@@ -158,6 +158,50 @@ import {
   type HouseScribePreferences,
 } from "./house_scribe/population_audit.js";
 import { DEFAULT_PREFERENCES } from "./reminder_scribe/rules_registry.js";
+// KN-N1/N2/N3: Gold Tablet Infrastructure (Layer 4 SOURCE-class)
+import {
+  appendTablet,
+  readTablet as readGoldTablet,
+  queryTablets,
+  verifyTablet,
+  auditTablets,
+  type AppendTabletParams,
+} from "./gold_tablet/ledger.js";
+import {
+  checkMutationAuthority,
+  checkReadAuthority,
+} from "./gold_tablet/authority_check.js";
+import {
+  linkExcaliburToGold,
+  getExcaliburPointers,
+} from "./gold_tablet/excalibur_pointer.js";
+import {
+  cascadeSupersession,
+} from "./gold_tablet/supersession_cascade.js";
+import { writeGoldPixieDust } from "./gold_tablet/pheromone.js";
+// KN-D2/D4/D5: Apiarist Hive Infrastructure Remainder
+import {
+  createHiveThread,
+  advanceHiveThread,
+  readHiveThread,
+  listHiveThreads,
+  type CreateThreadParams,
+} from "./apiarist_hive/state_transitions.js";
+import { onThreadClosedFederateIfEligible } from "./apiarist_hive/cross_frame_federation.js";
+import { enforceCap, getUsage, resetCycle } from "./apiarist_hive/uptime_cap.js";
+// KN-J6: Dual-Tier IPv4-Local / IPv6-Federation Translation
+import {
+  localToFederation,
+  federationToLocal,
+  getTranslationProvenance,
+} from "./house_scribe/federation_translation.js";
+import {
+  buildFederationAddress,
+  parseFederationAddress,
+  inferCohortClass as inferFederationCohortClass,
+  isValidIPv6,
+  SCOPE_TIER_PREFIXES,
+} from "./house_scribe/ipv6_federation_address.js";
 // KN-I3: Reminder Scribe substrate write-back + provenance chain
 import {
   writeBackViolationEvent,
@@ -181,6 +225,55 @@ import {
   VIOLATION_LOG_PATH,
   type SessionEvidenceMap,
 } from "./catechist/grader.js";
+// KN-M1/M2/M3: Pod-M Forever-Stamp Joules (Layer 7 Currency)
+import {
+  appendJoulesEntry,
+  readAllJoulesEntries,
+  verifyJoulesHmac,
+  assertForeverStampInvariant,
+} from "./joules/ledger.js";
+import {
+  computeBalance,
+  getCurrentHolder,
+  isInCirculation,
+  computeAudit,
+} from "./joules/balance.js";
+import { JoulesOperations } from "./joules/operations.js";
+// KN-T1/T2/T3/T4: Pod-T Keyword-Pyramid Strata Hierarchy
+import {
+  readAllAssignments,
+  getAssignment,
+  writeAssignment,
+  isValidStratum,
+  STRATUM_ORDINALS,
+  ALL_STRATA,
+  type Stratum,
+} from "./strata/schema.js";
+import {
+  StrataQuery,
+  assignStratum,
+} from "./strata/query.js";
+import {
+  detectiveQueryByStratum,
+  buildStratumFlavorCoordinate,
+  rankByStratumPriority,
+} from "./strata/cross_cut.js";
+// KN-K1/K2/K3: Pod-K Codex (Layer 8 Canon-of-Canons)
+import {
+  allocateCodexSerial,
+  appendCodexEntry,
+  readAllCodexEntries,
+  getCodexById,
+  queryCodex,
+  ANTHOLOGY_TARGETS,
+  type CodexStatus,
+  type AnthologyTarget,
+} from "./codex/schema.js";
+import {
+  CodexBinding,
+  verifyCodexHmac,
+  computeCodexHmac,
+} from "./codex/binding.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -8012,6 +8105,706 @@ server.tool(
         content: [{ type: "text" as const, text: JSON.stringify({ success: false, error: String(err) }, null, 2) }],
         isError: true,
       };
+    }
+  },
+);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Pod-M: Forever-Stamp Joules (Layer 7 Currency) — KN-M3 / BP018
+// ─────────────────────────────────────────────────────────────────────────────
+
+const _joulesOps = new JoulesOperations();
+
+server.tool(
+  "joules_mint",
+  "KN-M3 / BP018 Pod-M — Mint a new Forever-Stamp Joule from Marks-surplus. " +
+    "Layer 7 currency. face_value is IMMUTABLE once minted (forever-stamp semantics). " +
+    "Marks consumed are ONE-WAY VALVE — never recoverable as Marks. " +
+    "backing_rule_id cites the Gold tablet (Pod-N) canonicalizing the conversion rate. " +
+    "Default rate: 1 Joule per 100 Marks-surplus. Majesty incentive currency.",
+  {
+    member_id: z.string().describe("Member ID to receive the minted Joule."),
+    marks_surplus: z.number().int().positive().describe("Marks-surplus to consume in the mint. Must be > 0."),
+    backing_rule_id: z.string().describe("Gold tablet ID (Pod-N) for the backing rule. Must be non-empty."),
+  },
+  async ({ member_id, marks_surplus, backing_rule_id }) => {
+    const result = await _joulesOps.mintFromMarksSurplus({ member_id, marks_surplus, backing_rule_id });
+    return {
+      content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }],
+      isError: !result.success,
+    };
+  },
+);
+
+server.tool(
+  "joules_transfer",
+  "KN-M3 / BP018 Pod-M — Transfer a Forever-Stamp Joule between members. " +
+    "face_value is preserved exactly (forever-stamp semantics). " +
+    "Requires current holder to match 'from' member.",
+  {
+    from: z.string().describe("Member ID currently holding the Joule."),
+    to: z.string().describe("Member ID to receive the Joule."),
+    joule_uuid: z.string().describe("UUID of the Joule to transfer."),
+  },
+  async ({ from, to, joule_uuid }) => {
+    const result = await _joulesOps.transfer({ from, to, joule_uuid });
+    return {
+      content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }],
+      isError: !result.success,
+    };
+  },
+);
+
+server.tool(
+  "joules_redeem",
+  "KN-M3 / BP018 Pod-M — Redeem a Forever-Stamp Joule against a civilization-class work target. " +
+    "Removes the Joule from circulation permanently. " +
+    "redemption_target must describe the civilization-class work being rewarded.",
+  {
+    member_id: z.string().describe("Member ID redeeming the Joule (must be current holder)."),
+    joule_uuid: z.string().describe("UUID of the Joule to redeem."),
+    redemption_target: z.string().describe("Civilization-class work descriptor (required)."),
+  },
+  async ({ member_id, joule_uuid, redemption_target }) => {
+    const result = await _joulesOps.redeem({ member_id, joule_uuid, redemption_target });
+    return {
+      content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }],
+      isError: !result.success,
+    };
+  },
+);
+
+server.tool(
+  "joules_balance",
+  "KN-M3 / BP018 Pod-M — Get the current Forever-Stamp Joules balance for a member. " +
+    "Returns total_face_value, joule_count, and per-Joule face_value list.",
+  {
+    member_id: z.string().describe("Member ID to query balance for."),
+  },
+  async ({ member_id }) => {
+    const balance = computeBalance(member_id);
+    return {
+      content: [{ type: "text" as const, text: JSON.stringify(balance, null, 2) }],
+    };
+  },
+);
+
+server.tool(
+  "joules_audit",
+  "KN-M3 / BP018 Pod-M — Aggregate Joules audit: total minted, redeemed, in-circulation, face_value totals. " +
+    "Optional 'since' ISO timestamp to filter to a window.",
+  {
+    since: z.string().optional().describe("ISO-8601 timestamp; filter audit to entries after this date."),
+    member_id: z.string().optional().describe("If supplied, also include per-member balance in response."),
+  },
+  async ({ since, member_id }) => {
+    const audit = computeAudit(since);
+    const response: Record<string, unknown> = { audit };
+    if (member_id) {
+      response.member_balance = computeBalance(member_id);
+    }
+    return {
+      content: [{ type: "text" as const, text: JSON.stringify(response, null, 2) }],
+    };
+  },
+);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Pod-T: Keyword-Pyramid Strata Hierarchy — KN-T4 / BP018
+// ─────────────────────────────────────────────────────────────────────────────
+
+const _strataQuery = new StrataQuery();
+
+server.tool(
+  "strata_ascend",
+  "KN-T4 / BP018 Pod-T — Ascend the 7-layer Keyword-Pyramid from a topic toward Bedrock. " +
+    "Returns topics at stratum ordinal + levels. Pyramid: Sand(0) → Soil(1) → Sediment(2) → Sandstone(3) → Limestone(4) → Granite(5) → Bedrock(6).",
+  {
+    topic: z.string().describe("Base topic to ascend from."),
+    levels: z.number().int().positive().optional().describe("How many stratum levels to ascend (default 1)."),
+  },
+  async ({ topic, levels }) => {
+    const results = _strataQuery.ascend(topic, levels ?? 1);
+    return { content: [{ type: "text" as const, text: JSON.stringify({ topic, levels: levels ?? 1, results }, null, 2) }] };
+  },
+);
+
+server.tool(
+  "strata_descend",
+  "KN-T4 / BP018 Pod-T — Descend the 7-layer Keyword-Pyramid from a topic toward Sand. " +
+    "Returns topics at stratum ordinal - levels. Returns empty array at Sand (bottom).",
+  {
+    topic: z.string().describe("Base topic to descend from."),
+    levels: z.number().int().positive().optional().describe("How many stratum levels to descend (default 1)."),
+  },
+  async ({ topic, levels }) => {
+    const results = _strataQuery.descend(topic, levels ?? 1);
+    return { content: [{ type: "text" as const, text: JSON.stringify({ topic, levels: levels ?? 1, results }, null, 2) }] };
+  },
+);
+
+server.tool(
+  "strata_by_stratum",
+  "KN-T4 / BP018 Pod-T — List all topics assigned to a given stratum level. " +
+    "Valid strata: sand, soil, sediment, sandstone, limestone, granite, bedrock.",
+  {
+    stratum: z.enum(["sand", "soil", "sediment", "sandstone", "limestone", "granite", "bedrock"])
+      .describe("Target stratum level."),
+  },
+  async ({ stratum }) => {
+    const topics = _strataQuery.byStratum(stratum as Stratum);
+    return { content: [{ type: "text" as const, text: JSON.stringify({ stratum, topics, count: topics.length }, null, 2) }] };
+  },
+);
+
+server.tool(
+  "strata_promote",
+  "KN-T4 / BP018 Pod-T — Promote a topic to a higher stratum in the 7-layer Keyword-Pyramid. " +
+    "Builds promotion chain history. Bedrock rejects further promotion. Cannot demote.",
+  {
+    topic: z.string().describe("Topic to promote."),
+    to_stratum: z.enum(["sand", "soil", "sediment", "sandstone", "limestone", "granite", "bedrock"])
+      .describe("Target stratum (must be higher than current)."),
+    signer: z.string().describe("Session ID or agent signing this promotion."),
+    session: z.string().optional().describe("Ratification session ID (defaults to signer)."),
+  },
+  async ({ topic, to_stratum, signer, session }) => {
+    try {
+      const result = _strataQuery.promote(topic, to_stratum as Stratum, signer, session);
+      return { content: [{ type: "text" as const, text: JSON.stringify({ success: true, assignment: result }, null, 2) }] };
+    } catch (err) {
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify({ success: false, error: String(err) }, null, 2) }],
+        isError: true,
+      };
+    }
+  },
+);
+
+server.tool(
+  "strata_audit",
+  "KN-T4 / BP018 Pod-T — Audit: count topics per stratum; identify Sand/Soil topics ready for promotion. " +
+    "Returns counts per stratum and promotion candidates (high-hit sand/soil topics).",
+  {},
+  async () => {
+    const all = readAllAssignments();
+    const counts: Record<string, number> = {};
+    for (const s of ALL_STRATA) counts[s] = 0;
+    for (const a of all) counts[a.stratum] = (counts[a.stratum] ?? 0) + 1;
+    const promotion_candidates = all
+      .filter((a) => a.stratum === "sand" || a.stratum === "soil")
+      .map((a) => ({ topic: a.topic, stratum: a.stratum, ordinal: a.ordinal }));
+    return {
+      content: [{ type: "text" as const, text: JSON.stringify({
+        total_topics: all.length,
+        counts_by_stratum: counts,
+        promotion_candidates: promotion_candidates.slice(0, 20),
+      }, null, 2) }],
+    };
+  },
+);
+
+server.tool(
+  "strata_promotion_recommend",
+  "KN-T4 / BP018 Pod-T — Recommend Sand/Soil topics for promotion based on pheromone hit-frequency × age. " +
+    "Surfaces topics that appear frequently in Detective queries and may be ready for canonical elevation.",
+  {
+    claim: z.string().optional().describe("Query claim to find relevant promotion candidates. Defaults to general substrate scan."),
+    topK: z.number().int().positive().optional().describe("Max candidates to return (default 10)."),
+  },
+  async ({ claim, topK }) => {
+    const hits = detectiveQueryByStratum(claim ?? "canonical substrate promotion bedrock granite limestone", topK ?? 10);
+    const sand_soil = hits.filter((h) => h.stratum === "sand" || h.stratum === "soil");
+    return {
+      content: [{ type: "text" as const, text: JSON.stringify({
+        promotion_recommendations: sand_soil,
+        total_hits: hits.length,
+        sand_soil_count: sand_soil.length,
+      }, null, 2) }],
+    };
+  },
+);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Pod-K: Codex (Layer 8 Canon-of-Canons) — KN-K3 / BP018
+// ─────────────────────────────────────────────────────────────────────────────
+
+const _codexBinding = new CodexBinding();
+
+server.tool(
+  "codex_create",
+  "KN-K3 / BP018 Pod-K — Create a new Codex in 'drafting' state. " +
+    "Layer 8 canon-of-canons bound-book artifact. Chapters added via codex_add_chapter. " +
+    "Lifecycle: drafting → review → bound (immutable).",
+  {
+    title: z.string().describe("Human-readable title for the Codex."),
+    edition: z.string().describe("Edition string (e.g. '1.0', '2025-Q2')."),
+  },
+  async ({ title, edition }) => {
+    const { randomUUID } = await import("crypto");
+    const id = allocateCodexSerial();
+    const codex = {
+      id,
+      uuid: randomUUID(),
+      title,
+      edition,
+      chapters: [],
+      status: "drafting" as CodexStatus,
+      created_ts: new Date().toISOString(),
+    };
+    appendCodexEntry(codex);
+    return { content: [{ type: "text" as const, text: JSON.stringify({ success: true, codex }, null, 2) }] };
+  },
+);
+
+server.tool(
+  "codex_add_chapter",
+  "KN-K3 / BP018 Pod-K — Add a chapter to a Codex in 'drafting' state. " +
+    "Chapter cites Gold tablets (Pod-N), Excalibur instances, Joules redemptions (Pod-M), Jars (Pod-J). " +
+    "Mutations rejected on bound/superseded Codex.",
+  {
+    codex_id: z.string().describe("Codex serial (LB-CODEX-NNNN)."),
+    topic: z.string().describe("Chapter topic."),
+    body_text: z.string().describe("Chapter prose body."),
+    stratum: z.enum(["sand", "soil", "sediment", "sandstone", "limestone", "granite", "bedrock"]).optional()
+      .describe("Pod-T stratum citation for this chapter."),
+    gold_tablet_pointers: z.array(z.string()).optional().describe("Gold tablet IDs (Pod-N)."),
+    excalibur_pointers: z.array(z.string()).optional().describe("Excalibur class IDs (BP016 Pod-C)."),
+    jar_pointers: z.array(z.string()).optional().describe("House Scribe Jar serials (Pod-J KN-J1)."),
+    joules_redemption_pointers: z.array(z.string()).optional().describe("Joules entry IDs (Pod-M) cited."),
+  },
+  async ({ codex_id, topic, body_text, stratum, gold_tablet_pointers, excalibur_pointers, jar_pointers, joules_redemption_pointers }) => {
+    const codex = getCodexById(codex_id);
+    if (!codex) {
+      return { content: [{ type: "text" as const, text: JSON.stringify({ success: false, error: `Codex '${codex_id}' not found` }, null, 2) }], isError: true };
+    }
+    const check = _codexBinding.checkMutationAllowed(codex);
+    if (!check.allowed) {
+      return { content: [{ type: "text" as const, text: JSON.stringify({ success: false, error: check.reason }, null, 2) }], isError: true };
+    }
+    const chapter = {
+      topic,
+      stratum: (stratum as Stratum) ?? undefined,
+      gold_tablet_pointers: gold_tablet_pointers ?? [],
+      excalibur_pointers: excalibur_pointers ?? [],
+      jar_pointers: jar_pointers ?? [],
+      joules_redemption_pointers: joules_redemption_pointers ?? [],
+      body_text,
+      ts_drafted: new Date().toISOString(),
+    };
+    const updated = { ...codex, chapters: [...codex.chapters, chapter] };
+    appendCodexEntry(updated);
+    return { content: [{ type: "text" as const, text: JSON.stringify({ success: true, codex: updated, chapters_count: updated.chapters.length }, null, 2) }] };
+  },
+);
+
+server.tool(
+  "codex_review",
+  "KN-K3 / BP018 Pod-K — Move a Codex from 'drafting' to 'review' (mutations frozen for review window). " +
+    "Required before binding.",
+  {
+    codex_id: z.string().describe("Codex serial (LB-CODEX-NNNN)."),
+  },
+  async ({ codex_id }) => {
+    const codex = getCodexById(codex_id);
+    if (!codex) return { content: [{ type: "text" as const, text: JSON.stringify({ success: false, error: `Codex '${codex_id}' not found` }, null, 2) }], isError: true };
+    if (codex.status !== "drafting") return { content: [{ type: "text" as const, text: JSON.stringify({ success: false, error: `Codex '${codex_id}' is '${codex.status}', not 'drafting'` }, null, 2) }], isError: true };
+    const updated = { ...codex, status: "review" as CodexStatus };
+    appendCodexEntry(updated);
+    return { content: [{ type: "text" as const, text: JSON.stringify({ success: true, codex: updated }, null, 2) }] };
+  },
+);
+
+server.tool(
+  "codex_bind",
+  "KN-K3 / BP018 Pod-K — Bind a Codex: HMAC-locks all chapters; status → 'bound'; immutable after this. " +
+    "Requires status='review'. Verifies all pointer references before binding.",
+  {
+    codex_id: z.string().describe("Codex serial (LB-CODEX-NNNN) in 'review' status."),
+    signer: z.string().describe("Session ID or agent signing the binding ceremony."),
+  },
+  async ({ codex_id, signer }) => {
+    const result = await _codexBinding.bind(codex_id, signer);
+    const isError = "error" in result;
+    return {
+      content: [{ type: "text" as const, text: JSON.stringify(isError ? result : { success: true, bound_codex: result }, null, 2) }],
+      isError,
+    };
+  },
+);
+
+server.tool(
+  "codex_query",
+  "KN-K3 / BP018 Pod-K — Query Codices by title, edition, or status. " +
+    "Returns matching Codex records.",
+  {
+    title: z.string().optional().describe("Partial title match (case-insensitive)."),
+    edition: z.string().optional().describe("Exact edition match."),
+    status: z.enum(["drafting", "review", "bound", "superseded"]).optional().describe("Filter by status."),
+  },
+  async ({ title, edition, status }) => {
+    const results = queryCodex({ title, edition, status: status as CodexStatus | undefined });
+    return { content: [{ type: "text" as const, text: JSON.stringify({ count: results.length, codices: results }, null, 2) }] };
+  },
+);
+
+server.tool(
+  "codex_supersede",
+  "KN-K3 / BP018 Pod-K — Supersede a bound Codex with a new one. " +
+    "Old Codex gets status='superseded' + superseded_by=new_id.",
+  {
+    old_id: z.string().describe("Codex serial of the bound Codex to supersede."),
+    new_id: z.string().describe("Codex serial of the replacement Codex."),
+  },
+  async ({ old_id, new_id }) => {
+    const result = await _codexBinding.supersede(old_id, new_id);
+    if (result && "error" in result) {
+      return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }], isError: true };
+    }
+    return { content: [{ type: "text" as const, text: JSON.stringify({ success: true, old_id, new_id, superseded_at: new Date().toISOString() }, null, 2) }] };
+  },
+);
+
+server.tool(
+  "codex_anthology_export",
+  "KN-K3 / BP018 Pod-K — Export a bound Codex to a named Anthology. " +
+    "Valid targets: ai_cake, no_atomo, mechanical_computer, pre_cathedral_substack. " +
+    "Codex must be in 'bound' status.",
+  {
+    codex_id: z.string().describe("Codex serial (LB-CODEX-NNNN) in 'bound' status."),
+    target_anthology: z.enum(["ai_cake", "no_atomo", "mechanical_computer", "pre_cathedral_substack"])
+      .describe("Named Anthology to export into."),
+  },
+  async ({ codex_id, target_anthology }) => {
+    const codex = getCodexById(codex_id);
+    if (!codex) return { content: [{ type: "text" as const, text: JSON.stringify({ success: false, error: `Codex '${codex_id}' not found` }, null, 2) }], isError: true };
+    if (codex.status !== "bound") return { content: [{ type: "text" as const, text: JSON.stringify({ success: false, error: `Codex '${codex_id}' is '${codex.status}'; must be 'bound' for anthology export` }, null, 2) }], isError: true };
+
+    const exported_ts = new Date().toISOString();
+    const existing_exports = codex.anthology_exports ?? [];
+    const updated = {
+      ...codex,
+      anthology_exports: [...existing_exports, { target: target_anthology as AnthologyTarget, exported_ts }],
+    };
+    appendCodexEntry(updated);
+
+    emitPheromone(
+      "CodexAnthology",
+      `codex_anthology_export_${codex_id}_${target_anthology}`,
+      `codex anthology export ${codex.title} target:${target_anthology} layer-8 canon-of-canons`,
+      { cathedral: "knight", flavorClass: { domain: "codex", cognition: "building-in-public" } }
+    );
+
+    return { content: [{ type: "text" as const, text: JSON.stringify({ success: true, codex_id, target_anthology, exported_ts, chapter_count: codex.chapters.length }, null, 2) }] };
+  },
+);
+
+// ─── KN-N1/N2/N3: Gold Tablet Infrastructure (Layer 4 SOURCE-class) ──────────
+
+/**
+ * gold_tablet_query — read-class
+ * Query active Gold Tablets by tier, scope, topic, or status.
+ */
+server.tool(
+  "gold_tablet_query",
+  "KN-N1 / BP018 — Gold Tablet: query canonical regulations tablets by tier/scope/topic. " +
+    "Returns active tablets by default. Pass status='all' to include superseded.",
+  {
+    tier: z.enum(["platform_canon", "platform_rules", "project_rules"]).optional()
+      .describe("Filter by tier (platform_canon | platform_rules | project_rules)."),
+    scope: z.string().optional().describe("Filter by scope ('platform' or project_id)."),
+    topic: z.string().optional().describe("Filter by topic name."),
+    status: z.enum(["active", "all"]).optional().describe("'active' (default) or 'all' including superseded."),
+    limit: z.number().optional().describe("Max results (default 100)."),
+    offset: z.number().optional().describe("Pagination offset."),
+  },
+  async ({ tier, scope, topic, status, limit, offset }) => {
+    try {
+      const results = queryTablets({ tier, scope, topic, status, limit: limit ?? 100, offset });
+      return { content: [{ type: "text" as const, text: JSON.stringify({ tablets: results, count: results.length }, null, 2) }] };
+    } catch (err) {
+      return { content: [{ type: "text" as const, text: JSON.stringify({ error: String(err) }, null, 2) }], isError: true };
+    }
+  },
+);
+
+/**
+ * gold_tablet_ratify — write-class
+ * Ratify a new Gold Tablet (requires platform-tier authority for platform tiers).
+ */
+server.tool(
+  "gold_tablet_ratify",
+  "KN-N2/N3 / BP018 — Gold Tablet: ratify a new canonical regulation. " +
+    "Generates LB-GOLD-NNNN serial, HMAC + Chronos signatures. " +
+    "Writes Pheromone Pixie-Dust provenance. Authority-gated by tier.",
+  {
+    tier: z.enum(["platform_canon", "platform_rules", "project_rules"])
+      .describe("Tier (platform_canon|platform_rules|project_rules)."),
+    scope: z.string().describe("'platform' or project_id."),
+    topic: z.string().describe("Canonical topic name."),
+    rule_text: z.string().describe("The canonical statement."),
+    ratification_session: z.string().describe("Session ID (e.g. BP018)."),
+    signer_id: z.string().describe("Authority signer (FOUNDER, BP018, K461 etc)."),
+    founder_voice_quote: z.string().optional().describe("Optional Founder voice quote."),
+    supersedes: z.array(z.string()).optional().describe("Array of prior Gold tablet IDs this replaces."),
+  },
+  async ({ tier, scope, topic, rule_text, ratification_session, signer_id, founder_voice_quote, supersedes }) => {
+    try {
+      const authCheck = checkMutationAuthority({ tier, scope, signer_id });
+      if (!authCheck.allowed) {
+        return { content: [{ type: "text" as const, text: JSON.stringify({ success: false, error: authCheck.reason }, null, 2) }], isError: true };
+      }
+      const result = appendTablet({ tier, scope, topic, rule_text, ratification_session, signer_id, founder_voice_quote, supersedes });
+      if (result.success) {
+        writeGoldPixieDust({ event_type: "tablet_ratified", gold_tablet_id: result.tablet!.id, tier, scope, signer_id, timestamp: new Date().toISOString() });
+      }
+      return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }], isError: !result.success };
+    } catch (err) {
+      return { content: [{ type: "text" as const, text: JSON.stringify({ error: String(err) }, null, 2) }], isError: true };
+    }
+  },
+);
+
+/**
+ * gold_tablet_supersede — write-class
+ * Supersede a Gold Tablet: marks old as superseded, cascades to Excalibur instances.
+ */
+server.tool(
+  "gold_tablet_supersede",
+  "KN-N2/N3 / BP018 — Gold Tablet: supersede an existing tablet. " +
+    "Marks old tablet superseded + cascade-marks dependent Excalibur as needs_re_anchor. " +
+    "Use gold_tablet_ratify with supersedes[] for the new tablet first.",
+  {
+    old_id: z.string().describe("Gold tablet ID to supersede (LB-GOLD-NNNN)."),
+    new_id: z.string().describe("Replacing Gold tablet ID (LB-GOLD-NNNN)."),
+  },
+  async ({ old_id, new_id }) => {
+    try {
+      const result = cascadeSupersession(old_id, new_id);
+      if (result.success) {
+        writeGoldPixieDust({ event_type: "tablet_superseded", gold_tablet_id: old_id, new_gold_tablet_id: new_id, timestamp: new Date().toISOString() });
+      }
+      return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }], isError: !result.success };
+    } catch (err) {
+      return { content: [{ type: "text" as const, text: JSON.stringify({ error: String(err) }, null, 2) }], isError: true };
+    }
+  },
+);
+
+/**
+ * gold_tablet_excalibur_link — write-class
+ * Create bidirectional pointer between Gold Tablet and Excalibur Class instance.
+ */
+server.tool(
+  "gold_tablet_excalibur_link",
+  "KN-N2/N3 / BP018 — Gold Tablet: link an Excalibur Class instance to a Gold Tablet. " +
+    "Creates bidirectional pointer. Excalibur is READ-ONLY against Gold. " +
+    "Gold supersession cascade will mark linked Excalibur as needs_re_anchor.",
+  {
+    gold_id: z.string().describe("Gold tablet ID (LB-GOLD-NNNN)."),
+    excalibur_id: z.string().describe("Excalibur Class instance ID."),
+  },
+  async ({ gold_id, excalibur_id }) => {
+    try {
+      const result = linkExcaliburToGold(gold_id, excalibur_id);
+      if (result.success) {
+        writeGoldPixieDust({ event_type: "excalibur_linked", gold_tablet_id: gold_id, excalibur_id, timestamp: new Date().toISOString() });
+      }
+      return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }], isError: !result.success };
+    } catch (err) {
+      return { content: [{ type: "text" as const, text: JSON.stringify({ error: String(err) }, null, 2) }], isError: true };
+    }
+  },
+);
+
+/**
+ * gold_tablet_audit — read-class
+ * Aggregate counts by tier × status × scope.
+ */
+server.tool(
+  "gold_tablet_audit",
+  "KN-N3 / BP018 — Gold Tablet: aggregate audit (counts by tier × status × scope). " +
+    "Returns total + by_tier + by_status + by_scope breakdowns.",
+  {},
+  async () => {
+    try {
+      const result = auditTablets();
+      writeGoldPixieDust({ event_type: "audit_query", timestamp: new Date().toISOString() });
+      return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+    } catch (err) {
+      return { content: [{ type: "text" as const, text: JSON.stringify({ error: String(err) }, null, 2) }], isError: true };
+    }
+  },
+);
+
+// ─── KN-D2/D4/D5: Apiarist Hive Infrastructure Remainder ────────────────────
+
+/**
+ * apiarist_hive_create_thread — write-class
+ * Create a new Apiarist Hive thread in `open` state.
+ */
+server.tool(
+  "apiarist_hive_create_thread",
+  "KN-D2 / BP018 — Apiarist Hive: create a new hive thread in `open` state. " +
+    "Assigns LB-HIVE-NNNN serial. Validates bee_role_assignments (max 1 queen).",
+  {
+    topic: z.string().describe("Thread topic."),
+    participants: z.array(z.string()).describe("Member IDs participating."),
+    bee_role_assignments: z.record(z.string(), z.enum(["worker", "drone", "queen"]))
+      .describe("Role per participant_id (worker|drone|queen). Max 1 queen."),
+    cohort_class: z.string().optional().describe("Cohort class for federation eligibility."),
+  },
+  async ({ topic, participants, bee_role_assignments, cohort_class }) => {
+    try {
+      const result = createHiveThread({ topic, participants, bee_role_assignments, cohort_class });
+      return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }], isError: !result.success };
+    } catch (err) {
+      return { content: [{ type: "text" as const, text: JSON.stringify({ error: String(err) }, null, 2) }], isError: true };
+    }
+  },
+);
+
+/**
+ * apiarist_hive_advance_thread — write-class
+ * Advance a Hive thread to the next state (guarded transitions).
+ */
+server.tool(
+  "apiarist_hive_advance_thread",
+  "KN-D2 / BP018 — Apiarist Hive: advance thread state (open→synthesizing→closed→sealed). " +
+    "Only valid forward transitions allowed. BRIDLE Rule 4: backward transitions rejected.",
+  {
+    thread_id: z.string().describe("Thread ID (LB-HIVE-NNNN)."),
+    target: z.enum(["synthesizing", "closed", "sealed"]).describe("Target state."),
+    synthesis_target: z.string().optional().describe("Jar ID (required before sealed)."),
+  },
+  async ({ thread_id, target, synthesis_target }) => {
+    try {
+      const result = advanceHiveThread(thread_id, target, { synthesis_target });
+      return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }], isError: !result.success };
+    } catch (err) {
+      return { content: [{ type: "text" as const, text: JSON.stringify({ error: String(err) }, null, 2) }], isError: true };
+    }
+  },
+);
+
+/**
+ * apiarist_hive_federate — write-class
+ * Trigger cross-frame federation for a closed Hive thread.
+ */
+server.tool(
+  "apiarist_hive_federate",
+  "KN-D4 / BP018 — Apiarist Hive: trigger cross-frame federation on thread close. " +
+    "Lone Wolf: broadcast_mode=none. Pied Piper: read_only. Federation: bidirectional. Excalibur: curated_slice.",
+  {
+    thread_id: z.string().describe("Thread ID to federate."),
+    jar_id: z.string().describe("Jar ID created from thread closure (KN-J4)."),
+    cohort_class: z.string().describe("Cohort class of the thread originator."),
+    frame_instance_id: z.string().describe("LB Frame Local instance ID."),
+    tags: z.array(z.string()).optional().describe("Tags for Excalibur curated-slice broadcast."),
+  },
+  async ({ thread_id, jar_id, cohort_class, frame_instance_id, tags }) => {
+    try {
+      const thread = readHiveThread(thread_id);
+      if (!thread) {
+        return { content: [{ type: "text" as const, text: JSON.stringify({ success: false, error: `Thread ${thread_id} not found.` }, null, 2) }], isError: true };
+      }
+      const receipt = onThreadClosedFederateIfEligible({ thread, jar_id, cohort_class, frame_instance_id, tags });
+      return { content: [{ type: "text" as const, text: JSON.stringify(receipt, null, 2) }] };
+    } catch (err) {
+      return { content: [{ type: "text" as const, text: JSON.stringify({ error: String(err) }, null, 2) }], isError: true };
+    }
+  },
+);
+
+/**
+ * apiarist_hive_uptime_cap — write-class
+ * Check and enforce the 50%-uptime cap for a participant+role.
+ */
+server.tool(
+  "apiarist_hive_uptime_cap",
+  "KN-D5 / BP018 — Apiarist Hive: enforce 50%-uptime cap per role per cycle. " +
+    "Per-role independent caps (worker/drone/queen). Race-safe. Composes with Pod-G.",
+  {
+    participant_id: z.string().describe("Participant member ID."),
+    role: z.enum(["worker", "drone", "queen"]).describe("Bee role."),
+    attempted_duration_min: z.number().describe("Duration to attempt (minutes)."),
+    cycle_period_min: z.number().optional().describe("Cycle period in minutes (default 60)."),
+    cap_pct: z.number().optional().describe("Cap percentage (default 50)."),
+  },
+  async ({ participant_id, role, attempted_duration_min, cycle_period_min, cap_pct }) => {
+    try {
+      const result = enforceCap(participant_id, role, attempted_duration_min, { cycle_period_min, cap_pct });
+      return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+    } catch (err) {
+      return { content: [{ type: "text" as const, text: JSON.stringify({ error: String(err) }, null, 2) }], isError: true };
+    }
+  },
+);
+
+// ─── KN-J6: Dual-Tier IPv4-Local / IPv6-Federation Translation ───────────────
+
+/**
+ * coordinate_translate_local_to_federation — write-class
+ * Translate a local 4-tuple + instance to an IPv6 federation address.
+ */
+server.tool(
+  "coordinate_translate_local_to_federation",
+  "KN-J6.2 / BP018 — Dual-Tier Addressing: translate local 4-tuple to IPv6 federation address. " +
+    "Lone Wolf REJECTED (never federates). " +
+    "Scope-tier prefix encodes cohort_class structurally. Caches in Augur Living Gate.",
+  {
+    local_tuple: z.string().describe("Local 4-tuple coordinate (e.g. 'auth-user-session-token' or NN-NN-NN-NN)."),
+    instance_id: z.string().describe("LB Frame Local instance ID (e.g. LB-CAT.M-0001)."),
+    cohort_class: z.string().describe("HsCohortClass (lone_wolf|pied_piper_tier_1|federation_member|excalibur_subscriber|thirteenth_warrior)."),
+  },
+  async ({ local_tuple, instance_id, cohort_class }) => {
+    try {
+      const result = localToFederation({ local_tuple, instance_id, cohort_class: cohort_class as any });
+      return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }], isError: !result.success };
+    } catch (err) {
+      return { content: [{ type: "text" as const, text: JSON.stringify({ error: String(err) }, null, 2) }], isError: true };
+    }
+  },
+);
+
+/**
+ * coordinate_translate_federation_to_local — read-class
+ * Translate an IPv6 federation address back to local 4-tuple + instance_id.
+ */
+server.tool(
+  "coordinate_translate_federation_to_local",
+  "KN-J6.2 / BP018 — Dual-Tier Addressing: reverse translate IPv6 federation address to 4-tuple. " +
+    "Checks Augur cache first, then provenance ledger. Returns cohort_class from scope-tier prefix.",
+  {
+    federation_address: z.string().describe("IPv6 federation address to reverse-translate."),
+  },
+  async ({ federation_address }) => {
+    try {
+      const result = federationToLocal({ federation_address });
+      return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }], isError: !result.success };
+    } catch (err) {
+      return { content: [{ type: "text" as const, text: JSON.stringify({ error: String(err) }, null, 2) }], isError: true };
+    }
+  },
+);
+
+/**
+ * coordinate_translation_provenance — read-class
+ * Return full provenance chain for a tuple or federation address.
+ */
+server.tool(
+  "coordinate_translation_provenance",
+  "KN-J6.3 / BP018 — Dual-Tier Addressing: retrieve provenance chain for a 4-tuple or IPv6 address. " +
+    "Returns all translation events (local→federation and federation→local) for the identifier.",
+  {
+    tuple_or_address: z.string().describe("Local 4-tuple or IPv6 federation address to query provenance for."),
+  },
+  async ({ tuple_or_address }) => {
+    try {
+      const chain = getTranslationProvenance(tuple_or_address);
+      return { content: [{ type: "text" as const, text: JSON.stringify({ chain, count: chain.length }, null, 2) }] };
+    } catch (err) {
+      return { content: [{ type: "text" as const, text: JSON.stringify({ error: String(err) }, null, 2) }], isError: true };
     }
   },
 );
