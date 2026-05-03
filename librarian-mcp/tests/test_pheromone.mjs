@@ -234,6 +234,95 @@ test('G.2.b — appendTidbit: 5 writes produce 5 distinct pheromone records (K52
   console.log('G.2.b cleanup: files truncated to pre-test sizes, in-memory index reset');
 });
 
+// ─── G.B18-1a: Multi-Trail — flavor_class emitted and queryable by axis ──────
+test('G.B18-1a — flavor_class: emit with domain+cognition+audience, query filters correctly', () => {
+  const SCRIBE = 'B18FlavorScribe';
+  const UNIQUE = 'bzzbflavortrailxqq';  // purely alphabetic for extractTopics
+
+  // Emit: miner cognition record
+  emitPheromone(SCRIBE, 'b18_miner_tablet', `${UNIQUE} miner substrate discovery canonical`, {
+    cathedral: 'bishop',
+    flavorClass: { domain: 'bread', cognition: 'miner', audience: 'knight-build' },
+  });
+
+  // Emit: analytical cognition record (different axis — same UNIQUE tag so both are queryable)
+  emitPheromone(SCRIBE, 'b18_analytical_tablet', `${UNIQUE} analytical review session`, {
+    cathedral: 'bishop',
+    flavorClass: { domain: 'vanilla', cognition: 'analytical', audience: 'founder-personal' },
+  });
+
+  // Query unfiltered — both should appear
+  const allHits = queryPheromone(UNIQUE, { decayActive: false, topK: 200 });
+  const unfiltered = allHits.hits.filter(h => h.scribe === SCRIBE);
+  assert.ok(unfiltered.length >= 2, `Expected >=2 unfiltered hits, got ${unfiltered.length}`);
+
+  // Query filtered by cognition=miner — only miner record
+  const minerHits = queryPheromone(UNIQUE, { decayActive: false, topK: 200, flavorClass: { cognition: 'miner' } });
+  const minerFiltered = minerHits.hits.filter(h => h.scribe === SCRIBE);
+  assert.ok(minerFiltered.length >= 1, `Expected >=1 miner hit, got ${minerFiltered.length}`);
+  for (const h of minerFiltered) {
+    assert.equal(h.flavor_class?.cognition, 'miner', `All miner-filtered hits must have cognition=miner`);
+  }
+
+  // Query filtered by cognition=analytical — only analytical record
+  const analyticalHits = queryPheromone(UNIQUE, { decayActive: false, topK: 200, flavorClass: { cognition: 'analytical' } });
+  const analyticalFiltered = analyticalHits.hits.filter(h => h.scribe === SCRIBE);
+  assert.ok(analyticalFiltered.length >= 1, `Expected >=1 analytical hit, got ${analyticalFiltered.length}`);
+  for (const h of analyticalFiltered) {
+    assert.equal(h.flavor_class?.cognition, 'analytical', `All analytical-filtered hits must have cognition=analytical`);
+  }
+
+  console.log(`G.B18-1a PASS: flavor_class emit+query by axis (miner=${minerFiltered.length}, analytical=${analyticalFiltered.length})`);
+});
+
+// ─── G.B18-1b: Multi-Trail — AND semantics across multiple axes ───────────────
+test('G.B18-1b — flavor_class AND semantics: domain+cognition filter narrows correctly', () => {
+  const SCRIBE = 'B18FlavorAndScribe';
+  const UNIQUE = 'bzzbflavorandxqq';  // purely alphabetic
+
+  emitPheromone(SCRIBE, 'b18_and_bread_miner',     `${UNIQUE} bread miner substrate`,     { flavorClass: { domain: 'bread',    cognition: 'miner'      } });
+  emitPheromone(SCRIBE, 'b18_and_bread_analytical', `${UNIQUE} bread analytical review`,   { flavorClass: { domain: 'bread',    cognition: 'analytical' } });
+  emitPheromone(SCRIBE, 'b18_and_vanilla_miner',    `${UNIQUE} vanilla miner substrate`,   { flavorClass: { domain: 'vanilla',  cognition: 'miner'      } });
+
+  // AND filter: domain=bread AND cognition=miner → only first record
+  const andHits = queryPheromone(UNIQUE, { decayActive: false, topK: 200, flavorClass: { domain: 'bread', cognition: 'miner' } });
+  const andFiltered = andHits.hits.filter(h => h.scribe === SCRIBE);
+  assert.ok(andFiltered.length >= 1, `Expected >=1 hit for AND(bread,miner)`);
+  for (const h of andFiltered) {
+    assert.equal(h.flavor_class?.domain,    'bread',  `AND hit domain must=bread`);
+    assert.equal(h.flavor_class?.cognition, 'miner',  `AND hit cognition must=miner`);
+  }
+  // Must NOT include vanilla-miner or bread-analytical
+  const wrongDomain = andFiltered.filter(h => h.flavor_class?.domain !== 'bread');
+  const wrongCognition = andFiltered.filter(h => h.flavor_class?.cognition !== 'miner');
+  assert.equal(wrongDomain.length,    0, `AND filter must exclude non-bread records`);
+  assert.equal(wrongCognition.length, 0, `AND filter must exclude non-miner records`);
+
+  console.log(`G.B18-1b PASS: AND semantics narrowed to ${andFiltered.length} hit(s)`);
+});
+
+// ─── G.B18-1c: Multi-Trail — synthesis_class="miner" filter ──────────────────
+test('G.B18-1c — synthesis_class miner filter routes to correct trail', () => {
+  const SCRIBE = 'B18SynthesisScribe';
+  const UNIQUE = 'bzzbsynthminerxqq';  // purely alphabetic
+
+  emitPheromone(SCRIBE, 'b18_synth_miner',    `${UNIQUE} miner extracted canonical primitive`, { synthesisClass: 'miner' });
+  emitPheromone(SCRIBE, 'b18_synth_detective', `${UNIQUE} detective team finding synthesis`,    { synthesisClass: 'detective_team_finding' });
+
+  const minerSynth = queryPheromone(UNIQUE, { decayActive: false, topK: 200, synthesisClass: 'miner' });
+  const minerSynthHits = minerSynth.hits.filter(h => h.scribe === SCRIBE);
+  assert.ok(minerSynthHits.length >= 1, `Expected >=1 miner synthesis hit`);
+  for (const h of minerSynthHits) {
+    assert.equal(h.synthesis_class, 'miner', `All synthesis_class-filtered hits must have synthesis_class=miner`);
+  }
+
+  const detectiveSynth = queryPheromone(UNIQUE, { decayActive: false, topK: 200, synthesisClass: 'detective_team_finding' });
+  const detectiveSynthHits = detectiveSynth.hits.filter(h => h.scribe === SCRIBE);
+  assert.ok(detectiveSynthHits.length >= 1, `Expected >=1 detective_team_finding synthesis hit`);
+
+  console.log(`G.B18-1c PASS: synthesis_class filter (miner=${minerSynthHits.length}, detective=${detectiveSynthHits.length})`);
+});
+
 // ─── G.10: Scribe coverage mismatch resolution ───────────────────────────────
 test('G.10 — all non-empty Scribes covered; empty/no-file Scribes absent (correct)', () => {
   const raw = readFileSync(PHEROMONE_INDEX_PATH, 'utf-8');
