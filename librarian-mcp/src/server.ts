@@ -7564,6 +7564,267 @@ server.tool(
   },
 );
 
+// ─── Pod-Q KN-Q2: On Deck Scribe MCP tools ────────────────────────────────────
+
+import {
+  appendEntry as odsAppendEntry,
+  markInFlight as odsMarkInFlight,
+  markLanded as odsMarkLanded,
+  markErrored as odsMarkErrored,
+  markDeferred as odsMarkDeferred,
+  attachPreparedContext as odsAttachPreparedContext,
+} from "./on_deck_scribe/writer.js";
+import {
+  loadQueue as odsLoadQueue,
+  getNextForKnight as odsGetNextForKnight,
+  dispatchAudit as odsDispatchAudit,
+  scanDropzoneForKPrompts,
+} from "./on_deck_scribe/reader.js";
+import { allocateOdsSerial } from "./on_deck_scribe/serial.js";
+
+/**
+ * on_deck_query — read-class
+ * Return next-fire entry OR full filtered queue from On Deck Scribe canonical state file.
+ */
+server.tool(
+  "on_deck_query",
+  "KN-Q2 / BP018 — On Deck Scribe: query canonical state file. " +
+    "Returns next-fire K-prompt entry for Knight (queued + prereqs met + optional filters). " +
+    "Pass full_queue=true to return all entries in priority order.",
+  {
+    full_queue: z.boolean().optional().describe("Return full queue instead of next-fire entry. Default: false."),
+    cohort_class: z
+      .enum(["lone_wolf", "pied_piper_tier_1", "federation_member", "excalibur_subscriber", "thirteenth_warrior"])
+      .optional()
+      .describe("Filter by HsCohortClass. Only entries with matching cohort_class returned."),
+    category: z.string().optional().describe("Filter by category (default: 'knight'). E.g. 'bishop', 'shadow'."),
+    status: z
+      .enum(["queued", "in_flight", "landed", "deferred", "errored"])
+      .optional()
+      .describe("Filter by status (only effective when full_queue=true)."),
+  },
+  async ({ full_queue, cohort_class, category, status }) => {
+    try {
+      if (full_queue) {
+        let all = odsLoadQueue();
+        if (cohort_class) all = all.filter((e) => !e.cohort_class || e.cohort_class === cohort_class);
+        if (category) all = all.filter((e) => e.category === category);
+        if (status) all = all.filter((e) => e.status === status);
+        return {
+          content: [{ type: "text" as const, text: JSON.stringify({ data_available: true, count: all.length, entries: all }, null, 2) }],
+        };
+      } else {
+        const next = odsGetNextForKnight({ cohort_class, category });
+        return {
+          content: [{ type: "text" as const, text: JSON.stringify({ data_available: next !== null, next_entry: next ?? null }, null, 2) }],
+        };
+      }
+    } catch (err) {
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify({ data_available: false, error: String(err) }, null, 2) }],
+        isError: true,
+      };
+    }
+  },
+);
+
+/**
+ * on_deck_append — write-class
+ * Append a new K-prompt entry to the canonical queue.
+ */
+server.tool(
+  "on_deck_append",
+  "KN-Q2 / BP018 — On Deck Scribe: append new K-prompt entry to canonical queue. " +
+    "Allocates LB-ODS-NNNN serial. Returns entry_id.",
+  {
+    category: z
+      .enum(["knight", "bishop", "shadow", "pawn", "rook"])
+      .describe("Entry category."),
+    k_prompt_path: z.string().describe("Absolute path to PROMPT_KNIGHT_*.md file."),
+    priority: z.number().int().min(0).describe("Dispatch priority (0 = highest; lower fires first)."),
+    prerequisites: z.array(z.string()).optional().describe("Entry IDs that must be 'landed' before this fires."),
+    pod_class: z.string().optional().describe("Pod class label (e.g. 'Q', 'R', 'N')."),
+    cohort_class: z
+      .enum(["lone_wolf", "pied_piper_tier_1", "federation_member", "excalibur_subscriber", "thirteenth_warrior"])
+      .optional(),
+    flavor_class: z
+      .enum(["cinnamon", "vanilla", "cardamom", "saffron", "miner"])
+      .optional(),
+  },
+  async ({ category, k_prompt_path, priority, prerequisites, pod_class, cohort_class, flavor_class }) => {
+    try {
+      const id = await allocateOdsSerial();
+      const entry = await odsAppendEntry({
+        id,
+        category,
+        k_prompt_path,
+        priority,
+        prerequisites: prerequisites ?? [],
+        ...(pod_class ? { pod_class } : {}),
+        ...(cohort_class ? { cohort_class } : {}),
+        ...(flavor_class ? { flavor_class } : {}),
+        status: "queued",
+        ts_queued: new Date().toISOString(),
+      });
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify({ success: true, entry_id: id, entry }, null, 2) }],
+      };
+    } catch (err) {
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify({ success: false, error: String(err) }, null, 2) }],
+        isError: true,
+      };
+    }
+  },
+);
+
+/**
+ * on_deck_mutate — write-class
+ * Mutate status, commit_hash, or error_reason on an existing entry.
+ */
+server.tool(
+  "on_deck_mutate",
+  "KN-Q2 / BP018 — On Deck Scribe: mutate entry status. " +
+    "Transitions: queued→in_flight, in_flight→landed, *→errored, *→deferred. " +
+    "Append-only: mutation is a new line in queue.jsonl.",
+  {
+    id: z.string().describe("Entry ID (LB-ODS-NNNN)."),
+    status: z
+      .enum(["queued", "in_flight", "landed", "deferred", "errored"])
+      .describe("New status."),
+    commit_hash: z.string().optional().describe("Git commit hash when status=landed."),
+    error_reason: z.string().optional().describe("Error detail when status=errored."),
+  },
+  async ({ id, status, commit_hash, error_reason }) => {
+    try {
+      let result;
+      if (status === "in_flight") result = await odsMarkInFlight(id);
+      else if (status === "landed") result = await odsMarkLanded(id, commit_hash);
+      else if (status === "errored") result = await odsMarkErrored(id, error_reason);
+      else if (status === "deferred") result = await odsMarkDeferred(id);
+      else result = await odsMarkInFlight(id); // fallback
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify({ success: true, entry: result }, null, 2) }],
+      };
+    } catch (err) {
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify({ success: false, error: String(err) }, null, 2) }],
+        isError: true,
+      };
+    }
+  },
+);
+
+/**
+ * on_deck_attach_prepared_context — write-class
+ * Attach Shadow E-Giant prepared_context (pre-staging output) to a queued entry.
+ */
+server.tool(
+  "on_deck_attach_prepared_context",
+  "KN-Q2 / BP018 — On Deck Scribe: attach Shadow E-Giant pre-staging output to a queued entry. " +
+    "Sets prepared_context (shadow_id, wrasse_pre_injections, detective_findings, prereq summary). " +
+    "Required before Pod-R auto-fire can proceed.",
+  {
+    id: z.string().describe("Entry ID to attach prepared context to."),
+    shadow_id: z.string().describe("Shadow E-Giant that ran pre-staging (e.g. 'alpha', 'beta')."),
+    wrasse_pre_injections: z.array(z.string()).describe("Eblet paths bulk-loaded during pre-staging."),
+    detective_findings: z
+      .array(
+        z.object({
+          trigger: z.string(),
+          scribe: z.string(),
+          excerpt: z.string(),
+          score: z.number(),
+        })
+      )
+      .optional()
+      .describe("Detective Phase-0 hits cached during pre-staging."),
+    prerequisite_context_summary: z.string().describe("Summary of prerequisite commits + test results."),
+  },
+  async ({ id, shadow_id, wrasse_pre_injections, detective_findings, prerequisite_context_summary }) => {
+    try {
+      const result = await odsAttachPreparedContext(id, {
+        shadow_id,
+        prep_ts: new Date().toISOString(),
+        wrasse_pre_injections,
+        detective_findings: detective_findings ?? [],
+        prerequisite_context_summary,
+      });
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify({ success: true, entry: result }, null, 2) }],
+      };
+    } catch (err) {
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify({ success: false, error: String(err) }, null, 2) }],
+        isError: true,
+      };
+    }
+  },
+);
+
+/**
+ * on_deck_promote_from_dropzone — write-class
+ * Scan a dropzone directory, find PROMPT_KNIGHT_*.md files, and bulk-import as queued entries.
+ */
+server.tool(
+  "on_deck_promote_from_dropzone",
+  "KN-Q2 / BP018 — On Deck Scribe: bulk-import K-prompt files from a dropzone directory. " +
+    "Scans for PROMPT_KNIGHT_*.md files and appends each as a queued entry. " +
+    "Returns list of imported entry IDs.",
+  {
+    dropzone_path: z.string().describe("Absolute path to dropzone directory (e.g. BISHOP_DROPZONE/01_KnightPrompts/)."),
+    priority: z.number().int().min(0).optional().describe("Priority for all imported entries. Default: 99."),
+  },
+  async ({ dropzone_path, priority }) => {
+    try {
+      const stubs = scanDropzoneForKPrompts(dropzone_path);
+      const imported: string[] = [];
+      for (const stub of stubs) {
+        const id = await allocateOdsSerial();
+        await odsAppendEntry({
+          ...stub,
+          id,
+          priority: priority ?? stub.priority,
+          ts_queued: new Date().toISOString(),
+        });
+        imported.push(id);
+      }
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify({ success: true, imported_count: imported.length, entry_ids: imported }, null, 2) }],
+      };
+    } catch (err) {
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify({ success: false, error: String(err) }, null, 2) }],
+        isError: true,
+      };
+    }
+  },
+);
+
+/**
+ * on_deck_dispatch_audit — read-class
+ * Return aggregated counts: queued / in_flight / landed / errored / by-category / by-cohort_class.
+ */
+server.tool(
+  "on_deck_dispatch_audit",
+  "KN-Q2 / BP018 — On Deck Scribe: aggregated dispatch counts. " +
+    "Returns total / queued / in_flight / landed / deferred / errored + breakdowns by category, cohort_class, pod_class.",
+  {},
+  async () => {
+    try {
+      const audit = odsDispatchAudit();
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify({ data_available: true, ...audit }, null, 2) }],
+      };
+    } catch (err) {
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify({ data_available: false, error: String(err) }, null, 2) }],
+        isError: true,
+      };
+    }
+  },
+);
+
 main().catch(err => {
   console.error("Server failed to start:", err);
   process.exit(1);
