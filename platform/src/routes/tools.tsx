@@ -3,6 +3,12 @@ import { Route, Navigate } from "react-router-dom";
 import { ProtectedRoute, ExplorerRoute } from "@/components/ProtectedRoute";
 import { LazyPage } from "./LazyPage";
 
+// Bushel 8 — LB Frame Substrate UI (BP021)
+const SubstrateBrowserPage = lazy(() => import("@/pages/helm/SubstrateBrowserPage"));
+const BushelDashboard = lazy(() => import("@/pages/helm/BushelDashboard"));
+const SubstrateHealthDashboard = lazy(() => import("@/pages/helm/SubstrateHealthDashboard"));
+const CodexReader = lazy(() => import("@/pages/museum/CodexReader"));
+
 const CueCardDeckPage = lazy(() => import("@/pages/CueCardDeckPage"));
 const DeckCardStudio = lazy(() => import("@/pages/DeckCardStudio"));
 const DeckCollection = lazy(() => import("@/pages/DeckCollection"));
@@ -160,6 +166,14 @@ export const toolsRoutes = (
     <Route path="/staff/v2-primitives" element={<ProtectedRoute><LazyPage><V2PrimitivesPage /></LazyPage></ProtectedRoute>} />
     <Route path="/staff/battery-dispatch-access" element={<ProtectedRoute><LazyPage><BatteryDispatchAccessAudit /></LazyPage></ProtectedRoute>} />
     <Route path="/founder-savings" element={<ProtectedRoute><LazyPage><FounderSavingsDashboard /></LazyPage></ProtectedRoute>} />
+
+    {/* Bushel 8 — LB Frame Substrate UI (BP021) */}
+    <Route path="/helm/substrate" element={<ProtectedRoute><LazyPage><SubstrateBrowserPage /></LazyPage></ProtectedRoute>} />
+    <Route path="/helm/substrate/browser" element={<ProtectedRoute><LazyPage><SubstrateBrowserPage /></LazyPage></ProtectedRoute>} />
+    <Route path="/helm/bushels" element={<ProtectedRoute><LazyPage><BushelDashboard /></LazyPage></ProtectedRoute>} />
+    <Route path="/helm/substrate/health" element={<ProtectedRoute><LazyPage><SubstrateHealthDashboard /></LazyPage></ProtectedRoute>} />
+    <Route path="/codex" element={<ProtectedRoute><LazyPage><CodexReader /></LazyPage></ProtectedRoute>} />
+    <Route path="/codex/:codexId" element={<ProtectedRoute><LazyPage><CodexReader /></LazyPage></ProtectedRoute>} />
 
     {/* Cue card landing pages */}
     <Route path="/tower-of-peace" element={<LazyPage><TowerOfPeace /></LazyPage>} />
