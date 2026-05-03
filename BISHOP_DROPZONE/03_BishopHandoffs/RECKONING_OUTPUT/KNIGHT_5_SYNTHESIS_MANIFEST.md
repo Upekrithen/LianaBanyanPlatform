@@ -52,7 +52,7 @@ stratum_recommendation, ts, hmac, chronos
 
 ---
 
-## Phase C — Processing Summary (74 entries at manifest time)
+## Phase C — Processing Summary (80 entries at final close)
 
 | session_class | count |
 |---|---|
@@ -61,7 +61,7 @@ stratum_recommendation, ts, hmac, chronos
 | monolith | 4 |
 | augur_supersede | 9 |
 | titan_orchestration | 1 |
-| **TOTAL** | **74** |
+| **TOTAL** | **80** |
 
 | stratum | count |
 |---|---|
@@ -112,3 +112,4 @@ stratum_recommendation, ts, hmac, chronos
 ---
 
 *Knight 5 synthesis ledger — TITAN Bushel 1 Reckoning — Bishop session BP018*
+
