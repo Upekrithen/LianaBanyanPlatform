@@ -27,6 +27,11 @@ import {
   TIER_A_SPEC_BULLETS,
   TIER_A_TOOLTIP,
 } from "@/data/lb_frame_tier_specs/tier_a_needs_spec";
+import {
+  TIER_B_SPEC_BULLETS,
+  TIER_B_TOOLTIP,
+  TIER_B_PLAN_ADVISORY,
+} from "@/data/lb_frame_tier_specs/tier_b_suggests_spec";
 
 // ─── Types ─────────────────────────────────────────────────────────────────
 
@@ -89,12 +94,10 @@ const TIERS: TierDef[] = [
     description:
       "The recommended config for a better experience — documented lift over Tier A. " +
       "Claude Max or equivalent. Faster Reckoning velocity and Pod scaffolding.",
-    bullets: [
-      "Claude Code Max or equivalent (recommended, not required)",
-      "Higher token budget + message-rate floor for sustained Reckoning",
-      "15–20 MCP server slots recommended",
-      "Empirical: 2–3× Tier A Reckoning velocity (spec in KN-H3)",
-    ],
+    // Spec bullets and tooltip sourced from tier_b_suggests_spec.ts (single source of truth).
+    // Human-readable canonical: platform/src/data/lb_frame_tier_specs/tier_b_suggests.md
+    bullets: TIER_B_SPEC_BULLETS as unknown as string[],
+    tooltip: TIER_B_TOOLTIP,
     icon: TrendingUp,
     badgeText: "Recommended",
     highlight: "text-blue-700 dark:text-blue-400",
@@ -270,6 +273,25 @@ export function TierSelectionStep({
           );
         })}
       </RadioGroup>
+
+      {/* Plan-tier advisory for Tier B (informational only — does NOT block) */}
+      {selected === "suggests" && (
+        <div
+          role="note"
+          aria-live="polite"
+          aria-atomic="true"
+          className="flex gap-2 rounded-lg border border-blue-200 dark:border-blue-800 bg-blue-50/40 dark:bg-blue-950/20 p-3 text-xs text-muted-foreground"
+        >
+          <AlertCircle className="w-3.5 h-3.5 mt-0.5 flex-shrink-0 text-blue-500" aria-hidden="true" />
+          <div>
+            <span className="font-medium text-blue-700 dark:text-blue-400">Advisory (informational — does not block):</span>{" "}
+            {TIER_B_PLAN_ADVISORY}
+            {detectedSurface && (
+              <span className="block mt-0.5 text-muted-foreground/70">Surface: {detectedSurface}</span>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Plan-tier advisory for Tier C (informational only — does NOT block) */}
       {selected === "founder" && (

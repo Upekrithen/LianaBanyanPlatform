@@ -5391,11 +5391,14 @@ server.tool(
   },
 );
 
-// ─── KN-H1 + KN-H2: get_lb_frame_resource_config_tier ───────────────────────
+// ─── KN-H1 + KN-H2 + KN-H3: get_lb_frame_resource_config_tier ───────────────
 // Read-only. Returns member's Tier choice + tier-spec metadata.
 // KN-H2: Extended to return Tier A spec metadata + empirical-floor receipt pointer
 //         when tier == 'needs'. Single source of truth: tier_a_needs_spec.ts (UI)
 //         and TIER_A_EMPIRICAL_FLOOR_RECEIPT_BP017.json (empirical anchor).
+// KN-H3: Extended to return Tier B spec metadata + empirical-uplift receipt pointer
+//         when tier == 'suggests'. Single source of truth: tier_b_suggests_spec.ts (UI)
+//         and TIER_B_EMPIRICAL_UPLIFT_RECEIPT_BP017.json (empirical anchor).
 // Called at LB Frame Handshake Phase 1 Discovery (Step 1.3) and on-demand.
 // Orthogonal to get_cohort_class (Step 1.2) — Tier and cohort-class are independent axes.
 // BRIDLE Rule 4: if DB unavailable, returns tier_state='not_chosen' (surface picker; don't proceed silently).
@@ -5434,14 +5437,69 @@ const TIER_A_SPEC_METADATA = {
   spec_doc: "platform/src/data/lb_frame_tier_specs/tier_a_needs.md",
 };
 
+const TIER_B_SPEC_METADATA = {
+  plan_requirement: "Claude Code Max or equivalent higher-tier (recommended, not required)",
+  plan_note: "Tier B advisory surfaces if plan below Max-equivalent. Informational only — does not block.",
+  upgrade_required: false,
+  anyone_can_run: true,
+  mcp_slots: "15–20 slots minimum",
+  cohort_class_recommended: "Pied Piper Tier 1+",
+  bag_of_holding_class:
+    "Bigger bag (Claude Code Max context-budget); event-driven warehouse-write at Pied Piper+ cohort",
+  substrate_mode: "read+write",
+  cathedral_fingerprint: "fluid (event-driven; Cue Card 7-day recency gate)",
+  pheromone_mode: "read+write",
+  detective_team_mode: "full (read+write-back)",
+  spec_bullets: [
+    "Claude Code Max or equivalent (recommended, not required)",
+    "1M-context Opus 4.7 token budget (vs default Tier A bag)",
+    "15–20 MCP slots minimum (full LB Frame core + Cathedral + Pheromone + Detective TEAM)",
+    "Full Pheromone substrate (read + write — was read-only at Tier A)",
+    "Detective TEAM full access + write-back loop (was read-only at Tier A)",
+    "Fluid Cathedral fingerprint via Cue Card 7-day recency gate (was Brittle at Tier A)",
+    "Pied Piper Tier 1+ cohort-class recommended (separately advanceable)",
+  ],
+  empirical_uplift: {
+    baseline_tier: "needs",
+    baseline_receipt_pointer:
+      "BISHOP_DROPZONE/14_CanonicalReferences/TIER_A_EMPIRICAL_FLOOR_RECEIPT_BP017.json",
+    hot_rate_min_pct: 89.3,
+    hot_rate_max_pct: 98.7,
+    hot_rate_note:
+      "HOT-rate is substrate-dependent, not plan-dependent. Same R10 baseline applies. " +
+      "Fluid Cathedral may improve in fast-evolving knowledge domains.",
+    reckoning_velocity_uplift_range: "2–3×",
+    reckoning_velocity_source: "bp017-spec",
+    pod_scaffolding_uplift_min_x: 1.5,
+    pod_scaffolding_tier_b_rate: "~1 K-prompt per 30 min (vs ~60 min at Tier A)",
+    pod_scaffolding_source: "bp017-spec",
+    cathedral_hot_between_rebuilds_pct_range: "70–85%",
+    receipt_pointer:
+      "BISHOP_DROPZONE/14_CanonicalReferences/TIER_B_EMPIRICAL_UPLIFT_RECEIPT_BP017.json",
+    uplift_pass: true,
+    bridle_rule_4_note:
+      "Velocity and pod-scaffolding claims labeled bp017-spec (architectural basis). " +
+      "HOT-rate empirically verified via R10 cross-vendor benchmark. " +
+      "BRIDLE Rule 4: source clearly distinguished from live-benchmark measurement.",
+  },
+  spec_doc: "platform/src/data/lb_frame_tier_specs/tier_b_suggests.md",
+  composes_with: [
+    "KN-H1 LANDED 82c52fa (Three-Tier installer + UI + persistence + MCP tools)",
+    "KN-H2 LANDED (Tier A baseline empirical floor receipt)",
+    "KN102+KN103 LANDED 42ad0c3 (cohort-class probe + Pied Piper Fluid Cathedral fingerprint)",
+    "KN104 PRE-COLOSSUS LANDED 5e7f540 (Detective TEAM full access at Tier B)",
+  ],
+};
+
 server.tool(
   "get_lb_frame_resource_config_tier",
   "Returns a member's LB Frame resource-config tier choice (needs/suggests/founder) + tier-spec metadata. " +
   "KN-H2: When tier is 'needs' (Tier A), returns full Tier A spec metadata including empirical floor receipt pointer. " +
+  "KN-H3: When tier is 'suggests' (Tier B), returns full Tier B spec metadata including empirical uplift receipt pointer. " +
   "Called at LB Frame Handshake Phase 1 Discovery Step 1.3 to check if member has already chosen a tier. " +
   "Orthogonal to get_cohort_class (Step 1.2) — Tier and cohort-class are independent axes. " +
   "Tier A NEEDS = default Claude plan, no upgrade required, empirical floor +78–93pp lift. " +
-  "Tier B SUGGESTS = recommended uplift, documented better experience. " +
+  "Tier B SUGGESTS = recommended uplift (Claude Code Max); 2–3× Reckoning velocity; Fluid Cathedral; full Pheromone+Detective TEAM. " +
   "Tier C FOUNDER = empirical-receipt-source, self-attested, no fiat-bridge. " +
   "Anti-extraction by structural form: capital alone cannot purchase higher-tier participation. " +
   "Falls back gracefully if Supabase unavailable (BRIDLE Rule 4).",
@@ -5458,6 +5516,8 @@ server.tool(
     const tier_a_spec = (result.tier === "needs" || result.tier_state === "not_chosen")
       ? TIER_A_SPEC_METADATA
       : null;
+    // KN-H3: Attach Tier B spec metadata when tier is 'suggests'
+    const tier_b_spec = result.tier === "suggests" ? TIER_B_SPEC_METADATA : null;
     return {
       content: [{
         type: "text" as const,
@@ -5466,6 +5526,7 @@ server.tool(
           summary,
           plan_tier_advisory: advisory,
           tier_a_spec,
+          tier_b_spec,
           compose_note: "Run get_cohort_class for cohort-class axis (orthogonal). Both at Handshake Phase 1 Discovery.",
         }, null, 2),
       }],

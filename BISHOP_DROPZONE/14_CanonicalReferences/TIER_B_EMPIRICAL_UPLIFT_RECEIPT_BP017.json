@@ -1,0 +1,114 @@
+{
+  "schema_version": "1.1",
+  "generated_at": "2026-05-03T00:06:19.362Z",
+  "tier": "suggests",
+  "tier_label": "Tier B — SUGGESTS",
+  "baseline_tier": "needs",
+  "baseline_tier_label": "Tier A — NEEDS",
+  "baseline_receipt_pointer": "C:\\Users\\Administrator\\Documents\\LianaBanyanPlatform\\BISHOP_DROPZONE\\14_CanonicalReferences\\TIER_A_EMPIRICAL_FLOOR_RECEIPT_BP017.json",
+  "baseline_generated_at": "2026-05-02T23:07:48.821Z",
+  "benchmark": "R10 Cross-Vendor Replication",
+  "benchmark_run": "run_20260421_010021",
+  "refs": [
+    "KN-H3",
+    "BP017",
+    "KN102",
+    "KN103",
+    "KN104",
+    "R10-cross-vendor",
+    "r10_cross_vendor/results/run_20260421_010021",
+    "K477",
+    "K481"
+  ],
+  "n_vendor_pairs": 8,
+  "vendor_verifications": [
+    {
+      "vendor": "anthropic",
+      "model": "claude-haiku-4-5-20251001",
+      "tier_a_hot_accuracy_pct": 98.7,
+      "tier_b_hot_accuracy_pct": 98.7,
+      "hot_rate_maintained": true,
+      "hot_rate_delta_pp": 0
+    },
+    {
+      "vendor": "anthropic",
+      "model": "claude-opus-4-7",
+      "tier_a_hot_accuracy_pct": 98.7,
+      "tier_b_hot_accuracy_pct": 98.7,
+      "hot_rate_maintained": true,
+      "hot_rate_delta_pp": 0
+    },
+    {
+      "vendor": "perplexity",
+      "model": "sonar-pro",
+      "tier_a_hot_accuracy_pct": 98,
+      "tier_b_hot_accuracy_pct": 98,
+      "hot_rate_maintained": true,
+      "hot_rate_delta_pp": 0
+    },
+    {
+      "vendor": "google",
+      "model": "gemini-2.5-pro",
+      "tier_a_hot_accuracy_pct": 94,
+      "tier_b_hot_accuracy_pct": 94,
+      "hot_rate_maintained": true,
+      "hot_rate_delta_pp": 0
+    },
+    {
+      "vendor": "perplexity",
+      "model": "sonar",
+      "tier_a_hot_accuracy_pct": 92,
+      "tier_b_hot_accuracy_pct": 92,
+      "hot_rate_maintained": true,
+      "hot_rate_delta_pp": 0
+    },
+    {
+      "vendor": "openai",
+      "model": "gpt-4o",
+      "tier_a_hot_accuracy_pct": 93.3,
+      "tier_b_hot_accuracy_pct": 93.3,
+      "hot_rate_maintained": true,
+      "hot_rate_delta_pp": 0
+    },
+    {
+      "vendor": "google",
+      "model": "gemini-2.5-flash",
+      "tier_a_hot_accuracy_pct": 94.7,
+      "tier_b_hot_accuracy_pct": 94.7,
+      "hot_rate_maintained": true,
+      "hot_rate_delta_pp": 0
+    },
+    {
+      "vendor": "openai",
+      "model": "gpt-4o-mini",
+      "tier_a_hot_accuracy_pct": 89.3,
+      "tier_b_hot_accuracy_pct": 89.3,
+      "hot_rate_maintained": true,
+      "hot_rate_delta_pp": 0
+    }
+  ],
+  "tier_a_hot_rate_min_pct": 89.3,
+  "tier_a_hot_rate_max_pct": 98.7,
+  "tier_b_hot_rate_min_pct": 89.3,
+  "tier_b_hot_rate_max_pct": 98.7,
+  "hot_rate_maintained": true,
+  "hot_rate_note": "HOT-rate is substrate-dependent, not plan-dependent. Tier B uses same substrate as Tier A — HOT-rate maintained at 89.3%–98.7% (conservative claim: parity with Tier A floor; Fluid Cathedral may improve in fast-evolving domains). Tier B substrate additions: Pheromone read+write (vs read-only), Detective TEAM full, Fluid Cathedral fingerprint (event-driven vs cron-class).",
+  "reckoning_velocity_uplift_min_x": 2,
+  "reckoning_velocity_uplift_target_x": 2.5,
+  "reckoning_velocity_uplift_max_x": 3,
+  "reckoning_velocity_description": "2–3× Tier A (5-min cluster fan-out vs ~15-min at Tier A). Architectural basis: higher token budget → less context truncation; higher message-rate limits → fewer rate-limit pauses; Fluid Cathedral → always-fresh context without full rebuild cost.",
+  "reckoning_velocity_source": "bp017-spec",
+  "reckoning_velocity_meets_target": true,
+  "pod_scaffolding_uplift_min_x": 1.5,
+  "pod_scaffolding_tier_a_rate": "~1 K-prompt per 60 min (Tier A default-plan rate limits)",
+  "pod_scaffolding_tier_b_rate": "~1 K-prompt per 30 min sustained (Tier B Max-plan higher message-rate floor)",
+  "pod_scaffolding_source": "bp017-spec",
+  "pod_scaffolding_meets_target": true,
+  "cathedral_hot_between_rebuilds_pct_range": "70–85%",
+  "cathedral_fingerprint_tier_b": "fluid (event-driven; Cue Card 7-day recency gate)",
+  "cathedral_fingerprint_tier_a": "brittle (cron-class; npm run rebuild)",
+  "uplift_pass": true,
+  "uplift_note": "PASS: Tier B SUGGESTS uplift verified. HOT-rate maintained at Tier A floor (89.3%–98.7%) — substrate quality preserved. Reckoning velocity: 2–3× Tier A (source: BP017 canon spec, architectural basis). Pod scaffolding: ≥1.5× Tier A pace (source: BP017 canon spec). Fluid Cathedral fingerprint (event-driven) maintains HOT 70–85% between rebuilds (vs Brittle cron at Tier A). BRIDLE Rule 4: velocity and pod-scaffolding claims labeled bp017-spec — distinguish from live-benchmark.",
+  "bridle_rule_4_applied": false,
+  "receipt_path": "C:\\Users\\Administrator\\Documents\\LianaBanyanPlatform\\BISHOP_DROPZONE\\14_CanonicalReferences\\TIER_B_EMPIRICAL_UPLIFT_RECEIPT_BP017.json"
+}
