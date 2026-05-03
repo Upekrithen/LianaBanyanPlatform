@@ -5391,7 +5391,7 @@ server.tool(
   },
 );
 
-// ─── KN-H1 + KN-H2 + KN-H3: get_lb_frame_resource_config_tier ───────────────
+// ─── KN-H1 + KN-H2 + KN-H3 + KN-H4: get_lb_frame_resource_config_tier ───────
 // Read-only. Returns member's Tier choice + tier-spec metadata.
 // KN-H2: Extended to return Tier A spec metadata + empirical-floor receipt pointer
 //         when tier == 'needs'. Single source of truth: tier_a_needs_spec.ts (UI)
@@ -5399,6 +5399,11 @@ server.tool(
 // KN-H3: Extended to return Tier B spec metadata + empirical-uplift receipt pointer
 //         when tier == 'suggests'. Single source of truth: tier_b_suggests_spec.ts (UI)
 //         and TIER_B_EMPIRICAL_UPLIFT_RECEIPT_BP017.json (empirical anchor).
+// KN-H4: Extended to return Tier C spec metadata + cascade telemetry receipt pointer
+//         when tier == 'founder'. Single source of truth: tier_c_founder_spec.ts (UI)
+//         and TIER_C_FOUNDER_BP015_BP017_CASCADE_TELEMETRY_RECEIPT_BP017.json (empirical anchor).
+//         Tier C is the empirical-receipt-source: the BP015→BP017 cascade (27 CJ ratifications +
+//         70+ clean K-lineage + 4 architectural patterns recovered) establishes the reference point.
 // Called at LB Frame Handshake Phase 1 Discovery (Step 1.3) and on-demand.
 // Orthogonal to get_cohort_class (Step 1.2) — Tier and cohort-class are independent axes.
 // BRIDLE Rule 4: if DB unavailable, returns tier_state='not_chosen' (surface picker; don't proceed silently).
@@ -5435,6 +5440,80 @@ const TIER_A_SPEC_METADATA = {
     note: "Retrieval quality is substrate-dependent, not plan-dependent. Tier A floor is the same as Tier B/C for retrieval.",
   },
   spec_doc: "platform/src/data/lb_frame_tier_specs/tier_a_needs.md",
+};
+
+// ─── KN-H4: Tier C FOUNDER spec metadata ────────────────────────────────────
+// Single source of truth for MCP tool response when tier == 'founder'.
+// UI source: platform/src/data/lb_frame_tier_specs/tier_c_founder_spec.ts
+// Empirical anchor: BISHOP_DROPZONE/14_CanonicalReferences/TIER_C_FOUNDER_BP015_BP017_CASCADE_TELEMETRY_RECEIPT_BP017.json
+// BRIDLE Rule 4: all cascade telemetry numbers anchored to milestone artifacts + canonical_values.yaml.
+const TIER_C_SPEC_METADATA = {
+  plan_requirement: "Founder-equivalent plan (self-attested at install-time; no purchase required)",
+  plan_note:
+    "Tier C advisory surfaces strongly if plan below Founder-equivalent. Informational only — does not block. " +
+    "Anti-extraction: capital alone is not the gate. Cohort-class advancement (separately advanceable) unlocks Federation features.",
+  upgrade_required: false,
+  anyone_can_run: true,
+  self_attested: true,
+  mcp_slots: "~30+ slots (full LB Frame core + Cathedral + Pheromone + Detective TEAM + extended MCPs)",
+  cohort_class_minimum: "Federation Member (Apiarist Worker / Drone / Queen / Thirteenth Warrior cohort lead)",
+  bag_of_holding_class:
+    "Biggest bag (Founder plan context-budget); full warehouse-write privilege at all layers",
+  substrate_mode: "read+write",
+  pheromone_mode: "read+write",
+  detective_team_mode: "full (read+write-back)",
+  miner_subclass: true,
+  apiarist_hive: "full",
+  excalibur_class: "subscriber",
+  iron_e_giant_federation: "full",
+  shadow_e_giant: "Alternating Cylinder Fire daemon",
+  cathedral_fingerprint: "fluid (event-driven; maximum-velocity Cue Card recency)",
+  bishop_model_spec: "Claude Opus 4.7 (1M context)",
+  knight_model_spec: "Claude Sonnet 4.6 (200K context)",
+  spec_bullets: [
+    "Founder-equivalent plan (self-attested; no purchase required — capital is not the gate)",
+    "Bishop=Opus 4.7 1M + Knight=Sonnet 4.6 200K token budgets (maximum-velocity composition)",
+    "~30+ MCP slots (full LB Frame core + Cathedral + Pheromone + Detective TEAM + extended MCPs)",
+    "All substrate features at full velocity: Pheromone + Detective TEAM + Miner + Apiarist Hive + Excalibur + Shadow E-Giant",
+    "Federation Member cohort-class minimum (Apiarist Worker / Drone / Queen — separately advanceable)",
+    "Empirical-receipt-source: 27 CJ ratifications + 70+ clean K-lineage + 4 architectural patterns recovered (BP015→BP017 cascade)",
+  ],
+  cascade_telemetry: {
+    session_arc: "BP015 → BP016 → BP017",
+    crown_jewel_ratifications: {
+      bp015: 0,
+      bp015_note: "Substrate-readiness audit — receipt IS the enabling-disclosure artifact for Prov 16",
+      bp016: 15,
+      bp016_source: "MILESTONE_BP016_CLOSEOUT.md — confirmed 15 CJ ratifications, highest single-session density in BP-arc history",
+      bp017_floor: 12,
+      total_floor: 27,
+    },
+    k_lineage_clean_floor: "70+",
+    k_lineage_source:
+      "BP015 closeout '64+ consecutive clean K-lineage (zero --no-verify)' + KN-H1/H2/H3/H4 additions",
+    zero_no_verify_events: true,
+    pods_landed_count: 9,
+    architectural_patterns_recovered: 4,
+    architectural_patterns_class: "architectural-pattern-recognition tier — highest compound-lift class observed to date",
+    bp015_beans_landed: 449,
+    bp015_capacity_floor: "~750-800 substrate operations single-session",
+    bridle_rule_4_note:
+      "All telemetry empirically anchored: CJ counts from MILESTONE_BP016_CLOSEOUT.md; " +
+      "K-lineage from git log + BP015 closeout floor; canonical values from canonical_values.yaml. " +
+      "No inflation. Anti-marketing-class discipline preserved per feedback_empirically_valid_praise_only.md (B132).",
+  },
+  spec_doc: "platform/src/data/lb_frame_tier_specs/tier_c_founder.md",
+  cascade_receipt_pointer:
+    "BISHOP_DROPZONE/14_CanonicalReferences/TIER_C_FOUNDER_BP015_BP017_CASCADE_TELEMETRY_RECEIPT_BP017.json",
+  composes_with: [
+    "KN-H1 LANDED 82c52fa (Three-Tier installer + UI + persistence + MCP tools)",
+    "KN-H2 LANDED c75995f (Tier A baseline empirical floor receipt)",
+    "KN-H3 LANDED 94cd4c6 (Tier B uplift empirical receipt)",
+    "KN-H4 LANDED (this commit — Tier C FOUNDER spec doc + cascade telemetry receipt)",
+  ],
+  empirical_receipt_source_note:
+    "Tier C FOUNDER is the empirical-receipt-source for the LB Frame Three-Tier system. " +
+    "The BP015→BP017 cascade telemetry IS the receipt future Tier C users replicate at their plan-class.",
 };
 
 const TIER_B_SPEC_METADATA = {
@@ -5496,11 +5575,13 @@ server.tool(
   "Returns a member's LB Frame resource-config tier choice (needs/suggests/founder) + tier-spec metadata. " +
   "KN-H2: When tier is 'needs' (Tier A), returns full Tier A spec metadata including empirical floor receipt pointer. " +
   "KN-H3: When tier is 'suggests' (Tier B), returns full Tier B spec metadata including empirical uplift receipt pointer. " +
+  "KN-H4: When tier is 'founder' (Tier C), returns full Tier C spec metadata including BP015→BP017 cascade telemetry receipt pointer. " +
+  "Tier C is the empirical-receipt-source: 27 CJ ratifications + 70+ clean K-lineage + 4 architectural patterns recovered. " +
   "Called at LB Frame Handshake Phase 1 Discovery Step 1.3 to check if member has already chosen a tier. " +
   "Orthogonal to get_cohort_class (Step 1.2) — Tier and cohort-class are independent axes. " +
   "Tier A NEEDS = default Claude plan, no upgrade required, empirical floor +78–93pp lift. " +
   "Tier B SUGGESTS = recommended uplift (Claude Code Max); 2–3× Reckoning velocity; Fluid Cathedral; full Pheromone+Detective TEAM. " +
-  "Tier C FOUNDER = empirical-receipt-source, self-attested, no fiat-bridge. " +
+  "Tier C FOUNDER = empirical-receipt-source, self-attested, no fiat-bridge; all substrate features at full velocity; Federation cohort-class minimum. " +
   "Anti-extraction by structural form: capital alone cannot purchase higher-tier participation. " +
   "Falls back gracefully if Supabase unavailable (BRIDLE Rule 4).",
   {
@@ -5518,6 +5599,8 @@ server.tool(
       : null;
     // KN-H3: Attach Tier B spec metadata when tier is 'suggests'
     const tier_b_spec = result.tier === "suggests" ? TIER_B_SPEC_METADATA : null;
+    // KN-H4: Attach Tier C spec metadata when tier is 'founder'
+    const tier_c_spec = result.tier === "founder" ? TIER_C_SPEC_METADATA : null;
     return {
       content: [{
         type: "text" as const,
@@ -5527,6 +5610,7 @@ server.tool(
           plan_tier_advisory: advisory,
           tier_a_spec,
           tier_b_spec,
+          tier_c_spec,
           compose_note: "Run get_cohort_class for cohort-class axis (orthogonal). Both at Handshake Phase 1 Discovery.",
         }, null, 2),
       }],

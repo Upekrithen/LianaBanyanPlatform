@@ -32,6 +32,11 @@ import {
   TIER_B_TOOLTIP,
   TIER_B_PLAN_ADVISORY,
 } from "@/data/lb_frame_tier_specs/tier_b_suggests_spec";
+import {
+  TIER_C_SPEC_BULLETS,
+  TIER_C_TOOLTIP,
+  TIER_C_PLAN_ADVISORY,
+} from "@/data/lb_frame_tier_specs/tier_c_founder_spec";
 
 // ─── Types ─────────────────────────────────────────────────────────────────
 
@@ -111,14 +116,13 @@ const TIERS: TierDef[] = [
     tagline: "Empirical-receipt source. Maximum-velocity.",
     description:
       "Founder's customized highest-throughput config. The spec under which " +
-      "BP015→BP017 cascade (15 Crown Jewels + 36-hour Reckoning) was generated. " +
+      "BP015→BP017 cascade (27 Crown Jewels + 70+ clean K-lineage + 4 architectural patterns recovered) was generated. " +
       "Self-attested — no fiat-bridge. Capital alone is not the gate.",
-    bullets: [
-      "Founder-equivalent plan (self-attested; no purchase required)",
-      "Maximum token budget + message-rate config",
-      "All LB Frame core + extended MCPs",
-      "Empirical receipt: BP015→BP017 cascade as anchor (spec in KN-H4)",
-    ],
+    // Spec bullets and tooltip sourced from tier_c_founder_spec.ts (single source of truth).
+    // Human-readable canonical: platform/src/data/lb_frame_tier_specs/tier_c_founder.md
+    // Empirical receipt: BISHOP_DROPZONE/14_CanonicalReferences/TIER_C_FOUNDER_BP015_BP017_CASCADE_TELEMETRY_RECEIPT_BP017.json
+    bullets: TIER_C_SPEC_BULLETS as unknown as string[],
+    tooltip: TIER_C_TOOLTIP,
     icon: Zap,
     badgeText: "Self-Attested",
     highlight: "text-violet-700 dark:text-violet-400",
@@ -305,9 +309,7 @@ export function TierSelectionStep({
           <AlertCircle className="w-3.5 h-3.5 mt-0.5 flex-shrink-0 text-violet-500" aria-hidden="true" />
           <div>
             <span className="font-medium text-violet-700 dark:text-violet-400">Advisory (informational — does not block):</span>{" "}
-            Tier C reflects Founder&apos;s customized Claude Code plan. If your plan has lower
-            token budgets, some maximum-velocity features may be slower. LB Frame still runs.
-            Capital alone is not the gate. You have full sovereignty to pick any tier.
+            {TIER_C_PLAN_ADVISORY}
             {detectedSurface && (
               <span className="block mt-0.5 text-muted-foreground/70">Surface: {detectedSurface}</span>
             )}
