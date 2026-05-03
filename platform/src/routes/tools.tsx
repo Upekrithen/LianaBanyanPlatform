@@ -8,6 +8,10 @@ const SubstrateBrowserPage = lazy(() => import("@/pages/helm/SubstrateBrowserPag
 const BushelDashboard = lazy(() => import("@/pages/helm/BushelDashboard"));
 const SubstrateHealthDashboard = lazy(() => import("@/pages/helm/SubstrateHealthDashboard"));
 const CodexReader = lazy(() => import("@/pages/museum/CodexReader"));
+// Bushel 19 — Scales/Bouncer/Judge Member-Visible Verdict UX (BP021)
+const MyVerdictHistoryPage = lazy(() => import("@/pages/helm/MyVerdictHistoryPage"));
+const MyMinerGradingPage = lazy(() => import("@/pages/helm/MyMinerGradingPage"));
+const ScalesRubricPage = lazy(() => import("@/pages/helm/ScalesRubricPage"));
 
 const CueCardDeckPage = lazy(() => import("@/pages/CueCardDeckPage"));
 const DeckCardStudio = lazy(() => import("@/pages/DeckCardStudio"));
@@ -174,6 +178,11 @@ export const toolsRoutes = (
     <Route path="/helm/substrate/health" element={<ProtectedRoute><LazyPage><SubstrateHealthDashboard /></LazyPage></ProtectedRoute>} />
     <Route path="/codex" element={<ProtectedRoute><LazyPage><CodexReader /></LazyPage></ProtectedRoute>} />
     <Route path="/codex/:codexId" element={<ProtectedRoute><LazyPage><CodexReader /></LazyPage></ProtectedRoute>} />
+
+    {/* Bushel 19 — Scales/Bouncer/Judge Member-Visible Verdict UX (BP021) */}
+    <Route path="/helm/verdicts" element={<ProtectedRoute><LazyPage><MyVerdictHistoryPage /></LazyPage></ProtectedRoute>} />
+    <Route path="/helm/miner-grading" element={<ProtectedRoute><LazyPage><MyMinerGradingPage /></LazyPage></ProtectedRoute>} />
+    <Route path="/helm/scales-rubric" element={<ProtectedRoute><LazyPage><ScalesRubricPage /></LazyPage></ProtectedRoute>} />
 
     {/* Cue card landing pages */}
     <Route path="/tower-of-peace" element={<LazyPage><TowerOfPeace /></LazyPage>} />
