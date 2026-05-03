@@ -1,0 +1,43 @@
+﻿---
+supersede_type: augur_post_audit_violation
+augur_id: augur_pricing
+augur_name: Augur-Pricing
+violating_file: C:\Users\Administrator\Documents\LianaBanyanPlatform\BISHOP_DROPZONE\01_KnightPrompts\PROMPT_KNIGHT_BUSHEL_2_SCALING_TIER_8CP_PARALLEL_KNIGHT_8_SPHINX_PHEROMONE_THIN_BP020.md
+detected_at: 2026-05-03T06:11:16Z
+status: reconciled
+kn043: true
+reconciled_by: Knight (Cursor) BP020 session
+reconciled_at: 2026-05-03T06:17:00Z
+reconciliation_note: "FALSE POSITIVE. 8CP = 8 candlepower (cP) -- the canonical LB AI throughput unit ratified by Founder direct BP020 turn ~46 ('Yes, candlepower (cP). Good stuff.'). Candlepower is explicitly NOT a currency (see candlepower_cp_lb_throughput_unit_canon_bp020.eblet.md: 'NOT a replacement for tokens, entries, or wall-clock'). LB membership remains $5/year, unchanged. No pricing violation. Exemption path: measurement-unit context (candlepower = AI throughput, distinct from fiat/currency/membership pricing)."
+---
+
+# Augur Post-Audit Violation Supersede
+
+**Augur:** Augur-Pricing  
+**Violating file:** `C:\Users\Administrator\Documents\LianaBanyanPlatform\BISHOP_DROPZONE\01_KnightPrompts\PROMPT_KNIGHT_BUSHEL_2_SCALING_TIER_8CP_PARALLEL_KNIGHT_8_SPHINX_PHEROMONE_THIN_BP020.md`  
+**Detected:** 2026-05-03T06:11:16Z
+
+## Violation Signal
+
+WARN [Augur-Pricing] (PostToolUse audit â€” not blocking): Membership pricing â‰  $5/year detected.
+LB membership is $5/year, identical for every member from day one through year fifty.
+No tiers, no early-adopter pricing, no entry fees. Lifetime guarantee at signup price.
+Note: API spend, compute cost, Pawn run budgets, 'Member count', and 'threshold' (canonical Amplifier naming) do NOT trigger this Augur (K514.5/K527 tuned).
+Context exemptions: '$5/year membership unchanged', 'membership-orthogonal', 'pricing identical for all', '(industry term)' suppress false positives when present in the diff.
+Path exemptions: Amplifier AA Formals (#2318-2320), project_amplifier_program_*, voucher_tiers/, BRIDLE_RULES/, sentinel_severity_tiers/.
+See: project_membership_pricing_identical_for_all.md
+
+## Action Required
+
+This file was written with content that triggered the **Augur-Pricing** Augur.
+The write was **NOT blocked** (PostToolUse audit mode â€” KN043 BP005).
+Bishop must reconcile: either correct the violating file or ratify an exemption.
+
+## Stone Tablet Pattern
+
+This supersede stub follows the BP005 Skipping Stones extension:
+- D.2 KN043: NO destructive operations. Write succeeded; this stub points
+  to the canonical correction needed.
+- Per Hugo clarification examples: supersede stubs carry `status: reconciled`.
+  Once Bishop reconciles, update status to `reconciled` and note the resolution.
+
