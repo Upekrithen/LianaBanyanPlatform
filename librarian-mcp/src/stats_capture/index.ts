@@ -5,3 +5,5 @@
  */
 
 export * from "./harness.js";
+export * from "./retention_pruner.js";
+export * from "./cron_register.js";
