@@ -25,6 +25,8 @@
 
 import type { VendorName } from "./adapters/types.js";
 import type { QueryClass } from "./classifier.js";
+import type { InternalTaskClass, AgentRole } from "./internal_classifier.js";
+import type { InternalConductorMode } from "./internal_router.js";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -239,4 +241,138 @@ export function getRecentRoutes(limit: number = 10): RouteEvent[] {
 /** Test-only: clear all telemetry state. */
 export function _resetTelemetryForTests(): void {
   _events.length = 0;
+}
+
+// ---------------------------------------------------------------------------
+// Internal AI Cohort Telemetry (Bushel X · BP021)
+// Extends the member-query telemetry with internal-task-class events.
+// Scribe path: scribe_Conductor.jsonl (same file, internal_task_class field
+// distinguishes internal events from member-query events).
+// ---------------------------------------------------------------------------
+
+export interface InternalRouteEvent {
+  ts: number;
+  vendor: VendorName;
+  model: string;
+  taskClass: InternalTaskClass;
+  agentRole: AgentRole;
+  mode: InternalConductorMode;
+  fallbackUsed: boolean;
+  canonicalAssignmentUsed: boolean;
+  latencyMs?: number | null;
+  costUsd?: number | null;
+}
+
+const _internalEvents: InternalRouteEvent[] = [];
+const MAX_INTERNAL_EVENTS = 2_000;
+
+function _trimInternal(): void {
+  if (_internalEvents.length > MAX_INTERNAL_EVENTS) {
+    _internalEvents.splice(0, _internalEvents.length - MAX_INTERNAL_EVENTS);
+  }
+}
+
+/**
+ * Record an internal routing decision for the AI cohort.
+ * Called by internal_router.ts after every routing decision.
+ * Also appends to scribe_Conductor.jsonl (non-fatal, Node.js only).
+ */
+export function recordInternalRoute(evt: InternalRouteEvent): void {
+  _internalEvents.push({ ...evt });
+  _trimInternal();
+  void _logInternalConductorDecision(evt);
+}
+
+async function _logInternalConductorDecision(evt: InternalRouteEvent): Promise<void> {
+  try {
+    if (typeof process === "undefined" || !process.versions?.node) return;
+
+    const { appendFileSync, mkdirSync, existsSync } = await import("node:fs");
+    const { resolve, dirname } = await import("node:path");
+
+    const stitchpunksDir = process.env.LIBRARIAN_STITCHPUNKS_DIR
+      ? resolve(process.env.LIBRARIAN_STITCHPUNKS_DIR)
+      : null;
+    if (!stitchpunksDir) return;
+
+    const conductorPath = resolve(stitchpunksDir, "scribes", "scribe_Conductor.jsonl");
+    const parentDir = dirname(conductorPath);
+    if (!existsSync(parentDir)) mkdirSync(parentDir, { recursive: true });
+
+    const record = {
+      event_type: "internal_task_routing",
+      task_class: evt.taskClass,
+      agent_role: evt.agentRole,
+      vendor: evt.vendor,
+      model: evt.model,
+      mode: evt.mode,
+      fallback_used: evt.fallbackUsed,
+      canonical_used: evt.canonicalAssignmentUsed,
+      ts: new Date(evt.ts).toISOString(),
+    };
+
+    appendFileSync(conductorPath, JSON.stringify(record) + "\n", "utf-8");
+  } catch {
+    // Non-fatal: routing must never fail because the scribe write failed
+  }
+}
+
+/**
+ * Return internal routing events within a time window (newest first).
+ * Optional agentRole filter.
+ */
+export function getRecentInternalRoutes(
+  limit = 20,
+  agentRole?: AgentRole,
+): InternalRouteEvent[] {
+  let events = [..._internalEvents];
+  if (agentRole) events = events.filter((e) => e.agentRole === agentRole);
+  return events.slice(-limit).reverse();
+}
+
+/**
+ * Return auto-mode adoption rate for internal routing.
+ * Useful for the cost/quality telemetry dashboard (Shadow 7).
+ */
+export function getInternalConductorAdoptionStats(windowHours = 24 * 7): {
+  total: number;
+  canonicalLockCount: number;
+  autoCount: number;
+  manualCount: number;
+  canonicalOverrideCount: number;
+  autoAdoptionPercent: number | null;
+} {
+  const cutoff = Date.now() - windowHours * 3_600_000;
+  const events = _internalEvents.filter((e) => e.ts >= cutoff);
+  if (events.length === 0) {
+    return {
+      total: 0,
+      canonicalLockCount: 0,
+      autoCount: 0,
+      manualCount: 0,
+      canonicalOverrideCount: 0,
+      autoAdoptionPercent: null,
+    };
+  }
+
+  const canonicalLockCount = events.filter((e) => e.mode === "canonical-lock").length;
+  const autoCount = events.filter((e) => e.mode === "auto").length;
+  const manualCount = events.filter((e) => e.mode === "manual").length;
+  const canonicalOverrideCount = events.filter(
+    (e) => e.mode === "auto" && !e.canonicalAssignmentUsed,
+  ).length;
+
+  return {
+    total: events.length,
+    canonicalLockCount,
+    autoCount,
+    manualCount,
+    canonicalOverrideCount,
+    autoAdoptionPercent: events.length > 0 ? Math.round((autoCount / events.length) * 1000) / 10 : null,
+  };
+}
+
+/** Test-only: clear internal route telemetry state. */
+export function _resetInternalTelemetryForTests(): void {
+  _internalEvents.length = 0;
 }

@@ -1,3 +1,24 @@
+﻿---
+name: The Conductor (Vendor-Neutral Adaptive Model Router)
+description: A Cathedral-aware adaptive model router that classifies member queries by complexity, routes to the empirically-best vendor-model pair from a continuously-updated ranking table, with a three-mode member toggle and a cooperative-economic flywheel over cross-vendor telemetry.
+type: aa_formal
+innovation_id: "2277"
+ratification_session: B117
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - the conductor vendor neutral adaptive router
+  - automatic transmission for ai
+  - cathedral aware query routing classification
+  - cross vendor model selection routing
+  - three mode toggle auto route manual vendor lock
+  - continuous online benchmark routing update
+  - aa formal 2277
+  - conductor orchestra model routing
+canon_eblet_pointer: conductor_2277_bishop_sonnet_default_opus_synthesis_routing_policy_bp021.eblet.md
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
 # A&A Formal #2277 — The Conductor's Baton: Vendor-Neutral Adaptive Model Router for Member Queries
 
 **Primary name (patent / technical / A&A):** The Conductor's Baton
@@ -277,6 +298,93 @@ The Conductor has the same participation-driven improvement property as the Cath
 
 ---
 
+## BP021 Internal AI Cohort Routing Extension
+
+**Session:** BP021 / Bushel X (Knight session K<TBD>)
+**Date:** May 3, 2026
+**Author:** Knight (Cursor / Sonnet 4.6)
+**Status:** LANDED
+
+### Extension Scope
+
+The Conductor (#2277) was shipped for member-query routing via AI Companion (#2275).
+This extension applies the same three-mode toggle, continuous benchmarking, and Inuka Pattern
+routing logic to the **internal AI cohort** — Bishop / Knight / Pawn task assignment.
+
+### New Files (Bushel X deliverables)
+
+| File | Purpose |
+|---|---|
+| `platform/src/lib/conductor/internal_classifier.ts` | 7-class internal task classifier (bishop/knight/pawn sub-classes) |
+| `platform/src/lib/conductor/internal_rankings.ts` | Per-(task_class × cost_priority) ranking matrix; canonical defaults + BP021 seeds |
+| `platform/src/lib/conductor/internal_router.ts` | Three-mode toggle for internal cohort (auto/manual/canonical-lock) |
+| `platform/src/lib/conductor/internal_adapters/` | Bishop / Knight / Pawn adapter layer (all 4 vendors usable per role) |
+| `platform/src/lib/conductor/internal_benchmarking.ts` | Every-Nth benchmarking hook; feeds internal_rankings.ts via injectRankingEntry() |
+| `platform/src/lib/conductor/telemetry.ts` | Extended with InternalRouteEvent, recordInternalRoute(), adoption stats |
+| `platform/src/components/conductor/InternalRoutingPanel.tsx` | Helm UX: per-role mode toggle + manual override UI |
+| `platform/src/components/conductor/InternalCostDashboard.tsx` | Helm dashboard: cost/quality/HOT% trend per agent role |
+
+### New Task Taxonomy (7 internal task classes)
+
+```
+bishop_canon_substrate_keeping — Eblets, A&A formals, Cathedral substrate writes
+bishop_foreman_coordination    — Knight/Pawn dispatch, cross-agent coordination
+knight_authoring               — Greenfield code authoring, new feature build
+knight_audit                   — Code review, test triage, diff audit
+knight_implementation          — Prescribed tasks: migrations, wiring, deploys
+pawn_research                  — Web research, domain lookup, source verification
+pawn_validation                — Spec/legal/patent compliance check, contradiction detection
+```
+
+### Three-Mode Toggle (Internal)
+
+| Mode | Behavior | Who |
+|---|---|---|
+| **canonical-lock** (default) | Bishop=Opus, Knight=Sonnet, Pawn=Perplexity. Zero behavioral change. | Safe production default |
+| **auto** | Conductor picks optimal vendor/model per task class from internal_rankings. Requires Founder fire decision to activate in production. | Post-empirical rollout |
+| **manual** | Founder/agent specifies vendor/model per role ("stick-shift mode"). | Power-user override |
+
+### Canonical-Lock Safety Discipline
+
+`canonical-lock` mode is the production default. It preserves `Bishop=Opus / Knight=Sonnet / Pawn=Perplexity`
+exactly — no behavioral change from pre-Conductor defaults. The router only departs from canonical
+when BOTH: (a) mode === "auto" AND (b) internal_rankings has empirical data suggesting a better choice.
+Auto-mode rollout = Founder fire decision.
+
+### Continuous Benchmarking (Internal)
+
+Every Nth internal task (default N=20) fires parallel vendor probes in the background.
+Results feed `injectRankingEntry()` in `internal_rankings.ts` — keeping the ranking table
+self-correcting. Founder Fire Code: benchmarking is observation, not publication.
+Probe log appends to `$CONDUCTOR_INTERNAL_BENCH_DIR/bench_log.jsonl`.
+
+### Tests
+
+- `__tests__/internal_classifier.test.ts` — 40 tests, 40 passing (all 7 task classes + fallback + label fast-path)
+- `__tests__/internal_router.test.ts` — 19 tests, 19 passing (canonical-lock invariants, manual/auto modes, telemetry)
+- Total: **59/59 tests passing** (100% pass rate — G3 gate met)
+
+### Patent Posture
+
+Extends #2277 claims to internal-cohort scope. Candidate supplementary disclosure for Prov 16+:
+- Claim extension: routing taxonomy applied to heterogeneous AI agent roles (Bishop/Knight/Pawn)
+- Claim extension: canonical-lock mode as a safety primitive for AI-agent role assignment
+- Claim extension: continuous parallel-vendor benchmarking for internal AI cohort optimization
+- Composes with #2250 (Algorithmic Efficiency Mandate) — cost-discipline lever operationalized at
+  runtime for internal AI spend, not just member queries.
+
+### Strategic Implication
+
+The #2250 Algorithmic Efficiency Mandate is now operationalized at runtime for internal AI spend.
+Platform gets the same Economy-of-Mass lever over Bishop/Knight/Pawn compute that members get
+over their own query routing. When auto mode is enabled (post Founder fire decision), the Conductor
+may route Knight audit tasks to Haiku (R13: 90% HOT at 0.0157 cost-per-HOT) instead of Sonnet —
+same accuracy, 6× cheaper per task.
+
+---
+
 *Drafted B117, April 23, 2026. Bishop (Claude Opus 4.7, 1M context). Tenth A&A Formal of the Prov 14 thresh — the vendor-neutral adaptive router that turns the Cost-Slasher from a static claim into a live service, the Cathedral from retrieval-only into retrieval-plus-adaptive-compute, and the Companion from a vendor-bridge into a vendor-orchestrator. Founder's canonical phrasing ratified in-session: "First strings... now brass... now tympani!" The Conductor does not play an instrument. The Conductor decides which instrument plays. That distinction is the patent.*
+
+*Extension section added Bushel X / BP021, May 3, 2026. Knight (Cursor / Sonnet 4.6). 59/59 tests passing. Canonical-lock default active. Auto-mode production rollout = Founder fire decision pending.*
 
 **FOR THE KEEP.**
