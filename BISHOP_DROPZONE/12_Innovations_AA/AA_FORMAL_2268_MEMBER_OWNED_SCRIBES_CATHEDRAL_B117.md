@@ -1,3 +1,24 @@
+﻿---
+name: Member-Owned Scribes Cathedral as Membership Product
+description: Every cooperative member receives a domain-indexed working memory (personal Scribes Cathedral) that persists across sessions, grows in value with participation, and is fully exportable on membership close, bridging the R9 retrieval substrate to cooperative membership product-market fit.
+type: aa_formal
+innovation_id: "2268"
+ratification_session: B117
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - member owned scribes cathedral
+  - personal working memory membership product
+  - cathedral membership retention compounding
+  - domain indexed working memory member
+  - export on close cathedral standalone
+  - cooperative membership cathedral asset
+  - aa formal 2268
+  - r9 retrieval member product bridge
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
 # A&A Formal #2268 — Member-Owned Scribes Cathedral as Membership Product
 
 **Innovation #:** 2268

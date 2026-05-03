@@ -1,3 +1,24 @@
+---
+name: Seasoning (Cooperative Contribution Maturation and Trust-Weighted Currency Backing)
+description: A cooperative currency and contribution maturation primitive where newly-earned Marks accumulate along a sigmoid curve through sustained authentic participation before achieving full backing weight, providing anti-gaming by construction and governance weight differentiation without marketplace transaction penalties.
+type: aa_formal
+innovation_id: "2330"
+ratification_session: BP021
+prov_filing_status: drafted
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - seasoning cooperative contribution maturation
+  - mark maturation sigmoid curve authentic participation
+  - anti gaming by construction seasoning
+  - aa formal 2330
+  - seasoning bp021 draft
+  - fresh marks seasoned marks backing weight
+  - culinary metaphor cooperative currency seasoning cast iron
+canon_eblet_pointer: seasoning_canon_bp021.eblet.md
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A FORMAL #2330 — Seasoning (Cooperative Contribution Maturation and Trust-Weighted Currency Backing)
 
 **Filed**: BP021, 2026-05-03 by Knight (Bushel 10 Shadow 5) — INDL-9 Geneva deadline 2026-05-07

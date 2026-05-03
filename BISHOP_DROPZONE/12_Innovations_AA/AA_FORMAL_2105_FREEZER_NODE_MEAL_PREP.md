@@ -1,3 +1,24 @@
+---
+name: Freezer Node — Community Meal Prep, Storage, and Distribution Hub
+description: Members operate home or community-kitchen batch meal preparation hubs, portioning and freezing meals for subscription and on-demand distribution at Cost+20%; cooperative purchasing and Pearl Diver deal intelligence reduce ingredient costs 20-40%; startup investment is $55-105 plus one Sunday.
+type: aa_formal
+innovation_id: "2105"
+ratification_session: B048
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: false
+wrasseTriggers:
+  - freezer node meal prep
+  - cooperative frozen meal distribution hub
+  - aa formal 2105
+  - batch cooking cooperative micro business
+  - freezer node factory node food equivalent
+  - lets make dinner freezer node
+  - home meal prep subscription cooperative
+  - cooperative kitchen food production
+cooperative_defensive_patent_pledge_2260_umbrella: true
+canon_eblet_pointer: null
+---
 # Acknowledgment & Assignment — Innovation #2105
 
 **Date:** March 29, 2026

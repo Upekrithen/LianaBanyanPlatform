@@ -1,3 +1,25 @@
+---
+name: Element-Level Design Overlay and Design Democracy Voting
+description: A cooperative system where members propose visual replacements for specific UI elements through an overlay activated in X-Ray mode, with community-governed visual design (CSS Zen Garden model) and threshold governance determining which versions become platform defaults across nine portals.
+type: aa_formal
+innovation_id: "2010-2012"
+ratification_session: B035
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - element-level design overlay you can do better
+  - community-governed visual design css zen garden
+  - design democracy voting threshold governance
+  - x-ray goggles overlay submission
+  - cooperative interface design governance
+  - portal visual identity democratic voting
+  - aa formal 2010-2012
+  - design democracy cooperative platform
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # Acknowledgment & Assignment — Innovations #2010 through #2012
 
 **Date:** March 26, 2026

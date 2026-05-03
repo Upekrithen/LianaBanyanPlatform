@@ -1,3 +1,24 @@
+---
+name: Trust Match (Bilateral Cooperative Member Trust Profiling and Differential Routing)
+description: A bilateral cooperative marketplace matching primitive routing members to counterparties based on pairwise five-component Trust Profile compatibility across three modes (Confidence/Provisional/Aspiration), with no universal hierarchy and member-owned substrate partitions inaccessible to platform modification.
+type: aa_formal
+innovation_id: "2329"
+ratification_session: BP021
+prov_filing_status: drafted
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - trust match bilateral cooperative member profiling
+  - pairwise trust profile routing marketplace
+  - no universal trust hierarchy only match quality
+  - aa formal 2329
+  - trust match bp021 draft
+  - confidence provisional aspiration match modes
+  - member owned trust profile bilateral cooperative routing
+canon_eblet_pointer: trust_match_canon_bp021.eblet.md
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A FORMAL #2329 -- Trust Match (Bilateral Cooperative Member Trust Profiling and Differential Routing)
 
 **Filed**: BP021, 2026-05-03 by Knight (Bushel 10 Shadow 4) — INDL-9 Geneva deadline 2026-05-07

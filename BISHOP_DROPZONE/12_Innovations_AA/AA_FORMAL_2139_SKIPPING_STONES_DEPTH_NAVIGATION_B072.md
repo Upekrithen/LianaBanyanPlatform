@@ -1,3 +1,24 @@
+---
+name: Skipping Stones Depth Navigation
+description: Four-layer reading depth system making every section of every academic paper independently discoverable via Cue Card, progressing from a one-sentence Skipping Stone through accessible Pudding article to the full academic source.
+type: aa_formal
+innovation_id: "2139"
+ratification_session: B072
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - skipping stones depth navigation
+  - four layer content depth system
+  - proof is in the pudding not pudding
+  - aa formal 2139
+  - section level paper entry point
+  - skipping stone logo cue card
+  - academic accessibility funnel
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A FORMAL — Innovation #2139: Skipping Stones Depth Navigation
 ## Acknowledgment & Attribution | Bishop Session B072 | April 3, 2026
 

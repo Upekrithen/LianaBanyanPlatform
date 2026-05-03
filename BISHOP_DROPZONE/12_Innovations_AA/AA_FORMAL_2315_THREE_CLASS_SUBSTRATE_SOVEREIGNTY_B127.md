@@ -1,3 +1,24 @@
+﻿---
+name: Member-Curated Three-Class Substrate Sovereignty
+description: A member-controlled corpus curation architecture defining three data classesâ€”ephemeral (default, no storage), personal-permanent (member-private, right-to-be-forgotten), and shared-permanent (member-chosen scope)â€”inverting the standard harvesting model to make forgetting the default.
+type: aa_formal
+innovation_id: "2315"
+ratification_session: B127
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - three class substrate sovereignty
+  - ephemeral personal permanent shared permanent
+  - member curated data classes default forgetting
+  - opt in curation prompt make a book
+  - right to be forgotten sovereignty
+  - control inversion harvesting default
+  - aa formal 2315
+  - chrome omnibox substrate three class
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
 # A&A FORMAL #2315 -- Member-Curated Three-Class Substrate Sovereignty
 ## (Ephemeral / Personal-Permanent / Shared-Permanent)
 

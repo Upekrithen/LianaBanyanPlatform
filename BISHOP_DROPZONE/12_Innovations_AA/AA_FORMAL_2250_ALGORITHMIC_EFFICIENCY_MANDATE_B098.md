@@ -1,3 +1,25 @@
+---
+name: Algorithmic Efficiency Mandate as Grid Interconnection Compliance Layer
+description: A regulatory compliance architecture attaching a minimum AI inference cache hit rate floor to the existing grid interconnection review process administered by public utility commissions, producing algorithmic efficiency compliance without creating new regulatory bureaucracy by piggybacking on existing interconnection approval workflows.
+type: aa_formal
+innovation_id: "2250"
+ratification_session: B098
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - algorithmic efficiency mandate grid interconnection
+  - ai cache hit rate regulatory compliance
+  - interconnection approval efficiency floor
+  - aa formal 2250
+  - datacenter algorithmic efficiency regulation
+  - public utility commission ai efficiency standard
+  - rom-first regulatory companion mandate
+  - technology-neutral output efficiency standard
+canon_eblet_pointer: algorithmic_efficiency_mandate_canon_bp021.eblet.md
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A Formal #2250 — Algorithmic Efficiency Mandate as Grid Interconnection Compliance Layer
 
 **Innovation #:** 2250

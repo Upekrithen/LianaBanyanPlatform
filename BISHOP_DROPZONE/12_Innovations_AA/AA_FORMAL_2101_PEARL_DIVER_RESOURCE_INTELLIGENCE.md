@@ -1,3 +1,24 @@
+---
+name: Pearl Diver Resource Intelligence Network — Community-Sourced Deal Discovery with Optional Influencer Track
+description: A dual-track cooperative deal intelligence system where members earn Marks for logging physical-world discount schedules, stacking discounts, and hidden sources to a Resource Board (Quiet Pearl) or optionally also post to social media for additional rewards (Pearl Influencer), with tips automatically feeding cooperative bulk purchasing via Let's Get Groceries.
+type: aa_formal
+innovation_id: "2101"
+ratification_session: B048
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: false
+wrasseTriggers:
+  - pearl diver resource intelligence network
+  - community sourced deal discovery
+  - quiet pearl resource board
+  - pearl influencer social media track
+  - aa formal 2101
+  - physical world deal intelligence cooperative
+  - stacking discount logging cooperative
+  - lets get groceries pearl diver integration
+cooperative_defensive_patent_pledge_2260_umbrella: true
+canon_eblet_pointer: null
+---
 # Acknowledgment & Assignment — Innovation #2101
 
 **Date:** March 29, 2026

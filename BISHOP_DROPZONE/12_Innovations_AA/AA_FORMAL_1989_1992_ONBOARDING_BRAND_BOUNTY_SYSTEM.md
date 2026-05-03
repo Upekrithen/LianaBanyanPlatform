@@ -1,3 +1,25 @@
+---
+name: "Onboarding Brand Bounty System — Logo, Domain, Email, and Designed Cue Card at Signup"
+description: "Four innovations delivering instant brand-building services during cooperative onboarding: brand bounty panel for new members at signup, urgency-tier pricing, volume-pooled designer marketplace, and related brand acceleration mechanisms."
+type: aa_formal
+innovation_id: "1989-1992"
+ratification_session: B034
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: false
+wrasseTriggers:
+  - onboarding brand bounty instant branding at signup
+  - logo domain email cue card onboarding bounty
+  - urgency tier pricing bounty panel cooperative
+  - volume pooled designer marketplace onboarding
+  - aa formal 1989-1992
+  - build your brand cooperative onboarding first hour
+  - bounty poster crew call designer community branding
+  - brand acceleration cooperative new member signup
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # Acknowledgment & Assignment — Innovations #1989 through #1992
 
 **Date:** March 26, 2026

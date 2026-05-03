@@ -1,3 +1,24 @@
+---
+name: Informative Lock Component
+description: UI component replacing SaaS paywall patterns with cooperative informative messaging, rendering contextual member capability descriptions at access-restricted surfaces instead of punitive lock language.
+type: aa_formal
+innovation_id: "2153"
+ratification_session: B081
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - informative lock component
+  - members can action here
+  - anti-saas paywall pattern
+  - aa formal 2153
+  - cooperative access gate messaging
+  - no upgrade premium unlock language
+  - participation not purchase membership gate
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A Formal — Innovation #2153
 ## Informative Lock Component
 ### Bishop B081 | April 5, 2026

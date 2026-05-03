@@ -1,3 +1,24 @@
+﻿---
+name: The Representative Scorecard
+description: A cooperative-member-created, data-backed persistent tracking artifact for elected representatives' actions on specific policy issues, enabling member-voted escalation and coordinated political action across election cycles.
+type: aa_formal
+innovation_id: "2261"
+ratification_session: B098
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - representative scorecard
+  - elected representative tracking cooperative
+  - member voted scorecard escalation
+  - data backed political scorecard
+  - persistent representative tracking artifact
+  - political expedition scorecard
+  - aa formal 2261
+  - power to the people scorecard
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
 # A&A Formal #2261 — The Representative Scorecard (Power to the People, Literally)
 
 **Innovation #:** 2261 (promoted in B098 from B096 stub)

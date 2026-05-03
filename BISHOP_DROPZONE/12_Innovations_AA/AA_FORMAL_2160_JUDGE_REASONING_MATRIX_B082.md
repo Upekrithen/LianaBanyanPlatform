@@ -1,3 +1,25 @@
+---
+name: Judge Reasoning Matrix (Transparent Arbitration Visualization)
+description: A multi-agent arbitration visualization with four distinct AI judges displayed in a parallel matrix, making convergence and divergence visible at a glance, with founder override as an annotation layer preserving judge reasoning and a visible escalation ladder.
+type: aa_formal
+innovation_id: "2160"
+ratification_session: B082
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - judge reasoning matrix
+  - transparent arbitration visualization
+  - four judge ai arbitration matrix
+  - aa formal 2160
+  - convergence divergence arbitration display
+  - founder override annotation layer
+  - areopagus escalation ladder
+  - star chamber visualization
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A FORMAL — Innovation #2160
 ## Judge Reasoning Matrix (Transparent Arbitration Visualization)
 ## Bishop B082 | April 5, 2026

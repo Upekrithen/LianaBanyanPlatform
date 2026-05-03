@@ -1,3 +1,24 @@
+﻿---
+name: SP-21 Tidbit Scribe
+description: An AI agent behavioral ledger that records every verify-before-assert action to a dedicated append-only JSONL store, creating first-class observability of verification discipline distinct from domain content retrieval and enabling meta-learning over how agents reason.
+type: aa_formal
+innovation_id: "2271"
+ratification_session: B117
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - tidbit scribe verify before assert
+  - sp21 tidbit verification ledger
+  - bridle rule audit trail observability
+  - verify action taxonomy ledger
+  - log tidbit mcp tool
+  - verification discipline behavioral ledger
+  - aa formal 2271
+  - agent verification observability discipline
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
 # A&A Formal #2271 — SP-21 Tidbit Scribe: Verify-Before-Assert Behavioral Ledger
 
 **Innovation #:** 2271

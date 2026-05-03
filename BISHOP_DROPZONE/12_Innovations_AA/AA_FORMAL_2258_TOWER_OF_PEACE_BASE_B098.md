@@ -1,3 +1,25 @@
+---
+name: Tower of Peace Base Interface (Three-Door Help Entry)
+description: A three-door entry architecture for the cooperative platform's member help surface routing requests from Twilio SMS, email webhook, and web chat through a unified ROM-first query pipeline achieving approximately 70% cache hit rate, making AI-backed member help economically viable within $5/year cooperative membership constraints.
+type: aa_formal
+innovation_id: "2258"
+ratification_session: B098
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - tower of peace base interface
+  - three-door help entry architecture
+  - cooperative help surface rom-first pipeline
+  - aa formal 2258
+  - five dollar membership ai help viability
+  - twilio email web chat unified help routing
+  - 70 percent cache hit member help queries
+  - rom-first cooperative query economics
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A Formal #2258 — Tower of Peace Base Interface (Three-Door Help Entry)
 
 **Innovation #:** 2258 (promoted in B098 from B096 stub)

@@ -1,3 +1,24 @@
+---
+name: Deck Card Deep-Link Pipeline
+description: System connecting a physical or digital Deck Card carrying a serialized episode to the exact position of that content within its source paper on Cephas via QR code deep link, triggering a physical-to-digital onboarding funnel.
+type: aa_formal
+innovation_id: "2135"
+ratification_session: B071
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - deck card deep-link pipeline
+  - qr to episode to paper bridge
+  - physical digital onboarding bridge
+  - aa formal 2135
+  - deck card qr scan
+  - episode source passage deep link
+  - collectible content card
+canon_eblet_pointer: trail_head_cue_card_deck_golden_key_bp015.eblet.md
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A FORMAL — Innovation #2135: Deck Card Deep-Link Pipeline
 ## Acknowledgment & Attribution | Bishop Session B071 | April 3, 2026
 

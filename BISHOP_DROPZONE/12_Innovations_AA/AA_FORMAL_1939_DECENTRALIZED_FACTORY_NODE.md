@@ -1,3 +1,25 @@
+---
+name: "Decentralized Factory Node: Modular Home-Based Manufacturing Assembly Line"
+description: "System for establishing decentralized manufacturing capacity through home-based factory nodes using additive manufacturing and desktop injection molding machines, with a cloud bridge (FormNow) for cold-start scaling."
+type: aa_formal
+innovation_id: "1939"
+ratification_session: B031
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: false
+wrasseTriggers:
+  - decentralized factory node modular home based manufacturing
+  - cooperative member operated machine network
+  - cloud to local manufacturing transition formlabs formnow
+  - modular cold start manufacturing scaling
+  - aa formal 1939
+  - sla sls injection molding cooperative assembly line
+  - home based 3d printing cooperative production
+  - distributed manufacturing cooperative node configuration
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # Acknowledgment & Assignment — Innovation #1939
 
 ## Decentralized Factory Node: Modular Home-Based Manufacturing Assembly Line

@@ -1,3 +1,24 @@
+---
+name: K192 LB Card Abstraction Layer
+description: Provider-agnostic card issuing infrastructure implementing the CardIssuer abstraction interface with Lithic and Stripe implementations, Walking Billboard signals, and five edge functions supporting existing LB Card innovations #1967-#1971.
+type: aa_formal
+innovation_id: "K192"
+ratification_session: K192/B051
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: false
+wrasseTriggers:
+  - lb card abstraction layer
+  - card issuer interface
+  - lithic card issuer
+  - k192 lb card
+  - walking billboard card signals
+  - provider agnostic card issuing
+  - lb card edge functions
+canon_eblet_pointer: lb_frame_viral_onboarding_cue_card_pied_piper_bp009.eblet.md
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A FORMAL — K192 LB Card Abstraction Layer
 ## Bishop B051 (post-hoc documentation)
 ## Note: K192 is infrastructure — no NEW innovation number assigned

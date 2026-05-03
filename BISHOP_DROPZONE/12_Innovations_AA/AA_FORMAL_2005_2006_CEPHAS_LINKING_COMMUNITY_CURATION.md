@@ -1,3 +1,25 @@
+---
+name: Cephas Community-Curated Resource Linking and Bidirectional Knowledge Graph
+description: A cooperative knowledge base system where any user can suggest cross-reference links voted on by members using reputation-only tiered voting (visible → verified → canonical), and every page forms a node in a bidirectional platform-wide knowledge graph with community-managed edges.
+type: aa_formal
+innovation_id: "2005-2006"
+ratification_session: B035
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: false
+wrasseTriggers:
+  - cephas linking community curation
+  - bidirectional knowledge graph nodes
+  - community suggested cross-reference links
+  - reputation-only voting knowledge base
+  - canonical link threshold cephas
+  - living documentation network cooperative
+  - aa formal 2005-2006
+  - cephas community curated network
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # Acknowledgment & Assignment — Innovations #2005 through #2006
 
 **Date:** March 26, 2026

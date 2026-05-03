@@ -1,3 +1,24 @@
+---
+name: Mark Backing + One-Way Valve (Cooperative Currency Anti-Extraction Architecture)
+description: A cooperative currency anti-extraction architecture combining a bylaw-codified one-way ratchet on Mark backing rates (value only ever increases) with a structural Credit fiat-exit prohibition, making platform enshittification architecturally impossible without a supermajority member bylaw vote.
+type: aa_formal
+innovation_id: "2327"
+ratification_session: BP021
+prov_filing_status: drafted
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - mark backing one way valve
+  - cooperative currency anti extraction architecture
+  - slow blade credit one way valve
+  - aa formal 2327
+  - mark backing bp021 draft
+  - credit fiat exit prohibition bylaw
+  - anti enshittification guarantee by construction cooperative currency
+canon_eblet_pointer: slow_blade_defense_stack_v2_master_canon_bp021.eblet.md
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A FORMAL #2327 -- Mark Backing + One-Way Valve (Cooperative Currency Anti-Extraction Architecture)
 
 **Filed**: BP021, 2026-05-03 by Knight (Bushel 10 Shadow 1) on Founder direction — INDL-9 Geneva deadline 2026-05-07

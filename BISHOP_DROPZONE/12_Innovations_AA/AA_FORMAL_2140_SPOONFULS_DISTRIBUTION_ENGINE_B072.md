@@ -1,3 +1,24 @@
+---
+name: Spoonfuls Distribution Engine
+description: Content atomization engine extracting 5-8 bite-sized micro-posts from Pudding articles for automated social media distribution, forming the accessible third distribution channel alongside BST Episodes and Skipping Stones.
+type: aa_formal
+innovation_id: "2140"
+ratification_session: B072
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - spoonfuls distribution engine
+  - a spoonful of cephas
+  - pudding article atomization
+  - aa formal 2140
+  - micro-post extraction from pudding
+  - three channel content distribution
+  - vote-gated pudding publication
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A FORMAL — Innovation #2140: Spoonfuls Distribution Engine
 ## Acknowledgment & Attribution | Bishop Session B072 | April 3, 2026
 

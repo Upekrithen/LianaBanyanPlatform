@@ -1,3 +1,24 @@
+---
+name: The Spice Rack
+description: Ten-spice culinary taxonomy simultaneously categorizing content by business-skill domain, enabling audience filtering and project skill-matching, connecting the Stone Soup and Little Red Hen fable tradition to operational cooperative infrastructure.
+type: aa_formal
+innovation_id: "2142"
+ratification_session: B072
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - the spice rack
+  - culinary skill taxonomy
+  - salt garlic sugar cinnamon pepper ginger cumin paprika basil oregano
+  - aa formal 2142
+  - ten spice business domain taxonomy
+  - content grading spice tags
+  - stone soup skill vocabulary
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A FORMAL — Innovation #2142: The Spice Rack
 ## Acknowledgment & Attribution | Bishop Session B072 | April 3, 2026
 

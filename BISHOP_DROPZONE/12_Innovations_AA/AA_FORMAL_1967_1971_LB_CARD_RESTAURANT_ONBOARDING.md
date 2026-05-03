@@ -1,3 +1,25 @@
+---
+name: "LB Card Direct Funding, Restaurant Onboarding Campaign, and Cooperative Commerce Extensions"
+description: "Five innovations covering LB Card direct external funding as a daily-commerce normalizer, community-driven restaurant onboarding via demand-signal aggregation and Captain's Pitch Packet, and related merchant acquisition mechanisms."
+type: aa_formal
+innovation_id: "1967-1971"
+ratification_session: B033
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - lb card direct funding cooperative commerce normalizer
+  - restaurant onboarding campaign community driven merchant recruitment
+  - captains pitch packet demand signal aggregation
+  - cooperative merchant acquisition bottom up community driven
+  - aa formal 1967-1971
+  - branded prepaid card platform currency real world bridge
+  - community nominated restaurant volume discount pitch
+  - demand first merchant onboarding captain mediated
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # Acknowledgment & Assignment — Innovations #1967 through #1971
 
 **Date:** March 26, 2026

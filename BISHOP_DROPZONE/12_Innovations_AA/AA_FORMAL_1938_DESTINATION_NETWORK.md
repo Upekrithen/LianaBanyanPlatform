@@ -1,3 +1,25 @@
+---
+name: "Destination Network — Cooperative Land Development Pipeline"
+description: "Repeatable ten-step pipeline for transforming underutilized rural land into self-sustaining cooperative destination nodes by layering LB infrastructure onto lot sales, anchor businesses, vacation rentals, supply chain logistics, and cooperative labor."
+type: aa_formal
+innovation_id: "1938"
+ratification_session: B028
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: false
+wrasseTriggers:
+  - destination network cooperative land development pipeline
+  - destination montana rural land cooperative
+  - cooperative destination creation vacation rental
+  - lot contract crowdfunding integration cooperative
+  - aa formal 1938
+  - rural land cooperative infrastructure overlay
+  - touring route destination threading cooperative nodes
+  - destination creation not discovery airbnb alternative
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # Analysis & Attribution — Innovation #1938
 
 ## Destination Network: Cooperative Land Development Pipeline

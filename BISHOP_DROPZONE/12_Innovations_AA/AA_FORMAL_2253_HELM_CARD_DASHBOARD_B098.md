@@ -1,3 +1,25 @@
+---
+name: Helm Card Dashboard (Desktop Frame Grid, Three-Mode Display)
+description: A three-mode personal dashboard system rendering a member's Deck Cards as a categorized frame grid on desktop (TV Screens), a full-display single-card view (Movie Theater), and a swipeable deck on mobile (Shuffleable Deck), with progressive frame unlocking tied to cooperative Keep tier advancement and simultaneous X-Ray diagnostic flip.
+type: aa_formal
+innovation_id: "2253"
+ratification_session: B098
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - helm card dashboard three-mode display
+  - deck card frame grid tv screens
+  - movie theater single card view
+  - aa formal 2253
+  - shuffleable deck mobile card display
+  - progressive frame unlock keep tiers
+  - simultaneous x-ray diagnostic flip cards
+  - chalk outline progressive discovery dashboard
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A Formal #2253 — Helm Card Dashboard (Desktop Frame Grid, Three-Mode Display)
 
 **Innovation #:** 2253 (renumbered in B098 from former #2236 per `INNOVATION_RENUMBERING_LOG_B098.md`)

@@ -1,3 +1,24 @@
+---
+name: Universal Member Subscription System — Dual-Currency Recurring Channel Subscriptions
+description: Any cooperative member can create subscription channels accepting Marks or dollars (Stripe recurring), with subscribers choosing payment method per subscription; Cost+20% fixed margin on both; constitutional creator retention of 83.3%; no follower minimum or monetization gate.
+type: aa_formal
+innovation_id: "2102"
+ratification_session: B048
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: false
+wrasseTriggers:
+  - universal member subscription system
+  - dual currency recurring subscriptions
+  - aa formal 2102
+  - marks economy flywheel subscriptions
+  - cooperative subscription no follower gate
+  - cost plus 20 subscription engine
+  - internal cooperative economy subscription
+  - stripe recurring plus marks subscription
+cooperative_defensive_patent_pledge_2260_umbrella: true
+canon_eblet_pointer: excalibur_class_scribes_commercial_subscription_canon_bp016.eblet.md
+---
 # Acknowledgment & Assignment — Innovation #2102
 
 **Date:** March 29, 2026

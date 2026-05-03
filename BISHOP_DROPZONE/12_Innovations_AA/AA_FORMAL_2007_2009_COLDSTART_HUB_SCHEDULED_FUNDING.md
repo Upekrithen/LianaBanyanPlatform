@@ -1,3 +1,25 @@
+---
+name: Four-Pathway Cold Start Hub and Scheduled LB Card Funding
+description: A cooperative onboarding system presenting four distinct economic-activity pathways (food, manufacturing, service, local business) that converge to Captain status via multi-step wizards, with scheduled purpose-earmarked recurring prepaid card funding enabling community-supported financial safety nets.
+type: aa_formal
+innovation_id: "2007-2009"
+ratification_session: B035
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - four-pathway cold start hub
+  - scheduled lb card funding recurring
+  - community-supported card funding cooperative safety net
+  - cold start all paths lead to captain
+  - stripe billing issuing card funding
+  - rent captain community fund pattern
+  - aa formal 2007-2009
+  - cooperative onboarding convergence pathways
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # Acknowledgment & Assignment — Innovations #2007 through #2009
 
 **Date:** March 26, 2026

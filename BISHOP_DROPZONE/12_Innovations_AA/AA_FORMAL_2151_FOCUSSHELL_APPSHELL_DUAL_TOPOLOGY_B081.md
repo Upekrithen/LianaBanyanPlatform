@@ -1,3 +1,24 @@
+---
+name: FocusShell / AppShell Dual Topology
+description: Two distinct component shells enforcing fundamentally different UX topologies — conversion-oriented FocusShell with no persistent chrome and workspace-oriented AppShell with sidebar — both sharing design governance enforced at the route declaration level.
+type: aa_formal
+innovation_id: "2151"
+ratification_session: B081
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - focusshell appshell dual topology
+  - ux topology separation
+  - conversion shell workspace shell
+  - aa formal 2151
+  - route-level shell declaration
+  - cooperative platform layout governance
+  - no sidebar hero viewport shell
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A Formal — Innovation #2151
 ## FocusShell / AppShell Dual Topology
 ### Bishop B081 | April 5, 2026

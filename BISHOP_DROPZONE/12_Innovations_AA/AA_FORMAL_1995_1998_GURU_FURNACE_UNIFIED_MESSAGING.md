@@ -1,3 +1,25 @@
+---
+name: Ambassador Guru Bounty and Furnace Unified Messaging System
+description: A system for recruiting and compensating expert platform ambassadors (Gurus) across external social platforms, combined with an authenticated cross-platform posting gateway (the Furnace) featuring content policy guardrails, a unified inbox, and screenshot broadcasting capability.
+type: aa_formal
+innovation_id: "1995-1998"
+ratification_session: B034
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: false
+wrasseTriggers:
+  - ambassador guru bounty
+  - the furnace authenticated gateway
+  - shirley temple content policy
+  - guru unified inbox
+  - screenshot broadcasting
+  - cross-platform posting cooperative
+  - aa formal 1995-1998
+  - unified messaging external platforms
+canon_eblet_pointer: furnace_canon_bp021.eblet.md
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # Acknowledgment & Assignment — Innovations #1995 through #1998
 
 **Date:** March 26, 2026

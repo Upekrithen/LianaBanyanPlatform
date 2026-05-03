@@ -1,3 +1,24 @@
+---
+name: Cooperative Classroom — Home-Based Teaching Marketplace with Dual Revenue
+description: Any qualified member can teach live group classes (subscription) and individual tutoring sessions (per-booking) from home via Zoom; platform handles scheduling, billing, and discovery; teacher keeps 83.3% of every transaction across all four currencies; zero video hosting cost.
+type: aa_formal
+innovation_id: "2103"
+ratification_session: B048
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: false
+wrasseTriggers:
+  - cooperative classroom
+  - home based teaching marketplace
+  - aa formal 2103
+  - home teacher zoom subscription cooperative
+  - dual revenue group class individual tutoring
+  - didasko education cooperative
+  - teachers guild cooperative
+  - any member can teach from home
+cooperative_defensive_patent_pledge_2260_umbrella: true
+canon_eblet_pointer: null
+---
 # Acknowledgment & Assignment — Innovation #2103
 
 **Date:** March 29, 2026

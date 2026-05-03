@@ -1,3 +1,24 @@
+---
+name: The Mnemonic Load
+description: Formalized process of loading mission-specific context from the Armory of Information into each AI agent's context window before task execution; named after the Johnny Mnemonic and Matrix analogy of pre-loading wetware with knowledge.
+type: aa_formal
+innovation_id: "2131"
+ratification_session: B069
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - the mnemonic load
+  - agent context loading
+  - armory of information
+  - aa formal 2131
+  - pre-mission context initialization
+  - wetware priming
+  - role-scoped context loader
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A FORMAL — Innovation #2131: The Mnemonic Load
 ## Acknowledgment & Attribution | Bishop Session B069 | April 3, 2026
 

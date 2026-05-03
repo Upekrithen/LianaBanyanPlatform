@@ -1,3 +1,25 @@
+---
+name: Guild and Tribe Formation with MoneyPenny Gatekeeper
+description: Six cold start pathways including guild (professional) and tribe (personal community) formation with collective treasury, visual identity, benefit cascade, and governance, plus MoneyPenny as an AI receptionist performing four-tier triage for inbound communications.
+type: aa_formal
+innovation_id: "2015-2021"
+ratification_session: B035
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: false
+wrasseTriggers:
+  - guild tribe formation six cold start pathways
+  - moneypenny gatekeeper ai receptionist
+  - guild treasury tribe formation wizard
+  - six pathways six production levels
+  - inbound contact screening cooperative
+  - guild tribe benefit cascade production system
+  - aa formal 2015-2021
+  - cooperative professional personal community formation
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A FORMAL — Innovations #2015-#2021
 ## Guild + Tribe Formation + MoneyPenny Gatekeeper
 **Bishop Session:** 035 | **Date:** March 27, 2026 | **Knight:** K133 (Guild/Tribe)

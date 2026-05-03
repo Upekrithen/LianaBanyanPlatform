@@ -1,3 +1,24 @@
+---
+name: Oar Slots — Visual Cooperative Crew Formation with Earning Comparison
+description: After selecting an earning path, members see a visual crew formation showing their role as a filled oar alongside empty oar slots for the remaining cooperative venture positions; a side-by-side "Your Canoe" vs "The Ship" comparison shows real dollar earning differentials; integrated CTAs generate pre-filled Cue Cards for recruiting into specific empty slots.
+type: aa_formal
+innovation_id: "2122"
+ratification_session: B052
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - oar slots cooperative crew formation
+  - visual cooperative multiplier visualization
+  - aa formal 2122
+  - canoe to ship earning comparison
+  - solo versus cooperative earnings side by side
+  - ship templates cooperative ventures
+  - recruit into oar slots cue card integration
+  - cooperative venture crew formation visual
+cooperative_defensive_patent_pledge_2260_umbrella: true
+canon_eblet_pointer: null
+---
 # A&A FORMAL — Innovation #2122
 ## Oar Slots: Cooperative Multiplier Visualization
 ## Bishop B052

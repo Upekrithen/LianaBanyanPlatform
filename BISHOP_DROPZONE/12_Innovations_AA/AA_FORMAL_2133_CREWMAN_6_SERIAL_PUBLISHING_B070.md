@@ -1,3 +1,24 @@
+---
+name: "Crewman #6 — Vote-Gated Serial Publishing Engine"
+description: Serialized narrative system distributing a founder's AI journey as automated hourly micro-posts on social media, where each chapter's Cephas publication is gated by audience vote threshold acting as demand signals.
+type: aa_formal
+innovation_id: "2133"
+ratification_session: B070
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - crewman 6
+  - vote-gated serial publishing
+  - demand signal escalation
+  - aa formal 2133
+  - founders ai journey
+  - blood sweat and tears bst
+  - serial narrative micro-post distribution
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A FORMAL — Innovation #2133: Crewman #6 — Vote-Gated Serial Publishing Engine
 ## Acknowledgment & Attribution | Bishop Session B070 | April 3, 2026
 

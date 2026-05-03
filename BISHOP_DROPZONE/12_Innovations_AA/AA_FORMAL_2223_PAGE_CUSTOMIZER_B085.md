@@ -1,3 +1,25 @@
+---
+name: Member Page Customizer
+description: A member-facing page layout customization system activated through the X-Ray Goggles overlay, enabling drag-and-drop repositioning of page elements saved to the member's Helm, with the ability to submit layouts as community design contest entries where winning designs can become new platform defaults.
+type: aa_formal
+innovation_id: "2223"
+ratification_session: B085
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - member page customizer
+  - page layout personalization helm
+  - x-ray goggles drag drop customization
+  - aa formal 2223
+  - design democracy layout submission
+  - community design contest platform defaults
+  - helm page layouts json schema
+  - every member is a designer cooperative
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # Innovation #2223 — Member Page Customizer (Crown Jewel Candidate)
 
 **Session**: B085

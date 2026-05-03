@@ -1,3 +1,25 @@
+---
+name: Guild and Tribe Funded Design Contests
+description: A system where guilds and tribes pool Credits into collective contest treasuries to run democratic design competitions for visual identity elements (banners, themes, mascots), with member-voted winners receiving pooled Credits and designs automatically applied as group themes.
+type: aa_formal
+innovation_id: "2014"
+ratification_session: B035
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: false
+wrasseTriggers:
+  - guild tribe funded design contests
+  - collective treasury visual identity competition
+  - guild banner contest credits pooled
+  - cooperative design contest treasury
+  - democratic group visual identity
+  - tribe guild mascot contest cooperative
+  - aa formal 2014
+  - guild design economy labor valued
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # Acknowledgment & Assignment — Innovation #2014
 
 **Date:** March 26, 2026

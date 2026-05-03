@@ -1,3 +1,25 @@
+---
+name: Pioneer Proposal Rewards (Rolodex Recruitment Pipeline)
+description: A diminishing-priority reward system for cooperative members who propose external vendors or individuals for platform membership, distributing rewards on order-based (100%/50%/25%/10%) and time-decay scales, strictly one-level-deep as a structural anti-MLM guarantee, with automatic Rolodex connection formed upon the proposed party joining.
+type: aa_formal
+innovation_id: "2252"
+ratification_session: B098
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - pioneer proposal rewards rolodex recruitment
+  - diminishing priority proposal reward system
+  - anti-mlm one-level-deep enforcement
+  - aa formal 2252
+  - pioneer proposal time-decay rewards
+  - rolodex automatic connection on join
+  - multi-proposer ordered recruitment attribution
+  - no effort wasted proposal reward floor
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A Formal #2252 — Pioneer Proposal Rewards (Rolodex Recruitment Pipeline)
 
 **Innovation #:** 2252 (renumbered in B098 from former #2235 per `INNOVATION_RENUMBERING_LOG_B098.md`)

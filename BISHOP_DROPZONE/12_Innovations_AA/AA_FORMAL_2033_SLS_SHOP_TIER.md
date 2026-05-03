@@ -1,3 +1,25 @@
+---
+name: SLS Production Node — The Shop Tier
+description: The addition of Selective Laser Sintering as the inflection point in the manufacturing escalation ladder where a maker becomes a shop — enabling tool-free production of engineering-grade custom parts for other customers, co-funded by the cooperative using the 1/3 model for Marks-proven contributors.
+type: aa_formal
+innovation_id: "2033"
+ratification_session: B036
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - sls production node shop tier
+  - selective laser sintering cooperative manufacturing
+  - maker with bench becomes shop sls
+  - formlabs sinterit cooperative node
+  - tool-free production cooperative shop
+  - 1/3 funding model sls machine placement
+  - aa formal 2033
+  - cooperative shop threshold marks proven
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # FORMAL ACKNOWLEDGMENT & ACCESSION — Innovation #2033
 # SLS Production Node: When a Maker Becomes a Shop
 **Bishop Session:** 036 | **Date:** March 27, 2026

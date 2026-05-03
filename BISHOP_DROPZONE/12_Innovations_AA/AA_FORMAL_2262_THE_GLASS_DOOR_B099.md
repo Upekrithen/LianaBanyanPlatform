@@ -1,3 +1,24 @@
+﻿---
+name: The Glass Door
+description: A computer-implemented method for cooperative governance of a platform's outbound external communications, making every letter public-by-default before dispatch with member voting on whether and when each communication ships.
+type: aa_formal
+innovation_id: "2262"
+ratification_session: B099
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - the glass door
+  - public by default outreach cooperative
+  - member voted dispatch governance
+  - outbound communications transparency
+  - letter dispatch authorized predicate
+  - democratic communications cooperative
+  - aa formal 2262
+  - outreach governance member voting
+canon_eblet_pointer: glass_door_canon_bp021.eblet.md
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
 # A&A Formal #2262 — The Glass Door (Public-by-Default Outreach with Member-Voted Dispatch)
 
 **Innovation #:** 2262

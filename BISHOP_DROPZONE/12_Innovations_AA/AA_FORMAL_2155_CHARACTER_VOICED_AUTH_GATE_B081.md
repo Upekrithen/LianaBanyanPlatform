@@ -1,3 +1,24 @@
+---
+name: Character-Voiced Progressive Auth Gate
+description: Unified authentication system where a platform mascot character delivers contextual auth messaging through a speech bubble, with server-side email auto-detection eliminating the sign-in/sign-up choice and a 3D card-flip transition between flows.
+type: aa_formal
+innovation_id: "2155"
+ratification_session: B081
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - character voiced auth gate
+  - platform mascot authentication
+  - auto-detect signin signup
+  - aa formal 2155
+  - 3d card flip auth transition
+  - contextual gate messaging
+  - cooperative character auth flow
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A Formal — Innovation #2155
 ## Character-Voiced Progressive Auth Gate
 ### Bishop B081 | April 5, 2026

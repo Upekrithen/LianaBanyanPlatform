@@ -1,3 +1,24 @@
+---
+name: Intent-First Dispatch Composition
+description: Message composition architecture requiring mandatory intent declaration before drafting, producing a single canonical message with automated channel variations as edge deltas, and using a solemn stamp confirmation pattern for consequential multi-channel broadcasts.
+type: aa_formal
+innovation_id: "2158"
+ratification_session: B082
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - intent-first dispatch composition
+  - as you wish confirmation pattern
+  - canonical message channel variations
+  - aa formal 2158
+  - mandatory intent declaration composer
+  - multi-channel broadcast dispatch
+  - solemn stamp confirmation
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A FORMAL — Innovation #2158
 ## Intent-First Dispatch Composition
 ## Bishop B082 | April 5, 2026

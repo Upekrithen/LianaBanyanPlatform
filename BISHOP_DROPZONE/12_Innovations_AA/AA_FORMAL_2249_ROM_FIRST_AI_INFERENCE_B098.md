@@ -1,3 +1,25 @@
+---
+name: ROM-First AI Inference Cost Architecture (The 70/25/5 Model)
+description: A computer-implemented method serving AI inference through a read-only-memory-first pipeline where approximately 70% of queries are served from a deterministic cache without invoking a frontier model, 25% route to the primary model, and 5% route to a cross-reference secondary, producing blended per-query costs of roughly 10-15% of naive inference pipelines.
+type: aa_formal
+innovation_id: "2249"
+ratification_session: B098
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - rom-first ai inference cost architecture
+  - 70 25 5 inference cost model
+  - read-only-memory ai query cache
+  - aa formal 2249
+  - deterministic inference fingerprint cache
+  - zipfian query distribution ai cache
+  - ai inference cache hit rate measurement
+  - primary commercial licensing asset rom-first
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A Formal #2249 — ROM-First AI Inference Cost Architecture (The 70/25/5 Model)
 
 **Innovation #:** 2249

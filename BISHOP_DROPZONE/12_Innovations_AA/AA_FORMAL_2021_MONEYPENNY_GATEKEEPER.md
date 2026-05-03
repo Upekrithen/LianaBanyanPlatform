@@ -1,3 +1,25 @@
+---
+name: MoneyPenny Gatekeeper
+description: An AI executive assistant serving as intelligent gatekeeper for inbound communications, performing four-tier triage (known contacts, recognized public figures with context summaries, relevance-scored unknowns, and spam filtering) with Claude API analysis, SMS escalation, and Founder-configurable controls.
+type: aa_formal
+innovation_id: "2021"
+ratification_session: B035
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: false
+wrasseTriggers:
+  - moneypenny gatekeeper ai receptionist
+  - inbound contact screening four-tier triage
+  - ai executive assistant communication management
+  - spam filtering cooperative platform
+  - public figure priority routing
+  - moneypenny inbox sms escalation
+  - aa formal 2021
+  - cooperative captain ai receptionist benefit
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # Acknowledgment & Assignment — Innovation #2021
 
 **Date:** March 26, 2026

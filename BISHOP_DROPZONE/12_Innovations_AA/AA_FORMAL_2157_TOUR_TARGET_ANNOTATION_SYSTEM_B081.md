@@ -1,3 +1,24 @@
+---
+name: Tour Target Annotation System
+description: Systematic approach annotating all platform page landmarks with data-tour-target attributes via a useTourTarget React hook, creating a maintainable bidirectional link between page content and guided tour overlays as a required build deliverable.
+type: aa_formal
+innovation_id: "2157"
+ratification_session: B081
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - tour target annotation system
+  - data-tour-target react hook
+  - guided tour build annotation
+  - aa formal 2157
+  - usetour target hook
+  - dual layer annotation xray tour
+  - resilient guided tour architecture
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A Formal — Innovation #2157
 ## Tour Target Annotation System
 ### Bishop B081 | April 5, 2026

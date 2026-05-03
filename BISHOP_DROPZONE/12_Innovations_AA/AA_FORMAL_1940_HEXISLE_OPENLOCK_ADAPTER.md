@@ -1,3 +1,25 @@
+---
+name: "HexIsle-to-OpenLOCK Universal Foundation Adapter"
+description: "Modular adapter bridging hexagonal terrain tiles with square-grid OpenLOCK terrain systems, enabling mixed-geometry assemblies where a HexIsle foundation supports interchangeable square-grid terrain overlays from any manufacturer."
+type: aa_formal
+innovation_id: "1940"
+ratification_session: B031
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: false
+wrasseTriggers:
+  - hexisle openlock universal foundation adapter
+  - hex to square grid terrain adapter
+  - modular terrain interoperability adapter
+  - slottedtop hex openlock clip bridge
+  - aa formal 1940
+  - active base terrain gameplay foundation layer
+  - mixed geometry terrain assembly adapter
+  - universal foundation hex grid active sub-terrain
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # Acknowledgment & Assignment — Innovation #1940
 
 ## HexIsle-to-OpenLOCK Universal Foundation Adapter

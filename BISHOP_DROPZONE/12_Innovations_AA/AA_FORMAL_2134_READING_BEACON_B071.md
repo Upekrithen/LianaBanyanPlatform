@@ -1,3 +1,24 @@
+---
+name: Reading Beacon
+description: Specialized beacon subtype that saves a member's reading position within any Liana Banyan publication using auto-generated reference codes, stored in a portable Beacon Wallet for persistent cross-publication position tracking.
+type: aa_formal
+innovation_id: "2134"
+ratification_session: B071
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - reading beacon
+  - beacon wallet
+  - auto-generated reference code
+  - aa formal 2134
+  - reading position persistence
+  - read along system
+  - cross-publication bookmark
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A FORMAL — Innovation #2134: Reading Beacon
 ## Acknowledgment & Attribution | Bishop Session B071 | April 3, 2026
 

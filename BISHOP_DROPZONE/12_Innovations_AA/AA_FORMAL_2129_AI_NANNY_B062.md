@@ -1,3 +1,24 @@
+---
+name: AI Nanny Verification Protocol
+description: Automated verification layer for multi-agent AI development combining a codebase-scanning health check script, a five-type hallucination taxonomy (Stats Drift, Premature Declaration, Phantom Wiring, Stale Context Claims, Confirmation Cascade), and a dual-synthesis Red Queen protocol requiring two independent AI architectures to achieve field-exact agreement before publishing canonical platform state.
+type: aa_formal
+innovation_id: "2129"
+ratification_session: B062
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - ai nanny verification protocol
+  - multi agent ai development verification
+  - aa formal 2129
+  - red queen protocol dual synthesis agreement
+  - five hallucination types ai development taxonomy
+  - health check script codebase scanning
+  - stats drift premature declaration phantom wiring
+  - mandatory post deploy verification gate
+cooperative_defensive_patent_pledge_2260_umbrella: true
+canon_eblet_pointer: null
+---
 # A&A FORMAL — Innovation #2129
 ## AI Nanny Verification Protocol
 ## Bishop B062 (post-hoc from B054 paper)

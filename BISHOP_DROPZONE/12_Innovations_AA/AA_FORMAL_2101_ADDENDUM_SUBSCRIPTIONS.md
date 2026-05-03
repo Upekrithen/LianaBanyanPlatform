@@ -1,3 +1,24 @@
+---
+name: Pearl Diver Addendum — Subscription Model and Visual Identity
+description: Addendum to Innovation #2101 adding tiered subscription offerings (Free/Basic/Premium/VIP) for Pearl Divers, quality-gated eligibility (30 verified tips, 85% accuracy, ADAPT Silver+), city-wide Guild subscription bundles, and the brass diving helmet visual identity with flashlight beam.
+type: aa_formal
+innovation_id: "2101"
+ratification_session: B048
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: false
+wrasseTriggers:
+  - pearl diver subscription model
+  - pearl diver visual identity brass helmet
+  - aa formal 2101
+  - deal intelligence subscription tiers
+  - city wide pearl diver guild subscription
+  - quality gated subscription eligibility
+  - pearl diver addendum b048
+  - cooperative deal alert subscription
+cooperative_defensive_patent_pledge_2260_umbrella: true
+canon_eblet_pointer: null
+---
 # A&A #2101 ADDENDUM — Subscription Model + Visual Identity
 ## Bishop B048 | Founder Directive
 

@@ -1,3 +1,24 @@
+---
+name: Bounty Photography Network — Zero-Storage Visual Documentation Marketplace
+description: A dual-channel cooperative photography system where members earn Marks by photographing businesses to their personal social media (Channel 1) and businesses post their own photography bounties through the same marketplace (Channel 2), with the platform storing only ~850-byte metadata references per photo — zero image hosting cost.
+type: aa_formal
+innovation_id: "2100"
+ratification_session: B048
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: false
+wrasseTriggers:
+  - bounty photography network
+  - zero storage visual documentation marketplace
+  - dual channel photography cooperative
+  - business initiated photography bounties
+  - aa formal 2100
+  - social media as storage layer cooperative
+  - real estate photography guild cooperative
+  - metadata only content platform
+cooperative_defensive_patent_pledge_2260_umbrella: true
+canon_eblet_pointer: null
+---
 # Acknowledgment & Assignment — Innovation #2100
 
 **Date:** March 29, 2026

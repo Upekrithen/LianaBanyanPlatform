@@ -1,3 +1,25 @@
+---
+name: "Local Wheels"
+description: "Cooperative fleet vehicle provision model where members earn income while paying down vehicle ownership via an 80/20 delivery earnings split."
+type: aa_formal
+innovation_id: "1915"
+ratification_session: B027
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: false
+wrasseTriggers:
+  - local wheels cooperative vehicle provision
+  - earn down vehicle ownership 80 20 split
+  - cooperative fleet delivery driver model
+  - aa formal 1915
+  - running jewels vehicle fleet cooperative
+  - multi use vehicle scheduling delivery rideshare
+  - title transfer payoff completion cooperative
+  - vehicle provision model income delivery
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A FORMAL — Innovation #1915: Local Wheels (Cooperative Vehicle Provision Model)
 ## Bishop Session 027 | March 22, 2026
 ## Patent Relevance: HIGH

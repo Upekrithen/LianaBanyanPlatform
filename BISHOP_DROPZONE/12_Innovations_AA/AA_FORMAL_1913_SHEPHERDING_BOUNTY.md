@@ -1,3 +1,25 @@
+---
+name: "Shepherding Bounty"
+description: "Standing on-call cooperative labor position where specialists are auto-matched to businesses by proximity and reputation using a monthly Mark activation fee."
+type: aa_formal
+innovation_id: "1913"
+ratification_session: B027
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: false
+wrasseTriggers:
+  - shepherding bounty
+  - standing on call labor position cooperative
+  - proximity reputation hybrid ranking
+  - shepherd matching cooperative directory
+  - aa formal 1913
+  - mark funded availability declaration
+  - 100 point reputation override threshold
+  - cooperative service directory specialist
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A FORMAL — Innovation #1913: Shepherding Bounty (Standing On-Call Service Position)
 ## Bishop Session 027 | March 22, 2026
 ## Patent Relevance: HIGH

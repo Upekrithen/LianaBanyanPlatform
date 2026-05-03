@@ -1,3 +1,24 @@
+---
+name: Design Doctrine — 10 Rules Codified in Architecture
+description: Formal architectural doctrine comprising 10 canonical rules codified into component constraints, design tokens, and page templates enforcing cooperative economic principles including anti-SaaS language restrictions, non-punitive access messaging, and trust-anchor positioning.
+type: aa_formal
+innovation_id: "2152"
+ratification_session: B081
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - design doctrine 10 rules architecture
+  - cooperative platform design governance
+  - no saas language component constraint
+  - aa formal 2152
+  - governance as code design system
+  - informative lock amber not red
+  - trust anchor positioning
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A Formal — Innovation #2152
 ## Design Doctrine (10 Rules Codified in Architecture)
 ### Bishop B081 | April 5, 2026

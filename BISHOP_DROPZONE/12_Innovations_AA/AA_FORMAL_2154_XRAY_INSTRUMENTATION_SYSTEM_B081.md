@@ -1,3 +1,24 @@
+---
+name: X-Ray Instrumentation System
+description: Platform-wide transparency system annotating DOM landmarks with data-xray-id attributes paired with a centralized glossary, enabling members to inspect platform structure, data flows, and cooperative economics through a visual overlay mode.
+type: aa_formal
+innovation_id: "2154"
+ratification_session: B081
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - xray instrumentation system
+  - data-xray-id dom annotation
+  - member facing transparency overlay
+  - aa formal 2154
+  - platform structure transparency
+  - xray glossary economic context
+  - cooperative transparency feature
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A Formal — Innovation #2154
 ## X-Ray Instrumentation System
 ### Bishop B081 | April 5, 2026

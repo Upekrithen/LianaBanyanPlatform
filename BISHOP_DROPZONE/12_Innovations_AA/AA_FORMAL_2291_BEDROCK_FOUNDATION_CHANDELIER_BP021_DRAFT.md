@@ -1,3 +1,24 @@
+﻿---
+name: Bedrock-Foundation-Chandelier (Inverted-Priority Substrate Stratum Architecture)
+description: A three-property architectural primitive governing the lowest stratum in a hierarchical substrate pyramid, where the foundation stratum holds the highest retrieval priority despite occupying the lowest storage position, seeding every agent context window with axiomatic facts before any dynamic content.
+type: aa_formal
+innovation_id: "2291"
+ratification_session: BP021
+prov_filing_status: drafted
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - bedrock foundation chandelier
+  - inverted priority substrate stratum
+  - seven stratum pyramid bedrock
+  - append only foundation stratum highest priority
+  - chandelier retrieval inversion
+  - context seeding bedrock first axiomatic
+  - aa formal 2291
+  - rom preload packet bedrock stratum
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
 # A&A FORMAL #2291 -- Bedrock-Foundation-Chandelier (Inverted-Priority Substrate Stratum Architecture)
 
 **Filed**: BP021, 2026-05-03 by Knight (Bushel 10 Shadow 2) — standalone filing per Bushel 10 mission / prior A&A drafted

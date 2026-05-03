@@ -1,3 +1,25 @@
+---
+name: The Glove (MoneyPenny Multi-Channel Persona Layer)
+description: A persona-consistent multi-channel interaction layer routing inbound contact from Twilio SMS, email webhook, and on-site chat into a single ROM-first query pipeline with unified MoneyPenny persona and conversation state, with a structural consent rule prohibiting broadcast or push-outbound messaging without explicit opt-in.
+type: aa_formal
+innovation_id: "2257"
+ratification_session: B098
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: false
+wrasseTriggers:
+  - the glove moneypenny multi-channel persona
+  - moneypenny unified persona layer
+  - twilio sms email chat single pipeline
+  - aa formal 2257
+  - consent-gated outbound messaging constraint
+  - rom-first member interaction agent
+  - three-channel unified persona routing
+  - implicit inbound consent scoped outbound reply
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A Formal #2257 — The Glove: MoneyPenny Multi-Channel Persona Layer
 
 **Innovation #:** 2257 (promoted in B098 from B096 stub)

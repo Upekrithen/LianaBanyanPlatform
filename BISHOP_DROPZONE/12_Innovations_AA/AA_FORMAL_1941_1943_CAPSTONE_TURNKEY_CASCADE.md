@@ -1,3 +1,25 @@
+---
+name: "Capstone Terrain System, Turn-Key Project Template, Matched-Fund Tiered Production Cascade"
+description: "Three innovations: terrain surface modules with pass-through connection points, a single-payment pre-configured production campaign template, and a tiered production cascade where creator investment is matched by community pre-orders to unlock manufacturing tiers."
+type: aa_formal
+innovation_id: "1941-1943"
+ratification_session: B031
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: false
+wrasseTriggers:
+  - capstone terrain system through connection surface modules
+  - turn key project template pre configured creator campaign
+  - matched fund tiered production cascade
+  - creator matched funding community pre-orders
+  - aa formal 1941-1943
+  - terrain pass through accessory hex foundation
+  - tiered production cascade manufacturing pathway
+  - five dollar membership turn key campaign setup
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # Acknowledgment & Assignment — Innovations #1941, #1942, #1943
 
 **Date:** March 26, 2026

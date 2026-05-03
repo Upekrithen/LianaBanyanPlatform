@@ -1,3 +1,24 @@
+---
+name: Family Table Trust Graph
+description: Six-degrees-of-separation trust-scoring system with per-bridge human stamping and pre-interaction selfie verification, enabling trust-critical member-to-member services without anonymous review stars or centralized background-check services.
+type: aa_formal
+innovation_id: "2149"
+ratification_session: B076
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - family table trust graph
+  - degrees of separation trust scoring
+  - per-bridge member stamping
+  - aa formal 2149
+  - pre-interaction selfie verification
+  - cooperative trust infrastructure
+  - babysitting eldercare trust system
+canon_eblet_pointer: trust_match_canon_bp021.eblet.md
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A FORMAL — Innovation #2149 (Family Table Trust Graph)
 ## Bishop Session B076 | April 4, 2026
 ## Patent Relevance: HIGH — Crown Jewel candidate

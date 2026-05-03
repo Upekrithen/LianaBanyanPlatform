@@ -1,3 +1,24 @@
+﻿---
+name: Vendor-Neutral AI Companion as Cooperative-Member-Product Bridge
+description: A self-installing personal retrieval substrate that runs locally, exposes the Scribes Cathedral and R9-style preload via MCP to any AI vendor, and persists member memory independently of any vendor platform, inverting the conventional pattern where vendors own member memory.
+type: aa_formal
+innovation_id: "2275"
+ratification_session: B117
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - ai companion vendor neutral bridge
+  - self installing personal retrieval substrate
+  - vendor neutral mcp first architecture
+  - liana companion pip install
+  - anti lock in cooperative memory
+  - vendors are backends member owns memory
+  - aa formal 2275
+  - free tier standalone paid tier sync
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
 # A&A Formal #2275 — Vendor-Neutral AI Companion as Cooperative-Member-Product Bridge
 
 **Innovation #:** 2275

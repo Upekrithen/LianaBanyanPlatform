@@ -1,3 +1,25 @@
+---
+name: "Cooperative Real Estate Expanded — Tenant-as-Contributor through $5 Access Key"
+description: "Six innovations expanding cooperative real estate: STR guest onboarding, commercial real estate acquisition, member vacation network, property listing marketplace, unified real estate WaterWheel, and $5 membership network access key."
+type: aa_formal
+innovation_id: "1930-1935"
+ratification_session: B029
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - tenant as contributor short term rental onboarding
+  - cooperative commercial real estate acquisition
+  - member vacation network cost plus twenty
+  - member property listing garage scenario
+  - unified real estate waterwheel multi asset
+  - aa formal 1930-1935
+  - five dollar access key cooperative network
+  - cooperative real estate expanded six innovations
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A FORMAL — Innovations #1930-#1935 (Cooperative Real Estate Expanded)
 ## Bishop Session 029 | March 23, 2026
 ## Six Innovations — Tenant-as-Contributor through $5 Access Key

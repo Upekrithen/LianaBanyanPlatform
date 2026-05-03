@@ -1,3 +1,24 @@
+---
+name: Creator and Press Red Carpet Outreach Pipeline
+description: Complete outreach pipeline connecting the Content Command Center to the Opening Gambit — comprising creator scouting, enhanced Red Carpet with QR preview, Press Junket with guided tours, universal invite codes resolving to 9 walkthrough types, MoneyPenny outbound queue with full lifecycle tracking, and auto-generated personalized cue cards for all recipients.
+type: aa_formal
+innovation_id: "2114"
+ratification_session: B051
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: false
+wrasseTriggers:
+  - creator press red carpet outreach pipeline
+  - universal invite code system
+  - aa formal 2114
+  - moneypenny outbound queue lifecycle tracking
+  - creator scouting undrafted picks pipeline
+  - opening gambit outreach system
+  - press junket guided tours cooperative
+  - personalized cue card auto generation
+cooperative_defensive_patent_pledge_2260_umbrella: true
+canon_eblet_pointer: null
+---
 # A&A FORMAL — Innovation #2114
 ## Creator & Press Red Carpet Outreach Pipeline
 ## K191 | Bishop B051

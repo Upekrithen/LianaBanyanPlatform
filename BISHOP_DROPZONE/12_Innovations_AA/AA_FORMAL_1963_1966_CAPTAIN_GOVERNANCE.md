@@ -1,3 +1,25 @@
+---
+name: "Meritocratic Captain System and Governance — Skin-in-the-Game Distributed Leadership"
+description: "Four innovations defining the Captain governance architecture: permissionless leadership pipeline scaling by verified performance and staked Marks, Captain collateral mechanism, Moses-model scaling, and supporting governance structures."
+type: aa_formal
+innovation_id: "1963-1966"
+ratification_session: B032
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - meritocratic captain system skin in the game leadership
+  - captain mark staking collateral moses scaling model
+  - permissionless leadership pipeline cooperative
+  - decentralized delivery confirmation threshold captain
+  - aa formal 1963-1966
+  - captain of ten fifty hundred thousand governance
+  - joule backed mark staking operational collateral
+  - no gatekeeping permissionless captain entry
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # Acknowledgment & Assignment — Innovations #1963 through #1966
 
 **Date:** March 26, 2026

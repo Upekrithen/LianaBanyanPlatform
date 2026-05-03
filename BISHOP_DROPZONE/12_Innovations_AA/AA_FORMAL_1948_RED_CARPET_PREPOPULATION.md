@@ -1,3 +1,25 @@
+---
+name: "Red Carpet Pre-Population: Demand-Signal Showcase for Creator Onboarding"
+description: "System for pre-populating marketplace templates with a prospective creator's public product information before registration, allowing community members to pledge escrowed Credits as demand signals, then delivering the accumulated demand as a personalized Red Carpet onboarding incentive."
+type: aa_formal
+innovation_id: "1948"
+ratification_session: B032
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: false
+wrasseTriggers:
+  - red carpet pre-population demand signal showcase
+  - creator onboarding demand aggregation escrowed credits
+  - showcased project pre-registration marketplace
+  - platform initiated creator recruitment warm onboarding
+  - aa formal 1948
+  - community demand signaling pledge credits escrow
+  - cold start marketplace content strategy
+  - personalized red carpet evidence backed creator conversion
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # Acknowledgment & Assignment — Innovation #1948
 
 **Date:** March 26, 2026

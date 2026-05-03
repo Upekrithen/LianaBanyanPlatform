@@ -1,3 +1,25 @@
+---
+name: "Restaurant Negotiation Architecture — Tiered Commitment Chart, Advance Payment, Cookbook Integration"
+description: "Six innovations defining restaurant and local business negotiation architecture: tiered C+20 to C+90 commitment chart with escalating platform benefits, advance payment trigger mechanism, Cookbook menu integration, and related merchant partnership tools."
+type: aa_formal
+innovation_id: "1979-1984"
+ratification_session: B034
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - tiered restaurant commitment chart c plus twenty c plus ninety
+  - restaurant negotiation architecture volume discount tiers
+  - advance payment trigger cooperative restaurant partner
+  - cookbook menu cooperative restaurant integration
+  - aa formal 1979-1984
+  - negotiation wiggle room restaurant onboarding captain
+  - cost plus twenty floor restaurant commitment
+  - printable pitch negotiation chart captain restaurant
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # Acknowledgment & Assignment — Innovations #1979 through #1984
 
 **Date:** March 26, 2026

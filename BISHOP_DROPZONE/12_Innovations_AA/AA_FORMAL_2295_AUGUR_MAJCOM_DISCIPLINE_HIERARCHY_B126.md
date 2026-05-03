@@ -1,3 +1,24 @@
+﻿---
+name: The Augur MAJCOM (Recursive Scale-Invariant Federated Discipline-Enforcement Plane)
+description: A recursive scale-invariant federated discipline-enforcement plane combining enforce-locally and federate-upward operations in a composable Federated Discipline Cell that composes without bound from Augur through Squadron, Wing, NAF, MAJCOM, Ring, Constellation, and beyond while preserving sovereignty at every tier.
+type: aa_formal
+innovation_id: "2295"
+ratification_session: B126
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - augur majcom discipline hierarchy
+  - recursive scale invariant federated enforcement
+  - federated discipline cell composition
+  - wing squadron naf majcom federation
+  - scale invariant cooperative governance
+  - sovereignty preserving federation tiers
+  - aa formal 2295
+  - tcp ip equivalent cooperative ai discipline
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
 # A&A Formal #2295 — The Augur MAJCOM (Recursive Scale-Invariant Federated Discipline-Enforcement Plane for Cooperative AI Substrates)
 
 **Filed:** B126 (2026-04-25, priority date 2026-04-26 for Prov 14 amendment)

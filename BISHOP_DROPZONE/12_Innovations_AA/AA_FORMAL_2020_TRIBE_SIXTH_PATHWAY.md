@@ -1,3 +1,25 @@
+---
+name: Tribe Formation as Sixth Cold Start Pathway
+description: A cooperative platform system presenting six onboarding pathways mirroring six production levels, with Tribe formation enabling multi-membership across family, geographic, interest, cultural, and hybrid communities each with collective treasury, visual identity contests, and autonomous governance.
+type: aa_formal
+innovation_id: "2020"
+ratification_session: B035
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: false
+wrasseTriggers:
+  - tribe formation sixth cold start pathway
+  - six paths six levels all lead to captain
+  - tribe elder cooperative community
+  - family tribe family table connection
+  - multi-tribe membership geographic interest
+  - tribe treasury visual identity formation wizard
+  - aa formal 2020
+  - six pathway symmetry production levels
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # Acknowledgment & Assignment — Innovation #2020
 
 **Date:** March 26, 2026

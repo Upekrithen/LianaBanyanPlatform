@@ -1,3 +1,24 @@
+﻿---
+name: The Cooperative Defensive Patent Pledge
+description: A three-part structured patent filing and licensing framework for cooperatively-developed infrastructure, combining defensive filing, perpetual cooperative license codified in corporate bylaws, and reserved enforcement against extractive commercial use.
+type: aa_formal
+innovation_id: "2260"
+ratification_session: B098
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - cooperative defensive patent pledge
+  - patent pledge cooperative licensing
+  - perpetual royalty free cooperative license
+  - defensive enforcement reserved patent
+  - patent retaliation clause cooperative
+  - cooperative defensive patent framework
+  - aa formal 2260
+  - ip governance cooperative platform
+canon_eblet_pointer: cooperative_defensive_patent_pledge_2260_canon_bp021.eblet.md
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
 # A&A Formal #2260 — The Cooperative Defensive Patent Pledge
 
 **Innovation #:** 2260 (promoted in B098 from B096 stub)

@@ -1,3 +1,25 @@
+---
+name: Cooperative AI Cost Aggregation and Institutional Knowledge Compounding
+description: A system for reducing per-member AI service costs through shared cooperative infrastructure and volume purchasing, with institutional knowledge that compounds across member interactions — creating an inverse cost curve where per-member AI expenses decrease as membership grows.
+type: aa_formal
+innovation_id: "1993-1994"
+ratification_session: B034
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: false
+wrasseTriggers:
+  - cooperative ai cost aggregation
+  - institutional knowledge compounding
+  - sipping tea with the librarian
+  - shared librarian infrastructure
+  - volume priced ai services
+  - inverse cost curve cooperative
+  - aa formal 1993-1994
+  - ai gets cheaper at scale
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # Acknowledgment & Assignment — Innovations #1993 through #1994
 
 **Date:** March 26, 2026

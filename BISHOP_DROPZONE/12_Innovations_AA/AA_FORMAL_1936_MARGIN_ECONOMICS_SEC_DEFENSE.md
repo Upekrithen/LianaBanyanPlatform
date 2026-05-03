@@ -1,3 +1,25 @@
+---
+name: "Margin Economics as Structural SEC Defense"
+description: "Recognition that the Cost+20% cooperative pricing formula simultaneously sets retail prices and generates non-security work-credits as transactional byproducts, defeating Howey's investment-of-money prong at the threshold level."
+type: aa_formal
+innovation_id: "1936"
+ratification_session: B028
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - margin economics structural sec defense
+  - cost plus twenty howey prong defeat
+  - transactional byproduct marks non-security
+  - cooperative pricing formula legal defense
+  - aa formal 1936
+  - constitutional margin lock securities defense
+  - marks as retail transaction byproduct
+  - category three transactional byproduct green
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A FORMAL — Innovation #1936: Margin Economics as Structural SEC Defense
 ## Bishop Session 028 | March 23, 2026
 ## Patent Relevance: HIGH | Priority: CRITICAL (Crown Jewel)

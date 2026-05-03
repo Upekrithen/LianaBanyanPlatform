@@ -1,3 +1,24 @@
+﻿---
+name: The Cathedral Effect
+description: Architecture-earned recall improvement in AI systems through domain-indexed working memory injection prior to generation, producing measurable HOT accuracy lift attributable solely to the architecture rather than model fine-tuning, demonstrated with +62-80pp lift in dual-universe zero-web-prior benchmarks.
+type: aa_formal
+innovation_id: "2278"
+ratification_session: B121
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - the cathedral effect
+  - architecture earned recall ai
+  - domain indexed working memory injection
+  - hot accuracy lift architecture only
+  - keyword router scribe corpus injection
+  - zero web prior cathedral benchmark
+  - aa formal 2278
+  - architecture caused recall improvement
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
 # A&A Formal #2278 — The Cathedral Effect: Architecture-Earned Recall in AI Systems Through Domain-Indexed Working Memory
 
 **Innovation #:** 2278

@@ -1,3 +1,24 @@
+---
+name: What-If Commissions
+description: Pre-drafted anticipatory role-assignment system enabling on-the-spot deployment of scoped roles during live conversations, with fractional commitment architecture and automatic platform routing updates upon recipient signature.
+type: aa_formal
+innovation_id: "2150"
+ratification_session: B076
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - what-if commissions
+  - we need what youre good at
+  - fractional commitment architecture
+  - aa formal 2150
+  - battlefield commission cooperative
+  - live issuance role assignment
+  - automatic platform routing commission
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A FORMAL — Innovation #2150 (What-If Commissions)
 ## Bishop Session B076 | April 4, 2026
 ## Patent Relevance: HIGH — Crown Jewel candidate

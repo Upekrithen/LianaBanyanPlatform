@@ -1,3 +1,24 @@
+﻿---
+name: Cost-Slasher Claim Ladder with Self-Auditing Evidence Table
+description: A cost-reduction marketing method pairing a three-tier claim ladder with an adjacent evidence table containing a cost-per-correct-answer column, enabling readers to self-audit the claim in one scroll without click-through, whitepaper, or guarantee.
+type: aa_formal
+innovation_id: "2272"
+ratification_session: B117
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - cost slasher claim ladder
+  - self auditing evidence table marketing
+  - cost per correct answer column
+  - ftc safe claim architecture ladder
+  - three tier claim conservative aggressive
+  - dollar per correct self audit
+  - aa formal 2272
+  - claim ladder evidence substantiation
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
 # A&A Formal #2272 — Cost-Slasher Claim Ladder with Self-Auditing Evidence Table
 
 **Innovation #:** 2272

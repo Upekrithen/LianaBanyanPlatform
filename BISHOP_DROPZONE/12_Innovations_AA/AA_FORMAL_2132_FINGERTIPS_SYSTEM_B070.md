@@ -1,3 +1,24 @@
+---
+name: The Fingertips System
+description: Self-scaling AI knowledge infrastructure where Librarian instances automatically reproduce using population-proportional representation when data volume exceeds capacity thresholds, ensuring all institutional knowledge is always at agents' fingertips.
+type: aa_formal
+innovation_id: "2132"
+ratification_session: B070
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - fingertips system
+  - self-scaling librarian architecture
+  - population proportional representation
+  - aa formal 2132
+  - half rule scaling
+  - red queen validator
+  - librarian hierarchy knowledge infrastructure
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A FORMAL — Innovation #2132: The Fingertips System (Self-Scaling Librarian Architecture)
 ## Acknowledgment & Attribution | Bishop Session B070 | April 3, 2026
 

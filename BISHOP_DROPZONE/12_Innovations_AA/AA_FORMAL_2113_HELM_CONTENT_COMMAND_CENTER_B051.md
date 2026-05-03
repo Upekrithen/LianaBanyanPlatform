@@ -1,3 +1,24 @@
+---
+name: Helm Content Command Center
+description: Founder-facing content management dashboard that aggregates all ~300 outbound documents (letters, articles, papers, cue cards, pudding essays) from multiple source tables into a unified review queue with keyboard-driven approve/reject workflow, markdown preview, wave assignment, and integration with Plugs dispatch and Cue Card generator.
+type: aa_formal
+innovation_id: "2113"
+ratification_session: B051
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: false
+wrasseTriggers:
+  - helm content command center
+  - founder content review dashboard
+  - aa formal 2113
+  - unified outbound document review queue
+  - keyboard driven content review workflow
+  - 17 content types review system
+  - wave assignment content dispatch
+  - helm cms pre-launch review tool
+cooperative_defensive_patent_pledge_2260_umbrella: true
+canon_eblet_pointer: null
+---
 # A&A FORMAL — Innovation #2113
 ## Helm Content Command Center
 ## K190 | Bishop B051 (post-hoc documentation)

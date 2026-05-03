@@ -1,3 +1,26 @@
+---
+name: Missing Chain Batch — Golden Key Codebreaker, Dynamic Red Carpet Registry, Cooperative Status Economics, Dual-Render Publication System
+description: Four innovations recovered from Knight chat transcripts (B062): an interactive keyword puzzle overlay reusing the Notes architecture; a database-driven recipient registry with GIN-indexed email arrays and auto-registration from Cue Card creation; an inverted status economics framework where affordability is the status signal; and a dual-render publication engine producing Academic and Member views from the same source.
+type: aa_formal
+innovation_id: "2125-2128"
+ratification_session: B062
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: false
+wrasseTriggers:
+  - golden key codebreaker interactive puzzle overlay
+  - dynamic red carpet recipient registry
+  - cooperative status economics affordability signal
+  - dual render publication system academic member view
+  - aa formal 2125
+  - aa formal 2126
+  - aa formal 2127
+  - aa formal 2128
+  - gin indexed email array registry
+  - veblen economics inversion cooperative
+cooperative_defensive_patent_pledge_2260_umbrella: true
+canon_eblet_pointer: null
+---
 # A&A FORMALS — Innovations #2125-#2128
 ## Recovered from Knight Chat Transcripts
 ## Bishop B062 | April 2, 2026

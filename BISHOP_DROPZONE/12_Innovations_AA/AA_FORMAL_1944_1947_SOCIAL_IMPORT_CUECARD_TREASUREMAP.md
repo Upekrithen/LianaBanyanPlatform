@@ -1,3 +1,25 @@
+---
+name: "One-Click Social Import, Cue Card Campaign System, Treasure Map Mini-Business Plans, Bridge-to-Local"
+description: "Four innovations: importing social media posts into production templates, pre-built craft-specific campaign Cue Cards, interactive visual business plan guides with platform tool integration, and a structured bridge-to-local conversion pattern replacing external services with cooperative providers."
+type: aa_formal
+innovation_id: "1944-1947"
+ratification_session: B031
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: false
+wrasseTriggers:
+  - one click social import external post to campaign template
+  - cue card campaign system craft type templates
+  - treasure map mini business plans per craft onboarding
+  - bridge to local external service linking local provider
+  - aa formal 1944-1947
+  - social media to marketplace campaign import
+  - craft specific production pathway cue card
+  - interactive visual onboarding treasure map
+canon_eblet_pointer: lb_frame_viral_onboarding_cue_card_pied_piper_bp009.eblet.md
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # Acknowledgment & Assignment — Innovations #1944, #1945, #1946, #1947
 
 **Date:** March 26, 2026

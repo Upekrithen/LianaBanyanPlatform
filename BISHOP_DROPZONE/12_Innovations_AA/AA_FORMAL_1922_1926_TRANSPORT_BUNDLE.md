@@ -1,3 +1,25 @@
+---
+name: "Rally Group Transport Bundle — Lemon Lot, Rideshare Routes, Vehicle Onboarding, Safety Ledger"
+description: "Five transport innovations including peer-to-peer vehicle sharing marketplace, commute matching, three-path vehicle contribution onboarding, unified transport architecture, and graduated photo documentation protocol."
+type: aa_formal
+innovation_id: "1922-1926"
+ratification_session: B029
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - rally group transport bundle
+  - lemon lot peer to peer vehicle sharing
+  - rideshare routes commute matching
+  - vehicle contribution onboarding earn down three path
+  - graduated photo documentation safety ledger
+  - aa formal 1922-1926
+  - cooperative vehicle sharing marketplace constitutional margin lock
+  - graduated trust mechanics transport documentation
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A FORMAL — Innovations #1922-#1926 (Rally Group Transport Bundle)
 ## Bishop Session 029 | March 23, 2026
 ## Five Innovations — Lemon Lot, Rideshare Routes, Vehicle Onboarding, Transport Bundle, Photo Protocol

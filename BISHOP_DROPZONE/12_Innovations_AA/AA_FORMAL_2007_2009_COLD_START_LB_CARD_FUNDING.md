@@ -1,3 +1,25 @@
+---
+name: Cold Start Hub and Scheduled LB Card Funding
+description: An animated multi-pathway onboarding hub converging all entry points to Captain status, combined with a recurring scheduled funding system for prepaid LB Cards with purpose earmarking and community-supported multi-funder capability for cooperative financial safety nets.
+type: aa_formal
+innovation_id: "2007-2009"
+ratification_session: B035
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - cold start hub four pathways captain
+  - scheduled lb card funding stripe
+  - community-supported card funding
+  - purpose-earmarked recurring prepaid card
+  - cooperative financial safety net
+  - onboarding convergence captain status
+  - aa formal 2007-2009
+  - programmable card funding cooperative
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A FORMAL — Innovations #2007-#2009
 ## Cold Start Hub + Scheduled LB Card Funding
 **Bishop Session:** 035 | **Date:** March 27, 2026 | **Knight:** K128 (Hub), Design (Funding)

@@ -1,3 +1,25 @@
+---
+name: X-Ray Overlay and Community-Governed Visual Design (Design Democracy)
+description: A member-driven design improvement system featuring element-level overlays in X-Ray Goggles mode, community-governed CSS Zen Garden-style visual themes voted into portal defaults, design democracy voting, tiered theme governance (guild/tribe/personal), and treasury-funded guild banner contests.
+type: aa_formal
+innovation_id: "2010-2014"
+ratification_session: B035
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - x-ray overlay design democracy
+  - community-governed visual design cooperative
+  - css zen garden cooperative model
+  - design democracy paper candidate crown jewel
+  - tiered theme governance guild tribe personal
+  - guild banner contests treasury funded
+  - aa formal 2010-2014
+  - cooperative visual identity democratic evolution
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A FORMAL — Innovations #2010-#2014
 ## X-Ray Overlay + Community-Governed Visual Design (Design Democracy)
 **Bishop Session:** 035 | **Date:** March 27, 2026

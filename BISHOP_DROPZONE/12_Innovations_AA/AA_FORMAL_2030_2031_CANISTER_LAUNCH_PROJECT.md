@@ -1,3 +1,25 @@
+---
+name: Canister System as Bounty-Funded Separate Project and Cue Card Recruitment
+description: The Canister System launched as an independent bounty-funded manufacturing project alongside the SlottedTop Kickstarter, with every production stage posted as Marks-earning bounties and a 'DO THE WORK = GET THE STATUS' recruitment Cue Card linking directly to the bounty board.
+type: aa_formal
+innovation_id: "2030-2031"
+ratification_session: B036
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - canister system bounty-funded separate project
+  - slottedtop kickstarter co-launch
+  - do the work get the status cue card
+  - bounty-funded manufacturing pipeline
+  - marks replace applications interviews negotiations
+  - vertically integrated production bounties
+  - aa formal 2030-2031
+  - cooperative manufacturing recruitment cue card
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # FORMAL ACKNOWLEDGMENT & ACCESSION — Innovations #2030–#2031
 # Canister System Launch Project + SlottedTop Co-Launch
 **Bishop Session:** 036 | **Date:** March 27, 2026

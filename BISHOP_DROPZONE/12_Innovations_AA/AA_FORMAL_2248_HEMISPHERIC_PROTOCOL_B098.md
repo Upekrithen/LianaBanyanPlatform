@@ -1,3 +1,25 @@
+---
+name: The Hemispheric Protocol (Deterministic Calendar Deconfliction)
+description: A deterministic deconfliction system for founder-level calendar management during high-volume launch-wave response windows, using tier-segmented scheduling links, graceful-recess collision handling, and physical separation of household from professional contact flow so that every counterparty sees only their tier's availability without revealing priority hierarchy.
+type: aa_formal
+innovation_id: "2248"
+ratification_session: B098
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - hemispheric protocol calendar deconfliction
+  - tier-segmented scheduling links launch wave
+  - aviation hemispheric rule calendar protocol
+  - aa formal 2248
+  - graceful recess collision handling calendar
+  - launch wave response scheduling system
+  - tier opacity scheduling deconfliction
+  - physical contact flow separation voip household
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A Formal #2248 — The Hemispheric Protocol (Deterministic Calendar Deconfliction for Launch-Wave Response Handling)
 
 **Innovation #:** 2248

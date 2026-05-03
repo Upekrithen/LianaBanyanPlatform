@@ -1,3 +1,25 @@
+---
+name: The Canister System — Modular Stackable Injection Molding
+description: A modular, stackable, gravity-pressure injection molding system built from 3D-printed components using hex-keyed A/B telescoping mold canisters with 60° twist-lock mechanisms, dual pressure (gravity push plus vacuum pull), and standardized canister sizes enabling distributed maker manufacturing without hydraulics.
+type: aa_formal
+innovation_id: "2022"
+ratification_session: B035
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - canister system modular injection molding
+  - hex-keyed a/b telescoping mold canister
+  - gravity vacuum-assist pressure injection
+  - stackable mold system 3d printed
+  - decentralized factory node tooling
+  - twist-lock 60 degree injection mold
+  - aa formal 2022
+  - cooperative maker manufacturing infrastructure
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A FORMAL — Innovation #2022
 ## The Canister System: Modular Stackable Injection Molding
 **Bishop Session:** 035 | **Date:** March 27, 2026

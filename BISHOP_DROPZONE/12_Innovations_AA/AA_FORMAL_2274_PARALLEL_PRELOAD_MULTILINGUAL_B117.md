@@ -1,3 +1,24 @@
+﻿---
+name: Parallel Preload Multilingual Retrieval Architecture
+description: A multilingual LLM retrieval architecture organizing content as sibling preload files per language with canonical-fact invariance rules enforced across languages, including mandatory lang_fallback declaration and deliberate breach of locale formatting for numeric canonical values.
+type: aa_formal
+innovation_id: "2274"
+ratification_session: B117
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - parallel preload multilingual retrieval
+  - sibling preload files multilingual
+  - canonical fact invariance across languages
+  - lang fallback mandatory declaration
+  - locale formatting breach canonical consistency
+  - multilingual retrieval architecture
+  - aa formal 2274
+  - cross language retrieval canonical numbers
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
 # A&A Formal #2274 — Parallel Preload Multilingual Retrieval Architecture
 
 **Innovation #:** 2274

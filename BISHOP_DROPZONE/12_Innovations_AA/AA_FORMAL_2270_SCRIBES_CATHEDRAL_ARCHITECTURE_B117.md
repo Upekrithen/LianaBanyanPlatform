@@ -1,3 +1,24 @@
+﻿---
+name: Scribes Cathedral Architecture
+description: An append-only JSONL-tablet store organized as a registry of domain Scribes, each declaring one primary field and up to twelve adjacent fields, with the triply-redundant witness property ensuring any topic is covered by three or more Scribes through overlapping adjacents.
+type: aa_formal
+innovation_id: "2270"
+ratification_session: B117
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - scribes cathedral architecture
+  - domain indexed working memory triply redundant
+  - triply redundant witness property
+  - append only jsonl tablets scribes
+  - reed solomon knowledge store
+  - primary plus adjacent expertise structure
+  - aa formal 2270
+  - cathedral substrate architecture
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
 # A&A Formal #2270 — Scribes Cathedral: Domain-Indexed Working Memory with Triply-Redundant Witness
 
 **Innovation #:** 2270

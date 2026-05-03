@@ -1,3 +1,24 @@
+---
+name: Bloodhound Rebuild (Topic-Coherent Cooperative Cathedral Index Rebuild with Guided Miner Pre-Anchoring)
+description: A topic-coherent Cathedral index rebuild system using a pre-pass TF-IDF corpus scout to build a global keyword density map, rank WellCandidates by scent density, detect drift gaps and overlaps, and pre-anchor Miners before file-one processing—eliminating filesystem-order fragility with deterministic stdlib-only output.
+type: aa_formal
+innovation_id: "2333"
+ratification_session: BP021
+prov_filing_status: drafted
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - bloodhound rebuild topic coherent index
+  - tfidf corpus scout miner pre anchoring
+  - wellcandidate density ranked guided rebuild
+  - aa formal 2333
+  - bloodhound rebuild bp021 draft
+  - follows the scent densest trail first
+  - deterministic corpus first ordering pheromone bridge rebuild
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A FORMAL #2333 -- Bloodhound Rebuild (Topic-Coherent Cooperative Cathedral Index Rebuild with Guided Miner Pre-Anchoring)
 
 **Filed**: BP021, 2026-05-03 by Knight (Bushel 10 Shadow 8) — INDL-9 Geneva deadline 2026-05-07

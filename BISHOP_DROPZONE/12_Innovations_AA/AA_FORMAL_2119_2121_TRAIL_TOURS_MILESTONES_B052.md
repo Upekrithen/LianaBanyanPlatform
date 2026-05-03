@@ -1,3 +1,25 @@
+---
+name: Trail Map Navigation + Grand Tour Packages + Marks Milestone Prize Panel
+description: Three engagement innovations: a treasure-map-style vertical progress tracker with customizable Trail Markers (Ghost default, upgradeable via Brand Bounty); themed Grand Tour Packages awarding Marks on completion; and a real-time Marks milestone celebration system that at 100 Marks presents a three-tab Prize Panel showing what you can get, do, and earn — with 16+ actionable cards linking to real platform pages.
+type: aa_formal
+innovation_id: "2119-2121"
+ratification_session: B052
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - cooperative trail map customizable trail markers
+  - grand tour packages marks earning completion
+  - marks milestone prize panel three tab business launch
+  - aa formal 2119
+  - aa formal 2120
+  - aa formal 2121
+  - crows nest dotted path trail gamification
+  - fable trail makers walk money map founders path
+  - dont wait for your ship launch it yourself
+cooperative_defensive_patent_pledge_2260_umbrella: true
+canon_eblet_pointer: null
+---
 # A&A FORMALS — Innovations #2119-#2121
 ## Trail Map Navigation + Grand Tour Packages + Marks Milestone Prize Panel
 ## Bishop B052

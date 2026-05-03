@@ -1,3 +1,25 @@
+---
+name: Affiliation Badge System (Shirley Temple Visibility)
+description: A unified group affiliation display system implementing category-based default visibility with two-sided member-controlled filters, where political and religious affiliations default to hidden while full cooperative participation rights — currency earning, governance voting, group feed access — persist regardless of visibility settings.
+type: aa_formal
+innovation_id: "2251"
+ratification_session: B098
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: false
+wrasseTriggers:
+  - affiliation badge system shirley temple visibility
+  - two-sided affiliation visibility filter
+  - category-based default visibility badges
+  - aa formal 2251
+  - ghost world affiliation display cooperative
+  - discourse risk visibility calibration
+  - wardrobe department equippable affiliation badges
+  - political religious badge hidden by default
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A Formal #2251 — Affiliation Badge System (Shirley Temple Visibility)
 
 **Innovation #:** 2251 (renumbered in B098 from former #2234 per `INNOVATION_RENUMBERING_LOG_B098.md`)

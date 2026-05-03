@@ -1,3 +1,24 @@
+---
+name: Character Bubble Primitive
+description: Reusable character-voiced explanation component serving as the universal platform-speaks-to-member primitive, rendering mascot-identified speech bubbles with consistent personality across auth gates, feature locks, empty states, and tutorial overlays.
+type: aa_formal
+innovation_id: "2156"
+ratification_session: B081
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - character bubble primitive
+  - platform voice component
+  - mascot speech bubble ui
+  - aa formal 2156
+  - universal platform explanation primitive
+  - denken bubble character voice
+  - cooperative ux personality component
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A Formal — Innovation #2156
 ## Character Bubble Primitive (Platform Voice Component)
 ### Bishop B081 | April 5, 2026

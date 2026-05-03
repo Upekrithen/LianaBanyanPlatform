@@ -1,3 +1,25 @@
+---
+name: Creator Dashboard and Cross-Entity Global Search
+description: A 9-table parallel query Creator Dashboard that aggregates a member's entire platform presence into a single Captain-aware view, combined with a multi-type adaptive search engine querying across all entity types simultaneously with type-tagged results.
+type: aa_formal
+innovation_id: "1999-2000"
+ratification_session: B035
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - unified creator dashboard
+  - cross-entity global search
+  - captain-aware dashboard
+  - 9-table parallel query
+  - multi-type adaptive search
+  - member command center
+  - aa formal 1999-2000
+  - cooperative discovery engine
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A FORMAL — Innovations #1999-#2000
 ## Creator Dashboard + Cross-Entity Global Search
 **Bishop Session:** 035 | **Date:** March 27, 2026 | **Knight:** K126

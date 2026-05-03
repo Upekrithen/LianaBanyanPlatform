@@ -1,3 +1,25 @@
+---
+name: "Portal Identity Messaging, Flipping Deck Card Navigation, CrossPortalNav"
+description: "Three innovations defining the multi-portal user experience: personality-driven three-line hero messaging per portal, interactive flipping Deck Card navigation grids, and a persistent cross-portal navigation bar maintaining session state across all seven portals."
+type: aa_formal
+innovation_id: "1960-1962"
+ratification_session: B032
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: false
+wrasseTriggers:
+  - portal identity messaging personality driven landing
+  - flipping deck card navigation portal curated entry points
+  - crossportalnav persistent cross-portal navigation
+  - multi portal user experience design unified cooperative
+  - aa formal 1960-1962
+  - three line hero message portal identity
+  - interactive deck card flip reveal navigation
+  - seven portal personality differentiation
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # Acknowledgment & Assignment — Innovations #1960, #1961, #1962
 
 **Date:** March 26, 2026

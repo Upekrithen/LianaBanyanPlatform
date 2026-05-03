@@ -1,3 +1,25 @@
+---
+name: Guided Tour System — Three-Mode Navigation, Adaptive Detail Switcher, and Content Notes Overlay
+description: Three Crown Jewel innovations: a three-mode content navigation system (Topic Focus, Category Browse, Guided Tour auto-advancing with Return Beacons); a persistent 3-position detail level toggle (Skipping Stones / Wading In / Deep Dive) mapping to the 6-depth Crow's Nest; and a floating notes overlay with dual-path persistence (personal localStorage or cooperative submission) routed through AI categorization to the 7-member Librarian Guild.
+type: aa_formal
+innovation_id: "2115-2117"
+ratification_session: B051
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - guided tour engine three mode content navigation
+  - adaptive detail level switcher skipping stones wading in deep dive
+  - content notes overlay librarian processing pipeline
+  - aa formal 2115
+  - aa formal 2116
+  - aa formal 2117
+  - return beacon bookmark cephas navigation
+  - crows nest six depth system
+  - moneypenny note categorization librarian guild routing
+cooperative_defensive_patent_pledge_2260_umbrella: true
+canon_eblet_pointer: null
+---
 # A&A FORMALS — Innovations #2115-#2117
 ## Guided Tour Content Consumption System
 ## Bishop B051

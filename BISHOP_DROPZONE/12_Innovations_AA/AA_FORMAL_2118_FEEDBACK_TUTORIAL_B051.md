@@ -1,3 +1,24 @@
+---
+name: Interactive Feedback Tutorial with Sequential Tracking
+description: First-visit interactive tutorial teaching feedback-as-civic-duty through a three-step practice exercise on the Little Red Hen Fable slideshow; the user physically clicks live content, writes a note, and receives a sequentially numbered confirmation ("SAVED as 00000129") routed into the real MoneyPenny → Librarian Guild pipeline — dismissable with persistent preference.
+type: aa_formal
+innovation_id: "2118"
+ratification_session: B051
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - interactive feedback tutorial sequential tracking
+  - aa formal 2118
+  - first visit feedback tutorial civic duty
+  - little red hen fable tutorial overlay
+  - sequentially numbered submission confirmation
+  - learn by doing feedback cooperative
+  - cooperative onboarding feedback mechanism
+  - tour notes submitted pipeline
+cooperative_defensive_patent_pledge_2260_umbrella: true
+canon_eblet_pointer: null
+---
 # A&A FORMAL — Innovation #2118
 ## Interactive Feedback Tutorial with Sequential Tracking
 ## Bishop B051

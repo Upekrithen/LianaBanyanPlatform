@@ -1,3 +1,24 @@
+---
+name: Adversarial Signal Counter-Vote Civic Engagement System
+description: Converts unsolicited political communications (texts, mailers, ads) into formal, verifiable civic position records within the cooperative — members identify the corresponding bill, register a FOR or AGAINST position under their verified membership identity, aggregate with other members non-partisanly, and auto-generate a pre-filled letter to their elected representative; the sender's investment in emotional reaction is redirected into formal civic action.
+type: aa_formal
+innovation_id: "2130"
+ratification_session: B061
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - counter vote adversarial signal civic engagement
+  - unsolicited political communication counter record
+  - aa formal 2130
+  - democratic jiu jitsu political outreach conversion
+  - verified membership civic position cooperative
+  - political expedition counter vote system
+  - representative letter auto generation bill position
+  - non partisan cooperative civic aggregation
+cooperative_defensive_patent_pledge_2260_umbrella: true
+canon_eblet_pointer: null
+---
 # Acknowledgment & Assignment — Innovation #2130
 
 **Date:** April 2, 2026

@@ -1,3 +1,24 @@
+---
+name: The Recipe Pot
+description: Project skill-matching system where projects declare their recipe of needed spices (skills) and members contribute by bringing their spice, operationalizing the Stone Soup fable into cooperative project collaboration.
+type: aa_formal
+innovation_id: "2143"
+ratification_session: B072
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - the recipe pot
+  - stone soup project matching
+  - bring your garlic to the pot
+  - aa formal 2143
+  - recipe skill declaration
+  - cooperative project staffing
+  - soup and bread cooperative output
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A FORMAL — Innovation #2143: The Recipe Pot
 ## Acknowledgment & Attribution | Bishop Session B072 | April 3, 2026
 

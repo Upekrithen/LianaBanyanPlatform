@@ -1,3 +1,24 @@
+---
+name: Six Sparks (Cooperative Platform Six-Pathway Cold-Start Ignition Protocol)
+description: A canonical six-pathway cold-start ignition protocol for cooperative commerce platforms enforcing Substrate Cold Start (Spark 1) and Agent Session Cold Start (Spark 4) as hard prerequisites for all other initialization pathways, with cryptographic audit register and substrate-sourced recovery ignition.
+type: aa_formal
+innovation_id: "2328"
+ratification_session: BP021
+prov_filing_status: drafted
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - six sparks cold start ignition protocol
+  - cooperative platform six pathway ignition
+  - substrate cold start spark one agent session spark four
+  - aa formal 2328
+  - six sparks bp021 draft
+  - candlepower gate cold start sequence
+  - cooperative node cold start ignition sparks
+canon_eblet_pointer: six_sparks_canon_bp021.eblet.md
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A FORMAL #2328 — Six Sparks (Cooperative Platform Six-Pathway Cold-Start Ignition Protocol)
 
 **Filed**: BP021, 2026-05-03 by Knight (Bushel 10 Shadow 3) — INDL-9 Geneva deadline 2026-05-07

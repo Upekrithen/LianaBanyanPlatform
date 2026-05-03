@@ -1,3 +1,24 @@
+﻿---
+name: Scribe Coverage Discovery
+description: A diagnostic method computing a category-by-category lift matrix from a canonical question bank run against a Cathedral, translating zero-lift categories into a prioritized expansion roadmap of Scribes to add, and quantifying the cooperative-economic flywheel of participation-driven accuracy growth.
+type: aa_formal
+innovation_id: "2276"
+ratification_session: B117
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - scribe coverage discovery diagnostic
+  - category level lift analysis cathedral
+  - cathedral expansion roadmap zero lift
+  - cooperative economic flywheel accuracy
+  - participation driven corpus accuracy
+  - pooled lift trajectory projection
+  - aa formal 2276
+  - coverage gap scribe expansion roadmap
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
 # A&A Formal #2276 — Scribe Coverage Discovery: Category-Level Lift Analysis as Cathedral Expansion Roadmap
 
 **Innovation #:** 2276

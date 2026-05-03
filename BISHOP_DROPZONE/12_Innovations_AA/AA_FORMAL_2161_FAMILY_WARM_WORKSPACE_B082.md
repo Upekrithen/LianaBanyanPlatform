@@ -1,3 +1,25 @@
+---
+name: Family Warm Workspace (Age-Appropriate Platform Economics)
+description: A household coordination workspace enforcing age-appropriate economic metric visibility by architectural constraint, where minor members see XP but never ADAPT scores, combined with a human-language activity feed and a savings-jar visual metaphor for shared household funds.
+type: aa_formal
+innovation_id: "2161"
+ratification_session: B082
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - family warm workspace
+  - age-appropriate platform economics
+  - xp adapt score distinction minors
+  - aa formal 2161
+  - family table hub household coordination
+  - savings jar cooperative fund metaphor
+  - human language activity feed
+  - minor member economic visibility constraint
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A FORMAL — Innovation #2161
 ## Family Warm Workspace (Age-Appropriate Platform Economics)
 ## Bishop B082 | April 5, 2026

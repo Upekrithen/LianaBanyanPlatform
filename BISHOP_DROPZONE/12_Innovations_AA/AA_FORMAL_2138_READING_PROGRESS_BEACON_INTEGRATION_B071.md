@@ -1,3 +1,24 @@
+---
+name: Reading Progress Beacon Integration
+description: Architectural bridge connecting the existing reading_progress table to the Reading Beacon, Cue Card Interest Signal, and Linchpin attribution chain, activating a five-innovation pipeline on live infrastructure without new core tables.
+type: aa_formal
+innovation_id: "2138"
+ratification_session: B071
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - reading progress beacon integration
+  - five innovation chain activation
+  - coverage minutes golden keys beacon
+  - aa formal 2138
+  - reading progress pipeline
+  - zero new tables integration
+  - verified engagement signals
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A FORMAL — Innovation #2138: Reading Progress Beacon Integration
 ## Acknowledgment & Attribution | Bishop Session B071 | April 3, 2026
 

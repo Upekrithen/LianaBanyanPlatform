@@ -1,3 +1,24 @@
+---
+name: Elbow Grease Visual Effort Scale + Printable Cue Card Business Cards
+description: A 10-level effort scale using an old-timey oil can icon that assigns difficulty levels to all platform activities with a flippable badge showing process steps and solo-vs-crew earnings; paired with a printable 3.5"×2" business card generator encoding dual-slug Red Carpet QR codes that earn the member Seeder Marks when a business onboards.
+type: aa_formal
+innovation_id: "2123-2124"
+ratification_session: B052
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - elbow grease visual effort scale
+  - printable cue card business cards red carpet qr
+  - aa formal 2123
+  - aa formal 2124
+  - oil can flippable badge effort level
+  - ten level cooperative effort classification
+  - print ready business card red carpet onboarding
+  - x ray goggles elbow grease integration
+cooperative_defensive_patent_pledge_2260_umbrella: true
+canon_eblet_pointer: null
+---
 # A&A FORMALS — Innovations #2123-#2124
 ## Elbow Grease Effort Scale + Printable Cue Card Business Cards
 ## Bishop B052

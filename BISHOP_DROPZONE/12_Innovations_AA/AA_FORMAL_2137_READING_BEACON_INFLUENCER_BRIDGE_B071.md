@@ -1,3 +1,24 @@
+---
+name: Reading Beacon Influencer Bridge
+description: Attribution system connecting a member's Reading Beacon Interest Signal to the Linchpin Influencer Program, crediting new member signups driven by shared reading positions as Linchpin connections without any explicit recruitment action.
+type: aa_formal
+innovation_id: "2137"
+ratification_session: B071
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - reading beacon influencer bridge
+  - content as referral
+  - organic influencer attribution
+  - aa formal 2137
+  - linchpin reading attribution
+  - content driven member acquisition
+  - beacon to beacon resonance
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A FORMAL — Innovation #2137: Reading Beacon Influencer Bridge
 ## Acknowledgment & Attribution | Bishop Session B071 | April 3, 2026
 

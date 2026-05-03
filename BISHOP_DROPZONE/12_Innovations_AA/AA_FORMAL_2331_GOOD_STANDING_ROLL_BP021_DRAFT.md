@@ -1,3 +1,24 @@
+---
+name: Good Standing Roll (Continuous Rolling Cooperative Member Standing Ledger)
+description: A continuous, rolling, recoverable six-component cooperative member standing ledger recalculated daily with one binary dues gate and five sliding-scale inputs, gating governance participation, Joule surplus distributions, and Crown nomination eligibility without permanent adverse marks.
+type: aa_formal
+innovation_id: "2331"
+ratification_session: BP021
+prov_filing_status: drafted
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - good standing roll continuous rolling ledger
+  - six component member standing cooperative
+  - non punitive recoverable standing architecture
+  - aa formal 2331
+  - good standing roll bp021 draft
+  - daily recalculation rolling window standing score
+  - cooperative member standing governance gate crown nomination
+canon_eblet_pointer: good_standing_roll_canon_bp021.eblet.md
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A FORMAL #2331 -- Good Standing Roll (Continuous Rolling Cooperative Member Standing Ledger)
 
 **Filed**: BP021, 2026-05-03 by Knight (Bushel 10 Shadow 6) — INDL-9 Geneva deadline 2026-05-07

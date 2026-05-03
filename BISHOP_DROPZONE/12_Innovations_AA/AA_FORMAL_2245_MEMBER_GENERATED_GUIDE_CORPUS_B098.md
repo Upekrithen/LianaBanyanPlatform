@@ -1,3 +1,25 @@
+---
+name: Member-Generated Guide Corpus
+description: A cooperative knowledge infrastructure accumulating first-person operator-scale guides from members describing how they scaled from one vessel-tier rung to the next, forming a distributed peer-to-peer training substrate with proximity-ranked retrieval and integration with the Open Water advisory engagement system.
+type: aa_formal
+innovation_id: "2245"
+ratification_session: B098
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - member generated guide corpus
+  - peer-to-peer operator training substrate
+  - vessel-tier indexed operator guides
+  - aa formal 2245
+  - first-person case study corpus cooperative
+  - peer proximity expertise transfer corpus
+  - guide corpus proximity ranking open water
+  - distributed operator skill transfer substrate
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A Formal #2245 — Member-Generated Guide Corpus
 
 **Innovation #:** 2245

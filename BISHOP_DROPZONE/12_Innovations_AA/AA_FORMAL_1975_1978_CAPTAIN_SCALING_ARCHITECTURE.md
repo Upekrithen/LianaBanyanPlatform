@@ -1,3 +1,25 @@
+---
+name: "Captain Scaling Architecture — Walking Billboard Signal, Apprentice Program, Multiplier Titles"
+description: "Four innovations scaling the cooperative Captain network: passive merchant-acquisition intelligence from LB Card spending data at non-participating merchants, structured Captain apprenticeship mentorship chain, and companion scaling mechanisms."
+type: aa_formal
+innovation_id: "1975-1978"
+ratification_session: B034
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - walking billboard signal passive demand discovery lb card
+  - captain apprentice program mentorship chain scaling
+  - ripe for pitch aggregated spending intelligence
+  - non participating merchant acquisition passive sensor
+  - aa formal 1975-1978
+  - lb card spend data merchant recruitment intelligence
+  - captain network scaling cooperative architecture
+  - cooperative merchant acquisition intelligence sensor
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # Acknowledgment & Assignment — Innovations #1975 through #1978
 
 **Date:** March 26, 2026

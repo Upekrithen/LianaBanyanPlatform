@@ -1,3 +1,25 @@
+---
+name: Tiered Theme Governance
+description: A layered visual theme governance system with four tiers — community default (democratic), guild/crew theme, tribe theme, and personal override (at Credit cost) — where override adoption rates serve as a built-in feedback signal for design governance quality.
+type: aa_formal
+innovation_id: "2013"
+ratification_session: B035
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: false
+wrasseTriggers:
+  - tiered theme governance
+  - guild tribe personal override community default
+  - layered visual governance cooperative
+  - override rate feedback signal design
+  - theme resolution hierarchy
+  - cooperative visual identity layers
+  - aa formal 2013
+  - personal theme override credit cost signal
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # Acknowledgment & Assignment — Innovation #2013
 
 **Date:** March 26, 2026

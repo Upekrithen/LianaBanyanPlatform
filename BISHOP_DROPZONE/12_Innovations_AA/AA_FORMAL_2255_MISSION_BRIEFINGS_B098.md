@@ -1,3 +1,25 @@
+---
+name: Mission Briefings (Role-Specific Informational Tours)
+description: A role-specific, repeatable informational tour system where each Mission Briefing is a multi-page submarine-door-sequence assembled from live Catapult Power data, curated per member role; a member holding multiple roles receives multiple distinct briefings, explicitly distinguished from one-time onboarding Red Carpet Rides.
+type: aa_formal
+innovation_id: "2255"
+ratification_session: B098
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - mission briefings role-specific informational tours
+  - role-multiplied repeatable briefings
+  - submarine door sequence briefing assembly
+  - aa formal 2255
+  - catapult power mission briefing display
+  - live-data assembled role briefings
+  - mission briefings vs red carpet rides distinction
+  - helm mission briefings dashboard card
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A Formal #2255 — Mission Briefings (Role-Specific Informational Tours)
 
 **Innovation #:** 2255 (renumbered in B098 from former #2238 per `INNOVATION_RENUMBERING_LOG_B098.md`)

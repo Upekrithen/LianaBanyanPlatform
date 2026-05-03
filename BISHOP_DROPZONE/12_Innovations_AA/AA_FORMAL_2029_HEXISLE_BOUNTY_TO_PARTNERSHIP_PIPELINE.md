@@ -1,3 +1,25 @@
+---
+name: HexIsle Prototype Bounty Escalation Pipeline
+description: A meritocratic manufacturing recruitment pipeline where makers contribute to HexIsle prototype development through escalating tiers (Bounty Hunter → Contractor → Senior Contractor → Partner → Senior Partner) based purely on accumulated Marks thresholds, earning revenue shares and Factory Node placement rights.
+type: aa_formal
+innovation_id: "2029"
+ratification_session: B036
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - hexisle bounty to partnership pipeline
+  - bounty hunter contractor partner marks threshold
+  - meritocratic manufacturing escalation marks
+  - do the work get the status
+  - factory node seed partner revenue share
+  - cooperative manufacturing recruitment pipeline
+  - aa formal 2029
+  - hexisle prototype distributed manufacturing
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # FORMAL ACKNOWLEDGMENT & ACCESSION — Innovation #2029
 # HexIsle Modular Prototype: Bounty-to-Contract-to-Partnership Pipeline
 **Bishop Session:** 036 | **Date:** March 27, 2026

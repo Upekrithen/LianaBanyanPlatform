@@ -1,3 +1,25 @@
+---
+name: "Universal Business Onboarding Campaign, Cold Start Business Node, Cookbook Menu Architecture"
+description: "Three innovations: generalized volume-discount-as-a-service merchant onboarding for any local business via Captain-mediated pitch packets, a guided Cold Start cue card for Captains launching local commerce campaigns, and supporting menu and cookbook architecture."
+type: aa_formal
+innovation_id: "1972-1974"
+ratification_session: B033
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - universal business onboarding campaign volume discount
+  - cold start business node captain cue card
+  - community demand aggregation any local business onboarding
+  - captain pitch packet standard card acceptance
+  - aa formal 1972-1974
+  - permissionless merchant acquisition cooperative pipeline
+  - volume discount as a service local business lb card
+  - captain cold start four pathways local commerce
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # Acknowledgment & Assignment — Innovations #1972 through #1974
 
 **Date:** March 26, 2026

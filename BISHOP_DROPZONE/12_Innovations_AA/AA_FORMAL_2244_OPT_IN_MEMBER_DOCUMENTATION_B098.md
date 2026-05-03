@@ -1,3 +1,25 @@
+---
+name: Opt-In Member Documentation with Benefits
+description: A cooperative membership architecture where documentation of a member's contribution origin or lived experience is strictly opt-in and paired with a graduated benefit bundle (attribution, co-authorship, SAA legibility, research eligibility, durable public record), ensuring full cooperative participation rights are preserved regardless of documentation status.
+type: aa_formal
+innovation_id: "2244"
+ratification_session: B098
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - opt-in member documentation with benefits
+  - voluntary documentation consent architecture
+  - per-contribution granular consent cooperative
+  - aa formal 2244
+  - service allocation authority documentation legibility
+  - founder-first documentation corpus pedagogical
+  - documentation benefit bundle attribution
+  - two-tier membership refusal architecture
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A Formal #2244 — Opt-In Member Documentation with Benefits
 
 **Innovation #:** 2244

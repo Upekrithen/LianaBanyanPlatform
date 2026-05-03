@@ -1,3 +1,24 @@
+﻿---
+name: Fingerprint-Based Incremental Index Reconciliation for LLM Agent Session Hooks
+description: A three-state freshness reporting system (FRESH/DRIFT/UNKNOWN) computed from SHA-256 tree-hash over file modification times, delivered at session-start to enable LLM agents to choose between trusting the index, incremental reindex, or operator warning before any corpus-dependent tool call.
+type: aa_formal
+innovation_id: "2273"
+ratification_session: B117
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - fingerprint incremental index reconciliation
+  - three state freshness report fresh drift unknown
+  - session start corpus freshness hook
+  - tree mtime hash fingerprint corpus
+  - incremental reindex session boundary
+  - unknown versus drift freshness state
+  - aa formal 2273
+  - llm agent index freshness detection
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
 # A&A Formal #2273 — Fingerprint-Based Incremental Index Reconciliation for LLM Agent Session Hooks
 
 **Innovation #:** 2273

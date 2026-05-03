@@ -1,3 +1,24 @@
+---
+name: Bring Popcorn
+description: Experience layer reframing the entire multi-series content distribution system as a live business reality show, where watching is the first step in an onboarding funnel converting viewers to members through audience-participatory content engagement.
+type: aa_formal
+innovation_id: "2144"
+ratification_session: B072
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - bring popcorn
+  - live business reality show
+  - food metaphor chain complete
+  - aa formal 2144
+  - platform as show
+  - audience participatory content
+  - viewing experience entertainment onboarding
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A FORMAL — Innovation #2144: Bring Popcorn
 ## Acknowledgment & Attribution | Bishop Session B072 | April 3, 2026
 

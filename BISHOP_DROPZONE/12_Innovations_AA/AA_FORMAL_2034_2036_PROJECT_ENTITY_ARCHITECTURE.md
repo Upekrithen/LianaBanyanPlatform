@@ -1,3 +1,26 @@
+---
+name: Project-Entity Architecture + Multi-Vendor Prototype Validation
+description: Every project on the LB platform requires a business entity; multiple vendors can complete the same bounty and compete as independent sellers, with the Founder operating each product line through its own LLC subsidiary.
+type: aa_formal
+innovation_id: "2034-2036"
+ratification_session: B036
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: false
+wrasseTriggers:
+  - project entity architecture
+  - multi-vendor prototype validation
+  - founder project entity portfolio
+  - every project business entity requirement
+  - aa formal 2034
+  - aa formal 2035
+  - aa formal 2036
+  - decentralized manufacturing competition
+  - project entity requirement
+  - llc per product line cooperative
+cooperative_defensive_patent_pledge_2260_umbrella: true
+canon_eblet_pointer: null
+---
 # FORMAL ACKNOWLEDGMENT & ACCESSION — Innovations #2034–#2036
 # Project-Entity Architecture + Multi-Vendor Prototype Validation
 **Bishop Session:** 036 | **Date:** March 27, 2026

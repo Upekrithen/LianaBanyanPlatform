@@ -1,3 +1,25 @@
+---
+name: "Captain's Calling Card System — QR-Bearing Personalized Onboarding Cards"
+description: "Four innovations comprising the Captain's Calling Card system: QR-bearing physical/digital cards opening personalized Red Carpet onboarding experiences, Captain medallion attribution tracking, and related physical-to-digital conversion tools."
+type: aa_formal
+innovation_id: "1985-1988"
+ratification_session: B034
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - captains calling card qr personalized onboarding
+  - captain medallion attribution tracking
+  - hand it and walk away captain pitch flow
+  - physical digital qr red carpet conversion
+  - aa formal 1985-1988
+  - personalized landing page qr card captain
+  - medallion unique tracking id captain credit
+  - captain calling card cooperative merchant onboarding
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # Acknowledgment & Assignment — Innovations #1985 through #1988
 
 **Date:** March 26, 2026

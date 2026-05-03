@@ -1,3 +1,24 @@
+﻿---
+name: Three Fates Routing Pipeline for AI Session Listeners
+description: A three-stage routing pipeline named Clotho, Lachesis, and Atropos that connects a stream of session content to many sleeping domain-specialist recorders, enabling Cathedral-scale ingest without per-Scribe scan cost through expertise-level-weighted scoring.
+type: aa_formal
+innovation_id: "2269"
+ratification_session: B117
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - three fates routing pipeline
+  - clotho lachesis atropos cathedral
+  - session to memory routing expertise weighted
+  - coverage gap detection routing
+  - dispatch directive awakened scribes
+  - fates route session listener
+  - aa formal 2269
+  - cathedral scale ingest routing
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
 # A&A Formal #2269 — Three Fates Routing Pipeline for AI Session Listeners
 
 **Innovation #:** 2269

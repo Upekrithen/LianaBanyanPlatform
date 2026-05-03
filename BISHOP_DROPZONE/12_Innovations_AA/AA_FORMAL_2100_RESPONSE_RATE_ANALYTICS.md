@@ -1,3 +1,24 @@
+---
+name: Response Rate Analytics — Optimal Contact Window Intelligence System
+description: A cooperative platform analytics system measuring optimal contact timing across day-of-week, hour-of-day, channel, content type, and recipient type to surface outbound timing recommendations for Captains, Battery Dispatch, and platform communications — with aggregated data owned by the cooperative, never sold to advertisers.
+type: aa_formal
+innovation_id: "2100"
+ratification_session: B046
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: false
+wrasseTriggers:
+  - response rate analytics
+  - optimal contact window intelligence
+  - aa formal 2100
+  - outbound timing optimization cooperative
+  - best time to send captain tool
+  - battery dispatch timing analytics
+  - cooperative owned contact analytics
+  - cue card send timing recommendation
+cooperative_defensive_patent_pledge_2260_umbrella: true
+canon_eblet_pointer: null
+---
 # A&A FORMAL — Innovation #2100
 ## Response Rate Analytics / Optimal Contact Window Intelligence
 ## Bishop B046 — March 29, 2026

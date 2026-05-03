@@ -1,3 +1,25 @@
+---
+name: "Cooperative Housing Acquisition, AirBnB Revenue Subsidy Model, Housing WaterWheel"
+description: "Three Crown Jewel innovations enabling member-crowdfunded cooperative property acquisition, short-term rental revenue subsidizing below-market cooperative housing, and self-expanding property portfolio reinvestment loop."
+type: aa_formal
+innovation_id: "1927-1929"
+ratification_session: B029
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - cooperative housing acquisition crowdfunded
+  - airbnb revenue subsidy model dual use property
+  - housing waterwheel self expanding cooperative real estate
+  - aa formal 1927-1929
+  - mission two shelter cooperative housing
+  - str subsidized cooperative housing model
+  - below market housing cooperative members
+  - cooperative property crowdfunding commerce engine
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A FORMAL — Innovations #1927-#1929 (Cooperative Housing)
 ## Bishop Session 029 | March 23, 2026
 ## Three Innovations — Housing Acquisition, AirBnB Subsidy, Housing WaterWheel

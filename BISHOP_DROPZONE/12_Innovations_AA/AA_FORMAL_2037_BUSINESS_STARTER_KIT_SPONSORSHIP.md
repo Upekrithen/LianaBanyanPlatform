@@ -1,3 +1,24 @@
+---
+name: $100 Business Starter Kit Sponsorship
+description: Fund 10,000 Business Starter Kits at $100 each ($1M total), backed by the patent portfolio, to turn members into business owners on the spot with membership, Marks, LB Card, and recruitment materials.
+type: aa_formal
+innovation_id: "2037"
+ratification_session: B036
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: false
+wrasseTriggers:
+  - business starter kit sponsorship
+  - 10000 kits patent backed
+  - aa formal 2037
+  - sponsored business formation onboarding
+  - give people businesses not jobs
+  - heoho interdependence onboarding
+  - cue card startup kit
+  - patent portfolio sponsorship
+cooperative_defensive_patent_pledge_2260_umbrella: true
+canon_eblet_pointer: null
+---
 # FORMAL ACKNOWLEDGMENT & ACCESSION — Innovation #2037
 # $100 Business Starter Kit Sponsorship (10,000 Units, Patent-Backed)
 **Bishop Session:** 036 | **Date:** March 27, 2026

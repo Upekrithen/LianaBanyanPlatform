@@ -1,3 +1,25 @@
+---
+name: Neighborhood Content Shield
+description: A multi-layered content validation and enforcement system preventing member-customizable neighborhood spaces from hosting prohibited content, using a categorized regex patterns registry, database trigger enforcement, CSS sandboxing, immutable economic rule enforcement, and Harper Guild review workflows.
+type: aa_formal
+innovation_id: "2224"
+ratification_session: B086
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: false
+wrasseTriggers:
+  - neighborhood content shield
+  - prohibited patterns registry cooperative
+  - css sandbox neighborhood spaces
+  - aa formal 2224
+  - harper guild content review workflow
+  - database trigger content validation
+  - immutable economic rules neighborhood enforcement
+  - content shield audit log sha256
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # Innovation #2224 — Neighborhood Content Shield
 
 ## Abstract

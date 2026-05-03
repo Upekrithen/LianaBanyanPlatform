@@ -1,3 +1,25 @@
+---
+name: Guild Formation, Treasury, Visual Identity, and Tribe Mirror System
+description: A comprehensive guild system featuring formation as a fifth cold start pathway, collective Credit treasury with tiered governance, democratic visual identity contest stack, compounding five-domain member benefit cascade, and a mirrored Tribe structure for geographic and interest-based communities.
+type: aa_formal
+innovation_id: "2015-2019"
+ratification_session: B035
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: false
+wrasseTriggers:
+  - guild formation fifth cold start pathway
+  - guild collective treasury credits governance
+  - guild visual identity stack banner mascot icon
+  - guild benefit cascade compounding
+  - tribe mirror geographic interest community
+  - professional association cooperative sub-unit
+  - aa formal 2015-2019
+  - guild sub-cooperative economic structure
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # Acknowledgment & Assignment — Innovations #2015 through #2019
 
 **Date:** March 26, 2026

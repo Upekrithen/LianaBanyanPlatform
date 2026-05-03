@@ -1,3 +1,25 @@
+---
+name: "ADAPT Score — Adaptive Deployment And Performance Tracking"
+description: "Multi-dimensional scoring and governance system measuring deployed cooperative systems across six weighted dimensions (Effectiveness, Adaptability, Durability, Alignment, Participation, Transmission) with automated constitutional compliance checking and innovation feedback loops."
+type: aa_formal
+innovation_id: "1937"
+ratification_session: B028
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: false
+wrasseTriggers:
+  - adapt score adaptive deployment performance tracking
+  - cooperative system effectiveness scoring six dimensions
+  - local sop adaptation constitutional compliance checking
+  - helicopter control theory cooperative governance
+  - aa formal 1937
+  - innovation feedback loop experimentation scoring
+  - cross cooperative integration scoring tiered connectivity
+  - adapt score platinum gold silver bronze red flag
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A FORMAL — Innovation #1937: ADAPT Score (Adaptive Deployment And Performance Tracking)
 ## Bishop Session 028 | March 23, 2026
 ## Patent Relevance: HIGH

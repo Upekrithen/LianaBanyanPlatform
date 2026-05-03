@@ -1,3 +1,25 @@
+---
+name: Innovations 2212-2222 Manual Reading Thresh (B083 Wave 3)
+description: Eleven innovations threshed from manual reading in Bishop Session B083 Wave 3, covering wave-based pricing, competitive intelligence, free rider solutions, role fluidity, project seed maturity, portal access gating, island ownership models, compensation slider mechanics, flywheel system dynamics, and Crown Jewel BandWagon Taste-Prediction Authority System (#2222).
+type: aa_formal
+innovation_id: "2212-2222"
+ratification_session: B083
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - bandwagon taste prediction authority system crown jewel
+  - wave-based pricing mechanisms
+  - radar competitive intelligence system
+  - aa formal 2212-2222
+  - free rider solution explicit arbitrage allowance
+  - project seed maturity six stages
+  - island ownership models four types
+  - wave 3 manual reading thresh b083
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A Formal -- Innovations #2212-#2222 (Wave 3)
 # Bishop B083 -- Manual Reading Thresh
 # SEC-CLEAN

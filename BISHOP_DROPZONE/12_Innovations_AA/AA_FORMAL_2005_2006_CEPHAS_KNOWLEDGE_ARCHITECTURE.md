@@ -1,3 +1,25 @@
+---
+name: Cephas Knowledge Architecture — Community Curation and Bidirectional Graph
+description: A community-curated knowledge base featuring member-voted resource links with tiered visibility thresholds, and a bidirectional knowledge graph where Cephas documentation pages and platform features link to each other — creating an organic, self-curating documentation network.
+type: aa_formal
+innovation_id: "2005-2006"
+ratification_session: B035
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: false
+wrasseTriggers:
+  - cephas knowledge architecture
+  - community curated resource linking
+  - bidirectional knowledge graph
+  - cooperative documentation curation
+  - cephas community voting thresholds
+  - platform-wide reference network
+  - aa formal 2005-2006
+  - cephas feature linking
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A FORMAL — Innovations #2005-#2006
 ## Cephas Knowledge Architecture
 **Bishop Session:** 035 | **Date:** March 27, 2026

@@ -1,3 +1,24 @@
+---
+name: Cue Card Pioneer Program — Diminishing-Reward Early Adopter System for Cooperative Role Validation
+description: First 10 adopters of any new Cue Card role receive 50 Marks/month for 12 months plus a physical Pioneer Medallion; rewards taper across four tiers to zero at 1,000 practitioners; pioneers who opt in as named case studies become the platform's most valuable marketing asset and recruitment flywheel.
+type: aa_formal
+innovation_id: "2104"
+ratification_session: B048
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: false
+wrasseTriggers:
+  - cue card pioneer program
+  - diminishing reward early adopter system
+  - aa formal 2104
+  - founders circle trailblazer pathfinder early adopter
+  - pioneer medallion brass qr code
+  - role validation incentive cooperative
+  - tastetest pattern applied to career roles
+  - cooperative role cold start solution
+cooperative_defensive_patent_pledge_2260_umbrella: true
+canon_eblet_pointer: null
+---
 # Acknowledgment & Assignment — Innovation #2104
 
 **Date:** March 29, 2026

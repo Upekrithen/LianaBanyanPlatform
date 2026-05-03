@@ -1,3 +1,25 @@
+---
+name: Chess-Piece Librarian Doublets (Four Parallel Truth-Snapshot Pipelines)
+description: A computer-implemented architecture with four parallel ingestion pipelines — prose-semantic (Bishop), schema-structure (Knight), numerical-statistical (Rook), and provenance-citation (Pawn) — processing the same source corpus through intentionally different strategies, producing independent truth snapshots whose pairwise disagreements classify drift type for diagnostic precision.
+type: aa_formal
+innovation_id: "2256"
+ratification_session: B098
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - chess piece librarian doublets
+  - four parallel truth snapshot pipelines
+  - orthogonal ingestion pipeline architecture
+  - aa formal 2256
+  - bishop knight rook pawn ingestion pipelines
+  - diagnostic disagreement classification drift
+  - four doublet chessboard truth triangulation
+  - pairwise pipeline consistency comparison
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A Formal #2256 — Chess-Piece Librarian Doublets (Four Parallel Truth-Snapshot Pipelines)
 
 **Innovation #:** 2256 (promoted in B098 from B096 stub; see `INNOVATION_RENUMBERING_LOG_B098.md`)

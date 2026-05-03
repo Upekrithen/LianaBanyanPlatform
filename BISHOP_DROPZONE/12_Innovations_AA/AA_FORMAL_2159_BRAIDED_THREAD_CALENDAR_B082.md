@@ -1,3 +1,25 @@
+---
+name: Braided Thread Calendar Visualization
+description: A time-visualization system rendering a member's week as seven semantically distinct life-domain threads braided together in a unified view, revealing cross-domain patterns with a single weekly adjustment suggestion framed as a question rather than a prescription.
+type: aa_formal
+innovation_id: "2159"
+ratification_session: B082
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - braided thread calendar visualization
+  - seven thread calendar
+  - week visualization life domains
+  - aa formal 2159
+  - week reflection panel one adjustment
+  - cross-domain time pattern calendar
+  - braided temporal thread view
+  - non-judgmental pattern mirror calendar
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A FORMAL — Innovation #2159
 ## Braided Thread Calendar Visualization
 ## Bishop B082 | April 5, 2026

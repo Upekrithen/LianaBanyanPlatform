@@ -1,3 +1,24 @@
+---
+name: Bags of Holding (Three-Class Session-Context-vs-Persistent-Substrate Architecture with Cross-Session Continuity)
+description: A three-class AI agent memory architecture (Ephemeral/Personal-Permanent/Shared-Permanent) where combined substrate capacity structurally exceeds any individual context window, with Romulator proactive loading at session start and nested subagent bag aggregation enabling cross-session continuity by construction.
+type: aa_formal
+innovation_id: "2332"
+ratification_session: BP021
+prov_filing_status: drafted
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - bags of holding session context persistent substrate
+  - three class ai agent memory architecture
+  - inside is always larger than the outside context
+  - aa formal 2332
+  - bags of holding bp021 draft
+  - ephemeral personal permanent shared permanent memory class
+  - cross session continuity substrate continuity by construction
+canon_eblet_pointer: bags_of_holding_session_context_vs_persistent_substrate_brand_metaphor_canon_bp017.eblet.md
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A FORMAL #2332 — Bags of Holding (Three-Class Session-Context-vs-Persistent-Substrate Architecture with Cross-Session Continuity)
 
 **Filed**: BP021, 2026-05-03 by Knight (Bushel 10 Shadow 7) — INDL-9 Geneva deadline 2026-05-07

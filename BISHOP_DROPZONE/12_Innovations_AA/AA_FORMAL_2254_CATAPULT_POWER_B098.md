@@ -1,3 +1,25 @@
+---
+name: Catapult Power (Universal Momentum Metric)
+description: A universal momentum metric normalizing all cooperative platform progress thresholds into a single 0-100 scale (analogous to horsepower) where 100 equals escape velocity and triggers a launch event, enabling cross-system comparability of project funding, petition signatures, legislative vote gathering, and initiative thresholds through a single reusable gauge component.
+type: aa_formal
+innovation_id: "2254"
+ratification_session: B098
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - catapult power universal momentum metric
+  - 0 to 100 momentum scale escape velocity
+  - cross-system progress threshold normalization
+  - aa formal 2254
+  - catapult gauge amber gold arc visualization
+  - launch event threshold trigger metric
+  - universal momentum horsepower analogy
+  - catapult metrics database generated column
+canon_eblet_pointer: null
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A Formal #2254 — Catapult Power (Universal Momentum Metric)
 
 **Innovation #:** 2254 (renumbered in B098 from former #2237 per `INNOVATION_RENUMBERING_LOG_B098.md`)

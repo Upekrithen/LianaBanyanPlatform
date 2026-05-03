@@ -1,3 +1,25 @@
+---
+name: The Eight Crown Jewels — Foundational Innovations of Liana Banyan
+description: The eight original load-bearing innovations (Cost+20%, Three-Gear Currency, IP Load Balancing, Compass Governance/The 300, DNA Lock, Red Queen Adaptive Oversight, HIVI/QV/Forex Ratchet, Harbor Defense) upon which the entire Liana Banyan cooperative platform is constructed.
+type: aa_formal
+innovation_id: "CROWN_JEWELS_ORIGINAL_EIGHT"
+ratification_session: B028
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - eight crown jewels
+  - cost plus 20 constitutional pricing floor
+  - three gear currency marks credits joules
+  - ip load balancing 60 20 20
+  - compass governance the 300 seats
+  - dna lock cooperative immutability
+  - red queen adaptive oversight
+  - harbor defense member legal protection
+canon_eblet_pointer: cooperative_defensive_patent_pledge_2260_canon_bp021.eblet.md
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A FORMAL — The Eight Crown Jewels: Foundational Innovations of Liana Banyan
 ## Bishop Session 028 | March 23, 2026
 ## Patent Relevance: CRITICAL — ALL EIGHT

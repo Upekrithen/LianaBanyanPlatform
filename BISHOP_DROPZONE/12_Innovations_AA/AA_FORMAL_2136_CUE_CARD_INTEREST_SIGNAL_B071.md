@@ -1,3 +1,24 @@
+---
+name: Cue Card Interest Signal
+description: Capability for a member to share a Reading Beacon position on their Cue Card as a visible statement of interest, enabling interest-based network discovery and reading cohorts through reading behavior as social signal.
+type: aa_formal
+innovation_id: "2136"
+ratification_session: B071
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: true
+wrasseTriggers:
+  - cue card interest signal
+  - reading as social signal
+  - reading cohorts
+  - aa formal 2136
+  - share your reading beacon
+  - reading position social sharing
+  - interest declaration via bookmark
+canon_eblet_pointer: lb_frame_viral_onboarding_cue_card_pied_piper_bp009.eblet.md
+cooperative_defensive_patent_pledge_2260_umbrella: true
+---
+
 # A&A FORMAL — Innovation #2136: Cue Card Interest Signal
 ## Acknowledgment & Attribution | Bishop Session B071 | April 3, 2026
 

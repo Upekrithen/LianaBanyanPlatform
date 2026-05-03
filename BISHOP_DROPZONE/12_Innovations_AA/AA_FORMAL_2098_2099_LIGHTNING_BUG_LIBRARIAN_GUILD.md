@@ -1,3 +1,26 @@
+---
+name: Lightning Bug Ideation Pipeline + Cooperative AI Knowledge Architecture (Librarian Guild)
+description: Marks-weighted community ideation system with six-stage creature metamorphosis from Ember to Lightning Strike; paired with a hierarchical multi-agent knowledge management architecture distributing institutional memory across Section Librarians, Master Librarians, and a Red Queen verification layer.
+type: aa_formal
+innovation_id: "2098-2099"
+ratification_session: B045
+prov_filing_status: filed
+prov_filing_target: 14
+crown_jewel_class: false
+wrasseTriggers:
+  - lightning bug ideation pipeline
+  - cooperative ai knowledge architecture
+  - librarian guild
+  - marks weighted community ideation
+  - ember firefly lightning strike progression
+  - section librarian master librarian red queen
+  - aa formal 2098
+  - aa formal 2099
+  - institutional knowledge management multi agent
+  - brainstorm chamber graduation system
+cooperative_defensive_patent_pledge_2260_umbrella: true
+canon_eblet_pointer: apiarist_librarian_hive_cross_lb_frame_collective_intelligence_canon_bp016.eblet.md
+---
 # A&A Formal Registration — Innovations #2098-#2099
 **Bishop Session:** B045
 **Date:** March 29, 2026
