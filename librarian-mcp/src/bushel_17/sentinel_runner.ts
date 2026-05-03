@@ -14,8 +14,8 @@
  *   A 7th field on every receipt: background_shadow_tokens_during_arm
  *   Captures Shadow E-Giant continuous-background token spend within the arm execution window.
  *   Source: heartbeat eblets at ~/.claude/state/eblets/<session>/heartbeat_R11_shadow_*.eblet.md
- *   Heartbeats currently carry timestamp + position but not tokens_consumed →
- *   instrumentation_status: "scaffold_unfilled" until heartbeat format includes token data.
+ *   Heartbeats carry tokens_consumed from extension-2 (bushel-17-extension-2, BP021) onward →
+ *   instrumentation_status: "live" when heartbeats present and tokens_consumed is populated.
  *   When Shadows are not running, shadow_heartbeats_observed = 0, total_tokens = null.
  *
  * Receipts write to ~/.claude/state/bushel_17/sentinel_receipts/<arm>/<task_id>.json
@@ -42,8 +42,8 @@ export type Arm = "A_compaction_continue" | "B_new_session_reorient";
 /**
  * Parsed representation of a single Shadow heartbeat eblet.
  * Path: ~/.claude/state/eblets/<session>/heartbeat_R11_shadow_<name>.eblet.md
- * Current heartbeat format carries ts + position but NOT tokens_consumed.
- * tokens_consumed is null until the heartbeat spec is extended to include cost data.
+ * From extension-2 (bushel-17-extension-2, BP021) onward, heartbeats carry tokens_consumed.
+ * tokens_consumed is null for heartbeats written by pre-extension-2 Shadow daemons.
  */
 export interface ShadowHeartbeatRead {
   shadow_id: string;
@@ -174,12 +174,17 @@ const EBLET_BASE = join(
 
 /**
  * Parse a Shadow heartbeat eblet markdown file into a ShadowHeartbeatRead.
- * Expected format:
+ * Expected format (post bushel-17-extension-2):
  *   # Shadow Heartbeat — R11_shadow_<name>
  *   - **ts:** `<ISO-8601>`
  *   - **session:** `<session_id>`
  *   - **position:** <number>
  *   - **reattach_count:** <number>
+ *   - **cycle_phase:** <A|B|unknown>
+ *   - **tokens_consumed:** <number>   ← per-interval estimate; present from extension-2 onward
+ *
+ * tokens_consumed is null for heartbeats written before extension-2 landed (pre-BP021).
+ * The sentinel sums tokens_consumed across heartbeats within the arm window → total_tokens.
  */
 function parseHeartbeatEblet(filePath: string): ShadowHeartbeatRead | null {
   try {

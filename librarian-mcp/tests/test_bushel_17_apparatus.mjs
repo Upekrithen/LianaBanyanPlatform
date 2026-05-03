@@ -12,10 +12,11 @@
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync, mkdirSync, rmSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { dirname } from "node:path";
+import { homedir } from "node:os";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const LIBRARIAN_ROOT = resolve(__dirname, "..");
@@ -401,4 +402,107 @@ test("G7d — when Shadows are NOT running (empty window), Sipping receipt has t
   assert.equal(sipping.stream_class, "sipping_ethereal_t", "stream_class must be sipping_ethereal_t");
   assert.equal(sipping.heartbeat_path_observed, "none_found", "heartbeat_path_observed must be 'none_found' when no Shadows present");
   console.log("G7d PASS — empty-window Sipping scaffold: total_tokens=null, status=scaffold_unfilled, no throw");
+});
+
+// ---------------------------------------------------------------------------
+// G8 (Extension-2) — tokens_consumed field in heartbeat eblet schema (BP021)
+// ---------------------------------------------------------------------------
+
+// Shared temp eblet path used by G8a + G8b.
+const G8_TEST_SESSION = "TEST_B17_G8";
+const G8_EBLET_TS = "2026-04-15T12:00:00.000Z";
+const G8_TOKENS = 5000;
+const G8_EBLET_DIR = join(
+  homedir(),
+  ".claude", "state", "eblets", G8_TEST_SESSION
+);
+const G8_EBLET_PATH = join(G8_EBLET_DIR, "heartbeat_R11_shadow_test_g8.eblet.md");
+
+function writeG8Eblet() {
+  mkdirSync(G8_EBLET_DIR, { recursive: true });
+  writeFileSync(
+    G8_EBLET_PATH,
+    [
+      `# Shadow Heartbeat \u2014 R11_shadow_test_g8`,
+      ``,
+      `- **ts:** \`${G8_EBLET_TS}\``,
+      `- **session:** \`${G8_TEST_SESSION}\``,
+      `- **position:** 1`,
+      `- **reattach_count:** 0`,
+      `- **cycle_phase:** A`,
+      `- **tokens_consumed:** ${G8_TOKENS}`,
+    ].join("\n"),
+    "utf-8"
+  );
+}
+
+function cleanupG8Eblet() {
+  try { rmSync(G8_EBLET_PATH); } catch { /* already gone */ }
+  try { rmSync(G8_EBLET_DIR, { recursive: true }); } catch { /* already gone */ }
+}
+
+test("G8a — parseHeartbeatEblet returns tokens_consumed when field present", async () => {
+  const { readShadowHeartbeatsWithinWindow } = await import(
+    distUrl("bushel_17/sentinel_runner.js")
+  );
+
+  writeG8Eblet();
+  try {
+    // Window centered on the test eblet's timestamp
+    const windowStart = new Date("2026-04-15T11:00:00Z");
+    const windowEnd = new Date("2026-04-15T13:00:00Z");
+
+    const heartbeats = readShadowHeartbeatsWithinWindow(windowStart, windowEnd);
+    const g8hb = heartbeats.find((h) => h.shadow_id === "R11_shadow_test_g8");
+
+    assert.ok(g8hb !== undefined, "G8 test heartbeat must be found in window");
+    assert.ok(
+      g8hb.tokens_consumed !== null,
+      `tokens_consumed must be non-null; got: ${g8hb.tokens_consumed}`
+    );
+    assert.equal(
+      g8hb.tokens_consumed,
+      G8_TOKENS,
+      `tokens_consumed must equal ${G8_TOKENS}; got: ${g8hb.tokens_consumed}`
+    );
+    console.log(`G8a PASS — parseHeartbeatEblet returned tokens_consumed=${g8hb.tokens_consumed} from test eblet`);
+  } finally {
+    cleanupG8Eblet();
+  }
+});
+
+test("G8b — buildSippingScaffold returns instrumentation_status=live when heartbeat has tokens_consumed", async () => {
+  const { buildSippingScaffold } = await import(
+    distUrl("bushel_17/sentinel_runner.js")
+  );
+
+  writeG8Eblet();
+  try {
+    const windowStartTs = "2026-04-15T11:00:00.000Z";
+    const windowEndTs   = "2026-04-15T13:00:00.000Z";
+
+    const sipping = buildSippingScaffold(windowStartTs, windowEndTs);
+
+    // Must have observed at least the one G8 test heartbeat
+    assert.ok(
+      sipping.shadow_heartbeats_observed >= 1,
+      `shadow_heartbeats_observed must be ≥1; got: ${sipping.shadow_heartbeats_observed}`
+    );
+    assert.equal(
+      sipping.instrumentation_status,
+      "live",
+      `instrumentation_status must be 'live' when tokens_consumed is populated; got: ${sipping.instrumentation_status}`
+    );
+    assert.ok(
+      sipping.total_tokens !== null && sipping.total_tokens > 0,
+      `total_tokens must be > 0 when heartbeats carry tokens_consumed; got: ${sipping.total_tokens}`
+    );
+    assert.equal(sipping.stream_class, "sipping_ethereal_t");
+    console.log(
+      `G8b PASS — buildSippingScaffold: status=${sipping.instrumentation_status}, ` +
+      `heartbeats=${sipping.shadow_heartbeats_observed}, total_tokens=${sipping.total_tokens}`
+    );
+  } finally {
+    cleanupG8Eblet();
+  }
 });

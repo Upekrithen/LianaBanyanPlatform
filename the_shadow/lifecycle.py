@@ -54,6 +54,13 @@ EBLET_BP011_DIR = _HEARTBEAT_EBLET_BASE / "BP011"
 
 HEARTBEAT_INTERVAL_S = 60
 BISHOP_REFRESH_CHECK_INTERVAL_S = 5
+
+# Per-interval token estimate used until actual API telemetry is wired in.
+# Each heartbeat represents one HEARTBEAT_INTERVAL_S window of Shadow background work.
+# Calibrated at 5 000 tokens/60s — rough median for a background E-Giant inference pass.
+# Source: KN-extension-2 BP021 (bushel-17-extension-2-heartbeat-tokens-consumed-field).
+# Replace with real API-level telemetry when Shadow session stats become available.
+SHADOW_TOKENS_PER_INTERVAL_ESTIMATE = 5_000
 LEDGER_FILENAME = "iron_tablet_ledger.jsonl"
 
 SESSION_FILE_PATH = Path.home() / ".claude" / "state" / "current_session_name.txt"
@@ -158,6 +165,7 @@ class ShadowLifecycle:
         )
         self._state_lock = threading.Lock()
         self._last_rebind_time: Optional[float] = None
+        self._heartbeat_count: int = 0
         self._stop_event = threading.Event()
         self._threads: list[threading.Thread] = []
 
@@ -190,6 +198,7 @@ class ShadowLifecycle:
             rebind_time = self._last_rebind_time
             # Capture path inside the lock so path and content agree on session_id (KN098).
             hb_path = self.eblet_root / session_id / f"heartbeat_{self.scribe_id}.eblet.md"
+            self._heartbeat_count += 1
         carryover = (
             rebind_time is not None
             and (time.monotonic() - rebind_time) * 1000 < 100
@@ -200,6 +209,13 @@ class ShadowLifecycle:
         # falls back to the deterministic formula (no coordinator dependency at runtime).
         cycle_phase = self._get_current_cycle_phase()
 
+        # tokens_consumed: per-interval estimate for Sipping Ethereal T cost-stream.
+        # Each heartbeat represents one HEARTBEAT_INTERVAL_S window; we emit a constant
+        # per-interval estimate (SHADOW_TOKENS_PER_INTERVAL_ESTIMATE).  The sentinel
+        # runner sums across heartbeats within the arm window → total_tokens.
+        # Replace with real API telemetry when Shadow session stats become available.
+        tokens_consumed = SHADOW_TOKENS_PER_INTERVAL_ESTIMATE
+
         content = (
             f"# Shadow Heartbeat — {self.scribe_id}\n\n"
             f"- **ts:** `{ts}`\n"
@@ -207,6 +223,7 @@ class ShadowLifecycle:
             f"- **position:** {self.lighthouse_position}\n"
             f"- **reattach_count:** {self._state.reattach_count}\n"
             f"- **cycle_phase:** {cycle_phase}\n"
+            f"- **tokens_consumed:** {tokens_consumed}\n"
         )
         if carryover:
             content += "- **rebind_carryover:** true\n"
