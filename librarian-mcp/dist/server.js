@@ -42,6 +42,7 @@ import { probeTierConfig, setTierConfig, formatTierSummary, buildPlanTierAdvisor
 // KN-I1: Reminder Scribe pattern-match engine
 import { runReminderScribeCheck } from "./reminder_scribe/pattern_match_engine.js";
 import { createJar, sealJar, queryJars, } from "./house_scribe/jar_lifecycle.js";
+import { assignCoordinate, queryJarsByCoordinate, } from "./house_scribe/coordinate_assignment.js";
 import { runPopulationAudit, } from "./house_scribe/population_audit.js";
 // KN-I3: Reminder Scribe substrate write-back + provenance chain
 import { writeBackViolationEvent, queryRsHistory, drainRetryQueue, aggregateByRule, } from "./reminder_scribe/substrate_writeback.js";
@@ -5800,6 +5801,70 @@ server.tool("house_scribe_population_audit", "KN-J1 / BP017 — House Scribe: po
 }, async (prefs) => {
     try {
         const result = runPopulationAudit(prefs);
+        return {
+            content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+        };
+    }
+    catch (err) {
+        return {
+            content: [{ type: "text", text: JSON.stringify({ error: String(err), data_available: false }, null, 2) }],
+            isError: true,
+        };
+    }
+});
+// ─── KN-J2: House Scribe coordinate tools ─────────────────────────────────────
+/**
+ * house_scribe_assign_coordinate — write-class
+ * Assigns an 8-digit grid coordinate to a Jar at its `indexed` transition.
+ * Handles cell-overflow Swarming (daughter-cell at adjacent flavor-class).
+ */
+server.tool("house_scribe_assign_coordinate", "KN-J2 / BP017 — House Scribe: assign 8-digit grid coordinate to a Jar (indexed state transition). " +
+    "Coordinate: NN-NN-NN-NN (cathedral × tier × flavor-class × jar-slot). " +
+    "Extends Multi-Trail BP015 P3 2D to 4D. Cell capacity: 100 Jars. " +
+    "Cell overflow → Swarming: daughter-cell spawned at adjacent flavor-class. " +
+    "BRIDLE Rule 4: collision detected → HALT; overflow exhausted → HALT. " +
+    "Composes with KN-J1 Jar lifecycle (created → indexed transition).", {
+    jar_id: z.string().describe("UUID of the Jar to assign a coordinate."),
+    cathedral: z.enum(["bishop", "knight", "pawn", "apiarist_tribe_hive", "apiarist_family_hive", "apiarist_project_hive", "apiarist_guild_hive"]).describe("Cathedral this Jar belongs to (determines digits 1-2)."),
+    content_type: z.enum(["synthesis", "comb_artifact", "royal_jelly_class", "innovation_corpus", "session_archive", "detective_finding"]).describe("Content type — determines tier and flavor-class derivation."),
+    tier_override: z.string().regex(/^\d{2}$/).optional().describe("Override tier ID (01-07, 99). Default: derived from content_type."),
+    flavor_override: z.string().regex(/^\d{2}$/).optional().describe("Override flavor ID (01-06, 99). Default: derived from content_type."),
+}, async (args) => {
+    try {
+        const result = assignCoordinate(args);
+        if (!result.success) {
+            return {
+                content: [{ type: "text", text: JSON.stringify({ error: result.error, collision_detected: result.collision_detected, bridle_rule_4: result.bridle_rule_4 }, null, 2) }],
+                isError: true,
+            };
+        }
+        return {
+            content: [{ type: "text", text: JSON.stringify({ success: true, coordinate: result.coordinate, swarmed: result.swarmed, jar: result.jar }, null, 2) }],
+        };
+    }
+    catch (err) {
+        return {
+            content: [{ type: "text", text: JSON.stringify({ error: String(err) }, null, 2) }],
+            isError: true,
+        };
+    }
+});
+/**
+ * house_scribe_query_jars_by_coordinate — read-class
+ * Queries Jars by 8-digit coordinate: exact, wildcard, range, or cross-cathedral.
+ * BRIDLE Rule 4: result-set capped at 1,000 entries.
+ */
+server.tool("house_scribe_query_jars_by_coordinate", "KN-J2 / BP017 — House Scribe: coordinate-based Jar query. " +
+    "Pattern: exact '01-06-02-05', wildcard '01-*-*-*' (all bishop Jars), " +
+    "range '01-06-01..06-*' (bishop/freeway flavors 01-06), cross-cathedral '99-*-*-*'. " +
+    "BRIDLE Rule 4: result-set capped at 1,000 entries; use offset for paging. " +
+    "Composes with KN-J1 queryJars + KN-J3 living-gridwork freshness.", {
+    pattern: z.string().describe("Coordinate query pattern (exact, wildcard *, or range NN..NN)."),
+    limit: z.number().int().min(1).max(1000).optional().describe("Max results. Default and max: 1000."),
+    offset: z.number().int().min(0).optional().describe("Pagination offset. Default: 0."),
+}, async ({ pattern, limit, offset }) => {
+    try {
+        const result = queryJarsByCoordinate(pattern, { limit, offset });
         return {
             content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
         };
