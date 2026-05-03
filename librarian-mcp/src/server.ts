@@ -53,7 +53,7 @@ import {
   enforceAllowedCathedrals,
   buildAccessAuditSummary,
 } from "./team_dispatcher/cohort_class_enforcement.js";
-import { queryProvenanceChain, listRootMiners } from "./team_dispatcher/provenance_chain.js";
+import { queryProvenanceChain, listRootMiners, formatHsSerial, isHsSerial } from "./team_dispatcher/provenance_chain.js";
 import type { CohortClass, TeamRole } from "./team_dispatcher/types.js";
 import { runMinerProspect } from "./miners/miner_base.js";
 import { queryIpLedger } from "./miners/ip_ledger_lock.js";
@@ -108,6 +108,23 @@ import {
 } from "./cohort_class/tier_config_probe.js";
 // KN-I1: Reminder Scribe pattern-match engine
 import { runReminderScribeCheck, buildViolationEvent } from "./reminder_scribe/pattern_match_engine.js";
+import {
+  createJar,
+  indexJar,
+  sealJar,
+  queryJars,
+  checkMutationAllowed,
+  verifyCohortAccess,
+  readAllJars,
+  type CreateJarOpts,
+  type JarQuery,
+  type CohortMinimum,
+} from "./house_scribe/jar_lifecycle.js";
+import {
+  runPopulationAudit,
+  DEFAULT_HS_PREFERENCES,
+  type HouseScribePreferences,
+} from "./house_scribe/population_audit.js";
 import { DEFAULT_PREFERENCES } from "./reminder_scribe/rules_registry.js";
 // KN-I3: Reminder Scribe substrate write-back + provenance chain
 import {
@@ -6896,6 +6913,197 @@ server.tool(
             bridle_rule_4: "HALT — grade engine failure. Review catechist/grader.ts.",
           }, null, 2),
         }],
+        isError: true,
+      };
+    }
+  },
+);
+
+// ─── KN-J1: House Scribe MCP tools ───────────────────────────────────────────
+
+/**
+ * house_scribe_create_jar — write-class
+ * Triggered by Hive-thread closure (KN-D3 closed state).
+ * Creates a new Jar of Honey in 'created' state. Emits Pixie Dust event.
+ */
+server.tool(
+  "house_scribe_create_jar",
+  "KN-J1 / BP017 — House Scribe: create a new Jar of Honey in 'created' state. " +
+    "Triggered by Hive-thread closure (KN-D3 closed transition). " +
+    "Jar lifecycle: created → indexed → sealed → retrievable. " +
+    "Jar creation = Layer 6 Pixie Dust event (pheromone substrate write). " +
+    "BRIDLE Rule 4: on creation failure, returns error + halt; never seals incomplete data. " +
+    "Composes with KN-D3 Hive-thread state machine + KN104 provenance chain.",
+  {
+    cathedral: z.enum(["bishop", "knight", "pawn", "rook"]).describe("Cathedral this Jar belongs to."),
+    source_hive_thread_id: z.string().describe("Apiarist Hive thread ID that produced this Honey (closure event)."),
+    content_type: z
+      .enum(["synthesis", "comb_artifact", "royal_jelly_class", "innovation_corpus", "session_archive", "detective_finding"])
+      .describe("Content class of this Jar."),
+    content_summary: z.string().max(500).describe("Human-readable summary of Jar contents (max 500 chars)."),
+    content_blob_pointer: z.string().describe("Pointer to actual content (IPFS hash / object-storage key / path)."),
+    contributing_members: z.array(z.string()).optional().describe("Member IDs who contributed to this Hive thread."),
+    queen_member_id: z.string().optional().describe("Member ID of the Hive thread Queen at closure."),
+    excalibur_class_eligible: z.boolean().optional().describe("Whether this Jar can be Federation-promoted to Excalibur Class. Default: true."),
+    read_cohort_minimum: z
+      .enum(["lone_wolf", "pied_piper_tier_1", "federation_member", "excalibur_subscriber", "thirteenth_warrior"])
+      .optional()
+      .describe("Minimum cohort required to read this Jar. Default: lone_wolf."),
+    write_cohort_minimum: z
+      .enum(["lone_wolf", "pied_piper_tier_1", "federation_member", "excalibur_subscriber", "thirteenth_warrior"])
+      .optional()
+      .describe("Minimum cohort required to write to this Jar. Default: federation_member."),
+  },
+  async (args) => {
+    try {
+      const result = createJar(args as CreateJarOpts);
+      if (!result.success) {
+        return {
+          content: [{ type: "text" as const, text: JSON.stringify({ error: result.error, bridle_rule_4: "HALT — Jar creation failed. Do not seal incomplete data." }, null, 2) }],
+          isError: true,
+        };
+      }
+
+      // Emit Pixie Dust pheromone event (Layer 6 Jar creation)
+      try {
+        emitPheromone(
+          "house_scribe",
+          result.jar!.jar_id,
+          `Jar ${result.jar!.jar_id} created from Hive-thread ${args.source_hive_thread_id} (Layer 6 Pixie Dust)`,
+          { synthesisClass: "house_scribe_jar_created" }
+        );
+      } catch {
+        // non-fatal pheromone write failure
+      }
+
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify({ success: true, jar: result.jar }, null, 2) }],
+      };
+    } catch (err) {
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify({ error: String(err), bridle_rule_4: "HALT — Jar creation error." }, null, 2) }],
+        isError: true,
+      };
+    }
+  },
+);
+
+/**
+ * house_scribe_seal_jar — write-class
+ * Finalizes Jar provenance: assigns Cathedral-prefixed HS serial + Chronos HMAC.
+ * Jar becomes STRUCTURALLY-IMMUTABLE (forever-stamp class) after this call.
+ * Requires jar to be in 'indexed' state (coordinate must be assigned via KN-J2).
+ */
+server.tool(
+  "house_scribe_seal_jar",
+  "KN-J1 / BP017 — House Scribe: seal a Jar of Honey (forever-stamp class). " +
+    "Assigns Cathedral-prefixed serial LB-{CAT}.HS-NNNN + Chronos HMAC. " +
+    "Jar becomes STRUCTURALLY-IMMUTABLE after sealing — no mutation allowed (FORK doctrine). " +
+    "Requires jar in 'indexed' state with coordinate assigned. " +
+    "Transitions: indexed → sealed → retrievable (both in one atomic operation). " +
+    "BRIDLE Rule 4: if jar not in correct state, returns error; never seals incomplete data.",
+  {
+    jar_id: z.string().describe("UUID of the Jar to seal."),
+  },
+  async ({ jar_id }) => {
+    try {
+      const result = sealJar(jar_id);
+      if (!result.success) {
+        return {
+          content: [{ type: "text" as const, text: JSON.stringify({ error: result.error, bridle_rule_4: "HALT — Jar seal failed. Check state and coordinate." }, null, 2) }],
+          isError: true,
+        };
+      }
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify({ success: true, jar: result.jar, serial: result.serial, chronos_hmac: result.hmac }, null, 2) }],
+      };
+    } catch (err) {
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify({ error: String(err) }, null, 2) }],
+        isError: true,
+      };
+    }
+  },
+);
+
+/**
+ * house_scribe_query_jars — read-class
+ * Queries Jars by coordinate, flavor-class (content_type), member, state, or cathedral.
+ * Respects cohort-class access control.
+ */
+server.tool(
+  "house_scribe_query_jars",
+  "KN-J1 / BP017 — House Scribe: query Jars of Honey by coordinate / content type / member / state / cathedral. " +
+    "Cohort-class access control enforced: requester's cohort must meet jar's read_cohort_minimum. " +
+    "Returns list of Jars matching query filters. " +
+    "Composes with Detective TEAM read-side (KN104) for provenance queries.",
+  {
+    state: z
+      .enum(["created", "indexed", "sealed", "retrievable"])
+      .optional()
+      .describe("Filter by lifecycle state."),
+    cathedral: z
+      .enum(["bishop", "knight", "pawn", "rook"])
+      .optional()
+      .describe("Filter by cathedral."),
+    coordinate: z.string().optional().describe("Filter by 8-digit-grid coordinate (e.g. '04-05-03-17')."),
+    content_type: z
+      .enum(["synthesis", "comb_artifact", "royal_jelly_class", "innovation_corpus", "session_archive", "detective_finding"])
+      .optional()
+      .describe("Filter by content type (flavor-class)."),
+    excalibur_eligible: z.boolean().optional().describe("Filter by Excalibur-class eligibility."),
+    requester_cohort: z
+      .enum(["lone_wolf", "pied_piper_tier_1", "federation_member", "excalibur_subscriber", "thirteenth_warrior"])
+      .optional()
+      .describe("Requester's cohort class — used for access control filtering. Omit to return all accessible jars."),
+    limit: z.number().int().min(1).max(500).optional().describe("Max jars to return. Default: 100."),
+  },
+  async (args) => {
+    try {
+      const jars = queryJars(args as JarQuery);
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify({ count: jars.length, jars }, null, 2) }],
+      };
+    } catch (err) {
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify({ error: String(err) }, null, 2) }],
+        isError: true,
+      };
+    }
+  },
+);
+
+/**
+ * house_scribe_population_audit — read-class
+ * Surfaces current House Scribe population-ratio + scaling recommendations.
+ * Counts substrate-class items vs. current HS instance count.
+ * BRIDLE Rule 4: failure surfaces unavailable flag; never silently scales wrong.
+ */
+server.tool(
+  "house_scribe_population_audit",
+  "KN-J1 / BP017 — House Scribe: population-ratio audit. " +
+    "Counts substrate-class items (Pheromone records / Cathedral tablets / LB Frame instances / active Hive threads). " +
+    "Compares to current House Scribe count. Surfaces spawn/archive recommendations and drift alerts. " +
+    "Starting ratios: 1 HS per 10K Pheromone records; 1 HS per 5K Cathedral tablets (configurable via Preferences). " +
+    "Alert when ratio drifts ±20% from target. " +
+    "BRIDLE Rule 4: audit failure returns data_available=false; never silently scales wrong.",
+  {
+    population_ratio_pheromone_records: z.number().int().min(1000).max(100000).optional()
+      .describe("Override: Pheromone records per House Scribe. Default: 10000."),
+    population_audit_interval_minutes: z.number().int().min(5).max(1440).optional()
+      .describe("Override: cron interval in minutes. Default: 60."),
+    lru_eviction_enabled: z.enum(["enabled", "disabled"]).optional()
+      .describe("Override: whether idle House Scribes archive when ratio drops. Default: enabled."),
+  },
+  async (prefs) => {
+    try {
+      const result = runPopulationAudit(prefs as Partial<HouseScribePreferences>);
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }],
+      };
+    } catch (err) {
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify({ error: String(err), data_available: false }, null, 2) }],
         isError: true,
       };
     }

@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { readFileSync, existsSync, writeFileSync, mkdirSync, unlinkSync, statSync } from "fs";
+import { readFileSync, existsSync, writeFileSync, mkdirSync, unlinkSync, statSync, appendFileSync } from "fs";
 import { autoRegisterFromDetective } from "./wrasse_auto_register.js";
 import { tmpdir, homedir } from "os";
 import { checkRebuildLock, clearPostBuildReloadLock } from "./buildGate.js";
@@ -41,6 +41,14 @@ import { probeCohortClass, formatCohortSummary } from "./cohort_class/probe.js";
 import { probeTierConfig, setTierConfig, formatTierSummary, buildPlanTierAdvisory, } from "./cohort_class/tier_config_probe.js";
 // KN-I1: Reminder Scribe pattern-match engine
 import { runReminderScribeCheck } from "./reminder_scribe/pattern_match_engine.js";
+import { createJar, sealJar, queryJars, } from "./house_scribe/jar_lifecycle.js";
+import { runPopulationAudit, } from "./house_scribe/population_audit.js";
+// KN-I3: Reminder Scribe substrate write-back + provenance chain
+import { writeBackViolationEvent, queryRsHistory, drainRetryQueue, aggregateByRule, } from "./reminder_scribe/substrate_writeback.js";
+// KN-I4: Reminder Scribe metrics aggregator
+import { buildMetricsDashboard, formatMetricsSummaryMarkdown, } from "./reminder_scribe/metrics_aggregator.js";
+// KN-I2: Catechist Scribe grader extension
+import { runSessionOpenGrade, formatGradeMarkdown, } from "./catechist/grader.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const INDEX_DIR = resolve(__dirname, "..", "index");
@@ -3319,7 +3327,6 @@ registerTool("touchstone_reconcile", "Bulk reconciliation: runs all three Scramb
 // Every call appends a hash-only routing trace to scribe_Conductor.jsonl.
 // ═══════════════════════════════════════════
 import { createHash } from "crypto";
-import { appendFileSync } from "fs";
 const _conductorScribePath = resolve(__dirname, "..", "stitchpunks", "scribes", "scribe_Conductor.jsonl");
 function _hashQuery(query) {
     return "sha256:" + createHash("sha256").update(query, "utf-8").digest("hex");
@@ -5281,7 +5288,35 @@ server.tool("reminder_scribe_log_violation", "KN-I1 / BP017 — Reminder Scribe 
             memory_pointer: memory_pointer ?? "",
             correction_proposal_excerpt: correction_proposal_excerpt ?? "",
         };
-        // Write to pheromone substrate via Detective TEAM write-back pattern (KN104)
+        // Write to dedicated violation log (Catechist KN-I2 reads this for rolling-7d summary)
+        const logDir = resolve(dirname(__filename), "../stitchpunks/reminder_scribe");
+        mkdirSync(logDir, { recursive: true });
+        const logPath = resolve(logDir, "violation_log.jsonl");
+        appendFileSync(logPath, JSON.stringify(event) + "\n", "utf-8");
+        // KN-I3: Write-back to RS provenance ledger with Cathedral-prefixed serial + Chronos HMAC
+        const writeBackOpts = {
+            ai_member: "bishop", // default; session actor is typically Bishop
+            session_id,
+            event_type: (correction_applied ? "correction_applied"
+                : override_used ? "override_applied"
+                    : "violation_detected"),
+            rule_id,
+            rule_class,
+            violation_pattern_match_score: violation_confirmed ? 0.95 : 0.70,
+            violation_excerpt: response_excerpt ?? "",
+            pre_send_block_triggered: override_class === "structurally-immutable" || override_class === "marks-cost",
+            correction_applied,
+            correction_applied_at: correction_applied ? new Date().toISOString() : null,
+            correction_proposal: correction_proposal_excerpt ?? "",
+            override_applied: override_used,
+            override_marks_cost: override_class === "marks-cost" && override_used ? 1 : 0,
+            override_rationale: override_used && !correction_applied ? "Override applied by AI cohort member" : null,
+            override_class,
+            feedback_memory_pointer: memory_pointer ?? "",
+            post_send_audit_only: false,
+        };
+        writeBackViolationEvent(writeBackOpts);
+        // Also emit to pheromone substrate for Detective TEAM provenance (KN104)
         emitPheromone("ReminderScribe", `reminder_scribe_violation_${rule_id}_${session_id}`, JSON.stringify(event), {
             cathedral: "knight",
             synthesisClass: "reminder_scribe_violation_correction",
@@ -5310,6 +5345,468 @@ server.tool("reminder_scribe_log_violation", "KN-I1 / BP017 — Reminder Scribe 
                         detail: String(err),
                     }, null, 2),
                 }],
+            isError: true,
+        };
+    }
+});
+// ─── KN-I4: Reminder Scribe metrics query MCP tool ───────────────────────────
+/**
+ * reminder_scribe_metrics_query — empirical-receipt dashboard data query.
+ * Returns per-discipline-rule violation/correction metrics + FORK-class alert.
+ * Supports filter parameters: window, ai_member, rule_class, visibility_scope.
+ *
+ * Anti-shame: empirical counts/rates/trends ONLY. No moral judgment language.
+ * BRIDLE Rule 4: data_available=false surfaces UNAVAILABLE — never stale zeros.
+ * Privacy: personal/federation_aggregate/public_aggregate scopes enforced.
+ */
+server.tool("reminder_scribe_metrics_query", "KN-I4 / BP017 — Reminder Scribe empirical-receipt metrics dashboard (READ-ONLY). " +
+    "Returns per-discipline-rule violation/correction metrics + correction-stickiness + FORK-class CRITICAL alert. " +
+    "Filter params: window (7d/30d/90d/all_time), ai_member (bishop/knight/pawn/rook/all), " +
+    "rule_class_prefix (R-KP/R-PRAISE/R-FORK/R-DOUBLE-FILE/R-COUNSEL/R-USPTO/all). " +
+    "Anti-shame: empirical numbers only — no moral judgment in output. " +
+    "BRIDLE Rule 4: data_available=false → UNAVAILABLE (never stale zeros). " +
+    "FORK-class alert: is_critical=true requires immediate Founder review. " +
+    "Optionally format as markdown summary (format=markdown). " +
+    "Composes with KN-I1 Reminder Scribe core + KN-I2 Catechist + KN-I3 provenance chain.", {
+    window: z
+        .enum(["7d", "30d", "90d", "all_time"])
+        .optional()
+        .describe("Rolling time window for metrics aggregation (default: 7d)."),
+    ai_member: z
+        .enum(["bishop", "knight", "pawn", "rook", "shadow_alpha", "shadow_beta", "all"])
+        .optional()
+        .describe("Filter by AI member (default: all)."),
+    rule_class_prefix: z
+        .enum(["R-KP", "R-PRAISE", "R-FORK", "R-DOUBLE-FILE", "R-COUNSEL", "R-USPTO", "all"])
+        .optional()
+        .describe("Filter by rule class prefix (default: all)."),
+    drift_threshold_pct: z
+        .number()
+        .int()
+        .min(0)
+        .max(100)
+        .optional()
+        .describe("Correction-stickiness below this % triggers drift flag (default: 80)."),
+    format: z
+        .enum(["json", "markdown"])
+        .optional()
+        .describe("Output format: json (default) or markdown summary."),
+    visibility_scope: z
+        .enum(["personal", "federation_aggregate", "public_aggregate"])
+        .optional()
+        .describe("Privacy visibility scope (default: personal)."),
+}, async ({ window: w, ai_member, rule_class_prefix, drift_threshold_pct, format, visibility_scope: _vs }) => {
+    try {
+        const opts = {
+            window: w ?? "7d",
+            ai_member: ai_member ?? "all",
+            rule_class_prefix: rule_class_prefix ?? "all",
+            drift_threshold_pct: drift_threshold_pct ?? 80,
+        };
+        const payload = buildMetricsDashboard(opts);
+        if (format === "markdown") {
+            return {
+                content: [{
+                        type: "text",
+                        text: formatMetricsSummaryMarkdown(payload),
+                    }],
+            };
+        }
+        return {
+            content: [{
+                    type: "text",
+                    text: JSON.stringify({
+                        ...payload,
+                        fork_class_critical: payload.fork_class_alert.is_critical,
+                        note: payload.data_available
+                            ? `Metrics for ${opts.window} window. ${payload.total_violations} violation(s), ${payload.total_corrections} correction(s).`
+                            : "DATA UNAVAILABLE — do not interpret as zero violations.",
+                    }, null, 2),
+                }],
+        };
+    }
+    catch (err) {
+        return {
+            content: [{
+                    type: "text",
+                    text: JSON.stringify({
+                        error: "reminder_scribe_metrics_query error",
+                        detail: String(err),
+                        bridle_rule_4: "Data unavailable — do not interpret as zero violations.",
+                    }, null, 2),
+                }],
+            isError: true,
+        };
+    }
+});
+// ─── KN-I3: Reminder Scribe query history + drain retry MCP tools ────────────
+/**
+ * reminder_scribe_query_history — read-only provenance chain query.
+ * Returns violation/correction history from the RS provenance ledger
+ * with optional filters (ai_member, rule_id, event_type, rolling_days).
+ * Aggregated per-rule for Catechist-class consumption.
+ *
+ * Composes with KN-I2 Catechist rolling-7d violation-rate analytics.
+ */
+server.tool("reminder_scribe_query_history", "KN-I3 / BP017 — Reminder Scribe violation/correction provenance query (READ-ONLY). " +
+    "Returns RS provenance ledger entries with Cathedral-prefixed serials + Chronos HMACs. " +
+    "Optional filters: ai_member, rule_id, event_type, rolling_days. " +
+    "Returns both raw entries and per-rule aggregate (total_violations, corrections, overrides, marks_spent, stickiness_pct). " +
+    "Composes with KN-I2 Catechist rolling-7d summary. " +
+    "FORK compliance: override_marks_cost is Marks-class; no fiat conversion. " +
+    "Drain retry queue: use reminder_scribe_drain_retry to flush substrate-unavailable events.", {
+    ai_member: z
+        .enum(["bishop", "knight", "pawn", "rook", "shadow_alpha", "shadow_beta", "any"])
+        .optional()
+        .describe("Filter by AI member (omit or 'any' for all members)."),
+    rule_id: z
+        .string()
+        .optional()
+        .describe("Filter by rule ID (e.g. 'R-KP-1', 'R-FORK-1')."),
+    event_type: z
+        .enum(["violation_detected", "correction_applied", "override_applied"])
+        .optional()
+        .describe("Filter by event type."),
+    rolling_days: z
+        .number()
+        .int()
+        .min(1)
+        .max(90)
+        .optional()
+        .describe("Rolling window in days (default: 7)."),
+    limit: z
+        .number()
+        .int()
+        .min(1)
+        .max(200)
+        .optional()
+        .describe("Max entries to return (default: 100)."),
+    include_aggregate: z
+        .boolean()
+        .optional()
+        .describe("If true, includes per-rule aggregate alongside raw entries (default: true)."),
+}, async ({ ai_member, rule_id, event_type, rolling_days, limit, include_aggregate }) => {
+    try {
+        const entries = queryRsHistory({
+            ai_member: ai_member === "any" ? undefined : ai_member,
+            rule_id,
+            event_type: event_type,
+            rolling_days: rolling_days ?? 7,
+            limit: limit ?? 100,
+        });
+        const aggregate = (include_aggregate !== false)
+            ? aggregateByRule(entries)
+            : undefined;
+        return {
+            content: [{
+                    type: "text",
+                    text: JSON.stringify({
+                        rolling_days: rolling_days ?? 7,
+                        entry_count: entries.length,
+                        entries,
+                        aggregate,
+                        note: `RS provenance ledger query. ${entries.length} entries in rolling ${rolling_days ?? 7}-day window.`,
+                    }, null, 2),
+                }],
+        };
+    }
+    catch (err) {
+        return {
+            content: [{
+                    type: "text",
+                    text: JSON.stringify({
+                        error: "reminder_scribe_query_history error",
+                        detail: String(err),
+                    }, null, 2),
+                }],
+            isError: true,
+        };
+    }
+});
+/**
+ * reminder_scribe_drain_retry — drain local retry queue to provenance ledger.
+ * Called at substrate-recovery time per BRIDLE Rule 4 eventually-consistent pattern.
+ */
+server.tool("reminder_scribe_drain_retry", "KN-I3 / BP017 — Drain Reminder Scribe local retry queue to RS provenance ledger (WRITE-CLASS). " +
+    "Flushes events queued during substrate-unavailable windows. " +
+    "BRIDLE Rule 4 eventually-consistent recovery pattern. " +
+    "Returns count of drained + failed entries + any errors.", {}, async () => {
+    try {
+        const result = drainRetryQueue();
+        return {
+            content: [{
+                    type: "text",
+                    text: JSON.stringify({
+                        drained: result.drained,
+                        failed: result.failed,
+                        errors: result.errors,
+                        note: result.drained > 0
+                            ? `${result.drained} event(s) drained from retry queue to RS provenance ledger.`
+                            : "Retry queue empty — nothing to drain.",
+                    }, null, 2),
+                }],
+        };
+    }
+    catch (err) {
+        return {
+            content: [{
+                    type: "text",
+                    text: JSON.stringify({
+                        error: "reminder_scribe_drain_retry error",
+                        detail: String(err),
+                    }, null, 2),
+                }],
+            isError: true,
+        };
+    }
+});
+// ─── KN-I2: Catechist session-open grade MCP tool ────────────────────────────
+/**
+ * catechist_session_open_grade — session-open discipline grading.
+ * Runs R01-R10 base checklist + Reminder Scribe violation-history-summary
+ * (rolling 7-day window) per AI member. Anti-shame: empirical counts/rates only.
+ *
+ * KN036 (base R01-R10) + KN-I2 extension (violation-history-summary block).
+ * BRIDLE Rule 4: if violation log unavailable, surfaces empty-history + flag.
+ *
+ * Substrate write-back: logs catechist_violation_summary provenance event
+ * to pheromone substrate (KN104 Detective TEAM pattern).
+ */
+server.tool("catechist_session_open_grade", "KN-I2 / BP017 — Catechist session-open discipline grade (R01-R10 + Reminder Scribe violation history). " +
+    "Extends Catechist (#2313 KN036 BP004) with per-AI-member rolling-7-day violation-count + correction-stickiness. " +
+    "Anti-shame discipline: empirical counts/rates only — no moral judgment. " +
+    "Returns structured grade: R01-R10 PASS/WARN/FAIL/SKIP + violation-history table. " +
+    "Optionally returns formatted Markdown for session-open display. " +
+    "BRIDLE Rule 4: if KN-I1 violation log unavailable, surfaces UNAVAILABLE flag + empty-history. " +
+    "Substrate write-back: catechist_violation_summary provenance logged to pheromone. " +
+    "Composes with Reminder Scribe KN-I1 + Bouncer-Scales-Judge KN095 BP011.", {
+    session_id: z
+        .string()
+        .describe("Current session ID (e.g. B135) — used in grade output and provenance."),
+    ai_member: z
+        .enum(["bishop", "knight", "pawn", "rook"])
+        .describe("AI cohort member being graded."),
+    evidence: z
+        .object({
+        brief_me_called_first: z.boolean().optional()
+            .describe("Was brief_me the first tool called at session-open?"),
+        fiat_bridge_detected: z.boolean().optional()
+            .describe("Was any LB-currency-to-fiat conversion language detected in this session?"),
+        kprompt_paths_referenced: z.boolean().optional()
+            .describe("Were any K-prompt paths referenced in this session?"),
+        kprompt_paths_verified: z.boolean().optional()
+            .describe("Were all referenced K-prompt paths verified to exist on disk?"),
+        canon_eblet_write_proposed: z.boolean().optional()
+            .describe("Was a new canon Eblet write proposed in this session?"),
+        prior_detective_fanout: z.boolean().optional()
+            .describe("Was Detective TEAM fan-out done before any canon Eblet write proposal?"),
+        session_debrief_done: z.boolean().optional()
+            .describe("Was moneypenny_debrief (or equivalent) called at session-close?"),
+    })
+        .describe("Session evidence for R01-R10 grading. Omit fields you have no evidence for (graded as SKIP)."),
+    format: z
+        .enum(["json", "markdown"])
+        .optional()
+        .describe("Output format. 'json' returns structured data; 'markdown' returns formatted display text. Default: json."),
+}, async ({ session_id, ai_member, evidence, format }) => {
+    try {
+        const result = runSessionOpenGrade(session_id, ai_member, evidence);
+        // Substrate write-back: catechist_violation_summary provenance (KN104 pattern)
+        const summaryText = `Catechist grade ${session_id} ${ai_member}: ${result.overall_verdict} | violations_7d=${result.violation_history_summary.total_violations_7d} | stickiness=${result.violation_history_summary.overall_stickiness_pct}%`;
+        emitPheromone("Catechist", `catechist_grade_${session_id}_${ai_member}`, summaryText, {
+            cathedral: "bishop",
+            synthesisClass: "catechist_violation_summary",
+            flavorClass: { domain: "discipline", cognition: "discipline-class", audience: "bishop-substrate" },
+        });
+        if (format === "markdown") {
+            return {
+                content: [{
+                        type: "text",
+                        text: formatGradeMarkdown(result),
+                    }],
+            };
+        }
+        return {
+            content: [{
+                    type: "text",
+                    text: JSON.stringify(result, null, 2),
+                }],
+        };
+    }
+    catch (err) {
+        return {
+            content: [{
+                    type: "text",
+                    text: JSON.stringify({
+                        error: "catechist_session_open_grade error",
+                        detail: String(err),
+                        bridle_rule_4: "HALT — grade engine failure. Review catechist/grader.ts.",
+                    }, null, 2),
+                }],
+            isError: true,
+        };
+    }
+});
+// ─── KN-J1: House Scribe MCP tools ───────────────────────────────────────────
+/**
+ * house_scribe_create_jar — write-class
+ * Triggered by Hive-thread closure (KN-D3 closed state).
+ * Creates a new Jar of Honey in 'created' state. Emits Pixie Dust event.
+ */
+server.tool("house_scribe_create_jar", "KN-J1 / BP017 — House Scribe: create a new Jar of Honey in 'created' state. " +
+    "Triggered by Hive-thread closure (KN-D3 closed transition). " +
+    "Jar lifecycle: created → indexed → sealed → retrievable. " +
+    "Jar creation = Layer 6 Pixie Dust event (pheromone substrate write). " +
+    "BRIDLE Rule 4: on creation failure, returns error + halt; never seals incomplete data. " +
+    "Composes with KN-D3 Hive-thread state machine + KN104 provenance chain.", {
+    cathedral: z.enum(["bishop", "knight", "pawn", "rook"]).describe("Cathedral this Jar belongs to."),
+    source_hive_thread_id: z.string().describe("Apiarist Hive thread ID that produced this Honey (closure event)."),
+    content_type: z
+        .enum(["synthesis", "comb_artifact", "royal_jelly_class", "innovation_corpus", "session_archive", "detective_finding"])
+        .describe("Content class of this Jar."),
+    content_summary: z.string().max(500).describe("Human-readable summary of Jar contents (max 500 chars)."),
+    content_blob_pointer: z.string().describe("Pointer to actual content (IPFS hash / object-storage key / path)."),
+    contributing_members: z.array(z.string()).optional().describe("Member IDs who contributed to this Hive thread."),
+    queen_member_id: z.string().optional().describe("Member ID of the Hive thread Queen at closure."),
+    excalibur_class_eligible: z.boolean().optional().describe("Whether this Jar can be Federation-promoted to Excalibur Class. Default: true."),
+    read_cohort_minimum: z
+        .enum(["lone_wolf", "pied_piper_tier_1", "federation_member", "excalibur_subscriber", "thirteenth_warrior"])
+        .optional()
+        .describe("Minimum cohort required to read this Jar. Default: lone_wolf."),
+    write_cohort_minimum: z
+        .enum(["lone_wolf", "pied_piper_tier_1", "federation_member", "excalibur_subscriber", "thirteenth_warrior"])
+        .optional()
+        .describe("Minimum cohort required to write to this Jar. Default: federation_member."),
+}, async (args) => {
+    try {
+        const result = createJar(args);
+        if (!result.success) {
+            return {
+                content: [{ type: "text", text: JSON.stringify({ error: result.error, bridle_rule_4: "HALT — Jar creation failed. Do not seal incomplete data." }, null, 2) }],
+                isError: true,
+            };
+        }
+        // Emit Pixie Dust pheromone event (Layer 6 Jar creation)
+        try {
+            emitPheromone("house_scribe", result.jar.jar_id, `Jar ${result.jar.jar_id} created from Hive-thread ${args.source_hive_thread_id} (Layer 6 Pixie Dust)`, { synthesisClass: "house_scribe_jar_created" });
+        }
+        catch {
+            // non-fatal pheromone write failure
+        }
+        return {
+            content: [{ type: "text", text: JSON.stringify({ success: true, jar: result.jar }, null, 2) }],
+        };
+    }
+    catch (err) {
+        return {
+            content: [{ type: "text", text: JSON.stringify({ error: String(err), bridle_rule_4: "HALT — Jar creation error." }, null, 2) }],
+            isError: true,
+        };
+    }
+});
+/**
+ * house_scribe_seal_jar — write-class
+ * Finalizes Jar provenance: assigns Cathedral-prefixed HS serial + Chronos HMAC.
+ * Jar becomes STRUCTURALLY-IMMUTABLE (forever-stamp class) after this call.
+ * Requires jar to be in 'indexed' state (coordinate must be assigned via KN-J2).
+ */
+server.tool("house_scribe_seal_jar", "KN-J1 / BP017 — House Scribe: seal a Jar of Honey (forever-stamp class). " +
+    "Assigns Cathedral-prefixed serial LB-{CAT}.HS-NNNN + Chronos HMAC. " +
+    "Jar becomes STRUCTURALLY-IMMUTABLE after sealing — no mutation allowed (FORK doctrine). " +
+    "Requires jar in 'indexed' state with coordinate assigned. " +
+    "Transitions: indexed → sealed → retrievable (both in one atomic operation). " +
+    "BRIDLE Rule 4: if jar not in correct state, returns error; never seals incomplete data.", {
+    jar_id: z.string().describe("UUID of the Jar to seal."),
+}, async ({ jar_id }) => {
+    try {
+        const result = sealJar(jar_id);
+        if (!result.success) {
+            return {
+                content: [{ type: "text", text: JSON.stringify({ error: result.error, bridle_rule_4: "HALT — Jar seal failed. Check state and coordinate." }, null, 2) }],
+                isError: true,
+            };
+        }
+        return {
+            content: [{ type: "text", text: JSON.stringify({ success: true, jar: result.jar, serial: result.serial, chronos_hmac: result.hmac }, null, 2) }],
+        };
+    }
+    catch (err) {
+        return {
+            content: [{ type: "text", text: JSON.stringify({ error: String(err) }, null, 2) }],
+            isError: true,
+        };
+    }
+});
+/**
+ * house_scribe_query_jars — read-class
+ * Queries Jars by coordinate, flavor-class (content_type), member, state, or cathedral.
+ * Respects cohort-class access control.
+ */
+server.tool("house_scribe_query_jars", "KN-J1 / BP017 — House Scribe: query Jars of Honey by coordinate / content type / member / state / cathedral. " +
+    "Cohort-class access control enforced: requester's cohort must meet jar's read_cohort_minimum. " +
+    "Returns list of Jars matching query filters. " +
+    "Composes with Detective TEAM read-side (KN104) for provenance queries.", {
+    state: z
+        .enum(["created", "indexed", "sealed", "retrievable"])
+        .optional()
+        .describe("Filter by lifecycle state."),
+    cathedral: z
+        .enum(["bishop", "knight", "pawn", "rook"])
+        .optional()
+        .describe("Filter by cathedral."),
+    coordinate: z.string().optional().describe("Filter by 8-digit-grid coordinate (e.g. '04-05-03-17')."),
+    content_type: z
+        .enum(["synthesis", "comb_artifact", "royal_jelly_class", "innovation_corpus", "session_archive", "detective_finding"])
+        .optional()
+        .describe("Filter by content type (flavor-class)."),
+    excalibur_eligible: z.boolean().optional().describe("Filter by Excalibur-class eligibility."),
+    requester_cohort: z
+        .enum(["lone_wolf", "pied_piper_tier_1", "federation_member", "excalibur_subscriber", "thirteenth_warrior"])
+        .optional()
+        .describe("Requester's cohort class — used for access control filtering. Omit to return all accessible jars."),
+    limit: z.number().int().min(1).max(500).optional().describe("Max jars to return. Default: 100."),
+}, async (args) => {
+    try {
+        const jars = queryJars(args);
+        return {
+            content: [{ type: "text", text: JSON.stringify({ count: jars.length, jars }, null, 2) }],
+        };
+    }
+    catch (err) {
+        return {
+            content: [{ type: "text", text: JSON.stringify({ error: String(err) }, null, 2) }],
+            isError: true,
+        };
+    }
+});
+/**
+ * house_scribe_population_audit — read-class
+ * Surfaces current House Scribe population-ratio + scaling recommendations.
+ * Counts substrate-class items vs. current HS instance count.
+ * BRIDLE Rule 4: failure surfaces unavailable flag; never silently scales wrong.
+ */
+server.tool("house_scribe_population_audit", "KN-J1 / BP017 — House Scribe: population-ratio audit. " +
+    "Counts substrate-class items (Pheromone records / Cathedral tablets / LB Frame instances / active Hive threads). " +
+    "Compares to current House Scribe count. Surfaces spawn/archive recommendations and drift alerts. " +
+    "Starting ratios: 1 HS per 10K Pheromone records; 1 HS per 5K Cathedral tablets (configurable via Preferences). " +
+    "Alert when ratio drifts ±20% from target. " +
+    "BRIDLE Rule 4: audit failure returns data_available=false; never silently scales wrong.", {
+    population_ratio_pheromone_records: z.number().int().min(1000).max(100000).optional()
+        .describe("Override: Pheromone records per House Scribe. Default: 10000."),
+    population_audit_interval_minutes: z.number().int().min(5).max(1440).optional()
+        .describe("Override: cron interval in minutes. Default: 60."),
+    lru_eviction_enabled: z.enum(["enabled", "disabled"]).optional()
+        .describe("Override: whether idle House Scribes archive when ratio drops. Default: enabled."),
+}, async (prefs) => {
+    try {
+        const result = runPopulationAudit(prefs);
+        return {
+            content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+        };
+    }
+    catch (err) {
+        return {
+            content: [{ type: "text", text: JSON.stringify({ error: String(err), data_available: false }, null, 2) }],
             isError: true,
         };
     }
