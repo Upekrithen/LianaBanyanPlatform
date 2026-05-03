@@ -7825,6 +7825,197 @@ server.tool(
   },
 );
 
+// ─── Pod-S KN-S3: Stats-Capture Bishop Substrate-Query MCP tools ──────────────
+
+import { queryAggregate } from "./stats_capture/query_aggregate.js";
+import { queryTimeline } from "./stats_capture/query_timeline.js";
+import { queryParallelCompare } from "./stats_capture/query_parallel_compare.js";
+import { queryAnomalies } from "./stats_capture/query_anomalies.js";
+import { RetentionPruner } from "./stats_capture/retention_pruner.js";
+
+/**
+ * test_telemetry_aggregate — read-class
+ * Aggregate counts by outcome, tier, k_prompt pattern, and cost accounting.
+ */
+server.tool(
+  "test_telemetry_aggregate",
+  "KN-S3 / BP018 — Stats-Capture: aggregate telemetry counts. " +
+    "Returns total / by_outcome / by_tier / by_k_prompt + cost-accounting (actual vs counterfactual). " +
+    "Optional filters: hours window, k_prompt_pattern (glob), cohort_class.",
+  {
+    hours: z.number().int().min(1).optional().describe("Time window in hours. Default: 24."),
+    k_prompt_pattern: z.string().optional().describe("K-prompt section/source filter (glob, e.g. 'KN-R*')."),
+    cohort_class: z.string().optional().describe("Cohort class filter."),
+  },
+  async ({ hours, k_prompt_pattern, cohort_class }) => {
+    try {
+      const result = queryAggregate({ hours, k_prompt_pattern, cohort_class });
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }],
+        isError: !result.data_available,
+      };
+    } catch (err) {
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify({ data_available: false, error: String(err) }, null, 2) }],
+        isError: true,
+      };
+    }
+  },
+);
+
+/**
+ * test_telemetry_cost_savings — read-class
+ * Focused cost-savings report (Bushel 3 Colossus / Decentralized Data Center).
+ */
+server.tool(
+  "test_telemetry_cost_savings",
+  "KN-S3 / BP018 — Stats-Capture: cost-savings report. " +
+    "Returns actual_spend vs counterfactual_estimate + savings_usd/pct. " +
+    "Supports Bushel 3 Colossus pairing (colossus_paired_runs_count). " +
+    "Decentralized Data Center Prov 16 supplementary disclosure.",
+  {
+    since: z.string().describe("ISO-8601 cutoff date (e.g. '2026-05-01T00:00:00Z')."),
+    k_prompt_pattern: z.string().optional().describe("K-prompt section pattern filter."),
+  },
+  async ({ since, k_prompt_pattern }) => {
+    try {
+      const sinceMs = new Date(since).getTime();
+      const hoursWindow = Math.ceil((Date.now() - sinceMs) / (60 * 60 * 1000));
+      const result = queryAggregate({ hours: hoursWindow, k_prompt_pattern });
+      const { cost_accounting } = result;
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify({
+          data_available: result.data_available,
+          since,
+          actual_spend_usd: cost_accounting.actual_spend_usd,
+          counterfactual_estimate_usd: cost_accounting.counterfactual_estimate_usd,
+          savings_usd: cost_accounting.savings_usd,
+          savings_pct: cost_accounting.savings_pct,
+          by_tier: result.by_tier,
+          total_snapshots: result.total,
+        }, null, 2) }],
+        isError: !result.data_available,
+      };
+    } catch (err) {
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify({ data_available: false, error: String(err) }, null, 2) }],
+        isError: true,
+      };
+    }
+  },
+);
+
+/**
+ * test_telemetry_timeline — read-class
+ * Full ordered sequence of snapshots for one test_id.
+ */
+server.tool(
+  "test_telemetry_timeline",
+  "KN-S3 / BP018 — Stats-Capture: ordered snapshot timeline for one test_id. " +
+    "Returns bookend_start + intervals (in order) + bookend_end.",
+  {
+    test_id: z.string().describe("Test ID to retrieve timeline for."),
+  },
+  async ({ test_id }) => {
+    try {
+      const result = queryTimeline(test_id);
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }],
+        isError: !result.data_available,
+      };
+    } catch (err) {
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify({ data_available: false, error: String(err) }, null, 2) }],
+        isError: true,
+      };
+    }
+  },
+);
+
+/**
+ * test_telemetry_parallel_compare — read-class
+ * Correlates 5-Knight × N-pod test runs for Founder comparison.
+ */
+server.tool(
+  "test_telemetry_parallel_compare",
+  "KN-S3 / BP018 — Stats-Capture: parallel-session comparison for 5-Knight × N-pod tests. " +
+    "Pass test_id_pattern (glob) to match runs. Returns per-session breakdown + aggregate.",
+  {
+    test_id_pattern: z.string().describe("Test ID pattern (glob, e.g. 'KN-R4-*' or 'T7-test-*')."),
+  },
+  async ({ test_id_pattern }) => {
+    try {
+      const result = queryParallelCompare(test_id_pattern);
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }],
+        isError: !result.data_available,
+      };
+    } catch (err) {
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify({ data_available: false, error: String(err) }, null, 2) }],
+        isError: true,
+      };
+    }
+  },
+);
+
+/**
+ * test_telemetry_anomalies — read-class
+ * Returns flagged anomaly snapshots since a cutoff date.
+ */
+server.tool(
+  "test_telemetry_anomalies",
+  "KN-S3 / BP018 — Stats-Capture: anomaly snapshots since cutoff. " +
+    "Returns anomaly_flag=true snapshots from anomaly/ + live/ dirs. " +
+    "Optional severity filter: 'all' (default) or 'high' (context_pct>90 or stall).",
+  {
+    since: z.string().describe("ISO-8601 cutoff date (e.g. '2026-05-01T00:00:00Z')."),
+    severity: z.enum(["all", "high"]).optional().describe("Severity filter. Default: 'all'."),
+  },
+  async ({ since, severity }) => {
+    try {
+      const result = queryAnomalies(since, severity ?? "all");
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }],
+        isError: !result.data_available,
+      };
+    } catch (err) {
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify({ data_available: false, error: String(err) }, null, 2) }],
+        isError: true,
+      };
+    }
+  },
+);
+
+/**
+ * test_telemetry_protect — write-class
+ * Mark a test_id for indefinite retention (move to protected/).
+ */
+server.tool(
+  "test_telemetry_protect",
+  "KN-S3 / BP018 — Stats-Capture: mark a test_id for indefinite retention. " +
+    "Moves all its files from live/ to protected/. Pruner will never touch protected files.",
+  {
+    test_id: z.string().describe("Test ID to protect."),
+    reason: z.string().optional().describe("Optional reason for protection (logged for audit)."),
+  },
+  async ({ test_id, reason }) => {
+    try {
+      const pruner = new RetentionPruner();
+      await pruner.protect(test_id);
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify({ success: true, test_id, reason: reason ?? null, protected_at: new Date().toISOString() }, null, 2) }],
+      };
+    } catch (err) {
+      return {
+        content: [{ type: "text" as const, text: JSON.stringify({ success: false, error: String(err) }, null, 2) }],
+        isError: true,
+      };
+    }
+  },
+);
+
 main().catch(err => {
   console.error("Server failed to start:", err);
   process.exit(1);
