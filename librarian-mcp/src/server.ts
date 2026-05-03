@@ -109,6 +109,15 @@ import {
 // KN-I1: Reminder Scribe pattern-match engine
 import { runReminderScribeCheck, buildViolationEvent } from "./reminder_scribe/pattern_match_engine.js";
 import { DEFAULT_PREFERENCES } from "./reminder_scribe/rules_registry.js";
+// KN-I3: Reminder Scribe substrate write-back + provenance chain
+import {
+  writeBackViolationEvent,
+  queryRsHistory,
+  drainRetryQueue,
+  aggregateByRule,
+  type WriteBackOpts,
+  type RsEventType,
+} from "./reminder_scribe/substrate_writeback.js";
 // KN-I2: Catechist Scribe grader extension
 import {
   runSessionOpenGrade,
@@ -6487,6 +6496,30 @@ server.tool(
       const logPath = resolve(logDir, "violation_log.jsonl");
       appendFileSync(logPath, JSON.stringify(event) + "\n", "utf-8");
 
+      // KN-I3: Write-back to RS provenance ledger with Cathedral-prefixed serial + Chronos HMAC
+      const writeBackOpts: WriteBackOpts = {
+        ai_member: "bishop", // default; session actor is typically Bishop
+        session_id,
+        event_type: (correction_applied ? "correction_applied"
+          : override_used ? "override_applied"
+          : "violation_detected") as RsEventType,
+        rule_id,
+        rule_class,
+        violation_pattern_match_score: violation_confirmed ? 0.95 : 0.70,
+        violation_excerpt: response_excerpt ?? "",
+        pre_send_block_triggered: override_class === "structurally-immutable" || override_class === "marks-cost",
+        correction_applied,
+        correction_applied_at: correction_applied ? new Date().toISOString() : null,
+        correction_proposal: correction_proposal_excerpt ?? "",
+        override_applied: override_used,
+        override_marks_cost: override_class === "marks-cost" && override_used ? 1 : 0,
+        override_rationale: override_used && !correction_applied ? "Override applied by AI cohort member" : null,
+        override_class,
+        feedback_memory_pointer: memory_pointer ?? "",
+        post_send_audit_only: false,
+      };
+      writeBackViolationEvent(writeBackOpts);
+
       // Also emit to pheromone substrate for Detective TEAM provenance (KN104)
       emitPheromone(
         "ReminderScribe",
@@ -6518,6 +6551,139 @@ server.tool(
           type: "text" as const,
           text: JSON.stringify({
             error: "reminder_scribe_log_violation write error",
+            detail: String(err),
+          }, null, 2),
+        }],
+        isError: true,
+      };
+    }
+  },
+);
+
+// ─── KN-I3: Reminder Scribe query history + drain retry MCP tools ────────────
+/**
+ * reminder_scribe_query_history — read-only provenance chain query.
+ * Returns violation/correction history from the RS provenance ledger
+ * with optional filters (ai_member, rule_id, event_type, rolling_days).
+ * Aggregated per-rule for Catechist-class consumption.
+ *
+ * Composes with KN-I2 Catechist rolling-7d violation-rate analytics.
+ */
+server.tool(
+  "reminder_scribe_query_history",
+  "KN-I3 / BP017 — Reminder Scribe violation/correction provenance query (READ-ONLY). " +
+    "Returns RS provenance ledger entries with Cathedral-prefixed serials + Chronos HMACs. " +
+    "Optional filters: ai_member, rule_id, event_type, rolling_days. " +
+    "Returns both raw entries and per-rule aggregate (total_violations, corrections, overrides, marks_spent, stickiness_pct). " +
+    "Composes with KN-I2 Catechist rolling-7d summary. " +
+    "FORK compliance: override_marks_cost is Marks-class; no fiat conversion. " +
+    "Drain retry queue: use reminder_scribe_drain_retry to flush substrate-unavailable events.",
+  {
+    ai_member: z
+      .enum(["bishop", "knight", "pawn", "rook", "shadow_alpha", "shadow_beta", "any"])
+      .optional()
+      .describe("Filter by AI member (omit or 'any' for all members)."),
+    rule_id: z
+      .string()
+      .optional()
+      .describe("Filter by rule ID (e.g. 'R-KP-1', 'R-FORK-1')."),
+    event_type: z
+      .enum(["violation_detected", "correction_applied", "override_applied"])
+      .optional()
+      .describe("Filter by event type."),
+    rolling_days: z
+      .number()
+      .int()
+      .min(1)
+      .max(90)
+      .optional()
+      .describe("Rolling window in days (default: 7)."),
+    limit: z
+      .number()
+      .int()
+      .min(1)
+      .max(200)
+      .optional()
+      .describe("Max entries to return (default: 100)."),
+    include_aggregate: z
+      .boolean()
+      .optional()
+      .describe("If true, includes per-rule aggregate alongside raw entries (default: true)."),
+  },
+  async ({ ai_member, rule_id, event_type, rolling_days, limit, include_aggregate }) => {
+    try {
+      const entries = queryRsHistory({
+        ai_member: ai_member === "any" ? undefined : ai_member,
+        rule_id,
+        event_type: event_type as RsEventType | undefined,
+        rolling_days: rolling_days ?? 7,
+        limit: limit ?? 100,
+      });
+
+      const aggregate = (include_aggregate !== false)
+        ? aggregateByRule(entries)
+        : undefined;
+
+      return {
+        content: [{
+          type: "text" as const,
+          text: JSON.stringify({
+            rolling_days: rolling_days ?? 7,
+            entry_count: entries.length,
+            entries,
+            aggregate,
+            note: `RS provenance ledger query. ${entries.length} entries in rolling ${rolling_days ?? 7}-day window.`,
+          }, null, 2),
+        }],
+      };
+    } catch (err) {
+      return {
+        content: [{
+          type: "text" as const,
+          text: JSON.stringify({
+            error: "reminder_scribe_query_history error",
+            detail: String(err),
+          }, null, 2),
+        }],
+        isError: true,
+      };
+    }
+  },
+);
+
+/**
+ * reminder_scribe_drain_retry — drain local retry queue to provenance ledger.
+ * Called at substrate-recovery time per BRIDLE Rule 4 eventually-consistent pattern.
+ */
+server.tool(
+  "reminder_scribe_drain_retry",
+  "KN-I3 / BP017 — Drain Reminder Scribe local retry queue to RS provenance ledger (WRITE-CLASS). " +
+    "Flushes events queued during substrate-unavailable windows. " +
+    "BRIDLE Rule 4 eventually-consistent recovery pattern. " +
+    "Returns count of drained + failed entries + any errors.",
+  {},
+  async () => {
+    try {
+      const result = drainRetryQueue();
+      return {
+        content: [{
+          type: "text" as const,
+          text: JSON.stringify({
+            drained: result.drained,
+            failed: result.failed,
+            errors: result.errors,
+            note: result.drained > 0
+              ? `${result.drained} event(s) drained from retry queue to RS provenance ledger.`
+              : "Retry queue empty — nothing to drain.",
+          }, null, 2),
+        }],
+      };
+    } catch (err) {
+      return {
+        content: [{
+          type: "text" as const,
+          text: JSON.stringify({
+            error: "reminder_scribe_drain_retry error",
             detail: String(err),
           }, null, 2),
         }],
