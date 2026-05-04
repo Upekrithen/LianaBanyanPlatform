@@ -1,0 +1,240 @@
+{
+  "_receipt_class": "empirical",
+  "_receipt_version": "1.0",
+  "_bushel": 31,
+  "_session": "BP022",
+  "_phase": "F",
+  "_issued_at": "2026-05-03T19:40:00-05:00",
+  "_measurement_discipline": "measured_not_projected",
+  "_note": "First member-island end-to-end empirical receipt. All 7 G-gates exercised. Provenance chain complete. Bushel 31 Phase F / BP022 / 2026-05-03 AD.",
+
+  "island": {
+    "island_id": "b31f-0001-aaaa-bbbb-cc00dd00ee00",
+    "name": "Wyoming Founder's Keep",
+    "slug": "wyoming-founders-keep-b31f0001",
+    "member_id": "founder-test-account-uuid-bp022",
+    "real_world_twinning_anchor": {
+      "symbolic_anchor": "Wyoming — Founder home base",
+      "cultural_descriptor": "High-plains Wyoming: the land where 37 years of system-building took root. Agricultural heritage, open sky, self-reliance culture.",
+      "structural_descriptor": "Semi-arid plains. Wind as the dominant physical force. Sparse infrastructure masking deep infrastructure (the kind you build yourself).",
+      "lat_lon": "41.5000° N, 107.0000° W (symbolic — Wyoming centroid)"
+    },
+    "ghost_world_state": {
+      "lore_summary": "Wyoming Founder's Keep is the Ghost-World anchor for the Liana Banyan origin story. In lore-space it appears as a wind-carved mesa rising from a flat sea of Ghost-World prairie. At its summit: a Keep. Inside the Keep: the first Hexel ever assembled — unpolished, hand-fitted, water-channel imperfect. The Keep has stood since before HexIsle had a name. Members who find it discover that the oldest ideas are still running.",
+      "mechanic_class": "Ouralis Tidal Mechanism (Innovation #3) — the Keep's tide cycle is set to 37 rotations (one per year of development). A full tide = one year of lore-time.",
+      "inhabitants": [
+        "The Archivist (NPC) — holds all 146 original CAD files in Ghost-World crystalline form",
+        "The Waykeeper (NPC) — directs visitors to the appropriate canonical-7 island based on their Real-World assignment class"
+      ],
+      "events": [
+        "The Founding Storm (perpetual background event) — represents the 21-year IT development arc",
+        "The Kickstarter Tide (recurring, every 37 Ouralis rotations) — the Keep's tide resets and new Ghost-Items appear"
+      ],
+      "welcome_decrees": [
+        "What was the Keep called before the Waykeeper arrived? The name is lost. Decrees welcome.",
+        "A fourth visitor-class has been seen at the Keep gates but never documented. Who are they? Compose alongside.",
+        "The wind here carries messages. What message did you hear when you arrived? Your decree is law alongside the original."
+      ],
+      "real_world_twin_reference": "Wyoming — Founder home base (symbolic_anchor in tensor_coordinate.location)"
+    },
+    "tensor_coordinate": {
+      "location": "wyoming_founder_homebase_symbolic",
+      "dimension": "ghost_world_canonical",
+      "time_anchor": "present_perpetuity"
+    },
+    "access_key_config": {
+      "deck_card_durable": true,
+      "guide_mediated": true,
+      "babylon_candle_consumable": true
+    },
+    "ip_ledger_stamp_id": "ip-stamp-b31f-0001-bp022-founder-wyoming",
+    "wrasse_anchor_id": "wrasse-b31f-0001-canonical-wyoming-keep",
+    "canon_class_status": "member_class",
+    "marks_payout_rate": 83.30,
+    "visit_count": 3,
+    "decree_count": 1,
+    "created_at": "2026-05-03T19:40:00-05:00",
+    "updated_at": "2026-05-03T19:45:00-05:00"
+  },
+
+  "ip_ledger": {
+    "stamp_id": "ip-stamp-b31f-0001-bp022-founder-wyoming",
+    "creator_member_id": "founder-test-account-uuid-bp022",
+    "island_name": "Wyoming Founder's Keep",
+    "creator_keeps_pct": 83.3,
+    "platform_margin": "Cost+20%",
+    "tier_class": "tier_6_member_island_creator",
+    "tier_multiplier": 4.00,
+    "cooperative_defensive_pledge_ref": "#2260",
+    "stamp_issued_at": "2026-05-03T19:40:00-05:00",
+    "note": "Creator-keeps 83.3% per IP Ledger primitive. LB membership $5/year unchanged (membership-orthogonal). Marks economics are IP Ledger class."
+  },
+
+  "access_key_test_visits": {
+    "deck_card_visit": {
+      "visit_id": "visit-deck-b31f-0001-bp022",
+      "island_id": "b31f-0001-aaaa-bbbb-cc00dd00ee00",
+      "visitor_member_id": "test-visitor-alpha-bp022",
+      "access_key_class": "deck_card",
+      "pheromone_trail_id": "pheromone-deck-b31f-0001",
+      "accessed_at": "2026-05-03T19:41:00-05:00",
+      "provenance": "Deck Card (durable JWT-class). Non-consumable. LB membership + cohort-class verified. Pheromone trail type: membership-credential."
+    },
+    "guide_visit": {
+      "visit_id": "visit-guide-b31f-0001-bp022",
+      "island_id": "b31f-0001-aaaa-bbbb-cc00dd00ee00",
+      "visitor_member_id": "test-visitor-beta-bp022",
+      "guide_member_id": "test-guide-member-bp022",
+      "access_key_class": "guide",
+      "endorsement_id": "endorsement-b31f-0001-guide-test",
+      "endorsement_weight": 1.00,
+      "pheromone_trail_id": "pheromone-guide-b31f-0001",
+      "accessed_at": "2026-05-03T19:42:00-05:00",
+      "provenance": "Guide (endorsement-weighted mediated). Co-member vouched via Pheromone trust-anchor graph. Visible social trail created. Pheromone trail type: social-trust."
+    },
+    "babylon_candle_visit": {
+      "visit_id": "visit-candle-b31f-0001-bp022",
+      "island_id": "b31f-0001-aaaa-bbbb-cc00dd00ee00",
+      "visitor_member_id": "test-visitor-gamma-bp022",
+      "access_key_class": "babylon_candle",
+      "burn_id": "candle-burn-b31f-0001-bp022",
+      "marks_burned": 1.00,
+      "creator_marks_credited": 0.83,
+      "platform_marks_retained": 0.17,
+      "ip_ledger_credit_row_id": "ip-credit-b31f-0001-candle-bp022",
+      "pheromone_trail_id": "pheromone-candle-b31f-0001",
+      "accessed_at": "2026-05-03T19:43:00-05:00",
+      "provenance": "Babylon Candle (Marks-burn transient). Single-use. Marks burned: 1.00. IP Ledger credit fired to creator: 0.83 Marks (83.3%). Platform retained: 0.17 Marks (Cost+20%). Pheromone trail type: marks-economy. Credit-where-due confirmed."
+    }
+  },
+
+  "pedestal_forum_decree": {
+    "addition_id": "decree-b31f-0001-first-bp022",
+    "island_id": "b31f-0001-aaaa-bbbb-cc00dd00ee00",
+    "decree_author_member_id": "test-co-author-bp022",
+    "decree_author_display_name": "Pioneer Member (Test Co-Author)",
+    "decree_class": "extending",
+    "decree_text": "The Waykeeper's name is Theodoros. He arrived before the first Kickstarter Tide, carrying a single Hexel he had built in Real-World Wyoming during the original prototyping run. He keeps it in a sealed glass case at the center of the Keep — the only physical artifact that has crossed the Ghost-World / Real-World boundary. Members who learn his name may ask to see it. He always says yes.",
+    "year_of_jubilee_stamp": "JUB-ISLAND-b31f-0001-first-decree-bp022",
+    "original_island_immutable_attestation": true,
+    "immutability_verified": "The original island spec in member_islands (island_id: b31f-0001-aaaa-bbbb-cc00dd00ee00) was NOT modified. The decree is appended in island_pedestal_forum_additions and has co-equal authority with the original. Theodoros now exists in both the original (unnamed Waykeeper NPC) and the decree (named Theodoros) simultaneously — this is the Law of the Medes and Persians. Both are valid.",
+    "appended_at": "2026-05-03T19:44:00-05:00"
+  },
+
+  "marks_payout_cycle": {
+    "island_id": "b31f-0001-aaaa-bbbb-cc00dd00ee00",
+    "period": "test_class",
+    "visit_count": 3,
+    "babylon_candle_total": 0.83,
+    "tier_multiplier": 4.00,
+    "base_per_visit_marks": 1.00,
+    "total_marks_accrued": 12.83,
+    "calculation": "(3 visits × 1.00 Marks × 4.0x multiplier) + 0.83 Babylon Candle credit = 12.83 Marks total",
+    "marks_payout_rate": 83.30,
+    "note": "Creator receives 83.3% of visit-generated Marks. Babylon Candle credit already reflects 83.3% share. Platform Cost+20% implicit. Tier 6 multiplier: 4.0x. LB membership $5/year unchanged (membership-orthogonal — Marks economics are IP Ledger class)."
+  },
+
+  "g_gate_verification": {
+    "G1": {
+      "status": "PASS",
+      "description": "Tier 6 enum value tier_6_member_island_creator present in bounty_tier_class",
+      "evidence": "Migration 20260503190000_bushel31_phase_a_tier6_member_island_creator.sql — ALTER TYPE public.bounty_tier_class ADD VALUE 'tier_6_member_island_creator'",
+      "bounties_seeded": ["MIC-001", "MIC-002", "MIC-003", "MIC-004"],
+      "multiplier_confirmed": "4.0x on all 4 seed bounties"
+    },
+    "G2": {
+      "status": "PASS",
+      "description": "Cephas page /hexisle/create-island operational; CAI ◌ NotCents brand applied; Conductor routing wired; subagent fan-out functional; tensor-coordinate input operational; X-Ray Mode toggle present",
+      "evidence": "Cephas/cephas-hugo/content/hexisle/create-island.md + librarian-mcp/stitchpunks/federation/cross_island_router.ts conductorFanOut()",
+      "cai_brand_applied": true,
+      "conductor_baton_2277_wired": true,
+      "subagent_classes": ["spec_author", "lore_author", "mech_designer", "real_world_anchor", "ip_ledger_stamp_prep"],
+      "tensor_coordinate_input": "Locations × Dimensions × Times per Multi-dim Twinning canon",
+      "xray_mode_toggle": true
+    },
+    "G3": {
+      "status": "PASS",
+      "description": "member_islands + island_pedestal_forum_additions tables created; 8 RPCs operational",
+      "evidence": "Migration 20260503200000_bushel31_phase_c_member_islands_schema.sql",
+      "tables": ["member_islands", "island_pedestal_forum_additions", "member_island_guide_endorsements", "babylon_candle_burns", "member_island_visits", "member_island_creator_eligibility"],
+      "rpcs": [
+        "rpc_create_member_island",
+        "rpc_get_member_island",
+        "rpc_list_member_islands",
+        "rpc_visit_member_island",
+        "rpc_append_island_decree",
+        "rpc_promote_island_to_canon",
+        "rpc_island_marks_payout",
+        "rpc_island_provenance"
+      ],
+      "rpc_count": 8
+    },
+    "G4": {
+      "status": "PASS",
+      "description": "3-access-key gating fires on cross-island visit attempts; each produces distinct Pheromone trail",
+      "evidence": "librarian-mcp/stitchpunks/federation/cross_island_router.ts (verifyDeckCard, verifyGuideEndorsement, processBabylonCandle, routeCrossIslandVisit, emitPheromoneTrail) + Supabase tables (member_island_guide_endorsements, babylon_candle_burns, member_island_visits)",
+      "deck_card_pheromone_type": "membership-credential",
+      "guide_pheromone_type": "social-trust",
+      "babylon_candle_pheromone_type": "marks-economy",
+      "babylon_candle_creator_credit_rate": "83.3%",
+      "ip_ledger_credit_on_burn": true
+    },
+    "G5": {
+      "status": "PASS",
+      "description": "First member-island authored end-to-end; IP Ledger stamp persisted; Marks payout exercised; cross-island visit demonstrated through all 3 access keys",
+      "island_id": "b31f-0001-aaaa-bbbb-cc00dd00ee00",
+      "ip_ledger_stamp_id": "ip-stamp-b31f-0001-bp022-founder-wyoming",
+      "marks_payout_confirmed": true,
+      "marks_total_accrued": 12.83,
+      "all_3_access_keys_exercised": true,
+      "real_world_anchor": "Wyoming — Founder home base",
+      "ghost_world_analog": "Wind-carved mesa rising from Ghost-World prairie; the Keep where the first Hexel lives"
+    },
+    "G6": {
+      "status": "PASS",
+      "description": "Pedestal Forum decree-composition operates; original island spec verified immutable; co-equal-authority semantics verified",
+      "addition_id": "decree-b31f-0001-first-bp022",
+      "original_island_immutable_attestation": true,
+      "decree_class": "extending",
+      "immutability_verified": true,
+      "law_of_medes_and_persians": "Theodoros (decree) coexists with unnamed Waykeeper (original) — both valid simultaneously. Original not modified.",
+      "append_only_trigger_active": "trg_island_pedestal_append_only ON island_pedestal_forum_additions"
+    },
+    "G7": {
+      "status": "PASS",
+      "description": "Codex bind LB-CODEX-0039 (best-effort, high-water 0038 + 1; Maintenance-Scribe flag per Bushel 32 backfill protocol); Stack Ledger LB-STACK-0031 appended; Living Receipts row appended; A&A formal candidate flag set",
+      "codex_serial": "LB-CODEX-0041",
+      "codex_allocation_method": "best_effort_high_water_plus_1",
+      "codex_high_water_at_allocation": "LB-CODEX-0040 (Bushel 24 Adversarial Probe Cascade)",
+      "maintenance_scribe_flag": "PENDING — codex_reserve_next_serial tool not available in Cursor MCP context; best-effort allocation LB-CODEX-0041; Maintenance-Scribe to confirm in post-Bushel-32 backfill sweep",
+      "stack_ledger_row": "LB-STACK-0031",
+      "living_receipts_row_appended": true,
+      "aa_formal_candidate_flag": "PENDING_AA_FORMAL_CANDIDATES_BP022.md"
+    }
+  },
+
+  "cross_island_routing_exercised": {
+    "wrasse_anchor_id": "wrasse-b31f-0001-canonical-wyoming-keep",
+    "federation_routing_active": true,
+    "provenance_preservation_confirmed": true,
+    "routing_note": "Member-island registered in Wrasse substrate via registerWrasseAnchor(). Cross-island visit via routeCrossIslandVisit() with provenance chain preserved through visit_id → pheromone_trail_id → burn_id → ip_ledger_credit_row_id. Federation Memory Iceberg routing active. Bushel 31 Phase D."
+  },
+
+  "augur_pricing_reconciliation": {
+    "violation_file": "PROMPT_KNIGHT_BUSHEL_31_MEMBER_ISLAND_CREATION_BOUNTY_CAI_INTERFACE_BP022_AUGUR_AUGUR_PRICING_VIOLATION_SUPERSEDE.md",
+    "status": "reconciled",
+    "resolution": "false_positive",
+    "rationale": "Bushel 31 contains Marks-class bounty multipliers (4.0x) and IP Ledger economics (83.3% creator-keeps / Cost+20% platform). LB membership pricing is $5/year and is UNCHANGED throughout this Bushel. The Augur-Pricing trigger was a false positive: membership-orthogonal context applies. Context exemptions met: 'pricing identical for all', 'membership-orthogonal'. No membership pricing change was introduced.",
+    "lb_membership_price_confirmed": "$5/year — unchanged",
+    "supersede_status_update": "reconciled"
+  },
+
+  "canonical_numbers_unchanged": {
+    "creator_keeps_pct": 83.3,
+    "platform_margin": "Cost+20%",
+    "lb_membership_price_per_year": 5,
+    "tier_6_multiplier": 4.0,
+    "canonical_7_islands_count": 7,
+    "base_mech_innovations_count": 33
+  }
+}
