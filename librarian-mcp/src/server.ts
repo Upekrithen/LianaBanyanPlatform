@@ -279,6 +279,7 @@ import {
   bindReservation,
   expireReservations,
   queryReservations,
+  resolveReservationForCreate,
 } from "./codex/serial_allocator.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -8341,14 +8342,38 @@ server.tool(
   "codex_create",
   "KN-K3 / BP018 Pod-K — Create a new Codex in 'drafting' state. " +
     "Layer 8 canon-of-canons bound-book artifact. Chapters added via codex_add_chapter. " +
-    "Lifecycle: drafting → review → bound (immutable).",
+    "Lifecycle: drafting → review → bound (immutable). " +
+    "Bushel 32B (BP023): pass reservation_id from codex_reserve_next_serial to honor the reserved serial " +
+    "and unify the reservation-space with the corpus-space (dual-serial-space sync-debt closure).",
   {
     title: z.string().describe("Human-readable title for the Codex."),
-    edition: z.string().describe("Edition string (e.g. '1.0', '2025-Q2')."),
+    edition: z.string().describe("Edition string (e.g. 'BP023', '2025-Q2')."),
+    reservation_id: z.string().optional().describe(
+      "Optional UUID from codex_reserve_next_serial. " +
+      "When provided, the Codex is created with the reserved serial (LB-CODEX-NNNN) instead of auto-allocating. " +
+      "Errors: reservation_not_found | reservation_already_bound | reservation_expired | corpus_id_already_taken."
+    ),
   },
-  async ({ title, edition }) => {
+  async ({ title, edition, reservation_id }) => {
     const { randomUUID } = await import("crypto");
-    const id = allocateCodexSerial();
+
+    let id: string;
+
+    if (reservation_id) {
+      const corpusEntryExists = (serial: string) =>
+        readAllCodexEntries().some((c) => c.id === serial);
+      const resolved = await resolveReservationForCreate(reservation_id, corpusEntryExists);
+      if ("error_code" in resolved) {
+        return {
+          content: [{ type: "text" as const, text: JSON.stringify({ success: false, error: resolved.error, error_code: resolved.error_code }, null, 2) }],
+          isError: true,
+        };
+      }
+      id = resolved.serial;
+    } else {
+      id = allocateCodexSerial();
+    }
+
     const codex = {
       id,
       uuid: randomUUID(),
