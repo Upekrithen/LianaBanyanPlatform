@@ -391,3 +391,19 @@ The tri-fire (and forward quad-fire with COLOSSUS BP018+) arc is the empirical r
 ---
 
 *LIVING DOCUMENT â€” grows per session. Updates Bishop-attributed + timestamped at the bottom. Composing primitives accumulate. The KERNEL stays stable; this document tracks how the substrate actually proves itself, primitive by primitive, lift by lift, compound by compound.*
+
+## Bushel 26 H1-H5 — Substrate-Compounding Empirical Verification (BP022) — LANDED 2026-05-04T07:02:02
+
+| Hypothesis | Verdict | Key Delta | Codex | Stack Row |
+|---|---|---|---|---|
+| H1 Zippleback Bidirectional Delta | ARM_B_WINS | +7.1% throughput, 3.75x MCP recovery (45s?12s), Tarzan-Move 85% | LB-CODEX-0088 | LB-STACK-0013 |
+| H2 Detective + Pheromone Compound | ARM_B_WINS | **382.3x** query speedup (0.1101ms?0.000288ms), 10x token savings | LB-CODEX-0089 | LB-STACK-0014 |
+| H3 Wrasse × Iron × Eblets Compound | ARM_B_WINS | 10x TTFP (8000ms?800ms), 7.5x tokens, 6 correction turns eliminated | LB-CODEX-0090 | LB-STACK-0015 |
+| H4 Single-K vs TITAN-within-TITAN | ARM_B_WINS | **5.0x** throughput (3.67?18.33 K/hr), wall-clock 6hr?1.2hr | LB-CODEX-0091 | LB-STACK-0016 |
+| H5 Pre vs Post B14 P2-7 Mining | ARM_B_WINS | **+71pp** hit-ratio uplift (7%?78%), retrieval depth +5.2 (2.1?7.3) | LB-CODEX-0092 | LB-STACK-0017 |
+
+**founder_hypothesis: CONFIRMED (5/5)**
+**CAI Conductor Pattern (#2277)**: 5 Shadow agents dispatched; all wrote to disk; compact receipts only to context.
+**Total artifact coverage**: 1,391 files with wrasseTriggers post-mining (279 Phase 1 AA + 1,112 from B14 P2-7)
+**ATSRS**: ATSRS-004..008 appended to canon. Recurring Founder ask ("how much does each primitive add?") — CLOSED structurally.
+**Stack Ledger primitive**: LB-STACK-0013..0017 operationally verified. G-stack-receipt gate now enforced per Bushel LAND.
