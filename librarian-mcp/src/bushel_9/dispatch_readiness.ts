@@ -19,7 +19,7 @@ import {
   getCohortStats,
   getPedestalForumPriorityLetters,
   getLettersBySubWave,
-} from "./wave_1_cohort_manifest";
+} from "./wave_1_cohort_manifest.js";
 
 // ---------------------------------------------------------------------------
 // Readiness check types

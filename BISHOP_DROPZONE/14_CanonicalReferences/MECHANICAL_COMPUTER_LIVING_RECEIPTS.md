@@ -341,4 +341,22 @@ The tri-fire (and forward quad-fire with COLOSSUS BP018+) arc is the empirical r
 
 ---
 
+### Bushel 32B: codex_create Reservation-Honor Patch × Bushel 32 Atomic Reservation × Maintenance-Scribe Sync-Debt Class (compound-lift — BP023 Bushel 32B)
+
+*(Compound-lift row class: dual-serial-space closure primitive × atomic-reservation primitive × sync-debt-detection class. Empirical receipt: `stitchpunks/codex/codex_ledger.jsonl` LB-CODEX-0071 status=bound + reservation_id `7a797d7f-480f-4842-9513-aa651ca54252` status=bound. LB-STACK-32B. LB-CODEX-0071. T1-T8 all PASS.)*
+
+- Bushel 32 `codex_reserve_next_serial` alone (BP022): atomically reserves non-colliding LB-CODEX-NNNN serial; eliminates Codex-collision class (5+ empirical instances BP020-BP022); but reservation-space serials had no path to corpus — `codex_create` used independent counter, ignored reservation log
+- BP018 KN-K3 `codex_create` alone (original): creates corpus entry with auto-allocated serial; no `reservation_id` parameter; produces LB-CODEX-NNNN from `codex_serial_counter.json`; architecturally decoupled from `codex_reserve_next_serial`
+- Maintenance-Scribe sync-debt detection alone (BP023 empirical probe): revealed the two counters exist independently; LB-CODEX-0009 probe artifact confirmed corpus counter at 9, reservation log at 44 — two divergent number-lines; canonized the gap
+- **Together (Bushel 32B LANDED):** All three compose to close the dual-serial-space gap structurally:
+  - `codex_create(title, edition, reservation_id?)` — optional `reservation_id` resolves to the reserved serial; corpus entry gets `id = reservation.serial`
+  - Full ceremony now works end-to-end: `reserve → create-with-reservation → add_chapter × N → review → bind → bind_reservation` → `reservation.serial === corpus.id` guaranteed
+  - T2 concurrency probe (10 parallel calls, same reservation_id): exactly 1 wins; 9 fail with `corpus_id_already_taken` — atomic correctness under concurrency preserved
+  - 9 BP022 reservations (LB-CODEX-0035–0043) + all BP020-BP022 reservation-space serials now eligible for Bushel 32C reconciliation sweep
+  - Dogfood receipt: Bushel 32B used its own patch to bind its own Codex; `LB-CODEX-0071` reservation.serial === corpus.id === Stack Ledger row codex_serial — G6 gate verified
+
+**2026-05-04 BP023 Bushel 32B LANDED** — codex_create Reservation-Honor Patch. Dual-serial-space sync-debt closed structurally. LB-STACK-32B appended. LB-CODEX-0071 bound. Knight BP023 (Cursor / Sonnet 4.6) attribution. T1-T8 all PASS. G1-G7 all green.
+
+---
+
 *LIVING DOCUMENT — grows per session. Updates Bishop-attributed + timestamped at the bottom. Composing primitives accumulate. The KERNEL stays stable; this document tracks how the substrate actually proves itself, primitive by primitive, lift by lift, compound by compound.*

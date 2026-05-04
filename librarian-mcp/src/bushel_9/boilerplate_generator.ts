@@ -18,7 +18,7 @@
  * Authored BP021 turn 95 by Knight (Cursor / Sonnet 4.6) — Bushel 9 Phase C.
  */
 
-import { WAVE_1_COHORT, WaveOneLetter, SAVE_THE_WORLD_PAPERS } from "./wave_1_cohort_manifest";
+import { WAVE_1_COHORT, WaveOneLetter, SAVE_THE_WORLD_PAPERS } from "./wave_1_cohort_manifest.js";
 
 // ---------------------------------------------------------------------------
 // Boilerplate output types

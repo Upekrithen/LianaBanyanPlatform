@@ -269,3 +269,101 @@ export function queryReservations(filter: ReservationQueryFilter): CodexReservat
     return true;
   });
 }
+
+// ─── resolveReservationForCreate (Bushel 32B / BP023) ─────────────────────────
+//
+// Atomically validates a reservation_id and returns the reserved serial for use
+// as the corpus ID in codex_create. Uses the same mutex + file-lock discipline
+// as reserveNextSerial to prevent concurrent races.
+//
+// Error codes:
+//   reservation_not_found       — no matching row in ledger
+//   reservation_already_bound   — reservation.status === 'bound'
+//   reservation_expired         — reservation.status === 'expired' OR expires_ts ≤ now
+//   corpus_id_already_taken     — a corpus entry with id = reservation.serial already exists
+
+export type ReservationCreateErrorCode =
+  | "reservation_not_found"
+  | "reservation_already_bound"
+  | "reservation_expired"
+  | "corpus_id_already_taken";
+
+export interface ReservationResolveSuccess {
+  serial: string;
+  reservation: CodexReservation;
+}
+
+export interface ReservationResolveError {
+  error: string;
+  error_code: ReservationCreateErrorCode;
+}
+
+export type ReservationResolveResult = ReservationResolveSuccess | ReservationResolveError;
+
+/**
+ * Resolves a reservation_id to its serial under mutex + file-lock.
+ * Called by codex_create when reservation_id is provided.
+ *
+ * The reservation row is NOT modified here — it stays 'reserved' until
+ * codex_bind_reservation is called after the full bind ceremony.
+ *
+ * Caller must pass a corpus-exists check function to keep this module
+ * decoupled from the corpus reader (avoids circular imports).
+ */
+export function resolveReservationForCreate(
+  reservation_id: string,
+  corpusEntryExists: (serial: string) => boolean,
+): Promise<ReservationResolveResult> {
+  return withMutex(async () => {
+    await acquireFileLock();
+    try {
+      const reservation = getReservationById(reservation_id);
+
+      if (!reservation) {
+        return {
+          error: `Reservation '${reservation_id}' not found in ledger.`,
+          error_code: "reservation_not_found" as const,
+        };
+      }
+
+      if (reservation.status === "bound") {
+        return {
+          error: `Reservation '${reservation_id}' is already bound to Codex '${reservation.bound_codex_id}'. ` +
+            "Use a fresh reservation for a new Codex.",
+          error_code: "reservation_already_bound" as const,
+        };
+      }
+
+      if (reservation.status === "expired") {
+        return {
+          error: `Reservation '${reservation_id}' has expired. ` +
+            "Call codex_reserve_next_serial to obtain a fresh reservation.",
+          error_code: "reservation_expired" as const,
+        };
+      }
+
+      // Also check wall-clock expiry (status may still be 'reserved' but TTL past)
+      if (reservation.expires_ts && new Date(reservation.expires_ts).getTime() <= Date.now()) {
+        return {
+          error: `Reservation '${reservation_id}' has expired (TTL elapsed at ${reservation.expires_ts}). ` +
+            "Call codex_reserve_next_serial to obtain a fresh reservation.",
+          error_code: "reservation_expired" as const,
+        };
+      }
+
+      // Duplicate-creation guard: if corpus already has a bound/drafting/review entry
+      // with this serial, reject (10-concurrent-call T2 safety net)
+      if (corpusEntryExists(reservation.serial)) {
+        return {
+          error: `Corpus ID '${reservation.serial}' is already taken. ` +
+            "Another concurrent codex_create call won the race for this reservation.",
+          error_code: "corpus_id_already_taken" as const,
+        };
+      }
+
+      return { serial: reservation.serial, reservation };
+    } finally {
+      releaseFileLock();
+    }
+  });
+}
