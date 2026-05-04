@@ -1,10 +1,10 @@
-# LB-CODEX-0039 — Bushel 27 — Red/Blue Team Competition + IP Ledger Stamp Surface
+# LB-CODEX-0043 — Bushel 27 — Red/Blue Team Competition + IP Ledger Stamp Surface
 
-**Serial:** LB-CODEX-0040  
-**Bushel:** 27  
-**Session:** BP022 (Knight)  
-**Dated:** AD 2026-05-03  
-**Allocation method:** Best-effort (ledger high-water 0039 + 1; 0039 taken by Bushel 22 at collision-time); Bushel 32 tool LANDED but not exposed to this Cursor MCP client — flag for reconciliation post-session  
+**Serial:** LB-CODEX-0043 (Bishop Maintenance-Scribe reconciliation BP022 turn ~101 — was 0040 best-effort triple-collision)
+**Bushel:** 27
+**Session:** BP022 (Knight)
+**Dated:** AD 2026-05-03
+**Allocation method:** Originally best-effort 0040 (Knight Cursor lacked codex_reserve_next_serial MCP tool exposure). Bishop manual reconciliation BP022 turn ~101 reallocated to LB-CODEX-0043 (next free after Bushel 25 reallocation to 0042). Reconciliation receipt: see ledger entry at codex_ledger.jsonl with reservation_id `bishop-recon-bushel27-bp022-0043`.  
 
 ---
 
