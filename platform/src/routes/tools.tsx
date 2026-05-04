@@ -13,6 +13,11 @@ const MyVerdictHistoryPage = lazy(() => import("@/pages/helm/MyVerdictHistoryPag
 const MyMinerGradingPage = lazy(() => import("@/pages/helm/MyMinerGradingPage"));
 const ScalesRubricPage = lazy(() => import("@/pages/helm/ScalesRubricPage"));
 
+// Bushel 27 — Red/Blue Team Competition + IP Ledger Stamp Surface (BP022)
+const RedBlueLeaderboard = lazy(() => import("@/pages/helm/RedBlueLeaderboard"));
+const RedBlueTeamDetail = lazy(() => import("@/pages/helm/RedBlueTeamDetail"));
+const RedBlueMemberDetail = lazy(() => import("@/pages/helm/RedBlueMemberDetail"));
+
 const CueCardDeckPage = lazy(() => import("@/pages/CueCardDeckPage"));
 const DeckCardStudio = lazy(() => import("@/pages/DeckCardStudio"));
 const DeckCollection = lazy(() => import("@/pages/DeckCollection"));
@@ -183,6 +188,12 @@ export const toolsRoutes = (
     <Route path="/helm/verdicts" element={<ProtectedRoute><LazyPage><MyVerdictHistoryPage /></LazyPage></ProtectedRoute>} />
     <Route path="/helm/miner-grading" element={<ProtectedRoute><LazyPage><MyMinerGradingPage /></LazyPage></ProtectedRoute>} />
     <Route path="/helm/scales-rubric" element={<ProtectedRoute><LazyPage><ScalesRubricPage /></LazyPage></ProtectedRoute>} />
+
+    {/* Bushel 27 — Red/Blue Team Competition + IP Ledger Stamp Surface (BP022) */}
+    <Route path="/helm/red-blue-leaderboard" element={<ExplorerRoute><LazyPage><RedBlueLeaderboard /></LazyPage></ExplorerRoute>} />
+    <Route path="/helm/red-blue-leaderboard/red" element={<ExplorerRoute><LazyPage><RedBlueTeamDetail /></LazyPage></ExplorerRoute>} />
+    <Route path="/helm/red-blue-leaderboard/blue" element={<ExplorerRoute><LazyPage><RedBlueTeamDetail /></LazyPage></ExplorerRoute>} />
+    <Route path="/helm/red-blue-leaderboard/member/:member_id" element={<ExplorerRoute><LazyPage><RedBlueMemberDetail /></LazyPage></ExplorerRoute>} />
 
     {/* Cue card landing pages */}
     <Route path="/tower-of-peace" element={<LazyPage><TowerOfPeace /></LazyPage>} />
