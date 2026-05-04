@@ -1,4 +1,4 @@
----
+﻿---
 title: "Crown Letter: Laughton"
 date: 2026-01-15
 letter_type: "Crown Letter"
@@ -6,9 +6,15 @@ recipient: "Laughton"
 initiative: "Let's Go Shopping"
 initiative_number: 3
 tags: ["crown-letter", "initiative", "mary-beth-laughton"]
+wrasseTriggers:
+  - ðÿ crown letter mary beth laughton
+  - crown initiative
+  - mary beth laughton
+  - letters
+  - cephas member content
 ---
 
-# 👑 CROWN LETTER: MARY BETH LAUGHTON
+# ðŸ‘‘ CROWN LETTER: MARY BETH LAUGHTON
 ## Merchant Mentor, Lady Banyan of the Marketplace
 ## First Steward of Let's Go Shopping
 ## Board Candidate, Liana Banyan Corporation
@@ -21,9 +27,9 @@ You lead America's largest consumer cooperative.
 
 I'm building the next one.
 
-REI has 25 million members who believe that outdoor recreation should be accessible, sustainable, and member-owned. Liana Banyan is a cooperative commerce platform with the same philosophy — applied to everything else.
+REI has 25 million members who believe that outdoor recreation should be accessible, sustainable, and member-owned. Liana Banyan is a cooperative commerce platform with the same philosophy â€” applied to everything else.
 
-When I researched who should lead our cooperative retail initiative, your name kept coming up. And what caught my attention wasn't the scale of REI — it was the course correction. When members pushed back on political endorsements, you listened. You refocused on culture. You said: *"If we don't get the culture right, the rest doesn't matter."*
+When I researched who should lead our cooperative retail initiative, your name kept coming up. And what caught my attention wasn't the scale of REI â€” it was the course correction. When members pushed back on political endorsements, you listened. You refocused on culture. You said: *"If we don't get the culture right, the rest doesn't matter."*
 
 That's exactly what I believe. And that's why I'm writing.
 
@@ -31,19 +37,19 @@ That's exactly what I believe. And that's why I'm writing.
 
 ## WHO I AM
 
-My name is Jonathan Jones. I'm a 53-year-old father of eight, a U.S. ARNG veteran, and the founder of Liana Banyan Corporation — a cooperative commerce platform with fourteen charitable initiatives designed to be self-funding and sustainable.
+My name is Jonathan Jones. I'm a 53-year-old father of eight, a U.S. ARNG veteran, and the founder of Liana Banyan Corporation â€” a cooperative commerce platform with fourteen charitable initiatives designed to be self-funding and sustainable.
 
-I was a child of missionaries in Tanzania — no television until 13, so I read a lot, and I'm good at chess. I've spent 47 years thinking about cooperative economics and nine years building this platform. I'm not a billionaire. I'm not famous. I'm just someone who wants what SHOULD be good to ACTUALLY be GOOD.
+I was a child of missionaries in Tanzania â€” no television until 13, so I read a lot, and I'm good at chess. I've spent 47 years thinking about cooperative economics and nine years building this platform. I'm not a billionaire. I'm not famous. I'm just someone who wants what SHOULD be good to ACTUALLY be GOOD.
 
 ---
 
 ## WHAT I'VE BUILT
 
-Liana Banyan is a cooperative platform in which three commercial divisions — .com, .biz, and .net — drive sustained funding for the .org charitable initiatives. All the time, by design, sustainable beyond our lifetimes because of the infrastructure we build that operates far beyond us.
+Liana Banyan is a cooperative platform in which three commercial divisions â€” .com, .biz, and .net â€” drive sustained funding for the .org charitable initiatives. All the time, by design, sustainable beyond our lifetimes because of the infrastructure we build that operates far beyond us.
 
 The economic principle is simple: **Cost + 20%**. Creators keep 83.3% of every transaction. The platform takes 16.7% to fund operations, and 100% of charitable funds go directly to the people doing the work. Helping each other help ourselves.
 
-We have fourteen initiatives — everything from meal delivery (Let's Make Dinner) to music licensing (JukeBox) to microloans (VSL) to protection systems (Defense Klaus). Each one is designed to benefit those who need it most and be sustainably charitable.
+We have fourteen initiatives â€” everything from meal delivery (Let's Make Dinner) to music licensing (JukeBox) to microloans (VSL) to protection systems (Defense Klaus). Each one is designed to benefit those who need it most and be sustainably charitable.
 
 **Let's Go Shopping** is our cooperative retail initiative. It's designed to:
 
@@ -52,7 +58,7 @@ We have fourteen initiatives — everything from meal delivery (Let's Make Dinne
 - Build supply chains that benefit communities, not just shareholders
 - Create a marketplace where member-owners set the standards
 
-Sound familiar? It should. It's REI's model — applied beyond outdoor gear.
+Sound familiar? It should. It's REI's model â€” applied beyond outdoor gear.
 
 ---
 
@@ -60,13 +66,13 @@ Sound familiar? It should. It's REI's model — applied beyond outdoor gear.
 
 You've spent your career at the intersection of retail and values.
 
-Sephora. Ulta. REI. You understand that modern retail isn't just about transactions — it's about trust. And you've proven you can build that trust at scale.
+Sephora. Ulta. REI. You understand that modern retail isn't just about transactions â€” it's about trust. And you've proven you can build that trust at scale.
 
 But what convinced me to write was your response to the political backlash. When REI members said "focus on the mission, not the politics," you didn't dig in. You course-corrected. You said the culture matters more than the controversy.
 
 That's rare. That's leadership. And that's exactly what Liana Banyan needs.
 
-We operate under what we call the **Switzerland Rule**: no politics, no religion. We incorporate principles that work — practical, not ideological. The platform serves everyone, regardless of which way they vote. The economics are apolitical. The mission is universal.
+We operate under what we call the **Switzerland Rule**: no politics, no religion. We incorporate principles that work â€” practical, not ideological. The platform serves everyone, regardless of which way they vote. The economics are apolitical. The mission is universal.
 
 You already understand this. You're already living it.
 
@@ -76,9 +82,9 @@ You already understand this. You're already living it.
 
 I want you to lead Let's Go Shopping.
 
-Not to run it day-to-day — you're leading REI. But to guide it. To set the standards for what ethical cooperative retail should look like. To help us build the infrastructure that connects consumers with producers in a way that benefits both.
+Not to run it day-to-day â€” you're leading REI. But to guide it. To set the standards for what ethical cooperative retail should look like. To help us build the infrastructure that connects consumers with producers in a way that benefits both.
 
-Every initiative in Liana Banyan operates as a council. The Crown is the First Seat — the leader, the tie-breaker, the voice on our Steering Committee. As the council grows with workers and members, they elect their own representative to the Board of Directors. In the early days, that representative would likely be you.
+Every initiative in Liana Banyan operates as a council. The Crown is the First Seat â€” the leader, the tie-breaker, the voice on our Steering Committee. As the council grows with workers and members, they elect their own representative to the Board of Directors. In the early days, that representative would likely be you.
 
 You've built trust with 25 million REI members. Let's Go Shopping is the infrastructure that brings that same trust to the rest of retail.
 
@@ -89,11 +95,11 @@ You've built trust with 25 million REI members. Let's Go Shopping is the infrast
 | Benefit | Description |
 |---------|-------------|
 | **First Seat** | Leader of the Let's Go Shopping Council, with tie-breaker authority |
-| **Board Representation** | The Council elects its representative to the Board — in the early days, likely you |
+| **Board Representation** | The Council elects its representative to the Board â€” in the early days, likely you |
 | **Founder's Reserve Stake** | Significant participation stake in Liana Banyan |
 | **Permanent Title** | Merchant Mentor Mary Beth Laughton, Lady Banyan of the Marketplace |
 | **Crown Medallion** | Physical medallion, serial CROWN-SHOP-001 |
-| **Ceremonial Crown** | Selected by community vote from top designs — yours to keep |
+| **Ceremonial Crown** | Selected by community vote from top designs â€” yours to keep |
 | **Revenue Share** | Percentage of Let's Go Shopping business side revenue in perpetuity |
 | **Steering Committee Seat** | Voice in platform-wide decisions |
 | **Full Control** | Or whatever level of engagement you choose |
@@ -102,15 +108,15 @@ You've built trust with 25 million REI members. Let's Go Shopping is the infrast
 
 ## THE ECOSYSTEM
 
-You wouldn't be leading an isolated initiative — you'd be part of an ecosystem of hundreds that lead thousands to benefit millions.
+You wouldn't be leading an isolated initiative â€” you'd be part of an ecosystem of hundreds that lead thousands to benefit millions.
 
 I've also written to:
-- **José Andrés** for Let's Get Groceries — food access
-- **Maneet Chauhan** for Let's Make Dinner — meal delivery
-- **Jessica Jackley** for VSL — microfinance
-- **Dale Dougherty** for Let's Make Bread — business incubation
-- **Alex Oshmyansky** for Lifeline Medications — prescription access
-- **Ruth Glenn** for Defense Klaus — protection systems
+- **JosÃ© AndrÃ©s** for Let's Get Groceries â€” food access
+- **Maneet Chauhan** for Let's Make Dinner â€” meal delivery
+- **Jessica Jackley** for VSL â€” microfinance
+- **Dale Dougherty** for Let's Make Bread â€” business incubation
+- **Alex Oshmyansky** for Lifeline Medications â€” prescription access
+- **Ruth Glenn** for Defense Klaus â€” protection systems
 
 If any of them are too busy or have other commitments, I've asked for referrals to others who might carry the torch. I'm asking the same of you.
 
@@ -126,13 +132,13 @@ That's what you'd be shaping.
 
 I've included four documents for your review:
 
-1. **The Considered Approach** — An academic paper outlining the theoretical and economic foundations of Liana Banyan. This is the "why" behind the architecture.
+1. **The Considered Approach** â€” An academic paper outlining the theoretical and economic foundations of Liana Banyan. This is the "why" behind the architecture.
 
-2. **Let's Go Shopping Overview** — The operational blueprint for the initiative you'd be leading. This is the "how."
+2. **Let's Go Shopping Overview** â€” The operational blueprint for the initiative you'd be leading. This is the "how."
 
-3. **The 300 Framework** — The strategic allies structure you'd be joining. Shields, Spears, and Phalanx — and where you fit.
+3. **The 300 Framework** â€” The strategic allies structure you'd be joining. Shields, Spears, and Phalanx â€” and where you fit.
 
-4. **The Connected Keep** — System-wide infrastructure showing how Let's Go Shopping connects to every other initiative.
+4. **The Connected Keep** â€” System-wide infrastructure showing how Let's Go Shopping connects to every other initiative.
 
 Please read them. Check out the implementations at **LianaBanyan.org** and pick them apart. Tell me what breaks with the feedback tool or contact me directly by email or phone.
 
@@ -144,7 +150,7 @@ REI proves that cooperative retail works. 25 million members. $3+ billion in rev
 
 But REI is one category: outdoor recreation.
 
-What if that model applied to everything? What if ethical retail wasn't a niche — it was the default?
+What if that model applied to everything? What if ethical retail wasn't a niche â€” it was the default?
 
 That's what Let's Go Shopping is building. And that's what you could help shape.
 
@@ -152,7 +158,7 @@ That's what Let's Go Shopping is building. And that's what you could help shape.
 
 ## IF NOT YOU
 
-If your schedule will not permit, or you are committed to other concerns, or simply do not wish to — no problem. I understand completely.
+If your schedule will not permit, or you are committed to other concerns, or simply do not wish to â€” no problem. I understand completely.
 
 But if you know someone in cooperative retail who would be right for this, I would be grateful for the referral. The work matters more than any particular person doing it.
 
@@ -184,13 +190,13 @@ lianabanyan.com
 
 Liana Banyan amplifies the people it serves. We drive our audience to your storefronts, your channels, your practices. We don't ask you to be our billboard. We ask to be your megaphone.
 
-The louder you get, the louder we get — because your success is our revenue, and our revenue is your influence.
+The louder you get, the louder we get â€” because your success is our revenue, and our revenue is your influence.
 
 **We amplify you. You amplify makers. Makers amplify their communities. Everyone gets louder together.**
 
 ---
 
-🏰 FOR THE KEEP! ⚔️
+ðŸ° FOR THE KEEP! âš”ï¸
 
 ---
 

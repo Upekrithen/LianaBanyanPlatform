@@ -1,3 +1,19 @@
+﻿---
+name: "Crown Letter — Tom Simon (SEC-Fixed)"
+description: "SEC-compliant version of blockchain-without-coin letter inviting Tom Simon to serve as CFO with audit-discipline blockchain architecture."
+type: crown_letter
+recipient: "Tom Simon"
+ratificationDate: "B028"
+wrasseTriggers:
+  - crown letter tom simon CFO SEC fixed
+  - blockchain without coin no speculation SEC clean
+  - test-net by design immutable ledger cooperative
+  - forensic accountant blockchain audit receipt chain
+  - credits marks joules closed loop tokens cooperative
+  - CFO candidate cooperative blockchain ledger architecture
+  - glass door outreach letter
+canonical_references: []
+---
 # No Intrinsic Value: Blockchain Without Coin or Speculation
 
 ## Crown Letter: Tom Simon

@@ -1,3 +1,19 @@
+﻿---
+name: "Crown Letter — MacKenzie Scott (SEC-Fixed)"
+description: "SEC-compliant Cardboard Boots letter asking MacKenzie Scott for network introductions to steward cooperative charitable platform operators."
+type: crown_letter
+recipient: "MacKenzie Scott"
+ratificationDate: "B026"
+wrasseTriggers:
+  - crown letter mackenzie scott SEC fixed
+  - cardboard boots SEC clean amplifier clause
+  - cooperative platform sixteen charitable introductions
+  - member-operated cooperative commerce SEC compliant
+  - philanthropist outreach network introductions cooperative
+  - no investment language SEC crown letter
+  - glass door outreach letter
+canonical_references: []
+---
 # Cardboard Boots: An Open Letter to MacKenzie Scott
 ## SEC-Fixed Version — Bishop Session 026
 ## Changes: 6 SEC fixes + Amplifier Clause + updated stats

@@ -1,3 +1,19 @@
+﻿---
+name: "Crown Letter — Dale Dougherty (SEC-Fixed)"
+description: "SEC-compliant version inviting Dale Dougherty as Industry Chancellor board candidate for Liana Banyan Cooperative."
+type: crown_letter
+recipient: "Dale Dougherty"
+ratificationDate: "B028"
+wrasseTriggers:
+  - crown letter dale dougherty SEC fixed
+  - industry chancellor maker movement cooperative board
+  - SEC compliant crown letter cooperative platform
+  - cooperative commerce Cost plus 20 margin
+  - make magazine maker culture cooperative founding
+  - lord banyan of the forge board candidate
+  - glass door outreach letter
+canonical_references: []
+---
 # CROWN LETTER: DALE DOUGHERTY
 ## Industry Chancellor, Lord Banyan of the Forge
 ## First Maker of Let's Make Bread

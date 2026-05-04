@@ -1,3 +1,19 @@
+﻿---
+name: "Crown Letter — Robert Herjavec"
+description: "Offers Robert Herjavec a patent revenue participation agreement on Founder's personal creator share of Liana Banyan's 2263-innovation portfolio."
+type: crown_letter
+recipient: "Robert Herjavec"
+ratificationDate: "B097"
+wrasseTriggers:
+  - crown letter robert herjavec patent revenue
+  - patent revenue participation agreement no equity
+  - grand experiment founder creator share partial assignment
+  - romulator 9000 inclusion ten million repricing
+  - cooperative platform no venture capital constitutional
+  - herjavec cybersecurity cooperative patent portfolio participation
+  - glass door outreach letter
+canonical_references: []
+---
 # CROWN LETTER — Robert Herjavec
 ## Patent Revenue Participation — The Grand Experiment
 **Bishop 036 | March 27, 2026 | Revised B097 April 10, 2026 (out-of-founder-half structure) | Patched B103 April 17, 2026 (Romulator inclusion + $10M re-pricing)**

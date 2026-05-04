@@ -1,3 +1,19 @@
+﻿---
+name: "Crown Letter — Patches B096"
+description: "Drop-in patch paragraphs for MacKenzie Scott, Warren Buffett, and Tom Simon letters with lived-experience proof and D&M Service Center anecdote."
+type: crown_letter
+recipient: "Multiple Recipients (Patches)"
+ratificationDate: "B096"
+wrasseTriggers:
+  - crown letter patches B096
+  - D&M service center barter network proof
+  - MacKenzie Scott red carpet full package patch
+  - Warren Buffett crown letter insert patch
+  - lived experience proof cooperative barter
+  - Tom Simon CFO patch blockchain letter insert
+  - glass door outreach letter
+canonical_references: []
+---
 # Crown Letter Patches — Bishop Session B096
 
 *Drop-in patches for MacKenzie Scott, Warren Buffett, and Fred Simon (CFO) letters. Each patch is a self-contained paragraph or short section that can be inserted into the existing letter without full rewrite. All patches flagged NAMED-ATTRIBUTION-PENDING for D&M Service Center confirmation.*

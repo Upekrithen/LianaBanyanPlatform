@@ -1,3 +1,19 @@
+﻿---
+name: "Crown Letter — Craig Newmark"
+description: "Asks Craig Newmark for network introductions and unvarnished judgment to help scale Liana Banyan's cooperative platform for veterans and civic tech."
+type: crown_letter
+recipient: "Craig Newmark"
+ratificationDate: "B100"
+wrasseTriggers:
+  - crown letter craig newmark
+  - infrastructure chancellor liana banyan newmark
+  - newspaper classified civic tech veteran causes
+  - cooperative platform network introduction request
+  - no plan survives first contact military leadership
+  - craigconnects civic tech infrastructure funding
+  - glass door outreach letter
+canonical_references: []
+---
 # Crown Letter: Craig Newmark
 ## Infrastructure Chancellor — Liana Banyan Corporation (Offered)
 

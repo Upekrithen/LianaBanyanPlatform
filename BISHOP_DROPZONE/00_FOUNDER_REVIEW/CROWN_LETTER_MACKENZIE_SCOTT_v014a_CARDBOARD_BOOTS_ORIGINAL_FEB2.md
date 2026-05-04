@@ -1,3 +1,19 @@
+﻿---
+name: "Crown Letter — MacKenzie Scott (Cardboard Boots Original)"
+description: "Original February 2026 open letter to MacKenzie Scott asking for network introductions to steward cooperative charitable platform."
+type: crown_letter
+recipient: "MacKenzie Scott"
+ratificationDate: "B100"
+wrasseTriggers:
+  - crown letter mackenzie scott
+  - cardboard boots original february open letter
+  - philanthropist cooperative platform introduction
+  - sixteen charitable initiatives economic mobility
+  - cooperative commerce 83 percent creator share
+  - two roommates two suits story
+  - glass door outreach letter
+canonical_references: []
+---
 # Crown Letter — MacKenzie Scott
 ## v014a — CARDBOARD BOOTS ORIGINAL (Feb 2, 2026)
 ## Source: LOCKED02_CROWN_LETTER_MACKENZIE_SCOTT_BOARD_CHAIR.md

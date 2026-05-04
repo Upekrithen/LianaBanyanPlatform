@@ -1,3 +1,19 @@
+﻿---
+name: "Crown Letter — MacKenzie Scott (Shape A)"
+description: "Shape-A variant placing Romulator 9000 accuracy benchmark as opening value before the network-introductions ask to MacKenzie Scott."
+type: crown_letter
+recipient: "MacKenzie Scott"
+ratificationDate: "B107"
+wrasseTriggers:
+  - crown letter mackenzie scott shape A
+  - romulator 9000 accuracy benchmark 92 percent
+  - cooperative defensive patent pledge R9 commons
+  - philanthropist network introduction cooperative platform
+  - cardboard boots roommate suits founder story
+  - patent commons nonprofit automatic EIN eligibility
+  - glass door outreach letter
+canonical_references: []
+---
 # Crown Letter — MacKenzie Scott
 ## v014e — SHAPE A: R9 as the star, first-contact, standalone
 ## Date: April 2026 (for Wave 1 Apr 22–23 window)

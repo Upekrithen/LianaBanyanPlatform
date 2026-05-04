@@ -1,3 +1,19 @@
+﻿---
+name: "Crown Letter — Michael Seibel (CEO)"
+description: "Asks Michael Seibel to serve as CEO of Liana Banyan Corporation, presenting the Romulator 9000 and 2263-innovation portfolio as proof of architecture."
+type: crown_letter
+recipient: "Michael Seibel"
+ratificationDate: "B103"
+wrasseTriggers:
+  - crown letter michael seibel CEO
+  - CEO candidate liana banyan corporation offer
+  - romulator 9000 provisional patent 64 036 646
+  - 2263 innovations 222 crown jewels prior art
+  - proof of architecture AI infrastructure filing
+  - cooperative platform yc founder approach
+  - glass door outreach letter
+canonical_references: []
+---
 # Proof of Architecture
 ## Crown Letter: Michael Seibel
 ### CEO — Liana Banyan Corporation (Offered)

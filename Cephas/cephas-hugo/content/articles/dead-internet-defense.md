@@ -1,4 +1,4 @@
----
+﻿---
 title: "Why Bots Can't Vote Here: Four Layers of Defense Against the Dead Internet"
 date: 2026-03-15
 draft: false
@@ -8,6 +8,11 @@ categories: ["Ring of Articles"]
 weight: 60
 author: "Bishop"
 reading_time: "8 min"
+wrasseTriggers:
+  - articles
+  - dead internet defense
+  - liana banyan platform
+  - cephas member content
 ---
 
 ## The Problem Digg Just Discovered

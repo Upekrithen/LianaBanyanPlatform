@@ -1,3 +1,19 @@
+﻿---
+name: "Crown Letter — Sal Khan (SEC-Fixed)"
+description: "SEC-compliant crown letter offering Sal Khan the Chancellor role for Didasko education initiative with creator ownership model."
+type: crown_letter
+recipient: "Sal Khan"
+ratificationDate: "B026"
+wrasseTriggers:
+  - crown letter sal khan chancellor didasko
+  - didasko education initiative chancellor crown offer
+  - free world-class education cooperative ownership
+  - SEC fixed crown letter education platform
+  - 83 percent creator revenue education cooperative
+  - khan academy complement creator-owned education
+  - glass door outreach letter
+canonical_references: []
+---
 # CROWN LETTER: SAL KHAN — SEC-Fixed Version
 ## Chancellor — Didasko Education Initiative
 ## Liana Banyan Cooperative

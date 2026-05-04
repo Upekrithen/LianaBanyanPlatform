@@ -1,3 +1,19 @@
+﻿---
+name: "Crown Letter — MacKenzie Scott (Path C Fresh)"
+description: "Fresh-write Cardboard Boots letter centering the Cooperative Defensive Patent Pledge as primary value proposition for Scott's grantees."
+type: crown_letter
+recipient: "MacKenzie Scott"
+ratificationDate: "B107"
+wrasseTriggers:
+  - crown letter mackenzie scott path c
+  - cooperative defensive patent pledge commons
+  - cardboard boots fresh write R9 centerpiece
+  - eighty percent patent portfolio commons pledge
+  - grantee EIN nonprofit cooperative free access
+  - system of wells rising tide equity
+  - glass door outreach letter
+canonical_references: []
+---
 # Crown Letter — MacKenzie Scott
 ## v014c — PATH C: Fresh write using Cardboard Boots template + R9/Commons centerpiece
 ## Date: April 2026 (for Wave 1 Apr 22–23 window)

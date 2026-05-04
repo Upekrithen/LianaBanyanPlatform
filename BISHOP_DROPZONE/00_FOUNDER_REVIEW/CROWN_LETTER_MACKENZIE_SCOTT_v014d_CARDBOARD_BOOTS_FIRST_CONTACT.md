@@ -1,3 +1,19 @@
+﻿---
+name: "Crown Letter — MacKenzie Scott (First Contact)"
+description: "Standalone first-contact Cardboard Boots letter integrating Romulator 9000 commons natively for Medium and direct publication."
+type: crown_letter
+recipient: "MacKenzie Scott"
+ratificationDate: "B107"
+wrasseTriggers:
+  - crown letter mackenzie scott first contact
+  - cardboard boots first contact open letter
+  - cooperative platform sixteen charitable initiatives
+  - romulator 9000 context persistence patent
+  - nothing about us without us cooperative
+  - patent commons EIN nonprofit automatic eligibility
+  - glass door outreach letter
+canonical_references: []
+---
 # Crown Letter — MacKenzie Scott
 ## v014d — FIRST CONTACT (the one letter, Medium + direct)
 ## Date: April 2026 (for Wave 1 Apr 22–23 window)

@@ -1,3 +1,19 @@
+﻿---
+name: "The Cathedral Adoption Pathway: Why AI Companies Will Rebuild on Cooperative Substrate"
+description: "Structural case for AI companies rebuilding on cooperative substrate backed by three same-week receipts showing model arms race exhaustion and 3.5pp HOT spread across 23x cost spread."
+type: paper
+ratificationDate: "B134"
+wrasseTriggers:
+  - "Cathedral Adoption Pathway"
+  - "Cathedral Effect benchmark"
+  - "model arms race"
+  - "cooperative substrate"
+  - "harness not model"
+  - "Partnership-Stake IP-Reversion"
+  - "Cooperative Defensive Patent Pledge"
+  - "Qomplx distinguishing"
+canonical_references: []
+---
 # The Cathedral Adoption Pathway: Why AI Companies Will Rebuild on Cooperative Substrate
 
 **Draft status:** INTERNAL DRAFT — K553 assembly; KN015-BP002 polish. Founder prose-pass at fire-time per BRIDLE v11 Rule 11B.

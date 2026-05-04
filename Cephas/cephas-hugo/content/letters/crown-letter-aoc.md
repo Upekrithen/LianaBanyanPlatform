@@ -1,4 +1,4 @@
----
+﻿---
 title: "Crown Letter: Alexandria Ocasio-Cortez"
 subtitle: "Door-Opening Crown (Left) — Power to the People"
 date: 2026-03-16
@@ -7,6 +7,11 @@ initiative_number: 15
 crown_type: "Door-Opener (Left)"
 recipient: "Alexandria Ocasio-Cortez"
 tags: ["crown-letter", "political-expedition", "civic-engagement", "door-opener"]
+wrasseTriggers:
+  - letters
+  - crown letter aoc
+  - liana banyan platform
+  - cephas member content
 ---
 
 Dear Representative Ocasio-Cortez,

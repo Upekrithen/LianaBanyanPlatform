@@ -1,8 +1,14 @@
----
+﻿---
 title: "Create Your Island — CAI ◌ NotCents Interface"
 description: "Join LB and stake a permanent coordinate in HexIsle's Ghost World / Real World tensor. MAKE your own island. Conducted Intelligence routes your design intent into lore, mechanics, and a Real-World Twinning anchor."
 aliases:
   - /hexisle/create-island/
+wrasseTriggers:
+  - conducted intelligence  island creation
+  - hexisle
+  - create island
+  - liana banyan platform
+  - cephas member content
 ---
 
 # Conducted Intelligence — Island Creation

@@ -1,9 +1,15 @@
----
+﻿---
 title: "Prior Art Research — 16 Innovation Screening"
 date: 2026-03-15
 description: "Comprehensive prior art analysis for 16 Liana Banyan innovations — all found structurally novel or defensibly distinct"
 tags: ["patent", "prior-art", "innovation", "legal", "filing"]
 weight: 2
+wrasseTriggers:
+  - prior art research 16 innovation screening
+  - patents
+  - prior art research
+  - liana banyan platform
+  - cephas member content
 ---
 
 # Prior Art Research: 16 Innovation Screening

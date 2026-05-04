@@ -1,4 +1,4 @@
----
+﻿---
 title: "Crown Letter: Kondo"
 date: 2026-01-15
 letter_type: "Crown Letter"
@@ -6,9 +6,15 @@ recipient: "Kondo"
 initiative: "Household Concierge"
 initiative_number: 4
 tags: ["crown-letter", "initiative", "marie-kondo"]
+wrasseTriggers:
+  - ðÿ crown letter marie kondo
+  - crown initiative
+  - marie kondo
+  - letters
+  - cephas member content
 ---
 
-# 👑 CROWN LETTER: MARIE KONDO
+# ðŸ‘‘ CROWN LETTER: MARIE KONDO
 ## Steward Mentor, Lady Banyan of the Homestead
 ## First Keeper of Home Logistics
 ## Board Candidate, Liana Banyan Corporation
@@ -19,11 +25,11 @@ tags: ["crown-letter", "initiative", "marie-kondo"]
 
 Dear Ms. Kondo,
 
-You taught the world that tidying is not about getting rid of things — it's about choosing what to keep. About surrounding yourself with what sparks joy and releasing what doesn't serve you.
+You taught the world that tidying is not about getting rid of things â€” it's about choosing what to keep. About surrounding yourself with what sparks joy and releasing what doesn't serve you.
 
 I've built a platform based on the same principle: keeping what matters, releasing what extracts.
 
-Home Logistics is one of fourteen initiatives within Liana Banyan — a cooperative platform where workers keep 83.3% of every transaction and communities provide for themselves. It needs a leader who understands that home isn't just a place. It's a system. And systems can be designed to serve the people living in them.
+Home Logistics is one of fourteen initiatives within Liana Banyan â€” a cooperative platform where workers keep 83.3% of every transaction and communities provide for themselves. It needs a leader who understands that home isn't just a place. It's a system. And systems can be designed to serve the people living in them.
 
 I'm offering you the Crown.
 
@@ -31,11 +37,11 @@ I'm offering you the Crown.
 
 ## WHO I AM
 
-I'm a 53-year-old ARNG veteran — Infantry and Aviation, helicopter pilot with FAA Commercial Rotary Wing IFR rating. Father of eight. 21 years in IT development. My home has been many things over the years: barracks, apartments, rentals, and finally a house I've mortgaged to build this platform.
+I'm a 53-year-old ARNG veteran â€” Infantry and Aviation, helicopter pilot with FAA Commercial Rotary Wing IFR rating. Father of eight. 21 years in IT development. My home has been many things over the years: barracks, apartments, rentals, and finally a house I've mortgaged to build this platform.
 
-I've been thinking about cooperative economics for four decades. Building this specific platform for nine. Ludicrous speed for the last five months. I have 18 handwritten journals documenting every iteration, and 1,754 innovations with 1,401 patent claims filed since November 26, 2025—the last 44 about ten minutes ago.
+I've been thinking about cooperative economics for four decades. Building this specific platform for nine. Ludicrous speed for the last five months. I have 18 handwritten journals documenting every iteration, and 1,754 innovations with 1,401 patent claims filed since November 26, 2025â€”the last 44 about ten minutes ago.
 
-I read *The Life-Changing Magic of Tidying Up* during a difficult period. Your insight — that we should choose what to keep rather than what to discard — reframed how I thought about building systems. Liana Banyan is built the same way: we chose what to keep (worker ownership, community governance, fair margins) and released what doesn't serve (extraction, surveillance, algorithmic manipulation).
+I read *The Life-Changing Magic of Tidying Up* during a difficult period. Your insight â€” that we should choose what to keep rather than what to discard â€” reframed how I thought about building systems. Liana Banyan is built the same way: we chose what to keep (worker ownership, community governance, fair margins) and released what doesn't serve (extraction, surveillance, algorithmic manipulation).
 
 ---
 
@@ -43,7 +49,7 @@ I read *The Life-Changing Magic of Tidying Up* during a difficult period. Your i
 
 Liana Banyan is a cooperative platform built on one principle: **Cost + 20%**.
 
-Creators keep 83.3% of every transaction. The platform margin is fixed in the operating agreement — not by choice, but by legal structure. We cannot raise it. We cannot enshittify.
+Creators keep 83.3% of every transaction. The platform margin is fixed in the operating agreement â€” not by choice, but by legal structure. We cannot raise it. We cannot enshittify.
 
 Three commercial divisions generate revenue that permanently funds fourteen charitable initiatives across food security, healthcare access, education, financial inclusion, and crisis response.
 
@@ -70,7 +76,7 @@ Home Logistics needs the same transformation. The current options for household 
 
 You understand that home is sacred space. That the people we invite into our homes to help us should be treated with dignity. That systems can be designed to honor both the people providing services and the families receiving them.
 
-The KonMari method isn't about minimalism — it's about intentionality. Home Logistics needs that same intentionality: services designed around what families actually need, delivered by workers who are treated as partners, not labor units.
+The KonMari method isn't about minimalism â€” it's about intentionality. Home Logistics needs that same intentionality: services designed around what families actually need, delivered by workers who are treated as partners, not labor units.
 
 ---
 
@@ -78,9 +84,9 @@ The KonMari method isn't about minimalism — it's about intentionality. Home Lo
 
 I want you to lead the Home Logistics Council.
 
-Not to run it day-to-day — you have your own work, your own mission. But to guide it. To set the standards for what household services should look like when they're designed to serve everyone involved. To help us build the infrastructure that honors both homes and the people who care for them.
+Not to run it day-to-day â€” you have your own work, your own mission. But to guide it. To set the standards for what household services should look like when they're designed to serve everyone involved. To help us build the infrastructure that honors both homes and the people who care for them.
 
-Every initiative in Liana Banyan operates as a council. The Crown is the First Seat — the leader, the tie-breaker, the voice on our Steering Committee. As the council grows with workers and members, they elect their own representative to the Board of Directors. In the early days, that representative would likely be you.
+Every initiative in Liana Banyan operates as a council. The Crown is the First Seat â€” the leader, the tie-breaker, the voice on our Steering Committee. As the council grows with workers and members, they elect their own representative to the Board of Directors. In the early days, that representative would likely be you.
 
 ---
 
@@ -89,11 +95,11 @@ Every initiative in Liana Banyan operates as a council. The Crown is the First S
 | Benefit | Description |
 |---------|-------------|
 | **First Seat** | Leader of the Home Logistics Council, with tie-breaker authority |
-| **Board Representation** | The Council elects its representative to the Board — initially, likely you |
+| **Board Representation** | The Council elects its representative to the Board â€” initially, likely you |
 | **Founder's Reserve Stake** | Significant participation stake in Liana Banyan |
 | **Permanent Title** | Steward Mentor Marie Kondo, Lady Banyan of the Homestead |
 | **Crown Medallion** | Physical medallion, serial CROWN-HOME-001 |
-| **Ceremonial Crown** | Selected by community vote from top designs — yours to keep |
+| **Ceremonial Crown** | Selected by community vote from top designs â€” yours to keep |
 | **Revenue Share** | Percentage of Home Logistics revenue in perpetuity |
 | **Steering Committee Seat** | Voice in platform-wide decisions |
 | **Full Control** | Or whatever level of engagement you choose |
@@ -112,7 +118,7 @@ The answer should be yes for:
 - The community (local employment, wealth that stays local)
 - The platform (sustainable margin, not extraction)
 
-When a house cleaner earns 83.3% of every cleaning fee — and builds ownership stakes in the platform — that sparks joy. When a family can trust that their childcare provider has been vetted by a community that knows them — that sparks joy. When the system is designed so everyone benefits — that's the tidying that matters.
+When a house cleaner earns 83.3% of every cleaning fee â€” and builds ownership stakes in the platform â€” that sparks joy. When a family can trust that their childcare provider has been vetted by a community that knows them â€” that sparks joy. When the system is designed so everyone benefits â€” that's the tidying that matters.
 
 ---
 
@@ -126,7 +132,7 @@ I've also written to:
 - **Mary Beth Laughton** for Let's Go Shopping
 - **Ruth Glenn** for Defense Klaus (protection)
 
-The ecosystem is forming. Home Logistics connects to all of it — the family ordering dinner might need childcare, the elder receiving companion services might need meal delivery, the house cleaner might need a microloan to buy better equipment.
+The ecosystem is forming. Home Logistics connects to all of it â€” the family ordering dinner might need childcare, the elder receiving companion services might need meal delivery, the house cleaner might need a microloan to buy better equipment.
 
 You wouldn't be leading an isolated initiative. You'd be shaping how millions of families experience their homes.
 
@@ -136,7 +142,7 @@ You wouldn't be leading an isolated initiative. You'd be shaping how millions of
 
 No one else is getting this letter for Steward Mentor.
 
-If you aren't interested, we'll have to go back to the drawing board. We have made no backup plans — because we want you to know how wanted you are.
+If you aren't interested, we'll have to go back to the drawing board. We have made no backup plans â€” because we want you to know how wanted you are.
 
 **If the answer is no:**
 
@@ -148,7 +154,7 @@ I'd be grateful for a referral. Who do you know in the home services or lifestyl
 
 You taught people to transform their homes by asking a simple question.
 
-I'm asking you to help transform how home services work — by asking the same question at a system level.
+I'm asking you to help transform how home services work â€” by asking the same question at a system level.
 
 Does this system spark joy for the worker? For the family? For the community?
 
@@ -179,7 +185,7 @@ As You Wish.
 
 Liana Banyan amplifies the people it serves. We drive our audience to your storefronts, your channels, your practices. We don't ask you to be our billboard. We ask to be your megaphone.
 
-The louder you get, the louder we get — because your success is our revenue, and our revenue is your influence.
+The louder you get, the louder we get â€” because your success is our revenue, and our revenue is your influence.
 
 **We amplify you. You amplify makers. Makers amplify their communities. Everyone gets louder together.**
 

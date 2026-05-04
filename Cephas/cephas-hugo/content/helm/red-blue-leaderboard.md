@@ -1,4 +1,4 @@
----
+﻿---
 title: "Red / Blue Team Leaderboard"
 description: "Live scoreboard for the LB Elves Guild Red/Blue Team Competition. Find exploits, harden defenses, earn Marks and permanent IP Ledger stamps."
 date: 2026-05-03
@@ -6,6 +6,12 @@ bushel: "Bushel 27 (BP022)"
 status: "operational"
 platform_route: "/helm/red-blue-leaderboard"
 tags: ["lb-elves-guild", "red-team", "blue-team", "ip-ledger", "marks", "competition"]
+wrasseTriggers:
+  - red  blue team leaderboard
+  - helm
+  - red blue leaderboard
+  - liana banyan platform
+  - cephas member content
 ---
 
 # Red / Blue Team Leaderboard

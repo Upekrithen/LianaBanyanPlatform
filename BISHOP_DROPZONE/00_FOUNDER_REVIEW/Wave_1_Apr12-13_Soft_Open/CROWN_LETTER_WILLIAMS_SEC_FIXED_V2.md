@@ -1,3 +1,19 @@
+﻿---
+name: "Crown Letter — Kimberly Williams (SEC-Fixed)"
+description: "SEC-compliant crown letter offering Kimberly Williams the Responder General position for The Rally Group crisis response cooperative initiative."
+type: crown_letter
+recipient: "Kimberly Williams"
+ratificationDate: "B028"
+wrasseTriggers:
+  - crown letter kimberly williams SEC fixed
+  - rally group responder general SEC clean offer
+  - 988 crisis response system cooperative integration
+  - cooperative crisis response 14 initiatives platform
+  - help each other help ourselves cooperative motto
+  - responder general lady banyan cooperative SEC
+  - glass door outreach letter
+canonical_references: []
+---
 # CROWN LETTER: KIMBERLY A. WILLIAMS
 ## Responder General, Lady Banyan of the Lifeline
 ## First Responder of the Rally Group

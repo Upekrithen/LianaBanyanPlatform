@@ -1,3 +1,19 @@
+﻿---
+name: "Crown Letter — Trebor Scholz (SEC-Fixed V14)"
+description: "SEC-compliant V15 letter presenting Liana Banyan's Solidarity Stack as the built operational answer to platform cooperativism theory."
+type: crown_letter
+recipient: "Trebor Scholz"
+ratificationDate: "B030"
+wrasseTriggers:
+  - crown letter trebor scholz SEC fixed V14
+  - solidarity stack platform cooperativism built not theorized
+  - SEC clean academic crown letter new school
+  - librarian MCP multi-agent knowledge infrastructure
+  - democratic AI cooperative platform operationalized
+  - platform cooperativism V15 nathan schneider solidarity
+  - glass door outreach letter
+canonical_references: []
+---
 # The Solidarity Stack — Built, Not Theorized
 ## An Open Letter to Trebor Scholz
 

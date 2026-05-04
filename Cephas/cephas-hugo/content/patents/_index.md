@@ -1,6 +1,12 @@
----
+﻿---
 title: "Patent Portfolio"
 description: "THE BEHEMOTH — 1,754 innovations, 1,401 claims, 8 provisional applications filed with the USPTO"
+wrasseTriggers:
+  - patent portfolio
+  - patents
+  -  index
+  - liana banyan platform
+  - cephas member content
 ---
 
 # Patent Portfolio
@@ -43,4 +49,3 @@ description: "THE BEHEMOTH — 1,754 innovations, 1,401 claims, 8 provisional ap
 - [The 123 Crown Jewels](/innovations/crown-jewels/) — Complete flagship registry
 - [Prior Art Research](/patents/prior-art-research/) — 16 innovations screened, all found novel
 - [Hall of Records](/innovations/) — Full innovation index
-

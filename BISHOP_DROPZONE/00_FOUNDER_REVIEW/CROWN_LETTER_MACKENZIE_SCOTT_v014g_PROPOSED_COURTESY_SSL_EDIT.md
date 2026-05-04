@@ -1,3 +1,19 @@
+﻿---
+name: "Crown Letter — MacKenzie Scott (Courtesy SSL Edit)"
+description: "Proposed insertion connecting Cardboard Boots poverty-premium metaphor to the Courtesy SSL Super Short Loan operational mechanism."
+type: crown_letter
+recipient: "MacKenzie Scott"
+ratificationDate: "B109"
+wrasseTriggers:
+  - crown letter mackenzie scott courtesy SSL
+  - courtesy SSL super short loan boot theory
+  - pratchett boot theory operationalized mechanism
+  - cardboard boots metaphor cooperative insert
+  - poverty premium structural break cooperative
+  - courtesy SSL first fifty dollars no credit check
+  - glass door outreach letter
+canonical_references: []
+---
 # Scott Letter v014g — Proposed Courtesy SSL Insertion
 ## B109, April 19, 2026 — Founder rewrites the sentence in his voice
 

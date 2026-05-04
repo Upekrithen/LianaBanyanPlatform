@@ -1,3 +1,19 @@
+﻿---
+name: "Crown Letter — Tom Simon (CFO v007)"
+description: "Crown letter inviting Tom Simon to serve as CFO presenting blockchain as audit-discipline ledger with no intrinsic speculative value."
+type: crown_letter
+recipient: "Tom Simon"
+ratificationDate: "B100"
+wrasseTriggers:
+  - crown letter tom simon CFO 007
+  - blockchain no intrinsic value forensic accountant
+  - cooperative commerce blockchain ledger provenance
+  - test-net by design no mainnet no speculation
+  - reed morin show crypto garbage response
+  - cooperative CFO blockchain audit oversight role
+  - glass door outreach letter
+canonical_references: []
+---
 # No Intrinsic Value: Blockchain Without Coin or Speculation
 
 ## Crown Letter: Tom Simon

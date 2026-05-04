@@ -1,9 +1,15 @@
----
+﻿---
 title: "The 123 Crown Jewels"
 date: 2026-03-15
 description: "The definitive registry of Liana Banyan's 123 flagship innovations — the foundation of THE BEHEMOTH patent portfolio"
 tags: ["crown-jewels", "patent", "innovation", "registry", "filed"]
 weight: 1
+wrasseTriggers:
+  - the 123 crown jewels
+  - innovations
+  - crown jewels
+  - liana banyan platform
+  - cephas member content
 ---
 
 # The 123 Crown Jewels

@@ -1,3 +1,19 @@
+﻿---
+name: "Crown Letter — Kimberly Williams"
+description: "Crown letter offering Kimberly Williams the Responder General role leading The Rally Group, Liana Banyan's crisis response cooperative initiative."
+type: crown_letter
+recipient: "Kimberly Williams"
+ratificationDate: "B100"
+wrasseTriggers:
+  - crown letter kimberly williams responder general
+  - rally group crisis response cooperative initiative
+  - 988 suicide crisis lifeline cooperative integration
+  - responder general lady banyan of the lifeline
+  - help each other help ourselves cooperative
+  - crisis response 200 centers nationwide cooperative
+  - glass door outreach letter
+canonical_references: []
+---
 # 👑 CROWN LETTER: KIMBERLY A. WILLIAMS
 ## Responder General, Lady Banyan of the Lifeline
 ## First Responder of the Rally Group

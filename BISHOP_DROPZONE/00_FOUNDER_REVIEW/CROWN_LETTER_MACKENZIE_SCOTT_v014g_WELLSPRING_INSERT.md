@@ -1,3 +1,19 @@
+﻿---
+name: "Crown Letter — MacKenzie Scott (Wellspring Insert)"
+description: "Proposed Wellspring Keystone paragraph insert anchoring cooperative infrastructure as a system of wells rather than redistributed wealth."
+type: crown_letter
+recipient: "MacKenzie Scott"
+ratificationDate: "B117"
+wrasseTriggers:
+  - crown letter mackenzie scott wellspring
+  - wellspring keystone rising tide system of wells
+  - cooperative infrastructure community ownership paragraph
+  - cardboard boots wellspring economic sovereignty
+  - eighty percent patent commons cooperative pledge
+  - community builds own means not foundation patronage
+  - glass door outreach letter
+canonical_references: []
+---
 # Crown Letter — MacKenzie Scott
 ## v014g — WELLSPRING KEYSTONE INSERT (proposed addition to v014f, one paragraph + close)
 ## Bishop B117, April 23, 2026

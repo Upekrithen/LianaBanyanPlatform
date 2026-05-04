@@ -1,3 +1,19 @@
+﻿---
+name: "Crown Letter — Tom Simon (CFO)"
+description: "Invites Tom Simon, FBI forensic accountant, to serve as CFO presenting blockchain-as-audit-receipt architecture with no speculative value."
+type: crown_letter
+recipient: "Tom Simon"
+ratificationDate: "B103"
+wrasseTriggers:
+  - crown letter tom simon CFO
+  - CFO candidate forensic accountant blockchain
+  - blockchain without coin no intrinsic value
+  - test-net by design no speculation ledger
+  - cooperative platform credits marks joules tokens
+  - romulator 9000 receipt chain audit architecture
+  - glass door outreach letter
+canonical_references: []
+---
 # No Intrinsic Value: Blockchain Without Coin or Speculation
 
 ## Crown Letter: Tom Simon

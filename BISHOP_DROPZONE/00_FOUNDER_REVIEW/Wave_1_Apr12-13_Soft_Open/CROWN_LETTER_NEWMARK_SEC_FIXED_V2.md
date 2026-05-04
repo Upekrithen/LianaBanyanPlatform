@@ -1,3 +1,19 @@
+﻿---
+name: "Crown Letter — Craig Newmark (SEC-Fixed)"
+description: "SEC-compliant crown letter asking Craig Newmark for network introductions and judgment on cooperative platform for civic infrastructure."
+type: crown_letter
+recipient: "Craig Newmark"
+ratificationDate: "B026"
+wrasseTriggers:
+  - crown letter craig newmark SEC fixed
+  - infrastructure chancellor cooperative platform newmark
+  - SEC clean amplifier clause civic tech
+  - newspaper classified accountability civic infrastructure
+  - cooperative network introduction veteran causes
+  - classified craigslist accountability journalism funding
+  - glass door outreach letter
+canonical_references: []
+---
 # Crown Letter: Craig Newmark — SEC-Fixed Version
 ## Infrastructure Chancellor — Liana Banyan Cooperative
 ## SEC-Fixed: Bishop Session 026

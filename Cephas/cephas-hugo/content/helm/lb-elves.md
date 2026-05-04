@@ -1,4 +1,4 @@
----
+﻿---
 title: "LB Elves Guild"
 description: "Red/Blue Team Competition — Friendly-Cohort Variant. Bushel 25 seed stub. Full competition scoreboard and per-team IP Ledger stamping land in Bushel 27."
 date: 2026-05-03
@@ -7,6 +7,12 @@ status: "seed-operational"
 platform_route: "/helm/lb-elves"
 guild_class: "cross-cutting"
 tags: ["lb-elves-guild", "red-team", "blue-team", "ip-ledger", "marks", "guild", "competition"]
+wrasseTriggers:
+  - lb elves guild
+  - helm
+  - lb elves
+  - liana banyan platform
+  - cephas member content
 ---
 
 # LB Elves Guild

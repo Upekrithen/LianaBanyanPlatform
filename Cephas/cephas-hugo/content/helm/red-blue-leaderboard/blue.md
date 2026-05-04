@@ -1,10 +1,16 @@
----
+﻿---
 title: "Blue Team — Defenders"
 description: "LB Elves Guild Blue Team detail: defensive hardeners who close vulnerabilities and earn IP Ledger stamps + Marks."
 date: 2026-05-03
 bushel: "Bushel 27 (BP022)"
 platform_route: "/helm/red-blue-leaderboard/blue"
 tags: ["lb-elves-guild", "blue-team", "ip-ledger", "marks", "competition", "slow-blade"]
+wrasseTriggers:
+  - blue team  defenders
+  - red blue leaderboard
+  - blue
+  - liana banyan platform
+  - cephas member content
 ---
 
 # Blue Team — Defenders

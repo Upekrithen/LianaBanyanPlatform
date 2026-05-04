@@ -1,3 +1,19 @@
+﻿---
+name: "Crown Letter — MacKenzie Scott"
+description: "Requests MacKenzie Scott's network endorsement and introductions to help scale Liana Banyan's sixteen charitable cooperative initiatives."
+type: crown_letter
+recipient: "MacKenzie Scott"
+ratificationDate: "B107"
+wrasseTriggers:
+  - crown letter mackenzie scott
+  - philanthropist network introduction request
+  - cooperative patent commons board chair
+  - cardboard boots open letter
+  - sixteen charitable initiatives cooperative platform
+  - romulator 9000 commons pledge
+  - glass door outreach letter
+canonical_references: []
+---
 # Crown Letter — MacKenzie Scott
 ## v004 — B107 — April 17, 2026
 ## Category: Philanthropy / Commons Protection / Patent Defense Fund

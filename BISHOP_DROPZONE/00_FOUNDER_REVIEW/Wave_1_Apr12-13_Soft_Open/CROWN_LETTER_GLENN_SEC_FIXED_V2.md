@@ -1,3 +1,19 @@
+﻿---
+name: "Crown Letter — Ruth Glenn (SEC-Fixed)"
+description: "SEC-compliant shield letter asking Ruth Glenn to lead Defense Klaus, Liana Banyan's domestic abuse protection initiative."
+type: crown_letter
+recipient: "Ruth Glenn"
+ratificationDate: "B028"
+wrasseTriggers:
+  - crown letter ruth glenn shield letter
+  - first shield mentor defense Klaus domestic abuse
+  - 988 crisis response cooperative protection system
+  - SEC fixed cooperative platform shield table
+  - escape hide heal start over survivor infrastructure
+  - lady banyan of protection guardian
+  - glass door outreach letter
+canonical_references: []
+---
 # SHIELD LETTER: RUTH M. GLENN
 ## First Shield Mentor, Lady Banyan of Protection
 ## Guardian of the Shield Table, First Seat

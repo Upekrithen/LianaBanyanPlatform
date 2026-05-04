@@ -1,3 +1,19 @@
+﻿---
+name: "Crown Letter — Harvard Undiagnosed Diseases Network"
+description: "Crown letter proposing Six Medical Degrees of Separation as crowdsourced complement to Harvard UDN's collaborative rare disease research."
+type: crown_letter
+recipient: "Harvard Undiagnosed Diseases Network"
+ratificationDate: "B036"
+wrasseTriggers:
+  - crown letter harvard undiagnosed diseases network
+  - six medical degrees of separation crowdsourced
+  - one-in-a-million diagnosis breadcrumb trail cooperative
+  - health accords cooperative medical knowledge board
+  - UDN HMS NIH collaborative research complement
+  - reputation-backed knowledge boards rare disease
+  - glass door outreach letter
+canonical_references: []
+---
 # Crown Letter Brief: Harvard Undiagnosed Diseases Network (UDN)
 
 ## Target

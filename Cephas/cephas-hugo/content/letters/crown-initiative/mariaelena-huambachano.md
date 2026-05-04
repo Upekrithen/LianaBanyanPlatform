@@ -1,4 +1,4 @@
----
+﻿---
 title: "Crown Letter: Huambachano"
 date: 2026-01-15
 letter_type: "Crown Letter"
@@ -6,6 +6,12 @@ recipient: "Huambachano"
 initiative: "International"
 initiative_number: 15
 tags: ["crown-letter", "initiative", "mariaelena-huambachano"]
+wrasseTriggers:
+  - crown letter dr mariaelena huambachano
+  - crown initiative
+  - mariaelena huambachano
+  - letters
+  - cephas member content
 ---
 
 # CROWN LETTER: DR. MARIAELENA HUAMBACHANO
@@ -21,7 +27,7 @@ tags: ["crown-letter", "initiative", "mariaelena-huambachano"]
 
 Dear Dr. Huambachano,
 
-My name is Jonathan Jones, and I'm building Liana Banyan, a cooperative marketplace and incubator meant to support exactly the kind of work you already do: people building real things—food systems, tools, and businesses—who want to keep value and control close to home.
+My name is Jonathan Jones, and I'm building Liana Banyan, a cooperative marketplace and incubator meant to support exactly the kind of work you already do: people building real thingsâ€”food systems, tools, and businessesâ€”who want to keep value and control close to home.
 
 Our design is simple:
 
@@ -42,7 +48,7 @@ Local communities should be able to grow their own food, make their own products
 I am writing to ask whether you would consider serving as one of our founding Builder Crowns. Concretely, that would involve:
 
 1. Allowing us to name you (or your organization) as a Builder Crown on our Power to the People page,
-2. Joining 1–2 conversations a year about how to make the infrastructure actually useful for people growing food / building tools / running co-ops, and
+2. Joining 1â€“2 conversations a year about how to make the infrastructure actually useful for people growing food / building tools / running co-ops, and
 3. Giving us permission to describe Liana Banyan as guided, in part, by the same practical sovereignty you've modeled in your work.
 
 This is not a fundraising request and not a political endorsement. It's an invitation to help shape neutral infrastructure that can quietly support many different communities, while staying rooted in the values you already live: reverence for the land, respect for people, and resilience through shared work.
@@ -70,7 +76,7 @@ As You Wish.
 
 Liana Banyan amplifies the people it serves. We drive our audience to your storefronts, your channels, your practices. We don't ask you to be our billboard. We ask to be your megaphone.
 
-The louder you get, the louder we get — because your success is our revenue, and our revenue is your influence.
+The louder you get, the louder we get â€” because your success is our revenue, and our revenue is your influence.
 
 **We amplify you. You amplify makers. Makers amplify their communities. Everyone gets louder together.**
 

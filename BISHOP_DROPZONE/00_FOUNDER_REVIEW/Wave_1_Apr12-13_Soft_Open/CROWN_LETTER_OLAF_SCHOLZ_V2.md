@@ -1,3 +1,19 @@
+﻿---
+name: "Crown Letter — Olaf Scholz (Chancellor)"
+description: "Crown letter to former German Chancellor Olaf Scholz proposing European expansion of Liana Banyan through Germany's deep cooperative tradition."
+type: crown_letter
+recipient: "Olaf Scholz"
+ratificationDate: "B029"
+wrasseTriggers:
+  - crown letter olaf scholz chancellor germany
+  - european expansion cooperative tradition raiffeisen
+  - german cooperative tradition SPD social democratic
+  - raiffeisen cooperative credit unions 1864 history
+  - liana banyan european cooperative partnership
+  - former chancellor cooperative economy outreach
+  - glass door outreach letter
+canonical_references: []
+---
 # CROWN LETTER — Olaf Scholz
 ## Bishop Session 029 | March 23, 2026
 ## Circle: 1 (Strategic) — European Expansion / Cooperative Tradition

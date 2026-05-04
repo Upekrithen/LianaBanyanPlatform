@@ -1,3 +1,19 @@
+﻿---
+name: "Crown Letter — Arnold Schwarzenegger"
+description: "Crown letter inviting Arnold Schwarzenegger to serve as Door-Opening Crown for Political Expedition based on his no-self-made-man philosophy."
+type: crown_letter
+recipient: "Arnold Schwarzenegger"
+ratificationDate: "B036"
+wrasseTriggers:
+  - crown letter arnold schwarzenegger political expedition
+  - door-opening crown right power to the people
+  - no self-made man graduate speech cooperative
+  - cooperative platform nobody did it alone philosophy
+  - cooperative commerce locked operating agreement member-owned
+  - bipartisan cooperative crown right political outreach
+  - glass door outreach letter
+canonical_references: []
+---
 # CROWN LETTER: ARNOLD SCHWARZENEGGER
 ## Door-Opening Crown (Right) — Power to the People
 ## Initiative #15: Political Expedition

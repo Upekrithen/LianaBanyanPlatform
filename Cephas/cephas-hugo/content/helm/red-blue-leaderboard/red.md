@@ -1,10 +1,16 @@
----
+﻿---
 title: "Red Team — Finders"
 description: "LB Elves Guild Red Team detail: adversarial finders who identify exploits and earn IP Ledger stamps + Marks."
 date: 2026-05-03
 bushel: "Bushel 27 (BP022)"
 platform_route: "/helm/red-blue-leaderboard/red"
 tags: ["lb-elves-guild", "red-team", "ip-ledger", "marks", "competition"]
+wrasseTriggers:
+  - red team  finders
+  - red blue leaderboard
+  - red
+  - liana banyan platform
+  - cephas member content
 ---
 
 # Red Team — Finders

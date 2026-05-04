@@ -359,4 +359,35 @@ The tri-fire (and forward quad-fire with COLOSSUS BP018+) arc is the empirical r
 
 ---
 
+---
+
+### Compound Lift — Bushel 14 Phases 2-7: Platform-Wide Eblet Conversion (BP024)
+
+**Composing primitives:** Bushel 14 Phase 1 (LB-CODEX-0030) × Bushel 16 Shadow-cascade eligibility (LB-CODEX-0031) × CAI Conductor Protocol (#2277, BP024) × platform_wide_eblet_conversion_speed_strategy_canon_bp021
+
+**Synergistic effect:** CAI Conductor Pattern (#2277) deployed at platform scale — 20 parallel Shadow agents processing 865 artifact files across 6 content classes. Each Shadow bounded to ≤25-file shards, writes disk receipts, returns ≤300-token summary to Knight context. Context window stayed clean through entire 865-file sweep. Wrasse frontmatter (wrasseTriggers ≥5 per file) added to all content classes. npm run rebuild: 9702 files now tracked in Librarian index. Founder "pretty fast" hypothesis (BP021 turn 65) proven at platform scale.
+
+**Per-phase totals:**
+- Phase 2 (Papers): 67/67 — 4+4 Shadows — LB-CODEX-0081
+- Phase 3 (Cephas): 618/618 — 2 Shadows — LB-CODEX-0082
+- Phase 4 (Puddings): 180/180 — 8+1 Shadows — LB-CODEX-0083
+- Phase 5 (Crown Letters): 30/30 — 3 Shadows — LB-CODEX-0084
+- Phase 6 (Canon Eblets audit): 179/179 audited (135 ok + 44 remediated, 13 collisions logged) — LB-CODEX-0085
+- Phase 7 (Tail): 38/38 — 2 Shadows — LB-CODEX-0086
+- **Total: 1,112 artifacts converted/audited across 6 content classes**
+
+**G-gates:**
+- G1 ✅ 100% coverage all phases
+- G2 ✅ frontmatter schema complete (name + description + type + ratificationDate + wrasseTriggers ≥5 + canonical_references)
+- G3 ✅ pheromone re-indexed: 9702 files tracked post-rebuild (baseline pre-conversion)
+- G4 ✅ collision detection: 13 pairs logged in phase6_canon_audit.jsonl for Bishop remediation
+- G5 ⏳ Detective TEAM validation: pending brief_me call to confirm 5/5 sample retrievable
+- G6 ✅ 6 Codex entries bound: LB-CODEX-0081 through LB-CODEX-0086
+
+**Note on gitignore:** Content in BISHOP_DROPZONE/05_Puddings/, 08_Papers/Academic/, Cephas/, 07_Spoonfuls/, etc. is gitignored by design. On-disk frontmatter conversion is the deliverable for these classes. Only 00_FOUNDER_REVIEW CROWN_LETTER_* / PAPER_* and Stack Ledger committed to git.
+
+**2026-05-04 BP024 Bushels 14 Phases 2-7 LANDED** — Platform-Wide Eblet Conversion. CAI Conductor Pattern #2277 first platform-scale deployment. 1,112 artifacts Wrasse-routable. Founder "pretty fast" confirmed. LB-STACK-14P2 through LB-STACK-14P7 appended. LB-CODEX-0081–0086 bound. Knight BP024 (Cursor / Sonnet 4.6) attribution. 20-Shadow parallel dispatch. G1-G4, G6 green.
+
+---
+
 *LIVING DOCUMENT — grows per session. Updates Bishop-attributed + timestamped at the bottom. Composing primitives accumulate. The KERNEL stays stable; this document tracks how the substrate actually proves itself, primitive by primitive, lift by lift, compound by compound.*

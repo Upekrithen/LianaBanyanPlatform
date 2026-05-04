@@ -1,3 +1,19 @@
+﻿---
+name: "Crown Letter — MacKenzie Scott (Cardboard Boots Final)"
+description: "Founder-ratified send-ready Cardboard Boots letter with R9 measured 92.7-percent accuracy and commons pledge woven throughout."
+type: crown_letter
+recipient: "MacKenzie Scott"
+ratificationDate: "B107"
+wrasseTriggers:
+  - crown letter mackenzie scott final
+  - cardboard boots send-ready founder ratified
+  - romulator 9000 92 percent accuracy benchmark
+  - cooperative patent commons nonprofit eligibility
+  - cardboard boots two suits roommate story
+  - sixteen charitable initiatives food security cooperative
+  - glass door outreach letter
+canonical_references: []
+---
 # Crown Letter — MacKenzie Scott
 ## v014f — CARDBOARD BOOTS, FINAL (Shape A, raw-number R9 framing, Pledge-name trimmed later)
 ## Date: April 2026 (for Wave 1 Apr 22–23 window)

@@ -1,3 +1,19 @@
+﻿---
+name: "Crown Letter — Alexandria Ocasio-Cortez"
+description: "Crown letter asking AOC to lead Initiative 15 Power to the People, Liana Banyan's political expedition uniting civic and economic participation."
+type: crown_letter
+recipient: "Alexandria Ocasio-Cortez"
+ratificationDate: "B036"
+wrasseTriggers:
+  - crown letter alexandria ocasio-cortez AOC
+  - power to the people political expedition initiative 15
+  - civic participation economic participation same fight
+  - cooperative platform Cost plus 20 margin
+  - door-opening crown left progressive leader
+  - 83 percent creator revenue political cooperative
+  - glass door outreach letter
+canonical_references: []
+---
 # CROWN LETTER: ALEXANDRIA OCASIO-CORTEZ
 ## Door-Opening Crown (Left) — Power to the People
 ## Initiative #15: Political Expedition

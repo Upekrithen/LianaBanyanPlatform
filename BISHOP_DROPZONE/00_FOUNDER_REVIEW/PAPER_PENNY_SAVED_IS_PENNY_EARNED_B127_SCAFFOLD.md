@@ -1,4 +1,20 @@
-﻿# A Penny Saved is a Penny Earned
+﻿---
+name: "A Penny Saved is a Penny Earned: Empirical Substrate Savings in Cooperative AI Memory Systems"
+description: "Reports 60% cost reduction and 86pp accuracy lift from the Cathedral Librarian across 15 production sessions totaling 13.99 million input tokens with cost-cliff finding."
+type: paper
+ratificationDate: "B127"
+wrasseTriggers:
+  - "Cathedral Librarian savings"
+  - "substrate cost reduction"
+  - "60 percent cost reduction"
+  - "accuracy lift 86pp"
+  - "cost cliff finding"
+  - "vendor-neutral substrate"
+  - "substrate telemetry"
+  - "R10 R13 K511 benchmark"
+canonical_references: []
+---
+# A Penny Saved is a Penny Earned
 ## Empirical Substrate Savings in Cooperative AI Memory Systems
 
 **Status**: B127 SCAFFOLD — drafts-as-scaffolding per canon. Founder rewrites prose.

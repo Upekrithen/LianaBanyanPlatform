@@ -1,3 +1,19 @@
+﻿---
+name: "Crown Letter — Michael Seibel (Final)"
+description: "Final crown letter asking Michael Seibel to lead Liana Banyan as CEO, presenting cooperative economics and simultaneous market penetration strategy."
+type: crown_letter
+recipient: "Michael Seibel"
+ratificationDate: "B100"
+wrasseTriggers:
+  - crown letter michael seibel CEO final
+  - cooperative CEO candidate impossible platform
+  - Cost plus 20 margin cooperative commerce
+  - 83 percent creator revenue no enshittification
+  - simultaneous market penetration price skimming forever stamps
+  - yc founder cooperative scaling strategy
+  - glass door outreach letter
+canonical_references: []
+---
 # CROWN LETTER: MICHAEL SEIBEL
 ## CEO Candidate � Liana Banyan Corporation
 

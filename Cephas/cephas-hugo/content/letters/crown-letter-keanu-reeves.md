@@ -1,4 +1,4 @@
----
+﻿---
 title: "Crown Letter: Keanu Reeves"
 subtitle: "Builder Crown (Culture) — Power to the People"
 date: 2026-03-16
@@ -7,6 +7,11 @@ initiative_number: 15
 crown_type: "Builder (Culture)"
 recipient: "Keanu Reeves"
 tags: ["crown-letter", "political-expedition", "culture", "civic-engagement"]
+wrasseTriggers:
+  - letters
+  - crown letter keanu reeves
+  - liana banyan platform
+  - cephas member content
 ---
 
 Dear Mr. Reeves,

@@ -1,4 +1,4 @@
----
+﻿---
 title: "Crown Letter: Sal Khan Chancellor"
 date: 2026-01-15
 letter_type: "Crown Letter"
@@ -6,10 +6,16 @@ recipient: "Sal Khan Chancellor"
 initiative: "Didasko"
 initiative_number: 14
 tags: ["crown-letter", "initiative", "sal-khan-chancellor"]
+wrasseTriggers:
+  - crown letter sal khan
+  - crown initiative
+  - sal khan chancellor
+  - letters
+  - cephas member content
 ---
 
 # CROWN LETTER: SAL KHAN
-## Chancellor — Didasko Education Initiative
+## Chancellor â€” Didasko Education Initiative
 ## Liana Banyan Corporation
 
 **To:** Sal Khan
@@ -25,13 +31,13 @@ You've spent two decades proving that world-class education can be free. I've sp
 
 I'm offering you a Crown.
 
-**Didasko** is the education initiative within Liana Banyan — a cooperative commerce platform where creators keep 83.3% of revenue and the margin is permanently locked at Cost + 20%. No extraction. No enshittification. The operating agreement makes it structurally impossible.
+**Didasko** is the education initiative within Liana Banyan â€” a cooperative commerce platform where creators keep 83.3% of revenue and the margin is permanently locked at Cost + 20%. No extraction. No enshittification. The operating agreement makes it structurally impossible.
 
-You built Khan Academy on the principle that education should be accessible to everyone. Didasko is built on the same principle — plus one addition: the people who teach should own what they build.
+You built Khan Academy on the principle that education should be accessible to everyone. Didasko is built on the same principle â€” plus one addition: the people who teach should own what they build.
 
 **The Problem You Know:**
 
-Education platforms extract 50%+ from instructors. Udemy, Coursera, Skillshare — they all take more than they give. Knowledge gets paywalled. Instructors burn out. Students pay premium prices while teachers earn pennies.
+Education platforms extract 50%+ from instructors. Udemy, Coursera, Skillshare â€” they all take more than they give. Knowledge gets paywalled. Instructors burn out. Students pay premium prices while teachers earn pennies.
 
 You solved access. We're solving ownership.
 
@@ -43,7 +49,7 @@ You solved access. We're solving ownership.
 4. **Instructors** keep 83.3% of every transaction
 5. **Contributors** earn Joules (platform future value) for their work
 
-The Three-Gear Currency System underneath — Credits, Marks, Joules — has mathematical solvency proofs. This isn't promises. It's engineering.
+The Three-Gear Currency System underneath â€” Credits, Marks, Joules â€” has mathematical solvency proofs. This isn't promises. It's engineering.
 
 **Why You:**
 
@@ -53,13 +59,13 @@ Didasko needs a Chancellor who sees education as a public good AND understands i
 
 **What I'm Asking:**
 
-The Chancellor guides Didasko's strategy and sits on the Crown Council. You'd shape how cooperative education works — not just at Liana Banyan, but as a model for what comes after the extraction economy.
+The Chancellor guides Didasko's strategy and sits on the Crown Council. You'd shape how cooperative education works â€” not just at Liana Banyan, but as a model for what comes after the extraction economy.
 
-The cascade is: Chancellor → Advisory Board → Ambassador. I'm offering the top.
+The cascade is: Chancellor â†’ Advisory Board â†’ Ambassador. I'm offering the top.
 
 **Who I Am:**
 
-I'm a 53-year-old ARNG veteran — Infantry (11B) and Aviation (15A), helicopter pilot with FAA Commercial Rotary Wing IFR rating. Father of eight. 21 years in IT development. Chess rating 2118 on a good day - nowadays I hover in the 2080s when I take a chess break from work - top 0.4% globally.
+I'm a 53-year-old ARNG veteran â€” Infantry (11B) and Aviation (15A), helicopter pilot with FAA Commercial Rotary Wing IFR rating. Father of eight. 21 years in IT development. Chess rating 2118 on a good day - nowadays I hover in the 2080s when I take a chess break from work - top 0.4% globally.
 
 I've been thinking about cooperative economics for 47 years. I've been actively building this for nine. I have 18 handwritten journals documenting the journey, 1,754 innovations with 1,401 patent claims filed, and a manufacturing backbone ready to prove the system works.
 
@@ -69,9 +75,9 @@ I read a lot, and I'm good at chess. I suspect you'd appreciate both.
 
 Canada just canceled 40,000 startup visas. We're recruiting stranded entrepreneurs to build infrastructure they actually own. Many of them are educators, developers, creators. They need a platform. Didasko needs builders. The alignment is obvious.
 
-**HexIsle — Education Through Play:**
+**HexIsle â€” Education Through Play:**
 
-One of our flagship products is HexIsle, a water-powered physical computing game launching on Kickstarter in late January. No batteries. No screens. Just hydraulics, pneumatics, magnetic coupling, and laminar flow dynamics — all visible, all learnable.
+One of our flagship products is HexIsle, a water-powered physical computing game launching on Kickstarter in late January. No batteries. No screens. Just hydraulics, pneumatics, magnetic coupling, and laminar flow dynamics â€” all visible, all learnable.
 
 We've designed a full K-12 curriculum around it:
 
@@ -80,13 +86,13 @@ We've designed a full K-12 curriculum around it:
 - **High School:** Fluid mechanics, magnetic fields, thermodynamics
 - **All Ages:** Game theory, resource management, cooperation vs. competition
 
-The game teaches STEAM by being STEAM. Kids don't study physics — they use physics to grow palm trees, navigate currents, and build islands.
+The game teaches STEAM by being STEAM. Kids don't study physics â€” they use physics to grow palm trees, navigate currents, and build islands.
 
 I'd love to explore integration with Khan Academy if there's interest. A HexIsle unit on your platform could reach millions of students with hands-on learning that starts with play.
 
 **What This Doesn't Require:**
 
-This doesn't have to take all your time. The Chancellor role is strategic guidance — quarterly calls, occasional input, your name lending credibility to cooperative education. You keep running Khan Academy. We build Didasko with your vision in mind.
+This doesn't have to take all your time. The Chancellor role is strategic guidance â€” quarterly calls, occasional input, your name lending credibility to cooperative education. You keep running Khan Academy. We build Didasko with your vision in mind.
 
 If even that's too much, I'd welcome a conversation about what level of involvement makes sense. Advisory. Ambassador. A single phone call with your honest feedback.
 
@@ -113,7 +119,7 @@ As You Wish.
 
 Liana Banyan amplifies the people it serves. We drive our audience to your storefronts, your channels, your practices. We don't ask you to be our billboard. We ask to be your megaphone.
 
-The louder you get, the louder we get — because your success is our revenue, and our revenue is your influence.
+The louder you get, the louder we get â€” because your success is our revenue, and our revenue is your influence.
 
 **We amplify you. You amplify makers. Makers amplify their communities. Everyone gets louder together.**
 
@@ -142,14 +148,14 @@ The louder you get, the louder we get — because your success is our revenue, a
 - Known for: radical accessibility, long-term thinking, mission over money
 
 **Angle:**
-- He solved access — we're solving ownership
+- He solved access â€” we're solving ownership
 - Khan Academy is nonprofit; Didasko shows sustainable cooperative model
 - His "one person with a camera" story mirrors distributed education vision
 - Chess reference lands (he's analytical, appreciates strategy)
-- Universal respect — passes depoliticization filter completely
+- Universal respect â€” passes depoliticization filter completely
 
 **Why Chancellor (not CEO):**
-- He already runs Khan Academy — won't leave
+- He already runs Khan Academy â€” won't leave
 - Chancellor = strategic guidance, not operational
 - His endorsement alone opens massive doors
 - Advisory role fits his current commitments

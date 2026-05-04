@@ -1,3 +1,19 @@
+﻿---
+name: "Crown Letter — Keanu Reeves"
+description: "Crown letter inviting Keanu Reeves to serve as Builder Crown for Political Expedition based on his demonstrated values-over-fame worldview."
+type: crown_letter
+recipient: "Keanu Reeves"
+ratificationDate: "B036"
+wrasseTriggers:
+  - crown letter keanu reeves political expedition
+  - builder crown culture power to the people
+  - matrix earnings crew equity values worldview
+  - cooperative platform creator ownership no hierarchy
+  - cooperative commerce 83 percent creator revenue
+  - celebrity cooperative values authentic humility crown
+  - glass door outreach letter
+canonical_references: []
+---
 # CROWN LETTER: KEANU REEVES
 ## Builder Crown (Culture) — Power to the People
 ## Initiative #15: Political Expedition

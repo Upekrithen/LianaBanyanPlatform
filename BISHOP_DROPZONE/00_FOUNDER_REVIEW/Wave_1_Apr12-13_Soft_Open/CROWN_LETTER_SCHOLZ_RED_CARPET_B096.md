@@ -1,3 +1,19 @@
+﻿---
+name: "Crown Letter — Trebor Scholz (Red Carpet B096)"
+description: "Red Carpet package for Trebor Scholz anchoring Paper 40 The No-Brainer co-authorship offer as platform cooperativism academic entry point."
+type: crown_letter
+recipient: "Trebor Scholz"
+ratificationDate: "B096"
+wrasseTriggers:
+  - crown letter trebor scholz red carpet
+  - paper 40 no-brainer co-authorship offer scholz
+  - platform cooperativism consortium academic partnership
+  - cooperative engineering substrate chessboard architecture
+  - new school platform cooperativism outreach
+  - cooperative engineering literature gap how not just why
+  - glass door outreach letter
+canonical_references: []
+---
 # Crown Letter — Trebor Scholz Red Carpet Package
 
 *Bishop Session B096. Full Red Carpet for Trebor Scholz, The New School, Platform Cooperativism Consortium. Anchor deliverable: Paper #40 "The No-Brainer" with co-authorship offer.*

@@ -1,3 +1,19 @@
+﻿---
+name: "Crown Letter — Robert Kaiser (Updated)"
+description: "Updated shield letter recruiting Robert Kaiser's escalation-pattern expertise to found Defense Klaus protection initiative within Liana Banyan."
+type: crown_letter
+recipient: "Robert Kaiser"
+ratificationDate: "B100"
+wrasseTriggers:
+  - crown letter robert kaiser updated
+  - defense Klaus intimate partner violence protection
+  - escalation pattern analysis cooperative safety
+  - shield knight lord banyan of the watch
+  - first shield table founding cooperative protection
+  - infrastructure builder violence prevention expert
+  - glass door outreach letter
+canonical_references: []
+---
 # 🛡️ SHIELD LETTER: ROBERT KAISER
 ## First Shield Knight, Lord Banyan of the Watch
 ## Guardian of the United Kingdom

@@ -1,4 +1,4 @@
----
+﻿---
 title: "Code Breakers Corps Guild"
 description: "Standing Security Bounties · IP Ledger Stamps · Guild-Class Security Membership. Solve cryptographic puzzles and platform-substrate challenges to earn Marks and permanent IP attribution."
 date: 2026-05-03
@@ -7,6 +7,12 @@ status: "operational"
 platform_route: "/helm/code-breakers"
 guild_class: "cross-cutting"
 tags: ["code-breakers-corps", "standing-security-bounty", "ip-ledger", "marks", "guild", "tier-5", "security"]
+wrasseTriggers:
+  - code breakers corps guild
+  - helm
+  - code breakers
+  - liana banyan platform
+  - cephas member content
 ---
 
 # Code Breakers Corps Guild

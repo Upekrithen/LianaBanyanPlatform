@@ -1,3 +1,19 @@
+﻿---
+name: "Crown Letter — MacKenzie Scott (Thermometer Addendum)"
+description: "Proposed R9 Thermometer open-source meter insert letting Scott's grantees self-verify AI token savings against their own data."
+type: crown_letter
+recipient: "MacKenzie Scott"
+ratificationDate: "B111"
+wrasseTriggers:
+  - crown letter mackenzie scott thermometer
+  - R9 thermometer open-source verification tool
+  - AI token cost savings grantee verification
+  - librarian MCP open source pip install
+  - cooperative grant case self-verification
+  - commons dashboard anonymized savings aggregate
+  - glass door outreach letter
+canonical_references: []
+---
 # Crown Letter — MacKenzie Scott
 ## v014h — THERMOMETER ADDENDUM (proposed insertion into v014f, one-paragraph addition)
 ## B111, April 20, 2026

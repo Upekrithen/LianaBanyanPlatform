@@ -1,3 +1,19 @@
+﻿---
+name: "Crown Letter — Dale Dougherty"
+description: "Invites Dale Dougherty, maker movement founder, to serve as Industry Chancellor Lord Banyan of the Forge on Liana Banyan's board."
+type: crown_letter
+recipient: "Dale Dougherty"
+ratificationDate: "B100"
+wrasseTriggers:
+  - crown letter dale dougherty
+  - industry chancellor lord banyan of the forge
+  - maker movement make magazine board candidate
+  - cooperative commerce platform maker founder
+  - ARNG veteran helicopter pilot platform builder
+  - floating modular cities maker childhood story
+  - glass door outreach letter
+canonical_references: []
+---
 # ?? CROWN LETTER: DALE DOUGHERTY
 ## Industry Chancellor, Lord Banyan of the Forge
 ## First Maker of Let's Make Bread

@@ -1,4 +1,4 @@
----
+﻿---
 title: "Crown Letter: Oshmyansky"
 date: 2026-01-15
 letter_type: "Crown Letter"
@@ -6,9 +6,15 @@ recipient: "Oshmyansky"
 initiative: "LifeLine Medications"
 initiative_number: 6
 tags: ["crown-letter", "initiative", "alex-oshmyansky"]
+wrasseTriggers:
+  - ðÿ crown letter alex oshmyansky
+  - crown initiative
+  - alex oshmyansky
+  - letters
+  - cephas member content
 ---
 
-# 👑 CROWN LETTER: ALEX OSHMYANSKY
+# ðŸ‘‘ CROWN LETTER: ALEX OSHMYANSKY
 ## Apothecary Mentor
 ## Lord Banyan of Lifeline Medications
 ## Board Member, Liana Banyan Corporation
@@ -59,17 +65,17 @@ That's the foundation of everything I've built.
 
 ## WHAT LIANA BANYAN IS
 
-Liana Banyan is a cooperative platform in which three commercial divisions — .com, .biz, and .net — drive sustained funding for the .org charitable initiatives. All the time, by design, sustainable beyond our lifetimes because of the infrastructure we build that operates far beyond us.
+Liana Banyan is a cooperative platform in which three commercial divisions â€” .com, .biz, and .net â€” drive sustained funding for the .org charitable initiatives. All the time, by design, sustainable beyond our lifetimes because of the infrastructure we build that operates far beyond us.
 
 The economic principle is simple: **Cost + 20%**. Creators keep 80%+ of every transaction. The 20% funds operations, and 100% of charitable funds go directly to the people doing the work.
 
 Lifeline Medications is one of fourteen initiatives:
 
-- **Let's Make Dinner** — meal preparation and delivery
-- **JukeBox** — music licensing where artists keep 80%+
-- **Defense Klaus** — protection for domestic abuse survivors
-- **VSL** — microfinance for people the banks won't touch
-- **Rally Group** — crisis response embedded in every interaction
+- **Let's Make Dinner** â€” meal preparation and delivery
+- **JukeBox** â€” music licensing where artists keep 80%+
+- **Defense Klaus** â€” protection for domestic abuse survivors
+- **VSL** â€” microfinance for people the banks won't touch
+- **Rally Group** â€” crisis response embedded in every interaction
 
 Each one supports the others. The economic engine funds the charitable work. The charitable work builds community trust. The community trust drives the economic engine.
 
@@ -79,19 +85,19 @@ You've proven Cost + 15% works for drugs. I've designed Cost + 20% to work for e
 
 ## WHAT I'M ASKING
 
-I want you to be the **Apothecary Mentor** — the Crown of Lifeline Medications.
+I want you to be the **Apothecary Mentor** â€” the Crown of Lifeline Medications.
 
-Every initiative in Liana Banyan operates as a council. The Crown is the First Seat — the leader, the tie-breaker, the voice on our Steering Committee. As the council grows with workers and members, they elect their own representative to the Board of Directors. In the early days, that representative would likely be you.
+Every initiative in Liana Banyan operates as a council. The Crown is the First Seat â€” the leader, the tie-breaker, the voice on our Steering Committee. As the council grows with workers and members, they elect their own representative to the Board of Directors. In the early days, that representative would likely be you.
 
 **What the Crown includes:**
 
 | Benefit | Description |
 |---------|-------------|
 | **First Seat** | Leader of the Lifeline Medications Council, with tie-breaker authority |
-| **Board Representation** | The Council elects its representative to the Board — in the early days, likely you |
+| **Board Representation** | The Council elects its representative to the Board â€” in the early days, likely you |
 | **Founder's Reserve** | Allocation in our founding contributor pool |
 | **Title** | Apothecary Mentor, Lord Banyan of Lifeline Medications |
-| **Medallion** | CROWN-MEDS-001 — first and only |
+| **Medallion** | CROWN-MEDS-001 â€” first and only |
 | **Steering Committee** | Voting seat on platform governance |
 | **Revenue Share** | Percentage of Lifeline Medications business side revenue in perpetuity |
 | **Crown Ceremony** | Designed by community votes for you to choose from and keep |
@@ -100,7 +106,7 @@ Every initiative in Liana Banyan operates as a council. The Crown is the First S
 
 - Review our Lifeline Medications architecture
 - Tell me what's wrong with it (I'd rather know now)
-- Advise on scaling — you've done this, I haven't
+- Advise on scaling â€” you've done this, I haven't
 - Lend your credibility to the launch
 - Be the voice that says "this is how transparent pricing should work"
 
@@ -108,7 +114,7 @@ Every initiative in Liana Banyan operates as a council. The Crown is the First S
 
 ## WHY YOU
 
-You could have stayed a radiologist. You had the credentials — Hopkins, Harvard, Oxford, Duke. You could have had a comfortable career reading scans.
+You could have stayed a radiologist. You had the credentials â€” Hopkins, Harvard, Oxford, Duke. You could have had a comfortable career reading scans.
 
 Instead, you saw two patients die because of red tape, and you couldn't let it go.
 
@@ -116,7 +122,7 @@ You started a nonprofit. It didn't work. You pivoted. You cold-emailed Mark Cuba
 
 You did all of that because you were incensed.
 
-I need people who get incensed. I need people who see broken systems and build new ones. I need people who understand that transparency isn't a marketing gimmick — it's the architecture.
+I need people who get incensed. I need people who see broken systems and build new ones. I need people who understand that transparency isn't a marketing gimmick â€” it's the architecture.
 
 You're that person.
 
@@ -124,11 +130,11 @@ You're that person.
 
 ## THE PARTNERSHIP
 
-I've also written to Jessica Jackley, co-founder of Kiva, for our VSL microfinance initiative. Her VSL initiative and your Lifeline Medications share the same DNA — transparent systems that trust people and cut out the middlemen.
+I've also written to Jessica Jackley, co-founder of Kiva, for our VSL microfinance initiative. Her VSL initiative and your Lifeline Medications share the same DNA â€” transparent systems that trust people and cut out the middlemen.
 
 The whole platform is designed so the initiatives support each other. Someone who needs affordable medication might also need a microloan to cover rent. Someone starting a small business through VSL might need prescriptions to stay healthy enough to work. The system interlocks.
 
-You wouldn't be leading an isolated project — you'd be part of an ecosystem of hundreds that lead thousands to benefit millions. Check out the structure and connections at **Cephas.LianaBanyan.com/The300**.
+You wouldn't be leading an isolated project â€” you'd be part of an ecosystem of hundreds that lead thousands to benefit millions. Check out the structure and connections at **Cephas.LianaBanyan.com/The300**.
 
 ---
 
@@ -136,9 +142,9 @@ You wouldn't be leading an isolated project — you'd be part of an ecosystem of
 
 I've included two documents for your review:
 
-1. **The Considered Approach** — An academic paper outlining the theoretical and economic foundations of Liana Banyan. This is the "why" behind the architecture.
+1. **The Considered Approach** â€” An academic paper outlining the theoretical and economic foundations of Liana Banyan. This is the "why" behind the architecture.
 
-2. **Lifeline Medications Business Plan** — The operational blueprint for the initiative you'd be leading. This is the "how."
+2. **Lifeline Medications Business Plan** â€” The operational blueprint for the initiative you'd be leading. This is the "how."
 
 Read them. Check out the implementations at **LianaBanyan.org** and pick them apart. Tell me what breaks with the feedback tool or contact me directly by email or phone.
 
@@ -174,11 +180,11 @@ lianabanyan.com
 
 Liana Banyan amplifies the people it serves. We drive our audience to your storefronts, your channels, your practices. We don't ask you to be our billboard. We ask to be your megaphone.
 
-The louder you get, the louder we get — because your success is our revenue, and our revenue is your influence.
+The louder you get, the louder we get â€” because your success is our revenue, and our revenue is your influence.
 
 **We amplify you. You amplify makers. Makers amplify their communities. Everyone gets louder together.**
 
 ---
 
 *"A lot of us in healthcare see these problems, and we think about them. What sets Alex apart is that he has the drive to act on it."*
-— Dr. Nitin Khandheria, on Alex Oshmyansky
+â€” Dr. Nitin Khandheria, on Alex Oshmyansky

@@ -1,10 +1,16 @@
----
+﻿---
 title: "Member Competition Record"
 description: "Per-member Red/Blue Team competition record: wins, Marks, IP Ledger stamps, and event history."
 date: 2026-05-03
 bushel: "Bushel 27 (BP022)"
 platform_route: "/helm/red-blue-leaderboard/member/:member_id"
 tags: ["lb-elves-guild", "red-team", "blue-team", "ip-ledger", "marks", "competition"]
+wrasseTriggers:
+  - member competition record
+  - red blue leaderboard
+  - member
+  - liana banyan platform
+  - cephas member content
 ---
 
 # Member Competition Record

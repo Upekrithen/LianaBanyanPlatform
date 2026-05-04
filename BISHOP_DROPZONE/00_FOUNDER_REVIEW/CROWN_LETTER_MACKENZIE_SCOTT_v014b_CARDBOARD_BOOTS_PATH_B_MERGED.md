@@ -1,3 +1,19 @@
+﻿---
+name: "Crown Letter — MacKenzie Scott (Path B Merged)"
+description: "Follow-up Cardboard Boots letter integrating Romulator 9000 commons and Patent Prosecution Defense Fund into original voice and structure."
+type: crown_letter
+recipient: "MacKenzie Scott"
+ratificationDate: "B107"
+wrasseTriggers:
+  - crown letter mackenzie scott path b
+  - cardboard boots R9 commons merged
+  - romulator 9000 cooperative patent pledge
+  - patent prosecution defense fund
+  - cooperative defensive patent pledge grantees
+  - follow-up open letter philanthropist network
+  - glass door outreach letter
+canonical_references: []
+---
 # Crown Letter — MacKenzie Scott
 ## v014b — PATH B: Cardboard Boots + R9 Commons merged
 ## Date: April 2026 (for Wave 1 Apr 22–23 window)

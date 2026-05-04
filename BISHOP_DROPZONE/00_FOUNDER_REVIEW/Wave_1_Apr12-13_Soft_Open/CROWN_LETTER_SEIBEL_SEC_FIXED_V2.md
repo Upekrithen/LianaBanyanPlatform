@@ -1,3 +1,19 @@
+﻿---
+name: "Crown Letter — Michael Seibel (SEC-Fixed)"
+description: "SEC-compliant crown letter offering Michael Seibel CEO role for cooperative platform that structurally cannot extract value from members."
+type: crown_letter
+recipient: "Michael Seibel"
+ratificationDate: "B028"
+wrasseTriggers:
+  - crown letter michael seibel SEC fixed
+  - CEO cooperative platform SEC clean offer
+  - cooperative cannot enshittify operating agreement lock
+  - 83 percent creator revenue participation rights
+  - Cost plus 20 margin cooperative forever stamps
+  - SEC fixed CEO candidate startup cooperative
+  - glass door outreach letter
+canonical_references: []
+---
 # CROWN LETTER: MICHAEL SEIBEL
 ## CEO Candidate — Liana Banyan Cooperative
 ## SEC-Fixed Version — Bishop Session 028

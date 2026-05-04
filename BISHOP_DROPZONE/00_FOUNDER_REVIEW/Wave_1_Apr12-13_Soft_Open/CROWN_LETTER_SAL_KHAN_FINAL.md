@@ -1,3 +1,19 @@
+﻿---
+name: "Crown Letter — Sal Khan (Final)"
+description: "Final crown letter offering Sal Khan the Chancellor of Didasko role in creator-owned cooperative education platform complementing Khan Academy."
+type: crown_letter
+recipient: "Sal Khan"
+ratificationDate: "B100"
+wrasseTriggers:
+  - crown letter sal khan final didasko
+  - didasko education initiative creator ownership
+  - chancellor cooperative education complement khan academy
+  - 83 percent creator revenue education platform
+  - Cost plus 20 no extraction education cooperative
+  - teachers own what they build cooperative
+  - glass door outreach letter
+canonical_references: []
+---
 # CROWN LETTER: SAL KHAN
 ## Chancellor � Didasko Education Initiative
 ## Liana Banyan Corporation

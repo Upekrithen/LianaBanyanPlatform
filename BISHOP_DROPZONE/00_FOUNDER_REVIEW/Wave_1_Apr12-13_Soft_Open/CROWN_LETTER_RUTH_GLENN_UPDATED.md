@@ -1,3 +1,19 @@
+﻿---
+name: "Crown Letter — Ruth Glenn (Updated)"
+description: "Updated shield letter to Ruth Glenn offering Shield Table leadership for cooperative domestic abuse protection and survivor infrastructure."
+type: crown_letter
+recipient: "Ruth Glenn"
+ratificationDate: "B100"
+wrasseTriggers:
+  - crown letter ruth glenn updated
+  - defense Klaus domestic abuse survivor cooperative
+  - first shield mentor shield table guardian
+  - cooperative protection escape hide heal start over
+  - missionary foster care personal motivation founder
+  - 16 charitable initiatives self-funding survivor protection
+  - glass door outreach letter
+canonical_references: []
+---
 # 🛡️ SHIELD LETTER: RUTH M. GLENN
 ## First Shield Mentor, Lady Banyan of Protection
 ## Guardian of the Shield Table, First Seat

@@ -1,3 +1,19 @@
+﻿---
+name: "Crown Letter — Sandra Bullock"
+description: "Crown letter inviting Sandra Bullock to serve as Builder Crown for Political Expedition recognizing her quiet community-rebuilding disaster work."
+type: crown_letter
+recipient: "Sandra Bullock"
+ratificationDate: "B036"
+wrasseTriggers:
+  - crown letter sandra bullock political expedition
+  - builder crown action power to the people
+  - hurricane disaster relief community rebuild cooperative
+  - cooperative platform Cost plus 20 locked operating
+  - celebrity philanthropist quiet infrastructure building
+  - no press conferences recovery infrastructure cooperative
+  - glass door outreach letter
+canonical_references: []
+---
 # CROWN LETTER: SANDRA BULLOCK
 ## Builder Crown (Action) — Power to the People
 ## Initiative #15: Political Expedition
