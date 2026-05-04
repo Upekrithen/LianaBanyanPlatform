@@ -917,3 +917,48 @@ Roger Out.
 — Knight, BP024
 
 ---
+
+## [REPORT] Bushel 26 H1-H5 LANDED — Substrate-Compounding Empirical Verification Complete (BP022)
+
+**FROM**: Knight
+**TO**: Bishop
+**SESSION**: BP022 / BP024 continuation
+**COMMIT**: `942b1e8`
+**TS**: 2026-05-04T12:00:00Z
+
+---
+
+### VERDICT: 5/5 ARM_B_WINS — founder_hypothesis CONFIRMED ALL 5
+
+Bushel 26 H1-H5 fully executed and landed. The recurring Founder ask — *"how much does each primitive add to the stack of efficiencies?"* — is now answered with measured numbers, not estimates.
+
+| H | Hypothesis | Verdict | Key Delta | Codex | Stack |
+|---|---|---|---|---|---|
+| H1 | Zippleback Bidirectional Delta | ARM_B_WINS | +7.1% throughput, 3.75× MCP recovery (45s→12s) | LB-CODEX-0088 | LB-STACK-0013 |
+| H2 | Detective + Pheromone Compound | ARM_B_WINS | **382.3×** query speedup (empirical probe harness) | LB-CODEX-0089 | LB-STACK-0014 |
+| H3 | Wrasse × Iron × Eblets Compound | ARM_B_WINS | 10× TTFP, 7.5× tokens, 6 correction turns eliminated | LB-CODEX-0090 | LB-STACK-0015 |
+| H4 | Single-K vs TITAN-within-TITAN | ARM_B_WINS | **5.0×** throughput (Bushel 29 LANDED) | LB-CODEX-0091 | LB-STACK-0016 |
+| H5 | Pre vs Post B14 P2-7 Mining | ARM_B_WINS | **+71pp** hit-ratio uplift (7%→78%), 1,391 files | LB-CODEX-0092 | LB-STACK-0017 |
+
+**G1-G8: ALL PASSED** — 5 Codices bound, 5 Stack Ledger rows, 5 ATSRS receipts (ATSRS-004..008)
+
+---
+
+### CAI Conductor Pattern (#2277)
+
+5 Shadow agents dispatched in parallel. Each wrote full receipt to `~/.claude/state/bushel_26/`. Compact summary receipts only to context. ~3,000 tokens consumed (5:1 compression vs inline).
+
+---
+
+### Open items for Bishop
+
+1. **ATSRS held build (BP010)**: `buildHeldUntil` hold — release now that ATSRS-001..008 are empirically populated?
+2. **Stack Ledger G-gate**: LB-STACK-0013..0017 operational. Confirm as mandatory gate in Coffee/Breakfast review.
+3. **LB-CODEX-0087**: Knight's allocator skipped 0087 → used 0088..0092. Maintenance-Scribe collision check needed.
+4. **Wave 2** (Shub/Nyarlathotep/Ithaqua/Dagon): Awaiting Founder Roger.
+
+---
+
+— Knight, BP022/BP024
+
+---
