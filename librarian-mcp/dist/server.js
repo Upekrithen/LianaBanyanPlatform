@@ -47,12 +47,34 @@ import { updateCellOnEvent, queryLivingCell, buildGridworkSnapshot, detectAndRec
 import { onThreadClosedWithSynthesis, queryHiveJarStatus, } from "./house_scribe/apiarist_hive_subscriber.js";
 import { queryCrossCathedral, invalidateCrossCache, queryCrossCathedralProvenance, } from "./house_scribe/cross_cathedral_router.js";
 import { runPopulationAudit, } from "./house_scribe/population_audit.js";
+// KN-N1/N2/N3: Gold Tablet Infrastructure (Layer 4 SOURCE-class)
+import { appendTablet, queryTablets, auditTablets, } from "./gold_tablet/ledger.js";
+import { checkMutationAuthority, } from "./gold_tablet/authority_check.js";
+import { linkExcaliburToGold, } from "./gold_tablet/excalibur_pointer.js";
+import { cascadeSupersession, } from "./gold_tablet/supersession_cascade.js";
+import { writeGoldPixieDust } from "./gold_tablet/pheromone.js";
+// KN-D2/D4/D5: Apiarist Hive Infrastructure Remainder
+import { createHiveThread, advanceHiveThread, readHiveThread, } from "./apiarist_hive/state_transitions.js";
+import { onThreadClosedFederateIfEligible } from "./apiarist_hive/cross_frame_federation.js";
+import { enforceCap } from "./apiarist_hive/uptime_cap.js";
+// KN-J6: Dual-Tier IPv4-Local / IPv6-Federation Translation
+import { localToFederation, federationToLocal, getTranslationProvenance, } from "./house_scribe/federation_translation.js";
 // KN-I3: Reminder Scribe substrate write-back + provenance chain
 import { writeBackViolationEvent, queryRsHistory, drainRetryQueue, aggregateByRule, } from "./reminder_scribe/substrate_writeback.js";
 // KN-I4: Reminder Scribe metrics aggregator
 import { buildMetricsDashboard, formatMetricsSummaryMarkdown, } from "./reminder_scribe/metrics_aggregator.js";
 // KN-I2: Catechist Scribe grader extension
 import { runSessionOpenGrade, formatGradeMarkdown, } from "./catechist/grader.js";
+import { computeBalance, computeAudit, } from "./joules/balance.js";
+import { JoulesOperations } from "./joules/operations.js";
+// KN-T1/T2/T3/T4: Pod-T Keyword-Pyramid Strata Hierarchy
+import { readAllAssignments, ALL_STRATA, } from "./strata/schema.js";
+import { StrataQuery, } from "./strata/query.js";
+import { detectiveQueryByStratum, } from "./strata/cross_cut.js";
+// KN-K1/K2/K3: Pod-K Codex (Layer 8 Canon-of-Canons)
+import { allocateCodexSerial, appendCodexEntry, getCodexById, queryCodex, } from "./codex/schema.js";
+import { CodexBinding, } from "./codex/binding.js";
+import { reserveNextSerial, bindReservation, expireReservations, queryReservations, } from "./codex/serial_allocator.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const INDEX_DIR = resolve(__dirname, "..", "index");
@@ -6172,6 +6194,971 @@ server.tool("house_scribe_cross_cathedral_provenance", "KN-J5 / BP017 — House 
             content: [{ type: "text", text: JSON.stringify({ data_available: false, error: String(err) }, null, 2) }],
             isError: true,
         };
+    }
+});
+// ─── Pod-Q KN-Q2: On Deck Scribe MCP tools ────────────────────────────────────
+import { appendEntry as odsAppendEntry, markInFlight as odsMarkInFlight, markLanded as odsMarkLanded, markErrored as odsMarkErrored, markDeferred as odsMarkDeferred, attachPreparedContext as odsAttachPreparedContext, } from "./on_deck_scribe/writer.js";
+import { loadQueue as odsLoadQueue, getNextForKnight as odsGetNextForKnight, dispatchAudit as odsDispatchAudit, scanDropzoneForKPrompts, } from "./on_deck_scribe/reader.js";
+import { allocateOdsSerial } from "./on_deck_scribe/serial.js";
+/**
+ * on_deck_query — read-class
+ * Return next-fire entry OR full filtered queue from On Deck Scribe canonical state file.
+ */
+server.tool("on_deck_query", "KN-Q2 / BP018 — On Deck Scribe: query canonical state file. " +
+    "Returns next-fire K-prompt entry for Knight (queued + prereqs met + optional filters). " +
+    "Pass full_queue=true to return all entries in priority order.", {
+    full_queue: z.boolean().optional().describe("Return full queue instead of next-fire entry. Default: false."),
+    cohort_class: z
+        .enum(["lone_wolf", "pied_piper_tier_1", "federation_member", "excalibur_subscriber", "thirteenth_warrior"])
+        .optional()
+        .describe("Filter by HsCohortClass. Only entries with matching cohort_class returned."),
+    category: z.string().optional().describe("Filter by category (default: 'knight'). E.g. 'bishop', 'shadow'."),
+    status: z
+        .enum(["queued", "in_flight", "landed", "deferred", "errored"])
+        .optional()
+        .describe("Filter by status (only effective when full_queue=true)."),
+}, async ({ full_queue, cohort_class, category, status }) => {
+    try {
+        if (full_queue) {
+            let all = odsLoadQueue();
+            if (cohort_class)
+                all = all.filter((e) => !e.cohort_class || e.cohort_class === cohort_class);
+            if (category)
+                all = all.filter((e) => e.category === category);
+            if (status)
+                all = all.filter((e) => e.status === status);
+            return {
+                content: [{ type: "text", text: JSON.stringify({ data_available: true, count: all.length, entries: all }, null, 2) }],
+            };
+        }
+        else {
+            const next = odsGetNextForKnight({ cohort_class, category });
+            return {
+                content: [{ type: "text", text: JSON.stringify({ data_available: next !== null, next_entry: next ?? null }, null, 2) }],
+            };
+        }
+    }
+    catch (err) {
+        return {
+            content: [{ type: "text", text: JSON.stringify({ data_available: false, error: String(err) }, null, 2) }],
+            isError: true,
+        };
+    }
+});
+/**
+ * on_deck_append — write-class
+ * Append a new K-prompt entry to the canonical queue.
+ */
+server.tool("on_deck_append", "KN-Q2 / BP018 — On Deck Scribe: append new K-prompt entry to canonical queue. " +
+    "Allocates LB-ODS-NNNN serial. Returns entry_id.", {
+    category: z
+        .enum(["knight", "bishop", "shadow", "pawn", "rook"])
+        .describe("Entry category."),
+    k_prompt_path: z.string().describe("Absolute path to PROMPT_KNIGHT_*.md file."),
+    priority: z.number().int().min(0).describe("Dispatch priority (0 = highest; lower fires first)."),
+    prerequisites: z.array(z.string()).optional().describe("Entry IDs that must be 'landed' before this fires."),
+    pod_class: z.string().optional().describe("Pod class label (e.g. 'Q', 'R', 'N')."),
+    cohort_class: z
+        .enum(["lone_wolf", "pied_piper_tier_1", "federation_member", "excalibur_subscriber", "thirteenth_warrior"])
+        .optional(),
+    flavor_class: z
+        .enum(["cinnamon", "vanilla", "cardamom", "saffron", "miner"])
+        .optional(),
+}, async ({ category, k_prompt_path, priority, prerequisites, pod_class, cohort_class, flavor_class }) => {
+    try {
+        const id = await allocateOdsSerial();
+        const entry = await odsAppendEntry({
+            id,
+            category,
+            k_prompt_path,
+            priority,
+            prerequisites: prerequisites ?? [],
+            ...(pod_class ? { pod_class } : {}),
+            ...(cohort_class ? { cohort_class } : {}),
+            ...(flavor_class ? { flavor_class } : {}),
+            status: "queued",
+            ts_queued: new Date().toISOString(),
+        });
+        return {
+            content: [{ type: "text", text: JSON.stringify({ success: true, entry_id: id, entry }, null, 2) }],
+        };
+    }
+    catch (err) {
+        return {
+            content: [{ type: "text", text: JSON.stringify({ success: false, error: String(err) }, null, 2) }],
+            isError: true,
+        };
+    }
+});
+/**
+ * on_deck_mutate — write-class
+ * Mutate status, commit_hash, or error_reason on an existing entry.
+ */
+server.tool("on_deck_mutate", "KN-Q2 / BP018 — On Deck Scribe: mutate entry status. " +
+    "Transitions: queued→in_flight, in_flight→landed, *→errored, *→deferred. " +
+    "Append-only: mutation is a new line in queue.jsonl.", {
+    id: z.string().describe("Entry ID (LB-ODS-NNNN)."),
+    status: z
+        .enum(["queued", "in_flight", "landed", "deferred", "errored"])
+        .describe("New status."),
+    commit_hash: z.string().optional().describe("Git commit hash when status=landed."),
+    error_reason: z.string().optional().describe("Error detail when status=errored."),
+}, async ({ id, status, commit_hash, error_reason }) => {
+    try {
+        let result;
+        if (status === "in_flight")
+            result = await odsMarkInFlight(id);
+        else if (status === "landed")
+            result = await odsMarkLanded(id, commit_hash);
+        else if (status === "errored")
+            result = await odsMarkErrored(id, error_reason);
+        else if (status === "deferred")
+            result = await odsMarkDeferred(id);
+        else
+            result = await odsMarkInFlight(id); // fallback
+        return {
+            content: [{ type: "text", text: JSON.stringify({ success: true, entry: result }, null, 2) }],
+        };
+    }
+    catch (err) {
+        return {
+            content: [{ type: "text", text: JSON.stringify({ success: false, error: String(err) }, null, 2) }],
+            isError: true,
+        };
+    }
+});
+/**
+ * on_deck_attach_prepared_context — write-class
+ * Attach Shadow E-Giant prepared_context (pre-staging output) to a queued entry.
+ */
+server.tool("on_deck_attach_prepared_context", "KN-Q2 / BP018 — On Deck Scribe: attach Shadow E-Giant pre-staging output to a queued entry. " +
+    "Sets prepared_context (shadow_id, wrasse_pre_injections, detective_findings, prereq summary). " +
+    "Required before Pod-R auto-fire can proceed.", {
+    id: z.string().describe("Entry ID to attach prepared context to."),
+    shadow_id: z.string().describe("Shadow E-Giant that ran pre-staging (e.g. 'alpha', 'beta')."),
+    wrasse_pre_injections: z.array(z.string()).describe("Eblet paths bulk-loaded during pre-staging."),
+    detective_findings: z
+        .array(z.object({
+        trigger: z.string(),
+        scribe: z.string(),
+        excerpt: z.string(),
+        score: z.number(),
+    }))
+        .optional()
+        .describe("Detective Phase-0 hits cached during pre-staging."),
+    prerequisite_context_summary: z.string().describe("Summary of prerequisite commits + test results."),
+}, async ({ id, shadow_id, wrasse_pre_injections, detective_findings, prerequisite_context_summary }) => {
+    try {
+        const result = await odsAttachPreparedContext(id, {
+            shadow_id,
+            prep_ts: new Date().toISOString(),
+            wrasse_pre_injections,
+            detective_findings: detective_findings ?? [],
+            prerequisite_context_summary,
+        });
+        return {
+            content: [{ type: "text", text: JSON.stringify({ success: true, entry: result }, null, 2) }],
+        };
+    }
+    catch (err) {
+        return {
+            content: [{ type: "text", text: JSON.stringify({ success: false, error: String(err) }, null, 2) }],
+            isError: true,
+        };
+    }
+});
+/**
+ * on_deck_promote_from_dropzone — write-class
+ * Scan a dropzone directory, find PROMPT_KNIGHT_*.md files, and bulk-import as queued entries.
+ */
+server.tool("on_deck_promote_from_dropzone", "KN-Q2 / BP018 — On Deck Scribe: bulk-import K-prompt files from a dropzone directory. " +
+    "Scans for PROMPT_KNIGHT_*.md files and appends each as a queued entry. " +
+    "Returns list of imported entry IDs.", {
+    dropzone_path: z.string().describe("Absolute path to dropzone directory (e.g. BISHOP_DROPZONE/01_KnightPrompts/)."),
+    priority: z.number().int().min(0).optional().describe("Priority for all imported entries. Default: 99."),
+}, async ({ dropzone_path, priority }) => {
+    try {
+        const stubs = scanDropzoneForKPrompts(dropzone_path);
+        const imported = [];
+        for (const stub of stubs) {
+            const id = await allocateOdsSerial();
+            await odsAppendEntry({
+                ...stub,
+                id,
+                priority: priority ?? stub.priority,
+                ts_queued: new Date().toISOString(),
+            });
+            imported.push(id);
+        }
+        return {
+            content: [{ type: "text", text: JSON.stringify({ success: true, imported_count: imported.length, entry_ids: imported }, null, 2) }],
+        };
+    }
+    catch (err) {
+        return {
+            content: [{ type: "text", text: JSON.stringify({ success: false, error: String(err) }, null, 2) }],
+            isError: true,
+        };
+    }
+});
+/**
+ * on_deck_dispatch_audit — read-class
+ * Return aggregated counts: queued / in_flight / landed / errored / by-category / by-cohort_class.
+ */
+server.tool("on_deck_dispatch_audit", "KN-Q2 / BP018 — On Deck Scribe: aggregated dispatch counts. " +
+    "Returns total / queued / in_flight / landed / deferred / errored + breakdowns by category, cohort_class, pod_class.", {}, async () => {
+    try {
+        const audit = odsDispatchAudit();
+        return {
+            content: [{ type: "text", text: JSON.stringify({ data_available: true, ...audit }, null, 2) }],
+        };
+    }
+    catch (err) {
+        return {
+            content: [{ type: "text", text: JSON.stringify({ data_available: false, error: String(err) }, null, 2) }],
+            isError: true,
+        };
+    }
+});
+// ─── Pod-S KN-S3: Stats-Capture Bishop Substrate-Query MCP tools ──────────────
+import { queryAggregate } from "./stats_capture/query_aggregate.js";
+import { queryTimeline } from "./stats_capture/query_timeline.js";
+import { queryParallelCompare } from "./stats_capture/query_parallel_compare.js";
+import { queryAnomalies } from "./stats_capture/query_anomalies.js";
+import { RetentionPruner } from "./stats_capture/retention_pruner.js";
+/**
+ * test_telemetry_aggregate — read-class
+ * Aggregate counts by outcome, tier, k_prompt pattern, and cost accounting.
+ */
+server.tool("test_telemetry_aggregate", "KN-S3 / BP018 — Stats-Capture: aggregate telemetry counts. " +
+    "Returns total / by_outcome / by_tier / by_k_prompt + cost-accounting (actual vs counterfactual). " +
+    "Optional filters: hours window, k_prompt_pattern (glob), cohort_class.", {
+    hours: z.number().int().min(1).optional().describe("Time window in hours. Default: 24."),
+    k_prompt_pattern: z.string().optional().describe("K-prompt section/source filter (glob, e.g. 'KN-R*')."),
+    cohort_class: z.string().optional().describe("Cohort class filter."),
+}, async ({ hours, k_prompt_pattern, cohort_class }) => {
+    try {
+        const result = queryAggregate({ hours, k_prompt_pattern, cohort_class });
+        return {
+            content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+            isError: !result.data_available,
+        };
+    }
+    catch (err) {
+        return {
+            content: [{ type: "text", text: JSON.stringify({ data_available: false, error: String(err) }, null, 2) }],
+            isError: true,
+        };
+    }
+});
+/**
+ * test_telemetry_cost_savings — read-class
+ * Focused cost-savings report (Bushel 3 Colossus / Decentralized Data Center).
+ */
+server.tool("test_telemetry_cost_savings", "KN-S3 / BP018 — Stats-Capture: cost-savings report. " +
+    "Returns actual_spend vs counterfactual_estimate + savings_usd/pct. " +
+    "Supports Bushel 3 Colossus pairing (colossus_paired_runs_count). " +
+    "Decentralized Data Center Prov 16 supplementary disclosure.", {
+    since: z.string().describe("ISO-8601 cutoff date (e.g. '2026-05-01T00:00:00Z')."),
+    k_prompt_pattern: z.string().optional().describe("K-prompt section pattern filter."),
+}, async ({ since, k_prompt_pattern }) => {
+    try {
+        const sinceMs = new Date(since).getTime();
+        const hoursWindow = Math.ceil((Date.now() - sinceMs) / (60 * 60 * 1000));
+        const result = queryAggregate({ hours: hoursWindow, k_prompt_pattern });
+        const { cost_accounting } = result;
+        return {
+            content: [{ type: "text", text: JSON.stringify({
+                        data_available: result.data_available,
+                        since,
+                        actual_spend_usd: cost_accounting.actual_spend_usd,
+                        counterfactual_estimate_usd: cost_accounting.counterfactual_estimate_usd,
+                        savings_usd: cost_accounting.savings_usd,
+                        savings_pct: cost_accounting.savings_pct,
+                        by_tier: result.by_tier,
+                        total_snapshots: result.total,
+                    }, null, 2) }],
+            isError: !result.data_available,
+        };
+    }
+    catch (err) {
+        return {
+            content: [{ type: "text", text: JSON.stringify({ data_available: false, error: String(err) }, null, 2) }],
+            isError: true,
+        };
+    }
+});
+/**
+ * test_telemetry_timeline — read-class
+ * Full ordered sequence of snapshots for one test_id.
+ */
+server.tool("test_telemetry_timeline", "KN-S3 / BP018 — Stats-Capture: ordered snapshot timeline for one test_id. " +
+    "Returns bookend_start + intervals (in order) + bookend_end.", {
+    test_id: z.string().describe("Test ID to retrieve timeline for."),
+}, async ({ test_id }) => {
+    try {
+        const result = queryTimeline(test_id);
+        return {
+            content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+            isError: !result.data_available,
+        };
+    }
+    catch (err) {
+        return {
+            content: [{ type: "text", text: JSON.stringify({ data_available: false, error: String(err) }, null, 2) }],
+            isError: true,
+        };
+    }
+});
+/**
+ * test_telemetry_parallel_compare — read-class
+ * Correlates 5-Knight × N-pod test runs for Founder comparison.
+ */
+server.tool("test_telemetry_parallel_compare", "KN-S3 / BP018 — Stats-Capture: parallel-session comparison for 5-Knight × N-pod tests. " +
+    "Pass test_id_pattern (glob) to match runs. Returns per-session breakdown + aggregate.", {
+    test_id_pattern: z.string().describe("Test ID pattern (glob, e.g. 'KN-R4-*' or 'T7-test-*')."),
+}, async ({ test_id_pattern }) => {
+    try {
+        const result = queryParallelCompare(test_id_pattern);
+        return {
+            content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+            isError: !result.data_available,
+        };
+    }
+    catch (err) {
+        return {
+            content: [{ type: "text", text: JSON.stringify({ data_available: false, error: String(err) }, null, 2) }],
+            isError: true,
+        };
+    }
+});
+/**
+ * test_telemetry_anomalies — read-class
+ * Returns flagged anomaly snapshots since a cutoff date.
+ */
+server.tool("test_telemetry_anomalies", "KN-S3 / BP018 — Stats-Capture: anomaly snapshots since cutoff. " +
+    "Returns anomaly_flag=true snapshots from anomaly/ + live/ dirs. " +
+    "Optional severity filter: 'all' (default) or 'high' (context_pct>90 or stall).", {
+    since: z.string().describe("ISO-8601 cutoff date (e.g. '2026-05-01T00:00:00Z')."),
+    severity: z.enum(["all", "high"]).optional().describe("Severity filter. Default: 'all'."),
+}, async ({ since, severity }) => {
+    try {
+        const result = queryAnomalies(since, severity ?? "all");
+        return {
+            content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+            isError: !result.data_available,
+        };
+    }
+    catch (err) {
+        return {
+            content: [{ type: "text", text: JSON.stringify({ data_available: false, error: String(err) }, null, 2) }],
+            isError: true,
+        };
+    }
+});
+/**
+ * test_telemetry_protect — write-class
+ * Mark a test_id for indefinite retention (move to protected/).
+ */
+server.tool("test_telemetry_protect", "KN-S3 / BP018 — Stats-Capture: mark a test_id for indefinite retention. " +
+    "Moves all its files from live/ to protected/. Pruner will never touch protected files.", {
+    test_id: z.string().describe("Test ID to protect."),
+    reason: z.string().optional().describe("Optional reason for protection (logged for audit)."),
+}, async ({ test_id, reason }) => {
+    try {
+        const pruner = new RetentionPruner();
+        await pruner.protect(test_id);
+        return {
+            content: [{ type: "text", text: JSON.stringify({ success: true, test_id, reason: reason ?? null, protected_at: new Date().toISOString() }, null, 2) }],
+        };
+    }
+    catch (err) {
+        return {
+            content: [{ type: "text", text: JSON.stringify({ success: false, error: String(err) }, null, 2) }],
+            isError: true,
+        };
+    }
+});
+// ─────────────────────────────────────────────────────────────────────────────
+// Pod-M: Forever-Stamp Joules (Layer 7 Currency) — KN-M3 / BP018
+// ─────────────────────────────────────────────────────────────────────────────
+const _joulesOps = new JoulesOperations();
+server.tool("joules_mint", "KN-M3 / BP018 Pod-M — Mint a new Forever-Stamp Joule from Marks-surplus. " +
+    "Layer 7 currency. face_value is IMMUTABLE once minted (forever-stamp semantics). " +
+    "Marks consumed are ONE-WAY VALVE — never recoverable as Marks. " +
+    "backing_rule_id cites the Gold tablet (Pod-N) canonicalizing the conversion rate. " +
+    "Default rate: 1 Joule per 100 Marks-surplus. Majesty incentive currency.", {
+    member_id: z.string().describe("Member ID to receive the minted Joule."),
+    marks_surplus: z.number().int().positive().describe("Marks-surplus to consume in the mint. Must be > 0."),
+    backing_rule_id: z.string().describe("Gold tablet ID (Pod-N) for the backing rule. Must be non-empty."),
+}, async ({ member_id, marks_surplus, backing_rule_id }) => {
+    const result = await _joulesOps.mintFromMarksSurplus({ member_id, marks_surplus, backing_rule_id });
+    return {
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+        isError: !result.success,
+    };
+});
+server.tool("joules_transfer", "KN-M3 / BP018 Pod-M — Transfer a Forever-Stamp Joule between members. " +
+    "face_value is preserved exactly (forever-stamp semantics). " +
+    "Requires current holder to match 'from' member.", {
+    from: z.string().describe("Member ID currently holding the Joule."),
+    to: z.string().describe("Member ID to receive the Joule."),
+    joule_uuid: z.string().describe("UUID of the Joule to transfer."),
+}, async ({ from, to, joule_uuid }) => {
+    const result = await _joulesOps.transfer({ from, to, joule_uuid });
+    return {
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+        isError: !result.success,
+    };
+});
+server.tool("joules_redeem", "KN-M3 / BP018 Pod-M — Redeem a Forever-Stamp Joule against a civilization-class work target. " +
+    "Removes the Joule from circulation permanently. " +
+    "redemption_target must describe the civilization-class work being rewarded.", {
+    member_id: z.string().describe("Member ID redeeming the Joule (must be current holder)."),
+    joule_uuid: z.string().describe("UUID of the Joule to redeem."),
+    redemption_target: z.string().describe("Civilization-class work descriptor (required)."),
+}, async ({ member_id, joule_uuid, redemption_target }) => {
+    const result = await _joulesOps.redeem({ member_id, joule_uuid, redemption_target });
+    return {
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+        isError: !result.success,
+    };
+});
+server.tool("joules_balance", "KN-M3 / BP018 Pod-M — Get the current Forever-Stamp Joules balance for a member. " +
+    "Returns total_face_value, joule_count, and per-Joule face_value list.", {
+    member_id: z.string().describe("Member ID to query balance for."),
+}, async ({ member_id }) => {
+    const balance = computeBalance(member_id);
+    return {
+        content: [{ type: "text", text: JSON.stringify(balance, null, 2) }],
+    };
+});
+server.tool("joules_audit", "KN-M3 / BP018 Pod-M — Aggregate Joules audit: total minted, redeemed, in-circulation, face_value totals. " +
+    "Optional 'since' ISO timestamp to filter to a window.", {
+    since: z.string().optional().describe("ISO-8601 timestamp; filter audit to entries after this date."),
+    member_id: z.string().optional().describe("If supplied, also include per-member balance in response."),
+}, async ({ since, member_id }) => {
+    const audit = computeAudit(since);
+    const response = { audit };
+    if (member_id) {
+        response.member_balance = computeBalance(member_id);
+    }
+    return {
+        content: [{ type: "text", text: JSON.stringify(response, null, 2) }],
+    };
+});
+// ─────────────────────────────────────────────────────────────────────────────
+// Pod-T: Keyword-Pyramid Strata Hierarchy — KN-T4 / BP018
+// ─────────────────────────────────────────────────────────────────────────────
+const _strataQuery = new StrataQuery();
+server.tool("strata_ascend", "KN-T4 / BP018 Pod-T — Ascend the 7-layer Keyword-Pyramid from a topic toward Bedrock. " +
+    "Returns topics at stratum ordinal + levels. Pyramid: Sand(0) → Soil(1) → Sediment(2) → Sandstone(3) → Limestone(4) → Granite(5) → Bedrock(6).", {
+    topic: z.string().describe("Base topic to ascend from."),
+    levels: z.number().int().positive().optional().describe("How many stratum levels to ascend (default 1)."),
+}, async ({ topic, levels }) => {
+    const results = _strataQuery.ascend(topic, levels ?? 1);
+    return { content: [{ type: "text", text: JSON.stringify({ topic, levels: levels ?? 1, results }, null, 2) }] };
+});
+server.tool("strata_descend", "KN-T4 / BP018 Pod-T — Descend the 7-layer Keyword-Pyramid from a topic toward Sand. " +
+    "Returns topics at stratum ordinal - levels. Returns empty array at Sand (bottom).", {
+    topic: z.string().describe("Base topic to descend from."),
+    levels: z.number().int().positive().optional().describe("How many stratum levels to descend (default 1)."),
+}, async ({ topic, levels }) => {
+    const results = _strataQuery.descend(topic, levels ?? 1);
+    return { content: [{ type: "text", text: JSON.stringify({ topic, levels: levels ?? 1, results }, null, 2) }] };
+});
+server.tool("strata_by_stratum", "KN-T4 / BP018 Pod-T — List all topics assigned to a given stratum level. " +
+    "Valid strata: sand, soil, sediment, sandstone, limestone, granite, bedrock.", {
+    stratum: z.enum(["sand", "soil", "sediment", "sandstone", "limestone", "granite", "bedrock"])
+        .describe("Target stratum level."),
+}, async ({ stratum }) => {
+    const topics = _strataQuery.byStratum(stratum);
+    return { content: [{ type: "text", text: JSON.stringify({ stratum, topics, count: topics.length }, null, 2) }] };
+});
+server.tool("strata_promote", "KN-T4 / BP018 Pod-T — Promote a topic to a higher stratum in the 7-layer Keyword-Pyramid. " +
+    "Builds promotion chain history. Bedrock rejects further promotion. Cannot demote.", {
+    topic: z.string().describe("Topic to promote."),
+    to_stratum: z.enum(["sand", "soil", "sediment", "sandstone", "limestone", "granite", "bedrock"])
+        .describe("Target stratum (must be higher than current)."),
+    signer: z.string().describe("Session ID or agent signing this promotion."),
+    session: z.string().optional().describe("Ratification session ID (defaults to signer)."),
+}, async ({ topic, to_stratum, signer, session }) => {
+    try {
+        const result = _strataQuery.promote(topic, to_stratum, signer, session);
+        return { content: [{ type: "text", text: JSON.stringify({ success: true, assignment: result }, null, 2) }] };
+    }
+    catch (err) {
+        return {
+            content: [{ type: "text", text: JSON.stringify({ success: false, error: String(err) }, null, 2) }],
+            isError: true,
+        };
+    }
+});
+server.tool("strata_audit", "KN-T4 / BP018 Pod-T — Audit: count topics per stratum; identify Sand/Soil topics ready for promotion. " +
+    "Returns counts per stratum and promotion candidates (high-hit sand/soil topics).", {}, async () => {
+    const all = readAllAssignments();
+    const counts = {};
+    for (const s of ALL_STRATA)
+        counts[s] = 0;
+    for (const a of all)
+        counts[a.stratum] = (counts[a.stratum] ?? 0) + 1;
+    const promotion_candidates = all
+        .filter((a) => a.stratum === "sand" || a.stratum === "soil")
+        .map((a) => ({ topic: a.topic, stratum: a.stratum, ordinal: a.ordinal }));
+    return {
+        content: [{ type: "text", text: JSON.stringify({
+                    total_topics: all.length,
+                    counts_by_stratum: counts,
+                    promotion_candidates: promotion_candidates.slice(0, 20),
+                }, null, 2) }],
+    };
+});
+server.tool("strata_promotion_recommend", "KN-T4 / BP018 Pod-T — Recommend Sand/Soil topics for promotion based on pheromone hit-frequency × age. " +
+    "Surfaces topics that appear frequently in Detective queries and may be ready for canonical elevation.", {
+    claim: z.string().optional().describe("Query claim to find relevant promotion candidates. Defaults to general substrate scan."),
+    topK: z.number().int().positive().optional().describe("Max candidates to return (default 10)."),
+}, async ({ claim, topK }) => {
+    const hits = detectiveQueryByStratum(claim ?? "canonical substrate promotion bedrock granite limestone", topK ?? 10);
+    const sand_soil = hits.filter((h) => h.stratum === "sand" || h.stratum === "soil");
+    return {
+        content: [{ type: "text", text: JSON.stringify({
+                    promotion_recommendations: sand_soil,
+                    total_hits: hits.length,
+                    sand_soil_count: sand_soil.length,
+                }, null, 2) }],
+    };
+});
+// ─────────────────────────────────────────────────────────────────────────────
+// Pod-K: Codex (Layer 8 Canon-of-Canons) — KN-K3 / BP018
+// ─────────────────────────────────────────────────────────────────────────────
+const _codexBinding = new CodexBinding();
+server.tool("codex_create", "KN-K3 / BP018 Pod-K — Create a new Codex in 'drafting' state. " +
+    "Layer 8 canon-of-canons bound-book artifact. Chapters added via codex_add_chapter. " +
+    "Lifecycle: drafting → review → bound (immutable).", {
+    title: z.string().describe("Human-readable title for the Codex."),
+    edition: z.string().describe("Edition string (e.g. '1.0', '2025-Q2')."),
+}, async ({ title, edition }) => {
+    const { randomUUID } = await import("crypto");
+    const id = allocateCodexSerial();
+    const codex = {
+        id,
+        uuid: randomUUID(),
+        title,
+        edition,
+        chapters: [],
+        status: "drafting",
+        created_ts: new Date().toISOString(),
+    };
+    appendCodexEntry(codex);
+    return { content: [{ type: "text", text: JSON.stringify({ success: true, codex }, null, 2) }] };
+});
+server.tool("codex_add_chapter", "KN-K3 / BP018 Pod-K — Add a chapter to a Codex in 'drafting' state. " +
+    "Chapter cites Gold tablets (Pod-N), Excalibur instances, Joules redemptions (Pod-M), Jars (Pod-J). " +
+    "Mutations rejected on bound/superseded Codex.", {
+    codex_id: z.string().describe("Codex serial (LB-CODEX-NNNN)."),
+    topic: z.string().describe("Chapter topic."),
+    body_text: z.string().describe("Chapter prose body."),
+    stratum: z.enum(["sand", "soil", "sediment", "sandstone", "limestone", "granite", "bedrock"]).optional()
+        .describe("Pod-T stratum citation for this chapter."),
+    gold_tablet_pointers: z.array(z.string()).optional().describe("Gold tablet IDs (Pod-N)."),
+    excalibur_pointers: z.array(z.string()).optional().describe("Excalibur class IDs (BP016 Pod-C)."),
+    jar_pointers: z.array(z.string()).optional().describe("House Scribe Jar serials (Pod-J KN-J1)."),
+    joules_redemption_pointers: z.array(z.string()).optional().describe("Joules entry IDs (Pod-M) cited."),
+}, async ({ codex_id, topic, body_text, stratum, gold_tablet_pointers, excalibur_pointers, jar_pointers, joules_redemption_pointers }) => {
+    const codex = getCodexById(codex_id);
+    if (!codex) {
+        return { content: [{ type: "text", text: JSON.stringify({ success: false, error: `Codex '${codex_id}' not found` }, null, 2) }], isError: true };
+    }
+    const check = _codexBinding.checkMutationAllowed(codex);
+    if (!check.allowed) {
+        return { content: [{ type: "text", text: JSON.stringify({ success: false, error: check.reason }, null, 2) }], isError: true };
+    }
+    const chapter = {
+        topic,
+        stratum: stratum ?? undefined,
+        gold_tablet_pointers: gold_tablet_pointers ?? [],
+        excalibur_pointers: excalibur_pointers ?? [],
+        jar_pointers: jar_pointers ?? [],
+        joules_redemption_pointers: joules_redemption_pointers ?? [],
+        body_text,
+        ts_drafted: new Date().toISOString(),
+    };
+    const updated = { ...codex, chapters: [...codex.chapters, chapter] };
+    appendCodexEntry(updated);
+    return { content: [{ type: "text", text: JSON.stringify({ success: true, codex: updated, chapters_count: updated.chapters.length }, null, 2) }] };
+});
+server.tool("codex_review", "KN-K3 / BP018 Pod-K — Move a Codex from 'drafting' to 'review' (mutations frozen for review window). " +
+    "Required before binding.", {
+    codex_id: z.string().describe("Codex serial (LB-CODEX-NNNN)."),
+}, async ({ codex_id }) => {
+    const codex = getCodexById(codex_id);
+    if (!codex)
+        return { content: [{ type: "text", text: JSON.stringify({ success: false, error: `Codex '${codex_id}' not found` }, null, 2) }], isError: true };
+    if (codex.status !== "drafting")
+        return { content: [{ type: "text", text: JSON.stringify({ success: false, error: `Codex '${codex_id}' is '${codex.status}', not 'drafting'` }, null, 2) }], isError: true };
+    const updated = { ...codex, status: "review" };
+    appendCodexEntry(updated);
+    return { content: [{ type: "text", text: JSON.stringify({ success: true, codex: updated }, null, 2) }] };
+});
+server.tool("codex_bind", "KN-K3 / BP018 Pod-K — Bind a Codex: HMAC-locks all chapters; status → 'bound'; immutable after this. " +
+    "Requires status='review'. Verifies all pointer references before binding.", {
+    codex_id: z.string().describe("Codex serial (LB-CODEX-NNNN) in 'review' status."),
+    signer: z.string().describe("Session ID or agent signing the binding ceremony."),
+}, async ({ codex_id, signer }) => {
+    const result = await _codexBinding.bind(codex_id, signer);
+    const isError = "error" in result;
+    return {
+        content: [{ type: "text", text: JSON.stringify(isError ? result : { success: true, bound_codex: result }, null, 2) }],
+        isError,
+    };
+});
+server.tool("codex_query", "KN-K3 / BP018 Pod-K — Query Codices by title, edition, or status. " +
+    "Returns matching Codex records.", {
+    title: z.string().optional().describe("Partial title match (case-insensitive)."),
+    edition: z.string().optional().describe("Exact edition match."),
+    status: z.enum(["drafting", "review", "bound", "superseded"]).optional().describe("Filter by status."),
+}, async ({ title, edition, status }) => {
+    const results = queryCodex({ title, edition, status: status });
+    return { content: [{ type: "text", text: JSON.stringify({ count: results.length, codices: results }, null, 2) }] };
+});
+server.tool("codex_supersede", "KN-K3 / BP018 Pod-K — Supersede a bound Codex with a new one. " +
+    "Old Codex gets status='superseded' + superseded_by=new_id.", {
+    old_id: z.string().describe("Codex serial of the bound Codex to supersede."),
+    new_id: z.string().describe("Codex serial of the replacement Codex."),
+}, async ({ old_id, new_id }) => {
+    const result = await _codexBinding.supersede(old_id, new_id);
+    if (result && "error" in result) {
+        return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }], isError: true };
+    }
+    return { content: [{ type: "text", text: JSON.stringify({ success: true, old_id, new_id, superseded_at: new Date().toISOString() }, null, 2) }] };
+});
+server.tool("codex_anthology_export", "KN-K3 / BP018 Pod-K — Export a bound Codex to a named Anthology. " +
+    "Valid targets: ai_cake, no_atomo, mechanical_computer, pre_cathedral_substack. " +
+    "Codex must be in 'bound' status.", {
+    codex_id: z.string().describe("Codex serial (LB-CODEX-NNNN) in 'bound' status."),
+    target_anthology: z.enum(["ai_cake", "no_atomo", "mechanical_computer", "pre_cathedral_substack"])
+        .describe("Named Anthology to export into."),
+}, async ({ codex_id, target_anthology }) => {
+    const codex = getCodexById(codex_id);
+    if (!codex)
+        return { content: [{ type: "text", text: JSON.stringify({ success: false, error: `Codex '${codex_id}' not found` }, null, 2) }], isError: true };
+    if (codex.status !== "bound")
+        return { content: [{ type: "text", text: JSON.stringify({ success: false, error: `Codex '${codex_id}' is '${codex.status}'; must be 'bound' for anthology export` }, null, 2) }], isError: true };
+    const exported_ts = new Date().toISOString();
+    const existing_exports = codex.anthology_exports ?? [];
+    const updated = {
+        ...codex,
+        anthology_exports: [...existing_exports, { target: target_anthology, exported_ts }],
+    };
+    appendCodexEntry(updated);
+    emitPheromone("CodexAnthology", `codex_anthology_export_${codex_id}_${target_anthology}`, `codex anthology export ${codex.title} target:${target_anthology} layer-8 canon-of-canons`, { cathedral: "knight", flavorClass: { domain: "codex", cognition: "building-in-public" } });
+    return { content: [{ type: "text", text: JSON.stringify({ success: true, codex_id, target_anthology, exported_ts, chapter_count: codex.chapters.length }, null, 2) }] };
+});
+// ─── Pod-K Bushel 32: Codex Serial Atomic-Reservation Primitive ──────────────
+// G2: Tool implemented + wired — mcp__librarian__codex_reserve_next_serial callable.
+registerTool("codex_reserve_next_serial", "Bushel 32 / BP022 — Atomically reserve the next available LB-CODEX-NNNN serial. " +
+    "Reads the ledger, finds max(bound, reserved), allocates next = max+1, writes reservation row to ledger BEFORE returning. " +
+    "Race-safe: in-process mutex + file-lock for cross-process concurrency. " +
+    "Eliminates the Codex-collision class (5+ empirical instances: Bushels 11/15/18/9/12/13/19). " +
+    "MUST be called BEFORE creating a Codex draft — draft authors with the returned serial from the start. " +
+    "At LANDING, call codex_bind_reservation to transition reserved→bound.", {
+    reserved_by: z.string().describe("Caller identity: session ID (e.g. 'K503') or agent name."),
+    intended_title: z.string().describe("Intended Codex title (used for collision detection in reservation log)."),
+    intended_session: z.string().describe("Session or Bushel session ID (e.g. 'B022', 'K503')."),
+    intended_bushel: z.number().int().describe("Bushel number this serial is for (0 if not for a Bushel)."),
+    ttl_days: z.number().optional().describe("Reservation TTL in days (default 7). Expired serials return to pool."),
+}, async ({ reserved_by, intended_title, intended_session, intended_bushel, ttl_days }) => {
+    const result = await reserveNextSerial(reserved_by, intended_title, intended_session, intended_bushel);
+    if ("error" in result) {
+        return { content: [{ type: "text", text: JSON.stringify({ success: false, error: result.error }, null, 2) }], isError: true };
+    }
+    const { serial, reserved_ts, reservation_id } = result;
+    return {
+        content: [{
+                type: "text",
+                text: JSON.stringify({
+                    success: true,
+                    serial,
+                    reserved_ts,
+                    reservation_id,
+                    ttl_days: ttl_days ?? 7,
+                    message: `Serial ${serial} reserved. Use this serial in your Codex draft from the start. Call codex_bind_reservation(reservation_id, bound_codex_id) at LANDING.`,
+                }, null, 2),
+            }],
+    };
+});
+registerTool("codex_bind_reservation", "Bushel 32 / BP022 — Transition a Codex reservation from status='reserved' to status='bound'. " +
+    "Call AFTER codex_bind() succeeds. Links the reservation row to the now-bound Codex entry. " +
+    "Fails if reservation does not exist (T7: must reserve first), or if target Codex is not yet bound.", {
+    reservation_id: z.string().describe("UUID from codex_reserve_next_serial call."),
+    bound_codex_id: z.string().describe("Codex serial (LB-CODEX-NNNN) that was just bound via codex_bind."),
+}, async ({ reservation_id, bound_codex_id }) => {
+    const result = await bindReservation(reservation_id, bound_codex_id);
+    if ("error" in result) {
+        return { content: [{ type: "text", text: JSON.stringify({ success: false, error: result.error }, null, 2) }], isError: true };
+    }
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+});
+registerTool("codex_expire_reservations", "Bushel 32 / BP022 — Sweep expired reservations (past TTL) and transition them to status='expired', releasing their serials back to the pool. " +
+    "Returns count of expired reservations and their serials.", {
+    ttl_days: z.number().optional().describe("Override TTL in days (default 7). Reservations older than this are expired."),
+}, async ({ ttl_days }) => {
+    const result = await expireReservations(ttl_days);
+    return { content: [{ type: "text", text: JSON.stringify({ success: true, ...result }, null, 2) }] };
+});
+registerTool("codex_query_reservations", "Bushel 32 / BP022 — Query Codex serial reservations by status, caller, or Bushel number. " +
+    "Returns reservation rows (type='reservation') from the codex ledger.", {
+    status: z.enum(["reserved", "bound", "expired"]).optional().describe("Filter by reservation status."),
+    reserved_by: z.string().optional().describe("Filter by caller identity."),
+    intended_bushel: z.number().optional().describe("Filter by Bushel number."),
+}, async ({ status, reserved_by, intended_bushel }) => {
+    const results = queryReservations({ status, reserved_by, intended_bushel });
+    return { content: [{ type: "text", text: JSON.stringify({ count: results.length, reservations: results }, null, 2) }] };
+});
+/**
+ * gold_tablet_query — read-class
+ * Query active Gold Tablets by tier, scope, topic, or status.
+ */
+server.tool("gold_tablet_query", "KN-N1 / BP018 — Gold Tablet: query canonical regulations tablets by tier/scope/topic. " +
+    "Returns active tablets by default. Pass status='all' to include superseded.", {
+    tier: z.enum(["platform_canon", "platform_rules", "project_rules"]).optional()
+        .describe("Filter by tier (platform_canon | platform_rules | project_rules)."),
+    scope: z.string().optional().describe("Filter by scope ('platform' or project_id)."),
+    topic: z.string().optional().describe("Filter by topic name."),
+    status: z.enum(["active", "all"]).optional().describe("'active' (default) or 'all' including superseded."),
+    limit: z.number().optional().describe("Max results (default 100)."),
+    offset: z.number().optional().describe("Pagination offset."),
+}, async ({ tier, scope, topic, status, limit, offset }) => {
+    try {
+        const results = queryTablets({ tier, scope, topic, status, limit: limit ?? 100, offset });
+        return { content: [{ type: "text", text: JSON.stringify({ tablets: results, count: results.length }, null, 2) }] };
+    }
+    catch (err) {
+        return { content: [{ type: "text", text: JSON.stringify({ error: String(err) }, null, 2) }], isError: true };
+    }
+});
+/**
+ * gold_tablet_ratify — write-class
+ * Ratify a new Gold Tablet (requires platform-tier authority for platform tiers).
+ */
+server.tool("gold_tablet_ratify", "KN-N2/N3 / BP018 — Gold Tablet: ratify a new canonical regulation. " +
+    "Generates LB-GOLD-NNNN serial, HMAC + Chronos signatures. " +
+    "Writes Pheromone Pixie-Dust provenance. Authority-gated by tier.", {
+    tier: z.enum(["platform_canon", "platform_rules", "project_rules"])
+        .describe("Tier (platform_canon|platform_rules|project_rules)."),
+    scope: z.string().describe("'platform' or project_id."),
+    topic: z.string().describe("Canonical topic name."),
+    rule_text: z.string().describe("The canonical statement."),
+    ratification_session: z.string().describe("Session ID (e.g. BP018)."),
+    signer_id: z.string().describe("Authority signer (FOUNDER, BP018, K461 etc)."),
+    founder_voice_quote: z.string().optional().describe("Optional Founder voice quote."),
+    supersedes: z.array(z.string()).optional().describe("Array of prior Gold tablet IDs this replaces."),
+}, async ({ tier, scope, topic, rule_text, ratification_session, signer_id, founder_voice_quote, supersedes }) => {
+    try {
+        const authCheck = checkMutationAuthority({ tier, scope, signer_id });
+        if (!authCheck.allowed) {
+            return { content: [{ type: "text", text: JSON.stringify({ success: false, error: authCheck.reason }, null, 2) }], isError: true };
+        }
+        const result = appendTablet({ tier, scope, topic, rule_text, ratification_session, signer_id, founder_voice_quote, supersedes });
+        if (result.success) {
+            writeGoldPixieDust({ event_type: "tablet_ratified", gold_tablet_id: result.tablet.id, tier, scope, signer_id, timestamp: new Date().toISOString() });
+        }
+        return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }], isError: !result.success };
+    }
+    catch (err) {
+        return { content: [{ type: "text", text: JSON.stringify({ error: String(err) }, null, 2) }], isError: true };
+    }
+});
+/**
+ * gold_tablet_supersede — write-class
+ * Supersede a Gold Tablet: marks old as superseded, cascades to Excalibur instances.
+ */
+server.tool("gold_tablet_supersede", "KN-N2/N3 / BP018 — Gold Tablet: supersede an existing tablet. " +
+    "Marks old tablet superseded + cascade-marks dependent Excalibur as needs_re_anchor. " +
+    "Use gold_tablet_ratify with supersedes[] for the new tablet first.", {
+    old_id: z.string().describe("Gold tablet ID to supersede (LB-GOLD-NNNN)."),
+    new_id: z.string().describe("Replacing Gold tablet ID (LB-GOLD-NNNN)."),
+}, async ({ old_id, new_id }) => {
+    try {
+        const result = cascadeSupersession(old_id, new_id);
+        if (result.success) {
+            writeGoldPixieDust({ event_type: "tablet_superseded", gold_tablet_id: old_id, new_gold_tablet_id: new_id, timestamp: new Date().toISOString() });
+        }
+        return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }], isError: !result.success };
+    }
+    catch (err) {
+        return { content: [{ type: "text", text: JSON.stringify({ error: String(err) }, null, 2) }], isError: true };
+    }
+});
+/**
+ * gold_tablet_excalibur_link — write-class
+ * Create bidirectional pointer between Gold Tablet and Excalibur Class instance.
+ */
+server.tool("gold_tablet_excalibur_link", "KN-N2/N3 / BP018 — Gold Tablet: link an Excalibur Class instance to a Gold Tablet. " +
+    "Creates bidirectional pointer. Excalibur is READ-ONLY against Gold. " +
+    "Gold supersession cascade will mark linked Excalibur as needs_re_anchor.", {
+    gold_id: z.string().describe("Gold tablet ID (LB-GOLD-NNNN)."),
+    excalibur_id: z.string().describe("Excalibur Class instance ID."),
+}, async ({ gold_id, excalibur_id }) => {
+    try {
+        const result = linkExcaliburToGold(gold_id, excalibur_id);
+        if (result.success) {
+            writeGoldPixieDust({ event_type: "excalibur_linked", gold_tablet_id: gold_id, excalibur_id, timestamp: new Date().toISOString() });
+        }
+        return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }], isError: !result.success };
+    }
+    catch (err) {
+        return { content: [{ type: "text", text: JSON.stringify({ error: String(err) }, null, 2) }], isError: true };
+    }
+});
+/**
+ * gold_tablet_audit — read-class
+ * Aggregate counts by tier × status × scope.
+ */
+server.tool("gold_tablet_audit", "KN-N3 / BP018 — Gold Tablet: aggregate audit (counts by tier × status × scope). " +
+    "Returns total + by_tier + by_status + by_scope breakdowns.", {}, async () => {
+    try {
+        const result = auditTablets();
+        writeGoldPixieDust({ event_type: "audit_query", timestamp: new Date().toISOString() });
+        return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+    }
+    catch (err) {
+        return { content: [{ type: "text", text: JSON.stringify({ error: String(err) }, null, 2) }], isError: true };
+    }
+});
+// ─── KN-D2/D4/D5: Apiarist Hive Infrastructure Remainder ────────────────────
+/**
+ * apiarist_hive_create_thread — write-class
+ * Create a new Apiarist Hive thread in `open` state.
+ */
+server.tool("apiarist_hive_create_thread", "KN-D2 / BP018 — Apiarist Hive: create a new hive thread in `open` state. " +
+    "Assigns LB-HIVE-NNNN serial. Validates bee_role_assignments (max 1 queen).", {
+    topic: z.string().describe("Thread topic."),
+    participants: z.array(z.string()).describe("Member IDs participating."),
+    bee_role_assignments: z.record(z.string(), z.enum(["worker", "drone", "queen"]))
+        .describe("Role per participant_id (worker|drone|queen). Max 1 queen."),
+    cohort_class: z.string().optional().describe("Cohort class for federation eligibility."),
+}, async ({ topic, participants, bee_role_assignments, cohort_class }) => {
+    try {
+        const result = createHiveThread({ topic, participants, bee_role_assignments, cohort_class });
+        return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }], isError: !result.success };
+    }
+    catch (err) {
+        return { content: [{ type: "text", text: JSON.stringify({ error: String(err) }, null, 2) }], isError: true };
+    }
+});
+/**
+ * apiarist_hive_advance_thread — write-class
+ * Advance a Hive thread to the next state (guarded transitions).
+ */
+server.tool("apiarist_hive_advance_thread", "KN-D2 / BP018 — Apiarist Hive: advance thread state (open→synthesizing→closed→sealed). " +
+    "Only valid forward transitions allowed. BRIDLE Rule 4: backward transitions rejected.", {
+    thread_id: z.string().describe("Thread ID (LB-HIVE-NNNN)."),
+    target: z.enum(["synthesizing", "closed", "sealed"]).describe("Target state."),
+    synthesis_target: z.string().optional().describe("Jar ID (required before sealed)."),
+}, async ({ thread_id, target, synthesis_target }) => {
+    try {
+        const result = advanceHiveThread(thread_id, target, { synthesis_target });
+        return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }], isError: !result.success };
+    }
+    catch (err) {
+        return { content: [{ type: "text", text: JSON.stringify({ error: String(err) }, null, 2) }], isError: true };
+    }
+});
+/**
+ * apiarist_hive_federate — write-class
+ * Trigger cross-frame federation for a closed Hive thread.
+ */
+server.tool("apiarist_hive_federate", "KN-D4 / BP018 — Apiarist Hive: trigger cross-frame federation on thread close. " +
+    "Lone Wolf: broadcast_mode=none. Pied Piper: read_only. Federation: bidirectional. Excalibur: curated_slice.", {
+    thread_id: z.string().describe("Thread ID to federate."),
+    jar_id: z.string().describe("Jar ID created from thread closure (KN-J4)."),
+    cohort_class: z.string().describe("Cohort class of the thread originator."),
+    frame_instance_id: z.string().describe("LB Frame Local instance ID."),
+    tags: z.array(z.string()).optional().describe("Tags for Excalibur curated-slice broadcast."),
+}, async ({ thread_id, jar_id, cohort_class, frame_instance_id, tags }) => {
+    try {
+        const thread = readHiveThread(thread_id);
+        if (!thread) {
+            return { content: [{ type: "text", text: JSON.stringify({ success: false, error: `Thread ${thread_id} not found.` }, null, 2) }], isError: true };
+        }
+        const receipt = onThreadClosedFederateIfEligible({ thread, jar_id, cohort_class, frame_instance_id, tags });
+        return { content: [{ type: "text", text: JSON.stringify(receipt, null, 2) }] };
+    }
+    catch (err) {
+        return { content: [{ type: "text", text: JSON.stringify({ error: String(err) }, null, 2) }], isError: true };
+    }
+});
+/**
+ * apiarist_hive_uptime_cap — write-class
+ * Check and enforce the 50%-uptime cap for a participant+role.
+ */
+server.tool("apiarist_hive_uptime_cap", "KN-D5 / BP018 — Apiarist Hive: enforce 50%-uptime cap per role per cycle. " +
+    "Per-role independent caps (worker/drone/queen). Race-safe. Composes with Pod-G.", {
+    participant_id: z.string().describe("Participant member ID."),
+    role: z.enum(["worker", "drone", "queen"]).describe("Bee role."),
+    attempted_duration_min: z.number().describe("Duration to attempt (minutes)."),
+    cycle_period_min: z.number().optional().describe("Cycle period in minutes (default 60)."),
+    cap_pct: z.number().optional().describe("Cap percentage (default 50)."),
+}, async ({ participant_id, role, attempted_duration_min, cycle_period_min, cap_pct }) => {
+    try {
+        const result = enforceCap(participant_id, role, attempted_duration_min, { cycle_period_min, cap_pct });
+        return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+    }
+    catch (err) {
+        return { content: [{ type: "text", text: JSON.stringify({ error: String(err) }, null, 2) }], isError: true };
+    }
+});
+// ─── KN-J6: Dual-Tier IPv4-Local / IPv6-Federation Translation ───────────────
+/**
+ * coordinate_translate_local_to_federation — write-class
+ * Translate a local 4-tuple + instance to an IPv6 federation address.
+ */
+server.tool("coordinate_translate_local_to_federation", "KN-J6.2 / BP018 — Dual-Tier Addressing: translate local 4-tuple to IPv6 federation address. " +
+    "Lone Wolf REJECTED (never federates). " +
+    "Scope-tier prefix encodes cohort_class structurally. Caches in Augur Living Gate.", {
+    local_tuple: z.string().describe("Local 4-tuple coordinate (e.g. 'auth-user-session-token' or NN-NN-NN-NN)."),
+    instance_id: z.string().describe("LB Frame Local instance ID (e.g. LB-CAT.M-0001)."),
+    cohort_class: z.string().describe("HsCohortClass (lone_wolf|pied_piper_tier_1|federation_member|excalibur_subscriber|thirteenth_warrior)."),
+}, async ({ local_tuple, instance_id, cohort_class }) => {
+    try {
+        const result = localToFederation({ local_tuple, instance_id, cohort_class: cohort_class });
+        return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }], isError: !result.success };
+    }
+    catch (err) {
+        return { content: [{ type: "text", text: JSON.stringify({ error: String(err) }, null, 2) }], isError: true };
+    }
+});
+/**
+ * coordinate_translate_federation_to_local — read-class
+ * Translate an IPv6 federation address back to local 4-tuple + instance_id.
+ */
+server.tool("coordinate_translate_federation_to_local", "KN-J6.2 / BP018 — Dual-Tier Addressing: reverse translate IPv6 federation address to 4-tuple. " +
+    "Checks Augur cache first, then provenance ledger. Returns cohort_class from scope-tier prefix.", {
+    federation_address: z.string().describe("IPv6 federation address to reverse-translate."),
+}, async ({ federation_address }) => {
+    try {
+        const result = federationToLocal({ federation_address });
+        return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }], isError: !result.success };
+    }
+    catch (err) {
+        return { content: [{ type: "text", text: JSON.stringify({ error: String(err) }, null, 2) }], isError: true };
+    }
+});
+/**
+ * coordinate_translation_provenance — read-class
+ * Return full provenance chain for a tuple or federation address.
+ */
+server.tool("coordinate_translation_provenance", "KN-J6.3 / BP018 — Dual-Tier Addressing: retrieve provenance chain for a 4-tuple or IPv6 address. " +
+    "Returns all translation events (local→federation and federation→local) for the identifier.", {
+    tuple_or_address: z.string().describe("Local 4-tuple or IPv6 federation address to query provenance for."),
+}, async ({ tuple_or_address }) => {
+    try {
+        const chain = getTranslationProvenance(tuple_or_address);
+        return { content: [{ type: "text", text: JSON.stringify({ chain, count: chain.length }, null, 2) }] };
+    }
+    catch (err) {
+        return { content: [{ type: "text", text: JSON.stringify({ error: String(err) }, null, 2) }], isError: true };
     }
 });
 main().catch(err => {

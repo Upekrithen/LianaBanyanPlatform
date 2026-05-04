@@ -6,3 +6,4 @@
 
 export * from "./schema.js";
 export * from "./binding.js";
+export * from "./serial_allocator.js";

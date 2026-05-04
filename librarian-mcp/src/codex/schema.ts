@@ -70,6 +70,26 @@ export interface CodexChapter {
 
 export type CodexStatus = "drafting" | "review" | "bound" | "superseded";
 
+// ─── Reservation schema (Bushel 32 / BP022) ───────────────────────────────────
+
+export type CodexReservationStatus = "reserved" | "bound" | "expired";
+
+export interface CodexReservation {
+  type: "reservation";
+  serial: string;               // LB-CODEX-NNNN
+  reserved_by: string;          // caller identity (session ID or agent name)
+  intended_title: string;
+  intended_session: string;
+  intended_bushel: number;
+  reserved_ts: string;          // ISO-8601
+  reservation_id: string;       // UUID v4 — stable identity
+  status: CodexReservationStatus;
+  originally_proposed_serial?: string;  // collision-migration: original serial before rename
+  bound_codex_id?: string;      // populated when status transitions to "bound"
+  bound_ts?: string;
+  expires_ts?: string;          // populated when status transitions to "expired"
+}
+
 export const ANTHOLOGY_TARGETS = [
   "ai_cake",
   "no_atomo",
@@ -103,7 +123,9 @@ export function readAllCodexEntries(): Codex[] {
     const byId = new Map<string, Codex>();
     for (const line of raw.split("\n").filter((l) => l.trim())) {
       try {
-        const c = JSON.parse(line) as Codex;
+        const c = JSON.parse(line) as Codex & { type?: string };
+        if (c.type === "reservation") continue; // skip reservation rows
+        if (!c.id) continue;                    // skip malformed entries
         byId.set(c.id, c);
       } catch { /* skip malformed lines */ }
     }
@@ -133,4 +155,71 @@ export function queryCodex(filter: {
     if (filter.status && c.status !== filter.status) return false;
     return true;
   });
+}
+
+// ─── Reservation ledger read/write (Bushel 32 / BP022) ───────────────────────
+
+export function appendReservationEntry(reservation: CodexReservation): void {
+  ensureCodexDir();
+  appendFileSync(CODEX_LEDGER, JSON.stringify(reservation) + "\n", "utf-8");
+}
+
+export function readAllReservationEntries(): CodexReservation[] {
+  ensureCodexDir();
+  if (!existsSync(CODEX_LEDGER)) return [];
+  try {
+    const raw = readFileSync(CODEX_LEDGER, "utf-8");
+    const byId = new Map<string, CodexReservation>();
+    for (const line of raw.split("\n").filter((l) => l.trim())) {
+      try {
+        const entry = JSON.parse(line) as Record<string, unknown>;
+        if (entry.type === "reservation") {
+          const r = entry as unknown as CodexReservation;
+          byId.set(r.reservation_id, r);
+        }
+      } catch { /* skip malformed lines */ }
+    }
+    return Array.from(byId.values());
+  } catch {
+    return [];
+  }
+}
+
+export function getReservationById(reservation_id: string): CodexReservation | undefined {
+  return readAllReservationEntries().find((r) => r.reservation_id === reservation_id);
+}
+
+export function getReservationBySerial(serial: string): CodexReservation | undefined {
+  return readAllReservationEntries().find((r) => r.serial === serial);
+}
+
+/**
+ * Parse a serial string like "LB-CODEX-0034" → 34.
+ * Returns 0 for unparseable entries so they don't inflate the max.
+ */
+export function parseSerialNumber(serial: string): number {
+  const m = serial.match(/LB-CODEX-(\d+)/i);
+  return m ? parseInt(m[1], 10) : 0;
+}
+
+/**
+ * Find the highest allocated serial across ALL ledger entries:
+ * - Bound/drafting/review Codex entries
+ * - Active (non-expired) reservation entries
+ */
+export function findMaxAllocatedSerial(): number {
+  let max = 0;
+  const codices = readAllCodexEntries();
+  for (const c of codices) {
+    const n = parseSerialNumber(c.id);
+    if (n > max) max = n;
+  }
+  const reservations = readAllReservationEntries();
+  for (const r of reservations) {
+    if (r.status !== "expired") {
+      const n = parseSerialNumber(r.serial);
+      if (n > max) max = n;
+    }
+  }
+  return max;
 }

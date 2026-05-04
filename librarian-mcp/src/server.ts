@@ -274,6 +274,12 @@ import {
   verifyCodexHmac,
   computeCodexHmac,
 } from "./codex/binding.js";
+import {
+  reserveNextSerial,
+  bindReservation,
+  expireReservations,
+  queryReservations,
+} from "./codex/serial_allocator.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -8499,7 +8505,91 @@ server.tool(
   },
 );
 
-// ─── KN-N1/N2/N3: Gold Tablet Infrastructure (Layer 4 SOURCE-class) ──────────
+// ─── Pod-K Bushel 32: Codex Serial Atomic-Reservation Primitive ──────────────
+// G2: Tool implemented + wired — mcp__librarian__codex_reserve_next_serial callable.
+
+registerTool(
+  "codex_reserve_next_serial",
+  "Bushel 32 / BP022 — Atomically reserve the next available LB-CODEX-NNNN serial. " +
+    "Reads the ledger, finds max(bound, reserved), allocates next = max+1, writes reservation row to ledger BEFORE returning. " +
+    "Race-safe: in-process mutex + file-lock for cross-process concurrency. " +
+    "Eliminates the Codex-collision class (5+ empirical instances: Bushels 11/15/18/9/12/13/19). " +
+    "MUST be called BEFORE creating a Codex draft — draft authors with the returned serial from the start. " +
+    "At LANDING, call codex_bind_reservation to transition reserved→bound.",
+  {
+    reserved_by: z.string().describe("Caller identity: session ID (e.g. 'K503') or agent name."),
+    intended_title: z.string().describe("Intended Codex title (used for collision detection in reservation log)."),
+    intended_session: z.string().describe("Session or Bushel session ID (e.g. 'B022', 'K503')."),
+    intended_bushel: z.number().int().describe("Bushel number this serial is for (0 if not for a Bushel)."),
+    ttl_days: z.number().optional().describe("Reservation TTL in days (default 7). Expired serials return to pool."),
+  },
+  async ({ reserved_by, intended_title, intended_session, intended_bushel, ttl_days }) => {
+    const result = await reserveNextSerial(reserved_by, intended_title, intended_session, intended_bushel);
+    if ("error" in result) {
+      return { content: [{ type: "text" as const, text: JSON.stringify({ success: false, error: result.error }, null, 2) }], isError: true };
+    }
+    const { serial, reserved_ts, reservation_id } = result;
+    return {
+      content: [{
+        type: "text" as const,
+        text: JSON.stringify({
+          success: true,
+          serial,
+          reserved_ts,
+          reservation_id,
+          ttl_days: ttl_days ?? 7,
+          message: `Serial ${serial} reserved. Use this serial in your Codex draft from the start. Call codex_bind_reservation(reservation_id, bound_codex_id) at LANDING.`,
+        }, null, 2),
+      }],
+    };
+  },
+);
+
+registerTool(
+  "codex_bind_reservation",
+  "Bushel 32 / BP022 — Transition a Codex reservation from status='reserved' to status='bound'. " +
+    "Call AFTER codex_bind() succeeds. Links the reservation row to the now-bound Codex entry. " +
+    "Fails if reservation does not exist (T7: must reserve first), or if target Codex is not yet bound.",
+  {
+    reservation_id: z.string().describe("UUID from codex_reserve_next_serial call."),
+    bound_codex_id: z.string().describe("Codex serial (LB-CODEX-NNNN) that was just bound via codex_bind."),
+  },
+  async ({ reservation_id, bound_codex_id }) => {
+    const result = await bindReservation(reservation_id, bound_codex_id);
+    if ("error" in result) {
+      return { content: [{ type: "text" as const, text: JSON.stringify({ success: false, error: result.error }, null, 2) }], isError: true };
+    }
+    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+registerTool(
+  "codex_expire_reservations",
+  "Bushel 32 / BP022 — Sweep expired reservations (past TTL) and transition them to status='expired', releasing their serials back to the pool. " +
+    "Returns count of expired reservations and their serials.",
+  {
+    ttl_days: z.number().optional().describe("Override TTL in days (default 7). Reservations older than this are expired."),
+  },
+  async ({ ttl_days }) => {
+    const result = await expireReservations(ttl_days);
+    return { content: [{ type: "text" as const, text: JSON.stringify({ success: true, ...result }, null, 2) }] };
+  },
+);
+
+registerTool(
+  "codex_query_reservations",
+  "Bushel 32 / BP022 — Query Codex serial reservations by status, caller, or Bushel number. " +
+    "Returns reservation rows (type='reservation') from the codex ledger.",
+  {
+    status: z.enum(["reserved", "bound", "expired"]).optional().describe("Filter by reservation status."),
+    reserved_by: z.string().optional().describe("Filter by caller identity."),
+    intended_bushel: z.number().optional().describe("Filter by Bushel number."),
+  },
+  async ({ status, reserved_by, intended_bushel }) => {
+    const results = queryReservations({ status, reserved_by, intended_bushel });
+    return { content: [{ type: "text" as const, text: JSON.stringify({ count: results.length, reservations: results }, null, 2) }] };
+  },
+);
 
 /**
  * gold_tablet_query — read-class
