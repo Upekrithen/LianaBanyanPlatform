@@ -1,14 +1,14 @@
-/**
+﻿/**
  * test_old_ones_fleet.mjs — Old Ones Multi-Zippleback Fleet Test Suite
  * ======================================================================
  * Bushel 29 / BP021 — ≥15 tests covering G1-G8
  *
- * G1: Fleet scaffold operational — Cthulhu + 7 workers in Apiarist Hive thread
+ * G1: Fleet scaffold operational — Aughra + 7 workers in Apiarist Hive thread
  * G2: Assignment coverage — all 15 missing innovations assigned
  * G3: 4-action loop — each Old One cycles analyze→evaluate→recommend without error
  * G4: Iron Tablet writeback — each recommendation persisted with old_one_name + innovation_id
  * G5: Authority-gating — fix_upon_authority rejects malformed tokens; exact-match fires cascade
- * G6: Conflict arbitration — Cthulhu detects concurrent file conflict + serializes; dep-ordering honored
+ * G6: Conflict arbitration — Aughra detects concurrent file conflict + serializes; dep-ordering honored
  * G7: Dry-run receipt delivered with all 15 missing innovations covered
  * G8: Empirical receipt — Arm B throughput ≥ 4× Arm A
  */
@@ -38,7 +38,7 @@ import {
   advanceLoopState,
   emitFleetHeartbeat,
   draftBushel29Codex,
-} from "../src/zippleback/old_ones_fleet.js";
+} from "../dist/zippleback/old_ones_fleet.js";
 
 import {
   analyze,
@@ -47,7 +47,7 @@ import {
   fixUponAuthority,
   runOldOneLoop,
   runFleetDryRun,
-} from "../src/zippleback/old_ones_loop.js";
+} from "../dist/zippleback/old_ones_loop.js";
 
 import {
   detectFileConflicts,
@@ -58,7 +58,7 @@ import {
   detectFleetStall,
   validateArbitration,
   loadArbitrationLog,
-} from "../src/zippleback/old_ones_conflict.js";
+} from "../dist/zippleback/old_ones_conflict.js";
 
 // ─── Test helpers ─────────────────────────────────────────────────────────────
 
@@ -83,9 +83,9 @@ describe("Old Ones Multi-Zippleback Fleet — G1-G8", () => {
 
   // ── G1: Fleet scaffold ────────────────────────────────────────────────────
 
-  it("G1.1 — spawnOldOnesFleet returns FleetReceipt with Cthulhu as coordinator", () => {
+  it("G1.1 — spawnOldOnesFleet returns FleetReceipt with Aughra as coordinator", () => {
     const receipt = spawnOldOnesFleet(SESSION_REF);
-    assert.equal(receipt.coordinator, "Cthulhu");
+    assert.equal(receipt.coordinator, "Aughra");
     assert.ok(receipt.fleet_id.startsWith("LB-FLEET-"));
     assert.ok(receipt.hive_thread_id.startsWith("LB-HIVE-"));
   });
@@ -97,10 +97,10 @@ describe("Old Ones Multi-Zippleback Fleet — G1-G8", () => {
     assert.equal(receipt.active_workers.length, 7);
   });
 
-  it("G1.3 — all 7 named Old Ones present: Dagon/Shub/Nyarlathotep/Azathoth/Yog/Tsathoggua/Ithaqua", () => {
+  it("G1.3 — all 7 named Old Ones present: urSu/urZah/urUtt/urTih/urYod/urNol/urIm", () => {
     const receipt = spawnOldOnesFleet(SESSION_REF);
     const names = receipt.active_workers.map((w) => w.name);
-    const expected = ["Dagon", "Shub", "Nyarlathotep", "Azathoth", "Yog", "Tsathoggua", "Ithaqua"];
+    const expected = ["urSu", "urZah", "urUtt", "urTih", "urYod", "urNol", "urIm"];
     for (const name of expected) {
       assert.ok(names.includes(name), `${name} missing from fleet`);
     }
@@ -128,9 +128,9 @@ describe("Old Ones Multi-Zippleback Fleet — G1-G8", () => {
     assert.equal(Object.keys(assignmentMap).length, 22);
   });
 
-  it("G2.3 — Cthulhu has NO assignments (coordinator only)", () => {
+  it("G2.3 — Aughra has NO assignments (coordinator only)", () => {
     const assignmentMap = buildAssignmentMap();
-    const cthulhuAssignments = Object.values(assignmentMap).filter((v) => v === "Cthulhu");
+    const cthulhuAssignments = Object.values(assignmentMap).filter((v) => v === "Aughra");
     assert.equal(cthulhuAssignments.length, 0);
   });
 
@@ -143,7 +143,7 @@ describe("Old Ones Multi-Zippleback Fleet — G1-G8", () => {
   // ── G3: 4-action loop ─────────────────────────────────────────────────────
 
   it("G3.1 — analyze() returns GapReport for MISS-002 (Ouralis)", () => {
-    const desc = makeDescriptor("Dagon", "worker", "idle", "MISS-002");
+    const desc = makeDescriptor("urSu", "worker", "idle", "MISS-002");
     const report = analyze(desc, "MISS-002");
     assert.equal(report.innovation_id, "MISS-002");
     assert.equal(report.innovation_number, 3);
@@ -152,7 +152,7 @@ describe("Old Ones Multi-Zippleback Fleet — G1-G8", () => {
   });
 
   it("G3.2 — evaluate() returns complexity=L and patent_risk=high for Crown Jewel innovation", () => {
-    const desc = makeDescriptor("Dagon", "worker", "evaluating", "MISS-002");
+    const desc = makeDescriptor("urSu", "worker", "evaluating", "MISS-002");
     const report = analyze(desc, "MISS-002");
     const evalResult = evaluate(desc, report);
     assert.equal(evalResult.is_crown_jewel, true);
@@ -162,9 +162,9 @@ describe("Old Ones Multi-Zippleback Fleet — G1-G8", () => {
 
   it("G3.3 — runOldOneLoop() advances state to awaiting_authority without authority token", () => {
     const receipt = spawnOldOnesFleet(SESSION_REF);
-    const dagon = receipt.active_workers.find((w) => w.name === "Dagon");
-    const firstTarget = dagon.innovations_assigned[0];
-    const loopResult = runOldOneLoop(dagon, firstTarget, receipt.fleet_id);
+    const urSu = receipt.active_workers.find((w) => w.name === "urSu");
+    const firstTarget = urSu.innovations_assigned[0];
+    const loopResult = runOldOneLoop(urSu, firstTarget, receipt.fleet_id);
     assert.equal(loopResult.final_state, "awaiting_authority");
     assert.ok(loopResult.gap_report !== null, "gap_report should be set");
     assert.ok(loopResult.evaluation !== null, "evaluation should be set");
@@ -174,11 +174,11 @@ describe("Old Ones Multi-Zippleback Fleet — G1-G8", () => {
 
   it("G3.4 — loop state advances correctly: idle → analyzing → evaluating → recommending → awaiting_authority", () => {
     const receipt = spawnOldOnesFleet(SESSION_REF);
-    const shub = receipt.active_workers.find((w) => w.name === "Shub");
-    const target = shub.innovations_assigned[0];
-    const loopResult = runOldOneLoop(shub, target, receipt.fleet_id);
+    const urZah = receipt.active_workers.find((w) => w.name === "urZah");
+    const target = urZah.innovations_assigned[0];
+    const loopResult = runOldOneLoop(urZah, target, receipt.fleet_id);
     const heartbeats = loadFleetHeartbeats()
-      .filter((h) => h.old_one_name === "Shub" && h.fleet_id === receipt.fleet_id);
+      .filter((h) => h.old_one_name === "urZah" && h.fleet_id === receipt.fleet_id);
     const states = heartbeats.map((h) => h.loop_state);
     // Should have seen at least: analyzing, evaluating, recommending, awaiting_authority
     assert.ok(states.includes("analyzing"), `should have seen analyzing, got: ${states}`);
@@ -191,24 +191,24 @@ describe("Old Ones Multi-Zippleback Fleet — G1-G8", () => {
 
   it("G4.1 — recommend() writes to Iron Tablet (entry exists with old_one_name + innovation_id)", () => {
     const receipt = spawnOldOnesFleet(SESSION_REF);
-    const nyar = receipt.active_workers.find((w) => w.name === "Nyarlathotep");
+    const nyar = receipt.active_workers.find((w) => w.name === "urUtt");
     const target = nyar.innovations_assigned[0];
     runOldOneLoop(nyar, target, receipt.fleet_id);
     const tablets = loadIronTabletEntries();
     const recEntry = tablets.find(
-      (t) => t.old_one_name === "Nyarlathotep" &&
+      (t) => t.old_one_name === "urUtt" &&
              t.innovation_id === target &&
              t.entry_type === "recommendation"
     );
-    assert.ok(recEntry, `No recommendation Iron Tablet entry found for Nyarlathotep + ${target}`);
-    assert.equal(recEntry.old_one_name, "Nyarlathotep");
+    assert.ok(recEntry, `No recommendation Iron Tablet entry found for urUtt + ${target}`);
+    assert.equal(recEntry.old_one_name, "urUtt");
     assert.equal(recEntry.innovation_id, target);
   });
 
   it("G4.2 — writeIronTablet() persists entry with fleet_id field", () => {
     const fleetId = "LB-FLEET-TEST-G4";
     const entry = writeIronTablet(
-      "LB-IT-TEST-G4", "Yog", "MISS-012",
+      "LB-IT-TEST-G4", "urYod", "MISS-012",
       "gap_report", { test: true }, fleetId
     );
     const tablets = loadIronTabletEntries();
@@ -221,11 +221,11 @@ describe("Old Ones Multi-Zippleback Fleet — G1-G8", () => {
 
   it("G5.1 — fixUponAuthority() rejects malformed token", () => {
     const receipt = spawnOldOnesFleet(SESSION_REF);
-    const ithaqua = receipt.active_workers.find((w) => w.name === "Ithaqua");
-    const target = ithaqua.innovations_assigned[0];
-    const loopResult = runOldOneLoop(ithaqua, target, receipt.fleet_id);
+    const urIm = receipt.active_workers.find((w) => w.name === "urIm");
+    const target = urIm.innovations_assigned[0];
+    const loopResult = runOldOneLoop(urIm, target, receipt.fleet_id);
     const badTokenResult = fixUponAuthority(
-      ithaqua, loopResult.recommendation, "WRONG_TOKEN", receipt.fleet_id
+      urIm, loopResult.recommendation, "WRONG_TOKEN", receipt.fleet_id
     );
     assert.ok("error" in badTokenResult, "Should have returned error for malformed token");
     assert.ok(badTokenResult.error.includes("rejected"), badTokenResult.error);
@@ -233,22 +233,22 @@ describe("Old Ones Multi-Zippleback Fleet — G1-G8", () => {
 
   it("G5.2 — fixUponAuthority() rejects wrong Old One name in token", () => {
     const receipt = spawnOldOnesFleet(SESSION_REF);
-    const tsathoggua = receipt.active_workers.find((w) => w.name === "Tsathoggua");
-    const target = tsathoggua.innovations_assigned[0];
-    const loopResult = runOldOneLoop(tsathoggua, target, receipt.fleet_id);
+    const urNol = receipt.active_workers.find((w) => w.name === "urNol");
+    const target = urNol.innovations_assigned[0];
+    const loopResult = runOldOneLoop(urNol, target, receipt.fleet_id);
     const wrongNameResult = fixUponAuthority(
-      tsathoggua, loopResult.recommendation, "AUTHORITY_GRANTED:Dagon", receipt.fleet_id
+      urNol, loopResult.recommendation, "AUTHORITY_GRANTED:urSu", receipt.fleet_id
     );
     assert.ok("error" in wrongNameResult, "Should reject wrong Old One name");
   });
 
   it("G5.3 — fixUponAuthority() accepts exact-match token and fires Channel 4→5→6 cascade", () => {
     const receipt = spawnOldOnesFleet(SESSION_REF);
-    const azathoth = receipt.active_workers.find((w) => w.name === "Azathoth");
-    const target = azathoth.innovations_assigned[0];
-    const loopResult = runOldOneLoop(azathoth, target, receipt.fleet_id);
+    const urTih = receipt.active_workers.find((w) => w.name === "urTih");
+    const target = urTih.innovations_assigned[0];
+    const loopResult = runOldOneLoop(urTih, target, receipt.fleet_id);
     const authResult = fixUponAuthority(
-      azathoth, loopResult.recommendation, "AUTHORITY_GRANTED:Azathoth", receipt.fleet_id
+      urTih, loopResult.recommendation, "AUTHORITY_GRANTED:urTih", receipt.fleet_id
     );
     assert.ok(!("error" in authResult), `Should succeed: ${JSON.stringify(authResult)}`);
     assert.ok(authResult.channel_4_directive_id.startsWith("LB-DIR-"));
@@ -257,9 +257,9 @@ describe("Old Ones Multi-Zippleback Fleet — G1-G8", () => {
 
   it("G5.4 — runOldOneLoop() with valid authority token advances to complete state", () => {
     const receipt = spawnOldOnesFleet(SESSION_REF);
-    const yog = receipt.active_workers.find((w) => w.name === "Yog");
-    const target = yog.innovations_assigned[0];
-    const loopResult = runOldOneLoop(yog, target, receipt.fleet_id, `AUTHORITY_GRANTED:Yog`);
+    const urYod = receipt.active_workers.find((w) => w.name === "urYod");
+    const target = urYod.innovations_assigned[0];
+    const loopResult = runOldOneLoop(urYod, target, receipt.fleet_id, `AUTHORITY_GRANTED:urYod`);
     assert.equal(loopResult.final_state, "complete");
     assert.ok(loopResult.fix_receipt !== null, "fix_receipt should be set after authority grant");
   });
@@ -268,20 +268,20 @@ describe("Old Ones Multi-Zippleback Fleet — G1-G8", () => {
 
   it("G6.1 — detectFileConflicts() returns conflict when two Old Ones target same file", () => {
     const rec1 = {
-      innovation_id: "MISS-001", old_one_name: "Dagon",
+      innovation_id: "MISS-001", old_one_name: "urSu",
       files_to_create: ["platform/src/components/hexisle/SharedComponent.tsx"],
       files_to_modify: ["platform/src/pages/HexIsle.tsx"],
       new_component_spec: "", acceptance_criteria: [],
       iron_tablet_entry_id: "LB-IT-TEST", ts: new Date().toISOString(),
     };
     const rec2 = {
-      innovation_id: "MISS-002", old_one_name: "Shub",
+      innovation_id: "MISS-002", old_one_name: "urZah",
       files_to_create: [],
       files_to_modify: ["platform/src/pages/HexIsle.tsx"], // same file!
       new_component_spec: "", acceptance_criteria: [],
       iron_tablet_entry_id: "LB-IT-TEST2", ts: new Date().toISOString(),
     };
-    const recommendations = new Map([["Dagon", rec1], ["Shub", rec2]]);
+    const recommendations = new Map([["urSu", rec1], ["urZah", rec2]]);
     const conflicts = detectFileConflicts(recommendations);
     assert.ok(conflicts.length > 0, "Should detect file conflict");
     const hexIsleConflict = conflicts.find(c => c.contested_resource === "platform/src/pages/HexIsle.tsx");
@@ -292,19 +292,19 @@ describe("Old Ones Multi-Zippleback Fleet — G1-G8", () => {
 
   it("G6.2 — areDependenciesMet() defers Old One when dependency not yet in awaiting_authority", () => {
     // MISS-015 depends on MISS-002 (Ouralis)
-    // Shub owns MISS-002 but is still in 'analyzing' state
+    // urZah owns MISS-002 but is still in 'analyzing' state
     const receipt = spawnOldOnesFleet(SESSION_REF);
     const assignmentMap = receipt.assignments;
 
-    // Simulate Shub still analyzing
+    // Simulate urZah still analyzing
     const workersWithShubAnalyzing = receipt.active_workers.map((w) =>
-      w.name === "Shub" ? { ...w, loop_state: "analyzing", current_target: "MISS-002" } : w
+      w.name === "urZah" ? { ...w, loop_state: "analyzing", current_target: "MISS-002" } : w
     );
 
     const result = areDependenciesMet("MISS-015", workersWithShubAnalyzing, assignmentMap);
-    // MISS-015 depends on MISS-002; Shub owns MISS-002 but is 'analyzing' not 'awaiting_authority'
+    // MISS-015 depends on MISS-002; urZah owns MISS-002 but is 'analyzing' not 'awaiting_authority'
     // So deps may or may not be met depending on assignment — check the logic
-    // (If MISS-002 is assigned to Shub and Shub is analyzing, deps are NOT met)
+    // (If MISS-002 is assigned to urZah and urZah is analyzing, deps are NOT met)
     assert.ok(typeof result.met === "boolean", "areDependenciesMet should return met boolean");
   });
 

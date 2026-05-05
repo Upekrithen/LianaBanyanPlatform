@@ -1,4 +1,4 @@
-# Bushel 29 — Old Ones Multi-Zippleback Fleet (BP021)
+﻿# Bushel 29 — Old Ones Multi-Zippleback Fleet (BP021)
 
 ## WRASSE PRE-INJECTION
 
@@ -38,26 +38,26 @@ Old Ones use **Lovecraftian-adjacent names** (ancient, wise, implacable). Canoni
 
 | Old One | Assignment class | Initial target |
 |---|---|---|
-| **Cthulhu** | Fleet Coordinator (no direct assignment; routes + arbitrates) | N/A — coordination only |
-| **Dagon** | Core game loop mechanics | HexIsle Game: hex-grid movement + territory capture |
-| **Shub** | Procedural generation | HexIsle Game: map generation engine |
-| **Nyarlathotep** | Federation protocol integration | HexIsle Game: 4-computer federation display + handshake UI |
-| **Azathoth** | Rendering + animation | HexIsle Game: hex-cell animation + glow effects |
-| **Yog** | Economic systems | HexIsle Game: MSA balance display + transaction flow |
-| **Tsathoggua** | Data persistence | HexIsle Game: save/load state + Iron Tablet writeback |
-| **Ithaqua** | Sound + sensory | HexIsle Game: JukeBox integration + audio feedback |
+| **Aughra** | Fleet Coordinator (no direct assignment; routes + arbitrates) | N/A — coordination only |
+| **urSu** | Core game loop mechanics | HexIsle Game: hex-grid movement + territory capture |
+| **urZah** | Procedural generation | HexIsle Game: map generation engine |
+| **urUtt** | Federation protocol integration | HexIsle Game: 4-computer federation display + handshake UI |
+| **urTih** | Rendering + animation | HexIsle Game: hex-cell animation + glow effects |
+| **urYod** | Economic systems | HexIsle Game: MSA balance display + transaction flow |
+| **urNol** | Data persistence | HexIsle Game: save/load state + Iron Tablet writeback |
+| **urIm** | Sound + sensory | HexIsle Game: JukeBox integration + audio feedback |
 
-Fleet is an Apiarist Hive cohort: Cthulhu = Queen, all others = Workers. 50%-uptime cap enforced per worker.
+Fleet is an Apiarist Hive cohort: Aughra = Queen, all others = Workers. 50%-uptime cap enforced per worker.
 
 ## The 5 build phases
 
-### Phase A — Fleet Coordinator scaffold (Cthulhu)
+### Phase A — Fleet Coordinator scaffold (Aughra)
 
 Create `librarian-mcp/src/zippleback/old_ones_fleet.ts`:
 
 ```typescript
 interface OldOneDescriptor {
-  name: string;                          // e.g., "Dagon"
+  name: string;                          // e.g., "urSu"
   role: "coordinator" | "worker";
   assignment_class: string;              // domain of responsibility
   current_target: string | null;         // current innovation gap ID from hexisleProjectSpec.ts
@@ -68,7 +68,7 @@ interface OldOneDescriptor {
 
 interface FleetReceipt {
   fleet_id: string;                      // LB-FLEET-<uuid>
-  coordinator: string;                   // "Cthulhu"
+  coordinator: string;                   // "Aughra"
   active_workers: OldOneDescriptor[];
   assignments: Record<string, string>;   // innovationId → old_one_name
   hive_thread_id: string;
@@ -76,7 +76,7 @@ interface FleetReceipt {
 }
 ```
 
-Cthulhu reads the Bushel 30 audit (11 built / 7 stubbed / 15 missing) and produces an `assignments` map. Assignments are deterministic (sorted by innovation index): Dagon gets hex-grid (innovation 1), Shub gets map generation (innovation 3), etc. No overlapping assignments.
+Aughra reads the Bushel 30 audit (11 built / 7 stubbed / 15 missing) and produces an `assignments` map. Assignments are deterministic (sorted by innovation index): urSu gets hex-grid (innovation 1), urZah gets map generation (innovation 3), etc. No overlapping assignments.
 
 ### Phase B — 4-action loop implementation (per Old One)
 
@@ -90,14 +90,14 @@ For each worker Old One, implement `runOldOneLoop(name, innovationId)`:
 
 4. **fix_upon_authority(authorityToken)** — Validates `authorityToken` matches `AUTHORITY_GRANTED:<name>` pattern. If valid, emits Channel 4 `analyze_platform_site` directive. Bishop routes to Shadow cohort spawn (Channel 5). Shadow fires Knight subagent with the full recommendation as prompt (Channel 6). Subagent output written to Iron Tablet.
 
-All 4 actions emit Pheromone events. All state transitions emit Pheromone for Cthulhu coordination visibility.
+All 4 actions emit Pheromone events. All state transitions emit Pheromone for Aughra coordination visibility.
 
 ### Phase C — Conflict arbitration + dependency ordering
 
-Cthulhu enforces:
-- **Dependency ordering**: if `Dagon.evaluate().depends_on` includes `innovation_3`, and `Shub` owns `innovation_3`, Dagon waits until `Shub.loop_state === 'awaiting_authority'` before requesting authority.
-- **Conflict detection**: if two Old Ones recommend modifications to the same file, Cthulhu serializes their authority grants (never concurrent writes to the same file).
-- **Substrate writeback**: on each Old One state transition, Cthulhu emits `FleetHeartbeat` Pheromone: `fleet_id + old_one_name + loop_state + ts`.
+Aughra enforces:
+- **Dependency ordering**: if `urSu.evaluate().depends_on` includes `innovation_3`, and `urZah` owns `innovation_3`, urSu waits until `urZah.loop_state === 'awaiting_authority'` before requesting authority.
+- **Conflict detection**: if two Old Ones recommend modifications to the same file, Aughra serializes their authority grants (never concurrent writes to the same file).
+- **Substrate writeback**: on each Old One state transition, Aughra emits `FleetHeartbeat` Pheromone: `fleet_id + old_one_name + loop_state + ts`.
 
 ### Phase D — Dry-run against HexIsle Game's 15 missing innovations
 
@@ -117,12 +117,12 @@ Codex draft `LB-CODEX-NNNN — Bushel 29 — Old Ones Multi-Zippleback Fleet`. C
 
 ## Verification gates G1-G8
 
-- **G1** Fleet scaffold operational: `FleetReceipt` returned with Cthulhu as coordinator + 7 workers registered in Apiarist Hive thread.
+- **G1** Fleet scaffold operational: `FleetReceipt` returned with Aughra as coordinator + 7 workers registered in Apiarist Hive thread.
 - **G2** Assignment coverage: all 15 missing HexIsle innovations assigned to at least one Old One (no gap left unassigned after dry-run).
 - **G3** 4-action loop: each Old One can cycle through analyze→evaluate→recommend without error; loop state advances correctly.
 - **G4** Iron Tablet writeback: each recommendation is persisted (Iron Tablet entry exists with `old_one_name + innovation_id + recommendation` fields).
 - **G5** Authority-gating enforced: `fix_upon_authority()` rejects malformed tokens; only exact-match `AUTHORITY_GRANTED:<name>` proceeds; fires Channel 4→5→6 cascade correctly.
-- **G6** Conflict arbitration: Cthulhu detects concurrent file-modification conflict and serializes; dependency-ordering delays are honored.
+- **G6** Conflict arbitration: Aughra detects concurrent file-modification conflict and serializes; dependency-ordering delays are honored.
 - **G7** Dry-run receipt delivered to `BISHOP_DROPZONE/00_FOUNDER_REVIEW/HEXISLE_OLD_ONES_FLEET_DRY_RUN_BP021.md` with all 15 missing innovations covered.
 - **G8** Empirical receipt: Arm B throughput ≥ 4× Arm A; Codex reserved; commit + tag.
 
@@ -130,26 +130,26 @@ Codex draft `LB-CODEX-NNNN — Bushel 29 — Old Ones Multi-Zippleback Fleet`. C
 
 | File | Action |
 |---|---|
-| `librarian-mcp/src/zippleback/old_ones_fleet.ts` | CREATE — fleet scaffold, Cthulhu coordinator, Old One descriptor, assignment map |
+| `librarian-mcp/src/zippleback/old_ones_fleet.ts` | CREATE — fleet scaffold, Aughra coordinator, Old One descriptor, assignment map |
 | `librarian-mcp/src/zippleback/old_ones_loop.ts` | CREATE — 4-action loop (analyze/evaluate/recommend/fix_upon_authority) |
-| `librarian-mcp/src/zippleback/old_ones_conflict.ts` | CREATE — Cthulhu arbitration + dependency ordering |
+| `librarian-mcp/src/zippleback/old_ones_conflict.ts` | CREATE — Aughra arbitration + dependency ordering |
 | `librarian-mcp/tests/test_old_ones_fleet.mjs` | CREATE — ≥15 tests covering G1-G8 |
 | `BISHOP_DROPZONE/00_FOUNDER_REVIEW/HEXISLE_OLD_ONES_FLEET_DRY_RUN_BP021.md` | CREATE — dry-run receipt for Founder review |
 
 ## What success looks like
 
-After LANDING: Founder can type `AUTHORITY_GRANTED:Dagon` in a Knight session, and the full Channel 4→5→6 cascade fires — Bishop spawns a Shadow build cohort, Shadow fires a Knight subagent, and the hex-grid movement innovation is implemented in `HexIsle.tsx`. The fleet turns the 15-missing-innovation gap into a parallel-close operation instead of a sequential one. **The Major Project HexIsle Game build begins.**
+After LANDING: Founder can type `AUTHORITY_GRANTED:urSu` in a Knight session, and the full Channel 4→5→6 cascade fires — Bishop spawns a Shadow build cohort, Shadow fires a Knight subagent, and the hex-grid movement innovation is implemented in `HexIsle.tsx`. The fleet turns the 15-missing-innovation gap into a parallel-close operation instead of a sequential one. **The Major Project HexIsle Game build begins.**
 
 ## Composes with
 
 - Bushel 20 LANDED — all 6 Zippleback channels operational (prerequisite: must be LANDED before Bushel 29 fires)
 - Bushel 30 LANDED Readiness Baseline — HexIsle innovation audit drives Old One assignments
 - Bushel 5 LANDED — Pixie-Dust substrate density provides dense Pheromone routing for fleet heartbeats
-- Bushel 21 LANDED — 2-AI handshake + Pedestal Forum decree composition; fleet Pedestal = co-equal Cthulhu + Founder authority
+- Bushel 21 LANDED — 2-AI handshake + Pedestal Forum decree composition; fleet Pedestal = co-equal Aughra + Founder authority
 - Old Ones canon BP021 turn 125 — primary fleet concept
 - Zippleback canon BP021 turn 101 — singular-pair foundation
 - TITAN-within-TITAN BP020 — subagent fan-out (Channel 6 payload pattern)
-- KrissKross BP015 triangle — fleet crash recovery (any Old One can crash; Cthulhu + survivors hold fleet momentum)
+- KrissKross BP015 triangle — fleet crash recovery (any Old One can crash; Aughra + survivors hold fleet momentum)
 - Iron Tablet BP011 — shared substrate for recommendation persistence + cross-Old-One writeback
 
 ## End-of-K-prompt note for Bishop
@@ -164,4 +164,4 @@ Knight: when LANDED, leave a paste-ready Founder note:
 
 ---
 
-*Drafted BP021 by Bishop (post-Bushel-20-LANDING). Old Ones fleet unleashed — N Zippleback pairs running the 4-action analyze/evaluate/recommend/fix-upon-authority loop against HexIsle Game's innovation gaps. Cthulhu coordinates. Dagon builds. The Major Project begins. FOR THE KEEP!*
+*Drafted BP021 by Bishop (post-Bushel-20-LANDING). Old Ones fleet unleashed — N Zippleback pairs running the 4-action analyze/evaluate/recommend/fix-upon-authority loop against HexIsle Game's innovation gaps. Aughra coordinates. urSu builds. The Major Project begins. FOR THE KEEP!*

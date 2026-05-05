@@ -1,12 +1,12 @@
-/**
+﻿/**
  * Old Ones Multi-Zippleback Fleet — Phase A: Fleet Scaffold
  * ===========================================================
  * Bushel 29 / BP021 — Old Ones Multi-Zippleback Fleet (turn 125)
  *
- * Deploys Cthulhu (Queen/Coordinator) + 7 Worker Old Ones (Dagon, Shub,
- * Nyarlathotep, Azathoth, Yog, Tsathoggua, Ithaqua) as an Apiarist Hive cohort.
+ * Deploys Aughra (Queen/Coordinator) + 7 Worker Old Ones (urSu, urZah,
+ * urUtt, urTih, urYod, urNol, urIm) as an Apiarist Hive cohort.
  * Each Old One is a full Zippleback pair running the 4-action loop (Phase B).
- * Cthulhu coordinates assignments, arbitrates conflicts, and tracks fleet state.
+ * Aughra coordinates assignments, arbitrates conflicts, and tracks fleet state.
  *
  * Assignments derived from Bushel 30 audit: 11 built / 7 stubbed / 15 missing.
  * Deterministic assignment: sorted by innovation index → round-robin to workers.
@@ -14,7 +14,7 @@
  * Composes with:
  *   bishop_callback_listener.ts  — Channels 4/5/6 (Bushel 20 LANDED)
  *   old_ones_loop.ts             — 4-action loop per Old One (Phase B)
- *   old_ones_conflict.ts         — Cthulhu arbitration (Phase C)
+ *   old_ones_conflict.ts         — Aughra arbitration (Phase C)
  *   ../scribes/pheromone.ts      — Pheromone event emission
  *   ../codex/schema.ts           — Codex entry
  *
@@ -61,14 +61,14 @@ export type LoopState =
   | "crashed";
 
 export type OldOneName =
-  | "Cthulhu"
-  | "Dagon"
-  | "Shub"
-  | "Nyarlathotep"
-  | "Azathoth"
-  | "Yog"
-  | "Tsathoggua"
-  | "Ithaqua";
+  | "Aughra"
+  | "urSu"
+  | "urZah"
+  | "urUtt"
+  | "urTih"
+  | "urYod"
+  | "urNol"
+  | "urIm";
 
 export interface OldOneDescriptor {
   name: OldOneName;
@@ -83,7 +83,7 @@ export interface OldOneDescriptor {
 
 export interface FleetReceipt {
   fleet_id: string;             // LB-FLEET-<uuid>
-  coordinator: OldOneName;      // "Cthulhu"
+  coordinator: OldOneName;      // "Aughra"
   active_workers: OldOneDescriptor[];
   assignments: Record<string, OldOneName>; // innovationId → old_one_name
   hive_thread_id: string;
@@ -146,17 +146,17 @@ export const HEXISLE_INNOVATION_GAPS: HexIsleInnovationGap[] = [
 // ─── Old One roster ───────────────────────────────────────────────────────────
 
 const OLD_ONE_ROSTER: Omit<OldOneDescriptor, "current_target" | "loop_state" | "iron_tablet_id" | "hive_thread_id" | "innovations_assigned">[] = [
-  { name: "Cthulhu",      role: "coordinator", assignment_class: "Fleet Coordinator (routes + arbitrates; no direct innovation assignment)" },
-  { name: "Dagon",        role: "worker",      assignment_class: "Core game loop mechanics — hydraulic coupling + tidal engine" },
-  { name: "Shub",         role: "worker",      assignment_class: "Procedural generation — map generation + directional current" },
-  { name: "Nyarlathotep", role: "worker",      assignment_class: "Federation protocol integration — pressure generation + distribution" },
-  { name: "Azathoth",     role: "worker",      assignment_class: "Rendering + animation — ship mechanics + visual mechanics" },
-  { name: "Yog",          role: "worker",      assignment_class: "Economic systems — scale adapters + gravity baseline" },
-  { name: "Tsathoggua",   role: "worker",      assignment_class: "Data persistence — fluid systems + clock-as-state" },
-  { name: "Ithaqua",      role: "worker",      assignment_class: "Sound + sensory — cascading + manufacturing systems" },
+  { name: "Aughra",      role: "coordinator", assignment_class: "Fleet Coordinator (routes + arbitrates; no direct innovation assignment)" },
+  { name: "urSu",        role: "worker",      assignment_class: "Core game loop mechanics — hydraulic coupling + tidal engine" },
+  { name: "urZah",         role: "worker",      assignment_class: "Procedural generation — map generation + directional current" },
+  { name: "urUtt", role: "worker",      assignment_class: "Federation protocol integration — pressure generation + distribution" },
+  { name: "urTih",     role: "worker",      assignment_class: "Rendering + animation — ship mechanics + visual mechanics" },
+  { name: "urYod",          role: "worker",      assignment_class: "Economic systems — scale adapters + gravity baseline" },
+  { name: "urNol",   role: "worker",      assignment_class: "Data persistence — fluid systems + clock-as-state" },
+  { name: "urIm",      role: "worker",      assignment_class: "Sound + sensory — cascading + manufacturing systems" },
 ];
 
-const WORKERS: OldOneName[] = ["Dagon", "Shub", "Nyarlathotep", "Azathoth", "Yog", "Tsathoggua", "Ithaqua"];
+const WORKERS: OldOneName[] = ["urSu", "urZah", "urUtt", "urTih", "urYod", "urNol", "urIm"];
 
 // ─── Deterministic assignment algorithm ──────────────────────────────────────
 
@@ -165,7 +165,7 @@ const WORKERS: OldOneName[] = ["Dagon", "Shub", "Nyarlathotep", "Azathoth", "Yog
  * Sort by: (1) status: missing before stubbed, (2) priority: critical before core before standard,
  * (3) innovation_number ascending. Then round-robin across WORKERS.
  *
- * Cthulhu (coordinator) receives no assignments.
+ * Aughra (coordinator) receives no assignments.
  */
 export function buildAssignmentMap(
   gaps: HexIsleInnovationGap[] = HEXISLE_INNOVATION_GAPS
@@ -205,7 +205,7 @@ function workerAssignments(
 /**
  * Phase A: Spawn the Old Ones fleet.
  *
- * Returns a FleetReceipt with Cthulhu as coordinator + 7 workers registered
+ * Returns a FleetReceipt with Aughra as coordinator + 7 workers registered
  * in a shared Apiarist Hive thread. Validates G1 (fleet scaffold operational)
  * and G2 (all 15 missing innovations assigned).
  */
@@ -232,7 +232,7 @@ export function spawnOldOnesFleet(
       : workerAssignments(base.name, assignmentMap),
   }));
 
-  const coordinator = allDescriptors.find((d) => d.name === "Cthulhu")!;
+  const coordinator = allDescriptors.find((d) => d.name === "Aughra")!;
   const workers = allDescriptors.filter((d) => d.role === "worker");
 
   // Set initial target for each worker (first assigned innovation)
@@ -265,8 +265,8 @@ export function spawnOldOnesFleet(
   emitPheromone(
     "OldOnesFleetSpawn",
     fleetId,
-    `old-ones fleet spawn ${fleetId} cthulhu coordinator 7 workers dagon shub ` +
-    `nyarlathotep azathoth yog tsathoggua ithaqua apiarist-hive ${hiveThreadId} ` +
+    `old-ones fleet spawn ${fleetId} aughra coordinator 7 workers urSu urZah ` +
+    `urUtt urTih urYod urNol urIm apiarist-hive ${hiveThreadId} ` +
     `session ${sessionRef} innovations-covered ${receipt.innovations_covered} ` +
     `missing ${missingCount} stubbed ${stubbedCount} hexisle-game bushel-29 ` +
     `multi-zippleback-fleet 4-action-loop authority-gating major-project-begins`,
@@ -293,7 +293,7 @@ export function spawnOldOnesFleet(
 
 /**
  * Emit a FleetHeartbeat Pheromone — called on every Old One state transition.
- * Cthulhu monitors these for coordination visibility.
+ * Aughra monitors these for coordination visibility.
  */
 export function emitFleetHeartbeat(
   fleetId: string,
@@ -317,7 +317,7 @@ export function emitFleetHeartbeat(
     `fleet-heartbeat-${fleetId}-${oldOneName}-${Date.now()}`,
     `old-ones fleet heartbeat ${fleetId} ${oldOneName} loop-state ${loopState} ` +
     `target ${currentTarget ?? "none"} apiarist-hive 50pct-uptime-cap ` +
-    `cthulhu-visibility hexisle-game bushel-29`,
+    `aughra-visibility hexisle-game bushel-29`,
     {
       cathedral: "knight",
       flavorClass: {
@@ -332,7 +332,7 @@ export function emitFleetHeartbeat(
 }
 
 /**
- * Advance an Old One's loop state — emits heartbeat for Cthulhu visibility.
+ * Advance an Old One's loop state — emits heartbeat for Aughra visibility.
  * Returns the new descriptor (immutable update pattern).
  */
 export function advanceLoopState(
@@ -442,14 +442,14 @@ export function loadFleetHeartbeats(): FleetHeartbeat[] {
 
 // ─── G1/G2 validation helpers ─────────────────────────────────────────────────
 
-/** G1: Fleet scaffold operational — Cthulhu + 7 workers in hive thread */
+/** G1: Fleet scaffold operational — Aughra + 7 workers in hive thread */
 export function validateFleetScaffold(receipt: FleetReceipt): {
   valid: boolean;
   errors: string[];
 } {
   const errors: string[] = [];
-  if (receipt.coordinator !== "Cthulhu") {
-    errors.push(`G1 FAIL: coordinator must be Cthulhu, got ${receipt.coordinator}`);
+  if (receipt.coordinator !== "Aughra") {
+    errors.push(`G1 FAIL: coordinator must be Aughra, got ${receipt.coordinator}`);
   }
   if (receipt.active_workers.length !== 7) {
     errors.push(`G1 FAIL: expected 7 workers, got ${receipt.active_workers.length}`);
@@ -508,12 +508,12 @@ export function draftBushel29Codex(
     created_ts: now,
     chapters: [
       {
-        topic: "Fleet Scaffold — Cthulhu + 7 Workers",
+        topic: "Fleet Scaffold — Aughra + 7 Workers",
         gold_tablet_pointers: ["old_ones_fleet_spawn"],
         excalibur_pointers: [],
         jar_pointers: [],
         body_text:
-          `Fleet ID: ${receipt.fleet_id}. Coordinator: Cthulhu. ` +
+          `Fleet ID: ${receipt.fleet_id}. Coordinator: Aughra. ` +
           `Workers: ${receipt.active_workers.map((w) => w.name).join(", ")}. ` +
           `Hive thread: ${receipt.hive_thread_id}. ` +
           `Innovations covered: ${receipt.innovations_covered} ` +
@@ -535,15 +535,15 @@ export function draftBushel29Codex(
         ts_drafted: now,
       },
       {
-        topic: "Cthulhu Conflict Arbitration + Dependency Ordering",
+        topic: "Aughra Conflict Arbitration + Dependency Ordering",
         gold_tablet_pointers: ["old_ones_cthulhu_arbitration"],
         excalibur_pointers: [],
         jar_pointers: [],
         body_text:
-          `Cthulhu enforces dependency ordering (waits for dependency Old One to reach awaiting_authority) ` +
+          `Aughra enforces dependency ordering (waits for dependency Old One to reach awaiting_authority) ` +
           `and conflict serialization (same-file concurrent modifications prevented). ` +
           `KrissKross triangle from Bushel 20 provides crash recovery for fleet. ` +
-          `G6 PASSED: Cthulhu detects conflict + serializes; dependency-ordering delays honored.`,
+          `G6 PASSED: Aughra detects conflict + serializes; dependency-ordering delays honored.`,
         ts_drafted: now,
       },
       {
@@ -575,7 +575,7 @@ export function draftBushel29Codex(
     "Codex",
     codexId,
     `codex ${codexId} bushel-29 old-ones multi-zippleback-fleet landed BP021 ` +
-    `cthulhu 7-workers hexisle-game major-project-begins authority-gating ` +
+    `aughra 7-workers hexisle-game major-project-begins authority-gating ` +
     `4-action-loop iron-tablet dry-run-receipt empirical-arm-b-4x-arm-a`,
     {
       cathedral: "knight",

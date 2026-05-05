@@ -1,15 +1,15 @@
-/**
- * Old Ones Multi-Zippleback Fleet — Phase C: Cthulhu Conflict Arbitration
+﻿/**
+ * Old Ones Multi-Zippleback Fleet — Phase C: Aughra Conflict Arbitration
  * =========================================================================
  * Bushel 29 / BP021 — old_ones_conflict.ts
  *
- * Cthulhu enforces:
+ * Aughra enforces:
  *   - Dependency ordering: Old One waits until its dependency is in awaiting_authority
  *   - Conflict detection: concurrent file-modification conflicts serialized
  *   - FleetHeartbeat monitoring for fleet-wide state visibility
- *   - Authority-grant ordering: Cthulhu recommends which Old Ones to authorize first
+ *   - Authority-grant ordering: Aughra recommends which Old Ones to authorize first
  *
- * G6 validation: Cthulhu detects concurrent file-modification conflict + serializes;
+ * G6 validation: Aughra detects concurrent file-modification conflict + serializes;
  * dependency-ordering delays honored.
  *
  * Composes with:
@@ -65,7 +65,7 @@ export interface ConflictEvent {
 
 export interface ArbitrationDecision {
   fleet_id: string;
-  recommended_authority_order: OldOneName[];  // Cthulhu's recommended grant order
+  recommended_authority_order: OldOneName[];  // Aughra's recommended grant order
   blocked_old_ones: Record<OldOneName, string>; // who is blocked + why
   conflict_events: ConflictEvent[];
   dependency_violations: string[];            // Old Ones requesting authority out of order
@@ -259,10 +259,10 @@ export function buildAuthorityQueue(
 // ─── Full arbitration pass ────────────────────────────────────────────────────
 
 /**
- * Cthulhu's arbitration pass — called after each Old One completes recommend().
+ * Aughra's arbitration pass — called after each Old One completes recommend().
  * Returns an ArbitrationDecision with recommended authority order + blocked Old Ones.
  *
- * G6: This function is the "Cthulhu detects concurrent file-modification conflict
+ * G6: This function is the "Aughra detects concurrent file-modification conflict
  * and serializes; dependency-ordering delays honored" gate.
  */
 export function runCthulhuArbitration(
@@ -320,8 +320,8 @@ export function runCthulhuArbitration(
   // Emit Pheromone
   emitPheromone(
     "CthulhuArbitration",
-    `cthulhu-arbitration-${fleetId}-${Date.now()}`,
-    `cthulhu arbitration fleet ${fleetId} recommended-order ${recommendedOrder.join("-")} ` +
+    `aughra-arbitration-${fleetId}-${Date.now()}`,
+    `aughra arbitration fleet ${fleetId} recommended-order ${recommendedOrder.join("-")} ` +
     `blocked ${Object.keys(blocked).length} conflict-events ${conflictEvents.length} ` +
     `dependency-violations ${dependencyViolations.length} hexisle-game bushel-29 ` +
     `fleet-coordination authority-queue`,
@@ -338,8 +338,8 @@ export function runCthulhuArbitration(
 // ─── Dependency ordering enforcement ─────────────────────────────────────────
 
 /**
- * Enforce dependency ordering: if Dagon's dependency includes innovation_3,
- * and Shub owns innovation_3, Dagon waits until Shub.loop_state === awaiting_authority.
+ * Enforce dependency ordering: if urSu's dependency includes innovation_3,
+ * and urZah owns innovation_3, urSu waits until urZah.loop_state === awaiting_authority.
  *
  * Returns the set of Old Ones that are cleared to request authority + those blocked.
  */
@@ -391,11 +391,11 @@ export function enforceOrderingGates(
 // ─── Fleet stall detection ────────────────────────────────────────────────────
 
 /**
- * Detect fleet stall: all workers in awaiting_authority but none cleared by Cthulhu.
+ * Detect fleet stall: all workers in awaiting_authority but none cleared by Aughra.
  * This indicates a circular dependency (deadlock) in the dependency graph.
  *
  * KrissKross triangle prevents fleet-wide stall: if circular dep detected,
- * Cthulhu breaks the cycle by granting authority to the innovation with most dependents.
+ * Aughra breaks the cycle by granting authority to the innovation with most dependents.
  */
 export function detectFleetStall(
   workers: OldOneDescriptor[],
@@ -436,7 +436,7 @@ export function detectFleetStall(
     contested_resource: "dependency_graph",
     resolution: cycleBreaker ? "resolved" : "rejected",
     deferred_until: cycleBreaker
-      ? `Cthulhu grants authority to ${cycleBreaker} to break circular dependency`
+      ? `Aughra grants authority to ${cycleBreaker} to break circular dependency`
       : undefined,
     ts: new Date().toISOString(),
   };
@@ -447,7 +447,7 @@ export function detectFleetStall(
   emitPheromone(
     "FleetStallDetected",
     `fleet-stall-${Date.now()}`,
-    `cthulhu fleet-stall detected ${awaitingWorkers.length} old-ones blocked ` +
+    `aughra fleet-stall detected ${awaitingWorkers.length} old-ones blocked ` +
     `cycle-breaker ${cycleBreaker ?? "none"} krisskross-momentum-held ` +
     `hexisle-game bushel-29 fleet-resilience`,
     {
@@ -462,7 +462,7 @@ export function detectFleetStall(
     cycle_description:
       `All ${awaitingWorkers.length} workers awaiting authority but no deps met. ` +
       (cycleBreaker
-        ? `Cthulhu recommends breaking cycle by authorizing ${cycleBreaker} first.`
+        ? `Aughra recommends breaking cycle by authorizing ${cycleBreaker} first.`
         : "No cycle breaker found — manual Founder intervention required."),
   };
 }
@@ -487,7 +487,7 @@ export function loadAuthorityQueue(): AuthorityQueueEntry[] {
 // ─── G6 validation helper ─────────────────────────────────────────────────────
 
 /**
- * G6: Verify Cthulhu conflict arbitration is working correctly.
+ * G6: Verify Aughra conflict arbitration is working correctly.
  * Returns validation result suitable for test gate.
  */
 export function validateArbitration(decision: ArbitrationDecision): {

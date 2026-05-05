@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Old Ones Multi-Zippleback Fleet — Phase B: 4-Action Loop
  * ==========================================================
  * Bushel 29 / BP021 — old_ones_loop.ts
@@ -10,7 +10,7 @@
  *   3. recommend()       — drafts fix spec; writes to Iron Tablet
  *   4. fix_upon_authority(token) — validates AUTHORITY_GRANTED:<name>; fires Ch4→5→6 cascade
  *
- * All actions emit Pheromone. All state transitions emit FleetHeartbeat for Cthulhu visibility.
+ * All actions emit Pheromone. All state transitions emit FleetHeartbeat for Aughra visibility.
  * Authority-gating enforced at action 4: exact token required (G5).
  *
  * Composes with:
