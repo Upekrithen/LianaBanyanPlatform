@@ -24,6 +24,7 @@ import { memberFatesRoute } from "./cathedral_supabase/member_fates.js";
 import { queryPheromone, buildPheromoneIndex, emitPheromone } from "./scribes/pheromone.js";
 import { getInboundStatus } from "./scribes/hounds.js";
 import { runDispatchPawn, getDispatchStatus, cancelDispatch, listRecentDispatches, } from "./pawn_dispatch.js";
+import { indexPawnReturns, readHighPrioritySurface, getIndexedReturnCount, } from "./pawn_return_indexer.js";
 import { teamDispatch } from "./team_dispatcher/dispatcher.js";
 import { getScribeAccessDescriptor, } from "./team_dispatcher/cohort_class_enforcement.js";
 import { queryProvenanceChain, listRootMiners } from "./team_dispatcher/provenance_chain.js";
@@ -72,9 +73,9 @@ import { readAllAssignments, ALL_STRATA, } from "./strata/schema.js";
 import { StrataQuery, } from "./strata/query.js";
 import { detectiveQueryByStratum, } from "./strata/cross_cut.js";
 // KN-K1/K2/K3: Pod-K Codex (Layer 8 Canon-of-Canons)
-import { allocateCodexSerial, appendCodexEntry, getCodexById, queryCodex, } from "./codex/schema.js";
+import { allocateCodexSerial, appendCodexEntry, readAllCodexEntries, getCodexById, queryCodex, } from "./codex/schema.js";
 import { CodexBinding, } from "./codex/binding.js";
-import { reserveNextSerial, bindReservation, expireReservations, queryReservations, } from "./codex/serial_allocator.js";
+import { reserveNextSerial, bindReservation, expireReservations, queryReservations, resolveReservationForCreate, } from "./codex/serial_allocator.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const INDEX_DIR = resolve(__dirname, "..", "index");
@@ -4275,6 +4276,13 @@ registerTool("dispatch_pawn", "K532 — Dispatch a research prompt to Pawn (Perp
         max_tokens,
         dispatch_metadata: dispatch_metadata,
     });
+    // B36 Phase 1: auto-index returns
+    if (result.status === "dispatched") {
+        try {
+            indexPawnReturns();
+        }
+        catch { /* best-effort */ }
+    }
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
 });
 registerTool("check_pawn_dispatch", "K532 — Check status of a Pawn dispatch by dispatch_id. Returns dispatch record including status, cost, return path, attempt_log.", {
@@ -4309,6 +4317,25 @@ registerTool("list_pending_pawn_dispatches", "K532 — List recent Pawn dispatch
         error_class: r.error_class,
     }));
     return { content: [{ type: "text", text: JSON.stringify({ count: summary.length, dispatches: summary }, null, 2) }] };
+});
+registerTool("index_pawn_returns", "Bushel 36 Phase 1 (BP025) � Pawn Return Auto-Indexer. Scans dispatches/pawn/ for unprocessed *.return.json files, " +
+    "extracts topics, emits pheromone records to the substrate (cathedral:pawn, synthesisClass:pawn_research_return), " +
+    "surfaces FLAGGED/CRITICAL findings to high_priority_surface.jsonl for next-session-open Wrasse pre-injection. Idempotent.", {
+    show_high_priority: z.boolean().optional().default(false).describe("Return recent high-priority flagged Pawn findings."),
+    high_priority_limit: z.number().int().min(1).max(50).optional().default(5).describe("Max high-priority records."),
+}, async ({ show_high_priority, high_priority_limit }) => {
+    const result = indexPawnReturns();
+    const output = {
+        processed: result.processed,
+        skipped_already_indexed: result.skipped_already_indexed,
+        high_priority_surfaced: result.high_priority_surfaced,
+        total_indexed: getIndexedReturnCount(),
+        errors: result.errors,
+    };
+    if (show_high_priority) {
+        output.high_priority_findings = readHighPrioritySurface(high_priority_limit ?? 5);
+    }
+    return { content: [{ type: "text", text: JSON.stringify(output, null, 2) }] };
 });
 // ═══════════════════════════════════════════
 // KN-G — SHADOW PHASE QUERY (BP016)
@@ -6734,12 +6761,31 @@ server.tool("strata_promotion_recommend", "KN-T4 / BP018 Pod-T — Recommend San
 const _codexBinding = new CodexBinding();
 server.tool("codex_create", "KN-K3 / BP018 Pod-K — Create a new Codex in 'drafting' state. " +
     "Layer 8 canon-of-canons bound-book artifact. Chapters added via codex_add_chapter. " +
-    "Lifecycle: drafting → review → bound (immutable).", {
+    "Lifecycle: drafting → review → bound (immutable). " +
+    "Bushel 32B (BP023): pass reservation_id from codex_reserve_next_serial to honor the reserved serial " +
+    "and unify the reservation-space with the corpus-space (dual-serial-space sync-debt closure).", {
     title: z.string().describe("Human-readable title for the Codex."),
-    edition: z.string().describe("Edition string (e.g. '1.0', '2025-Q2')."),
-}, async ({ title, edition }) => {
+    edition: z.string().describe("Edition string (e.g. 'BP023', '2025-Q2')."),
+    reservation_id: z.string().optional().describe("Optional UUID from codex_reserve_next_serial. " +
+        "When provided, the Codex is created with the reserved serial (LB-CODEX-NNNN) instead of auto-allocating. " +
+        "Errors: reservation_not_found | reservation_already_bound | reservation_expired | corpus_id_already_taken."),
+}, async ({ title, edition, reservation_id }) => {
     const { randomUUID } = await import("crypto");
-    const id = allocateCodexSerial();
+    let id;
+    if (reservation_id) {
+        const corpusEntryExists = (serial) => readAllCodexEntries().some((c) => c.id === serial);
+        const resolved = await resolveReservationForCreate(reservation_id, corpusEntryExists);
+        if ("error_code" in resolved) {
+            return {
+                content: [{ type: "text", text: JSON.stringify({ success: false, error: resolved.error, error_code: resolved.error_code }, null, 2) }],
+                isError: true,
+            };
+        }
+        id = resolved.serial;
+    }
+    else {
+        id = allocateCodexSerial();
+    }
     const codex = {
         id,
         uuid: randomUUID(),

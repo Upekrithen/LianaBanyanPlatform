@@ -47,6 +47,11 @@ import {
   cancelDispatch,
   listRecentDispatches,
 } from "./pawn_dispatch.js";
+import {
+  indexPawnReturns,
+  readHighPrioritySurface,
+  getIndexedReturnCount,
+} from "./pawn_return_indexer.js";
 import { teamDispatch } from "./team_dispatcher/dispatcher.js";
 import {
   getScribeAccessDescriptor,
@@ -5395,6 +5400,10 @@ registerTool(
       max_tokens,
       dispatch_metadata: dispatch_metadata as Record<string, unknown> | undefined,
     });
+    // B36 Phase 1: auto-index returns
+    if (result.status === "dispatched") {
+      try { indexPawnReturns(); } catch { /* best-effort */ }
+    }
     return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
   }
 );
@@ -5447,6 +5456,31 @@ registerTool(
       error_class: r.error_class,
     }));
     return { content: [{ type: "text" as const, text: JSON.stringify({ count: summary.length, dispatches: summary }, null, 2) }] };
+  }
+);
+
+registerTool(
+  "index_pawn_returns",
+  "Bushel 36 Phase 1 (BP025) — Pawn Return Auto-Indexer. Scans dispatches/pawn/ for unprocessed *.return.json files, " +
+  "extracts topics, emits pheromone records to the substrate (cathedral:pawn, synthesisClass:pawn_research_return), " +
+  "surfaces FLAGGED/CRITICAL findings to high_priority_surface.jsonl for next-session-open Wrasse pre-injection. Idempotent.",
+  {
+    show_high_priority: z.boolean().optional().default(false).describe("Return recent high-priority flagged Pawn findings."),
+    high_priority_limit: z.number().int().min(1).max(50).optional().default(5).describe("Max high-priority records."),
+  },
+  async ({ show_high_priority, high_priority_limit }) => {
+    const result = indexPawnReturns();
+    const output: Record<string, unknown> = {
+      processed: result.processed,
+      skipped_already_indexed: result.skipped_already_indexed,
+      high_priority_surfaced: result.high_priority_surfaced,
+      total_indexed: getIndexedReturnCount(),
+      errors: result.errors,
+    };
+    if (show_high_priority) {
+      output.high_priority_findings = readHighPrioritySurface(high_priority_limit ?? 5);
+    }
+    return { content: [{ type: "text" as const, text: JSON.stringify(output, null, 2) }] };
   }
 );
 
