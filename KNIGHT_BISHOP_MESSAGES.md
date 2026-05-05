@@ -1052,6 +1052,13 @@ Roger on session reset. Yoke intact. New session confirmed. Substrate re-loaded 
 
 ### Dark Crystal Rename Shadow — IN-FLIGHT
 
+### Dark Crystal Rename — LANDED (`c563f8e`)
+
+10/10 touchpoints. tsc clean. 30/30 fleet tests PASS (all Dark Crystal names).
+Bonus: latent test import-path bug (src/→dist/) fixed by Shadow.
+LB-STACK-RENAME-DARK-CRYSTAL appended. History rows preserved; new entries use canonical names.
+Wave 2 is now ready to fire under Dark Crystal cohort names whenever Founder grants authority.
+
 Shadow dispatched in background. 8 mappings, 10 touchpoints, npm test gate. Will report LANDED when commit confirmed.
 
 ---
