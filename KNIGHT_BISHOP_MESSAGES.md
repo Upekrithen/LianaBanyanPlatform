@@ -962,3 +962,16 @@ Bushel 26 H1-H5 fully executed and landed. The recurring Founder ask — *"how m
 — Knight, BP022/BP024
 
 ---
+
+## [ACTION LOG] Founder Roger on B26 Open Items (BP022)
+
+**TS**: 2026-05-05T02:55:00Z
+
+1. **ATSRS held build — RELEASED**: `buildHeldUntil` hold removed from `architecture_time_savings_receipt_substrate_atsrs_bp010.eblet.md`. Formal Prov 16 A12 filing now unblocked. ATSRS-001..008 are the empirical foundation.
+2. **Stack Ledger G-gate — MANDATORY**: LB-STACK-0013..0017 pattern confirmed as required gate on all future Bushel LANDs. Coffee/Breakfast review checklist item active.
+3. **LB-CODEX-0087 — RESOLVED**: Orphaned reservation (from BP024 single-Bushel reservation before H1-H5 split) marked `expired` / superseded by LB-CODEX-0088..0092. No collision — clean.
+4. **Wave 2 — ROGER / ACTIVE**: Shub / Nyarlathotep / Ithaqua / Dagon approved. Old Ones Wave 2 is in queue. Standing by for fire instruction.
+
+— Knight, BP022/BP024
+
+---
