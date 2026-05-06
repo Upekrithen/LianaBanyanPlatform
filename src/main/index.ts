@@ -19,6 +19,10 @@ import { SubstrateAPIServer, API_PORT } from './substrate_api';
 import { FederationClient } from './federation_client';
 import { getMoneyPennyURL, getLocalIPs } from './mobile_pwa';
 import { AutoUpdateManager } from './auto_updater';
+import { AuthManager, registerCustomScheme } from './auth_manager';
+
+// Register custom OAuth scheme before app ready (Electron requirement)
+registerCustomScheme();
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 
@@ -39,6 +43,7 @@ let ollamaManager: OllamaManager | null = null;
 let substrateServer: SubstrateAPIServer | null = null;
 let federationClient: FederationClient | null = null;
 let autoUpdater: AutoUpdateManager | null = null;
+let authManager: AuthManager | null = null;
 let connectivityTimer: ReturnType<typeof setInterval> | null = null;
 
 // ─── Frame Mode ──────────────────────────────────────────────────────────────
@@ -142,8 +147,9 @@ function createOverlayWindow(): void {
     overlayWindow = null;
   });
 
-  // Register with auto-updater so it can broadcast update events
+  // Register with auto-updater and auth manager so events can be broadcast
   if (autoUpdater) autoUpdater.registerWindow(overlayWindow);
+  if (authManager) authManager.registerWindow(overlayWindow);
 }
 
 // ─── System Tray ─────────────────────────────────────────────────────────────
@@ -277,6 +283,7 @@ function openDashboard(): void {
   });
 
   if (autoUpdater) autoUpdater.registerWindow(dashboardWindow);
+  if (authManager) authManager.registerWindow(dashboardWindow);
 }
 
 // ─── IPC Handlers ────────────────────────────────────────────────────────────
@@ -340,16 +347,18 @@ function registerIPCHandlers(): void {
   // ── Substrate ─────────────────────────────────────────────────────────────
 
   // Route a query through the three-mode substrate router
+  // Degraded mode (trial expired): allow substrate read, but block Ollama/cloud escalation
   ipcMain.handle(
     'substrate-query',
     async (_event, { query, model }: { query: string; model?: string }) => {
       if (!substrateServer) return { hit: false, routing: 'miss', latency_ms: 0 };
-      // Forward to the HTTP API internally (reuses all routing + telemetry logic)
+      const degraded = authManager?.isDegraded() ?? false;
       try {
         const res = await fetch(`http://127.0.0.1:11480/substrate/query`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ query, model }),
+          // In degraded mode, skip Ollama by omitting model and forcing Normal mode
+          body: JSON.stringify({ query, model: degraded ? undefined : model, degraded }),
         });
         return await res.json();
       } catch {
@@ -359,9 +368,13 @@ function registerIPCHandlers(): void {
   );
 
   // Write a record to the local substrate index + queue federation sync
+  // Blocked entirely in degraded mode
   ipcMain.handle(
     'substrate-write',
     async (_event, { text, source, keywords }: { text: string; source?: string; keywords?: string[] }) => {
+      if (authManager?.isDegraded()) {
+        return { ok: false, reason: 'degraded_mode' };
+      }
       try {
         const res = await fetch(`http://127.0.0.1:11480/substrate/write`, {
           method: 'POST',
@@ -444,10 +457,17 @@ app.whenReady().then(async () => {
   autoUpdater = new AutoUpdateManager();
   autoUpdater.init();
 
+  // Initialize auth manager (Phase 7)
+  authManager = new AuthManager();
+  authManager.init();
+
   // Create overlay + tray
   createOverlayWindow();
   createTray();
   registerIPCHandlers();
+
+  // Register auth IPC handlers (after windows are created)
+  authManager.registerIPCHandlers();
 
   // Initial mode detection
   const aiAvailable = await ollamaManager.isReachable();

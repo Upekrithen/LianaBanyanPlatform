@@ -17,6 +17,10 @@ interface FrameModeIndicatorProps {
   state: FrameModeState;
   onModeChange?: (mode: FrameMode) => void;
   showCostControls?: boolean;
+  /** Phase 7: cooperative member badge tier ('stamped' shows gold ✦ dot) */
+  memberBadge?: 'stamped' | 'ghost';
+  /** Phase 7: degraded mode (trial expired) — show grey tint */
+  degraded?: boolean;
 }
 
 const MODE_META: Record<FrameMode, { icon: string; label: string; tooltip: string }> = {
@@ -40,11 +44,12 @@ const MODE_META: Record<FrameMode, { icon: string; label: string; tooltip: strin
 export const FrameModeIndicator: React.FC<FrameModeIndicatorProps> = ({
   state,
   onModeChange,
+  memberBadge,
+  degraded = false,
 }) => {
   const meta = MODE_META[state.mode];
 
   const handleClick = () => {
-    // Click cycles through modes; could open modal in future
     if (onModeChange) {
       const next: Record<FrameMode, FrameMode> = {
         ai_burst: 'normal',
@@ -55,33 +60,58 @@ export const FrameModeIndicator: React.FC<FrameModeIndicatorProps> = ({
     }
   };
 
+  const effectiveMode = degraded ? 'fallback' : state.mode;
+  const effectiveMeta = MODE_META[effectiveMode];
+
   return (
     <>
-      {/* LB Frame border overlay — full-screen */}
+      {/* LB Frame border overlay — full-screen; grey when degraded */}
       <div
-        className={`lb-frame lb-frame--${state.mode}`}
+        className={`lb-frame lb-frame--${degraded ? 'fallback' : state.mode}`}
         aria-hidden="true"
+        style={degraded ? { filter: 'grayscale(0.7)', opacity: 0.5 } : undefined}
       />
 
       {/* Corner mode indicator — bottom-right */}
       <div
-        className={`lb-corner-indicator lb-corner-indicator--${state.mode}`}
-        title={meta.tooltip}
+        className={`lb-corner-indicator lb-corner-indicator--${effectiveMode}`}
+        title={degraded ? 'Degraded mode — trial expired' : effectiveMeta.tooltip}
         onClick={handleClick}
         role="button"
         tabIndex={0}
         onKeyDown={(e) => e.key === 'Enter' && handleClick()}
-        aria-label={`Current mode: ${meta.label}. Click to cycle.`}
+        aria-label={`Current mode: ${effectiveMeta.label}. Click to cycle.`}
+        style={degraded ? { opacity: 0.55, filter: 'grayscale(0.6)' } : undefined}
       >
-        <span className="lb-corner-indicator__icon">{meta.icon}</span>
-        <span className="lb-corner-indicator__label">{meta.label}</span>
-        {state.mode === 'ai_burst' && state.costRatePerHour !== undefined && (
+        <span className="lb-corner-indicator__icon">
+          {degraded ? '⚠️' : effectiveMeta.icon}
+        </span>
+        <span className="lb-corner-indicator__label">
+          {degraded ? 'Degraded' : effectiveMeta.label}
+        </span>
+        {state.mode === 'ai_burst' && state.costRatePerHour !== undefined && !degraded && (
           <span
             className="lb-corner-indicator__label"
             style={{ opacity: 0.7, marginLeft: 2 }}
           >
             ${state.costRatePerHour.toFixed(2)}/hr
           </span>
+        )}
+        {/* Phase 7: Stamped member gold dot */}
+        {memberBadge === 'stamped' && !degraded && (
+          <span
+            style={{
+              display: 'inline-block',
+              width: 7,
+              height: 7,
+              borderRadius: '50%',
+              background: '#f59e0b',
+              marginLeft: 5,
+              verticalAlign: 'middle',
+              boxShadow: '0 0 4px rgba(245,158,11,0.8)',
+            }}
+            title="Cooperative member — stamped"
+          />
         )}
       </div>
     </>
