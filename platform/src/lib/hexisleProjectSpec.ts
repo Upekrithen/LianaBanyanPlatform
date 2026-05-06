@@ -267,13 +267,20 @@ export interface PatentedInnovation {
   name: string;
   category: 'mechanical' | 'system' | 'energy' | 'manufacturing';
   description: string;
+  // CAI implementation metadata (Wave 2 / BP025)
+  status?: 'implemented' | 'stub' | 'pending';
+  component?: string;
+  hook?: string;
+  wave?: number;
+  old_one?: string;
+  innovationId?: string;
 }
 
 export const PATENTED_INNOVATIONS: PatentedInnovation[] = [
   // Mechanical (#1-10)
   { number: 1,  category: 'mechanical',    name: 'Hexel 12-Part Modular Construction',           description: '12 parts snap together into one functional Hexel tile' },
   { number: 2,  category: 'mechanical',    name: 'Inverse Hydraulic Coupling',                   description: 'When A piston moves, B moves opposite — daisy chain linkage' },
-  { number: 3,  category: 'mechanical',    name: 'Ouralis Tidal Mechanism',                      description: '12-rotation tide cycle = one game turn' },
+  { number: 3,  category: 'mechanical',    name: 'Ouralis Tidal Mechanism',                      description: '12-rotation tide cycle = one game turn', status: 'implemented', innovationId: 'MISS-002', component: 'OuralisTidalMechanismEngine', hook: 'useOuralisTidalMechanism', wave: 2, old_one: 'urSu' },
   { number: 4,  category: 'mechanical',    name: 'Sawtooth60 Directional Current',               description: 'Sawtooth-pattern channels create directional water flow' },
   { number: 5,  category: 'mechanical',    name: 'Rudder Keel Ship Mechanics',                   description: 'Ships navigate currents using physics-based rudder/keel' },
   { number: 6,  category: 'mechanical',    name: 'Magnetic Character Placement',                 description: 'Characters magnetically snap to designated tile positions' },
@@ -285,7 +292,7 @@ export const PATENTED_INNOVATIONS: PatentedInnovation[] = [
   // System (#11-23)
   { number: 11, category: 'system',        name: 'AC Pressure Generation',                        description: 'Creates alternating pressure waves without pumps' },
   { number: 12, category: 'system',        name: 'Clock-as-Game-State Controller',                description: 'Ouralis tide cycle IS the game clock — no timers needed' },
-  { number: 13, category: 'system',        name: 'Banyan Tree Distribution Manifold',             description: 'Water distributes like a banyan tree root system' },
+  { number: 13, category: 'system',        name: 'Banyan Tree Distribution Manifold',             description: 'Water distributes like a banyan tree root system', status: 'stub', innovationId: 'MISS-007', component: 'BanyanTreeDistributionManifoldEngine', hook: 'useBanyanTreeDistributionManifold', wave: 2, old_one: 'urSu' },
   { number: 14, category: 'system',        name: 'One-Way Valve Network',                         description: 'Tesla valve-inspired unidirectional flow control' },
   { number: 15, category: 'system',        name: 'Gravity-Powered Baseline',                      description: '8-foot column provides gravity-fed pressure' },
   { number: 16, category: 'system',        name: 'Cascading Hexagonal Containers',                description: 'Water cascades between nested hex containers' },
@@ -306,7 +313,7 @@ export const PATENTED_INNOVATIONS: PatentedInnovation[] = [
   // Manufacturing (#28-33)
   { number: 28, category: 'manufacturing', name: 'Lithographic Dual-Process Design',              description: '3D Print + Injection Mold from SAME CAD file' },
   { number: 29, category: 'manufacturing', name: 'Zero-Overhang Constraint System',               description: 'No undercuts in any mold — printable AND moldable' },
-  { number: 30, category: 'manufacturing', name: 'Airtight Hydraulic Snap-Fit Assembly',           description: 'Seals without adhesive — hydraulic-tight snap connections' },
+  { number: 30, category: 'manufacturing', name: 'Airtight Hydraulic Snap-Fit Assembly',           description: 'Seals without adhesive — hydraulic-tight snap connections', status: 'stub', innovationId: 'STUB-007', component: 'AirtightHydraulicSnapFitAssemblyEngine', hook: 'useAirtightHydraulicSnapFitAssembly', wave: 2, old_one: 'urSu' },
   { number: 31, category: 'manufacturing', name: 'Modular Character Component System',            description: 'Hair/clothes/accessories snap on — customize without reprinting' },
   { number: 32, category: 'manufacturing', name: 'POSTF (Print Once Snap Together Forever)',       description: 'Permanent snap without glue — works for home printing AND mass production' },
   { number: 33, category: 'manufacturing', name: 'Multi-Color Cost-Efficient Assembly',           description: 'Custom colors without painting — each piece is its own color' },
@@ -514,3 +521,77 @@ export const ARCHIVE = {
   pitchDeckReference: '8 utility patents, 21 design patents (from Pitch Deck PDF)',
   note: '40+ years of development documented here',
 };
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// CAI CONDUCTOR — WAVE 2 IMPLEMENTATIONS (Old Ones Wave 2, Bushel 29 / BP025)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+export interface CaiInnovationEntry {
+  id: string;
+  name: string;
+  old_one: string;
+  wave: number;
+  bushel: string;
+  status: 'planned' | 'fix_upon_authority' | 'implemented';
+  component: string;
+  hook: string;
+  depends_on?: string[];
+  description: string;
+  files: string[];
+}
+
+export const CAI_WAVE2_INNOVATIONS: CaiInnovationEntry[] = [
+  {
+    id: 'MISS-003',
+    name: 'Rudder Keel Ship Mechanics',
+    old_one: 'urUtt',
+    wave: 2,
+    bushel: 'BP025',
+    status: 'implemented',
+    component: 'RudderKeelShipMechanicsEngine',
+    hook: 'useRudderKeelShipMechanics',
+    depends_on: ['MISS-015', 'STUB-001'],
+    description: 'Ships navigate currents using physics-based rudder/keel geometry. ' +
+      'Sawtooth60 current exerts lateral force proportional to keel depth; ' +
+      'rudder angle determines turning radius.',
+    files: [
+      'src/components/hexisle/RudderKeelShipMechanicsEngine.tsx',
+      'src/hooks/useRudderKeelShipMechanics.ts',
+    ],
+  },
+  {
+    id: 'MISS-009',
+    name: 'Gravity-Powered Baseline',
+    old_one: 'urUtt',
+    wave: 2,
+    bushel: 'BP025',
+    status: 'implemented',
+    component: 'GravityPoweredBaselineEngine',
+    hook: 'useGravityPoweredBaseline',
+    description: '8-foot column provides gravity-fed pressure (~2.17 psi at 5-foot effective head). ' +
+      'No pumps, no batteries. Water source: 5-gallon jug on telescoping legs (flat-pack ship).',
+    files: [
+      'src/components/hexisle/GravityPoweredBaselineEngine.tsx',
+      'src/hooks/useGravityPoweredBaseline.ts',
+    ],
+  },
+  {
+    id: 'STUB-003',
+    name: 'Clock-as-Game-State Controller',
+    old_one: 'urUtt',
+    wave: 2,
+    bushel: 'BP025',
+    status: 'implemented',
+    component: 'ClockasGameStateControllerEngine',
+    hook: 'useClockasGameStateController',
+    depends_on: ['MISS-002'],
+    description: 'Ouralis wired as game clock. OuralisClock React context + 12-step rotation state ' +
+      '+ QuestSystem subscription to OuralisClock.tick event.',
+    files: [
+      'src/components/hexisle/ClockasGameStateControllerEngine.tsx',
+      'src/components/hexisle/OuralisClockContext.tsx',
+      'src/hooks/useClockasGameStateController.ts',
+      'src/components/hexisle/QuestSystem.tsx', // updated: OuralisClock subscription added
+    ],
+  },
+];
