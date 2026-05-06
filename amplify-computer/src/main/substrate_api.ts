@@ -1,24 +1,26 @@
 // AMPLIFY Computer — Local Substrate API Server
-// B37 Phase 3 — Full implementation (replaces Phase 1 stub)
+// B37 Phase 3-4 — Full implementation with TelemetryStore
 //
-// HTTP endpoints exposed on 127.0.0.1:11481 for any local app to query:
+// HTTP endpoints on 127.0.0.1:11480:
 //   GET  /health                    — liveness
 //   GET  /mode                      — current + forced mode
 //   POST /mode/force                — force or clear override mode
 //   POST /substrate/query           — three-mode routed query
-//   POST /substrate/write           — write a record to local index + queue federation sync
-//   GET  /amplify/snapshot          — cost telemetry snapshot
+//   POST /substrate/write           — write record to local index + federation queue
+//   GET  /amplify/snapshot          — session telemetry snapshot
+//   GET  /amplify/summary           — full historical summary (today/week/month/all-time)
 //   GET  /federation/status         — peer count, last sync, online status
 
 import { createServer, IncomingMessage, ServerResponse } from 'http';
-import { appendFileSync, mkdirSync, existsSync } from 'fs';
+import { mkdirSync, existsSync } from 'fs';
 import { resolve } from 'path';
 import { SubstrateLocalIndex, SubstrateRouter, type FrameMode } from './substrate_router';
+import { TelemetryStore, type RoutingSource } from './telemetry_store';
 import type { FederationClient } from './federation_client';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
-export const API_PORT = 11480; // LB CAI Hearth substrate local port
+export const API_PORT = 11480;
 
 const LOG_DIR = resolve(
   process.env.APPDATA || process.env.HOME || '.',
@@ -26,32 +28,27 @@ const LOG_DIR = resolve(
   'logs',
 );
 
-// ─── Telemetry record ─────────────────────────────────────────────────────────
-
-interface QueryRecord {
-  ts: string;
-  query_hash: string;
-  routing: 'substrate_hit' | 'local_ollama' | 'cloud_escalation' | 'peer_sync' | 'miss';
-  latency_ms: number;
-  cloud_cost_avoided_usd: number;
-}
-
 // ─── Substrate API Server ─────────────────────────────────────────────────────
 
 export class SubstrateAPIServer {
   private server: ReturnType<typeof createServer> | null = null;
-  private queryLog: QueryRecord[] = [];
   private index: SubstrateLocalIndex;
   private router: SubstrateRouter;
   private federation: FederationClient | null = null;
+  private telemetry: TelemetryStore;
 
   constructor() {
     this.index = new SubstrateLocalIndex();
     this.router = new SubstrateRouter(this.index);
+    this.telemetry = new TelemetryStore();
   }
 
   setFederationClient(client: FederationClient): void {
     this.federation = client;
+  }
+
+  getTelemetryStore(): TelemetryStore {
+    return this.telemetry;
   }
 
   getIndex(): SubstrateLocalIndex {
@@ -76,12 +73,9 @@ export class SubstrateAPIServer {
 
   async start(): Promise<void> {
     if (!existsSync(LOG_DIR)) mkdirSync(LOG_DIR, { recursive: true });
-
-    // Load substrate index
     await this.index.load();
 
     this.server = createServer((req, res) => this._handleRequest(req, res));
-
     return new Promise((resolve, reject) => {
       this.server!.listen(API_PORT, '127.0.0.1', () => {
         console.log(
@@ -96,7 +90,6 @@ export class SubstrateAPIServer {
 
   private _handleRequest(req: IncomingMessage, res: ServerResponse): void {
     res.setHeader('Content-Type', 'application/json');
-    // Allow requests from the local AMPLIFY renderer + any local app
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -109,33 +102,29 @@ export class SubstrateAPIServer {
 
     const url = req.url?.split('?')[0];
 
-    // ── GET /health ──────────────────────────────────────────────────────────
+    // ── GET /health ───────────────────────────────────────────────────────────
     if (req.method === 'GET' && url === '/health') {
-      res.end(
-        JSON.stringify({
-          ok: true,
-          version: '0.3.0',
-          port: API_PORT,
-          index_size: this.index.size,
-          mode: this.router.getEffectiveMode(),
-          forced_mode: this.router.getForcedMode(),
-        }),
-      );
+      res.end(JSON.stringify({
+        ok: true,
+        version: '0.4.0',
+        port: API_PORT,
+        index_size: this.index.size,
+        mode: this.router.getEffectiveMode(),
+        forced_mode: this.router.getForcedMode(),
+      }));
       return;
     }
 
-    // ── GET /mode ────────────────────────────────────────────────────────────
+    // ── GET /mode ─────────────────────────────────────────────────────────────
     if (req.method === 'GET' && url === '/mode') {
-      res.end(
-        JSON.stringify({
-          mode: this.router.getEffectiveMode(),
-          forced_mode: this.router.getForcedMode(),
-        }),
-      );
+      res.end(JSON.stringify({
+        mode: this.router.getEffectiveMode(),
+        forced_mode: this.router.getForcedMode(),
+      }));
       return;
     }
 
-    // ── POST /mode/force ─────────────────────────────────────────────────────
+    // ── POST /mode/force ──────────────────────────────────────────────────────
     if (req.method === 'POST' && url === '/mode/force') {
       this._readBody(req, (body) => {
         try {
@@ -150,9 +139,15 @@ export class SubstrateAPIServer {
       return;
     }
 
-    // ── GET /amplify/snapshot ─────────────────────────────────────────────────
+    // ── GET /amplify/snapshot — session stats ─────────────────────────────────
     if (req.method === 'GET' && url === '/amplify/snapshot') {
       res.end(JSON.stringify(this.getAMPLIFYSnapshot()));
+      return;
+    }
+
+    // ── GET /amplify/summary — full historical summary ────────────────────────
+    if (req.method === 'GET' && url === '/amplify/summary') {
+      res.end(JSON.stringify(this.telemetry.getSummary()));
       return;
     }
 
@@ -174,11 +169,7 @@ export class SubstrateAPIServer {
     if (req.method === 'POST' && url === '/substrate/query') {
       this._readBody(req, async (body) => {
         try {
-          const { query, model } = JSON.parse(body) as {
-            query: string;
-            model?: string;
-          };
-
+          const { query, model } = JSON.parse(body) as { query: string; model?: string };
           if (!query || typeof query !== 'string') {
             res.statusCode = 400;
             res.end(JSON.stringify({ error: 'query field required' }));
@@ -187,7 +178,7 @@ export class SubstrateAPIServer {
 
           const result = await this.router.query(query, model);
 
-          // If in fallback and local missed, try peer sync
+          // Fallback: try peer sync on miss
           if (
             result.routing === 'peer_sync' &&
             this.federation &&
@@ -199,14 +190,11 @@ export class SubstrateAPIServer {
               if (exchanged > 0) {
                 const retryResult = await this.router.query(query, model);
                 if (retryResult.hit) {
-                  this._recordQuery({
-                    ts: new Date().toISOString(),
-                    query_hash: this._hashQuery(query),
-                    routing: retryResult.routing as QueryRecord['routing'],
-                    latency_ms: retryResult.latency_ms,
-                    cloud_cost_avoided_usd: retryResult.cloud_cost_avoided_usd,
-                  });
-                  this._appendTelemetry(retryResult.routing, retryResult.latency_ms, retryResult.cloud_cost_avoided_usd);
+                  this._recordTelemetry(
+                    retryResult.routing as RoutingSource,
+                    retryResult.latency_ms,
+                    retryResult.cloud_cost_avoided_usd,
+                  );
                   res.end(JSON.stringify({ ...retryResult, peer_sync_exchanged: exchanged }));
                   return;
                 }
@@ -214,14 +202,11 @@ export class SubstrateAPIServer {
             }
           }
 
-          this._recordQuery({
-            ts: new Date().toISOString(),
-            query_hash: this._hashQuery(query),
-            routing: result.routing as QueryRecord['routing'],
-            latency_ms: result.latency_ms,
-            cloud_cost_avoided_usd: result.cloud_cost_avoided_usd,
-          });
-          this._appendTelemetry(result.routing, result.latency_ms, result.cloud_cost_avoided_usd);
+          this._recordTelemetry(
+            result.routing as RoutingSource,
+            result.latency_ms,
+            result.cloud_cost_avoided_usd,
+          );
           res.end(JSON.stringify(result));
         } catch (err) {
           res.statusCode = 500;
@@ -241,13 +226,11 @@ export class SubstrateAPIServer {
             source?: string;
             keywords?: string[];
           };
-
           if (!text || typeof text !== 'string') {
             res.statusCode = 400;
             res.end(JSON.stringify({ error: 'text field required' }));
             return;
           }
-
           const record = {
             id: id ?? this._hashQuery(text),
             text,
@@ -255,10 +238,8 @@ export class SubstrateAPIServer {
             keywords: keywords ?? [],
             ts: new Date().toISOString(),
           };
-
           this.index.writeRecord(record);
           this.federation?.queueWrite(record);
-
           res.end(JSON.stringify({ ok: true, id: record.id }));
         } catch {
           res.statusCode = 400;
@@ -272,68 +253,43 @@ export class SubstrateAPIServer {
     res.end(JSON.stringify({ error: 'Not found' }));
   }
 
-  // ─── Telemetry ───────────────────────────────────────────────────────────────
+  // ─── Telemetry ────────────────────────────────────────────────────────────
 
-  private _recordQuery(record: QueryRecord): void {
-    this.queryLog.push(record);
-    if (this.queryLog.length > 2000) this.queryLog.shift();
-  }
-
-  private _appendTelemetry(
-    routing: QueryRecord['routing'],
+  private _recordTelemetry(
+    routing: RoutingSource,
     latency_ms: number,
     cloud_cost_avoided_usd: number,
   ): void {
-    const telemetryPath = resolve(
-      process.env.APPDATA || process.env.HOME || '.',
-      'AMPLIFY Computer',
-      'logs',
-      'query_telemetry.jsonl',
-    );
-    const entry = JSON.stringify({
-      ts: new Date().toISOString(),
+    this.telemetry.record({
       routing,
       latency_ms,
       cloud_cost_avoided_usd,
       tokens_saved_est: Math.round(cloud_cost_avoided_usd / 0.000003),
     });
-    try {
-      appendFileSync(telemetryPath, entry + '\n', 'utf8');
-    } catch {
-      // Non-fatal
-    }
   }
 
   getAMPLIFYSnapshot(): object {
-    const total = this.queryLog.length;
-    const substrate = this.queryLog.filter((r) => r.routing === 'substrate_hit').length;
-    const local = this.queryLog.filter((r) => r.routing === 'local_ollama').length;
-    const cloud = this.queryLog.filter((r) => r.routing === 'cloud_escalation').length;
-    const peer = this.queryLog.filter((r) => r.routing === 'peer_sync').length;
-    const avoided = this.queryLog.reduce((sum, r) => sum + r.cloud_cost_avoided_usd, 0);
-    const avgLatencyMs =
-      total > 0
-        ? Math.round(this.queryLog.reduce((s, r) => s + r.latency_ms, 0) / total)
-        : 0;
-
+    const s = this.telemetry.getSessionStats();
     return {
-      total_queries: total,
-      substrate_hits: substrate,
-      local_ollama_served: local,
-      cloud_escalations: cloud,
-      peer_synced: peer,
-      substrate_hit_ratio: total > 0 ? substrate / total : 0,
-      local_ratio: total > 0 ? local / total : 0,
-      cloud_ratio: total > 0 ? cloud / total : 0,
-      total_cloud_cost_avoided_usd: avoided,
-      total_tokens_saved_est: Math.round(avoided / 0.000003),
-      avg_latency_ms: avgLatencyMs,
+      total_queries: s.total_queries,
+      substrate_hits: s.substrate_hits,
+      local_ollama_served: s.local_ollama_served,
+      cloud_escalations: s.cloud_escalations,
+      peer_synced: s.peer_synced,
+      substrate_hit_ratio: s.substrate_hit_ratio,
+      local_ratio: s.local_ratio,
+      cloud_ratio: s.cloud_ratio,
+      total_cloud_cost_avoided_usd: s.cloud_cost_avoided_usd,
+      total_tokens_saved_est: s.tokens_saved_est,
+      avg_latency_ms: s.avg_latency_ms,
+      avg_local_latency_ms: s.avg_local_latency_ms,
+      latency_improvement_pct: s.latency_improvement_pct,
       index_size: this.index.size,
       as_of: new Date().toISOString(),
     };
   }
 
-  // ─── Utilities ───────────────────────────────────────────────────────────────
+  // ─── Utilities ────────────────────────────────────────────────────────────
 
   private _readBody(req: IncomingMessage, cb: (body: string) => void): void {
     let body = '';
@@ -342,7 +298,6 @@ export class SubstrateAPIServer {
   }
 
   private _hashQuery(query: string): string {
-    // Inline hash without crypto import at top level (already in substrate_router)
     let hash = 0;
     for (let i = 0; i < query.length; i++) {
       hash = ((hash << 5) - hash + query.charCodeAt(i)) | 0;
