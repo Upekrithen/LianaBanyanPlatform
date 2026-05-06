@@ -42,6 +42,8 @@ const ResponseLoggingPage = lazy(() => import("@/pages/admin/ResponseLoggingPage
 const ResponseDashboardPage = lazy(() => import("@/pages/admin/ResponseDashboardPage"));
 // K537: Glass Door admin
 const OutreachLettersAdminPage = lazy(() => import("@/pages/admin/OutreachLettersAdminPage"));
+// [CAI] [B40] FOREMAN Dashboard — Founder-only mission control
+const ForemanDashboard = lazy(() => import("@/pages/ForemanDashboard"));
 
 export const adminRoutes = (
   <>
@@ -82,5 +84,7 @@ export const adminRoutes = (
     <Route path="/admin/response-dashboard" element={<ProtectedRoute><LazyPage><ResponseDashboardPage /></LazyPage></ProtectedRoute>} />
     {/* K537: Glass Door letter lock console */}
     <Route path="/admin/outreach-letters" element={<ProtectedRoute><LazyPage><OutreachLettersAdminPage /></LazyPage></ProtectedRoute>} />
+    {/* [CAI] [B40] FOREMAN Dashboard — Founder-only, auth-gated internally */}
+    <Route path="/foreman" element={<LazyPage><ForemanDashboard /></LazyPage>} />
   </>
 );
