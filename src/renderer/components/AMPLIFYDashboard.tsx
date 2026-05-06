@@ -282,17 +282,20 @@ export const AMPLIFYDashboard: React.FC<AMPLIFYDashboardProps> = ({
   const [historyPeriod, setHistoryPeriod] = useState<HistoryPeriod>('session');
   const [showShareCard, setShowShareCard] = useState(false);
   const [forceApplied, setForceApplied] = useState(false);
+  const [moneyPennyUrl, setMoneyPennyUrl] = useState<string | null>(null);
 
   // ── Data loading ──────────────────────────────────────────────────────────
   const loadData = useCallback(async () => {
-    const [sum, fed, modeInfo] = await Promise.all([
+    const [sum, fed, modeInfo, mpUrl] = await Promise.all([
       window.amplify.getAMPLIFYSummary(),
       window.amplify.getFederationStatus(),
       window.amplify.getFrameMode(),
+      window.amplify.getMoneyPennyUrl(),
     ]);
     setSummary((sum as TelemetrySummary) ?? emptySummary);
     setFederation(fed as FederationStatus);
     setForcedMode((modeInfo as FrameModePayload).forced_mode);
+    setMoneyPennyUrl(mpUrl.url);
   }, []);
 
   useEffect(() => {
@@ -596,6 +599,36 @@ export const AMPLIFYDashboard: React.FC<AMPLIFYDashboardProps> = ({
                 Auto-Detect switches mode based on Ollama availability, network connectivity,
                 and peer count. Privacy-conscious users should lock to Fallback.
               </div>
+
+              {/* MoneyPenny Mobile URL */}
+              {moneyPennyUrl && (
+                <div
+                  style={{
+                    marginTop: 16,
+                    padding: '10px 12px',
+                    background: 'rgba(245,158,11,0.06)',
+                    border: '1px solid rgba(245,158,11,0.2)',
+                    borderRadius: 8,
+                  }}
+                >
+                  <div style={{ fontSize: 10, color: 'rgba(245,158,11,0.6)', marginBottom: 5 }}>
+                    📱 MONEYPENNY MOBILE
+                  </div>
+                  <div
+                    style={{
+                      fontSize: 12,
+                      fontFamily: 'monospace',
+                      color: 'rgba(245,158,11,0.85)',
+                      wordBreak: 'break-all',
+                    }}
+                  >
+                    {moneyPennyUrl}
+                  </div>
+                  <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.3)', marginTop: 5 }}>
+                    Open on your phone while on the same WiFi network
+                  </div>
+                </div>
+              )}
             </div>
           )}
 

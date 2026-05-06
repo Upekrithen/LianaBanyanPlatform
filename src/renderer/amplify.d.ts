@@ -138,6 +138,8 @@ declare global {
       // Telemetry
       getAMPLIFYSnapshot: () => Promise<AMPLIFYSnapshot>;
       getAMPLIFYSummary: () => Promise<TelemetrySummary>;
+      // MoneyPenny
+      getMoneyPennyUrl: () => Promise<{ url: string; ips: string[]; port: number }>;
       // Dashboard
       openDashboard: () => void;
     };

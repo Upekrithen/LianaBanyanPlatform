@@ -16,6 +16,7 @@ import { mkdirSync, existsSync } from 'fs';
 import { resolve } from 'path';
 import { SubstrateLocalIndex, SubstrateRouter, type FrameMode } from './substrate_router';
 import { TelemetryStore, type RoutingSource } from './telemetry_store';
+import { getMobileHTML, getManifestJSON, getServiceWorker, getIconSVG } from './mobile_pwa';
 import type { FederationClient } from './federation_client';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -77,9 +78,10 @@ export class SubstrateAPIServer {
 
     this.server = createServer((req, res) => this._handleRequest(req, res));
     return new Promise((resolve, reject) => {
-      this.server!.listen(API_PORT, '127.0.0.1', () => {
+      // Bind to 0.0.0.0 so MoneyPenny mobile can reach it over WiFi
+      this.server!.listen(API_PORT, '0.0.0.0', () => {
         console.log(
-          `[SubstrateAPI] Listening on http://127.0.0.1:${API_PORT} — ` +
+          `[SubstrateAPI] Listening on http://0.0.0.0:${API_PORT} — ` +
           `${this.index.size} records indexed`,
         );
         resolve();
@@ -112,6 +114,46 @@ export class SubstrateAPIServer {
         mode: this.router.getEffectiveMode(),
         forced_mode: this.router.getForcedMode(),
       }));
+      return;
+    }
+
+    // ── GET / → redirect to /mobile ──────────────────────────────────────────
+    if (req.method === 'GET' && (url === '/' || url === '')) {
+      res.writeHead(302, { Location: '/mobile' });
+      res.end();
+      return;
+    }
+
+    // ── GET /mobile — MoneyPenny PWA shell ───────────────────────────────────
+    if (req.method === 'GET' && url === '/mobile') {
+      res.setHeader('Content-Type', 'text/html; charset=utf-8');
+      res.setHeader('Cache-Control', 'no-cache');
+      res.end(getMobileHTML());
+      return;
+    }
+
+    // ── GET /manifest.json ────────────────────────────────────────────────────
+    if (req.method === 'GET' && url === '/manifest.json') {
+      res.setHeader('Content-Type', 'application/manifest+json');
+      res.setHeader('Cache-Control', 'max-age=3600');
+      res.end(getManifestJSON());
+      return;
+    }
+
+    // ── GET /sw.js — service worker ───────────────────────────────────────────
+    if (req.method === 'GET' && url === '/sw.js') {
+      res.setHeader('Content-Type', 'application/javascript');
+      res.setHeader('Service-Worker-Allowed', '/');
+      res.setHeader('Cache-Control', 'no-cache');
+      res.end(getServiceWorker());
+      return;
+    }
+
+    // ── GET /icon.svg ─────────────────────────────────────────────────────────
+    if (req.method === 'GET' && url === '/icon.svg') {
+      res.setHeader('Content-Type', 'image/svg+xml');
+      res.setHeader('Cache-Control', 'max-age=86400');
+      res.end(getIconSVG());
       return;
     }
 
