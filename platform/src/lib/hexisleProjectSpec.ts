@@ -316,7 +316,7 @@ export const PATENTED_INNOVATIONS: PatentedInnovation[] = [
   { number: 30, category: 'manufacturing', name: 'Airtight Hydraulic Snap-Fit Assembly',           description: 'Seals without adhesive — hydraulic-tight snap connections', status: 'stub', innovationId: 'STUB-007', component: 'AirtightHydraulicSnapFitAssemblyEngine', hook: 'useAirtightHydraulicSnapFitAssembly', wave: 2, old_one: 'urSu' },
   { number: 31, category: 'manufacturing', name: 'Modular Character Component System',            description: 'Hair/clothes/accessories snap on — customize without reprinting' },
   { number: 32, category: 'manufacturing', name: 'POSTF (Print Once Snap Together Forever)',       description: 'Permanent snap without glue — works for home printing AND mass production' },
-  { number: 33, category: 'manufacturing', name: 'Multi-Color Cost-Efficient Assembly',           description: 'Custom colors without painting — each piece is its own color' },
+  { number: 33, category: 'manufacturing', name: 'Multi-Color Cost-Efficient Assembly',           description: 'Custom colors without painting — each piece is its own color', status: 'implemented', innovationId: 'MISS-014', component: 'MultiColorCostEfficientAssemblyEngine', hook: 'useMultiColorCostEfficientAssembly', wave: 2, old_one: 'urSu' },
 ];
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -521,6 +521,74 @@ export const ARCHIVE = {
   pitchDeckReference: '8 utility patents, 21 design patents (from Pitch Deck PDF)',
   note: '40+ years of development documented here',
 };
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// CAI WAVE 2 IMPLEMENTATIONS — Old One: urIm / Bushel 29 (BP025)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+export interface CAIImplementedInnovation {
+  id: string;
+  name: string;
+  status: 'implemented';
+  wave: 2;
+  old_one: 'urIm';
+  bushel: 'BP025';
+  component: string;
+  hook: string;
+  dependencies: string[];
+  description: string;
+}
+
+export const CAI_WAVE2_URIM_INNOVATIONS: CAIImplementedInnovation[] = [
+  {
+    id: 'MISS-005',
+    name: 'Hydraulic-to-Pneumatic Plant System',
+    status: 'implemented',
+    wave: 2,
+    old_one: 'urIm',
+    bushel: 'BP025',
+    component: 'HydraulictoPneumaticPlantSystemEngine',
+    hook: 'useHydraulictoPneumaticPlantSystem',
+    dependencies: ['MISS-001'],
+    description:
+      'Water pressure at the Hexel base converts to air pressure for above-water plant mechanisms. ' +
+      'Differential pressure seal at 5mm lift point enables pneumatic actuation without external pumps. ' +
+      'Depends on MISS-001 (Inverse Hydraulic Coupling) — interface integrated.',
+  },
+  {
+    id: 'MISS-013',
+    name: 'Energy Innovation Cluster (#24-27)',
+    status: 'implemented',
+    wave: 2,
+    old_one: 'urIm',
+    bushel: 'BP025',
+    component: 'EnergyInnovationCluster2427Engine',
+    hook: 'useEnergyInnovationCluster2427',
+    dependencies: ['MISS-006', 'MISS-012'],
+    description:
+      'Four energy sub-innovations modeled as tabs: ' +
+      '#24 Solar-Assisted Pump Integration, ' +
+      '#25 Piezoelectric Harvest from Hexel Vibration, ' +
+      '#26 Kinetic-to-Hydraulic from Player Movement, ' +
+      '#27 Battery-Free LED via Flow-Driven Dynamo. ' +
+      'Depends on MISS-006 (AC Pressure) and MISS-012 (Water Table) — interface stubs injected.',
+  },
+  {
+    id: 'STUB-006',
+    name: 'Zero-Overhang Constraint System',
+    status: 'implemented',
+    wave: 2,
+    old_one: 'urIm',
+    bushel: 'BP025',
+    component: 'ZeroOverhangConstraintSystemEngine',
+    hook: 'useZeroOverhangConstraintSystem',
+    dependencies: [],
+    description:
+      'Standalone constraint system. RootLockSystem embodies the constraint. ' +
+      'Surfaces overhang-angle visualization overlay and constraint-violation highlight in 3D view. ' +
+      'All Hexel faces must be 0° overhang from mold-pull direction for injection-mold compliance (POCF).',
+  },
+];
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // CAI CONDUCTOR — WAVE 2 IMPLEMENTATIONS (Old Ones Wave 2, Bushel 29 / BP025)
