@@ -8982,6 +8982,212 @@ server.tool(
   },
 );
 
+// ═══════════════════════════════════════════════════════════════════════════
+// B36 PHASE 3 — SKULK COORDINATOR PATTERN (Optimus Primal 7th Axis)
+// BP025 / Bushel 36 Phase 3
+// ═══════════════════════════════════════════════════════════════════════════
+//
+// Extends Optimus Primal (Innovation #2277) with a 7th axis: triad_count.
+// Values: 1 (single-agent), 3 (triad), 4 (full skulk for Bushel 35-class).
+// New skulk_dispatch MCP tool: calls Optimus Primal, dispatches triad in
+// beat-offset pattern, writes substrate records, returns aggregate manifest.
+
+type _SkAgentName = "bishop" | "knight" | "pawn" | "rook";
+type _TriadType   = "research" | "build" | "discovery" | "synthesis";
+
+interface _TriadSpec {
+  triad_type: _TriadType;
+  agents: _SkAgentName[];
+  foreman: _SkAgentName;
+  rationale: string;
+}
+
+const _SK_TRIADS: Record<_TriadType, _TriadSpec> = {
+  research: {
+    triad_type: "research",
+    agents: ["bishop", "pawn", "knight"],
+    foreman: "bishop",
+    rationale: "Strategic synthesis + fresh research data + execution capability",
+  },
+  build: {
+    triad_type: "build",
+    agents: ["knight", "rook", "bishop"],
+    foreman: "knight",
+    rationale: "Production builds + multimodal bulk processing + strategic synthesis",
+  },
+  discovery: {
+    triad_type: "discovery",
+    agents: ["knight", "pawn", "rook"],
+    foreman: "knight",
+    rationale: "Exploration + research retrieval + multimodal bulk scanning",
+  },
+  synthesis: {
+    triad_type: "synthesis",
+    agents: ["bishop", "pawn", "rook"],
+    foreman: "bishop",
+    rationale: "Synthesis + research + multimodal — Bushel 35 default triad",
+  },
+};
+
+const _SK_FULL_SKULK: _SkAgentName[] = ["bishop", "knight", "pawn", "rook"];
+
+function _selectTriad(task: string): { triad_count: 1 | 3 | 4; triad: _TriadSpec | null } {
+  const t = task.toLowerCase();
+  // Full skulk: Bushel 35-class work (highest priority)
+  if (/\b(bushel.?35|nine.?track|beyond.?colossus|full.?skulk|all.?four.?agents?|multi.?track.?research)\b/i.test(t)) {
+    return { triad_count: 4, triad: _SK_TRIADS.synthesis };
+  }
+  // Build Triad: production build + multimodal assets (Knight leads)
+  if (/\b(build|implement|deploy|ship|develop|create|program|migrate|refactor)\b/i.test(t)
+    && /\b(multimodal|pdf|image|document|figure|chart|visual|scan|file)\b/i.test(t)) {
+    return { triad_count: 3, triad: _SK_TRIADS.build };
+  }
+  // Discovery Triad: corpus exploration + document scanning (Knight leads)
+  if (/\b(discover|explore|scan|survey|find|map|catalog|inventory|prospect)\b/i.test(t)
+    && /\b(pdf|paper|literature|document|image|corpus|library|archive)\b/i.test(t)) {
+    return { triad_count: 3, triad: _SK_TRIADS.discovery };
+  }
+  // Synthesis Triad: aggregate/compare/evaluate existing findings (Bishop leads — wins over pure research)
+  if (/\b(synthesize?|summarize?|compile|aggregate|evaluate|compare|assess|cross.?reference)\b/i.test(t)
+    && /\b(paper|literature|data|findings|results|cross.?document|analysis|research)\b/i.test(t)) {
+    return { triad_count: 3, triad: _SK_TRIADS.synthesis };
+  }
+  // Research Triad: primary research / retrieval signal (Bishop leads)
+  if (/\b(research|study|investigate|literature.?review|state.?of.?the.?art|survey|papers)\b/i.test(t)) {
+    return { triad_count: 3, triad: _SK_TRIADS.research };
+  }
+  return { triad_count: 1, triad: null };
+}
+
+const _SKULK_LOG_PATH = resolve(__dirname, "..", "stitchpunks", "data", "skulk_dispatch_log.jsonl");
+
+function _appendSkulkRecord(entry: object): void {
+  try {
+    const dir = dirname(_SKULK_LOG_PATH);
+    if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
+    appendFileSync(_SKULK_LOG_PATH, JSON.stringify(entry) + "\n", "utf-8");
+  } catch {
+    // Non-fatal: substrate log failure must not break dispatch
+  }
+}
+
+function _buildBeatSequence(
+  agents: _SkAgentName[],
+  beat_offset_ms: number
+): Array<{ agent: _SkAgentName; dispatch_at_ms: number; beat_index: number }> {
+  return agents.map((agent, i) => ({
+    agent,
+    dispatch_at_ms: i * beat_offset_ms,
+    beat_index: i,
+  }));
+}
+
+registerTool(
+  "skulk_dispatch",
+  "B36 Phase 3 (BP025) — Skulk Coordinator. Calls Optimus Primal (7th axis: triad_count), selects the " +
+  "optimal Triad (Research/Build/Discovery/Synthesis or full Fox Skulk), dispatches agents in synchronized " +
+  "beat-offset pattern (substrate as crankshaft), writes substrate records for Foreman aggregation. " +
+  "Returns triad manifest + beat sequence + dispatch_id. Innovation #2277 extended — 7th axis.",
+  {
+    task_description: z.string().describe("The task to dispatch to the Skulk (fed to Optimus Primal 7th axis)"),
+    triad_override: z.enum(["research", "build", "discovery", "synthesis", "full_skulk"]).optional()
+      .describe("Force a specific triad type instead of Optimus Primal auto-selection"),
+    beat_offset_ms: z.number().int().min(0).max(30000).optional().default(2000)
+      .describe("Milliseconds between successive agent dispatches in beat pattern (default 2000ms)"),
+    foreman_override: z.enum(["bishop", "knight", "pawn", "rook"]).optional()
+      .describe("Override the Foreman agent for this dispatch (default: triad-defined foreman)"),
+  },
+  async ({ task_description, triad_override, beat_offset_ms, foreman_override }) => {
+    const { randomUUID } = await import("crypto");
+    const dispatch_id = randomUUID();
+    const ts = new Date().toISOString();
+
+    const classified = _classifyForMcp(task_description);
+    const decision = _routeForMcp(classified, "auto");
+
+    let triad_count: 1 | 3 | 4;
+    let triad: _TriadSpec | null;
+
+    if (triad_override === "full_skulk") {
+      triad_count = 4;
+      triad = _SK_TRIADS.synthesis;
+    } else if (triad_override) {
+      triad_count = 3;
+      triad = _SK_TRIADS[triad_override as _TriadType];
+    } else {
+      const selected = _selectTriad(task_description);
+      triad_count = selected.triad_count;
+      triad = selected.triad;
+    }
+
+    const active_agents: _SkAgentName[] = triad_count === 4
+      ? _SK_FULL_SKULK
+      : (triad?.agents ?? ["bishop"]);
+
+    const foreman: _SkAgentName =
+      (foreman_override as _SkAgentName | undefined) ?? (triad?.foreman ?? active_agents[0]);
+
+    const beat_sequence = _buildBeatSequence(active_agents, beat_offset_ms ?? 2000);
+
+    beat_sequence.forEach(beat => {
+      _appendSkulkRecord({
+        skulk_dispatch_id: dispatch_id,
+        agent: beat.agent,
+        is_foreman: beat.agent === foreman,
+        beat_index: beat.beat_index,
+        dispatch_at_ms: beat.dispatch_at_ms,
+        task_hash: _hashQuery(task_description),
+        triad_type: triad?.triad_type ?? "single",
+        triad_count,
+        optimus_primal_class: classified.class,
+        optimus_primal_confidence: classified.confidence,
+        ts,
+      });
+    });
+
+    _appendConductorTrace({
+      ts,
+      query_hash: _hashQuery(task_description),
+      classified_as: classified.class,
+      confidence: classified.confidence,
+      mode: "auto",
+      vendor: decision.vendor,
+      model: decision.model,
+      fallback_used: decision.fallbackUsed,
+      skulk_dispatch_id: dispatch_id,
+      triad_type: triad?.triad_type ?? "single",
+      triad_count,
+      axis_7_extension: "B36_Phase_3_BP025",
+    });
+
+    const result = {
+      dispatch_id,
+      ts,
+      status: "dispatched",
+      optimus_primal: {
+        axis_1_query_class: classified.class,
+        axis_2_confidence: classified.confidence,
+        axis_3_signals: classified.signals,
+        axis_4_mode: "auto",
+        axis_5_vendor: decision.vendor,
+        axis_6_model: decision.model,
+        axis_7_triad_count: triad_count,
+      },
+      triad: {
+        triad_type: triad_count === 4 ? "full_skulk" : (triad?.triad_type ?? "single"),
+        agents: active_agents,
+        foreman,
+        rationale: triad?.rationale ?? "Single-agent task — no triad warranted by Optimus Primal",
+      },
+      beat_sequence,
+      substrate_records_written: beat_sequence.length,
+      next_step: `Foreman (${foreman}) aggregates substrate records. Query skulk_dispatch_id=${dispatch_id} for convergence.`,
+    };
+
+    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
 main().catch(err => {
   console.error("Server failed to start:", err);
   process.exit(1);
