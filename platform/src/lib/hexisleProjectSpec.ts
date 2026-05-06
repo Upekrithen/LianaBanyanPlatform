@@ -279,29 +279,29 @@ export interface PatentedInnovation {
 export const PATENTED_INNOVATIONS: PatentedInnovation[] = [
   // Mechanical (#1-10)
   { number: 1,  category: 'mechanical',    name: 'Hexel 12-Part Modular Construction',           description: '12 parts snap together into one functional Hexel tile' },
-  { number: 2,  category: 'mechanical',    name: 'Inverse Hydraulic Coupling',                   description: 'When A piston moves, B moves opposite — daisy chain linkage' },
+  { number: 2,  category: 'mechanical',    name: 'Inverse Hydraulic Coupling',                   description: 'When A piston moves, B moves opposite — daisy chain linkage', status: 'implemented', innovationId: 'MISS-001', component: 'InverseHydraulicCouplingEngine', hook: 'useInverseHydraulicCoupling', wave: 3, old_one: 'urYod' },
   { number: 3,  category: 'mechanical',    name: 'Ouralis Tidal Mechanism',                      description: '12-rotation tide cycle = one game turn', status: 'implemented', innovationId: 'MISS-002', component: 'OuralisTidalMechanismEngine', hook: 'useOuralisTidalMechanism', wave: 2, old_one: 'urSu' },
   { number: 4,  category: 'mechanical',    name: 'Sawtooth60 Directional Current',               description: 'Sawtooth-pattern channels create directional water flow' },
   { number: 5,  category: 'mechanical',    name: 'Rudder Keel Ship Mechanics',                   description: 'Ships navigate currents using physics-based rudder/keel' },
   { number: 6,  category: 'mechanical',    name: 'Magnetic Character Placement',                 description: 'Characters magnetically snap to designated tile positions' },
   { number: 7,  category: 'mechanical',    name: 'Character-Triggered Mechanisms',                description: 'Placing a character activates tile mechanisms via weight/magnet' },
-  { number: 8,  category: 'mechanical',    name: 'Compliant Mechanism Terrain Caps',              description: 'Capstone system — flexible snap-on terrain covers' },
-  { number: 9,  category: 'mechanical',    name: 'Universal Scale Adapter',                       description: '25mm/28mm/32mm compatibility via adapter rings' },
+  { number: 8,  category: 'mechanical',    name: 'Compliant Mechanism Terrain Caps',              description: 'Capstone system — flexible snap-on terrain covers', status: 'stub', innovationId: 'STUB-002', component: 'CompliantMechanismTerrainCapsEngine', hook: 'useCompliantMechanismTerrainCaps', wave: 3, old_one: 'urTih' },
+  { number: 9,  category: 'mechanical',    name: 'Universal Scale Adapter',                       description: '25mm/28mm/32mm compatibility via adapter rings', status: 'implemented', innovationId: 'MISS-004', component: 'UniversalScaleAdapterEngine', hook: 'useUniversalScaleAdapter', wave: 3, old_one: 'urNol' },
   { number: 10, category: 'mechanical',    name: 'Hydraulic-to-Pneumatic Plant System',           description: 'Water pressure converts to air pressure for above-water effects' },
 
   // System (#11-23)
-  { number: 11, category: 'system',        name: 'AC Pressure Generation',                        description: 'Creates alternating pressure waves without pumps' },
+  { number: 11, category: 'system',        name: 'AC Pressure Generation',                        description: 'Creates alternating pressure waves without pumps', status: 'implemented', innovationId: 'MISS-006', component: 'ACPressureGenerationEngine', hook: 'useACPressureGeneration', wave: 3, old_one: 'urTih' },
   { number: 12, category: 'system',        name: 'Clock-as-Game-State Controller',                description: 'Ouralis tide cycle IS the game clock — no timers needed' },
   { number: 13, category: 'system',        name: 'Banyan Tree Distribution Manifold',             description: 'Water distributes like a banyan tree root system', status: 'stub', innovationId: 'MISS-007', component: 'BanyanTreeDistributionManifoldEngine', hook: 'useBanyanTreeDistributionManifold', wave: 2, old_one: 'urSu' },
   { number: 14, category: 'system',        name: 'One-Way Valve Network',                         description: 'Tesla valve-inspired unidirectional flow control' },
   { number: 15, category: 'system',        name: 'Gravity-Powered Baseline',                      description: '8-foot column provides gravity-fed pressure' },
-  { number: 16, category: 'system',        name: 'Cascading Hexagonal Containers',                description: 'Water cascades between nested hex containers' },
-  { number: 17, category: 'system',        name: 'Continuous Fluid Loop',                         description: 'Water recirculates without external pumps' },
+  { number: 16, category: 'system',        name: 'Cascading Hexagonal Containers',                description: 'Water cascades between nested hex containers', status: 'implemented', innovationId: 'MISS-010', component: 'CascadingHexagonalContainersEngine', hook: 'useCascadingHexagonalContainers', wave: 3, old_one: 'urTih' },
+  { number: 17, category: 'system',        name: 'Continuous Fluid Loop',                         description: 'Water recirculates without external pumps', status: 'implemented', innovationId: 'MISS-011', component: 'ContinuousFluidLoopEngine', hook: 'useContinuousFluidLoop', wave: 3, old_one: 'urYod' },
   { number: 18, category: 'system',        name: 'Multi-Character Trigger Gates',                 description: 'Multiple characters required to trigger certain mechanisms' },
-  { number: 19, category: 'system',        name: 'Modular Canoe-to-Viking Ship Transform',        description: 'Ships grow by snapping additional hull segments' },
+  { number: 19, category: 'system',        name: 'Modular Canoe-to-Viking Ship Transform',        description: 'Ships grow by snapping additional hull segments', status: 'stub', innovationId: 'STUB-004', component: 'ModularCanoeToVikingShipEngine', hook: 'useModularCanoeToVikingShip', wave: 3, old_one: 'urYod' },
   { number: 20, category: 'system',        name: 'Turn-Based Growth Cycle',                       description: 'Plants/structures grow each tide cycle (turn)' },
   { number: 21, category: 'system',        name: 'Harvest-Only-When-Mature Lock',                 description: 'Physical lock prevents harvest before growth completes' },
-  { number: 22, category: 'system',        name: 'Water Table Gravity Engine',                    description: '5+ gallon reservoir provides sustained hydraulic power' },
+  { number: 22, category: 'system',        name: 'Water Table Gravity Engine',                    description: '5+ gallon reservoir provides sustained hydraulic power', status: 'implemented', innovationId: 'MISS-012', component: 'WaterTableGravityEngine', hook: 'useWaterTableGravity', wave: 3, old_one: 'urNol' },
   { number: 23, category: 'system',        name: 'Snap-Together Board Assembly',                  description: 'Entire board assembles without tools, screws, or adhesive' },
 
   // Energy (#24-27)
@@ -311,7 +311,7 @@ export const PATENTED_INNOVATIONS: PatentedInnovation[] = [
   { number: 27, category: 'energy',        name: 'Evaporative Purification Cycle',                description: 'Water purification through evaporation/condensation cycle' },
 
   // Manufacturing (#28-33)
-  { number: 28, category: 'manufacturing', name: 'Lithographic Dual-Process Design',              description: '3D Print + Injection Mold from SAME CAD file' },
+  { number: 28, category: 'manufacturing', name: 'Lithographic Dual-Process Design',              description: '3D Print + Injection Mold from SAME CAD file', status: 'stub', innovationId: 'STUB-005', component: 'LithographicDualProcessEngine', hook: 'useLithographicDualProcess', wave: 3, old_one: 'urNol' },
   { number: 29, category: 'manufacturing', name: 'Zero-Overhang Constraint System',               description: 'No undercuts in any mold — printable AND moldable' },
   { number: 30, category: 'manufacturing', name: 'Airtight Hydraulic Snap-Fit Assembly',           description: 'Seals without adhesive — hydraulic-tight snap connections', status: 'stub', innovationId: 'STUB-007', component: 'AirtightHydraulicSnapFitAssemblyEngine', hook: 'useAirtightHydraulicSnapFitAssembly', wave: 2, old_one: 'urSu' },
   { number: 31, category: 'manufacturing', name: 'Modular Character Component System',            description: 'Hair/clothes/accessories snap on — customize without reprinting' },
@@ -660,6 +660,167 @@ export const CAI_WAVE2_INNOVATIONS: CaiInnovationEntry[] = [
       'src/components/hexisle/OuralisClockContext.tsx',
       'src/hooks/useClockasGameStateController.ts',
       'src/components/hexisle/QuestSystem.tsx', // updated: OuralisClock subscription added
+    ],
+  },
+];
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// CAI CONDUCTOR — WAVE 3 IMPLEMENTATIONS (Old Ones Wave 3, BP025)
+// urTih (Alchemist): MISS-006, MISS-010, STUB-002
+// urYod (Numerologist): MISS-001, MISS-011, STUB-004
+// urNol (Herbalist): MISS-004, MISS-012, STUB-005
+// ═══════════════════════════════════════════════════════════════════════════════
+
+export const CAI_WAVE3_INNOVATIONS: CaiInnovationEntry[] = [
+  // urTih — Alchemist
+  {
+    id: 'MISS-006',
+    name: 'AC Pressure Generation',
+    old_one: 'urTih',
+    wave: 3,
+    bushel: 'BP025',
+    status: 'implemented',
+    component: 'ACPressureGenerationEngine',
+    hook: 'useACPressureGeneration',
+    description: 'Alternating pressure wave generator — no pump required. ' +
+      'Pressure inversion cycle driven by valve-switching geometry; ' +
+      '11th Crown Jewel mechanism.',
+    files: [
+      'src/components/hexisle/ACPressureGenerationEngine.tsx',
+      'src/hooks/useACPressureGeneration.ts',
+    ],
+  },
+  {
+    id: 'MISS-010',
+    name: 'Cascading Hexagonal Containers',
+    old_one: 'urTih',
+    wave: 3,
+    bushel: 'BP025',
+    status: 'implemented',
+    component: 'CascadingHexagonalContainersEngine',
+    hook: 'useCascadingHexagonalContainers',
+    description: 'Nested hex containers cascade water tier-to-tier without pumps. ' +
+      '16th HexIsle innovation. Gravity + snap-fit geometry drives sequential fill-and-overflow.',
+    files: [
+      'src/components/hexisle/CascadingHexagonalContainersEngine.tsx',
+      'src/hooks/useCascadingHexagonalContainers.ts',
+    ],
+  },
+  {
+    id: 'STUB-002',
+    name: 'Compliant Mechanism Terrain Caps',
+    old_one: 'urTih',
+    wave: 3,
+    bushel: 'BP025',
+    status: 'implemented',
+    component: 'CompliantMechanismTerrainCapsEngine',
+    hook: 'useCompliantMechanismTerrainCaps',
+    description: 'Flexible snap-on terrain capstones. Living-hinge compliant mechanism ' +
+      'enables tool-free snap attachment. 8th HexIsle innovation.',
+    files: [
+      'src/components/hexisle/CompliantMechanismTerrainCapsEngine.tsx',
+      'src/hooks/useCompliantMechanismTerrainCaps.ts',
+    ],
+  },
+  // urYod — Numerologist
+  {
+    id: 'MISS-001',
+    name: 'Inverse Hydraulic Coupling',
+    old_one: 'urYod',
+    wave: 3,
+    bushel: 'BP025',
+    status: 'implemented',
+    component: 'InverseHydraulicCouplingEngine',
+    hook: 'useInverseHydraulicCoupling',
+    description: 'When piston A moves up, piston B moves down — pure hydraulic inversion. ' +
+      'Daisy-chainable across Hexel tiles. 2nd HexIsle innovation.',
+    files: [
+      'src/components/hexisle/InverseHydraulicCouplingEngine.tsx',
+      'src/hooks/useInverseHydraulicCoupling.ts',
+    ],
+  },
+  {
+    id: 'MISS-011',
+    name: 'Continuous Fluid Loop',
+    old_one: 'urYod',
+    wave: 3,
+    bushel: 'BP025',
+    status: 'implemented',
+    component: 'ContinuousFluidLoopEngine',
+    hook: 'useContinuousFluidLoop',
+    description: 'Water recirculates without external pumps or batteries. ' +
+      '17th HexIsle innovation. Loop sustained by gravity differential + ' +
+      'Ouralis tidal pressure cycling.',
+    files: [
+      'src/components/hexisle/ContinuousFluidLoopEngine.tsx',
+      'src/hooks/useContinuousFluidLoop.ts',
+    ],
+  },
+  {
+    id: 'STUB-004',
+    name: 'Modular Canoe-to-Viking Ship Transform',
+    old_one: 'urYod',
+    wave: 3,
+    bushel: 'BP025',
+    status: 'implemented',
+    component: 'ModularCanoeToVikingShipEngine',
+    hook: 'useModularCanoeToVikingShip',
+    description: 'Ships grow by snapping hull segments together. ' +
+      'Canoe (1 segment) → Viking ship (6 segments) via POSTF snap-fit connectors. ' +
+      '19th HexIsle innovation.',
+    files: [
+      'src/components/hexisle/ModularCanoeToVikingShipEngine.tsx',
+      'src/hooks/useModularCanoeToVikingShip.ts',
+    ],
+  },
+  // urNol — Herbalist
+  {
+    id: 'MISS-004',
+    name: 'Universal Scale Adapter',
+    old_one: 'urNol',
+    wave: 3,
+    bushel: 'BP025',
+    status: 'implemented',
+    component: 'UniversalScaleAdapterEngine',
+    hook: 'useUniversalScaleAdapter',
+    description: '25mm / 28mm / 32mm miniature scale compatibility via snap-on adapter rings. ' +
+      '9th HexIsle innovation. Single Hexel tile works with all standard miniature scales.',
+    files: [
+      'src/components/hexisle/UniversalScaleAdapterEngine.tsx',
+      'src/hooks/useUniversalScaleAdapter.ts',
+    ],
+  },
+  {
+    id: 'MISS-012',
+    name: 'Water Table Gravity Engine',
+    old_one: 'urNol',
+    wave: 3,
+    bushel: 'BP025',
+    status: 'implemented',
+    component: 'WaterTableGravityEngine',
+    hook: 'useWaterTableGravity',
+    description: '5+ gallon elevated reservoir sustains hydraulic power for full session. ' +
+      '22nd HexIsle innovation. Gravity head pressure feeds all Hexel mechanisms without pumps.',
+    files: [
+      'src/components/hexisle/WaterTableGravityEngine.tsx',
+      'src/hooks/useWaterTableGravity.ts',
+    ],
+  },
+  {
+    id: 'STUB-005',
+    name: 'Lithographic Dual-Process Design',
+    old_one: 'urNol',
+    wave: 3,
+    bushel: 'BP025',
+    status: 'implemented',
+    component: 'LithographicDualProcessEngine',
+    hook: 'useLithographicDualProcess',
+    description: '3D print + injection mold from SAME CAD file. ' +
+      '28th HexIsle innovation. Lithographic geometry ensures zero-overhang compliance ' +
+      'for both FDM printing and mold-pull injection molding.',
+    files: [
+      'src/components/hexisle/LithographicDualProcessEngine.tsx',
+      'src/hooks/useLithographicDualProcess.ts',
     ],
   },
 ];
