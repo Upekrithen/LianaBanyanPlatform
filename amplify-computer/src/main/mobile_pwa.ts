@@ -210,6 +210,55 @@ export function getMobileHTML(): string {
       white-space: nowrap;
     }
 
+    /* ── Bushel 43: Character avatar bar ─────────────────────────── */
+    #character-bar {
+      display: flex; gap: 10px; padding: 10px 16px 4px;
+      flex-shrink: 0;
+    }
+    .char-avatar {
+      flex: 1; display: flex; align-items: center; gap: 8px;
+      padding: 8px 12px; border-radius: 14px;
+      background: var(--surface); color: var(--text-muted);
+      border: 1.5px solid var(--border);
+      font-family: inherit; font-size: 14px; cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: background 0.15s, border-color 0.2s, color 0.2s;
+      user-select: none;
+    }
+    .char-avatar:active { transform: scale(0.97); }
+    .char-avatar.active {
+      background: var(--gold-dim);
+      border-color: rgba(245,158,11,0.5);
+      color: var(--gold);
+      box-shadow: 0 0 0 2px rgba(245,158,11,0.15);
+    }
+    .char-avatar .char-icon {
+      width: 24px; height: 24px; border-radius: 7px;
+      background: rgba(255,255,255,0.06);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 13px; flex-shrink: 0;
+    }
+    .char-avatar.active .char-icon {
+      background: var(--gold);
+      color: #000;
+    }
+    .char-avatar .char-name { font-weight: 600; }
+    /* Bushel 44: family member online/offline status indicator */
+    .char-avatar .char-status {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: #6b7280; margin-left: 2px;
+      transition: background 0.3s;
+    }
+    .char-avatar .char-status.online { background: var(--green); }
+    .char-avatar.family-member { /* slight visual differentiation from MoneyPenny/Bishop */
+      border-style: dashed;
+      border-color: rgba(255,255,255,0.18);
+    }
+    .char-avatar.family-member.active {
+      border-style: solid;
+      border-color: rgba(245,158,11,0.5);
+    }
+
     /* ── Quick buttons ───────────────────────────────────────────── */
     #quick-bar {
       display: flex; gap: 8px; padding: 10px 16px 6px;
@@ -347,6 +396,42 @@ export function getMobileHTML(): string {
     }
     #send-btn:active { transform: scale(0.92); }
     #send-btn:disabled { opacity: 0.4; cursor: default; }
+    /* Bushel 46: attachment button + preview */
+    #attach-btn {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--surface2); color: var(--gold);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 17px; cursor: pointer; flex-shrink: 0;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform 0.1s;
+    }
+    #attach-btn:active { transform: scale(0.92); }
+    #attach-btn:disabled { opacity: 0.4; cursor: default; }
+    #attach-preview {
+      display: none; padding: 6px 14px;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+      gap: 8px; flex-wrap: wrap;
+    }
+    #attach-preview.visible { display: flex; }
+    .attach-chip {
+      display: flex; align-items: center; gap: 6px;
+      padding: 4px 10px; border-radius: 12px;
+      background: var(--gold-dim); color: var(--gold);
+      border: 1px solid rgba(245,158,11,0.3);
+      font-size: 12px;
+    }
+    .attach-chip .remove { cursor: pointer; opacity: 0.7; margin-left: 4px; }
+    .attach-chip .remove:hover { opacity: 1; }
+    .msg img.attachment {
+      max-width: 100%; max-height: 320px; border-radius: 8px;
+      margin-top: 6px; display: block;
+    }
+    .msg audio.attachment {
+      margin-top: 6px; max-width: 100%;
+    }
 
     /* ── Savings strip ───────────────────────────────────────────── */
     #savings-strip {
@@ -380,6 +465,18 @@ export function getMobileHTML(): string {
   <!-- Savings strip -->
   <div id="savings-strip"></div>
 
+  <!-- Bushel 43+44: Character-avatar recipient selector with dynamic family roster -->
+  <div id="character-bar">
+    <button class="char-avatar active" data-recipient="moneypenny" title="Talk to MoneyPenny (substrate query)">
+      <span class="char-icon">M</span><span class="char-name">MoneyPenny</span>
+    </button>
+    <button class="char-avatar" data-recipient="bishop" title="Note Bishop (writes to Yoke; Bishop reads + replies)">
+      <span class="char-icon">B</span><span class="char-name">Bishop</span>
+      <span class="char-status" id="status-bishop"></span>
+    </button>
+    <!-- Dynamic family member avatars injected by loadFamilyRoster() -->
+  </div>
+
   <!-- Quick buttons -->
   <div id="quick-bar">
     <button class="qbtn gold" data-action="brief">📋 Brief me</button>
@@ -394,9 +491,13 @@ export function getMobileHTML(): string {
 
   <!-- Input bar -->
   <div id="input-area">
+    <!-- Bushel 46: attachment picker (file input hidden; label triggers it) -->
+    <input type="file" id="attach-input" accept="image/*,audio/*" style="display:none" multiple />
+    <button id="attach-btn" title="Attach image or audio (Family Table only)">📎</button>
     <textarea id="input" rows="1" placeholder="Ask MoneyPenny…"></textarea>
     <button id="send-btn" disabled>↑</button>
   </div>
+  <div id="attach-preview"></div>
 </div>
 
 <script>
@@ -407,6 +508,9 @@ export function getMobileHTML(): string {
   let busy = false;
   let online = false;
   let currentMode = '—';
+  // Bushel 43: character-avatar recipient selector replaces single-shot noteMode
+  // Sticky selection — stays on chosen recipient until user taps another avatar
+  let currentRecipient = 'moneypenny';
 
   // ── DOM ──────────────────────────────────────────────────────────
   const thread   = document.getElementById('thread');
@@ -496,6 +600,56 @@ export function getMobileHTML(): string {
       .replace(/\\n/g, '<br>');
   }
 
+  // Bushel 47 #17: lightweight markdown — **bold**, *italic*, code (backtick-quoted), line breaks
+  function renderMarkdown(s) {
+    let out = escHtml(s);
+    const BT = String.fromCharCode(96); // backtick — avoid raw char that would terminate outer TS template literal
+    // Triple-backtick code blocks first (multi-line)
+    out = out.replace(new RegExp(BT+BT+BT+'([\\s\\S]*?)'+BT+BT+BT, 'g'), '<pre style="background:rgba(255,255,255,0.05);padding:8px;border-radius:6px;overflow-x:auto;font-size:12px">$1</pre>');
+    // Inline code
+    out = out.replace(new RegExp(BT+'([^'+BT+']+?)'+BT, 'g'), '<code style="background:rgba(255,255,255,0.08);padding:2px 5px;border-radius:3px;font-size:13px">$1</code>');
+    // Bold **x**
+    out = out.replace(/\*\*([^*\\n]+?)\*\*/g, '<strong>$1</strong>');
+    // Italic *x*
+    out = out.replace(/\*([^*\\n]+?)\*/g, '<em>$1</em>');
+    // Line breaks (newline becomes br)
+    out = out.replace(/\\n/g, '<br>');
+    return out;
+  }
+
+  // Bushel 47 #2: relative timestamps
+  function relativeTime(isoTs) {
+    if (!isoTs) return '';
+    const then = new Date(isoTs).getTime();
+    const now = Date.now();
+    const diff = now - then;
+    if (diff < 60000) return 'just now';
+    if (diff < 3600000) return Math.floor(diff / 60000) + 'm ago';
+    if (diff < 86400000) return Math.floor(diff / 3600000) + 'h ago';
+    if (diff < 86400000 * 7) return Math.floor(diff / 86400000) + 'd ago';
+    return new Date(isoTs).toLocaleDateString();
+  }
+
+  // Bushel 47 #19: draft persistence — save unsent input on every keystroke
+  const DRAFT_KEY = 'moneypenny_mail_draft_v1';
+  function saveDraft() {
+    try { localStorage.setItem(DRAFT_KEY, input.value || ''); } catch {}
+  }
+  function loadDraft() {
+    try {
+      const saved = localStorage.getItem(DRAFT_KEY);
+      if (saved) {
+        input.value = saved;
+        input.style.height = 'auto';
+        input.style.height = Math.min(input.scrollHeight, 120) + 'px';
+        sendBtn.disabled = !saved.trim();
+      }
+    } catch {}
+  }
+  function clearDraft() {
+    try { localStorage.removeItem(DRAFT_KEY); } catch {}
+  }
+
   // ── Quick action handlers ─────────────────────────────────────────
   async function handleBriefMe() {
     addMsg('user', '📋 Brief me');
@@ -543,7 +697,7 @@ export function getMobileHTML(): string {
     busy = true;
     sendBtn.disabled = true;
 
-    addMsg('user', escHtml(text));
+    addMsg('user', renderMarkdown(text));
     showTyping();
 
     try {
@@ -599,7 +753,105 @@ export function getMobileHTML(): string {
     }
   }
 
+  // ── Bushel 43: Character-avatar recipient selector ────────────────
+  // Sticky selection — replaces Bushel 41's single-shot noteMode toggle.
+  // Each avatar routes Send to a different endpoint:
+  //   moneypenny -> POST /substrate/query (substrate routing)
+  //   bishop     -> POST /yoke/note       (Pixel-to-Bishop async bridge)
+
+  function setRecipient(name, displayName) {
+    currentRecipient = name;
+    document.querySelectorAll('.char-avatar').forEach((el) => {
+      if (el.getAttribute('data-recipient') === name) {
+        el.classList.add('active');
+      } else {
+        el.classList.remove('active');
+      }
+    });
+    if (name === 'bishop') {
+      input.placeholder = 'Note to Bishop…';
+      sendBtn.textContent = '📨';
+      sendBtn.title = 'Send note to Bishop (Yoke channel)';
+    } else if (name && name.indexOf('family:') === 0) {
+      // Bushel 44+45+46: Family member recipient (Family Table scope)
+      const dn = displayName || 'family member';
+      input.placeholder = 'Note to ' + dn + ' (Family Table)…';
+      sendBtn.textContent = '📨';
+      sendBtn.title = 'Send to ' + dn + ' (Family Table scope)';
+    } else {
+      input.placeholder = 'Ask MoneyPenny…';
+      sendBtn.textContent = '↑';
+      sendBtn.title = 'Send query to substrate';
+    }
+    refreshAttachButton();
+  }
+
+  async function handleSendNote(text) {
+    // Bushel 45: determine scope + recipient_id from currentRecipient
+    let scope = 'just-recipient';
+    let recipientId = null;
+    let recipientName = null;
+    let recipientLabel = 'Bishop';
+    if (currentRecipient && currentRecipient.indexOf('family:') === 0) {
+      scope = 'family-table';
+      recipientId = currentRecipient.slice(7); // strip "family:" prefix
+      // Pull recipient name from the active char-avatar's data attribute
+      const activeBtn = document.querySelector('.char-avatar.active');
+      if (activeBtn) {
+        recipientName = activeBtn.getAttribute('data-member-name');
+        recipientLabel = recipientName || recipientId.slice(0, 8);
+      }
+    }
+    addMsg('user', '📝 → ' + escHtml(recipientLabel) + ':<br>' + renderMarkdown(text));
+    showTyping();
+    try {
+      const attachmentIds = pendingAttachments.map((a) => a.attachment_id);
+      const r = await fetch(BASE + '/yoke/note', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          note: text,
+          urgency: 'normal',
+          scope,
+          recipient_id: recipientId,
+          recipient_name: recipientName,
+          attachment_ids: attachmentIds,
+        }),
+        signal: AbortSignal.timeout(8000),
+      });
+      const d = await r.json();
+      removeTyping();
+      if (d.success) {
+        const shortId = String(d.msg_id || '').slice(0, 8);
+        const tsShort = String(d.ts || '').replace('T', ' ').slice(0, 16);
+        const scopeLabel = scope === 'family-table' ? ' (Family Table)' : '';
+        const attachLabel = attachmentIds.length > 0 ? ' · ' + attachmentIds.length + ' attachment' + (attachmentIds.length > 1 ? 's' : '') : '';
+        addMsg(
+          'system',
+          '📨 Sent to ' + escHtml(recipientLabel) + scopeLabel + attachLabel + ' · ' + tsShort + ' · ' + shortId,
+        );
+        // Bushel 46: clear pending attachments after successful send
+        pendingAttachments = [];
+        renderAttachPreview();
+      } else {
+        addMsg('error', 'Send failed: ' + (d.error || 'unknown error'));
+      }
+    } catch (e) {
+      removeTyping();
+      addMsg('error', 'Send failed: ' + e.message);
+    }
+    // Bushel 43: sticky recipient — do not auto-revert
+  }
+
   // ── Event wiring ──────────────────────────────────────────────────
+  // Bushel 43: character avatar selection
+  document.querySelectorAll('.char-avatar').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const r = btn.getAttribute('data-recipient');
+      if (r) setRecipient(r);
+    });
+  });
+
   document.querySelectorAll('[data-action]').forEach((btn) => {
     btn.addEventListener('click', () => {
       const a = btn.getAttribute('data-action');
@@ -614,6 +866,7 @@ export function getMobileHTML(): string {
     input.style.height = 'auto';
     input.style.height = Math.min(input.scrollHeight, 120) + 'px';
     sendBtn.disabled = !input.value.trim() || busy;
+    saveDraft(); // Bushel 47 #19: draft persistence
   });
 
   input.addEventListener('keydown', (e) => {
@@ -631,7 +884,14 @@ export function getMobileHTML(): string {
     input.value = '';
     input.style.height = 'auto';
     sendBtn.disabled = true;
-    sendQuery(text);
+    clearDraft(); // Bushel 47 #19: draft persistence — clear after send
+    // Bushel 43: route on currentRecipient (sticky); no auto-revert
+    // Bushel 44/45: family:* recipients route via Yoke with Family Table scope
+    if (currentRecipient === 'bishop' || (currentRecipient && currentRecipient.indexOf('family:') === 0)) {
+      handleSendNote(text);
+    } else {
+      sendQuery(text);
+    }
   }
 
   // ── Service worker registration ────────────────────────────────────
@@ -661,15 +921,224 @@ export function getMobileHTML(): string {
 
     addMsg(
       'assistant',
-      'Good evening. I\'m MoneyPenny — your AMPLIFY Computer substrate interface. ' +
+      'Good evening. I\\'m MoneyPenny — your AMPLIFY Computer substrate interface. ' +
       'What do you need?',
     );
+  }
+
+  // ── Bushel 46: Attachment picker + upload + preview ────────────────────
+  // Family-Table-scope only: attachments restricted to family member recipients.
+  // Image/audio limit ~14 MB binary; uploaded as base64 to /family/attachment.
+
+  const attachInput = document.getElementById('attach-input');
+  const attachBtn = document.getElementById('attach-btn');
+  const attachPreview = document.getElementById('attach-preview');
+  let pendingAttachments = []; // [{attachment_id, filename, content_type, url}]
+
+  function isAttachmentAllowed() {
+    return currentRecipient && currentRecipient.indexOf('family:') === 0;
+  }
+
+  function refreshAttachButton() {
+    attachBtn.disabled = !isAttachmentAllowed();
+    attachBtn.title = isAttachmentAllowed()
+      ? 'Attach image or audio (Family Table)'
+      : 'Attachments only available when sending to a family member';
+  }
+
+  function renderAttachPreview() {
+    attachPreview.innerHTML = '';
+    if (pendingAttachments.length === 0) {
+      attachPreview.classList.remove('visible');
+      return;
+    }
+    attachPreview.classList.add('visible');
+    pendingAttachments.forEach((a, idx) => {
+      const chip = document.createElement('div');
+      chip.className = 'attach-chip';
+      const isImg = (a.content_type || '').startsWith('image/');
+      const isAud = (a.content_type || '').startsWith('audio/');
+      const icon = isImg ? '🖼️' : isAud ? '🎵' : '📎';
+      chip.innerHTML = icon + ' ' + escHtml(a.filename) +
+        ' <span class="remove" data-idx="' + idx + '">×</span>';
+      attachPreview.appendChild(chip);
+    });
+    attachPreview.querySelectorAll('.remove').forEach((el) => {
+      el.addEventListener('click', () => {
+        const idx = parseInt(el.getAttribute('data-idx'), 10);
+        pendingAttachments.splice(idx, 1);
+        renderAttachPreview();
+      });
+    });
+  }
+
+  function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = String(reader.result || '');
+        const idx = result.indexOf(',');
+        resolve(idx >= 0 ? result.substring(idx + 1) : result);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  async function uploadAttachment(file) {
+    const base64 = await fileToBase64(file);
+    const r = await fetch(BASE + '/family/attachment', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        filename: file.name,
+        content_type: file.type || 'application/octet-stream',
+        base64_data: base64,
+      }),
+      signal: AbortSignal.timeout(30000),
+    });
+    return r.json();
+  }
+
+  attachBtn.addEventListener('click', () => {
+    if (!isAttachmentAllowed()) {
+      addMsg('error', 'Attachments only available when sending to a family member (Family Table scope).');
+      return;
+    }
+    attachInput.click();
+  });
+
+  attachInput.addEventListener('change', async (e) => {
+    const files = Array.from(e.target.files || []);
+    for (const file of files) {
+      try {
+        addMsg('system', '📤 Uploading ' + escHtml(file.name) + '…');
+        const result = await uploadAttachment(file);
+        if (result.success) {
+          pendingAttachments.push({
+            attachment_id: result.attachment_id,
+            filename: file.name,
+            content_type: result.content_type,
+            url: result.url,
+          });
+          renderAttachPreview();
+        } else {
+          addMsg('error', 'Upload failed: ' + (result.error || 'unknown'));
+        }
+      } catch (err) {
+        addMsg('error', 'Upload failed: ' + err.message);
+      }
+    }
+    attachInput.value = ''; // reset for next selection
+  });
+
+  function renderAttachments(div, attachmentIds) {
+    if (!attachmentIds || attachmentIds.length === 0) return;
+    for (const id of attachmentIds) {
+      const url = BASE + '/family/attachment/' + id;
+      // Try image first; if it 404s or non-image, fall back to audio
+      const img = document.createElement('img');
+      img.className = 'attachment';
+      img.src = url;
+      img.alt = 'Family Table attachment';
+      img.onerror = () => {
+        img.remove();
+        const audio = document.createElement('audio');
+        audio.className = 'attachment';
+        audio.controls = true;
+        audio.src = url;
+        div.appendChild(audio);
+      };
+      div.appendChild(img);
+    }
+  }
+
+  // ── Bushel 44: Dynamic family roster — load + render character avatars ────
+  // Family members are paired AMPLIFY peers on local network (federation peers).
+  // Roster fetched from /family/roster; rendered as additional .char-avatar buttons.
+
+  async function loadFamilyRoster() {
+    try {
+      const r = await fetch(BASE + '/family/roster', { signal: AbortSignal.timeout(3000) });
+      const d = await r.json();
+      const roster = (d.roster || []);
+      const charBar = document.getElementById('character-bar');
+      // Remove existing dynamic family avatars (preserve MoneyPenny + Bishop)
+      charBar.querySelectorAll('.char-avatar.family-member').forEach((el) => el.remove());
+      // Add fresh avatars
+      for (const m of roster) {
+        const btn = document.createElement('button');
+        btn.className = 'char-avatar family-member';
+        btn.setAttribute('data-recipient', 'family:' + m.member_id);
+        btn.setAttribute('data-member-name', m.name);
+        btn.title = 'Note ' + m.name + ' (Family Table)';
+        const initial = (m.name || '?').trim().charAt(0).toUpperCase();
+        btn.innerHTML =
+          '<span class="char-icon">' + escHtml(initial) + '</span>' +
+          '<span class="char-name">' + escHtml(m.name) + '</span>' +
+          '<span class="char-status' + (m.online ? ' online' : '') + '"></span>';
+        btn.addEventListener('click', () => setRecipient('family:' + m.member_id, m.name));
+        charBar.appendChild(btn);
+      }
+    } catch { /* offline or no roster yet */ }
+  }
+
+  // ── Bushel 42: MoneyPenny Mail bidirectional inbox polling ────────────
+  // Tracks msg_ids already rendered so we only show new Bishop replies once.
+  const seenReplies = new Set();
+
+  async function pollInbox() {
+    try {
+      const r = await fetch(BASE + '/yoke/inbox', { signal: AbortSignal.timeout(4000) });
+      const d = await r.json();
+      const replies = (d.replies || []).slice().reverse(); // oldest-first for thread chronology
+      for (const reply of replies) {
+        if (!reply.msg_id || seenReplies.has(reply.msg_id)) continue;
+        // Skip read-event entries (Bushel 47 #1) — those mark reads, not actual replies
+        if (reply.event === 'read') continue;
+        seenReplies.add(reply.msg_id);
+        const shortIrt = String(reply.in_reply_to || '').slice(0, 8);
+        const ts = reply.ts || '';
+        const rel = relativeTime(ts);
+        addMsg(
+          'assistant',
+          '<div style="color:var(--gold);font-weight:600;margin-bottom:4px">' +
+          '📬 ' + escHtml(reply.author || 'Bishop') + '’s Reply</div>' +
+          renderMarkdown(reply.text || ''),
+          'in reply to ' + shortIrt + ' · <span data-relative-ts="' + escHtml(ts) + '">' + rel + '</span>',
+        );
+        // Bushel 47 #1: mark this reply as read (read-receipt for Bishop's outbox tracking)
+        try {
+          fetch(BASE + '/yoke/inbox/read', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ msg_id: reply.msg_id }),
+          }).catch(() => {});
+        } catch {}
+      }
+    } catch { /* offline or transient — try again next tick */ }
   }
 
   // Poll health every 30s
   setInterval(checkHealth, 30000);
   // Refresh savings every 2min
   setInterval(loadSavings, 120000);
+  // Bushel 42: poll inbox every 10s for Bishop replies
+  setInterval(pollInbox, 10000);
+  // Initial inbox poll on startup (after init delay so welcome message renders first)
+  setTimeout(pollInbox, 1500);
+  // Bushel 44: load family roster on startup + refresh every 30s for online/offline status
+  setTimeout(loadFamilyRoster, 800);
+  setInterval(loadFamilyRoster, 30000);
+  // Bushel 47 #19: restore draft on init (after init delay)
+  setTimeout(loadDraft, 600);
+  // Bushel 47 #2: refresh relative timestamps every 30s
+  setInterval(() => {
+    document.querySelectorAll('[data-relative-ts]').forEach((el) => {
+      const ts = el.getAttribute('data-relative-ts');
+      if (ts) el.textContent = relativeTime(ts);
+    });
+  }, 30000);
 
   init();
 </script>

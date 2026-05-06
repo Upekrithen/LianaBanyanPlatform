@@ -460,6 +460,12 @@ app.whenReady().then(async () => {
   // Initialize auth manager (Phase 7)
   authManager = new AuthManager();
   authManager.init();
+  authManager.onStateChanged((state) => {
+    substrateServer?.setDegradedMode(state.degraded);
+    if (state.degraded && substrateServer?.getEffectiveMode() === 'ai_burst') {
+      setMode('fallback');
+    }
+  });
 
   // Create overlay + tray
   createOverlayWindow();

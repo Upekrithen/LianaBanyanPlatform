@@ -2,6 +2,7 @@
   "name": "amplify-computer",
   "version": "0.1.0",
   "description": "AMPLIFY Computer — CAI Hearth local inference + LB Frame OS overlay",
+  "homepage": "https://lianabanyan.com",
   "private": true,
   "main": "dist/main/index.js",
   "scripts": {
@@ -83,8 +84,7 @@
       "icon": "assets/icon.ico",
       "signingHashAlgorithms": ["sha256"],
       "signDlls": false,
-      "certificateFile": "${env.WIN_CERT_FILE}",
-      "certificatePassword": "${env.WIN_CERT_PASSWORD}",
+      "signAndEditExecutable": false,
       "verifyUpdateCodeSignature": false
     },
     "nsis": {
@@ -115,7 +115,7 @@
       "entitlements": "assets/entitlements.mac.plist",
       "entitlementsInherit": "assets/entitlements.mac.plist",
       "notarize": false,
-      "identity": "${env.MAC_IDENTITY}"
+      "identity": null
     },
     "dmg": {
       "title": "AMPLIFY Computer ${version}",
@@ -137,7 +137,6 @@
       "icon": "assets/icons",
       "category": "Office",
       "maintainer": "Liana Banyan Corporation <support@lianabanyan.com>",
-      "homepage": "https://lianabanyan.com",
       "synopsis": "CAI Hearth local inference + cooperative substrate OS overlay",
       "description": "AMPLIFY Computer runs CAI Hearth — local AI inference via Ollama, cooperative substrate index, and the LB Frame OS overlay. Saves cloud AI costs. Members pay $5/year."
     },

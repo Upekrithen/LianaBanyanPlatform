@@ -90,6 +90,7 @@ export class AuthManager {
   private windows: Set<BrowserWindow> = new Set();
   private persistedData: PersistedAuth | null = null;
   private tokenResolvers: Array<(token: string | null) => void> = [];
+  private stateListeners: Set<(state: Omit<AuthState, 'token'>) => void> = new Set();
 
   // ─── Lifecycle ──────────────────────────────────────────────────────────────
 
@@ -109,13 +110,21 @@ export class AuthManager {
   // ─── Public API ─────────────────────────────────────────────────────────────
 
   getState(): AuthState {
+    this._computeState();
     return { ...this.state };
   }
 
   sanitizedState(): Omit<AuthState, 'token'> {
+    this._computeState();
     // Never send raw token to renderer
     const { token: _t, ...safe } = this.state;
     return safe;
+  }
+
+  onStateChanged(cb: (state: Omit<AuthState, 'token'>) => void): () => void {
+    this.stateListeners.add(cb);
+    cb(this.sanitizedState());
+    return () => this.stateListeners.delete(cb);
   }
 
   isDegraded(): boolean {
@@ -381,6 +390,11 @@ export class AuthManager {
     for (const win of this.windows) {
       if (!win.isDestroyed()) {
         win.webContents.send(channel, payload);
+      }
+    }
+    if (channel === 'auth-state-changed') {
+      for (const listener of this.stateListeners) {
+        listener(payload as Omit<AuthState, 'token'>);
       }
     }
   }
