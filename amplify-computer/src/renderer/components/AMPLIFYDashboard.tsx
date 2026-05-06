@@ -1,10 +1,12 @@
-// AMPLIFY Dashboard — B37 Phase 4
+// AMPLIFY Dashboard — B37 Phase 4 + Phase 7
 // Full telemetry: real-time session + historical (today/week/month) + daily bar chart + share card
 // Phase 3 retained: mode switcher, force-mode settings, federation panel
+// Phase 7: Auth state, member badge, trial info, sign-out
 
 import React, { useEffect, useState, useCallback } from 'react';
 import type { FrameMode } from './FrameModeIndicator';
 import { ShareCard } from './ShareCard';
+import type { AuthState } from '../amplify.d';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -76,6 +78,8 @@ interface AMPLIFYDashboardProps {
   currentMode: FrameMode;
   onModeChange: (mode: FrameMode) => void;
   onClose: () => void;
+  /** Phase 7: live auth/trial state */
+  authState?: AuthState | null;
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -280,6 +284,7 @@ export const AMPLIFYDashboard: React.FC<AMPLIFYDashboardProps> = ({
   currentMode,
   onModeChange,
   onClose,
+  authState,
 }) => {
   const [summary, setSummary] = useState<TelemetrySummary>(emptySummary);
   const [federation, setFederation] = useState<FederationStatus>({
@@ -356,11 +361,114 @@ export const AMPLIFYDashboard: React.FC<AMPLIFYDashboardProps> = ({
         <div className="dashboard__panel">
 
           {/* Header */}
-          <div className="dashboard__title">AMPLIFY Computer</div>
-          <div className="dashboard__subtitle">
-            CAI Hearth — {MODES.find((m) => m.id === currentMode)?.label ?? 'Normal'} Mode
-            {forcedMode && (
-              <span style={{ color: '#f59e0b', marginLeft: 6, fontSize: 10 }}>(forced)</span>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              justifyContent: 'space-between',
+            }}
+          >
+            <div>
+              <div className="dashboard__title">AMPLIFY Computer</div>
+              <div className="dashboard__subtitle">
+                CAI Hearth — {MODES.find((m) => m.id === currentMode)?.label ?? 'Normal'} Mode
+                {forcedMode && (
+                  <span style={{ color: '#f59e0b', marginLeft: 6, fontSize: 10 }}>(forced)</span>
+                )}
+              </div>
+            </div>
+
+            {/* Phase 7: Member badge / auth state chip */}
+            {authState && (
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'flex-end',
+                  gap: 4,
+                  marginTop: 2,
+                }}
+              >
+                {authState.status === 'member' && authState.member ? (
+                  <div
+                    title={`Signed in as ${authState.member.email}`}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 5,
+                      background: 'rgba(245,158,11,0.1)',
+                      border: '1px solid rgba(245,158,11,0.25)',
+                      borderRadius: 20,
+                      padding: '3px 10px',
+                      fontSize: 11,
+                      color: '#f59e0b',
+                    }}
+                  >
+                    {authState.member.badge_tier === 'stamped' && (
+                      <span style={{ fontSize: 8 }}>✦</span>
+                    )}
+                    {authState.member.display_name}
+                  </div>
+                ) : authState.status === 'trial_active' ? (
+                  <div
+                    style={{
+                      fontSize: 10,
+                      color: 'rgba(255,255,255,0.35)',
+                      borderRadius: 20,
+                      border: '1px solid rgba(255,255,255,0.1)',
+                      padding: '2px 8px',
+                    }}
+                  >
+                    Trial · {authState.trial_days_remaining ?? 0}d left
+                  </div>
+                ) : authState.status === 'trial_expired' ? (
+                  <div
+                    style={{
+                      fontSize: 10,
+                      color: '#fca5a5',
+                      borderRadius: 20,
+                      border: '1px solid rgba(239,68,68,0.25)',
+                      padding: '2px 8px',
+                    }}
+                  >
+                    ⚠ Trial expired
+                  </div>
+                ) : null}
+
+                {/* Sign-out link for members */}
+                {authState.status === 'member' && (
+                  <button
+                    onClick={() => window.amplify.authSignOut()}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      color: 'rgba(255,255,255,0.2)',
+                      fontSize: 10,
+                      cursor: 'pointer',
+                      padding: 0,
+                    }}
+                  >
+                    Sign out
+                  </button>
+                )}
+
+                {/* Sign-in CTA for trial users */}
+                {(authState.status === 'trial_active' || authState.status === 'trial_expired') && (
+                  <button
+                    onClick={() => window.amplify.authSignIn()}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      color: '#f59e0b',
+                      fontSize: 10,
+                      cursor: 'pointer',
+                      padding: 0,
+                    }}
+                  >
+                    Sign in →
+                  </button>
+                )}
+              </div>
             )}
           </div>
 

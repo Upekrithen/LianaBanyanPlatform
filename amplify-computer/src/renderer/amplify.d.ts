@@ -121,6 +121,33 @@ export interface FederationStatus {
   peers: FederationPeer[];
 }
 
+// Phase 7 — Auth types
+export type AuthStatus =
+  | 'unauthenticated'
+  | 'trial_active'
+  | 'trial_expired'
+  | 'member'
+  | 'validating';
+
+export interface MemberInfo {
+  user_id: string;
+  display_name: string;
+  email: string;
+  is_member: boolean;
+  membership_expires?: string;
+  badge_tier?: 'stamped' | 'ghost';
+  avatar_url?: string;
+}
+
+export interface AuthState {
+  status: AuthStatus;
+  member?: MemberInfo;
+  trial_started_ts?: number;
+  trial_days_remaining?: number;
+  token_expires?: number;
+  degraded: boolean;
+}
+
 declare global {
   interface Window {
     amplify: {
@@ -153,6 +180,13 @@ declare global {
       onUpdateStateChanged: (cb: (state: UpdateState) => void) => () => void;
       // MoneyPenny
       getMoneyPennyUrl: () => Promise<{ url: string; ips: string[]; port: number }>;
+      // Auth (Phase 7)
+      getAuthState: () => Promise<AuthState>;
+      authSignIn: () => void;
+      authSignOut: () => void;
+      authStartTrial: () => void;
+      authOpenJoin: () => void;
+      onAuthStateChanged: (cb: (state: AuthState) => void) => () => void;
       // Dashboard
       openDashboard: () => void;
     };
