@@ -81,7 +81,6 @@
         { "target": "nsis", "arch": ["x64"] },
         { "target": "portable", "arch": ["x64"] }
       ],
-      "icon": "assets/icon.ico",
       "signingHashAlgorithms": ["sha256"],
       "signDlls": false,
       "signAndEditExecutable": false,
@@ -92,9 +91,6 @@
       "perMachine": false,
       "allowElevation": true,
       "allowToChangeInstallationDirectory": true,
-      "installerIcon": "assets/icon.ico",
-      "uninstallerIcon": "assets/icon.ico",
-      "installerHeaderIcon": "assets/icon.ico",
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "shortcutName": "AMPLIFY Computer",
@@ -108,7 +104,6 @@
         { "target": "dmg", "arch": ["x64", "arm64"] },
         { "target": "zip", "arch": ["x64", "arm64"] }
       ],
-      "icon": "assets/icon.icns",
       "category": "public.app-category.productivity",
       "hardenedRuntime": true,
       "gatekeeperAssess": false,
@@ -119,8 +114,6 @@
     },
     "dmg": {
       "title": "AMPLIFY Computer ${version}",
-      "icon": "assets/icon.icns",
-      "background": "assets/dmg-background.png",
       "window": { "width": 540, "height": 380 },
       "contents": [
         { "x": 130, "y": 220 },
@@ -134,7 +127,6 @@
         { "target": "rpm", "arch": ["x64"] },
         { "target": "AppImage", "arch": ["x64"] }
       ],
-      "icon": "assets/icons",
       "category": "Office",
       "maintainer": "Liana Banyan Corporation <support@lianabanyan.com>",
       "synopsis": "CAI Hearth local inference + cooperative substrate OS overlay",
