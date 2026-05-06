@@ -387,6 +387,11 @@ function registerIPCHandlers(): void {
     };
   });
 
+  // Full historical summary (today / week / month / daily breakdown / all-time)
+  ipcMain.handle('get-amplify-summary', () => {
+    return substrateServer?.getTelemetryStore().getSummary() ?? null;
+  });
+
   // ── Dashboard ─────────────────────────────────────────────────────────────
   ipcMain.on('open-dashboard', () => openDashboard());
 }

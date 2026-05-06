@@ -54,6 +54,49 @@ export interface SubstrateQueryResult {
   peer_sync_exchanged?: number;
 }
 
+export interface PeriodStats {
+  period: string;
+  label: string;
+  total_queries: number;
+  substrate_hits: number;
+  local_ollama_served: number;
+  cloud_escalations: number;
+  peer_synced: number;
+  misses: number;
+  substrate_hit_ratio: number;
+  local_ratio: number;
+  cloud_ratio: number;
+  cloud_cost_avoided_usd: number;
+  tokens_saved_est: number;
+  avg_latency_ms: number;
+  avg_local_latency_ms: number;
+  cloud_baseline_latency_ms: number;
+  latency_improvement_pct: number;
+  days_active: number;
+}
+
+export interface DailyBreakdown {
+  date: string;
+  total_queries: number;
+  substrate_hits: number;
+  local_ollama_served: number;
+  cloud_escalations: number;
+  cloud_cost_avoided_usd: number;
+  tokens_saved_est: number;
+  avg_latency_ms: number;
+}
+
+export interface TelemetrySummary {
+  session: PeriodStats;
+  today: PeriodStats;
+  week: PeriodStats;
+  month: PeriodStats;
+  daily_breakdown: DailyBreakdown[];
+  all_time_cost_avoided_usd: number;
+  all_time_tokens_saved: number;
+  all_time_queries: number;
+}
+
 export interface FederationPeer {
   address: string;
   port: number;
@@ -94,6 +137,7 @@ declare global {
       setMemberToken: (token: string | null) => Promise<{ ok: boolean }>;
       // Telemetry
       getAMPLIFYSnapshot: () => Promise<AMPLIFYSnapshot>;
+      getAMPLIFYSummary: () => Promise<TelemetrySummary>;
       // Dashboard
       openDashboard: () => void;
     };
