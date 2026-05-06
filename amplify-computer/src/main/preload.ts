@@ -193,6 +193,10 @@ contextBridge.exposeInMainWorld('amplify', {
   getAMPLIFYSummary: (): Promise<TelemetrySummary> =>
     ipcRenderer.invoke('get-amplify-summary'),
 
+  // ── MoneyPenny Mobile ─────────────────────────────────────────────────────
+  getMoneyPennyUrl: (): Promise<{ url: string; ips: string[]; port: number }> =>
+    ipcRenderer.invoke('get-moneypenny-url'),
+
   // ── Dashboard ─────────────────────────────────────────────────────────────
   openDashboard: (): void =>
     ipcRenderer.send('open-dashboard'),
@@ -225,6 +229,8 @@ declare global {
       // Telemetry
       getAMPLIFYSnapshot: () => Promise<AMPLIFYSnapshot>;
       getAMPLIFYSummary: () => Promise<TelemetrySummary>;
+      // MoneyPenny
+      getMoneyPennyUrl: () => Promise<{ url: string; ips: string[]; port: number }>;
       // Dashboard
       openDashboard: () => void;
     };

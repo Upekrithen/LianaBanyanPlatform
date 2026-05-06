@@ -15,8 +15,9 @@ import {
 import { join } from 'path';
 import { existsSync } from 'fs';
 import { OllamaManager } from './ollama_manager';
-import { SubstrateAPIServer } from './substrate_api';
+import { SubstrateAPIServer, API_PORT } from './substrate_api';
 import { FederationClient } from './federation_client';
+import { getMoneyPennyURL, getLocalIPs } from './mobile_pwa';
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 
@@ -208,6 +209,10 @@ function rebuildTrayMenu(mode: FrameMode = currentMode): void {
     },
     { type: 'separator' },
     {
+      label: `MoneyPenny Mobile: ${getMoneyPennyURL(API_PORT)}`,
+      click: () => shell.openExternal(getMoneyPennyURL(API_PORT)),
+    },
+    {
       label: 'Open lianabanyan.com',
       click: () => shell.openExternal('https://lianabanyan.com'),
     },
@@ -391,6 +396,13 @@ function registerIPCHandlers(): void {
   ipcMain.handle('get-amplify-summary', () => {
     return substrateServer?.getTelemetryStore().getSummary() ?? null;
   });
+
+  // ── MoneyPenny Mobile ─────────────────────────────────────────────────────
+  ipcMain.handle('get-moneypenny-url', () => ({
+    url: getMoneyPennyURL(API_PORT),
+    ips: getLocalIPs(),
+    port: API_PORT,
+  }));
 
   // ── Dashboard ─────────────────────────────────────────────────────────────
   ipcMain.on('open-dashboard', () => openDashboard());
