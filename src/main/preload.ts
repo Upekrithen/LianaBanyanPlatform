@@ -15,6 +15,14 @@ export interface OllamaStatus {
   version?: string;
 }
 
+export interface ModelPullProgress {
+  status: 'pulling' | 'verifying' | 'complete' | 'error';
+  bytesDownloaded?: number;
+  totalBytes?: number;
+  percentComplete?: number;
+  error?: string;
+}
+
 export interface AMPLIFYSnapshot {
   total_queries: number;
   substrate_hits: number;
@@ -55,6 +63,19 @@ contextBridge.exposeInMainWorld('amplify', {
   // Dashboard
   openDashboard: (): void =>
     ipcRenderer.send('open-dashboard'),
+
+  // Ollama model management
+  pullDefaultModel: (): Promise<{ success: boolean; alreadyInstalled?: boolean; error?: string }> =>
+    ipcRenderer.invoke('pull-default-model'),
+  listOllamaModels: (): Promise<string[]> =>
+    ipcRenderer.invoke('list-ollama-models'),
+  checkDiskSpace: (): Promise<{ ok: boolean; requiredGB: number }> =>
+    ipcRenderer.invoke('check-disk-space'),
+  onOllamaPullProgress: (cb: (progress: ModelPullProgress) => void): (() => void) => {
+    const handler = (_event: Electron.IpcRendererEvent, progress: ModelPullProgress) => cb(progress);
+    ipcRenderer.on('ollama-pull-progress', handler);
+    return () => ipcRenderer.removeListener('ollama-pull-progress', handler);
+  },
 });
 
 // TypeScript global type extension

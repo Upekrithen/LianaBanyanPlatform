@@ -203,7 +203,38 @@ function registerIPCHandlers(): void {
 
   // Health check for Ollama
   ipcMain.handle('get-ollama-status', async () => {
-    return ollamaManager?.getStatus() ?? { running: false, model: null };
+    return ollamaManager?.getStatus() ?? { running: false, model: null, source: 'none' };
+  });
+
+  // First-launch model pull (with user consent via renderer dialog)
+  ipcMain.handle('pull-default-model', async () => {
+    if (!ollamaManager) return { success: false, error: 'Ollama manager not initialized' };
+    const reachable = await ollamaManager.isReachable();
+    if (!reachable) return { success: false, error: 'Ollama not running' };
+
+    const hasModel = await ollamaManager.hasModel();
+    if (hasModel) return { success: true, alreadyInstalled: true };
+
+    try {
+      await ollamaManager.pullModel(undefined, (progress) => {
+        overlayWindow?.webContents.send('ollama-pull-progress', progress);
+        dashboardWindow?.webContents.send('ollama-pull-progress', progress);
+      });
+      return { success: true };
+    } catch (err) {
+      return { success: false, error: String(err) };
+    }
+  });
+
+  // List available models
+  ipcMain.handle('list-ollama-models', async () => {
+    return ollamaManager?.listModels() ?? [];
+  });
+
+  // Disk space check before model pull
+  ipcMain.handle('check-disk-space', async () => {
+    const ok = await ollamaManager?.checkDiskSpace(6) ?? true;
+    return { ok, requiredGB: 6 };
   });
 
   // AMPLIFY telemetry snapshot
