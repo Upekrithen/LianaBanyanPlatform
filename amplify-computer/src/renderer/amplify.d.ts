@@ -3,6 +3,14 @@
 
 export type FrameMode = 'ai_burst' | 'normal' | 'fallback';
 
+export interface UpdateState {
+  status: 'idle' | 'checking' | 'available' | 'downloading' | 'downloaded' | 'error' | 'not-available';
+  version?: string;
+  releaseNotes?: string;
+  downloadProgress?: number;
+  errorMessage?: string;
+}
+
 export interface FrameModePayload {
   mode: FrameMode;
   forced_mode: FrameMode | null;
@@ -138,6 +146,11 @@ declare global {
       // Telemetry
       getAMPLIFYSnapshot: () => Promise<AMPLIFYSnapshot>;
       getAMPLIFYSummary: () => Promise<TelemetrySummary>;
+      // Auto-Update
+      getUpdateState: () => Promise<UpdateState>;
+      checkForUpdates: () => void;
+      installUpdate: () => void;
+      onUpdateStateChanged: (cb: (state: UpdateState) => void) => () => void;
       // MoneyPenny
       getMoneyPennyUrl: () => Promise<{ url: string; ips: string[]; port: number }>;
       // Dashboard

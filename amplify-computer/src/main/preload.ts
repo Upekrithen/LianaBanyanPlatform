@@ -59,6 +59,14 @@ export interface SubstrateQueryResult {
   peer_sync_exchanged?: number;
 }
 
+export interface UpdateState {
+  status: 'idle' | 'checking' | 'available' | 'downloading' | 'downloaded' | 'error' | 'not-available';
+  version?: string;
+  releaseNotes?: string;
+  downloadProgress?: number;
+  errorMessage?: string;
+}
+
 export interface PeriodStats {
   period: string;
   label: string;
@@ -193,6 +201,22 @@ contextBridge.exposeInMainWorld('amplify', {
   getAMPLIFYSummary: (): Promise<TelemetrySummary> =>
     ipcRenderer.invoke('get-amplify-summary'),
 
+  // ── Auto-Update ───────────────────────────────────────────────────────────
+  getUpdateState: (): Promise<UpdateState> =>
+    ipcRenderer.invoke('get-update-state'),
+
+  checkForUpdates: (): void =>
+    ipcRenderer.send('check-for-updates'),
+
+  installUpdate: (): void =>
+    ipcRenderer.send('install-update'),
+
+  onUpdateStateChanged: (cb: (state: UpdateState) => void): (() => void) => {
+    const handler = (_event: Electron.IpcRendererEvent, state: UpdateState) => cb(state);
+    ipcRenderer.on('update-state-changed', handler);
+    return () => ipcRenderer.removeListener('update-state-changed', handler);
+  },
+
   // ── MoneyPenny Mobile ─────────────────────────────────────────────────────
   getMoneyPennyUrl: (): Promise<{ url: string; ips: string[]; port: number }> =>
     ipcRenderer.invoke('get-moneypenny-url'),
@@ -229,6 +253,11 @@ declare global {
       // Telemetry
       getAMPLIFYSnapshot: () => Promise<AMPLIFYSnapshot>;
       getAMPLIFYSummary: () => Promise<TelemetrySummary>;
+      // Auto-Update
+      getUpdateState: () => Promise<UpdateState>;
+      checkForUpdates: () => void;
+      installUpdate: () => void;
+      onUpdateStateChanged: (cb: (state: UpdateState) => void) => () => void;
       // MoneyPenny
       getMoneyPennyUrl: () => Promise<{ url: string; ips: string[]; port: number }>;
       // Dashboard
