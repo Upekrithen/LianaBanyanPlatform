@@ -64,6 +64,14 @@ interface FrameModePayload {
   forced_mode: FrameMode | null;
 }
 
+interface UpdateState {
+  status: 'idle' | 'checking' | 'available' | 'downloading' | 'downloaded' | 'error' | 'not-available';
+  version?: string;
+  releaseNotes?: string;
+  downloadProgress?: number;
+  errorMessage?: string;
+}
+
 interface AMPLIFYDashboardProps {
   currentMode: FrameMode;
   onModeChange: (mode: FrameMode) => void;
@@ -283,6 +291,7 @@ export const AMPLIFYDashboard: React.FC<AMPLIFYDashboardProps> = ({
   const [showShareCard, setShowShareCard] = useState(false);
   const [forceApplied, setForceApplied] = useState(false);
   const [moneyPennyUrl, setMoneyPennyUrl] = useState<string | null>(null);
+  const [updateState, setUpdateState] = useState<UpdateState>({ status: 'idle' });
 
   // ── Data loading ──────────────────────────────────────────────────────────
   const loadData = useCallback(async () => {
@@ -303,6 +312,13 @@ export const AMPLIFYDashboard: React.FC<AMPLIFYDashboardProps> = ({
     const iv = setInterval(loadData, 5000);
     return () => clearInterval(iv);
   }, [loadData]);
+
+  // Auto-update listener
+  useEffect(() => {
+    window.amplify.getUpdateState().then(setUpdateState);
+    const cleanup = window.amplify.onUpdateStateChanged(setUpdateState);
+    return cleanup;
+  }, []);
 
   // ── Period to stats ───────────────────────────────────────────────────────
   const periodStats: PeriodStats = summary[historyPeriod];
@@ -347,6 +363,66 @@ export const AMPLIFYDashboard: React.FC<AMPLIFYDashboardProps> = ({
               <span style={{ color: '#f59e0b', marginLeft: 6, fontSize: 10 }}>(forced)</span>
             )}
           </div>
+
+          {/* Update banner */}
+          {(updateState.status === 'available' || updateState.status === 'downloading' || updateState.status === 'downloaded') && (
+            <div
+              style={{
+                margin: '8px 0',
+                padding: '8px 12px',
+                borderRadius: 8,
+                background: updateState.status === 'downloaded'
+                  ? 'rgba(34,197,94,0.12)'
+                  : 'rgba(59,130,246,0.12)',
+                border: `1px solid ${updateState.status === 'downloaded' ? 'rgba(34,197,94,0.3)' : 'rgba(59,130,246,0.3)'}`,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: 10,
+              }}
+            >
+              <div>
+                <div style={{ fontSize: 12, fontWeight: 600, color: updateState.status === 'downloaded' ? '#22c55e' : '#60a5fa' }}>
+                  {updateState.status === 'downloaded'
+                    ? `✓ v${updateState.version} ready to install`
+                    : updateState.status === 'downloading'
+                    ? `⬇ Downloading v${updateState.version}… ${updateState.downloadProgress ?? 0}%`
+                    : `↑ v${updateState.version} available`}
+                </div>
+                {updateState.status === 'downloading' && (
+                  <div style={{ marginTop: 4, height: 3, background: 'rgba(255,255,255,0.1)', borderRadius: 2 }}>
+                    <div
+                      style={{
+                        height: '100%',
+                        width: `${updateState.downloadProgress ?? 0}%`,
+                        background: '#3b82f6',
+                        borderRadius: 2,
+                        transition: 'width 0.3s',
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
+              {updateState.status === 'downloaded' && (
+                <button
+                  onClick={() => window.amplify.installUpdate()}
+                  style={{
+                    padding: '5px 12px',
+                    background: '#22c55e',
+                    border: 'none',
+                    borderRadius: 6,
+                    color: '#000',
+                    fontSize: 11,
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    flexShrink: 0,
+                  }}
+                >
+                  Restart
+                </button>
+              )}
+            </div>
+          )}
 
           {/* Mode switcher */}
           <div className="mode-switcher">
@@ -598,6 +674,46 @@ export const AMPLIFYDashboard: React.FC<AMPLIFYDashboardProps> = ({
               <div style={{ marginTop: 16, fontSize: 10, color: 'rgba(255,255,255,0.3)', lineHeight: 1.5 }}>
                 Auto-Detect switches mode based on Ollama availability, network connectivity,
                 and peer count. Privacy-conscious users should lock to Fallback.
+              </div>
+
+              {/* Update control */}
+              <div style={{ marginTop: 16 }}>
+                <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.5)', marginBottom: 8 }}>
+                  SOFTWARE UPDATE
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
+                  <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)' }}>
+                    {updateState.status === 'idle' ? 'AMPLIFY Computer v0.1.0'
+                      : updateState.status === 'checking' ? 'Checking…'
+                      : updateState.status === 'not-available' ? '✓ Up to date'
+                      : updateState.status === 'available' ? `v${updateState.version} available`
+                      : updateState.status === 'downloading' ? `Downloading ${updateState.downloadProgress ?? 0}%`
+                      : updateState.status === 'downloaded' ? `v${updateState.version} ready`
+                      : updateState.status === 'error' ? `Error: ${updateState.errorMessage?.slice(0, 40)}`
+                      : '—'}
+                  </span>
+                  <button
+                    onClick={() => updateState.status === 'downloaded'
+                      ? window.amplify.installUpdate()
+                      : window.amplify.checkForUpdates()}
+                    style={{
+                      padding: '5px 12px',
+                      background: updateState.status === 'downloaded'
+                        ? 'rgba(34,197,94,0.2)' : 'rgba(255,255,255,0.07)',
+                      border: `1px solid ${updateState.status === 'downloaded'
+                        ? 'rgba(34,197,94,0.4)' : 'rgba(255,255,255,0.12)'}`,
+                      borderRadius: 6,
+                      color: updateState.status === 'downloaded' ? '#22c55e' : 'rgba(255,255,255,0.6)',
+                      fontSize: 11,
+                      cursor: 'pointer',
+                      flexShrink: 0,
+                    }}
+                  >
+                    {updateState.status === 'downloaded' ? 'Restart & Install'
+                      : updateState.status === 'checking' ? 'Checking…'
+                      : 'Check Now'}
+                  </button>
+                </div>
               </div>
 
               {/* MoneyPenny Mobile URL */}

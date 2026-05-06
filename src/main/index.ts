@@ -18,6 +18,7 @@ import { OllamaManager } from './ollama_manager';
 import { SubstrateAPIServer, API_PORT } from './substrate_api';
 import { FederationClient } from './federation_client';
 import { getMoneyPennyURL, getLocalIPs } from './mobile_pwa';
+import { AutoUpdateManager } from './auto_updater';
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 
@@ -37,6 +38,7 @@ let tray: Tray | null = null;
 let ollamaManager: OllamaManager | null = null;
 let substrateServer: SubstrateAPIServer | null = null;
 let federationClient: FederationClient | null = null;
+let autoUpdater: AutoUpdateManager | null = null;
 let connectivityTimer: ReturnType<typeof setInterval> | null = null;
 
 // ─── Frame Mode ──────────────────────────────────────────────────────────────
@@ -139,6 +141,9 @@ function createOverlayWindow(): void {
   overlayWindow.on('closed', () => {
     overlayWindow = null;
   });
+
+  // Register with auto-updater so it can broadcast update events
+  if (autoUpdater) autoUpdater.registerWindow(overlayWindow);
 }
 
 // ─── System Tray ─────────────────────────────────────────────────────────────
@@ -209,6 +214,10 @@ function rebuildTrayMenu(mode: FrameMode = currentMode): void {
     },
     { type: 'separator' },
     {
+      label: 'Check for Updates…',
+      click: () => autoUpdater?.checkNow(),
+    },
+    {
       label: `MoneyPenny Mobile: ${getMoneyPennyURL(API_PORT)}`,
       click: () => shell.openExternal(getMoneyPennyURL(API_PORT)),
     },
@@ -266,6 +275,8 @@ function openDashboard(): void {
   dashboardWindow.on('closed', () => {
     dashboardWindow = null;
   });
+
+  if (autoUpdater) autoUpdater.registerWindow(dashboardWindow);
 }
 
 // ─── IPC Handlers ────────────────────────────────────────────────────────────
@@ -397,6 +408,11 @@ function registerIPCHandlers(): void {
     return substrateServer?.getTelemetryStore().getSummary() ?? null;
   });
 
+  // ── Auto-Update ───────────────────────────────────────────────────────────
+  ipcMain.handle('get-update-state', () => autoUpdater?.getState() ?? { status: 'idle' });
+  ipcMain.on('check-for-updates', () => autoUpdater?.checkNow());
+  ipcMain.on('install-update', () => autoUpdater?.installNow());
+
   // ── MoneyPenny Mobile ─────────────────────────────────────────────────────
   ipcMain.handle('get-moneypenny-url', () => ({
     url: getMoneyPennyURL(API_PORT),
@@ -423,6 +439,10 @@ app.whenReady().then(async () => {
   // Initialize Ollama manager
   ollamaManager = new OllamaManager();
   await ollamaManager.init();
+
+  // Initialize auto-updater
+  autoUpdater = new AutoUpdateManager();
+  autoUpdater.init();
 
   // Create overlay + tray
   createOverlayWindow();
@@ -455,6 +475,7 @@ app.on('window-all-closed', () => {
 
 app.on('before-quit', async () => {
   if (connectivityTimer) clearInterval(connectivityTimer);
+  autoUpdater?.destroy();
   await ollamaManager?.shutdown();
   await federationClient?.stop();
   await substrateServer?.stop();
