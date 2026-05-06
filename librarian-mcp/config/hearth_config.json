@@ -1,0 +1,1 @@
+{"enabled":true,"default_model":"llama3.1:8b-instruct-q4_K_M","ollama_base_url":"http://localhost:11434","quality_threshold":0.72,"substrate_boost":0.15,"max_tokens_local":2048,"cost_per_cloud_token_usd":0.000003}

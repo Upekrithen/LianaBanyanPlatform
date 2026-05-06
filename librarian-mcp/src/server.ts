@@ -8983,6 +8983,84 @@ server.tool(
 );
 
 // ═══════════════════════════════════════════════════════════════════════════
+// B36 PHASE 5 — CAI HEARTH LOCAL INFERENCE LAYER (AMPLIFY Product Foundation)
+// BP025 / Bushel 36 Phase 5
+// ═══════════════════════════════════════════════════════════════════════════
+//
+// Ollama integration as third tier between Arm B substrate and cloud APIs.
+// Query routing: substrate (0.000288ms) → Ollama local (100-500ms) → cloud.
+// Quality threshold detection: substrate-driven heuristic per query class.
+// AMPLIFY product surface: status indicator + cost savings telemetry.
+
+import { hearthRoute, computeAmplifySnapshot, loadHearthConfig, saveHearthConfig } from "./hearth_ollama.js";
+
+registerTool(
+  "cai_hearth_route",
+  "B36 Phase 5 (BP025) — CAI Hearth 3-tier query router. " +
+  "Tier 1: Arm B substrate (zero cost, 0.000288ms). " +
+  "Tier 2: Local Ollama (zero API cost, 100-500ms, substrate-augmented). " +
+  "Tier 3: Cloud API escalation signal (frontier/complex queries). " +
+  "Returns routing decision, response (if local), and AMPLIFY cost savings data.",
+  {
+    query: z.string().describe("The query to route through the 3-tier Hearth stack"),
+    substrate_hit: z.boolean().optional().default(false)
+      .describe("Whether Arm B substrate returned a hit for this query (caller checks substrate first)"),
+    substrate_context: z.string().optional()
+      .describe("Substrate hit content (if substrate_hit=true, this is the response to return)"),
+    force_tier: z.enum(["substrate", "local", "cloud"]).optional()
+      .describe("Force a specific tier (override quality threshold)"),
+  },
+  async ({ query, substrate_hit, substrate_context, force_tier }) => {
+    const config = loadHearthConfig();
+
+    // Force overrides
+    if (force_tier === "cloud") {
+      return { content: [{ type: "text" as const, text: JSON.stringify({ routing: "cloud_escalation", quality_score: 0.0, quality_signals: ["force_cloud"], substrate_augmented: !!substrate_hit }) }] };
+    }
+    if (force_tier === "substrate" && substrate_hit && substrate_context) {
+      return { content: [{ type: "text" as const, text: JSON.stringify({ routing: "substrate_hit", response: substrate_context, quality_score: 1.0, quality_signals: ["force_substrate"], substrate_augmented: true }) }] };
+    }
+
+    const result = await hearthRoute(query, !!substrate_hit, substrate_context ?? null, config);
+    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+registerTool(
+  "amplify_snapshot",
+  "B36 Phase 5 (BP025) — AMPLIFY telemetry snapshot. " +
+  "Returns routing distribution (substrate/local/cloud ratios) and cumulative cost savings. " +
+  "Users see their own hardware 'amplifying' their work via local Ollama inference.",
+  {},
+  async () => {
+    const snapshot = computeAmplifySnapshot();
+    return { content: [{ type: "text" as const, text: JSON.stringify(snapshot, null, 2) }] };
+  },
+);
+
+registerTool(
+  "hearth_config",
+  "B36 Phase 5 (BP025) — Get or update CAI Hearth configuration. " +
+  "Without params: returns current config. With params: updates specified fields. " +
+  "Key fields: enabled, default_model (Ollama model name), quality_threshold (0.0-1.0).",
+  {
+    enabled: z.boolean().optional().describe("Enable/disable CAI Hearth local inference"),
+    default_model: z.string().optional().describe("Ollama model to use (e.g. 'llama3.1:8b-instruct-q4_K_M')"),
+    quality_threshold: z.number().min(0).max(1).optional().describe("Quality threshold for local inference (0.0-1.0, default 0.72)"),
+    substrate_boost: z.number().min(0).max(1).optional().describe("Quality bonus when substrate augments query (default 0.15)"),
+  },
+  async ({ enabled, default_model, quality_threshold, substrate_boost }) => {
+    const config = loadHearthConfig();
+    if (enabled !== undefined) config.enabled = enabled;
+    if (default_model !== undefined) config.default_model = default_model;
+    if (quality_threshold !== undefined) config.quality_threshold = quality_threshold;
+    if (substrate_boost !== undefined) config.substrate_boost = substrate_boost;
+    saveHearthConfig(config);
+    return { content: [{ type: "text" as const, text: JSON.stringify({ success: true, config }, null, 2) }] };
+  },
+);
+
+// ═══════════════════════════════════════════════════════════════════════════
 // B36 PHASE 3 — SKULK COORDINATOR PATTERN (Optimus Primal 7th Axis)
 // BP025 / Bushel 36 Phase 3
 // ═══════════════════════════════════════════════════════════════════════════
