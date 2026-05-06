@@ -40,6 +40,10 @@ export interface QueryResult {
   cloud_cost_avoided_usd: number;
 }
 
+export interface QueryOptions {
+  degraded?: boolean;
+}
+
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 const DATA_DIR = resolve(
@@ -291,9 +295,10 @@ export class SubstrateRouter {
   async query(
     queryText: string,
     ollamaModel?: string,
+    options: QueryOptions = {},
   ): Promise<QueryResult> {
     const t0 = Date.now();
-    const mode = this.getEffectiveMode();
+    const mode = options.degraded ? 'fallback' : this.getEffectiveMode();
 
     // ── Step 1: Local substrate lookup (all modes) ────────────────────────────
     const hits = this.index.query(queryText, 1);
