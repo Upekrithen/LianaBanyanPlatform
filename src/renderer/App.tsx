@@ -23,8 +23,8 @@ export default function App() {
   // Sync mode from main process + check first-launch model
   useEffect(() => {
     let cleanup: (() => void) | undefined;
-    window.amplify.getFrameMode().then(({ mode: m }) => setMode(m as FrameMode));
-    cleanup = window.amplify.onFrameModeChanged(({ mode: m }) => setMode(m as FrameMode));
+    window.amplify.getFrameMode().then(({ mode: m }) => setMode(m));
+    cleanup = window.amplify.onFrameModeChanged(({ mode: m }) => setMode(m));
 
     // First-launch: check if default model needs pulling
     window.amplify.getOllamaStatus().then((status) => {
