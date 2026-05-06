@@ -1,16 +1,19 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { 
-  Scroll, Trophy, Clock, Coins, Star, CheckCircle2, 
-  AlertCircle, Swords, Pickaxe, BookOpen, Users 
+import {
+  Scroll, Trophy, Clock, Coins, Star, CheckCircle2,
+  AlertCircle, Swords, Pickaxe, BookOpen, Users
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+// STUB-003: OuralisClock subscription — QuestSystem reacts to each tide-step tick
+import { OuralisClockContext } from '@/components/hexisle/OuralisClockContext';
+import type { TidePhase } from '@/hooks/useClockasGameStateController';
 
 interface Quest {
   id: string;
@@ -108,15 +111,28 @@ const TYPE_ICONS = {
   contract: Scroll,
 };
 
-export function QuestSystem({ 
-  onQuestSelect 
-}: { 
-  onQuestSelect?: (quest: Quest) => void 
+export function QuestSystem({
+  onQuestSelect
+}: {
+  onQuestSelect?: (quest: Quest) => void
 }) {
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const [activeQuests, setActiveQuests] = useState<Quest[]>([]);
   const [filter, setFilter] = useState<string>('all');
+
+  // STUB-003: Subscribe to OuralisClock ticks — expire daily quests on each full-turn close
+  const ouralisClock = useContext(OuralisClockContext);
+  useEffect(() => {
+    const unsub = ouralisClock.subscribe((step: number, phase: TidePhase, turnNumber: number) => {
+      if (phase === 'cycle_close') {
+        // Expire any daily quests that were not completed this turn
+        setActiveQuests(prev => prev.filter(q => q.type !== 'daily'));
+        toast.info(`Ouralis Tide Turn ${turnNumber + 1} complete — daily quests reset`);
+      }
+    });
+    return unsub;
+  }, [ouralisClock]);
 
   // Fetch quests from Supabase
   const { data: dbQuests, isLoading } = useQuery({
@@ -126,7 +142,7 @@ export function QuestSystem({
         .from('hexisle_quests')
         .select('*')
         .eq('is_active', true);
-      
+
       if (error) {
         console.error('Error fetching quests:', error);
         return [];
@@ -136,7 +152,7 @@ export function QuestSystem({
   });
 
   // Transform DB quests to component format, fallback to sample data
-  const quests: Quest[] = (dbQuests && dbQuests.length > 0) 
+  const quests: Quest[] = (dbQuests && dbQuests.length > 0)
     ? dbQuests.map((q: any) => ({
         id: q.id,
         title: q.title,
@@ -162,12 +178,12 @@ export function QuestSystem({
       toast.error('Maximum 5 active quests at a time');
       return;
     }
-    
+
     const updatedQuest = { ...quest, status: 'in_progress' as const };
     setActiveQuests([...activeQuests, updatedQuest]);
     setQuests(quests.map(q => q.id === quest.id ? updatedQuest : q));
     toast.success(`Quest accepted: ${quest.title}`);
-    
+
     if (onQuestSelect) {
       onQuestSelect(updatedQuest);
     }
@@ -176,7 +192,7 @@ export function QuestSystem({
   const completeQuest = async (quest: Quest) => {
     // Check if all requirements are met
     const allComplete = quest.requirements.every(r => r.current >= r.target);
-    
+
     if (!allComplete) {
       toast.error('Quest requirements not yet met');
       return;
@@ -253,7 +269,7 @@ export function QuestSystem({
           const progressPercent = (totalProgress / totalTarget) * 100;
 
           return (
-            <Card 
+            <Card
               key={quest.id}
               className={`transition-all hover:shadow-lg ${
                 quest.status === 'completed' ? 'opacity-60' : ''
@@ -277,7 +293,7 @@ export function QuestSystem({
                     <p className="text-sm text-muted-foreground mb-2">
                       {quest.description}
                     </p>
-                    
+
                     {/* Progress */}
                     {quest.status === 'in_progress' && (
                       <div className="mb-2">
@@ -315,8 +331,8 @@ export function QuestSystem({
                       </Button>
                     )}
                     {quest.status === 'in_progress' && (
-                      <Button 
-                        size="sm" 
+                      <Button
+                        size="sm"
                         variant="secondary"
                         onClick={() => completeQuest(quest)}
                         disabled={progressPercent < 100}
@@ -350,4 +366,3 @@ export function QuestSystem({
     </div>
   );
 }
-
