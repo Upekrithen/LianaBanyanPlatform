@@ -436,6 +436,74 @@ export const HEXISLE_DAISYCHAIN = {
 };
 
 // ═══════════════════════════════════════════════════════════════════════════════
+// CAI WAVE-2 IMPLEMENTATIONS — Old One: urZah / Bushel 29 / BP025
+// ═══════════════════════════════════════════════════════════════════════════════
+
+export interface WaveImplementation {
+  id: string;
+  name: string;
+  status: 'stub' | 'implemented';
+  wave: number;
+  old_one: string;
+  bushel: string;
+  component: string;
+  hook: string;
+  depends_on: string[];
+  description: string;
+}
+
+export const WAVE2_IMPLEMENTATIONS: WaveImplementation[] = [
+  {
+    id: 'MISS-015',
+    name: 'Sawtooth60 Directional Current (gap close)',
+    status: 'implemented',
+    wave: 2,
+    old_one: 'urZah',
+    bushel: 'BP025',
+    component: 'Sawtooth60DirectionalCurrentgapcloseEngine',
+    hook: 'useSawtooth60DirectionalCurrentgapclose',
+    depends_on: ['MISS-002'],
+    description:
+      'Sawtooth-pattern channels at 36mm depth create directional water flow. ' +
+      '60-tooth sawtooth geometry at ChannelLock base enforces preferred current direction; ' +
+      'reversed Hexel placement creates opposing current. ' +
+      'Interfaces with OuralisTidalMechanismEngine for phase synchronisation.',
+  },
+  {
+    id: 'MISS-008',
+    name: 'One-Way Valve Network',
+    status: 'implemented',
+    wave: 2,
+    old_one: 'urZah',
+    bushel: 'BP025',
+    component: 'OneWayValveNetworkEngine',
+    hook: 'useOneWayValveNetwork',
+    depends_on: ['MISS-007'],
+    description:
+      'Tesla valve-inspired unidirectional flow control at each ChannelLock junction. ' +
+      'No moving parts; geometry alone enforces directionality at ~90% efficiency per junction. ' +
+      'BanyanTree distribution manifold (MISS-007) wired as stub interface pending full coupling.',
+  },
+  {
+    id: 'STUB-001',
+    name: 'Sawtooth60 Directional Current (stub → full)',
+    status: 'implemented',
+    wave: 2,
+    old_one: 'urZah',
+    bushel: 'BP025',
+    component: 'Sawtooth60DirectionalCurrentEngine',
+    hook: 'useSawtooth60DirectionalCurrent',
+    depends_on: ['MISS-002', 'MISS-015'],
+    description:
+      'Full directional-current simulation. Spec defined in hexisleProjectSpec.ts; ' +
+      'CanalRenderer exists but directional-current simulation was not wired. ' +
+      'Now implements: sawtooth geometry shader + current-force vector per-Hexel-edge. ' +
+      'Four-phase lifecycle (idle → ramp_up → peak → ramp_down). ' +
+      'Ouralis phase sync and MISS-015 gapclose bridge both active.',
+  },
+];
+
+// ═══════════════════════════════════════════════════════════════════════════════
 // E: DRIVE ARCHIVE — Bloom Toys Era
 // ═══════════════════════════════════════════════════════════════════════════════
 
