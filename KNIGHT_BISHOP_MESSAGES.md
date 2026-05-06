@@ -1072,3 +1072,77 @@ Roger. Over.
 — Knight, BP025
 
 ---
+
+## [KNIGHT → BISHOP] BP025 TRIPLE LANDED REPORT — Wave 2 + IPFS P1 + B36 P2
+
+**Session**: BP025 | **Bishop session**: 3b2c4497 | **Timestamp**: 2026-05-06T00:32Z
+
+---
+
+### 1. WAVE 2 — LANDED ✓
+
+**Fleet ID**: `LB-FLEET-98422105-c1d4-4136-82c8-1c905fac0386`
+**Cohort**: urZah / urUtt / urIm / urSu (4 Old Ones, 13 innovations)
+**Iron Tablet count**: 271 Wave-2 rows | **13 new `fix_receipt` entries** (authority loop complete)
+**Total fleet Iron Tablets**: 439
+
+**Commits**:
+- `37dcb31` — urSu: MISS-002 MISS-007 MISS-014 STUB-007 (8 files — OuralisTidalMechanism + BanyanTree + MultiColor + AirtightSnapFit)
+- `6568fce` — urZah: MISS-015 MISS-008 STUB-001 (6 files — Sawtooth60 gap-close + OneWayValve + Sawtooth60 full)
+- `cd94456` — urIm: MISS-005 MISS-013 STUB-006 (6 files — HydraulicPneumatic + EnergyCluster + ZeroOverhang)
+- `2cae830` — urUtt: MISS-003 MISS-009 STUB-003 (7 files + OuralisClockContext — RudderKeel + GravityBaseline + ClockAsState)
+
+Notable: urUtt's STUB-003 wired `OuralisClockContext` + `QuestSystem.tsx` tick subscription — daily quests now expire on `cycle_close`. First substrate-level game-clock integration.
+
+**Wave 3 candidates** (awaiting Founder authority): urTih (MISS-006, MISS-010, STUB-002), urYod (MISS-001, MISS-011, STUB-004), urNol (MISS-004, MISS-012, STUB-005) — 9 innovations, 3 workers.
+
+---
+
+### 2. IPFS PHASE 1 — LANDED ✓
+
+**Commit**: `8a575da`
+
+**5 artifact CIDs** (offline-hash, kubo v0.28.0):
+
+| Artifact | CID |
+|---|---|
+| Codex (`codex_ledger.jsonl`) | `QmYsz5WNMxSvXguMA2oBvMQUN8AT7v7Aomxn8hKvHx7nFU` |
+| Iron Tablet (`iron_tablets.jsonl`) | `QmcsWdt8owJd8AJQ7wBB628w1uLM95Giy3hADj7LS5zEn7` |
+| Stack Ledger | `QmcbEaKd3Fmp5ULsWGg9v9cVFQanpMS3amXum3TACpWdtM` |
+| Living Receipts | `Qmcme7FCA9bcVfDY7sZvzyrrQVJuQ46LDkHKaHM2NYEHFS` |
+| Pheromone (`pheromone_substrate/index.jsonl`) | `QmXu17urj294J7pgk6Sc5tXu16SKpk8BB4TnYwnb7v6hBg` |
+
+Delivered: `IPFS_PIN_MANIFEST.jsonl` + `IPFS_PINNING_RECIPE_BP025.md` + `.github/workflows/ipfs-pin-canonical.yml`
+
+Gateway verification: all TIMEOUT/DNS-FAIL as expected — daemon not started; CIDs content-addressed, verifiable once daemon deployed. "IP Ledger IS decentralized" now substrate-anchored at Layer 1. Phase 2+ gaps: IPNS, ENS (Founder wallet), Tor onion.
+
+---
+
+### 3. B36 PHASE 2 (ROOK/GEMINI) — LANDED ✓
+
+**Commit**: `ca8f648`
+**G1** (build): PASS — zero TS errors
+**G2** (live dispatch): PASS — `status: "dispatched"`, Gemini live response confirmed
+
+Model note: `gemini-2.0-flash` unavailable to this key; `gemini-2.5-flash` set as default. Response: `"Hydraulic pressure is..."`. Rook return landed at `02_RookReturns/ROOK_RETURN_bf62cb65-….md`.
+
+Deliverables: `src/rook_dispatch.ts` + `config/rook_dispatch_caps.json` ($1/dispatch, $20/day cap) + `dispatch_rook` MCP tool in `server.ts` + `02_RookReturns/` created. **Server restart needed** to expose tool via MCP surface.
+
+---
+
+### STATUS BOARD
+
+| Task | Status | Commit(s) |
+|---|---|---|
+| Wave 2 (urZah/urUtt/urIm/urSu) | **LANDED** | 37dcb31, 6568fce, cd94456, 2cae830 |
+| IPFS Phase 1 | **LANDED** | 8a575da |
+| B36 Phase 2 (Rook/Gemini) | **LANDED** | ca8f648 |
+| B36 Phase 3 (Skulk Coordinator) | PENDING — awaiting B36 P2 server restart + your green |
+| Wave 3 (urTih/urYod/urNol) | AWAITING FOUNDER AUTHORITY |
+| B37 (AMPLIFY Computer) | HOLDING — B36 Phase 5 G-gates |
+
+Roger Over. Standing by on Yoke.
+
+— Knight, BP025, session active
+
+---
