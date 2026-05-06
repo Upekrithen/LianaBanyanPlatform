@@ -24,6 +24,7 @@ import { memberFatesRoute } from "./cathedral_supabase/member_fates.js";
 import { queryPheromone, buildPheromoneIndex, emitPheromone } from "./scribes/pheromone.js";
 import { getInboundStatus } from "./scribes/hounds.js";
 import { runDispatchPawn, getDispatchStatus, cancelDispatch, listRecentDispatches, } from "./pawn_dispatch.js";
+import { runDispatchRook } from "./rook_dispatch.js";
 import { indexPawnReturns, readHighPrioritySurface, getIndexedReturnCount, } from "./pawn_return_indexer.js";
 import { teamDispatch } from "./team_dispatcher/dispatcher.js";
 import { getScribeAccessDescriptor, } from "./team_dispatcher/cohort_class_enforcement.js";
@@ -79,7 +80,7 @@ import { reserveNextSerial, bindReservation, expireReservations, queryReservatio
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const INDEX_DIR = resolve(__dirname, "..", "index");
-// K520.5 — First-Consult Edict substrate cache (A&A #2310)
+// K520.5 ΓÇö First-Consult Edict substrate cache (A&A #2310)
 const SUBSTRATE_CACHE_DIR = resolve(homedir(), ".lb-session");
 const SUBSTRATE_CACHE_FILE = resolve(SUBSTRATE_CACHE_DIR, "substrate_cache.json");
 // K520.6: read always-loaded OperationalGotchas tablets for substrate cache injection
@@ -92,7 +93,7 @@ function readGotchasForCache() {
     }
 }
 function writeSubstrateCache(task, briefingText) {
-    // K520.8: explicit logging at every step — no silent failures
+    // K520.8: explicit logging at every step ΓÇö no silent failures
     const target = SUBSTRATE_CACHE_FILE;
     try {
         // C.2: ensure parent directory exists before write
@@ -111,16 +112,16 @@ function writeSubstrateCache(task, briefingText) {
         }, null, 2);
         writeFileSync(target, payload, "utf-8");
         console.error(`[K520.8] writeSubstrateCache: write attempted, payload=${payload.length} bytes`);
-        // C.5: round-trip self-test — throw if file didn't land
+        // C.5: round-trip self-test ΓÇö throw if file didn't land
         const { size } = statSync(target);
         if (size === 0) {
-            throw new Error("statSync shows size=0 after write — file appears empty");
+            throw new Error("statSync shows size=0 after write ΓÇö file appears empty");
         }
         console.error(`[K520.8] writeSubstrateCache: VERIFIED file at ${target}, size=${size}`);
     }
     catch (err) {
-        // Non-fatal — brief_me still returns its result — but NOW we log the cause
-        console.error(`[K520.8] writeSubstrateCache: FAILED at ${target} — ${String(err)}`);
+        // Non-fatal ΓÇö brief_me still returns its result ΓÇö but NOW we log the cause
+        console.error(`[K520.8] writeSubstrateCache: FAILED at ${target} ΓÇö ${String(err)}`);
     }
 }
 function normalizePagination(options, defaultLimit, maxLimit = 200) {
@@ -179,8 +180,8 @@ function reloadAll() {
     v2Migration = loadIndex("v2-migration");
     letters = loadIndex("letters");
 }
-// ─── K441 Half D: fingerprint-based cache invalidation ────────────────────────
-// Before this Knight, every server.tool used `if (!XXX) reloadAll()` — meaning
+// ΓöÇΓöÇΓöÇ K441 Half D: fingerprint-based cache invalidation ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+// Before this Knight, every server.tool used `if (!XXX) reloadAll()` ΓÇö meaning
 // the in-memory index was loaded once at startup and never refreshed, so
 // `npm run rebuild` writing fresh content to `index/*.json` did NOT propagate
 // to a running MCP server. Founder had to restart the client to see new data.
@@ -190,7 +191,7 @@ function reloadAll() {
 // The gate reads JUST `index/last_build_fingerprint.json` (a tiny file written
 // at the end of every rebuild) and compares its `treeHash` to the last value
 // it saw. On change, it triggers a single `reloadAll()` and stamps the new
-// fingerprint. On no-change it is essentially a single small JSON parse —
+// fingerprint. On no-change it is essentially a single small JSON parse ΓÇö
 // cheap enough to do per tool call. The gate is unit-tested independently in
 // `tests/test_fresh_index_gate.mjs`.
 const freshIndexGate = createFreshIndexGate(INDEX_DIR, () => reloadAll(), () => overview != null);
@@ -212,7 +213,7 @@ function buildGateCheck() {
     }
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
 }
-// ── K506 Phase A — In-process session telemetry tracker ──────────────────────
+// ΓöÇΓöÇ K506 Phase A ΓÇö In-process session telemetry tracker ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 // Accumulates MCP tool call count + estimated overhead tokens for the current
 // session. Auto-resets when run_session_end consumes and logs the values.
 // No per-session keying needed: a single agent session is one MCP server
@@ -232,7 +233,7 @@ function _resetSessionTracker() {
     _sessionTracker.last_call_ts = new Date().toISOString();
     _sessionTracker.tool_call_names = [];
 }
-// ─────────────────────────────────────────────────────────────────────────────
+// ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 function registerTool(name, desc, schema, handler) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     server.tool(name, desc, schema, async (args) => {
@@ -253,10 +254,10 @@ function registerTool(name, desc, schema, handler) {
         return result;
     });
 }
-// ─────────────────────────────────────────────────────────────────────────────
-// ═══════════════════════════════════════════
+// ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 // TOOL 1: get_system_overview
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 registerTool("get_system_overview", "Returns innovation count, initiative count, page/function/table counts, last session, and pending work. Call at session start.", {}, async () => {
     ensureFreshIndex();
     if (!overview) {
@@ -269,9 +270,9 @@ registerTool("get_system_overview", "Returns innovation count, initiative count,
             }],
     };
 });
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 // TOOL 2: query_domain
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 registerTool("query_domain", "Returns all tables, functions, pages, feature flags, and Cephas content for a domain (e.g. 'lb_card', 'housing', 'ghost_world'). Pass domain name or 'list' to see all domains.", { domain: z.string().describe("Domain name or 'list' to see all available domains") }, async ({ domain }) => {
     ensureFreshIndex();
     if (!domains) {
@@ -295,9 +296,9 @@ registerTool("query_domain", "Returns all tables, functions, pages, feature flag
     }
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
 });
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 // TOOL 3: get_schema
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 registerTool("get_schema", "Returns columns, types, constraints, FKs, indexes, RLS policies, and originating migration for a table. Pass 'list' to see all tables.", { table: z.string().describe("Table name or 'list' to see all tables") }, async ({ table }) => {
     ensureFreshIndex();
     if (!schemas) {
@@ -321,9 +322,9 @@ registerTool("get_schema", "Returns columns, types, constraints, FKs, indexes, R
     }
     return { content: [{ type: "text", text: JSON.stringify(t, null, 2) }] };
 });
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 // TOOL 4: list_edge_functions
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 registerTool("list_edge_functions", "Lists edge functions, optionally filtered by name/domain pattern. Returns name, purpose, auth pattern, and tables used.", { filter: z.string().optional().describe("Optional name/keyword filter (e.g. 'card', 'membership', 'webhook')") }, async ({ filter }) => {
     ensureFreshIndex();
     if (!functions) {
@@ -345,16 +346,16 @@ registerTool("list_edge_functions", "Lists edge functions, optionally filtered b
             }],
     };
 });
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 // TOOL 5: get_page_info
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 registerTool("get_page_info", "Returns route, data queries, feature flag dependencies, and edge function calls for a page. Pass 'list' to see all pages.", { page: z.string().describe("Page component name or 'list'") }, async ({ page }) => {
     ensureFreshIndex();
     if (!pages) {
         return { content: [{ type: "text", text: "Index not built." }] };
     }
     if (page === "list") {
-        const list = Object.values(pages.pages).map(p => `${p.route} → ${p.name}`).sort();
+        const list = Object.values(pages.pages).map(p => `${p.route} ΓåÆ ${p.name}`).sort();
         return { content: [{ type: "text", text: `${pages.count} pages:\n${list.join("\n")}` }] };
     }
     const p = pages.pages[page];
@@ -371,9 +372,9 @@ registerTool("get_page_info", "Returns route, data queries, feature flag depende
     }
     return { content: [{ type: "text", text: JSON.stringify(p, null, 2) }] };
 });
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 // TOOL 6: get_canonical_numbers
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 registerTool("get_canonical_numbers", "Returns all canonical numbers from canonical_values.yaml (single source of truth): innovations, crown jewels, patents, membership cost, creator keeps %, etc. Always reads fresh from disk.", {}, async () => {
     try {
         const flat = loadCanonicalFlat();
@@ -421,9 +422,9 @@ registerTool("get_canonical_numbers", "Returns all canonical numbers from canoni
         return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
     }
 });
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 // TOOL 7: get_initiative
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 const INITIATIVES = {
     "lets_make_dinner": { number: 1, crown: "Maneet Chauhan" },
     "lets_get_groceries": { number: 2 },
@@ -463,9 +464,9 @@ registerTool("get_initiative", "Returns initiative details: crown holder, tables
     }
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
 });
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 // TOOL 8: get_session_context
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 registerTool("get_session_context", "Returns what was built in a session: files changed, commits, pending work. Without session_id returns the latest.", { session_id: z.string().optional().describe("Session ID (e.g. 'A', 'C', '98') or omit for latest") }, async ({ session_id }) => {
     // K441 Half D: ensureFreshIndex() reloads only when the on-disk
     // fingerprint changes (after `npm run rebuild`). Cheap on the no-change
@@ -488,9 +489,9 @@ registerTool("get_session_context", "Returns what was built in a session: files 
     }
     return { content: [{ type: "text", text: JSON.stringify(session, null, 2) }] };
 });
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 // TOOL 9: search_knowledge
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 registerTool("search_knowledge", "Text search across all index files. Returns top matches with context.", {
     query: z.string().describe("Search query"),
     options: z.object({
@@ -529,7 +530,7 @@ registerTool("search_knowledge", "Text search across all index files. Returns to
                 results.push({
                     source: "page",
                     key: name,
-                    snippet: `${page.name} → ${page.route} ${page.isProtected ? "[protected]" : ""}`,
+                    snippet: `${page.name} ΓåÆ ${page.route} ${page.isProtected ? "[protected]" : ""}`,
                 });
             }
         }
@@ -647,9 +648,9 @@ registerTool("search_knowledge", "Text search across all index files. Returns to
             }],
     };
 });
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 // TOOL 10: get_deploy_state
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 registerTool("get_deploy_state", "Returns last deploy info, pending migrations, pending function deploys, and build commands for each site.", {}, async () => {
     ensureFreshIndex();
     const deployState = context?.deployState || {
@@ -675,9 +676,9 @@ registerTool("get_deploy_state", "Returns last deploy info, pending migrations, 
     };
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
 });
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 // TOOL 11: update_session
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 registerTool("update_session", "Appends a session summary to the index. Call at session end instead of editing MILESTONE_HANDOFF.", {
     session_id: z.string().describe("Session identifier (e.g. 'K99')"),
     summary: z.string().describe("What was built/accomplished"),
@@ -692,7 +693,7 @@ registerTool("update_session", "Appends a session summary to the index. Call at 
     if (existsSync(sessionsPath)) {
         sessions = JSON.parse(readFileSync(sessionsPath, "utf-8"));
     }
-    // K460 input guard — reject implausibly high session IDs at the write path
+    // K460 input guard ΓÇö reject implausibly high session IDs at the write path
     const guardResult = validateSessionId(session_id, sessions);
     if (guardResult.rejected) {
         return {
@@ -727,9 +728,9 @@ registerTool("update_session", "Appends a session summary to the index. Call at 
             }],
     };
 });
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 // TOOL 12: get_bishop_chat
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 registerTool("get_bishop_chat", "Returns summary, decisions, and topics from BISHOP chat transcripts. Pass filename for details, 'list' for recent 20, or 'search:keyword' to find by topic.", { chat: z.string().describe("Chat filename, 'list' for recent 20, or 'search:keyword'") }, async ({ chat }) => {
     ensureFreshIndex();
     if (!bishop) {
@@ -769,9 +770,9 @@ registerTool("get_bishop_chat", "Returns summary, decisions, and topics from BIS
     }
     return { content: [{ type: "text", text: JSON.stringify(entry, null, 2) }] };
 });
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 // TOOL 13: get_architecture
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 const WORKSPACE_ROOT = resolve(__dirname, "..", "..");
 registerTool("get_architecture", "Returns architectural concept explanation from Cephas. Searches by keyword, slug, or title. Pass 'list' to see all concepts, or a keyword like 'joules', 'cost+20', 'three-gear', 'crown', 'medallion', etc. Set brief=true (default) for summary only, brief=false for full markdown content.", {
     concept: z.string().describe("Concept slug, keyword, or 'list' for all concepts"),
@@ -875,9 +876,9 @@ registerTool("get_architecture", "Returns architectural concept explanation from
     };
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
 });
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 // TOOL 14: check_consistency
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 const ARCHITECTURAL_RULES = [
     { id: "creator-keeps", rule: "Creator keeps exactly 83.3% (never 83%, never 84%). On a $500 transaction the creator gets $416.67.", source: "Structural Bylaw", severity: "critical" },
     { id: "cost-plus-20", rule: "All pricing uses Cost+20% model. Platform margin is always Cost + 20%, no more, no less.", source: "Structural Bylaw", severity: "critical" },
@@ -1023,9 +1024,9 @@ registerTool("check_consistency", "Validates a proposal or statement against Lia
     result.rulesChecked = ARCHITECTURAL_RULES.length;
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
 });
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 // TOOL 14b: canonical_value_matches (K406)
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 registerTool("canonical_value_matches", "Verify a document's canonical values against the Liana Banyan source of truth (canonical_values.yaml). Finds stale numbers, wrong percentages, and unverified claims.", {
     document_path: z.string().describe("Relative path from repo root"),
     check_all: z.boolean().optional().describe("If true (default), check all canonical keys; if false, provide expected_values"),
@@ -1057,9 +1058,9 @@ registerTool("canonical_value_matches", "Verify a document's canonical values ag
         return { content: [{ type: "text", text: `Error: ${err.message}` }] };
     }
 });
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 // TOOL 15: get_dropzone_task
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 registerTool("get_dropzone_task", "Returns task prompts from KNIGHT/BISHOP/ROOK/PAWN dropzones. Pass agent name for that agent's tasks, a filename for details, or 'list' for all.", {
     query: z.string().describe("Agent name (KNIGHT/BISHOP/ROOK/PAWN), filename, or 'list'"),
     options: z.object({
@@ -1150,9 +1151,9 @@ registerTool("get_dropzone_task", "Returns task prompts from KNIGHT/BISHOP/ROOK/
     }
     return { content: [{ type: "text", text: `No dropzone task matching '${query}'. Use 'list' to see all.` }] };
 });
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 // TOOL 16: get_transcript
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 registerTool("get_transcript", "Returns summaries of Cursor agent chat transcripts. Pass a session UUID for details, 'recent' for latest 10, or 'list' for all.", { query: z.string().describe("Session UUID, 'recent', or 'list'") }, async ({ query }) => {
     ensureFreshIndex();
     if (!transcripts) {
@@ -1177,9 +1178,9 @@ registerTool("get_transcript", "Returns summaries of Cursor agent chat transcrip
     }
     return { content: [{ type: "text", text: `No transcript matching '${query}'.` }] };
 });
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 // TOOL 17: get_component
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 registerTool("get_component", "Returns exports, imports, Supabase queries, and props for React components, hooks, or libs. Pass name for details or 'list' for all.", {
     query: z.string().describe("Component/hook/lib name, or 'list'/'hooks'/'libs' to browse"),
     options: z.object({
@@ -1279,12 +1280,12 @@ registerTool("get_component", "Returns exports, imports, Supabase queries, and p
     }
     return { content: [{ type: "text", text: `No component matching '${query}'.` }] };
 });
-// ═══════════════════════════════════════════
-// K419 — TRIPLE SCRAMBLER VERIFICATION TRIGGERS
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+// K419 ΓÇö TRIPLE SCRAMBLER VERIFICATION TRIGGERS
 // Trigger 1: hardwired into brief_me + moneypenny_debrief
 // Trigger 2: file-based watchdog (4hr staleness check)
 // Trigger 3: Cursor hooks (configured in .cursor/hooks.json)
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 const SCRAMBLER_REPORT_DIR = resolve(__dirname, "..", "data", "scrambler-reports");
 const SCRAMBLER_CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 const SCRAMBLER_WATCHDOG_STALE_MS = 4 * 60 * 60 * 1000; // 4 hours
@@ -1326,7 +1327,7 @@ function runTripleScrambler(sessionId, timeoutMs = 30_000) {
 }
 function formatVerificationSection(result) {
     if (result._error) {
-        return `\n## ⚠️ Verification Status\n${result._message}\n`;
+        return `\n## ΓÜá∩╕Å Verification Status\n${result._message}\n`;
     }
     const a = result.scrambler_a || {};
     const b = result.scrambler_b || {};
@@ -1345,9 +1346,9 @@ function formatVerificationSection(result) {
     }
     const details = result.details || {};
     if (details.c_decisions?.length > 0) {
-        lines.push(`\n### UNRESOLVED — Founder Review Required`);
+        lines.push(`\n### UNRESOLVED ΓÇö Founder Review Required`);
         for (const d of details.c_decisions.filter((dd) => dd.escalate)) {
-            lines.push(`- **${d.deliverable_id}** → ${d.decision}: ${d.reasoning}`);
+            lines.push(`- **${d.deliverable_id}** ΓåÆ ${d.decision}: ${d.reasoning}`);
         }
     }
     if (details.auto_candidates?.length > 0) {
@@ -1463,9 +1464,9 @@ function formatLetterStateBlock(summary) {
 function isLetterDeliverableId(id) {
     return /(^|-)letter-/.test(id) || /^wave-\d+-letter-/.test(id);
 }
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 // TOOL 18: brief_me (MoneyPenny)
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 registerTool("brief_me", "MoneyPenny Smart Router: returns a compact, task-scoped context package in ~600 words. Call this FIRST at session start instead of multiple individual queries. Replaces the need for get_system_overview + query_domain + get_architecture + check_consistency.", { task: z.string().describe("Natural language description of what you're about to work on, e.g. 'build housing payment contribution form'") }, async ({ task }) => {
     ensureFreshIndex();
     const pkg = buildBriefing(task, overview, schemas, functions, pages, concepts, domains, context, dropzones, transcripts, ARCHITECTURAL_RULES);
@@ -1506,24 +1507,24 @@ registerTool("brief_me", "MoneyPenny Smart Router: returns a compact, task-scope
             sections.push(`- [${pw.source}] ${pw.id}: ${pw.summary}`);
         }
     }
-    // ── K442: Letters state summary (replaces "POSSIBLY COMPLETED" for letter deliverables) ──
+    // ΓöÇΓöÇ K442: Letters state summary (replaces "POSSIBLY COMPLETED" for letter deliverables) ΓöÇΓöÇ
     const letterSummary = getLetterStateSummary();
     const letterStateBlock = formatLetterStateBlock(letterSummary);
     if (letterStateBlock)
         sections.push(letterStateBlock);
-    // ── K419 Trigger 1A: Triple Scrambler at session start ──
+    // ΓöÇΓöÇ K419 Trigger 1A: Triple Scrambler at session start ΓöÇΓöÇ
     const verificationSections = [];
     const reportAge = getLastReportAge();
     const isWatchdogStale = reportAge > SCRAMBLER_WATCHDOG_STALE_MS;
     const scramblerResult = runTripleScrambler(task.slice(0, 20).replace(/\s+/g, "_"));
     verificationSections.push(formatVerificationSection(scramblerResult));
     if (isWatchdogStale && !scramblerResult._error) {
-        verificationSections.push(`_Watchdog: last report was ${Math.round(reportAge / 3600000)}h ago — full reconcile ran._`);
+        verificationSections.push(`_Watchdog: last report was ${Math.round(reportAge / 3600000)}h ago ΓÇö full reconcile ran._`);
     }
     // Trigger 3 self-monitoring
     const hookStatus = checkHooksConfigured();
     if (!hookStatus.configured) {
-        verificationSections.push(`\n### ⚠️ TRIGGER 3 INCOMPLETE`);
+        verificationSections.push(`\n### ΓÜá∩╕Å TRIGGER 3 INCOMPLETE`);
         verificationSections.push(`Missing hooks: ${hookStatus.missing.join(", ")}`);
         verificationSections.push(`Run: \`node librarian-mcp/scripts/install-hooks.js\``);
     }
@@ -1534,7 +1535,7 @@ registerTool("brief_me", "MoneyPenny Smart Router: returns a compact, task-scope
         if (freshness.status === "DRIFT") {
             indexDrift = true;
             const ageHr = Math.round((freshness.ageMs || 0) / 3600000);
-            verificationSections.push(`\n### ⚠️ LIBRARIAN INDEX DRIFT`);
+            verificationSections.push(`\n### ΓÜá∩╕Å LIBRARIAN INDEX DRIFT`);
             verificationSections.push(`${freshness.totalDrift} files changed since last build (${ageHr}h ago). Run: \`cd librarian-mcp && npm run rebuild\``);
         }
         else if (freshness.status === "FRESH") {
@@ -1558,10 +1559,10 @@ registerTool("brief_me", "MoneyPenny Smart Router: returns a compact, task-scope
     writeSubstrateCache(task, finalOutput);
     return { content: [{ type: "text", text: finalOutput }] };
 });
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 // TOOL 18b: refresh_substrate_cache (K520.5)
-// ═══════════════════════════════════════════
-registerTool("refresh_substrate_cache", "K520.5 / A&A #2310 — Refresh the persistent substrate cache at ~/.lb-session/substrate_cache.json. Calls brief_me logic and overwrites the cache. Use after npm run rebuild or when canonical state has changed mid-session. Gate hooks read this cache to allow Bash/MCP tool calls without re-querying.", {
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+registerTool("refresh_substrate_cache", "K520.5 / A&A #2310 ΓÇö Refresh the persistent substrate cache at ~/.lb-session/substrate_cache.json. Calls brief_me logic and overwrites the cache. Use after npm run rebuild or when canonical state has changed mid-session. Gate hooks read this cache to allow Bash/MCP tool calls without re-querying.", {
     task: z.string().optional().describe("Session task description. If omitted, uses the task from the existing cache. Provide a value to override."),
 }, async ({ task }) => {
     ensureFreshIndex();
@@ -1600,9 +1601,9 @@ registerTool("refresh_substrate_cache", "K520.5 / A&A #2310 — Refresh the pers
     const cacheInfo = `\n\n---\nSubstrate cache refreshed at: ${new Date().toISOString()}\nCache path: ${SUBSTRATE_CACHE_FILE}\nTask: ${resolvedTask}`;
     return { content: [{ type: "text", text: briefingText + cacheInfo }] };
 });
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 // TOOL 19: moneypenny_checklist
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 registerTool("moneypenny_checklist", "MoneyPenny pre-flight check. Validates a proposed task against architectural rules, identifies missing prerequisites (tables, functions), finds related past sessions, and returns contextual reminders. Call before implementing.", { task: z.string().describe("Description of what you're about to implement") }, async ({ task }) => {
     ensureFreshIndex();
     const result = buildChecklist(task, schemas, functions, context, concepts, domains, dropzones, ARCHITECTURAL_RULES);
@@ -1650,9 +1651,9 @@ registerTool("moneypenny_checklist", "MoneyPenny pre-flight check. Validates a p
     const output = budgetEnforce(sections.join("\n"), BUDGETS.checklist);
     return { content: [{ type: "text", text: output }] };
 });
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 // TOOL 20: moneypenny_debrief
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 registerTool("moneypenny_debrief", "MoneyPenny session-end debrief. Logs what was built, validates consistency, generates sync reminders and handoff notes. Call at session end instead of manually editing MILESTONE_HANDOFF.", {
     session_id: z.string().describe("Session identifier (e.g. 'K100')"),
     summary: z.string().describe("What was built/accomplished this session"),
@@ -1691,7 +1692,7 @@ registerTool("moneypenny_debrief", "MoneyPenny session-end debrief. Logs what wa
             sections.push(`- ${sl.trim()}`);
     }
     catch { /* non-fatal */ }
-    // ── K419 Trigger 1B: Triple Scrambler at session end ──
+    // ΓöÇΓöÇ K419 Trigger 1B: Triple Scrambler at session end ΓöÇΓöÇ
     _scramblerCache = null; // Force fresh run at session end
     const scramblerResult = runTripleScrambler(session_id);
     if (!scramblerResult._error) {
@@ -1704,7 +1705,7 @@ registerTool("moneypenny_debrief", "MoneyPenny session-end debrief. Logs what wa
             sections.push(debriefLetterBlock);
         const details = scramblerResult.details || {};
         // Auto-flag deliverables matching this session's work.
-        // K442: skip letter deliverables — their state is reported via the Letters summary block.
+        // K442: skip letter deliverables ΓÇö their state is reported via the Letters summary block.
         if (details.auto_candidates?.length > 0) {
             const matchingCandidates = details.auto_candidates.filter((ac) => {
                 if (isLetterDeliverableId(ac.deliverable_id || ""))
@@ -1714,7 +1715,7 @@ registerTool("moneypenny_debrief", "MoneyPenny session-end debrief. Logs what wa
                 return titleLower.split(/\s+/).some((w) => w.length > 4 && summaryLower.includes(w));
             });
             if (matchingCandidates.length > 0) {
-                sections.push(`\n### Session Match — Auto-Complete Candidates`);
+                sections.push(`\n### Session Match ΓÇö Auto-Complete Candidates`);
                 for (const mc of matchingCandidates) {
                     sections.push(`- [AUTO-COMPLETE CANDIDATE] **${mc.deliverable_id}**: ${mc.title}`);
                 }
@@ -1723,23 +1724,23 @@ registerTool("moneypenny_debrief", "MoneyPenny session-end debrief. Logs what wa
         // Escalations for Founder
         const escalations = (details.c_decisions || []).filter((d) => d.escalate);
         if (escalations.length > 0) {
-            sections.push(`\n### UNRESOLVED — Founder Review Required`);
+            sections.push(`\n### UNRESOLVED ΓÇö Founder Review Required`);
             for (const e of escalations) {
-                sections.push(`- **${e.deliverable_id}** → ${e.decision}: ${e.reasoning}`);
+                sections.push(`- **${e.deliverable_id}** ΓåÆ ${e.decision}: ${e.reasoning}`);
             }
         }
     }
     else {
-        sections.push(`\n### ⚠️ Verification`);
+        sections.push(`\n### ΓÜá∩╕Å Verification`);
         sections.push(scramblerResult._message || "Triple scrambler did not complete.");
     }
     const output = budgetEnforce(sections.join("\n"), BUDGETS.debrief + 200);
     return { content: [{ type: "text", text: output }] };
 });
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 // TOOL 21: get_migration_status
-// ═══════════════════════════════════════════
-registerTool("get_migration_status", "Returns v1→v2 domain migration tracker. Shows which domains are audited, migrated, or verified. Pass 'list' for overview or a domain name for details.", { query: z.string().describe("Domain name or 'list' for overview") }, async ({ query }) => {
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+registerTool("get_migration_status", "Returns v1ΓåÆv2 domain migration tracker. Shows which domains are audited, migrated, or verified. Pass 'list' for overview or a domain name for details.", { query: z.string().describe("Domain name or 'list' for overview") }, async ({ query }) => {
     ensureFreshIndex();
     if (!v2Migration) {
         return { content: [{ type: "text", text: "v2-migration index not built yet. Run: cd librarian-mcp && npm run rebuild" }] };
@@ -1763,7 +1764,7 @@ registerTool("get_migration_status", "Returns v1→v2 domain migration tracker. 
         return { content: [{ type: "text", text: `Domain '${query}' not found. Available: ${available}` }] };
     }
     const detail = [
-        `## ${domain.domain} — Migration Status: ${domain.auditStatus}`,
+        `## ${domain.domain} ΓÇö Migration Status: ${domain.auditStatus}`,
         ``,
         `### v1 Assets`,
         `- Tables: ${domain.v1Tables}`,
@@ -1782,9 +1783,9 @@ registerTool("get_migration_status", "Returns v1→v2 domain migration tracker. 
         detail.push(`Notes: ${domain.notes}`);
     return { content: [{ type: "text", text: detail.join("\n") }] };
 });
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 // TOOL 22: get_letter_status
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 registerTool("get_letter_status", "Returns letter tracking status. Pass 'list' for overview, 'crown'/'media'/'political' for category, 'draft'/'locked'/'sent' for status, or a recipient name for details.", { query: z.string().describe("'list', category name, status name, or recipient name") }, async ({ query }) => {
     ensureFreshIndex();
     if (!letters) {
@@ -1811,7 +1812,7 @@ registerTool("get_letter_status", "Returns letter tracking status. Pass 'list' f
         for (const f of files) {
             const entry = letters.letters[f];
             if (entry) {
-                lines.push(`- **${entry.recipient}** — ${entry.status} (${entry.wordCount} words)`);
+                lines.push(`- **${entry.recipient}** ΓÇö ${entry.status} (${entry.wordCount} words)`);
             }
         }
         return { content: [{ type: "text", text: lines.join("\n") }] };
@@ -1847,9 +1848,9 @@ registerTool("get_letter_status", "Returns letter tracking status. Pass 'list' f
     }
     return { content: [{ type: "text", text: lines.join("\n") }] };
 });
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 // TOOL 23: get_diff_since_session
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 registerTool("get_diff_since_session", "Returns what changed since a given session. Compares current session list against a baseline session ID. Shows new sessions, files changed, migrations, and functions since then.", { session_id: z.string().describe("Baseline session ID (e.g. 'K200', 'B054'). Shows everything after this session.") }, async ({ session_id }) => {
     ensureFreshIndex();
     if (!context) {
@@ -1907,9 +1908,9 @@ registerTool("get_diff_since_session", "Returns what changed since a given sessi
     }
     return { content: [{ type: "text", text: budgetEnforce(lines.join("\n"), 600) }] };
 });
-// ═══════════════════════════════════════════
-// STITCHPUNK CORPS — Auto-Wire Tools
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+// STITCHPUNK CORPS ΓÇö Auto-Wire Tools
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 const STITCHPUNK_DIR = resolve(__dirname, "..", "stitchpunks");
 function runStitchpunkHook(script, args) {
     const cmd = `python "${resolve(STITCHPUNK_DIR, script)}" ${args.map(a => `"${a.replace(/"/g, '\\"')}"`).join(" ")}`;
@@ -1953,29 +1954,29 @@ registerTool("run_session_start", "Runs the Stitchpunk Corps session start hook 
                 drifts.push(`provisionalApps: overview=${ov.provisionalApps}, canonical=${flat["stats.patent_provisionals_filed"]}`);
             }
             if (drifts.length > 0) {
-                sections.push("⚠️  CANONICAL DRIFT DETECTED — overview.json disagrees with canonical_values.yaml:");
+                sections.push("ΓÜá∩╕Å  CANONICAL DRIFT DETECTED ΓÇö overview.json disagrees with canonical_values.yaml:");
                 for (const d of drifts)
                     sections.push(`  - ${d}`);
                 sections.push("  Action: run 'cd librarian-mcp && npm run rebuild' to resync, or update canonical_values.yaml if values changed.");
             }
             else {
-                sections.push("✅ Canonical values: overview.json matches canonical_values.yaml");
+                sections.push("Γ£à Canonical values: overview.json matches canonical_values.yaml");
             }
         }
     }
     catch (err) {
-        sections.push(`⚠️  Canonical check skipped: ${err.message}`);
+        sections.push(`ΓÜá∩╕Å  Canonical check skipped: ${err.message}`);
     }
     // K429 Half B: Index freshness check
     try {
         const freshness = await checkFreshness(INDEX_DIR, WORKSPACE_ROOT);
         if (freshness.status === "FRESH") {
             const ageMin = freshness.ageMs < 60000 ? "<1m" : `${Math.round(freshness.ageMs / 60000)}m`;
-            sections.push(`✅ Librarian index: FRESH (built ${freshness.lastBuild}, ${ageMin} ago)`);
+            sections.push(`Γ£à Librarian index: FRESH (built ${freshness.lastBuild}, ${ageMin} ago)`);
         }
         else if (freshness.status === "DRIFT") {
             const ageHr = Math.round((freshness.ageMs || 0) / 3600000);
-            sections.push(`⚠️  LIBRARIAN INDEX DRIFT — ${freshness.totalDrift} files changed since last build (${ageHr}h ago)`);
+            sections.push(`ΓÜá∩╕Å  LIBRARIAN INDEX DRIFT ΓÇö ${freshness.totalDrift} files changed since last build (${ageHr}h ago)`);
             if (freshness.newFiles.length)
                 sections.push(`  New: ${freshness.newFiles.slice(0, 5).join(", ")}${freshness.newFiles.length > 5 ? ` (+${freshness.newFiles.length - 5} more)` : ""}`);
             if (freshness.changedFiles.length)
@@ -1983,11 +1984,11 @@ registerTool("run_session_start", "Runs the Stitchpunk Corps session start hook 
             sections.push(`  Action: run \`cd librarian-mcp && npm run rebuild\` to resync.`);
         }
         else {
-            sections.push(`⚠️  Librarian index: no fingerprint found. Run \`cd librarian-mcp && npm run rebuild:full\` to initialize.`);
+            sections.push(`ΓÜá∩╕Å  Librarian index: no fingerprint found. Run \`cd librarian-mcp && npm run rebuild:full\` to initialize.`);
         }
     }
     catch (err) {
-        sections.push(`⚠️  Index freshness check skipped: ${err.message}`);
+        sections.push(`ΓÜá∩╕Å  Index freshness check skipped: ${err.message}`);
     }
     const output = runStitchpunkHook("session_start.py", [agent, session_id, task || ""]);
     sections.push(output);
@@ -2010,7 +2011,7 @@ registerTool("run_session_end", "Runs the Stitchpunk Corps session end hook (SP-
     agent: z.string().describe("Agent type: BISHOP, KNIGHT, ROOK, or PAWN"),
     session_id: z.string().describe("Session identifier (e.g. 'B064', 'K231')"),
     summary: z.string().describe("What was built/accomplished this session"),
-    input_tokens: z.number().int().nonnegative().optional().describe("(K505) Total input tokens this session — supply to enable substrate savings logging"),
+    input_tokens: z.number().int().nonnegative().optional().describe("(K505) Total input tokens this session ΓÇö supply to enable substrate savings logging"),
     output_tokens: z.number().int().nonnegative().optional().describe("(K505) Total output tokens this session"),
     substrate_overhead_tokens: z.number().int().nonnegative().optional().default(0).describe("(K505) Tokens consumed by Librarian/substrate injections"),
     substrate_injection_count: z.number().int().nonnegative().optional().default(0).describe("(K505) Number of MCP tool calls + memory reads during session"),
@@ -2020,7 +2021,7 @@ registerTool("run_session_end", "Runs the Stitchpunk Corps session end hook (SP-
 }, async ({ agent, session_id, summary, input_tokens, output_tokens, substrate_overhead_tokens, substrate_injection_count, vendor, model, friction_confirmations }) => {
     const output = runStitchpunkHook("session_end.py", [agent, session_id, summary]);
     // SP-22/23 Cathedral session summary (K436)
-    const cathedralLines = ["", "── SP-22/23 Cathedral session summary ──"];
+    const cathedralLines = ["", "ΓöÇΓöÇ SP-22/23 Cathedral session summary ΓöÇΓöÇ"];
     try {
         const sessionTidbits = readTidbits({ session: session_id });
         const tidbitsByCategory = new Map();
@@ -2028,7 +2029,7 @@ registerTool("run_session_end", "Runs the Stitchpunk Corps session end hook (SP-
             tidbitsByCategory.set(t.category, (tidbitsByCategory.get(t.category) || 0) + 1);
         }
         const tidbitSummary = sessionTidbits.length === 0
-            ? "0 (none — under-verification flag if non-trivial session)"
+            ? "0 (none ΓÇö under-verification flag if non-trivial session)"
             : `${sessionTidbits.length} (${Array.from(tidbitsByCategory.entries())
                 .map(([k, v]) => `${v} ${k}`)
                 .join(", ")})`;
@@ -2049,7 +2050,7 @@ registerTool("run_session_end", "Runs the Stitchpunk Corps session end hook (SP-
         // Fates dispatches
         const fatesThisSession = readFatesLog({ session: session_id });
         const dispatchCount = fatesThisSession.reduce((s, r) => s + (r.atropos_dispatch?.length || 0), 0);
-        cathedralLines.push(`SP-22 Fates routings this session: ${fatesThisSession.length} pipeline runs → ${dispatchCount} dispatches`);
+        cathedralLines.push(`SP-22 Fates routings this session: ${fatesThisSession.length} pipeline runs ΓåÆ ${dispatchCount} dispatches`);
         // Coverage gaps
         const gapSet = new Set();
         for (const r of fatesThisSession) {
@@ -2063,13 +2064,13 @@ registerTool("run_session_end", "Runs the Stitchpunk Corps session end hook (SP-
             cathedralLines.push(`Hottest Scribe this session: ${hottest.id} (${hottest.n} entries)`);
         }
         else {
-            cathedralLines.push(`Hottest Scribe this session: (none — Cathedral idle)`);
+            cathedralLines.push(`Hottest Scribe this session: (none ΓÇö Cathedral idle)`);
         }
     }
     catch (err) {
         cathedralLines.push(`(Cathedral summary failed: ${err.message})`);
     }
-    // K505/K506 — Substrate savings
+    // K505/K506 ΓÇö Substrate savings
     // K506 Phase A: auto-populate injection_count + overhead_tokens from session tracker
     // when the caller didn't supply them (or supplied 0).
     const autoInjections = (substrate_injection_count == null || substrate_injection_count === 0)
@@ -2115,28 +2116,28 @@ registerTool("run_session_end", "Runs the Stitchpunk Corps session end hook (SP-
                 multiplier_provisional: true,
             };
             const { line_count } = appendSavingsRecord(record);
-            savingsLines.push("", "── Substrate Savings This Session (K506 auto-hook) ──");
+            savingsLines.push("", "ΓöÇΓöÇ Substrate Savings This Session (K506 auto-hook) ΓöÇΓöÇ");
             savingsLines.push(`  Actual cost:    $${actual_cost_usd.toFixed(4)}`);
-            savingsLines.push(`  Counterfactual: $${counterfactual_cost_usd.toFixed(4)} (${cold_multiplier}× cold mult.)`);
+            savingsLines.push(`  Counterfactual: $${counterfactual_cost_usd.toFixed(4)} (${cold_multiplier}├ù cold mult.)`);
             savingsLines.push(`  Net savings:    $${session_savings_usd.toFixed(4)} [provisional]`);
             savingsLines.push(`  Overhead:       ${overheadTokens.toLocaleString()} tokens, ${injections} injections${autoMode ? " [auto-tracked]" : ""}`);
-            savingsLines.push(`  Logged → substrate_savings_log.jsonl (${line_count} total entries)`);
+            savingsLines.push(`  Logged ΓåÆ substrate_savings_log.jsonl (${line_count} total entries)`);
         }
         catch (err) {
             savingsLines.push(`(K506 savings logging failed: ${err.message})`);
         }
     }
     else {
-        savingsLines.push("", `── Substrate Savings ──`);
+        savingsLines.push("", `ΓöÇΓöÇ Substrate Savings ΓöÇΓöÇ`);
         savingsLines.push(`  Session tracker: ${_sessionTracker.injection_count + autoInjections} MCP calls (reset). Supply input_tokens + output_tokens to log savings.`);
     }
     return {
         content: [{ type: "text", text: output + "\n" + cathedralLines.join("\n") + savingsLines.join("\n") }],
     };
 });
-// ═══════════════════════════════════════════
-// K506 Phase A — SESSION TELEMETRY TOOLS
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+// K506 Phase A ΓÇö SESSION TELEMETRY TOOLS
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 registerTool("get_session_telemetry", "K506: Returns the auto-tracked MCP call count and estimated overhead tokens accumulated since the last run_session_end (or server start). Use this to inspect current session telemetry before calling run_session_end. The tracker resets on each run_session_end call.", {}, async () => {
     const data = {
         injection_count: _sessionTracker.injection_count,
@@ -2146,18 +2147,18 @@ registerTool("get_session_telemetry", "K506: Returns the auto-tracked MCP call c
         unique_tools_called: [...new Set(_sessionTracker.tool_call_names)],
         total_tool_calls: _sessionTracker.tool_call_names.length,
         note: "Injection count auto-populates substrate_injection_count in run_session_end when not supplied. Supply input_tokens + output_tokens to run_session_end to complete savings logging.",
-        auto_hook_status: "K506 Phase A active — overhead auto-tracked. Token counts (input/output) still require explicit supply.",
+        auto_hook_status: "K506 Phase A active ΓÇö overhead auto-tracked. Token counts (input/output) still require explicit supply.",
     };
     return { content: [{ type: "text", text: JSON.stringify(data, null, 2) }] };
 });
-// ═══════════════════════════════════════════
-// SP-21 + SP-22/23 — TIDBIT + CATHEDRAL TOOLS (K436)
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+// SP-21 + SP-22/23 ΓÇö TIDBIT + CATHEDRAL TOOLS (K436)
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 registerTool("log_tidbit", "Append a verification-behavior tidbit to the SP-21 ledger (stitchpunks/data/tidbits.jsonl). Call whenever you perform a BRIDLE-Rule-2-style pre-assertion check (verified a slot, file, commit, symbol, route, or canonical value before claiming it). Returns the new line count.", {
     agent: z.enum(["BISHOP", "KNIGHT", "ROOK", "PAWN"]).describe("Calling agent"),
     session: z.string().regex(SESSION_ID_REGEX).describe(SESSION_ID_DESCRIPTION),
     category: z.string().min(3).describe("verify_<action>, e.g. verify_slot_number, verify_file_exists"),
-    observation: z.string().min(10).describe("Description of what was checked and what was found. No upper bound — substance over brevity."),
+    observation: z.string().min(10).describe("Description of what was checked and what was found. No upper bound ΓÇö substance over brevity."),
     artifact: z.string().optional().describe("File path or symbol the verification served"),
 }, async ({ agent, session, category, observation, artifact }) => {
     try {
@@ -2223,10 +2224,10 @@ registerTool("fates_route", "Run the Three Fates pipeline (Clotho extracts theme
         };
     }
 });
-registerTool("scribe_log", "Append an observation to a specific Scribe's tablet (stitchpunks/scribes/scribe_<id>.jsonl). The scribe_id MUST be registered in registry.yaml — unknown ids are rejected (registration is a deliberate registry edit, not an on-the-fly call).", {
+registerTool("scribe_log", "Append an observation to a specific Scribe's tablet (stitchpunks/scribes/scribe_<id>.jsonl). The scribe_id MUST be registered in registry.yaml ΓÇö unknown ids are rejected (registration is a deliberate registry edit, not an on-the-fly call).", {
     scribe_id: z.string().describe("Registered Scribe id, e.g. R9, BRIDLE, Landing, Prov14, Vault"),
     session_id: z.string().describe("Session identifier"),
-    observation: z.string().min(10).describe("Observation text — the durable record. No upper bound — substance over brevity."),
+    observation: z.string().min(10).describe("Observation text ΓÇö the durable record. No upper bound ΓÇö substance over brevity."),
     source: z.enum([
         "founder_dialogue", "bishop_ship", "knight_ship",
         "bishop_read", "bishop_thresh", "bishop_design",
@@ -2293,12 +2294,12 @@ registerTool("scribe_log", "Append an observation to a specific Scribe's tablet 
     }
 });
 registerTool("consult_scribes", "RAM-access pattern for the Cathedral: query Scribes for recent observations on a topic. Scores topic against every registered Scribe's primary + adjacent fields, returns up to max_entries from the highest-scoring Scribes (primary first, adjacents next if include_adjacents=true). Extended K455c/B121: accepts cathedral ('bishop'=default or 'knight') and scope ('public'=default, 'private', 'guild:<name>', 'tribe:<name>') for cross-Cathedral consultation and permissioned scope filtering. Extended K466/B121: Scribes declare mode='observational' (default, recency top-K) or mode='corpus' (full deterministic retrieval for static reference corpora like R11). Default max_entries for corpus-mode queries is 100; for observational is 20. Optimized for fast mid-session retrieval (target p95 < 200ms for 20-tablet cathedral).", {
-    topic: z.string().min(2).describe("Topic to look up — keyword, phrase, named entity, or canonical id"),
+    topic: z.string().min(2).describe("Topic to look up ΓÇö keyword, phrase, named entity, or canonical id"),
     max_entries: z.number().int().min(1).max(500).optional().describe("Maximum entries to return (default 20 for observational Scribes, 100 for corpus Scribes). Explicit override respected for both modes."),
     since_ts: z.string().optional().describe("ISO-8601 timestamp; only entries newer than this are returned"),
     include_adjacents: z.boolean().optional().describe("If true (default), also return entries from Scribes that match only on adjacent fields"),
-    cathedral: z.enum(["bishop", "knight"]).optional().describe("Which Cathedral to consult: 'bishop' (default, Bishop's stitchpunks Cathedral) or 'knight' (Knight's Cathedral — cooperative-corpus flywheel, K455c). Added K455c/B121."),
-    scope: z.string().optional().describe("Scope filter: 'public' (default), 'private', 'guild:<name>', or 'tribe:<name>'. Silent filter — non-matching entries omitted, not error. Added K455c/B121."),
+    cathedral: z.enum(["bishop", "knight"]).optional().describe("Which Cathedral to consult: 'bishop' (default, Bishop's stitchpunks Cathedral) or 'knight' (Knight's Cathedral ΓÇö cooperative-corpus flywheel, K455c). Added K455c/B121."),
+    scope: z.string().optional().describe("Scope filter: 'public' (default), 'private', 'guild:<name>', or 'tribe:<name>'. Silent filter ΓÇö non-matching entries omitted, not error. Added K455c/B121."),
 }, async ({ topic, max_entries, since_ts, include_adjacents, cathedral, scope }) => {
     try {
         const result = consultScribes({
@@ -2316,9 +2317,9 @@ registerTool("consult_scribes", "RAM-access pattern for the Cathedral: query Scr
         };
     }
 });
-// ═══════════════════════════════════════════
-// K523 — PHEROMONE SUBSTRATE TOOLS (A&A #2317)
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+// K523 ΓÇö PHEROMONE SUBSTRATE TOOLS (A&A #2317)
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 registerTool("pheromone_query", "Detective Phase 0 fast path (A&A #2317): query the stigmergic pheromone substrate for a claim. Returns ranked hits from the constant-time inverted-topic index. Falls back to N-Scribe RPC when index is sparse (phase_0_used=false, fallback_to_rpc=true). Hits carry decay_score (recency-weighted match strength). Build cost is amortized; query is sub-millisecond once index is warm. Use before consult_scribes for routine 'where does X live?' investigations.", {
     claim: z.string().min(3).max(500).describe("Topic or claim to investigate (e.g. 'founder anecdote', 'pheromone substrate', '#2317')"),
     freshness_threshold_seconds: z.number().int().min(0).optional().describe("Max age of index in seconds before warning stale (default 86400)"),
@@ -2358,7 +2359,7 @@ registerTool("pheromone_query", "Detective Phase 0 fast path (A&A #2317): query 
         };
     }
 });
-registerTool("pheromone_build", "Force a full pheromone substrate rebuild from all Cathedral Scribe tablets. Expensive (but fast — typically <100ms). Use after bulk Scribe imports or when pheromone_query reports record_count=0. Normal usage: index is maintained incrementally by sync-emit hooks on every scribe_log / log_tidbit call.", {
+registerTool("pheromone_build", "Force a full pheromone substrate rebuild from all Cathedral Scribe tablets. Expensive (but fast ΓÇö typically <100ms). Use after bulk Scribe imports or when pheromone_query reports record_count=0. Normal usage: index is maintained incrementally by sync-emit hooks on every scribe_log / log_tidbit call.", {
     verbose: z.boolean().optional().describe("Emit build stats to stderr (default false)"),
     decay_constant_days: z.number().min(1).max(365).optional().describe("Decay half-life for all records (default 30 days)"),
 }, async ({ verbose, decay_constant_days }) => {
@@ -2374,9 +2375,9 @@ registerTool("pheromone_build", "Force a full pheromone substrate rebuild from a
         };
     }
 });
-// ─── Vendor Tablet Query (K-Vendor-Layer-Tablet-Capture / B132) ─────────────
+// ΓöÇΓöÇΓöÇ Vendor Tablet Query (K-Vendor-Layer-Tablet-Capture / B132) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 import { vendorTabletQuery } from "./vendor_tablet_capture.js";
-registerTool("vendor_tablet_query", "Query the Stone Tablet vendor payload provenance archive. Returns raw vendor request/response records captured at the boundary between SDK call and internal summarization. Enables 'what was the raw payload of vendor call X?' — closes the provenance loop for Detective investigations. Tablets live at stitchpunks/data/vendor_tablets/<vendor>/<YYYY-MM-DD>.jsonl (append-only, never deleted).", {
+registerTool("vendor_tablet_query", "Query the Stone Tablet vendor payload provenance archive. Returns raw vendor request/response records captured at the boundary between SDK call and internal summarization. Enables 'what was the raw payload of vendor call X?' ΓÇö closes the provenance loop for Detective investigations. Tablets live at stitchpunks/data/vendor_tablets/<vendor>/<YYYY-MM-DD>.jsonl (append-only, never deleted).", {
     vendor: z.string().optional().describe("Filter by vendor name: anthropic | openai | google | perplexity | groq | together | ollama"),
     model: z.string().optional().describe("Filter by model name substring (e.g. 'claude-haiku')"),
     since_ts: z.string().optional().describe("ISO-8601 cutoff; only records at or after this timestamp"),
@@ -2402,7 +2403,7 @@ registerTool("vendor_tablet_query", "Query the Stone Tablet vendor payload prove
         };
     }
 });
-registerTool("detective_investigate", "Cross-Scribe investigation (A&A #2316 Detective Scribe + #2317 Phase 0). Phase 0: checks pheromone substrate (constant-time) — returns Provenance Map from index if sufficient hits. Phase 1: falls through to consult_scribes RPC when Phase 0 is sparse. Returns structured findings: phase used, hits, scribe coverage, fallback details. Trigger C: operator provenance query ('where does X live?'). Use this before manually scanning multiple Scribes.", {
+registerTool("detective_investigate", "Cross-Scribe investigation (A&A #2316 Detective Scribe + #2317 Phase 0). Phase 0: checks pheromone substrate (constant-time) ΓÇö returns Provenance Map from index if sufficient hits. Phase 1: falls through to consult_scribes RPC when Phase 0 is sparse. Returns structured findings: phase used, hits, scribe coverage, fallback details. Trigger C: operator provenance query ('where does X live?'). Use this before manually scanning multiple Scribes.", {
     claim: z.string().min(3).max(500).describe("The claim or named entity to investigate (e.g. 'founder anecdote', 'pheromone substrate', 'BRIDLE Rule 3')"),
     sufficiency_threshold: z.number().int().min(1).optional().describe("Min pheromone hits for Phase 0 to be sufficient (default 10). Lower = prefer pheromone fast-path."),
     include_rpc_fallback: z.boolean().optional().describe("If true (default), run Phase 1 consult_scribes RPC when Phase 0 is insufficient (false = pheromone-only)"),
@@ -2412,7 +2413,7 @@ registerTool("detective_investigate", "Cross-Scribe investigation (A&A #2316 Det
 }, async ({ claim, sufficiency_threshold, include_rpc_fallback, max_rpc_entries, decay_active, max_hits }) => {
     try {
         // Phase 0: pheromone index pre-check
-        // max_hits controls topK — pass 5-10 for LEAN-mode, omit for default 50 (F5 KN100/BP015)
+        // max_hits controls topK ΓÇö pass 5-10 for LEAN-mode, omit for default 50 (F5 KN100/BP015)
         const phase0 = queryPheromone(claim, {
             sufficiencyThreshold: sufficiency_threshold,
             decayActive: decay_active,
@@ -2442,7 +2443,7 @@ registerTool("detective_investigate", "Cross-Scribe investigation (A&A #2316 Det
             result.phase_1 = rpcResult;
             result.provenance_source = "rpc_consult_scribes";
         }
-        // K550 — Wrasse Registry Live-Update (D.1 = α direct-write on resolution success)
+        // K550 ΓÇö Wrasse Registry Live-Update (D.1 = ╬▒ direct-write on resolution success)
         // If Detective resolved anything (phase0 hits > 0 OR phase1 entries > 0), auto-register
         // trigger patterns extracted from the claim into the Wrasse registry.
         // Brick Wall: autoRegisterFromDetective never throws; lock failure silently skips.
@@ -2475,24 +2476,24 @@ registerTool("detective_investigate", "Cross-Scribe investigation (A&A #2316 Det
         };
     }
 });
-// ═══════════════════════════════════════════
-// KN100/BP015 — DETECTIVE TEAM (P4) + ADVERSARIAL FENCE TESTING (P5)
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+// KN100/BP015 ΓÇö DETECTIVE TEAM (P4) + ADVERSARIAL FENCE TESTING (P5)
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 /**
- * Detective TEAM Investigate — Priority 4 KN100/BP015
+ * Detective TEAM Investigate ΓÇö Priority 4 KN100/BP015
  *
  * Upgrades Detective from single-agent to TEAM-of-N fanning out across
  * cathedrals. Synthesized findings are WRITTEN BACK to pheromone substrate
- * as new entries tagged synthesis_class: detective_team_finding — closing
+ * as new entries tagged synthesis_class: detective_team_finding ΓÇö closing
  * the Detective Self-Pheromonating Loop ("so you don't forget again").
  *
  * Phase 0: fan-out queryPheromone per cathedral
  * Phase 1: per-cathedral Phase 0 hits synthesized into cross-cathedral finding
  * Phase 2: emitPheromone write-back with synthesis_class + provenance metadata
  */
-registerTool("detective_team_investigate", "Detective TEAM cross-cathedral investigation with substrate write-back (KN100/BP015 P4 — A&A #2316/#2317 upgrade). Fans out across N cathedrals (bishop/knight/pawn), synthesizes findings, writes the synthesis BACK to pheromone substrate as a detective_team_finding entry so next query surfaces the synthesis directly. 'So you don't forget again.' — Founder direct BP015. Composes with Multi-Trail Pheromone-Flavor (BP015 P3) and Adversarial Fence Testing (BP015 P5).", {
+registerTool("detective_team_investigate", "Detective TEAM cross-cathedral investigation with substrate write-back (KN100/BP015 P4 ΓÇö A&A #2316/#2317 upgrade). Fans out across N cathedrals (bishop/knight/pawn), synthesizes findings, writes the synthesis BACK to pheromone substrate as a detective_team_finding entry so next query surfaces the synthesis directly. 'So you don't forget again.' ΓÇö Founder direct BP015. Composes with Multi-Trail Pheromone-Flavor (BP015 P3) and Adversarial Fence Testing (BP015 P5).", {
     claim: z.string().min(3).max(500).describe("The claim to investigate across all cathedrals (e.g. 'treasure maps', 'BRIDLE Rule 3 enforcement', '#2317 pheromone substrate')"),
-    cathedrals: z.array(z.enum(["bishop", "knight", "pawn"])).optional().describe("Cathedrals to fan out across (default: ['bishop','knight','pawn'] — all three)"),
+    cathedrals: z.array(z.enum(["bishop", "knight", "pawn"])).optional().describe("Cathedrals to fan out across (default: ['bishop','knight','pawn'] ΓÇö all three)"),
     top_k_per_cathedral: z.number().int().min(1).max(50).optional().describe("Phase 0 hits per cathedral agent (default 10; LEAN: 3-5)"),
     write_back: z.boolean().optional().describe("Write synthesis back to pheromone substrate as detective_team_finding entry (default true). Set false for dry-run investigation."),
     flavor_class: z.object({
@@ -2537,7 +2538,7 @@ registerTool("detective_team_investigate", "Detective TEAM cross-cathedral inves
         const consistencyNote = crossCathedralAgreement === targetCathedrals.length
             ? `All ${targetCathedrals.length} cathedrals have substrate coverage for this claim.`
             : crossCathedralAgreement === 0
-                ? "No cathedral has substrate coverage — claim may be novel or substrate needs backfill."
+                ? "No cathedral has substrate coverage ΓÇö claim may be novel or substrate needs backfill."
                 : `${crossCathedralAgreement}/${targetCathedrals.length} cathedrals have coverage; partial cathedral knowledge.`;
         const synthesisStatement = [
             `Detective TEAM finding for: "${claim}"`,
@@ -2591,25 +2592,25 @@ registerTool("detective_team_investigate", "Detective TEAM cross-cathedral inves
     }
 });
 /**
- * Adversarial Fence Testing — Priority 5 KN100/BP015
+ * Adversarial Fence Testing ΓÇö Priority 5 KN100/BP015
  *
  * Implements the Adversarial Fence Testing Protocol (Founder direct clarification
- * of "Prove all things; hold fast that which is good" — 1 Thess 5:21).
+ * of "Prove all things; hold fast that which is good" ΓÇö 1 Thess 5:21).
  * Three probe types:
- *   1. counter_claim — submit alternative claim; verify substrate response
- *   2. cross_canon_contradiction — find entries contradicting each other
- *   3. stale_substrate — verify staleness detection works
+ *   1. counter_claim ΓÇö submit alternative claim; verify substrate response
+ *   2. cross_canon_contradiction ΓÇö find entries contradicting each other
+ *   3. stale_substrate ΓÇö verify staleness detection works
  *
  * Writes probe results back to pheromone with synthesis_class: adversarial_fence_probe
  * for Bushel 1 Reckoning audit trail.
  */
-registerTool("adversarial_fence_probe", "Adversarial Fence Testing Protocol (KN100/BP015 P5 — 'Prove all things; hold fast that which is good' — Founder BP015 clarification). Three probe types: counter_claim (submit alternative; verify substrate handles contradiction), cross_canon_contradiction (find entries that contradict each other), stale_substrate (verify staleness markers fire). Writes probe receipts back to pheromone substrate as adversarial_fence_probe entries for Bushel 1 Reckoning audit trail. 'It will happen anyway, if WE do it, then that makes us all the stronger.' — Founder direct.", {
+registerTool("adversarial_fence_probe", "Adversarial Fence Testing Protocol (KN100/BP015 P5 ΓÇö 'Prove all things; hold fast that which is good' ΓÇö Founder BP015 clarification). Three probe types: counter_claim (submit alternative; verify substrate handles contradiction), cross_canon_contradiction (find entries that contradict each other), stale_substrate (verify staleness markers fire). Writes probe receipts back to pheromone substrate as adversarial_fence_probe entries for Bushel 1 Reckoning audit trail. 'It will happen anyway, if WE do it, then that makes us all the stronger.' ΓÇö Founder direct.", {
     probe_type: z.enum(["counter_claim", "cross_canon_contradiction", "stale_substrate"]).describe("Probe class: counter_claim | cross_canon_contradiction | stale_substrate"),
     claim: z.string().min(3).max(500).describe("Primary canonical claim to probe (the 'rung' being adversarially tested)"),
     counter_claim: z.string().min(3).max(500).optional().describe("For counter_claim probe: the alternative/contradicting claim to submit against the substrate"),
     top_k: z.number().int().min(1).max(50).optional().describe("Number of substrate hits to probe against (default 10)"),
     write_back: z.boolean().optional().describe("Write probe receipt to pheromone as adversarial_fence_probe entry (default true)"),
-    hold_or_discard: z.enum(["hold", "discard", "flag_reconciliation", "pending"]).optional().describe("Per-claim adjudication for Bushel 1 Reckoning (default: pending — to be adjudicated after probe review)"),
+    hold_or_discard: z.enum(["hold", "discard", "flag_reconciliation", "pending"]).optional().describe("Per-claim adjudication for Bushel 1 Reckoning (default: pending ΓÇö to be adjudicated after probe review)"),
 }, async ({ probe_type, claim, counter_claim, top_k, write_back, hold_or_discard }) => {
     try {
         const topK = top_k ?? 10;
@@ -2660,7 +2661,7 @@ registerTool("adversarial_fence_probe", "Adversarial Fence Testing Protocol (KN1
                 scribes_covered: scribeGroups.size,
                 multi_hit_scribes: multiHitScribes.map(([s, entries]) => ({ scribe: s, entries })),
                 finding: multiHitScribes.length > 0
-                    ? `Cross-canon probe: ${multiHitScribes.length} scribe(s) have multiple entries for '${claim}' — potential contradiction surface; manual review recommended.`
+                    ? `Cross-canon probe: ${multiHitScribes.length} scribe(s) have multiple entries for '${claim}' ΓÇö potential contradiction surface; manual review recommended.`
                     : `No cross-canon contradiction surface found for '${claim}' (${scribeGroups.size} scribes, each with single entry). Clean.`,
                 adjudication,
             };
@@ -2721,9 +2722,9 @@ registerTool("adversarial_fence_probe", "Adversarial Fence Testing Protocol (KN1
         };
     }
 });
-// ═══════════════════════════════════════════
-// K524 — PHEROMONE INBOUND STATUS (A&A #2317 Claim 7)
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+// K524 ΓÇö PHEROMONE INBOUND STATUS (A&A #2317 Claim 7)
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 registerTool("pheromone_inbound_status", "K524 G.8: returns counts of inbound pheromone records per Cathedral from cross-Cathedral Hound transport. " +
     "Inbound records live in `stitchpunks/<cathedral>_cathedral/inbound_pheromones.jsonl` and are produced " +
     "when a sibling Cathedral emits a pheromone. These are merged into the unified index.jsonl on the next " +
@@ -2750,17 +2751,17 @@ registerTool("pheromone_inbound_status", "K524 G.8: returns counts of inbound ph
         };
     }
 });
-// ═══════════════════════════════════════════
-// K438b — MEMBER-FACING CATHEDRAL TOOLS
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+// K438b ΓÇö MEMBER-FACING CATHEDRAL TOOLS
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 // Sibling tools to the K436 stitchpunks-backed Cathedral surface above,
 // targeting the per-member cathedral.* schema (#2268). Both tools require
 // a Supabase service-role client (LIBRARIAN_SUPABASE_URL +
-// LIBRARIAN_SUPABASE_SERVICE_ROLE_KEY) — they fail gracefully with an
+// LIBRARIAN_SUPABASE_SERVICE_ROLE_KEY) ΓÇö they fail gracefully with an
 // actionable error message when the env is missing rather than crashing
 // the MCP process. See librarian-mcp/src/cathedral_supabase/client.ts for
 // the access-control rationale (service role + explicit member_id filter).
-registerTool("member_consult_scribes", "Cathedral retrieval (#2268) — query a member's own Scribes plus optionally any commons-shared Scribes from other members. Returns top_k entries ranked by relevance (member's own ranked above shared at equal score). Backed by cathedral.member_scribes + cathedral.scribe_entries. Sibling of consult_scribes (which reads stitchpunks tablets).", {
+registerTool("member_consult_scribes", "Cathedral retrieval (#2268) ΓÇö query a member's own Scribes plus optionally any commons-shared Scribes from other members. Returns top_k entries ranked by relevance (member's own ranked above shared at equal score). Backed by cathedral.member_scribes + cathedral.scribe_entries. Sibling of consult_scribes (which reads stitchpunks tablets).", {
     member_id: z.string().uuid().describe("Member's auth.users.id (UUID)"),
     query: z.string().min(5).max(2000).describe("Topic / phrase / canonical id to look up"),
     top_k: z.number().int().min(1).max(50).optional().describe("Maximum entries to return (default 10)"),
@@ -2783,10 +2784,10 @@ registerTool("member_consult_scribes", "Cathedral retrieval (#2268) — query a 
         };
     }
 });
-registerTool("member_fates_route", "Three Fates routing (#2269) for a member session: Clotho extracts themes (against the member's own Scribe keywords + canonical entity regexes), Lachesis scores each Scribe, Atropos returns dispatch directives. Persists one row to cathedral.fates_log. Does NOT auto-append to scribe_entries — the member confirms in the UI before any tablet write (manual-approval default for first ship).", {
+registerTool("member_fates_route", "Three Fates routing (#2269) for a member session: Clotho extracts themes (against the member's own Scribe keywords + canonical entity regexes), Lachesis scores each Scribe, Atropos returns dispatch directives. Persists one row to cathedral.fates_log. Does NOT auto-append to scribe_entries ΓÇö the member confirms in the UI before any tablet write (manual-approval default for first ship).", {
     member_id: z.string().uuid().describe("Member's auth.users.id (UUID)"),
     session_id: z.string().optional().describe("Session identifier (optional but recommended for log threading)"),
-    content: z.string().min(10).max(10000).describe("Session content to route — typically the latest exchange"),
+    content: z.string().min(10).max(10000).describe("Session content to route ΓÇö typically the latest exchange"),
     dispatch_cap: z.number().int().min(1).max(10).optional().describe("Maximum dispatch directives returned (default 5)"),
     persist: z.boolean().optional().describe("If true (default), write a cathedral.fates_log row"),
 }, async ({ member_id, session_id, content, dispatch_cap, persist }) => {
@@ -2806,9 +2807,9 @@ registerTool("member_fates_route", "Three Fates routing (#2269) for a member ses
         };
     }
 });
-// ═══════════════════════════════════════════
-// TOUCHSTONE — Deterministic Coordinator Tools
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+// TOUCHSTONE ΓÇö Deterministic Coordinator Tools
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 const TOUCHSTONE_DIR = resolve(__dirname, "..", "touchstone");
 function runTouchstone(script, args) {
     const cmd = `python "${resolve(TOUCHSTONE_DIR, script)}" ${args.map(a => `"${a.replace(/"/g, '\\"')}"`).join(" ")}`;
@@ -2876,7 +2877,7 @@ registerTool("touchstone_verify", "Runs verification predicates on a specific de
         const result = JSON.parse(output);
         if (deliverable_id) {
             const passStr = result.passed ? "PASSED" : "FAILED";
-            const details = (result.predicate_results || []).map((pr) => `  ${pr.passed ? "✅" : "❌"} ${pr.predicate}: ${pr.message}`).join("\n");
+            const details = (result.predicate_results || []).map((pr) => `  ${pr.passed ? "Γ£à" : "Γ¥î"} ${pr.predicate}: ${pr.message}`).join("\n");
             return {
                 content: [{ type: "text", text: `${passStr}: ${deliverable_id}\n${details}` }],
             };
@@ -2888,7 +2889,7 @@ registerTool("touchstone_verify", "Runs verification predicates on a specific de
                         text: `TouchStone Report (${result.verified_at || "now"}):\n` +
                             `Total: ${result.total} | Passed: ${result.passed} | Failed: ${result.failed} | Pending: ${result.pending} | Blocked: ${result.blocked}\n\n` +
                             `By owner:\n${Object.entries(result.by_owner || {}).map(([o, s]) => `  ${o}: ${s.passed}/${s.total} passed`).join("\n")}\n\n` +
-                            `Details:\n${(result.results || []).map((r) => `  ${r.passed ? "✅" : "⬜"} [${r.status}] ${r.title || r.deliverable_id}`).join("\n")}`,
+                            `Details:\n${(result.results || []).map((r) => `  ${r.passed ? "Γ£à" : "Γ¼£"} [${r.status}] ${r.title || r.deliverable_id}`).join("\n")}`,
                     }],
             };
         }
@@ -2917,7 +2918,7 @@ registerTool("touchstone_claim", "Claims a pending deliverable for the calling a
     // Log to ledger
     runTouchstone("ledger.py", ["started", deliverable_id, JSON.stringify({ agent })]);
     return {
-        content: [{ type: "text", text: `✅ Claimed: ${d.title} (${deliverable_id}) → in_progress` }],
+        content: [{ type: "text", text: `Γ£à Claimed: ${d.title} (${deliverable_id}) ΓåÆ in_progress` }],
     };
 });
 registerTool("touchstone_complete", "Submits completion for a deliverable. Runs all predicates. If ALL pass, marks completed. If any fail, rejects with reasons. Stale predicates (10+ sessions old) are downgraded to warnings.", {
@@ -2960,18 +2961,18 @@ registerTool("touchstone_complete", "Submits completion for a deliverable. Runs 
         saveTouchstoneManifest(manifest);
         runTouchstone("ledger.py", ["completed", deliverable_id, JSON.stringify({ agent, predicate_count: (result.predicate_results || []).length })]);
         return {
-            content: [{ type: "text", text: `✅ COMPLETED: ${d.title}\nAll ${(result.predicate_results || []).length} predicates passed.` }],
+            content: [{ type: "text", text: `Γ£à COMPLETED: ${d.title}\nAll ${(result.predicate_results || []).length} predicates passed.` }],
         };
     }
     else if (isStale) {
-        const failDetails = (result.blocking_failures || []).map((f) => `  ⚠️ ${f} [STALE — downgraded to warning]`).join("\n");
+        const failDetails = (result.blocking_failures || []).map((f) => `  ΓÜá∩╕Å ${f} [STALE ΓÇö downgraded to warning]`).join("\n");
         return {
-            content: [{ type: "text", text: `⚠️ STALE PREDICATES: ${d.title}\nDeliverable is 10+ sessions old. Failures downgraded to warnings:\n${failDetails}\n\nUse touchstone_force_complete to override.` }],
+            content: [{ type: "text", text: `ΓÜá∩╕Å STALE PREDICATES: ${d.title}\nDeliverable is 10+ sessions old. Failures downgraded to warnings:\n${failDetails}\n\nUse touchstone_force_complete to override.` }],
         };
     }
     else {
         runTouchstone("ledger.py", ["failed", deliverable_id, JSON.stringify({ agent, failures: result.blocking_failures })]);
-        const failDetails = (result.blocking_failures || []).map((f) => `  ❌ ${f}`).join("\n");
+        const failDetails = (result.blocking_failures || []).map((f) => `  Γ¥î ${f}`).join("\n");
         return {
             content: [{ type: "text", text: `REJECTED: ${d.title}\nPredicates failed:\n${failDetails}` }],
         };
@@ -2980,7 +2981,7 @@ registerTool("touchstone_complete", "Submits completion for a deliverable. Runs 
 registerTool("touchstone_force_complete", "Force-completes a deliverable when predicates are stale but work clearly shipped. Logs the override with reason and agent. Use when touchstone_complete rejects due to stale predicates.", {
     deliverable_id: z.string().describe("The deliverable ID to force-complete"),
     agent: z.string().describe("The agent forcing completion: bishop, knight, rook, pawn"),
-    reason: z.string().describe("Why force-completing — what evidence shows it shipped"),
+    reason: z.string().describe("Why force-completing ΓÇö what evidence shows it shipped"),
 }, async ({ deliverable_id, agent, reason }) => {
     const manifest = loadTouchstoneManifest();
     const d = (manifest.deliverables || []).find((dd) => dd.id === deliverable_id);
@@ -3003,12 +3004,12 @@ registerTool("touchstone_force_complete", "Force-completes a deliverable when pr
             predicate_count: 0,
         })]);
     return {
-        content: [{ type: "text", text: `⚡ FORCE-COMPLETED: ${d.title}\nAgent: ${agent}\nReason: ${reason}\nLogged for Founder audit.` }],
+        content: [{ type: "text", text: `ΓÜí FORCE-COMPLETED: ${d.title}\nAgent: ${agent}\nReason: ${reason}\nLogged for Founder audit.` }],
     };
 });
-// ═══════════════════════════════════════════
-// SCRAMBLER — Chessboard Phase 2 Sync Tools (K407)
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+// SCRAMBLER ΓÇö Chessboard Phase 2 Sync Tools (K407)
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 const SCRAMBLER_DIR = resolve(__dirname, "..", "scrambler");
 function runScrambler(script, args) {
     const cmd = `python "${resolve(SCRAMBLER_DIR, script)}" ${args.map(a => `"${a.replace(/"/g, '\\"')}"`).join(" ")}`;
@@ -3029,7 +3030,7 @@ registerTool("scrambler_session_start", "Scrambler Chessboard Phase 2 + K418 Tri
     agent: z.string().describe("Agent type: bishop, knight, rook, pawn"),
     session_id: z.string().describe("Session identifier (e.g. 'B098', 'K407')"),
 }, async ({ agent, session_id }) => {
-    // Scrambler A — original session brief
+    // Scrambler A ΓÇö original session brief
     const output = runScrambler("session_brief.py", [agent, session_id]);
     let brief;
     try {
@@ -3042,8 +3043,8 @@ registerTool("scrambler_session_start", "Scrambler Chessboard Phase 2 + K418 Tri
     lines.push(`## Scrambler Session Brief: ${session_id}\n`);
     lines.push(`Agent: **${brief.agent}** | Started: ${brief.started_at}`);
     lines.push(`Snapshot: ${brief.canonical_state_snapshot_id}`);
-    // ── Scrambler A results ──
-    lines.push(`\n### Scrambler A — Ledger Verifier`);
+    // ΓöÇΓöÇ Scrambler A results ΓöÇΓöÇ
+    lines.push(`\n### Scrambler A ΓÇö Ledger Verifier`);
     const driftCount = (brief.drift_warnings || []).length;
     const conflictCount = (brief.canonical_conflicts || []).length;
     lines.push(`Drifts: ${driftCount} | Conflicts: ${conflictCount}`);
@@ -3057,13 +3058,13 @@ registerTool("scrambler_session_start", "Scrambler Chessboard Phase 2 + K418 Tri
             lines.push(`  - ${c.key}: ${c.reason || c.message}`);
         }
     }
-    // ── Scrambler B — Ground Truth ──
+    // ΓöÇΓöÇ Scrambler B ΓÇö Ground Truth ΓöÇΓöÇ
     let bResult = null;
     try {
         const bOutput = runScrambler("ground_truth.py", []);
         bResult = JSON.parse(bOutput);
         const vs = bResult.verdicts_summary || {};
-        lines.push(`\n### Scrambler B — Ground Truth Verifier`);
+        lines.push(`\n### Scrambler B ΓÇö Ground Truth Verifier`);
         lines.push(`Deliverables: ${bResult.total_deliverables} | Shipped: ${vs.shipped || 0} | Likely: ${vs.likely_shipped || 0} | Missing: ${vs.missing || 0}`);
         lines.push(`Disagreements: **${bResult.disagreement_count || 0}**`);
         if (bResult.disagreements?.length > 0) {
@@ -3073,28 +3074,28 @@ registerTool("scrambler_session_start", "Scrambler Chessboard Phase 2 + K418 Tri
         }
     }
     catch {
-        lines.push(`\n### Scrambler B — Ground Truth Verifier`);
+        lines.push(`\n### Scrambler B ΓÇö Ground Truth Verifier`);
         lines.push(`(could not run)`);
     }
-    // ── Scrambler C — Arbiter ──
+    // ΓöÇΓöÇ Scrambler C ΓÇö Arbiter ΓöÇΓöÇ
     if (bResult && (bResult.disagreement_count || 0) > 0) {
         try {
             const cOutput = runScrambler("arbiter.py", []);
             const cResult = JSON.parse(cOutput);
-            lines.push(`\n### Scrambler C — Arbiter`);
+            lines.push(`\n### Scrambler C ΓÇö Arbiter`);
             lines.push(`Activated: **${cResult.activated ? "YES" : "NO"}** | Self-healed: ${cResult.self_healed || 0} | Escalations: ${cResult.escalations || 0}`);
             if (cResult.decisions?.length > 0) {
                 for (const d of cResult.decisions.slice(0, 5)) {
-                    lines.push(`  - ${d.deliverable_id} → ${d.decision} (${d.confidence})${d.self_healed ? " [SELF-HEALED]" : ""}${d.escalate ? " [ESCALATE]" : ""}`);
+                    lines.push(`  - ${d.deliverable_id} ΓåÆ ${d.decision} (${d.confidence})${d.self_healed ? " [SELF-HEALED]" : ""}${d.escalate ? " [ESCALATE]" : ""}`);
                 }
             }
         }
         catch {
-            lines.push(`\n### Scrambler C — Arbiter`);
+            lines.push(`\n### Scrambler C ΓÇö Arbiter`);
             lines.push(`(could not run)`);
         }
     }
-    // ── Staleness & Gaps ──
+    // ΓöÇΓöÇ Staleness & Gaps ΓöÇΓöÇ
     try {
         const staleOutput = runScrambler("staleness.py", []);
         const staleResult = JSON.parse(staleOutput);
@@ -3119,13 +3120,13 @@ registerTool("scrambler_session_start", "Scrambler Chessboard Phase 2 + K418 Tri
     catch {
         /* staleness check is informational, don't block on failure */
     }
-    // ── Canonical Numbers ──
+    // ΓöÇΓöÇ Canonical Numbers ΓöÇΓöÇ
     const cs = brief.canonical_state || {};
     if (cs.stats) {
         lines.push(`\n### Canonical Numbers`);
         lines.push(`Innovations: ${cs.stats.innovation_count} | CJs: ${cs.stats.crown_jewels} | Claims: ${cs.stats.formal_claims_approximate}`);
     }
-    // ── Prior Session ──
+    // ΓöÇΓöÇ Prior Session ΓöÇΓöÇ
     if (brief.prior_session_summary) {
         const ps = brief.prior_session_summary;
         const lastKey = Object.keys(ps).find(k => k.startsWith("last_"));
@@ -3134,14 +3135,14 @@ registerTool("scrambler_session_start", "Scrambler Chessboard Phase 2 + K418 Tri
             lines.push(`${lastKey}: ${ps[lastKey]}`);
         }
     }
-    // ── Active Prompts ──
+    // ΓöÇΓöÇ Active Prompts ΓöÇΓöÇ
     const promptsKey = Object.keys(brief).find(k => k.endsWith("_prompts") && k.startsWith("active_"));
     if (promptsKey && brief[promptsKey]?.length > 0) {
         lines.push(`\n### Active Prompts`);
         for (const p of brief[promptsKey])
             lines.push(`- ${p}`);
     }
-    // ── Ready to proceed ──
+    // ΓöÇΓöÇ Ready to proceed ΓöÇΓöÇ
     const ready = brief.ready_to_proceed;
     lines.push(`\n---\nReady to proceed: **${ready ? "YES" : "NO"}**`);
     if (brief.block_reason?.length > 0) {
@@ -3184,10 +3185,10 @@ registerTool("scrambler_session_closeout", "Scrambler Chessboard Phase 2: reconc
         return { content: [{ type: "text", text: output }] };
     }
 });
-// ═══════════════════════════════════════════
-// K418 — TRIPLE-REDUNDANT VERIFICATION (Innovation #2263)
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+// K418 ΓÇö TRIPLE-REDUNDANT VERIFICATION (Innovation #2263)
 // Scrambler B (Ground Truth), Scrambler C (Arbiter), Reconciliation
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 registerTool("scrambler_ground_truth", "Scrambler B: Ground Truth Verifier. Checks actual deployed artifacts (files, code patterns, migrations, edge functions) against pending deliverables. Returns verdicts per deliverable.", {
     deliverable_id: z.string().optional().describe("Specific deliverable to check. Omit for all."),
 }, async ({ deliverable_id }) => {
@@ -3246,7 +3247,7 @@ registerTool("scrambler_arbiter", "Scrambler C: Arbiter/Tiebreaker. Runs ONLY wh
                 for (const d of result.decisions) {
                     const heal = d.self_healed ? " [SELF-HEALED]" : "";
                     const esc = d.escalate ? " [ESCALATE]" : "";
-                    lines.push(`- **${d.deliverable_id}** → ${d.decision} (${d.confidence})${heal}${esc}`);
+                    lines.push(`- **${d.deliverable_id}** ΓåÆ ${d.decision} (${d.confidence})${heal}${esc}`);
                     lines.push(`  ${d.reasoning}`);
                 }
             }
@@ -3269,8 +3270,8 @@ registerTool("scrambler_tiebreak_log", "Reads the Scrambler C tiebreak audit log
         }
         const lines = [`## Tiebreak Audit Log (${entries.length} entries)\n`];
         for (const e of entries) {
-            const heal = e.self_healed ? " ✅ self-healed" : "";
-            lines.push(`- [${e.timestamp?.slice(0, 19) || "?"}] **${e.deliverable_id}** → ${e.decision} (${e.confidence}, score=${e.evidence_score})${heal}`);
+            const heal = e.self_healed ? " Γ£à self-healed" : "";
+            lines.push(`- [${e.timestamp?.slice(0, 19) || "?"}] **${e.deliverable_id}** ΓåÆ ${e.decision} (${e.confidence}, score=${e.evidence_score})${heal}`);
         }
         return { content: [{ type: "text", text: lines.join("\n") }] };
     }
@@ -3294,12 +3295,12 @@ registerTool("touchstone_reconcile", "Bulk reconciliation: runs all three Scramb
             `## Triple-Redundant Reconciliation Report`,
             `ID: ${result.reconciliation_id}`,
             `Session: ${result.session_id} | Health: **${health.status}**\n`,
-            `### Scrambler A — Ledger Verifier`,
+            `### Scrambler A ΓÇö Ledger Verifier`,
             `Drifts: ${a.drift_count} | Material: ${a.material_drift} | Approved: ${a.approved} | Conflicts: ${a.conflicts}\n`,
-            `### Scrambler B — Ground Truth Verifier`,
+            `### Scrambler B ΓÇö Ground Truth Verifier`,
             `Deliverables: ${b.total_deliverables} | Disagreements with A: **${b.disagreements}**`,
             `Verdicts: ${Object.entries(b.verdicts || {}).map(([k, v]) => `${k}=${v}`).join(", ")}\n`,
-            `### Scrambler C — Arbiter`,
+            `### Scrambler C ΓÇö Arbiter`,
             `Activated: ${c.activated} | Self-healed: ${c.self_healed} | Escalations: ${c.escalations}\n`,
             `### Staleness & Gaps`,
             `Session gaps: ${st.session_gaps} | Stale deliverables: ${st.stale_deliverables} | Auto-complete candidates: ${st.auto_complete_candidates}`,
@@ -3315,7 +3316,7 @@ registerTool("touchstone_reconcile", "Bulk reconciliation: runs all three Scramb
             lines.push(`\n### Arbiter Decisions`);
             for (const d of details.c_decisions) {
                 const heal = d.self_healed ? " [SELF-HEALED]" : "";
-                lines.push(`- **${d.deliverable_id}** → ${d.decision}${heal}: ${d.reasoning}`);
+                lines.push(`- **${d.deliverable_id}** ΓåÆ ${d.decision}${heal}: ${d.reasoning}`);
             }
         }
         if (details.session_gaps?.length > 0) {
@@ -3336,7 +3337,7 @@ registerTool("touchstone_reconcile", "Bulk reconciliation: runs all three Scramb
         if (details.auto_candidates?.length > 0) {
             lines.push(`\n### Auto-Complete Candidates`);
             for (const ac of details.auto_candidates) {
-                lines.push(`- **${ac.deliverable_id}** (${ac.title}): match score ${ac.match_score} — verify completion`);
+                lines.push(`- **${ac.deliverable_id}** (${ac.title}): match score ${ac.match_score} ΓÇö verify completion`);
             }
         }
         return { content: [{ type: "text", text: lines.join("\n") }] };
@@ -3345,14 +3346,14 @@ registerTool("touchstone_reconcile", "Bulk reconciliation: runs all three Scramb
         return { content: [{ type: "text", text: output }] };
     }
 });
-// ═══════════════════════════════════════════
-// K446a: Conductor's Baton — conductor_route MCP tool
-// Innovation #2277 · Phase 2.1 · Cathedral integration
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+// K446a: Conductor's Baton ΓÇö conductor_route MCP tool
+// Innovation #2277 ┬╖ Phase 2.1 ┬╖ Cathedral integration
 //
 // Classifies a query and returns the routing decision (vendor, model, rationale).
-// Does NOT execute the query — that's a future conductor_execute tool.
+// Does NOT execute the query ΓÇö that's a future conductor_execute tool.
 // Every call appends a hash-only routing trace to scribe_Conductor.jsonl.
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 import { createHash } from "crypto";
 const _conductorScribePath = resolve(__dirname, "..", "stitchpunks", "scribes", "scribe_Conductor.jsonl");
 function _hashQuery(query) {
@@ -3437,11 +3438,11 @@ function _routeForMcp(classified, mode, overrideVendor, overrideModel) {
         return { vendor: v, model: m, rationale: `Manual override: ${v}/${m}.`, fallbackUsed: false, rankingAgeDays: null };
     }
     if (classified.class === "uncertain") {
-        return { vendor: FALLBACK_VENDOR, model: FALLBACK_MODEL, rationale: "Uncertain class — conservative Sonnet fallback.", fallbackUsed: true, rankingAgeDays: null };
+        return { vendor: FALLBACK_VENDOR, model: FALLBACK_MODEL, rationale: "Uncertain class ΓÇö conservative Sonnet fallback.", fallbackUsed: true, rankingAgeDays: null };
     }
     const top = _R13_TOP[classified.class];
     if (!top) {
-        return { vendor: FALLBACK_VENDOR, model: FALLBACK_MODEL, rationale: "No ranking data — conservative fallback.", fallbackUsed: true, rankingAgeDays: null };
+        return { vendor: FALLBACK_VENDOR, model: FALLBACK_MODEL, rationale: "No ranking data ΓÇö conservative fallback.", fallbackUsed: true, rankingAgeDays: null };
     }
     const isConservative = top.hot === 0;
     return {
@@ -3456,7 +3457,7 @@ function _routeForMcp(classified, mode, overrideVendor, overrideModel) {
 }
 registerTool("conductor_route", "Classify a query and return the routing decision (vendor, model, rationale). " +
     "Does not execute the query. Records a hash-only trace in scribe_Conductor.jsonl. " +
-    "Innovation #2277 — The Conductor's Baton.", {
+    "Innovation #2277 ΓÇö The Conductor's Baton.", {
     query: z.string().describe("The member query to classify and route"),
     mode: z.enum(["auto", "manual", "vendor-lock"]).optional().default("auto")
         .describe("Conductor mode: auto (default), manual (member chooses), vendor-lock (fixed vendor)"),
@@ -3498,9 +3499,9 @@ registerTool("conductor_route", "Classify a query and return the routing decisio
     };
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
 });
-// ═══════════════════════════════════════════
-// K505 — SUBSTRATE SAVINGS TELEMETRY
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+// K505 ΓÇö SUBSTRATE SAVINGS TELEMETRY
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 const SAVINGS_LOG_PATH = resolve(__dirname, "..", "stitchpunks", "data", "substrate_savings_log.jsonl");
 /**
  * Vendor pricing table (per 1M tokens, USD).
@@ -3516,7 +3517,7 @@ const VENDOR_PRICING = {
 const COLD_MULTIPLIERS = {
     BISHOP: 3.0,
     KNIGHT: 2.5,
-    PAWN: 3.5, // includes baked-in friction_multiplier (3.0×)
+    PAWN: 3.5, // includes baked-in friction_multiplier (3.0├ù)
     ROOK: 2.5, // same as KNIGHT until calibration data available
 };
 function appendSavingsRecord(record) {
@@ -3584,15 +3585,15 @@ registerTool("record_substrate_savings", "Log substrate savings for a completed 
     };
     const { line_count } = appendSavingsRecord(record);
     const lines = [
-        "── Substrate Savings This Session ──",
+        "ΓöÇΓöÇ Substrate Savings This Session ΓöÇΓöÇ",
         `  Agent:          ${agent} (${session_id})`,
         `  Model:          ${model} @ ${vendor}`,
         `  Tokens:         ${input_tokens.toLocaleString()} in / ${output_tokens.toLocaleString()} out`,
         `  Substrate OH:   ${substrate_overhead_tokens.toLocaleString()} tokens (${substrate_injection_count} injections)`,
         `  Actual cost:    $${actual_cost_usd.toFixed(4)}`,
-        `  Counterfactual: $${counterfactual_cost_usd.toFixed(4)} (${cold_multiplier}× cold multiplier)`,
+        `  Counterfactual: $${counterfactual_cost_usd.toFixed(4)} (${cold_multiplier}├ù cold multiplier)`,
         `  Net savings:    $${session_savings_usd.toFixed(4)}`,
-        `  [provisional multipliers — calibration K-future will refine]`,
+        `  [provisional multipliers ΓÇö calibration K-future will refine]`,
         `  Logged to substrate_savings_log.jsonl (${line_count} total entries)`,
     ];
     if (friction_confirmations > 0) {
@@ -3655,15 +3656,15 @@ registerTool("substrate_savings_summary", "Returns aggregate substrate savings s
         totals,
         by_agent: agentSummaries,
         multiplier_provisional: true,
-        calibration_note: "Cold multipliers (Bishop 3.0×, Knight 2.5×, Pawn 3.5×) are evidence-informed estimates from R13. Calibration will run every 30 days per K505 Phase E plan.",
+        calibration_note: "Cold multipliers (Bishop 3.0├ù, Knight 2.5├ù, Pawn 3.5├ù) are evidence-informed estimates from R13. Calibration will run every 30 days per K505 Phase E plan.",
         earliest_record: filtered.length > 0 ? filtered[0].ts : null,
         latest_record: filtered.length > 0 ? filtered[filtered.length - 1].ts : null,
     };
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
 });
-// ═══════════════════════════════════════════
-// K506 Phase C — PAWN AUTO-HOOK (detect paste-backs)
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+// K506 Phase C ΓÇö PAWN AUTO-HOOK (detect paste-backs)
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 /**
  * Pawn model signature patterns. Detects text produced by Pawn-layer AI
  * agents (Perplexity Sonar, Gemini 3.1 Pro, etc.) from Founder paste-backs.
@@ -3752,17 +3753,17 @@ registerTool("detect_and_log_pawn_session", "K506 Phase C: Detects whether paste
                     logged: true,
                     line_count,
                     note: estimated
-                        ? "Token counts estimated from text length (chars × 0.35/0.25). Supply token_counts in Pawn output footer for measured accuracy."
+                        ? "Token counts estimated from text length (chars ├ù 0.35/0.25). Supply token_counts in Pawn output footer for measured accuracy."
                         : "Token counts extracted from Pawn output footer.",
                 }, null, 2),
             }],
     };
 });
-// ═══════════════════════════════════════════
-// K515 — Chronos + Bureau MCP Tools
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+// K515 ΓÇö Chronos + Bureau MCP Tools
 // A&A #2299 (Chronos), #2300 (Chroniclers), #2306 (Embedded Correspondent + Bureau)
-// ═══════════════════════════════════════════
-// WORKSPACE_ROOT already declared above — shared reference
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+// WORKSPACE_ROOT already declared above ΓÇö shared reference
 /**
  * Run a discipline_wing Python snippet with typed args.
  * The snippet may reference `_args` (a dict loaded from args param).
@@ -3809,9 +3810,9 @@ function runWingHelper(pySnippet, args) {
         catch { /* ignore */ }
     }
 }
-server.tool("chronos_query", "K515 — Chronos time-state aggregation query. Reads per-Augur Chronicler tablets and returns Wing-wide or per-Augur statistics. Returns fire counts, rates, trends, and last-fire timestamps. A&A #2299/#2300.", {
+server.tool("chronos_query", "K515 ΓÇö Chronos time-state aggregation query. Reads per-Augur Chronicler tablets and returns Wing-wide or per-Augur statistics. Returns fire counts, rates, trends, and last-fire timestamps. A&A #2299/#2300.", {
     augur_ids: z.array(z.string()).optional().describe("Specific Augur IDs to query (omit for all)"),
-    since_ts: z.string().optional().describe("ISO timestamp — only include entries after this time"),
+    since_ts: z.string().optional().describe("ISO timestamp ΓÇö only include entries after this time"),
 }, async ({ augur_ids, since_ts }) => {
     const result = runWingHelper(`from discipline_wing.chronicler import wing_chronos_query
 result = wing_chronos_query(
@@ -3820,7 +3821,7 @@ result = wing_chronos_query(
 )`, { augur_ids: augur_ids ?? null, since_ts: since_ts ?? null });
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
 });
-server.tool("correspondent_log", "K515 — Embedded Correspondent producer. Write a reasoning chunk to the agent's tablet; evaluates against 7 risk-pattern Augurs (vendor-secret-rotation, force-push, schema-destruction, filesystem-wipe, permission-grant, api-spend-spike, toolsmith-missing). Returns pre-execution advisories. A&A #2306. Closes K512.5 vulnerability class.", {
+server.tool("correspondent_log", "K515 ΓÇö Embedded Correspondent producer. Write a reasoning chunk to the agent's tablet; evaluates against 7 risk-pattern Augurs (vendor-secret-rotation, force-push, schema-destruction, filesystem-wipe, permission-grant, api-spend-spike, toolsmith-missing). Returns pre-execution advisories. A&A #2306. Closes K512.5 vulnerability class.", {
     agent: z.string().describe("Agent name: 'knight', 'bishop', 'pawn', 'rook'"),
     session: z.string().describe("Session ID, e.g. 'K515', 'B126'"),
     chunk: z.string().describe("Reasoning chunk text to log and evaluate"),
@@ -3835,7 +3836,7 @@ result = write_chunk(
 )`, { agent, session, chunk, context: context ?? {} });
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
 });
-server.tool("bureau_subscribe", "K515 — Bureau subscription read (pull mode). Retrieves recent reasoning chunks from Embedded Correspondent tablets, filtered by risk pattern. Bishop uses this to watch other agents' reasoning streams for pre-execution risk signals. A&A #2306.", {
+server.tool("bureau_subscribe", "K515 ΓÇö Bureau subscription read (pull mode). Retrieves recent reasoning chunks from Embedded Correspondent tablets, filtered by risk pattern. Bishop uses this to watch other agents' reasoning streams for pre-execution risk signals. A&A #2306.", {
     watching_agent: z.string().describe("The subscribing agent: 'bishop', 'knight', etc."),
     risk_filter: z.array(z.string()).optional().describe("Risk pattern Augur IDs to filter on (omit = all)"),
     since_ts: z.string().optional().describe("Only return chunks after this ISO timestamp"),
@@ -3848,7 +3849,7 @@ result = bureau_subscribe(
 )`, { watching_agent, risk_filter: risk_filter ?? null, since_ts: since_ts ?? null });
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
 });
-server.tool("bureau_query", "K515 — Bureau aggregate query (Chronos-style, for reasoning streams). Aggregates reasoning chunks across agents and sessions; filterable by agent, session, time range, and risk-pattern Augur ID. A&A #2306.", {
+server.tool("bureau_query", "K515 ΓÇö Bureau aggregate query (Chronos-style, for reasoning streams). Aggregates reasoning chunks across agents and sessions; filterable by agent, session, time range, and risk-pattern Augur ID. A&A #2306.", {
     agent: z.string().optional().describe("Filter to one agent (omit = all agents)"),
     session: z.string().optional().describe("Filter to one session (omit = all sessions)"),
     since_ts: z.string().optional().describe("ISO timestamp filter"),
@@ -3865,12 +3866,12 @@ result = query_bureau(
 )`, { agent: agent ?? null, session: session ?? null, since_ts: since_ts ?? null, risk_filter: risk_filter ?? null, limit: limit ?? 50 });
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
 });
-// ═══════════════════════════════════════════
-// K516 — Dragonrider Phase-Shift MCP Tool
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+// K516 ΓÇö Dragonrider Phase-Shift MCP Tool
 // A&A #2301 (Dragonriders) / #2295 Tier 3 sandbox-integration
-// ═══════════════════════════════════════════
-server.tool("dragonrider_phase_shifts", "K516 — Query Dragonrider Phase-Shift evaluation history. Returns recent borderline-signal sandbox evaluations: when they triggered, what harm was predicted, whether they escalated warn→block. A&A #2301.", {
-    since_ts: z.string().optional().describe("ISO timestamp — only include evaluations after this time"),
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+server.tool("dragonrider_phase_shifts", "K516 ΓÇö Query Dragonrider Phase-Shift evaluation history. Returns recent borderline-signal sandbox evaluations: when they triggered, what harm was predicted, whether they escalated warnΓåÆblock. A&A #2301.", {
+    since_ts: z.string().optional().describe("ISO timestamp ΓÇö only include evaluations after this time"),
     limit: z.number().int().min(1).max(200).optional().default(50).describe("Max records to return"),
 }, async ({ since_ts, limit }) => {
     const result = runWingHelper(`from discipline_wing.dragonrider import query_phase_shifts
@@ -3880,12 +3881,12 @@ result = query_phase_shifts(
 )`, { since_ts: since_ts ?? null, limit: limit ?? 50 });
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
 });
-// ═══════════════════════════════════════════
-// K517 — TimeWave Security MCP Tool
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+// K517 ΓÇö TimeWave Security MCP Tool
 // A&A #2302 (TimeWave Security) / #2295 Tier 3 security enhancement
-// ═══════════════════════════════════════════
-server.tool("timewave_security_events", "K517 — Query TimeWave Security event log. Returns rejected-action audit events with pattern-hash grouping. Use to inspect repeated-rejection patterns, Wing-block sources, and Dragonrider-escalated events. Append-only log; no mutations via this interface. A&A #2302.", {
-    since_ts: z.string().optional().describe("ISO timestamp — only include events after this time"),
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+server.tool("timewave_security_events", "K517 ΓÇö Query TimeWave Security event log. Returns rejected-action audit events with pattern-hash grouping. Use to inspect repeated-rejection patterns, Wing-block sources, and Dragonrider-escalated events. Append-only log; no mutations via this interface. A&A #2302.", {
+    since_ts: z.string().optional().describe("ISO timestamp ΓÇö only include events after this time"),
     source: z.enum(["wing_block", "dragonrider_reject"]).optional().describe("Filter by event source"),
     pattern_hash: z.string().optional().describe("Filter by specific pattern hash (16-char hex)"),
     limit: z.number().int().min(1).max(500).optional().default(50).describe("Max events to return"),
@@ -3899,14 +3900,14 @@ result = query_events(
 )`, { since_ts: since_ts ?? null, source: source ?? null, pattern_hash: pattern_hash ?? null, limit: limit ?? 50 });
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
 });
-// ═══════════════════════════════════════════
-// K517 — Angel of Death Catacombs MCP Tools
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+// K517 ΓÇö Angel of Death Catacombs MCP Tools
 // A&A #2305 (Angel of Death) / #2258 Catacombs extension
-// ═══════════════════════════════════════════
-server.tool("angel_of_death_buried", "K517 — Query Angel of Death Catacombs buried entries. Shows Dragonrider-rejected snapshots that were buried for forensic preservation. Filter by session, bury reason, or date. Use rehydrate path for full snapshot retrieval. A&A #2305.", {
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+server.tool("angel_of_death_buried", "K517 ΓÇö Query Angel of Death Catacombs buried entries. Shows Dragonrider-rejected snapshots that were buried for forensic preservation. Filter by session, bury reason, or date. Use rehydrate path for full snapshot retrieval. A&A #2305.", {
     session: z.string().optional().describe("Filter by session identifier"),
     bury_reason: z.string().optional().describe("Filter by bury reason substring match"),
-    since_date: z.string().optional().describe("ISO date — only include entries buried after this date"),
+    since_date: z.string().optional().describe("ISO date ΓÇö only include entries buried after this date"),
     limit: z.number().int().min(1).max(200).optional().default(50).describe("Max entries to return"),
 }, async ({ session, bury_reason, since_date, limit }) => {
     const result = runWingHelper(`from discipline_wing.angel_of_death import query_buried
@@ -3918,7 +3919,7 @@ result = query_buried(
 )`, { session: session ?? null, bury_reason: bury_reason ?? null, since_date: since_date ?? null, limit: limit ?? 50 });
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
 });
-server.tool("angel_of_death_rehydrate", "K517 — Rehydrate (retrieve) a buried Catacombs entry by burial_id. Governance-only operation: adds rehydrate audit record to the burial file. Returns full snapshot data with complete audit trail. Original burial entry remains in Catacombs. A&A #2305.", {
+server.tool("angel_of_death_rehydrate", "K517 ΓÇö Rehydrate (retrieve) a buried Catacombs entry by burial_id. Governance-only operation: adds rehydrate audit record to the burial file. Returns full snapshot data with complete audit trail. Original burial entry remains in Catacombs. A&A #2305.", {
     burial_id: z.string().describe("8-character burial ID to rehydrate"),
     rehydrate_reason: z.string().describe("Reason for rehydration (required for audit trail)"),
     operator: z.string().optional().default("manual_operator").describe("Who is performing the rehydration"),
@@ -3931,10 +3932,10 @@ result = rehydrate(
 )`, { burial_id, rehydrate_reason, operator: operator ?? "manual_operator" });
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
 });
-// ═══════════════════════════════════════════
-// K520.6 — Operational Gotchas Scribe tools (A&A #2310 always-loaded)
-// ═══════════════════════════════════════════
-registerTool("consult_gotchas", "K520.6 / A&A #2310 — Returns ALL Operational Gotchas tablets (always-loaded subset). No query needed — set is small and curated. Each entry has og_id, friction, workaround, agents_affected, recurrence_count. Call at session start to pre-load known frictions before any tool invocation.", {}, async () => {
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+// K520.6 ΓÇö Operational Gotchas Scribe tools (A&A #2310 always-loaded)
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+registerTool("consult_gotchas", "K520.6 / A&A #2310 ΓÇö Returns ALL Operational Gotchas tablets (always-loaded subset). No query needed ΓÇö set is small and curated. Each entry has og_id, friction, workaround, agents_affected, recurrence_count. Call at session start to pre-load known frictions before any tool invocation.", {}, async () => {
     const tablets = readTablet("OperationalGotchas");
     if (tablets.length === 0) {
         return { content: [{ type: "text", text: "No Operational Gotchas tablets found. Seed via add_gotcha or check scribe_OperationalGotchas.jsonl." }] };
@@ -3947,10 +3948,10 @@ registerTool("consult_gotchas", "K520.6 / A&A #2310 — Returns ALL Operational 
         const recur = t.recurrence_count != null ? ` [recurrence: ${t.recurrence_count}]` : "";
         return `**${id}**${recur}: ${friction}\n  Fix: ${workaround}\n  Affects: ${affects}`;
     });
-    const text = `## Operational Gotchas (${tablets.length} entries — always loaded)\n\n${lines.join("\n\n")}`;
+    const text = `## Operational Gotchas (${tablets.length} entries ΓÇö always loaded)\n\n${lines.join("\n\n")}`;
     return { content: [{ type: "text", text }] };
 });
-registerTool("add_gotcha", "K520.6 — Append a new Operational Gotcha to the always-loaded Scribe. Use when a recurring friction is discovered. Assigns next OG-NNN id automatically.", {
+registerTool("add_gotcha", "K520.6 ΓÇö Append a new Operational Gotcha to the always-loaded Scribe. Use when a recurring friction is discovered. Assigns next OG-NNN id automatically.", {
     friction: z.string().describe("One-sentence symptom description"),
     workaround: z.string().describe("Actionable fix or mitigation"),
     agents_affected: z.array(z.enum(["Bishop", "Knight", "Pawn", "Rook"])).default(["Bishop", "Knight"]).describe("Which agent types are affected"),
@@ -3979,7 +3980,7 @@ registerTool("add_gotcha", "K520.6 — Append a new Operational Gotcha to the al
     afs(ogPath, line, "utf-8");
     return { content: [{ type: "text", text: JSON.stringify({ ok: true, og_id, friction, workaround, agents_affected }, null, 2) }] };
 });
-registerTool("promote_to_gotchas", "K520.6 — Promote an existing Toolsmith entry to the always-loaded OperationalGotchas class. Reads Toolsmith JSONL by toolsmith_ts_id, creates an OG entry with what_fails→friction and what_works→workaround. Returns new OG-id.", {
+registerTool("promote_to_gotchas", "K520.6 ΓÇö Promote an existing Toolsmith entry to the always-loaded OperationalGotchas class. Reads Toolsmith JSONL by toolsmith_ts_id, creates an OG entry with what_failsΓåÆfriction and what_worksΓåÆworkaround. Returns new OG-id.", {
     toolsmith_ts_id: z.string().describe("Toolsmith ID to promote (e.g. 'TS-012')"),
     session: z.string().optional().default("manual").describe("Session performing the promotion"),
 }, async ({ toolsmith_ts_id, session }) => {
@@ -4024,13 +4025,13 @@ registerTool("promote_to_gotchas", "K520.6 — Promote an existing Toolsmith ent
     afs(ogPath, JSON.stringify(entry) + "\n", "utf-8");
     return { content: [{ type: "text", text: JSON.stringify({ ok: true, og_id, promoted_from: toolsmith_ts_id, friction, workaround }, null, 2) }] };
 });
-// K520.7 — Test-mode audit summary tool
-registerTool("test_mode_audit_summary", "K520.7 — Return recent test-mode bypass events from the append-only audit log (~/.lb-session/test_mode_audit.jsonl). Use to verify the bypass mechanism is working and to inspect the audit trail during A/B empirical testing.", {
+// K520.7 ΓÇö Test-mode audit summary tool
+registerTool("test_mode_audit_summary", "K520.7 ΓÇö Return recent test-mode bypass events from the append-only audit log (~/.lb-session/test_mode_audit.jsonl). Use to verify the bypass mechanism is working and to inspect the audit trail during A/B empirical testing.", {
     last_n: z.number().int().min(1).max(200).default(20).describe("Return the last N audit events (default 20)"),
 }, async ({ last_n }) => {
     const auditPath = resolve(homedir(), ".lb-session", "test_mode_audit.jsonl");
     if (!existsSync(auditPath)) {
-        return { content: [{ type: "text", text: "No test-mode audit log found at ~/.lb-session/test_mode_audit.jsonl — no bypass events recorded yet." }] };
+        return { content: [{ type: "text", text: "No test-mode audit log found at ~/.lb-session/test_mode_audit.jsonl ΓÇö no bypass events recorded yet." }] };
     }
     const raw = readFileSync(auditPath, "utf-8");
     const lines = raw.split("\n").filter(l => l.trim());
@@ -4045,16 +4046,16 @@ registerTool("test_mode_audit_summary", "K520.7 — Return recent test-mode bypa
     const summary = entries.map((e, i) => {
         return `[${total - recent.length + i + 1}] ${e.ts_iso ?? "?"} | tool=${e.tool ?? "?"} | age=${e.age_seconds ?? "?"}s | token=${e.auth_token_prefix ?? "?"} | args=${(e.tool_args_summary ?? "").slice(0, 80)}`;
     }).join("\n");
-    const text = `## Test-Mode Audit Log — last ${recent.length} of ${total} events\n\n${summary}\n\nAudit file: ${auditPath}`;
+    const text = `## Test-Mode Audit Log ΓÇö last ${recent.length} of ${total} events\n\n${summary}\n\nAudit file: ${auditPath}`;
     return { content: [{ type: "text", text }] };
 });
-// ═══════════════════════════════════════════
-// KN009-BP002 — CHANDELIER EMPIRICAL-MEASUREMENT-SUBSTRATE
-// A&A #2291 Bedrock Foundation — multi-level L1-L12 receipt registry
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+// KN009-BP002 ΓÇö CHANDELIER EMPIRICAL-MEASUREMENT-SUBSTRATE
+// A&A #2291 Bedrock Foundation ΓÇö multi-level L1-L12 receipt registry
 // + Chronos Chronicler signatories + prerequisite-graph + three-mode
 // comparator + temporal diagnostics
-// ═══════════════════════════════════════════
-/** Path to librarian-mcp/stitchpunks — added to Python sys.path for chandelier imports */
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+/** Path to librarian-mcp/stitchpunks ΓÇö added to Python sys.path for chandelier imports */
 const CHANDELIER_STITCH_DIR = resolve(WORKSPACE_ROOT, "librarian-mcp", "stitchpunks");
 /**
  * Run a Python snippet with chandelier package importable.
@@ -4098,7 +4099,7 @@ function runChandelierHelper(pySnippet, args) {
         catch { /* ignore */ }
     }
 }
-server.tool("chandelier_query_receipts", "KN009/BP002 — A&A #2291 Bedrock Foundation. Direct lookup of empirical measurement receipts by primitive subset. Returns all receipts matching the given primitive_ids (exact subset match), optionally filtered by metric and time range. Receipts are Chronos Chronicler-signed (append-only Stone Tablet).", {
+server.tool("chandelier_query_receipts", "KN009/BP002 ΓÇö A&A #2291 Bedrock Foundation. Direct lookup of empirical measurement receipts by primitive subset. Returns all receipts matching the given primitive_ids (exact subset match), optionally filtered by metric and time range. Receipts are Chronos Chronicler-signed (append-only Stone Tablet).", {
     primitive_ids: z.array(z.string()).describe("Exact set of primitive IDs to look up (e.g. ['cathedral_effect', 'wrasse_scribe'])"),
     metric: z.string().optional().describe("Filter by metric name (e.g. 'hot_accuracy_pct')"),
     time_range_start: z.string().optional().describe("ISO timestamp lower bound (inclusive)"),
@@ -4117,12 +4118,12 @@ receipts = index.query(
 result = {"receipts": receipts, "count": len(receipts)}`, { primitive_ids, metric: metric ?? null, time_range_start: time_range_start ?? null, time_range_end: time_range_end ?? null });
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
 });
-server.tool("chandelier_compare_modes", "KN009/BP002 — A&A #2291 Three-Mode Comparator. Compares Basic Stock vs Modified Stock vs Full Stack vs Right Recipe (argmax) for a primitive subset on a given metric. Right Recipe is lazy — only computed when include_right_recipe=true. Core diagnostic tool for the Chandelier substrate.", {
+server.tool("chandelier_compare_modes", "KN009/BP002 ΓÇö A&A #2291 Three-Mode Comparator. Compares Basic Stock vs Modified Stock vs Full Stack vs Right Recipe (argmax) for a primitive subset on a given metric. Right Recipe is lazy ΓÇö only computed when include_right_recipe=true. Core diagnostic tool for the Chandelier substrate.", {
     subset: z.array(z.string()).describe("Modified-Stock subset (the primitives to compare)"),
     metric: z.string().describe("Metric to compare on (e.g. 'hot_accuracy_pct')"),
     all_primitive_ids: z.array(z.string()).optional().describe("All primitives for Full-Stack + Right-Recipe (omit to skip those modes)"),
     basic_stock_primitive: z.string().optional().describe("Single primitive for Basic-Stock baseline (default: first in subset)"),
-    include_right_recipe: z.boolean().optional().default(false).describe("Compute Right Recipe argmax (lazy — may be expensive for large N)"),
+    include_right_recipe: z.boolean().optional().default(false).describe("Compute Right Recipe argmax (lazy ΓÇö may be expensive for large N)"),
     right_recipe_max_k: z.number().int().min(1).max(12).optional().describe("Max subset size for Right Recipe search"),
 }, async ({ subset, metric, all_primitive_ids, basic_stock_primitive, include_right_recipe, right_recipe_max_k }) => {
     const result = runChandelierHelper(`from chandelier.chronos_chandelier_bridge import build_index
@@ -4139,7 +4140,7 @@ result = cmp.compare(
 )`, { subset, metric, all_primitive_ids: all_primitive_ids ?? null, basic_stock_primitive: basic_stock_primitive ?? null, include_right_recipe: include_right_recipe ?? false, right_recipe_max_k: right_recipe_max_k ?? null });
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
 });
-server.tool("chandelier_right_recipe", "KN009/BP002 — A&A #2291 Right Recipe (argmax). Find the empirically optimal primitive subset for a given metric across all 2^N-1 possible subsets. The pudding-test: which recipe wins, empirically. Set max_subset_size to limit search scope (recommended ≤ 6 for speed).", {
+server.tool("chandelier_right_recipe", "KN009/BP002 ΓÇö A&A #2291 Right Recipe (argmax). Find the empirically optimal primitive subset for a given metric across all 2^N-1 possible subsets. The pudding-test: which recipe wins, empirically. Set max_subset_size to limit search scope (recommended Γëñ 6 for speed).", {
     target_metric: z.string().describe("Metric to optimise (e.g. 'hot_accuracy_pct')"),
     all_primitive_ids: z.array(z.string()).describe("All primitives to consider in the search"),
     max_subset_size: z.number().int().min(1).max(12).optional().describe("Max subset size to search (default: all)"),
@@ -4155,7 +4156,7 @@ result = cmp._compute_right_recipe(
 )`, { target_metric, all_primitive_ids, max_subset_size: max_subset_size ?? null });
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
 });
-server.tool("chandelier_query_prerequisites", "KN009/BP002 — A&A #2291 Prerequisite Graph query. Returns hard prerequisites, soft enhancers, and layer classification for a primitive. Use to understand what MUST be present before a primitive can function. The build-order canon: scaffold → framing → wiring → building → edifice → paint.", {
+server.tool("chandelier_query_prerequisites", "KN009/BP002 ΓÇö A&A #2291 Prerequisite Graph query. Returns hard prerequisites, soft enhancers, and layer classification for a primitive. Use to understand what MUST be present before a primitive can function. The build-order canon: scaffold ΓåÆ framing ΓåÆ wiring ΓåÆ building ΓåÆ edifice ΓåÆ paint.", {
     primitive_id: z.string().describe("Primitive to query (e.g. 'cathedral_effect', 'chandelier_substrate')"),
     include_transitive: z.boolean().optional().default(false).describe("If true, returns full transitive closure of hard prerequisites"),
 }, async ({ primitive_id, include_transitive }) => {
@@ -4174,7 +4175,7 @@ result = {
 }`, { primitive_id, include_transitive: include_transitive ?? false });
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
 });
-server.tool("chandelier_validate_subset", "KN009/BP002 — A&A #2291 Subset validation. Checks that all hard prerequisites are met within a substrate subset. Returns valid=true/false + list of missing prerequisite pairs. Use before running an L2+ measurement to confirm the subset is coherent.", {
+server.tool("chandelier_validate_subset", "KN009/BP002 ΓÇö A&A #2291 Subset validation. Checks that all hard prerequisites are met within a substrate subset. Returns valid=true/false + list of missing prerequisite pairs. Use before running an L2+ measurement to confirm the subset is coherent.", {
     subset: z.array(z.string()).describe("List of primitive IDs to validate"),
     recommend_minimum: z.boolean().optional().default(false).describe("If true, also returns the minimum subset needed for each primitive in the input"),
 }, async ({ subset, recommend_minimum }) => {
@@ -4193,7 +4194,7 @@ result = {
 }`, { subset, recommend_minimum: recommend_minimum ?? false });
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
 });
-server.tool("chandelier_temporal_query", "KN009/BP002 — A&A #2291 Temporal diagnostics. Aggregate empirical receipts by time grain (hour/day/week/month/continuous_stretch) or run substrate-state-correlation analysis. Use to answer: 'Which hours were most productive for Crown Jewel receipts?' Composes Properties 1+2+5.", {
+server.tool("chandelier_temporal_query", "KN009/BP002 ΓÇö A&A #2291 Temporal diagnostics. Aggregate empirical receipts by time grain (hour/day/week/month/continuous_stretch) or run substrate-state-correlation analysis. Use to answer: 'Which hours were most productive for Crown Jewel receipts?' Composes Properties 1+2+5.", {
     time_grain: z.enum(["hour", "day", "week", "month", "continuous_stretch", "substrate_correlation"]).describe("Aggregation grain or analysis type"),
     primitive_filter: z.array(z.string()).optional().describe("Filter to receipts involving these primitives"),
     metric: z.string().optional().describe("Filter by metric name"),
@@ -4224,7 +4225,7 @@ else:
     )`, { time_grain, primitive_filter: primitive_filter ?? null, metric: metric ?? null, time_range_start: time_range_start ?? null, time_range_end: time_range_end ?? null, top_n_periods: top_n_periods ?? 5 });
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
 });
-server.tool("chandelier_update_prerequisite_graph", "KN009/BP002 — A&A #2291 Prerequisite Graph writer. Add or update a primitive node in the prerequisite graph YAML. Persists to prerequisite_graph.yaml (Stone Tablet Imperative: existing nodes are updated, not deleted). Use when landing a new primitive that has structural dependencies.", {
+server.tool("chandelier_update_prerequisite_graph", "KN009/BP002 ΓÇö A&A #2291 Prerequisite Graph writer. Add or update a primitive node in the prerequisite graph YAML. Persists to prerequisite_graph.yaml (Stone Tablet Imperative: existing nodes are updated, not deleted). Use when landing a new primitive that has structural dependencies.", {
     primitive_id: z.string().describe("Canonical primitive ID"),
     layer: z.enum(["scaffold", "framing", "wiring", "building", "edifice", "paint"]).describe("Structural layer this primitive belongs to"),
     hard_prerequisites: z.array(z.string()).optional().describe("Primitives that MUST be present"),
@@ -4249,15 +4250,15 @@ node = g.update_prerequisite_graph(
 result = {"ok": True, "primitive_id": _args["primitive_id"], "node": node}`, { primitive_id, layer, hard_prerequisites: hard_prerequisites ?? null, soft_enhancers: soft_enhancers ?? null, orthogonals: orthogonals ?? null, aa_number: aa_number ?? null, landed_session: landed_session ?? null, notes: notes ?? null });
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
 });
-// ═══════════════════════════════════════════
-// K532 — PAWN-VIA-LIBRARIAN DISPATCH TOOLS
-// ═══════════════════════════════════════════
-registerTool("dispatch_pawn", "K532 — Dispatch a research prompt to Pawn (Perplexity API, sonar-pro). " +
-    "Inlines prompt_content — no local file paths sent to Pawn. " +
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+// K532 ΓÇö PAWN-VIA-LIBRARIAN DISPATCH TOOLS
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+registerTool("dispatch_pawn", "K532 ΓÇö Dispatch a research prompt to Pawn (Perplexity API, sonar-pro). " +
+    "Inlines prompt_content ΓÇö no local file paths sent to Pawn. " +
     "Returns dispatch_id; return file written to expected_return_path. " +
     "Requires PAWN_VIA_LIBRARIAN_DISPATCH_ENABLED=true in config/pawn_dispatch_caps.json. " +
     "Per-dispatch cost cap $1.00; daily cap $10.00 (configurable).", {
-    prompt_content: z.string().describe("Full prompt text to send to Pawn — NOT a file path; tool inlines content"),
+    prompt_content: z.string().describe("Full prompt text to send to Pawn ΓÇö NOT a file path; tool inlines content"),
     prompt_artifact_path: z.string().optional().describe("Optional: Bishop dropzone path of the canonical prompt artifact (for ledger record only)"),
     expected_return_path: z.string().describe("Path where Pawn's return should be written (e.g., BISHOP_DROPZONE/02_PawnPrompts/PAWN_RETURN_*.md)"),
     model: z.enum(["sonar-pro", "sonar", "sonar-reasoning", "sonar-reasoning-pro"]).default("sonar-pro").describe("Perplexity model selection"),
@@ -4285,7 +4286,23 @@ registerTool("dispatch_pawn", "K532 — Dispatch a research prompt to Pawn (Perp
     }
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
 });
-registerTool("check_pawn_dispatch", "K532 — Check status of a Pawn dispatch by dispatch_id. Returns dispatch record including status, cost, return path, attempt_log.", {
+// BP025 - ROOK DISPATCH (GEMINI MULTIMODAL)
+registerTool("dispatch_rook", "Bushel 36 Phase 2 (BP025) - Rook Dispatch Mechanism. Dispatches a multimodal Gemini query. " +
+    "Accepts prompt_content, optional multimodal_inputs (PDF/image/text paths), model override, max_tokens. " +
+    "Returns ROOK_RETURN_*.md in BISHOP_DROPZONE/02_RookReturns/ and auto-indexes into pheromone substrate.", {
+    prompt_content: z.string().describe("The prompt/question to send to Rook (Gemini)."),
+    expected_return_path: z.string().optional().describe("Desired return filename suffix (auto-generated if omitted)."),
+    multimodal_inputs: z.array(z.object({
+        type: z.enum(["pdf", "image", "text"]),
+        path: z.string(),
+    })).optional().describe("Files to attach to the Rook dispatch."),
+    model: z.string().optional().default("gemini-2.5-flash").describe("Gemini model to use."),
+    max_tokens: z.number().int().min(1).max(8192).optional().default(2048).describe("Max output tokens."),
+}, async ({ prompt_content, expected_return_path, multimodal_inputs, model, max_tokens }) => {
+    const result = await runDispatchRook({ prompt_content, expected_return_path, multimodal_inputs, model, max_tokens });
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+});
+registerTool("check_pawn_dispatch", "K532 ΓÇö Check status of a Pawn dispatch by dispatch_id. Returns dispatch record including status, cost, return path, attempt_log.", {
     dispatch_id: z.string().describe("UUID returned by dispatch_pawn"),
 }, async ({ dispatch_id }) => {
     const record = getDispatchStatus(dispatch_id);
@@ -4294,13 +4311,13 @@ registerTool("check_pawn_dispatch", "K532 — Check status of a Pawn dispatch by
     }
     return { content: [{ type: "text", text: JSON.stringify(record, null, 2) }] };
 });
-registerTool("cancel_pawn_dispatch", "K532 — Cancel a pending Pawn dispatch. Marks it cancelled in the ledger. Does not abort already-in-flight HTTP calls.", {
+registerTool("cancel_pawn_dispatch", "K532 ΓÇö Cancel a pending Pawn dispatch. Marks it cancelled in the ledger. Does not abort already-in-flight HTTP calls.", {
     dispatch_id: z.string().describe("UUID returned by dispatch_pawn"),
 }, async ({ dispatch_id }) => {
     const result = cancelDispatch(dispatch_id);
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
 });
-registerTool("list_pending_pawn_dispatches", "K532 — List recent Pawn dispatch records. Founder can inspect status, costs, return paths. Returns last N records from the ledger.", {
+registerTool("list_pending_pawn_dispatches", "K532 ΓÇö List recent Pawn dispatch records. Founder can inspect status, costs, return paths. Returns last N records from the ledger.", {
     last_n: z.number().int().min(1).max(100).default(20).describe("How many recent records to return"),
 }, async ({ last_n }) => {
     const records = listRecentDispatches(last_n);
@@ -4318,7 +4335,7 @@ registerTool("list_pending_pawn_dispatches", "K532 — List recent Pawn dispatch
     }));
     return { content: [{ type: "text", text: JSON.stringify({ count: summary.length, dispatches: summary }, null, 2) }] };
 });
-registerTool("index_pawn_returns", "Bushel 36 Phase 1 (BP025) � Pawn Return Auto-Indexer. Scans dispatches/pawn/ for unprocessed *.return.json files, " +
+registerTool("index_pawn_returns", "Bushel 36 Phase 1 (BP025) ù Pawn Return Auto-Indexer. Scans dispatches/pawn/ for unprocessed *.return.json files, " +
     "extracts topics, emits pheromone records to the substrate (cathedral:pawn, synthesisClass:pawn_research_return), " +
     "surfaces FLAGGED/CRITICAL findings to high_priority_surface.jsonl for next-session-open Wrasse pre-injection. Idempotent.", {
     show_high_priority: z.boolean().optional().default(false).describe("Return recent high-priority flagged Pawn findings."),
@@ -4337,14 +4354,14 @@ registerTool("index_pawn_returns", "Bushel 36 Phase 1 (BP025) � Pawn Return Au
     }
     return { content: [{ type: "text", text: JSON.stringify(output, null, 2) }] };
 });
-// ═══════════════════════════════════════════
-// KN-G — SHADOW PHASE QUERY (BP016)
-// ═══════════════════════════════════════════
-registerTool("shadow_phase_query", "KN-G / BP016 — Alternating Cylinder Fire observability tool. " +
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+// KN-G ΓÇö SHADOW PHASE QUERY (BP016)
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+registerTool("shadow_phase_query", "KN-G / BP016 ΓÇö Alternating Cylinder Fire observability tool. " +
     "Returns the current A/B phase assignment for each of the 8 Shadow E-Giants. " +
     "Reads from federation/cylinder_phase_state.jsonl; falls back to deterministic formula if no state file. " +
     "Use for debugging cycle coordination, verifying N/2-in-A + N/2-in-B balance, and monitoring phase transitions.", {
-    shadow_id: z.string().optional().describe("Optional: specific Shadow ID (shadow_0..shadow_7) — omit for all 8"),
+    shadow_id: z.string().optional().describe("Optional: specific Shadow ID (shadow_0..shadow_7) ΓÇö omit for all 8"),
     cycle_number: z.number().int().min(0).optional().describe("Optional: query phase for a hypothetical cycle number instead of current"),
     include_history: z.boolean().default(false).describe("If true, include last 5 cycle snapshots from the state log"),
 }, async ({ shadow_id, cycle_number, include_history }) => {
@@ -4373,7 +4390,7 @@ registerTool("shadow_phase_query", "KN-G / BP016 — Alternating Cylinder Fire o
                 latestSnapshot = history[history.length - 1];
         }
         catch {
-            // file unreadable — fall through to deterministic
+            // file unreadable ΓÇö fall through to deterministic
         }
     }
     // Resolve effective cycle number
@@ -4407,7 +4424,7 @@ registerTool("shadow_phase_query", "KN-G / BP016 — Alternating Cylinder Fire o
     }
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
 });
-// ─── KN102: get_cohort_class ──────────────────────────────────────────────────
+// ΓöÇΓöÇΓöÇ KN102: get_cohort_class ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 // Read-only. Returns current member's cohort tier + librarian mode.
 // Called at LB Frame Handshake Phase 1 Discovery and on-demand for diagnostics.
 // BRIDLE Rule 4: if detection fails, returns lone_wolf/brittle (safe default).
@@ -4427,7 +4444,7 @@ server.tool("get_cohort_class", "Returns the current member's cohort class (lone
             }],
     };
 });
-// ─── KN-H1 + KN-H2 + KN-H3 + KN-H4: get_lb_frame_resource_config_tier ───────
+// ΓöÇΓöÇΓöÇ KN-H1 + KN-H2 + KN-H3 + KN-H4: get_lb_frame_resource_config_tier ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 // Read-only. Returns member's Tier choice + tier-spec metadata.
 // KN-H2: Extended to return Tier A spec metadata + empirical-floor receipt pointer
 //         when tier == 'needs'. Single source of truth: tier_a_needs_spec.ts (UI)
@@ -4438,16 +4455,16 @@ server.tool("get_cohort_class", "Returns the current member's cohort class (lone
 // KN-H4: Extended to return Tier C spec metadata + cascade telemetry receipt pointer
 //         when tier == 'founder'. Single source of truth: tier_c_founder_spec.ts (UI)
 //         and TIER_C_FOUNDER_BP015_BP017_CASCADE_TELEMETRY_RECEIPT_BP017.json (empirical anchor).
-//         Tier C is the empirical-receipt-source: the BP015→BP017 cascade (27 CJ ratifications +
+//         Tier C is the empirical-receipt-source: the BP015ΓåÆBP017 cascade (27 CJ ratifications +
 //         70+ clean K-lineage + 4 architectural patterns recovered) establishes the reference point.
 // Called at LB Frame Handshake Phase 1 Discovery (Step 1.3) and on-demand.
-// Orthogonal to get_cohort_class (Step 1.2) — Tier and cohort-class are independent axes.
+// Orthogonal to get_cohort_class (Step 1.2) ΓÇö Tier and cohort-class are independent axes.
 // BRIDLE Rule 4: if DB unavailable, returns tier_state='not_chosen' (surface picker; don't proceed silently).
 const TIER_A_SPEC_METADATA = {
     plan_requirement: "Default Claude Code Pro/Standard plan",
     upgrade_required: false,
     anyone_can_run: true,
-    mcp_slots: "Default (5–10 slots)",
+    mcp_slots: "Default (5ΓÇô10 slots)",
     cohort_class_default: "Lone Wolf",
     bag_of_holding_class: "Small bag (default-plan context-budget); warehouse-access full",
     substrate_mode: "read-only",
@@ -4455,8 +4472,8 @@ const TIER_A_SPEC_METADATA = {
     spec_bullets: [
         "Default Claude Code plan (no upgrade required)",
         "Standard token budget + message-rate limits (no overrides)",
-        "Pheromone substrate read-only — query the cooperative warehouse",
-        "Detective TEAM read-only — cross-cathedral fan-out for canon search",
+        "Pheromone substrate read-only ΓÇö query the cooperative warehouse",
+        "Detective TEAM read-only ΓÇö cross-cathedral fan-out for canon search",
         "Brittle Cathedral fingerprint (refreshes via npm run rebuild)",
         "Lone Wolf cohort-class default (separately advanceable)",
     ],
@@ -4476,14 +4493,14 @@ const TIER_A_SPEC_METADATA = {
     },
     spec_doc: "platform/src/data/lb_frame_tier_specs/tier_a_needs.md",
 };
-// ─── KN-H4: Tier C FOUNDER spec metadata ────────────────────────────────────
+// ΓöÇΓöÇΓöÇ KN-H4: Tier C FOUNDER spec metadata ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 // Single source of truth for MCP tool response when tier == 'founder'.
 // UI source: platform/src/data/lb_frame_tier_specs/tier_c_founder_spec.ts
 // Empirical anchor: BISHOP_DROPZONE/14_CanonicalReferences/TIER_C_FOUNDER_BP015_BP017_CASCADE_TELEMETRY_RECEIPT_BP017.json
 // BRIDLE Rule 4: all cascade telemetry numbers anchored to milestone artifacts + canonical_values.yaml.
 const TIER_C_SPEC_METADATA = {
     plan_requirement: "Founder-equivalent plan (self-attested at install-time; no purchase required)",
-    plan_note: "Tier C advisory surfaces strongly if plan below Founder-equivalent. Informational only — does not block. " +
+    plan_note: "Tier C advisory surfaces strongly if plan below Founder-equivalent. Informational only ΓÇö does not block. " +
         "Anti-extraction: capital alone is not the gate. Cohort-class advancement (separately advanceable) unlocks Federation features.",
     upgrade_required: false,
     anyone_can_run: true,
@@ -4503,20 +4520,20 @@ const TIER_C_SPEC_METADATA = {
     bishop_model_spec: "Claude Opus 4.7 (1M context)",
     knight_model_spec: "Claude Sonnet 4.6 (200K context)",
     spec_bullets: [
-        "Founder-equivalent plan (self-attested; no purchase required — capital is not the gate)",
+        "Founder-equivalent plan (self-attested; no purchase required ΓÇö capital is not the gate)",
         "Bishop=Opus 4.7 1M + Knight=Sonnet 4.6 200K token budgets (maximum-velocity composition)",
         "~30+ MCP slots (full LB Frame core + Cathedral + Pheromone + Detective TEAM + extended MCPs)",
         "All substrate features at full velocity: Pheromone + Detective TEAM + Miner + Apiarist Hive + Excalibur + Shadow E-Giant",
-        "Federation Member cohort-class minimum (Apiarist Worker / Drone / Queen — separately advanceable)",
-        "Empirical-receipt-source: 27 CJ ratifications + 70+ clean K-lineage + 4 architectural patterns recovered (BP015→BP017 cascade)",
+        "Federation Member cohort-class minimum (Apiarist Worker / Drone / Queen ΓÇö separately advanceable)",
+        "Empirical-receipt-source: 27 CJ ratifications + 70+ clean K-lineage + 4 architectural patterns recovered (BP015ΓåÆBP017 cascade)",
     ],
     cascade_telemetry: {
-        session_arc: "BP015 → BP016 → BP017",
+        session_arc: "BP015 ΓåÆ BP016 ΓåÆ BP017",
         crown_jewel_ratifications: {
             bp015: 0,
-            bp015_note: "Substrate-readiness audit — receipt IS the enabling-disclosure artifact for Prov 16",
+            bp015_note: "Substrate-readiness audit ΓÇö receipt IS the enabling-disclosure artifact for Prov 16",
             bp016: 15,
-            bp016_source: "MILESTONE_BP016_CLOSEOUT.md — confirmed 15 CJ ratifications, highest single-session density in BP-arc history",
+            bp016_source: "MILESTONE_BP016_CLOSEOUT.md ΓÇö confirmed 15 CJ ratifications, highest single-session density in BP-arc history",
             bp017_floor: 12,
             total_floor: 27,
         },
@@ -4525,7 +4542,7 @@ const TIER_C_SPEC_METADATA = {
         zero_no_verify_events: true,
         pods_landed_count: 9,
         architectural_patterns_recovered: 4,
-        architectural_patterns_class: "architectural-pattern-recognition tier — highest compound-lift class observed to date",
+        architectural_patterns_class: "architectural-pattern-recognition tier ΓÇö highest compound-lift class observed to date",
         bp015_beans_landed: 449,
         bp015_capacity_floor: "~750-800 substrate operations single-session",
         bridle_rule_4_note: "All telemetry empirically anchored: CJ counts from MILESTONE_BP016_CLOSEOUT.md; " +
@@ -4538,17 +4555,17 @@ const TIER_C_SPEC_METADATA = {
         "KN-H1 LANDED 82c52fa (Three-Tier installer + UI + persistence + MCP tools)",
         "KN-H2 LANDED c75995f (Tier A baseline empirical floor receipt)",
         "KN-H3 LANDED 94cd4c6 (Tier B uplift empirical receipt)",
-        "KN-H4 LANDED (this commit — Tier C FOUNDER spec doc + cascade telemetry receipt)",
+        "KN-H4 LANDED (this commit ΓÇö Tier C FOUNDER spec doc + cascade telemetry receipt)",
     ],
     empirical_receipt_source_note: "Tier C FOUNDER is the empirical-receipt-source for the LB Frame Three-Tier system. " +
-        "The BP015→BP017 cascade telemetry IS the receipt future Tier C users replicate at their plan-class.",
+        "The BP015ΓåÆBP017 cascade telemetry IS the receipt future Tier C users replicate at their plan-class.",
 };
 const TIER_B_SPEC_METADATA = {
     plan_requirement: "Claude Code Max or equivalent higher-tier (recommended, not required)",
-    plan_note: "Tier B advisory surfaces if plan below Max-equivalent. Informational only — does not block.",
+    plan_note: "Tier B advisory surfaces if plan below Max-equivalent. Informational only ΓÇö does not block.",
     upgrade_required: false,
     anyone_can_run: true,
-    mcp_slots: "15–20 slots minimum",
+    mcp_slots: "15ΓÇô20 slots minimum",
     cohort_class_recommended: "Pied Piper Tier 1+",
     bag_of_holding_class: "Bigger bag (Claude Code Max context-budget); event-driven warehouse-write at Pied Piper+ cohort",
     substrate_mode: "read+write",
@@ -4558,8 +4575,8 @@ const TIER_B_SPEC_METADATA = {
     spec_bullets: [
         "Claude Code Max or equivalent (recommended, not required)",
         "1M-context Opus 4.7 token budget (vs default Tier A bag)",
-        "15–20 MCP slots minimum (full LB Frame core + Cathedral + Pheromone + Detective TEAM)",
-        "Full Pheromone substrate (read + write — was read-only at Tier A)",
+        "15ΓÇô20 MCP slots minimum (full LB Frame core + Cathedral + Pheromone + Detective TEAM)",
+        "Full Pheromone substrate (read + write ΓÇö was read-only at Tier A)",
         "Detective TEAM full access + write-back loop (was read-only at Tier A)",
         "Fluid Cathedral fingerprint via Cue Card 7-day recency gate (was Brittle at Tier A)",
         "Pied Piper Tier 1+ cohort-class recommended (separately advanceable)",
@@ -4571,12 +4588,12 @@ const TIER_B_SPEC_METADATA = {
         hot_rate_max_pct: 98.7,
         hot_rate_note: "HOT-rate is substrate-dependent, not plan-dependent. Same R10 baseline applies. " +
             "Fluid Cathedral may improve in fast-evolving knowledge domains.",
-        reckoning_velocity_uplift_range: "2–3×",
+        reckoning_velocity_uplift_range: "2ΓÇô3├ù",
         reckoning_velocity_source: "bp017-spec",
         pod_scaffolding_uplift_min_x: 1.5,
         pod_scaffolding_tier_b_rate: "~1 K-prompt per 30 min (vs ~60 min at Tier A)",
         pod_scaffolding_source: "bp017-spec",
-        cathedral_hot_between_rebuilds_pct_range: "70–85%",
+        cathedral_hot_between_rebuilds_pct_range: "70ΓÇô85%",
         receipt_pointer: "BISHOP_DROPZONE/14_CanonicalReferences/TIER_B_EMPIRICAL_UPLIFT_RECEIPT_BP017.json",
         uplift_pass: true,
         bridle_rule_4_note: "Velocity and pod-scaffolding claims labeled bp017-spec (architectural basis). " +
@@ -4594,23 +4611,23 @@ const TIER_B_SPEC_METADATA = {
 server.tool("get_lb_frame_resource_config_tier", "Returns a member's LB Frame resource-config tier choice (needs/suggests/founder) + tier-spec metadata. " +
     "KN-H2: When tier is 'needs' (Tier A), returns full Tier A spec metadata including empirical floor receipt pointer. " +
     "KN-H3: When tier is 'suggests' (Tier B), returns full Tier B spec metadata including empirical uplift receipt pointer. " +
-    "KN-H4: When tier is 'founder' (Tier C), returns full Tier C spec metadata including BP015→BP017 cascade telemetry receipt pointer. " +
+    "KN-H4: When tier is 'founder' (Tier C), returns full Tier C spec metadata including BP015ΓåÆBP017 cascade telemetry receipt pointer. " +
     "Tier C is the empirical-receipt-source: 27 CJ ratifications + 70+ clean K-lineage + 4 architectural patterns recovered. " +
     "Called at LB Frame Handshake Phase 1 Discovery Step 1.3 to check if member has already chosen a tier. " +
-    "Orthogonal to get_cohort_class (Step 1.2) — Tier and cohort-class are independent axes. " +
-    "Tier A NEEDS = default Claude plan, no upgrade required, empirical floor +78–93pp lift. " +
-    "Tier B SUGGESTS = recommended uplift (Claude Code Max); 2–3× Reckoning velocity; Fluid Cathedral; full Pheromone+Detective TEAM. " +
+    "Orthogonal to get_cohort_class (Step 1.2) ΓÇö Tier and cohort-class are independent axes. " +
+    "Tier A NEEDS = default Claude plan, no upgrade required, empirical floor +78ΓÇô93pp lift. " +
+    "Tier B SUGGESTS = recommended uplift (Claude Code Max); 2ΓÇô3├ù Reckoning velocity; Fluid Cathedral; full Pheromone+Detective TEAM. " +
     "Tier C FOUNDER = empirical-receipt-source, self-attested, no fiat-bridge; all substrate features at full velocity; Federation cohort-class minimum. " +
     "Anti-extraction by structural form: capital alone cannot purchase higher-tier participation. " +
     "Falls back gracefully if Supabase unavailable (BRIDLE Rule 4).", {
     member_id: z.string().describe("Supabase auth.users UUID for the member. Required."),
-    surface: z.string().optional().describe("Detected Claude Code surface (from Phase 1 Discovery) — used for plan-tier advisory text only."),
+    surface: z.string().optional().describe("Detected Claude Code surface (from Phase 1 Discovery) ΓÇö used for plan-tier advisory text only."),
 }, async ({ member_id, surface }) => {
     ensureFreshIndex();
     const result = await probeTierConfig(member_id);
     const summary = formatTierSummary(result);
     const advisory = result.tier ? buildPlanTierAdvisory(result.tier, surface) : null;
-    // KN-H2: Attach Tier A spec metadata when tier is 'needs' (or not yet chosen — show floor spec for UI)
+    // KN-H2: Attach Tier A spec metadata when tier is 'needs' (or not yet chosen ΓÇö show floor spec for UI)
     const tier_a_spec = (result.tier === "needs" || result.tier_state === "not_chosen")
         ? TIER_A_SPEC_METADATA
         : null;
@@ -4633,13 +4650,13 @@ server.tool("get_lb_frame_resource_config_tier", "Returns a member's LB Frame re
             }],
     };
 });
-// ─── KN-H1: set_lb_frame_resource_config_tier ────────────────────────────────
+// ΓöÇΓöÇΓöÇ KN-H1: set_lb_frame_resource_config_tier ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 // Persists user's tier choice from Handshake Step 1.3.
 // Tier choice is reversible (re-selection supported; tier_chosen_at updates).
 // Anti-extraction: no fiat-bridge enforcement at this layer; Tier C is self-attested.
 server.tool("set_lb_frame_resource_config_tier", "Persists a member's LB Frame resource-config tier choice to user_preferences. " +
     "Called by Handshake Phase 1 Discovery Step 1.3 after user picks. " +
-    "Tier choice is reversible — re-selection allowed; tier_chosen_at updates on every call. " +
+    "Tier choice is reversible ΓÇö re-selection allowed; tier_chosen_at updates on every call. " +
     "No fiat-bridge: Tier C (founder) does NOT require fiat upgrade-purchase; user self-attests. " +
     "Returns success + reselection flag (true if overriding a previous pick). " +
     "BRIDLE Rule 8: surfaces error + retry if persistence fails; does not silently proceed.", {
@@ -4660,7 +4677,7 @@ server.tool("set_lb_frame_resource_config_tier", "Persists a member's LB Frame r
             isError: true,
         };
     }
-    const summary = `Tier ${tier} (${tier === "needs" ? "A" : tier === "suggests" ? "B" : "C"}) set successfully${result.reselection ? " (reselection — overrode previous pick)" : ""}.`;
+    const summary = `Tier ${tier} (${tier === "needs" ? "A" : tier === "suggests" ? "B" : "C"}) set successfully${result.reselection ? " (reselection ΓÇö overrode previous pick)" : ""}.`;
     return {
         content: [{
                 type: "text",
@@ -4668,18 +4685,18 @@ server.tool("set_lb_frame_resource_config_tier", "Persists a member's LB Frame r
             }],
     };
 });
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 // KN104: TEAM DISPATCHER (PRE-COLOSSUS)
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 /**
- * team_dispatch — KN104 / BP016 PRE-COLOSSUS
+ * team_dispatch ΓÇö KN104 / BP016 PRE-COLOSSUS
  * Multi-class TEAM (Detectives + Miners) cross-cathedral investigation
  * with cohort-class-aware Scribe-access enforcement and substrate write-back.
  */
 registerTool("team_dispatch", "Detective TEAM dispatcher (KN104/BP016 PRE-COLOSSUS). Multi-class team composition: Detectives (pheromone + consult_scribes) + Miners (mitotic corpus-prospecting + ROOT-lineage + IP-ledger-locked). Cohort-class-aware Scribe-access enforcement (lone_wolf/pied_piper/federation_member/excalibur_class_subscriber). Substrate write-back via Pheromone with extended schema. Pairs with KN105 Excalibur Class: Miner output feeds Excalibur slice-distillation pipeline.", {
     claim: z.string().min(3).max(500).describe("The claim or topic to investigate with the full TEAM"),
     team_composition: z.array(z.enum(["detective", "miner"])).min(1).describe("Team roles to dispatch (e.g. ['detective', 'miner'])"),
-    cohort_class: z.enum(["lone_wolf", "pied_piper", "federation_member", "excalibur_class_subscriber"]).describe("Cohort class — controls Scribe-access boundaries per KN102/BP016"),
+    cohort_class: z.enum(["lone_wolf", "pied_piper", "federation_member", "excalibur_class_subscriber"]).describe("Cohort class ΓÇö controls Scribe-access boundaries per KN102/BP016"),
     cathedrals: z.array(z.enum(["bishop", "knight", "pawn"])).optional().describe("Cathedrals to fan out across (default: all 3; bounded by cohort_class)"),
     max_agents_per_role: z.number().int().min(1).max(5).optional().describe("Max agents per role (default 2)"),
     write_back: z.boolean().optional().describe("Write synthesis to pheromone substrate (default true; overridden by cohort_class access rules)"),
@@ -4729,7 +4746,7 @@ registerTool("team_dispatch", "Detective TEAM dispatcher (KN104/BP016 PRE-COLOSS
     }
 });
 /**
- * miner_dispatch — KN104 / BP016
+ * miner_dispatch ΓÇö KN104 / BP016
  * Standalone Miner-only dispatch for ad-hoc corpus prospecting.
  */
 registerTool("miner_dispatch", "Standalone Miner dispatch (KN104/BP016). Runs a single Miner agent on a raw corpus. Produces ROOT-lineage tablet + halves-on-category-discovery. Cathedral-prefixed serial number generated. IP-ledger-locked + Chronos Chronicler signed. Use for targeted corpus-prospecting without full TEAM overhead.", {
@@ -4769,7 +4786,7 @@ registerTool("miner_dispatch", "Standalone Miner dispatch (KN104/BP016). Runs a 
     }
 });
 /**
- * get_team_provenance_chain — KN104 / BP016
+ * get_team_provenance_chain ΓÇö KN104 / BP016
  * Query ROOT-lineage for Miner outputs by serial prefix.
  */
 registerTool("get_team_provenance_chain", "Returns ROOT-lineage provenance chain for a given Miner serial (KN104/BP016). Resolves all descendants (daughter Miners spawned via halving). Serial format: LB-CAT.M-0042 (bishop), LB-CAT.K-0007 (knight). Also returns IP-ledger entries and Wells of Knowledge for the lineage. Use after miner_dispatch or team_dispatch to audit mitotic lineage.", {
@@ -4805,11 +4822,11 @@ registerTool("get_team_provenance_chain", "Returns ROOT-lineage provenance chain
         return { content: [{ type: "text", text: JSON.stringify({ ok: false, error: err.message }) }] };
     }
 });
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 // KN105: EXCALIBUR CLASS COMMERCIAL SUBSCRIPTION
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 /**
- * excalibur_slice_list — KN105 / BP016
+ * excalibur_slice_list ΓÇö KN105 / BP016
  */
 registerTool("excalibur_slice_list", "Lists Excalibur Class Scribe slices (KN105/BP016). By default returns only tag-assigned Excalibur Class slices. Set include_all=true to include proposed/raw_federation_library slices. Each slice includes pricing (one-time + subscription), tag-assignment gate status, contributing-member count, and topics covered.", {
     include_all: z.boolean().optional().describe("Include all slice statuses (default false = Excalibur Class only)"),
@@ -4827,9 +4844,9 @@ registerTool("excalibur_slice_list", "Lists Excalibur Class Scribe slices (KN105
     }
 });
 /**
- * excalibur_slice_create — KN105 / BP016
+ * excalibur_slice_create ΓÇö KN105 / BP016
  */
-registerTool("excalibur_slice_create", "Creates a new Excalibur Class Scribe slice candidate (KN105/BP016). Status starts as 'proposed'. Pricing calculated automatically: M_share × N_opted_in × 1.20 Cost+20%; category slices get 0.70 bundle discount. Slice earns 'excalibur_class' status only after all 4 gates pass (Cathedral Effect + Furnace + Adversarial Fence + Federation vote).", {
+registerTool("excalibur_slice_create", "Creates a new Excalibur Class Scribe slice candidate (KN105/BP016). Status starts as 'proposed'. Pricing calculated automatically: M_share ├ù N_opted_in ├ù 1.20 Cost+20%; category slices get 0.70 bundle discount. Slice earns 'excalibur_class' status only after all 4 gates pass (Cathedral Effect + Furnace + Adversarial Fence + Federation vote).", {
     name: z.string().describe("Slice name (e.g. 'Gene Splicing' or 'Financial Markets')"),
     granularity: z.enum(["topic", "category"]).describe("topic = single topic; category = bundle of topics"),
     topics_included: z.array(z.string()).min(1).describe("Topics in this slice"),
@@ -4860,12 +4877,12 @@ registerTool("excalibur_slice_create", "Creates a new Excalibur Class Scribe sli
     }
 });
 /**
- * excalibur_slice_evaluate_gates — KN105 / BP016
+ * excalibur_slice_evaluate_gates ΓÇö KN105 / BP016
  */
-registerTool("excalibur_slice_evaluate_gates", "Evaluates the 4 Excalibur tag-assignment gates for a slice (KN105/BP016). BRIDLE Rule 4: if any gate fails (including borderline scores), tag is NOT assigned — slice stays 'raw_federation_library'. Gates: (1) Cathedral Effect lift ≥30pp, (2) Furnace verification ≥0.70, (3) Adversarial Fence all-probes-pass, (4) Federation vote quorum+threshold. Returns evaluation result + recommended_status.", {
+registerTool("excalibur_slice_evaluate_gates", "Evaluates the 4 Excalibur tag-assignment gates for a slice (KN105/BP016). BRIDLE Rule 4: if any gate fails (including borderline scores), tag is NOT assigned ΓÇö slice stays 'raw_federation_library'. Gates: (1) Cathedral Effect lift ΓëÑ30pp, (2) Furnace verification ΓëÑ0.70, (3) Adversarial Fence all-probes-pass, (4) Federation vote quorum+threshold. Returns evaluation result + recommended_status.", {
     slice_id: z.string().describe("Excalibur slice ID"),
     cathedral_effect_lift_pp: z.number().describe("Cathedral Effect cross-vendor lift in percentage points (e.g. 35 = +35pp)"),
-    furnace_verification_score: z.number().min(0).max(1).describe("Furnace gear-tooth-fit score 0.0–1.0"),
+    furnace_verification_score: z.number().min(0).max(1).describe("Furnace gear-tooth-fit score 0.0ΓÇô1.0"),
     adversarial_fence_probes_passed: z.number().int().min(0).describe("Number of adversarial fence probes passed"),
     adversarial_fence_probes_total: z.number().int().min(1).describe("Total adversarial fence probes"),
     federation_vote_yes: z.number().int().min(0).describe("Federation member yes votes"),
@@ -4889,7 +4906,7 @@ registerTool("excalibur_slice_evaluate_gates", "Evaluates the 4 Excalibur tag-as
     }
 });
 /**
- * excalibur_subscription_create — KN105 / BP016
+ * excalibur_subscription_create ΓÇö KN105 / BP016
  */
 registerTool("excalibur_subscription_create", "Creates and activates an Excalibur Class subscription (KN105/BP016). Upekrithen LLC seller-of-record (Apache 2.0, NOT AGPL). Payment type: 'subscription' (annual, 5-year amortized) or 'one_time' (expires 30 days). Auto-grants cohort_class=excalibur_class_subscriber + fluid librarian mode (KN102 composition). No preemptive non-profit vetting per Founder stance.", {
     subscriber_id: z.string().describe("Member/subscriber UUID"),
@@ -4927,9 +4944,9 @@ registerTool("excalibur_subscription_create", "Creates and activates an Excalibu
     }
 });
 /**
- * excalibur_share_back_summary — KN105 / BP016
+ * excalibur_share_back_summary ΓÇö KN105 / BP016
  */
-registerTool("excalibur_share_back_summary", "Returns Excalibur Class share-back-pay summary (KN105/BP016). Per-member share of subscription revenue: (revenue / 1.20) × contribution_proportion. Radical transparency per Meta-Law. For slice-level: shows all opted-in contributors and their total earned/pending/paid-out. For member-level: shows total earned across all slices.", {
+registerTool("excalibur_share_back_summary", "Returns Excalibur Class share-back-pay summary (KN105/BP016). Per-member share of subscription revenue: (revenue / 1.20) ├ù contribution_proportion. Radical transparency per Meta-Law. For slice-level: shows all opted-in contributors and their total earned/pending/paid-out. For member-level: shows total earned across all slices.", {
     query_type: z.enum(["slice", "member"]).describe("Query by slice_id or member_id"),
     id: z.string().describe("Slice ID (if query_type=slice) or Member ID (if query_type=member)"),
     record_payment: z.object({
@@ -4960,9 +4977,9 @@ registerTool("excalibur_share_back_summary", "Returns Excalibur Class share-back
     }
 });
 /**
- * excalibur_member_vote — KN105 / BP016
+ * excalibur_member_vote ΓÇö KN105 / BP016
  */
-registerTool("excalibur_member_vote", "Records a Federation member vote on an Excalibur slice (KN105/BP016). Gate 4 requires quorum (default 50% of members) + approval threshold (default 60% yes). After vote, gates are re-evaluated — if all 4 gates now pass, slice is promoted to 'excalibur_class'. BRIDLE Rule 4: borderline results default to NOT promoting.", {
+registerTool("excalibur_member_vote", "Records a Federation member vote on an Excalibur slice (KN105/BP016). Gate 4 requires quorum (default 50% of members) + approval threshold (default 60% yes). After vote, gates are re-evaluated ΓÇö if all 4 gates now pass, slice is promoted to 'excalibur_class'. BRIDLE Rule 4: borderline results default to NOT promoting.", {
     slice_id: z.string().describe("Excalibur slice ID to vote on"),
     vote: z.enum(["yes", "no"]).describe("Federation member vote"),
     total_eligible_voters: z.number().int().min(1).describe("Total eligible Federation members for quorum calculation"),
@@ -4983,19 +5000,19 @@ registerTool("excalibur_member_vote", "Records a Federation member vote on an Ex
         return { content: [{ type: "text", text: JSON.stringify({ ok: false, error: err.message }) }] };
     }
 });
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 // TOOL: get_lb_frame_tier_bounty_pay_rate (KN-H5 / BP017)
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 /**
- * get_lb_frame_tier_bounty_pay_rate — KN-H5 / BP017 Bounty Poster Tier Scaffold
+ * get_lb_frame_tier_bounty_pay_rate ΓÇö KN-H5 / BP017 Bounty Poster Tier Scaffold
  * Three modes: bounty_class (exact), tier (primary class for tier), list_all (all 4 classes).
- * Pay-rate multipliers: Tier A × 1.0 / Tier B × 1.25 / Tier C × 1.5 / Cross-tier × 2.0.
+ * Pay-rate multipliers: Tier A ├ù 1.0 / Tier B ├ù 1.25 / Tier C ├ù 1.5 / Cross-tier ├ù 2.0.
  */
 registerTool("get_lb_frame_tier_bounty_pay_rate", "Returns Bounty pay-rate metadata for LB Frame Three-Tier empirical verification tasks (KN-H5/BP017). " +
-    "Three modes: (1) bounty_class — exact class lookup; " +
-    "(2) tier — primary bounty class for needs/suggests/founder; " +
-    "(3) list_all=true — all four classes. " +
-    "Pay-rate multipliers: Tier A × 1.0 (baseline) / Tier B × 1.25 (uplift) / Tier C × 1.5 (founder replication) / Cross-tier × 2.0 (full comparison). " +
+    "Three modes: (1) bounty_class ΓÇö exact class lookup; " +
+    "(2) tier ΓÇö primary bounty class for needs/suggests/founder; " +
+    "(3) list_all=true ΓÇö all four classes. " +
+    "Pay-rate multipliers: Tier A ├ù 1.0 (baseline) / Tier B ├ù 1.25 (uplift) / Tier C ├ù 1.5 (founder replication) / Cross-tier ├ù 2.0 (full comparison). " +
     "Scaffold for KN-H6/H7/H8 Bounty Poster Tier-testing infrastructure.", {
     bounty_class: z
         .enum([
@@ -5022,25 +5039,25 @@ registerTool("get_lb_frame_tier_bounty_pay_rate", "Returns Bounty pay-rate metad
     });
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
 });
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 // TOOL: generate_tier_bounty_poster (KN-H6 / BP017)
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 /**
- * generate_tier_bounty_poster — KN-H6 / BP017 Per-Tier Bounty Poster Generator
+ * generate_tier_bounty_poster ΓÇö KN-H6 / BP017 Per-Tier Bounty Poster Generator
  * Creates a Bounty Poster instance for a given Three-Tier empirical-verification class.
- * FORK doctrine: marks_pay_rate is always Marks-class — no fiat bridge possible.
- * Four classes: tier_a_floor_verification (×1.0) / tier_b_uplift_verification (×1.25) /
- *               tier_c_founder_replication (×1.5) / cross_tier_comparison (×2.0).
+ * FORK doctrine: marks_pay_rate is always Marks-class ΓÇö no fiat bridge possible.
+ * Four classes: tier_a_floor_verification (├ù1.0) / tier_b_uplift_verification (├ù1.25) /
+ *               tier_c_founder_replication (├ù1.5) / cross_tier_comparison (├ù2.0).
  */
 registerTool("generate_tier_bounty_poster", "Generates a per-tier Bounty Poster instance for LB Frame Three-Tier empirical-verification tasks (KN-H6/BP017). " +
     "Creates a TierBountyPoster with UUID, description, FORK-compliant Marks pay-rate (never fiat), " +
     "submission schema (empirical-receipt JSON fields), validation criteria (pass/fail thresholds for KN-H7), " +
     "and cohort_class_eligibility (Federation Member or higher). " +
     "Four Bounty classes: " +
-    "tier_a_floor_verification (×1.0 — floor verification at default plan), " +
-    "tier_b_uplift_verification (×1.25 — uplift vs Tier A), " +
-    "tier_c_founder_replication (×1.5 — Founder cascade replication + Apiarist cohort uplift), " +
-    "cross_tier_comparison (×2.0 — all three tiers, same submitter + same bank). " +
+    "tier_a_floor_verification (├ù1.0 ΓÇö floor verification at default plan), " +
+    "tier_b_uplift_verification (├ù1.25 ΓÇö uplift vs Tier A), " +
+    "tier_c_founder_replication (├ù1.5 ΓÇö Founder cascade replication + Apiarist cohort uplift), " +
+    "cross_tier_comparison (├ù2.0 ΓÇö all three tiers, same submitter + same bank). " +
     "Use generate_all=true to generate all four at once. " +
     "standard_rate defaults to 100 Marks; override to set base rate before multiplier.", {
     tier_class: z
@@ -5052,8 +5069,8 @@ registerTool("generate_tier_bounty_poster", "Generates a per-tier Bounty Poster 
     ])
         .optional()
         .describe("Tier Bounty class to generate. Required unless generate_all=true. " +
-        "tier_a_floor_verification=×1.0 / tier_b_uplift_verification=×1.25 / " +
-        "tier_c_founder_replication=×1.5 / cross_tier_comparison=×2.0."),
+        "tier_a_floor_verification=├ù1.0 / tier_b_uplift_verification=├ù1.25 / " +
+        "tier_c_founder_replication=├ù1.5 / cross_tier_comparison=├ù2.0."),
     standard_rate: z
         .number()
         .positive()
@@ -5064,7 +5081,7 @@ registerTool("generate_tier_bounty_poster", "Generates a per-tier Bounty Poster 
         .boolean()
         .optional()
         .describe("If true, generates all four Bounty Poster classes at once (ignores tier_class). " +
-        "Returns all_posters array ordered A → B → C → Cross-tier."),
+        "Returns all_posters array ordered A ΓåÆ B ΓåÆ C ΓåÆ Cross-tier."),
 }, async ({ tier_class, standard_rate, generate_all }) => {
     const result = handleGenerateTierBountyPoster({
         tier_class: tier_class,
@@ -5073,26 +5090,26 @@ registerTool("generate_tier_bounty_poster", "Generates a per-tier Bounty Poster 
     });
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
 });
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 // TOOL: validate_bounty_receipt (KN-H7 / BP017)
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 /**
- * validate_bounty_receipt — KN-H7 / BP017 Bounty Empirical-Receipt Validator
+ * validate_bounty_receipt ΓÇö KN-H7 / BP017 Bounty Empirical-Receipt Validator
  * Validates submitted Bounty receipts against per-tier empirical criteria.
  * Anti-marketing-class discipline: suspicious inflation flagged for Founder review.
  * BRIDLE Rule 4: borderline cases default to FAIL.
  */
 registerTool("validate_bounty_receipt", "Validates a submitted Bounty empirical receipt against per-tier criteria (KN-H7/BP017). " +
     "Four Bounty classes: " +
-    "tier_a_floor_verification (HOT-rate lift ≥30pp; tier_config 'needs'; valid question bank), " +
-    "tier_b_uplift_verification (Cathedral lift ≥30pp; Reckoning velocity ≥2× Tier A reference), " +
-    "tier_c_founder_replication (Cathedral lift ≥30pp; founder_cascade_reference; own-corpus proof), " +
-    "cross_tier_comparison (all 3 tiers lift ≥30pp; same submitter; same question bank; monotone uplift). " +
-    "Returns: pass (bool), margin (lift_pp − 30; positive = above threshold), " +
+    "tier_a_floor_verification (HOT-rate lift ΓëÑ30pp; tier_config 'needs'; valid question bank), " +
+    "tier_b_uplift_verification (Cathedral lift ΓëÑ30pp; Reckoning velocity ΓëÑ2├ù Tier A reference), " +
+    "tier_c_founder_replication (Cathedral lift ΓëÑ30pp; founder_cascade_reference; own-corpus proof), " +
+    "cross_tier_comparison (all 3 tiers lift ΓëÑ30pp; same submitter; same question bank; monotone uplift). " +
+    "Returns: pass (bool), margin (lift_pp ΓêÆ 30; positive = above threshold), " +
     "failures (array of specific unmet criteria), warnings (borderline/suspicious results for Founder review). " +
     "Anti-marketing-class discipline: lift_pp > 60pp (>20% above K477/K481/K499 50pp typical ceiling) " +
-    "flags suspicious_inflation warning and routes to Founder review — no auto-approval. " +
-    "BRIDLE Rule 4: borderline cases (e.g. velocity 1.5–2×) default to FAIL. " +
+    "flags suspicious_inflation warning and routes to Founder review ΓÇö no auto-approval. " +
+    "BRIDLE Rule 4: borderline cases (e.g. velocity 1.5ΓÇô2├ù) default to FAIL. " +
     "Composes with KN-H6 generate_tier_bounty_poster (provides submission_schema + validation_criteria). " +
     "KN-H8 Marks payout integration is gated on a passing validation result from this tool.", {
     bounty_id: z
@@ -5105,11 +5122,11 @@ registerTool("validate_bounty_receipt", "Validates a submitted Bounty empirical 
         "tier_c_founder_replication",
         "cross_tier_comparison",
     ])
-        .describe("Tier Bounty class — determines which validation criteria apply. " +
-        "tier_a_floor_verification: HOT-rate ≥30pp lift; tier_config 'needs'. " +
-        "tier_b_uplift_verification: Cathedral lift ≥30pp; Reckoning velocity ≥2× Tier A. " +
-        "tier_c_founder_replication: Cathedral lift ≥30pp; cascade-replication evidence; own-corpus. " +
-        "cross_tier_comparison: all 3 tiers ≥30pp; same submitter; same bank; monotone uplift."),
+        .describe("Tier Bounty class ΓÇö determines which validation criteria apply. " +
+        "tier_a_floor_verification: HOT-rate ΓëÑ30pp lift; tier_config 'needs'. " +
+        "tier_b_uplift_verification: Cathedral lift ΓëÑ30pp; Reckoning velocity ΓëÑ2├ù Tier A. " +
+        "tier_c_founder_replication: Cathedral lift ΓëÑ30pp; cascade-replication evidence; own-corpus. " +
+        "cross_tier_comparison: all 3 tiers ΓëÑ30pp; same submitter; same bank; monotone uplift."),
     receipt_json: z
         .record(z.unknown())
         .describe("The submitted empirical receipt as a JSON object. " +
@@ -5131,11 +5148,11 @@ registerTool("validate_bounty_receipt", "Validates a submitted Bounty empirical 
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
 });
 // TOOL: process_bounty_marks_payout (KN-H8 / BP017)
-// ────────────────────────────────────────────────────────────────────────────
+// ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 /**
- * process_bounty_marks_payout — KN-H8 / BP017 Bounty Marks Payout Integration
+ * process_bounty_marks_payout ΓÇö KN-H8 / BP017 Bounty Marks Payout Integration
  *
- * Write-class tool — atomically processes a Bounty Marks payout when a receipt
+ * Write-class tool ΓÇö atomically processes a Bounty Marks payout when a receipt
  * has passed KN-H7 validator PASS criteria.
  *
  * FORK doctrine compliance:
@@ -5143,16 +5160,16 @@ registerTool("validate_bounty_receipt", "Validates a submitted Bounty empirical 
  *   - cash_out_bounty_marks_to_fiat DOES NOT EXIST in this codebase (structural absence).
  *   - Composes with KN105 Excalibur share-back-pay FORK-compliant precedent.
  *
- * Tier multipliers: Tier A=1.0×, Tier B=1.25×, Tier C=1.5×, Cross-tier=2.0×.
+ * Tier multipliers: Tier A=1.0├ù, Tier B=1.25├ù, Tier C=1.5├ù, Cross-tier=2.0├ù.
  * BRIDLE Rule 4: bare pass (margin<0.5pp) capped at 0.70 quality factor.
  * Year of Jubilee: append-only audit trail; one payout per receipt.
  */
-server.tool("process_bounty_marks_payout", "KN-H8 / BP017 — Atomic Bounty Marks payout. Write-class tool. " +
+server.tool("process_bounty_marks_payout", "KN-H8 / BP017 ΓÇö Atomic Bounty Marks payout. Write-class tool. " +
     "Triggered when a bounty receipt has passed the KN-H7 validate_bounty_receipt tool. " +
-    "FORK doctrine: payout is Marks-class ONLY — no fiat bridge. " +
+    "FORK doctrine: payout is Marks-class ONLY ΓÇö no fiat bridge. " +
     "cash_out_bounty_marks_to_fiat does NOT exist in this codebase (structural absence). " +
-    "Tier multipliers: Tier A=1.0×, Tier B=1.25×, Tier C=1.5×, Cross-tier=2.0×. " +
-    "BRIDLE Rule 4 Phase B5: bare pass (margin<0.5pp) → completion_quality_factor capped at 0.70. " +
+    "Tier multipliers: Tier A=1.0├ù, Tier B=1.25├ù, Tier C=1.5├ù, Cross-tier=2.0├ù. " +
+    "BRIDLE Rule 4 Phase B5: bare pass (margin<0.5pp) ΓåÆ completion_quality_factor capped at 0.70. " +
     "Year of Jubilee append-only ledger: no mutation, no deletion, one payout per receipt. " +
     "Gates: pass=true, Founder review clear (requires_founder_review=false OR founder_review_status='approved'), " +
     "not already paid. " +
@@ -5174,8 +5191,8 @@ server.tool("process_bounty_marks_payout", "KN-H8 / BP017 — Atomic Bounty Mark
         .positive()
         .optional()
         .describe("Base Marks rate before tier multiplier. Default: 100 Marks. " +
-        "marks_earned = floor(standard_rate × tier_multiplier × completion_quality_factor). " +
-        "Tier multipliers: A=1.0×, B=1.25×, C=1.5×, Cross=2.0×."),
+        "marks_earned = floor(standard_rate ├ù tier_multiplier ├ù completion_quality_factor). " +
+        "Tier multipliers: A=1.0├ù, B=1.25├ù, C=1.5├ù, Cross=2.0├ù."),
 }, async ({ receipt_id, member_id, standard_rate }) => {
     const result = await handleProcessBountyMarksPayout({
         receipt_id,
@@ -5184,9 +5201,9 @@ server.tool("process_bounty_marks_payout", "KN-H8 / BP017 — Atomic Bounty Mark
     });
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
 });
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 // START
-// ═══════════════════════════════════════════
+// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 async function main() {
     const transport = new StdioServerTransport();
     await server.connect(transport);
@@ -5195,21 +5212,21 @@ async function main() {
     clearPostBuildReloadLock();
     console.error("The Librarian MCP Server is running (stdio transport)");
 }
-// ─── KN-I1: Reminder Scribe MCP tools ───────────────────────────────────────
+// ΓöÇΓöÇΓöÇ KN-I1: Reminder Scribe MCP tools ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 /**
- * reminder_scribe_check — read-only pre-send pattern-match check.
+ * reminder_scribe_check ΓÇö read-only pre-send pattern-match check.
  * Runs the Reminder Scribe engine against a response draft and returns
  * violations + correction proposals. DOES NOT log to Detective TEAM.
  * Use reminder_scribe_log_violation to write violation events.
  *
- * BRIDLE Rule 4: engine failure → error_receipt (never silently passes).
+ * BRIDLE Rule 4: engine failure ΓåÆ error_receipt (never silently passes).
  */
-server.tool("reminder_scribe_check", "KN-I1 / BP017 — Reminder Scribe pre-send pattern-match check (READ-ONLY). " +
+server.tool("reminder_scribe_check", "KN-I1 / BP017 ΓÇö Reminder Scribe pre-send pattern-match check (READ-ONLY). " +
     "Runs the Reminder Scribe engine against an AI cohort response draft. " +
     "Detects discipline violations (R-KP-1 bare K-prompt path, R-KP-2 file-not-found, " +
     "R-KP-3 queued-as-path, R-FORK-1 fiat-bridge, R-PRAISE-1/2 unanchored praise, etc.). " +
     "Returns violations + correction proposals + engine stats. " +
-    "BRIDLE Rule 4: engine failure surfaces error_receipt — never silently passes. " +
+    "BRIDLE Rule 4: engine failure surfaces error_receipt ΓÇö never silently passes. " +
     "Composes with Catechist session-open grading + Bouncer-Scales-Judge BP011 KN095. " +
     "For violation write-back to Detective TEAM use reminder_scribe_log_violation.", {
     response_draft: z
@@ -5220,7 +5237,7 @@ server.tool("reminder_scribe_check", "KN-I1 / BP017 — Reminder Scribe pre-send
     session_id: z
         .string()
         .optional()
-        .describe("Current session ID (e.g. B135) — used in violation event metadata."),
+        .describe("Current session ID (e.g. B135) ΓÇö used in violation event metadata."),
     override_preferences: z
         .object({
         knight_kprompt_path_format: z.enum(["full_path", "bare_filename", "markdown_link"]).optional(),
@@ -5254,7 +5271,7 @@ server.tool("reminder_scribe_check", "KN-I1 / BP017 — Reminder Scribe pre-send
                     text: JSON.stringify({
                         error: "reminder_scribe_check engine error",
                         detail: String(err),
-                        bridle_rule_4: "HALT — engine failure. Response NOT cleared for send.",
+                        bridle_rule_4: "HALT ΓÇö engine failure. Response NOT cleared for send.",
                     }, null, 2),
                 }],
             isError: true,
@@ -5262,21 +5279,21 @@ server.tool("reminder_scribe_check", "KN-I1 / BP017 — Reminder Scribe pre-send
     }
 });
 /**
- * reminder_scribe_log_violation — write-class tool.
+ * reminder_scribe_log_violation ΓÇö write-class tool.
  * Records a violation/correction event to the Detective TEAM provenance substrate.
  * Called after Bishop reviews a flag and either applies correction or overrides.
  * Marks-cost logic is enforced here for marks-cost class overrides.
  */
-server.tool("reminder_scribe_log_violation", "KN-I1 / BP017 — Reminder Scribe violation/correction write-back (WRITE-CLASS). " +
+server.tool("reminder_scribe_log_violation", "KN-I1 / BP017 ΓÇö Reminder Scribe violation/correction write-back (WRITE-CLASS). " +
     "Records violation + correction or override decision to Detective TEAM provenance substrate. " +
     "Called after AI cohort member reviews a reminder_scribe_check flag. " +
     "Marks-cost applies when override_used=true AND violation override_class='marks-cost'. " +
-    "STRUCTURALLY-IMMUTABLE violations (R-FORK-1) cannot be overridden — reject call if attempted. " +
+    "STRUCTURALLY-IMMUTABLE violations (R-FORK-1) cannot be overridden ΓÇö reject call if attempted. " +
     "Appends to pheromone substrate with event_type=reminder_scribe_violation_correction. " +
     "Composes with KN104 Detective TEAM PRE-COLOSSUS substrate-write-back (5e7f540).", {
     session_id: z
         .string()
-        .describe("Current session ID (e.g. B135) — used in violation event metadata."),
+        .describe("Current session ID (e.g. B135) ΓÇö used in violation event metadata."),
     rule_id: z
         .string()
         .describe("Rule ID that triggered the violation (e.g. R-KP-2, R-FORK-1)."),
@@ -5402,22 +5419,22 @@ server.tool("reminder_scribe_log_violation", "KN-I1 / BP017 — Reminder Scribe 
         };
     }
 });
-// ─── KN-I4: Reminder Scribe metrics query MCP tool ───────────────────────────
+// ΓöÇΓöÇΓöÇ KN-I4: Reminder Scribe metrics query MCP tool ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 /**
- * reminder_scribe_metrics_query — empirical-receipt dashboard data query.
+ * reminder_scribe_metrics_query ΓÇö empirical-receipt dashboard data query.
  * Returns per-discipline-rule violation/correction metrics + FORK-class alert.
  * Supports filter parameters: window, ai_member, rule_class, visibility_scope.
  *
  * Anti-shame: empirical counts/rates/trends ONLY. No moral judgment language.
- * BRIDLE Rule 4: data_available=false surfaces UNAVAILABLE — never stale zeros.
+ * BRIDLE Rule 4: data_available=false surfaces UNAVAILABLE ΓÇö never stale zeros.
  * Privacy: personal/federation_aggregate/public_aggregate scopes enforced.
  */
-server.tool("reminder_scribe_metrics_query", "KN-I4 / BP017 — Reminder Scribe empirical-receipt metrics dashboard (READ-ONLY). " +
+server.tool("reminder_scribe_metrics_query", "KN-I4 / BP017 ΓÇö Reminder Scribe empirical-receipt metrics dashboard (READ-ONLY). " +
     "Returns per-discipline-rule violation/correction metrics + correction-stickiness + FORK-class CRITICAL alert. " +
     "Filter params: window (7d/30d/90d/all_time), ai_member (bishop/knight/pawn/rook/all), " +
     "rule_class_prefix (R-KP/R-PRAISE/R-FORK/R-DOUBLE-FILE/R-COUNSEL/R-USPTO/all). " +
-    "Anti-shame: empirical numbers only — no moral judgment in output. " +
-    "BRIDLE Rule 4: data_available=false → UNAVAILABLE (never stale zeros). " +
+    "Anti-shame: empirical numbers only ΓÇö no moral judgment in output. " +
+    "BRIDLE Rule 4: data_available=false ΓåÆ UNAVAILABLE (never stale zeros). " +
     "FORK-class alert: is_critical=true requires immediate Founder review. " +
     "Optionally format as markdown summary (format=markdown). " +
     "Composes with KN-I1 Reminder Scribe core + KN-I2 Catechist + KN-I3 provenance chain.", {
@@ -5473,7 +5490,7 @@ server.tool("reminder_scribe_metrics_query", "KN-I4 / BP017 — Reminder Scribe 
                         fork_class_critical: payload.fork_class_alert.is_critical,
                         note: payload.data_available
                             ? `Metrics for ${opts.window} window. ${payload.total_violations} violation(s), ${payload.total_corrections} correction(s).`
-                            : "DATA UNAVAILABLE — do not interpret as zero violations.",
+                            : "DATA UNAVAILABLE ΓÇö do not interpret as zero violations.",
                     }, null, 2),
                 }],
         };
@@ -5485,23 +5502,23 @@ server.tool("reminder_scribe_metrics_query", "KN-I4 / BP017 — Reminder Scribe 
                     text: JSON.stringify({
                         error: "reminder_scribe_metrics_query error",
                         detail: String(err),
-                        bridle_rule_4: "Data unavailable — do not interpret as zero violations.",
+                        bridle_rule_4: "Data unavailable ΓÇö do not interpret as zero violations.",
                     }, null, 2),
                 }],
             isError: true,
         };
     }
 });
-// ─── KN-I3: Reminder Scribe query history + drain retry MCP tools ────────────
+// ΓöÇΓöÇΓöÇ KN-I3: Reminder Scribe query history + drain retry MCP tools ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 /**
- * reminder_scribe_query_history — read-only provenance chain query.
+ * reminder_scribe_query_history ΓÇö read-only provenance chain query.
  * Returns violation/correction history from the RS provenance ledger
  * with optional filters (ai_member, rule_id, event_type, rolling_days).
  * Aggregated per-rule for Catechist-class consumption.
  *
  * Composes with KN-I2 Catechist rolling-7d violation-rate analytics.
  */
-server.tool("reminder_scribe_query_history", "KN-I3 / BP017 — Reminder Scribe violation/correction provenance query (READ-ONLY). " +
+server.tool("reminder_scribe_query_history", "KN-I3 / BP017 ΓÇö Reminder Scribe violation/correction provenance query (READ-ONLY). " +
     "Returns RS provenance ledger entries with Cathedral-prefixed serials + Chronos HMACs. " +
     "Optional filters: ai_member, rule_id, event_type, rolling_days. " +
     "Returns both raw entries and per-rule aggregate (total_violations, corrections, overrides, marks_spent, stickiness_pct). " +
@@ -5577,10 +5594,10 @@ server.tool("reminder_scribe_query_history", "KN-I3 / BP017 — Reminder Scribe 
     }
 });
 /**
- * reminder_scribe_drain_retry — drain local retry queue to provenance ledger.
+ * reminder_scribe_drain_retry ΓÇö drain local retry queue to provenance ledger.
  * Called at substrate-recovery time per BRIDLE Rule 4 eventually-consistent pattern.
  */
-server.tool("reminder_scribe_drain_retry", "KN-I3 / BP017 — Drain Reminder Scribe local retry queue to RS provenance ledger (WRITE-CLASS). " +
+server.tool("reminder_scribe_drain_retry", "KN-I3 / BP017 ΓÇö Drain Reminder Scribe local retry queue to RS provenance ledger (WRITE-CLASS). " +
     "Flushes events queued during substrate-unavailable windows. " +
     "BRIDLE Rule 4 eventually-consistent recovery pattern. " +
     "Returns count of drained + failed entries + any errors.", {}, async () => {
@@ -5595,7 +5612,7 @@ server.tool("reminder_scribe_drain_retry", "KN-I3 / BP017 — Drain Reminder Scr
                         errors: result.errors,
                         note: result.drained > 0
                             ? `${result.drained} event(s) drained from retry queue to RS provenance ledger.`
-                            : "Retry queue empty — nothing to drain.",
+                            : "Retry queue empty ΓÇö nothing to drain.",
                     }, null, 2),
                 }],
         };
@@ -5613,9 +5630,9 @@ server.tool("reminder_scribe_drain_retry", "KN-I3 / BP017 — Drain Reminder Scr
         };
     }
 });
-// ─── KN-I2: Catechist session-open grade MCP tool ────────────────────────────
+// ΓöÇΓöÇΓöÇ KN-I2: Catechist session-open grade MCP tool ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 /**
- * catechist_session_open_grade — session-open discipline grading.
+ * catechist_session_open_grade ΓÇö session-open discipline grading.
  * Runs R01-R10 base checklist + Reminder Scribe violation-history-summary
  * (rolling 7-day window) per AI member. Anti-shame: empirical counts/rates only.
  *
@@ -5625,9 +5642,9 @@ server.tool("reminder_scribe_drain_retry", "KN-I3 / BP017 — Drain Reminder Scr
  * Substrate write-back: logs catechist_violation_summary provenance event
  * to pheromone substrate (KN104 Detective TEAM pattern).
  */
-server.tool("catechist_session_open_grade", "KN-I2 / BP017 — Catechist session-open discipline grade (R01-R10 + Reminder Scribe violation history). " +
+server.tool("catechist_session_open_grade", "KN-I2 / BP017 ΓÇö Catechist session-open discipline grade (R01-R10 + Reminder Scribe violation history). " +
     "Extends Catechist (#2313 KN036 BP004) with per-AI-member rolling-7-day violation-count + correction-stickiness. " +
-    "Anti-shame discipline: empirical counts/rates only — no moral judgment. " +
+    "Anti-shame discipline: empirical counts/rates only ΓÇö no moral judgment. " +
     "Returns structured grade: R01-R10 PASS/WARN/FAIL/SKIP + violation-history table. " +
     "Optionally returns formatted Markdown for session-open display. " +
     "BRIDLE Rule 4: if KN-I1 violation log unavailable, surfaces UNAVAILABLE flag + empty-history. " +
@@ -5635,7 +5652,7 @@ server.tool("catechist_session_open_grade", "KN-I2 / BP017 — Catechist session
     "Composes with Reminder Scribe KN-I1 + Bouncer-Scales-Judge KN095 BP011.", {
     session_id: z
         .string()
-        .describe("Current session ID (e.g. B135) — used in grade output and provenance."),
+        .describe("Current session ID (e.g. B135) ΓÇö used in grade output and provenance."),
     ai_member: z
         .enum(["bishop", "knight", "pawn", "rook"])
         .describe("AI cohort member being graded."),
@@ -5693,22 +5710,22 @@ server.tool("catechist_session_open_grade", "KN-I2 / BP017 — Catechist session
                     text: JSON.stringify({
                         error: "catechist_session_open_grade error",
                         detail: String(err),
-                        bridle_rule_4: "HALT — grade engine failure. Review catechist/grader.ts.",
+                        bridle_rule_4: "HALT ΓÇö grade engine failure. Review catechist/grader.ts.",
                     }, null, 2),
                 }],
             isError: true,
         };
     }
 });
-// ─── KN-J1: House Scribe MCP tools ───────────────────────────────────────────
+// ΓöÇΓöÇΓöÇ KN-J1: House Scribe MCP tools ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 /**
- * house_scribe_create_jar — write-class
+ * house_scribe_create_jar ΓÇö write-class
  * Triggered by Hive-thread closure (KN-D3 closed state).
  * Creates a new Jar of Honey in 'created' state. Emits Pixie Dust event.
  */
-server.tool("house_scribe_create_jar", "KN-J1 / BP017 — House Scribe: create a new Jar of Honey in 'created' state. " +
+server.tool("house_scribe_create_jar", "KN-J1 / BP017 ΓÇö House Scribe: create a new Jar of Honey in 'created' state. " +
     "Triggered by Hive-thread closure (KN-D3 closed transition). " +
-    "Jar lifecycle: created → indexed → sealed → retrievable. " +
+    "Jar lifecycle: created ΓåÆ indexed ΓåÆ sealed ΓåÆ retrievable. " +
     "Jar creation = Layer 6 Pixie Dust event (pheromone substrate write). " +
     "BRIDLE Rule 4: on creation failure, returns error + halt; never seals incomplete data. " +
     "Composes with KN-D3 Hive-thread state machine + KN104 provenance chain.", {
@@ -5735,7 +5752,7 @@ server.tool("house_scribe_create_jar", "KN-J1 / BP017 — House Scribe: create a
         const result = createJar(args);
         if (!result.success) {
             return {
-                content: [{ type: "text", text: JSON.stringify({ error: result.error, bridle_rule_4: "HALT — Jar creation failed. Do not seal incomplete data." }, null, 2) }],
+                content: [{ type: "text", text: JSON.stringify({ error: result.error, bridle_rule_4: "HALT ΓÇö Jar creation failed. Do not seal incomplete data." }, null, 2) }],
                 isError: true,
             };
         }
@@ -5752,22 +5769,22 @@ server.tool("house_scribe_create_jar", "KN-J1 / BP017 — House Scribe: create a
     }
     catch (err) {
         return {
-            content: [{ type: "text", text: JSON.stringify({ error: String(err), bridle_rule_4: "HALT — Jar creation error." }, null, 2) }],
+            content: [{ type: "text", text: JSON.stringify({ error: String(err), bridle_rule_4: "HALT ΓÇö Jar creation error." }, null, 2) }],
             isError: true,
         };
     }
 });
 /**
- * house_scribe_seal_jar — write-class
+ * house_scribe_seal_jar ΓÇö write-class
  * Finalizes Jar provenance: assigns Cathedral-prefixed HS serial + Chronos HMAC.
  * Jar becomes STRUCTURALLY-IMMUTABLE (forever-stamp class) after this call.
  * Requires jar to be in 'indexed' state (coordinate must be assigned via KN-J2).
  */
-server.tool("house_scribe_seal_jar", "KN-J1 / BP017 — House Scribe: seal a Jar of Honey (forever-stamp class). " +
+server.tool("house_scribe_seal_jar", "KN-J1 / BP017 ΓÇö House Scribe: seal a Jar of Honey (forever-stamp class). " +
     "Assigns Cathedral-prefixed serial LB-{CAT}.HS-NNNN + Chronos HMAC. " +
-    "Jar becomes STRUCTURALLY-IMMUTABLE after sealing — no mutation allowed (FORK doctrine). " +
+    "Jar becomes STRUCTURALLY-IMMUTABLE after sealing ΓÇö no mutation allowed (FORK doctrine). " +
     "Requires jar in 'indexed' state with coordinate assigned. " +
-    "Transitions: indexed → sealed → retrievable (both in one atomic operation). " +
+    "Transitions: indexed ΓåÆ sealed ΓåÆ retrievable (both in one atomic operation). " +
     "BRIDLE Rule 4: if jar not in correct state, returns error; never seals incomplete data.", {
     jar_id: z.string().describe("UUID of the Jar to seal."),
 }, async ({ jar_id }) => {
@@ -5775,7 +5792,7 @@ server.tool("house_scribe_seal_jar", "KN-J1 / BP017 — House Scribe: seal a Jar
         const result = sealJar(jar_id);
         if (!result.success) {
             return {
-                content: [{ type: "text", text: JSON.stringify({ error: result.error, bridle_rule_4: "HALT — Jar seal failed. Check state and coordinate." }, null, 2) }],
+                content: [{ type: "text", text: JSON.stringify({ error: result.error, bridle_rule_4: "HALT ΓÇö Jar seal failed. Check state and coordinate." }, null, 2) }],
                 isError: true,
             };
         }
@@ -5791,11 +5808,11 @@ server.tool("house_scribe_seal_jar", "KN-J1 / BP017 — House Scribe: seal a Jar
     }
 });
 /**
- * house_scribe_query_jars — read-class
+ * house_scribe_query_jars ΓÇö read-class
  * Queries Jars by coordinate, flavor-class (content_type), member, state, or cathedral.
  * Respects cohort-class access control.
  */
-server.tool("house_scribe_query_jars", "KN-J1 / BP017 — House Scribe: query Jars of Honey by coordinate / content type / member / state / cathedral. " +
+server.tool("house_scribe_query_jars", "KN-J1 / BP017 ΓÇö House Scribe: query Jars of Honey by coordinate / content type / member / state / cathedral. " +
     "Cohort-class access control enforced: requester's cohort must meet jar's read_cohort_minimum. " +
     "Returns list of Jars matching query filters. " +
     "Composes with Detective TEAM read-side (KN104) for provenance queries.", {
@@ -5816,7 +5833,7 @@ server.tool("house_scribe_query_jars", "KN-J1 / BP017 — House Scribe: query Ja
     requester_cohort: z
         .enum(["lone_wolf", "pied_piper_tier_1", "federation_member", "excalibur_subscriber", "thirteenth_warrior"])
         .optional()
-        .describe("Requester's cohort class — used for access control filtering. Omit to return all accessible jars."),
+        .describe("Requester's cohort class ΓÇö used for access control filtering. Omit to return all accessible jars."),
     limit: z.number().int().min(1).max(500).optional().describe("Max jars to return. Default: 100."),
 }, async (args) => {
     try {
@@ -5833,16 +5850,16 @@ server.tool("house_scribe_query_jars", "KN-J1 / BP017 — House Scribe: query Ja
     }
 });
 /**
- * house_scribe_population_audit — read-class
+ * house_scribe_population_audit ΓÇö read-class
  * Surfaces current House Scribe population-ratio + scaling recommendations.
  * Counts substrate-class items vs. current HS instance count.
  * BRIDLE Rule 4: failure surfaces unavailable flag; never silently scales wrong.
  */
-server.tool("house_scribe_population_audit", "KN-J1 / BP017 — House Scribe: population-ratio audit. " +
+server.tool("house_scribe_population_audit", "KN-J1 / BP017 ΓÇö House Scribe: population-ratio audit. " +
     "Counts substrate-class items (Pheromone records / Cathedral tablets / LB Frame instances / active Hive threads). " +
     "Compares to current House Scribe count. Surfaces spawn/archive recommendations and drift alerts. " +
     "Starting ratios: 1 HS per 10K Pheromone records; 1 HS per 5K Cathedral tablets (configurable via Preferences). " +
-    "Alert when ratio drifts ±20% from target. " +
+    "Alert when ratio drifts ┬▒20% from target. " +
     "BRIDLE Rule 4: audit failure returns data_available=false; never silently scales wrong.", {
     population_ratio_pheromone_records: z.number().int().min(1000).max(100000).optional()
         .describe("Override: Pheromone records per House Scribe. Default: 10000."),
@@ -5864,21 +5881,21 @@ server.tool("house_scribe_population_audit", "KN-J1 / BP017 — House Scribe: po
         };
     }
 });
-// ─── KN-J2: House Scribe coordinate tools ─────────────────────────────────────
+// ΓöÇΓöÇΓöÇ KN-J2: House Scribe coordinate tools ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 /**
- * house_scribe_assign_coordinate — write-class
+ * house_scribe_assign_coordinate ΓÇö write-class
  * Assigns an 8-digit grid coordinate to a Jar at its `indexed` transition.
  * Handles cell-overflow Swarming (daughter-cell at adjacent flavor-class).
  */
-server.tool("house_scribe_assign_coordinate", "KN-J2 / BP017 — House Scribe: assign 8-digit grid coordinate to a Jar (indexed state transition). " +
-    "Coordinate: NN-NN-NN-NN (cathedral × tier × flavor-class × jar-slot). " +
+server.tool("house_scribe_assign_coordinate", "KN-J2 / BP017 ΓÇö House Scribe: assign 8-digit grid coordinate to a Jar (indexed state transition). " +
+    "Coordinate: NN-NN-NN-NN (cathedral ├ù tier ├ù flavor-class ├ù jar-slot). " +
     "Extends Multi-Trail BP015 P3 2D to 4D. Cell capacity: 100 Jars. " +
-    "Cell overflow → Swarming: daughter-cell spawned at adjacent flavor-class. " +
-    "BRIDLE Rule 4: collision detected → HALT; overflow exhausted → HALT. " +
-    "Composes with KN-J1 Jar lifecycle (created → indexed transition).", {
+    "Cell overflow ΓåÆ Swarming: daughter-cell spawned at adjacent flavor-class. " +
+    "BRIDLE Rule 4: collision detected ΓåÆ HALT; overflow exhausted ΓåÆ HALT. " +
+    "Composes with KN-J1 Jar lifecycle (created ΓåÆ indexed transition).", {
     jar_id: z.string().describe("UUID of the Jar to assign a coordinate."),
     cathedral: z.enum(["bishop", "knight", "pawn", "apiarist_tribe_hive", "apiarist_family_hive", "apiarist_project_hive", "apiarist_guild_hive"]).describe("Cathedral this Jar belongs to (determines digits 1-2)."),
-    content_type: z.enum(["synthesis", "comb_artifact", "royal_jelly_class", "innovation_corpus", "session_archive", "detective_finding"]).describe("Content type — determines tier and flavor-class derivation."),
+    content_type: z.enum(["synthesis", "comb_artifact", "royal_jelly_class", "innovation_corpus", "session_archive", "detective_finding"]).describe("Content type ΓÇö determines tier and flavor-class derivation."),
     tier_override: z.string().regex(/^\d{2}$/).optional().describe("Override tier ID (01-07, 99). Default: derived from content_type."),
     flavor_override: z.string().regex(/^\d{2}$/).optional().describe("Override flavor ID (01-06, 99). Default: derived from content_type."),
 }, async (args) => {
@@ -5902,11 +5919,11 @@ server.tool("house_scribe_assign_coordinate", "KN-J2 / BP017 — House Scribe: a
     }
 });
 /**
- * house_scribe_query_jars_by_coordinate — read-class
+ * house_scribe_query_jars_by_coordinate ΓÇö read-class
  * Queries Jars by 8-digit coordinate: exact, wildcard, range, or cross-cathedral.
  * BRIDLE Rule 4: result-set capped at 1,000 entries.
  */
-server.tool("house_scribe_query_jars_by_coordinate", "KN-J2 / BP017 — House Scribe: coordinate-based Jar query. " +
+server.tool("house_scribe_query_jars_by_coordinate", "KN-J2 / BP017 ΓÇö House Scribe: coordinate-based Jar query. " +
     "Pattern: exact '01-06-02-05', wildcard '01-*-*-*' (all bishop Jars), " +
     "range '01-06-01..06-*' (bishop/freeway flavors 01-06), cross-cathedral '99-*-*-*'. " +
     "BRIDLE Rule 4: result-set capped at 1,000 entries; use offset for paging. " +
@@ -5928,13 +5945,13 @@ server.tool("house_scribe_query_jars_by_coordinate", "KN-J2 / BP017 — House Sc
         };
     }
 });
-// ─── KN-J3: House Scribe Living Gridwork MCP tools ───────────────────────────
+// ΓöÇΓöÇΓöÇ KN-J3: House Scribe Living Gridwork MCP tools ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 /**
- * house_scribe_cell_event — write-class
+ * house_scribe_cell_event ΓÇö write-class
  * Fires a Pheromone-write/Pixie-Dust event on a cell, triggering
  * sub-ms cell-state-update per the Augur Living Gate pattern.
  */
-server.tool("house_scribe_cell_event", "KN-J3 / BP017 — House Scribe: fire Pixie Dust / Pheromone-write event on a grid cell. " +
+server.tool("house_scribe_cell_event", "KN-J3 / BP017 ΓÇö House Scribe: fire Pixie Dust / Pheromone-write event on a grid cell. " +
     "Triggers Augur Living Gate sub-ms cell-state-update (jar_count + density + decay). " +
     "Sets cell living=true for living_window_ms (default 60s). " +
     "Composes with KN-J1 Jar lifecycle + KN-J2 coordinate scheme + Pheromone substrate (#2317). " +
@@ -5968,11 +5985,11 @@ server.tool("house_scribe_cell_event", "KN-J3 / BP017 — House Scribe: fire Pix
     }
 });
 /**
- * house_scribe_query_living_cell — read-class
+ * house_scribe_query_living_cell ΓÇö read-class
  * Returns LivingCellState for a coordinate (jar_count + density + decay + living flag).
  * BRIDLE Rule 4: data_available=false if state unavailable.
  */
-server.tool("house_scribe_query_living_cell", "KN-J3 / BP017 — House Scribe: query living cell state for a coordinate. " +
+server.tool("house_scribe_query_living_cell", "KN-J3 / BP017 ΓÇö House Scribe: query living cell state for a coordinate. " +
     "Returns LivingCellState: jar_count + cell_density_score + decay_score + living flag. " +
     "living=true while Pheromone events flow; false after silence window (default 60s). " +
     "BRIDLE Rule 4: data_available=false if state unavailable; fallback_polling flag set when Augur unavailable.", {
@@ -5992,10 +6009,10 @@ server.tool("house_scribe_query_living_cell", "KN-J3 / BP017 — House Scribe: q
     }
 });
 /**
- * house_scribe_gridwork_snapshot — read-class
+ * house_scribe_gridwork_snapshot ΓÇö read-class
  * Returns a full living-gridwork snapshot: all tracked cells with current state.
  */
-server.tool("house_scribe_gridwork_snapshot", "KN-J3 / BP017 — House Scribe: full living-gridwork snapshot. " +
+server.tool("house_scribe_gridwork_snapshot", "KN-J3 / BP017 ΓÇö House Scribe: full living-gridwork snapshot. " +
     "Returns all tracked cells with living flag + jar_count + density + decay. " +
     "Includes living/dead/fallback cell counts. " +
     "BRIDLE Rule 4: data_available=false on failure; never silent state corruption.", {}, async () => {
@@ -6013,11 +6030,11 @@ server.tool("house_scribe_gridwork_snapshot", "KN-J3 / BP017 — House Scribe: f
     }
 });
 /**
- * house_scribe_reconcile_cells — write-class
+ * house_scribe_reconcile_cells ΓÇö write-class
  * Detect and reconcile cell-state inconsistencies against KN-J1 ledger.
  * BRIDLE Rule 4: flags + reconciles; never silently leaves inconsistent state.
  */
-server.tool("house_scribe_reconcile_cells", "KN-J3 / BP017 — House Scribe: detect and reconcile cell-state inconsistencies. " +
+server.tool("house_scribe_reconcile_cells", "KN-J3 / BP017 ΓÇö House Scribe: detect and reconcile cell-state inconsistencies. " +
     "Compares cached cell state against KN-J1 jars ledger (source-of-truth). " +
     "Flags inconsistencies + reconciles. BRIDLE Rule 4 required before any seal operation.", {}, async () => {
     try {
@@ -6033,31 +6050,31 @@ server.tool("house_scribe_reconcile_cells", "KN-J3 / BP017 — House Scribe: det
         };
     }
 });
-// ─── KN-J4: Apiarist Hive Subscriber ─────────────────────────────────────────
+// ΓöÇΓöÇΓöÇ KN-J4: Apiarist Hive Subscriber ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 /**
- * house_scribe_hive_thread_closed — write-class
- * Called when a Hive thread transitions active → closed (KN-D3).
- * Orchestrates: create Jar → assign coordinate → living-gridwork → seal Jar.
- * Bee-canon role mapping: Workers/Drones/Queen → Marks-attribution.
+ * house_scribe_hive_thread_closed ΓÇö write-class
+ * Called when a Hive thread transitions active ΓåÆ closed (KN-D3).
+ * Orchestrates: create Jar ΓåÆ assign coordinate ΓåÆ living-gridwork ΓåÆ seal Jar.
+ * Bee-canon role mapping: Workers/Drones/Queen ΓåÆ Marks-attribution.
  * BRIDLE Rule 4: incomplete synthesis halts Jar creation.
  * FORK doctrine: Marks-attribution NEVER bridges to fiat.
  */
-server.tool("house_scribe_hive_thread_closed", "KN-J4 / BP017 — House Scribe: handle Hive-thread closure event. " +
+server.tool("house_scribe_hive_thread_closed", "KN-J4 / BP017 ΓÇö House Scribe: handle Hive-thread closure event. " +
     "Receives thread_closed_with_synthesis event (KN-D3). " +
-    "Orchestrates Jar creation (KN-J1) → coordinate assignment (KN-J2) → " +
-    "living-gridwork registration (KN-J3) → seal. " +
+    "Orchestrates Jar creation (KN-J1) ΓåÆ coordinate assignment (KN-J2) ΓåÆ " +
+    "living-gridwork registration (KN-J3) ΓåÆ seal. " +
     "Computes bee-canon Marks-attribution (Workers/Drones pro-rata; Queen supervisor multiplier; " +
     "Project-cohort GREATER % multiplier). " +
     "BRIDLE Rule 4: incomplete synthesis halts creation + flags for Queen review. " +
-    "FORK doctrine: Marks-attribution is LB-currency ONLY — no fiat conversion.", {
+    "FORK doctrine: Marks-attribution is LB-currency ONLY ΓÇö no fiat conversion.", {
     thread_id: z.string().describe("Unique Hive-thread ID (from KN-D3 state machine)."),
     cathedral: z.string().describe("Cathedral identifier: bishop, knight, pawn, rook, cross."),
     cohort_type: z
         .enum(["tribe", "family", "guild", "project"])
         .describe("Hive cohort class. project triggers GREATER % Marks-attribution multiplier."),
     closed_at: z.string().describe("ISO-8601 timestamp when thread closed."),
-    synthesis_summary: z.string().describe("Synthesis summary text (max 500 chars). Empty → BRIDLE Rule 4 HALT."),
-    synthesis_blob_pointer: z.string().describe("Object-storage key / IPFS CID for synthesis blob. Empty → BRIDLE Rule 4 HALT."),
+    synthesis_summary: z.string().describe("Synthesis summary text (max 500 chars). Empty ΓåÆ BRIDLE Rule 4 HALT."),
+    synthesis_blob_pointer: z.string().describe("Object-storage key / IPFS CID for synthesis blob. Empty ΓåÆ BRIDLE Rule 4 HALT."),
     contributors: z
         .array(z.object({
         member_id: z.string(),
@@ -6110,11 +6127,11 @@ server.tool("house_scribe_hive_thread_closed", "KN-J4 / BP017 — House Scribe: 
     }
 });
 /**
- * house_scribe_apiarist_hive_jar_status — read-class
+ * house_scribe_apiarist_hive_jar_status ΓÇö read-class
  * Query Jars created from a specific Hive thread (by thread_id).
  * Returns Jar state + Marks-attribution breakdown.
  */
-server.tool("house_scribe_apiarist_hive_jar_status", "KN-J4 / BP017 — House Scribe: query Jars created from a Hive thread. " +
+server.tool("house_scribe_apiarist_hive_jar_status", "KN-J4 / BP017 ΓÇö House Scribe: query Jars created from a Hive thread. " +
     "Returns Jar lifecycle state + bee-canon Marks-attribution breakdown. " +
     "BRIDLE Rule 4: data_available=false if query fails.", {
     thread_id: z.string().describe("Hive-thread ID to query (from KN-D3)."),
@@ -6132,20 +6149,20 @@ server.tool("house_scribe_apiarist_hive_jar_status", "KN-J4 / BP017 — House Sc
         };
     }
 });
-// ─── KN-J5: Cross-Cathedral Coordinate Routing ───────────────────────────────
+// ΓöÇΓöÇΓöÇ KN-J5: Cross-Cathedral Coordinate Routing ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 /**
- * house_scribe_query_jars_cross_cathedral — read-class
+ * house_scribe_query_jars_cross_cathedral ΓÇö read-class
  * Cross-cathedral Jar query via 8-digit-grid wildcard patterns.
  * Detective TEAM fan-out + cohort-class enforcement + cache + provenance.
  */
-server.tool("house_scribe_query_jars_cross_cathedral", "KN-J5 / BP017 — House Scribe: cross-cathedral Jar query via 8-digit-grid coordinate patterns. " +
+server.tool("house_scribe_query_jars_cross_cathedral", "KN-J5 / BP017 ΓÇö House Scribe: cross-cathedral Jar query via 8-digit-grid coordinate patterns. " +
     "Patterns: `01-*-*-*` (single cathedral), `99-*-*-*` (cross-cathedral reserved), " +
     "`*-*-*-*` (all cathedrals; Federation Members only), `01..04-*-*-*` (range). " +
     "Cohort-class enforcement: lone_wolf=own-cathedral only; federation_member=full cross-cathedral. " +
     "Detective TEAM fan-out per cathedral + synthesis merge. " +
     "Cache with Augur Living Gate invalidation (KN-J3). " +
     "Provenance write-back: house_scribe_cross_cathedral_query class. " +
-    "BRIDLE Rule 4: insufficient cohort → reject with advancement-suggestion; cathedral unavailable → partial results + flag.", {
+    "BRIDLE Rule 4: insufficient cohort ΓåÆ reject with advancement-suggestion; cathedral unavailable ΓåÆ partial results + flag.", {
     pattern: z.string().describe("Cross-cathedral query pattern. Examples: '01-*-*-*' (bishop only), '99-*-*-*' (all cross-cathedral), " +
         "'*-*-*-*' (all cathedrals; Federation Members only), '01..04-*-*-*' (cathedral range). " +
         "Standard KN-J2 wildcard/exact patterns also supported for single-cathedral queries."),
@@ -6179,11 +6196,11 @@ server.tool("house_scribe_query_jars_cross_cathedral", "KN-J5 / BP017 — House 
     }
 });
 /**
- * house_scribe_invalidate_cross_cache — write-class
+ * house_scribe_invalidate_cross_cache ΓÇö write-class
  * Invalidate the cross-cathedral query cache (Augur Living Gate).
  * Called on Pheromone substrate write-events.
  */
-server.tool("house_scribe_invalidate_cross_cache", "KN-J5 / BP017 — House Scribe: invalidate cross-cathedral query cache. " +
+server.tool("house_scribe_invalidate_cross_cache", "KN-J5 / BP017 ΓÇö House Scribe: invalidate cross-cathedral query cache. " +
     "Called by Augur Living Gate on Pheromone write-events. " +
     "Pass pattern to invalidate a specific cache entry, or omit to clear all.", {
     pattern: z.string().optional().describe("Specific cross-cathedral query pattern to invalidate. Omit to clear full cache."),
@@ -6202,10 +6219,10 @@ server.tool("house_scribe_invalidate_cross_cache", "KN-J5 / BP017 — House Scri
     }
 });
 /**
- * house_scribe_cross_cathedral_provenance — read-class
+ * house_scribe_cross_cathedral_provenance ΓÇö read-class
  * Query the cross-cathedral provenance log.
  */
-server.tool("house_scribe_cross_cathedral_provenance", "KN-J5 / BP017 — House Scribe: query the cross-cathedral query provenance log. " +
+server.tool("house_scribe_cross_cathedral_provenance", "KN-J5 / BP017 ΓÇö House Scribe: query the cross-cathedral query provenance log. " +
     "Returns recent house_scribe_cross_cathedral_query entries. " +
     "BRIDLE Rule 4: data_available=false if log unavailable.", {
     limit: z.number().int().min(1).max(500).optional().describe("Max entries to return. Default: 100."),
@@ -6223,15 +6240,15 @@ server.tool("house_scribe_cross_cathedral_provenance", "KN-J5 / BP017 — House 
         };
     }
 });
-// ─── Pod-Q KN-Q2: On Deck Scribe MCP tools ────────────────────────────────────
+// ΓöÇΓöÇΓöÇ Pod-Q KN-Q2: On Deck Scribe MCP tools ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 import { appendEntry as odsAppendEntry, markInFlight as odsMarkInFlight, markLanded as odsMarkLanded, markErrored as odsMarkErrored, markDeferred as odsMarkDeferred, attachPreparedContext as odsAttachPreparedContext, } from "./on_deck_scribe/writer.js";
 import { loadQueue as odsLoadQueue, getNextForKnight as odsGetNextForKnight, dispatchAudit as odsDispatchAudit, scanDropzoneForKPrompts, } from "./on_deck_scribe/reader.js";
 import { allocateOdsSerial } from "./on_deck_scribe/serial.js";
 /**
- * on_deck_query — read-class
+ * on_deck_query ΓÇö read-class
  * Return next-fire entry OR full filtered queue from On Deck Scribe canonical state file.
  */
-server.tool("on_deck_query", "KN-Q2 / BP018 — On Deck Scribe: query canonical state file. " +
+server.tool("on_deck_query", "KN-Q2 / BP018 ΓÇö On Deck Scribe: query canonical state file. " +
     "Returns next-fire K-prompt entry for Knight (queued + prereqs met + optional filters). " +
     "Pass full_queue=true to return all entries in priority order.", {
     full_queue: z.boolean().optional().describe("Return full queue instead of next-fire entry. Default: false."),
@@ -6273,10 +6290,10 @@ server.tool("on_deck_query", "KN-Q2 / BP018 — On Deck Scribe: query canonical 
     }
 });
 /**
- * on_deck_append — write-class
+ * on_deck_append ΓÇö write-class
  * Append a new K-prompt entry to the canonical queue.
  */
-server.tool("on_deck_append", "KN-Q2 / BP018 — On Deck Scribe: append new K-prompt entry to canonical queue. " +
+server.tool("on_deck_append", "KN-Q2 / BP018 ΓÇö On Deck Scribe: append new K-prompt entry to canonical queue. " +
     "Allocates LB-ODS-NNNN serial. Returns entry_id.", {
     category: z
         .enum(["knight", "bishop", "shadow", "pawn", "rook"])
@@ -6318,11 +6335,11 @@ server.tool("on_deck_append", "KN-Q2 / BP018 — On Deck Scribe: append new K-pr
     }
 });
 /**
- * on_deck_mutate — write-class
+ * on_deck_mutate ΓÇö write-class
  * Mutate status, commit_hash, or error_reason on an existing entry.
  */
-server.tool("on_deck_mutate", "KN-Q2 / BP018 — On Deck Scribe: mutate entry status. " +
-    "Transitions: queued→in_flight, in_flight→landed, *→errored, *→deferred. " +
+server.tool("on_deck_mutate", "KN-Q2 / BP018 ΓÇö On Deck Scribe: mutate entry status. " +
+    "Transitions: queuedΓåÆin_flight, in_flightΓåÆlanded, *ΓåÆerrored, *ΓåÆdeferred. " +
     "Append-only: mutation is a new line in queue.jsonl.", {
     id: z.string().describe("Entry ID (LB-ODS-NNNN)."),
     status: z
@@ -6355,10 +6372,10 @@ server.tool("on_deck_mutate", "KN-Q2 / BP018 — On Deck Scribe: mutate entry st
     }
 });
 /**
- * on_deck_attach_prepared_context — write-class
+ * on_deck_attach_prepared_context ΓÇö write-class
  * Attach Shadow E-Giant prepared_context (pre-staging output) to a queued entry.
  */
-server.tool("on_deck_attach_prepared_context", "KN-Q2 / BP018 — On Deck Scribe: attach Shadow E-Giant pre-staging output to a queued entry. " +
+server.tool("on_deck_attach_prepared_context", "KN-Q2 / BP018 ΓÇö On Deck Scribe: attach Shadow E-Giant pre-staging output to a queued entry. " +
     "Sets prepared_context (shadow_id, wrasse_pre_injections, detective_findings, prereq summary). " +
     "Required before Pod-R auto-fire can proceed.", {
     id: z.string().describe("Entry ID to attach prepared context to."),
@@ -6395,10 +6412,10 @@ server.tool("on_deck_attach_prepared_context", "KN-Q2 / BP018 — On Deck Scribe
     }
 });
 /**
- * on_deck_promote_from_dropzone — write-class
+ * on_deck_promote_from_dropzone ΓÇö write-class
  * Scan a dropzone directory, find PROMPT_KNIGHT_*.md files, and bulk-import as queued entries.
  */
-server.tool("on_deck_promote_from_dropzone", "KN-Q2 / BP018 — On Deck Scribe: bulk-import K-prompt files from a dropzone directory. " +
+server.tool("on_deck_promote_from_dropzone", "KN-Q2 / BP018 ΓÇö On Deck Scribe: bulk-import K-prompt files from a dropzone directory. " +
     "Scans for PROMPT_KNIGHT_*.md files and appends each as a queued entry. " +
     "Returns list of imported entry IDs.", {
     dropzone_path: z.string().describe("Absolute path to dropzone directory (e.g. BISHOP_DROPZONE/01_KnightPrompts/)."),
@@ -6429,10 +6446,10 @@ server.tool("on_deck_promote_from_dropzone", "KN-Q2 / BP018 — On Deck Scribe: 
     }
 });
 /**
- * on_deck_dispatch_audit — read-class
+ * on_deck_dispatch_audit ΓÇö read-class
  * Return aggregated counts: queued / in_flight / landed / errored / by-category / by-cohort_class.
  */
-server.tool("on_deck_dispatch_audit", "KN-Q2 / BP018 — On Deck Scribe: aggregated dispatch counts. " +
+server.tool("on_deck_dispatch_audit", "KN-Q2 / BP018 ΓÇö On Deck Scribe: aggregated dispatch counts. " +
     "Returns total / queued / in_flight / landed / deferred / errored + breakdowns by category, cohort_class, pod_class.", {}, async () => {
     try {
         const audit = odsDispatchAudit();
@@ -6447,17 +6464,17 @@ server.tool("on_deck_dispatch_audit", "KN-Q2 / BP018 — On Deck Scribe: aggrega
         };
     }
 });
-// ─── Pod-S KN-S3: Stats-Capture Bishop Substrate-Query MCP tools ──────────────
+// ΓöÇΓöÇΓöÇ Pod-S KN-S3: Stats-Capture Bishop Substrate-Query MCP tools ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 import { queryAggregate } from "./stats_capture/query_aggregate.js";
 import { queryTimeline } from "./stats_capture/query_timeline.js";
 import { queryParallelCompare } from "./stats_capture/query_parallel_compare.js";
 import { queryAnomalies } from "./stats_capture/query_anomalies.js";
 import { RetentionPruner } from "./stats_capture/retention_pruner.js";
 /**
- * test_telemetry_aggregate — read-class
+ * test_telemetry_aggregate ΓÇö read-class
  * Aggregate counts by outcome, tier, k_prompt pattern, and cost accounting.
  */
-server.tool("test_telemetry_aggregate", "KN-S3 / BP018 — Stats-Capture: aggregate telemetry counts. " +
+server.tool("test_telemetry_aggregate", "KN-S3 / BP018 ΓÇö Stats-Capture: aggregate telemetry counts. " +
     "Returns total / by_outcome / by_tier / by_k_prompt + cost-accounting (actual vs counterfactual). " +
     "Optional filters: hours window, k_prompt_pattern (glob), cohort_class.", {
     hours: z.number().int().min(1).optional().describe("Time window in hours. Default: 24."),
@@ -6479,10 +6496,10 @@ server.tool("test_telemetry_aggregate", "KN-S3 / BP018 — Stats-Capture: aggreg
     }
 });
 /**
- * test_telemetry_cost_savings — read-class
+ * test_telemetry_cost_savings ΓÇö read-class
  * Focused cost-savings report (Bushel 3 Colossus / Decentralized Data Center).
  */
-server.tool("test_telemetry_cost_savings", "KN-S3 / BP018 — Stats-Capture: cost-savings report. " +
+server.tool("test_telemetry_cost_savings", "KN-S3 / BP018 ΓÇö Stats-Capture: cost-savings report. " +
     "Returns actual_spend vs counterfactual_estimate + savings_usd/pct. " +
     "Supports Bushel 3 Colossus pairing (colossus_paired_runs_count). " +
     "Decentralized Data Center Prov 16 supplementary disclosure.", {
@@ -6516,10 +6533,10 @@ server.tool("test_telemetry_cost_savings", "KN-S3 / BP018 — Stats-Capture: cos
     }
 });
 /**
- * test_telemetry_timeline — read-class
+ * test_telemetry_timeline ΓÇö read-class
  * Full ordered sequence of snapshots for one test_id.
  */
-server.tool("test_telemetry_timeline", "KN-S3 / BP018 — Stats-Capture: ordered snapshot timeline for one test_id. " +
+server.tool("test_telemetry_timeline", "KN-S3 / BP018 ΓÇö Stats-Capture: ordered snapshot timeline for one test_id. " +
     "Returns bookend_start + intervals (in order) + bookend_end.", {
     test_id: z.string().describe("Test ID to retrieve timeline for."),
 }, async ({ test_id }) => {
@@ -6538,10 +6555,10 @@ server.tool("test_telemetry_timeline", "KN-S3 / BP018 — Stats-Capture: ordered
     }
 });
 /**
- * test_telemetry_parallel_compare — read-class
- * Correlates 5-Knight × N-pod test runs for Founder comparison.
+ * test_telemetry_parallel_compare ΓÇö read-class
+ * Correlates 5-Knight ├ù N-pod test runs for Founder comparison.
  */
-server.tool("test_telemetry_parallel_compare", "KN-S3 / BP018 — Stats-Capture: parallel-session comparison for 5-Knight × N-pod tests. " +
+server.tool("test_telemetry_parallel_compare", "KN-S3 / BP018 ΓÇö Stats-Capture: parallel-session comparison for 5-Knight ├ù N-pod tests. " +
     "Pass test_id_pattern (glob) to match runs. Returns per-session breakdown + aggregate.", {
     test_id_pattern: z.string().describe("Test ID pattern (glob, e.g. 'KN-R4-*' or 'T7-test-*')."),
 }, async ({ test_id_pattern }) => {
@@ -6560,10 +6577,10 @@ server.tool("test_telemetry_parallel_compare", "KN-S3 / BP018 — Stats-Capture:
     }
 });
 /**
- * test_telemetry_anomalies — read-class
+ * test_telemetry_anomalies ΓÇö read-class
  * Returns flagged anomaly snapshots since a cutoff date.
  */
-server.tool("test_telemetry_anomalies", "KN-S3 / BP018 — Stats-Capture: anomaly snapshots since cutoff. " +
+server.tool("test_telemetry_anomalies", "KN-S3 / BP018 ΓÇö Stats-Capture: anomaly snapshots since cutoff. " +
     "Returns anomaly_flag=true snapshots from anomaly/ + live/ dirs. " +
     "Optional severity filter: 'all' (default) or 'high' (context_pct>90 or stall).", {
     since: z.string().describe("ISO-8601 cutoff date (e.g. '2026-05-01T00:00:00Z')."),
@@ -6584,10 +6601,10 @@ server.tool("test_telemetry_anomalies", "KN-S3 / BP018 — Stats-Capture: anomal
     }
 });
 /**
- * test_telemetry_protect — write-class
+ * test_telemetry_protect ΓÇö write-class
  * Mark a test_id for indefinite retention (move to protected/).
  */
-server.tool("test_telemetry_protect", "KN-S3 / BP018 — Stats-Capture: mark a test_id for indefinite retention. " +
+server.tool("test_telemetry_protect", "KN-S3 / BP018 ΓÇö Stats-Capture: mark a test_id for indefinite retention. " +
     "Moves all its files from live/ to protected/. Pruner will never touch protected files.", {
     test_id: z.string().describe("Test ID to protect."),
     reason: z.string().optional().describe("Optional reason for protection (logged for audit)."),
@@ -6606,13 +6623,13 @@ server.tool("test_telemetry_protect", "KN-S3 / BP018 — Stats-Capture: mark a t
         };
     }
 });
-// ─────────────────────────────────────────────────────────────────────────────
-// Pod-M: Forever-Stamp Joules (Layer 7 Currency) — KN-M3 / BP018
-// ─────────────────────────────────────────────────────────────────────────────
+// ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+// Pod-M: Forever-Stamp Joules (Layer 7 Currency) ΓÇö KN-M3 / BP018
+// ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 const _joulesOps = new JoulesOperations();
-server.tool("joules_mint", "KN-M3 / BP018 Pod-M — Mint a new Forever-Stamp Joule from Marks-surplus. " +
+server.tool("joules_mint", "KN-M3 / BP018 Pod-M ΓÇö Mint a new Forever-Stamp Joule from Marks-surplus. " +
     "Layer 7 currency. face_value is IMMUTABLE once minted (forever-stamp semantics). " +
-    "Marks consumed are ONE-WAY VALVE — never recoverable as Marks. " +
+    "Marks consumed are ONE-WAY VALVE ΓÇö never recoverable as Marks. " +
     "backing_rule_id cites the Gold tablet (Pod-N) canonicalizing the conversion rate. " +
     "Default rate: 1 Joule per 100 Marks-surplus. Majesty incentive currency.", {
     member_id: z.string().describe("Member ID to receive the minted Joule."),
@@ -6625,7 +6642,7 @@ server.tool("joules_mint", "KN-M3 / BP018 Pod-M — Mint a new Forever-Stamp Jou
         isError: !result.success,
     };
 });
-server.tool("joules_transfer", "KN-M3 / BP018 Pod-M — Transfer a Forever-Stamp Joule between members. " +
+server.tool("joules_transfer", "KN-M3 / BP018 Pod-M ΓÇö Transfer a Forever-Stamp Joule between members. " +
     "face_value is preserved exactly (forever-stamp semantics). " +
     "Requires current holder to match 'from' member.", {
     from: z.string().describe("Member ID currently holding the Joule."),
@@ -6638,7 +6655,7 @@ server.tool("joules_transfer", "KN-M3 / BP018 Pod-M — Transfer a Forever-Stamp
         isError: !result.success,
     };
 });
-server.tool("joules_redeem", "KN-M3 / BP018 Pod-M — Redeem a Forever-Stamp Joule against a civilization-class work target. " +
+server.tool("joules_redeem", "KN-M3 / BP018 Pod-M ΓÇö Redeem a Forever-Stamp Joule against a civilization-class work target. " +
     "Removes the Joule from circulation permanently. " +
     "redemption_target must describe the civilization-class work being rewarded.", {
     member_id: z.string().describe("Member ID redeeming the Joule (must be current holder)."),
@@ -6651,7 +6668,7 @@ server.tool("joules_redeem", "KN-M3 / BP018 Pod-M — Redeem a Forever-Stamp Jou
         isError: !result.success,
     };
 });
-server.tool("joules_balance", "KN-M3 / BP018 Pod-M — Get the current Forever-Stamp Joules balance for a member. " +
+server.tool("joules_balance", "KN-M3 / BP018 Pod-M ΓÇö Get the current Forever-Stamp Joules balance for a member. " +
     "Returns total_face_value, joule_count, and per-Joule face_value list.", {
     member_id: z.string().describe("Member ID to query balance for."),
 }, async ({ member_id }) => {
@@ -6660,7 +6677,7 @@ server.tool("joules_balance", "KN-M3 / BP018 Pod-M — Get the current Forever-S
         content: [{ type: "text", text: JSON.stringify(balance, null, 2) }],
     };
 });
-server.tool("joules_audit", "KN-M3 / BP018 Pod-M — Aggregate Joules audit: total minted, redeemed, in-circulation, face_value totals. " +
+server.tool("joules_audit", "KN-M3 / BP018 Pod-M ΓÇö Aggregate Joules audit: total minted, redeemed, in-circulation, face_value totals. " +
     "Optional 'since' ISO timestamp to filter to a window.", {
     since: z.string().optional().describe("ISO-8601 timestamp; filter audit to entries after this date."),
     member_id: z.string().optional().describe("If supplied, also include per-member balance in response."),
@@ -6674,19 +6691,19 @@ server.tool("joules_audit", "KN-M3 / BP018 Pod-M — Aggregate Joules audit: tot
         content: [{ type: "text", text: JSON.stringify(response, null, 2) }],
     };
 });
-// ─────────────────────────────────────────────────────────────────────────────
-// Pod-T: Keyword-Pyramid Strata Hierarchy — KN-T4 / BP018
-// ─────────────────────────────────────────────────────────────────────────────
+// ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+// Pod-T: Keyword-Pyramid Strata Hierarchy ΓÇö KN-T4 / BP018
+// ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 const _strataQuery = new StrataQuery();
-server.tool("strata_ascend", "KN-T4 / BP018 Pod-T — Ascend the 7-layer Keyword-Pyramid from a topic toward Bedrock. " +
-    "Returns topics at stratum ordinal + levels. Pyramid: Sand(0) → Soil(1) → Sediment(2) → Sandstone(3) → Limestone(4) → Granite(5) → Bedrock(6).", {
+server.tool("strata_ascend", "KN-T4 / BP018 Pod-T ΓÇö Ascend the 7-layer Keyword-Pyramid from a topic toward Bedrock. " +
+    "Returns topics at stratum ordinal + levels. Pyramid: Sand(0) ΓåÆ Soil(1) ΓåÆ Sediment(2) ΓåÆ Sandstone(3) ΓåÆ Limestone(4) ΓåÆ Granite(5) ΓåÆ Bedrock(6).", {
     topic: z.string().describe("Base topic to ascend from."),
     levels: z.number().int().positive().optional().describe("How many stratum levels to ascend (default 1)."),
 }, async ({ topic, levels }) => {
     const results = _strataQuery.ascend(topic, levels ?? 1);
     return { content: [{ type: "text", text: JSON.stringify({ topic, levels: levels ?? 1, results }, null, 2) }] };
 });
-server.tool("strata_descend", "KN-T4 / BP018 Pod-T — Descend the 7-layer Keyword-Pyramid from a topic toward Sand. " +
+server.tool("strata_descend", "KN-T4 / BP018 Pod-T ΓÇö Descend the 7-layer Keyword-Pyramid from a topic toward Sand. " +
     "Returns topics at stratum ordinal - levels. Returns empty array at Sand (bottom).", {
     topic: z.string().describe("Base topic to descend from."),
     levels: z.number().int().positive().optional().describe("How many stratum levels to descend (default 1)."),
@@ -6694,7 +6711,7 @@ server.tool("strata_descend", "KN-T4 / BP018 Pod-T — Descend the 7-layer Keywo
     const results = _strataQuery.descend(topic, levels ?? 1);
     return { content: [{ type: "text", text: JSON.stringify({ topic, levels: levels ?? 1, results }, null, 2) }] };
 });
-server.tool("strata_by_stratum", "KN-T4 / BP018 Pod-T — List all topics assigned to a given stratum level. " +
+server.tool("strata_by_stratum", "KN-T4 / BP018 Pod-T ΓÇö List all topics assigned to a given stratum level. " +
     "Valid strata: sand, soil, sediment, sandstone, limestone, granite, bedrock.", {
     stratum: z.enum(["sand", "soil", "sediment", "sandstone", "limestone", "granite", "bedrock"])
         .describe("Target stratum level."),
@@ -6702,7 +6719,7 @@ server.tool("strata_by_stratum", "KN-T4 / BP018 Pod-T — List all topics assign
     const topics = _strataQuery.byStratum(stratum);
     return { content: [{ type: "text", text: JSON.stringify({ stratum, topics, count: topics.length }, null, 2) }] };
 });
-server.tool("strata_promote", "KN-T4 / BP018 Pod-T — Promote a topic to a higher stratum in the 7-layer Keyword-Pyramid. " +
+server.tool("strata_promote", "KN-T4 / BP018 Pod-T ΓÇö Promote a topic to a higher stratum in the 7-layer Keyword-Pyramid. " +
     "Builds promotion chain history. Bedrock rejects further promotion. Cannot demote.", {
     topic: z.string().describe("Topic to promote."),
     to_stratum: z.enum(["sand", "soil", "sediment", "sandstone", "limestone", "granite", "bedrock"])
@@ -6721,7 +6738,7 @@ server.tool("strata_promote", "KN-T4 / BP018 Pod-T — Promote a topic to a high
         };
     }
 });
-server.tool("strata_audit", "KN-T4 / BP018 Pod-T — Audit: count topics per stratum; identify Sand/Soil topics ready for promotion. " +
+server.tool("strata_audit", "KN-T4 / BP018 Pod-T ΓÇö Audit: count topics per stratum; identify Sand/Soil topics ready for promotion. " +
     "Returns counts per stratum and promotion candidates (high-hit sand/soil topics).", {}, async () => {
     const all = readAllAssignments();
     const counts = {};
@@ -6740,7 +6757,7 @@ server.tool("strata_audit", "KN-T4 / BP018 Pod-T — Audit: count topics per str
                 }, null, 2) }],
     };
 });
-server.tool("strata_promotion_recommend", "KN-T4 / BP018 Pod-T — Recommend Sand/Soil topics for promotion based on pheromone hit-frequency × age. " +
+server.tool("strata_promotion_recommend", "KN-T4 / BP018 Pod-T ΓÇö Recommend Sand/Soil topics for promotion based on pheromone hit-frequency ├ù age. " +
     "Surfaces topics that appear frequently in Detective queries and may be ready for canonical elevation.", {
     claim: z.string().optional().describe("Query claim to find relevant promotion candidates. Defaults to general substrate scan."),
     topK: z.number().int().positive().optional().describe("Max candidates to return (default 10)."),
@@ -6755,13 +6772,13 @@ server.tool("strata_promotion_recommend", "KN-T4 / BP018 Pod-T — Recommend San
                 }, null, 2) }],
     };
 });
-// ─────────────────────────────────────────────────────────────────────────────
-// Pod-K: Codex (Layer 8 Canon-of-Canons) — KN-K3 / BP018
-// ─────────────────────────────────────────────────────────────────────────────
+// ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+// Pod-K: Codex (Layer 8 Canon-of-Canons) ΓÇö KN-K3 / BP018
+// ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 const _codexBinding = new CodexBinding();
-server.tool("codex_create", "KN-K3 / BP018 Pod-K — Create a new Codex in 'drafting' state. " +
+server.tool("codex_create", "KN-K3 / BP018 Pod-K ΓÇö Create a new Codex in 'drafting' state. " +
     "Layer 8 canon-of-canons bound-book artifact. Chapters added via codex_add_chapter. " +
-    "Lifecycle: drafting → review → bound (immutable). " +
+    "Lifecycle: drafting ΓåÆ review ΓåÆ bound (immutable). " +
     "Bushel 32B (BP023): pass reservation_id from codex_reserve_next_serial to honor the reserved serial " +
     "and unify the reservation-space with the corpus-space (dual-serial-space sync-debt closure).", {
     title: z.string().describe("Human-readable title for the Codex."),
@@ -6798,7 +6815,7 @@ server.tool("codex_create", "KN-K3 / BP018 Pod-K — Create a new Codex in 'draf
     appendCodexEntry(codex);
     return { content: [{ type: "text", text: JSON.stringify({ success: true, codex }, null, 2) }] };
 });
-server.tool("codex_add_chapter", "KN-K3 / BP018 Pod-K — Add a chapter to a Codex in 'drafting' state. " +
+server.tool("codex_add_chapter", "KN-K3 / BP018 Pod-K ΓÇö Add a chapter to a Codex in 'drafting' state. " +
     "Chapter cites Gold tablets (Pod-N), Excalibur instances, Joules redemptions (Pod-M), Jars (Pod-J). " +
     "Mutations rejected on bound/superseded Codex.", {
     codex_id: z.string().describe("Codex serial (LB-CODEX-NNNN)."),
@@ -6833,7 +6850,7 @@ server.tool("codex_add_chapter", "KN-K3 / BP018 Pod-K — Add a chapter to a Cod
     appendCodexEntry(updated);
     return { content: [{ type: "text", text: JSON.stringify({ success: true, codex: updated, chapters_count: updated.chapters.length }, null, 2) }] };
 });
-server.tool("codex_review", "KN-K3 / BP018 Pod-K — Move a Codex from 'drafting' to 'review' (mutations frozen for review window). " +
+server.tool("codex_review", "KN-K3 / BP018 Pod-K ΓÇö Move a Codex from 'drafting' to 'review' (mutations frozen for review window). " +
     "Required before binding.", {
     codex_id: z.string().describe("Codex serial (LB-CODEX-NNNN)."),
 }, async ({ codex_id }) => {
@@ -6846,7 +6863,7 @@ server.tool("codex_review", "KN-K3 / BP018 Pod-K — Move a Codex from 'drafting
     appendCodexEntry(updated);
     return { content: [{ type: "text", text: JSON.stringify({ success: true, codex: updated }, null, 2) }] };
 });
-server.tool("codex_bind", "KN-K3 / BP018 Pod-K — Bind a Codex: HMAC-locks all chapters; status → 'bound'; immutable after this. " +
+server.tool("codex_bind", "KN-K3 / BP018 Pod-K ΓÇö Bind a Codex: HMAC-locks all chapters; status ΓåÆ 'bound'; immutable after this. " +
     "Requires status='review'. Verifies all pointer references before binding.", {
     codex_id: z.string().describe("Codex serial (LB-CODEX-NNNN) in 'review' status."),
     signer: z.string().describe("Session ID or agent signing the binding ceremony."),
@@ -6858,7 +6875,7 @@ server.tool("codex_bind", "KN-K3 / BP018 Pod-K — Bind a Codex: HMAC-locks all 
         isError,
     };
 });
-server.tool("codex_query", "KN-K3 / BP018 Pod-K — Query Codices by title, edition, or status. " +
+server.tool("codex_query", "KN-K3 / BP018 Pod-K ΓÇö Query Codices by title, edition, or status. " +
     "Returns matching Codex records.", {
     title: z.string().optional().describe("Partial title match (case-insensitive)."),
     edition: z.string().optional().describe("Exact edition match."),
@@ -6867,7 +6884,7 @@ server.tool("codex_query", "KN-K3 / BP018 Pod-K — Query Codices by title, edit
     const results = queryCodex({ title, edition, status: status });
     return { content: [{ type: "text", text: JSON.stringify({ count: results.length, codices: results }, null, 2) }] };
 });
-server.tool("codex_supersede", "KN-K3 / BP018 Pod-K — Supersede a bound Codex with a new one. " +
+server.tool("codex_supersede", "KN-K3 / BP018 Pod-K ΓÇö Supersede a bound Codex with a new one. " +
     "Old Codex gets status='superseded' + superseded_by=new_id.", {
     old_id: z.string().describe("Codex serial of the bound Codex to supersede."),
     new_id: z.string().describe("Codex serial of the replacement Codex."),
@@ -6878,7 +6895,7 @@ server.tool("codex_supersede", "KN-K3 / BP018 Pod-K — Supersede a bound Codex 
     }
     return { content: [{ type: "text", text: JSON.stringify({ success: true, old_id, new_id, superseded_at: new Date().toISOString() }, null, 2) }] };
 });
-server.tool("codex_anthology_export", "KN-K3 / BP018 Pod-K — Export a bound Codex to a named Anthology. " +
+server.tool("codex_anthology_export", "KN-K3 / BP018 Pod-K ΓÇö Export a bound Codex to a named Anthology. " +
     "Valid targets: ai_cake, no_atomo, mechanical_computer, pre_cathedral_substack. " +
     "Codex must be in 'bound' status.", {
     codex_id: z.string().describe("Codex serial (LB-CODEX-NNNN) in 'bound' status."),
@@ -6900,14 +6917,14 @@ server.tool("codex_anthology_export", "KN-K3 / BP018 Pod-K — Export a bound Co
     emitPheromone("CodexAnthology", `codex_anthology_export_${codex_id}_${target_anthology}`, `codex anthology export ${codex.title} target:${target_anthology} layer-8 canon-of-canons`, { cathedral: "knight", flavorClass: { domain: "codex", cognition: "building-in-public" } });
     return { content: [{ type: "text", text: JSON.stringify({ success: true, codex_id, target_anthology, exported_ts, chapter_count: codex.chapters.length }, null, 2) }] };
 });
-// ─── Pod-K Bushel 32: Codex Serial Atomic-Reservation Primitive ──────────────
-// G2: Tool implemented + wired — mcp__librarian__codex_reserve_next_serial callable.
-registerTool("codex_reserve_next_serial", "Bushel 32 / BP022 — Atomically reserve the next available LB-CODEX-NNNN serial. " +
+// ΓöÇΓöÇΓöÇ Pod-K Bushel 32: Codex Serial Atomic-Reservation Primitive ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+// G2: Tool implemented + wired ΓÇö mcp__librarian__codex_reserve_next_serial callable.
+registerTool("codex_reserve_next_serial", "Bushel 32 / BP022 ΓÇö Atomically reserve the next available LB-CODEX-NNNN serial. " +
     "Reads the ledger, finds max(bound, reserved), allocates next = max+1, writes reservation row to ledger BEFORE returning. " +
     "Race-safe: in-process mutex + file-lock for cross-process concurrency. " +
     "Eliminates the Codex-collision class (5+ empirical instances: Bushels 11/15/18/9/12/13/19). " +
-    "MUST be called BEFORE creating a Codex draft — draft authors with the returned serial from the start. " +
-    "At LANDING, call codex_bind_reservation to transition reserved→bound.", {
+    "MUST be called BEFORE creating a Codex draft ΓÇö draft authors with the returned serial from the start. " +
+    "At LANDING, call codex_bind_reservation to transition reservedΓåÆbound.", {
     reserved_by: z.string().describe("Caller identity: session ID (e.g. 'K503') or agent name."),
     intended_title: z.string().describe("Intended Codex title (used for collision detection in reservation log)."),
     intended_session: z.string().describe("Session or Bushel session ID (e.g. 'B022', 'K503')."),
@@ -6933,7 +6950,7 @@ registerTool("codex_reserve_next_serial", "Bushel 32 / BP022 — Atomically rese
             }],
     };
 });
-registerTool("codex_bind_reservation", "Bushel 32 / BP022 — Transition a Codex reservation from status='reserved' to status='bound'. " +
+registerTool("codex_bind_reservation", "Bushel 32 / BP022 ΓÇö Transition a Codex reservation from status='reserved' to status='bound'. " +
     "Call AFTER codex_bind() succeeds. Links the reservation row to the now-bound Codex entry. " +
     "Fails if reservation does not exist (T7: must reserve first), or if target Codex is not yet bound.", {
     reservation_id: z.string().describe("UUID from codex_reserve_next_serial call."),
@@ -6945,14 +6962,14 @@ registerTool("codex_bind_reservation", "Bushel 32 / BP022 — Transition a Codex
     }
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
 });
-registerTool("codex_expire_reservations", "Bushel 32 / BP022 — Sweep expired reservations (past TTL) and transition them to status='expired', releasing their serials back to the pool. " +
+registerTool("codex_expire_reservations", "Bushel 32 / BP022 ΓÇö Sweep expired reservations (past TTL) and transition them to status='expired', releasing their serials back to the pool. " +
     "Returns count of expired reservations and their serials.", {
     ttl_days: z.number().optional().describe("Override TTL in days (default 7). Reservations older than this are expired."),
 }, async ({ ttl_days }) => {
     const result = await expireReservations(ttl_days);
     return { content: [{ type: "text", text: JSON.stringify({ success: true, ...result }, null, 2) }] };
 });
-registerTool("codex_query_reservations", "Bushel 32 / BP022 — Query Codex serial reservations by status, caller, or Bushel number. " +
+registerTool("codex_query_reservations", "Bushel 32 / BP022 ΓÇö Query Codex serial reservations by status, caller, or Bushel number. " +
     "Returns reservation rows (type='reservation') from the codex ledger.", {
     status: z.enum(["reserved", "bound", "expired"]).optional().describe("Filter by reservation status."),
     reserved_by: z.string().optional().describe("Filter by caller identity."),
@@ -6962,10 +6979,10 @@ registerTool("codex_query_reservations", "Bushel 32 / BP022 — Query Codex seri
     return { content: [{ type: "text", text: JSON.stringify({ count: results.length, reservations: results }, null, 2) }] };
 });
 /**
- * gold_tablet_query — read-class
+ * gold_tablet_query ΓÇö read-class
  * Query active Gold Tablets by tier, scope, topic, or status.
  */
-server.tool("gold_tablet_query", "KN-N1 / BP018 — Gold Tablet: query canonical regulations tablets by tier/scope/topic. " +
+server.tool("gold_tablet_query", "KN-N1 / BP018 ΓÇö Gold Tablet: query canonical regulations tablets by tier/scope/topic. " +
     "Returns active tablets by default. Pass status='all' to include superseded.", {
     tier: z.enum(["platform_canon", "platform_rules", "project_rules"]).optional()
         .describe("Filter by tier (platform_canon | platform_rules | project_rules)."),
@@ -6984,10 +7001,10 @@ server.tool("gold_tablet_query", "KN-N1 / BP018 — Gold Tablet: query canonical
     }
 });
 /**
- * gold_tablet_ratify — write-class
+ * gold_tablet_ratify ΓÇö write-class
  * Ratify a new Gold Tablet (requires platform-tier authority for platform tiers).
  */
-server.tool("gold_tablet_ratify", "KN-N2/N3 / BP018 — Gold Tablet: ratify a new canonical regulation. " +
+server.tool("gold_tablet_ratify", "KN-N2/N3 / BP018 ΓÇö Gold Tablet: ratify a new canonical regulation. " +
     "Generates LB-GOLD-NNNN serial, HMAC + Chronos signatures. " +
     "Writes Pheromone Pixie-Dust provenance. Authority-gated by tier.", {
     tier: z.enum(["platform_canon", "platform_rules", "project_rules"])
@@ -7016,10 +7033,10 @@ server.tool("gold_tablet_ratify", "KN-N2/N3 / BP018 — Gold Tablet: ratify a ne
     }
 });
 /**
- * gold_tablet_supersede — write-class
+ * gold_tablet_supersede ΓÇö write-class
  * Supersede a Gold Tablet: marks old as superseded, cascades to Excalibur instances.
  */
-server.tool("gold_tablet_supersede", "KN-N2/N3 / BP018 — Gold Tablet: supersede an existing tablet. " +
+server.tool("gold_tablet_supersede", "KN-N2/N3 / BP018 ΓÇö Gold Tablet: supersede an existing tablet. " +
     "Marks old tablet superseded + cascade-marks dependent Excalibur as needs_re_anchor. " +
     "Use gold_tablet_ratify with supersedes[] for the new tablet first.", {
     old_id: z.string().describe("Gold tablet ID to supersede (LB-GOLD-NNNN)."),
@@ -7037,10 +7054,10 @@ server.tool("gold_tablet_supersede", "KN-N2/N3 / BP018 — Gold Tablet: supersed
     }
 });
 /**
- * gold_tablet_excalibur_link — write-class
+ * gold_tablet_excalibur_link ΓÇö write-class
  * Create bidirectional pointer between Gold Tablet and Excalibur Class instance.
  */
-server.tool("gold_tablet_excalibur_link", "KN-N2/N3 / BP018 — Gold Tablet: link an Excalibur Class instance to a Gold Tablet. " +
+server.tool("gold_tablet_excalibur_link", "KN-N2/N3 / BP018 ΓÇö Gold Tablet: link an Excalibur Class instance to a Gold Tablet. " +
     "Creates bidirectional pointer. Excalibur is READ-ONLY against Gold. " +
     "Gold supersession cascade will mark linked Excalibur as needs_re_anchor.", {
     gold_id: z.string().describe("Gold tablet ID (LB-GOLD-NNNN)."),
@@ -7058,10 +7075,10 @@ server.tool("gold_tablet_excalibur_link", "KN-N2/N3 / BP018 — Gold Tablet: lin
     }
 });
 /**
- * gold_tablet_audit — read-class
- * Aggregate counts by tier × status × scope.
+ * gold_tablet_audit ΓÇö read-class
+ * Aggregate counts by tier ├ù status ├ù scope.
  */
-server.tool("gold_tablet_audit", "KN-N3 / BP018 — Gold Tablet: aggregate audit (counts by tier × status × scope). " +
+server.tool("gold_tablet_audit", "KN-N3 / BP018 ΓÇö Gold Tablet: aggregate audit (counts by tier ├ù status ├ù scope). " +
     "Returns total + by_tier + by_status + by_scope breakdowns.", {}, async () => {
     try {
         const result = auditTablets();
@@ -7072,12 +7089,12 @@ server.tool("gold_tablet_audit", "KN-N3 / BP018 — Gold Tablet: aggregate audit
         return { content: [{ type: "text", text: JSON.stringify({ error: String(err) }, null, 2) }], isError: true };
     }
 });
-// ─── KN-D2/D4/D5: Apiarist Hive Infrastructure Remainder ────────────────────
+// ΓöÇΓöÇΓöÇ KN-D2/D4/D5: Apiarist Hive Infrastructure Remainder ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 /**
- * apiarist_hive_create_thread — write-class
+ * apiarist_hive_create_thread ΓÇö write-class
  * Create a new Apiarist Hive thread in `open` state.
  */
-server.tool("apiarist_hive_create_thread", "KN-D2 / BP018 — Apiarist Hive: create a new hive thread in `open` state. " +
+server.tool("apiarist_hive_create_thread", "KN-D2 / BP018 ΓÇö Apiarist Hive: create a new hive thread in `open` state. " +
     "Assigns LB-HIVE-NNNN serial. Validates bee_role_assignments (max 1 queen).", {
     topic: z.string().describe("Thread topic."),
     participants: z.array(z.string()).describe("Member IDs participating."),
@@ -7094,10 +7111,10 @@ server.tool("apiarist_hive_create_thread", "KN-D2 / BP018 — Apiarist Hive: cre
     }
 });
 /**
- * apiarist_hive_advance_thread — write-class
+ * apiarist_hive_advance_thread ΓÇö write-class
  * Advance a Hive thread to the next state (guarded transitions).
  */
-server.tool("apiarist_hive_advance_thread", "KN-D2 / BP018 — Apiarist Hive: advance thread state (open→synthesizing→closed→sealed). " +
+server.tool("apiarist_hive_advance_thread", "KN-D2 / BP018 ΓÇö Apiarist Hive: advance thread state (openΓåÆsynthesizingΓåÆclosedΓåÆsealed). " +
     "Only valid forward transitions allowed. BRIDLE Rule 4: backward transitions rejected.", {
     thread_id: z.string().describe("Thread ID (LB-HIVE-NNNN)."),
     target: z.enum(["synthesizing", "closed", "sealed"]).describe("Target state."),
@@ -7112,10 +7129,10 @@ server.tool("apiarist_hive_advance_thread", "KN-D2 / BP018 — Apiarist Hive: ad
     }
 });
 /**
- * apiarist_hive_federate — write-class
+ * apiarist_hive_federate ΓÇö write-class
  * Trigger cross-frame federation for a closed Hive thread.
  */
-server.tool("apiarist_hive_federate", "KN-D4 / BP018 — Apiarist Hive: trigger cross-frame federation on thread close. " +
+server.tool("apiarist_hive_federate", "KN-D4 / BP018 ΓÇö Apiarist Hive: trigger cross-frame federation on thread close. " +
     "Lone Wolf: broadcast_mode=none. Pied Piper: read_only. Federation: bidirectional. Excalibur: curated_slice.", {
     thread_id: z.string().describe("Thread ID to federate."),
     jar_id: z.string().describe("Jar ID created from thread closure (KN-J4)."),
@@ -7136,10 +7153,10 @@ server.tool("apiarist_hive_federate", "KN-D4 / BP018 — Apiarist Hive: trigger 
     }
 });
 /**
- * apiarist_hive_uptime_cap — write-class
+ * apiarist_hive_uptime_cap ΓÇö write-class
  * Check and enforce the 50%-uptime cap for a participant+role.
  */
-server.tool("apiarist_hive_uptime_cap", "KN-D5 / BP018 — Apiarist Hive: enforce 50%-uptime cap per role per cycle. " +
+server.tool("apiarist_hive_uptime_cap", "KN-D5 / BP018 ΓÇö Apiarist Hive: enforce 50%-uptime cap per role per cycle. " +
     "Per-role independent caps (worker/drone/queen). Race-safe. Composes with Pod-G.", {
     participant_id: z.string().describe("Participant member ID."),
     role: z.enum(["worker", "drone", "queen"]).describe("Bee role."),
@@ -7155,12 +7172,12 @@ server.tool("apiarist_hive_uptime_cap", "KN-D5 / BP018 — Apiarist Hive: enforc
         return { content: [{ type: "text", text: JSON.stringify({ error: String(err) }, null, 2) }], isError: true };
     }
 });
-// ─── KN-J6: Dual-Tier IPv4-Local / IPv6-Federation Translation ───────────────
+// ΓöÇΓöÇΓöÇ KN-J6: Dual-Tier IPv4-Local / IPv6-Federation Translation ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 /**
- * coordinate_translate_local_to_federation — write-class
+ * coordinate_translate_local_to_federation ΓÇö write-class
  * Translate a local 4-tuple + instance to an IPv6 federation address.
  */
-server.tool("coordinate_translate_local_to_federation", "KN-J6.2 / BP018 — Dual-Tier Addressing: translate local 4-tuple to IPv6 federation address. " +
+server.tool("coordinate_translate_local_to_federation", "KN-J6.2 / BP018 ΓÇö Dual-Tier Addressing: translate local 4-tuple to IPv6 federation address. " +
     "Lone Wolf REJECTED (never federates). " +
     "Scope-tier prefix encodes cohort_class structurally. Caches in Augur Living Gate.", {
     local_tuple: z.string().describe("Local 4-tuple coordinate (e.g. 'auth-user-session-token' or NN-NN-NN-NN)."),
@@ -7176,10 +7193,10 @@ server.tool("coordinate_translate_local_to_federation", "KN-J6.2 / BP018 — Dua
     }
 });
 /**
- * coordinate_translate_federation_to_local — read-class
+ * coordinate_translate_federation_to_local ΓÇö read-class
  * Translate an IPv6 federation address back to local 4-tuple + instance_id.
  */
-server.tool("coordinate_translate_federation_to_local", "KN-J6.2 / BP018 — Dual-Tier Addressing: reverse translate IPv6 federation address to 4-tuple. " +
+server.tool("coordinate_translate_federation_to_local", "KN-J6.2 / BP018 ΓÇö Dual-Tier Addressing: reverse translate IPv6 federation address to 4-tuple. " +
     "Checks Augur cache first, then provenance ledger. Returns cohort_class from scope-tier prefix.", {
     federation_address: z.string().describe("IPv6 federation address to reverse-translate."),
 }, async ({ federation_address }) => {
@@ -7192,11 +7209,11 @@ server.tool("coordinate_translate_federation_to_local", "KN-J6.2 / BP018 — Dua
     }
 });
 /**
- * coordinate_translation_provenance — read-class
+ * coordinate_translation_provenance ΓÇö read-class
  * Return full provenance chain for a tuple or federation address.
  */
-server.tool("coordinate_translation_provenance", "KN-J6.3 / BP018 — Dual-Tier Addressing: retrieve provenance chain for a 4-tuple or IPv6 address. " +
-    "Returns all translation events (local→federation and federation→local) for the identifier.", {
+server.tool("coordinate_translation_provenance", "KN-J6.3 / BP018 ΓÇö Dual-Tier Addressing: retrieve provenance chain for a 4-tuple or IPv6 address. " +
+    "Returns all translation events (localΓåÆfederation and federationΓåÆlocal) for the identifier.", {
     tuple_or_address: z.string().describe("Local 4-tuple or IPv6 federation address to query provenance for."),
 }, async ({ tuple_or_address }) => {
     try {
