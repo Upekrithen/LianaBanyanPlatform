@@ -26,6 +26,14 @@ export interface AMPLIFYSnapshot {
   as_of: string;
 }
 
+export interface ModelPullProgress {
+  status: 'pulling' | 'verifying' | 'complete' | 'error';
+  bytesDownloaded?: number;
+  totalBytes?: number;
+  percentComplete?: number;
+  error?: string;
+}
+
 declare global {
   interface Window {
     amplify: {
@@ -36,6 +44,10 @@ declare global {
       getOllamaStatus: () => Promise<OllamaStatus>;
       getAMPLIFYSnapshot: () => Promise<AMPLIFYSnapshot>;
       openDashboard: () => void;
+      pullDefaultModel: () => Promise<{ success: boolean; alreadyInstalled?: boolean; error?: string }>;
+      listOllamaModels: () => Promise<string[]>;
+      checkDiskSpace: () => Promise<{ ok: boolean; requiredGB: number }>;
+      onOllamaPullProgress: (cb: (progress: ModelPullProgress) => void) => () => void;
     };
   }
 }
