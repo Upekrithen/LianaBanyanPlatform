@@ -1,6 +1,6 @@
 {
   "name": "amplify-computer",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "AMPLIFY Computer — CAI Hearth local inference + LB Frame OS overlay",
   "homepage": "https://lianabanyan.com",
   "private": true,
