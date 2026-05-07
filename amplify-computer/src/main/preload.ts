@@ -4,6 +4,11 @@
 
 import { contextBridge, ipcRenderer } from 'electron';
 
+// Main-process watchdog (Bushel 58) — respond even if renderer React tree is wedged
+ipcRenderer.on('watchdog-ping', () => {
+  ipcRenderer.send('watchdog-pong');
+});
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 export type FrameMode = 'ai_burst' | 'normal' | 'fallback';

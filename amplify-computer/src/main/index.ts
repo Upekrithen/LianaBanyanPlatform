@@ -11,6 +11,7 @@ import {
   ipcMain,
   screen,
   shell,
+  globalShortcut,
 } from 'electron';
 import { join } from 'path';
 import { existsSync } from 'fs';
@@ -45,6 +46,56 @@ let federationClient: FederationClient | null = null;
 let autoUpdater: AutoUpdateManager | null = null;
 let authManager: AuthManager | null = null;
 let connectivityTimer: ReturnType<typeof setInterval> | null = null;
+let watchdogOverlayInterval: NodeJS.Timeout | null = null;
+let rendererResponsive = true;
+let displayMetricsListenerAttached = false;
+
+// ─── Monitor-safe bounds (multi-display; prevents off-screen window trap) ─────
+
+function getSafeBounds(bounds: Electron.Rectangle): Electron.Rectangle {
+  const displays = screen.getAllDisplays();
+  const onScreen = displays.some((d) => {
+    const b = d.bounds;
+    return (
+      bounds.x < b.x + b.width &&
+      bounds.x + bounds.width > b.x &&
+      bounds.y < b.y + b.height &&
+      bounds.y + bounds.height > b.y
+    );
+  });
+  if (onScreen) return bounds;
+  const primary = screen.getPrimaryDisplay();
+  const w = primary.bounds;
+  return {
+    x: w.x + Math.floor((w.width - bounds.width) / 2),
+    y: w.y + Math.floor((w.height - bounds.height) / 2),
+    width: bounds.width,
+    height: bounds.height,
+  };
+}
+
+function stopOverlayWatchdog(): void {
+  if (watchdogOverlayInterval) {
+    clearInterval(watchdogOverlayInterval);
+    watchdogOverlayInterval = null;
+  }
+}
+
+function startOverlayWatchdog(win: BrowserWindow): void {
+  stopOverlayWatchdog();
+  rendererResponsive = true;
+  watchdogOverlayInterval = setInterval(() => {
+    if (!win || win.isDestroyed()) return;
+    rendererResponsive = false;
+    win.webContents.send('watchdog-ping');
+    setTimeout(() => {
+      if (!rendererResponsive && !win.isDestroyed()) {
+        console.warn('[watchdog] renderer unresponsive — force reload');
+        win.webContents.reload();
+      }
+    }, 5000);
+  }, 8000);
+}
 
 // ─── LB overlay pointer policy (Electron) ────────────────────────────────────
 // Preload exposes setClickthrough(true) ⇒ ignore mouse ⇒ transparent hits forward to OS.
@@ -124,12 +175,13 @@ async function runConnectivityPoll(): Promise<void> {
 
 function createOverlayWindow(): void {
   const { width, height } = screen.getPrimaryDisplay().workAreaSize;
+  const overlayBounds = getSafeBounds({ x: 0, y: 0, width, height });
 
   overlayWindow = new BrowserWindow({
-    width,
-    height,
-    x: 0,
-    y: 0,
+    width: overlayBounds.width,
+    height: overlayBounds.height,
+    x: overlayBounds.x,
+    y: overlayBounds.y,
     frame: false,
     transparent: true,
     alwaysOnTop: true,
@@ -160,19 +212,26 @@ function createOverlayWindow(): void {
     overlayWindow.webContents.openDevTools({ mode: 'detach' });
   }
 
-  screen.on('display-metrics-changed', () => {
-    if (!overlayWindow) return;
-    const { width: w, height: h } = screen.getPrimaryDisplay().workAreaSize;
-    overlayWindow.setBounds({ x: 0, y: 0, width: w, height: h });
-  });
+  if (!displayMetricsListenerAttached) {
+    displayMetricsListenerAttached = true;
+    screen.on('display-metrics-changed', () => {
+      if (!overlayWindow) return;
+      const { width: w, height: h } = screen.getPrimaryDisplay().workAreaSize;
+      const next = getSafeBounds({ x: 0, y: 0, width: w, height: h });
+      overlayWindow.setBounds(next);
+    });
+  }
 
   overlayWindow.on('closed', () => {
+    stopOverlayWatchdog();
     overlayWindow = null;
   });
 
   // Register with auto-updater and auth manager so events can be broadcast
   if (autoUpdater) autoUpdater.registerWindow(overlayWindow);
   if (authManager) authManager.registerWindow(overlayWindow);
+
+  startOverlayWatchdog(overlayWindow);
 }
 
 // ─── System Tray ─────────────────────────────────────────────────────────────
@@ -288,12 +347,25 @@ function openDashboard(): void {
     width: 520,
     height: 680,
     title: 'AMPLIFY Dashboard',
+    show: false,
     webPreferences: {
       preload: join(__dirname, 'preload.js'),
       contextIsolation: true,
       nodeIntegration: false,
     },
   });
+
+  const dashW = 520;
+  const dashH = 680;
+  const primary = screen.getPrimaryDisplay().workArea;
+  const dashBounds = getSafeBounds({
+    x: primary.x + Math.floor((primary.width - dashW) / 2),
+    y: primary.y + Math.floor((primary.height - dashH) / 2),
+    width: dashW,
+    height: dashH,
+  });
+  dashboardWindow.setBounds(dashBounds);
+  dashboardWindow.show();
 
   dashboardWindow.loadURL(
     IS_DEV
@@ -449,6 +521,10 @@ function registerIPCHandlers(): void {
   ipcMain.on('check-for-updates', () => autoUpdater?.checkNow());
   ipcMain.on('install-update', () => autoUpdater?.installNow());
 
+  ipcMain.on('watchdog-pong', () => {
+    rendererResponsive = true;
+  });
+
   // ── MoneyPenny Mobile ─────────────────────────────────────────────────────
   ipcMain.handle('get-moneypenny-url', () => ({
     url: getMoneyPennyURL(API_PORT),
@@ -461,6 +537,10 @@ function registerIPCHandlers(): void {
 }
 
 // ─── App Lifecycle ────────────────────────────────────────────────────────────
+
+app.on('will-quit', () => {
+  globalShortcut.unregisterAll();
+});
 
 app.whenReady().then(async () => {
   // Initialize substrate API server (Phase 3: full implementation)
@@ -495,6 +575,19 @@ app.whenReady().then(async () => {
   createTray();
   registerIPCHandlers();
 
+  const okQuit = globalShortcut.register('CommandOrControl+Shift+Alt+Q', () => {
+    app.quit();
+  });
+  const okHide = globalShortcut.register('CommandOrControl+Shift+Alt+H', () => {
+    overlayWindow?.hide();
+    dashboardWindow?.hide();
+  });
+  if (!okQuit || !okHide) {
+    console.warn(
+      `[Frame] Global escape shortcuts unavailable (quitRegistered=${okQuit} hideRegistered=${okHide}); another app may own the accelerator`,
+    );
+  }
+
   // Register auth IPC handlers (after windows are created)
   authManager.registerIPCHandlers();
 
@@ -523,6 +616,7 @@ app.on('window-all-closed', () => {
 });
 
 app.on('before-quit', async () => {
+  stopOverlayWatchdog();
   if (connectivityTimer) clearInterval(connectivityTimer);
   autoUpdater?.destroy();
   await ollamaManager?.shutdown();
