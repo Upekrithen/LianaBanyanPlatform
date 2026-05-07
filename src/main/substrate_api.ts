@@ -667,6 +667,68 @@ export class SubstrateAPIServer {
       return;
     }
 
+    // ── POST /yoke/pawn — Bushel 58 Perplexity direct (MoneyPenny Pawn avatar) ──
+    if (req.method === 'POST' && url === '/yoke/pawn') {
+      this._readBody(req, async (body) => {
+        try {
+          const parsed = JSON.parse(body) as {
+            text: string;
+            context_msgs?: Array<{ role: string; content: string }>;
+          };
+          const { text, context_msgs } = parsed;
+          if (!text?.trim()) {
+            res.statusCode = 400;
+            res.end(JSON.stringify({ error: 'text required' }));
+            return;
+          }
+
+          const apiKey = process.env.PERPLEXITY_API_KEY;
+          if (!apiKey) {
+            res.statusCode = 503;
+            res.end(JSON.stringify({ error: 'PERPLEXITY_API_KEY not set' }));
+            return;
+          }
+
+          const messages = [...(context_msgs ?? []), { role: 'user', content: text }];
+
+          try {
+            const response = await fetch('https://api.perplexity.ai/chat/completions', {
+              method: 'POST',
+              headers: {
+                Authorization: `Bearer ${apiKey}`,
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                model: 'sonar-reasoning-pro',
+                messages,
+                stream: false,
+              }),
+            });
+
+            if (!response.ok) {
+              const err = await response.text();
+              res.statusCode = 502;
+              res.end(JSON.stringify({ error: `Perplexity error: ${err}` }));
+              return;
+            }
+
+            const data = (await response.json()) as {
+              choices?: Array<{ message?: { content?: string } }>;
+            };
+            const reply = data.choices?.[0]?.message?.content ?? '(no response)';
+            res.end(JSON.stringify({ success: true, reply, recipient: 'pawn' }));
+          } catch (e) {
+            res.statusCode = 500;
+            res.end(JSON.stringify({ error: String(e) }));
+          }
+        } catch (err) {
+          res.statusCode = 400;
+          res.end(JSON.stringify({ error: 'Invalid JSON', detail: String(err) }));
+        }
+      });
+      return;
+    }
+
     // ── Bushel 47 #1: Read-receipts — POST /yoke/inbox/read marks Bishop reply as read ─
     if (req.method === 'POST' && url === '/yoke/inbox/read') {
       this._readBody(req, (body) => {
