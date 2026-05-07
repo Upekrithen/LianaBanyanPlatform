@@ -10,10 +10,11 @@
 //   GET  /amplify/snapshot          — session telemetry snapshot
 //   GET  /amplify/summary           — full historical summary (today/week/month/all-time)
 //   GET  /federation/status         — peer count, last sync, online status
+//   GET  /yoke/stream               — SSE inbox fan-out (MoneyPenny Phase B)
 
 import { createServer, IncomingMessage, ServerResponse } from 'http';
-import { mkdirSync, existsSync, appendFileSync } from 'fs';
-import { resolve } from 'path';
+import { mkdirSync, existsSync, appendFileSync, readFileSync, watch } from 'fs';
+import { resolve, dirname } from 'path';
 import { randomUUID } from 'crypto';
 import { SubstrateLocalIndex, SubstrateRouter, type FrameMode } from './substrate_router';
 import { TelemetryStore, type RoutingSource } from './telemetry_store';
@@ -76,6 +77,8 @@ export class SubstrateAPIServer {
   private federation: FederationClient | null = null;
   private telemetry: TelemetryStore;
   private degradedMode = false;
+  private yokeSseClients = new Set<ServerResponse>();
+  private inboxWatchInstalled = false;
 
   constructor() {
     this.index = new SubstrateLocalIndex();
@@ -133,8 +136,106 @@ export class SubstrateAPIServer {
     });
   }
 
+  /** Pixel inbox JSON (same payload as GET /yoke/inbox). */
+  private _readPixelInboxPayload(): { replies: unknown[]; as_of: string } {
+    let entries: unknown[] = [];
+    if (existsSync(INBOX_PATH)) {
+      const raw = readFileSync(INBOX_PATH, 'utf8');
+      entries = raw
+        .split('\n')
+        .filter((l) => l.trim().length > 0)
+        .map((l) => {
+          try {
+            return JSON.parse(l) as unknown;
+          } catch {
+            return null;
+          }
+        })
+        .filter((e) => e !== null);
+    }
+    entries.reverse();
+    if (entries.length > 50) entries = entries.slice(0, 50);
+    return {
+      replies: entries,
+      as_of: new Date().toISOString(),
+    };
+  }
+
+  private _broadcastYokeInboxSse(): void {
+    if (this.yokeSseClients.size === 0) return;
+    const payload = JSON.stringify(this._readPixelInboxPayload());
+    const chunk = `event: inbox\ndata: ${payload}\n\n`;
+    for (const client of [...this.yokeSseClients]) {
+      try {
+        if (!client.writableEnded) client.write(chunk);
+      } catch {
+        this.yokeSseClients.delete(client);
+      }
+    }
+  }
+
+  private _ensurePixelInboxFanout(): void {
+    if (this.inboxWatchInstalled) return;
+    this.inboxWatchInstalled = true;
+    try {
+      mkdirSync(dirname(INBOX_PATH), { recursive: true });
+      if (!existsSync(INBOX_PATH)) {
+        appendFileSync(INBOX_PATH, '', 'utf8');
+      }
+    } catch {
+      /* non-fatal */
+    }
+    try {
+      let debounceTimer: ReturnType<typeof setTimeout>;
+      watch(INBOX_PATH, () => {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => this._broadcastYokeInboxSse(), 100);
+      });
+    } catch (err) {
+      console.warn('[SubstrateAPI] pixel inbox watch failed:', String(err));
+    }
+  }
+
+  private _handleYokeSse(req: IncomingMessage, res: ServerResponse): void {
+    res.writeHead(200, {
+      'Content-Type': 'text/event-stream; charset=utf-8',
+      'Cache-Control': 'no-cache, no-transform',
+      Connection: 'keep-alive',
+      'Access-Control-Allow-Origin': '*',
+    });
+    const resFlush = res as unknown as { flushHeaders?: () => void };
+    resFlush.flushHeaders?.();
+
+    res.write(': connected\n\n');
+
+    this._ensurePixelInboxFanout();
+    this.yokeSseClients.add(res);
+
+    try {
+      const snapshot = JSON.stringify(this._readPixelInboxPayload());
+      res.write(`event: inbox\ndata: ${snapshot}\n\n`);
+    } catch {
+      /* ignore initial snapshot failures */
+    }
+
+    const pingIv = setInterval(() => {
+      try {
+        if (!res.writableEnded) res.write(': ping\n\n');
+      } catch {
+        clearInterval(pingIv);
+      }
+    }, 28_000);
+
+    req.on('close', () => {
+      clearInterval(pingIv);
+      this.yokeSseClients.delete(res);
+    });
+    req.socket.setTimeout?.(0);
+  }
+
   private _handleRequest(req: IncomingMessage, res: ServerResponse): void {
-    res.setHeader('Content-Type', 'application/json');
+    const url = req.url?.split('?')[0];
+
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -145,7 +246,12 @@ export class SubstrateAPIServer {
       return;
     }
 
-    const url = req.url?.split('?')[0];
+    if (req.method === 'GET' && url === '/yoke/stream') {
+      this._handleYokeSse(req, res);
+      return;
+    }
+
+    res.setHeader('Content-Type', 'application/json');
 
     // ── GET /health ───────────────────────────────────────────────────────────
     if (req.method === 'GET' && url === '/health') {
@@ -408,6 +514,7 @@ export class SubstrateAPIServer {
           try {
             appendFileSync(YOKE_PATH, yokeEntry, 'utf8');
             appendFileSync(INBOX_PATH, inboxEntry, 'utf8');
+            this._broadcastYokeInboxSse();
           } catch (err) {
             res.statusCode = 500;
             res.end(JSON.stringify({
@@ -435,23 +542,7 @@ export class SubstrateAPIServer {
     // ── GET /yoke/inbox — Bushel 42 PWA polling endpoint ─────────────────────
     if (req.method === 'GET' && url === '/yoke/inbox') {
       try {
-        let entries: any[] = [];
-        if (existsSync(INBOX_PATH)) {
-          const raw = require('fs').readFileSync(INBOX_PATH, 'utf8') as string;
-          entries = raw.split('\n')
-            .filter((l) => l.trim().length > 0)
-            .map((l) => {
-              try { return JSON.parse(l); } catch { return null; }
-            })
-            .filter((e) => e !== null);
-        }
-        // Most-recent-first; up to 50 entries
-        entries.reverse();
-        if (entries.length > 50) entries = entries.slice(0, 50);
-        res.end(JSON.stringify({
-          replies: entries,
-          as_of: new Date().toISOString(),
-        }));
+        res.end(JSON.stringify(this._readPixelInboxPayload()));
       } catch (err) {
         res.statusCode = 500;
         res.end(JSON.stringify({ error: 'Inbox read failed', detail: String(err) }));

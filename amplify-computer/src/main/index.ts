@@ -46,6 +46,21 @@ let autoUpdater: AutoUpdateManager | null = null;
 let authManager: AuthManager | null = null;
 let connectivityTimer: ReturnType<typeof setInterval> | null = null;
 
+// ─── LB overlay pointer policy (Electron) ────────────────────────────────────
+// Preload exposes setClickthrough(true) ⇒ ignore mouse ⇒ transparent hits forward to OS.
+
+function applyLBFrameClickthrough(enabled: boolean): void {
+  if (!overlayWindow || overlayWindow.isDestroyed()) return;
+  if (enabled) {
+    overlayWindow.setIgnoreMouseEvents(true, { forward: true });
+  } else {
+    overlayWindow.setIgnoreMouseEvents(false);
+  }
+  if (IS_DEV) {
+    console.log(`[LB Frame] passthrough-ignore-mouse=${enabled}`);
+  }
+}
+
 // ─── Frame Mode ──────────────────────────────────────────────────────────────
 
 type FrameMode = 'ai_burst' | 'normal' | 'fallback';
@@ -122,6 +137,7 @@ function createOverlayWindow(): void {
     skipTaskbar: true,
     hasShadow: false,
     focusable: false,
+    show: false,
     webPreferences: {
       preload: join(__dirname, 'preload.js'),
       contextIsolation: true,
@@ -130,7 +146,14 @@ function createOverlayWindow(): void {
     },
   });
 
-  overlayWindow.setIgnoreMouseEvents(true, { forward: true });
+  // Guarantee passthrough AFTER the compositor attaches (BP029 / LB-STACK-0157).
+  overlayWindow.once('ready-to-show', () => {
+    applyLBFrameClickthrough(true);
+    overlayWindow?.showInactive();
+  });
+  overlayWindow.webContents.once('did-finish-load', () => {
+    applyLBFrameClickthrough(true);
+  });
   overlayWindow.loadURL(RENDERER_URL);
 
   if (IS_DEV) {
@@ -240,7 +263,7 @@ function rebuildTrayMenu(mode: FrameMode = currentMode): void {
       label: 'Show Overlay',
       click: () => {
         if (!overlayWindow) createOverlayWindow();
-        overlayWindow?.show();
+        overlayWindow?.showInactive();
       },
     },
     { type: 'separator' },
@@ -310,7 +333,7 @@ function registerIPCHandlers(): void {
 
   // ── Overlay ───────────────────────────────────────────────────────────────
   ipcMain.on('set-clickthrough', (_event, { enabled }: { enabled: boolean }) => {
-    overlayWindow?.setIgnoreMouseEvents(enabled, { forward: true });
+    applyLBFrameClickthrough(enabled);
   });
 
   // ── Ollama ────────────────────────────────────────────────────────────────
