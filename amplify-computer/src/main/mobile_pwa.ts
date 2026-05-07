@@ -751,6 +751,37 @@ export function getMobileHTML(): string {
     innovations: 'Innovation count — how many innovations and crown jewels does Liana Banyan have?',
   };
 
+  async function handlePawnQuery(text) {
+    if (busy) return;
+    busy = true;
+    if (sendBtn) sendBtn.disabled = true;
+    addMsg('user', renderMarkdown(text));
+    const thinkId = 'think-' + Date.now();
+    addMsg('assistant', '<em id="' + thinkId + '">Pawn is thinking...</em>');
+
+    try {
+      const r = await fetch(BASE + '/yoke/pawn', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text }),
+        signal: AbortSignal.timeout(60000),
+      });
+      const d = await r.json();
+      document.getElementById(thinkId)?.parentElement?.remove();
+      if (d.success) {
+        addMsg('assistant', '🦅 <strong>Pawn:</strong><br>' + renderMarkdown(d.reply));
+      } else {
+        addMsg('assistant', '⚠️ Pawn error: ' + escHtml(d.error || 'unknown'));
+      }
+    } catch (e) {
+      document.getElementById(thinkId)?.parentElement?.remove();
+      addMsg('assistant', '⚠️ Pawn unreachable: ' + escHtml(e.message));
+    } finally {
+      busy = false;
+      if (sendBtn && input) sendBtn.disabled = !input.value.trim();
+    }
+  }
+
   async function sendQuery(text) {
     if (busy || !text.trim()) return;
     busy = true;
@@ -815,10 +846,10 @@ export function getMobileHTML(): string {
   // ── Bushel 43+53-A: Character-avatar recipient selector ───────────────
   // Each avatar routes Send:
   //   moneypenny -> POST /substrate/query
-  //   bishop     -> POST /yoke/note (bishop default header)
-  //   knight|pawn|rook -> POST /yoke/note + recipient_id (Mothership Phase A)
-  //   family:*   -> POST /yoke/note (Family Table scope)
-
+  //   bishop | knight -> POST /yoke/note (file bridge)
+  //   pawn -> POST /yoke/pawn (Perplexity sonar-reasoning-pro — Bushel 58)
+  //   rook -> POST /substrate/query (Phase C upgrades to /yoke/rook Gemini)
+  //   family:* -> POST /yoke/note (Family Table scope)
   function setRecipient(name, displayName) {
     currentRecipient = name;
     document.querySelectorAll('.char-avatar').forEach((el) => {
@@ -838,9 +869,9 @@ export function getMobileHTML(): string {
       sendBtn.textContent = '📨';
       sendBtn.title = 'Send note to Knight (Yoke)';
     } else if (name === 'pawn') {
-      input.placeholder = 'Note to Pawn…';
+      input.placeholder = 'Message to Pawn…';
       sendBtn.textContent = '📨';
-      sendBtn.title = 'Send note to Pawn (Yoke)';
+      sendBtn.title = 'Send to Pawn (Perplexity)';
     } else if (name === 'rook') {
       input.placeholder = 'Note to Rook…';
       sendBtn.textContent = '📨';
@@ -871,14 +902,6 @@ export function getMobileHTML(): string {
       recipientId = 'knight';
       recipientName = 'Knight';
       recipientLabel = 'Knight';
-    } else if (currentRecipient === 'pawn') {
-      recipientId = 'pawn';
-      recipientName = 'Pawn';
-      recipientLabel = 'Pawn';
-    } else if (currentRecipient === 'rook') {
-      recipientId = 'rook';
-      recipientName = 'Rook';
-      recipientLabel = 'Rook';
     } else if (currentRecipient && currentRecipient.indexOf('family:') === 0) {
       scope = 'family-table';
       recipientId = currentRecipient.slice(7); // strip "family:" prefix
@@ -933,12 +956,10 @@ export function getMobileHTML(): string {
     // Bushel 43: sticky recipient — do not auto-revert
   }
 
-  function yokeRecipientSelected() {
+  function yokeFileNoteRecipientSelected() {
     return (
       currentRecipient === 'bishop' ||
       currentRecipient === 'knight' ||
-      currentRecipient === 'pawn' ||
-      currentRecipient === 'rook' ||
       (currentRecipient && currentRecipient.indexOf('family:') === 0)
     );
   }
@@ -987,7 +1008,9 @@ export function getMobileHTML(): string {
       input.style.height = 'auto';
       sendBtn.disabled = true;
       clearDraft();
-      if (yokeRecipientSelected()) {
+      if (currentRecipient === 'pawn') {
+        handlePawnQuery(text);
+      } else if (yokeFileNoteRecipientSelected()) {
         handleSendNote(text);
       } else {
         sendQuery(text);
