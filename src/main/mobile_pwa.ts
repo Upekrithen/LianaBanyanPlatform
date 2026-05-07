@@ -73,7 +73,7 @@ export function getManifestJSON(): string {
 export function getServiceWorker(): string {
   return `// MoneyPenny Service Worker — B37 Phase 5
 // Bump CACHE_NAME when /mobile shell changes; BP029 network-first /mobile prevents stale Pixel bundles (v3: Yoke SSE Phase B).
-const CACHE_NAME = 'moneypenny-v3-bp029-phase-b';
+const CACHE_NAME = 'moneypenny-v4-bp030-b58';
 const SHELL_URLS = ['/mobile', '/manifest.json', '/icon.svg'];
 
 // Install: cache shell assets
@@ -622,7 +622,11 @@ export function getMobileHTML(): string {
       div.appendChild(m);
     }
     thread.appendChild(div);
-    thread.scrollTop = thread.scrollHeight;
+    requestAnimationFrame(() => {
+      thread.scrollTop = thread.scrollHeight;
+      const last = thread.lastElementChild;
+      if (last) last.scrollIntoView({ block: 'end', behavior: 'smooth' });
+    });
     return div;
   }
 
@@ -632,7 +636,11 @@ export function getMobileHTML(): string {
     div.id = 'typing-indicator';
     div.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
     thread.appendChild(div);
-    thread.scrollTop = thread.scrollHeight;
+    requestAnimationFrame(() => {
+      thread.scrollTop = thread.scrollHeight;
+      const last = thread.lastElementChild;
+      if (last) last.scrollIntoView({ block: 'end', behavior: 'smooth' });
+    });
   }
 
   function removeTyping() {
@@ -1056,7 +1064,12 @@ export function getMobileHTML(): string {
 
   // ── Service worker registration ────────────────────────────────────
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(() => {});
+    navigator.serviceWorker.register('/sw.js', { scope: '/' }).then((reg) => {
+      reg.update(); // force fresh asset check on every load (BP030 Phase D)
+    }).catch(() => {});
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      window.location.reload(); // new SW activated — reload for fresh assets
+    });
   }
 
   // ── Install prompt (Android Chrome) ───────────────────────────────
