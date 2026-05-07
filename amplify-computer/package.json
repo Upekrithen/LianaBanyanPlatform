@@ -20,7 +20,12 @@
     "publish:mac": "npm run build && electron-builder --mac --publish always",
     "publish:linux": "npm run build && electron-builder --linux --publish always"
   },
-  "keywords": ["amplify", "cai-hearth", "liana-banyan", "cooperative-ai"],
+  "keywords": [
+    "amplify",
+    "cai-hearth",
+    "liana-banyan",
+    "cooperative-ai"
+  ],
   "author": {
     "name": "Liana Banyan Corporation",
     "email": "support@lianabanyan.com",
@@ -28,6 +33,7 @@
   },
   "license": "UNLICENSED",
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "electron-updater": "^6.1.7"
   },
   "devDependencies": {
@@ -67,7 +73,9 @@
       {
         "from": "resources/ollama",
         "to": "ollama",
-        "filter": ["**/*"]
+        "filter": [
+          "**/*"
+        ]
       }
     ],
     "publish": {
@@ -78,10 +86,22 @@
     },
     "win": {
       "target": [
-        { "target": "nsis", "arch": ["x64"] },
-        { "target": "portable", "arch": ["x64"] }
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
       ],
-      "signingHashAlgorithms": ["sha256"],
+      "signingHashAlgorithms": [
+        "sha256"
+      ],
       "signDlls": false,
       "signAndEditExecutable": false,
       "verifyUpdateCodeSignature": false
@@ -101,8 +121,20 @@
     },
     "mac": {
       "target": [
-        { "target": "dmg", "arch": ["x64", "arm64"] },
-        { "target": "zip", "arch": ["x64", "arm64"] }
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
       ],
       "category": "public.app-category.productivity",
       "hardenedRuntime": true,
@@ -114,18 +146,45 @@
     },
     "dmg": {
       "title": "AMPLIFY Computer ${version}",
-      "window": { "width": 540, "height": 380 },
+      "window": {
+        "width": 540,
+        "height": 380
+      },
       "contents": [
-        { "x": 130, "y": 220 },
-        { "x": 410, "y": 220, "type": "link", "path": "/Applications" }
+        {
+          "x": 130,
+          "y": 220
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
       ],
       "internetEnabled": false
     },
     "linux": {
       "target": [
-        { "target": "deb", "arch": ["x64", "arm64"] },
-        { "target": "rpm", "arch": ["x64"] },
-        { "target": "AppImage", "arch": ["x64"] }
+        {
+          "target": "deb",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        },
+        {
+          "target": "rpm",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        }
       ],
       "category": "Office",
       "maintainer": "Liana Banyan Corporation <support@lianabanyan.com>",
@@ -135,7 +194,14 @@
     "deb": {
       "packageCategory": "utils",
       "priority": "optional",
-      "depends": ["libgtk-3-0", "libnotify4", "libnss3", "libxss1", "libxtst6", "xdg-utils"]
+      "depends": [
+        "libgtk-3-0",
+        "libnotify4",
+        "libnss3",
+        "libxss1",
+        "libxtst6",
+        "xdg-utils"
+      ]
     },
     "rpm": {
       "packageCategory": "Applications/Internet"

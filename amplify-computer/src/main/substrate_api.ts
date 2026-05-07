@@ -20,6 +20,7 @@ import { SubstrateLocalIndex, SubstrateRouter, type FrameMode } from './substrat
 import { TelemetryStore, type RoutingSource } from './telemetry_store';
 import { getMobileHTML, getManifestJSON, getServiceWorker, getIconSVG } from './mobile_pwa';
 import type { FederationClient } from './federation_client';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -717,6 +718,67 @@ export class SubstrateAPIServer {
             };
             const reply = data.choices?.[0]?.message?.content ?? '(no response)';
             res.end(JSON.stringify({ success: true, reply, recipient: 'pawn' }));
+          } catch (e) {
+            res.statusCode = 500;
+            res.end(JSON.stringify({ error: String(e) }));
+          }
+        } catch (err) {
+          res.statusCode = 400;
+          res.end(JSON.stringify({ error: 'Invalid JSON', detail: String(err) }));
+        }
+      });
+      return;
+    }
+
+    // ── POST /yoke/rook — Bushel 58 Gemini direct (MoneyPenny Rook avatar) ───────
+    if (req.method === 'POST' && url === '/yoke/rook') {
+      this._readBody(req, async (body) => {
+        try {
+          const parsed = JSON.parse(body) as {
+            text: string;
+            context_msgs?: Array<{ role: string; parts: Array<{ text?: string }> }>;
+          };
+          const { text, context_msgs } = parsed;
+          if (!text?.trim()) {
+            res.statusCode = 400;
+            res.end(JSON.stringify({ error: 'text required' }));
+            return;
+          }
+
+          const apiKey = process.env.GEMINI_API_KEY ?? process.env.GOOGLE_GENERATIVEAI_API_KEY;
+          if (!apiKey) {
+            res.statusCode = 503;
+            res.end(JSON.stringify({ error: 'GEMINI_API_KEY not set' }));
+            return;
+          }
+
+          const history: Array<{ role: 'user' | 'model'; parts: { text: string }[] }> = [];
+          for (const m of context_msgs ?? []) {
+            const rl = String(m.role || 'user').toLowerCase();
+            const role: 'user' | 'model' = rl === 'model' || rl === 'assistant' ? 'model' : 'user';
+            const joined = Array.isArray(m.parts)
+              ? m.parts.map((p) => String(p?.text ?? '')).join('\n').trim()
+              : '';
+            if (!joined) continue;
+            history.push({ role, parts: [{ text: joined }] });
+          }
+
+          try {
+            const genAI = new GoogleGenerativeAI(apiKey);
+            // Default: gemini-2.0-flash — cheap, fast, works for all API tiers.
+            // Override: set GEMINI_MODEL=gemini-2.5-pro in env for flagship.
+            const modelId = process.env.GEMINI_MODEL ?? 'gemini-2.0-flash';
+            const model = genAI.getGenerativeModel({ model: modelId });
+            let reply: string;
+            if (history.length > 0) {
+              const chat = model.startChat({ history });
+              const result = await chat.sendMessage(text);
+              reply = result.response.text();
+            } else {
+              const result = await model.generateContent(text);
+              reply = result.response.text();
+            }
+            res.end(JSON.stringify({ success: true, reply, recipient: 'rook' }));
           } catch (e) {
             res.statusCode = 500;
             res.end(JSON.stringify({ error: String(e) }));
