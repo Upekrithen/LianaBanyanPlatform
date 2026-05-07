@@ -782,7 +782,39 @@ export function getMobileHTML(): string {
     }
   }
 
+  async function handleRookQuery(text) {
+    if (busy) return;
+    busy = true;
+    if (sendBtn) sendBtn.disabled = true;
+    addMsg('user', renderMarkdown(text));
+    const thinkId = 'think-' + Date.now();
+    addMsg('assistant', '<em id="' + thinkId + '">Rook is thinking...</em>');
+
+    try {
+      const r = await fetch(BASE + '/yoke/rook', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text }),
+        signal: AbortSignal.timeout(90000),
+      });
+      const d = await r.json();
+      document.getElementById(thinkId)?.parentElement?.remove();
+      if (d.success) {
+        addMsg('assistant', '♜ <strong>Rook:</strong><br>' + renderMarkdown(d.reply));
+      } else {
+        addMsg('assistant', '⚠️ Rook error: ' + escHtml(d.error || 'unknown'));
+      }
+    } catch (e) {
+      document.getElementById(thinkId)?.parentElement?.remove();
+      addMsg('assistant', '⚠️ Rook unreachable: ' + escHtml(e.message));
+    } finally {
+      busy = false;
+      if (sendBtn && input) sendBtn.disabled = !input.value.trim();
+    }
+  }
+
   async function sendQuery(text) {
+
     if (busy || !text.trim()) return;
     busy = true;
     if (sendBtn) sendBtn.disabled = true;
@@ -848,7 +880,7 @@ export function getMobileHTML(): string {
   //   moneypenny -> POST /substrate/query
   //   bishop | knight -> POST /yoke/note (file bridge)
   //   pawn -> POST /yoke/pawn (Perplexity sonar-reasoning-pro — Bushel 58)
-  //   rook -> POST /substrate/query (Phase C upgrades to /yoke/rook Gemini)
+  //   rook -> POST /yoke/rook (Gemini 2.5 Pro — Bushel 58 Phase C)
   //   family:* -> POST /yoke/note (Family Table scope)
   function setRecipient(name, displayName) {
     currentRecipient = name;
@@ -873,9 +905,9 @@ export function getMobileHTML(): string {
       sendBtn.textContent = '📨';
       sendBtn.title = 'Send to Pawn (Perplexity)';
     } else if (name === 'rook') {
-      input.placeholder = 'Note to Rook…';
+      input.placeholder = 'Message to Rook…';
       sendBtn.textContent = '📨';
-      sendBtn.title = 'Send note to Rook (Yoke)';
+      sendBtn.title = 'Send to Rook (Gemini)';
     } else if (name && name.indexOf('family:') === 0) {
       // Bushel 44+45+46: Family member recipient (Family Table scope)
       const dn = displayName || 'family member';
@@ -1010,6 +1042,8 @@ export function getMobileHTML(): string {
       clearDraft();
       if (currentRecipient === 'pawn') {
         handlePawnQuery(text);
+      } else if (currentRecipient === 'rook') {
+        handleRookQuery(text);
       } else if (yokeFileNoteRecipientSelected()) {
         handleSendNote(text);
       } else {
