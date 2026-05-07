@@ -22,6 +22,7 @@ import { fileURLToPath } from "url";
 import { randomUUID } from "crypto";
 import { GoogleGenerativeAI, type Part } from "@google/generative-ai";
 import { emitPheromone } from "./scribes/pheromone.js";
+import { resolveGeminiApiKey } from "./gemini_env_sources.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -128,15 +129,18 @@ export async function runDispatchRook(
   const modelName = params.model ?? "gemini-2.5-flash";
   const maxTokens = params.max_tokens ?? 2048;
 
-  // 1. API key gate
-  const apiKey = process.env["GEMINI_API_KEY"];
+  // 1. API key gate (BP028: env → ~/.gemini/settings.json → SDS.env)
+  const { key: apiKey } = resolveGeminiApiKey();
   if (!apiKey) {
     return {
       status: "error",
       rook_return_path: "",
       dispatch_id: dispatchId,
       model_used: modelName,
-      message: "GEMINI_API_KEY not found in process.env. Ensure it is set before dispatching.",
+      message:
+        "GEMINI_API_KEY not configured. Set process.env.GEMINI_API_KEY, or " +
+        "~/.gemini/settings.json → mcpServers.librarian.env.GEMINI_API_KEY, or " +
+        "Asteroid-ProofVault/LockBox/SDS.env (GEMINI_API_KEY=...).",
     };
   }
 

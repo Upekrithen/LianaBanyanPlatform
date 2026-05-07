@@ -49,6 +49,10 @@ import {
 } from "./pawn_dispatch.js";
 import { runDispatchRook } from "./rook_dispatch.js";
 import {
+  autobatonDispatch,
+  type AutobatonTaskClass,
+} from "./autobaton_dispatch.js";
+import {
   indexPawnReturns,
   readHighPrioritySurface,
   getIndexedReturnCount,
@@ -5430,6 +5434,63 @@ registerTool(
     const result = await runDispatchRook({ prompt_content, expected_return_path, multimodal_inputs, model, max_tokens });
     return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
   }
+);
+
+registerTool(
+  "autobaton_dispatch",
+  "BP028 AutoBaton production router: consults task_class (explicit or heuristic), routes synthesis to " +
+    "claude-haiku-4-5-20251001, coordination/edit_precision to Sonnet, flagship to Opus, research_external to " +
+    "dispatch_pawn, cross_domain_synthesis to Rook (Gemini 3.1 Pro preview). Logs MAD telemetry to " +
+    "~/.lb-session/mad_data.jsonl. Optional ab_test (synthesis Haiku vs Sonnet 50/50) and blind_grade_output.",
+  {
+    prompt: z.string().describe("Prompt text to dispatch"),
+    task_class: z
+      .enum([
+        "synthesis",
+        "coordination",
+        "edit_precision",
+        "flagship_deliberation",
+        "research_external",
+        "cross_domain_synthesis",
+      ])
+      .optional()
+      .describe("Explicit task class (recommended for Bishop SEG dispatches)"),
+    session_id: z.string().optional().describe("Session id for MAD row (default autobaton)"),
+    model_override: z.string().optional().describe("Force model id (sets model_routed_reason=override)"),
+    max_tokens: z.number().int().min(1).max(8192).optional(),
+    ab_test: z.boolean().optional().default(false).describe("If true and task_class is synthesis: 50/50 Haiku vs Sonnet"),
+    blind_grade_output: z
+      .boolean()
+      .optional()
+      .default(false)
+      .describe("Strip model identifiers from output_for_grade for blind grading"),
+    substrate_context_loaded: z.boolean().optional().default(false),
+    substrate_eblets_pre_injected: z.array(z.string()).optional().default([]),
+  },
+  async ({
+    prompt,
+    task_class,
+    session_id,
+    model_override,
+    max_tokens,
+    ab_test,
+    blind_grade_output,
+    substrate_context_loaded,
+    substrate_eblets_pre_injected,
+  }) => {
+    const result = await autobatonDispatch({
+      prompt,
+      task_class: task_class as AutobatonTaskClass | undefined,
+      session_id,
+      model_override,
+      max_tokens,
+      ab_test,
+      blind_grade_output,
+      substrate_context_loaded,
+      substrate_eblets_pre_injected,
+    });
+    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+  },
 );
 
 registerTool(
