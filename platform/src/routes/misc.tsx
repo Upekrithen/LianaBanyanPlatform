@@ -10,6 +10,7 @@ const MemberAgreement = lazy(() => import("@/pages/MemberAgreement"));
 const SantaEverAfter = lazy(() => import("@/pages/SantaEverAfter"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
 const SphinxPhase1 = lazy(() => import("@/pages/SphinxPhase1"));
+const SkipEbletsDevPage = lazy(() => import("@/pages/dev/SkipEbletsDevPage"));
 
 const ExternalRedirect = ({ to }: { to: string }) => {
   useEffect(() => {
@@ -109,6 +110,9 @@ export const miscRoutes = (
     <Route path="/sphinx/docs" element={<Navigate to="/sphinx" replace />} />
     <Route path="/the-sphinx-project" element={<Navigate to="/sphinx" replace />} />
     <Route path="/majcom" element={<Navigate to="/sphinx" replace />} />
+
+    {/* BP028 Skip-Eblets Phase 1+2 prototype */}
+    <Route path="/dev/skip-eblets" element={<LazyPage><SkipEbletsDevPage /></LazyPage>} />
 
     {/* Catch-all */}
     <Route path="*" element={<LazyPage><NotFound /></LazyPage>} />

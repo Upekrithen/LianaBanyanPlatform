@@ -11,6 +11,7 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
+    "codegen:chronos-schema": "node scripts/chronos-schema-codegen.mjs",
     "smoke": "node scripts/smoke-test.mjs",
     "sync:letters": "node scripts/sync_letters_to_cephas.cjs --apply",
     "mint:cue-cards": "node scripts/mint_letter_cue_cards.cjs --generate",
