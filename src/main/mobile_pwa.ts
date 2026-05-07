@@ -72,8 +72,8 @@ export function getManifestJSON(): string {
 
 export function getServiceWorker(): string {
   return `// MoneyPenny Service Worker — B37 Phase 5
-// Bump CACHE_NAME when /mobile shell changes; BP029 network-first /mobile prevents stale Pixel bundles.
-const CACHE_NAME = 'moneypenny-v2-bp029';
+// Bump CACHE_NAME when /mobile shell changes; BP029 network-first /mobile prevents stale Pixel bundles (v3: Yoke SSE Phase B).
+const CACHE_NAME = 'moneypenny-v3-bp029-phase-b';
 const SHELL_URLS = ['/mobile', '/manifest.json', '/icon.svg'];
 
 // Install: cache shell assets
@@ -1192,49 +1192,82 @@ export function getMobileHTML(): string {
     } catch { /* offline or no roster yet */ }
   }
 
-  // ── Bushel 42: MoneyPenny Mail bidirectional inbox polling ────────────
+  // ── Bushel 42 + BP029 Phase B: inbox ingest (polling + SSE) ─────────────
   // Tracks msg_ids already rendered so we only show new Bishop replies once.
   const seenReplies = new Set();
 
+  function ingestInboxPayload(d) {
+    const replies = (d.replies || []).slice().reverse(); // oldest-first for thread chronology
+    for (const reply of replies) {
+      if (!reply.msg_id || seenReplies.has(reply.msg_id)) continue;
+      if (reply.event === 'read') continue;
+      seenReplies.add(reply.msg_id);
+      var shortIrt = String(reply.in_reply_to || '').slice(0, 8);
+      var ts = reply.ts || '';
+      var rel = relativeTime(ts);
+      addMsg(
+        'assistant',
+        '<div style="color:var(--gold);font-weight:600;margin-bottom:4px">' +
+        '📬 ' + escHtml(reply.author || 'Bishop') + '’s Reply</div>' +
+        renderMarkdown(reply.text || ''),
+        'in reply to ' + shortIrt + ' · <span data-relative-ts="' + escHtml(ts) + '">' + rel + '</span>',
+      );
+      try {
+        fetch(BASE + '/yoke/inbox/read', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ msg_id: reply.msg_id }),
+        }).catch(function () {});
+      } catch (e) {}
+    }
+  }
+
   async function pollInbox() {
     try {
-      const r = await fetch(BASE + '/yoke/inbox', { signal: fetchSignal(4000) });
-      const d = await r.json();
-      const replies = (d.replies || []).slice().reverse(); // oldest-first for thread chronology
-      for (const reply of replies) {
-        if (!reply.msg_id || seenReplies.has(reply.msg_id)) continue;
-        // Skip read-event entries (Bushel 47 #1) — those mark reads, not actual replies
-        if (reply.event === 'read') continue;
-        seenReplies.add(reply.msg_id);
-        const shortIrt = String(reply.in_reply_to || '').slice(0, 8);
-        const ts = reply.ts || '';
-        const rel = relativeTime(ts);
-        addMsg(
-          'assistant',
-          '<div style="color:var(--gold);font-weight:600;margin-bottom:4px">' +
-          '📬 ' + escHtml(reply.author || 'Bishop') + '’s Reply</div>' +
-          renderMarkdown(reply.text || ''),
-          'in reply to ' + shortIrt + ' · <span data-relative-ts="' + escHtml(ts) + '">' + rel + '</span>',
-        );
-        // Bushel 47 #1: mark this reply as read (read-receipt for Bishop's outbox tracking)
+      var r = await fetch(BASE + '/yoke/inbox', { signal: fetchSignal(4000) });
+      var d = await r.json();
+      ingestInboxPayload(d);
+    } catch (e) { /* offline or transient */ }
+  }
+
+  var yokeEventSource = null;
+  function attachYokeInboxStream() {
+    if (typeof EventSource === 'undefined') {
+      return false;
+    }
+    if (yokeEventSource) {
+      try { yokeEventSource.close(); } catch (e) {}
+      yokeEventSource = null;
+    }
+    try {
+      yokeEventSource = new EventSource(BASE + '/yoke/stream');
+      yokeEventSource.addEventListener('inbox', function (ev) {
         try {
-          fetch(BASE + '/yoke/inbox/read', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ msg_id: reply.msg_id }),
-          }).catch(() => {});
-        } catch {}
-      }
-    } catch { /* offline or transient — try again next tick */ }
+          var d = JSON.parse(ev.data);
+          ingestInboxPayload(d);
+        } catch (e) {}
+      });
+      yokeEventSource.onerror = function () {
+        try { yokeEventSource.close(); } catch (e) {}
+        yokeEventSource = null;
+        setTimeout(attachYokeInboxStream, 5000);
+      };
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   // Poll health every 30s
   setInterval(checkHealth, 30000);
   // Refresh savings every 2min
   setInterval(loadSavings, 120000);
-  // Bushel 42: poll inbox every 10s for Bishop replies
-  setInterval(pollInbox, 10000);
-  // Initial inbox poll on startup (after init delay so welcome message renders first)
+  if (!attachYokeInboxStream()) {
+    setInterval(pollInbox, 10000);
+  } else {
+    // Fallback poll on a longer cadence in case SSE drops silently
+    setInterval(pollInbox, 120000);
+  }
   setTimeout(pollInbox, 1500);
   // Bushel 44: load family roster on startup + refresh every 30s for online/offline status
   setTimeout(loadFamilyRoster, 800);

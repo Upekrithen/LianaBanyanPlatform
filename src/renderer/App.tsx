@@ -2,7 +2,7 @@
 // B37 Phase 1 — Transparent overlay with FrameModeIndicator
 // B37 Phase 7 — Auth gate, trial banner, member badge
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { FrameModeIndicator } from './components/FrameModeIndicator';
 import { AMPLIFYDashboard } from './components/AMPLIFYDashboard';
 import { ModelPullDialog } from './components/ModelPullDialog';
@@ -36,10 +36,6 @@ export default function App() {
     window.amplify.getAuthState().then(setAuthState);
     cleanupAuth = window.amplify.onAuthStateChanged((state) => {
       setAuthState(state);
-      // When trial starts, auth gate closes — re-enable click-through for overlay
-      if (state.status === 'trial_active' && view === 'overlay') {
-        window.amplify.setClickthrough(true);
-      }
     });
 
     // First-launch: check if default model needs pulling
@@ -51,7 +47,6 @@ export default function App() {
           );
           if (!defaultInstalled && view === 'overlay') {
             setShowModelPull(true);
-            window.amplify.setClickthrough(false);
           }
         });
       }
@@ -63,12 +58,18 @@ export default function App() {
     };
   }, []);
 
-  // AuthGate needs click-through disabled
-  useEffect(() => {
-    if (authState?.status === 'unauthenticated' && view === 'overlay') {
-      window.amplify.setClickthrough(false);
-    }
-  }, [authState?.status, view]);
+  const showAuthGate =
+    !authState || authState.status === 'unauthenticated' || authState.status === 'validating';
+
+  // Single source of truth for LB Frame pointer capture (LB-STACK-0157).
+  // When any modal/gate is visible, the overlay must receive clicks; otherwise passthrough.
+  const overlayNeedsPointerCapture =
+    view === 'overlay' && (showAuthGate || showModelPull || showDashboard);
+
+  useLayoutEffect(() => {
+    if (view !== 'overlay') return;
+    window.amplify.setClickthrough(!overlayNeedsPointerCapture);
+  }, [view, overlayNeedsPointerCapture]);
 
   const handleModeChange = (newMode: FrameMode) => {
     setMode(newMode);
@@ -77,16 +78,11 @@ export default function App() {
 
   const handleCornerClick = () => {
     setShowDashboard(true);
-    window.amplify.setClickthrough(false);
   };
 
   const handleDashboardClose = () => {
     setShowDashboard(false);
-    window.amplify.setClickthrough(true);
   };
-
-  const showAuthGate =
-    !authState || authState.status === 'unauthenticated' || authState.status === 'validating';
 
   const showTrialBanner =
     !showAuthGate &&
@@ -131,11 +127,9 @@ export default function App() {
         <ModelPullDialog
           onComplete={() => {
             setShowModelPull(false);
-            window.amplify.setClickthrough(true);
           }}
           onSkip={() => {
             setShowModelPull(false);
-            window.amplify.setClickthrough(true);
           }}
         />
       )}
