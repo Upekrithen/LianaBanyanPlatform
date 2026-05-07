@@ -72,7 +72,8 @@ export function getManifestJSON(): string {
 
 export function getServiceWorker(): string {
   return `// MoneyPenny Service Worker — B37 Phase 5
-const CACHE_NAME = 'moneypenny-v1';
+// Bump CACHE_NAME when /mobile shell changes; BP029 network-first /mobile prevents stale Pixel bundles.
+const CACHE_NAME = 'moneypenny-v2-bp029';
 const SHELL_URLS = ['/mobile', '/manifest.json', '/icon.svg'];
 
 // Install: cache shell assets
@@ -98,11 +99,13 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // API calls: network-first, no caching
+  // API + Yoke + Family: network-first, no caching (Pixel must never get a cached POST/GET mixup)
   if (
     url.pathname.startsWith('/substrate/') ||
     url.pathname.startsWith('/amplify/') ||
     url.pathname.startsWith('/federation/') ||
+    url.pathname.startsWith('/yoke/') ||
+    url.pathname.startsWith('/family/') ||
     url.pathname === '/mode' ||
     url.pathname === '/health'
   ) {
@@ -116,7 +119,23 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Shell assets: cache-first
+  // /mobile shell: network-first then refresh cache (fixes stale PWA after deploys)
+  if (url.pathname === '/mobile') {
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          if (response && response.ok) {
+            const copy = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
+          }
+          return response;
+        })
+        .catch(() => caches.match(request)),
+    );
+    return;
+  }
+
+  // Other shell assets: cache-first
   event.respondWith(
     caches.match(request).then((cached) => cached || fetch(request)),
   );
@@ -214,9 +233,15 @@ export function getMobileHTML(): string {
     #character-bar {
       display: flex; gap: 10px; padding: 10px 16px 4px;
       flex-shrink: 0;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
     }
+    #character-bar::-webkit-scrollbar { display: none; }
     .char-avatar {
-      flex: 1; display: flex; align-items: center; gap: 8px;
+      flex: 0 0 auto;
+      display: flex; align-items: center; gap: 8px;
+      min-width: 108px;
       padding: 8px 12px; border-radius: 14px;
       background: var(--surface); color: var(--text-muted);
       border: 1.5px solid var(--border);
@@ -224,6 +249,7 @@ export function getMobileHTML(): string {
       -webkit-tap-highlight-color: transparent;
       transition: background 0.15s, border-color 0.2s, color 0.2s;
       user-select: none;
+      touch-action: manipulation;
     }
     .char-avatar:active { transform: scale(0.97); }
     .char-avatar.active {
@@ -264,6 +290,9 @@ export function getMobileHTML(): string {
       display: flex; gap: 8px; padding: 10px 16px 6px;
       overflow-x: auto; flex-shrink: 0;
       scrollbar-width: none;
+      position: relative;
+      z-index: 2;
+      touch-action: manipulation;
     }
     #quick-bar::-webkit-scrollbar { display: none; }
     .qbtn {
@@ -276,16 +305,21 @@ export function getMobileHTML(): string {
       -webkit-tap-highlight-color: transparent;
       transition: background 0.15s, border-color 0.15s;
       user-select: none;
+      touch-action: manipulation;
     }
     .qbtn:active { background: var(--surface2); border-color: rgba(255,255,255,0.2); }
     .qbtn.gold { background: var(--gold-dim); border-color: rgba(245,158,11,0.3); color: var(--gold); }
 
     /* ── Message thread ──────────────────────────────────────────── */
     #thread {
-      flex: 1; overflow-y: auto; padding: 12px 14px;
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-y: auto; padding: 12px 14px;
       display: flex; flex-direction: column; gap: 10px;
       scroll-behavior: smooth;
       -webkit-overflow-scrolling: touch;
+      position: relative;
+      z-index: 0;
     }
     .msg {
       max-width: 86%; border-radius: var(--radius);
@@ -367,6 +401,9 @@ export function getMobileHTML(): string {
       border-top: 1px solid var(--border);
       flex-shrink: 0;
       align-items: flex-end;
+      position: relative;
+      z-index: 2;
+      touch-action: manipulation;
     }
     #input {
       flex: 1; min-height: 42px; max-height: 120px;
@@ -393,6 +430,7 @@ export function getMobileHTML(): string {
       font-size: 20px; cursor: pointer; flex-shrink: 0;
       -webkit-tap-highlight-color: transparent;
       transition: transform 0.1s, opacity 0.2s;
+      touch-action: manipulation;
     }
     #send-btn:active { transform: scale(0.92); }
     #send-btn:disabled { opacity: 0.4; cursor: default; }
@@ -474,6 +512,15 @@ export function getMobileHTML(): string {
       <span class="char-icon">B</span><span class="char-name">Bishop</span>
       <span class="char-status" id="status-bishop"></span>
     </button>
+    <button class="char-avatar" data-recipient="knight" title="Note Knight (Yoke → Cursor / Knight lane)">
+      <span class="char-icon">K</span><span class="char-name">Knight</span>
+    </button>
+    <button class="char-avatar" data-recipient="pawn" title="Note Pawn (Yoke → compliance lane)">
+      <span class="char-icon">P</span><span class="char-name">Pawn</span>
+    </button>
+    <button class="char-avatar" data-recipient="rook" title="Note Rook (Yoke → patents lane)">
+      <span class="char-icon">R</span><span class="char-name">Rook</span>
+    </button>
     <!-- Dynamic family member avatars injected by loadFamilyRoster() -->
   </div>
 
@@ -503,6 +550,16 @@ export function getMobileHTML(): string {
 <script>
   'use strict';
 
+  /** AbortSignal.timeout polyfill (older Android WebView / Chrome). */
+  function fetchSignal(ms) {
+    if (typeof AbortSignal !== 'undefined' && typeof AbortSignal.timeout === 'function') {
+      return AbortSignal.timeout(ms);
+    }
+    var c = new AbortController();
+    setTimeout(function () { c.abort(); }, ms);
+    return c.signal;
+  }
+
   // ── State ────────────────────────────────────────────────────────
   const BASE = window.location.origin;
   let busy = false;
@@ -523,7 +580,7 @@ export function getMobileHTML(): string {
   // ── Connectivity check ───────────────────────────────────────────
   async function checkHealth() {
     try {
-      const r = await fetch(BASE + '/mode', { signal: AbortSignal.timeout(3000) });
+      const r = await fetch(BASE + '/mode', { signal: fetchSignal(3000) });
       const d = await r.json();
       online = true;
       statusDot.className = 'online';
@@ -540,7 +597,7 @@ export function getMobileHTML(): string {
   // ── Savings strip ─────────────────────────────────────────────────
   async function loadSavings() {
     try {
-      const r = await fetch(BASE + '/amplify/summary', { signal: AbortSignal.timeout(4000) });
+      const r = await fetch(BASE + '/amplify/summary', { signal: fetchSignal(4000) });
       const d = await r.json();
       const s = d.month || d.session || {};
       const cost = s.cloud_cost_avoided_usd || 0;
@@ -633,9 +690,11 @@ export function getMobileHTML(): string {
   // Bushel 47 #19: draft persistence — save unsent input on every keystroke
   const DRAFT_KEY = 'moneypenny_mail_draft_v1';
   function saveDraft() {
+    if (!input) return;
     try { localStorage.setItem(DRAFT_KEY, input.value || ''); } catch {}
   }
   function loadDraft() {
+    if (!input || !sendBtn) return;
     try {
       const saved = localStorage.getItem(DRAFT_KEY);
       if (saved) {
@@ -655,7 +714,7 @@ export function getMobileHTML(): string {
     addMsg('user', '📋 Brief me');
     showTyping();
     try {
-      const r = await fetch(BASE + '/amplify/summary', { signal: AbortSignal.timeout(6000) });
+      const r = await fetch(BASE + '/amplify/summary', { signal: fetchSignal(6000) });
       const d = await r.json();
       removeTyping();
       const s = d.session || {};
@@ -695,7 +754,7 @@ export function getMobileHTML(): string {
   async function sendQuery(text) {
     if (busy || !text.trim()) return;
     busy = true;
-    sendBtn.disabled = true;
+    if (sendBtn) sendBtn.disabled = true;
 
     addMsg('user', renderMarkdown(text));
     showTyping();
@@ -705,7 +764,7 @@ export function getMobileHTML(): string {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query: text }),
-        signal: AbortSignal.timeout(12000),
+        signal: fetchSignal(12000),
       });
       const d = await r.json();
       removeTyping();
@@ -749,15 +808,16 @@ export function getMobileHTML(): string {
       }
     } finally {
       busy = false;
-      sendBtn.disabled = !input.value.trim();
+      if (sendBtn && input) sendBtn.disabled = !input.value.trim();
     }
   }
 
-  // ── Bushel 43: Character-avatar recipient selector ────────────────
-  // Sticky selection — replaces Bushel 41's single-shot noteMode toggle.
-  // Each avatar routes Send to a different endpoint:
-  //   moneypenny -> POST /substrate/query (substrate routing)
-  //   bishop     -> POST /yoke/note       (Pixel-to-Bishop async bridge)
+  // ── Bushel 43+53-A: Character-avatar recipient selector ───────────────
+  // Each avatar routes Send:
+  //   moneypenny -> POST /substrate/query
+  //   bishop     -> POST /yoke/note (bishop default header)
+  //   knight|pawn|rook -> POST /yoke/note + recipient_id (Mothership Phase A)
+  //   family:*   -> POST /yoke/note (Family Table scope)
 
   function setRecipient(name, displayName) {
     currentRecipient = name;
@@ -768,10 +828,23 @@ export function getMobileHTML(): string {
         el.classList.remove('active');
       }
     });
+    if (!input || !sendBtn) return;
     if (name === 'bishop') {
       input.placeholder = 'Note to Bishop…';
       sendBtn.textContent = '📨';
       sendBtn.title = 'Send note to Bishop (Yoke channel)';
+    } else if (name === 'knight') {
+      input.placeholder = 'Note to Knight…';
+      sendBtn.textContent = '📨';
+      sendBtn.title = 'Send note to Knight (Yoke)';
+    } else if (name === 'pawn') {
+      input.placeholder = 'Note to Pawn…';
+      sendBtn.textContent = '📨';
+      sendBtn.title = 'Send note to Pawn (Yoke)';
+    } else if (name === 'rook') {
+      input.placeholder = 'Note to Rook…';
+      sendBtn.textContent = '📨';
+      sendBtn.title = 'Send note to Rook (Yoke)';
     } else if (name && name.indexOf('family:') === 0) {
       // Bushel 44+45+46: Family member recipient (Family Table scope)
       const dn = displayName || 'family member';
@@ -787,12 +860,26 @@ export function getMobileHTML(): string {
   }
 
   async function handleSendNote(text) {
+    if (busy) return;
+    busy = true;
     // Bushel 45: determine scope + recipient_id from currentRecipient
     let scope = 'just-recipient';
     let recipientId = null;
     let recipientName = null;
     let recipientLabel = 'Bishop';
-    if (currentRecipient && currentRecipient.indexOf('family:') === 0) {
+    if (currentRecipient === 'knight') {
+      recipientId = 'knight';
+      recipientName = 'Knight';
+      recipientLabel = 'Knight';
+    } else if (currentRecipient === 'pawn') {
+      recipientId = 'pawn';
+      recipientName = 'Pawn';
+      recipientLabel = 'Pawn';
+    } else if (currentRecipient === 'rook') {
+      recipientId = 'rook';
+      recipientName = 'Rook';
+      recipientLabel = 'Rook';
+    } else if (currentRecipient && currentRecipient.indexOf('family:') === 0) {
       scope = 'family-table';
       recipientId = currentRecipient.slice(7); // strip "family:" prefix
       // Pull recipient name from the active char-avatar's data attribute
@@ -817,7 +904,7 @@ export function getMobileHTML(): string {
           recipient_name: recipientName,
           attachment_ids: attachmentIds,
         }),
-        signal: AbortSignal.timeout(8000),
+        signal: fetchSignal(8000),
       });
       const d = await r.json();
       removeTyping();
@@ -839,59 +926,75 @@ export function getMobileHTML(): string {
     } catch (e) {
       removeTyping();
       addMsg('error', 'Send failed: ' + e.message);
+    } finally {
+      busy = false;
+      if (sendBtn && input) sendBtn.disabled = !input.value.trim();
     }
     // Bushel 43: sticky recipient — do not auto-revert
   }
 
+  function yokeRecipientSelected() {
+    return (
+      currentRecipient === 'bishop' ||
+      currentRecipient === 'knight' ||
+      currentRecipient === 'pawn' ||
+      currentRecipient === 'rook' ||
+      (currentRecipient && currentRecipient.indexOf('family:') === 0)
+    );
+  }
+
   // ── Event wiring ──────────────────────────────────────────────────
-  // Bushel 43: character avatar selection
-  document.querySelectorAll('.char-avatar').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const r = btn.getAttribute('data-recipient');
-      if (r) setRecipient(r);
+  try {
+    document.querySelectorAll('.char-avatar').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const r = btn.getAttribute('data-recipient');
+        if (r) setRecipient(r);
+      });
     });
-  });
 
-  document.querySelectorAll('[data-action]').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const a = btn.getAttribute('data-action');
-      if (a === 'brief') { handleBriefMe(); return; }
-      const q = QUICK_QUERIES[a];
-      if (q) sendQuery(q);
+    document.querySelectorAll('[data-action]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const a = btn.getAttribute('data-action');
+        if (a === 'brief') { handleBriefMe(); return; }
+        const q = QUICK_QUERIES[a];
+        if (q) sendQuery(q);
+      });
     });
-  });
 
-  input.addEventListener('input', () => {
-    // Auto-resize textarea
-    input.style.height = 'auto';
-    input.style.height = Math.min(input.scrollHeight, 120) + 'px';
-    sendBtn.disabled = !input.value.trim() || busy;
-    saveDraft(); // Bushel 47 #19: draft persistence
-  });
+    if (input) {
+      input.addEventListener('input', () => {
+        input.style.height = 'auto';
+        input.style.height = Math.min(input.scrollHeight, 120) + 'px';
+        if (sendBtn) sendBtn.disabled = !input.value.trim() || busy;
+        saveDraft();
+      });
 
-  input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      doSend();
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          doSend();
+        }
+      });
     }
-  });
 
-  sendBtn.addEventListener('click', doSend);
+    if (sendBtn) sendBtn.addEventListener('click', doSend);
 
-  function doSend() {
-    const text = input.value.trim();
-    if (!text || busy) return;
-    input.value = '';
-    input.style.height = 'auto';
-    sendBtn.disabled = true;
-    clearDraft(); // Bushel 47 #19: draft persistence — clear after send
-    // Bushel 43: route on currentRecipient (sticky); no auto-revert
-    // Bushel 44/45: family:* recipients route via Yoke with Family Table scope
-    if (currentRecipient === 'bishop' || (currentRecipient && currentRecipient.indexOf('family:') === 0)) {
-      handleSendNote(text);
-    } else {
-      sendQuery(text);
+    function doSend() {
+      if (!input || !sendBtn) return;
+      const text = input.value.trim();
+      if (!text || busy) return;
+      input.value = '';
+      input.style.height = 'auto';
+      sendBtn.disabled = true;
+      clearDraft();
+      if (yokeRecipientSelected()) {
+        handleSendNote(text);
+      } else {
+        sendQuery(text);
+      }
     }
+  } catch (wireErr) {
+    console.error('[MoneyPenny] event wiring failed:', wireErr);
   }
 
   // ── Service worker registration ────────────────────────────────────
@@ -940,6 +1043,7 @@ export function getMobileHTML(): string {
   }
 
   function refreshAttachButton() {
+    if (!attachBtn) return;
     attachBtn.disabled = !isAttachmentAllowed();
     attachBtn.title = isAttachmentAllowed()
       ? 'Attach image or audio (Family Table)'
@@ -947,6 +1051,7 @@ export function getMobileHTML(): string {
   }
 
   function renderAttachPreview() {
+    if (!attachPreview) return;
     attachPreview.innerHTML = '';
     if (pendingAttachments.length === 0) {
       attachPreview.classList.remove('visible');
@@ -995,11 +1100,12 @@ export function getMobileHTML(): string {
         content_type: file.type || 'application/octet-stream',
         base64_data: base64,
       }),
-      signal: AbortSignal.timeout(30000),
+      signal: fetchSignal(30000),
     });
     return r.json();
   }
 
+  if (attachBtn && attachInput) {
   attachBtn.addEventListener('click', () => {
     if (!isAttachmentAllowed()) {
       addMsg('error', 'Attachments only available when sending to a family member (Family Table scope).');
@@ -1031,6 +1137,9 @@ export function getMobileHTML(): string {
     }
     attachInput.value = ''; // reset for next selection
   });
+  }
+
+  refreshAttachButton();
 
   function renderAttachments(div, attachmentIds) {
     if (!attachmentIds || attachmentIds.length === 0) return;
@@ -1059,7 +1168,7 @@ export function getMobileHTML(): string {
 
   async function loadFamilyRoster() {
     try {
-      const r = await fetch(BASE + '/family/roster', { signal: AbortSignal.timeout(3000) });
+      const r = await fetch(BASE + '/family/roster', { signal: fetchSignal(3000) });
       const d = await r.json();
       const roster = (d.roster || []);
       const charBar = document.getElementById('character-bar');
@@ -1089,7 +1198,7 @@ export function getMobileHTML(): string {
 
   async function pollInbox() {
     try {
-      const r = await fetch(BASE + '/yoke/inbox', { signal: AbortSignal.timeout(4000) });
+      const r = await fetch(BASE + '/yoke/inbox', { signal: fetchSignal(4000) });
       const d = await r.json();
       const replies = (d.replies || []).slice().reverse(); // oldest-first for thread chronology
       for (const reply of replies) {
@@ -1140,7 +1249,9 @@ export function getMobileHTML(): string {
     });
   }, 30000);
 
-  init();
+  init().catch(function (e) {
+    console.error('[MoneyPenny] init failed:', e);
+  });
 </script>
 </body>
 </html>`;
