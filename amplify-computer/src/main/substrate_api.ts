@@ -21,6 +21,12 @@ import { TelemetryStore, type RoutingSource } from './telemetry_store';
 import { getMobileHTML, getManifestJSON, getServiceWorker, getIconSVG } from './mobile_pwa';
 import type { FederationClient } from './federation_client';
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import {
+  getSpriteRegistry,
+  computeLockSignature,
+  type SpriteDispatch,
+  type ClusterName,
+} from './sprite_registry';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -1053,6 +1059,98 @@ export class SubstrateAPIServer {
       } catch (err) {
         res.statusCode = 500;
         res.end(JSON.stringify({ error: 'Roster read failed', detail: String(err) }));
+      }
+      return;
+    }
+
+    // ── Bushel 60 Phase B: Shadow E-Sprite courier endpoints (BP030) ─────────
+    // POST /yoke/sprite/dispatch — body {session, package_path, source_cluster,
+    //   destination_cluster, destination_path_pattern, candidate_dropzones,
+    //   redundancy_count?, lock_signature?, metadata?}
+    // Spawns N parallel Sprite couriers. First-success-wins with file-flag recall.
+    // Returns final delivery receipt (waits for completion).
+    if (req.method === 'POST' && url === '/yoke/sprite/dispatch') {
+      this._readBody(req, async (body) => {
+        try {
+          const parsed = JSON.parse(body) as {
+            session?: string;
+            package_path: string;
+            source_cluster: ClusterName;
+            destination_cluster: ClusterName;
+            destination_path_pattern: string;
+            candidate_dropzones: string[];
+            redundancy_count?: number;
+            lock_signature?: string;
+            metadata?: Record<string, unknown>;
+          };
+          if (!parsed.package_path || !parsed.source_cluster ||
+              !parsed.destination_cluster || !parsed.destination_path_pattern ||
+              !Array.isArray(parsed.candidate_dropzones)) {
+            res.statusCode = 400;
+            res.end(JSON.stringify({
+              error: 'package_path, source_cluster, destination_cluster, ' +
+                'destination_path_pattern, candidate_dropzones[] all required',
+            }));
+            return;
+          }
+          const registry = getSpriteRegistry();
+          const lockSig = parsed.lock_signature ??
+            computeLockSignature(parsed.destination_cluster, parsed.package_path);
+          const dispatch: SpriteDispatch = {
+            dispatch_id: randomUUID(),
+            session: parsed.session ?? 'BP030',
+            package_path: parsed.package_path,
+            source_cluster: parsed.source_cluster,
+            destination_cluster: parsed.destination_cluster,
+            lock_signature: lockSig,
+            destination_path_pattern: parsed.destination_path_pattern,
+            redundancy_count: Math.max(1, (parsed.redundancy_count ?? 3) | 0),
+            spawn_timestamp: new Date().toISOString(),
+            candidate_dropzones: parsed.candidate_dropzones,
+            metadata: parsed.metadata,
+          };
+          const receipt = await registry.dispatchSprites(dispatch);
+          res.end(JSON.stringify({ success: true, receipt }));
+        } catch (err) {
+          res.statusCode = 400;
+          res.end(JSON.stringify({ error: 'Invalid JSON or dispatch error', detail: String(err) }));
+        }
+      });
+      return;
+    }
+
+    // POST /yoke/sprite/recall — body {dispatch_id, reason?}
+    // External admin abort of an in-flight dispatch.
+    if (req.method === 'POST' && url === '/yoke/sprite/recall') {
+      this._readBody(req, (body) => {
+        try {
+          const { dispatch_id, reason } = JSON.parse(body) as {
+            dispatch_id: string;
+            reason?: string;
+          };
+          if (!dispatch_id) {
+            res.statusCode = 400;
+            res.end(JSON.stringify({ error: 'dispatch_id required' }));
+            return;
+          }
+          const ok = getSpriteRegistry().recall(dispatch_id, reason ?? 'external_recall');
+          res.end(JSON.stringify({ success: ok, dispatch_id }));
+        } catch (err) {
+          res.statusCode = 400;
+          res.end(JSON.stringify({ error: 'Invalid JSON', detail: String(err) }));
+        }
+      });
+      return;
+    }
+
+    // GET /yoke/sprite/status — snapshot of currently in-flight dispatches.
+    if (req.method === 'GET' && url === '/yoke/sprite/status') {
+      try {
+        const snap = getSpriteRegistry().getActiveSnapshot();
+        res.end(JSON.stringify({ active: snap, as_of: new Date().toISOString() }));
+      } catch (err) {
+        res.statusCode = 500;
+        res.end(JSON.stringify({ error: 'Status read failed', detail: String(err) }));
       }
       return;
     }
