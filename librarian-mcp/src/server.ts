@@ -1,4 +1,4 @@
-﻿import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { readFileSync, existsSync, writeFileSync, mkdirSync, unlinkSync, statSync, appendFileSync } from "fs";
 import { autoRegisterFromDetective } from "./wrasse_auto_register.js";
@@ -228,12 +228,13 @@ import {
   type RollingWindow,
   type MetricsQueryOpts,
 } from "./reminder_scribe/metrics_aggregator.js";
-// KN-I2: Catechist Scribe grader extension
+// KN-I2 + BP028 R12-R17: Catechist Scribe grader extension
 import {
   runSessionOpenGrade,
   formatGradeMarkdown,
   VIOLATION_LOG_PATH,
   type SessionEvidenceMap,
+  type FullSessionEvidenceMap,
 } from "./catechist/grader.js";
 // KN-M1/M2/M3: Pod-M Forever-Stamp Joules (Layer 7 Currency)
 import {
@@ -295,6 +296,39 @@ import {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const INDEX_DIR = resolve(__dirname, "..", "index");
+
+// ── WORKING_KEYS.env startup loader ─────────────────────────────────────────
+// Populates missing process.env vars from WORKING_KEYS.env so all dispatch
+// modules (Anthropic / Gemini / Perplexity / OpenAI) find their working keys
+// without requiring the caller to pre-export them in the MCP host env.
+// Values are NEVER logged — only key names and counts.
+(function loadWorkingKeysEnv() {
+  try {
+    const wkPath = resolve(__dirname, "..", "..", "Asteroid-ProofVault", "LockBox", "WORKING_KEYS.env");
+    if (!existsSync(wkPath)) {
+      console.error("[WORKING_KEYS] WORKING_KEYS.env not found — skipping.");
+      return;
+    }
+    const lines = readFileSync(wkPath, "utf-8").split(/\r?\n/);
+    let loaded = 0;
+    let skipped = 0;
+    for (const raw of lines) {
+      const line = raw.trim();
+      if (!line || line.startsWith("#")) continue;
+      const eqIdx = line.indexOf("=");
+      if (eqIdx < 1) continue;
+      const key = line.slice(0, eqIdx).trim();
+      const val = line.slice(eqIdx + 1).trim().replace(/^["']|["']$/g, "");
+      if (!key || !val) continue;
+      if (process.env[key]) { skipped++; continue; }
+      process.env[key] = val;
+      loaded++;
+    }
+    console.error(`[WORKING_KEYS] Loaded ${loaded} key(s) from WORKING_KEYS.env (${skipped} already set in env).`);
+  } catch (e) {
+    console.error(`[WORKING_KEYS] Failed to load WORKING_KEYS.env: ${(e as Error).message}`);
+  }
+})();
 
 // K520.5 ΓÇö First-Consult Edict substrate cache (A&A #2310)
 const SUBSTRATE_CACHE_DIR = resolve(homedir(), ".lb-session");
@@ -7068,11 +7102,13 @@ server.tool(
 
 // ΓöÇΓöÇΓöÇ KN-I2: Catechist session-open grade MCP tool ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 /**
- * catechist_session_open_grade ΓÇö session-open discipline grading.
- * Runs R01-R10 base checklist + Reminder Scribe violation-history-summary
- * (rolling 7-day window) per AI member. Anti-shame: empirical counts/rates only.
+ * catechist_session_open_grade — session-open discipline grading.
+ * Runs R01-R10 base checklist + R12-R17 BP028 operational-discipline rules
+ * + Reminder Scribe violation-history-summary (rolling 7-day window).
+ * Anti-shame: empirical counts/rates only.
  *
- * KN036 (base R01-R10) + KN-I2 extension (violation-history-summary block).
+ * KN036 (base R01-R10) + KN-I2 extension (violation-history-summary block)
+ * + BP028 R12-R17 extension (Toolbelt/ColdStart/BrickWall/LastHours/PawnBlind/MCPRestart).
  * BRIDLE Rule 4: if violation log unavailable, surfaces empty-history + flag.
  *
  * Substrate write-back: logs catechist_violation_summary provenance event
@@ -7080,39 +7116,95 @@ server.tool(
  */
 server.tool(
   "catechist_session_open_grade",
-  "KN-I2 / BP017 ΓÇö Catechist session-open discipline grade (R01-R10 + Reminder Scribe violation history). " +
-    "Extends Catechist (#2313 KN036 BP004) with per-AI-member rolling-7-day violation-count + correction-stickiness. " +
-    "Anti-shame discipline: empirical counts/rates only ΓÇö no moral judgment. " +
-    "Returns structured grade: R01-R10 PASS/WARN/FAIL/SKIP + violation-history table. " +
+  "KN-I2 / BP017 / BP028 — Catechist session-open discipline grade (R01-R17 + Reminder Scribe violation history). " +
+    "Base R01-R10: KN036 BP004. R12-R17 BP028 operational discipline: Toolbelt-On (R12), Cold Start Ritual (R13), " +
+    "Brick-Wall Full-Loop (R14), Last-Hours Cohort Readiness (R15), Pawn-Blind-Workaround (R16), MCP-Restart Regression (R17). " +
+    "Violation history: per-AI-member rolling-7-day violation-count + correction-stickiness. " +
+    "Anti-shame discipline: empirical counts/rates only — no moral judgment. " +
+    "Returns structured grade: R01-R17 PASS/WARN/FAIL/SKIP + violation-history table. " +
+    "R12-R17 fields with undefined evidence grade as SKIP (backward-compatible with R01-R10-only callers). " +
     "Optionally returns formatted Markdown for session-open display. " +
     "BRIDLE Rule 4: if KN-I1 violation log unavailable, surfaces UNAVAILABLE flag + empty-history. " +
     "Substrate write-back: catechist_violation_summary provenance logged to pheromone. " +
-    "Composes with Reminder Scribe KN-I1 + Bouncer-Scales-Judge KN095 BP011.",
+    "Composes with Reminder Scribe KN-I1 + Bouncer-Scales-Judge KN095 BP011. LB-STACK-0071..0076.",
   {
     session_id: z
       .string()
-      .describe("Current session ID (e.g. B135) ΓÇö used in grade output and provenance."),
+      .describe("Current session ID (e.g. B135) — used in grade output and provenance."),
     ai_member: z
       .enum(["bishop", "knight", "pawn", "rook"])
       .describe("AI cohort member being graded."),
     evidence: z
       .object({
+        // ── R01-R10 evidence (existing fields — UNCHANGED) ──────────────────
         brief_me_called_first: z.boolean().optional()
-          .describe("Was brief_me the first tool called at session-open?"),
+          .describe("R01: Was brief_me the first tool called at session-open?"),
         fiat_bridge_detected: z.boolean().optional()
-          .describe("Was any LB-currency-to-fiat conversion language detected in this session?"),
+          .describe("R04/R07: Was any LB-currency-to-fiat conversion language detected in this session?"),
         kprompt_paths_referenced: z.boolean().optional()
-          .describe("Were any K-prompt paths referenced in this session?"),
+          .describe("R05: Were any K-prompt paths referenced in this session?"),
         kprompt_paths_verified: z.boolean().optional()
-          .describe("Were all referenced K-prompt paths verified to exist on disk?"),
+          .describe("R05: Were all referenced K-prompt paths verified to exist on disk?"),
         canon_eblet_write_proposed: z.boolean().optional()
-          .describe("Was a new canon Eblet write proposed in this session?"),
+          .describe("R06: Was a new canon Eblet write proposed in this session?"),
         prior_detective_fanout: z.boolean().optional()
-          .describe("Was Detective TEAM fan-out done before any canon Eblet write proposal?"),
+          .describe("R06: Was Detective TEAM fan-out done before any canon Eblet write proposal?"),
         session_debrief_done: z.boolean().optional()
-          .describe("Was moneypenny_debrief (or equivalent) called at session-close?"),
+          .describe("R09: Was moneypenny_debrief (or equivalent) called at session-close?"),
+        // ── R12: Toolbelt-On Confirmation (BP028 LB-STACK-0071) ─────────────
+        r12_brief_me_returned: z.boolean().optional()
+          .describe("R12: Was brief_me called and returned before substantive work?"),
+        r12_tool_schemas_loaded: z.boolean().optional()
+          .describe("R12: Are work-class tool schemas loaded/listed (Codex/Yoke/dispatch/GADGETs)?"),
+        r12_substrate_cache_fresh: z.boolean().optional()
+          .describe("R12: Is substrate cache fresh (within 24h) or explicitly refreshed this session?"),
+        r12_work_before_toolbelt: z.boolean().optional()
+          .describe("R12: Did substantive work fire before Toolbelt confirmation? (true = FAIL)"),
+        // ── R13: Cold Start Ritual Sequence-Integrity (BP028 LB-STACK-0072) ─
+        r13_steps_out_of_order: z.boolean().optional()
+          .describe("R13: Were Cold Start steps executed out of canonical order? (true = FAIL)"),
+        r13_gather_step_present: z.boolean().optional()
+          .describe("R13: Was the Gather step (pheromone/detective/consult_scribes) present?"),
+        r13_assess_step_evidenced: z.boolean().optional()
+          .describe("R13: Was the Assess step evidenced by measurement/numbers/empirical receipt?"),
+        r13_collect_deferred: z.boolean().optional()
+          .describe("R13: Was Collect (Toolbelt-on) deferred until mid-Apply? (true = WARN)"),
+        r13_adjust_skipped: z.boolean().optional()
+          .describe("R13: Was Adjust skipped entirely with no tactical replan queued? (true = WARN)"),
+        // ── R14: Brick-Wall Full-Loop Discipline (BP028 LB-STACK-0073) ──────
+        r14_prehoc_ask_detected: z.boolean().optional()
+          .describe("R14: Was a pre-hoc 'should I?' / 'may I?' ask detected before action? (true = FAIL)"),
+        r14_missing_surface_after_action: z.boolean().optional()
+          .describe("R14: Did an action land without a completion-block surface? (true = FAIL)"),
+        r14_separate_ok_ask_appended: z.boolean().optional()
+          .describe("R14: Was a separate 'was that OK?' line appended after surface? (true = FAIL)"),
+        r14_surface_sparse: z.boolean().optional()
+          .describe("R14: Was the surface sparse / redirect point unclear? (true = WARN)"),
+        // ── R15: Last-Hours Founder Review Cohort Readiness (BP028 LB-STACK-0074) ─
+        r15_counsel_prep_brief_current: z.boolean().optional()
+          .describe("R15: Is counsel-prep brief §12 scaffold-status current and accurate?"),
+        r15_file_paths_staged: z.boolean().optional()
+          .describe("R15: Were file paths staged / paste-ready code accessible for batch review?"),
+        r15_critical_gap_late_discovered: z.boolean().optional()
+          .describe("R15: Was a critical gap discovered <15min before fire? (true = WARN)"),
+        r15_preemptive_review_ask: z.boolean().optional()
+          .describe("R15: Did session chat show a pre-emptive review ask before last-hours window? (true = FAIL)"),
+        // ── R16: Pawn-Blind-Workaround Respect (BP028 LB-STACK-0075) ────────
+        r16_prior_session_workaround_directive: z.boolean().optional()
+          .describe("R16: Did prior session have a Founder directive routing Pawn task to paste-to-perplexity-web workaround?"),
+        r16_dispatch_pawn_attempted_after_directive: z.boolean().optional()
+          .describe("R16: Was dispatch_pawn attempted for same task class after the workaround directive? (true = FAIL)"),
+        r16_dispatch_pawn_scope_unclear: z.boolean().optional()
+          .describe("R16: Was dispatch_pawn scope unclear relative to Founder directive? (true = WARN)"),
+        // ── R17: MCP-Restart-Needed Regression (BP028 LB-STACK-0076) ────────
+        r17_mcp_restart_required_in_commits: z.boolean().optional()
+          .describe("R17: Does recent Knight commit history contain a 'librarian-mcp restart required' note?"),
+        r17_dispatch_rook_before_restart: z.boolean().optional()
+          .describe("R17: Was dispatch_rook attempted while MCP restart is still pending? (true = FAIL)"),
+        r17_dispatch_rook_restart_status_unclear: z.boolean().optional()
+          .describe("R17: Was dispatch_rook attempted with unclear restart status? (true = WARN)"),
       })
-      .describe("Session evidence for R01-R10 grading. Omit fields you have no evidence for (graded as SKIP)."),
+      .describe("Session evidence for R01-R17 grading. Omit fields you have no evidence for (graded as SKIP). R01-R10 fields unchanged; R12-R17 fields are new BP028 operational-discipline rules."),
     format: z
       .enum(["json", "markdown"])
       .optional()
@@ -7123,7 +7215,7 @@ server.tool(
       const result = runSessionOpenGrade(
         session_id,
         ai_member,
-        evidence as SessionEvidenceMap
+        evidence as FullSessionEvidenceMap
       );
 
       // Substrate write-back: catechist_violation_summary provenance (KN104 pattern)
@@ -8384,8 +8476,6 @@ server.tool(
 );
 
 server.tool(
-  "strata_promote",
-  "KN-T4 / BP018 Pod-T ΓÇö Promote a topic to a higher stratum in the 7-layer Keyword-Pyramid. " +
     "Builds promotion chain history. Bedrock rejects further promotion. Cannot demote.",
   {
     topic: z.string().describe("Topic to promote."),
