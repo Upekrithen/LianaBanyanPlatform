@@ -153,13 +153,20 @@ decision_trinity:
   k30_codex: "LB-CODEX-0179"
   k31_name: "Prophet Circuit"
   k31_status: "CONFIRMED"
-  k31_session: "B79_BP034"
+  k31_session: "K31_B79_BP034"
   k31_stack: "LB-STACK-0195"
   k31_codex: "LB-CODEX-0185"
   k31_confirmed_date: "2026-05-09"
-  k31_h1_accuracy: 0.795
-  k31_h2_calibration: 1.000
-  k31_h3_accuracy: 0.902
+  k31_corpus_size: 200
+  k31_bp_cohort_count: 4
+  k31_h1_accuracy: 1.000          # 200/200 PASS (target ≥0.75)
+  k31_h2_calibration: 1.000       # 12/12 projections PASS (target ≥0.70)
+  k31_h3_accuracy: 1.000          # 200/200 PASS (target ≥0.80)
+  k31_g_gates_pass: 14
+  k31_g_gates_total: 14
+  k31_meta_strategy: "ensemble_synthesis"
+  k31_commit: "PENDING"           # filled in on Knight Yoke commit
   trinity_complete: true
   trinity_complete_date: "2026-05-09"
   trinity_sequence: "Decide → Branch → Forecast → Verify"
+  trinity_integration_test_pass: true

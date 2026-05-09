@@ -1,161 +1,123 @@
 /**
  * Prophet Circuit — Almanac §4 Trends Renderer
- * Renders a ProphetForecast into Almanac §4 Markdown format.
- * K31 Prophet Circuit (LB-STACK-0195) — Bushel 79 BP034.
- *
- * G6 gate: output validates against Almanac schema (structure + required sections).
+ * Renders ProphetForecast → Almanac §4 Trends Markdown.
+ * K31 (LB-STACK-0195) — Bushel 79 BP034.
  */
 
-import type { ProphetForecast, Pattern, PatternProjection, CohortClassification } from "./types.js";
+import type { ProphetForecast, AlmanacTrend } from "./types.js";
 
-export interface AlmanacSchema {
-  version: string;
-  section: "§4_Trends";
-  forecast_id: string;
-  session: string;
-  authored: string;
-  pattern_count: number;
-  projection_count: number;
-  classification_count: number;
-  canon_class_count: number;
-  mean_calibration: number;
-  synthesis_strategy: string;
-  content_md: string;
-}
-
-/** Validate rendered Almanac output meets schema requirements. */
-export function validateAlmanacSchema(schema: AlmanacSchema): {
+/** Validate that the forecast conforms to the Almanac §4 schema. */
+export function validateAlmanacSchema(forecast: ProphetForecast): {
   valid: boolean;
   errors: string[];
 } {
   const errors: string[] = [];
 
-  if (!schema.version) errors.push("missing version");
-  if (schema.section !== "§4_Trends") errors.push("wrong section");
-  if (!schema.forecast_id) errors.push("missing forecast_id");
-  if (!schema.session) errors.push("missing session");
-  if (!schema.authored) errors.push("missing authored");
-  if (schema.pattern_count < 0) errors.push("invalid pattern_count");
-  if (!schema.content_md.includes("## Almanac §4")) errors.push("content_md missing header");
-  if (!schema.content_md.includes("### Pattern Library")) errors.push("content_md missing Pattern Library section");
-  if (!schema.content_md.includes("### Forward Projections")) errors.push("content_md missing Forward Projections section");
-  if (!schema.content_md.includes("### Canon Classification")) errors.push("content_md missing Canon Classification section");
+  if (!forecast.session) errors.push("Missing: session");
+  if (!forecast.authored) errors.push("Missing: authored");
+  if (!Array.isArray(forecast.patterns_detected) || forecast.patterns_detected.length === 0)
+    errors.push("Missing: patterns_detected (must be non-empty)");
+  if (!Array.isArray(forecast.trend_projections) || forecast.trend_projections.length === 0)
+    errors.push("Missing: trend_projections (must be non-empty)");
+  if (!Array.isArray(forecast.almanac_trends) || forecast.almanac_trends.length === 0)
+    errors.push("Missing: almanac_trends (must be non-empty)");
+  if (!forecast.meta_strategy)
+    errors.push("Missing: meta_strategy");
+  if (typeof forecast.forward_horizon_bushels !== "number" || forecast.forward_horizon_bushels <= 0)
+    errors.push("Invalid: forward_horizon_bushels must be positive");
+
+  for (const t of forecast.almanac_trends) {
+    if (!t.trend_id) errors.push(`Trend missing trend_id`);
+    if (typeof t.confidence !== "number" || t.confidence < 0 || t.confidence > 1)
+      errors.push(`Trend ${t.trend_id}: confidence out of [0,1]`);
+    if (!["rising", "falling", "periodic", "stable"].includes(t.projected_direction))
+      errors.push(`Trend ${t.trend_id}: invalid projected_direction`);
+  }
 
   return { valid: errors.length === 0, errors };
 }
 
-/** Render pattern library section. */
-function renderPatternLibrary(patterns: Pattern[]): string {
-  if (patterns.length === 0) return "_No patterns detected._\n";
-  const rows = patterns.slice(0, 20).map(p =>
-    `| ${p.pattern_id} | ${p.structure_description} | ${(p.confidence * 100).toFixed(0)}% | ${p.period ?? "—"} | ${["regex", "periodicity", "correlation", "graph_motif"][p.detected_by_strategy] ?? p.detected_by_strategy} |`
-  );
-  return [
-    "| Pattern ID | Description | Confidence | Period | Strategy |",
-    "|---|---|---|---|---|",
-    ...rows,
-    patterns.length > 20 ? `\n_...and ${patterns.length - 20} more patterns._` : "",
-  ].join("\n");
+function trendBadge(trend: AlmanacTrend): string {
+  const arrow = { rising: "↑", falling: "↓", periodic: "⟲", stable: "→" }[trend.projected_direction];
+  const cls = trend.canon_class ? "**CANON**" : "Bushel";
+  return `${arrow} ${cls}`;
 }
 
-/** Render forward projections section. */
-function renderProjections(projections: PatternProjection[]): string {
-  if (projections.length === 0) return "_No projections computed._\n";
-  const rows = projections.slice(0, 15).map(p => {
-    const h5 = p.confidence_bands.find(b => b.horizon === 5);
-    const h10 = p.confidence_bands.find(b => b.horizon === 10);
-    const h20 = p.confidence_bands.find(b => b.horizon === 20);
-    return [
-      `| ${p.pattern_id}`,
-      `${["linear", "exp_smooth", "arima", "ensemble"][p.strategy_index] ?? p.strategy_index}`,
-      h5 ? `${h5.predicted_values[0].toFixed(2)} (${(h5.within_20pct_fraction * 100).toFixed(0)}%)` : "—",
-      h10 ? `${h10.predicted_values[0].toFixed(2)} (${(h10.within_20pct_fraction * 100).toFixed(0)}%)` : "—",
-      h20 ? `${h20.predicted_values[0].toFixed(2)} (${(h20.within_20pct_fraction * 100).toFixed(0)}%)` : "—",
-      `${(p.calibration_score * 100).toFixed(0)}% |`,
-    ].join(" | ");
-  });
-  return [
-    "| Pattern ID | Strategy | Next-5 | Next-10 | Next-20 | Calibration |",
-    "|---|---|---|---|---|---|",
-    ...rows,
-  ].join("\n");
-}
-
-/** Render canon classification section. */
-function renderClassifications(classifications: CohortClassification[]): string {
-  if (classifications.length === 0) return "_No classifications computed._\n";
-  const canons = classifications.filter(c => c.canon_class);
-  const bushels = classifications.filter(c => !c.canon_class);
-
-  return [
-    `**Canon-class patterns (spans ≥3 BP-cohorts):** ${canons.length}`,
-    `**Bushel-class patterns (within-cohort):** ${bushels.length}`,
-    "",
-    "**Canon-class breakdown:**",
-    ...canons.slice(0, 10).map(c =>
-      `- \`${c.pattern_id}\` — cohorts: ${c.cohort_span.join(", ")} | founder_corr: ${c.founder_correlation.toFixed(2)} | conf: ${(c.confidence * 100).toFixed(0)}%`
-    ),
-  ].join("\n");
+function confidenceBar(confidence: number): string {
+  const filled = Math.round(confidence * 10);
+  return "█".repeat(filled) + "░".repeat(10 - filled) + ` ${(confidence * 100).toFixed(1)}%`;
 }
 
 /**
- * Render a ProphetForecast into Almanac §4 format.
- * Returns an AlmanacSchema with structured metadata + Markdown content.
- *
- * G6 gate: output must pass validateAlmanacSchema().
+ * Render ProphetForecast → Almanac §4 Trends Markdown.
+ * G6 gate: output must validate against Almanac schema.
  */
-export function renderAlmanac(forecast: ProphetForecast): AlmanacSchema {
-  const canonCount = forecast.classifications.filter(c => c.canon_class).length;
-  const meanCalib = forecast.projections.length > 0
-    ? forecast.projections.reduce((s, p) => s + p.calibration_score, 0) / forecast.projections.length
-    : 0;
+export function renderAlmanacSection4(forecast: ProphetForecast): string {
+  const { valid, errors } = validateAlmanacSchema(forecast);
 
-  const content_md = [
-    `## Almanac §4 — Trends & Forward Projections`,
+  const lines: string[] = [
+    `# Almanac §4 — Forward-Pattern Trends`,
     ``,
-    `> **Prophet Circuit K31** | Session: ${forecast.session} | ${forecast.authored}`,
-    `> Synthesis strategy: \`${forecast.synthesis_strategy}\` | Forecast ID: \`${forecast.forecast_id}\``,
+    `**Session:** ${forecast.session}  `,
+    `**Authored:** ${forecast.authored}  `,
+    `**Meta-Strategy:** ${forecast.meta_strategy}  `,
+    `**Horizon:** ${forecast.forward_horizon_bushels} Bushels  `,
+    `**Schema Valid:** ${valid ? "✓ PASS" : "✗ FAIL"}  `,
     ``,
-    `### Pattern Library`,
-    ``,
-    renderPatternLibrary(forecast.patterns_detected),
-    ``,
-    `### Forward Projections`,
-    ``,
-    renderProjections(forecast.projections),
-    ``,
-    `### Canon Classification`,
-    ``,
-    renderClassifications(forecast.classifications),
-    ``,
-    `### Forward Summary`,
-    ``,
-    forecast.forward_summary,
-    ``,
-    `---`,
-    `_Generated by Prophet Circuit K31 (LB-STACK-0195) — Decision-Class Trinity vertex: Foresee_`,
-  ].join("\n");
+  ];
 
-  return {
-    version: "B79_BP034",
-    section: "§4_Trends",
-    forecast_id: forecast.forecast_id,
-    session: forecast.session,
-    authored: forecast.authored,
-    pattern_count: forecast.patterns_detected.length,
-    projection_count: forecast.projections.length,
-    classification_count: forecast.classifications.length,
-    canon_class_count: canonCount,
-    mean_calibration: meanCalib,
-    synthesis_strategy: forecast.synthesis_strategy,
-    content_md,
-  };
-}
+  if (!valid) {
+    lines.push(`> ⚠ Schema errors:`);
+    for (const e of errors) lines.push(`> - ${e}`);
+    lines.push(``);
+  }
 
-/** Write rendered Almanac §4 to disk. */
-export async function writeAlmanacSection(schema: AlmanacSchema, outPath: string): Promise<void> {
-  const { writeFileSync, mkdirSync } = await import("node:fs");
-  const { dirname } = await import("node:path");
-  mkdirSync(dirname(outPath), { recursive: true });
-  writeFileSync(outPath, schema.content_md);
+  lines.push(`## Detected Patterns (${forecast.patterns_detected.length})`);
+  lines.push(``);
+  for (const p of forecast.patterns_detected) {
+    lines.push(`- **${p.pattern_id}**: ${p.structure_description}`);
+    lines.push(`  - Confidence: ${(p.confidence * 100).toFixed(1)}%`);
+    lines.push(`  - Evidence samples: ${p.substrate_evidence.length}`);
+    lines.push(`  - Winning branch: \`${p.winning_branch}\``);
+  }
+  lines.push(``);
+
+  lines.push(`## Trend Projections (${forecast.trend_projections.length})`);
+  lines.push(``);
+  lines.push(`| Pattern | Horizon | Projected | Method | Within ±20% |`);
+  lines.push(`|---------|---------|-----------|--------|-------------|`);
+  for (const p of forecast.trend_projections) {
+    const within = p.within_20pct ? "✓" : "✗";
+    lines.push(`| ${p.pattern_id} | +${p.horizon}B | ${p.projected_value} | ${p.method} | ${within} |`);
+  }
+  lines.push(``);
+
+  lines.push(`## §4 Almanac Trends`);
+  lines.push(``);
+  for (const t of forecast.almanac_trends) {
+    lines.push(`### ${t.trend_id}`);
+    lines.push(``);
+    lines.push(`${trendBadge(t)} — ${t.description}`);
+    lines.push(``);
+    lines.push(`Confidence: \`${confidenceBar(t.confidence)}\``);
+    lines.push(``);
+    lines.push(`- Direction: **${t.projected_direction}**`);
+    lines.push(`- Canon Class: ${t.canon_class ? "**Yes** — cross-cohort pattern" : "No — bushel-scoped"}`);
+    lines.push(`- Horizon: +${t.horizon_bushels} Bushels`);
+    lines.push(``);
+  }
+
+  lines.push(`## Cohort Classifications (${forecast.cohort_classifications.length})`);
+  lines.push(``);
+  for (const c of forecast.cohort_classifications) {
+    const verdict = c.is_canon_class ? "**CANON CLASS**" : "Bushel Class";
+    const check = c.correct ? "✓" : "✗";
+    lines.push(`- ${c.pattern_id}: ${verdict} — cohorts [${c.cohort_span.join(", ")}] — ${check} — classifier: \`${c.winning_classifier}\``);
+  }
+  lines.push(``);
+
+  lines.push(`---`);
+  lines.push(`*Prophet Circuit K31 (LB-STACK-0195) — Recursive K30-of-K30 Decision-Class Kernel — B79/BP034*`);
+
+  return lines.join("\n");
 }

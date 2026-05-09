@@ -1,190 +1,163 @@
 /**
- * Meta-Prophet: K30-of-K30 Orchestration
- * Manages {Axis 1, Axis 2, Axis 3} as K30 branches, selects synthesis strategy,
- * and produces the final ProphetForecast.
- * K31 Prophet Circuit (LB-STACK-0195) — Bushel 79 BP034.
+ * Prophet Circuit — Meta-Prophet: K30-of-K30 Orchestration
+ * Treats Axis 1 (detection), Axis 2 (extrapolation), Axis 3 (recognition)
+ * each as a K30 Contingency Operator instance, then runs a meta-K30 over
+ * their three outputs to synthesize the final ProphetForecast.
  *
- * Synthesis strategies (K30 meta-branch space):
- *   0 — full_pipeline:       run all 3 axes sequentially, compose all outputs
- *   1 — pattern_dominant:    Axis 1 heavy; simplified projection + classification
- *   2 — trend_dominant:      Axis 2 heavy; deep confidence bands, simplified classification
- *   3 — classifier_dominant: Axis 3 heavy; detailed canon/bushel metadata, simplified projection
- *   4 — ensemble:            weighted ensemble of all three axis outputs
- *
- * G5 gate: meta-K30 selects ensemble strategy (may be any of the above;
- *          "full_pipeline" satisfies G5 as the maximally composable strategy).
+ * "Prophet Circuit = recursive K30-of-K30 composition."
+ * K31 (LB-STACK-0195) — Bushel 79 BP034.
  */
 
 import type {
-  SubstrateSample, Pattern, PatternProjection, CohortClassification,
-  ProphetForecast, AxisProblem,
+  PatternEntry,
+  TrendProjection,
+  CohortClassification,
+  ProphetForecast,
+  AlmanacTrend,
 } from "./types.js";
-import { runContingencyOperator, DEFAULT_PARAMS } from "../contingency_operator/composer.js";
-import { runAxis1PatternDetection } from "./axes/pattern_detection.js";
-import { runAxis2TrendExtrapolation } from "./axes/trend_extrapolation.js";
-import { runAxis3CrossCohortRecognition } from "./axes/cross_cohort_recognition.js";
+import { runPatternDetection } from "./axes/pattern_detection.js";
+import { runTrendExtrapolation } from "./axes/trend_extrapolation.js";
+import { runCrossCohortRecognition } from "./axes/cross_cohort_recognition.js";
+import type { SubstrateSample } from "./types.js";
 
-let forecastCounter = 0;
-
-function seededRng(seed: number): () => number {
-  let s = seed;
-  return () => {
-    s = (s * 1664525 + 1013904223) & 0xffffffff;
-    return (s >>> 0) / 0x100000000;
-  };
+/** Axis "ballot" at the meta-level — K30 SPECULATE equivalent. */
+interface AxisBallot {
+  axis: "pattern_detection" | "trend_extrapolation" | "cross_cohort_recognition";
+  confidence_mean: number;
+  output_count: number;
+  quality_score: number;  // synthetic ballot weight for meta-K30
 }
 
-const SYNTHESIS_NAMES = [
-  "full_pipeline",
-  "pattern_dominant",
-  "trend_dominant",
-  "classifier_dominant",
-  "ensemble",
-] as const;
-type SynthesisName = typeof SYNTHESIS_NAMES[number];
+/** Compute mean confidence from pattern entries. */
+function meanPatternConfidence(patterns: PatternEntry[]): number {
+  if (patterns.length === 0) return 0;
+  return patterns.reduce((s, p) => s + p.confidence, 0) / patterns.length;
+}
 
-// ─── K30 Meta-Problem Builder ─────────────────────────────────────────────────
+/** Compute calibration score from trend projections. */
+function calibrationScore(projections: TrendProjection[]): number {
+  if (projections.length === 0) return 0;
+  return projections.filter(p => p.within_20pct).length / projections.length;
+}
+
+/** Compute classification accuracy proxy from CohortClassification. */
+function classificationScore(classifications: CohortClassification[]): number {
+  if (classifications.length === 0) return 0;
+  return classifications.filter(c => c.correct).length / classifications.length;
+}
 
 /**
- * Build a K30 SyntheticProblem for the Meta-Prophet level.
- * Each "strategy" is a synthesis approach.
- * The accuracy ceiling models composite forecast quality for each approach.
+ * Meta-Oracle at K30-of-K30 level.
+ * Determines which synthesis strategy to use based on axis quality scores.
  */
-function buildMetaProblem(
-  patternCount: number,
-  projectionCount: number,
-  classificationCount: number,
-  rng: () => number,
-): AxisProblem {
-  // full_pipeline (0) wins when all three axes have produced rich data.
-  // ensemble (4) is competitive and wins when axes outputs are high-quality.
-  const richness = Math.min(1, (patternCount + projectionCount + classificationCount) / 60);
-  const ceilings = [
-    0.88 + richness * 0.05 + rng() * 0.04,  // full_pipeline
-    0.78 + rng() * 0.07,                     // pattern_dominant
-    0.76 + rng() * 0.07,                     // trend_dominant
-    0.74 + rng() * 0.07,                     // classifier_dominant
-    0.85 + richness * 0.08 + rng() * 0.04,  // ensemble
-  ];
-  const bestIdx = ceilings.indexOf(Math.max(...ceilings));
+function metaOracleStrategy(ballots: AxisBallot[]): {
+  strategy: ProphetForecast["meta_strategy"];
+  dominant?: AxisBallot;
+} {
+  const maxQ = Math.max(...ballots.map(b => b.quality_score));
+  const minQ = Math.min(...ballots.map(b => b.quality_score));
+  const spread = maxQ - minQ;
 
-  return {
-    id: "meta_prophet_synthesis",
-    n_strategies: 5,
-    best_strategy_index: bestIdx,
-    best_strategy_accuracy: ceilings[bestIdx],
-    correct_answer: SYNTHESIS_NAMES[bestIdx],
-    strategies: ceilings.map((ceiling, i) => ({
-      index: i,
-      accuracy_ceiling: ceiling,
-      steps_to_converge: 50 + Math.floor(rng() * 50),
-      convergence_rate: 0.30 + rng() * 0.40,
-    })),
-  };
+  if (spread < 0.15) {
+    // All axes roughly equal quality → ensemble synthesis
+    return { strategy: "ensemble_synthesis" };
+  }
+
+  const dominant = ballots.reduce((a, b) => a.quality_score >= b.quality_score ? a : b);
+  if (spread > 0.35) {
+    // One axis dramatically better → single axis dominates
+    return { strategy: "single_axis_dominant", dominant };
+  }
+
+  // Moderate spread → conflict resolution via ensemble with dominant weighting
+  return { strategy: "conflict_resolved", dominant };
 }
 
-// ─── Synthesis Functions ──────────────────────────────────────────────────────
-
-function buildForwardSummary(
-  patterns: Pattern[],
-  projections: PatternProjection[],
+/** Build AlmanacTrend entries from the three-axis outputs. */
+function buildAlmanacTrends(
+  patterns: PatternEntry[],
+  projections: TrendProjection[],
   classifications: CohortClassification[],
-  strategy: SynthesisName,
-): string {
-  const canonPatterns = classifications.filter(c => c.canon_class).length;
-  const bushelPatterns = classifications.filter(c => !c.canon_class).length;
-  const meanCalib = projections.length > 0
-    ? projections.reduce((s, p) => s + p.calibration_score, 0) / projections.length
-    : 0;
+  horizon: number,
+): AlmanacTrend[] {
+  const classMap = new Map(classifications.map(c => [c.pattern_id, c]));
+  const horizonProj = projections.filter(p => p.horizon === horizon);
+  const projMap = new Map(horizonProj.map(p => [p.pattern_id, p]));
 
-  return [
-    `## Almanac §4 — Forward Trends (Prophet Circuit K31 / LB-STACK-0195)`,
-    ``,
-    `**Synthesis strategy:** ${strategy}`,
-    `**Patterns detected:** ${patterns.length} (${canonPatterns} canon-class, ${bushelPatterns} Bushel-class)`,
-    `**Mean projection calibration:** ${(meanCalib * 100).toFixed(1)}% within ±20% CI`,
-    ``,
-    `### Canon-Class Patterns (cross-cohort, ≥3 BP-cohorts)`,
-    ...classifications
-      .filter(c => c.canon_class)
-      .slice(0, 5)
-      .map(c => `- ${c.pattern_id}: spans ${c.cohort_span.join(", ")} (founder_corr: ${c.founder_correlation.toFixed(2)})`),
-    ``,
-    `### Forward Projection Summary`,
-    ...projections
-      .slice(0, 5)
-      .map(p => {
-        const h5 = p.confidence_bands.find(b => b.horizon === 5);
-        return `- ${p.pattern_id}: next-5 forecast ${h5 ? h5.predicted_values[0].toFixed(2) : "N/A"} (calib: ${(p.calibration_score * 100).toFixed(0)}%)`;
-      }),
-  ].join("\n");
-}
+  return patterns.map(pattern => {
+    const cls = classMap.get(pattern.pattern_id);
+    const proj = projMap.get(pattern.pattern_id);
 
-// ─── Public API ───────────────────────────────────────────────────────────────
+    const direction =
+      pattern.pattern_class === "noise" ? "stable" : pattern.pattern_class;
 
-export interface MetaProphetResult {
-  forecast: ProphetForecast;
-  axis1_winning_strategy: number;
-  axis2_winning_strategy: number;
-  axis3_winning_strategy: number;
-  meta_committed_strategy: number;
+    return {
+      trend_id: `trend_${pattern.pattern_id}_h${horizon}`,
+      description: `${pattern.structure_description} — ${horizon}-Bushel outlook`,
+      projected_direction: direction as AlmanacTrend["projected_direction"],
+      confidence: proj
+        ? Math.round(((pattern.confidence + (proj.within_20pct ? 0.95 : 0.55)) / 2) * 10000) / 10000
+        : pattern.confidence,
+      canon_class: cls?.is_canon_class ?? false,
+      horizon_bushels: horizon,
+    };
+  });
 }
 
 /**
- * Orchestrate all three Prophet Circuit axes as K30 branches.
- * Meta-K30 selects synthesis strategy; returns final ProphetForecast.
+ * Run the full Meta-Prophet K30-of-K30 orchestration.
  *
- * G5 gate: meta-K30 selects ensemble strategy; all outputs compose cleanly.
- * G10 gate (composability): Prophet receives K28 context, queries K29 Oracle state,
- *   invokes K30 Contingency per axis, emits SCR-compliant Eblet.
+ * Sequence:
+ *   1. SPECULATE — launch all three K30 axis instances
+ *   2. PURSUE    — evaluate ballot weights from each axis output
+ *   3. META-COMMIT — meta-oracle selects synthesis strategy
+ *   4. SYNTHESIZE — build ProphetForecast from winning strategy
  */
 export function runMetaProphet(
-  corpus: SubstrateSample[],
+  samples: SubstrateSample[],
   session: string,
-  rngSeed = 79,
-): MetaProphetResult {
-  const rng = seededRng(rngSeed);
+): ProphetForecast {
+  // SPECULATE: launch three K30 axis instances in parallel (simulated)
+  const patterns      = runPatternDetection(samples);
+  const projections   = runTrendExtrapolation(patterns, samples);
+  const classifications = runCrossCohortRecognition(patterns, samples);
 
-  // Run all three axes (sequential pipeline — Axis 2 depends on Axis 1 patterns)
-  const axis1 = runAxis1PatternDetection(corpus, session, rngSeed);
-  const axis2 = runAxis2TrendExtrapolation(axis1.patterns, corpus, session, rngSeed + 1);
-  const axis3 = runAxis3CrossCohortRecognition(axis1.patterns, corpus, session, rngSeed + 2);
+  // PURSUE: score each axis output (ballot weights for meta-K30)
+  const ballots: AxisBallot[] = [
+    {
+      axis: "pattern_detection",
+      confidence_mean: meanPatternConfidence(patterns),
+      output_count: patterns.length,
+      quality_score: meanPatternConfidence(patterns),
+    },
+    {
+      axis: "trend_extrapolation",
+      confidence_mean: calibrationScore(projections),
+      output_count: projections.length,
+      quality_score: calibrationScore(projections),
+    },
+    {
+      axis: "cross_cohort_recognition",
+      confidence_mean: classificationScore(classifications),
+      output_count: classifications.length,
+      quality_score: classificationScore(classifications),
+    },
+  ];
 
-  // Build meta K30 problem
-  const metaProblem = buildMetaProblem(
-    axis1.patterns.length,
-    axis2.projections.length,
-    axis3.classifications.length,
-    rng,
-  );
+  // META-COMMIT: meta-oracle determines synthesis strategy
+  const { strategy } = metaOracleStrategy(ballots);
 
-  // Run K30 at meta level to commit to synthesis strategy
-  const k30Rng = seededRng(rngSeed + 3);
-  const params = { ...DEFAULT_PARAMS, rng: k30Rng, warm_up: 10 };
-  const metaResult = runContingencyOperator(metaProblem as Parameters<typeof runContingencyOperator>[0], params, session);
-
-  const committedStratIdx = metaResult.committed_strategy_index ?? 0;
-  const synthName: SynthesisName = SYNTHESIS_NAMES[committedStratIdx] ?? "full_pipeline";
-
-  const summary = buildForwardSummary(axis1.patterns, axis2.projections, axis3.classifications, synthName);
-
-  const forecast: ProphetForecast = {
-    forecast_id: `FORECAST_${String(++forecastCounter).padStart(3, "0")}`,
-    session,
-    authored: new Date().toISOString(),
-    patterns_detected: axis1.patterns,
-    projections: axis2.projections,
-    classifications: axis3.classifications,
-    synthesis_strategy: synthName,
-    meta_k30_committed_strategy: committedStratIdx,
-    forward_summary: summary,
-  };
+  // SYNTHESIZE: build ProphetForecast — Almanac §4 Trends at 5-Bushel horizon
+  const almanacTrends = buildAlmanacTrends(patterns, projections, classifications, 5);
 
   return {
-    forecast,
-    axis1_winning_strategy: axis1.k30_winning_strategy,
-    axis2_winning_strategy: axis2.k30_winning_strategy,
-    axis3_winning_strategy: axis3.k30_winning_strategy,
-    meta_committed_strategy: committedStratIdx,
+    session,
+    authored: new Date().toISOString(),
+    patterns_detected: patterns,
+    trend_projections: projections,
+    cohort_classifications: classifications,
+    almanac_trends: almanacTrends,
+    meta_strategy: strategy,
+    forward_horizon_bushels: 20,
   };
 }

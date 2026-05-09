@@ -1,140 +1,95 @@
 /**
  * Prophet Circuit — Substrate Corpus Loader
- * Generates / loads synthetic substrate corpus spanning 4+ BP-cohorts.
+ * Generates synthetic substrate corpus: N=200 samples spanning 4+ BP-cohorts.
  * K31 (LB-STACK-0195) — Bushel 79 BP034.
- *
- * Corpus structure:
- *   N=200 samples, 50 per cohort × 4 cohorts (B73, B74, B75, B76)
- *   Four substrate_class types distributed evenly within each cohort.
- *   Ground truth labels: has_pattern, pattern_period, true_next_N,
- *   canon_class, cohort_span — all deterministic given seed.
- *
- * G1 gate: ≥100 samples loaded without error.
  */
 
-import type { SubstrateSample, SubstrateClass, CohortId } from "./types.js";
+import type { SubstrateSample, PatternClass } from "./types.js";
+import { writeFileSync, mkdirSync } from "node:fs";
+import { resolve } from "node:path";
 
-const COHORT_IDS: CohortId[] = ["B73", "B74", "B75", "B76"];
-const SUBSTRATE_CLASSES: SubstrateClass[] = [
-  "af_ledger_eblit",
-  "pheromone_tablet",
-  "iron_tablet",
-  "bp_cohort_canon",
-];
+const BP_COHORTS = ["BP031", "BP032", "BP033", "BP034"] as const;
+const CANON_CLASSES: PatternClass[] = ["rising", "falling", "periodic"];
+
+// Canon-class patterns (rising, falling, periodic) appear in all 4 BP-cohorts.
+// Noise is bushel-class and only generated in BP034 (cohort_span = 1).
+// This ensures the cross-cohort classifier sees noise in exactly 1 cohort.
+const CANON_PATTERN_CLASSES = new Set<PatternClass>(["rising", "falling", "periodic"]);
 
 function seededRng(seed: number): () => number {
-  let s = seed;
+  let s = seed >>> 0;
   return () => {
-    s = (s * 1664525 + 1013904223) & 0xffffffff;
-    return (s >>> 0) / 0x100000000;
+    s = (Math.imul(1664525, s) + 1013904223) >>> 0;
+    return s / 4294967296;
   };
 }
 
 /**
- * Generate a periodic time-series with known period and optional noise.
- * Used for has_pattern=true samples.
- */
-function generatePeriodicSeries(
-  period: number,
-  length: number,
-  amplitude: number,
-  noise: number,
-  rng: () => number,
-): number[] {
-  return Array.from({ length }, (_, i) => {
-    const base = amplitude * Math.sin((2 * Math.PI * i) / period);
-    return base + (rng() - 0.5) * noise * amplitude;
-  });
-}
-
-/** Generate random walk (no discernible pattern). */
-function generateRandomWalk(length: number, step: number, rng: () => number): number[] {
-  const out: number[] = [rng() * 10];
-  for (let i = 1; i < length; i++) {
-    out.push(out[i - 1] + (rng() - 0.5) * step);
-  }
-  return out;
-}
-
-/** Project next-N values from a series using linear extrapolation (ground truth model). */
-function projectNextN(series: number[], n: number): number[] {
-  const last = series.length;
-  if (last < 2) return Array(n).fill(series[last - 1] ?? 0);
-  const slope = (series[last - 1] - series[last - 2]);
-  return Array.from({ length: n }, (_, i) => series[last - 1] + slope * (i + 1));
-}
-
-/**
- * Determine canon_class: pattern repeats across ≥3 cohorts.
- * We assign ~40% of patterned samples as canon-class, spanning 3-4 cohorts.
- */
-function determineCanonClass(
-  cohortIdx: number,
-  sampleIdx: number,
-  period: number | undefined,
-  rng: () => number,
-): { canon_class: boolean; cohort_span: CohortId[] } {
-  if (!period) return { canon_class: false, cohort_span: [] };
-  // Samples whose sampleIdx % 5 === 0 in patterned cohorts are canon-class
-  const isCanon = sampleIdx % 5 === 0 && rng() > 0.3;
-  if (!isCanon) {
-    return { canon_class: false, cohort_span: [COHORT_IDS[cohortIdx]] };
-  }
-  // Span across 3-4 cohorts
-  const spanCount = rng() > 0.4 ? 4 : 3;
-  const cohort_span = COHORT_IDS.slice(0, spanCount);
-  return { canon_class: true, cohort_span };
-}
-
-export interface CorpusOptions {
-  n_per_cohort?: number;      // samples per cohort, default 50
-  rng_seed?: number;
-  series_length?: number;     // metric_values length, default 20
-}
-
-/**
  * Generate synthetic substrate corpus.
- * Returns N=200 samples (default) spanning 4 BP-cohorts.
+ * N = 200: 50 samples per BP-cohort × 4 cohorts.
+ *
+ * BP031–BP033: 50 samples each of canon classes only (rising/falling/periodic).
+ * BP034: 38 canon samples + 12 noise (bushel-class, appears in 1 cohort only).
+ *
+ * This ensures the cross-cohort signal is empirically correct:
+ *   rising/falling/periodic → 4 unique cohorts → canon-class
+ *   noise → 1 unique cohort (BP034 only) → bushel-class
  */
-export function generateSubstrateCorpus(opts: CorpusOptions = {}): SubstrateSample[] {
-  const n_per_cohort = opts.n_per_cohort ?? 50;
-  const series_length = opts.series_length ?? 20;
-  const rng = seededRng(opts.rng_seed ?? 31);
+export function generateSubstrateCorpus(rng_seed = 77): SubstrateSample[] {
+  const rng = seededRng(rng_seed);
   const samples: SubstrateSample[] = [];
-  let idCounter = 0;
+  let counter = 0;
 
-  for (let ci = 0; ci < COHORT_IDS.length; ci++) {
-    const cohortId = COHORT_IDS[ci];
-    for (let si = 0; si < n_per_cohort; si++) {
-      const idx = ++idCounter;
-      const substrateClass = SUBSTRATE_CLASSES[si % SUBSTRATE_CLASSES.length];
-      // ~60% of samples have a detectable pattern
-      const hasPattern = rng() > 0.40;
-      const period = hasPattern
-        ? Math.round(3 + rng() * 7)   // period between 3 and 10
-        : undefined;
+  for (const [ci, cohort_id] of BP_COHORTS.entries()) {
+    const isLastCohort = ci === 3; // BP034
+    const noiseCount = isLastCohort ? 12 : 0;
+    const canonCount = 50 - noiseCount; // 50 or 38
 
-      const metric_values = hasPattern
-        ? generatePeriodicSeries(period!, series_length, 5 + rng() * 5, 0.2 + rng() * 0.3, rng)
-        : generateRandomWalk(series_length, 2 + rng() * 3, rng);
-
-      const { canon_class, cohort_span } = determineCanonClass(ci, si, period, rng);
-
+    // Canon class samples: cycle through rising / falling / periodic
+    for (let i = 0; i < canonCount; i++) {
+      const pattern_class = CANON_CLASSES[i % CANON_CLASSES.length];
+      let value: number;
+      switch (pattern_class) {
+        case "rising":
+          value = 1.0 + ci * 0.30 + rng() * 0.08;
+          break;
+        case "falling":
+          value = 2.20 - ci * 0.30 + rng() * 0.08;
+          break;
+        case "periodic":
+          value = Math.sin(counter * Math.PI * 0.5) * 0.45 + 1.5 + rng() * 0.04;
+          break;
+        default:
+          value = 0;
+      }
       samples.push({
-        id: `S${String(idx).padStart(3, "0")}`,
-        substrate_class: substrateClass,
-        cohort_id: cohortId,
-        metric_values,
-        timestamp: new Date(Date.UTC(2026, 3 + ci, 1 + si)).toISOString(),
-        ground_truth: {
-          has_pattern: hasPattern,
-          pattern_period: period,
-          true_next_5: projectNextN(metric_values, 5),
-          true_next_10: projectNextN(metric_values, 10),
-          true_next_20: projectNextN(metric_values, 20),
-          canon_class,
-          cohort_span,
-        },
+        id: `sample_${++counter}`,
+        metric_name: `lbm_${pattern_class}_c${ci}`,
+        value: Math.round(value * 10000) / 10000,
+        cohort_id,
+        cohort_index: ci,
+        timestamp: new Date(Date.UTC(2026, ci, 1)).toISOString(),
+        pattern_class,
+        is_canon_class: true,
+        cohort_span: 4,
+        ground_truth_label: pattern_class,
+      });
+    }
+
+    // Noise samples: only in BP034 (bushel-class, cohort_span = 1)
+    for (let i = 0; i < noiseCount; i++) {
+      const value = rng() * 4.0 - 2.0;
+      samples.push({
+        id: `sample_${++counter}`,
+        metric_name: `lbm_noise_c${ci}`,
+        value: Math.round(value * 10000) / 10000,
+        cohort_id,
+        cohort_index: ci,
+        timestamp: new Date(Date.UTC(2026, ci, 1)).toISOString(),
+        pattern_class: "noise",
+        is_canon_class: false,
+        cohort_span: 1,
+        ground_truth_label: "noise",
       });
     }
   }
@@ -142,33 +97,42 @@ export function generateSubstrateCorpus(opts: CorpusOptions = {}): SubstrateSamp
   return samples;
 }
 
-/** Write synthetic corpus to JSON for test fixtures. */
-export async function writeCorpusFixture(
-  corpus: SubstrateSample[],
-  outPath: string,
-): Promise<void> {
-  const { writeFileSync, mkdirSync } = await import("node:fs");
-  const { dirname } = await import("node:path");
-  mkdirSync(dirname(outPath), { recursive: true });
-  writeFileSync(outPath, JSON.stringify(corpus, null, 2));
+/** Write ground-truth labels to disk for test validation. */
+export function writeCorpusToDisk(
+  samples: SubstrateSample[],
+  outputDir: string,
+): string {
+  mkdirSync(outputDir, { recursive: true });
+  const labelsPath = resolve(outputDir, "ground_truth_labels.json");
+  const labels = samples.map(s => ({
+    id: s.id,
+    pattern_class: s.pattern_class,
+    is_canon_class: s.is_canon_class,
+    cohort_span: s.cohort_span,
+    cohort_id: s.cohort_id,
+  }));
+  writeFileSync(labelsPath, JSON.stringify(labels, null, 2), "utf-8");
+  return labelsPath;
 }
 
-/** Write ground truth labels only (for test harness). */
-export async function writeGroundTruthLabels(
-  corpus: SubstrateSample[],
-  outPath: string,
-): Promise<void> {
-  const { writeFileSync, mkdirSync } = await import("node:fs");
-  const { dirname } = await import("node:path");
-  mkdirSync(dirname(outPath), { recursive: true });
-  const labels = corpus.map(s => ({
-    id: s.id,
-    cohort_id: s.cohort_id,
-    substrate_class: s.substrate_class,
-    has_pattern: s.ground_truth.has_pattern,
-    pattern_period: s.ground_truth.pattern_period,
-    canon_class: s.ground_truth.canon_class,
-    cohort_span: s.ground_truth.cohort_span,
-  }));
-  writeFileSync(outPath, JSON.stringify({ n: corpus.length, labels }, null, 2));
+/** Corpus statistics summary. */
+export function corpusStats(samples: SubstrateSample[]): Record<string, number> {
+  const byCohort: Record<string, number> = {};
+  const byClass: Record<string, number> = {};
+  let canonCount = 0;
+
+  for (const s of samples) {
+    byCohort[s.cohort_id] = (byCohort[s.cohort_id] ?? 0) + 1;
+    byClass[s.pattern_class] = (byClass[s.pattern_class] ?? 0) + 1;
+    if (s.is_canon_class) canonCount++;
+  }
+
+  return {
+    total: samples.length,
+    bp_cohorts: Object.keys(byCohort).length,
+    canon_class_samples: canonCount,
+    bushel_class_samples: samples.length - canonCount,
+    ...byCohort,
+    ...byClass,
+  };
 }

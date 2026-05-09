@@ -1,165 +1,137 @@
 /**
  * Prophet Circuit — K31 (LB-STACK-0195 / LB-CODEX-0185)
- * Types for the recursive K30-of-K30 forward-pattern-projection primitive.
+ * Types for the recursive K30-of-K30 forward-pattern-projection decision-class kernel.
  * Bushel 79 reduction-to-practice — BP034.
- *
- * Core innovation: Prophet Circuit = recursive K30-of-K30 composition.
- * Each of three axes (Pattern Detection / Trend Extrapolation / Cross-Cohort Recognition)
- * IS a K30 Contingency Operator instance managing branches over its respective domain.
- * Meta-Prophet orchestrates K30-over-K30 to synthesize forward-projection forecasts.
  */
 
-export type SubstrateClass =
-  | "af_ledger_eblit"
-  | "pheromone_tablet"
-  | "iron_tablet"
-  | "bp_cohort_canon";
+export type PatternClass = "rising" | "falling" | "periodic" | "noise";
+export type DetectionBranchStrategy =
+  | "regex_scanner"
+  | "periodicity_detector"
+  | "correlation_scanner"
+  | "motif_finder";
+export type ProjectionMethod =
+  | "linear_projection"
+  | "exponential_smoothing"
+  | "arima_approx"
+  | "ensemble_avg";
+export type ClassifierStrategy =
+  | "single_cohort"
+  | "multi_cohort"
+  | "founder_signal"
+  | "meta_pattern";
 
-export type CohortId = string;
-
-export type ProjectionHorizon = 5 | 10 | 20;
-
-/** One substrate state sample from the A+F Ledger / pheromone substrate. */
+/** One substrate sample from the corpus. */
 export interface SubstrateSample {
   id: string;
-  substrate_class: SubstrateClass;
-  cohort_id: CohortId;
-  metric_values: number[];    // time-series values to analyze (min length 8)
+  metric_name: string;
+  value: number;
+  cohort_id: string;        // e.g. "BP031", "BP032", "BP033", "BP034"
+  cohort_index: number;     // 0-based
   timestamp: string;
-  ground_truth: {
-    has_pattern: boolean;
-    pattern_period?: number;        // periodicity in metric_values if has_pattern
-    true_next_5: number[];          // true next-5-Bushel metric values
-    true_next_10: number[];
-    true_next_20: number[];
-    canon_class: boolean;           // true = pattern repeats across ≥3 BP-cohorts
-    cohort_span: CohortId[];        // cohorts in which this pattern appears
-  };
+  pattern_class: PatternClass;
+  is_canon_class: boolean;  // true if this pattern appears in ≥3 BP-cohorts
+  cohort_span: number;      // how many cohorts contain this pattern
+  ground_truth_label: string;
 }
 
 /** A detected pattern emitted by Axis 1. */
-export interface Pattern {
+export interface PatternEntry {
   pattern_id: string;
   structure_description: string;
+  pattern_class: PatternClass;
   confidence: number;
-  substrate_evidence: string[];   // sample IDs exhibiting this pattern
-  period?: number;                 // periodicity if temporal
-  detected_by_strategy: number;   // 0=regex, 1=periodicity, 2=correlation, 3=graph_motif
+  substrate_evidence: string[];
+  winning_branch: DetectionBranchStrategy;
 }
 
-/** Bootstrap confidence band for one projection horizon. */
-export interface ConfidenceBand {
-  horizon: ProjectionHorizon;
-  predicted_values: number[];
-  ci_80_low: number;
-  ci_80_high: number;
-  within_20pct_fraction: number;   // fraction of true values within ±20% of predicted
-}
-
-/** Output of Axis 2 for one pattern. */
-export interface PatternProjection {
+/** A forward projection emitted by Axis 2. */
+export interface TrendProjection {
   pattern_id: string;
-  strategy_index: number;          // 0=linear, 1=exp_smooth, 2=arima, 3=ensemble
-  confidence_bands: ConfidenceBand[];
-  calibration_score: number;       // mean within_20pct_fraction across horizons
+  horizon: 5 | 10 | 20;
+  projected_value: number;
+  confidence_interval_50: [number, number];
+  confidence_interval_80: [number, number];
+  confidence_interval_95: [number, number];
+  method: ProjectionMethod;
+  within_20pct: boolean;
 }
 
-/** Output of Axis 3 for one pattern. */
+/** A cross-cohort classification emitted by Axis 3. */
 export interface CohortClassification {
   pattern_id: string;
-  canon_class: boolean;
-  cohort_span: CohortId[];
+  is_canon_class: boolean;
+  cohort_span: number[];
   founder_correlation: number;
-  classifier_strategy: number;     // 0=single_cohort, 1=multi_cohort, 2=founder_signal, 3=meta_agg
-  confidence: number;
+  winning_classifier: ClassifierStrategy;
+  correct: boolean;
 }
 
-/** Synthesized forward-projection forecast (Meta-Prophet output). */
+/** Sample-level canon classification for H3 accuracy measurement. */
+export interface SampleCanonResult {
+  sample_id: string;
+  predicted_canon: boolean;
+  ground_truth_canon: boolean;
+  correct: boolean;
+  winning_classifier: ClassifierStrategy;
+}
+
+/** Final synthesized forecast from Meta-Prophet (K30-of-K30). */
 export interface ProphetForecast {
-  forecast_id: string;
   session: string;
   authored: string;
-  patterns_detected: Pattern[];
-  projections: PatternProjection[];
-  classifications: CohortClassification[];
-  synthesis_strategy: "full_pipeline" | "pattern_dominant" | "trend_dominant" | "classifier_dominant" | "ensemble";
-  meta_k30_committed_strategy: number;
-  forward_summary: string;
+  patterns_detected: PatternEntry[];
+  trend_projections: TrendProjection[];
+  cohort_classifications: CohortClassification[];
+  almanac_trends: AlmanacTrend[];
+  meta_strategy: "ensemble_synthesis" | "single_axis_dominant" | "conflict_resolved";
+  forward_horizon_bushels: number;
 }
 
-// ─── Hypothesis Result Types ───────────────────────────────────────────────
+export interface AlmanacTrend {
+  trend_id: string;
+  description: string;
+  projected_direction: "rising" | "falling" | "periodic" | "stable";
+  confidence: number;
+  canon_class: boolean;
+  horizon_bushels: number;
+}
 
-/** H1: Pattern detection accuracy ≥ 75% on held-out corpus. */
-export interface H1PatternResult {
+/** H1 result: pattern detection accuracy ≥75%. */
+export interface H1PatternDetectionResult {
   total_samples: number;
-  true_positives: number;
-  false_positives: number;
-  true_negatives: number;
-  false_negatives: number;
-  precision: number;
-  recall: number;
+  correctly_detected: number;
   accuracy: number;
-  h1_pass: boolean;         // accuracy ≥ 0.75
+  h1_pass: boolean;
 }
 
-/** H2: Trend extrapolation calibration ≥ 70% (projections within ±20% CI ≥70% of time). */
-export interface H2TrendResult {
-  patterns_projected: number;
-  horizons_tested: ProjectionHorizon[];
-  calibration_per_horizon: Record<string, number>;
-  mean_calibration: number;
-  h2_pass: boolean;         // mean_calibration ≥ 0.70
+/** H2 result: trend extrapolation calibration ≥70%. */
+export interface H2TrendCalibrationResult {
+  total_projections: number;
+  within_20pct_count: number;
+  calibration_rate: number;
+  h2_pass: boolean;
 }
 
-/** H3: Cross-cohort recognition ≥ 80% accuracy. */
+/** H3 result: cross-cohort recognition accuracy ≥80%. */
 export interface H3CrossCohortResult {
-  total_patterns: number;
-  correct_classifications: number;
+  total_samples: number;
+  correctly_classified: number;
   accuracy: number;
-  canon_true_positives: number;
-  canon_false_negatives: number;
-  h3_pass: boolean;         // accuracy ≥ 0.80
+  h3_pass: boolean;
 }
 
-/** K31 full receipt for Iron Tablet + canon Eblet. */
 export interface ProphetCircuitReceipt {
   session: string;
   authored: string;
   method: string;
   corpus_size: number;
-  bp_cohorts: number;
+  bp_cohort_count: number;
   rng_seed: number;
-  k30_winning_strategy_axis1: number;
-  k30_winning_strategy_axis2: number;
-  k30_winning_strategy_axis3: number;
-  meta_k30_committed_strategy: number;
-  h1: H1PatternResult;
-  h2: H2TrendResult;
+  h1: H1PatternDetectionResult;
+  h2: H2TrendCalibrationResult;
   h3: H3CrossCohortResult;
-  composability_pass: boolean;
   k31_verdict: "CONFIRMED" | "ADOPTED_PROVISIONAL_HELD" | "REVISION_REQUIRED";
   iron_tablet_receipts: number;
-  canon_eblet_path: string;
-  stack_ledger_entry: string;
-  codex_entry: string;
-}
-
-// ─── Internal K30-bridge types ─────────────────────────────────────────────
-
-/** Strategy specification for K30-bridge SyntheticProblem. */
-export interface AxisStrategySpec {
-  index: number;
-  accuracy_ceiling: number;
-  steps_to_converge: number;
-  convergence_rate: number;
-}
-
-/** K30-bridge problem: one axis evaluation over one domain sample. */
-export interface AxisProblem {
-  id: string;
-  n_strategies: number;
-  best_strategy_index: number;
-  best_strategy_accuracy: number;
-  correct_answer: string;
-  strategies: AxisStrategySpec[];
+  trinity_integration_verified: boolean;
 }
