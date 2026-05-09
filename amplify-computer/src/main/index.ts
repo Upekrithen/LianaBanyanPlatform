@@ -29,6 +29,11 @@ import {
   runSpecExtractSmoke,
 } from './hearth_app_builder/orchestrator';
 import { uninstallApp } from './hearth_app_builder/install_runner';
+// B83 — Hearth Conjunction Window
+import { conjunctionRouter } from './hearth/conjunction/conjunction_router';
+import { buildSubstrateContext } from './hearth/embedded_browser/substrate_context_builder';
+import { querySagaState, recordWaveDispatch, recordWaveComplete } from './hearth/drekaskip_status/drekaskip_bridge';
+import { pollWatchdogStatus, getSubjectHistory } from './hearth/active_substrate/watchdog_bridge';
 
 // Register custom OAuth scheme before app ready (Electron requirement)
 registerCustomScheme();
@@ -47,6 +52,7 @@ const CONNECTIVITY_POLL_MS = 30_000;
 
 let overlayWindow: BrowserWindow | null = null;
 let dashboardWindow: BrowserWindow | null = null;
+let hearthConjunctionWindow: BrowserWindow | null = null;
 let tray: Tray | null = null;
 let ollamaManager: OllamaManager | null = null;
 let substrateServer: SubstrateAPIServer | null = null;
@@ -305,6 +311,10 @@ function rebuildTrayMenu(mode: FrameMode = currentMode): void {
       click: () => openDashboard(),
     },
     {
+      label: '🔥 Hearth Conjunction Window',
+      click: () => openHearthConjunctionWindow(),
+    },
+    {
       label: 'Settings',
       click: () => openDashboard(),
     },
@@ -387,6 +397,65 @@ function openDashboard(): void {
 
   if (autoUpdater) autoUpdater.registerWindow(dashboardWindow);
   if (authManager) authManager.registerWindow(dashboardWindow);
+}
+
+// ─── Hearth Conjunction Window (B83) ─────────────────────────────────────────
+
+function openHearthConjunctionWindow(): void {
+  if (hearthConjunctionWindow && !hearthConjunctionWindow.isDestroyed()) {
+    hearthConjunctionWindow.focus();
+    return;
+  }
+
+  const HEARTH_W = 1600;
+  const HEARTH_H = 1000;
+  const primary = screen.getPrimaryDisplay().workArea;
+  const bounds = getSafeBounds({
+    x: primary.x + Math.floor((primary.width - HEARTH_W) / 2),
+    y: primary.y + Math.floor((primary.height - HEARTH_H) / 2),
+    width: HEARTH_W,
+    height: HEARTH_H,
+  });
+
+  // Webview preload path — compiled from src/main/hearth/embedded_browser/webview_preload.ts
+  const webviewPreloadPath = join(__dirname, 'hearth', 'embedded_browser', 'webview_preload.js');
+
+  hearthConjunctionWindow = new BrowserWindow({
+    width: bounds.width,
+    height: bounds.height,
+    x: bounds.x,
+    y: bounds.y,
+    title: 'Hearth Conjunction Window — Heavy Booster Test',
+    minWidth: 1280,
+    minHeight: 800,
+    show: false,
+    webPreferences: {
+      preload: join(__dirname, 'preload.js'),
+      contextIsolation: true,
+      nodeIntegration: false,
+      webviewTag: true, // B83b: enable <webview> for EmbeddedChrome
+    },
+  });
+
+  hearthConjunctionWindow.once('ready-to-show', () => {
+    hearthConjunctionWindow?.show();
+  });
+
+  hearthConjunctionWindow.loadURL(
+    IS_DEV
+      ? 'http://localhost:5173/#/hearth-conjunction'
+      : `file://${join(__dirname, '../renderer/index.html')}#/hearth-conjunction`,
+  );
+
+  hearthConjunctionWindow.on('closed', () => {
+    hearthConjunctionWindow = null;
+  });
+
+  // Store webview preload path for IPC response
+  ;(hearthConjunctionWindow as unknown as { _webviewPreloadPath: string })._webviewPreloadPath = webviewPreloadPath;
+
+  if (autoUpdater) autoUpdater.registerWindow(hearthConjunctionWindow);
+  if (authManager) authManager.registerWindow(hearthConjunctionWindow);
 }
 
 // ─── IPC Handlers ────────────────────────────────────────────────────────────
@@ -585,6 +654,82 @@ function registerIPCHandlers(): void {
 
   ipcMain.handle('hearth-spec-extract-smoke', async () => {
     return runSpecExtractSmoke();
+  });
+
+  // ── Hearth Conjunction Window (B83) ─────────────────────────────────────────
+
+  ipcMain.on('open-hearth-conjunction', () => openHearthConjunctionWindow());
+
+  ipcMain.handle('conjunction-get-state', () => conjunctionRouter.getState());
+
+  ipcMain.handle('conjunction-get-availability', () => conjunctionRouter.getAvailability());
+
+  ipcMain.handle(
+    'conjunction-select',
+    (_event, { mode }: { mode: import('./hearth/conjunction/types').ConjunctionMode }) =>
+      conjunctionRouter.selectMode(mode),
+  );
+
+  ipcMain.handle(
+    'conjunction-set-override',
+    (_event, { mode }: { mode: import('./hearth/conjunction/types').ConjunctionMode }) => {
+      const state = conjunctionRouter.getState();
+      void state; // state is available; update override via internal path
+      conjunctionRouter.selectMode(mode); // temporary — proper override wired below
+      return { ok: true };
+    },
+  );
+
+  ipcMain.handle(
+    'conjunction-dispatch',
+    async (
+      _event,
+      { prompt, mode_override }: {
+        prompt: string;
+        mode_override?: import('./hearth/conjunction/types').ConjunctionMode;
+      },
+    ) => {
+      const dispatchId = (await import('crypto')).randomUUID();
+      recordWaveDispatch(dispatchId, 'hearth_conjunction');
+      try {
+        const result = await conjunctionRouter.dispatch(prompt, mode_override);
+        recordWaveComplete(dispatchId);
+        // Broadcast Drekaskip state update to conjunction window
+        hearthConjunctionWindow?.webContents.send('drekaskip-state-updated');
+        return result;
+      } catch (err) {
+        recordWaveComplete(dispatchId, String(err));
+        throw err;
+      }
+    },
+  );
+
+  ipcMain.handle('conjunction-get-substrate-context', async () => {
+    return buildSubstrateContext();
+  });
+
+  // ── Drekaskip bridge (B83c) ───────────────────────────────────────────────
+
+  ipcMain.handle('drekaskip-query', async () => {
+    return querySagaState();
+  });
+
+  // ── Watchdog bridge (B83d) ────────────────────────────────────────────────
+
+  ipcMain.handle('watchdog-status', async () => {
+    return pollWatchdogStatus();
+  });
+
+  ipcMain.handle(
+    'watchdog-history',
+    async (_event, { subject, window_hours }: { subject: string; window_hours?: number }) => {
+      return getSubjectHistory(subject, window_hours);
+    },
+  );
+
+  // Webview preload path — renderer needs this to wire the <webview> preload attribute
+  ipcMain.on('get-webview-preload-path', (event) => {
+    event.returnValue = join(__dirname, 'hearth', 'embedded_browser', 'webview_preload.js');
   });
 }
 

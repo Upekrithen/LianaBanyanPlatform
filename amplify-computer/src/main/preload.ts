@@ -370,6 +370,47 @@ contextBridge.exposeInMainWorld('amplify', {
     ipcRenderer.on('hearth-app-build-error', handler);
     return () => ipcRenderer.removeListener('hearth-app-build-error', handler);
   },
+
+  // ── Hearth Conjunction Window (B83) ──────────────────────────────────────
+
+  openHearthConjunction: (): void =>
+    ipcRenderer.send('open-hearth-conjunction'),
+
+  conjunctionGetState: (): Promise<import('./hearth/conjunction/types').ConjunctionPanelState> =>
+    ipcRenderer.invoke('conjunction-get-state'),
+
+  conjunctionGetAvailability: (): Promise<import('./hearth/conjunction/types').BackendAvailability> =>
+    ipcRenderer.invoke('conjunction-get-availability'),
+
+  conjunctionSelect: (mode: import('./hearth/conjunction/types').ConjunctionMode): Promise<{ ok: boolean; previous: import('./hearth/conjunction/types').ConjunctionMode }> =>
+    ipcRenderer.invoke('conjunction-select', { mode }),
+
+  conjunctionSetOverride: (mode: import('./hearth/conjunction/types').ConjunctionMode): Promise<{ ok: boolean }> =>
+    ipcRenderer.invoke('conjunction-set-override', { mode }),
+
+  conjunctionDispatch: (prompt: string, mode_override?: import('./hearth/conjunction/types').ConjunctionMode): Promise<import('./hearth/conjunction/types').ConjunctionResult> =>
+    ipcRenderer.invoke('conjunction-dispatch', { prompt, mode_override }),
+
+  conjunctionGetSubstrateContext: (): Promise<{ raw_preamble: string; thread_id: string | null; built_at: string }> =>
+    ipcRenderer.invoke('conjunction-get-substrate-context'),
+
+  // ── Drekaskip Status (B83c) ───────────────────────────────────────────────
+
+  drekaskipQuery: (): Promise<{ active_saga: string | null; wave_count: number; wave_instances: unknown[] }> =>
+    ipcRenderer.invoke('drekaskip-query'),
+
+  // ── Watchdog Status (B83d) ────────────────────────────────────────────────
+
+  watchdogStatus: (): Promise<{ subjects: unknown[]; watchdog_status: string; polled_at: string }> =>
+    ipcRenderer.invoke('watchdog-status'),
+
+  watchdogHistory: (subject: string, window_hours?: number): Promise<Array<{ ts: string; level: string; message: string }>> =>
+    ipcRenderer.invoke('watchdog-history', { subject, window_hours }),
+
+  // ── Webview preload path (B83b) ───────────────────────────────────────────
+
+  getWebviewPreloadPath: (): string =>
+    ipcRenderer.sendSync('get-webview-preload-path') as string,
 });
 
 // ─── Global type extension ────────────────────────────────────────────────────
@@ -425,6 +466,21 @@ declare global {
       onHearthBuildProgress: (cb: (progress: BuildProgress) => void) => () => void;
       onHearthBuildComplete: (cb: (result: { appUuid: string; appName: string; installerPath?: string; buildDurationMs: number }) => void) => () => void;
       onHearthBuildError: (cb: (err: { appUuid: string; appName: string; error: string; lastStderr: string }) => void) => () => void;
+      // Hearth Conjunction Window (B83)
+      openHearthConjunction: () => void;
+      conjunctionGetState: () => Promise<unknown>;
+      conjunctionGetAvailability: () => Promise<unknown>;
+      conjunctionSelect: (mode: string) => Promise<{ ok: boolean; previous: string }>;
+      conjunctionSetOverride: (mode: string) => Promise<{ ok: boolean }>;
+      conjunctionDispatch: (prompt: string, mode_override?: string) => Promise<unknown>;
+      conjunctionGetSubstrateContext: () => Promise<{ raw_preamble: string; thread_id: string | null; built_at: string }>;
+      // Drekaskip (B83c)
+      drekaskipQuery: () => Promise<{ active_saga: string | null; wave_count: number; wave_instances: unknown[] }>;
+      // Watchdog (B83d)
+      watchdogStatus: () => Promise<{ subjects: unknown[]; watchdog_status: string; polled_at: string }>;
+      watchdogHistory: (subject: string, window_hours?: number) => Promise<Array<{ ts: string; level: string; message: string }>>;
+      // Webview preload path (B83b)
+      getWebviewPreloadPath?: () => string;
     };
   }
 }

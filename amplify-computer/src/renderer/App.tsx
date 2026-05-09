@@ -8,13 +8,17 @@ import { AMPLIFYDashboard } from './components/AMPLIFYDashboard';
 import { ModelPullDialog } from './components/ModelPullDialog';
 import { AuthGate } from './components/AuthGate';
 import { TrialBanner } from './components/TrialBanner';
+import { HearthConjunctionWindow } from './hearth/HearthConjunctionWindow';
 import type { FrameMode } from './components/FrameModeIndicator';
 import type { AuthState } from './amplify.d';
 
-type View = 'overlay' | 'dashboard';
+type View = 'overlay' | 'dashboard' | 'hearth-conjunction';
 
 function getInitialView(): View {
-  return window.location.hash === '#/dashboard' ? 'dashboard' : 'overlay';
+  const hash = window.location.hash;
+  if (hash === '#/dashboard') return 'dashboard';
+  if (hash === '#/hearth-conjunction') return 'hearth-conjunction';
+  return 'overlay';
 }
 
 export default function App() {
@@ -97,6 +101,11 @@ export default function App() {
         authState={authState}
       />
     );
+  }
+
+  // B83 — Hearth Conjunction Window (Heavy Booster Test surface)
+  if (view === 'hearth-conjunction') {
+    return <HearthConjunctionWindow />;
   }
 
   return (
