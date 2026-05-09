@@ -9713,6 +9713,398 @@ registerTool(
 
 // ─────────────────────────────────────────────────────────────────────────────
 
+// ═══════════════════════════════════════════════════════════════════
+// B80 — SWEAT SCRIBE TOOLS (LB-STACK-0215 / BP034)
+// ═══════════════════════════════════════════════════════════════════
+
+import {
+  sweatLogSignal,
+  sweatQuery,
+  sweatRoundup,
+  regenerateSweatIndex,
+} from "./scribes/sweat_scribe.js";
+
+/**
+ * sweat_log_signal — Mode 1: append an effort signal to the Sweat Scribe raw corpus.
+ */
+registerTool(
+  "sweat_log_signal",
+  "B80 / LB-STACK-0215 — Sweat Scribe Mode 1: log an effort signal. " +
+    "Appends to ~/.claude/state/sweat_scribe/raw_signals.jsonl. " +
+    "Signal classes: effort_marker | timing_delta | coffee_discipline | yoke_ritual | git_commit. " +
+    "Used by Drekaskip, Reminder Scribe, and direct session invocations.",
+  {
+    source: z.string().describe("Signal source (e.g. 'drekaskip', 'git_commit', 'session_open')"),
+    signal_class: z.enum([
+      "effort_marker",
+      "timing_delta",
+      "coffee_discipline",
+      "yoke_ritual",
+      "git_commit",
+      "trip_readiness",
+      "brick_wall",
+      "gate_check",
+      "other",
+    ]).describe("Discipline class for clustering"),
+    payload: z.string().min(1).max(2000).describe("Human-readable signal description"),
+    session: z.string().optional().describe("Session ID (e.g. BP034)"),
+  },
+  async ({ source, signal_class, payload, session }) => {
+    sweatLogSignal({ source, signal_class, payload, session });
+    return {
+      content: [{ type: "text" as const, text: JSON.stringify({ status: "logged", source, signal_class }, null, 2) }],
+    };
+  },
+);
+
+/**
+ * sweat_query — Mode 3: return current SR inventory + recent empirical receipts.
+ */
+registerTool(
+  "sweat_query",
+  "B80 / LB-STACK-0215 — Sweat Scribe Mode 3 (Founder-direct): query current SR inventory. " +
+    "Returns all SR-### rules with status, top load-bearing rules, and recent raw signals. " +
+    "Usage: 'Sweat Scribe, what are we earning?'",
+  {
+    top_k: z.number().min(1).max(7).optional().describe("Top-K most load-bearing rules to surface (default 5)"),
+  },
+  async ({ top_k }) => {
+    const result = sweatQuery(top_k ?? 5);
+    return {
+      content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }],
+    };
+  },
+);
+
+/**
+ * sweat_roundup — Mode 2: weekly Sweat Roundup.
+ * Clusters raw signals, surfaces SR candidates, emits roundup .md file.
+ * Also regenerates INDEX.md.
+ */
+registerTool(
+  "sweat_roundup",
+  "B80 / LB-STACK-0215 — Sweat Scribe Mode 2: run weekly Sweat Roundup. " +
+    "Clusters raw signals by discipline class; surfaces new SR candidates; emits SWEAT_ROUNDUP_BP{NNN}.md. " +
+    "Regenerates INDEX.md. Typically called at session-close every ~7 BPs.",
+  {
+    session_id: z.string().describe("Current session ID (e.g. BP034) — used in roundup filename"),
+  },
+  async ({ session_id }) => {
+    const result = sweatRoundup(session_id);
+    regenerateSweatIndex();
+    return {
+      content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }],
+    };
+  },
+);
+
+// ═══════════════════════════════════════════════════════════════════
+// B81 — TEARS SCRIBE TOOLS (LB-STACK-0216 / BP034)
+// ═══════════════════════════════════════════════════════════════════
+
+import {
+  tearsLogSignal,
+  tearsQuery,
+  trinityReview,
+  emitVelvetFingersAttestation,
+} from "./scribes/tears_scribe.js";
+
+/**
+ * tears_log_signal — Mode 1: process a loss-after-effort signal through both gates.
+ * Gate 1: Coroner-first arbitration (coroner claimed → Tears stands down)
+ * Gate 2: Velvet-Fingers attestation (no token → queue only)
+ */
+registerTool(
+  "tears_log_signal",
+  "B81 / LB-STACK-0216 — Tears Scribe Mode 1: log a loss-after-effort signal. " +
+    "Enforces Coroner-first arbitration gate AND Velvet-Fingers attestation gate. " +
+    "Status: emitted (both gates pass) | queued (no VF attestation) | coroner_claimed (Coroner took it). " +
+    "Loss classes: prospect-decline | timing-miss | first-contact-failure | outcome-asymmetry | compound-non-arrival.",
+  {
+    session: z.string().describe("Current session ID (e.g. BP034)"),
+    effort_signal: z.string().min(1).max(2000).describe("What work was done"),
+    loss_signal: z.string().min(1).max(2000).describe("What didn't arrive"),
+    loss_class: z.enum([
+      "prospect-decline",
+      "timing-miss",
+      "first-contact-failure",
+      "outcome-asymmetry",
+      "compound-non-arrival",
+    ]).describe("Loss classification"),
+    source: z.string().describe("Signal source (e.g. 'aar_rendezvous', 'founder_direct', 'a_f_ledger')"),
+    coroner_claimed: z.boolean().optional().describe("Set true if Coroner has already claimed this signal (Tears stands down)"),
+  },
+  async ({ session, effort_signal, loss_signal, loss_class, source, coroner_claimed }) => {
+    const result = tearsLogSignal({
+      session,
+      effort_signal,
+      loss_signal,
+      loss_class,
+      source,
+      coroner_claimed: coroner_claimed ?? false,
+    });
+    return {
+      content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }],
+    };
+  },
+);
+
+/**
+ * tears_query — Mode 3: return TR inventory + attestation status.
+ */
+registerTool(
+  "tears_query",
+  "B81 / LB-STACK-0216 — Tears Scribe Mode 3: query TR inventory and attestation state. " +
+    "Returns all TR-### rules with status, Velvet-Fingers attestation status, queued signal count. " +
+    "Must be called with active Velvet-Fingers attestation for full result.",
+  {},
+  async () => {
+    const result = tearsQuery();
+    return {
+      content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }],
+    };
+  },
+);
+
+/**
+ * velvet_fingers_attest — emit a Velvet-Fingers attestation token.
+ * Hard prerequisite for Tears Rule emission and ratification.
+ */
+registerTool(
+  "velvet_fingers_attest",
+  "B81 / LB-STACK-0216 — Velvet-Fingers attestation (LB-STACK-0201). " +
+    "Emits a Velvet-Fingers executive function attestation token (TTL: 48h). " +
+    "REQUIRED before Tears Rule emission or TR ratification. " +
+    "Called by Bishop on Founder's behalf: 'Velvet-Fingers attestation: active'.",
+  {
+    session: z.string().describe("Current session ID"),
+    attested_by: z.string().describe("Who is attesting (e.g. 'Founder', 'Bishop Opus 4.7')"),
+  },
+  async ({ session, attested_by }) => {
+    const att = emitVelvetFingersAttestation(session, attested_by);
+    return {
+      content: [{
+        type: "text" as const,
+        text: JSON.stringify({
+          ...att,
+          status: "attestation_active",
+          message: "Velvet-Fingers executive function attestation active. Tears emission unlocked for 48h.",
+        }, null, 2),
+      }],
+    };
+  },
+);
+
+/**
+ * trinity_review — Mode 3: side-by-side Trinity axis comparison for session close.
+ * Surfaces tension cases where Coroner/Tears/Sweat boundary was unclear.
+ */
+registerTool(
+  "trinity_review",
+  "B81 / LB-STACK-0216 — Trinity-Comparison Review (session-close). " +
+    "Side-by-side review of SWEAT + TEARS + BLOOD (Coroner) fires for a session. " +
+    "Surfaces Tears→Sweat aging candidates and Coroner/Tears boundary tension cases. " +
+    "Emits inaugural_trinity_review_{session}.md to ~/.claude/state/tears_scribe/.",
+  {
+    session_id: z.string().describe("Session ID for the review (e.g. BP034)"),
+  },
+  async ({ session_id }) => {
+    const result = trinityReview(session_id);
+    return {
+      content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }],
+    };
+  },
+);
+
+// ═══════════════════════════════════════════════════════════════════
+// B85 — CORONER SCRIBE TOOLS (LB-STACK-0171 / BP034 / B85)
+// Trinity COMPLETE × at daemon parity
+// ═══════════════════════════════════════════════════════════════════
+
+import {
+  coronerLogSignal,
+  coronerQuery,
+  coronerRoundup,
+  regenerateCoronerIndex,
+  ratifyBloodRules,
+} from "./scribes/coroner_scribe.js";
+
+/**
+ * coroner_log_signal — Mode 1: append a failure signal to the Coroner Scribe raw corpus.
+ * Source paths: watchdog_dispatch | manual | coroner_first_gate | stitchpunk
+ * Signal classes: failure_event | secret_exposure | collision | speculative_floor | test_integrity | mechanism_miss
+ */
+registerTool(
+  "coroner_log_signal",
+  "B85 / LB-STACK-0171 — Coroner Scribe Mode 1: log a failure/discipline signal. " +
+    "Appends to ~/.claude/state/coroner_scribe/raw_signals.jsonl. " +
+    "Signal classes: failure_event | secret_exposure | collision | speculative_floor | test_integrity | mechanism_miss. " +
+    "Rule associations: BR-001 (R-EXPLORE-3) through BR-007 (test corpus integrity). " +
+    "\"You bleed for what matters.\"",
+  {
+    source: z.enum([
+      "watchdog_dispatch",
+      "manual",
+      "coroner_first_gate",
+      "stitchpunk",
+      "founder_ratification",
+    ]).describe("Signal origin"),
+    signal_class: z.enum([
+      "failure_event",
+      "secret_exposure",
+      "collision",
+      "speculative_floor",
+      "test_integrity",
+      "mechanism_miss",
+    ]).describe("Failure classification for clustering"),
+    payload: z.string().min(1).max(2000).describe("Human-readable description of the failure signal"),
+    rule_association: z.string().optional().describe("BR-001 through BR-007 if classifiable at log time"),
+    session: z.string().optional().describe("Session ID (e.g. BP034)"),
+    failure_class: z.string().optional().describe("Failure class from coroner_dispatch.ts if applicable"),
+  },
+  async ({ source, signal_class, payload, rule_association, session, failure_class }) => {
+    const result = coronerLogSignal({ source, signal_class, payload, rule_association, session, failure_class });
+    return {
+      content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }],
+    };
+  },
+);
+
+/**
+ * coroner_query — Mode 3: query the Blood Rules registry.
+ * Five query modes: INDEX | RULE | BY_PATTERN | RECENT | RATIFIED_ONLY
+ */
+registerTool(
+  "coroner_query",
+  "B85 / LB-STACK-0171 — Coroner Scribe Mode 3 (Founder-direct): query Blood Rules registry. " +
+    "Modes: INDEX (all rules) | RULE (specific BR-###) | BY_PATTERN (anchor text search) | RECENT (last N signals) | RATIFIED_ONLY. " +
+    "Returns: rules array, total/pending/ratified counts, recent signals, top_load_bearing rules. " +
+    "\"You bleed for what matters.\"",
+  {
+    mode: z.enum(["INDEX", "RULE", "BY_PATTERN", "RECENT", "RATIFIED_ONLY"])
+      .describe("Query mode"),
+    rule_id: z.string().optional().describe("Required for mode RULE — e.g. BR-003"),
+    pattern: z.string().optional().describe("Required for mode BY_PATTERN — anchor pattern substring match"),
+    limit: z.number().min(1).max(50).optional().describe("For mode RECENT — default 10"),
+  },
+  async ({ mode, rule_id, pattern, limit }) => {
+    const result = coronerQuery(mode, { rule_id, pattern, limit });
+    return {
+      content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }],
+    };
+  },
+);
+
+/**
+ * coroner_roundup — Mode 2: session-close Coroner Roundup.
+ * Aggregates raw_signals into per-rule classified instances. Renders Markdown roundup.
+ * Also regenerates INDEX.md.
+ */
+registerTool(
+  "coroner_roundup",
+  "B85 / LB-STACK-0171 — Coroner Scribe Mode 2: run session-close Coroner Roundup. " +
+    "Clusters raw failure signals by class; surfaces new BR candidates; emits CORONER_ROUNDUP_BP{NNN}.md. " +
+    "Regenerates INDEX.md. Called at session-close alongside sweat_roundup and trinity_review. " +
+    "\"You bleed for what matters.\"",
+  {
+    session_id: z.string().describe("Current session ID (e.g. BP034) — used in roundup filename"),
+    top_k: z.number().min(1).max(10).optional().describe("Top-K signal classes to surface (default 5)"),
+  },
+  async ({ session_id, top_k }) => {
+    const result = coronerRoundup(session_id, top_k ?? 5);
+    regenerateCoronerIndex();
+    return {
+      content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }],
+    };
+  },
+);
+
+/**
+ * coroner_ratify — Founder ratification of Blood Rules.
+ * Updates ratification_status: pending → ratified; enables reminder_injection.
+ * Syntax: "ratify BR-001 BR-002 ..." (selective subset OK)
+ */
+registerTool(
+  "coroner_ratify",
+  "B85 / LB-STACK-0171 — Founder ratification of Blood Rules. " +
+    "Updates BR-### yaml files: ratification_status → ratified; reminder_injection → enabled. " +
+    "Logs ratification event to raw_signals.jsonl. Regenerates INDEX.md. " +
+    "Syntax: provide array of rule IDs, e.g. [\"BR-001\",\"BR-002\"] or all 7.",
+  {
+    rule_ids: z.array(z.string()).min(1).describe("Array of rule IDs to ratify, e.g. [\"BR-001\",\"BR-003\"]"),
+  },
+  async ({ rule_ids }) => {
+    const result = ratifyBloodRules(rule_ids);
+    return {
+      content: [{
+        type: "text" as const,
+        text: JSON.stringify({
+          ...result,
+          message: result.ratified.map((id) => `${id} ratified. Reminder injection enabled.`).join(" "),
+        }, null, 2),
+      }],
+    };
+  },
+);
+
+// ═══════════════════════════════════════════════════════════════════
+// WATCHDOG KNIGHT — MCP TOOLS (LB-STACK-0165 / BP034)
+// ═══════════════════════════════════════════════════════════════════
+
+import { watchdogStatus } from "./watchdog/mcp_tools/watchdog_status.js";
+import { watchdogHistory } from "./watchdog/mcp_tools/watchdog_history.js";
+import { watchdogForceCheck } from "./watchdog/mcp_tools/watchdog_force_check.js";
+
+registerTool(
+  "mcp__watchdog__status",
+  "Watchdog Knight — Query current health state for all monitored substrate subjects. " +
+    "Returns: summary (ok/degraded/down counts), per-subject results, last_poll_at, heartbeat. " +
+    "G5 gate. LB-STACK-0165 Cooperative Repair Loop.",
+  {},
+  async () => {
+    const result = watchdogStatus();
+    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+registerTool(
+  "mcp__watchdog__history",
+  "Watchdog Knight — Query health event history (status changes, alerts, recoveries). " +
+    "Filter by subject, event_type, and hours lookback. Default: last 24h, up to 200 events. " +
+    "G5 gate. LB-STACK-0165 Cooperative Repair Loop.",
+  {
+    hours:       z.number().optional().describe("Hours to look back (default: 24)"),
+    subject:     z.string().optional().describe("Filter to a specific subject ID (e.g. 'substrate-api')"),
+    event_type:  z.enum([
+      "status_change", "recovery", "coroner_dispatch",
+      "hall_monitor_dispatch", "moneypenny_dispatch",
+      "self_restart_attempt", "poll_cycle_complete",
+    ]).optional().describe("Filter to a specific event type"),
+    limit:       z.number().optional().describe("Max events to return (default: 200)"),
+  },
+  async (args) => {
+    const result = watchdogHistory(args);
+    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+registerTool(
+  "mcp__watchdog__force_check",
+  "Watchdog Knight — Trigger an immediate out-of-cycle health check for all (or a specific) subject. " +
+    "Returns fresh health results; persists state. G5 gate.",
+  {
+    subject: z.string().optional().describe(
+      "Optional: check only this subject ID (e.g. 'substrate-api'). Omit to check all subjects.",
+    ),
+  },
+  async (args) => {
+    const result = await watchdogForceCheck(args);
+    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+// ─────────────────────────────────────────────────────────────────────────────
+
 main().catch(err => {
   console.error("Server failed to start:", err);
   process.exit(1);
