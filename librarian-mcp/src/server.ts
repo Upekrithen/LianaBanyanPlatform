@@ -9417,6 +9417,68 @@ registerTool(
   },
 );
 
+// ─── Bushel 61A: Drekaskip Wave Generator MCP Tools ──────────────────────────
+// K30 §10 composability — Wave Generator is K30 with discard_threshold=Infinity.
+// Commit ref: 03e6337 (K30 Contingency Operator, LB-STACK-0185).
+
+import {
+  tool_wave_dispatch as drekaskip_wave_dispatch,
+  tool_saga_query as drekaskip_saga_query,
+  tool_saga_list as drekaskip_saga_list,
+} from "./drekaskip/mcp_tools.js";
+import { initWaveGenerator } from "./drekaskip/wave_generator.js";
+
+// Initialize crash-recovery on server start
+initWaveGenerator();
+
+registerTool(
+  "mcp__drekaskip__wave_dispatch",
+  "Drekaskip Wave Generator (Bushel 61A) — Fire a synchronized fan-out wave across N research/build/discovery axes. " +
+    "Each axis spawns a triad (3 SEG instances) per Skulk B36 P3 spec. All axes race to finish; none discarded " +
+    "(K30 §10: discard_threshold=Infinity, merge_policy=fan_in_synthesize). Results fan-in to consolidated synthesis artifact. " +
+    "Returns wave_id for status polling. Saga naming per LB-STACK-0196 Wave Riders Canon. " +
+    "K30 commit ref: 03e6337 (LB-STACK-0185).",
+  {
+    saga_id: z.string().describe("Saga campaign name (e.g. 'Saga-Galveston-Outreach'). Groups multiple wave instances."),
+    axes: z.array(z.string()).describe("Research/build/discovery axes to fan-out across (e.g. ['research','build','discovery'])."),
+    budget: z.object({
+      max_segs: z.number().describe("Max total SEG instances across all axes (axes × 3 ≤ max_segs)."),
+      timeout_s: z.number().describe("Per-wave timeout in seconds."),
+    }).describe("Wave budget constraints."),
+    beat_offset_ms: z.number().optional().describe("Beat stagger between axis launches in ms (default 50ms)."),
+  },
+  async (args) => {
+    const result = await drekaskip_wave_dispatch(args);
+    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+registerTool(
+  "mcp__drekaskip__saga_query",
+  "Drekaskip Wave Generator — Query all wave instances under a saga. " +
+    "Returns wave count, per-wave fire/complete times, speedup ratios, and SEG counts. " +
+    "Future wave dispatches against the same saga_id can resurrect thread context (B82 MCCI).",
+  {
+    saga_id: z.string().describe("Saga ID to query (e.g. 'Saga-Galveston-Outreach')."),
+  },
+  async (args) => {
+    const result = await drekaskip_saga_query(args);
+    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+registerTool(
+  "mcp__drekaskip__saga_list",
+  "Drekaskip Wave Generator — List all sagas (wave campaigns) ever dispatched. " +
+    "Returns saga_id, wave_count, and last_fire timestamp for each saga.",
+  {},
+  async () => {
+    const result = await drekaskip_saga_list();
+    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+  },
+);
+// ─────────────────────────────────────────────────────────────────────────────
+
 main().catch(err => {
   console.error("Server failed to start:", err);
   process.exit(1);
