@@ -1155,6 +1155,53 @@ export class SubstrateAPIServer {
       return;
     }
 
+    // ── GET /hearth/health ────────────────────────────────────────────────────
+    // MCP tool: mcp__hearth__healthz — G14 ship-class endpoint
+    if (req.method === 'GET' && url === '/hearth/health') {
+      import('./hearth_app_builder/orchestrator').then(({ getHearthHealthz }) => {
+        getHearthHealthz().then((healthz) => {
+          res.end(JSON.stringify(healthz));
+        }).catch((err) => {
+          res.statusCode = 500;
+          res.end(JSON.stringify({ error: String(err) }));
+        });
+      }).catch((err) => {
+        res.statusCode = 500;
+        res.end(JSON.stringify({ error: String(err) }));
+      });
+      return;
+    }
+
+    // ── GET /hearth/library ───────────────────────────────────────────────────
+    // MCP tool: mcp__hearth__library_query — G14 ship-class endpoint
+    if (req.method === 'GET' && url?.startsWith('/hearth/library')) {
+      import('./hearth_app_builder/orchestrator').then(({ getHearthLibrary }) => {
+        const apps = getHearthLibrary();
+        res.end(JSON.stringify({ apps }));
+      }).catch((err) => {
+        res.statusCode = 500;
+        res.end(JSON.stringify({ error: String(err) }));
+      });
+      return;
+    }
+
+    // ── POST /hearth/spec-smoke ───────────────────────────────────────────────
+    // MCP tool: mcp__hearth__spec_extract_smoke — G14 ship-class endpoint
+    if (req.method === 'POST' && url === '/hearth/spec-smoke') {
+      import('./hearth_app_builder/orchestrator').then(({ runSpecExtractSmoke }) => {
+        runSpecExtractSmoke().then((result) => {
+          res.end(JSON.stringify(result));
+        }).catch((err) => {
+          res.statusCode = 500;
+          res.end(JSON.stringify({ error: String(err) }));
+        });
+      }).catch((err) => {
+        res.statusCode = 500;
+        res.end(JSON.stringify({ error: String(err) }));
+      });
+      return;
+    }
+
     res.statusCode = 404;
     res.end(JSON.stringify({ error: 'Not found' }));
   }

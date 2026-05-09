@@ -34,7 +34,8 @@
   "license": "UNLICENSED",
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
-    "electron-updater": "^6.1.7"
+    "electron-updater": "^6.1.7",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@playwright/test": "^1.59.1",

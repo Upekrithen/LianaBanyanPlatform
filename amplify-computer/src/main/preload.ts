@@ -131,6 +131,60 @@ export interface FederationStatus {
   peers: FederationPeer[];
 }
 
+// B69 — Hearth App Builder types
+export interface HearthBuildResult {
+  ok: boolean;
+  appUuid?: string;
+  appDir?: string;
+  spec?: Record<string, unknown>;
+  installerPath?: string;
+  error?: string;
+}
+
+export interface HearthInstallOpts {
+  uuid: string;
+  appName: string;
+  description: string;
+  appDir: string;
+  installerPath: string;
+  spec: Record<string, unknown>;
+}
+
+export interface HearthApp {
+  uuid: string;
+  appName: string;
+  description: string;
+  appDir: string;
+  installerPath?: string;
+  installedAt: string;
+  os: string;
+  spec: Record<string, unknown>;
+  buildStatus: 'built' | 'installed';
+}
+
+export interface HearthHealthz {
+  status: 'ok' | 'degraded' | 'down';
+  ollama_available: boolean;
+  template_dir_present: boolean;
+  recent_builds: number;
+  recent_install_successes: number;
+}
+
+export interface HearthSpecSmokeResult {
+  passed: boolean;
+  latency_ms: number;
+  error?: string;
+}
+
+export interface BuildProgress {
+  status: string;
+  message: string;
+  percent?: number;
+  error?: string;
+  appUuid?: string;
+  installerPath?: string;
+}
+
 // Phase 7 — Auth types
 export type AuthStatus =
   | 'unauthenticated'
@@ -278,6 +332,44 @@ contextBridge.exposeInMainWorld('amplify', {
   // ── Dashboard ─────────────────────────────────────────────────────────────
   openDashboard: (): void =>
     ipcRenderer.send('open-dashboard'),
+
+  // ── Hearth App Builder (B69) ──────────────────────────────────────────────
+
+  hearthBuild: (request: string, memberId?: string): Promise<HearthBuildResult> =>
+    ipcRenderer.invoke('hearth-build', { request, memberId }),
+
+  hearthInstall: (opts: HearthInstallOpts): Promise<{ ok: boolean; error?: string }> =>
+    ipcRenderer.invoke('hearth-install', opts),
+
+  hearthLibraryQuery: (memberId?: string): Promise<HearthApp[]> =>
+    ipcRenderer.invoke('hearth-library-query', { memberId }),
+
+  hearthUninstall: (uuid: string): Promise<{ ok: boolean; error?: string }> =>
+    ipcRenderer.invoke('hearth-uninstall', { uuid }),
+
+  hearthHealthz: (): Promise<HearthHealthz> =>
+    ipcRenderer.invoke('hearth-healthz'),
+
+  hearthSpecExtractSmoke: (): Promise<HearthSpecSmokeResult> =>
+    ipcRenderer.invoke('hearth-spec-extract-smoke'),
+
+  onHearthBuildProgress: (cb: (progress: BuildProgress) => void): (() => void) => {
+    const handler = (_event: Electron.IpcRendererEvent, progress: BuildProgress) => cb(progress);
+    ipcRenderer.on('hearth-app-build-progress', handler);
+    return () => ipcRenderer.removeListener('hearth-app-build-progress', handler);
+  },
+
+  onHearthBuildComplete: (cb: (result: { appUuid: string; appName: string; installerPath?: string; buildDurationMs: number }) => void): (() => void) => {
+    const handler = (_event: Electron.IpcRendererEvent, result: { appUuid: string; appName: string; installerPath?: string; buildDurationMs: number }) => cb(result);
+    ipcRenderer.on('hearth-app-build-complete', handler);
+    return () => ipcRenderer.removeListener('hearth-app-build-complete', handler);
+  },
+
+  onHearthBuildError: (cb: (err: { appUuid: string; appName: string; error: string; lastStderr: string }) => void): (() => void) => {
+    const handler = (_event: Electron.IpcRendererEvent, err: { appUuid: string; appName: string; error: string; lastStderr: string }) => cb(err);
+    ipcRenderer.on('hearth-app-build-error', handler);
+    return () => ipcRenderer.removeListener('hearth-app-build-error', handler);
+  },
 });
 
 // ─── Global type extension ────────────────────────────────────────────────────
@@ -323,6 +415,16 @@ declare global {
       onAuthStateChanged: (cb: (state: AuthState) => void) => () => void;
       // Dashboard
       openDashboard: () => void;
+      // Hearth App Builder (B69)
+      hearthBuild: (request: string, memberId?: string) => Promise<HearthBuildResult>;
+      hearthInstall: (opts: HearthInstallOpts) => Promise<{ ok: boolean; error?: string }>;
+      hearthLibraryQuery: (memberId?: string) => Promise<HearthApp[]>;
+      hearthUninstall: (uuid: string) => Promise<{ ok: boolean; error?: string }>;
+      hearthHealthz: () => Promise<HearthHealthz>;
+      hearthSpecExtractSmoke: () => Promise<HearthSpecSmokeResult>;
+      onHearthBuildProgress: (cb: (progress: BuildProgress) => void) => () => void;
+      onHearthBuildComplete: (cb: (result: { appUuid: string; appName: string; installerPath?: string; buildDurationMs: number }) => void) => () => void;
+      onHearthBuildError: (cb: (err: { appUuid: string; appName: string; error: string; lastStderr: string }) => void) => () => void;
     };
   }
 }

@@ -21,6 +21,14 @@ import { FederationClient } from './federation_client';
 import { getMoneyPennyURL, getLocalIPs } from './mobile_pwa';
 import { AutoUpdateManager } from './auto_updater';
 import { AuthManager, registerCustomScheme } from './auth_manager';
+import {
+  runHearthBuild,
+  runHearthInstall,
+  getHearthLibrary,
+  getHearthHealthz,
+  runSpecExtractSmoke,
+} from './hearth_app_builder/orchestrator';
+import { uninstallApp } from './hearth_app_builder/install_runner';
 
 // Register custom OAuth scheme before app ready (Electron requirement)
 registerCustomScheme();
@@ -534,6 +542,50 @@ function registerIPCHandlers(): void {
 
   // ── Dashboard ─────────────────────────────────────────────────────────────
   ipcMain.on('open-dashboard', () => openDashboard());
+
+  // ── Hearth App Builder (B69) ──────────────────────────────────────────────
+
+  // Route hearth_app_build_request from Substrate-DM (intent class: hearth_app_build_request)
+  ipcMain.handle(
+    'hearth-build',
+    async (_event, { request, memberId }: { request: string; memberId?: string }) => {
+      const wins = [overlayWindow, dashboardWindow];
+      return runHearthBuild({ request, memberId: memberId ?? 'member', windows: wins });
+    },
+  );
+
+  ipcMain.handle(
+    'hearth-install',
+    async (
+      _event,
+      opts: {
+        uuid: string;
+        appName: string;
+        description: string;
+        appDir: string;
+        installerPath: string;
+        spec: unknown;
+      },
+    ) => {
+      return runHearthInstall(opts as Parameters<typeof runHearthInstall>[0]);
+    },
+  );
+
+  ipcMain.handle('hearth-library-query', (_event, { memberId }: { memberId?: string } = {}) => {
+    return getHearthLibrary(memberId);
+  });
+
+  ipcMain.handle('hearth-uninstall', async (_event, { uuid }: { uuid: string }) => {
+    return uninstallApp(uuid);
+  });
+
+  ipcMain.handle('hearth-healthz', async () => {
+    return getHearthHealthz();
+  });
+
+  ipcMain.handle('hearth-spec-extract-smoke', async () => {
+    return runSpecExtractSmoke();
+  });
 }
 
 // ─── App Lifecycle ────────────────────────────────────────────────────────────
