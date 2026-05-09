@@ -166,7 +166,7 @@ decision_trinity:
   k31_g_gates_total: 14
   k31_meta_strategy: "ensemble_synthesis"
   k31_commit: "2c5f2a8"
-  k31_heterogeneous_corpus_commit: ""      # filled after B79-FOLLOWUP-V2 commit
+  k31_heterogeneous_corpus_commit: "244e52b"     # B79-FOLLOWUP-V2 commit
   k31_empirical_receipt_grade: "heterogeneous_1200"
   k31_non_prov_receipt_ready: true
   trinity_complete: true
