@@ -165,7 +165,7 @@ decision_trinity:
   k31_g_gates_pass: 14
   k31_g_gates_total: 14
   k31_meta_strategy: "ensemble_synthesis"
-  k31_commit: "PENDING"           # filled in on Knight Yoke commit
+  k31_commit: "2c5f2a8"
   trinity_complete: true
   trinity_complete_date: "2026-05-09"
   trinity_sequence: "Decide → Branch → Forecast → Verify"
