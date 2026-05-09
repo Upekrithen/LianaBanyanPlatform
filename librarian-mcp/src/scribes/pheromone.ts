@@ -74,6 +74,9 @@ export interface PheromoneRecord {
   cathedral?: string;             // "bishop" | "knight" | "pawn" (default "bishop")
   flavor_class?: FlavorClass;     // Multi-trail flavor tags (BP015 P3); null = unflavored (cross-trail)
   synthesis_class?: string;       // "detective_team_finding" | "adversarial_fence_probe" etc. (BP015 P4)
+  // SE-4 Shadow E-Signal (B-SE4-1 / LB-STACK-0172): optional, backward-compatible
+  se4?: import('../se4/se4_envelope.js').SE4Envelope;
+  se4_shadow_id?: string;
 }
 
 export interface PheromoneHit {

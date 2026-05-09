@@ -269,6 +269,8 @@ import {
   buildStratumFlavorCoordinate,
   rankByStratumPriority,
 } from "./strata/cross_cut.js";
+// SE-4 Shadow E-Signal Retrofit (B-SE4-1 / LB-STACK-0172 / BP033)
+import { detectiveQueryBatch } from "./se4/integrations/detective_se4.js";
 // KN-K1/K2/K3: Pod-K Codex (Layer 8 Canon-of-Canons)
 import {
   allocateCodexSerial,
@@ -3248,8 +3250,58 @@ registerTool(
   }
 );
 
-// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
-// KN100/BP015 ΓÇö DETECTIVE TEAM (P4) + ADVERSARIAL FENCE TESTING (P5)
+// ─────────────────────────────────────────────────────────────────────────────
+// SE-4 Detective Compositional Query (B-SE4-1 / LB-STACK-0172 / BP033)
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * SE-4 Detective Compositional Query — Power-Set Burst (B-SE4-1)
+ *
+ * Accepts an array of claims and fires a SINGLE power-set burst that returns
+ * union hits + intersection hits for every non-empty subset (2^N - 1 combos).
+ *
+ * detectiveQueryBatch(['SE-4', 'HMAC', 'power-set']) = 7 subsets in one call.
+ * Replaces 7 separate detective_investigate calls.
+ *
+ * Carries a SE-4 Envelope on the result — HMAC-fingerprinted, Lamport-clocked,
+ * power-set collision-free. Used as Prov-19 patent empirical receipt generator.
+ */
+registerTool(
+  "se4_detective_investigate",
+  "SE-4 Detective compositional power-set burst (B-SE4-1 / LB-STACK-0172 / BP033). Accepts array of claims and returns union hits + intersection hits for every non-empty subset (2^N-1 combos). Replaces N separate detective_investigate calls with a single SE-4 burst. Result carries SE4Envelope (HMAC, Lamport clock, power-set identity). Max 8 claims per burst (255 subsets). Prov-19 patent receipt generator.",
+  {
+    claims: z.array(z.string().min(1).max(300)).min(1).max(8).describe(
+      "Array of 1–8 claim strings to investigate compositionally. " +
+      "e.g. ['SE-4', 'HMAC', 'power-set'] returns union + all 7 intersection subsets."
+    ),
+    top_k_per_claim: z.number().int().min(1).max(50).optional().describe(
+      "Max pheromone hits to fetch per individual claim (default 20)."
+    ),
+    top_k_union: z.number().int().min(1).max(200).optional().describe(
+      "Max hits to return in the unionHits array (default 50)."
+    ),
+    decay_active: z.boolean().optional().describe("Apply pheromone decay scoring (default true)."),
+  },
+  async ({ claims, top_k_per_claim, top_k_union, decay_active }) => {
+    try {
+      const result = detectiveQueryBatch(claims, {
+        topKPerClaim: top_k_per_claim,
+        topKUnion:    top_k_union,
+        decayActive:  decay_active,
+      });
+      return {
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+      };
+    } catch (err) {
+      return {
+        content: [{ type: "text", text: JSON.stringify({ ok: false, error: (err as Error).message }) }],
+      };
+    }
+  }
+);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// KN100/BP015 — DETECTIVE TEAM (P4) + ADVERSARIAL FENCE TESTING (P5)
 // ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 
 /**
@@ -9474,6 +9526,306 @@ registerTool(
   {},
   async () => {
     const result = await drekaskip_saga_list();
+    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+  },
+);
+// ─── Bushel 82: MoneyPenny — The Big Show Enabler (BP034) ────────────────────
+// Call routing + MCCI continuous context substrate.
+// G1-G12 gates. Cannon: LB-STACK-0170, LB-STACK-0167, LB-STACK-0189.
+
+import {
+  moneyPennyRoute,
+  moneyPennyHold,
+  moneyPennyReleaseHold,
+  moneyPennyResurrect,
+  moneyPennyStatus,
+  moneyPennyAvailabilityGet,
+  moneyPennyAvailabilitySet,
+  moneyPennyAvailabilityInfer,
+  bootstrapMoneyPenny,
+} from "./moneypenny/server.js";
+import {
+  moneyPennySchedule,
+} from "./moneypenny/mcp_tools/moneypenny_schedule.js";
+
+// Bootstrap on server start (ensures state dirs exist; crash-recovery)
+bootstrapMoneyPenny();
+
+registerTool(
+  "mcp__moneypenny__route",
+  "MoneyPenny — Route an inbound interaction to the right destination. " +
+    "Classifies caller class, checks Founder availability, arbitrates priority, " +
+    "dispatches Substantive Engager on hold, writes substrate Eblet receipt. " +
+    "G1/G2/G3 gates. Returns RoutingDecision with outcome, thread_id, receipt_path.",
+  {
+    channel: z.enum(["phone", "email", "slack", "web", "ai_tool"]).describe("Inbound channel"),
+    caller_id: z.string().describe("Caller identifier (email, phone, name, or AI surface ID)"),
+    caller_display_name: z.string().optional().describe("Human-readable caller name"),
+    signal: z.string().describe("What the caller said, wrote, or requested"),
+    caller_class_override: z.enum([
+      "WARREN_BUFFETT", "MACKENZIE_SCOTT", "TALENTS_PRACTITIONER",
+      "FAMILY", "COUNSEL", "PRESS", "UNKNOWN", "INTERNAL_AI",
+    ]).optional().describe("Override the auto-classified caller class"),
+    is_family_emergency: z.boolean().optional().describe("Mark as family emergency (overrides SLEEP state)"),
+    metadata: z.record(z.unknown()).optional().describe("Additional metadata"),
+  },
+  async (args) => {
+    const result = await moneyPennyRoute(args);
+    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+registerTool(
+  "mcp__moneypenny__hold",
+  "MoneyPenny — Place an inbound interaction on substantive hold. " +
+    "Assigns a Kissaki-ranked Substantive Engager and records a HoldHandle. " +
+    "Engager dispatched if caller_message provided. G4 gate.",
+  {
+    thread_id: z.string().describe("Thread ID for the held interaction"),
+    caller_class: z.enum([
+      "WARREN_BUFFETT", "MACKENZIE_SCOTT", "TALENTS_PRACTITIONER",
+      "FAMILY", "COUNSEL", "PRESS", "UNKNOWN", "INTERNAL_AI",
+    ]).describe("Caller class"),
+    reason: z.string().describe("Reason for hold"),
+    caller_message: z.string().optional().describe("Caller's message (triggers Substantive Engager)"),
+  },
+  async (args) => {
+    const result = moneyPennyHold(args);
+    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+registerTool(
+  "mcp__moneypenny__resurrect",
+  "MoneyPenny — Resurrect a dormant thread context. " +
+    "Produces warm-reopen packet: 3K-compressed history + last messages + suggested opener. " +
+    "The 'don't worry about context anymore' primitive. G8 gate.",
+  {
+    thread_id: z.string().describe("Thread ID to resurrect"),
+    new_signal: z.string().optional().describe("New inbound signal that triggered the resurrection"),
+    signal_channel: z.enum(["phone", "email", "slack", "web", "ai_tool"]).optional(),
+    caller_id: z.string().optional().describe("Caller ID associated with the new signal"),
+  },
+  async (args) => {
+    const result = await moneyPennyResurrect(args);
+    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+registerTool(
+  "mcp__moneypenny__status",
+  "MoneyPenny — Query current routing and context state. " +
+    "Returns: active_threads, on_hold count, Founder availability, oldest_held_call, " +
+    "uptime_seconds, total_routed_today, receipt_count_today. G11 gate.",
+  {},
+  async () => {
+    const result = moneyPennyStatus();
+    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+registerTool(
+  "mcp__moneypenny__availability_get",
+  "MoneyPenny — Read current Founder availability class. " +
+    "Returns: class (DEEP_WORK/OPEN_BLOCK/OUT/SLEEP/FAMILY/COUNSEL), description, set_at, set_by, until. G9 gate.",
+  {},
+  async () => {
+    const result = moneyPennyAvailabilityGet();
+    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+registerTool(
+  "mcp__moneypenny__availability_set",
+  "MoneyPenny — Set Founder availability class. " +
+    "Classes: DEEP_WORK (only WB/Family/Counsel interrupt), OPEN_BLOCK (most accepted), " +
+    "OUT (hard-out), SLEEP (family emergency only), FAMILY (WB only), COUNSEL (WB only). " +
+    "Optional until timestamp for auto-revert. G9 gate.",
+  {
+    class: z.enum(["DEEP_WORK", "OPEN_BLOCK", "OUT", "SLEEP", "FAMILY", "COUNSEL"])
+      .describe("Availability class to set"),
+    until: z.string().optional().describe("ISO8601 timestamp when to auto-revert to OPEN_BLOCK"),
+  },
+  async (args) => {
+    const result = moneyPennyAvailabilitySet(args);
+    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+registerTool(
+  "mcp__moneypenny__availability_infer",
+  "MoneyPenny — Infer Founder availability from connected calendars (Outlook + Google). " +
+    "Read-only at v1. Returns inferred_class + per-source breakdown. G9 gate.",
+  {},
+  async () => {
+    const result = await moneyPennyAvailabilityInfer();
+    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+registerTool(
+  "mcp__moneypenny__caller_override",
+  "MoneyPenny — Override a caller's class in the known-callers registry. " +
+    "Founder-direct mechanism. Persisted to ~/.claude/state/moneypenny/known_callers.json. G2 gate.",
+  {
+    caller_id: z.string().describe("Caller identifier (email or phone)"),
+    caller_class: z.enum([
+      "WARREN_BUFFETT", "MACKENZIE_SCOTT", "TALENTS_PRACTITIONER",
+      "FAMILY", "COUNSEL", "PRESS", "UNKNOWN", "INTERNAL_AI",
+    ]).describe("Class to assign to this caller"),
+  },
+  async (args) => {
+    const { overrideCallerClass } = await import("./moneypenny/gateway/router.js");
+    await overrideCallerClass(args.caller_id, args.caller_class);
+    return {
+      content: [{
+        type: "text" as const,
+        text: JSON.stringify({
+          caller_id: args.caller_id,
+          new_class: args.caller_class,
+          ts: new Date().toISOString(),
+        }, null, 2),
+      }],
+    };
+  },
+);
+
+registerTool(
+  "mcp__moneypenny__schedule",
+  "MoneyPenny — Propose a time slot for a caller. " +
+    "Read-only v1: generates proposals with prep-window enforcement; does NOT write to calendar. " +
+    "G10 gate.",
+  {
+    caller_class: z.enum([
+      "WARREN_BUFFETT", "MACKENZIE_SCOTT", "TALENTS_PRACTITIONER",
+      "FAMILY", "COUNSEL", "PRESS", "UNKNOWN", "INTERNAL_AI",
+    ]).describe("Caller class (determines prep window)"),
+    duration_minutes: z.number().describe("Meeting duration in minutes"),
+    preferred_window_start: z.string().optional().describe("ISO8601 start of preferred scheduling window"),
+    preferred_window_end: z.string().optional().describe("ISO8601 end of preferred scheduling window"),
+    notes: z.string().optional().describe("Optional scheduling notes"),
+  },
+  async (args) => {
+    const result = await moneyPennySchedule(args);
+    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+// ─── Bushel 82: MoneyPenny Production — The Big Show Enabler ─────────────────
+// BP034 / LB-STACK-0170 / LB-STACK-0167 / LB-STACK-0189
+// MoneyPenny call routing + MCCI continuous context substrate.
+
+// tool_* aliases resolved via moneyPenny* imports from ./moneypenny/server.js above
+
+registerTool(
+  "mcp__moneypenny__route",
+  "MoneyPenny Gateway (Bushel 82 / BP034) — Route an inbound interaction to the correct handler. " +
+    "Classifies the caller into one of 8 priority classes (Warren Buffett → Unknown → INTERNAL_AI), " +
+    "checks Founder availability state, applies no-collision arbitration, and either routes direct to " +
+    "Founder or places the caller on substantive hold with a Kissaki-rank Engager. " +
+    "Returns routing decision + hold session (if applicable). G1 gate: <500ms. " +
+    "Every call writes a substrate receipt to ~/.claude/state/moneypenny/calls/. " +
+    "LB-STACK-0170 MoneyPenny Call Routing.",
+  {
+    channel: z.enum(["phone", "email", "slack", "web", "ai_tool"]).describe("Inbound channel"),
+    caller_identifier_type: z.enum(["email", "phone", "name", "ai_surface_id", "unknown"]).describe("Identifier type"),
+    caller_identifier_value: z.string().describe("Caller identifier (email, phone number, name, or AI surface ID)"),
+    signal: z.string().describe("What the caller said, wrote, or requested"),
+    caller_class: z.enum(["WARREN_BUFFETT", "MACKENZIE_SCOTT", "TALENTS_PRACTITIONER", "FAMILY", "COUNSEL", "PRESS", "UNKNOWN", "INTERNAL_AI"]).optional().describe("Override caller class (if omitted, heuristic classification is used)"),
+    metadata: z.record(z.unknown()).optional().describe("Additional metadata"),
+  },
+  async (args) => {
+    const result = await moneyPennyRoute(args);
+    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+registerTool(
+  "mcp__moneypenny__hold",
+  "MoneyPenny Substantive Hold (Bushel 82 / BP034) — Manage a held caller's substantive engagement session. " +
+    "Actions: 'engage' (process a caller message through the Substantive Engager), " +
+    "'get_state' (query hold session state), 'founder_pickup' (produce transition packet for Founder), " +
+    "'close' (close the hold session), 'transition_complete' (signal call complete + produce all packets). " +
+    "Substantive Engager uses Kissaki-rank model (Journeyman for B-tier, Master for A-tier holdover). " +
+    "LB-STACK-0167 Kissaki Guild. LB-STACK-0170.",
+  {
+    thread_id: z.string().describe("Thread ID from moneypenny_route"),
+    hold_id: z.string().describe("Hold ID from moneypenny_route result"),
+    caller_message: z.string().optional().describe("Message from caller to engage with (required for 'engage' action)"),
+    action: z.enum(["engage", "get_state", "founder_pickup", "close", "transition_complete"]).optional().describe("Action to perform (default: get_state)"),
+    caller_class: z.enum(["WARREN_BUFFETT", "MACKENZIE_SCOTT", "TALENTS_PRACTITIONER", "FAMILY", "COUNSEL", "PRESS", "UNKNOWN", "INTERNAL_AI"]).optional().describe("Caller class override"),
+    caller_identifier_value: z.string().optional().describe("Caller identifier value"),
+  },
+  async (args) => {
+    const result = await moneyPennyHold(args);
+    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+registerTool(
+  "mcp__moneypenny__resurrect",
+  "MoneyPenny Context Resurrection (Bushel 82 / BP034) — Resurrect dormant thread context for a returning caller. " +
+    "The 'don't worry about context anymore' primitive — warm-reopen packet lets Founder or AI pick up " +
+    "the conversation as if no time had passed. G8 gate: <2 sec for threads dormant >30 days. " +
+    "G12 gate: Founder pastes a fresh message → MoneyPenny resurrects relevant context within 2 seconds. " +
+    "Modes: 'explicit' (provide thread_id), 'auto' (provide caller_identifier — finds best matching thread). " +
+    "'Warren Buffett doesn't remember having to introduce themselves twice.' LB-STACK-0170.",
+  {
+    mode: z.enum(["explicit", "auto"]).describe("Resurrection mode: 'explicit' needs thread_id, 'auto' needs caller_identifier"),
+    thread_id: z.string().optional().describe("Thread ID to resurrect (explicit mode)"),
+    caller_identifier: z.string().optional().describe("Caller identifier to auto-find thread (auto mode)"),
+    new_signal: z.string().describe("New message/signal from the returning caller"),
+    channel: z.string().optional().describe("Channel (email, phone, web, etc.)"),
+  },
+  async (args) => {
+    const result = await moneyPennyResurrect(args);
+    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+registerTool(
+  "mcp__moneypenny__status",
+  "MoneyPenny Status (Bushel 82 / BP034) — Query current routing and context state. " +
+    "Returns active thread count, held caller count, Founder availability class, and oldest held call. " +
+    "Optionally includes MCCI thread store statistics (total/active/dormant/archived). " +
+    "Use before routing decisions to understand current load. LB-STACK-0170.",
+  {
+    include_mcci: z.boolean().optional().describe("Include MCCI thread store statistics (default: false)"),
+  },
+  async (args) => {
+    const result = await moneyPennyStatus(args);
+    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+registerTool(
+  "mcp__moneypenny__availability_get",
+  "MoneyPenny Availability — Get Founder's current availability class. " +
+    "Classes: DEEP_WORK (only WB/FAMILY/COUNSEL interrupt), OPEN_BLOCK (most accepted), " +
+    "OUT (hard-out; all held), SLEEP (family emergency only), FAMILY (only WB breaks through), " +
+    "COUNSEL (only WB breaks through). LB-STACK-0170.",
+  {},
+  async () => {
+    const result = await moneyPennyAvailabilityGet();
+    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+registerTool(
+  "mcp__moneypenny__availability_set",
+  "MoneyPenny Availability — Set Founder's availability class. " +
+    "This governs all routing decisions: who interrupts vs who gets held. " +
+    "Set 'until' (ISO8601) for time-bounded availability windows (auto-resets to OPEN_BLOCK on expiry). " +
+    "Classes: DEEP_WORK | OPEN_BLOCK | OUT | SLEEP | FAMILY | COUNSEL. LB-STACK-0170.",
+  {
+    class: z.enum(["DEEP_WORK", "OPEN_BLOCK", "OUT", "SLEEP", "FAMILY", "COUNSEL"]).describe("Availability class to set"),
+    until: z.string().optional().describe("ISO8601 expiry time — auto-resets to OPEN_BLOCK after"),
+    notes: z.string().optional().describe("Notes about this availability setting"),
+  },
+  async (args) => {
+    const result = await moneyPennyAvailabilitySet(args);
     return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
   },
 );
