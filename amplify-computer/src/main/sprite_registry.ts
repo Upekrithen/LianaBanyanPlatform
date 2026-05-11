@@ -520,6 +520,217 @@ export class SpriteRegistry {
   }
 
   /**
+   * Cold-start handshake: purge stale residual substrate state, then run a
+   * single canary Sprite dispatch to verify first-success-recall semantics
+   * work from a freshly-booted cluster.
+   *
+   * Gate G-COLD-START PASS:
+   *   receipt.canary_delivered === true && receipt.state_coherence_ok === true
+   */
+  async coldStartHandshake(opts: {
+    session: string;
+    canaryPackagePath: string;
+    canaryDropzone: string;
+    destinationCluster?: ClusterName;
+  }): Promise<ColdStartReceipt> {
+    const ts = new Date().toISOString();
+    const errors: string[] = [];
+    ensureSubstrateLayout();
+
+    // Step 1: Purge stale residual state files from any prior crashed run.
+    let staleCleared = 0;
+    try {
+      const activeFiles = readdirSync(SPRITE_ACTIVE_DIR);
+      for (const f of activeFiles) {
+        const full = resolve(SPRITE_ACTIVE_DIR, f);
+        try { unlinkSync(full); staleCleared++; } catch { /* non-fatal */ }
+      }
+    } catch (e) {
+      errors.push(`stale-clear scan failed: ${String(e)}`);
+    }
+
+    // Step 2: Ensure destination dropzone exists.
+    const destCluster: ClusterName = opts.destinationCluster ?? 'knight';
+    try {
+      if (!existsSync(opts.canaryDropzone)) {
+        mkdirSync(opts.canaryDropzone, { recursive: true });
+      }
+    } catch (e) {
+      errors.push(`canary dropzone create failed: ${String(e)}`);
+    }
+
+    // Step 3: Run a single-Sprite canary dispatch from cold.
+    const canaryId = `cold-canary-${Date.now().toString(36)}`;
+    const t0 = Date.now();
+    let canaryReceipt: SpriteDeliveryReceipt | null = null;
+    try {
+      canaryReceipt = await this.dispatchSprites({
+        dispatch_id: canaryId,
+        session: opts.session,
+        package_path: opts.canaryPackagePath,
+        source_cluster: 'bishop',
+        destination_cluster: destCluster,
+        lock_signature: computeLockSignature(destCluster, opts.canaryPackagePath),
+        destination_path_pattern: opts.canaryDropzone,
+        redundancy_count: 1,
+        spawn_timestamp: new Date().toISOString(),
+        candidate_dropzones: [opts.canaryDropzone],
+      });
+    } catch (e) {
+      errors.push(`canary dispatch threw: ${String(e)}`);
+    }
+    const latencyMs = Date.now() - t0;
+
+    const canaryDelivered = canaryReceipt?.delivery_success === true;
+
+    // Step 4: State-coherence assertion — no dual-deliver zombie.
+    // With redundancy_count=1, there is exactly 1 Sprite; it wins and writes
+    // the `.recall` broadcast file (expected — this is the delivery signal).
+    // What must NOT exist are `.recalled.json` files, which would indicate a
+    // sibling Sprite was incorrectly spawned and then recalled (zombie siblings).
+    let stateCoherence = false;
+    if (canaryDelivered) {
+      try {
+        const zombieFiles = readdirSync(SPRITE_ACTIVE_DIR).filter(
+          (f) => f.includes(canaryId) && f.endsWith('.recalled.json'),
+        );
+        stateCoherence = zombieFiles.length === 0;
+        if (!stateCoherence) {
+          errors.push(`zombie sibling recalls after single-Sprite canary: ${zombieFiles.join(', ')}`);
+        }
+      } catch (e) {
+        errors.push(`coherence scan failed: ${String(e)}`);
+      }
+    }
+
+    if (canaryReceipt?.errors?.length) {
+      for (const e of canaryReceipt.errors) errors.push(e);
+    }
+
+    const receipt: ColdStartReceipt = {
+      session: opts.session,
+      ts,
+      stale_files_cleared: staleCleared,
+      canary_dispatch_id: canaryId,
+      canary_delivered: canaryDelivered,
+      canary_latency_ms: latencyMs,
+      state_coherence_ok: stateCoherence,
+      errors,
+    };
+
+    try {
+      writeFileSync(
+        resolve(SPRITE_RECEIPT_DIR, `${opts.session}_cold_start_${canaryId}.json`),
+        JSON.stringify(receipt, null, 2),
+      );
+    } catch { /* non-fatal */ }
+
+    return receipt;
+  }
+
+  /**
+   * Update an in-flight dispatch: recall it and re-fire with the new package.
+   * If the dispatch is already settled, returns resolution 'already_settled'.
+   *
+   * Gate G-UPDATE PASS:
+   *   resolution === 'resigned_and_refired' AND no zombie delivery from original.
+   */
+  async updateDispatch(opts: {
+    original_dispatch_id: string;
+    new_package_path: string;
+    session: string;
+    candidate_dropzones: string[];
+    destination_cluster: ClusterName;
+    destination_path_pattern: string;
+  }): Promise<UpdateReceipt> {
+    const ts = new Date().toISOString();
+    const errors: string[] = [];
+
+    const isInFlight = this.active.has(opts.original_dispatch_id);
+
+    // Check if already settled (receipt on disk, not currently active).
+    let alreadySettled = false;
+    if (!isInFlight) {
+      try {
+        const settled = readdirSync(SPRITE_RECEIPT_DIR).some((f) =>
+          f.includes(opts.original_dispatch_id),
+        );
+        alreadySettled = settled;
+      } catch { /* treat as not found */ }
+    }
+
+    if (alreadySettled) {
+      return {
+        original_dispatch_id: opts.original_dispatch_id,
+        new_dispatch_id: null,
+        new_package_path: opts.new_package_path,
+        resolution: 'already_settled',
+        ts,
+        errors: ['dispatch already settled; no update possible'],
+      };
+    }
+
+    if (!isInFlight) {
+      return {
+        original_dispatch_id: opts.original_dispatch_id,
+        new_dispatch_id: null,
+        new_package_path: opts.new_package_path,
+        resolution: 'not_found',
+        ts,
+        errors: ['dispatch not found in active registry'],
+      };
+    }
+
+    // Recall the in-flight original (writes recall flag + aborts in-process).
+    this.recall(opts.original_dispatch_id, 'update_resign');
+
+    // Re-fire with the updated package.
+    const newDispatchId = `upd-${opts.original_dispatch_id.slice(0, 8)}-${Date.now().toString(36)}`;
+    let newReceipt: SpriteDeliveryReceipt | null = null;
+    try {
+      newReceipt = await this.dispatchSprites({
+        dispatch_id: newDispatchId,
+        session: opts.session,
+        package_path: opts.new_package_path,
+        source_cluster: 'bishop',
+        destination_cluster: opts.destination_cluster,
+        lock_signature: computeLockSignature(opts.destination_cluster, opts.new_package_path),
+        destination_path_pattern: opts.destination_path_pattern,
+        redundancy_count: 1,
+        spawn_timestamp: new Date().toISOString(),
+        candidate_dropzones: opts.candidate_dropzones,
+      });
+    } catch (e) {
+      errors.push(`re-fire dispatch threw: ${String(e)}`);
+    }
+
+    if (newReceipt && !newReceipt.delivery_success) {
+      errors.push(`re-fired dispatch ${newDispatchId} did not deliver`);
+    }
+    if (newReceipt?.errors?.length) {
+      for (const e of newReceipt.errors) errors.push(e);
+    }
+
+    const updateReceipt: UpdateReceipt = {
+      original_dispatch_id: opts.original_dispatch_id,
+      new_dispatch_id: newDispatchId,
+      new_package_path: opts.new_package_path,
+      resolution: 'resigned_and_refired',
+      ts,
+      errors,
+    };
+
+    try {
+      writeFileSync(
+        resolve(SPRITE_RECEIPT_DIR, `${opts.session}_update_${opts.original_dispatch_id}.json`),
+        JSON.stringify(updateReceipt, null, 2),
+      );
+    } catch { /* non-fatal */ }
+
+    return updateReceipt;
+  }
+
+  /**
    * Get a snapshot of currently-active dispatches (for /yoke/sprite/status).
    */
   getActiveSnapshot(): Array<{
@@ -582,6 +793,36 @@ function pseudoShuffle<T>(arr: T[], seed: number): T[] {
     [out[i], out[j]] = [out[j], out[i]];
   }
   return out;
+}
+
+// ─── Cold-Start types ─────────────────────────────────────────────────────
+
+export interface ColdStartReceipt {
+  session: string;
+  ts: string;
+  stale_files_cleared: number;
+  canary_dispatch_id: string;
+  canary_delivered: boolean;
+  canary_latency_ms: number;
+  /** True when the canary produced exactly one delivery and no zombie recalls. */
+  state_coherence_ok: boolean;
+  errors: string[];
+}
+
+// ─── Update-path types ────────────────────────────────────────────────────
+
+export type UpdateResolution =
+  | 'resigned_and_refired'
+  | 'already_settled'
+  | 'not_found';
+
+export interface UpdateReceipt {
+  original_dispatch_id: string;
+  new_dispatch_id: string | null;
+  new_package_path: string;
+  resolution: UpdateResolution;
+  ts: string;
+  errors: string[];
 }
 
 // ─── Singleton accessor (used by substrate_api Yoke endpoints) ───────────
