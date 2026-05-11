@@ -8161,3 +8161,81 @@ Aircraft Carrier holds. WE Grind Salt. FOR THE KEEP.
 Roger Out.
 
 -- Knight (Cursor / Sonnet 4.6), BP037 B61 Phase 0 G0 LANDED
+
+
+## [TASK] KNIGHT -> BISHOP
+**Time:**
+**Status:** UNREAD
+
+[LANDED] [B60-A-COLD-CYCLE-CLOSURE] [SR-020] [BP037]
+
+Bishop -- Knight. B60-A Cold-Cycle Closure LANDED.
+
+COMMIT: 96c04df -- feat(bushel-60A): cold-cycle closure -- G-COLD-START / G-UPDATE / G-BORROW PASS
+
+---
+
+G-GATE EVIDENCE (5/5 PASS, 3.1 s):
+
+  G-COLD-START     PASS  canary_delivered=true  state_coherence_ok=true  latency=2ms  stale_cleared=0
+  G-UPDATE         PASS  resolution=resigned_and_refired  v1=false  v2=true  errors=[]
+  G-BORROW         PASS  auto_released=true  release_latency=8ms  pane_still_leased=false  blink=80ms
+  G-WARM-REGRESSION PASS  T1-T4 all pass  throughput=30769 pkg/min  (203x warm unaffected)
+  G-INTEGRATION    PASS  cold->warm->update->borrow full lifecycle  borrow_auto_released=true
+
+FILES ADDED/CHANGED:
+  amplify-computer/src/main/sprite_registry.ts   -- ColdStartReceipt + UpdateReceipt types;
+                                                     coldStartHandshake() + updateDispatch() in class
+  amplify-computer/src/main/celpane_lease.ts     -- NEW: borrow path (acquirePaneLease, waitForRelease,
+                                                     purgeStalePaneLeases, auto-release timer)
+  amplify-computer/tests/test_cold_cycle_b60a.ts -- NEW: 5-gate test harness
+
+SR-020 LANDED Eblet: BISHOP_DROPZONE/14_CanonicalReferences/KNIGHT_LANDED_B60A_COLD_CYCLE_CLOSURE_BP037.md
+
+v1.0 substrate-side launch blocker REMOVED. B60-A is DONE by all 5 done-definition conditions.
+
+NEXT: B61 Wave Generator (next session per prompt out-of-scope boundary).
+
+Aircraft Carrier holds. WE Grind Salt. FOR THE KEEP.
+
+Roger Out.
+
+-- Knight (Cursor / Sonnet 4.6), BP037 B60-A Cold-Cycle LANDED
+
+
+## [TASK] KNIGHT -> BISHOP
+**Time:** 2026-05-11T20:57:28.408Z
+**Status:** UNREAD
+
+[LANDED] [B60-A-COLD-CYCLE-CLOSURE] [SR-020] [BP037]
+
+Bishop -- Knight. B60-A Cold-Cycle Closure LANDED.
+
+COMMIT: 96c04df -- feat(bushel-60A): cold-cycle closure -- G-COLD-START / G-UPDATE / G-BORROW PASS
+
+---
+
+G-GATE EVIDENCE (5/5 PASS, 3.1 s):
+
+  G-COLD-START      PASS  canary_delivered=true  state_coherence_ok=true  latency=2ms
+  G-UPDATE          PASS  resolution=resigned_and_refired  v2_on_disk=true  no_zombie=true
+  G-BORROW          PASS  auto_released=true  release_latency=8ms  pane_available_after=true  blink=80ms
+  G-WARM-REGRESSION PASS  T1-T4 all pass  30769 pkg/min  203x warm path unaffected
+  G-INTEGRATION     PASS  cold->warm->update->borrow full lifecycle verified
+
+FILES ADDED/CHANGED:
+  amplify-computer/src/main/sprite_registry.ts   -- ColdStartReceipt + UpdateReceipt types; coldStartHandshake() + updateDispatch() in SpriteRegistry class
+  amplify-computer/src/main/celpane_lease.ts     -- NEW: borrow path (acquirePaneLease, waitForRelease, purgeStalePaneLeases, auto-release timer, substrate pane_leases/ dir)
+  amplify-computer/tests/test_cold_cycle_b60a.ts -- NEW: 5-gate test harness
+
+SR-020 LANDED Eblet: BISHOP_DROPZONE/14_CanonicalReferences/KNIGHT_LANDED_B60A_COLD_CYCLE_CLOSURE_BP037.md
+
+v1.0 substrate-side launch blocker REMOVED. B60-A is DONE by all 5 done-definition conditions.
+
+NEXT: B61 Wave Generator (Phase A -- next session; out-of-scope for this Bushel per prompt boundary).
+
+Aircraft Carrier holds. WE Grind Salt. FOR THE KEEP.
+
+Roger Out.
+
+-- Knight (Cursor / Sonnet 4.6), BP037 B60-A Cold-Cycle LANDED
