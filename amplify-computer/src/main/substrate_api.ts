@@ -1,6 +1,7 @@
 // AMPLIFY Computer — Local Substrate API Server
 // B37 Phase 3-4 — Full implementation with TelemetryStore
 // B61 Phase 0 — Pawn (Perplexity) + Rook (Gemini) Yoke dispatch/status endpoint stubs
+// B61 Phase A — Wave Generator daemon endpoints (wave orchestration)
 //
 // HTTP endpoints on 127.0.0.1:11480:
 //   GET  /health                    — liveness
@@ -16,6 +17,9 @@
 //   GET  /yoke/pawn/status/:id      — B61 Phase 0: Pawn dispatch status
 //   POST /yoke/rook/dispatch        — B61 Phase 0: Rook wave dispatch (Gemini)
 //   GET  /yoke/rook/status/:id      — B61 Phase 0: Rook dispatch status
+//   POST /yoke/wave/dispatch        — B61 Phase A: Wave Generator dispatch (6 core ops)
+//   GET  /yoke/wave/status/:id      — B61 Phase A: Wave status query
+//   POST /yoke/wave/abort/:id       — B61 Phase A: Abort in-flight wave
 
 import { createServer, IncomingMessage, ServerResponse } from 'http';
 import { mkdirSync, existsSync, appendFileSync, readFileSync, writeFileSync, watch } from 'fs';
@@ -33,6 +37,14 @@ import {
   type SpriteDispatch,
   type ClusterName,
 } from './sprite_registry';
+import {
+  initWaveGenerator,
+  dispatchWave as waveDispatch,
+  getWave,
+  abortWave,
+  getWaveSummary,
+  type WaveRequest,
+} from './wave_generator';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -153,6 +165,9 @@ export class SubstrateAPIServer {
   async start(): Promise<void> {
     if (!existsSync(LOG_DIR)) mkdirSync(LOG_DIR, { recursive: true });
     await this.index.load();
+
+    // B61 Phase A — crash-restart resilience: restore in-flight wave state
+    initWaveGenerator();
 
     this.server = createServer((req, res) => this._handleRequest(req, res));
     return new Promise((resolve, reject) => {
@@ -1428,6 +1443,102 @@ export class SubstrateAPIServer {
         res.statusCode = 404;
         res.end(JSON.stringify({ error: 'dispatch not found', dispatch_id: dispatchId }));
       }
+      return;
+    }
+
+    // ── B61 Phase A — POST /yoke/wave/dispatch ────────────────────────────────
+    // Wave Generator: accept wave-class request (anchor + segs[] + optional
+    // synthesis_prompt) → decompose → parallel Yoke dispatch → synthesize →
+    // HMAC-bound receipt in ~/.lb_substrate/wave_archive/{wave_id}/
+    if (req.method === 'POST' && url === '/yoke/wave/dispatch') {
+      this._readBody(req, async (body) => {
+        let parsed: WaveRequest;
+        try {
+          parsed = JSON.parse(body) as WaveRequest;
+        } catch (err) {
+          res.statusCode = 400;
+          res.end(JSON.stringify({ error: 'Invalid JSON', detail: String(err) }));
+          return;
+        }
+        if (!parsed.anchor?.trim()) {
+          res.statusCode = 400;
+          res.end(JSON.stringify({ error: 'anchor required' }));
+          return;
+        }
+        if (!Array.isArray(parsed.segs) || parsed.segs.length === 0) {
+          res.statusCode = 400;
+          res.end(JSON.stringify({ error: 'segs[] required (at least one SEG)' }));
+          return;
+        }
+        try {
+          const wave = await waveDispatch(parsed);
+          res.statusCode = 202;
+          res.end(JSON.stringify({
+            wave_id:   wave.wave_id,
+            anchor:    wave.anchor,
+            status:    wave.status,
+            seg_count: wave.segs.length,
+            created_at: wave.created_at,
+          }));
+        } catch (err) {
+          res.statusCode = 500;
+          res.end(JSON.stringify({ error: String(err) }));
+        }
+      });
+      return;
+    }
+
+    // ── B61 Phase A — GET /yoke/wave/status/:wave_id ──────────────────────────
+    if (req.method === 'GET' && url?.startsWith('/yoke/wave/status/')) {
+      const waveId = url!.slice('/yoke/wave/status/'.length);
+      if (!waveId) {
+        res.statusCode = 400;
+        res.end(JSON.stringify({ error: 'wave_id required' }));
+        return;
+      }
+      const wave = getWave(waveId);
+      if (!wave) {
+        res.statusCode = 404;
+        res.end(JSON.stringify({ error: 'wave not found', wave_id: waveId }));
+        return;
+      }
+      res.end(JSON.stringify({
+        wave_id:       wave.wave_id,
+        anchor:        wave.anchor,
+        status:        wave.status,
+        seg_count:     wave.segs.length,
+        segs:          wave.segs.map(s => ({
+          seg_id: s.seg_id,
+          recipient: s.recipient,
+          status: s.status,
+          done_at: s.done_at,
+        })),
+        created_at:    wave.created_at,
+        started_at:    wave.started_at,
+        completed_at:  wave.completed_at,
+        synthesis_receipt_path: wave.synthesis_receipt_path,
+        hmac:          wave.hmac,
+        error:         wave.error,
+        wave_summary:  getWaveSummary(),
+      }));
+      return;
+    }
+
+    // ── B61 Phase A — POST /yoke/wave/abort/:wave_id ──────────────────────────
+    if (req.method === 'POST' && url?.startsWith('/yoke/wave/abort/')) {
+      const waveId = url!.slice('/yoke/wave/abort/'.length);
+      if (!waveId) {
+        res.statusCode = 400;
+        res.end(JSON.stringify({ error: 'wave_id required' }));
+        return;
+      }
+      const aborted = abortWave(waveId);
+      if (!aborted) {
+        res.statusCode = 409;
+        res.end(JSON.stringify({ error: 'wave not found or already terminal', wave_id: waveId }));
+        return;
+      }
+      res.end(JSON.stringify({ wave_id: waveId, status: 'aborted', message: 'wave abort requested' }));
       return;
     }
 
