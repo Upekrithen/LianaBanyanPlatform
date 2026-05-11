@@ -34,6 +34,8 @@ import { conjunctionRouter } from './hearth/conjunction/conjunction_router';
 import { buildSubstrateContext } from './hearth/embedded_browser/substrate_context_builder';
 import { querySagaState, recordWaveDispatch, recordWaveComplete } from './hearth/drekaskip_status/drekaskip_bridge';
 import { pollWatchdogStatus, getSubjectHistory } from './hearth/active_substrate/watchdog_bridge';
+// BP037 — On-Deck Master-of-Ceremonies
+import { listOnDeck } from './on_deck/on_deck_bridge';
 
 // Register custom OAuth scheme before app ready (Electron requirement)
 registerCustomScheme();
@@ -730,6 +732,12 @@ function registerIPCHandlers(): void {
   // Webview preload path — renderer needs this to wire the <webview> preload attribute
   ipcMain.on('get-webview-preload-path', (event) => {
     event.returnValue = join(__dirname, 'hearth', 'embedded_browser', 'webview_preload.js');
+  });
+
+  // ── On-Deck Master-of-Ceremonies (BP037) ──────────────────────────────────
+
+  ipcMain.handle('on-deck-list', () => {
+    return listOnDeck();
   });
 }
 
