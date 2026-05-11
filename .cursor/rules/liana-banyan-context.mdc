@@ -30,33 +30,33 @@ If the Librarian is unavailable, fall back to reading `CONTEXT_MANAGEMENT/MILEST
 - **Creator keeps:** 83.3% (never round to 83%)
 - **Platform margin:** Cost + 20%
 - **On $500 transaction:** Creator or Worker gets $416.67
-- **Innovations:** 2,267 (reconciled K421/B110 Apr 20, 2026)
-- **Patent applications:** 13 provisional applications FILED
-- **Formal claims:** ~2,412 across 13 provisional applications
-- **Crown Jewels:** 225
+- **Innovations:** 2,270 (canonical_values.yaml; updated BP030 May 7, 2026)
+- **Patent applications:** 17 provisional applications FILED (Prov 16 + 17 filed 2026-05-07; Bag 18 open)
+- **Formal claims:** ~2,506 across 17 provisional applications
+- **Crown Jewels:** 228
 - **Production systems:** 36
 - **A&A Formals:** Complete through #2262 (B100)
-- **Last reconciliation:** K421/B110 (April 20, 2026)
+- **Last reconciliation:** canonical_values.yaml updated BP030 (May 7, 2026)
 - **Membership:** $5/year
 
 ## The Sweet Sixteen Initiatives
 
-1. Let's Make Dinner (Crown: Maneet Chauhan)
-2. Let's Get Groceries
-3. Let's Go Shopping (Crown: Mary Beth Laughton)
-4. Household Concierge
-5. The Family Table
-6. Tatiana Schlossburg Health Accords
-7. MSA
-8. Defense Klaus ("For Someone You Love")
-9. Rally Group (Crown: Kimberly A. Williams)
-10. VSL (Crown: Cathie Mahon)
-11. Let's Make Bread
-12. Harper Guild
-13. JukeBox
-14. Didasko (Academic)
-15. Power to the People (Political Expedition)
-16. Brass Tacks
+1. **Let's Make Dinner** (Crown: Maneet Chauhan) — Cooperative meal-planning, home-chef coordination, and shared cooking resources
+2. **Let's Get Groceries** — Group grocery procurement, shared-economy food access, and cooperative bulk purchasing
+3. **Let's Go Shopping** (Crown: Mary Beth Laughton) — Cooperative retail, group purchasing power, and community-commerce platform
+4. **Household Concierge** — Home-services coordination, household management, and domestic-task cooperative marketplace
+5. **The Family Table** — Intergenerational family connection, shared resources, and cooperative family-support infrastructure
+6. **Tatiana Schlossburg Health Accords** — Cooperative healthcare access, health outcomes accountability, and wellness coordination platform
+7. **MSA** (Crown: Cathie Mahon) — Medical Savings Accounts; cooperative healthcare-cost sharing and mutual-aid health finance (confirmed BP035)
+8. **Defense Klaus** ("For Someone You Love") — Cooperative protective services, loved-ones safety network, and advocacy coordination
+9. **Rally Group** (Crown: Kimberly A. Williams) — Community organizing, collective-action mobilization, and cooperative civic engagement
+10. **VSL** (Crown: Jessica Jackley) — Very Short Loans; cooperative microfinance, peer-lending, and financial-inclusion platform (confirmed BP035; NOT Cathie Mahon)
+11. **Let's Make Bread** — Cooperative artisan food production, local baking community, and cottage-industry marketplace
+12. **Harper Guild** — Cooperative creative guild for writers, artists, and content creators; collaborative IP-ownership model
+13. **JukeBox** — Cooperative music and entertainment platform; artist-owned distribution and audience-direct revenue
+14. **Didasko** (Academic) — Cooperative education marketplace; tutor-to-learner direct connection and knowledge-sharing platform
+15. **Power to the People** (Political Expedition) — Cooperative civic participation, democratic-engagement tools, and grassroots-organizing infrastructure
+16. **Brass Tacks** — Foundational cooperative-labor coordination; core economic infrastructure and worker-ownership primitives
 
 ## Legal Entity
 
@@ -160,6 +160,43 @@ firebase login --reauth
 8. **Query before assuming database state** -- Before writing SQL fixes for migration errors, FIRST query Supabase to see what columns/tables actually exist. Do NOT guess -- guessing costs the user money. Run `SELECT column_name FROM information_schema.columns WHERE table_name = 'tablename';` to know the actual state, THEN write the fix correctly the first time.
 9. **LETTER SYNC IS MANDATORY** -- When ANY letter is updated in `LAUNCH_DOCUMENTS_MASTER/letters/`, the corresponding Cephas letter MUST be updated immediately. Cephas is the public mirror. See `CONTEXT_MANAGEMENT/LETTER_SYNC_PROTOCOL.md` for full mapping. Include Red Carpet CTA in all Cephas letters.
 10. **WildFire Tours vs Real Data** -- When building UI, mock data (like a $4,250 MSA balance) should ONLY be shown when a "WildFire Tour" mode is active (for onboarding/demonstration). The default "Real Data" state for a new user must always be empty/zeroed out until they have actual participation.
+
+## Trinity Rules (QUINDECIM 15 — bound through BP036)
+
+All Trinity Rules are binding on every LB AI agent. The 5 newest (bound BP035–BP036):
+
+| Rule | Class | Meaning |
+|------|-------|---------|
+| R-MECHANISM-VERIFY | [BLOOD] | Verify the actual mechanism before claiming it works — no assumption of function |
+| R-PRODUCTION-FIRST | [SWEAT] | Always check what is in production before proposing changes |
+| R-CONTEXT-UPSTREAM | [SWEAT] | Seed context upstream before downstream work — substrate-current before external-facing (PARAMOUNT per Founder BP035 Overnight) |
+| R-SEARCH-EXHAUSTIVE | [BLOOD] | Exhaust corpus search before claiming absence; R0 inherits: report "no hits in [scope]" not fabricated context |
+| R-USE-THE-YOKE | [BLOOD] | Every inter-agent communication goes through canonical Yoke (KNIGHT_BISHOP_MESSAGES.md or knight-bishop-bridge MCP); Cursor chat ≠ canonical Yoke (BR-009 G-Yoke discipline) |
+
+Eblets at `~/.claude/state/eblets/CANON/` (Bishop-side canonical store).
+
+## BP035 Overnight Canon References (B91 upstream seeding)
+
+Bishop Opus 4.7 BP035 Overnight authored ~26 substantive artifacts. Index files:
+- `BP035_OVERNIGHT_RUN_INDEX_FOR_FOUNDER_6AM.md`
+- `BP035_OVERNIGHT_FINAL_REPORT_FOR_FOUNDER.md`
+- `RECOVERY_SYNTHESIS_MASTER_BP035_OVERNIGHT.md`
+
+New canon Eblets bound BP035 Overnight (LB-CODEX-0196..0211 + BP035 additions):
+- Built-in-Public / Advance-Notice / Six-Degrees Triad
+- To Blave Maneuver (Founder-ratified)
+- Iron Giants Sock Puppets — precursor to Shadow E-Giants (full lineage anchored)
+- R-CONTEXT-UPSTREAM Trinity Rule (QUINDECIM #13)
+- R-SEARCH-EXHAUSTIVE Trinity Rule (QUINDECIM #14)
+- R-USE-THE-YOKE Trinity Rule / R15 BLOOD (QUINDECIM #15)
+- Iterative Vault discipline (Bishop-side complete; Stone Tablets Vault = Knight-side, B94)
+- Dandelion Dispersion + Planned Ascension (Yovel-aligned 50-year cycle)
+
+BP036 additions (bound this session):
+- PGP "Pretty Good" + Edition tracking + Aviator-not-Pilot doctrine (`pgp_pretty_good_edition_aviator_doctrine_canon_bp036.eblet.md`)
+- Threshing Scribe re-anchor — Prov14; auto-invocation restoration (`threshing_scribe_innovation_glean_crown_jewel_harvest_canon_bp036.eblet.md`)
+- Aircraft Carrier / Always-On Substrate Doctrine (LB-EDITION-10)
+- SEG-Cascade Discipline (Bishop/Knight/Rook/Pawn parallel fan-out canon)
 
 ## Agent Roles
 
