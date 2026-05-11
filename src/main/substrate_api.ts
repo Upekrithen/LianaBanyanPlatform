@@ -1,5 +1,6 @@
 // AMPLIFY Computer — Local Substrate API Server
 // B37 Phase 3-4 — Full implementation with TelemetryStore
+// B61 Phase 0 — Pawn (Perplexity) + Rook (Gemini) Yoke dispatch/status endpoint stubs
 //
 // HTTP endpoints on 127.0.0.1:11480:
 //   GET  /health                    — liveness
@@ -11,11 +12,16 @@
 //   GET  /amplify/summary           — full historical summary (today/week/month/all-time)
 //   GET  /federation/status         — peer count, last sync, online status
 //   GET  /yoke/stream               — SSE inbox fan-out (MoneyPenny Phase B)
+//   POST /yoke/pawn/dispatch        — B61 Phase 0: Pawn wave dispatch (Perplexity sonar-reasoning-pro)
+//   GET  /yoke/pawn/status/:id      — B61 Phase 0: Pawn dispatch status
+//   POST /yoke/rook/dispatch        — B61 Phase 0: Rook wave dispatch (Gemini)
+//   GET  /yoke/rook/status/:id      — B61 Phase 0: Rook dispatch status
 
 import { createServer, IncomingMessage, ServerResponse } from 'http';
-import { mkdirSync, existsSync, appendFileSync, readFileSync, watch } from 'fs';
+import { mkdirSync, existsSync, appendFileSync, readFileSync, writeFileSync, watch } from 'fs';
 import { resolve, dirname } from 'path';
-import { randomUUID } from 'crypto';
+import { homedir } from 'os';
+import { randomUUID, createHash } from 'crypto';
 import { SubstrateLocalIndex, SubstrateRouter, type FrameMode } from './substrate_router';
 import { TelemetryStore, type RoutingSource } from './telemetry_store';
 import { getMobileHTML, getManifestJSON, getServiceWorker, getIconSVG } from './mobile_pwa';
@@ -74,6 +80,25 @@ const ATTACHMENTS_DIR = resolve(
   'family_attachments',
 );
 const ATTACHMENTS_INDEX = resolve(ATTACHMENTS_DIR, 'index.jsonl');
+
+// B61 Phase 0 — Yoke dispatch substrate paths
+// Per canon LB-STACK-0164 §5 L2; full wave_* dirs created by Phase A daemon.
+// Phase 0 uses yoke_dispatch/{pawn,rook}/ as the pre-daemon staging area.
+const LB_SUBSTRATE_ROOT_API =
+  process.env.LB_SUBSTRATE_ROOT ?? resolve(homedir(), '.lb_substrate');
+const YOKE_DISPATCH_PAWN_DIR = resolve(LB_SUBSTRATE_ROOT_API, 'yoke_dispatch', 'pawn');
+const YOKE_DISPATCH_ROOK_DIR = resolve(LB_SUBSTRATE_ROOT_API, 'yoke_dispatch', 'rook');
+
+function ensureYokeDispatchDirs(): void {
+  for (const d of [YOKE_DISPATCH_PAWN_DIR, YOKE_DISPATCH_ROOK_DIR]) {
+    if (!existsSync(d)) mkdirSync(d, { recursive: true });
+  }
+}
+
+/** SHA-256 content hash of a JSON payload (Slipstream §6 receipt integrity). */
+function contentHash(payload: unknown): string {
+  return createHash('sha256').update(JSON.stringify(payload)).digest('hex').slice(0, 32);
+}
 
 // ─── Substrate API Server ─────────────────────────────────────────────────────
 
@@ -1199,6 +1224,210 @@ export class SubstrateAPIServer {
         res.statusCode = 500;
         res.end(JSON.stringify({ error: String(err) }));
       });
+      return;
+    }
+
+    // ── B61 Phase 0 — POST /yoke/pawn/dispatch ────────────────────────────────
+    // Pawn-class wave dispatch: accepts prompt → Perplexity sonar-reasoning-pro →
+    // persists receipt to ~/.lb_substrate/yoke_dispatch/pawn/{dispatch_id}.receipt.json
+    // G0 gate: single-dispatch round-trip verified (receipt file confirms).
+    if (req.method === 'POST' && url === '/yoke/pawn/dispatch') {
+      this._readBody(req, async (body) => {
+        ensureYokeDispatchDirs();
+        let parsed: {
+          prompt: string;
+          dispatch_id?: string;
+          session?: string;
+          context_msgs?: Array<{ role: string; content: string }>;
+          budget_guardrail_usd?: number;
+        };
+        try {
+          parsed = JSON.parse(body) as typeof parsed;
+        } catch (err) {
+          res.statusCode = 400;
+          res.end(JSON.stringify({ error: 'Invalid JSON', detail: String(err) }));
+          return;
+        }
+        const { prompt, context_msgs, session } = parsed;
+        if (!prompt?.trim()) {
+          res.statusCode = 400;
+          res.end(JSON.stringify({ error: 'prompt required' }));
+          return;
+        }
+        const dispatchId = parsed.dispatch_id ?? randomUUID();
+        const spawnTs = new Date().toISOString();
+        const requestPayload = { dispatch_id: dispatchId, session: session ?? 'B61', prompt, spawn_timestamp: spawnTs, recipient: 'pawn' };
+        writeFileSync(
+          resolve(YOKE_DISPATCH_PAWN_DIR, `${dispatchId}.request.json`),
+          JSON.stringify({ ...requestPayload, status: 'PENDING' }, null, 2),
+        );
+
+        const apiKey = process.env.PERPLEXITY_API_KEY;
+        if (!apiKey) {
+          const errReceipt = { ...requestPayload, status: 'ERROR', error: 'PERPLEXITY_API_KEY not set', completed_timestamp: new Date().toISOString() };
+          writeFileSync(resolve(YOKE_DISPATCH_PAWN_DIR, `${dispatchId}.receipt.json`), JSON.stringify(errReceipt, null, 2));
+          res.statusCode = 503;
+          res.end(JSON.stringify({ error: 'PERPLEXITY_API_KEY not set', dispatch_id: dispatchId }));
+          return;
+        }
+
+        const messages = [...(context_msgs ?? []), { role: 'user', content: prompt }];
+        try {
+          const response = await fetch('https://api.perplexity.ai/chat/completions', {
+            method: 'POST',
+            headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ model: 'sonar-reasoning-pro', messages, stream: false }),
+          });
+          const completedTs = new Date().toISOString();
+          if (!response.ok) {
+            const errBody = await response.text();
+            const errReceipt = { ...requestPayload, status: 'ERROR', error: errBody, completed_timestamp: completedTs };
+            writeFileSync(resolve(YOKE_DISPATCH_PAWN_DIR, `${dispatchId}.receipt.json`), JSON.stringify(errReceipt, null, 2));
+            res.statusCode = 502;
+            res.end(JSON.stringify({ error: `Perplexity error: ${errBody}`, dispatch_id: dispatchId }));
+            return;
+          }
+          const data = (await response.json()) as { choices?: Array<{ message?: { content?: string } }> };
+          const reply = data.choices?.[0]?.message?.content ?? '(no response)';
+          const receipt = { ...requestPayload, status: 'COMPLETE', reply, completed_timestamp: completedTs, receipt_hash: contentHash({ dispatchId, reply, completedTs }) };
+          writeFileSync(resolve(YOKE_DISPATCH_PAWN_DIR, `${dispatchId}.receipt.json`), JSON.stringify(receipt, null, 2));
+          res.end(JSON.stringify({ success: true, dispatch_id: dispatchId, reply, receipt_hash: receipt.receipt_hash, recipient: 'pawn' }));
+        } catch (e) {
+          const completedTs = new Date().toISOString();
+          const errReceipt = { ...requestPayload, status: 'ERROR', error: String(e), completed_timestamp: completedTs };
+          writeFileSync(resolve(YOKE_DISPATCH_PAWN_DIR, `${dispatchId}.receipt.json`), JSON.stringify(errReceipt, null, 2));
+          res.statusCode = 500;
+          res.end(JSON.stringify({ error: String(e), dispatch_id: dispatchId }));
+        }
+      });
+      return;
+    }
+
+    // ── B61 Phase 0 — GET /yoke/pawn/status/:dispatch_id ─────────────────────
+    if (req.method === 'GET' && url?.startsWith('/yoke/pawn/status/')) {
+      ensureYokeDispatchDirs();
+      const dispatchId = url!.slice('/yoke/pawn/status/'.length);
+      if (!dispatchId) { res.statusCode = 400; res.end(JSON.stringify({ error: 'dispatch_id required' })); return; }
+      const receiptPath = resolve(YOKE_DISPATCH_PAWN_DIR, `${dispatchId}.receipt.json`);
+      const requestPath = resolve(YOKE_DISPATCH_PAWN_DIR, `${dispatchId}.request.json`);
+      if (existsSync(receiptPath)) {
+        try {
+          const receipt = JSON.parse(readFileSync(receiptPath, 'utf8'));
+          res.end(JSON.stringify(receipt));
+        } catch {
+          res.statusCode = 500;
+          res.end(JSON.stringify({ error: 'receipt parse error', dispatch_id: dispatchId }));
+        }
+      } else if (existsSync(requestPath)) {
+        res.end(JSON.stringify({ dispatch_id: dispatchId, status: 'PENDING', recipient: 'pawn' }));
+      } else {
+        res.statusCode = 404;
+        res.end(JSON.stringify({ error: 'dispatch not found', dispatch_id: dispatchId }));
+      }
+      return;
+    }
+
+    // ── B61 Phase 0 — POST /yoke/rook/dispatch ────────────────────────────────
+    // Rook-class wave dispatch: accepts prompt → Gemini → persists receipt.
+    if (req.method === 'POST' && url === '/yoke/rook/dispatch') {
+      this._readBody(req, async (body) => {
+        ensureYokeDispatchDirs();
+        let parsed: {
+          prompt: string;
+          dispatch_id?: string;
+          session?: string;
+          context_msgs?: Array<{ role: string; parts: Array<{ text?: string }> }>;
+          budget_guardrail_usd?: number;
+          model_override?: string;
+        };
+        try {
+          parsed = JSON.parse(body) as typeof parsed;
+        } catch (err) {
+          res.statusCode = 400;
+          res.end(JSON.stringify({ error: 'Invalid JSON', detail: String(err) }));
+          return;
+        }
+        const { prompt, context_msgs, session } = parsed;
+        if (!prompt?.trim()) {
+          res.statusCode = 400;
+          res.end(JSON.stringify({ error: 'prompt required' }));
+          return;
+        }
+        const dispatchId = parsed.dispatch_id ?? randomUUID();
+        const spawnTs = new Date().toISOString();
+        const requestPayload = { dispatch_id: dispatchId, session: session ?? 'B61', prompt, spawn_timestamp: spawnTs, recipient: 'rook' };
+        writeFileSync(
+          resolve(YOKE_DISPATCH_ROOK_DIR, `${dispatchId}.request.json`),
+          JSON.stringify({ ...requestPayload, status: 'PENDING' }, null, 2),
+        );
+
+        const apiKey = process.env.GEMINI_API_KEY ?? process.env.GOOGLE_GENERATIVEAI_API_KEY;
+        if (!apiKey) {
+          const errReceipt = { ...requestPayload, status: 'ERROR', error: 'GEMINI_API_KEY not set', completed_timestamp: new Date().toISOString() };
+          writeFileSync(resolve(YOKE_DISPATCH_ROOK_DIR, `${dispatchId}.receipt.json`), JSON.stringify(errReceipt, null, 2));
+          res.statusCode = 503;
+          res.end(JSON.stringify({ error: 'GEMINI_API_KEY not set', dispatch_id: dispatchId }));
+          return;
+        }
+
+        const history: Array<{ role: 'user' | 'model'; parts: { text: string }[] }> = [];
+        for (const m of context_msgs ?? []) {
+          const rl = String(m.role || 'user').toLowerCase();
+          const role: 'user' | 'model' = rl === 'model' || rl === 'assistant' ? 'model' : 'user';
+          const joined = Array.isArray(m.parts) ? m.parts.map((p) => String(p?.text ?? '')).join('\n').trim() : '';
+          if (!joined) continue;
+          history.push({ role, parts: [{ text: joined }] });
+        }
+
+        try {
+          const genAI = new GoogleGenerativeAI(apiKey);
+          const modelId = parsed.model_override ?? process.env.GEMINI_MODEL ?? 'gemini-2.0-flash';
+          const model = genAI.getGenerativeModel({ model: modelId });
+          let reply: string;
+          if (history.length > 0) {
+            const chat = model.startChat({ history });
+            const result = await chat.sendMessage(prompt);
+            reply = result.response.text();
+          } else {
+            const result = await model.generateContent(prompt);
+            reply = result.response.text();
+          }
+          const completedTs = new Date().toISOString();
+          const receipt = { ...requestPayload, model: modelId, status: 'COMPLETE', reply, completed_timestamp: completedTs, receipt_hash: contentHash({ dispatchId, reply, completedTs }) };
+          writeFileSync(resolve(YOKE_DISPATCH_ROOK_DIR, `${dispatchId}.receipt.json`), JSON.stringify(receipt, null, 2));
+          res.end(JSON.stringify({ success: true, dispatch_id: dispatchId, reply, receipt_hash: receipt.receipt_hash, recipient: 'rook', model: modelId }));
+        } catch (e) {
+          const completedTs = new Date().toISOString();
+          const errReceipt = { ...requestPayload, status: 'ERROR', error: String(e), completed_timestamp: completedTs };
+          writeFileSync(resolve(YOKE_DISPATCH_ROOK_DIR, `${dispatchId}.receipt.json`), JSON.stringify(errReceipt, null, 2));
+          res.statusCode = 500;
+          res.end(JSON.stringify({ error: String(e), dispatch_id: dispatchId }));
+        }
+      });
+      return;
+    }
+
+    // ── B61 Phase 0 — GET /yoke/rook/status/:dispatch_id ─────────────────────
+    if (req.method === 'GET' && url?.startsWith('/yoke/rook/status/')) {
+      ensureYokeDispatchDirs();
+      const dispatchId = url!.slice('/yoke/rook/status/'.length);
+      if (!dispatchId) { res.statusCode = 400; res.end(JSON.stringify({ error: 'dispatch_id required' })); return; }
+      const receiptPath = resolve(YOKE_DISPATCH_ROOK_DIR, `${dispatchId}.receipt.json`);
+      const requestPath = resolve(YOKE_DISPATCH_ROOK_DIR, `${dispatchId}.request.json`);
+      if (existsSync(receiptPath)) {
+        try {
+          const receipt = JSON.parse(readFileSync(receiptPath, 'utf8'));
+          res.end(JSON.stringify(receipt));
+        } catch {
+          res.statusCode = 500;
+          res.end(JSON.stringify({ error: 'receipt parse error', dispatch_id: dispatchId }));
+        }
+      } else if (existsSync(requestPath)) {
+        res.end(JSON.stringify({ dispatch_id: dispatchId, status: 'PENDING', recipient: 'rook' }));
+      } else {
+        res.statusCode = 404;
+        res.end(JSON.stringify({ error: 'dispatch not found', dispatch_id: dispatchId }));
+      }
       return;
     }
 
