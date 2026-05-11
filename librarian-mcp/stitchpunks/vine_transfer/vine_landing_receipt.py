@@ -58,8 +58,16 @@ def assemble_receipt(
     """
     ts = _iso_now()
 
-    _next_bp = codecopy_summary.get("next_bp_number")
-    _next_bp_str = f" | Next BP: BP{_next_bp:03d}" if _next_bp else ""
+    # SR-017: prefer next_bp_display (set by SR-017 cascade); fall back to legacy int format
+    _next_bp_display = codecopy_summary.get("next_bp_display")
+    _next_bp_conflict = codecopy_summary.get("next_bp_conflict_drift")
+    if _next_bp_display:
+        _next_bp_str = f" | Next BP: {_next_bp_display}"
+        if _next_bp_conflict:
+            _next_bp_str += f" [⚠ DRIFT: {_next_bp_conflict.get('message', '')}]"
+    else:
+        _next_bp = codecopy_summary.get("next_bp_number")
+        _next_bp_str = f" | Next BP: BP{_next_bp:03d}" if _next_bp else ""
     codecopy_status = (
         f"✓ Detected: {codecopy_summary.get('file_name')} "
         f"({codecopy_summary.get('chunk_count', 0)} chunks){_next_bp_str}"
