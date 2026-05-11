@@ -1,0 +1,9 @@
+category,impl,n,median,mad,p95,trimmed_mean
+cold,baseline,60,33.625,0.932,35.903,33.540
+cold,substrate,60,34.734,0.951,36.688,34.676
+warm,baseline,60,0.207,0.008,0.267,0.212
+warm,substrate,60,0.001,0.000,0.002,0.001
+update,baseline,60,0.223,0.009,0.262,0.225
+update,substrate,60,0.094,0.006,0.118,0.096
+borrow,baseline,60,0.026,0.002,0.038,0.028
+borrow,substrate,60,0.028,0.002,0.036,0.028
