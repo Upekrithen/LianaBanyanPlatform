@@ -189,6 +189,61 @@ declare global {
       onAuthStateChanged: (cb: (state: AuthState) => void) => () => void;
       // Dashboard
       openDashboard: () => void;
+      // Hearth App Builder (B69)
+      hearthBuild: (request: string, memberId?: string) => Promise<{ ok: boolean; appUuid?: string; appDir?: string; spec?: import('../main/hearth_app_builder/types').AppSpec; installerPath?: string; error?: string }>;
+      hearthInstall: (opts: { uuid: string; appName: string; description: string; appDir: string; installerPath: string; spec: import('../main/hearth_app_builder/types').AppSpec }) => Promise<{ ok: boolean; error?: string }>;
+      hearthLibraryQuery: (memberId?: string) => Promise<import('../main/hearth_app_builder/types').HearthApp[]>;
+      hearthUninstall: (uuid: string) => Promise<{ ok: boolean; error?: string }>;
+      hearthHealthz: () => Promise<import('../main/hearth_app_builder/types').HearthHealthz>;
+      hearthSpecExtractSmoke: () => Promise<import('../main/hearth_app_builder/types').HearthSpecSmokeResult>;
+      onHearthBuildProgress: (cb: (progress: import('../main/hearth_app_builder/types').BuildProgress) => void) => () => void;
+      onHearthBuildComplete: (cb: (result: { appUuid: string; appName: string; installerPath?: string; buildDurationMs: number }) => void) => () => void;
+      onHearthBuildError: (cb: (err: { appUuid: string; appName: string; error: string; lastStderr: string }) => void) => () => void;
+      // Hearth Conjunction Window (B83)
+      openHearthConjunction: () => void;
+      conjunctionGetState: () => Promise<import('./hearth/conjunction/types').ConjunctionPanelState>;
+      conjunctionGetAvailability: () => Promise<import('./hearth/conjunction/types').BackendAvailability>;
+      conjunctionSelect: (mode: import('./hearth/conjunction/types').ConjunctionMode) => Promise<{ ok: boolean; previous: import('./hearth/conjunction/types').ConjunctionMode }>;
+      conjunctionSetOverride: (mode: import('./hearth/conjunction/types').ConjunctionMode) => Promise<{ ok: boolean }>;
+      conjunctionDispatch: (prompt: string, mode_override?: import('./hearth/conjunction/types').ConjunctionMode) => Promise<import('./hearth/conjunction/types').ConjunctionResult>;
+      conjunctionGetSubstrateContext: () => Promise<{ raw_preamble: string; thread_id: string | null; built_at: string }>;
+      // Drekaskip (B83c)
+      drekaskipQuery: () => Promise<import('./hearth/drekaskip_status/saga_subscription').SagaState>;
+      // Watchdog (B83d)
+      watchdogStatus: () => Promise<import('./hearth/active_substrate/ActiveSubstratePanel').WatchdogStatusPayload>;
+      watchdogHistory: (subject: string, window_hours?: number) => Promise<Array<{ ts: string; level: string; message: string }>>;
+      // Webview preload path (B83b)
+      getWebviewPreloadPath?: () => string;
+      // On-Deck Master-of-Ceremonies (BP037)
+      onDeckList?: () => Promise<{
+        sequential: OnDeckItem[];
+        anytime: OnDeckItem[];
+        conditional: OnDeckItem[];
+        fired_recent: OnDeckItem[];
+        base_dir: string;
+        scanned_at: string;
+      }>;
     };
   }
+}
+
+// On-Deck item type (mirrored from main process; no import)
+export interface OnDeckFrontmatter {
+  on_deck_id: string;
+  target_seat: 'manager' | 'knight' | 'pawn' | 'rook';
+  category: 'sequential' | 'anytime' | 'conditional';
+  priority: 'HIGH' | 'MEDIUM' | 'LOW';
+  depends_on: string[];
+  conditions: string[];
+  estimated_cost?: number;
+  estimated_time?: number;
+  status: 'DRAFTING' | 'READY' | 'FIRED' | 'RETURNED' | 'COMPLETE' | 'FAILED';
+  title?: string;
+  created_at?: string;
+}
+
+export interface OnDeckItem {
+  frontmatter: OnDeckFrontmatter;
+  body: string;
+  file_path: string;
 }

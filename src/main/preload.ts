@@ -411,6 +411,11 @@ contextBridge.exposeInMainWorld('amplify', {
 
   getWebviewPreloadPath: (): string =>
     ipcRenderer.sendSync('get-webview-preload-path') as string,
+
+  // ── On-Deck Master-of-Ceremonies (BP037) ──────────────────────────────────
+
+  onDeckList: (): Promise<import('./on_deck/on_deck_bridge').OnDeckBridgePayload> =>
+    ipcRenderer.invoke('on-deck-list'),
 });
 
 // ─── Global type extension ────────────────────────────────────────────────────
@@ -481,6 +486,8 @@ declare global {
       watchdogHistory: (subject: string, window_hours?: number) => Promise<Array<{ ts: string; level: string; message: string }>>;
       // Webview preload path (B83b)
       getWebviewPreloadPath?: () => string;
+      // On-Deck Master-of-Ceremonies (BP037)
+      onDeckList?: () => Promise<import('./on_deck/on_deck_bridge').OnDeckBridgePayload>;
     };
   }
 }

@@ -16,6 +16,7 @@ import { ConjunctionPanel } from './conjunction/ConjunctionPanel';
 import { EmbeddedChrome } from './embedded_browser/EmbeddedChrome';
 import { DrekaskipStatusPanel } from './drekaskip_status/DrekaskipStatusPanel';
 import { ActiveSubstratePanel } from './active_substrate/ActiveSubstratePanel';
+import { OnDeckPanel } from './on_deck/OnDeckPanel';
 import {
   ConjunctionContext,
   DEFAULT_PANEL_STATE,
@@ -30,6 +31,7 @@ export function HearthConjunctionWindow() {
   const [substrateContext, setSubstrateContext] = useState<string | null>(null);
   const [conjunctionOutput, setConjunctionOutput] = useState<string | null>(null);
   const [injectionEvents, setInjectionEvents] = useState<Array<{ success: boolean; url: string }>>([]);
+  const [showOnDeck, setShowOnDeck] = useState(false);
   const contextRefreshTimer = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Load initial panel state + availability
@@ -130,6 +132,18 @@ export function HearthConjunctionWindow() {
           <button style={styles.contextBtn} onClick={buildContext} title="Refresh substrate context">
             🧬 Refresh context
           </button>
+          <button
+            style={{
+              ...styles.contextBtn,
+              background: showOnDeck ? '#1e3a5f' : '#2d3748',
+              borderColor: showOnDeck ? '#3b82f6' : '#4a5568',
+              color: showOnDeck ? '#63b3ed' : '#e2e8f0',
+            }}
+            onClick={() => setShowOnDeck((v) => !v)}
+            title="Toggle On-Deck queue panel"
+          >
+            📋 On Deck
+          </button>
         </div>
 
         {/* Main layout: left column | right column */}
@@ -197,6 +211,13 @@ export function HearthConjunctionWindow() {
             </div>
           </div>
         </div>
+
+        {/* On-Deck panel (BP037) — full-width strip, toggled from top bar */}
+        {showOnDeck && (
+          <div style={styles.onDeckStrip}>
+            <OnDeckPanel />
+          </div>
+        )}
 
         {/* Conjunction output strip (shown when dispatch result available) */}
         {conjunctionOutput && (
@@ -321,6 +342,13 @@ const styles: Record<string, React.CSSProperties> = {
     overflow: 'auto',
     padding: '0.5rem',
     minHeight: 0,
+  },
+  onDeckStrip: {
+    borderTop: '2px solid #3b82f6',
+    background: '#070710',
+    flexShrink: 0,
+    height: 340,
+    overflow: 'hidden',
   },
   outputStrip: {
     borderTop: '1px solid #f6ad55',
