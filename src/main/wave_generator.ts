@@ -1,22 +1,33 @@
-// AMPLIFY Computer — Wave Generator Daemon (B61 Phase A / LB-STACK-0164 §1)
-// Implements the six core operations of canon §1:
+// AMPLIFY Computer — Wave Generator Daemon (B61 Phase A+B / LB-STACK-0164 §1–§3)
+// Phase A: six core operations with inline SEG decomposition
+// Phase B: six versioned HMAC-bound wave templates (LB-STACK-0164 §3)
+//
+// Core operations (§1):
 //   1. Receive   — POST /yoke/wave/dispatch
-//   2. Decompose — inline SEG array (templates arrive Phase B)
-//   3. Dispatch  — N parallel Yoke calls to Phase 0 Pawn/Rook endpoints
+//   2. Decompose — inline SEG array OR template-based expansion (Phase B)
+//   3. Dispatch  — N parallel Yoke calls (Knight/Bishop/Pawn/Rook)
 //   4. Watch     — per-SEG progress log in wave_active/{wave_id}/seg_NN_progress/
-//   5. Synthesize — synthesis SEG (claude-sonnet-4-5 default) with all N receipts
+//   5. Synthesize — synthesis SEG (Sonnet 4.6 default) with all N receipts
 //   6. Report    — HMAC-bound synthesis_receipt.eblet.md in wave_archive/{wave_id}/
+//
+// Six named templates (§3):
+//   1. 4_way_cohort@v1            — 4 parallel Pawn calls, Bishop synthesis
+//   2. 8_seg_multi_scope@v1       — 8 parallel Bishop SEGs, cross-domain synthesis
+//   3. n_track_math_test@v1       — N parallel cross-vendor flagship dispatches
+//   4. high_vs_low@v1             — 2 parallel tiers, equivalence-metric synthesis
+//   5. cross_vendor_verification@v1 — N parallel cross-vendor, agreement metric
+//   6. recursive_drill_down@v1    — depth-bounded tree, hierarchical synthesis
 //
 // Substrate paths (L2 per canon §5):
 //   ~/.lb_substrate/wave_queue/     — queued requests
 //   ~/.lb_substrate/wave_active/    — in-flight waves + per-SEG progress
 //   ~/.lb_substrate/wave_archive/   — completed waves + synthesis Eblet + HMAC
-//   ~/.lb_substrate/wave_templates/ — versioned template defs (Phase B placeholder)
+//   ~/.lb_substrate/wave_templates/ — versioned template definitions (Phase B)
 //
 // Crash-restart resilience (canon §9): init scans wave_active/ and marks any
 // waves that were mid-flight as 'aborted' (async HTTP calls cannot be resumed).
 //
-// Canon anchor: LB-STACK-0164 §1, §5, §6, §9, §10
+// Canon anchor: LB-STACK-0164 §1–§3, §5, §6, §9, §10
 
 import {
   mkdirSync,
@@ -49,7 +60,7 @@ const WAVE_HMAC_KEY =
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-export type SegRecipient = 'pawn' | 'rook' | 'knight';
+export type SegRecipient = 'pawn' | 'rook' | 'knight' | 'bishop';
 export type WaveStatus   = 'queued' | 'running' | 'synthesizing' | 'complete' | 'aborted';
 export type SegStatus    = 'pending' | 'dispatched' | 'done' | 'error';
 
@@ -67,16 +78,76 @@ export interface WaveRequest {
   wave_id?: string;
   /** Human-readable label / canon anchor. */
   anchor: string;
-  /** Phase A: inline decomposition = pre-formed SEG array. */
-  segs: SegConfig[];
+  /**
+   * Phase A: inline decomposition — pre-formed SEG array.
+   * Phase B: omit when using template_name + params.
+   */
+  segs?: SegConfig[];
+  /**
+   * Phase B: named template from wave_templates/ (e.g. "4_way_cohort@v1").
+   * When set, `params` supplies the parameter binding.
+   */
+  template_name?: string;
+  /** Phase B: parameter bindings for the named template. */
+  params?: Record<string, unknown>;
   /**
    * Synthesis prompt sent to the synthesis SEG.
    * Use `{receipts}` as the placeholder for the concatenated SEG replies.
-   * Defaults to a standard summary template.
+   * Defaults to template synthesis_shape or standard summary template.
    */
   synthesis_prompt?: string;
-  /** Override synthesis SEG recipient. Default: 'knight' (Sonnet 4.6). */
+  /** Override synthesis SEG recipient. Default: template synthesis_shape or 'knight'. */
   synthesis_recipient?: SegRecipient;
+}
+
+// ─── Wave Template Types (Phase B / LB-STACK-0164 §3) ────────────────────────
+
+export interface SegTemplateSpec {
+  seg_id: string;
+  /** Literal SegRecipient or param reference like "{param}". */
+  recipient: string;
+  prompt_template: string;
+}
+
+export interface SegExpandSpec {
+  /** Parameter name that holds the array to iterate over. */
+  from_param: string;
+  /** Template for seg_id — may use {i} and {i02}. */
+  seg_id_template: string;
+  /** Literal recipient or "{item}" to use array element. */
+  recipient_template: string;
+  /** Prompt template — may use {item}, {i}, {i02} and any wave params. */
+  prompt_template: string;
+}
+
+export interface SynthesisSpec {
+  /** Literal SegRecipient. */
+  recipient: string;
+  /** Prompt template with {receipts} placeholder + any wave params. */
+  prompt_template: string;
+}
+
+export interface WaveTemplateSpec {
+  template_name: string;
+  version: string;
+  description: string;
+  empirical_anchor: string;
+  canon_anchor: string;
+  /** JSON Schema (informational; used to apply defaults). */
+  parameter_schema: {
+    type: string;
+    properties?: Record<string, { type?: string; description?: string; default?: unknown }>;
+    required?: string[];
+  };
+  /** Fixed SEGs. Empty array when seg_expand handles all SEGs. */
+  segs: SegTemplateSpec[];
+  /** Variable-N SEG expansion. Absent for fixed-N templates. */
+  seg_expand?: SegExpandSpec;
+  synthesis: SynthesisSpec;
+  authored_at: string;
+  author: string;
+  /** HMAC-SHA256 over serialized spec content (excluding this field). */
+  hmac?: string;
 }
 
 export interface SegProgress {
@@ -156,6 +227,139 @@ function contentSha256(text: string): string {
   return createHash('sha256').update(text, 'utf8').digest('hex').slice(0, 32);
 }
 
+// ─── Phase B — Template Engine (LB-STACK-0164 §3) ────────────────────────────
+
+/**
+ * Interpolate `{param}` and `{param[N]}` references in a template string.
+ * - `{param}` → string value; arrays joined with ", "
+ * - `{param[N]}` → Nth element of array param
+ */
+function interpolate(template: string, params: Record<string, unknown>): string {
+  return template.replace(/\{(\w+)(?:\[(\d+)\])?\}/g, (match, key: string, indexStr?: string) => {
+    const val = params[key];
+    if (val === undefined) return match;
+    if (indexStr !== undefined) {
+      if (!Array.isArray(val)) return match;
+      const item = val[parseInt(indexStr, 10)];
+      return item !== undefined ? String(item) : match;
+    }
+    if (Array.isArray(val)) return val.join(', ');
+    return String(val);
+  });
+}
+
+/** Apply parameter_schema defaults for any missing params. */
+function applySchemaDefaults(
+  params: Record<string, unknown>,
+  schema: WaveTemplateSpec['parameter_schema'],
+): Record<string, unknown> {
+  const result: Record<string, unknown> = { ...params };
+  const props = schema.properties ?? {};
+  for (const [key, def] of Object.entries(props)) {
+    if (result[key] === undefined && def.default !== undefined) {
+      result[key] = def.default;
+    }
+  }
+  return result;
+}
+
+/** Expand a template spec + bound params into a concrete SegConfig array + synthesis config. */
+function decomposeFromTemplate(
+  spec: WaveTemplateSpec,
+  rawParams: Record<string, unknown>,
+): { segs: SegConfig[]; synthRecipient: SegRecipient; synthPromptTemplate: string } {
+  const params = applySchemaDefaults(rawParams, spec.parameter_schema);
+  const segs: SegConfig[] = [];
+
+  // Fixed SEGs
+  for (const s of spec.segs) {
+    segs.push({
+      seg_id:    interpolate(s.seg_id, params),
+      recipient: interpolate(s.recipient, params) as SegRecipient,
+      prompt:    interpolate(s.prompt_template, params),
+    });
+  }
+
+  // Variable-N expansion
+  if (spec.seg_expand) {
+    const { from_param, seg_id_template, recipient_template, prompt_template } = spec.seg_expand;
+    const arr = params[from_param];
+    if (!Array.isArray(arr)) {
+      throw new Error(
+        `Template "${spec.template_name}@${spec.version}": param "${from_param}" must be an array`,
+      );
+    }
+    for (let i = 0; i < arr.length; i++) {
+      const item = arr[i] as unknown;
+      const segParams: Record<string, unknown> = {
+        ...params,
+        item:  String(item),
+        i:     String(i),
+        i02:   String(i).padStart(2, '0'),
+      };
+      segs.push({
+        seg_id:    interpolate(seg_id_template, segParams),
+        recipient: interpolate(recipient_template, segParams) as SegRecipient,
+        prompt:    interpolate(prompt_template, segParams),
+      });
+    }
+  }
+
+  if (segs.length === 0) {
+    throw new Error(`Template "${spec.template_name}@${spec.version}": produced zero SEGs`);
+  }
+
+  const synthRecipient = interpolate(spec.synthesis.recipient, params) as SegRecipient;
+  const synthPromptTemplate = interpolate(spec.synthesis.prompt_template, params);
+
+  return { segs, synthRecipient, synthPromptTemplate };
+}
+
+/**
+ * Load a named template from wave_templates/.
+ * Name format: "4_way_cohort@v1" or just "4_way_cohort" (defaults to @v1).
+ */
+export function loadTemplate(name: string): WaveTemplateSpec {
+  const resolved = name.includes('@') ? name : `${name}@v1`;
+  const tmplPath = resolve(WAVE_TEMPLATES_DIR, `${resolved}.tmpl.json`);
+  if (!existsSync(tmplPath)) {
+    throw new Error(`Wave template not found: "${resolved}" (looked at ${tmplPath})`);
+  }
+  const raw  = readFileSync(tmplPath, 'utf8');
+  const spec = JSON.parse(raw) as WaveTemplateSpec;
+
+  // HMAC verification (warn on mismatch, do not block)
+  if (spec.hmac) {
+    const { hmac: _hmac, ...rest } = spec;
+    const expected = hmacSign(JSON.stringify(rest));
+    if (spec.hmac !== expected) {
+      console.warn(
+        `[wave-generator] WARNING: template "${resolved}" HMAC mismatch — verify file integrity`,
+      );
+    }
+  }
+
+  return spec;
+}
+
+/** List all installed template names (without .tmpl.json extension). */
+export function listTemplates(): string[] {
+  if (!existsSync(WAVE_TEMPLATES_DIR)) return [];
+  return readdirSync(WAVE_TEMPLATES_DIR)
+    .filter(f => f.endsWith('.tmpl.json'))
+    .map(f => f.replace('.tmpl.json', ''));
+}
+
+/** Expand template → concrete segs + synthesis config, mutating req in place. */
+function expandTemplateIntoRequest(req: WaveRequest): void {
+  if (!req.template_name) return;
+  const spec     = loadTemplate(req.template_name);
+  const expanded = decomposeFromTemplate(spec, req.params ?? {});
+  req.segs                = expanded.segs;
+  req.synthesis_prompt    = req.synthesis_prompt    ?? expanded.synthPromptTemplate;
+  req.synthesis_recipient = req.synthesis_recipient ?? expanded.synthRecipient;
+}
+
 // ─── Operation 1 — RECEIVE / INIT ─────────────────────────────────────────────
 
 /**
@@ -165,6 +369,20 @@ function contentSha256(text: string): string {
  */
 export function initWaveGenerator(): void {
   ensureSubstrateDirs();
+  // Phase B: register built-in templates (idempotent; skips existing)
+  try {
+    // Dynamic import to avoid circular dep; module is always present in dist/
+    const writerPath = resolve(__dirname, 'wave_template_writer.js');
+    if (existsSync(writerPath)) {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const { registerBuiltInTemplates } = require(writerPath) as {
+        registerBuiltInTemplates: (dir: string) => void;
+      };
+      registerBuiltInTemplates(WAVE_TEMPLATES_DIR);
+    }
+  } catch (e) {
+    console.warn('[wave-generator] could not register built-in templates:', e);
+  }
 
   // Scan wave_active/ for abandoned waves
   const activeEntries = readdirSync(WAVE_ACTIVE_DIR);
@@ -207,11 +425,11 @@ export function initWaveGenerator(): void {
 // ─── Operation 2 — DECOMPOSE ──────────────────────────────────────────────────
 
 /**
- * Phase A: inline decomposition — normalise the incoming `segs` array.
- * Phase B: template expansion (not implemented here).
+ * Normalise the (already-expanded) `segs` array into SegProgress records.
+ * Phase B template expansion happens upstream in dispatchWave before this runs.
  */
 function decomposeRequest(req: WaveRequest): SegProgress[] {
-  return req.segs.map((s, i) => ({
+  return (req.segs ?? []).map((s, i) => ({
     seg_id:   s.seg_id ?? `seg_${String(i + 1).padStart(2, '0')}`,
     recipient: s.recipient,
     status:    'pending' as const,
@@ -269,10 +487,11 @@ async function dispatchSeg(
     return data.reply ?? '(no reply)';
   }
 
-  if (seg.recipient === 'knight') {
-    // Knight = Anthropic claude-sonnet-4-5 (Sonnet 4.6 in marketing)
+  if (seg.recipient === 'knight' || seg.recipient === 'bishop') {
+    // Knight + Bishop both use Anthropic claude-sonnet-4-5.
+    // Bishop role is a dispatch-class distinction (synthesis authoring), not a model switch.
     const apiKey = process.env.ANTHROPIC_API_KEY;
-    if (!apiKey) throw new Error('ANTHROPIC_API_KEY not set for knight SEG');
+    if (!apiKey) throw new Error(`ANTHROPIC_API_KEY not set for ${seg.recipient} SEG`);
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -282,13 +501,13 @@ async function dispatchSeg(
       },
       body: JSON.stringify({
         model:      'claude-sonnet-4-5',
-        max_tokens: 2048,
+        max_tokens: 4096,
         messages:   [{ role: 'user', content: segConfig.prompt }],
       }),
     });
-    if (!res.ok) throw new Error(`Knight dispatch HTTP ${res.status}: ${await res.text()}`);
+    if (!res.ok) throw new Error(`${seg.recipient} dispatch HTTP ${res.status}: ${await res.text()}`);
     const data = (await res.json()) as { content?: Array<{ text?: string }>; error?: { message?: string } };
-    if (data.error) throw new Error(`Knight dispatch error: ${data.error.message}`);
+    if (data.error) throw new Error(`${seg.recipient} dispatch error: ${data.error.message}`);
     return data.content?.[0]?.text ?? '(no reply)';
   }
 
@@ -309,7 +528,7 @@ async function runWaveLifecycle(wave: Wave, req: WaveRequest): Promise<void> {
   wave.started_at = new Date().toISOString();
   saveWaveJson(wave);
 
-  const segConfigs = req.segs.map((s, i) => ({
+  const segConfigs = (req.segs ?? []).map((s, i) => ({
     ...s,
     seg_id: wave.segs[i]!.seg_id,
   }));
@@ -428,9 +647,13 @@ function buildEblet(wave: Wave, synthSeg: SegProgress): string {
 
   const contentHash = contentSha256(wave.synthesis_text ?? '');
 
+  const templateLine = wave.request.template_name
+    ? `**Template:** ${wave.request.template_name}\n`
+    : '';
+
   return `# Wave Synthesis Receipt — ${wave.wave_id}
 **Anchor:** ${wave.anchor}
-**Wave Status:** ${wave.status}
+${templateLine}**Wave Status:** ${wave.status}
 **Created:** ${wave.created_at}
 **Completed:** ${wave.completed_at ?? 'N/A'}
 **SEG Count:** ${wave.segs.length}
@@ -451,7 +674,7 @@ ${wave.synthesis_text ?? '(none)'}
 
 ---
 
-*B61 Phase A Wave Generator — LB-STACK-0164 §1. Aircraft Carrier holds. Substrate compounds.*
+*B61 Phase A+B Wave Generator — LB-STACK-0164 §1–§3. Aircraft Carrier holds. Substrate compounds.*
 `;
 }
 
@@ -464,10 +687,15 @@ ${wave.synthesis_text ?? '(none)'}
 export async function dispatchWave(req: WaveRequest): Promise<Wave> {
   ensureSubstrateDirs();
 
+  // Phase B: expand template into inline segs if template_name provided
+  if (req.template_name) {
+    expandTemplateIntoRequest(req);
+  }
+
   const waveId = req.wave_id ?? `wave-${randomUUID()}`;
 
-  if (req.segs.length === 0) {
-    throw new Error('wave request must contain at least one SEG');
+  if (!req.segs || req.segs.length === 0) {
+    throw new Error('wave request must contain at least one SEG (provide segs[] or template_name)');
   }
 
   const segs   = decomposeRequest(req);
@@ -487,7 +715,13 @@ export async function dispatchWave(req: WaveRequest): Promise<Wave> {
   // Persist request to wave_queue/ immediately (crash point A safety)
   writeFileSync(
     waveQueuePath(waveId),
-    JSON.stringify({ waveId, anchor: req.anchor, segs: req.segs.length, queued_at: now }, null, 2),
+    JSON.stringify({
+      waveId,
+      anchor:        req.anchor,
+      template_name: req.template_name ?? null,
+      segs:          (req.segs ?? []).length,
+      queued_at:     now,
+    }, null, 2),
     'utf8',
   );
 
