@@ -33,6 +33,13 @@ export default function App() {
     let cleanupMode: (() => void) | undefined;
     let cleanupAuth: (() => void) | undefined;
 
+    // Guard: window.amplify is injected by the Electron preload via contextBridge.
+    // In rare cases (preload timing edge, test harness) it may be absent — bail silently.
+    if (!window.amplify) {
+      console.warn('[AMPLIFY App] window.amplify not ready — bridge may not have loaded.');
+      return;
+    }
+
     window.amplify.getFrameMode().then(({ mode: m }) => setMode(m));
     cleanupMode = window.amplify.onFrameModeChanged(({ mode: m }) => setMode(m));
 
@@ -72,7 +79,7 @@ export default function App() {
 
   useLayoutEffect(() => {
     if (view !== 'overlay') return;
-    window.amplify.setClickthrough(!overlayNeedsPointerCapture);
+    window.amplify?.setClickthrough(!overlayNeedsPointerCapture);
   }, [view, overlayNeedsPointerCapture]);
 
   const handleModeChange = (newMode: FrameMode) => {
