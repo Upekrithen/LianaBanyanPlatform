@@ -310,7 +310,8 @@ function createTray(): void {
     : nativeImage.createEmpty();
 
   tray = new Tray(icon);
-  tray.setToolTip('AMPLIFY Computer — CAI Hearth active');
+  // §1 BP041 — NotCents Đ is the product identity; NO-FIAT-CONVERSION carried in tooltip
+  tray.setToolTip('CAI (Đ) — AMPLIFY Computer · Hearth active');
   rebuildTrayMenu();
 }
 
@@ -839,6 +840,10 @@ app.whenReady().then(async () => {
     }
   });
 
+  // §6 BP041 — Hide Electron menu bar by default (non-technical member protection).
+  // Ctrl+Shift+D toggles developer menu on/off at runtime.
+  Menu.setApplicationMenu(null);
+
   // Create overlay + tray
   createOverlayWindow();
   createTray();
@@ -851,10 +856,37 @@ app.whenReady().then(async () => {
     overlayWindow?.hide();
     dashboardWindow?.hide();
   });
+
+  // §6 — Dev menu toggle: Ctrl+Shift+D shows/hides the Electron application menu
+  let devMenuVisible = false;
+  const okDevMenu = globalShortcut.register('CommandOrControl+Shift+D', () => {
+    devMenuVisible = !devMenuVisible;
+    if (devMenuVisible) {
+      const devMenu = Menu.buildFromTemplate([
+        { label: 'Developer', submenu: [
+          { label: 'Reload', role: 'reload' },
+          { label: 'Force Reload', role: 'forceReload' },
+          { label: 'Toggle DevTools', role: 'toggleDevTools' },
+          { type: 'separator' },
+          { label: 'Quit AMPLIFY', click: () => app.quit() },
+        ]},
+      ]);
+      Menu.setApplicationMenu(devMenu);
+    } else {
+      Menu.setApplicationMenu(null);
+    }
+    if (IS_DEV) {
+      console.log(`[Frame] Dev menu ${devMenuVisible ? 'shown' : 'hidden'} via Ctrl+Shift+D`);
+    }
+  });
+
   if (!okQuit || !okHide) {
     console.warn(
       `[Frame] Global escape shortcuts unavailable (quitRegistered=${okQuit} hideRegistered=${okHide}); another app may own the accelerator`,
     );
+  }
+  if (!okDevMenu) {
+    console.warn('[Frame] Ctrl+Shift+D dev-menu toggle unavailable — another app may own the accelerator');
   }
 
   // Register auth IPC handlers (after windows are created)

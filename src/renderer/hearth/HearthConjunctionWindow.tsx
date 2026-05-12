@@ -3,9 +3,11 @@
 // Unifies: B69 App Builder Chat / B82 MoneyPenny / B61A Drekaskip /
 //          Watchdog / B80 Sweat / B81 Tears / B-SE4-1 into ONE window
 //
+// BP041 Design Pass — §3: 3-tab layout (Prove It! / App Builder / Browser)
 // Layout:
-//   Left column:  App Builder Chat (top) | Embedded Chrome (middle) | Drekaskip Status (bottom)
-//   Right column: Conjunction Panel (top) | Active Substrate Panel (bottom)
+//   Left column:  Tab nav + tab content (Prove It! | App Builder | Browser)
+//                 + persistent Drekaskip Wave Status footer band
+//   Right column: In Conjunction panel (top) | Active Substrate Panel (bottom)
 //
 // Founder-coined names (immutable per R-FOUNDER-NAMING-PROVENANCE):
 //   "Hearth Conjunction Window", "In Conjunction", "HEAVY BOOSTER TEST"
@@ -25,6 +27,8 @@ import {
 } from './conjunction/conjunction_state';
 import type { ConjunctionMode, ConjunctionPanelState, ConjunctionResult, BackendAvailability } from './conjunction/types';
 
+type HearthTab = 'prove_it' | 'app_builder' | 'browser';
+
 export function HearthConjunctionWindow() {
   const [panelState, setPanelState] = useState<ConjunctionPanelState>(DEFAULT_PANEL_STATE);
   const [availability, setAvailability] = useState<BackendAvailability>(DEFAULT_AVAILABILITY);
@@ -33,6 +37,10 @@ export function HearthConjunctionWindow() {
   const [conjunctionOutput, setConjunctionOutput] = useState<string | null>(null);
   const [injectionEvents, setInjectionEvents] = useState<Array<{ success: boolean; url: string }>>([]);
   const [showOnDeck, setShowOnDeck] = useState(false);
+  const [activeTab, setActiveTab] = useState<HearthTab>('prove_it');
+  // §4 — Deck Card selections per tab (Founder rule: always 3 options)
+  const [proveCard, setProveCard] = useState<'A' | 'B' | 'C' | null>(null);
+  const [builderCard, setBuilderCard] = useState<'A' | 'B' | 'C'>('B');
   const contextRefreshTimer = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Load initial panel state + availability
@@ -121,6 +129,12 @@ export function HearthConjunctionWindow() {
     window.amplify.conjunctionSetOverride?.(mode).catch(() => { /* non-fatal */ });
   }, []);
 
+  const TAB_META: Record<HearthTab, { icon: string; label: string }> = {
+    prove_it:    { icon: '🎯', label: 'Prove It!' },
+    app_builder: { icon: '🏗️', label: 'App Builder' },
+    browser:     { icon: '🌐', label: 'Browser' },
+  };
+
   return (
     <ConjunctionContext.Provider value={{ panelState, availability, lastResult, selectMode, dispatch, refreshAvailability }}>
       <div style={styles.root}>
@@ -147,49 +161,184 @@ export function HearthConjunctionWindow() {
           </button>
         </div>
 
-        {/* Main layout: left column | right column */}
+        {/* Main layout: left (tabs) | right (panels) */}
         <div style={styles.layout}>
 
-          {/* Left column */}
+          {/* Left column: tab nav + tab content + drekaskip footer */}
           <div style={styles.leftCol}>
-            {/* App Builder Chat (B69) */}
-            <div style={{ ...styles.panel, flex: '0 0 38%' }}>
-              <div style={styles.panelHeader}>
-                <span>🏗️</span> App Builder Chat
-                {conjunctionOutput && (
-                  <span style={styles.panelNote}>Conjunction output available ↓</span>
-                )}
-              </div>
-              <div style={styles.panelBody}>
-                <AppBuilderChat />
-              </div>
+
+            {/* Tab navigation strip */}
+            <div style={styles.tabNav}>
+              {(Object.keys(TAB_META) as HearthTab[]).map((tab) => (
+                <button
+                  key={tab}
+                  style={{
+                    ...styles.tabBtn,
+                    ...(activeTab === tab ? styles.tabBtnActive : {}),
+                  }}
+                  onClick={() => setActiveTab(tab)}
+                >
+                  {TAB_META[tab].icon} {TAB_META[tab].label}
+                </button>
+              ))}
             </div>
 
-            {/* Embedded Chrome (B83b) */}
-            <div style={{ ...styles.panel, flex: '0 0 38%' }}>
-              <div style={styles.panelHeader}>
-                <span>🌐</span> Embedded Chrome
-                <span style={styles.panelNote}>Auto-substrate injection active</span>
-              </div>
-              <div style={{ ...styles.panelBody, padding: 0 }}>
-                <EmbeddedChrome
-                  substrateContext={substrateContext}
-                  onInjectionResult={(r) => setInjectionEvents((e) => [r, ...e].slice(0, 10))}
-                />
-              </div>
+            {/* Tab content area */}
+            <div style={styles.tabContent}>
+
+              {/* ─── Prove It! — trust gateway ───────────────────────────── */}
+              {activeTab === 'prove_it' && (
+                <div style={styles.proveItTab}>
+                  <div style={styles.proveItHeader}>
+                    <span style={styles.proveItTitle}>🎯 Prove It!</span>
+                    <span style={styles.proveItSubtitle}>
+                      Trust gateway — verify the substrate runs on your hardware. Pick how you want to see the proof.
+                    </span>
+                  </div>
+
+                  {/* Deck Cards — 3 options */}
+                  <div style={styles.deckRow}>
+                    {([
+                      { key: 'A', icon: '🎯', title: 'Fire Empirical Proof', desc: 'Run canonical test data through the full 24-SEG Novacula. Instant trust — no setup.' },
+                      { key: 'B', icon: '🧪', title: 'Fire Your Own Test', desc: 'Provide your own input. Wrapped in the same Novacula pipeline — you own the result.' },
+                      { key: 'C', icon: '👀', title: 'Just Watch', desc: 'Read the canonical published synthesis without firing. See what the system produces.' },
+                    ] as { key: 'A' | 'B' | 'C'; icon: string; title: string; desc: string }[]).map(({ key, icon, title, desc }) => (
+                      <button
+                        key={key}
+                        style={{ ...styles.deckCard, ...(proveCard === key ? styles.deckCardActive : {}) }}
+                        onClick={() => setProveCard(proveCard === key ? null : key)}
+                      >
+                        <span style={styles.deckCardIcon}>{icon}</span>
+                        <span style={styles.deckCardTitle}>{title}</span>
+                        <span style={styles.deckCardDesc}>{desc}</span>
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Card action areas */}
+                  {proveCard === 'A' && (
+                    <div style={styles.proveItBody}>
+                      <NovaculaFireButton />
+                      {conjunctionOutput && (
+                        <div style={styles.proveItNote}>Conjunction result ready — see strip below ↓</div>
+                      )}
+                    </div>
+                  )}
+                  {proveCard === 'B' && (
+                    <div style={styles.proveItBody}>
+                      <p style={styles.proveItNote}>Custom test input — fire your data through the Novacula pipeline:</p>
+                      <NovaculaFireButton />
+                    </div>
+                  )}
+                  {proveCard === 'C' && (
+                    <div style={styles.proveItBody}>
+                      {conjunctionOutput ? (
+                        <pre style={styles.synthesisView}>{conjunctionOutput.slice(0, 3000)}</pre>
+                      ) : (
+                        <p style={styles.proveItNote}>
+                          No synthesis result yet. Fire a Novacula test first (Card A or B), then return here to read the output.
+                        </p>
+                      )}
+                    </div>
+                  )}
+                  {proveCard === null && (
+                    <div style={styles.proveItBody}>
+                      <p style={styles.proveItNote}>Pick a card above to get started.</p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* ─── App Builder — 3 modes ───────────────────────────────── */}
+              {activeTab === 'app_builder' && (
+                <div style={styles.appBuilderTab}>
+                  {/* Deck Cards */}
+                  <div style={{ ...styles.deckRow, flexShrink: 0 }}>
+                    {([
+                      { key: 'A', icon: '📦', title: 'Build from Template', desc: 'Choose a cooperative pattern — budget tracker, task list, co-op ledger, and more.' },
+                      { key: 'B', icon: '✏️', title: 'Describe in Plain English', desc: 'Tell CAI what you want. It builds the app locally on your machine. Free, always.' },
+                      { key: 'C', icon: '🌳', title: 'Browse What Members Built', desc: 'Explore apps built by cooperative members. Install any with one click.' },
+                    ] as { key: 'A' | 'B' | 'C'; icon: string; title: string; desc: string }[]).map(({ key, icon, title, desc }) => (
+                      <button
+                        key={key}
+                        style={{ ...styles.deckCard, ...(builderCard === key ? styles.deckCardActive : {}) }}
+                        onClick={() => setBuilderCard(key)}
+                      >
+                        <span style={styles.deckCardIcon}>{icon}</span>
+                        <span style={styles.deckCardTitle}>{title}</span>
+                        <span style={styles.deckCardDesc}>{desc}</span>
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Card content */}
+                  <div style={styles.builderCardBody}>
+                    {builderCard === 'A' && (
+                      <div style={styles.placeholderPane}>
+                        <span style={styles.placeholderIcon}>📦</span>
+                        <span style={styles.placeholderTitle}>Cooperative Template Library</span>
+                        <span style={styles.placeholderDesc}>Coming soon — pattern library for cooperative apps. Card B (Describe in Plain English) is available now.</span>
+                      </div>
+                    )}
+                    {builderCard === 'B' && <AppBuilderChat />}
+                    {builderCard === 'C' && (
+                      <div style={styles.placeholderPane}>
+                        <span style={styles.placeholderIcon}>🌳</span>
+                        <span style={styles.placeholderTitle}>Member App Library</span>
+                        <span style={styles.placeholderDesc}>Browse and install apps built by cooperative members. Coming soon.</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* ─── Browser — 6 chalk-line slots + EmbeddedChrome ───────── */}
+              {activeTab === 'browser' && (
+                <div style={styles.browserTab}>
+                  {/* 6 browser slots */}
+                  <div style={styles.browserSlots}>
+                    {([
+                      { name: 'Chrome',   icon: '🟡', color: '#facc15' },
+                      { name: 'Firefox',  icon: '🦊', color: '#f97316' },
+                      { name: 'Edge',     icon: '🔵', color: '#3b82f6' },
+                      { name: 'Brave',    icon: '🦁', color: '#fb923c' },
+                      { name: 'Embedded', icon: '⚡', color: '#a78bfa' },
+                      { name: 'Vivaldi',  icon: '🔴', color: '#ef4444' },
+                    ]).map(({ name, icon, color }) => (
+                      <div
+                        key={name}
+                        style={{ ...styles.browserSlot, borderColor: `${color}55` }}
+                        title={name === 'Embedded' ? 'Use built-in Chromium (active below)' : `Open in ${name}`}
+                      >
+                        <span style={{ fontSize: '1.4rem' }}>{icon}</span>
+                        <span style={{ ...styles.browserSlotLabel, color }}>{name}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Embedded Chrome below the slot picker */}
+                  <div style={styles.browserEmbedArea}>
+                    <EmbeddedChrome
+                      substrateContext={substrateContext}
+                      onInjectionResult={(r) => setInjectionEvents((e) => [r, ...e].slice(0, 10))}
+                    />
+                  </div>
+                </div>
+              )}
             </div>
 
-            {/* Drekaskip Wave Status (B83c) */}
-            <div style={{ ...styles.panel, flex: '1 1 auto', minHeight: 160 }}>
-              <div style={styles.panelHeader}><span>🌊</span> Drekaskip Wave Status</div>
-              <div style={styles.panelBody}>
-                <NovaculaFireButton />
+            {/* Drekaskip Wave Status — persistent footer band (visible across all tabs) */}
+            <div style={styles.drekaskipFooter}>
+              <div style={styles.drekaskipFooterHeader}>
+                <span>🌊</span> Drekaskip Wave Status
+              </div>
+              <div style={styles.drekaskipFooterBody}>
                 <DrekaskipStatusPanel />
               </div>
             </div>
           </div>
 
-          {/* Right column */}
+          {/* Right column — unchanged */}
           <div style={styles.rightCol}>
             {/* Conjunction Panel (B83a) */}
             <div style={{ ...styles.panel, flex: '0 0 55%' }}>
@@ -302,14 +451,241 @@ const styles: Record<string, React.CSSProperties> = {
     overflow: 'hidden',
     minHeight: 0,
   },
+
+  // ─── Left column: tab nav + tab content + drekaskip footer ──────────────
   leftCol: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '0.5rem',
     flex: 2,
     minWidth: 0,
     overflow: 'hidden',
+    background: '#0f0f1a',
+    borderRadius: '8px',
+    border: '1px solid #2d3748',
   },
+  tabNav: {
+    display: 'flex',
+    flexShrink: 0,
+    borderBottom: '2px solid #2d3748',
+    background: '#12121f',
+  },
+  tabBtn: {
+    flex: 1,
+    padding: '0.5rem 0.25rem',
+    background: 'none',
+    border: 'none',
+    borderRight: '1px solid #2d3748',
+    color: '#718096',
+    fontSize: '0.78rem',
+    fontWeight: 600,
+    cursor: 'pointer',
+    letterSpacing: '0.03em',
+    transition: 'color 0.15s, background 0.15s',
+  },
+  tabBtnActive: {
+    color: '#f6ad55',
+    background: '#1a1a2e',
+    borderBottom: '2px solid #f6ad55',
+    marginBottom: '-2px',
+  },
+  tabContent: {
+    flex: 1,
+    overflow: 'hidden',
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: 0,
+  },
+
+  // ─── Prove It! tab ────────────────────────────────────────────────────────
+  proveItTab: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    padding: '1rem',
+    gap: '1rem',
+    overflow: 'auto',
+  },
+  proveItHeader: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '0.35rem',
+  },
+  proveItTitle: {
+    fontSize: '1.1rem',
+    fontWeight: 700,
+    color: '#f6ad55',
+  },
+  proveItSubtitle: {
+    fontSize: '0.82rem',
+    color: '#a0aec0',
+    lineHeight: 1.5,
+    maxWidth: 480,
+  },
+  proveItBody: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '0.75rem',
+  },
+  proveItNote: {
+    fontSize: '0.75rem',
+    color: '#68d391',
+    fontStyle: 'italic',
+  },
+  synthesisView: {
+    fontSize: '0.75rem',
+    lineHeight: 1.5,
+    color: '#e2e8f0',
+    whiteSpace: 'pre-wrap',
+    wordBreak: 'break-word',
+    background: '#070710',
+    border: '1px solid #2d3748',
+    borderRadius: '6px',
+    padding: '0.75rem',
+    overflow: 'auto',
+    maxHeight: 360,
+  },
+
+  // ─── Deck Cards (§4 — 3 options per tab) ─────────────────────────────────
+  deckRow: {
+    display: 'flex',
+    gap: '0.5rem',
+    flexShrink: 0,
+  },
+  deckCard: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column' as const,
+    alignItems: 'flex-start',
+    gap: '0.3rem',
+    padding: '0.65rem 0.75rem',
+    background: 'transparent',
+    border: '1px solid #2d3748',
+    borderRadius: '8px',
+    cursor: 'pointer',
+    textAlign: 'left' as const,
+    color: '#e2e8f0',
+    transition: 'border-color 0.15s, background 0.15s',
+  },
+  deckCardActive: {
+    borderColor: '#f6ad55',
+    background: 'rgba(246, 173, 85, 0.07)',
+  },
+  deckCardIcon: {
+    fontSize: '1.35rem',
+    lineHeight: 1,
+  },
+  deckCardTitle: {
+    fontSize: '0.78rem',
+    fontWeight: 700,
+    color: '#f6ad55',
+  },
+  deckCardDesc: {
+    fontSize: '0.68rem',
+    color: '#718096',
+    lineHeight: 1.4,
+  },
+
+  // ─── App Builder tab ──────────────────────────────────────────────────────
+  appBuilderTab: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column' as const,
+    gap: '0.5rem',
+    padding: '0.5rem',
+    overflow: 'hidden',
+    minHeight: 0,
+  },
+  builderCardBody: {
+    flex: 1,
+    overflow: 'hidden',
+    minHeight: 0,
+    display: 'flex',
+    flexDirection: 'column' as const,
+  },
+  placeholderPane: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column' as const,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '0.5rem',
+    color: '#718096',
+    padding: '2rem',
+  },
+  placeholderIcon: { fontSize: '2.5rem' },
+  placeholderTitle: { fontSize: '0.95rem', fontWeight: 600, color: '#a0aec0' },
+  placeholderDesc: { fontSize: '0.78rem', textAlign: 'center' as const, maxWidth: 320, lineHeight: 1.5 },
+
+  // ─── Browser tab ─────────────────────────────────────────────────────────
+  browserTab: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column' as const,
+    overflow: 'hidden',
+    minHeight: 0,
+  },
+  browserSlots: {
+    display: 'flex',
+    gap: '0.4rem',
+    padding: '0.5rem',
+    flexShrink: 0,
+    borderBottom: '1px solid #2d3748',
+    background: '#0a0a12',
+  },
+  browserSlot: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column' as const,
+    alignItems: 'center',
+    gap: '0.2rem',
+    padding: '0.4rem 0.25rem',
+    border: '1px solid',
+    borderRadius: '6px',
+    cursor: 'pointer',
+    background: 'rgba(255,255,255,0.02)',
+    transition: 'background 0.15s',
+  },
+  browserSlotLabel: {
+    fontSize: '0.6rem',
+    fontWeight: 600,
+    letterSpacing: '0.04em',
+  },
+  browserEmbedArea: {
+    flex: 1,
+    overflow: 'hidden',
+    minHeight: 0,
+  },
+
+  // ─── Drekaskip footer band (persistent across all tabs) ──────────────────
+  drekaskipFooter: {
+    flexShrink: 0,
+    borderTop: '1px solid #2d3748',
+    background: '#0a0a12',
+    display: 'flex',
+    flexDirection: 'column',
+    maxHeight: 180,
+    overflow: 'hidden',
+  },
+  drekaskipFooterHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '0.4rem',
+    padding: '0.3rem 0.75rem',
+    background: '#111120',
+    borderBottom: '1px solid #2d3748',
+    fontWeight: 600,
+    fontSize: '0.75rem',
+    color: '#718096',
+    flexShrink: 0,
+  },
+  drekaskipFooterBody: {
+    flex: 1,
+    overflow: 'auto',
+    padding: '0.4rem 0.75rem',
+    minHeight: 0,
+  },
+
+  // ─── Right column panels ──────────────────────────────────────────────────
   rightCol: {
     display: 'flex',
     flexDirection: 'column',
@@ -338,13 +714,14 @@ const styles: Record<string, React.CSSProperties> = {
     color: '#a0aec0',
     flexShrink: 0,
   },
-  panelNote: { marginLeft: 'auto', fontSize: '0.65rem', color: '#68d391' },
   panelBody: {
     flex: 1,
     overflow: 'auto',
     padding: '0.5rem',
     minHeight: 0,
   },
+
+  // ─── Strips & toasts ─────────────────────────────────────────────────────
   onDeckStrip: {
     borderTop: '2px solid #3b82f6',
     background: '#070710',
