@@ -29,7 +29,11 @@ END $$;
 
 -- Add tier_class column to bounties table
 -- Nullable for backward-compat with existing BP009 bounties (non-tier bounties)
+-- featured_order: BP009 used CREATE TABLE IF NOT EXISTS which was a no-op (baseline
+-- had already created the table); add it here with IF NOT EXISTS to patch the gap.
 ALTER TABLE public.bounties
+  ADD COLUMN IF NOT EXISTS featured_order INTEGER,
+  ADD COLUMN IF NOT EXISTS featured_in_lb_frame BOOLEAN NOT NULL DEFAULT FALSE,
   ADD COLUMN IF NOT EXISTS tier_class public.bounty_tier_class,
   ADD COLUMN IF NOT EXISTS marks_pay_rate_multiplier NUMERIC(4,2),
   ADD COLUMN IF NOT EXISTS is_tier_bounty BOOLEAN NOT NULL DEFAULT FALSE;
