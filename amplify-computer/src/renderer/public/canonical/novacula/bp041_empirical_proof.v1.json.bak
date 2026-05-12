@@ -1,11 +1,8 @@
 {
   "canonical_id": "bp041_empirical_proof_novacula",
-  "version": "v2",
-  "schema": "adaptive_concurrency_v1",
-  "anchor": "Mnemosyne BP041 Empirical Proof Novacula — 24-SEG · adaptive-concurrency · canonical · member-replicable",
-  "description": "K533 Reproducibility Pack canonical test #1. Proof = 24/24 substantive SEGs + synthesis present. Dispatch shape (parallel vs rolling window) is substrate-determined by concurrency cap — does not affect validity. Synthesis content hash is non-deterministic and is NOT a verification criterion.",
-  "seg_count_target": 24,
-  "acceptable_min": 12,
+  "version": "v1",
+  "anchor": "Mnemosyne BP041 Empirical Proof Novacula — 24-SEG max-density · canonical · member-replicable",
+  "description": "K533 Reproducibility Pack canonical test #1. Member fires from inside Mnemosyne; synthesis content hash compared to published canonical for empirical replication proof.",
   "segs": [
     {
       "seg_id": "seg_novacula_01",
