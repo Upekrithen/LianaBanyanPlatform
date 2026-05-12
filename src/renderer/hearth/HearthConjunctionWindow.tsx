@@ -15,6 +15,7 @@ import { AppBuilderChat } from './AppBuilderChat';
 import { ConjunctionPanel } from './conjunction/ConjunctionPanel';
 import { EmbeddedChrome } from './embedded_browser/EmbeddedChrome';
 import { DrekaskipStatusPanel } from './drekaskip_status/DrekaskipStatusPanel';
+import { NovaculaFireButton } from './drekaskip_status/NovaculaFireButton';
 import { ActiveSubstratePanel } from './active_substrate/ActiveSubstratePanel';
 import { OnDeckPanel } from './on_deck/OnDeckPanel';
 import {
@@ -182,6 +183,7 @@ export function HearthConjunctionWindow() {
             <div style={{ ...styles.panel, flex: '1 1 auto', minHeight: 160 }}>
               <div style={styles.panelHeader}><span>🌊</span> Drekaskip Wave Status</div>
               <div style={styles.panelBody}>
+                <NovaculaFireButton />
                 <DrekaskipStatusPanel />
               </div>
             </div>
