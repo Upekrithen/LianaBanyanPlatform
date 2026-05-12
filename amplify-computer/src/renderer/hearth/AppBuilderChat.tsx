@@ -30,11 +30,18 @@ const PLACEHOLDER_EXAMPLES = [
   'build a contact book with name, email, and phone number',
 ];
 
+// §2+§5 BP041 — CAI rebrand + Helena Pedagogy copy (give the answer first + prime with example).
+// "Hearth" is the internal Ollama-fallback label; member-facing brand is CAI.
+const CAI_GREETING =
+  "Hi! I'm CAI. Describe a tool you want — a task list, a chore tracker, " +
+  "a co-op budget that converts dollars to Marks — and I'll build it on your machine. " +
+  "Free, local, no cloud needed. Try: 'a task list where I can check off completed items.'";
+
 export function AppBuilderChat({ onBuildComplete, onBuildError, onProgress }: AppBuilderChatProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: 'hearth',
-      content: "Hi! I'm Hearth. Tell me what app you'd like me to build — in plain English. I'll generate it right here on your computer. What would you like?",
+      content: CAI_GREETING,
       ts: new Date().toISOString(),
     },
   ]);
@@ -130,7 +137,7 @@ export function AppBuilderChat({ onBuildComplete, onBuildError, onProgress }: Ap
               ...(msg.role === 'member' ? styles.memberBubble : styles.hearthBubble),
             }}
           >
-            <div style={styles.bubbleRole}>{msg.role === 'member' ? 'You' : '🔥 Hearth'}</div>
+            <div style={styles.bubbleRole}>{msg.role === 'member' ? 'You' : 'Đ CAI'}</div>
             <div style={styles.bubbleContent}>{msg.content}</div>
           </div>
         ))}
@@ -138,7 +145,7 @@ export function AppBuilderChat({ onBuildComplete, onBuildError, onProgress }: Ap
         {/* Live build progress */}
         {building && progress && (
           <div style={{ ...styles.bubble, ...styles.hearthBubble }}>
-            <div style={styles.bubbleRole}>🔥 Hearth</div>
+            <div style={styles.bubbleRole}>Đ CAI</div>
             <div style={styles.progressBar}>
               <div
                 style={{ ...styles.progressFill, width: `${progress.percent ?? 0}%` }}
@@ -150,7 +157,7 @@ export function AppBuilderChat({ onBuildComplete, onBuildError, onProgress }: Ap
 
         {building && !progress && (
           <div style={{ ...styles.bubble, ...styles.hearthBubble }}>
-            <div style={styles.bubbleRole}>🔥 Hearth</div>
+            <div style={styles.bubbleRole}>Đ CAI</div>
             <div style={styles.spinner}>Building…</div>
           </div>
         )}

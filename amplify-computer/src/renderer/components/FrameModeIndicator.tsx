@@ -72,6 +72,9 @@ export const FrameModeIndicator: React.FC<FrameModeIndicatorProps> = ({
         style={degraded ? { filter: 'grayscale(0.7)', opacity: 0.5 } : undefined}
       />
 
+      {/* §7 BP041 — CAI Đ product-identity stamp (semi-transparent, bottom-right, non-interactive) */}
+      <span className="lb-cai-stamp" aria-hidden="true">Đ CAI</span>
+
       {/* Corner mode indicator — bottom-right */}
       <div
         className={`lb-corner-indicator lb-corner-indicator--${effectiveMode}`}
