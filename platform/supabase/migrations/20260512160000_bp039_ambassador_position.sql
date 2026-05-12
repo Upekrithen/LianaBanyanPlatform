@@ -1,4 +1,4 @@
-﻿-- BP039: Ambassador Position Schema & Coalition Substrate Plumbing
+-- BP039: Ambassador Position Schema & Coalition Substrate Plumbing
 -- Enables members to declare coalition ambassador positions and track matching contributions
 
 -- ============================================================================
@@ -6,10 +6,10 @@
 -- ============================================================================
 CREATE TABLE IF NOT EXISTS public.coalition_ambassadors (
     id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-    member_id uuid NOT NULL REFERENCES public.members(id) ON DELETE CASCADE,
+    member_id uuid NOT NULL REFERENCES public.member_profiles(id) ON DELETE CASCADE,
     coalition_id text NOT NULL,
     coalition_label text NOT NULL,
-    initiative_id uuid REFERENCES public.initiatives(id) ON DELETE SET NULL,
+    initiative_id text REFERENCES public.initiatives(id) ON DELETE SET NULL,
     status text NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'active', 'withdrawn', 'suspended')),
     declared_at timestamptz NOT NULL DEFAULT now(),
     activated_at timestamptz,
@@ -57,7 +57,7 @@ CREATE POLICY ambassadors_update_own
 CREATE TABLE IF NOT EXISTS public.coalition_matches (
     id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
     ambassador_id uuid NOT NULL REFERENCES public.coalition_ambassadors(id) ON DELETE CASCADE,
-    matcher_member_id uuid REFERENCES public.members(id),
+    matcher_member_id uuid REFERENCES public.member_profiles(id),
     contribution_credits numeric NOT NULL CHECK (contribution_credits > 0),
     contribution_currency text NOT NULL CHECK (contribution_currency IN ('credits', 'marks', 'joules')),
     matched_at timestamptz NOT NULL DEFAULT now(),

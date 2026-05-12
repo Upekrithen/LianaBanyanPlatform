@@ -1,4 +1,4 @@
-﻿-- BP039: Council member voting mechanism for Initiative #15
+-- BP039: Council member voting mechanism for Initiative #15
 -- Migration: 20260512130000_bp039_council_voting.sql
 
 -- Enable UUID extension if not already enabled
@@ -6,8 +6,8 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- Create council_voting_cycles table
 CREATE TABLE IF NOT EXISTS public.council_voting_cycles (
-    id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-    initiative_id uuid NOT NULL REFERENCES public.initiatives(id) ON DELETE CASCADE,
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    initiative_id text NOT NULL REFERENCES public.initiatives(id) ON DELETE CASCADE,
     cycle_label text NOT NULL,
     cycle_start timestamptz NOT NULL,
     cycle_end timestamptz NOT NULL,
@@ -18,9 +18,9 @@ CREATE TABLE IF NOT EXISTS public.council_voting_cycles (
 
 -- Create council_votes table
 CREATE TABLE IF NOT EXISTS public.council_votes (
-    id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
     cycle_id uuid NOT NULL REFERENCES public.council_voting_cycles(id) ON DELETE CASCADE,
-    voter_member_id uuid NOT NULL REFERENCES public.members(id) ON DELETE CASCADE,
+    voter_member_id uuid NOT NULL REFERENCES public.member_profiles(id) ON DELETE CASCADE,
     candidate_crown_id uuid NOT NULL REFERENCES public.initiative_crowns(id) ON DELETE CASCADE,
     vote_class text DEFAULT 'support' CHECK (vote_class IN ('support', 'abstain', 'reject')),
     cast_at timestamptz DEFAULT now(),
@@ -69,16 +69,10 @@ CREATE POLICY cycles_read_all ON public.council_voting_cycles
     FOR SELECT
     USING (true);
 
--- Policy: Only admins can manage voting cycles (placeholder - adjust based on your admin logic)
+-- Policy: Only service_role can manage voting cycles
 CREATE POLICY cycles_write_admin ON public.council_voting_cycles
     FOR ALL
-    USING (
-        EXISTS (
-            SELECT 1 FROM public.members
-            WHERE id = auth.uid()
-            AND role IN ('admin', 'steward')
-        )
-    );
+    USING (auth.jwt() ->> 'role' = 'service_role');
 
 -- Create a view for vote tallies (useful for reporting)
 CREATE OR REPLACE VIEW public.council_vote_tallies AS

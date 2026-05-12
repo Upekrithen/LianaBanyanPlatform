@@ -1,11 +1,11 @@
-﻿-- BP039: Red Carpet Dispatch Flow - Pedestal Vote Canon Table
+-- BP039: Red Carpet Dispatch Flow - Pedestal Vote Canon Table
 -- This table tracks high-value recipients who receive personalized Frame bundles
 
 CREATE TABLE IF NOT EXISTS public.pedestal_vote_canon (
   id              uuid          PRIMARY KEY DEFAULT gen_random_uuid(),
   recipient_name  text          NOT NULL,
   recipient_slug  text          NOT NULL UNIQUE,
-  initiative_id   uuid          REFERENCES public.initiatives(id),
+    initiative_id   text          REFERENCES public.initiatives(id),
   pedestal_class  text          NOT NULL,
   vote_status     text          NOT NULL DEFAULT 'awaiting_initial_outreach'
                   CHECK (vote_status IN (

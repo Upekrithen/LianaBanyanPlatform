@@ -1,4 +1,4 @@
-﻿-- Migration: BP039 Three-Currency Ledger (Credits/Marks/Joules)
+-- Migration: BP039 Three-Currency Ledger (Credits/Marks/Joules)
 -- Date: 2026-05-12 12:00:00
 -- Description: Implements append-only ledger for cooperative currencies with NO-FIAT-CONVERSION enforcement
 
@@ -23,10 +23,10 @@ CREATE TABLE IF NOT EXISTS public.append_only_currency_ledger (
     txn_at timestamptz NOT NULL DEFAULT now(),
 
     -- Participant references (nullable to support different transaction types)
-    from_member_id uuid REFERENCES public.members(id) ON DELETE RESTRICT,
-    to_member_id uuid REFERENCES public.members(id) ON DELETE RESTRICT,
-    from_provider_id uuid REFERENCES public.participating_providers(id) ON DELETE RESTRICT,
-    to_provider_id uuid REFERENCES public.participating_providers(id) ON DELETE RESTRICT,
+    from_member_id uuid REFERENCES public.member_profiles(id) ON DELETE RESTRICT,
+    to_member_id uuid REFERENCES public.member_profiles(id) ON DELETE RESTRICT,
+    from_provider_id uuid,
+    to_provider_id uuid,
 
     -- Transaction details
     currency cooperative_currency NOT NULL,
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS public.append_only_currency_ledger (
     ),
 
     -- Optional initiative context
-    initiative_id uuid REFERENCES public.initiatives(id) ON DELETE SET NULL,
+    initiative_id text REFERENCES public.initiatives(id) ON DELETE SET NULL,
 
     -- Cryptographic chain integrity
     prior_txn_hash text,
@@ -162,7 +162,7 @@ SELECT
         0
     ) AS balance
 FROM
-    public.members m
+    public.member_profiles m
 CROSS JOIN (
     SELECT unnest(enum_range(NULL::cooperative_currency)) AS currency
 ) c
@@ -181,33 +181,9 @@ GRANT SELECT ON public.member_currency_balances TO authenticated;
 ALTER VIEW public.member_currency_balances SET (security_invoker = true);
 
 -- ============================================================================
--- 7. CREATE PROVIDER CURRENCY BALANCES VIEW
+-- 7. PROVIDER CURRENCY BALANCES VIEW (deferred — participating_providers table not yet in schema)
 -- ============================================================================
-
-CREATE OR REPLACE VIEW public.provider_currency_balances AS
-SELECT
-    p.id AS provider_id,
-    c.currency,
-    COALESCE(
-        SUM(CASE WHEN l.to_provider_id = p.id THEN l.amount ELSE 0 END) -
-        SUM(CASE WHEN l.from_provider_id = p.id THEN l.amount ELSE 0 END),
-        0
-    ) AS balance
-FROM
-    public.participating_providers p
-CROSS JOIN (
-    SELECT unnest(enum_range(NULL::cooperative_currency)) AS currency
-) c
-LEFT JOIN public.append_only_currency_ledger l
-    ON (l.from_provider_id = p.id OR l.to_provider_id = p.id)
-    AND l.currency = c.currency
-GROUP BY
-    p.id, c.currency
-ORDER BY
-    p.id, c.currency;
-
--- Grant access to the view
-GRANT SELECT ON public.provider_currency_balances TO authenticated;
+-- View will be created in a follow-up migration once participating_providers is added.
 
 -- ============================================================================
 -- 8. HELPER FUNCTION: CALCULATE TRANSACTION HASH
@@ -299,7 +275,7 @@ CREATE TRIGGER trigger_auto_calculate_txn_hash
 GRANT SELECT ON public.append_only_currency_ledger TO authenticated;
 GRANT INSERT ON public.append_only_currency_ledger TO authenticated;
 GRANT SELECT ON public.member_currency_balances TO authenticated;
-GRANT SELECT ON public.provider_currency_balances TO authenticated;
+-- GRANT SELECT ON public.provider_currency_balances TO authenticated; -- deferred until participating_providers exists
 
 -- ============================================================================
 -- VERIFICATION QUERIES (Run these after migration to verify)

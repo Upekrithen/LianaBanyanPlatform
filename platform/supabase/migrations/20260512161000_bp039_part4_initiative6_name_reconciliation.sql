@@ -1,14 +1,14 @@
-﻿-- BP039 Part 4: Initiative #6 Name Drift Reconciliation
+-- BP039 Part 4: Initiative #6 Name Drift Reconciliation
 -- Canonical: "Tatiana Schlossberg Health Accords"
 -- Corrects any drift from legacy "Lifeline Medications Access" references
 
 -- ============================================================================
--- UPDATE: initiative_name column
+-- UPDATE: name column (initiatives.name is the canonical display name)
 -- ============================================================================
 UPDATE public.initiatives
-SET initiative_name = 'Tatiana Schlossberg Health Accords'
+SET name = 'Tatiana Schlossberg Health Accords'
 WHERE initiative_number = 6
-  AND initiative_name IS DISTINCT FROM 'Tatiana Schlossberg Health Accords';
+  AND name IS DISTINCT FROM 'Tatiana Schlossberg Health Accords';
 
 -- ============================================================================
 -- CONDITIONAL UPDATE: display_name column (if exists)
