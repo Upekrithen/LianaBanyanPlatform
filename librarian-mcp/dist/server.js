@@ -25,6 +25,7 @@ import { queryPheromone, buildPheromoneIndex, emitPheromone } from "./scribes/ph
 import { getInboundStatus } from "./scribes/hounds.js";
 import { runDispatchPawn, getDispatchStatus, cancelDispatch, listRecentDispatches, } from "./pawn_dispatch.js";
 import { runDispatchRook } from "./rook_dispatch.js";
+import { autobatonDispatch, } from "./autobaton_dispatch.js";
 import { indexPawnReturns, readHighPrioritySurface, getIndexedReturnCount, } from "./pawn_return_indexer.js";
 import { teamDispatch } from "./team_dispatcher/dispatcher.js";
 import { getScribeAccessDescriptor, } from "./team_dispatcher/cohort_class_enforcement.js";
@@ -65,7 +66,7 @@ import { localToFederation, federationToLocal, getTranslationProvenance, } from 
 import { writeBackViolationEvent, queryRsHistory, drainRetryQueue, aggregateByRule, } from "./reminder_scribe/substrate_writeback.js";
 // KN-I4: Reminder Scribe metrics aggregator
 import { buildMetricsDashboard, formatMetricsSummaryMarkdown, } from "./reminder_scribe/metrics_aggregator.js";
-// KN-I2: Catechist Scribe grader extension
+// KN-I2 + BP028 R12-R17: Catechist Scribe grader extension
 import { runSessionOpenGrade, formatGradeMarkdown, } from "./catechist/grader.js";
 import { computeBalance, computeAudit, } from "./joules/balance.js";
 import { JoulesOperations } from "./joules/operations.js";
@@ -73,6 +74,8 @@ import { JoulesOperations } from "./joules/operations.js";
 import { readAllAssignments, ALL_STRATA, } from "./strata/schema.js";
 import { StrataQuery, } from "./strata/query.js";
 import { detectiveQueryByStratum, } from "./strata/cross_cut.js";
+// SE-4 Shadow E-Signal Retrofit (B-SE4-1 / LB-STACK-0172 / BP033)
+import { detectiveQueryBatch } from "./se4/integrations/detective_se4.js";
 // KN-K1/K2/K3: Pod-K Codex (Layer 8 Canon-of-Canons)
 import { allocateCodexSerial, appendCodexEntry, readAllCodexEntries, getCodexById, queryCodex, } from "./codex/schema.js";
 import { CodexBinding, } from "./codex/binding.js";
@@ -80,6 +83,45 @@ import { reserveNextSerial, bindReservation, expireReservations, queryReservatio
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const INDEX_DIR = resolve(__dirname, "..", "index");
+// ── WORKING_KEYS.env startup loader ─────────────────────────────────────────
+// Populates missing process.env vars from WORKING_KEYS.env so all dispatch
+// modules (Anthropic / Gemini / Perplexity / OpenAI) find their working keys
+// without requiring the caller to pre-export them in the MCP host env.
+// Values are NEVER logged — only key names and counts.
+(function loadWorkingKeysEnv() {
+    try {
+        const wkPath = resolve(__dirname, "..", "..", "Asteroid-ProofVault", "LockBox", "WORKING_KEYS.env");
+        if (!existsSync(wkPath)) {
+            console.error("[WORKING_KEYS] WORKING_KEYS.env not found — skipping.");
+            return;
+        }
+        const lines = readFileSync(wkPath, "utf-8").split(/\r?\n/);
+        let loaded = 0;
+        let skipped = 0;
+        for (const raw of lines) {
+            const line = raw.trim();
+            if (!line || line.startsWith("#"))
+                continue;
+            const eqIdx = line.indexOf("=");
+            if (eqIdx < 1)
+                continue;
+            const key = line.slice(0, eqIdx).trim();
+            const val = line.slice(eqIdx + 1).trim().replace(/^["']|["']$/g, "");
+            if (!key || !val)
+                continue;
+            if (process.env[key]) {
+                skipped++;
+                continue;
+            }
+            process.env[key] = val;
+            loaded++;
+        }
+        console.error(`[WORKING_KEYS] Loaded ${loaded} key(s) from WORKING_KEYS.env (${skipped} already set in env).`);
+    }
+    catch (e) {
+        console.error(`[WORKING_KEYS] Failed to load WORKING_KEYS.env: ${e.message}`);
+    }
+})();
 // K520.5 ΓÇö First-Consult Edict substrate cache (A&A #2310)
 const SUBSTRATE_CACHE_DIR = resolve(homedir(), ".lb-session");
 const SUBSTRATE_CACHE_FILE = resolve(SUBSTRATE_CACHE_DIR, "substrate_cache.json");
@@ -2476,8 +2518,46 @@ registerTool("detective_investigate", "Cross-Scribe investigation (A&A #2316 Det
         };
     }
 });
-// ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
-// KN100/BP015 ΓÇö DETECTIVE TEAM (P4) + ADVERSARIAL FENCE TESTING (P5)
+// ─────────────────────────────────────────────────────────────────────────────
+// SE-4 Detective Compositional Query (B-SE4-1 / LB-STACK-0172 / BP033)
+// ─────────────────────────────────────────────────────────────────────────────
+/**
+ * SE-4 Detective Compositional Query — Power-Set Burst (B-SE4-1)
+ *
+ * Accepts an array of claims and fires a SINGLE power-set burst that returns
+ * union hits + intersection hits for every non-empty subset (2^N - 1 combos).
+ *
+ * detectiveQueryBatch(['SE-4', 'HMAC', 'power-set']) = 7 subsets in one call.
+ * Replaces 7 separate detective_investigate calls.
+ *
+ * Carries a SE-4 Envelope on the result — HMAC-fingerprinted, Lamport-clocked,
+ * power-set collision-free. Used as Prov-19 patent empirical receipt generator.
+ */
+registerTool("se4_detective_investigate", "SE-4 Detective compositional power-set burst (B-SE4-1 / LB-STACK-0172 / BP033). Accepts array of claims and returns union hits + intersection hits for every non-empty subset (2^N-1 combos). Replaces N separate detective_investigate calls with a single SE-4 burst. Result carries SE4Envelope (HMAC, Lamport clock, power-set identity). Max 8 claims per burst (255 subsets). Prov-19 patent receipt generator.", {
+    claims: z.array(z.string().min(1).max(300)).min(1).max(8).describe("Array of 1–8 claim strings to investigate compositionally. " +
+        "e.g. ['SE-4', 'HMAC', 'power-set'] returns union + all 7 intersection subsets."),
+    top_k_per_claim: z.number().int().min(1).max(50).optional().describe("Max pheromone hits to fetch per individual claim (default 20)."),
+    top_k_union: z.number().int().min(1).max(200).optional().describe("Max hits to return in the unionHits array (default 50)."),
+    decay_active: z.boolean().optional().describe("Apply pheromone decay scoring (default true)."),
+}, async ({ claims, top_k_per_claim, top_k_union, decay_active }) => {
+    try {
+        const result = detectiveQueryBatch(claims, {
+            topKPerClaim: top_k_per_claim,
+            topKUnion: top_k_union,
+            decayActive: decay_active,
+        });
+        return {
+            content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+        };
+    }
+    catch (err) {
+        return {
+            content: [{ type: "text", text: JSON.stringify({ ok: false, error: err.message }) }],
+        };
+    }
+});
+// ─────────────────────────────────────────────────────────────────────────────
+// KN100/BP015 — DETECTIVE TEAM (P4) + ADVERSARIAL FENCE TESTING (P5)
 // ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 /**
  * Detective TEAM Investigate ΓÇö Priority 4 KN100/BP015
@@ -4302,6 +4382,47 @@ registerTool("dispatch_rook", "Bushel 36 Phase 2 (BP025) - Rook Dispatch Mechani
     const result = await runDispatchRook({ prompt_content, expected_return_path, multimodal_inputs, model, max_tokens });
     return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
 });
+registerTool("autobaton_dispatch", "BP028 AutoBaton production router: consults task_class (explicit or heuristic), routes synthesis to " +
+    "claude-haiku-4-5-20251001, coordination/edit_precision to Sonnet, flagship to Opus, research_external to " +
+    "dispatch_pawn, cross_domain_synthesis to Rook (Gemini 3.1 Pro preview). Logs MAD telemetry to " +
+    "~/.lb-session/mad_data.jsonl. Optional ab_test (synthesis Haiku vs Sonnet 50/50) and blind_grade_output.", {
+    prompt: z.string().describe("Prompt text to dispatch"),
+    task_class: z
+        .enum([
+        "synthesis",
+        "coordination",
+        "edit_precision",
+        "flagship_deliberation",
+        "research_external",
+        "cross_domain_synthesis",
+    ])
+        .optional()
+        .describe("Explicit task class (recommended for Bishop SEG dispatches)"),
+    session_id: z.string().optional().describe("Session id for MAD row (default autobaton)"),
+    model_override: z.string().optional().describe("Force model id (sets model_routed_reason=override)"),
+    max_tokens: z.number().int().min(1).max(8192).optional(),
+    ab_test: z.boolean().optional().default(false).describe("If true and task_class is synthesis: 50/50 Haiku vs Sonnet"),
+    blind_grade_output: z
+        .boolean()
+        .optional()
+        .default(false)
+        .describe("Strip model identifiers from output_for_grade for blind grading"),
+    substrate_context_loaded: z.boolean().optional().default(false),
+    substrate_eblets_pre_injected: z.array(z.string()).optional().default([]),
+}, async ({ prompt, task_class, session_id, model_override, max_tokens, ab_test, blind_grade_output, substrate_context_loaded, substrate_eblets_pre_injected, }) => {
+    const result = await autobatonDispatch({
+        prompt,
+        task_class: task_class,
+        session_id,
+        model_override,
+        max_tokens,
+        ab_test,
+        blind_grade_output,
+        substrate_context_loaded,
+        substrate_eblets_pre_injected,
+    });
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+});
 registerTool("check_pawn_dispatch", "K532 ΓÇö Check status of a Pawn dispatch by dispatch_id. Returns dispatch record including status, cost, return path, attempt_log.", {
     dispatch_id: z.string().describe("UUID returned by dispatch_pawn"),
 }, async ({ dispatch_id }) => {
@@ -5632,48 +5753,106 @@ server.tool("reminder_scribe_drain_retry", "KN-I3 / BP017 ΓÇö Drain Reminder 
 });
 // ΓöÇΓöÇΓöÇ KN-I2: Catechist session-open grade MCP tool ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
 /**
- * catechist_session_open_grade ΓÇö session-open discipline grading.
- * Runs R01-R10 base checklist + Reminder Scribe violation-history-summary
- * (rolling 7-day window) per AI member. Anti-shame: empirical counts/rates only.
+ * catechist_session_open_grade — session-open discipline grading.
+ * Runs R01-R10 base checklist + R12-R17 BP028 operational-discipline rules
+ * + Reminder Scribe violation-history-summary (rolling 7-day window).
+ * Anti-shame: empirical counts/rates only.
  *
- * KN036 (base R01-R10) + KN-I2 extension (violation-history-summary block).
+ * KN036 (base R01-R10) + KN-I2 extension (violation-history-summary block)
+ * + BP028 R12-R17 extension (Toolbelt/ColdStart/BrickWall/LastHours/PawnBlind/MCPRestart).
  * BRIDLE Rule 4: if violation log unavailable, surfaces empty-history + flag.
  *
  * Substrate write-back: logs catechist_violation_summary provenance event
  * to pheromone substrate (KN104 Detective TEAM pattern).
  */
-server.tool("catechist_session_open_grade", "KN-I2 / BP017 ΓÇö Catechist session-open discipline grade (R01-R10 + Reminder Scribe violation history). " +
-    "Extends Catechist (#2313 KN036 BP004) with per-AI-member rolling-7-day violation-count + correction-stickiness. " +
-    "Anti-shame discipline: empirical counts/rates only ΓÇö no moral judgment. " +
-    "Returns structured grade: R01-R10 PASS/WARN/FAIL/SKIP + violation-history table. " +
+server.tool("catechist_session_open_grade", "KN-I2 / BP017 / BP028 — Catechist session-open discipline grade (R01-R17 + Reminder Scribe violation history). " +
+    "Base R01-R10: KN036 BP004. R12-R17 BP028 operational discipline: Toolbelt-On (R12), Cold Start Ritual (R13), " +
+    "Brick-Wall Full-Loop (R14), Last-Hours Cohort Readiness (R15), Pawn-Blind-Workaround (R16), MCP-Restart Regression (R17). " +
+    "Violation history: per-AI-member rolling-7-day violation-count + correction-stickiness. " +
+    "Anti-shame discipline: empirical counts/rates only — no moral judgment. " +
+    "Returns structured grade: R01-R17 PASS/WARN/FAIL/SKIP + violation-history table. " +
+    "R12-R17 fields with undefined evidence grade as SKIP (backward-compatible with R01-R10-only callers). " +
     "Optionally returns formatted Markdown for session-open display. " +
     "BRIDLE Rule 4: if KN-I1 violation log unavailable, surfaces UNAVAILABLE flag + empty-history. " +
     "Substrate write-back: catechist_violation_summary provenance logged to pheromone. " +
-    "Composes with Reminder Scribe KN-I1 + Bouncer-Scales-Judge KN095 BP011.", {
+    "Composes with Reminder Scribe KN-I1 + Bouncer-Scales-Judge KN095 BP011. LB-STACK-0071..0076.", {
     session_id: z
         .string()
-        .describe("Current session ID (e.g. B135) ΓÇö used in grade output and provenance."),
+        .describe("Current session ID (e.g. B135) — used in grade output and provenance."),
     ai_member: z
         .enum(["bishop", "knight", "pawn", "rook"])
         .describe("AI cohort member being graded."),
     evidence: z
         .object({
+        // ── R01-R10 evidence (existing fields — UNCHANGED) ──────────────────
         brief_me_called_first: z.boolean().optional()
-            .describe("Was brief_me the first tool called at session-open?"),
+            .describe("R01: Was brief_me the first tool called at session-open?"),
         fiat_bridge_detected: z.boolean().optional()
-            .describe("Was any LB-currency-to-fiat conversion language detected in this session?"),
+            .describe("R04/R07: Was any LB-currency-to-fiat conversion language detected in this session?"),
         kprompt_paths_referenced: z.boolean().optional()
-            .describe("Were any K-prompt paths referenced in this session?"),
+            .describe("R05: Were any K-prompt paths referenced in this session?"),
         kprompt_paths_verified: z.boolean().optional()
-            .describe("Were all referenced K-prompt paths verified to exist on disk?"),
+            .describe("R05: Were all referenced K-prompt paths verified to exist on disk?"),
         canon_eblet_write_proposed: z.boolean().optional()
-            .describe("Was a new canon Eblet write proposed in this session?"),
+            .describe("R06: Was a new canon Eblet write proposed in this session?"),
         prior_detective_fanout: z.boolean().optional()
-            .describe("Was Detective TEAM fan-out done before any canon Eblet write proposal?"),
+            .describe("R06: Was Detective TEAM fan-out done before any canon Eblet write proposal?"),
         session_debrief_done: z.boolean().optional()
-            .describe("Was moneypenny_debrief (or equivalent) called at session-close?"),
+            .describe("R09: Was moneypenny_debrief (or equivalent) called at session-close?"),
+        // ── R12: Toolbelt-On Confirmation (BP028 LB-STACK-0071) ─────────────
+        r12_brief_me_returned: z.boolean().optional()
+            .describe("R12: Was brief_me called and returned before substantive work?"),
+        r12_tool_schemas_loaded: z.boolean().optional()
+            .describe("R12: Are work-class tool schemas loaded/listed (Codex/Yoke/dispatch/GADGETs)?"),
+        r12_substrate_cache_fresh: z.boolean().optional()
+            .describe("R12: Is substrate cache fresh (within 24h) or explicitly refreshed this session?"),
+        r12_work_before_toolbelt: z.boolean().optional()
+            .describe("R12: Did substantive work fire before Toolbelt confirmation? (true = FAIL)"),
+        // ── R13: Cold Start Ritual Sequence-Integrity (BP028 LB-STACK-0072) ─
+        r13_steps_out_of_order: z.boolean().optional()
+            .describe("R13: Were Cold Start steps executed out of canonical order? (true = FAIL)"),
+        r13_gather_step_present: z.boolean().optional()
+            .describe("R13: Was the Gather step (pheromone/detective/consult_scribes) present?"),
+        r13_assess_step_evidenced: z.boolean().optional()
+            .describe("R13: Was the Assess step evidenced by measurement/numbers/empirical receipt?"),
+        r13_collect_deferred: z.boolean().optional()
+            .describe("R13: Was Collect (Toolbelt-on) deferred until mid-Apply? (true = WARN)"),
+        r13_adjust_skipped: z.boolean().optional()
+            .describe("R13: Was Adjust skipped entirely with no tactical replan queued? (true = WARN)"),
+        // ── R14: Brick-Wall Full-Loop Discipline (BP028 LB-STACK-0073) ──────
+        r14_prehoc_ask_detected: z.boolean().optional()
+            .describe("R14: Was a pre-hoc 'should I?' / 'may I?' ask detected before action? (true = FAIL)"),
+        r14_missing_surface_after_action: z.boolean().optional()
+            .describe("R14: Did an action land without a completion-block surface? (true = FAIL)"),
+        r14_separate_ok_ask_appended: z.boolean().optional()
+            .describe("R14: Was a separate 'was that OK?' line appended after surface? (true = FAIL)"),
+        r14_surface_sparse: z.boolean().optional()
+            .describe("R14: Was the surface sparse / redirect point unclear? (true = WARN)"),
+        // ── R15: Last-Hours Founder Review Cohort Readiness (BP028 LB-STACK-0074) ─
+        r15_counsel_prep_brief_current: z.boolean().optional()
+            .describe("R15: Is counsel-prep brief §12 scaffold-status current and accurate?"),
+        r15_file_paths_staged: z.boolean().optional()
+            .describe("R15: Were file paths staged / paste-ready code accessible for batch review?"),
+        r15_critical_gap_late_discovered: z.boolean().optional()
+            .describe("R15: Was a critical gap discovered <15min before fire? (true = WARN)"),
+        r15_preemptive_review_ask: z.boolean().optional()
+            .describe("R15: Did session chat show a pre-emptive review ask before last-hours window? (true = FAIL)"),
+        // ── R16: Pawn-Blind-Workaround Respect (BP028 LB-STACK-0075) ────────
+        r16_prior_session_workaround_directive: z.boolean().optional()
+            .describe("R16: Did prior session have a Founder directive routing Pawn task to paste-to-perplexity-web workaround?"),
+        r16_dispatch_pawn_attempted_after_directive: z.boolean().optional()
+            .describe("R16: Was dispatch_pawn attempted for same task class after the workaround directive? (true = FAIL)"),
+        r16_dispatch_pawn_scope_unclear: z.boolean().optional()
+            .describe("R16: Was dispatch_pawn scope unclear relative to Founder directive? (true = WARN)"),
+        // ── R17: MCP-Restart-Needed Regression (BP028 LB-STACK-0076) ────────
+        r17_mcp_restart_required_in_commits: z.boolean().optional()
+            .describe("R17: Does recent Knight commit history contain a 'librarian-mcp restart required' note?"),
+        r17_dispatch_rook_before_restart: z.boolean().optional()
+            .describe("R17: Was dispatch_rook attempted while MCP restart is still pending? (true = FAIL)"),
+        r17_dispatch_rook_restart_status_unclear: z.boolean().optional()
+            .describe("R17: Was dispatch_rook attempted with unclear restart status? (true = WARN)"),
     })
-        .describe("Session evidence for R01-R10 grading. Omit fields you have no evidence for (graded as SKIP)."),
+        .describe("Session evidence for R01-R17 grading. Omit fields you have no evidence for (graded as SKIP). R01-R10 fields unchanged; R12-R17 fields are new BP028 operational-discipline rules."),
     format: z
         .enum(["json", "markdown"])
         .optional()
@@ -6719,8 +6898,7 @@ server.tool("strata_by_stratum", "KN-T4 / BP018 Pod-T ΓÇö List all topics ass
     const topics = _strataQuery.byStratum(stratum);
     return { content: [{ type: "text", text: JSON.stringify({ stratum, topics, count: topics.length }, null, 2) }] };
 });
-server.tool("strata_promote", "KN-T4 / BP018 Pod-T ΓÇö Promote a topic to a higher stratum in the 7-layer Keyword-Pyramid. " +
-    "Builds promotion chain history. Bedrock rejects further promotion. Cannot demote.", {
+server.tool("Builds promotion chain history. Bedrock rejects further promotion. Cannot demote.", {
     topic: z.string().describe("Topic to promote."),
     to_stratum: z.enum(["sand", "soil", "sediment", "sandstone", "limestone", "granite", "bedrock"])
         .describe("Target stratum (must be higher than current)."),
@@ -7224,6 +7402,661 @@ server.tool("coordinate_translation_provenance", "KN-J6.3 / BP018 ΓÇö Dual-Ti
         return { content: [{ type: "text", text: JSON.stringify({ error: String(err) }, null, 2) }], isError: true };
     }
 });
+// ═══════════════════════════════════════════════════════════════════════════
+// B36 PHASE 5 — CAI HEARTH LOCAL INFERENCE LAYER (AMPLIFY Product Foundation)
+// BP025 / Bushel 36 Phase 5
+// ═══════════════════════════════════════════════════════════════════════════
+//
+// Ollama integration as third tier between Arm B substrate and cloud APIs.
+// Query routing: substrate (0.000288ms) → Ollama local (100-500ms) → cloud.
+// Quality threshold detection: substrate-driven heuristic per query class.
+// AMPLIFY product surface: status indicator + cost savings telemetry.
+import { hearthRoute, computeAmplifySnapshot, loadHearthConfig, saveHearthConfig } from "./hearth_ollama.js";
+registerTool("cai_hearth_route", "B36 Phase 5 (BP025) — CAI Hearth 3-tier query router. " +
+    "Tier 1: Arm B substrate (zero cost, 0.000288ms). " +
+    "Tier 2: Local Ollama (zero API cost, 100-500ms, substrate-augmented). " +
+    "Tier 3: Cloud API escalation signal (frontier/complex queries). " +
+    "Returns routing decision, response (if local), and AMPLIFY cost savings data.", {
+    query: z.string().describe("The query to route through the 3-tier Hearth stack"),
+    substrate_hit: z.boolean().optional().default(false)
+        .describe("Whether Arm B substrate returned a hit for this query (caller checks substrate first)"),
+    substrate_context: z.string().optional()
+        .describe("Substrate hit content (if substrate_hit=true, this is the response to return)"),
+    force_tier: z.enum(["substrate", "local", "cloud"]).optional()
+        .describe("Force a specific tier (override quality threshold)"),
+}, async ({ query, substrate_hit, substrate_context, force_tier }) => {
+    const config = loadHearthConfig();
+    // Force overrides
+    if (force_tier === "cloud") {
+        return { content: [{ type: "text", text: JSON.stringify({ routing: "cloud_escalation", quality_score: 0.0, quality_signals: ["force_cloud"], substrate_augmented: !!substrate_hit }) }] };
+    }
+    if (force_tier === "substrate" && substrate_hit && substrate_context) {
+        return { content: [{ type: "text", text: JSON.stringify({ routing: "substrate_hit", response: substrate_context, quality_score: 1.0, quality_signals: ["force_substrate"], substrate_augmented: true }) }] };
+    }
+    const result = await hearthRoute(query, !!substrate_hit, substrate_context ?? null, config);
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+});
+registerTool("amplify_snapshot", "B36 Phase 5 (BP025) — AMPLIFY telemetry snapshot. " +
+    "Returns routing distribution (substrate/local/cloud ratios) and cumulative cost savings. " +
+    "Users see their own hardware 'amplifying' their work via local Ollama inference.", {}, async () => {
+    const snapshot = computeAmplifySnapshot();
+    return { content: [{ type: "text", text: JSON.stringify(snapshot, null, 2) }] };
+});
+registerTool("hearth_config", "B36 Phase 5 (BP025) — Get or update CAI Hearth configuration. " +
+    "Without params: returns current config. With params: updates specified fields. " +
+    "Key fields: enabled, default_model (Ollama model name), quality_threshold (0.0-1.0).", {
+    enabled: z.boolean().optional().describe("Enable/disable CAI Hearth local inference"),
+    default_model: z.string().optional().describe("Ollama model to use (e.g. 'llama3.1:8b-instruct-q4_K_M')"),
+    quality_threshold: z.number().min(0).max(1).optional().describe("Quality threshold for local inference (0.0-1.0, default 0.72)"),
+    substrate_boost: z.number().min(0).max(1).optional().describe("Quality bonus when substrate augments query (default 0.15)"),
+}, async ({ enabled, default_model, quality_threshold, substrate_boost }) => {
+    const config = loadHearthConfig();
+    if (enabled !== undefined)
+        config.enabled = enabled;
+    if (default_model !== undefined)
+        config.default_model = default_model;
+    if (quality_threshold !== undefined)
+        config.quality_threshold = quality_threshold;
+    if (substrate_boost !== undefined)
+        config.substrate_boost = substrate_boost;
+    saveHearthConfig(config);
+    return { content: [{ type: "text", text: JSON.stringify({ success: true, config }, null, 2) }] };
+});
+const _SK_TRIADS = {
+    research: {
+        triad_type: "research",
+        agents: ["bishop", "pawn", "knight"],
+        foreman: "bishop",
+        rationale: "Strategic synthesis + fresh research data + execution capability",
+    },
+    build: {
+        triad_type: "build",
+        agents: ["knight", "rook", "bishop"],
+        foreman: "knight",
+        rationale: "Production builds + multimodal bulk processing + strategic synthesis",
+    },
+    discovery: {
+        triad_type: "discovery",
+        agents: ["knight", "pawn", "rook"],
+        foreman: "knight",
+        rationale: "Exploration + research retrieval + multimodal bulk scanning",
+    },
+    synthesis: {
+        triad_type: "synthesis",
+        agents: ["bishop", "pawn", "rook"],
+        foreman: "bishop",
+        rationale: "Synthesis + research + multimodal — Bushel 35 default triad",
+    },
+};
+const _SK_FULL_SKULK = ["bishop", "knight", "pawn", "rook"];
+function _selectTriad(task) {
+    const t = task.toLowerCase();
+    // Full skulk: Bushel 35-class work (highest priority)
+    if (/\b(bushel.?35|nine.?track|beyond.?colossus|full.?skulk|all.?four.?agents?|multi.?track.?research)\b/i.test(t)) {
+        return { triad_count: 4, triad: _SK_TRIADS.synthesis };
+    }
+    // Build Triad: production build + multimodal assets (Knight leads)
+    if (/\b(build|implement|deploy|ship|develop|create|program|migrate|refactor)\b/i.test(t)
+        && /\b(multimodal|pdf|image|document|figure|chart|visual|scan|file)\b/i.test(t)) {
+        return { triad_count: 3, triad: _SK_TRIADS.build };
+    }
+    // Discovery Triad: corpus exploration + document scanning (Knight leads)
+    if (/\b(discover|explore|scan|survey|find|map|catalog|inventory|prospect)\b/i.test(t)
+        && /\b(pdf|paper|literature|document|image|corpus|library|archive)\b/i.test(t)) {
+        return { triad_count: 3, triad: _SK_TRIADS.discovery };
+    }
+    // Synthesis Triad: aggregate/compare/evaluate existing findings (Bishop leads — wins over pure research)
+    if (/\b(synthesize?|summarize?|compile|aggregate|evaluate|compare|assess|cross.?reference)\b/i.test(t)
+        && /\b(paper|literature|data|findings|results|cross.?document|analysis|research)\b/i.test(t)) {
+        return { triad_count: 3, triad: _SK_TRIADS.synthesis };
+    }
+    // Research Triad: primary research / retrieval signal (Bishop leads)
+    if (/\b(research|study|investigate|literature.?review|state.?of.?the.?art|survey|papers)\b/i.test(t)) {
+        return { triad_count: 3, triad: _SK_TRIADS.research };
+    }
+    return { triad_count: 1, triad: null };
+}
+const _SKULK_LOG_PATH = resolve(__dirname, "..", "stitchpunks", "data", "skulk_dispatch_log.jsonl");
+function _appendSkulkRecord(entry) {
+    try {
+        const dir = dirname(_SKULK_LOG_PATH);
+        if (!existsSync(dir))
+            mkdirSync(dir, { recursive: true });
+        appendFileSync(_SKULK_LOG_PATH, JSON.stringify(entry) + "\n", "utf-8");
+    }
+    catch {
+        // Non-fatal: substrate log failure must not break dispatch
+    }
+}
+function _buildBeatSequence(agents, beat_offset_ms) {
+    return agents.map((agent, i) => ({
+        agent,
+        dispatch_at_ms: i * beat_offset_ms,
+        beat_index: i,
+    }));
+}
+registerTool("skulk_dispatch", "B36 Phase 3 (BP025) — Skulk Coordinator. Calls Optimus Primal (7th axis: triad_count), selects the " +
+    "optimal Triad (Research/Build/Discovery/Synthesis or full Fox Skulk), dispatches agents in synchronized " +
+    "beat-offset pattern (substrate as crankshaft), writes substrate records for Foreman aggregation. " +
+    "Returns triad manifest + beat sequence + dispatch_id. Innovation #2277 extended — 7th axis.", {
+    task_description: z.string().describe("The task to dispatch to the Skulk (fed to Optimus Primal 7th axis)"),
+    triad_override: z.enum(["research", "build", "discovery", "synthesis", "full_skulk"]).optional()
+        .describe("Force a specific triad type instead of Optimus Primal auto-selection"),
+    beat_offset_ms: z.number().int().min(0).max(30000).optional().default(2000)
+        .describe("Milliseconds between successive agent dispatches in beat pattern (default 2000ms)"),
+    foreman_override: z.enum(["bishop", "knight", "pawn", "rook"]).optional()
+        .describe("Override the Foreman agent for this dispatch (default: triad-defined foreman)"),
+}, async ({ task_description, triad_override, beat_offset_ms, foreman_override }) => {
+    const { randomUUID } = await import("crypto");
+    const dispatch_id = randomUUID();
+    const ts = new Date().toISOString();
+    const classified = _classifyForMcp(task_description);
+    const decision = _routeForMcp(classified, "auto");
+    let triad_count;
+    let triad;
+    if (triad_override === "full_skulk") {
+        triad_count = 4;
+        triad = _SK_TRIADS.synthesis;
+    }
+    else if (triad_override) {
+        triad_count = 3;
+        triad = _SK_TRIADS[triad_override];
+    }
+    else {
+        const selected = _selectTriad(task_description);
+        triad_count = selected.triad_count;
+        triad = selected.triad;
+    }
+    const active_agents = triad_count === 4
+        ? _SK_FULL_SKULK
+        : (triad?.agents ?? ["bishop"]);
+    const foreman = foreman_override ?? (triad?.foreman ?? active_agents[0]);
+    const beat_sequence = _buildBeatSequence(active_agents, beat_offset_ms ?? 2000);
+    beat_sequence.forEach(beat => {
+        _appendSkulkRecord({
+            skulk_dispatch_id: dispatch_id,
+            agent: beat.agent,
+            is_foreman: beat.agent === foreman,
+            beat_index: beat.beat_index,
+            dispatch_at_ms: beat.dispatch_at_ms,
+            task_hash: _hashQuery(task_description),
+            triad_type: triad?.triad_type ?? "single",
+            triad_count,
+            optimus_primal_class: classified.class,
+            optimus_primal_confidence: classified.confidence,
+            ts,
+        });
+    });
+    _appendConductorTrace({
+        ts,
+        query_hash: _hashQuery(task_description),
+        classified_as: classified.class,
+        confidence: classified.confidence,
+        mode: "auto",
+        vendor: decision.vendor,
+        model: decision.model,
+        fallback_used: decision.fallbackUsed,
+        skulk_dispatch_id: dispatch_id,
+        triad_type: triad?.triad_type ?? "single",
+        triad_count,
+        axis_7_extension: "B36_Phase_3_BP025",
+    });
+    const result = {
+        dispatch_id,
+        ts,
+        status: "dispatched",
+        optimus_primal: {
+            axis_1_query_class: classified.class,
+            axis_2_confidence: classified.confidence,
+            axis_3_signals: classified.signals,
+            axis_4_mode: "auto",
+            axis_5_vendor: decision.vendor,
+            axis_6_model: decision.model,
+            axis_7_triad_count: triad_count,
+        },
+        triad: {
+            triad_type: triad_count === 4 ? "full_skulk" : (triad?.triad_type ?? "single"),
+            agents: active_agents,
+            foreman,
+            rationale: triad?.rationale ?? "Single-agent task — no triad warranted by Optimus Primal",
+        },
+        beat_sequence,
+        substrate_records_written: beat_sequence.length,
+        next_step: `Foreman (${foreman}) aggregates substrate records. Query skulk_dispatch_id=${dispatch_id} for convergence.`,
+    };
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+});
+// ─── Bushel 61A: Drekaskip Wave Generator MCP Tools ──────────────────────────
+// K30 §10 composability — Wave Generator is K30 with discard_threshold=Infinity.
+// Commit ref: 03e6337 (K30 Contingency Operator, LB-STACK-0185).
+import { tool_wave_dispatch as drekaskip_wave_dispatch, tool_saga_query as drekaskip_saga_query, tool_saga_list as drekaskip_saga_list, } from "./drekaskip/mcp_tools.js";
+import { initWaveGenerator } from "./drekaskip/wave_generator.js";
+// Initialize crash-recovery on server start
+initWaveGenerator();
+registerTool("mcp__drekaskip__wave_dispatch", "Drekaskip Wave Generator (Bushel 61A) — Fire a synchronized fan-out wave across N research/build/discovery axes. " +
+    "Each axis spawns a triad (3 SEG instances) per Skulk B36 P3 spec. All axes race to finish; none discarded " +
+    "(K30 §10: discard_threshold=Infinity, merge_policy=fan_in_synthesize). Results fan-in to consolidated synthesis artifact. " +
+    "Returns wave_id for status polling. Saga naming per LB-STACK-0196 Wave Riders Canon. " +
+    "K30 commit ref: 03e6337 (LB-STACK-0185).", {
+    saga_id: z.string().describe("Saga campaign name (e.g. 'Saga-Galveston-Outreach'). Groups multiple wave instances."),
+    axes: z.array(z.string()).describe("Research/build/discovery axes to fan-out across (e.g. ['research','build','discovery'])."),
+    budget: z.object({
+        max_segs: z.number().describe("Max total SEG instances across all axes (axes × 3 ≤ max_segs)."),
+        timeout_s: z.number().describe("Per-wave timeout in seconds."),
+    }).describe("Wave budget constraints."),
+    beat_offset_ms: z.number().optional().describe("Beat stagger between axis launches in ms (default 50ms)."),
+}, async (args) => {
+    const result = await drekaskip_wave_dispatch(args);
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+});
+registerTool("mcp__drekaskip__saga_query", "Drekaskip Wave Generator — Query all wave instances under a saga. " +
+    "Returns wave count, per-wave fire/complete times, speedup ratios, and SEG counts. " +
+    "Future wave dispatches against the same saga_id can resurrect thread context (B82 MCCI).", {
+    saga_id: z.string().describe("Saga ID to query (e.g. 'Saga-Galveston-Outreach')."),
+}, async (args) => {
+    const result = await drekaskip_saga_query(args);
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+});
+registerTool("mcp__drekaskip__saga_list", "Drekaskip Wave Generator — List all sagas (wave campaigns) ever dispatched. " +
+    "Returns saga_id, wave_count, and last_fire timestamp for each saga.", {}, async () => {
+    const result = await drekaskip_saga_list();
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+});
+// ─── Bushel 82: MoneyPenny — The Big Show Enabler (BP034) ────────────────────
+// Call routing + MCCI continuous context substrate.
+// G1-G12 gates. Cannon: LB-STACK-0170, LB-STACK-0167, LB-STACK-0189.
+import { moneyPennyRoute, moneyPennyHold, moneyPennyResurrect, moneyPennyStatus, moneyPennyAvailabilityGet, moneyPennyAvailabilitySet, moneyPennyAvailabilityInfer, bootstrapMoneyPenny, } from "./moneypenny/server.js";
+import { moneyPennySchedule, } from "./moneypenny/mcp_tools/moneypenny_schedule.js";
+// Bootstrap on server start (ensures state dirs exist; crash-recovery)
+bootstrapMoneyPenny();
+registerTool("mcp__moneypenny__route", "MoneyPenny — Route an inbound interaction to the right destination. " +
+    "Classifies caller class, checks Founder availability, arbitrates priority, " +
+    "dispatches Substantive Engager on hold, writes substrate Eblet receipt. " +
+    "G1/G2/G3 gates. Returns RoutingDecision with outcome, thread_id, receipt_path.", {
+    channel: z.enum(["phone", "email", "slack", "web", "ai_tool"]).describe("Inbound channel"),
+    caller_id: z.string().describe("Caller identifier (email, phone, name, or AI surface ID)"),
+    caller_display_name: z.string().optional().describe("Human-readable caller name"),
+    signal: z.string().describe("What the caller said, wrote, or requested"),
+    caller_class_override: z.enum([
+        "WARREN_BUFFETT", "MACKENZIE_SCOTT", "TALENTS_PRACTITIONER",
+        "FAMILY", "COUNSEL", "PRESS", "UNKNOWN", "INTERNAL_AI",
+    ]).optional().describe("Override the auto-classified caller class"),
+    is_family_emergency: z.boolean().optional().describe("Mark as family emergency (overrides SLEEP state)"),
+    metadata: z.record(z.unknown()).optional().describe("Additional metadata"),
+}, async (args) => {
+    const result = await moneyPennyRoute(args);
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+});
+registerTool("mcp__moneypenny__hold", "MoneyPenny — Place an inbound interaction on substantive hold. " +
+    "Assigns a Kissaki-ranked Substantive Engager and records a HoldHandle. " +
+    "Engager dispatched if caller_message provided. G4 gate.", {
+    thread_id: z.string().describe("Thread ID for the held interaction"),
+    caller_class: z.enum([
+        "WARREN_BUFFETT", "MACKENZIE_SCOTT", "TALENTS_PRACTITIONER",
+        "FAMILY", "COUNSEL", "PRESS", "UNKNOWN", "INTERNAL_AI",
+    ]).describe("Caller class"),
+    reason: z.string().describe("Reason for hold"),
+    caller_message: z.string().optional().describe("Caller's message (triggers Substantive Engager)"),
+}, async (args) => {
+    const result = moneyPennyHold(args);
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+});
+registerTool("mcp__moneypenny__resurrect", "MoneyPenny — Resurrect a dormant thread context. " +
+    "Produces warm-reopen packet: 3K-compressed history + last messages + suggested opener. " +
+    "The 'don't worry about context anymore' primitive. G8 gate.", {
+    thread_id: z.string().describe("Thread ID to resurrect"),
+    new_signal: z.string().optional().describe("New inbound signal that triggered the resurrection"),
+    signal_channel: z.enum(["phone", "email", "slack", "web", "ai_tool"]).optional(),
+    caller_id: z.string().optional().describe("Caller ID associated with the new signal"),
+}, async (args) => {
+    const result = await moneyPennyResurrect(args);
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+});
+registerTool("mcp__moneypenny__status", "MoneyPenny — Query current routing and context state. " +
+    "Returns: active_threads, on_hold count, Founder availability, oldest_held_call, " +
+    "uptime_seconds, total_routed_today, receipt_count_today. G11 gate.", {}, async () => {
+    const result = moneyPennyStatus();
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+});
+registerTool("mcp__moneypenny__availability_get", "MoneyPenny — Read current Founder availability class. " +
+    "Returns: class (DEEP_WORK/OPEN_BLOCK/OUT/SLEEP/FAMILY/COUNSEL), description, set_at, set_by, until. G9 gate.", {}, async () => {
+    const result = moneyPennyAvailabilityGet();
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+});
+registerTool("mcp__moneypenny__availability_set", "MoneyPenny — Set Founder availability class. " +
+    "Classes: DEEP_WORK (only WB/Family/Counsel interrupt), OPEN_BLOCK (most accepted), " +
+    "OUT (hard-out), SLEEP (family emergency only), FAMILY (WB only), COUNSEL (WB only). " +
+    "Optional until timestamp for auto-revert. G9 gate.", {
+    class: z.enum(["DEEP_WORK", "OPEN_BLOCK", "OUT", "SLEEP", "FAMILY", "COUNSEL"])
+        .describe("Availability class to set"),
+    until: z.string().optional().describe("ISO8601 timestamp when to auto-revert to OPEN_BLOCK"),
+}, async (args) => {
+    const result = moneyPennyAvailabilitySet(args);
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+});
+registerTool("mcp__moneypenny__availability_infer", "MoneyPenny — Infer Founder availability from connected calendars (Outlook + Google). " +
+    "Read-only at v1. Returns inferred_class + per-source breakdown. G9 gate.", {}, async () => {
+    const result = await moneyPennyAvailabilityInfer();
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+});
+registerTool("mcp__moneypenny__caller_override", "MoneyPenny — Override a caller's class in the known-callers registry. " +
+    "Founder-direct mechanism. Persisted to ~/.claude/state/moneypenny/known_callers.json. G2 gate.", {
+    caller_id: z.string().describe("Caller identifier (email or phone)"),
+    caller_class: z.enum([
+        "WARREN_BUFFETT", "MACKENZIE_SCOTT", "TALENTS_PRACTITIONER",
+        "FAMILY", "COUNSEL", "PRESS", "UNKNOWN", "INTERNAL_AI",
+    ]).describe("Class to assign to this caller"),
+}, async (args) => {
+    const { overrideCallerClass } = await import("./moneypenny/gateway/router.js");
+    await overrideCallerClass(args.caller_id, args.caller_class);
+    return {
+        content: [{
+                type: "text",
+                text: JSON.stringify({
+                    caller_id: args.caller_id,
+                    new_class: args.caller_class,
+                    ts: new Date().toISOString(),
+                }, null, 2),
+            }],
+    };
+});
+registerTool("mcp__moneypenny__schedule", "MoneyPenny — Propose a time slot for a caller. " +
+    "Read-only v1: generates proposals with prep-window enforcement; does NOT write to calendar. " +
+    "G10 gate.", {
+    caller_class: z.enum([
+        "WARREN_BUFFETT", "MACKENZIE_SCOTT", "TALENTS_PRACTITIONER",
+        "FAMILY", "COUNSEL", "PRESS", "UNKNOWN", "INTERNAL_AI",
+    ]).describe("Caller class (determines prep window)"),
+    duration_minutes: z.number().describe("Meeting duration in minutes"),
+    preferred_window_start: z.string().optional().describe("ISO8601 start of preferred scheduling window"),
+    preferred_window_end: z.string().optional().describe("ISO8601 end of preferred scheduling window"),
+    notes: z.string().optional().describe("Optional scheduling notes"),
+}, async (args) => {
+    const result = await moneyPennySchedule(args);
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+});
+// ─────────────────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════
+// B80 — SWEAT SCRIBE TOOLS (LB-STACK-0215 / BP034)
+// ═══════════════════════════════════════════════════════════════════
+import { sweatLogSignal, sweatQuery, sweatRoundup, regenerateSweatIndex, } from "./scribes/sweat_scribe.js";
+/**
+ * sweat_log_signal — Mode 1: append an effort signal to the Sweat Scribe raw corpus.
+ */
+registerTool("sweat_log_signal", "B80 / LB-STACK-0215 — Sweat Scribe Mode 1: log an effort signal. " +
+    "Appends to ~/.claude/state/sweat_scribe/raw_signals.jsonl. " +
+    "Signal classes: effort_marker | timing_delta | coffee_discipline | yoke_ritual | git_commit. " +
+    "Used by Drekaskip, Reminder Scribe, and direct session invocations.", {
+    source: z.string().describe("Signal source (e.g. 'drekaskip', 'git_commit', 'session_open')"),
+    signal_class: z.enum([
+        "effort_marker",
+        "timing_delta",
+        "coffee_discipline",
+        "yoke_ritual",
+        "git_commit",
+        "trip_readiness",
+        "brick_wall",
+        "gate_check",
+        "other",
+    ]).describe("Discipline class for clustering"),
+    payload: z.string().min(1).max(2000).describe("Human-readable signal description"),
+    session: z.string().optional().describe("Session ID (e.g. BP034)"),
+}, async ({ source, signal_class, payload, session }) => {
+    sweatLogSignal({ source, signal_class, payload, session });
+    return {
+        content: [{ type: "text", text: JSON.stringify({ status: "logged", source, signal_class }, null, 2) }],
+    };
+});
+/**
+ * sweat_query — Mode 3: return current SR inventory + recent empirical receipts.
+ */
+registerTool("sweat_query", "B80 / LB-STACK-0215 — Sweat Scribe Mode 3 (Founder-direct): query current SR inventory. " +
+    "Returns all SR-### rules with status, top load-bearing rules, and recent raw signals. " +
+    "Usage: 'Sweat Scribe, what are we earning?'", {
+    top_k: z.number().min(1).max(7).optional().describe("Top-K most load-bearing rules to surface (default 5)"),
+}, async ({ top_k }) => {
+    const result = sweatQuery(top_k ?? 5);
+    return {
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+    };
+});
+/**
+ * sweat_roundup — Mode 2: weekly Sweat Roundup.
+ * Clusters raw signals, surfaces SR candidates, emits roundup .md file.
+ * Also regenerates INDEX.md.
+ */
+registerTool("sweat_roundup", "B80 / LB-STACK-0215 — Sweat Scribe Mode 2: run weekly Sweat Roundup. " +
+    "Clusters raw signals by discipline class; surfaces new SR candidates; emits SWEAT_ROUNDUP_BP{NNN}.md. " +
+    "Regenerates INDEX.md. Typically called at session-close every ~7 BPs.", {
+    session_id: z.string().describe("Current session ID (e.g. BP034) — used in roundup filename"),
+}, async ({ session_id }) => {
+    const result = sweatRoundup(session_id);
+    regenerateSweatIndex();
+    return {
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+    };
+});
+// ═══════════════════════════════════════════════════════════════════
+// B81 — TEARS SCRIBE TOOLS (LB-STACK-0216 / BP034)
+// ═══════════════════════════════════════════════════════════════════
+import { tearsLogSignal, tearsQuery, trinityReview, emitVelvetFingersAttestation, } from "./scribes/tears_scribe.js";
+/**
+ * tears_log_signal — Mode 1: process a loss-after-effort signal through both gates.
+ * Gate 1: Coroner-first arbitration (coroner claimed → Tears stands down)
+ * Gate 2: Velvet-Fingers attestation (no token → queue only)
+ */
+registerTool("tears_log_signal", "B81 / LB-STACK-0216 — Tears Scribe Mode 1: log a loss-after-effort signal. " +
+    "Enforces Coroner-first arbitration gate AND Velvet-Fingers attestation gate. " +
+    "Status: emitted (both gates pass) | queued (no VF attestation) | coroner_claimed (Coroner took it). " +
+    "Loss classes: prospect-decline | timing-miss | first-contact-failure | outcome-asymmetry | compound-non-arrival.", {
+    session: z.string().describe("Current session ID (e.g. BP034)"),
+    effort_signal: z.string().min(1).max(2000).describe("What work was done"),
+    loss_signal: z.string().min(1).max(2000).describe("What didn't arrive"),
+    loss_class: z.enum([
+        "prospect-decline",
+        "timing-miss",
+        "first-contact-failure",
+        "outcome-asymmetry",
+        "compound-non-arrival",
+    ]).describe("Loss classification"),
+    source: z.string().describe("Signal source (e.g. 'aar_rendezvous', 'founder_direct', 'a_f_ledger')"),
+    coroner_claimed: z.boolean().optional().describe("Set true if Coroner has already claimed this signal (Tears stands down)"),
+}, async ({ session, effort_signal, loss_signal, loss_class, source, coroner_claimed }) => {
+    const result = tearsLogSignal({
+        session,
+        effort_signal,
+        loss_signal,
+        loss_class,
+        source,
+        coroner_claimed: coroner_claimed ?? false,
+    });
+    return {
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+    };
+});
+/**
+ * tears_query — Mode 3: return TR inventory + attestation status.
+ */
+registerTool("tears_query", "B81 / LB-STACK-0216 — Tears Scribe Mode 3: query TR inventory and attestation state. " +
+    "Returns all TR-### rules with status, Velvet-Fingers attestation status, queued signal count. " +
+    "Must be called with active Velvet-Fingers attestation for full result.", {}, async () => {
+    const result = tearsQuery();
+    return {
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+    };
+});
+/**
+ * velvet_fingers_attest — emit a Velvet-Fingers attestation token.
+ * Hard prerequisite for Tears Rule emission and ratification.
+ */
+registerTool("velvet_fingers_attest", "B81 / LB-STACK-0216 — Velvet-Fingers attestation (LB-STACK-0201). " +
+    "Emits a Velvet-Fingers executive function attestation token (TTL: 48h). " +
+    "REQUIRED before Tears Rule emission or TR ratification. " +
+    "Called by Bishop on Founder's behalf: 'Velvet-Fingers attestation: active'.", {
+    session: z.string().describe("Current session ID"),
+    attested_by: z.string().describe("Who is attesting (e.g. 'Founder', 'Bishop Opus 4.7')"),
+}, async ({ session, attested_by }) => {
+    const att = emitVelvetFingersAttestation(session, attested_by);
+    return {
+        content: [{
+                type: "text",
+                text: JSON.stringify({
+                    ...att,
+                    status: "attestation_active",
+                    message: "Velvet-Fingers executive function attestation active. Tears emission unlocked for 48h.",
+                }, null, 2),
+            }],
+    };
+});
+/**
+ * trinity_review — Mode 3: side-by-side Trinity axis comparison for session close.
+ * Surfaces tension cases where Coroner/Tears/Sweat boundary was unclear.
+ */
+registerTool("trinity_review", "B81 / LB-STACK-0216 — Trinity-Comparison Review (session-close). " +
+    "Side-by-side review of SWEAT + TEARS + BLOOD (Coroner) fires for a session. " +
+    "Surfaces Tears→Sweat aging candidates and Coroner/Tears boundary tension cases. " +
+    "Emits inaugural_trinity_review_{session}.md to ~/.claude/state/tears_scribe/.", {
+    session_id: z.string().describe("Session ID for the review (e.g. BP034)"),
+}, async ({ session_id }) => {
+    const result = trinityReview(session_id);
+    return {
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+    };
+});
+// ═══════════════════════════════════════════════════════════════════
+// B85 — CORONER SCRIBE TOOLS (LB-STACK-0171 / BP034 / B85)
+// Trinity COMPLETE × at daemon parity
+// ═══════════════════════════════════════════════════════════════════
+import { coronerLogSignal, coronerQuery, coronerRoundup, regenerateCoronerIndex, ratifyBloodRules, } from "./scribes/coroner_scribe.js";
+/**
+ * coroner_log_signal — Mode 1: append a failure signal to the Coroner Scribe raw corpus.
+ * Source paths: watchdog_dispatch | manual | coroner_first_gate | stitchpunk
+ * Signal classes: failure_event | secret_exposure | collision | speculative_floor | test_integrity | mechanism_miss
+ */
+registerTool("coroner_log_signal", "B85 / LB-STACK-0171 — Coroner Scribe Mode 1: log a failure/discipline signal. " +
+    "Appends to ~/.claude/state/coroner_scribe/raw_signals.jsonl. " +
+    "Signal classes: failure_event | secret_exposure | collision | speculative_floor | test_integrity | mechanism_miss. " +
+    "Rule associations: BR-001 (R-EXPLORE-3) through BR-007 (test corpus integrity). " +
+    "\"You bleed for what matters.\"", {
+    source: z.enum([
+        "watchdog_dispatch",
+        "manual",
+        "coroner_first_gate",
+        "stitchpunk",
+        "founder_ratification",
+    ]).describe("Signal origin"),
+    signal_class: z.enum([
+        "failure_event",
+        "secret_exposure",
+        "collision",
+        "speculative_floor",
+        "test_integrity",
+        "mechanism_miss",
+    ]).describe("Failure classification for clustering"),
+    payload: z.string().min(1).max(2000).describe("Human-readable description of the failure signal"),
+    rule_association: z.string().optional().describe("BR-001 through BR-007 if classifiable at log time"),
+    session: z.string().optional().describe("Session ID (e.g. BP034)"),
+    failure_class: z.string().optional().describe("Failure class from coroner_dispatch.ts if applicable"),
+}, async ({ source, signal_class, payload, rule_association, session, failure_class }) => {
+    const result = coronerLogSignal({ source, signal_class, payload, rule_association, session, failure_class });
+    return {
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+    };
+});
+/**
+ * coroner_query — Mode 3: query the Blood Rules registry.
+ * Five query modes: INDEX | RULE | BY_PATTERN | RECENT | RATIFIED_ONLY
+ */
+registerTool("coroner_query", "B85 / LB-STACK-0171 — Coroner Scribe Mode 3 (Founder-direct): query Blood Rules registry. " +
+    "Modes: INDEX (all rules) | RULE (specific BR-###) | BY_PATTERN (anchor text search) | RECENT (last N signals) | RATIFIED_ONLY. " +
+    "Returns: rules array, total/pending/ratified counts, recent signals, top_load_bearing rules. " +
+    "\"You bleed for what matters.\"", {
+    mode: z.enum(["INDEX", "RULE", "BY_PATTERN", "RECENT", "RATIFIED_ONLY"])
+        .describe("Query mode"),
+    rule_id: z.string().optional().describe("Required for mode RULE — e.g. BR-003"),
+    pattern: z.string().optional().describe("Required for mode BY_PATTERN — anchor pattern substring match"),
+    limit: z.number().min(1).max(50).optional().describe("For mode RECENT — default 10"),
+}, async ({ mode, rule_id, pattern, limit }) => {
+    const result = coronerQuery(mode, { rule_id, pattern, limit });
+    return {
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+    };
+});
+/**
+ * coroner_roundup — Mode 2: session-close Coroner Roundup.
+ * Aggregates raw_signals into per-rule classified instances. Renders Markdown roundup.
+ * Also regenerates INDEX.md.
+ */
+registerTool("coroner_roundup", "B85 / LB-STACK-0171 — Coroner Scribe Mode 2: run session-close Coroner Roundup. " +
+    "Clusters raw failure signals by class; surfaces new BR candidates; emits CORONER_ROUNDUP_BP{NNN}.md. " +
+    "Regenerates INDEX.md. Called at session-close alongside sweat_roundup and trinity_review. " +
+    "\"You bleed for what matters.\"", {
+    session_id: z.string().describe("Current session ID (e.g. BP034) — used in roundup filename"),
+    top_k: z.number().min(1).max(10).optional().describe("Top-K signal classes to surface (default 5)"),
+}, async ({ session_id, top_k }) => {
+    const result = coronerRoundup(session_id, top_k ?? 5);
+    regenerateCoronerIndex();
+    return {
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+    };
+});
+/**
+ * coroner_ratify — Founder ratification of Blood Rules.
+ * Updates ratification_status: pending → ratified; enables reminder_injection.
+ * Syntax: "ratify BR-001 BR-002 ..." (selective subset OK)
+ */
+registerTool("coroner_ratify", "B85 / LB-STACK-0171 — Founder ratification of Blood Rules. " +
+    "Updates BR-### yaml files: ratification_status → ratified; reminder_injection → enabled. " +
+    "Logs ratification event to raw_signals.jsonl. Regenerates INDEX.md. " +
+    "Syntax: provide array of rule IDs, e.g. [\"BR-001\",\"BR-002\"] or all 7.", {
+    rule_ids: z.array(z.string()).min(1).describe("Array of rule IDs to ratify, e.g. [\"BR-001\",\"BR-003\"]"),
+}, async ({ rule_ids }) => {
+    const result = ratifyBloodRules(rule_ids);
+    return {
+        content: [{
+                type: "text",
+                text: JSON.stringify({
+                    ...result,
+                    message: result.ratified.map((id) => `${id} ratified. Reminder injection enabled.`).join(" "),
+                }, null, 2),
+            }],
+    };
+});
+// ═══════════════════════════════════════════════════════════════════
+// WATCHDOG KNIGHT — MCP TOOLS (LB-STACK-0165 / BP034)
+// ═══════════════════════════════════════════════════════════════════
+import { watchdogStatus } from "./watchdog/mcp_tools/watchdog_status.js";
+import { watchdogHistory } from "./watchdog/mcp_tools/watchdog_history.js";
+import { watchdogForceCheck } from "./watchdog/mcp_tools/watchdog_force_check.js";
+registerTool("mcp__watchdog__status", "Watchdog Knight — Query current health state for all monitored substrate subjects. " +
+    "Returns: summary (ok/degraded/down counts), per-subject results, last_poll_at, heartbeat. " +
+    "G5 gate. LB-STACK-0165 Cooperative Repair Loop.", {}, async () => {
+    const result = watchdogStatus();
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+});
+registerTool("mcp__watchdog__history", "Watchdog Knight — Query health event history (status changes, alerts, recoveries). " +
+    "Filter by subject, event_type, and hours lookback. Default: last 24h, up to 200 events. " +
+    "G5 gate. LB-STACK-0165 Cooperative Repair Loop.", {
+    hours: z.number().optional().describe("Hours to look back (default: 24)"),
+    subject: z.string().optional().describe("Filter to a specific subject ID (e.g. 'substrate-api')"),
+    event_type: z.enum([
+        "status_change", "recovery", "coroner_dispatch",
+        "hall_monitor_dispatch", "moneypenny_dispatch",
+        "self_restart_attempt", "poll_cycle_complete",
+    ]).optional().describe("Filter to a specific event type"),
+    limit: z.number().optional().describe("Max events to return (default: 200)"),
+}, async (args) => {
+    const result = watchdogHistory(args);
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+});
+registerTool("mcp__watchdog__force_check", "Watchdog Knight — Trigger an immediate out-of-cycle health check for all (or a specific) subject. " +
+    "Returns fresh health results; persists state. G5 gate.", {
+    subject: z.string().optional().describe("Optional: check only this subject ID (e.g. 'substrate-api'). Omit to check all subjects."),
+}, async (args) => {
+    const result = await watchdogForceCheck(args);
+    return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
+});
+// ─────────────────────────────────────────────────────────────────────────────
 main().catch(err => {
     console.error("Server failed to start:", err);
     process.exit(1);

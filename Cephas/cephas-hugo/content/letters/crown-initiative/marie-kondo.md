@@ -128,7 +128,7 @@ I've also written to:
 - **Michael Seibel** for CEO
 - **Sal Khan** for Didasko (education)
 - **Maneet Chauhan** for Let's Make Dinner
-- **Cathie Mahon** for VSL (microfinance)
+- **Cathie Mahon** for Medical Savings Accounts (#7)
 - **Mary Beth Laughton** for Let's Go Shopping
 - **Ruth Glenn** for Defense Klaus (protection)
 

@@ -280,7 +280,7 @@ const SAMPLE_INTERACTIONS: SocialInteraction[] = [
     sentiment: 'hostile',
     priority: 'medium',
     category: 'troll',
-    draftResponse: 'We understand the skepticism — the startup space has earned it. We have a live platform in beta, 11 provisional patent filings (2,128 innovations), and a deployed React/Supabase stack. We\'re not asking anyone to speculate — we\'re a cooperative, not a membership rights offering. Happy to show receipts.',
+    draftResponse: 'We understand the skepticism — the startup space has earned it. We have a live platform in beta, {{provisionalApps}} provisional patent filings ({{innovationCount}} innovations), and a deployed React/Supabase stack. We\'re not asking anyone to speculate — we\'re a cooperative, not a membership rights offering. Happy to show receipts.',
     responseStatus: 'ai_drafted',
     aiNotes: 'Hostile but on a high-traffic subreddit. Unlike the Twitter troll, this accusation could gain traction and should be addressed factually. Response is calm, specific, and avoids SEC language. "Show receipts" matches Reddit tone.',
     receivedAt: '2026-03-18T10:45:00Z',

@@ -1,0 +1,93 @@
+```html
+{{ define "main" }}
+<article class="stw-paper">
+  <nav class="breadcrumb">
+    <a href="/">Home</a> / <a href="/save-the-world/">Save the World Papers</a> / Paper {{ .Params.paper_number }}
+  </nav>
+
+  <header class="stw-paper-header">
+    <div class="stw-meta">
+      <span class="paper-number">Paper {{ .Params.paper_number }} of 12</span>
+      {{ with .Params.status }}
+      <span class="paper-status status-{{ . }}">{{ . }}</span>
+      {{ end }}
+    </div>
+    <h1>{{ .Title }}</h1>
+    {{ with .Params.tldr }}
+    <div class="stw-tldr">
+      <h2>TL;DR</h2>
+      <p>{{ . }}</p>
+    </div>
+    {{ end }}
+  </header>
+
+  <div class="stw-content">
+    {{ .Content }}
+  </div>
+
+  {{ with .Params.composing_hints }}
+  <section class="stw-section stw-composing-hints">
+    <h2>Composing Sweet Sixteen Initiatives</h2>
+    <p>This paper engages with the following initiatives from the Sweet Sixteen:</p>
+    <ul class="initiatives-list">
+      {{ range . }}
+      <li><a href="/sweet-sixteen/#initiative-{{ . | urlize }}">{{ . }}</a></li>
+      {{ end }}
+    </ul>
+  </section>
+  {{ end }}
+
+  <section class="stw-section council-endorsement">
+    <h2>Council Endorsement</h2>
+    <div class="endorsement-stub">
+      <p><em>This paper is open for council review and endorsement. Cooperative members are invited to discuss and refine these proposals through our participatory governance process.</em></p>
+      <a href="/participate/" class="btn-endorse">Join the Discussion</a>
+    </div>
+  </section>
+
+  <nav class="stw-nav paper-navigation">
+    <div class="nav-links">
+      {{ $currentNumber := .Params.paper_number }}
+      {{ $prevNumber := sub $currentNumber 1 }}
+      {{ $nextNumber := add $currentNumber 1 }}
+
+      <div class="nav-prev">
+        {{ if ge $prevNumber 1 }}
+          {{ range where .Site.RegularPages "Section" "save-the-world" }}
+            {{ if eq .Params.paper_number $prevNumber }}
+              <a href="{{ .Permalink }}" rel="prev">
+                <span class="nav-label">← Previous Paper</span>
+                <span class="nav-title">{{ .Title }}</span>
+              </a>
+            {{ end }}
+          {{ end }}
+        {{ end }}
+      </div>
+
+      <div class="nav-up">
+        <a href="/save-the-world/">
+          <span class="nav-label">↑ All Papers</span>
+        </a>
+      </div>
+
+      <div class="nav-next">
+        {{ if le $nextNumber 12 }}
+          {{ range where .Site.RegularPages "Section" "save-the-world" }}
+            {{ if eq .Params.paper_number $nextNumber }}
+              <a href="{{ .Permalink }}" rel="next">
+                <span class="nav-label">Next Paper →</span>
+                <span class="nav-title">{{ .Title }}</span>
+              </a>
+            {{ end }}
+          {{ end }}
+        {{ end }}
+      </div>
+    </div>
+  </nav>
+
+  <footer class="stw-paper-footer">
+    <p class="cooperative-notice">Part of the Liana Banyan cooperative-civic platform. <a href="/about/">Learn more about our mission</a>.</p>
+  </footer>
+</article>
+{{ end }}
+```

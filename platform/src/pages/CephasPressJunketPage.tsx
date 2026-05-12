@@ -8,7 +8,8 @@ import { FileText, Download, Send, Lock, Megaphone } from "lucide-react";
 import { Link } from "react-router-dom";
 import { PortalPageLayout } from "@/components/PortalPageLayout";
 
-const INNOVATION_COUNT = "2,128";
+// MIGRATED BP031: triple-stale fix — was "2,128"; provisionals was "10". Pulls from canonical_values.
+const INNOVATION_COUNT = "{{innovationCount}}";
 const PATENT_CLAIMS = "2,097";
 const PROVISIONAL_APPS = "10";
 

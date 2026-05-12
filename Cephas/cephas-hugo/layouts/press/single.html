@@ -1,0 +1,42 @@
+﻿{{- define "main" }}
+
+<article class="post-single press-release">
+  <header class="post-header">
+    {{ partial "breadcrumbs.html" . }}
+    <h1 class="post-title">
+      {{ .Title }}
+    </h1>
+    {{- if .Description }}
+    <div class="post-description">
+      {{ .Description }}
+    </div>
+    {{- end }}
+    {{- if not .Date.IsZero -}}
+    <div class="post-meta">
+      {{- partial "post_meta.html" . -}}
+    </div>
+    {{- end }}
+  </header>
+
+  {{- if .Params.toc }}
+  <aside id="toc-container" class="toc-container wide">
+    {{- partial "toc.html" . }}
+  </aside>
+  {{- end }}
+
+  <div class="post-content">
+    {{- .Content }}
+  </div>
+
+  <footer class="post-footer">
+    {{- if .Params.tags }}
+    <ul class="post-tags">
+      {{- range .Params.tags }}
+      <li><a href="{{ "/tags/" | relLangURL }}{{ . | urlize }}/">{{ . }}</a></li>
+      {{- end }}
+    </ul>
+    {{- end }}
+  </footer>
+</article>
+
+{{- end }}{{/* end main */}}

@@ -35,6 +35,24 @@ const CONFIG_PATH = resolve(LIBRARIAN_ROOT, "config", "pawn_dispatch_caps.json")
 const LEDGER_PATH = resolve(DISPATCHES_DIR, "dispatch_ledger.jsonl");
 const TELEMETRY_PATH = resolve(TELEMETRY_DIR, "pawn_dispatch_costs.jsonl");
 
+// BP025 lockbox-as-runtime-source pattern: read PERPLEXITY key from disk at
+// dispatch time so rotation = file edit + zero process restart.
+const LOCKBOX_NEW_KEY_PATH = resolve(LIBRARIAN_ROOT, "..", "Asteroid-ProofVault", "LockBox", "newKey.env");
+
+function loadPerplexityKey(): string | undefined {
+  try {
+    if (existsSync(LOCKBOX_NEW_KEY_PATH)) {
+      const contents = readFileSync(LOCKBOX_NEW_KEY_PATH, "utf-8");
+      for (const rawLine of contents.split(/\r?\n/)) {
+        if (!rawLine.includes("PERPLEXITY") || !rawLine.includes("=")) continue;
+        const value = rawLine.split("=").slice(1).join("=").trim().replace(/^["']|["']$/g, "");
+        if (value) return value;
+      }
+    }
+  } catch { /* fall through to env */ }
+  return process.env["PERPLEXITY_API_KEY"];
+}
+
 const PERPLEXITY_API_URL = "https://api.perplexity.ai/chat/completions";
 
 const PRICING_USD_PER_1M: Record<string, { input: number; output: number }> = {
@@ -263,14 +281,15 @@ export async function runDispatchPawn(params: {
   updateDispatch(record);
 
   // B.2 — API call with B.5 retry logic
-  const apiKey = process.env["PERPLEXITY_API_KEY"];
+  // BP025: read from lockbox newKey.env at dispatch time (rotation = file edit, zero restart)
+  const apiKey = loadPerplexityKey();
   if (!apiKey) {
     record.status = "error";
     record.error_class = "missing_api_key";
-    record.attempt_log.push(`[${new Date().toISOString()}] ERROR: PERPLEXITY_API_KEY not set in environment`);
+    record.attempt_log.push(`[${new Date().toISOString()}] ERROR: PERPLEXITY_API_KEY not found in lockbox newKey.env or process.env`);
     updateDispatch(record);
     appendLedger(record);
-    return { dispatch_id: dispatchId, status: "error", error_class: "missing_api_key", message: "PERPLEXITY_API_KEY not set. Load from SDS.env first." };
+    return { dispatch_id: dispatchId, status: "error", error_class: "missing_api_key", message: "PERPLEXITY_API_KEY not found. Add a line containing 'PERPLEXITY' substring with '=value' to Asteroid-ProofVault/LockBox/newKey.env." };
   }
 
   const requestBody = {

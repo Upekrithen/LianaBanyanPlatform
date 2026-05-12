@@ -81,6 +81,10 @@ const RouteDetailPage = lazy(() => import("@/pages/v2/vehicle/RouteDetailPage"))
 const LemonLotV2 = lazy(() => import("@/pages/v2/vehicle/LemonLotV2"));
 const VehicleListingDetail = lazy(() => import("@/pages/v2/vehicle/VehicleListingDetail"));
 
+// Bushel 25 — Code Breakers Corps Guild + LB Elves Guild (BP022)
+const CodeBreakersCorps = lazy(() => import("@/pages/helm/CodeBreakersCorps"));
+const LBElvesGuild = lazy(() => import("@/pages/helm/LBElvesGuild"));
+
 // K438a — Member-Facing Scribes Cathedral (#2268, #2269, #2270)
 const CathedralLanding = lazy(() => import("@/pages/cathedral/CathedralLanding"));
 const CathedralNewScribe = lazy(() => import("@/pages/cathedral/CathedralNewScribe"));
@@ -178,6 +182,10 @@ export const dashboardRoutes = (
     <Route path="/v2/rideshare/:routeId" element={<ProtectedRoute><LazyPage><RouteDetailPage /></LazyPage></ProtectedRoute>} />
     <Route path="/v2/lemon-lot" element={<ProtectedRoute><LazyPage><LemonLotV2 /></LazyPage></ProtectedRoute>} />
     <Route path="/v2/lemon-lot/:listingId" element={<ProtectedRoute><LazyPage><VehicleListingDetail /></LazyPage></ProtectedRoute>} />
+
+    {/* Bushel 25 — Code Breakers Corps Guild + LB Elves Guild (BP022) */}
+    <Route path="/helm/code-breakers" element={<ProtectedRoute gateContext="access Code Breakers Corps Guild"><LazyPage><CodeBreakersCorps /></LazyPage></ProtectedRoute>} />
+    <Route path="/helm/lb-elves" element={<ProtectedRoute gateContext="access LB Elves Guild"><LazyPage><LBElvesGuild /></LazyPage></ProtectedRoute>} />
 
     {/* K438a — Member Cathedral (gated by ProtectedRoute, not PaidMemberRoute,
         so free-tier members can see the upgrade CTA from inside their own

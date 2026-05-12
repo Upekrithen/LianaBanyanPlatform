@@ -76,7 +76,7 @@ export default function The300Page() {
 
         {/* Innovation stats */}
         <div className="text-center text-xs text-slate-600 pt-4">
-          2,128 innovations | 2,097 claims | 11 provisional patents | 23 production systems
+          {{innovationCount}} innovations | 2,097 claims | {{provisionalApps}} provisional patents | 23 production systems
         </div>
       </div>
     </PortalPageLayout>

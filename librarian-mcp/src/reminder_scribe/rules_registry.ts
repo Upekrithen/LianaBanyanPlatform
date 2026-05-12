@@ -20,7 +20,12 @@
  *   8. R-FORK-1    Never propose LB-currency-to-fiat conversion
  *   9. R-COUNSEL-1 Never gate on counsel
  *  10. R-USPTO-1   Don't over-instruct USPTO process
- *  11+ (extendable via runtime loadRulesFromMemory)
+ *  11. R-PHA-1     Pre-Hoc Permission Ask (BRICK-WALL-FIRST-HALF regression) [BP028]
+ *  12. R-MS-1      Missing Surface (BRICK-WALL-SECOND-HALF regression) [BP028]
+ *  13. R-REV-1     Pre-Emptive Review Pressure (REVIEW-IN-LAST-HOURS regression) [BP028]
+ *  14. R-PAWN-1    dispatch_pawn-when-paste-routed (PAWN-BLIND-WORKAROUND regression) [BP028]
+ *  15. R-ROOK-1    dispatch_rook-pre-restart (MCP-RESTART-NEEDED regression) [BP028]
+ *  16+ (extendable via runtime loadRulesFromMemory)
  *
  * BRIDLE Rule 4: if rule compilation fails, default-FAIL = halt response.
  * Don't ship potentially-violating response on engine-failure.
@@ -44,7 +49,9 @@ export type ViolationClass =
   | "fork"
   | "counsel"
   | "file-existence"
-  | "path-format";
+  | "path-format"
+  | "brick-wall"      // BRICK-WALL-FIRST-HALF / SECOND-HALF regression class [BP028]
+  | "dispatch-coord"; // Pawn/Rook dispatch coordination regression class [BP028]
 
 export type OverrideClass =
   | "free"             // user can override at no cost
@@ -55,7 +62,8 @@ export type PatternType =
   | "regex"            // direct string/regex match against response text
   | "file-existence"   // verify file on disk (R-KP-2)
   | "anti-pattern"     // text should NOT contain pattern (e.g., fiat-bridge)
-  | "path-format";     // path must have specific prefix/format
+  | "path-format"      // path must have specific prefix/format
+  | "context-heuristic"; // text mention heuristic; full context-check is TODO for tool-call-record integration
 
 export interface RulePattern {
   type: PatternType;
@@ -402,6 +410,235 @@ export const BUILT_IN_RULES: ReminderScribeRule[] = [
     blocks_response: false,
     bridle_halt_on_failure: false,
     memory_pointer: "feedback_dont_over_instruct_founder_on_uspto_filing_process.md",
+    active: true,
+  },
+
+  // ── R-PHA-1: Pre-Hoc Permission Ask (BRICK-WALL-FIRST-HALF regression) ──── [BP028]
+  {
+    id: "R-PHA-1",
+    priority: 11,
+    class: "brick-wall",
+    description:
+      "BRICK-WALL-FIRST-HALF regression: Bishop asks for permission before executing an action " +
+      "when scope is already clear from Founder's directive. Interrogative permission-verb phrases " +
+      "('Should I...?', 'May I...?', 'Want me to...?', 'Can I...?', 'Would you like me to...?') " +
+      "signal uncertainty in scope-clear contexts. Bishop should fire action, surface outcome, then await ratification.",
+    source:
+      "REMINDER_SCRIBE_5_PATTERN_UPDATE_SPEC_BP028.md (R-PHA-1) + Catechist R14 (BP028)",
+    patterns: [
+      {
+        type: "anti-pattern",
+        // Interrogative permission-seeking phrases followed by action-verb content up to '?'
+        // Explicit alternations for "Should I|May I|Can I|Want me to|Would you like me to"
+        // Use [^?]+ to absorb content between phrase and terminal '?'
+        // Excluded: genuinely ambiguous routing questions are caught by engine's excluded-context logic
+        pattern:
+          "(?:Should\\s+I|May\\s+I|Can\\s+I|Want\\s+me\\s+to|Would\\s+you\\s+like\\s+me\\s+to)\\s+\\w[^?]*\\?",
+        flags: "gi",
+      },
+    ],
+    correction_proposal:
+      "Convert interrogative permission-ask to BRICK-WALL-FIRST-HALF action pattern.\n\n" +
+      "Instead of: 'Should I read the file and search for patterns?'\n" +
+      "Correct form: 'I'll read the file and search for patterns. [action-surface]. Here are [results].'\n\n" +
+      "Excluded contexts (do NOT flag):\n" +
+      "  - Genuinely ambiguous routing (e.g., 'Should I route to Knight or Pawn?' when both plausible)\n" +
+      "  - Destructive actions requiring pre-approval (deletions, irreversible ops)\n" +
+      "  - First-time encounter with novel task class (no precedent set)\n\n" +
+      "Per BRICK-WALL-FIRST-HALF canon (BP005 + BP028) + Catechist R14.",
+    override_class: "free",
+    blocks_response: false,
+    bridle_halt_on_failure: false,
+    memory_pointer: "REMINDER_SCRIBE_5_PATTERN_UPDATE_SPEC_BP028.md",
+    active: true,
+  },
+
+  // ── R-MS-1: Missing Surface (BRICK-WALL-SECOND-HALF regression) ────────── [BP028]
+  {
+    id: "R-MS-1",
+    priority: 12,
+    class: "brick-wall",
+    description:
+      "BRICK-WALL-SECOND-HALF regression: action fired (tool-call executed) without subsequent " +
+      "completion-block surface showing outcome/result/error to Founder. Founder must see outcome " +
+      "to ratify, redirect, or advance. Missing surface = Founder blind to action state. " +
+      "Token-heuristic: response text ends within 50 tokens of final tool-call marker.",
+    source:
+      "REMINDER_SCRIBE_5_PATTERN_UPDATE_SPEC_BP028.md (R-MS-1) + Catechist R14 + Token Time/Real Time canon BP028",
+    patterns: [
+      {
+        // Heuristic: response ends abruptly with a tool-call marker and minimal follow-up text.
+        // Full tool-call-record inspection is TODO (requires engine access to tool-call log).
+        // Text-class trigger: tool-result boundary phrases with no subsequent surface paragraph.
+        type: "context-heuristic",
+        pattern:
+          "(?:tool(?:\\s+call)?\\s+(?:executed|complete|done|fired|returned)|" +
+          "\\[(?:read|write|edit|bash|glob|grep)\\s+call\\]|" +
+          "dispatched\\s+to\\s+(?:knight|pawn|rook))\\s*\\.?\\s*$",
+        flags: "gi",
+      },
+    ],
+    correction_proposal:
+      "After each action-firing tool call, surface a 2-4 sentence completion block:\n" +
+      "  1. What was executed\n" +
+      "  2. What the result shows (or error detail + next-step suggestion)\n" +
+      "  3. Next action or decision point\n\n" +
+      "Example:\n" +
+      "  [read_file call]\n" +
+      "  Found 47 pattern definitions in patterns.ts. 12 active; 8 deprecated; 27 BP025-BP028 era.\n" +
+      "  Ready to ingest 5 new specs. Next: cross-reference Catechist R-table to assign rule IDs.\n\n" +
+      "Excluded contexts:\n" +
+      "  - Action is mid-flight (SEG dispatched, awaiting return — 'waiting on [X]' is acceptable)\n" +
+      "  - Tool result includes inline outcome (read_file content is implicit surface)\n" +
+      "  - Founder explicitly requested silent action\n\n" +
+      "Per BRICK-WALL-SECOND-HALF + Token Time/Real Time canon BP028.\n" +
+      "TODO: Upgrade to full tool-call-record inspection when engine supports tool-call log access.",
+    override_class: "marks-cost",
+    blocks_response: false,
+    bridle_halt_on_failure: false,
+    memory_pointer: "REMINDER_SCRIBE_5_PATTERN_UPDATE_SPEC_BP028.md",
+    active: true,
+  },
+
+  // ── R-REV-1: Pre-Emptive Review Pressure (REVIEW-IN-LAST-HOURS regression) [BP028]
+  {
+    id: "R-REV-1",
+    priority: 13,
+    class: "brick-wall",
+    description:
+      "REVIEW-IN-LAST-HOURS regression: Bishop asks Founder for incremental review during session " +
+      "instead of stashing draft to voice-pass queue for batch review in last-hours window. " +
+      "Trigger phrases: 'Want me to surface this for voice-pass?', 'Ready for your review?', " +
+      "'Should I put this in the voice-pass queue?', 'Want to look this over before I...?', " +
+      "'Ready to voice-pass?'. Batch review in last-hours window is faster + reduces Founder interrupt overhead.",
+    source:
+      "REMINDER_SCRIBE_5_PATTERN_UPDATE_SPEC_BP028.md (R-REV-1) + Catechist R15 (BP028)",
+    patterns: [
+      {
+        type: "anti-pattern",
+        // Use [^?]* after 'before I' to absorb trailing content up to terminal '?'
+        pattern:
+          "(?:Want(?:\\s+me)?\\s+to\\s+surface\\s+this\\s+for\\s+voice.?pass|" +
+          "Ready\\s+for\\s+your\\s+review|" +
+          "Should\\s+I\\s+put\\s+this\\s+in\\s+the\\s+voice.?pass\\s+queue|" +
+          "Want\\s+to\\s+look\\s+this\\s+over\\s+before\\s+I[^?]*|" +
+          "Ready\\s+to\\s+voice.?pass)\\s*\\?",
+        flags: "gi",
+      },
+    ],
+    correction_proposal:
+      "Convert pre-emptive review ask to autonomous draft stashing.\n\n" +
+      "Instead of: 'Want me to surface this for voice-pass?'\n" +
+      "Correct form: '[draft stashed in voice-pass queue for fire-time window (HH:MM MDT)]. " +
+      "Founder voice-pass on [date].'\n\n" +
+      "Review-in-last-hours protocol (BP028 canon):\n" +
+      "  - Drafts authored incrementally throughout session → stashed in voice-pass queue\n" +
+      "  - Founder voice-passes entire batch 1-2 hours before fire-time (not incrementally)\n" +
+      "  - Concentrates review into tight window; improves Founder focus + reduces interrupt overhead\n\n" +
+      "Excluded contexts:\n" +
+      "  - Founder explicitly requested incremental review (e.g., 'check with me after each file')\n" +
+      "  - Draft is blocking subsequent work (genuine scheduling constraint)\n" +
+      "  - Session-end approach where incremental review is logistically necessary\n\n" +
+      "Per Review-in-Last-Hours canon BP028 + Catechist R15.",
+    override_class: "free",
+    blocks_response: false,
+    bridle_halt_on_failure: false,
+    memory_pointer: "REMINDER_SCRIBE_5_PATTERN_UPDATE_SPEC_BP028.md",
+    active: true,
+  },
+
+  // ── R-PAWN-1: dispatch_pawn-when-paste-routed (PAWN-BLIND-WORKAROUND regression) [BP028]
+  {
+    id: "R-PAWN-1",
+    priority: 14,
+    class: "dispatch-coord",
+    description:
+      "PAWN-BLIND-WORKAROUND regression: dispatch_pawn tool-call attempted when Founder has " +
+      "explicitly routed task to paste-to-perplexity-web in current session. " +
+      "Trigger: 'dispatch_pawn' mention in response text when session context includes " +
+      "Founder paste-routing directive ('paste to perplexity', 'pawn is blind', 'perplexity web', 'workaround'). " +
+      "Full tool-call-record inspection is TODO; text-class trigger surfaces the mention for correction. " +
+      "Context: Founder BP028 — 'Pawn is blind without MCP. But we have a workaround, and we have deployed it.'",
+    source:
+      "REMINDER_SCRIBE_5_PATTERN_UPDATE_SPEC_BP028.md (R-PAWN-1) + Catechist R16 (BP028)",
+    patterns: [
+      {
+        // Text-class heuristic: 'dispatch_pawn' mention in response.
+        // Full context-check (session history paste-routing directive present) is TODO
+        // for tool-call-record integration. Pattern fires on text mention; engine caller
+        // must apply session-context exclusion (first dispatch_pawn in session → no flag).
+        type: "context-heuristic",
+        pattern: "\\bdispatch[_\\s]pawn\\b",
+        flags: "gi",
+      },
+    ],
+    correction_proposal:
+      "When Founder has indicated paste-routing preference:\n" +
+      "  1. Author Pawn prompt as .md file in BISHOP_DROPZONE/02_PawnPrompts/\n" +
+      "  2. Surface filename + location to Founder\n" +
+      "  3. Indicate: 'Ready for paste to Perplexity web. [Filename]. [Brief description].'\n" +
+      "  4. Do NOT call dispatch_pawn tool\n\n" +
+      "Example:\n" +
+      "  Pawn prompt authored: BISHOP_DROPZONE/02_PawnPrompts/PAWN_RESEARCH_GOLDBACH_SINGULAR_SERIES_BP028.md\n" +
+      "  Ready for paste to Perplexity web. Pawn will research singular series structure for Goldbach\n" +
+      "  conjecture via sonar-reasoning-pro. Estimated return: 2-4 minutes.\n\n" +
+      "Excluded contexts:\n" +
+      "  - First dispatch_pawn in session (no paste-routing directive yet established)\n" +
+      "  - Founder has explicitly approved MCP dispatch for this task class\n" +
+      "  - Task is outside web Perplexity scope (e.g., local file retrieval + analysis)\n\n" +
+      "Per PAWN-BLIND-WORKAROUND canon BP028 + Catechist R16.\n" +
+      "TODO: Upgrade to full tool-call-record inspection for session-context paste-routing detection.",
+    override_class: "marks-cost",
+    blocks_response: false,
+    bridle_halt_on_failure: false,
+    memory_pointer: "REMINDER_SCRIBE_5_PATTERN_UPDATE_SPEC_BP028.md",
+    active: true,
+  },
+
+  // ── R-ROOK-1: dispatch_rook-pre-restart (MCP-RESTART-NEEDED regression) ── [BP028]
+  {
+    id: "R-ROOK-1",
+    priority: 15,
+    class: "dispatch-coord",
+    description:
+      "MCP-RESTART-NEEDED regression: dispatch_rook tool-call attempted before librarian-mcp " +
+      "restart confirmation following a recent commit that requires restart (e.g., Knight commit 5d881a4 " +
+      "environment-fix). Attempting dispatch_rook before restart will hit immediate error (stale process state). " +
+      "Text-class trigger: 'dispatch_rook' mention. Full tool-call-record + git-log inspection is TODO. " +
+      "Fallback path: paste-to-Gemini-CLI (author Rook prompt as .md file; Founder pastes to Gemini CLI).",
+    source:
+      "REMINDER_SCRIBE_5_PATTERN_UPDATE_SPEC_BP028.md (R-ROOK-1) + Catechist R17 (BP028)",
+    patterns: [
+      {
+        // Text-class heuristic: 'dispatch_rook' mention in response.
+        // Full context-check (recent commit 5d881a4 in git log + no restart confirmation) is TODO
+        // for tool-call-record + git-log integration. Pattern fires on text mention; engine caller
+        // must apply session-context exclusion (prior successful dispatch_rook post-restart → no flag).
+        type: "context-heuristic",
+        pattern: "\\bdispatch[_\\s]rook\\b",
+        flags: "gi",
+      },
+    ],
+    correction_proposal:
+      "When commit requiring restart is detected:\n" +
+      "  Option A: Surface restart request to Yoke:\n" +
+      "    '[Knight commit 5d881a4 requires librarian-mcp restart. Ready?]'\n" +
+      "    Then retry dispatch_rook after restart confirmation.\n\n" +
+      "  Option B: Paste-to-Gemini-CLI fallback (immediate, no server dependency):\n" +
+      "    Author Rook prompt as .md file; Founder pastes to Gemini CLI.\n" +
+      "    Example: 'Rook prompt authored: BISHOP_DROPZONE/02_RookPrompts/ROOK_ANALYSIS_[TASK]_BP028.md\n" +
+      "    Ready for paste to Gemini CLI. Rook will [task description].'\n\n" +
+      "  Do NOT call dispatch_rook until restart is confirmed.\n\n" +
+      "Excluded contexts:\n" +
+      "  - librarian-mcp has been restarted post-commit (confirmed by prior successful dispatch_rook)\n" +
+      "  - Dispatch is to different MCP server (not librarian-mcp)\n" +
+      "  - Environment-fix commit is not yet on disk (pre-pull scenario)\n\n" +
+      "Per MCP-RESTART-NEEDED canon BP028 + Catechist R17.\n" +
+      "TODO: Upgrade to full git-log + tool-call-record inspection for restart-confirmation detection.",
+    override_class: "free",
+    blocks_response: false,
+    bridle_halt_on_failure: false,
+    memory_pointer: "REMINDER_SCRIBE_5_PATTERN_UPDATE_SPEC_BP028.md",
     active: true,
   },
 ];

@@ -63,7 +63,7 @@ const PATHWAYS = [
     title: 'GUILD',
     bestFor: 'Best for professionals',
     description: 'Rally your profession. Designers, makers, farmers, tutors — forge a guild.',
-    href: '/guilds/create',
+    href: '/start/cold-start/guild',
     gradient: 'from-purple-50 to-violet-50',
     border: 'hover:border-purple-400',
     accent: 'text-purple-700',
@@ -75,7 +75,7 @@ const PATHWAYS = [
     title: 'TRIBE',
     bestFor: 'Best for organizers',
     description: 'Gather your people. Family, neighbors, interest groups — form a tribe.',
-    href: '/tribes/create',
+    href: '/start/cold-start/tribe',
     gradient: 'from-amber-50 to-yellow-50',
     border: 'hover:border-amber-400',
     accent: 'text-amber-700',
@@ -282,12 +282,12 @@ export default function ColdStartHub() {
                   <RecommendationItem
                     question="Do you want to organize people in your profession?"
                     answer="Guild"
-                    onClick={() => { setShowDrawer(false); navigate('/guilds/create'); }}
+                    onClick={() => { setShowDrawer(false); navigate('/start/cold-start/guild'); }}
                   />
                   <RecommendationItem
                     question="Do you want to organize your family or neighbors?"
                     answer="Tribe"
-                    onClick={() => { setShowDrawer(false); navigate('/tribes/create'); }}
+                    onClick={() => { setShowDrawer(false); navigate('/start/cold-start/tribe'); }}
                   />
                 </div>
                 <p className="text-xs text-gray-400 text-center mt-6">

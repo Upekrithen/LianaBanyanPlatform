@@ -25,6 +25,8 @@ export interface PheromoneRecord {
     cathedral?: string;
     flavor_class?: FlavorClass;
     synthesis_class?: string;
+    se4?: import('../se4/se4_envelope.js').SE4Envelope;
+    se4_shadow_id?: string;
 }
 export interface PheromoneHit {
     scribe: string;

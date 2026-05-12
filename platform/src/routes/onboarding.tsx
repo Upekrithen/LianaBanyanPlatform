@@ -23,6 +23,9 @@ const FoodNodeCueCard = lazy(() => import("@/pages/FoodNodeCueCard"));
 const ManufacturingNodeCueCard = lazy(() => import("@/pages/ManufacturingNodeCueCard"));
 const ServiceNodeCueCard = lazy(() => import("@/pages/ServiceNodeCueCard"));
 const LocalBusinessNodeCueCard = lazy(() => import("@/pages/LocalBusinessNodeCueCard"));
+const BroadcastNodeCueCard = lazy(() => import("@/pages/BroadcastNodeCueCard"));
+const GuildNodeCueCard = lazy(() => import("@/pages/GuildNodeCueCard"));
+const TribeNodeCueCard = lazy(() => import("@/pages/TribeNodeCueCard"));
 const WelcomeGatePage = lazy(() => import("@/pages/WelcomeGatePage"));
 const RedCarpetLandingV2Page = lazy(() => import("@/pages/RedCarpetLandingV2Page"));
 const BusinessPathway = lazy(() => import("@/pages/BusinessPathway"));
@@ -69,6 +72,9 @@ export const onboardingRoutes = (
     <Route path="/start/cold-start/manufacturing" element={<LazyPage><ManufacturingNodeCueCard /></LazyPage>} />
     <Route path="/start/cold-start/service" element={<LazyPage><ServiceNodeCueCard /></LazyPage>} />
     <Route path="/start/cold-start/local-business" element={<LazyPage><LocalBusinessNodeCueCard /></LazyPage>} />
+    <Route path="/start/cold-start/broadcast" element={<LazyPage><BroadcastNodeCueCard /></LazyPage>} />
+    <Route path="/start/cold-start/guild" element={<LazyPage><GuildNodeCueCard /></LazyPage>} />
+    <Route path="/start/cold-start/tribe" element={<LazyPage><TribeNodeCueCard /></LazyPage>} />
     <Route path="/w/:medallionId" element={<LazyPage><WelcomeGatePage /></LazyPage>} />
     <Route path="/pathway" element={<LazyPage><BusinessPathway /></LazyPage>} />
     <Route path="/business-pathway" element={<LazyPage><BusinessPathway /></LazyPage>} />

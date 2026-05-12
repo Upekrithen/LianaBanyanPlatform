@@ -1,5 +1,5 @@
 {
-  "PAWN_VIA_LIBRARIAN_DISPATCH_ENABLED": false,
+  "PAWN_VIA_LIBRARIAN_DISPATCH_ENABLED": true,
   "per_dispatch_cost_cap_usd": 1,
   "daily_cost_cap_usd": 10,
   "default_model": "sonar-pro",

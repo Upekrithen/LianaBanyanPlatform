@@ -84,7 +84,7 @@ const HALLS: Hall[] = [
     id: "innovations",
     name: "Hall of Innovations",
     subtitle: "Patent Registry",
-    description: "2,128 innovations. Vote on which patents to prosecute. Bucket pedestals for IP Load Balancing.",
+    description: "{{innovationCount}} innovations. Vote on which patents to prosecute. Bucket pedestals for IP Load Balancing.",
     icon: Lightbulb,
     color: "from-yellow-500/20 to-yellow-600/10",
     route: "/senate/innovations",

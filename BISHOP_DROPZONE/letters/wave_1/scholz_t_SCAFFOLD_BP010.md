@@ -1,4 +1,20 @@
-﻿# Letter to Trebor Scholz — PLOW-AHEAD Priority 2 — SCAFFOLDED
+﻿---
+name: "Crown Letter — Trebor Scholz (Scaffold BP010)"
+description: "Scaffolded letter to Trebor Scholz using biology roots-trunk-lianas-fruits frame with PLOW-AHEAD priority for cooperative academic outreach."
+type: crown_letter
+recipient: "Trebor Scholz"
+ratificationDate: "BP010"
+wrasseTriggers:
+  - crown letter trebor scholz scaffold
+  - biology frame roots trunk lianas fruits cooperative
+  - platform cooperativism plow-ahead priority scaffold
+  - INFJ humble generous-with-credit scholz personality
+  - cooperative defensive patent pledge non-weaponization
+  - liana banyan platform cooperativism academic outreach
+  - glass door outreach letter
+canonical_references: []
+---
+# Letter to Trebor Scholz — PLOW-AHEAD Priority 2 — SCAFFOLDED
 
 **Status:** SCAFFOLDED — Founder prose-pass at fire-time activates
 **Recipient:** Trebor Scholz — UPGRADED from B130A WORTH-IT to PLOW-AHEAD per Pawn Keirsey return (B131)

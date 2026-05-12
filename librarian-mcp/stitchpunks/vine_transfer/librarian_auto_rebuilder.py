@@ -16,7 +16,7 @@ from typing import Optional
 _LIBRARIAN_DIR = Path(
     "C:/Users/Administrator/Documents/LianaBanyanPlatform/librarian-mcp"
 )
-_DRIFT_THRESHOLD = 5  # files changed
+_DRIFT_THRESHOLD = 50  # files changed (BP022 Founder-mandatory raise from 5 → 50; rebuild fires less aggressively)
 
 
 def _count_recent_changes(

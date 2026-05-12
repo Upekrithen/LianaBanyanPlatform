@@ -186,7 +186,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
       {
         id: 'no-vc',
         question: 'Why no venture capital?',
-        answer: "V.C. money comes with strings: 10x return demands force unsustainable growth, exit pressure means selling you in 5-7 years, and each funding round dilutes everyone. We're funded by 11 provisional patents with 2,128 innovations and started with $1,000. No burn rate. We own 100% — forever.",
+        answer: "V.C. money comes with strings: 10x return demands force unsustainable growth, exit pressure means selling you in 5-7 years, and each funding round dilutes everyone. We're funded by {{provisionalApps}} provisional patents with {{innovationCount}} innovations and started with $1,000. No burn rate. We own 100% — forever.",
         detail: "The math: At Year 10, if we're worth $500M with VC money, we'd own ~$25M. Growing organically, even at half that valuation ($250M), we own ALL of it. Our patent portfolio IS our runway. Micro-entity filing at $65 per provisional. Your early contribution = permanent credit via Ghost Attribution. The 300 founding members get Joules — no VC means no dilution of YOUR stake.",
         learnMoreUrl: '/why-no-vc',
         learnMoreLabel: 'Full Explanation: Why No V.C.',
@@ -348,7 +348,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
       {
         id: 'patent-portfolio',
         question: 'What is the patent portfolio?',
-        answer: "11 provisional applications filed as a micro-entity ($65 each). 2,128 innovations documented. This is the cooperative's runway — IP as a shared asset instead of venture capital debt. 60% of Founder patents go to the platform.",
+        answer: "{{provisionalApps}} provisional applications filed as a micro-entity ($65 each). {{innovationCount}} innovations documented. This is the cooperative's runway — IP as a shared asset instead of venture capital debt. 60% of Founder patents go to the platform.",
         learnMoreUrl: '/learn/patents',
         learnMoreLabel: 'Alcove: Patent Portfolio',
         relatedEntries: ['vernacular-silver-candlesticks', 'cost-plus-20', 'howey-defense'],
@@ -801,7 +801,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
       {
         id: 'ip-load-balance',
         question: 'What is IP Load Balancing?',
-        answer: "The mechanism that distributes crystallized Shadow Marks proportionally across the patent portfolio. When your Shadow Marks crystallize into real Marks, their value is backed by a proportional slice of the cooperative's 2,128 innovations. This creates a direct link between member demand signaling and IP asset allocation — the portfolio funds what people actually want built.",
+        answer: "The mechanism that distributes crystallized Shadow Marks proportionally across the patent portfolio. When your Shadow Marks crystallize into real Marks, their value is backed by a proportional slice of the cooperative's {{innovationCount}} innovations. This creates a direct link between member demand signaling and IP asset allocation — the portfolio funds what people actually want built.",
         relatedEntries: ['shadow-marks', 'crystallization', 'patent-portfolio'],
         tags: ['ip-load-balance', 'patents', 'demand', 'allocation', 'portfolio'],
       },
@@ -884,7 +884,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
       {
         id: 'vernacular-pollination',
         question: 'What does "Pollination" mean?',
-        answer: "Propagating a canonical number or fact across every file that references it. When the innovation count changes from 1,938 to 2,128, Pollination means finding and updating every source file — stats hooks, blueprints, metrics, landing pages, FAQ entries, press pages — so the entire platform shows one consistent truth. Named for how bees carry pollen between flowers: one source of truth, distributed everywhere.",
+        answer: "Propagating a canonical number or fact across every file that references it. When the innovation count changes from 1,938 to {{innovationCount}}, Pollination means finding and updating every source file — stats hooks, blueprints, metrics, landing pages, FAQ entries, press pages — so the entire platform shows one consistent truth. Named for how bees carry pollen between flowers: one source of truth, distributed everywhere.",
         relatedEntries: ['vernacular-threshing', 'vernacular-grafting-cycle'],
         tags: ['pollination', 'vernacular', 'process', 'consistency', 'canonical'],
       },
@@ -940,7 +940,7 @@ export const FAQ_CHAPTERS: FAQChapter[] = [
       {
         id: 'vernacular-silver-candlesticks',
         question: 'What are the "Silver Candlesticks"?',
-        answer: "The Founder's metaphor for the patent portfolio donation. In Les Misérables, the Bishop gives Valjean his silver candlesticks — not because they were owed, but because giving them redirected a life. The Founder valued 2,128 patents at $630K (Cost+20%) instead of $116M+ (market value) and gave away 80%. 'I'm not trying to be Valjean. I'm trying to be the Bishop — one of many — and these patents are my silver candlesticks. I don't have any silver spoons.'",
+        answer: "The Founder's metaphor for the patent portfolio donation. In Les Misérables, the Bishop gives Valjean his silver candlesticks — not because they were owed, but because giving them redirected a life. The Founder valued {{innovationCount}} patents at $630K (Cost+20%) instead of $116M+ (market value) and gave away 80%. 'I'm not trying to be Valjean. I'm trying to be the Bishop — one of many — and these patents are my silver candlesticks. I don't have any silver spoons.'",
         relatedEntries: ['cost-plus-20', 'vernacular-no-spoon'],
         tags: ['silver-candlesticks', 'vernacular', 'patents', 'giving', 'valjean', 'bishop'],
       },

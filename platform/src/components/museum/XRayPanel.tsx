@@ -9,10 +9,17 @@ import { useXRay } from "./XRayContext";
 import { LRHCharacter } from "./LRHCharacter";
 import { GripHorizontal, ChevronDown, ChevronUp } from "lucide-react";
 
+export interface XRayDialogueLine {
+  speaker: "lrh" | "profcat" | "bankerpig" | "goat" | "dog";
+  text: string;
+}
+
 export interface XRayAnnotation {
   id: string;
   title: string;
   explanation: string;
+  /** Optional character dialogue — replaces static explanation when present */
+  dialogue?: XRayDialogueLine[];
   character: "lrh" | "profcat" | "bankerpig" | "goat" | "dog";
   /** CSS selector or ref-id to find the target element */
   targetSelector?: string;
@@ -78,14 +85,23 @@ export function XRayPanel({ annotation, index }: XRayPanelProps) {
     return () => clearInterval(interval);
   }, [xrayOn, updateTargetPoint]);
 
-  // Stagger default positions if no target found
+  // Stagger default positions if no target found — delayed so element-finder gets priority
   useEffect(() => {
-    if (!xrayOn || initialized) return;
-    setPosition({
-      x: 16 + (index % 2) * (PANEL_WIDTH + 16),
-      y: 80 + index * 100,
-    });
-    setInitialized(true);
+    if (!xrayOn) return;
+    const timer = setTimeout(() => {
+      if (!initialized) {
+        // Spread panels at viewport corners/edges rather than a 2x2 grid
+        const fallbacks = [
+          { x: 20, y: 120 },
+          { x: Math.max(20, window.innerWidth - PANEL_WIDTH - 20), y: 120 },
+          { x: 20, y: Math.max(180, window.innerHeight / 2 - 80) },
+          { x: Math.max(20, window.innerWidth - PANEL_WIDTH - 20), y: Math.max(180, window.innerHeight / 2 - 80) },
+        ];
+        setPosition(fallbacks[index % fallbacks.length]);
+        setInitialized(true);
+      }
+    }, 250);
+    return () => clearTimeout(timer);
   }, [xrayOn, initialized, index]);
 
   // Drag handlers
@@ -227,13 +243,39 @@ export function XRayPanel({ annotation, index }: XRayPanelProps) {
                 transition={{ duration: 0.2 }}
                 className="overflow-hidden"
               >
-                <div className="px-3 py-2.5">
-                  <p
-                    className="text-xs leading-relaxed"
-                    style={{ color: "rgba(250, 245, 235, 0.75)", lineHeight: 1.6 }}
-                  >
-                    {annotation.explanation}
-                  </p>
+                <div className="px-3 py-2.5 space-y-2">
+                  {annotation.dialogue ? (
+                    annotation.dialogue.map((line, i) => (
+                      <div key={i} className="flex gap-2 items-start">
+                        <span
+                          className="shrink-0 text-base leading-none mt-0.5"
+                          title={line.speaker === "lrh" ? "Little Red Hen" : "Professor Cat"}
+                        >
+                          {line.speaker === "lrh" ? "🐔" : line.speaker === "profcat" ? "🐱" : "•"}
+                        </span>
+                        <p
+                          className="text-xs leading-relaxed"
+                          style={{
+                            color: line.speaker === "lrh"
+                              ? "rgba(252, 211, 77, 0.9)"
+                              : line.speaker === "profcat"
+                              ? "rgba(196, 181, 253, 0.9)"
+                              : "rgba(250, 245, 235, 0.75)",
+                            lineHeight: 1.6,
+                          }}
+                        >
+                          {line.text}
+                        </p>
+                      </div>
+                    ))
+                  ) : (
+                    <p
+                      className="text-xs leading-relaxed"
+                      style={{ color: "rgba(250, 245, 235, 0.75)", lineHeight: 1.6 }}
+                    >
+                      {annotation.explanation}
+                    </p>
+                  )}
                 </div>
               </motion.div>
             )}

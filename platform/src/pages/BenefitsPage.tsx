@@ -71,7 +71,7 @@ const UNIVERSAL = [
   { icon: Crown, text: 'Member-governed platform', detail: 'You vote on how this grows. Joules = governance weight.' },
   { icon: Heart, text: '20% margin funds 16 charitable initiatives', detail: 'Your membership directly funds food, housing, health, education, and more.' },
   { icon: Globe, text: 'Works in 58 languages, 195 countries', detail: 'PPP-adjusted pricing. Same DNA, calibrated for local purchasing power.' },
-  { icon: Zap, text: '2,128 documented innovations', detail: '11 provisional patents. 2,097 formal claims. 99% utility, not design.' },
+  { icon: Zap, text: '{{innovationCount}} documented innovations', detail: '{{provisionalApps}} provisional patents. 2,097 formal claims. 99% utility, not design.' },
 ];
 
 export default function BenefitsPage() {

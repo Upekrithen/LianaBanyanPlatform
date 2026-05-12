@@ -26,6 +26,7 @@ export const TIMELINE = [
   { year: 2020, event: "First provisional patent filed" },
   { year: 2023, event: "8 utility patents filed; Hexel mechanical taxonomy defined" },
   { year: 2024, event: "Platform architecture begins; AI team formed (Rook, Knight, Bishop, Pawn)" },
+  // TIME-CAPSULE PIN — value reflects pre-Prov 16/17 snapshot (BP030); do not migrate. Annotated BP031 Bushel 64.
   { year: 2025, event: "2,128 innovations cataloged; 2,097 patent claims across 11 provisional applications" },
   { year: 2026, event: "Public launch — 16 initiatives, 14 domains, full multi-portal architecture" },
 ] as const;

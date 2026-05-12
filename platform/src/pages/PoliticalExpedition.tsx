@@ -489,6 +489,9 @@ export default function PoliticalExpedition() {
             <p className="text-muted-foreground mt-1">
               Civic engagement infrastructure — not partisan messaging
             </p>
+            <p className="text-xs text-purple-400 font-semibold mt-1 tracking-wider uppercase">
+              It&rsquo;s What you Use it FOR
+            </p>
           </div>
         </div>
 

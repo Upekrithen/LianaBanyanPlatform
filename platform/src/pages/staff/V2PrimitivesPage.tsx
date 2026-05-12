@@ -69,7 +69,7 @@ export default function V2PrimitivesPage() {
               <ProofStrip
                 items={[
                   { icon: <BadgeCheck className="h-3.5 w-3.5" />, label: "2,130 innovations" },
-                  { icon: <ShieldCheck className="h-3.5 w-3.5" />, label: "11 provisional filings" },
+                  { icon: <ShieldCheck className="h-3.5 w-3.5" />, label: "{{provisionalApps}} provisional filings" },
                   { icon: <Flame className="h-3.5 w-3.5" />, label: "35 production systems" },
                   "No ads",
                   "No data selling",

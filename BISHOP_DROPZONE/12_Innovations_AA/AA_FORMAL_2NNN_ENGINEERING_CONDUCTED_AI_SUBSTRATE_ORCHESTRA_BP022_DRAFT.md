@@ -110,6 +110,7 @@ Method + system for cooperative-platform cognitive-sovereignty via a 4-layer sub
 - `bp021_day_receipt_empirical_anchor_for_architecture_beats_more_philosophy.eblet.md` — primary day-receipt
 - `compaction_continue_vs_new_session_reorient_sentinel_ab_framework_bushel_17_candidate_canon_bp021.eblet.md` — Bushel 17 fires the back-cover-numbers empirical receipt
 - `LB-CODEX-0028` (Sonnet-on-Both probe) + `LB-CODEX-0031` (Bushel 16 recursive-self-building) — load-bearing empirical receipts
+- **`ai_flagship_value_make_better_serve_purpose_everyone_benefits_canon_bp026.eblet.md`** — BP026 Founder-direct closing canon for the AI thesis. *"AI Flagships DO have a lot of value, and our goal is not to get rid of it, it's to make it BETTER to SERVE OUR PURPOSE and that EVERYONE benefits from. LIke better science and faster math to do it."* This is the *why* behind the Engineering Conducted AI thesis — calibrated stewardship, not displacement. Empirical anchor: BP026 cross-cluster composition A&A (Sonnet swarm + Opus 4.7 polish = combined output exceeding either tier alone). Tier-1 slogan-class candidates: **MAKE IT BETTER TO SERVE OUR PURPOSE** / **EVERYONE BENEFITS** / **BETTER SCIENCE. FASTER MATH.**
 
 ### Trademark posture
 - **A CONSIDERED APPROACH TO ENGINEERING CONDUCTED AI** — paper-title mark

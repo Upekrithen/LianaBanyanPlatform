@@ -11,6 +11,7 @@ const SantaEverAfter = lazy(() => import("@/pages/SantaEverAfter"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
 const SphinxPhase1 = lazy(() => import("@/pages/SphinxPhase1"));
 const SkipEbletsDevPage = lazy(() => import("@/pages/dev/SkipEbletsDevPage"));
+const CelPaneBenchmarkPage = lazy(() => import("@/pages/dev/CelPaneBenchmarkPage"));
 
 const ExternalRedirect = ({ to }: { to: string }) => {
   useEffect(() => {
@@ -113,6 +114,9 @@ export const miscRoutes = (
 
     {/* BP028 Skip-Eblets Phase 1+2 prototype */}
     <Route path="/dev/skip-eblets" element={<LazyPage><SkipEbletsDevPage /></LazyPage>} />
+
+    {/* BP028+BP029 CelPane / SKEBLETS Wild Magic standalone benchmark (Bushel 48 anchor) */}
+    <Route path="/dev/celpane-benchmark" element={<LazyPage><CelPaneBenchmarkPage /></LazyPage>} />
 
     {/* Catch-all */}
     <Route path="*" element={<LazyPage><NotFound /></LazyPage>} />

@@ -42,7 +42,7 @@ export default function FoodNodeCueCard() {
   const handlePlay = useCallback((val: PlayType) => {
     setPlay(val);
     if (val === 'captain') {
-      navigate('/captain/become');
+      navigate('/captain/landing');
       return;
     }
     if (val === 'food-truck' || val === 'ghost-kitchen') {

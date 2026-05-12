@@ -1515,7 +1515,7 @@ export default function RedCarpet() {
                     <MapPinIcon className="w-7 h-7 text-amber-400 mb-3" />
                     <h3 className="font-bold text-lg mb-2">Drop Beacons</h3>
                     <p className="text-sm text-muted-foreground">
-                      As you explore the 2,128+ innovations and 16 initiatives, drop beacons to mark your place. Like fireflies in the forest, they guide your way back.
+                      As you explore the {{innovationCount}}+ innovations and 16 initiatives, drop beacons to mark your place. Like fireflies in the forest, they guide your way back.
                     </p>
                   </div>
                   <div className="p-6 bg-card rounded-xl border border-border">

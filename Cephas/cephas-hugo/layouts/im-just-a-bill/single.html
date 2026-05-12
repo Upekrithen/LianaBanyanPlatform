@@ -1,0 +1,103 @@
+{{ define "main" }}
+<article class="bill-bounty-poster">
+  <nav class="breadcrumb" aria-label="breadcrumb">
+    <ol>
+      <li><a href="/">Home</a></li>
+      <li><a href="/im-just-a-bill/">I'm Just a Bill</a></li>
+      <li aria-current="page">{{ .Title }}</li>
+    </ol>
+  </nav>
+
+  <header class="bill-header">
+    <h1>{{ .Title }}</h1>
+
+    <div class="bill-meta">
+      {{ with .Params.status }}
+      <span class="status-badge status-{{ . }}">{{ . | humanize }}</span>
+      {{ end }}
+
+      {{ with .Params.slug }}
+      <span class="bill-slug">Bill #{{ . }}</span>
+      {{ end }}
+
+      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time>
+    </div>
+
+    {{ with .Params.tldr }}
+    <div class="bill-tldr">
+      <h2>TL;DR</h2>
+      <p>{{ . }}</p>
+    </div>
+    {{ end }}
+
+    {{ with .Params.composing_hints }}
+    <aside class="bill-composing-hints">
+      <h3>Composing Hints</h3>
+      <div class="hints-content">{{ . | markdownify }}</div>
+    </aside>
+    {{ end }}
+  </header>
+
+  <div class="bill-body">
+    {{ with .Params.plain_language_summary }}
+    <section class="bill-section plain-language-summary">
+      <h2>Plain Language Summary</h2>
+      <div class="section-content">{{ . | markdownify }}</div>
+    </section>
+    {{ end }}
+
+    {{ with .Params.what_the_bill_does }}
+    <section class="bill-section what-the-bill-does">
+      <h2>What the Bill Does</h2>
+      <div class="section-content">{{ . | markdownify }}</div>
+    </section>
+    {{ end }}
+
+    {{ with .Params.what_it_costs }}
+    <section class="bill-section what-it-costs">
+      <h2>What It Costs</h2>
+      <div class="section-content">{{ . | markdownify }}</div>
+    </section>
+    {{ end }}
+
+    {{ with .Params.who_benefits }}
+    <section class="bill-section who-benefits">
+      <h2>Who Benefits</h2>
+      <div class="section-content">{{ . | markdownify }}</div>
+    </section>
+    {{ end }}
+
+    {{ with .Params.who_opposes }}
+    <section class="bill-section who-opposes">
+      <h2>Who Opposes</h2>
+      <div class="section-content">{{ . | markdownify }}</div>
+    </section>
+    {{ end }}
+
+    {{ with .Params.council_vetting_prompt }}
+    <section class="bill-section council-vetting-prompt">
+      <h2>Council Vetting Prompt</h2>
+      <div class="section-content">{{ . | markdownify }}</div>
+    </section>
+    {{ end }}
+
+    {{ .Content }}
+  </div>
+
+  <footer class="bill-footer">
+    <section class="social-share">
+      <h3>Share This Bill</h3>
+      <div class="share-buttons">
+        <a href="https://twitter.com/intent/tweet?url={{ .Permalink }}&text={{ .Title }}" target="_blank" rel="noopener" class="share-button twitter">Twitter</a>
+        <a href="https://www.facebook.com/sharer/sharer.php?u={{ .Permalink }}" target="_blank" rel="noopener" class="share-button facebook">Facebook</a>
+        <a href="mailto:?subject={{ .Title }}&body={{ .Permalink }}" class="share-button email">Email</a>
+      </div>
+    </section>
+
+    <div class="cooperative-metadata">
+      <p class="meta-label">Cooperative Civic Platform</p>
+      <p class="platform-name">Liana Banyan</p>
+    </div>
+  </footer>
+</article>
+{{ end }}

@@ -443,21 +443,21 @@ const VARIANT_CONFIGS: Record<LibrarianMedallionVariant, VariantConfig> = {
     centerLock: false,
     ebletPath: "CANON/GOLDEN/liana-banyan",
     backSummary:
-      "Librarian-Liana-Banyan is the corporate anchor — broadest audience-tier, counsel-formal. Liana Banyan Corporation (EIN 41-2797446, Wyoming C-Corp). 37 years of development, 2,270 innovations, 228 Crown Jewels, 15 provisional patents. The substrate is AGPL v3 free — full-featured, no gating. Federation Library opt-in at $5/year. 83.3% creator-keeps on every transaction.",
+      "Librarian-Liana-Banyan is the corporate anchor — broadest audience-tier, counsel-formal. Liana Banyan Corporation (EIN [REDACTED-PRIVATE], C-Corp). 37 years of development, 2,270 innovations, 228 Crown Jewels, 17 provisional patents. The substrate is AGPL v3 free — full-featured, no gating. Federation Library opt-in at $5/year. 83.3% creator-keeps on every transaction.",
     bountyTagline: "Join the Cooperative — Help Each Other Help Ourselves.",
     tier: "Liana Banyan — Corporate Anchor",
     authorityLabel: "Corporate Canon Authority",
     accessTier: "public-agpl",
     stage2Demo: {
       title: "Liana Banyan Platform Overview",
-      subtitle: "37 years. 2,270 innovations. 15 provisionals. One cooperative.",
+      subtitle: "37 years. 2,270 innovations. 17 provisionals. One cooperative.",
       ctaLabel: "See the Platform",
       steps: [
-        { id: "foundation", label: "Foundation", prompt: "Loading Liana Banyan canonical context…", receipt: "✓ Foundation: 2,270 innovations · 228 Crown Jewels · 15 provisional patents filed" },
+        { id: "foundation", label: "Foundation", prompt: "Loading Liana Banyan canonical context…", receipt: "✓ Foundation: 2,270 innovations · 228 Crown Jewels · 17 provisional patents filed" },
         { id: "substrate", label: "Substrate", prompt: "Activating Cathedral Effect substrate…", receipt: "✓ Substrate: +86.1pp HOT lift · 5 vendors tested · AGPL v3 free full-version" },
         { id: "cooperative", label: "Cooperative", prompt: "Federation Library membership check…", receipt: "✓ Cooperative: $5/year · 83.3% creator keeps · FOR THE KEEP!" },
       ],
-      finalReceipt: "LB-PLATFORM-DEMO · 2,270 innovations · 15 provisionals · AGPL v3 free · Federation Library $5/year ONE OF US",
+      finalReceipt: "LB-PLATFORM-DEMO · 2,270 innovations · 17 provisionals · AGPL v3 free · Federation Library $5/year ONE OF US",
     },
   },
   apiarist: {

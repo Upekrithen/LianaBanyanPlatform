@@ -100,7 +100,7 @@ export async function getNervousSystemStatus(): Promise<{
 export const CRITICAL_NUMBERS = {
   CREATOR_KEEPS: 83.3,
   PLATFORM_MARGIN: 20,
-  INNOVATIONS: 2128,
+  INNOVATIONS: 2270,
   PATENT_CLAIMS: 2097,
   PATENT_APPLICATIONS: 11,
   CROWN_JEWELS: 167,

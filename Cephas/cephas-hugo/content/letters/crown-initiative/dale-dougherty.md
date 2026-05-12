@@ -1,14 +1,22 @@
-﻿---
-title: "Crown Letter: Dale Dougherty â€” Industry Chancellor"
-description: "Invitation to Dale Dougherty to serve as Industry Chancellor, Lord Banyan of the Forge, and First Maker of Let's Make Bread"
-date: 2026-01-15
-tags: ["crown-initiative", "lets-make-bread", "maker-movement", "hexisle"]
-categories: ["Crown Letters"]
+---
+title: 'Crown Letter: Dale Dougherty â€” Industry Chancellor'
+description: >-
+  Invitation to Dale Dougherty to serve as Industry Chancellor, Lord Banyan of
+  the Forge, and First Maker of Let's Make Bread
+date: 2026-01-15T00:00:00.000Z
+tags:
+  - crown-initiative
+  - lets-make-bread
+  - maker-movement
+  - hexisle
+categories:
+  - Crown Letters
 wrasseTriggers:
   - crown initiative
   - dale dougherty
   - letters
   - cephas member content
+  - crown letter dale dougherty industry chancellor
 ---
 
 Dear Mr. Dougherty,

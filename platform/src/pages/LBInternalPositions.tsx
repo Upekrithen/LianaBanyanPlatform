@@ -527,7 +527,7 @@ const lbInternalPositions: LBPosition[] = [
   {
     category: 'research_development',
     title: 'Patent Filing Specialist',
-    description: 'Provisional patent applications. Micro-entity filings ($65 each). 2,097 claims across 11 provisional applications.',
+    description: 'Provisional patent applications. Micro-entity filings ($65 each). 2,097 claims across {{provisionalApps}} provisional applications.',
     icon: BookOpen,
     priority: 'high',
     tier: 'guild_staff',

@@ -3,8 +3,8 @@ title: "Crown Letter: Yunus"
 date: 2026-01-15
 letter_type: "Crown Letter"
 recipient: "Yunus"
-initiative: "VSL"
-initiative_number: 10
+initiative: "Lets Make Bread"
+initiative_number: 11
 tags: ["crown-letter", "initiative", "muhammad-yunus"]
 wrasseTriggers:
   - ðÿ crown letter muhammad yunus

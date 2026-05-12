@@ -1,5 +1,5 @@
-/**
- * GET-FOREMAN-STATUS — [CAI] [B40] Bushel 40 FOREMAN Dashboard Data Layer
+﻿/**
+ * GET-FOREMAN-STATUS - [CAI] [B40] Bushel 40 FOREMAN Dashboard Data Layer
  * =========================================================================
  * Reads local filesystem state (Yoke feed, Bushel state, queue, etc.)
  * and returns structured JSON for the /foreman React dashboard.
@@ -8,11 +8,11 @@
  * Poll interval: 10 seconds from client.
  *
  * Data sources:
- *   1. Yoke feed   — KNIGHT_BISHOP_MESSAGES.md
- *   2. Bushel state — ~/.claude/state/bushel_*/
- *   3. Queue depth  — BISHOP_DROPZONE/01_KnightPrompts/ file list
- *   4. Git log      — last Knight commit
- *   5. Dropzone     — BISHOP_DROPZONE/02_PawnPrompts/ + 02_RookReturns/
+ *   1. Yoke feed    - KNIGHT_BISHOP_MESSAGES.md
+ *   2. Bushel state - ~/.claude/state/bushel_N/ (glob)
+ *   3. Queue depth  - BISHOP_DROPZONE/01_KnightPrompts/ file list
+ *   4. Git log      - last Knight commit
+ *   5. Dropzone     - BISHOP_DROPZONE/02_PawnPrompts/ + 02_RookReturns/
  */
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
@@ -22,7 +22,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-// ─── Path constants ───────────────────────────────────────────────────────────
+// --- Path constants -----------------------------------------------------------
 const HOME = Deno.env.get("HOME") ?? "/root";
 const PLATFORM_ROOT = Deno.env.get("PLATFORM_ROOT") ??
   "C:/Users/Administrator/Documents/LianaBanyanPlatform";
@@ -33,7 +33,7 @@ const DROPZONE_PAWN = `${PLATFORM_ROOT}/BISHOP_DROPZONE/02_PawnPrompts`;
 const DROPZONE_ROOK = `${PLATFORM_ROOT}/BISHOP_DROPZONE/02_RookReturns`;
 const STATE_DIR = `${HOME}/.claude/state`;
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+// --- Types --------------------------------------------------------------------
 interface AgentStatus {
   id: "bishop" | "knight" | "pawn" | "rook";
   display_name: string;
@@ -83,7 +83,7 @@ interface ForemanStatus {
   error_notes: string[];
 }
 
-// ─── Utility: safe file read ──────────────────────────────────────────────────
+// --- Utility: safe file read --------------------------------------------------
 async function readFileSafe(path: string): Promise<string | null> {
   try {
     return await Deno.readTextFile(path);
@@ -92,7 +92,7 @@ async function readFileSafe(path: string): Promise<string | null> {
   }
 }
 
-// ─── Utility: safe dir stat ───────────────────────────────────────────────────
+// --- Utility: safe dir stat ---------------------------------------------------
 async function statSafe(path: string): Promise<Deno.FileInfo | null> {
   try {
     return await Deno.stat(path);
@@ -101,7 +101,7 @@ async function statSafe(path: string): Promise<Deno.FileInfo | null> {
   }
 }
 
-// ─── Utility: list dir entries ────────────────────────────────────────────────
+// --- Utility: list dir entries ------------------------------------------------
 async function listDir(path: string): Promise<string[]> {
   const names: string[] = [];
   try {
@@ -114,16 +114,16 @@ async function listDir(path: string): Promise<string[]> {
   return names;
 }
 
-// ─── Yoke parser ─────────────────────────────────────────────────────────────
+// --- Yoke parser -------------------------------------------------------------
 function parseYoke(raw: string): YokeMessage[] {
   const messages: YokeMessage[] = [];
   // Split on the --- separator blocks
   const blocks = raw.split(/\n---\n/);
 
   for (const block of blocks) {
-    // Each message starts with ## [TYPE] FROM → TO or ## [TYPE] FROM → TO
+    // Each message starts with ## [TYPE] FROM -> TO or ## [TYPE] FROM -> TO
     const headerMatch = block.match(
-      /^##\s+\[([A-Z]+)\]\s+([\w\s/]+?)(?:\s*[→\->]+\s*([\w\s/]+))?\s*$/m
+      /^##\s+\[([A-Z]+)\]\s+([\w\s/]+?)(?:\s*[->\->]+\s*([\w\s/]+))?\s*$/m
     );
     if (!headerMatch) continue;
 
@@ -138,12 +138,12 @@ function parseYoke(raw: string): YokeMessage[] {
     const fromRaw = headerMatch[2]?.trim() ?? "UNKNOWN";
     const toRaw = headerMatch[3]?.trim() ?? "ALL";
 
-    // Parse from/to — they appear in the header like "BISHOP → KNIGHT"
+    // Parse from/to - they appear in the header like "BISHOP -> KNIGHT"
     let from = fromRaw;
     let to = toRaw;
 
-    // Also try inline "FROM → TO" on the ## line
-    const inlineDir = block.match(/##\s+\[[A-Z]+\]\s+(BISHOP|KNIGHT|PAWN|ROOK)\s*[→>]+\s*(BISHOP|KNIGHT|PAWN|ROOK)/i);
+    // Also try inline "FROM -> TO" on the ## line
+    const inlineDir = block.match(/##\s+\[[A-Z]+\]\s+(BISHOP|KNIGHT|PAWN|ROOK)\s*[->>]+\s*(BISHOP|KNIGHT|PAWN|ROOK)/i);
     if (inlineDir) {
       from = inlineDir[1].toUpperCase();
       to = inlineDir[2].toUpperCase();
@@ -172,7 +172,7 @@ function parseYoke(raw: string): YokeMessage[] {
   return messages;
 }
 
-// ─── Queue parser ─────────────────────────────────────────────────────────────
+// --- Queue parser -------------------------------------------------------------
 function parseQueueItem(filename: string): QueueItem {
   // Extract session tag e.g. BP022, B133, BP025
   const sessionMatch = filename.match(/_(BP\d+|B\d+)[\._]/i);
@@ -201,7 +201,7 @@ function parseQueueItem(filename: string): QueueItem {
   return { filename, display_name, priority, session, bushel_number };
 }
 
-// ─── Bushel status detector ───────────────────────────────────────────────────
+// --- Bushel status detector ---------------------------------------------------
 function extractBushelMeta(filename: string): { number: number; name: string } | null {
   const m = filename.match(/BUSHEL[_\-](\d+)[A-Z]?[_\-](.+?)(?:[_\-](BP|B)\d+)?\.md$/i);
   if (!m) return null;
@@ -210,7 +210,7 @@ function extractBushelMeta(filename: string): { number: number; name: string } |
   return { number, name: rawName };
 }
 
-// ─── MAIN ─────────────────────────────────────────────────────────────────────
+// --- MAIN ---------------------------------------------------------------------
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
@@ -219,7 +219,7 @@ Deno.serve(async (req) => {
   const errorNotes: string[] = [];
 
   try {
-    // ── Auth check ──────────────────────────────────────────────────────────
+    // -- Auth check ----------------------------------------------------------
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) {
       return new Response(
@@ -242,7 +242,7 @@ Deno.serve(async (req) => {
       );
     }
 
-    // ── Founder check ────────────────────────────────────────────────────────
+    // -- Founder check --------------------------------------------------------
     const { data: profile } = await supabase
       .from("profiles")
       .select("role")
@@ -256,7 +256,7 @@ Deno.serve(async (req) => {
       );
     }
 
-    // ── 1. Parse Yoke feed ───────────────────────────────────────────────────
+    // -- 1. Parse Yoke feed ---------------------------------------------------
     const yokeRaw = await readFileSafe(YOKE_PATH);
     let yokeMessages: YokeMessage[] = [];
     if (yokeRaw) {
@@ -267,12 +267,12 @@ Deno.serve(async (req) => {
       errorNotes.push(`Yoke file not readable: ${YOKE_PATH}`);
     }
 
-    // ── 2. Agent status from Yoke ────────────────────────────────────────────
+    // -- 2. Agent status from Yoke --------------------------------------------
     const allMessages = yokeRaw ? parseYoke(yokeRaw) : [];
 
     function lastMessageFrom(agentId: string): YokeMessage | undefined {
       const upperAgent = agentId.toUpperCase();
-      // Scan from end (newest) — find last message from this agent
+      // Scan from end (newest) - find last message from this agent
       for (let i = allMessages.length - 1; i >= 0; i--) {
         const m = allMessages[i];
         if (m.from.toUpperCase().includes(upperAgent)) return m;
@@ -288,7 +288,7 @@ Deno.serve(async (req) => {
       const lastMsg = lastMessageFrom(id);
       const lastActive = lastMsg?.timestamp ?? null;
 
-      // Determine status: if last activity within 2h → ACTIVE, within 24h → STANDING_BY, else OFFLINE
+      // Determine status: if last activity within 2h -> ACTIVE, within 24h -> STANDING_BY, else OFFLINE
       let status: AgentStatus["status"] = "OFFLINE";
       if (lastActive) {
         const diffMs = Date.now() - new Date(lastActive).getTime();
@@ -345,7 +345,7 @@ Deno.serve(async (req) => {
 
     const agents: AgentStatus[] = [bishopAgent, knightAgent, pawnAgent, rookAgent];
 
-    // ── 3. Queue: Knight prompt files ────────────────────────────────────────
+    // -- 3. Queue: Knight prompt files ----------------------------------------
     const queueFiles = await listDir(DROPZONE_KNIGHT);
     const queueItems: QueueItem[] = queueFiles
       .filter((f) => f.endsWith(".md") && f.startsWith("PROMPT_") && !f.includes("_AUGUR_"))
@@ -355,10 +355,10 @@ Deno.serve(async (req) => {
         return pri[a.priority] - pri[b.priority];
       });
 
-    // ── 4. Bushels: derive from queue files + state dirs ─────────────────────
+    // -- 4. Bushels: derive from queue files + state dirs ---------------------
     const bushelMap = new Map<number, BushelStatus>();
 
-    // From queue files — active/queued bushels
+    // From queue files - active/queued bushels
     for (const item of queueItems) {
       if (item.bushel_number === null) continue;
       if (bushelMap.has(item.bushel_number)) continue;
@@ -413,7 +413,7 @@ Deno.serve(async (req) => {
         name: "FOREMAN Dashboard Agent Activity",
         phase_current: 1,
         phase_total: 4,
-        phase_label: "Phase 1 — Data Layer",
+        phase_label: "Phase 1 - Data Layer",
         status: "IN_PROGRESS",
         last_file_modified: new Date().toISOString(),
         prompt_file: "PROMPT_KNIGHT_BUSHEL_40_FOREMAN_DASHBOARD_AGENT_ACTIVITY_BP025.md",
@@ -433,7 +433,7 @@ Deno.serve(async (req) => {
       return b.number - a.number;
     });
 
-    // ── 5. Assemble response ─────────────────────────────────────────────────
+    // -- 5. Assemble response -------------------------------------------------
     const payload: ForemanStatus = {
       agents,
       bushels,

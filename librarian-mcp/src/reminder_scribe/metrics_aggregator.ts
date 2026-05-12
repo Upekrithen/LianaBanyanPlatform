@@ -31,7 +31,19 @@ import { queryRsHistory, aggregateByRule, type RsProvenanceEntry } from "./subst
 
 export type RollingWindow = "7d" | "30d" | "90d" | "all_time";
 export type AiMemberFilter = "bishop" | "knight" | "pawn" | "rook" | "shadow_alpha" | "shadow_beta" | "all";
-export type RuleClassFilter = "R-KP" | "R-PRAISE" | "R-FORK" | "R-DOUBLE-FILE" | "R-COUNSEL" | "R-USPTO" | "all";
+export type RuleClassFilter =
+  | "R-KP"
+  | "R-PRAISE"
+  | "R-FORK"
+  | "R-DOUBLE-FILE"
+  | "R-COUNSEL"
+  | "R-USPTO"
+  | "R-PHA"       // Pre-Hoc Permission Ask (BRICK-WALL-FIRST-HALF) [BP028]
+  | "R-MS"        // Missing Surface (BRICK-WALL-SECOND-HALF) [BP028]
+  | "R-REV"       // Pre-Emptive Review Pressure (REVIEW-IN-LAST-HOURS) [BP028]
+  | "R-PAWN"      // dispatch_pawn-when-paste-routed (PAWN-BLIND-WORKAROUND) [BP028]
+  | "R-ROOK"      // dispatch_rook-pre-restart (MCP-RESTART-NEEDED) [BP028]
+  | "all";
 export type VisibilityScope = "personal" | "federation_aggregate" | "public_aggregate";
 
 export interface ViolationCell {

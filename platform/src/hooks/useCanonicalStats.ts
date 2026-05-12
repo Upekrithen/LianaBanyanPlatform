@@ -30,8 +30,8 @@ export interface CanonicalStats {
 const DEFAULTS: CanonicalStats = {
   innovationCount: 2270,
   crownJewels: 228,
-  patentApplications: 13,
-  patentClaims: 2506,
+  patentApplications: 19,
+  patentClaims: 2700,
   domains: 29,
   initiatives: 16,
   membershipCost: 5,
@@ -48,8 +48,8 @@ const DEFAULTS: CanonicalStats = {
   dirtyDozenGreen: 11,
   puddingArticles: 189,
   academicPapers: 41,
-  knightSessions: 545,
-  bishopSessions: 133,
+  knightSessions: 553,
+  bishopSessions: 134,
   pawnBatches: 56,
 };
 

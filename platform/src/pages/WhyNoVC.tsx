@@ -182,7 +182,7 @@ export default function WhyNoVC() {
               <Crown className="h-6 w-6 text-primary mb-2" />
               <h3 className="font-semibold text-foreground">Patent Portfolio</h3>
               <p className="text-sm text-muted-foreground">
-                <strong className="text-primary">11 provisional applications</strong> with 2,128 documented innovations.
+                <strong className="text-primary">{{provisionalApps}} provisional applications</strong> with {{innovationCount}} documented innovations.
                 This is our "runway."
               </p>
             </div>
@@ -197,7 +197,7 @@ export default function WhyNoVC() {
           </div>
           <div className="p-4 bg-muted rounded-lg space-y-3">
             <p className="text-sm text-muted-foreground">
-              Our <strong className="text-primary">127 Crown Jewel patents</strong> out of 2,128 documented innovations
+              Our <strong className="text-primary">127 Crown Jewel patents</strong> out of {{innovationCount}} documented innovations
               have an independent valuation of <strong className="text-green-600 dark:text-green-400">$116 Million</strong> — but
               we only claim <strong className="text-primary">$630,000</strong>.
             </p>

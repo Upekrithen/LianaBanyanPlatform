@@ -127,6 +127,7 @@ export default function StarterKitPage() {
               <CardContent className="p-6 flex flex-col items-center justify-center text-center h-full space-y-3">
                 <Gift className="h-10 w-10 text-emerald-500" />
                 <p className="text-4xl font-black text-emerald-500">$100</p>
+                // TIME-CAPSULE PIN — value reflects pre-Prov 16/17 snapshot (BP030); do not migrate. Annotated BP031 Bushel 64.
                 <p className="text-sm text-muted-foreground">Total kit value — backed by 11 provisional patents and 2,097 formal claims</p>
               </CardContent>
             </Card>

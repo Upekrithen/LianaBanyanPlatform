@@ -20,7 +20,12 @@
  *   8. R-FORK-1    Never propose LB-currency-to-fiat conversion
  *   9. R-COUNSEL-1 Never gate on counsel
  *  10. R-USPTO-1   Don't over-instruct USPTO process
- *  11+ (extendable via runtime loadRulesFromMemory)
+ *  11. R-PHA-1     Pre-Hoc Permission Ask (BRICK-WALL-FIRST-HALF regression) [BP028]
+ *  12. R-MS-1      Missing Surface (BRICK-WALL-SECOND-HALF regression) [BP028]
+ *  13. R-REV-1     Pre-Emptive Review Pressure (REVIEW-IN-LAST-HOURS regression) [BP028]
+ *  14. R-PAWN-1    dispatch_pawn-when-paste-routed (PAWN-BLIND-WORKAROUND regression) [BP028]
+ *  15. R-ROOK-1    dispatch_rook-pre-restart (MCP-RESTART-NEEDED regression) [BP028]
+ *  16+ (extendable via runtime loadRulesFromMemory)
  *
  * BRIDLE Rule 4: if rule compilation fails, default-FAIL = halt response.
  * Don't ship potentially-violating response on engine-failure.
@@ -30,9 +35,9 @@
  *   KN104 5e7f540 (Detective TEAM PRE-COLOSSUS substrate-write-back)
  *   Catechist Scribe #2313 KN036 BP004 (session-open grading; additively composes)
  */
-export type ViolationClass = "founder-mandatory" | "high-stakes" | "discipline" | "praise" | "fork" | "counsel" | "file-existence" | "path-format";
+export type ViolationClass = "founder-mandatory" | "high-stakes" | "discipline" | "praise" | "fork" | "counsel" | "file-existence" | "path-format" | "brick-wall" | "dispatch-coord";
 export type OverrideClass = "free" | "marks-cost" | "structurally-immutable";
-export type PatternType = "regex" | "file-existence" | "anti-pattern" | "path-format";
+export type PatternType = "regex" | "file-existence" | "anti-pattern" | "path-format" | "context-heuristic";
 export interface RulePattern {
     type: PatternType;
     /**

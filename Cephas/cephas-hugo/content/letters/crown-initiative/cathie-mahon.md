@@ -3,8 +3,8 @@ title: "Crown Letter: Mahon"
 date: 2026-01-15
 letter_type: "Crown Letter"
 recipient: "Mahon"
-initiative: "VSL"
-initiative_number: 10
+initiative: "MSA"
+initiative_number: 7
 tags: ["crown-letter", "initiative", "cathie-mahon"]
 wrasseTriggers:
   - ðÿ crown letter cathie mahon

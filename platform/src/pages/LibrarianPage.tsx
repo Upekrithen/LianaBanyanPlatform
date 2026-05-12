@@ -1,33 +1,39 @@
 /**
- * LibrarianPage — The Librarian Page
- * ====================================
+ * LibrarianPage — CAI ◌ NotCents Download & Information Page
+ * ============================================================
  * Lives at Librarian.the2ndSecond.com
  *
- * This is the destination page that all LibrarianMedallion QR codes route to
- * (per Marked Exception / BP005 federation canon).
+ * CAI = Conducted AI (pronounced "Kay-Eye")
+ * Formula: CAI = log₁₀(S × A × E)
+ *   S = Speed multiplier (substrate-routed vs cold)
+ *   A = Accuracy lift (HOT score delta)
+ *   E = Efficiency multiplier (cost reduction)
+ *
+ * DEPLOYMENT HOLD: Do NOT deploy until Prov 16, 17, and 18 are filed.
+ *   Prov 16: Distributed Substrate Mesh / VoIP cooperative network (in flight)
+ *   Prov 17: 12-Paper Series supplementary disclosure (supplementary)
+ *   Prov 18: Cooperative Mesh Network physical layer (BP024)
+ *   → Remove DEPLOYMENT_HOLD flag when all three are cleared.
  *
  * Routes:
- *   /                     → Librarian overview + all 7 medallion gallery
- *   /medallion/:variant   → Single variant full-page (composes with Pod T)
- *   /install              → Install / AGPL v3 framing + pip install
+ *   /                     → CAI home + applications + architectural boundaries
+ *   /medallion/:variant   → Single medallion full-page
+ *   /install              → Install / AGPL v3 + packages for replication
  *   /federation           → Federation Library access (ONE OF US, $5/year)
- *   /receipts             → Cross-vendor benchmark receipts (public / Pod X)
+ *   /receipts             → Cross-vendor benchmark receipts (public)
  *
  * Architecture:
- *   - Librarian.LianaBanyan.com → redirects here (download-detail-page)
- *   - Librarian.the2ndSecond.com → this page
- *   - All /medallion/:variant routes compose with LibrarianMedallion (KN053-55)
- *   - Stage-2 Demo Content (KN061) live on every medallion card-back
- *   - AGPL v3 framing: solo substrate free, federation library member-only
+ *   - Librarian.LianaBanyan.com → redirects here
+ *   - Librarian.the2ndSecond.com → this page (primary CAI surface)
+ *   - CAI ◌ NotCents composite brand canon (BP021 Crown-Jewel-class)
+ *   - AGPL v3: solo substrate free; Federation Library = $5/yr member-only
  *
- * Composes with:
- *   - LibrarianMedallion (KN053-55, Pod T)
- *   - Stage2DemoPanel (KN061, Pod Y)
- *   - MedallionPage routing architecture (Pod T)
- *   - BP005 LB Frame broadcast funnel (5-stage)
- *
- * Tags: KN064 / BP005 (Pod Y Bean 2 Librarian Page Deployment)
+ * Tags: KN064 / BP005 (Pod Y) / BP024 (CAI page rebrand)
  */
+
+// DEPLOYMENT_HOLD: true until Prov 16 + 17 + 18 filed. See header comment.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const DEPLOYMENT_HOLD = true;
 
 import { useParams, Link, useLocation } from "react-router-dom";
 import {
@@ -48,6 +54,14 @@ import {
   GitBranch,
   Shield,
   Zap,
+  Scale,
+  FileText,
+  Code2,
+  FlaskConical,
+  GraduationCap,
+  Microscope,
+  Lock,
+  AlertCircle,
 } from "lucide-react";
 
 // ─────────────────────────────────────────────────────────
@@ -87,6 +101,119 @@ function isValidVariant(v: string | undefined): v is LibrarianMedallionVariant {
 }
 
 // ─────────────────────────────────────────────────────────
+// APPLICATION DOMAINS — what CAI has been proven on
+// ─────────────────────────────────────────────────────────
+
+const CAI_APPLICATIONS = [
+  {
+    id: "legal",
+    title: "Legal Document Analysis",
+    icon: Scale,
+    description: "Contract review, patent claim language, cooperative legal structures.",
+    examples: [
+      "36 Crown Letters drafted + reviewed",
+      "A&A formal patent claim scaffolding (2,270 innovations)",
+      "Cooperative Defensive Patent Pledge (#2260)",
+    ],
+    package: "librarian-mcp",
+    receipt: "Wave 1 cohort / B131",
+  },
+  {
+    id: "patent",
+    title: "Patent Drafting",
+    icon: FileText,
+    description: "USPTO provisional and formal application scaffolding at scale.",
+    examples: [
+      "15 USPTO provisionals filed (Prov 1–15)",
+      "2,506 formal patent claims generated",
+      "Cross-provisional consistency checking",
+    ],
+    package: "librarian-mcp + chandelier-bench",
+    receipt: "Prov 13–15 / B133 BP001",
+  },
+  {
+    id: "medical",
+    title: "Medical & Health Research",
+    icon: Microscope,
+    description: "Systematic literature synthesis, clinical framework scaffolding.",
+    examples: [
+      "Healthcare systems paper (12-Paper Save-the-World Series)",
+      "Cross-study synthesis across 455+ publications",
+      "Skipping Stones depth routing: Skim → Article → Full Paper",
+    ],
+    package: "librarian-mcp",
+    receipt: "Bushel 12 / BP022",
+  },
+  {
+    id: "academic",
+    title: "Academic Paper Scaffolding",
+    icon: GraduationCap,
+    description: "Multi-paper series coordination, cross-citation consistency, submission prep.",
+    examples: [
+      "41 papers drafted across interconnected series",
+      "12-Paper Save-the-World Series structured in parallel",
+      "INDL-9 Geneva Sep 2026 submission pipeline",
+    ],
+    package: "librarian-mcp",
+    receipt: "Bushel 12 / BP022",
+  },
+  {
+    id: "code",
+    title: "Code Generation & Verification",
+    icon: Code2,
+    description: "Autonomous multi-agent build pipelines with substrate-routed context.",
+    examples: [
+      "77+ consecutive Knight builds (zero --no-verify)",
+      "Shadow E-Giant autonomous build fleet (Bushel 16)",
+      "64-nested subagent depth-3 parallel architecture",
+    ],
+    package: "librarian-mcp (MCP server mode)",
+    receipt: "BP021 Bushel 16 / KN042",
+  },
+  {
+    id: "benchmark",
+    title: "Cross-Vendor AI Benchmarking",
+    icon: FlaskConical,
+    description: "Empirical HOT-lift measurement across models and providers.",
+    examples: [
+      "+86.1pp mean HOT lift · 8 models · 5 vendors · 1,200 calls",
+      "23× cost spread measured across providers",
+      "Chandelier L1 + L2 receipt infrastructure (KN019)",
+    ],
+    package: "chandelier-bench (open-source, part of librarian-mcp)",
+    receipt: "K499 / B123 · K535 / B132",
+  },
+];
+
+// ─────────────────────────────────────────────────────────
+// PACKAGES FOR REPLICATION
+// ─────────────────────────────────────────────────────────
+
+const CAI_PACKAGES = [
+  {
+    name: "librarian-mcp",
+    install: "pip install librarian-mcp",
+    description: "Full Librarian MCP server. Cathedral Effect, Wrasse, Chronos, Herder, Detective. AGPL v3.",
+    license: "AGPL v3 Free",
+    replicates: "All 6 application domains above",
+  },
+  {
+    name: "chandelier-bench",
+    install: "pip install librarian-mcp  # included",
+    description: "Chandelier L1 + L2 benchmarking suite. Reproduce the +86.1pp HOT lift receipts.",
+    license: "AGPL v3 Free",
+    replicates: "Cross-vendor AI benchmarking",
+  },
+  {
+    name: "pheromone-substrate",
+    install: "# Bundled in librarian-mcp",
+    description: "Append-only JSONL pheromone substrate + Wrasse pre-injection router. Core knowledge store.",
+    license: "AGPL v3 Free",
+    replicates: "Substrate-routed memory (all domains)",
+  },
+];
+
+// ─────────────────────────────────────────────────────────
 // NAV
 // ─────────────────────────────────────────────────────────
 
@@ -112,10 +239,13 @@ function LibrarianNav({ showBack }: { showBack?: boolean }) {
           className="font-semibold text-sm hover:text-primary transition-colors"
           data-testid="librarian-nav-home"
         >
-          The Librarian
+          CAI ◌ NotCents
         </Link>
         <span className="text-muted-foreground/40 text-xs">·</span>
         <Badge variant="outline" className="text-[10px]">
+          Conducted AI
+        </Badge>
+        <Badge variant="outline" className="text-[10px] text-green-600 border-green-600/40">
           AGPL v3 Free
         </Badge>
         <div className="ml-auto flex items-center gap-2">
@@ -141,34 +271,52 @@ function LibrarianNav({ showBack }: { showBack?: boolean }) {
 
 function LibrarianHome() {
   return (
-    <div className="space-y-12" data-testid="librarian-home">
-      {/* Hero — V4 tagline (BP010 turn-21) */}
+    <div className="space-y-14" data-testid="librarian-home">
+
+      {/* Hero — CAI ◌ NotCents */}
       <div
         className="text-center space-y-5 py-14"
         data-testid="librarian-hero"
       >
         <div className="flex justify-center mb-4">
-          <div className="w-16 h-16 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center">
-            <BookOpen className="w-8 h-8 text-primary" />
+          <div className="relative">
+            <div className="w-20 h-20 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center">
+              <BookOpen className="w-10 h-10 text-primary" />
+            </div>
+            <div
+              className="absolute -bottom-1 -right-1 rounded-full px-1.5 py-0.5 text-[9px] font-bold border"
+              style={{ background: "#0a0a0a", color: "#22d3ee", borderColor: "rgba(34,211,238,0.4)" }}
+            >
+              CAI
+            </div>
           </div>
         </div>
-        <div className="space-y-2">
+
+        <div className="space-y-3">
           <p className="text-sm font-medium text-muted-foreground tracking-wide uppercase">
-            Librarian. Working Faster+Cheaper+Better. So you don't have to.
+            Conducted AI · Unparalleled accuracy, speed, with diminished cost
           </p>
           <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight">
-            TRIPLE YOUR CONTEXT.{" "}
-            <span className="text-primary">To the 4th Power.</span>{" "}
-            <span className="text-green-600 dark:text-green-400">FREE.</span>
+            CAI ◌ NotCents.{" "}
+            <span className="text-primary">It's HOW You Use It.</span>
           </h1>
+          <div
+            className="inline-block mx-auto rounded-lg px-4 py-2 font-mono text-sm border"
+            style={{ background: "#0a0a0a", color: "#22d3ee", borderColor: "rgba(34,211,238,0.3)" }}
+          >
+            CAI = log₁₀(S × A × E)
+            <span className="text-zinc-500 ml-3 text-xs">Speed · Accuracy · Efficiency</span>
+          </div>
         </div>
+
         <p className="text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-          AI context substrate — proven +86.1pp HOT lift across 5 vendors.
-          Cathedral Effect, Wrasse pre-injection, Chronos signing.
-          AGPL v3 free, full-version, no gating. Federation Library unlocks with{" "}
+          Conducted AI is not a model. It's an architecture. Route knowledge before the model sees the
+          question — proven +86.1pp HOT lift across 5 vendors, 8 models, 1,200 calls.
+          AGPL v3 free. Federation Library unlocks with{" "}
           <span className="font-semibold text-foreground">ONE OF US</span>{" "}
           membership ($5/year).
         </p>
+
         <div className="flex justify-center gap-3 flex-wrap">
           <Link to="/install">
             <Button size="lg" data-testid="hero-install-btn">
@@ -176,13 +324,10 @@ function LibrarianHome() {
               pip install librarian-mcp
             </Button>
           </Link>
-          <Link to="/medallion/liana-banyan">
-            <Button
-              size="lg"
-              variant="outline"
-              data-testid="hero-gallery-btn"
-            >
-              Explore Medallions
+          <Link to="/receipts">
+            <Button size="lg" variant="outline" data-testid="hero-receipts-btn">
+              <BarChart2 className="w-4 h-4 mr-2" />
+              See the Receipts
             </Button>
           </Link>
         </div>
@@ -211,6 +356,134 @@ function LibrarianHome() {
             <p className="text-[11px] text-muted-foreground">{stat.label}</p>
           </div>
         ))}
+      </div>
+
+      {/* Application Domains */}
+      <div className="space-y-5" data-testid="cai-applications">
+        <div>
+          <h2 className="text-xl font-bold">Proven Applications</h2>
+          <p className="text-sm text-muted-foreground mt-1">
+            Each domain below has been run on the CAI architecture with published receipts.
+            Packages for replication are listed under{" "}
+            <Link to="/install" className="underline underline-offset-2 hover:text-foreground transition-colors">
+              Install
+            </Link>.
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {CAI_APPLICATIONS.map((app) => {
+            const Icon = app.icon;
+            return (
+              <div
+                key={app.id}
+                className="rounded-lg border border-border/60 bg-card p-4 space-y-3"
+                data-testid={`cai-app-${app.id}`}
+              >
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-md bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <Icon className="w-4 h-4 text-primary" />
+                  </div>
+                  <h3 className="font-semibold text-sm">{app.title}</h3>
+                </div>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  {app.description}
+                </p>
+                <ul className="space-y-1">
+                  {app.examples.map((ex, i) => (
+                    <li key={i} className="flex gap-1.5 text-[11px] text-muted-foreground/80">
+                      <span className="text-green-500 flex-shrink-0 mt-0.5">·</span>
+                      <span>{ex}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="pt-1 border-t border-border/40 space-y-0.5">
+                  <p className="text-[10px] text-muted-foreground/60 font-mono">
+                    pkg: {app.package}
+                  </p>
+                  <p className="text-[10px] text-muted-foreground/50">
+                    receipt: {app.receipt}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Architectural Boundaries — why mining/hacking is impossible */}
+      <div
+        className="rounded-xl border border-red-500/20 bg-red-500/5 p-6 space-y-4"
+        data-testid="cai-architectural-boundaries"
+      >
+        <div className="flex items-start gap-3">
+          <Lock className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+          <div className="space-y-1">
+            <h2 className="font-bold text-base">
+              What CAI Cannot Do — By Architecture, Not Policy
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              This is not a terms-of-service restriction. The architecture does not contain the
+              components required for these use cases. The AGPL v3 source is auditable to confirm.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 text-red-400 flex-shrink-0" />
+              <p className="font-semibold text-sm">Cryptocurrency Mining — Architecturally Impossible</p>
+            </div>
+            <p className="text-[13px] text-muted-foreground leading-relaxed pl-6">
+              Mining requires a tight compute loop executing SHA-256 or equivalent hashing billions
+              of times per second, typically on GPU pipelines. The CAI architecture has no such loop.
+            </p>
+            <ul className="pl-6 space-y-1">
+              {[
+                "Arm A routes to external AI model APIs — it does not compute hashes",
+                "Arm B reads from append-only JSONL files — it is a read layer, not a compute engine",
+                "Wrasse pre-injection enriches text context — there is no GPU pipeline",
+                "No proof-of-work mechanism exists anywhere in the substrate",
+              ].map((item, i) => (
+                <li key={i} className="text-[11px] text-muted-foreground/70 flex gap-1.5">
+                  <span className="text-red-400/60 flex-shrink-0">✗</span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 text-red-400 flex-shrink-0" />
+              <p className="font-semibold text-sm">Network Intrusion / Hacking — Architecturally Impossible</p>
+            </div>
+            <p className="text-[13px] text-muted-foreground leading-relaxed pl-6">
+              Intrusion requires network scanners, exploit delivery, credential interception,
+              and C2 channels. None of these exist in the CAI architecture.
+            </p>
+            <ul className="pl-6 space-y-1">
+              {[
+                "Outbound calls: AI model APIs only (OpenAI, Anthropic, Google, etc.)",
+                "No network scanner, port prober, or exploit framework",
+                "No shellcode generation, no arbitrary code execution against external targets",
+                "No credential harvesting pipeline — the substrate stores knowledge, not secrets",
+              ].map((item, i) => (
+                <li key={i} className="text-[11px] text-muted-foreground/70 flex gap-1.5">
+                  <span className="text-red-400/60 flex-shrink-0">✗</span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <p className="text-[11px] text-muted-foreground/50 border-t border-border/30 pt-3">
+          CAI conducts knowledge routing between your AI model calls and an append-only substrate.
+          The architecture is a knowledge layer, not a compute farm or network tool.
+          Full source: AGPL v3 on GitHub. Audit it.
+        </p>
       </div>
 
       {/* AGPL framing */}
@@ -257,7 +530,7 @@ function LibrarianHome() {
             11 Medallions — One Brand, Many Doors
           </h2>
           <p className="text-sm text-muted-foreground">
-            All Medallions are Librarian variants.
+            All Medallions are CAI variants.
           </p>
         </div>
         <LibrarianMedallionGallery />
@@ -269,7 +542,7 @@ function LibrarianHome() {
         data-testid="librarian-cross-variant-nav"
       >
         <p className="text-sm font-semibold text-foreground/70">
-          Other doors to The Librarian:
+          Other doors to CAI:
         </p>
         <div className="flex flex-wrap gap-2">
           {CROSS_VARIANT_NAV.map(({ slug, label }) => (
@@ -292,7 +565,7 @@ function LibrarianHome() {
         </p>
       </div>
 
-      {/* Empirical-anchor footnote (BP010 current state; updates post-COLOSSUS receipt) */}
+      {/* Empirical-anchor footnote */}
       <div
         className="rounded-lg border border-border/40 bg-muted/30 p-4 space-y-1"
         data-testid="librarian-empirical-footnote"
@@ -319,7 +592,7 @@ function LibrarianHome() {
         data-testid="librarian-footer"
       >
         <p>
-          Librarian.the2ndSecond.com · Liana Banyan Corporation (EIN 41-2797446) · Wyoming C-Corp
+          CAI ◌ NotCents · Librarian.the2ndSecond.com · Liana Banyan Corporation (EIN [REDACTED-PRIVATE]) · C-Corp
         </p>
         <p className="flex flex-wrap justify-center gap-x-2 gap-y-0.5">
           <a
@@ -379,30 +652,66 @@ function LibrarianHome() {
 function LibrarianInstall() {
   return (
     <div
-      className="space-y-8 max-w-2xl mx-auto"
+      className="space-y-10 max-w-2xl mx-auto"
       data-testid="librarian-install"
     >
       <div className="space-y-2">
-        <h1 className="text-2xl font-bold">Install Librarian-MCP</h1>
+        <h1 className="text-2xl font-bold">Install CAI — Packages for Replication</h1>
         <p className="text-muted-foreground">
           AGPL v3 free. Full-version. No gating. No signup required.
+          Every application domain above is reproducible with these packages.
         </p>
       </div>
 
-      {/* pip install block */}
-      <div
-        className="rounded-lg bg-zinc-950 border border-zinc-800 p-4 font-mono text-sm"
-        data-testid="install-code-block"
-      >
-        <div className="flex items-center gap-2 mb-3 text-zinc-500 text-[11px]">
-          <Terminal className="w-3 h-3" />
-          <span>Terminal</span>
+      {/* Packages */}
+      <div className="space-y-4" data-testid="cai-packages">
+        {CAI_PACKAGES.map((pkg) => (
+          <div
+            key={pkg.name}
+            className="rounded-lg border border-border/60 bg-card p-5 space-y-3"
+            data-testid={`package-${pkg.name}`}
+          >
+            <div className="flex items-center justify-between gap-3">
+              <h2 className="font-semibold font-mono text-sm">{pkg.name}</h2>
+              <Badge variant="outline" className="text-[10px] text-green-600 border-green-600/40">
+                {pkg.license}
+              </Badge>
+            </div>
+            <p className="text-[13px] text-muted-foreground leading-relaxed">
+              {pkg.description}
+            </p>
+            <div
+              className="rounded-lg bg-zinc-950 border border-zinc-800 p-3 font-mono text-sm"
+              data-testid={`install-cmd-${pkg.name}`}
+            >
+              <div className="flex items-center gap-2 mb-2 text-zinc-500 text-[10px]">
+                <Terminal className="w-3 h-3" />
+                <span>Terminal</span>
+              </div>
+              <p className="text-green-400 text-[12px]">{pkg.install}</p>
+            </div>
+            <p className="text-[11px] text-muted-foreground/60">
+              Replicates: {pkg.replicates}
+            </p>
+          </div>
+        ))}
+      </div>
+
+      {/* MCP config block */}
+      <div className="space-y-3">
+        <h2 className="font-semibold text-sm">Configure your MCP client:</h2>
+        <div
+          className="rounded-lg bg-zinc-950 border border-zinc-800 p-4 font-mono text-sm"
+          data-testid="install-mcp-config"
+        >
+          <div className="flex items-center gap-2 mb-3 text-zinc-500 text-[11px]">
+            <Terminal className="w-3 h-3" />
+            <span>mcp_config.json</span>
+          </div>
+          <p className="text-zinc-300 text-[12px]">
+            {"{"} &quot;librarian-mcp&quot;: {"{"} &quot;command&quot;: &quot;librarian-mcp&quot; {"}"} {"}"}
+          </p>
         </div>
-        <p className="text-green-400">pip install librarian-mcp</p>
-        <p className="text-zinc-500 mt-2"># Then configure your MCP client:</p>
-        <p className="text-amber-400">
-          {"{"} &quot;librarian-mcp&quot;: {"{"} &quot;command&quot;: &quot;librarian-mcp&quot; {"}"} {"}"}
-        </p>
       </div>
 
       <div className="space-y-3 text-sm">
@@ -539,7 +848,6 @@ function LibrarianReceipts() {
         </p>
       </div>
 
-      {/* Key receipts */}
       <div className="space-y-3" data-testid="receipts-list">
         {[
           {
@@ -619,7 +927,7 @@ function LibrarianMedallionDetail() {
         <div className="text-center space-y-2">
           <h1 className="text-2xl font-bold">11 Medallions — One Brand, Many Doors</h1>
           <p className="text-sm text-muted-foreground max-w-xl mx-auto">
-            All Medallions are Librarian variants. Cathedral / Pied Piper /
+            All Medallions are CAI variants. Cathedral / Pied Piper /
             Furnace / Canon / Platform Rules / Project Rules / AI Tuning /
             Symbiote / UltraVision / Liana Banyan / Titan Librarian — one substrate, eleven doors.
           </p>
@@ -627,7 +935,7 @@ function LibrarianMedallionDetail() {
         <LibrarianMedallionGallery />
         <div className="text-center">
           <Link to="/">
-            <Button variant="outline" size="sm">← Back to Librarian Home</Button>
+            <Button variant="outline" size="sm">← Back to CAI Home</Button>
           </Link>
         </div>
       </div>
@@ -665,13 +973,12 @@ function LibrarianMedallionDetail() {
         </Link>
       </div>
 
-      {/* Cross-variant nav */}
       <div
         className="w-full max-w-lg rounded-xl border border-border/60 bg-card/60 p-4 space-y-2 text-center"
         data-testid={`cross-variant-nav-${resolvedVariant}`}
       >
         <p className="text-xs font-semibold text-muted-foreground">
-          Other doors to The Librarian:
+          Other doors to CAI:
         </p>
         <div className="flex flex-wrap gap-1.5 justify-center">
           {CROSS_VARIANT_NAV.filter((v) => v.slug !== resolvedVariant).map(({ slug, label }) => (
@@ -695,19 +1002,13 @@ function LibrarianMedallionDetail() {
 }
 
 // ─────────────────────────────────────────────────────────
-// ROOT COMPONENT (renders based on path)
+// ROOT COMPONENT
 // ─────────────────────────────────────────────────────────
 
-/**
- * LibrarianPage — top-level export.
- * Uses useLocation to determine which view to render.
- * Should be mounted at "/" with path-based sub-routing.
- */
 export default function LibrarianPage() {
   const location = useLocation();
   const path = location.pathname;
 
-  // Determine active view
   const isMedallion = path.startsWith("/medallion");
   const isInstall = path === "/install";
   const isFederation = path === "/federation";

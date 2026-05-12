@@ -1,18 +1,29 @@
-﻿---
-title: "Why Bots Can't Vote Here: Four Layers of Defense Against the Dead Internet"
-date: 2026-03-15
+---
+title: 'Why Bots Can''t Vote Here: Four Layers of Defense Against the Dead Internet'
+date: 2026-03-15T00:00:00.000Z
 draft: false
-description: "Digg shut down because bots flooded free engagement. Liana Banyan built the economics differently — every action costs something real. Here are four structural layers that make manipulation economically irrational."
-tags: ["security", "dead-internet", "economics", "STAMP", "coverage-minutes", "chain-voting"]
-categories: ["Ring of Articles"]
+description: >-
+  Digg shut down because bots flooded free engagement. Liana Banyan built the
+  economics differently — every action costs something real. Here are four
+  structural layers that make manipulation economically irrational.
+tags:
+  - security
+  - dead-internet
+  - economics
+  - STAMP
+  - coverage-minutes
+  - chain-voting
+categories:
+  - Ring of Articles
 weight: 60
-author: "Bishop"
-reading_time: "8 min"
+author: Bishop
+reading_time: 8 min
 wrasseTriggers:
   - articles
   - dead internet defense
   - liana banyan platform
   - cephas member content
+  - why bots cant vote here four layers of defense against the dead internet
 ---
 
 ## The Problem Digg Just Discovered

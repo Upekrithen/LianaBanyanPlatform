@@ -1,5 +1,6 @@
 /**
  * Catechist Scribe Grader — KN036 (base) + KN-I2 extension / BP017
+ *   + R12-R17 BP028 operational-discipline extension
  * ================================================================
  * Session-open discipline-grading module (#2313, KN036 BP004 LANDED).
  *
@@ -7,6 +8,15 @@
  * KN-I2 extension: Surfaces per-AI-member rolling-7-day Reminder Scribe
  * violation-history alongside R01-R10 grading. Composes ADDITIVELY —
  * existing R01-R10 output is untouched; violation-history block appended.
+ *
+ * BP028 R12-R17 extension (LB-STACK-0071..0076):
+ *   R12 — Toolbelt-On Confirmation
+ *   R13 — Cold Start Ritual Sequence-Integrity
+ *   R14 — Brick-Wall Full-Loop Discipline
+ *   R15 — Last-Hours Founder Review Cohort Readiness
+ *   R16 — Pawn-Blind-Workaround Respect
+ *   R17 — MCP-Restart-Needed Regression
+ *   All six are ADDITIVE; R01-R10 behavior is UNCHANGED.
  *
  * Anti-shame discipline (Reminder Scribe canon BP017 turn 22):
  *   Surfaces empirical counts + rates ONLY. No moral judgment language.
@@ -73,6 +83,400 @@ export const R01_R10_RULES = [
         description: "Empirical-praise-only: no unanchored superlatives in AI member response",
     },
 ];
+// ─── R12-R17 BP028 operational-discipline rules ───────────────────────────────
+/**
+ * R12-R17 rule descriptor table (parallel to R01_R10_RULES).
+ * Stack rows LB-STACK-0071..0076.
+ */
+export const R12_R17_RULES = [
+    {
+        rule_id: "R12",
+        description: "Toolbelt-On Confirmation: brief_me + tool schemas + substrate cache fresh before substantive work",
+    },
+    {
+        rule_id: "R13",
+        description: "Cold Start Ritual Sequence-Integrity: gather→collect→apply→execute→assess→adjust in canonical order",
+    },
+    {
+        rule_id: "R14",
+        description: "Brick-Wall Full-Loop Discipline: first-half (fire without asking) + second-half (post-hoc surface-as-ask)",
+    },
+    {
+        rule_id: "R15",
+        description: "Last-Hours Founder Review Cohort Readiness: counsel-prep brief §12 accurate; no pre-emptive review asks",
+    },
+    {
+        rule_id: "R16",
+        description: "Pawn-Blind-Workaround Respect: honor explicit Founder directive to route Pawn tasks manually",
+    },
+    {
+        rule_id: "R17",
+        description: "MCP-Restart-Needed Regression: do not dispatch_rook until librarian-mcp restart confirmed post schema-cache fix",
+    },
+];
+/**
+ * Grade R12-R17 rules (BP028 operational-discipline extension).
+ * Missing evidence → SKIP. R01-R10 is NEVER modified by this function.
+ *
+ * LB-STACK-0071..0076
+ */
+export function gradeR12R17(evidence, _session_id) {
+    const grades = [];
+    // ── R12: Toolbelt-On Confirmation ─────────────────────────────────────────
+    (() => {
+        const { r12_brief_me_returned, r12_tool_schemas_loaded, r12_substrate_cache_fresh, r12_work_before_toolbelt } = evidence;
+        // Critical FAIL: substantive work before toolbelt confirmed
+        if (r12_work_before_toolbelt === true) {
+            grades.push({
+                rule_id: "R12",
+                description: R12_R17_RULES[0].description,
+                verdict: "FAIL",
+                evidence: "Substantive work fired before Toolbelt confirmation — canonical sequence breach",
+            });
+            return;
+        }
+        // Critical FAIL: brief_me not called
+        if (r12_brief_me_returned === false) {
+            grades.push({
+                rule_id: "R12",
+                description: R12_R17_RULES[0].description,
+                verdict: "FAIL",
+                evidence: "brief_me not called at session-open — state pulse missing",
+            });
+            return;
+        }
+        const noEvidence = r12_brief_me_returned === undefined &&
+            r12_tool_schemas_loaded === undefined &&
+            r12_substrate_cache_fresh === undefined &&
+            r12_work_before_toolbelt === undefined;
+        if (noEvidence) {
+            grades.push({
+                rule_id: "R12",
+                description: R12_R17_RULES[0].description,
+                verdict: "SKIP",
+                evidence: "No R12 evidence provided",
+            });
+            return;
+        }
+        // WARN cases
+        const warnReasons = [];
+        if (r12_substrate_cache_fresh === false)
+            warnReasons.push("substrate cache stale (>24h) and refresh not triggered");
+        if (r12_tool_schemas_loaded === false)
+            warnReasons.push("deferred tools listed but not yet loaded");
+        if (warnReasons.length > 0) {
+            grades.push({
+                rule_id: "R12",
+                description: R12_R17_RULES[0].description,
+                verdict: "WARN",
+                evidence: warnReasons.join("; "),
+            });
+            return;
+        }
+        // All three criteria met → PASS
+        grades.push({
+            rule_id: "R12",
+            description: R12_R17_RULES[0].description,
+            verdict: "PASS",
+            evidence: "brief_me returned; tool schemas loaded; substrate cache fresh",
+        });
+    })();
+    // ── R13: Cold Start Ritual Sequence-Integrity ──────────────────────────────
+    (() => {
+        const { r13_steps_out_of_order, r13_gather_step_present, r13_assess_step_evidenced, r13_collect_deferred, r13_adjust_skipped, } = evidence;
+        const noEvidence = r13_steps_out_of_order === undefined &&
+            r13_gather_step_present === undefined &&
+            r13_assess_step_evidenced === undefined &&
+            r13_collect_deferred === undefined &&
+            r13_adjust_skipped === undefined;
+        if (noEvidence) {
+            grades.push({
+                rule_id: "R13",
+                description: R12_R17_RULES[1].description,
+                verdict: "SKIP",
+                evidence: "No R13 evidence provided",
+            });
+            return;
+        }
+        // FAIL: steps out of canonical order
+        if (r13_steps_out_of_order === true) {
+            grades.push({
+                rule_id: "R13",
+                description: R12_R17_RULES[1].description,
+                verdict: "FAIL",
+                evidence: "Steps executed out of canonical gather→collect→apply→execute→assess→adjust order",
+            });
+            return;
+        }
+        // FAIL: Gather missing
+        if (r13_gather_step_present === false) {
+            grades.push({
+                rule_id: "R13",
+                description: R12_R17_RULES[1].description,
+                verdict: "FAIL",
+                evidence: "Gather step absent — Execute fired on pre-hoc assumption without substrate detection",
+            });
+            return;
+        }
+        // FAIL: Assess missing or narrative-only
+        if (r13_assess_step_evidenced === false) {
+            grades.push({
+                rule_id: "R13",
+                description: R12_R17_RULES[1].description,
+                verdict: "FAIL",
+                evidence: "Assess step missing or narrative-only (no numbers / A/B result / empirical-receipt language)",
+            });
+            return;
+        }
+        // WARN cases
+        const warnReasons = [];
+        if (r13_collect_deferred === true)
+            warnReasons.push("Collect (Toolbelt-on) deferred until mid-Apply");
+        if (r13_adjust_skipped === true)
+            warnReasons.push("Adjust step skipped; no tactical replan queued for next iteration");
+        if (warnReasons.length > 0) {
+            grades.push({
+                rule_id: "R13",
+                description: R12_R17_RULES[1].description,
+                verdict: "WARN",
+                evidence: warnReasons.join("; "),
+            });
+            return;
+        }
+        grades.push({
+            rule_id: "R13",
+            description: R12_R17_RULES[1].description,
+            verdict: "PASS",
+            evidence: "Six-step ritual executed in canonical order with all steps evidenced",
+        });
+    })();
+    // ── R14: Brick-Wall Full-Loop Discipline ───────────────────────────────────
+    (() => {
+        const { r14_prehoc_ask_detected, r14_missing_surface_after_action, r14_separate_ok_ask_appended, r14_surface_sparse, } = evidence;
+        const noEvidence = r14_prehoc_ask_detected === undefined &&
+            r14_missing_surface_after_action === undefined &&
+            r14_separate_ok_ask_appended === undefined &&
+            r14_surface_sparse === undefined;
+        if (noEvidence) {
+            grades.push({
+                rule_id: "R14",
+                description: R12_R17_RULES[2].description,
+                verdict: "SKIP",
+                evidence: "No R14 evidence provided",
+            });
+            return;
+        }
+        // FAIL: pre-hoc ask creep (first-half violation)
+        if (r14_prehoc_ask_detected === true) {
+            grades.push({
+                rule_id: "R14",
+                description: R12_R17_RULES[2].description,
+                verdict: "FAIL",
+                evidence: "Pre-hoc 'should I…?' / 'may I…?' ask detected before action — brick-wall first-half violation",
+            });
+            return;
+        }
+        // FAIL: missing surface after action (second-half violation)
+        if (r14_missing_surface_after_action === true) {
+            grades.push({
+                rule_id: "R14",
+                description: R12_R17_RULES[2].description,
+                verdict: "FAIL",
+                evidence: "Action landed without completion-block surface — brick-wall second-half violation",
+            });
+            return;
+        }
+        // FAIL: separate "was that OK?" line (spirit violation)
+        if (r14_separate_ok_ask_appended === true) {
+            grades.push({
+                rule_id: "R14",
+                description: R12_R17_RULES[2].description,
+                verdict: "FAIL",
+                evidence: "Separate 'was that OK?' line appended — misses spirit of embedded-ask (surface IS the post-hoc ask)",
+            });
+            return;
+        }
+        // WARN: sparse surface
+        if (r14_surface_sparse === true) {
+            grades.push({
+                rule_id: "R14",
+                description: R12_R17_RULES[2].description,
+                verdict: "WARN",
+                evidence: "Dense parallel firing but surface sparse — completion-blocks hard to parse; redirect point unclear",
+            });
+            return;
+        }
+        grades.push({
+            rule_id: "R14",
+            description: R12_R17_RULES[2].description,
+            verdict: "PASS",
+            evidence: "Both halves confirmed: first-half (fire without asking) + second-half (post-hoc surface-as-ask)",
+        });
+    })();
+    // ── R15: Last-Hours Founder Review Cohort Readiness ───────────────────────
+    // TODO(Bishop-integration): cross-reference counsel-prep brief §12 audit data
+    // from BISHOP_DROPZONE at runtime. Currently stubs on r15_counsel_prep_brief_current
+    // when not provided. PATTERN_NOT_FULLY_IMPLEMENTED for automated brief scan.
+    (() => {
+        const { r15_counsel_prep_brief_current, r15_file_paths_staged, r15_critical_gap_late_discovered, r15_preemptive_review_ask, } = evidence;
+        // FAIL: pre-emptive review ask (first-half pre-emption)
+        if (r15_preemptive_review_ask === true) {
+            grades.push({
+                rule_id: "R15",
+                description: R12_R17_RULES[3].description,
+                verdict: "FAIL",
+                evidence: "Pre-emptive review ask detected in session chat ('can you prose-pass this?' before last-hours window) — first-half violated",
+            });
+            return;
+        }
+        // FAIL: counsel-prep brief status inaccurate
+        if (r15_counsel_prep_brief_current === false) {
+            grades.push({
+                rule_id: "R15",
+                description: R12_R17_RULES[3].description,
+                verdict: "FAIL",
+                evidence: "Counsel-prep brief §12 status stale or inaccurate — PROSE-PASS-READY claimed but scaffold not ready",
+            });
+            return;
+        }
+        const noEvidence = r15_counsel_prep_brief_current === undefined &&
+            r15_file_paths_staged === undefined &&
+            r15_critical_gap_late_discovered === undefined &&
+            r15_preemptive_review_ask === undefined;
+        if (noEvidence) {
+            // Stub: WARN with PATTERN_NOT_FULLY_IMPLEMENTED per spec
+            grades.push({
+                rule_id: "R15",
+                description: R12_R17_RULES[3].description,
+                verdict: "WARN",
+                evidence: "PATTERN_NOT_FULLY_IMPLEMENTED — counsel-prep brief §12 automated scan pending Bishop runtime integration; provide r15_* evidence fields for full grading",
+            });
+            return;
+        }
+        // WARN cases
+        const warnReasons = [];
+        if (r15_file_paths_staged === false)
+            warnReasons.push("file paths scattered; paste-ready code not staged for batch review");
+        if (r15_critical_gap_late_discovered === true)
+            warnReasons.push("critical gap discovered at last-minute (<15min before fire) instead of flagged ahead");
+        if (warnReasons.length > 0) {
+            grades.push({
+                rule_id: "R15",
+                description: R12_R17_RULES[3].description,
+                verdict: "WARN",
+                evidence: warnReasons.join("; "),
+            });
+            return;
+        }
+        grades.push({
+            rule_id: "R15",
+            description: R12_R17_RULES[3].description,
+            verdict: "PASS",
+            evidence: "Cohort readiness confirmed: brief §12 current; file paths staged; no pre-emptive review asks",
+        });
+    })();
+    // ── R16: Pawn-Blind-Workaround Respect ────────────────────────────────────
+    // TODO(Bishop-integration): cross-reference Toolsmith scribe_log for prior-session
+    // workaround directive at runtime. PATTERN_NOT_FULLY_IMPLEMENTED for automated log scan.
+    (() => {
+        const { r16_prior_session_workaround_directive, r16_dispatch_pawn_attempted_after_directive, r16_dispatch_pawn_scope_unclear, } = evidence;
+        // No prior directive on record → SKIP (rule not triggered)
+        if (r16_prior_session_workaround_directive === undefined) {
+            grades.push({
+                rule_id: "R16",
+                description: R12_R17_RULES[4].description,
+                verdict: "SKIP",
+                evidence: "PATTERN_NOT_FULLY_IMPLEMENTED — no prior-session Toolsmith scribe_log workaround directive found; provide r16_* evidence fields for full grading",
+            });
+            return;
+        }
+        if (r16_prior_session_workaround_directive === false) {
+            grades.push({
+                rule_id: "R16",
+                description: R12_R17_RULES[4].description,
+                verdict: "SKIP",
+                evidence: "No prior-session Founder workaround directive on record — rule not triggered",
+            });
+            return;
+        }
+        // Directive exists — check for violations
+        if (r16_dispatch_pawn_attempted_after_directive === true) {
+            grades.push({
+                rule_id: "R16",
+                description: R12_R17_RULES[4].description,
+                verdict: "FAIL",
+                evidence: "dispatch_pawn attempted after Founder explicitly routed to paste-to-perplexity-web workaround — silent regression to tool dispatch",
+            });
+            return;
+        }
+        if (r16_dispatch_pawn_scope_unclear === true) {
+            grades.push({
+                rule_id: "R16",
+                description: R12_R17_RULES[4].description,
+                verdict: "WARN",
+                evidence: "dispatch_pawn attempted with unclear scope relative to Founder workaround directive — caution warranted",
+            });
+            return;
+        }
+        grades.push({
+            rule_id: "R16",
+            description: R12_R17_RULES[4].description,
+            verdict: "PASS",
+            evidence: "Founder workaround directive honored — no dispatch_pawn regression detected for this task class",
+        });
+    })();
+    // ── R17: MCP-Restart-Needed Regression ────────────────────────────────────
+    // TODO(Bishop-integration): scan recent Knight commits for "restart required" pattern
+    // at runtime via git log. PATTERN_NOT_FULLY_IMPLEMENTED for automated commit scan.
+    (() => {
+        const { r17_mcp_restart_required_in_commits, r17_dispatch_rook_before_restart, r17_dispatch_rook_restart_status_unclear, } = evidence;
+        // No "restart required" commit found → SKIP (rule not triggered)
+        if (r17_mcp_restart_required_in_commits === undefined) {
+            grades.push({
+                rule_id: "R17",
+                description: R12_R17_RULES[5].description,
+                verdict: "SKIP",
+                evidence: "PATTERN_NOT_FULLY_IMPLEMENTED — automated Knight commit scan pending Bishop runtime integration; provide r17_* evidence fields for full grading",
+            });
+            return;
+        }
+        if (r17_mcp_restart_required_in_commits === false) {
+            grades.push({
+                rule_id: "R17",
+                description: R12_R17_RULES[5].description,
+                verdict: "SKIP",
+                evidence: "No 'librarian-mcp restart required' found in recent Knight commits — rule not triggered",
+            });
+            return;
+        }
+        // Restart required — check for violations
+        if (r17_dispatch_rook_before_restart === true) {
+            grades.push({
+                rule_id: "R17",
+                description: R12_R17_RULES[5].description,
+                verdict: "FAIL",
+                evidence: "dispatch_rook attempted on stale librarian-mcp env — cached schema / connection state before required restart",
+            });
+            return;
+        }
+        if (r17_dispatch_rook_restart_status_unclear === true) {
+            grades.push({
+                rule_id: "R17",
+                description: R12_R17_RULES[5].description,
+                verdict: "WARN",
+                evidence: "dispatch_rook attempted with unclear Knight restart status — Founder may have restarted manually but confirmation absent from session chat",
+            });
+            return;
+        }
+        grades.push({
+            rule_id: "R17",
+            description: R12_R17_RULES[5].description,
+            verdict: "PASS",
+            evidence: "librarian-mcp restart confirmed complete before dispatch_rook — cross-lane gating satisfied",
+        });
+    })();
+    return grades;
+}
 const SESSION_ID_FORMAT = /^(K|B|R|P)\d+$/;
 /**
  * Grade R01-R10 rules based on provided evidence.
@@ -305,31 +709,39 @@ export function buildViolationHistorySummary(ai_member, _opts = {}) {
 }
 /**
  * Run full Catechist session-open grade:
- *  1. R01-R10 base grading
- *  2. Violation-history-summary from KN-I1 Reminder Scribe substrate
+ *  1. R01-R10 base grading (KN036 / BP004)
+ *  2. R12-R17 BP028 operational-discipline grading (additive; R01-R10 unchanged)
+ *  3. Violation-history-summary from KN-I1 Reminder Scribe substrate
  *
- * Returns ExtendedGradeResult with both blocks.
+ * Returns ExtendedGradeResult with all blocks.
  * Anti-shame: violation-history uses empirical counts/rates only.
+ *
+ * Accepts FullSessionEvidenceMap (R01-R10 fields + R12-R17 fields).
+ * For backward compatibility, plain SessionEvidenceMap is also accepted —
+ * R12-R17 fields will all be undefined → all six rules grade as SKIP.
  */
 export function runSessionOpenGrade(session_id, ai_member, evidence, opts = {}) {
     const graded_at = new Date().toISOString();
     const r01_r10_grades = gradeR01R10(evidence, session_id);
-    const pass_count = r01_r10_grades.filter((g) => g.verdict === "PASS").length;
-    const warn_count = r01_r10_grades.filter((g) => g.verdict === "WARN").length;
-    const fail_count = r01_r10_grades.filter((g) => g.verdict === "FAIL").length;
+    const r12_r17_grades = gradeR12R17(evidence, session_id);
+    const allGrades = [...r01_r10_grades, ...r12_r17_grades];
+    const pass_count = allGrades.filter((g) => g.verdict === "PASS").length;
+    const warn_count = allGrades.filter((g) => g.verdict === "WARN").length;
+    const fail_count = allGrades.filter((g) => g.verdict === "FAIL").length;
     const overall_verdict = fail_count > 0 ? "FAIL"
         : warn_count > 0 ? "WARN" : "PASS";
     const summary = fail_count > 0
-        ? `${fail_count} FAIL(s) — session discipline requires attention before proceeding.`
+        ? `${fail_count} FAIL(s) across R01-R17 — session discipline requires attention before proceeding.`
         : warn_count > 0
-            ? `${warn_count} WARN(s) — review advisory items before proceeding.`
-            : `All graded rules PASS — session discipline clear.`;
+            ? `${warn_count} WARN(s) across R01-R17 — review advisory items before proceeding.`
+            : `All graded rules PASS (R01-R17) — session discipline clear.`;
     const base = {
         schema_version: "1.0",
         graded_at,
         session_id,
         ai_member,
         r01_r10_grades,
+        r12_r17_grades,
         overall_verdict,
         pass_count,
         warn_count,
@@ -358,6 +770,14 @@ export function formatGradeMarkdown(result) {
     lines.push("| Rule | Description | Verdict | Evidence |");
     lines.push("|---|---|---|---|");
     for (const g of result.r01_r10_grades) {
+        const evidence = g.evidence ?? "—";
+        lines.push(`| ${g.rule_id} | ${g.description} | **${g.verdict}** | ${evidence} |`);
+    }
+    lines.push("");
+    lines.push("### R12-R17 Operational Discipline Grades (BP028 — LB-STACK-0071..0076)");
+    lines.push("| Rule | Description | Verdict | Evidence |");
+    lines.push("|---|---|---|---|");
+    for (const g of result.r12_r17_grades) {
         const evidence = g.evidence ?? "—";
         lines.push(`| ${g.rule_id} | ${g.description} | **${g.verdict}** | ${evidence} |`);
     }

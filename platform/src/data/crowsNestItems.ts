@@ -859,9 +859,9 @@ const BUILD_TOOLS_ITEMS: CrowsNestItem[] = [
     icon: "FileCheck",
     title: "Patent System",
     glimpse:
-      "2,506 claims across 15 provisional applications. Micro-entity filing at $65 each. Innovation catalog of 2,270 items.",
+      "2,506 claims across 17 provisional applications. Micro-entity filing at $65 each. Innovation catalog of 2,270 items.",
     peek:
-      "The platform's patent portfolio spans 2,506 claims across fifteen provisional patent applications, filed as micro-entity ($65 each). The innovation catalog tracks 2,270 distinct innovations (Session 17: delegation, XP, trickle onboarding, STAMP). Patent Buckets organize innovations into themed bags (7 bags + 2 showcase pedestals with 408 claims in the codebase). Fractional IP participation lets sponsors contribute to patents and share in licensing revenue.",
+      "The platform's patent portfolio spans 2,506 claims across seventeen provisional patent applications, filed as micro-entity ($65 each). The innovation catalog tracks 2,270 distinct innovations (Session 17: delegation, XP, trickle onboarding, STAMP). Patent Buckets organize innovations into themed bags (7 bags + 2 showcase pedestals with 408 claims in the codebase). Fractional IP participation lets sponsors contribute to patents and share in licensing revenue.",
     tellMeMore:
       "The patent system is one of LB's most ambitious features. Every innovation — from the three-currency system to the Brewster Bonus to the hexagonal CAD grammar — is cataloged, numbered, and (where applicable) included in provisional patent applications. The micro-entity designation means each filing costs $65 instead of thousands. Patent Buckets organize related innovations into themed bags for filing. The Sponsor Portal lets members contribute to patent development and earn fractional IP participation in licensing revenue. This is NOT a security (the Howey defense depends on this distinction) — it is service-based participation in patent licensing outcomes. The Hall of Innovations displays the full catalog, and each innovation links to its patent bucket, cue card, and Cephas knowledge base entry.",
     sampleRoute: "/sponsor",

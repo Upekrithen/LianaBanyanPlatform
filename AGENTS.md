@@ -69,6 +69,35 @@ When in doubt, treat as secret. The cost of over-caution is minor; the cost of a
 
 ---
 
+## Critical rule — Detective FIRST for canon search, NEVER Grep
+
+**Founder-mandatory cross-agent (B134; reinforced BP017 turn 58)**: when searching for canonical concepts (primitives / Founder voice / A&A formals / prior decisions / project memories / canon Eblets / Cathedral content), every AI agent (Bishop / Knight / Pawn / Rook / future) MUST use Detective tools FIRST, NEVER filesystem Grep.
+
+### Tools
+
+- **Canonical concepts / primitives / Founder voice / decisions / canon Eblets / A&A formals**: `mcp__librarian__detective_team_investigate` (cross-cathedral fan-out + substrate write-back) or `mcp__librarian__detective_investigate` (Phase 0 pheromone fast-path + Phase 1 RPC fallback)
+- **With miner entourage** (BP017 turn 52 Founder-mandatory): every Detective dispatch includes `flavor_class.cognition: "miner"` — Detective NEVER flies solo
+- **Raw filesystem code-string searches** (function names, imports, log patterns, ts/py syntax): Grep is fine
+- **Specific file path verification**: Glob or Read
+
+### Why
+
+Filesystem Grep returns substring matches across raw files. Detective uses Cathedral-substrate Scribe-level scoring with K547 alias-aware retrieval + writes successful resolutions to Wrasse registry per K550 (live-update pipeline) — every Detective hit grows the substrate. **Empirical receipt**: 49:1 hit ratio observed at B134 (49 Cathedral hits across 8 Scribes vs. 1 Grep hit on same query).
+
+Bypassing Cathedral for filesystem Grep means: (a) bypassing the substrate-architecture's competitive moat, (b) failing to feed Wrasse + Pheromone substrate growth, (c) potentially missing alias-mapped canon entirely.
+
+### Common failure mode
+
+When you find yourself reaching for `Grep` / `Get-ChildItem` / `Select-String` to search for a NAMED CONCEPT (catechist, Reminder Scribe, KN036, FORK doctrine, etc.), STOP and use Detective instead. Concept-search = Cathedral substrate's job. The Cathedral has alias-mapping; Grep does not.
+
+### Full canon
+
+`~/.claude/projects/C--Users-Administrator-Documents/memory/feedback_use_detective_for_canon_search.md` (B134 Founder-mandatory original; BP017 turn 52 extension for miner-entourage rule).
+
+This rule was reinforced when Founder caught Knight grepping `catechist|Catechist|KN036` mid-KN-I1 build (BP017 turn 58) — same violation Bishop was caught on at turn 22+. Reminder Scribe class (Pod-I in flight) catches this violation structurally at response-draft tier post-LANDED.
+
+---
+
 ## Files and paths that contain secrets
 
 Never read the raw CONTENTS of these files into LLM context, tool output, or any surface that persists:

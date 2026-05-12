@@ -24,7 +24,9 @@
     "rebuild:auto_keywords": "node scripts/rebuild_auto_keywords.mjs",
     "generate:savings-snapshot": "node scripts/generate-savings-snapshot.mjs",
     "pheromone:build": "node scripts/pheromone-bloodhound.mjs",
-    "pheromone:bloodhound": "node scripts/pheromone-bloodhound.mjs"
+    "pheromone:bloodhound": "node scripts/pheromone-bloodhound.mjs",
+    "watchdog": "tsc && node dist/watchdog/daemon.js",
+    "watchdog:raw": "node dist/watchdog/daemon.js"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",

@@ -34,7 +34,7 @@
 
 .NOTES
     Bean: KN072 / BP006 / Pod EE
-    Liana Banyan Corporation (Wyoming C-Corp) — EIN 41-2797446
+    Liana Banyan Corporation (C-Corp) — EIN [REDACTED-PRIVATE]
     AGPL v3 — full source, no gating, forever.
     Filed under Cooperative Defensive Patent Pledge (#2260).
 #>
@@ -249,6 +249,65 @@ if (Test-Path $memTemplate) {
     } else {
         Write-Step "[DryRun] Would install MEMORY.md → $memTarget"
     }
+}
+
+# ─── Step 7b: Make Yourself Comfortable — Ollama Detection & Wiring ──────────
+Write-Host ""
+Write-Host "  ── Make Yourself Comfortable ──────────────────────────" -ForegroundColor DarkCyan
+Write-Step "Checking for local Ollama inference engine..."
+
+$ollamaAvailable = $false
+$ollamaModels    = @()
+$ollamaEndpoint  = "http://localhost:11434"
+
+try {
+    $tagsResponse = Invoke-RestMethod -Uri "$ollamaEndpoint/api/tags" `
+                        -Method Get -TimeoutSec 3 -ErrorAction Stop
+    $ollamaAvailable = $true
+    if ($tagsResponse.models) {
+        $ollamaModels = $tagsResponse.models
+    }
+} catch {
+    # Ollama not running or not installed — that's fine, it's optional
+}
+
+if ($ollamaAvailable) {
+    Write-OK "Ollama detected at $ollamaEndpoint"
+    if ($ollamaModels.Count -gt 0) {
+        Write-Host "  Local models available:" -ForegroundColor Green
+        foreach ($m in $ollamaModels) {
+            $sizeGB = [math]::Round($m.size / 1e9, 1)
+            Write-Host "    • $($m.name)  (${sizeGB}GB)" -ForegroundColor Green
+        }
+    }
+    Write-Host ""
+    Write-Host "  [LOCAL-MODEL CAI WIRED]" -ForegroundColor Cyan
+    Write-Host "  The pheromone substrate is now your Arm B." -ForegroundColor Cyan
+    Write-Host "  Ollama is your Arm A." -ForegroundColor Cyan
+    Write-Host ""
+    Write-Host "  How it works:" -ForegroundColor DarkGray
+    Write-Host "    Arm B (cache hit):  0.000288ms  — pheromone substrate" -ForegroundColor DarkGray
+    Write-Host "    Arm A (cache miss): seconds-to-minutes — local model" -ForegroundColor DarkGray
+    Write-Host "    Write-back:         every cache miss becomes a future cache hit" -ForegroundColor DarkGray
+    Write-Host ""
+    Write-Host "  Empirical S ratio on this machine type: ~55,940,972x" -ForegroundColor Yellow
+    Write-Host "  CAI Number (S-component): 7.75" -ForegroundColor Yellow
+    Write-Host "  Projected full CAI:       ~9.6" -ForegroundColor Yellow
+    Write-Host ""
+    Write-Host "  To run a live smoke test (after building librarian-mcp):" -ForegroundColor DarkGray
+    $firstModel = if ($ollamaModels.Count -gt 0) { $ollamaModels[0].name } else { "llama3.1:8b-instruct-q4_K_M" }
+    Write-Host "    node librarian-mcp/dist/base_camp/ollama_provider.js smoke $firstModel" -ForegroundColor DarkGray
+    Write-Host ""
+    Write-Host "  To ask a question through the CAI router:" -ForegroundColor DarkGray
+    Write-Host "    node librarian-mcp/dist/base_camp/ollama_provider.js ask What is the CAI substrate?" -ForegroundColor DarkGray
+    Write-Host ""
+    Write-Host "  Paper: 'Off the Charts' — BISHOP_DROPZONE/08_Papers/PAPER_OFF_THE_CHARTS_*" -ForegroundColor DarkGray
+    Write-Host ""
+} else {
+    Write-Host "  Ollama not detected (optional — Local-Model CAI requires Ollama)." -ForegroundColor DarkGray
+    Write-Host "  Install from: https://ollama.com  — then re-run this installer." -ForegroundColor DarkGray
+    Write-Host "  Without Ollama: Cloud-API CAI still fully operational." -ForegroundColor DarkGray
+    Write-Host ""
 }
 
 # ─── Step 8: Auto-fire Walkaround demo ───────────────────────────────────────

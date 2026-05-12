@@ -1,6 +1,7 @@
 ---
 # Liana Banyan Canonical Values Registry
-# Updated: BP030 May 7 2026 (INDL-9 Geneva fire — Prov 16 + Prov 17 USPTO-FILED; App #64/060,080 + 64/060,093; total filed = 17; same-day Mitchell Hashimoto departure receipt window for Cooperative Code Infrastructure canon LB-STACK-0159)
+# Updated: BP036 May 11 2026 (USPTO-FILED Prov 18 + Prov 19 within 5 minutes; App #64/062,332 + 64/062,334; total filed = 19; SR-015 ≤100pp HARD RULE empirically validated; Drekaskip 12-cohort Bishop AGENT fan-out per BP036 SEG-Cascade Discipline canon)
+# Prior update: BP030 May 7 2026 (INDL-9 Geneva fire — Prov 16 + Prov 17 USPTO-FILED; App #64/060,080 + 64/060,093; total then = 17; same-day Mitchell Hashimoto departure receipt window for Cooperative Code Infrastructure canon LB-STACK-0159)
 # Prior update: B134 April 29 2026 (post-B133-close AI Nanny sweep: yaml patents block reconciled to Prov 14 + 15 reality — App #64/052,602 + 64/052,618 both filed 2026-04-29; DB sync queued)
 # Single source of truth. Any document containing these keys should match these values.
 # When Bishop or Knight updates a canonical value, update this file FIRST, then run the linter.
@@ -9,8 +10,8 @@ stats:
   innovation_count: 2270
   crown_jewels: 228
   production_systems: 36
-  patent_provisionals_filed: 17
-  formal_claims_approximate: 2506
+  patent_provisionals_filed: 19
+  formal_claims_approximate: 2700
   puddings: 189
   papers: 41
   letters_in_dispatch_queue: 95
@@ -45,13 +46,27 @@ entity:
   holding_company_owner_percentage: 100
 
 patents:
-  most_recent_prov_number: 17
-  most_recent_prov_application: "64/060,093"
-  most_recent_prov_filed: "2026-05-07"
-  next_prov_number: 18
+  most_recent_prov_number: 19
+  most_recent_prov_application: "64/062,334"
+  most_recent_prov_filed: "2026-05-11"
+  next_prov_number: 20
   next_prov_status: "open"
   conversion_deadline_first_prov: "2026-11-26"
   # Historical app # chain (most recent first; MEMORY.md preserves full history)
+  prov_19_application: "64/062,334"
+  prov_19_filed: "2026-05-11"
+  prov_19_attorney_docket: "LB-PROV-019"
+  prov_19_confirmation: "8134"
+  prov_19_patent_center: "76080354"
+  prov_19_pages: 95
+  prov_19_scope: "HexIsle 2D Isometric World Operational Interface (Pawn P-15 virgin territory; cooperative-substrate-state-as-multi-scale-hex-prism-world coupling) + K3/K7/K9 demoted-class drafts + K16-K21 substrate kernel extensions + Sonnet S7 BP014-019 foundational substrate (Excalibur split-2 + TCP/IP 4-Tuple + Substrate-Backup-Pyramid + others) + Sonnet S8 K-era (K540 Wrasse Prov 15 supplement + K530 Omnibox + K470 Pawn Cathedral CIP + others) + Sonnet S1 EXCLUDED 5 (Multi-Dim Twinning + Cooperative Benefit FORK + Opening Gambit + Rook Billing Isolation + 3rd-Gear-Default) + Sonnet S1 §S4-§S5 (Nine-Pin Strategy + Old Ones Fleet)"
+  prov_18_application: "64/062,332"
+  prov_18_filed: "2026-05-11"
+  prov_18_attorney_docket: "LB-PROV-018"
+  prov_18_confirmation: "5732"
+  prov_18_patent_center: "76080194"
+  prov_18_pages: 94
+  prov_18_scope: "BP036 substrate canon (PGP/Edition/Aviator + Threshing Scribe + Regenerator + SEG-Cascade + Aircraft Carrier + SR-015 Page-Cap) + Substrate-IS-the-Primitive 5-Class Umbrella + Excalibur Class Subscription split-2 + TCP/IP 4-Tuple substrate-layer + Sonnet S3 BP031-035 (Decision-Class Trinity K28+K29+K30+K31 + Banyan Scale LBCAIS + Coroner + SE-4 + K1-K15 enumeration + Stone Tablets + others) + Sonnet S2 BP026-030 (Beyond Colossus + MoneyPenny Universal Interface + Cross-Vendor Symmetric MCP + Alexandrian Library + others) + Sonnet S1 BP020-025 top-3 (CAI Number + TITAN-within-TITAN + SCANTRON KEY)"
   prov_17_application: "64/060,093"
   prov_17_filed: "2026-05-07"
   prov_17_attorney_docket: "LB-PROV-017"

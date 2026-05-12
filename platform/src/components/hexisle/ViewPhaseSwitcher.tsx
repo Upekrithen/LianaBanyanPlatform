@@ -19,27 +19,33 @@
  */
 
 import { useNavigate, useLocation } from "react-router-dom";
-import { Map, Globe, Layers } from "lucide-react";
+import { Map, Globe, Layers, ZoomIn } from "lucide-react";
 import type { ViewPhase } from "@/lib/hexIsleWorldData";
+
+// ─── Extended phase type (includes zoom view) ────────────────────────────────
+
+type ExtendedPhase = ViewPhase | "zoom";
 
 // ─── Route Mapping ──────────────────────────────────────────────────────────
 
-const PHASE_ROUTES: Record<ViewPhase, string> = {
+const PHASE_ROUTES: Record<ExtendedPhase, string> = {
   portals: "/hexisle",
   overworld: "/hexisle/overworld",
   world3d: "/hexisle/world-3d",
+  zoom: "/hexisle/zoom",
 };
 
-const ROUTE_TO_PHASE: Record<string, ViewPhase> = {
+const ROUTE_TO_PHASE: Record<string, ExtendedPhase> = {
   "/hexisle": "portals",
   "/hexisle/overworld": "overworld",
   "/hexisle/world-3d": "world3d",
+  "/hexisle/zoom": "zoom",
 };
 
 // ─── Phase Display Config ───────────────────────────────────────────────────
 
 const PHASE_CONFIG: Record<
-  ViewPhase,
+  ExtendedPhase,
   { label: string; icon: React.ReactNode; shortLabel: string }
 > = {
   portals: {
@@ -57,6 +63,11 @@ const PHASE_CONFIG: Record<
     shortLabel: "3D",
     icon: <Globe className="h-3.5 w-3.5" />,
   },
+  zoom: {
+    label: "Zoom View",
+    shortLabel: "Zoom",
+    icon: <ZoomIn className="h-3.5 w-3.5" />,
+  },
 };
 
 // ─── Component ──────────────────────────────────────────────────────────────
@@ -66,10 +77,10 @@ export function ViewPhaseSwitcher() {
   const location = useLocation();
 
   // Determine current phase from URL
-  const currentPhase: ViewPhase =
+  const currentPhase: ExtendedPhase =
     ROUTE_TO_PHASE[location.pathname] ?? "portals";
 
-  const phases: ViewPhase[] = ["portals", "overworld", "world3d"];
+  const phases: ExtendedPhase[] = ["portals", "overworld", "world3d", "zoom"];
 
   return (
     <div className="fixed bottom-4 right-4 z-50 pointer-events-auto">

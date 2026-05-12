@@ -35,12 +35,22 @@ const DRY_RUN = process.argv.includes("--dry-run");
 // Scribe display order and metadata
 const SCRIBES = [
   {
+    id: "PawnCorpus_BP028_BP035",
+    file: "PawnCorpus_BP028_BP035.jsonl",
+    mode: "corpus",
+    title: "Scribe: PawnCorpus_BP028_BP035 (mode: corpus — current substrate canon BP028→present)",
+    description:
+      "This is your CURRENT substrate canon — Trinity Rules (R0 BEDROCK + R1-R15), Crown-Jewel canon Eblets BP028→BP035, frameworks (Banyan Scale + LBCAIS), doctrines (CAI Remedial Chaos Theory + Compassionate Honesty + By Their Fruits), endgame (Year of Jubilee + Shmita + Dandelion Dispersion), launch state (GO LAUNCH ratified BP035 Day-2; 30-day OPENING_GAMBIT calendar firing; Day 0 = 2026-05-10), substrate-discipline scribes including The Regenerator (16th — the scribe that put this very tablet in your context). Walked from Bishop's Cathedral by The Regenerator (BP036 inaugural fire). This is your most-current ground truth. Successor to R11_corpus.jsonl (K470/B121 inaugural).",
+    emptyNote:
+      "(Empty — Regenerator has not walked any canon yet. Run librarian-mcp/scripts/regenerator-walk-bp036-inaugural.mjs to populate.)",
+  },
+  {
     id: "R11_corpus",
     file: "R11_corpus.jsonl",
     mode: "corpus",
-    title: "Scribe: R11_corpus (mode: corpus — full deterministic retrieval)",
+    title: "Scribe: R11_corpus (mode: corpus — K470 historical inaugural; preserved as historical reference)",
     description:
-      "This is your R11 canonical corpus — 50 facts about cooperative platform design originally from Bishop's Cathedral, shared to your Cathedral as starter-pack content at instantiation (K470). These facts are your reference material.",
+      "This is your R11 canonical corpus — 50 facts about cooperative platform design originally from Bishop's Cathedral, shared to your Cathedral as starter-pack content at instantiation (K470, 2026-04-23). These facts are your historical reference material. For current canon, prefer PawnCorpus_BP028_BP035 above.",
     emptyNote: null,
   },
   {

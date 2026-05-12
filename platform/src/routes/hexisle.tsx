@@ -33,6 +33,7 @@ const GhostWorldMap = lazy(() => import("@/pages/GhostWorldMap"));
 const HexisleDashboard = lazy(() => import("@/pages/HexisleDashboard"));
 const KeepsLobby = lazy(() => import("@/pages/cue-cards/KeepsLobby"));
 const HexIsleWorldCard = lazy(() => import("@/pages/cue-cards/HexIsleWorldCard"));
+const HexIsleZoomPage = lazy(() => import("@/pages/HexIsleZoomPage"));
 
 export const hexisleRoutes = (
   <>
@@ -50,6 +51,7 @@ export const hexisleRoutes = (
     <Route path="/hexisle/island/:id" element={<LazyPage><IslandDetail /></LazyPage>} />
     <Route path="/hexisle/world-map" element={<LazyPage><IslandWorldMap /></LazyPage>} />
     <Route path="/hexisle/world-3d" element={<LazyPage><HexIsleWorld3D /></LazyPage>} />
+    <Route path="/hexisle/zoom" element={<LazyPage><HexIsleZoomPage /></LazyPage>} />
     <Route path="/hexisle/overworld" element={<LazyPage><HexIsleOverworld /></LazyPage>} />
     <Route path="/hexisle/hexels/slotted-top" element={<LazyPage><HexelSlottedTopDetail /></LazyPage>} />
     <Route path="/hexisle/hexels/:slug" element={<LazyPage><HexelWeeklyDetail /></LazyPage>} />

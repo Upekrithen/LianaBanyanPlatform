@@ -1,17 +1,22 @@
-﻿---
-title: "Crown Letter: Arnold Schwarzenegger"
-subtitle: "Door-Opening Crown (Right) — Power to the People"
-date: 2026-03-16
-initiative: "Power to the People"
+---
+title: 'Crown Letter: Arnold Schwarzenegger'
+subtitle: Door-Opening Crown (Right) — Power to the People
+date: 2026-03-16T00:00:00.000Z
+initiative: Power to the People
 initiative_number: 15
-crown_type: "Door-Opener (Right)"
-recipient: "Arnold Schwarzenegger"
-tags: ["crown-letter", "political-expedition", "civic-engagement", "door-opener"]
+crown_type: Door-Opener (Right)
+recipient: Arnold Schwarzenegger
+tags:
+  - crown-letter
+  - political-expedition
+  - civic-engagement
+  - door-opener
 wrasseTriggers:
   - letters
   - crown letter schwarzenegger
   - liana banyan platform
   - cephas member content
+  - crown letter arnold schwarzenegger
 ---
 
 Dear Governor Schwarzenegger,

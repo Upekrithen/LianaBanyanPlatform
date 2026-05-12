@@ -440,7 +440,7 @@ export const ALCOVES: Alcove[] = [
     subtitle: '2,097 claims, $65 each',
     icon: '📜',
     route: '/learn/patents',
-    preview: 'Micro-entity filing at $65 per provisional. 2,097 claims across 11 provisional applications. IP as cooperative asset.',
+    preview: 'Micro-entity filing at $65 per provisional. 2,097 claims across {{provisionalApps}} provisional applications. IP as cooperative asset.',
     innovations: [],
     questions: [
       {

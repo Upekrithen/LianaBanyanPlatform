@@ -314,7 +314,7 @@ function PressKitSection() {
                   <h4 className="font-semibold text-foreground mb-1">The Numbers</h4>
                   <ul className="text-sm text-muted-foreground space-y-1">
                     <li>2,270 documented innovations</li>
-                    <li>15 provisional patent applications</li>
+                    <li>17 provisional patent applications</li>
                     <li>~2,506 formal claims</li>
                     <li>228 Crown Jewel innovations</li>
                     <li>36 production systems live</li>
@@ -329,7 +329,7 @@ function PressKitSection() {
                     <li>Father of eight children</li>
                     <li>Funded with family emergency savings</li>
                     <li>No VC, no angels, no strings</li>
-                    <li>Wyoming C-Corp (EIN: 41-2797446)</li>
+                    <li>C-Corp (EIN: [REDACTED-PRIVATE])</li>
                   </ul>
                 </div>
               </div>

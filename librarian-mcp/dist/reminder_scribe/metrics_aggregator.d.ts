@@ -26,7 +26,7 @@
  */
 export type RollingWindow = "7d" | "30d" | "90d" | "all_time";
 export type AiMemberFilter = "bishop" | "knight" | "pawn" | "rook" | "shadow_alpha" | "shadow_beta" | "all";
-export type RuleClassFilter = "R-KP" | "R-PRAISE" | "R-FORK" | "R-DOUBLE-FILE" | "R-COUNSEL" | "R-USPTO" | "all";
+export type RuleClassFilter = "R-KP" | "R-PRAISE" | "R-FORK" | "R-DOUBLE-FILE" | "R-COUNSEL" | "R-USPTO" | "R-PHA" | "R-MS" | "R-REV" | "R-PAWN" | "R-ROOK" | "all";
 export type VisibilityScope = "personal" | "federation_aggregate" | "public_aggregate";
 export interface ViolationCell {
     ai_member: string;

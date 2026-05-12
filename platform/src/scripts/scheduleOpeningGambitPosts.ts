@@ -490,6 +490,7 @@ Not by charity. By math.
 
 Because in OUR Castle, we build more arrows instead of escape tunnels.
 
+// TIME-CAPSULE PIN — value reflects pre-Prov 16/17 snapshot (BP030); do not migrate. Annotated BP031 Bushel 64.
 Most platforms build escape hatches for the people who run them. We built 2,128 innovations — and 80% of the IP goes into the cooperative.
 
 That's not idealism. That's architecture.

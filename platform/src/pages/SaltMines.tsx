@@ -447,10 +447,10 @@ export default function SaltMines() {
         <ProgressiveSection
           id="patent-showcase"
           title="Patent Showcase"
-          subtitle="2,128 innovations. 167 Crown Jewels. Your competitive moat."
+          subtitle="{{innovationCount}} innovations. 167 Crown Jewels. Your competitive moat."
           sectionNumber={3}
           totalSections={totalSections}
-          benefit={{ id: 'patent-access', text: 'Access to 2,128 documented innovations', category: 'job' }}
+          benefit={{ id: 'patent-access', text: 'Access to {{innovationCount}} documented innovations', category: 'job' }}
           onBenefitUnlock={handleBenefitUnlock}
           onBeaconDrop={handleBeaconDrop}
           branchLinks={[

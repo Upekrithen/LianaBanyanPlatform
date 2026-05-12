@@ -32,6 +32,7 @@ import AttackWheelDemo from "@/components/hexisle/AttackWheelDemo";
 import HitbaseCounterShowcase from "@/components/hexisle/HitbaseCounterShowcase";
 import CharacterLayerExplorer from "@/components/hexisle/CharacterLayerExplorer";
 import { PortalPageLayout } from '@/components/PortalPageLayout';
+import '@/styles/landing.css';
 
 export default function HexIsle() {
   const { user } = useAuth();
@@ -128,7 +129,7 @@ export default function HexIsle() {
   });
 
   return (
-    <PortalPageLayout maxWidth="xl" xrayId="hexisle">
+    <PortalPageLayout maxWidth="xl" xrayId="hexisle" className="hexisle-hex-bg">
       <div className="space-y-6">
       {/* View Phase Switcher (Portals / 2D / 3D) */}
       <ViewPhaseSwitcher />

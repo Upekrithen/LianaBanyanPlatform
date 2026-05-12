@@ -110,7 +110,7 @@ function matchRule(
   const matches: ViolationMatch[] = [];
 
   for (const p of rule.patterns) {
-    if (p.type === "regex" || p.type === "anti-pattern" || p.type === "path-format") {
+    if (p.type === "regex" || p.type === "anti-pattern" || p.type === "path-format" || p.type === "context-heuristic") {
       if (!p.pattern) continue;
       const regex = new RegExp(p.pattern, p.flags ?? "gi");
       let m: RegExpExecArray | null;
@@ -145,6 +145,19 @@ function matchRule(
             matched_text: m[0].slice(0, 80),
             offset: m.index,
             likelihood: 0.75,
+          });
+        }
+      } else if (p.type === "context-heuristic") {
+        // Context-heuristic patterns (R-MS-1, R-PAWN-1, R-ROOK-1):
+        // Text-class trigger — flags text mention of the pattern.
+        // Full tool-call-record / session-context integration is marked TODO in each rule's
+        // correction_proposal. Likelihood is lower (0.72) to reflect partial coverage.
+        // Engine caller should apply session-context exclusions before acting on the flag.
+        while ((m = regex.exec(text)) !== null) {
+          matches.push({
+            matched_text: m[0].slice(0, 80),
+            offset: m.index,
+            likelihood: 0.72,
           });
         }
       }

@@ -1,17 +1,22 @@
-﻿---
-title: "Crown Letter: Sandra Bullock"
-subtitle: "Builder Crown (Action) — Power to the People"
-date: 2026-03-16
-initiative: "Power to the People"
+---
+title: 'Crown Letter: Sandra Bullock'
+subtitle: Builder Crown (Action) — Power to the People
+date: 2026-03-16T00:00:00.000Z
+initiative: Power to the People
 initiative_number: 15
-crown_type: "Builder (Action)"
-recipient: "Sandra Bullock"
-tags: ["crown-letter", "political-expedition", "action", "civic-engagement"]
+crown_type: Builder (Action)
+recipient: Sandra Bullock
+tags:
+  - crown-letter
+  - political-expedition
+  - action
+  - civic-engagement
 wrasseTriggers:
   - letters
   - crown letter sandra bullock
   - liana banyan platform
   - cephas member content
+  - crown letter
 ---
 
 Dear Ms. Bullock,
