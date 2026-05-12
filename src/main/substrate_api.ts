@@ -2,6 +2,8 @@
 // B37 Phase 3-4 — Full implementation with TelemetryStore
 // B61 Phase 0 — Pawn (Perplexity) + Rook (Gemini) Yoke dispatch/status endpoint stubs
 // B61 Phase A — Wave Generator daemon endpoints (wave orchestration)
+// B61 Phase B — Template-based dispatch (template_name + params instead of segs[])
+// B61 Phase C — Trigger Engine init; NL dispatch endpoint; trigger status endpoint
 //
 // HTTP endpoints on 127.0.0.1:11480:
 //   GET  /health                    — liveness
@@ -17,9 +19,11 @@
 //   GET  /yoke/pawn/status/:id      — B61 Phase 0: Pawn dispatch status
 //   POST /yoke/rook/dispatch        — B61 Phase 0: Rook wave dispatch (Gemini)
 //   GET  /yoke/rook/status/:id      — B61 Phase 0: Rook dispatch status
-//   POST /yoke/wave/dispatch        — B61 Phase A: Wave Generator dispatch (6 core ops)
+//   POST /yoke/wave/dispatch        — B61 Phase A/B: Wave Generator dispatch (segs[] or template_name)
 //   GET  /yoke/wave/status/:id      — B61 Phase A: Wave status query
 //   POST /yoke/wave/abort/:id       — B61 Phase A: Abort in-flight wave
+//   POST /yoke/wave/nl              — B61 Phase C Class A: NL-text → WaveRequest compile + dispatch
+//   GET  /yoke/wave/triggers        — B61 Phase C: Trigger Engine status + config summary
 
 import { createServer, IncomingMessage, ServerResponse } from 'http';
 import { mkdirSync, existsSync, appendFileSync, readFileSync, writeFileSync, watch } from 'fs';
@@ -45,6 +49,12 @@ import {
   getWaveSummary,
   type WaveRequest,
 } from './wave_generator';
+import {
+  initTriggerEngine,
+  emitSubstrateEvent,
+  parseNlWaveRequest,
+  getTriggerSummary,
+} from './wave_trigger_engine';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -168,6 +178,9 @@ export class SubstrateAPIServer {
 
     // B61 Phase A — crash-restart resilience: restore in-flight wave state
     initWaveGenerator();
+
+    // B61 Phase C — start trigger engine (Class B/C/D)
+    initTriggerEngine();
 
     this.server = createServer((req, res) => this._handleRequest(req, res));
     return new Promise((resolve, reject) => {
@@ -1446,10 +1459,9 @@ export class SubstrateAPIServer {
       return;
     }
 
-    // ── B61 Phase A — POST /yoke/wave/dispatch ────────────────────────────────
-    // Wave Generator: accept wave-class request (anchor + segs[] + optional
-    // synthesis_prompt) → decompose → parallel Yoke dispatch → synthesize →
-    // HMAC-bound receipt in ~/.lb_substrate/wave_archive/{wave_id}/
+    // ── B61 Phase A/B — POST /yoke/wave/dispatch ──────────────────────────────
+    // Phase A: anchor + segs[] (inline SEG array)
+    // Phase B: anchor + template_name + params (template expansion; segs[] not required)
     if (req.method === 'POST' && url === '/yoke/wave/dispatch') {
       this._readBody(req, async (body) => {
         let parsed: WaveRequest;
@@ -1465,9 +1477,12 @@ export class SubstrateAPIServer {
           res.end(JSON.stringify({ error: 'anchor required' }));
           return;
         }
-        if (!Array.isArray(parsed.segs) || parsed.segs.length === 0) {
+        // Accept either inline segs[] (Phase A) or template_name (Phase B/C)
+        const hasSegs     = Array.isArray(parsed.segs) && parsed.segs.length > 0;
+        const hasTemplate = typeof parsed.template_name === 'string' && parsed.template_name.length > 0;
+        if (!hasSegs && !hasTemplate) {
           res.statusCode = 400;
-          res.end(JSON.stringify({ error: 'segs[] required (at least one SEG)' }));
+          res.end(JSON.stringify({ error: 'segs[] or template_name required' }));
           return;
         }
         try {
@@ -1521,6 +1536,94 @@ export class SubstrateAPIServer {
         error:         wave.error,
         wave_summary:  getWaveSummary(),
       }));
+      return;
+    }
+
+    // ── B61 Phase C — POST /yoke/wave/nl ─────────────────────────────────────
+    // Class A: accept casual natural-language text → parse → dispatch wave.
+    // Body: { "text": "fire a 4-way cohort on cooperative-AI governance" }
+    // Returns 202 with wave receipt if parsed; 400 with parse_error if no pattern matched.
+    if (req.method === 'POST' && url === '/yoke/wave/nl') {
+      this._readBody(req, async (body) => {
+        let nlText: string | undefined;
+        try {
+          const parsed = JSON.parse(body) as { text?: string };
+          nlText = parsed.text;
+        } catch {
+          res.statusCode = 400;
+          res.end(JSON.stringify({ error: 'Invalid JSON; expected { "text": "..." }' }));
+          return;
+        }
+        if (!nlText?.trim()) {
+          res.statusCode = 400;
+          res.end(JSON.stringify({ error: '"text" field required' }));
+          return;
+        }
+        const waveReq = parseNlWaveRequest(nlText);
+        if (!waveReq) {
+          res.statusCode = 400;
+          res.end(JSON.stringify({
+            error:       'parse_error',
+            detail:      'No wave template pattern matched the input text.',
+            hint:        'Try: "fire a 4-way cohort on [topic]" | "cross-vendor verification on [topic]" | "drill-down on [topic]"',
+            input:       nlText,
+          }));
+          return;
+        }
+        try {
+          const wave = await waveDispatch(waveReq);
+          res.statusCode = 202;
+          res.end(JSON.stringify({
+            wave_id:       wave.wave_id,
+            anchor:        wave.anchor,
+            template_name: waveReq.template_name,
+            params:        waveReq.params,
+            status:        wave.status,
+            seg_count:     wave.segs.length,
+            created_at:    wave.created_at,
+            class_a:       true,
+          }));
+        } catch (err) {
+          res.statusCode = 500;
+          res.end(JSON.stringify({ error: String(err) }));
+        }
+      });
+      return;
+    }
+
+    // ── B61 Phase C — GET /yoke/wave/triggers ────────────────────────────────
+    // Trigger Engine status: Class B subscriptions, Class C schedules, dedup registry.
+    if (req.method === 'GET' && url === '/yoke/wave/triggers') {
+      const summary = getTriggerSummary();
+      res.end(JSON.stringify({
+        ...summary,
+        wave_summary:  getWaveSummary(),
+        as_of:         new Date().toISOString(),
+      }));
+      return;
+    }
+
+    // ── B61 Phase C — POST /yoke/wave/substrate_event ────────────────────────
+    // Manually emit a substrate-state event for Class B testing.
+    // Body: { "event_type": "canon_eblet_landed", "payload": { ... } }
+    if (req.method === 'POST' && url === '/yoke/wave/substrate_event') {
+      this._readBody(req, (body) => {
+        let parsed: { event_type?: string; payload?: Record<string, unknown> };
+        try {
+          parsed = JSON.parse(body) as typeof parsed;
+        } catch {
+          res.statusCode = 400;
+          res.end(JSON.stringify({ error: 'Invalid JSON' }));
+          return;
+        }
+        if (!parsed.event_type?.trim()) {
+          res.statusCode = 400;
+          res.end(JSON.stringify({ error: 'event_type required' }));
+          return;
+        }
+        emitSubstrateEvent(parsed.event_type, parsed.payload ?? {});
+        res.end(JSON.stringify({ emitted: true, event_type: parsed.event_type, class_b: true }));
+      });
       return;
     }
 

@@ -1,6 +1,7 @@
-// AMPLIFY Computer — Wave Generator Daemon (B61 Phase A+B / LB-STACK-0164 §1–§3)
+// AMPLIFY Computer — Wave Generator Daemon (B61 Phase A+B+C / LB-STACK-0164 §1–§3, §4)
 // Phase A: six core operations with inline SEG decomposition
 // Phase B: six versioned HMAC-bound wave templates (LB-STACK-0164 §3)
+// Phase C: post-synthesis hook registry for Class D cascade triggers (LB-STACK-0164 §4)
 //
 // Core operations (§1):
 //   1. Receive   — POST /yoke/wave/dispatch
@@ -182,6 +183,20 @@ export interface Wave {
 // ─── In-memory store ──────────────────────────────────────────────────────────
 
 const _waves = new Map<string, Wave>();
+
+// ─── Phase C — Post-Synthesis Hook Registry ───────────────────────────────────
+
+type PostSynthesisHook = (waveId: string, anchor: string, synthesisText: string) => void;
+const _postSynthesisHooks: PostSynthesisHook[] = [];
+
+/**
+ * Register a callback to be invoked after every wave synthesis completes.
+ * Used by the Trigger Engine (Phase C) for Class D cascade detection.
+ * Multiple hooks may be registered; all are called in order.
+ */
+export function registerPostSynthesisHook(hook: PostSynthesisHook): void {
+  _postSynthesisHooks.push(hook);
+}
 
 // ─── Filesystem helpers ───────────────────────────────────────────────────────
 
@@ -608,6 +623,11 @@ async function runWaveLifecycle(wave: Wave, req: WaveRequest): Promise<void> {
 
   wave.synthesis_text = synthesisText;
 
+  // Phase C — Class D cascade: notify post-synthesis hooks
+  for (const hook of _postSynthesisHooks) {
+    try { hook(wave.wave_id, wave.anchor, synthesisText); } catch { /* non-fatal */ }
+  }
+
   // ── COMPLETE: Operation 6 — REPORT ────────────────────────────────────────
   wave.status       = 'complete';
   wave.completed_at = new Date().toISOString();
@@ -674,7 +694,7 @@ ${wave.synthesis_text ?? '(none)'}
 
 ---
 
-*B61 Phase A+B Wave Generator — LB-STACK-0164 §1–§3. Aircraft Carrier holds. Substrate compounds.*
+*B61 Phase A+B+C Wave Generator — LB-STACK-0164 §1–§4. Aircraft Carrier holds. Substrate compounds.*
 `;
 }
 

@@ -12,6 +12,7 @@
     "build": "npm run build:renderer && npm run build:main",
     "build:renderer": "vite build --config vite.renderer.config.ts",
     "build:main": "tsc -p tsconfig.main.json",
+    "build:hugo": "node scripts/copy-hugo-bundle.mjs",
     "dist": "npm run build && electron-builder",
     "dist:win": "npm run build && electron-builder --win",
     "dist:mac": "npm run build && electron-builder --mac",
@@ -67,6 +68,7 @@
     "files": [
       "dist/**/*",
       "!dist/**/*.map",
+      "static/**/*",
       "node_modules/**/*",
       "!node_modules/.cache/**",
       "!node_modules/**/{test,__tests__,tests,powered-test,example,examples}/**"
