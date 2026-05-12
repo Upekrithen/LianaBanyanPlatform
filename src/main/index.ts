@@ -1,6 +1,13 @@
 // AMPLIFY Computer — Electron Main Process
 // B37 Phase 1-3 — BP025 / Bushel 37
 // Phase 3 additions: connectivity polling, auto-mode transitions, substrate/federation IPC
+// BP038 addition: env_loader MUST be the first import so its side-effects populate
+// process.env (ANTHROPIC_API_KEY, etc.) before any consumer module reads them at load.
+// Implements Blood Rule R16 (R-NO-API-KEY-EXPOSURE) — values never logged.
+
+import './env_loader';
+import { probeSubstrateApiPort } from './port_guard';
+import { probeRendererHealth } from './renderer_guard';
 
 import {
   app,
@@ -43,9 +50,34 @@ registerCustomScheme();
 // ─── Constants ──────────────────────────────────────────────────────────────
 
 const IS_DEV = process.env.NODE_ENV === 'development' || !app.isPackaged;
+// Use explicit 127.0.0.1 (IPv4) — avoids Windows ::1 vs 127.0.0.1 split-brain
+// where Vite binds to ::1 but Chromium connects to 127.0.0.1.
+const VITE_DEV_URL = 'http://127.0.0.1:5173';
 const RENDERER_URL = IS_DEV
-  ? 'http://localhost:5173'
+  ? VITE_DEV_URL
   : `file://${join(__dirname, '../renderer/index.html')}`;
+
+// ─── CSP ─────────────────────────────────────────────────────────────────────
+// Strict prod / minimal dev relaxation (HMR style + module loading only).
+// NO unsafe-eval in either environment.
+const CSP_DEV =
+  "default-src 'self' http://127.0.0.1:5173; " +
+  "script-src 'self' 'unsafe-inline' http://127.0.0.1:5173; " +
+  "style-src 'self' 'unsafe-inline'; " +
+  "connect-src 'self' http://127.0.0.1:5173 ws://127.0.0.1:5173 " +
+  "http://127.0.0.1:11480 http://127.0.0.1:11481; " +
+  "img-src 'self' data: blob:; " +
+  "font-src 'self' data:";
+
+const CSP_PROD =
+  "default-src 'self'; " +
+  "script-src 'self'; " +
+  "style-src 'self' 'unsafe-inline'; " +
+  "connect-src 'self' http://127.0.0.1:11480 http://127.0.0.1:11481; " +
+  "img-src 'self' data: blob:; " +
+  "font-src 'self' data:";
+
+const ACTIVE_CSP = IS_DEV ? CSP_DEV : CSP_PROD;
 
 // Connectivity polling interval (30s)
 const CONNECTIVITY_POLL_MS = 30_000;
@@ -214,6 +246,16 @@ function createOverlayWindow(): void {
     },
   });
 
+  // Inject CSP on every response — strips unsafe-eval, eliminates Electron security warning.
+  overlayWindow.webContents.session.webRequest.onHeadersReceived((details, callback) => {
+    callback({
+      responseHeaders: {
+        ...details.responseHeaders,
+        'Content-Security-Policy': [ACTIVE_CSP],
+      },
+    });
+  });
+
   // Guarantee passthrough AFTER the compositor attaches (BP029 / LB-STACK-0157).
   overlayWindow.once('ready-to-show', () => {
     applyLBFrameClickthrough(true);
@@ -221,6 +263,15 @@ function createOverlayWindow(): void {
   });
   overlayWindow.webContents.once('did-finish-load', () => {
     applyLBFrameClickthrough(true);
+    // renderer_guard: probe after 8s grace — log empty-root failures to health log.
+    const win = overlayWindow;
+    if (win) {
+      probeRendererHealth(win, RENDERER_URL, 8000).then((result) => {
+        if (!result.ok) {
+          tray?.setToolTip(`AMPLIFY Computer — ⚠ renderer boot failed (root empty)`);
+        }
+      }).catch(() => { /* probe errors never crash the app */ });
+    }
   });
   overlayWindow.loadURL(RENDERER_URL);
 
@@ -748,6 +799,19 @@ app.on('will-quit', () => {
 });
 
 app.whenReady().then(async () => {
+  // BP038 Frame-boilerplate — pre-bind port guard (singleton reuse pattern).
+  // If another AMPLIFY is already on API_PORT, exit cleanly instead of EADDRINUSE crash.
+  const probe = await probeSubstrateApiPort(API_PORT);
+  if (probe.occupied) {
+    if (probe.holder === 'another_amplify') {
+      console.warn(`[LB Frame] another AMPLIFY is already running on :${API_PORT} — this duplicate instance will exit cleanly (singleton reuse). Close the existing instance first if you intended to restart.`);
+    } else {
+      console.error(`[LB Frame] :${API_PORT} is held by an unknown service. AMPLIFY cannot bind. Free the port or set SUBSTRATE_API_PORT to an alternate.`);
+    }
+    app.quit();
+    return;
+  }
+
   // Initialize substrate API server (Phase 3: full implementation)
   substrateServer = new SubstrateAPIServer();
   await substrateServer.start();
