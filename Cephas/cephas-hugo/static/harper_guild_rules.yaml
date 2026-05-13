@@ -1,0 +1,325 @@
+# Harper Guild Rule-Base
+# Liana Banyan Corporation — Harper Guild (Initiative #12; Brené Brown Harper Prime)
+# Doctrine: feedback_blood_rule_no_law_enforcement_direct_access_harper_guild_mediation.md
+# BP041 — Founder direct: "Yes, some things are private. So, we have rules — the Harper Guild decides."
+#
+# AGPL-licensed: this rule-base is forkable under cooperative-class jurisprudence.
+# Higher Standards Class: Harper Guild itself bound by these rules + audit trail + periodic review.
+# Version: 1.0.0 (BP041)
+# Supersedes: none (first edition)
+
+meta:
+  version: "1.0.0"
+  effective_date: "2026-05-12"
+  administered_by: "Harper Guild (Initiative #12)"
+  harper_prime: "Brené Brown (Crown Designate)"
+  legal_entity: "LIANA BANYAN CORPORATION"
+  license: "AGPL-3.0"
+  privacy_default: true
+  composing_canon:
+    - "BLOOD RULE — No Law Enforcement Direct Access"
+    - "Brand-Stamped Use invariant"
+    - "Triple-Stamp Access Architecture"
+    - "Federal Body Cam doctrine"
+    - "Higher Standards Class"
+    - "IP Ledger correction-branch (SAGA 6)"
+
+# ─── Core Privacy Default ─────────────────────────────────────────────────────
+# Portal access information is PRIVATE by default.
+# Substrate logs everything (internal tamper-evidence intact).
+# Public disclosure happens ONLY under Harper-Guild-defined rules below.
+
+privacy_default:
+  description: >
+    All Portal access information is private by default. The IP Ledger records every
+    interaction (Federal Body Cam doctrine; tamper-evidence intact at substrate-internal layer),
+    but external disclosure of those records is governed by these rules.
+    No external party may bypass Harper Guild to access member data.
+  disclosure_tiers:
+    - tier: always_internal
+      who_sees: "Substrate IP Ledger (cryptographic tamper-evidence; never deleted)"
+      always: true
+    - tier: always_stamped_individual
+      who_sees: "The agency person who initiated access (their own ledger entries)"
+      always: true
+    - tier: always_harper_monitoring
+      who_sees: "Assigned Harper + Daily/Weekly/Continuous review tiers"
+      always: true
+    - tier: member_notification
+      who_sees: "Member whose data was touched"
+      default: true
+      exception: "Deferred until seal lifts when court-approved sealed order is in effect"
+    - tier: annual_public_report
+      who_sees: "Anonymized aggregate at agency level; sealed entry counts noted without detail"
+      always: true
+
+# ─── Disclosure Rules ─────────────────────────────────────────────────────────
+
+rules:
+
+  - id: HG-101
+    name: "Sealed Order"
+    version: "1.0"
+    trigger: >
+      Portal access conducted under a sealed court order (warrant, search order, or
+      similar order where the court has directed confidentiality of the access).
+    disclosure_scope:
+      - "Stamped individual + their agency superior"
+      - "Assigned Harper + Tier 2/3/4 review groups"
+      - "The issuing court (on request)"
+      - "Appellate review courts (on review)"
+    member_notification:
+      default: deferred
+      trigger: "Automatic when seal lifts; no grace period once seal expires"
+      exception: "If Defense Klaus determines immediate notification is life-safety-required"
+    public_disclosure: false
+    time_bounding:
+      auto_review_days: 90
+      max_duration_description: "Duration of court-ordered seal; auto-lift on expiry"
+    override_conditions:
+      - "Seal-lift court order"
+      - "Member consent (post-notification)"
+      - "Defense Klaus emergency life-safety finding"
+    audit_trail: >
+      Every Harper Guild decision under HG-101 is ledger-recorded, including deferral
+      decisions. Harper Guild itself held to Federal Body Cam doctrine.
+    composing_canon:
+      - "BLOOD RULE — No Law Enforcement Direct Access"
+      - "Defense Klaus (Initiative #8)"
+
+  - id: HG-102
+    name: "Grand Jury"
+    version: "1.0"
+    trigger: >
+      Portal access in connection with an active grand jury proceeding, where grand jury
+      secrecy statutes (e.g., Federal Rule of Criminal Procedure 6(e)) apply.
+    disclosure_scope:
+      - "Stamped individual + prosecutorial team (via prosecutor channel)"
+      - "Assigned Harper + all monitoring tiers"
+      - "Grand jury itself (on order)"
+    member_notification:
+      default: deferred
+      trigger: "Indictment returned OR no-bill closure, whichever comes first"
+    public_disclosure: false
+    time_bounding:
+      auto_review_days: 180
+      max_duration_description: "Until grand jury concludes (indictment or no-bill)"
+    override_conditions:
+      - "Grand jury closure"
+      - "Court order lifting secrecy"
+      - "Defense Klaus emergency finding"
+    audit_trail: "All Harper decisions append-only in IP Ledger under portal_search category"
+    composing_canon:
+      - "Grand Jury Secrecy (FRCP 6(e) and state equivalents)"
+      - "Defense Klaus (Initiative #8)"
+
+  - id: HG-103
+    name: "National Security Letter"
+    version: "1.0"
+    trigger: >
+      Portal access in connection with a National Security Letter (NSL) carrying a
+      gag order prohibiting disclosure of the NSL's existence or content.
+    disclosure_scope:
+      - "Stamped individual (only if NSL recipient)"
+      - "Harper Guild legal counsel (confidential)"
+      - "Continuous monitoring tier (security-cleared Harper, if applicable)"
+    member_notification:
+      default: deferred
+      trigger: "Gag order lift (typically 1-3 years by statute); or court order"
+    public_disclosure: false
+    time_bounding:
+      auto_review_days: 365
+      max_duration_description: >
+        NSL gag orders subject to statutory review; Harper Guild petitions for review
+        at 1-year anniversary if member not yet notified.
+    override_conditions:
+      - "Gag order lift"
+      - "Court order"
+      - "Declassification"
+    audit_trail: >
+      NSL-related entries flagged in substrate; only security-cleared Harper staff
+      see entry detail. Count appears in annual transparency report as 'N entries sealed
+      per national security order' without further detail.
+    composing_canon:
+      - "USA PATRIOT Act §505 and successors"
+      - "Defense Klaus (Initiative #8)"
+      - "Aircraft Carrier doctrine (always-on substrate)"
+
+  - id: HG-201
+    name: "Public Interest Unsealing"
+    version: "1.0"
+    trigger: >
+      Request to publicly disclose a specific Portal entry that would otherwise
+      remain private or sealed, on grounds of public interest.
+    disclosure_scope:
+      - "Public (after adjudication; anonymized as appropriate)"
+    conditions_for_activation:
+      - "High bar: requires Defense Klaus + Counsel sign-off"
+      - "Member consent required if living and reachable"
+      - "Harper Guild full-panel adjudication (not single Harper)"
+      - "IP Ledger correction-branch: the public-interest decision itself is ledger-recorded"
+    member_notification:
+      default: required_before_disclosure
+      exception: "Posthumous records or unreachable members handled by Harper Guild board"
+    public_disclosure: true
+    time_bounding:
+      description: "Decision is permanent; supersedes-chain available if new facts emerge"
+    override_conditions:
+      - "Member withdraws consent (supersession entry created; existing disclosure cannot be erased but future disclosure stops)"
+    audit_trail: >
+      Full adjudication record (all Harper votes, evidence chain, member consent artifacts)
+      is itself publicly disclosed alongside the unsealed entry.
+    composing_canon:
+      - "Federal Body Cam doctrine"
+      - "IP Ledger correction-branch"
+      - "Defense Klaus (Initiative #8)"
+      - "AGPL Free Forever"
+
+  - id: HG-301
+    name: "Pattern of Abuse Aggregate Disclosure"
+    version: "1.0"
+    trigger: >
+      N or more members are affected by similar Portal-search patterns from the same
+      agency or individual, and the pattern suggests systemic overreach, harassment,
+      or jurisdiction abuse. N is determined by Harper Guild board (default N=3).
+    disclosure_scope:
+      - "Aggregate anonymized findings (agency-level; no individual member identification)"
+      - "Relevant oversight bodies (OIG, agency internal affairs, Congressional oversight)"
+      - "Public annual transparency report (aggregated counts)"
+    conditions_for_activation:
+      - "Continuous monitoring Tier 4 flag + Harper board concurrence"
+      - "R-USE-THE-YOKE: multiple Harpers must concur (cross-instance Detective review)"
+      - "Defense Klaus activates in parallel for affected members"
+    member_notification:
+      default: "Aggregate notification to affected members (identity not disclosed to other members)"
+    public_disclosure:
+      aggregate_only: true
+      individual_entry_disclosure: "Per HG-201 if warranted"
+    time_bounding:
+      description: "Pattern-of-abuse findings are permanent substrate record"
+    override_conditions:
+      - "Pattern disproven via new evidence (supersession entry)"
+    audit_trail: "Full pattern detection methodology + Harper concurrence chain published alongside finding"
+    composing_canon:
+      - "R-USE-THE-YOKE (cross-instance Detective review)"
+      - "Defense Klaus (Initiative #8)"
+      - "Harper monitoring Tier 4 (24/7 continuous)"
+      - "IP Ledger correction-branch"
+
+# ─── Harper Guild Monitoring Tiers ───────────────────────────────────────────
+
+monitoring_tiers:
+  - tier: 1
+    name: "Assigned Harper (per-session)"
+    cadence: "Real-time"
+    scope: "Single Portal session from open to close"
+    authority:
+      - "Pause session pending scope clarification"
+      - "Request supplementary legal basis"
+      - "Escalate to Defense Klaus"
+
+  - tier: 2
+    name: "Daily Review Group"
+    cadence: "Every 24 hours (morning shift)"
+    scope: "Previous 24h of all Portal activity"
+    looks_for:
+      - "Scope drift (queries beyond declared warrant)"
+      - "Jurisdiction creep"
+      - "Unusual time-of-day patterns"
+      - "Suspicious cross-agent coordination"
+    authority:
+      - "Flag to Tier 3"
+      - "Initiate Defense Klaus referral"
+
+  - tier: 3
+    name: "Weekly Review Group"
+    cadence: "Weekly"
+    scope: "Full week of Portal activity"
+    looks_for:
+      - "Agency-wide patterns suggesting systemic overreach"
+      - "Individual-actor patterns (consistent misuse)"
+      - "Member-data exposure trends"
+    authority:
+      - "Formal challenge initiation"
+      - "HG-301 activation recommendation"
+      - "Annual transparency report input"
+
+  - tier: 4
+    name: "Continuous Monitoring Group"
+    cadence: "24/7"
+    scope: "Real-time anomaly detection across all Portal activity"
+    looks_for:
+      - "Volume spikes from single stamped individual"
+      - "Cross-jurisdictional queries inconsistent with declared scope"
+      - "Case re-opens from unfamiliar geographic context"
+      - "Time-of-day anomalies"
+    authority:
+      - "High-severity: immediate alert to on-duty Harper + Defense Klaus"
+      - "Low-severity: batch to Tier 2 daily queue"
+
+  - tier: 5
+    name: "Public and Member Visibility"
+    cadence: "Annual report + per-event member notification"
+    scope: "Annual transparency report + member-side audit (Settings → Privacy & Legal)"
+    components:
+      - "Annual transparency report (anonymized to agency level)"
+      - "Member Portal Activity page (each member sees events touching their data)"
+      - "Cooperative-substrate public ledger (aggregate Portal statistics)"
+      - "Harper Guild quarterly reports to LB Board"
+
+# ─── Higher Standards Class ───────────────────────────────────────────────────
+
+higher_standards_class:
+  principle: >
+    "We hold ourselves, and others that choose to interact with us, to higher standards."
+    — Founder direct, BP041
+  applies_to:
+    - "The Portal (law enforcement search interface)"
+    - "Pedestal Vote canon (Crown candidates)"
+    - "Federation peer onboarding (Federal Body Cam doctrine agreement)"
+    - "Marketplace plugin AGPL umbrella (SAGA 6)"
+    - "Counsel pre-brief reciprocity"
+  transparency_reciprocity: >
+    The Portal makes law enforcement subject to the same Federal Body Cam doctrine
+    Mnemosyne applies to itself. Their searches are accountable. Patterns of abuse are
+    visible. The substrate films the surveilors at the packet layer.
+
+# ─── Brand-Stamped Use Invariant ─────────────────────────────────────────────
+
+brand_stamped_use:
+  principle: >
+    No anonymous Portal access is ever permitted. Every search, every data retrieval,
+    every Portal interaction is stamped to a single identified individual person —
+    regardless of whether the requesting entity is an officer, agency, corporation,
+    government branch, or international authority.
+  enforcement:
+    - "Single ID can never authenticate multiple persons"
+    - "Agency-wide blanket IDs are prohibited"
+    - "Each person enrolls individually through Harper Guild credential verification"
+    - "Packet Briefing Case scribe requires IP Ledger touchback to unlock"
+    - "Every re-open of a Case generates a new ledger entry"
+  packet_briefing_case:
+    description: >
+      Data returned through the Portal is delivered as a Packet Briefing Case —
+      a signed bundle with embedded Python scribe requiring IP Ledger touchback to unlock.
+      Every access is logged. Re-opens are logged. Metadata watermarks enable tracing
+      if data appears in unauthorized public locations.
+    fields:
+      - case_id
+      - stamped_individual_id
+      - ledger_entry_id
+      - payload_encrypted
+      - scribe_version
+      - watermark_hash
+
+# ─── Founder Canon Anchor ────────────────────────────────────────────────────
+
+founder_canon:
+  bp041_direct: >
+    "Then we can all know what's appropriate to know, when it's appropriate to know it."
+  meaning: >
+    The substrate's transparency invariant at the law-enforcement-interaction boundary.
+    Every Portal access becomes part of a public record visible at multiple resolutions:
+    the stamped individual, their agency, the affected member, the Harpers, the
+    Defense Klaus team, and (in aggregate) the general public via annual transparency reports.
+    Privacy-by-default AND transparency-when-appropriate coexist through Harper Guild rules.
