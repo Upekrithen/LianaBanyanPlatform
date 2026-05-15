@@ -49,6 +49,9 @@ const CrewmanDashboardPage = lazy(() => import("@/pages/CrewmanDashboardPage"));
 const RolodexPage = lazy(() => import("@/pages/RolodexPage"));
 const AffiliationBadgesPage = lazy(() => import("@/pages/AffiliationBadgesPage"));
 const PioneerProposalsPage = lazy(() => import("@/pages/PioneerProposalsPage"));
+// The Roll — BP044 W1 cooperative-class peer-mesh ratification (supersedes /council/)
+const RollPage = lazy(() => import("@/pages/RollPage"));
+const RollNominatePage = lazy(() => import("@/pages/RollNominatePage"));
 
 export const socialRoutes = (
   <>
@@ -100,5 +103,10 @@ export const socialRoutes = (
     <Route path="/rolodex" element={<ProtectedRoute><LazyPage><RolodexPage /></LazyPage></ProtectedRoute>} />
     <Route path="/badges" element={<ProtectedRoute><LazyPage><AffiliationBadgesPage /></LazyPage></ProtectedRoute>} />
     <Route path="/pioneer" element={<ProtectedRoute><LazyPage><PioneerProposalsPage /></LazyPage></ProtectedRoute>} />
+    {/* The Roll — BP044 W1 cooperative-class peer-mesh ratification */}
+    <Route path="/roll" element={<LazyPage><RollPage /></LazyPage>} />
+    <Route path="/roll/nominate" element={<ProtectedRoute><LazyPage><RollNominatePage /></LazyPage></ProtectedRoute>} />
+    {/* Legacy /council/ redirect to /roll/ */}
+    <Route path="/council" element={<Navigate to="/roll" replace />} />
   </>
 );
