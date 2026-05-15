@@ -66,7 +66,34 @@ Per SAGA 7 §2 criterion 6 — these are restated verbatim with Bishop's read fo
 
 ---
 
-## §5 — MV-DRIFT-RESIDUAL (Known False-Positives from Lint Thresholds)
+## §5 — Founder-Ratified Resolution (BP045 W1 · "resolve ALL")
+
+**Founder direct: "Yes, resolve ALL of these now."**
+
+| File | Phrase | Resolution | Rationale |
+|---|---|---|---|
+| `BISHOP_INSTRUCTIONS_JAN25.md` | `$5/month` | ✅ FIXED → `$5/year` (disk) | Clear violation: membership fee table |
+| `BP021_transcript_be09c4d2.md` | `$5/month` ×2 | ✅ FIXED → `$5/year` (disk) | LB membership ref in transcript |
+| `BP021_transcript_df423557.md` | `$5/month` ×2 | ✅ FIXED → `$5/year` (disk) | LB membership ref in transcript |
+| `2026-01-23_cory-and-knights-messages.md` | `$5/month` ×2 | ✅ FIXED → `$5/year` (disk) | LB membership ref |
+| `2026-01-23_cory-and-knights-messages.extracted.md` | `$5/month` ×2 | ✅ FIXED → `$5/year` (disk) | LB membership ref |
+| `PUDDING_42` | `Not $5/month` | ✅ CONFIRMED FALSE POSITIVE | Intentional rhetorical contrast — "Five dollars, once a year. Not $5/month." Changing it would make "Not $5/year" — semantically broken |
+| `PUDDING_68` | `$60/year` | ✅ CONFIRMED FALSE POSITIVE | Savings math: Costco $65/yr − LB $5/yr = $60/yr cooperative saves you |
+| `INITIATIVE_CONTENT_LETS_GET_GROCERIES` | `$60/year` | ✅ CONFIRMED FALSE POSITIVE | Costco price in comparison table; LB correctly shown as `$5/year (platform)` |
+| `SUBSTACK_ACCOUNT_SETUP` | `$5/month` | ✅ CONFIRMED FALSE POSITIVE | Substack Commons Supporter publication tier — separate product, not LB platform membership |
+| `SESSION_REASONING_ARCHIVE` | `$5/month` | ✅ CONFIRMED FALSE POSITIVE | "$5 Santa Evermore" charitable micro-giving concept description — not LB membership pricing |
+
+**Total MEMB-001 fixed:** 9 instances across 5 files (all disk-applied; files in gitignored dirs or exceed 1 MB hook limit)
+**Total false positives resolved:** 5 (with clear rationale documented)
+
+**Lint tuning follow-on (still pending Founder ratification):**
+- Add `wording_drift_exclusions` for COOP-001: `["competitive", "comparative", "imperative", "conservative"]`
+- Reduce ARMADA-001 `drift_threshold_levenshtein`: 4 → 3
+- Normalize punctuation before length-ratio check in `findNearMatch`
+
+---
+
+## §6 — MV-DRIFT-RESIDUAL (Known False-Positives from Lint Thresholds)
 
 Per `BRAND_LINT_DRIFT_CORRECTIONS_APPLIED_BP044_W1.md` Part 2, these are threshold-sensitivity false-positives, NOT real violations:
 
