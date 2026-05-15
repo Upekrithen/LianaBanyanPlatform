@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Conductor's Baton Rollout Waves
  * K525 · Phase D.1 · Innovation #2277
  *
@@ -34,7 +34,7 @@ export const WAVE_0_DESCRIPTION =
 
 /**
  * The 10 Wave 1 candidates LOCKED at B129 (April 27, 2026). Founder accepted
- * all 8 Bishop archetype suggestions (less Tatiana Schlossberg — deceased),
+ * all 8 Bishop archetype suggestions (less Tatiana Schlossburg — deceased),
  * plus 3 additions from Bishop's expanded slate.
  *
  * The "name" field is the public name; "matchKey" is the canonical lookup

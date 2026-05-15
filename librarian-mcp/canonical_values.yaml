@@ -150,6 +150,146 @@ deadlines:
   pcc_bangkok_iso: "2026-11-01T00:00:00Z"
   pcc_bangkok_description: "PCC Bangkok conference"
 
+# ── The Roll Architecture (BP044 W1 · supersedes BP043 PEC Council 100-cap) ────────────────
+the_roll:
+  architecture_canonized: "BP044_W1"
+  supersedes: ["BP043_PEC_Council_100_cap"]
+  canon_eblet: "the_roll_get_on_a_roll_cooperative_class_peer_mesh_ratification_bp044.eblet.md"
+
+  ratio_canon:
+    famous_to_non_famous: "1:2"
+    rationale: "Cooperative-substrate identity-class invariant — prevents cooperative-class capture by famous-class — keeps cooperative-class governance grounded in cooperative-class members"
+
+  day_0_target:
+    famous_class: 60
+    non_famous_class: 60
+    total: 120
+    breakdown:
+      inaugural_famous_bishop_slated: 30
+      founder_reserved_20_named: 8
+      founder_reserved_20_unreserved: 12
+      crown_auto_roll: 22  # 16 Initiative Crowns + 3 spinout entity Crowns + reserve/candidate slots
+      initiative_crown_nominated_non_famous: 30
+      bishop_research_non_famous: 20
+      member_substrate_phase_b_non_famous: 10
+
+  three_prong_famous_class_test:
+    prong_a_cooperative_craft_authority: "Demonstrable cooperative-class work — NOT just spectacle-class fame"
+    prong_b_body_cam: "Supreme or clean — cooperative-class peer-witness OR public-record — 4-prong Repentance-Class test if applicable"
+    prong_c_independent_amplification: "Cultural-amplification reach independent of substrate — they don't need The Roll to be heard"
+
+  reality_tv_influencer_auto_pawn_gate:
+    enabled: true
+    description: "Reality-TV / influencer / spectacle-class candidates auto-Pawn-dispatched for 3-prong verification BEFORE peer-mesh vote queue placement"
+
+  dual_veto_path:
+    founder_alone_suffices: true
+    trinity_alone_suffices: true
+    trigger: "structural_inversion_class_only"
+    never_political_class: true
+    never_cooperative_class_peer_disagreement: true
+    receipt_class: "every veto LOGGED with reasoning — vetoed candidates retain cooperative-class kinship — reversible by either party"
+
+  hybrid_voting_class:
+    founder_direct: "always supersedes"
+    pedestal_roll: "simple majority"
+    members: "simple majority"
+    addition_threshold: "Pedestal Roll majority + Member majority + Founder non-veto = ratified"
+
+  crown_triad_canon:
+    triad_decision: "simple majority binding (2-1 or 3-0)"
+    pair_decision: "consensus required — if unresolved ~30 days, bring on 3rd Crown"
+    single_decision: "consult Trinity/Founder for major class — Initiative structurally incomplete-class until at least pair"
+
+  tiebreaker_hierarchy:
+    L1_initiative_internal: "Crown-triad simple majority"
+    L2_pair_crown_stalemate: "Auto-trigger 3rd-Crown nomination OR Founder/Trinity arbitrates if urgent"
+    L3_cross_initiative: "Trinity-class peer-mesh OR Founder direct"
+    L4_roll_class: "Hybrid voting + dual-veto-path"
+    L5_substrate_class: "Founder direct OR Trinity (dual-veto path)"
+    L6_blood_rule_supremes: "Founder direct supreme"
+
+  open_nomination_canon:
+    anyone_nominates: true
+    self_nomination_allowed: true
+    substrate_self_limiting_via:
+      - "body_cam_doctrine"
+      - "3_prong_famous_class_test"
+      - "peer_witness_requirement_min_2_for_non_famous"
+      - "pedestal_vote_canon"
+      - "passive_surveillance_logger"
+      - "dual_veto_path"
+
+  lb_not_suggesting_class:
+    description: "Cooperative-class governance restraint — LB declines internal endorsement BUT Open-Nomination path remains open — cooperative-class peer-mesh can still nominate — Body-Cam doctrine + 3-prong test apply"
+    bp044_w1_lb_not_suggesting: ["Geoffrey Rush", "Tim Allen", "William H. Macy"]
+
+  no_deceased_canon:
+    rule: "Roll seats are LIVING people only — TRIBUTE-class NOT a roster class"
+    canonical_exception: "Tatiana Schlossburg (Initiative #6 namesake — NOT roster — structural-Initiative-anchor)"
+    bp044_w1_deceased_class_OUT:
+      - "Paul Reubens (deceased)"
+      - "Alan Rickman (deceased)"
+      - "Adam Yauch / MCA — Beastie Boys roster = Mike D + Ad-Rock living-pair only"
+      - "Anthony Bourdain (deceased)"
+      - "Octavia Butler (TRIBUTE-class structural-metaphor-anchor only)"
+      - "Mike Davis (TRIBUTE-class only)"
+      - "Mac Miller (TRIBUTE-class only)"
+
+# ── Sweet Sixteen Initiatives — Canonical Authority Table (BP044 W1 correction) ─────────────
+# CORRECTIONS APPLIED:
+#   - Initiative #11: "Yunus Bread" WRONG — correct is "Let's Make Bread" (Yunus = Crown)
+#   - Initiative #15: "Cephas" WRONG — correct is "Power to the People" (Cephas = publishing surface)
+#   - "Schlossberg" with E WRONG — correct is "Schlossburg" with U (per DB)
+#   - "Bonfire" is SPINOUT (#17), NOT one of the 16 Bootstrap Initiatives
+sweet_sixteen_initiatives:
+  - { num: 1,  key: "lets_make_dinner",              display: "Let's Make Dinner",                      crown: "Maneet Chauhan",                          second_crown: "Bobby Flay (BP044_W1)",                                                           third_crown_pending: "Sean Sherman (Bishop pref — existing Crowns choose)" }
+  - { num: 2,  key: "lets_get_groceries",            display: "Let's Get Groceries",                    crown: "Stacy Mitchell" }
+  - { num: 3,  key: "lets_go_shopping",              display: "Let's Go Shopping",                      crown: "Mary Beth Laughton" }
+  - { num: 4,  key: "household_concierge",           display: "Household Concierge",                    crown: "Marie Kondo" }
+  - { num: 5,  key: "the_family_table",              display: "The Family Table",                       crown_triad: ["Ai-jen Poo (Household Steward)", "Ashton Applewhite (Age Champion)", "Marshall Freedman (Bridge Builder)"],  fourth_crown_candidate: "Anne Fishel" }
+  - { num: 6,  key: "tatiana_schlossburg_health_accords", display: "Tatiana Schlossburg Health Accords",tribute_namesake: "Tatiana Schlossburg (no-deceased canonical exception)", pre_tribute_pending_crown: "Oshmyansky" }
+  - { num: 7,  key: "msa",                           display: "MSA (Medical Savings Accounts)",         crown: "Cathie Mahon" }
+  - { num: 8,  key: "defense_klaus",                 display: "Defense Klaus",                          crown_pair: ["Kaiser (First Shield UK)", "Ruth Glenn (US Shield DRAFT)"] }
+  - { num: 9,  key: "rally_group",                   display: "Rally Group",                            crown: "Kimberly A. Williams" }
+  - { num: 10, key: "vsl",                           display: "VSL (Village Savings Loan)",             crown_db: "Cathie Mahon",                         note: "BP038 Eblet shows Jackley LOCKED — DB shows Mahon — reconcile pending Founder ratification" }
+  - { num: 11, key: "lets_make_bread",               display: "Let's Make Bread",                       crown: "Muhammad Yunus",                          correction_note: "NOT 'Yunus Bread' — Yunus is Crown — Initiative name is 'Let's Make Bread'" }
+  - { num: 12, key: "harper_guild",                  display: "Harper Guild",                           crown: "Brené Brown (Harper Prime)" }
+  - { num: 13, key: "jukebox",                       display: "JukeBox",                                crown: "Taylor Swift (Maestro Mentor + Lady Banyan of the Stage + First Voice 3-title stack)" }
+  - { num: 14, key: "didasko",                       display: "Didasko",                                crown: "Sal Khan (Chancellor)",                   institutional: "Harvard UDN (DRAFT)",                                                            third_crown_pending: "Stanley Tucci (Bishop pref — existing Crowns choose — cooperative-class educator-class via Searching for Italy)" }
+  - { num: 15, key: "power_to_the_people",           display: "Power to the People",                    crown: "TBD",                                     correction_note: "NOT 'Cephas' — Cephas is the publishing SURFACE — Initiative #15 is 'Power to the People'" }
+  - { num: 16, key: "brass_tacks",                   display: "Brass Tacks",                            crown_pair: ["Dale Dougherty (Maker-Mentor + Lord Banyan of Brass Tacks)", "Harry Moser (secondary)"],  cross_stack: "Danny DeVito cooperative-labor anchor per BP044 W1" }
+
+spinout_entities_NOT_initiatives:
+  - { name: "PolEx (Political Expedition)",  domains: 5, gates: "FEC AO HL#5" }
+  - { name: "Defense Klaus",                 domains: 4, cross_stack_initiative_8: true }
+  - { name: "Bonfire (#17 SPINOUT)",         description: "cooperative-class research arm — NOT one of 16 Bootstrap Initiatives — per BP041 Founder direct 'Bonfire is Option B'" }
+
+# ── Banyan Metric (BP043 close canonical band) ─────────────────────────────────────────────
+banyan_metric_bp043_close:
+  empirical_conservative: "42-46M× (SEG-FZ Augur final-lock)"
+  central_estimate: "54.4M×±15% (SEG-GB)"
+  projection_band: "92M× [68-124M×] (SEG-EP)"
+  honest_alpha_methodology: "K533 #19 receipt-class — NEVER point-estimate publicly"
+  cite_publicly: "42-46M× empirical — K533 #19 receipt link required"
+
+# ── Sticky canonical numbers (BP044 W1 refresh) ────────────────────────────────────────────
+sticky_canonical_numbers:
+  innovations: 2270
+  crown_jewels: 228
+  formal_claims: 2700
+  production_systems: 36
+  puddings: 196          # 189 BP032 baseline + 7 BP043 new
+  papers: 41
+  glass_door_letters: 95
+  provisionals: 19
+  bootstrap_initiatives: 16
+  spinout_entities: 3
+  candidate_class_reserves: 8
+  pec_council_DEPRECATED: "superseded by The Roll architecture BP044 W1"
+  the_roll_day_0_target: 120
+  trademark_portfolio_marks: 51
+
 decision_trinity:
   # K28+K29+K30+K31 Decision-Class Trinity — all four vertices CONFIRMED
   k28_name: "§6 Cross-Vendor Hygiene Triad"

@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from 'react-router-dom';
+﻿import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Calendar, TrendingUp, Lightbulb, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -16,7 +16,7 @@ const CROWN_RECIPIENTS: Record<string, { name: string; title: string; sentDate: 
   kaiser: { name: 'George Kaiser', title: 'Philanthropist', sentDate: '2026-02-15', initiative: 'VSL' },
   seibel: { name: 'Michael Seibel', title: 'Managing Director, YC', sentDate: '2026-02-18', initiative: 'Platform Growth' },
   simon: { name: 'David Simon', title: 'Creator, The Wire', sentDate: '2026-02-20', initiative: 'Harper Guild' },
-  schlossberg: { name: 'Tatiana Schlossberg', title: 'Journalist & Author', sentDate: '2026-03-01', initiative: 'Health Accords' },
+  schlossberg: { name: 'Tatiana Schlossburg', title: 'Journalist & Author', sentDate: '2026-03-01', initiative: 'Health Accords' },
 };
 
 export default function CrownLetterUpdate() {

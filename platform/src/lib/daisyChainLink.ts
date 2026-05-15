@@ -1,4 +1,4 @@
-/**
+﻿/**
  * DAISY CHAIN LINK — Universal Cross-Project Linking System
  * ==========================================================
  * Innovation #1464: DaisyChainLink Architecture
@@ -120,7 +120,7 @@ export const SWEET_SIXTEEN: Initiative[] = [
   { number: 3,  name: "Let's Go Shopping",           slug: "lets-go-shopping",       emoji: "\u{1F6CD}\uFE0F", tagline: "Ethical retail, cooperative scale",         category: "Retail & Commerce" },
   { number: 4,  name: "Household Concierge",         slug: "household-concierge",    emoji: "\u{1F3E0}",       tagline: "A shared Butler for your home",             category: "Home Services" },
   { number: 5,  name: "The Family Table",            slug: "family-table",           emoji: "\u2764\uFE0F",    tagline: "Private family operations hub",             category: "Family & Private" },
-  { number: 6,  name: "Tatiana Schlossberg Health Accords / LifeLine Medications", slug: "health-accords", emoji: "\u{1F48A}", tagline: "Navigating medical systems together", category: "Healthcare" },
+  { number: 6,  name: "Tatiana Schlossburg Health Accords / LifeLine Medications", slug: "health-accords", emoji: "\u{1F48A}", tagline: "Navigating medical systems together", category: "Healthcare" },
   { number: 7,  name: "MSA (Medical Savings Accounts)", slug: "msa",                 emoji: "\u{1F6E1}\uFE0F", tagline: "Cooperative medical savings",               category: "Healthcare & Finance" },
   { number: 8,  name: "Defense Klaus",               slug: "defense-klaus",          emoji: "\u{1F6E1}\uFE0F", tagline: "Personal safety, cooperative protection",   category: "Safety & Legal" },
   { number: 9,  name: "Rally Group",                 slug: "rally-group",            emoji: "\u{1F465}",       tagline: "Community action, organized",               category: "Community Action" },

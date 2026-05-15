@@ -1,4 +1,4 @@
-/**
+﻿/**
  * LETTER CUE CARDS (Auto-generated from Cephas letters)
  * =====================================================
  * Generated: 2026-03-19
@@ -382,7 +382,7 @@ export const LETTER_CUE_CARDS = [
   },
   {
     id: 'letter-tatiana-schlossberg-cephas',
-    title: "Letter to Schlossberg",
+    title: "Letter to Schlossburg",
     subtitle: "Academic Letter",
     front: "📬 LETTER TO SCHLOSSBERG\n\nI read with great sorrow your New Yorker piece about your diagnosis and the maybe year you have left. About the medications that might buy you more time, if you can afford them, if your insurance a...\n\nCost + 20% = Creators keep 83.3%\n$5/year membership. Worker-owned.\n\nlianabanyan.com/RedCarpet",
     back: "WHY SCHLOSSBERG?\n\nYou've spent your career documenting broken systems. And unfortunately, you're now very familiar with this one.\n\nLiana Banyan is a cooperative economic\necosystem where communities pool resources\nand share services.\n\n16 initiatives. {{innovationCount}} innovations.\n{{provisionalApps}} provisional patents. $5/year.\n\nHelp Each Other Help Ourselves.",
@@ -391,7 +391,7 @@ export const LETTER_CUE_CARDS = [
   },
   {
     id: 'letter-tatiana-schlossberg-short',
-    title: "Letter to Schlossberg",
+    title: "Letter to Schlossburg",
     subtitle: "Academic Letter",
     front: "📬 LETTER TO SCHLOSSBERG\n\nI read with great sorrow your New Yorker piece about your diagnosis and the maybe year you have left. About the medications that might buy you more time, if you can afford them, if your insurance a...\n\nCost + 20% = Creators keep 83.3%\n$5/year membership. Worker-owned.\n\nlianabanyan.com/RedCarpet",
     back: "WHY SCHLOSSBERG?\n\nYou've spent your career documenting broken systems. And unfortunately, you're now very familiar with this one.\n\nLiana Banyan is a cooperative economic\necosystem where communities pool resources\nand share services.\n\n16 initiatives. {{innovationCount}} innovations.\n{{provisionalApps}} provisional patents. $5/year.\n\nHelp Each Other Help Ourselves.",
@@ -400,7 +400,7 @@ export const LETTER_CUE_CARDS = [
   },
   {
     id: 'letter-tatiana-schlossberg',
-    title: "Letter to Tatiana Schlossberg",
+    title: "Letter to Tatiana Schlossburg",
     subtitle: "Letter",
     front: "📬 LETTER TO TATIANA SCHLOSSBERG\n\nI read with great sorrow your New Yorker piece about your diagnosis and the maybe year you have left. About the medications that might buy you more time, if you can afford them, if your insurance a...\n\nCost + 20% = Creators keep 83.3%\n$5/year membership. Worker-owned.\n\nlianabanyan.com/RedCarpet",
     back: "WHY TATIANA SCHLOSSBERG?\n\nYou've spent your career documenting broken systems. And unfortunately, you're now very familiar with this one.\n\nLiana Banyan is a cooperative economic\necosystem where communities pool resources\nand share services.\n\n16 initiatives. {{innovationCount}} innovations.\n{{provisionalApps}} provisional patents. $5/year.\n\nHelp Each Other Help Ourselves.",

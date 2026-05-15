@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -18,7 +18,7 @@ export default function HealthAccordsPage() {
           <Activity className="h-8 w-8" />
         </div>
         <div>
-          <h1 className="text-4xl font-bold text-foreground dark:text-white">Tatiana Schlossberg Health Accords</h1>
+          <h1 className="text-4xl font-bold text-foreground dark:text-white">Tatiana Schlossburg Health Accords</h1>
           <p className="text-lg text-muted-foreground dark:text-muted-foreground">
             Affordable prescriptions, navigating medical systems, and RNA help.
           </p>
@@ -37,7 +37,7 @@ export default function HealthAccordsPage() {
                 The System is Failing. Let's Build a New One.
               </CardTitle>
               <CardDescription className="text-base text-foreground dark:text-slate-300 mt-2">
-                Named in honor of Tatiana Schlossberg, who had the courage to name the system that was failing her. We are building a way for communities to pool their purchasing power for medications and health products, the same way they can for groceries.
+                Named in honor of Tatiana Schlossburg, who had the courage to name the system that was failing her. We are building a way for communities to pool their purchasing power for medications and health products, the same way they can for groceries.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
