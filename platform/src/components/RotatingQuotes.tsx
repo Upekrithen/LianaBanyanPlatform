@@ -36,6 +36,11 @@ const QUOTES: Quote[] = [
     author: "The Founder, Liana Banyan",
     isYvaine: true,
   },
+  // 18. Martin Luther King Jr.
+  {
+    text: "If you can't fly then run, if you can't run then walk, if you can't walk then crawl, but whatever you do keep moving forward.",
+    author: "Martin Luther King Jr.",
+  },
   // 4. Empire Records
   {
     text: "I am guided by a force much greater than luck.",
@@ -50,11 +55,6 @@ const QUOTES: Quote[] = [
   {
     text: "If the river route changes, the crocodile is obliged to follow.",
     author: "Burkinabé proverb (West Africa)",
-  },
-  // 18. Martin Luther King Jr.
-  {
-    text: "If you can't fly then run, if you can't run then walk, if you can't walk then crawl, but whatever you do keep moving forward.",
-    author: "Martin Luther King Jr.",
   },
   // 6. C.S. Lewis
   {

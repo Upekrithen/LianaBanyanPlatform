@@ -60,6 +60,24 @@
   color: #F59E0B;
   font-size: 1rem;
   font-weight: 600;
+  margin-bottom: 1.4rem;
+}
+
+.heoho-hero__cathedral {
+  margin: 0 auto;
+  max-width: 580px;
+  border-left: 3px solid rgba(212,168,67,0.4);
+  padding: 0.8rem 1.4rem;
+  background: rgba(212,168,67,0.04);
+  border-radius: 0 6px 6px 0;
+  text-align: left;
+}
+.heoho-hero__cathedral p {
+  color: rgba(226,232,240,0.75);
+  font-size: 0.95rem;
+  font-style: italic;
+  line-height: 1.6;
+  margin: 0.2rem 0;
 }
 
 @media (max-width: 768px) {

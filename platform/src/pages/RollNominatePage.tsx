@@ -4,9 +4,10 @@
  * BP044 W1 · substrate self-limits via Body-Cam + 3-prong + peer-witness + dual-veto
  */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useSupabaseClient, useSession } from "@supabase/auth-helpers-react";
+import { supabase } from "@/integrations/supabase/client";
+import type { Session } from "@supabase/supabase-js";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -16,9 +17,14 @@ import { Switch } from "@/components/ui/switch";
 import { ArrowLeft, PlusCircle, Info, Shield, Users } from "lucide-react";
 
 export default function RollNominatePage() {
-  const supabase = useSupabaseClient();
-  const session = useSession();
+  const [session, setSession] = useState<Session | null>(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => setSession(session));
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => setSession(session));
+    return () => subscription.unsubscribe();
+  }, []);
 
   const [form, setForm] = useState({
     nominated_display_name: "",

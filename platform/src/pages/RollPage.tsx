@@ -7,7 +7,8 @@
 
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useSupabaseClient, useSession } from "@supabase/auth-helpers-react";
+import { supabase } from "@/integrations/supabase/client";
+import type { Session } from "@supabase/supabase-js";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
@@ -220,13 +221,18 @@ function RollMemberCard({
 // ── RollPage (main) ───────────────────────────────────────────────────────────
 
 export default function RollPage() {
-  const supabase = useSupabaseClient();
-  const session = useSession();
+  const [session, setSession] = useState<Session | null>(null);
   const [members, setMembers] = useState<RollMember[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [activeTab, setActiveTab] = useState("all");
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => setSession(session));
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => setSession(session));
+    return () => subscription.unsubscribe();
+  }, []);
 
   useEffect(() => {
     async function fetchMembers() {
