@@ -294,6 +294,24 @@ import {
   queryReservations,
   resolveReservationForCreate,
 } from "./codex/serial_allocator.js";
+// BP046: Beacon Scribe
+import {
+  handleBeaconDrop,
+  handleBeaconList,
+  handleBeaconQuery,
+  handleBeaconCompose,
+  handleBeaconExpire,
+  handleBeaconIntersectChronos,
+  handleBeaconProject,
+  runBackfillScan,
+  BeaconDropSchema,
+  BeaconListSchema,
+  BeaconQuerySchema,
+  BeaconComposeSchema,
+  BeaconExpireSchema,
+  BeaconIntersectChronosSchema,
+  BeaconProjectSchema,
+} from "./beacon_scribe/beacon_tools.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -10099,6 +10117,112 @@ registerTool(
   },
   async (args) => {
     const result = await watchdogForceCheck(args);
+    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BP046: Beacon Scribe tool registrations — see imports at file top
+// ─────────────────────────────────────────────────────────────────────────────
+
+registerTool(
+  "mcp__librarian__beacon_drop",
+  "Beacon Scribe (BP046) — Drop a Beacon on one or more canonical entities. " +
+    "marker_type is alias-resolved (e.g. 'golden key' → 'golden-key-puzzle'). " +
+    "Returns beacon_id, resolved marker_type, applied_at.",
+  BeaconDropSchema,
+  async (args) => {
+    const result = handleBeaconDrop(args as Parameters<typeof handleBeaconDrop>[0]);
+    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+registerTool(
+  "mcp__librarian__beacon_list",
+  "Beacon Scribe (BP046) — List Beacons with optional filters: marker_type, " +
+    "applied_to entity, applied_by, active_only (default true). Paginated.",
+  BeaconListSchema,
+  async (args) => {
+    const result = handleBeaconList(args as Parameters<typeof handleBeaconList>[0]);
+    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+registerTool(
+  "mcp__librarian__beacon_query",
+  "Beacon Scribe (BP046) — Reverse lookup: given a marker_type, return all entities " +
+    "tagged with that Beacon. Dedupes across multiple Beacon rows.",
+  BeaconQuerySchema,
+  async (args) => {
+    const result = handleBeaconQuery(args as Parameters<typeof handleBeaconQuery>[0]);
+    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+registerTool(
+  "mcp__librarian__beacon_compose",
+  "Beacon Scribe (BP046) — Wire a bidirectional composition edge between two Beacons. " +
+    "Idempotent. Returns composed: true.",
+  BeaconComposeSchema,
+  async (args) => {
+    const result = handleBeaconCompose(args as Parameters<typeof handleBeaconCompose>[0]);
+    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+registerTool(
+  "mcp__librarian__beacon_expire",
+  "Beacon Scribe (BP046) — Set an expiry on a Beacon (the one allowed direct UPDATE). " +
+    "Row is preserved (append-only). Defaults to now() if expires_at omitted.",
+  BeaconExpireSchema,
+  async (args) => {
+    const result = handleBeaconExpire(args as Parameters<typeof handleBeaconExpire>[0]);
+    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+registerTool(
+  "mcp__librarian__beacon_intersect_chronos",
+  "Beacon Scribe (BP046) — Hot-path for compound retrieval: inner-join Beacon " +
+    "inverted-index (marker_types set-AND) with Chronos time range. " +
+    "Returns entities + beacon_hits, chronos_hits, intersection_count.",
+  BeaconIntersectChronosSchema,
+  async (args) => {
+    const result = handleBeaconIntersectChronos(
+      args as Parameters<typeof handleBeaconIntersectChronos>[0]
+    );
+    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+registerTool(
+  "mcp__librarian__beacon_project",
+  "Beacon Scribe (BP046) §6 stub — Wire a substrate Beacon marker_type to a " +
+    "platform-side Beacon ID. Sets projection_active flag. Full wire-up pending " +
+    "platform Beacon system endpoint canonization.",
+  BeaconProjectSchema,
+  async (args) => {
+    const result = handleBeaconProject(args as Parameters<typeof handleBeaconProject>[0]);
+    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+registerTool(
+  "mcp__librarian__beacon_backfill",
+  "Beacon Scribe (BP046) §9 — Scan workspace for implicit-thread files and backfill " +
+    "as unratified Beacon rows. Writes BEACON_BACKFILL_REPORT_BP046.md to " +
+    "BISHOP_DROPZONE/00_FOUNDER_REVIEW/ for Founder ratify pass. " +
+    "workspace_root: absolute path to LianaBanyanPlatform root.",
+  {
+    workspace_root: z.string().describe(
+      "Absolute path to LianaBanyanPlatform workspace root. " +
+        "Default: C:\\Users\\Administrator\\Documents\\LianaBanyanPlatform"
+    ),
+  },
+  async (args) => {
+    const root = (args as { workspace_root: string }).workspace_root
+      || "C:\\Users\\Administrator\\Documents\\LianaBanyanPlatform";
+    const result = runBackfillScan(root);
     return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
   },
 );
