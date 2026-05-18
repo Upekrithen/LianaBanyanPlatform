@@ -312,6 +312,23 @@ import {
   BeaconIntersectChronosSchema,
   BeaconProjectSchema,
 } from "./beacon_scribe/beacon_tools.js";
+// BP046B: Thorax Construction-Flag Protocol (Dream #5 · Phase 1)
+import {
+  handleThoraxInit,
+  handleThoraxHandshake,
+  handleThoraxTransmit,
+  handleThoraxStamp,
+  handleThoraxFlagStream,
+  handleThoraxChannelStatus,
+  handleThoraxPhalanx,
+  ThoraxInitSchema,
+  ThoraxHandshakeSchema,
+  ThoraxTransmitSchema,
+  ThoraxStampSchema,
+  ThoraxFlagStreamSchema,
+  ThoraxChannelStatusSchema,
+  ThoraxPhalanxSchema,
+} from "./thorax/thorax_tools.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -363,6 +380,18 @@ function readGotchasForCache(): Array<Record<string, unknown>> {
   }
 }
 
+// BP046 W1: read canonical_values.yaml mtime as the "last canonical sync" anchor.
+// Cheaper than parsing the YAML; mtime advances whenever the canonical truth file is touched.
+function readCanonicalSyncIso(): string | null {
+  try {
+    const canonicalPath = resolve(WORKSPACE_ROOT, "librarian-mcp", "canonical_values.yaml");
+    const { mtime } = statSync(canonicalPath);
+    return mtime.toISOString();
+  } catch {
+    return null;
+  }
+}
+
 function writeSubstrateCache(task: string, briefingText: string): void {
   // K520.8: explicit logging at every step ΓÇö no silent failures
   const target = SUBSTRATE_CACHE_FILE;
@@ -374,6 +403,8 @@ function writeSubstrateCache(task: string, briefingText: string): void {
     const gotchas = readGotchasForCache();
     console.error(`[K520.8] writeSubstrateCache: gotchas loaded (n=${gotchas.length})`);
 
+    const lastCanonicalSync = readCanonicalSyncIso();
+
     // C.4: schema must match what the gate reads: ts (epoch int), cached_at (ISO string)
     // C.2: truncate briefing to 50K chars to avoid pathological JSON size
     const payload = JSON.stringify({
@@ -382,6 +413,7 @@ function writeSubstrateCache(task: string, briefingText: string): void {
       briefing: briefingText.slice(0, 50_000),
       gotchas,
       cached_at: new Date().toISOString(),
+      last_canonical_sync: lastCanonicalSync,  // BP046 W1: freshness anchor surfaced in brief_me header
     }, null, 2);
 
     writeFileSync(target, payload, "utf-8");
@@ -2077,6 +2109,21 @@ registerTool(
 
     const sections: string[] = [];
     sections.push(`## MoneyPenny Briefing: ${task}\n`);
+
+    // BP046 W1: snapshot age — surface how stale the canonical truth file is.
+    // Reads mtime of canonical_values.yaml; flag >7d as STALE.
+    const lastCanonicalSync = readCanonicalSyncIso();
+    if (lastCanonicalSync) {
+      const ageMs = Date.now() - new Date(lastCanonicalSync).getTime();
+      const ageHr = Math.round(ageMs / 3600000);
+      const ageDay = Math.round(ageMs / 86400000);
+      const ageLabel = ageDay >= 1 ? `${ageDay}d` : `${ageHr}h`;
+      const stale = ageMs > 7 * 86400000;
+      const tag = stale ? " ⚠️ STALE (>7d — consider `npm run sync:preload` + recheck canonical)" : "";
+      sections.push(`_Canonical snapshot age: ${ageLabel} (last_canonical_sync=${lastCanonicalSync})${tag}_\n`);
+    } else {
+      sections.push(`_Canonical snapshot age: unknown (canonical_values.yaml not found)_\n`);
+    }
 
     sections.push(`### Canonical Numbers`);
     sections.push(Object.entries(pkg.canonicalReminders).map(([k, v]) => `${k}: ${v}`).join(" | "));
@@ -10223,6 +10270,106 @@ registerTool(
     const root = (args as { workspace_root: string }).workspace_root
       || "C:\\Users\\Administrator\\Documents\\LianaBanyanPlatform";
     const result = runBackfillScan(root);
+    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BP046B: Thorax Construction-Flag Protocol tool registrations
+// Dream #5 · 12-channel relay-thread avenues · Phase 1
+// Canon: CANON_DREAM_5_THORAX_DEFENSIVE_ARCHITECTURE_BP046B.md
+// ─────────────────────────────────────────────────────────────────────────────
+
+registerTool(
+  "mcp__librarian__thorax_init",
+  "Thorax Dream #5 (BP046B) — Initialize all 12 relay-thread channels in uninitialized state. " +
+    "Idempotent. Run once before any handshake or transmission. " +
+    "Returns initialized/skipped channel lists.",
+  ThoraxInitSchema,
+  async (args) => {
+    const result = await handleThoraxInit(args as Parameters<typeof handleThoraxInit>[0]);
+    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+registerTool(
+  "mcp__librarian__thorax_handshake",
+  "Thorax Dream #5 (BP046B) — Pheromone-handshake reciprocal-accept (P4) + persistent-bestie (P6). " +
+    "Actions: initiate (East node starts), accept (West node completes), status. " +
+    "'Both hands empty of gun at same time — say it together.' Once bestie established, " +
+    "stays open under continuous external confirmation (airport-secure-zone model).",
+  ThoraxHandshakeSchema,
+  async (args) => {
+    const result = await handleThoraxHandshake(args as Parameters<typeof handleThoraxHandshake>[0]);
+    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+registerTool(
+  "mcp__librarian__thorax_transmit",
+  "Thorax Dream #5 (BP046B) — Transmit through choke-point mutex (P1+P2). " +
+    "Half-duplex: East or West direction alternates post shift-to-side. " +
+    "CP-class refusal default: UNANIMOUS OR REFUSED (P12). " +
+    "Captures Eblit snapshot at transmission moment (P10). " +
+    "Binds CelPane shadow blink-skip signature (P11). " +
+    "payload_hash = SHA-256 of payload (never raw payload in substrate).",
+  ThoraxTransmitSchema,
+  async (args) => {
+    const result = await handleThoraxTransmit(args as Parameters<typeof handleThoraxTransmit>[0]);
+    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+registerTool(
+  "mcp__librarian__thorax_stamp",
+  "Thorax Dream #5 (BP046B) — 2-stamp share / 3-stamp adopt protocol (P5). " +
+    "apply: add a Chronos-tagged Eblit-snapshotted stamp (East or West direction). " +
+    "verify: check stamp state (share=1E+1W, adopt=3 total). " +
+    "Enables revert-to-alternate-timeline via Eblit snapshot_id.",
+  ThoraxStampSchema,
+  async (args) => {
+    const result = await handleThoraxStamp(args as Parameters<typeof handleThoraxStamp>[0]);
+    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+registerTool(
+  "mcp__librarian__thorax_flag_stream",
+  "Thorax Dream #5 (BP046B) — Per-stream flag constriction (P7) + Angel of Death recording (P8). " +
+    "Flags ONE channel: renders stationary, constricts entry/exit. " +
+    "OTHER 11 channels are unaffected (per-stream, NOT global isolation). " +
+    "Harbinger Scribe interrogation + Angel of Death burial logged. " +
+    "Auto-enqueues to Phalanx fallback queue.",
+  ThoraxFlagStreamSchema,
+  async (args) => {
+    const result = await handleThoraxFlagStream(args as Parameters<typeof handleThoraxFlagStream>[0]);
+    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+registerTool(
+  "mcp__librarian__thorax_channel_status",
+  "Thorax Dream #5 (BP046B) — Get status of all 12 relay-thread channels. " +
+    "Shows state machine, choke-point occupancy, bestie establishment, stamp counts, " +
+    "CelPane signatures. Optional: run ship gate smoke checks (gate_1 through gate_8).",
+  ThoraxChannelStatusSchema,
+  async (args) => {
+    const result = await handleThoraxChannelStatus(args as Parameters<typeof handleThoraxChannelStatus>[0]);
+    return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
+  },
+);
+
+registerTool(
+  "mcp__librarian__thorax_phalanx",
+  "Thorax Dream #5 (BP046B) — Phalanx fallback queue (P9). " +
+    "enqueue: add flagged/failed channel to fallback queue. " +
+    "review: reinstate (returns to bestie_open) or seal (Angel of Death furnace complete). " +
+    "list: view active unreviewed queue entries. " +
+    "'Entry point attuned to specific frequency signature and threshold prevents " +
+    "thorax transmission without reciprocal acceptance.'",
+  ThoraxPhalanxSchema,
+  async (args) => {
+    const result = await handleThoraxPhalanx(args as Parameters<typeof handleThoraxPhalanx>[0]);
     return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
   },
 );
