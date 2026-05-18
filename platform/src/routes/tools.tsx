@@ -75,6 +75,12 @@ const PuddingAnalyticsPage = lazy(() => import("@/pages/staff/PuddingAnalyticsPa
 const BatteryDispatchAccessAudit = lazy(() => import("@/pages/staff/BatteryDispatchAccessAudit"));
 const FounderSavingsDashboard = lazy(() => import("@/pages/FounderSavingsDashboard"));
 
+// SAGA 10 BP046B — Hub Source /hub/ai-models/
+const AIModelsHubPage = lazy(() => import("@/pages/hub/AIModelsHubPage"));
+
+// SAGA 15 BP046B — /gauntlet/variants/ category
+const GauntletVariantsPage = lazy(() => import("@/pages/gauntlet/GauntletVariantsPage"));
+
 // Cue card landing pages
 const TowerOfPeace = lazy(() => import("@/pages/cue-cards/TowerOfPeace"));
 const CueCardSponsorPortal = lazy(() => import("@/pages/cue-cards/SponsorPortal"));
@@ -194,6 +200,16 @@ export const toolsRoutes = (
     <Route path="/helm/red-blue-leaderboard/red" element={<ExplorerRoute><LazyPage><RedBlueTeamDetail /></LazyPage></ExplorerRoute>} />
     <Route path="/helm/red-blue-leaderboard/blue" element={<ExplorerRoute><LazyPage><RedBlueTeamDetail /></LazyPage></ExplorerRoute>} />
     <Route path="/helm/red-blue-leaderboard/member/:member_id" element={<ExplorerRoute><LazyPage><RedBlueMemberDetail /></LazyPage></ExplorerRoute>} />
+
+    {/* SAGA 10 BP046B — Hub Source AI Models */}
+    <Route path="/hub" element={<ExplorerRoute><LazyPage><AIModelsHubPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/hub/ai-models" element={<ExplorerRoute><LazyPage><AIModelsHubPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/hub/ai-models/" element={<ExplorerRoute><LazyPage><AIModelsHubPage /></LazyPage></ExplorerRoute>} />
+
+    {/* SAGA 15 BP046B — Gauntlet Variants */}
+    <Route path="/gauntlet" element={<ExplorerRoute><LazyPage><GauntletVariantsPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/gauntlet/variants" element={<ExplorerRoute><LazyPage><GauntletVariantsPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/gauntlet/variants/" element={<ExplorerRoute><LazyPage><GauntletVariantsPage /></LazyPage></ExplorerRoute>} />
 
     {/* Cue card landing pages */}
     <Route path="/tower-of-peace" element={<LazyPage><TowerOfPeace /></LazyPage>} />
