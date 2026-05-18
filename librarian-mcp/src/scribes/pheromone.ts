@@ -65,6 +65,17 @@ export interface FlavorClass {
   audience?:  string;    // canonical seed: founder-personal|bishop-substrate|knight-build|pawn-research|member-public|cathedral-public|counsel-eyes-only
 }
 
+/**
+ * SAGA 16 BP046B — 3-class pheromone hybrid
+ * Three independent decay classes:
+ *   transient (default) — exponential decay with decay_constant_days half-life
+ *   anchor              — permanent, no decay; for BLOOD RULES + Founder-ratified canon
+ *   linked              — decays, but uses most-recent timestamp of self OR any linked record
+ *
+ * Fully backward-compatible: existing records with no pheromone_class = transient.
+ */
+export type PheromoneClass = 'transient' | 'anchor' | 'linked';
+
 export interface PheromoneRecord {
   ts: string;                     // ISO-8601 emit timestamp
   scribe: string;                 // Scribe id (e.g. "Architecture", "FounderVoice")
@@ -74,6 +85,9 @@ export interface PheromoneRecord {
   cathedral?: string;             // "bishop" | "knight" | "pawn" (default "bishop")
   flavor_class?: FlavorClass;     // Multi-trail flavor tags (BP015 P3); null = unflavored (cross-trail)
   synthesis_class?: string;       // "detective_team_finding" | "adversarial_fence_probe" etc. (BP015 P4)
+  // SAGA 16 BP046B — 3-class pheromone
+  pheromone_class?: PheromoneClass; // default: 'transient' (backward-compatible)
+  linked_ids?: string[];            // for 'linked' class: keys of records that refresh this one's effective ts
   // SE-4 Shadow E-Signal (B-SE4-1 / LB-STACK-0172): optional, backward-compatible
   se4?: import('../se4/se4_envelope.js').SE4Envelope;
   se4_shadow_id?: string;
@@ -83,11 +97,12 @@ export interface PheromoneHit {
   scribe: string;
   tablet_id: string;
   match_strength: number;         // raw topic overlap count before decay
-  decay_score: number;            // match_strength × exp(-age / λ)
+  decay_score: number;            // match_strength × exp(-age / λ), or matchStrength if anchor
   ts: string;
   cathedral?: string;
   flavor_class?: FlavorClass;     // passthrough for query-time flavor inspection
   synthesis_class?: string;       // passthrough for Detective TEAM findings
+  pheromone_class?: PheromoneClass; // SAGA 16: passthrough for decay-class inspection
 }
 
 export interface PheromoneQueryResult {
@@ -266,8 +281,10 @@ export function emitPheromone(
     cathedral?: string;
     decayConstantDays?: number;
     ts?: string;
-    flavorClass?: FlavorClass;      // BP015 P3: multi-trail flavor tags
-    synthesisClass?: string;        // BP015 P4: e.g. "detective_team_finding"
+    flavorClass?: FlavorClass;       // BP015 P3: multi-trail flavor tags
+    synthesisClass?: string;         // BP015 P4: e.g. "detective_team_finding"
+    pheromoneClass?: PheromoneClass; // SAGA 16 BP046B: 'transient'(default)|'anchor'|'linked'
+    linkedIds?: string[];            // SAGA 16: for 'linked' class — keys of related records
   } = {}
 ): PheromoneRecord {
   const t0 = Date.now();
@@ -279,8 +296,10 @@ export function emitPheromone(
     topics,
     decay_constant_days: options.decayConstantDays ?? DEFAULT_DECAY_CONSTANT_DAYS,
     cathedral: options.cathedral ?? "bishop",
-    ...(options.flavorClass    ? { flavor_class:    options.flavorClass    } : {}),
-    ...(options.synthesisClass ? { synthesis_class: options.synthesisClass } : {}),
+    ...(options.flavorClass     ? { flavor_class:     options.flavorClass                  } : {}),
+    ...(options.synthesisClass  ? { synthesis_class:  options.synthesisClass               } : {}),
+    ...(options.pheromoneClass  ? { pheromone_class:  options.pheromoneClass               } : {}),
+    ...(options.linkedIds?.length ? { linked_ids:     options.linkedIds                    } : {}),
   };
 
   // Append to JSONL (single-writer; append is atomic on all supported platforms)
@@ -330,11 +349,42 @@ export function emitPheromone(
 
 // ─── Decay scoring ────────────────────────────────────────────────────────
 
-function decayScore(rec: PheromoneRecord, matchStrength: number, nowMs: number): number {
-  const ageMs = nowMs - new Date(rec.ts).getTime();
-  const ageDays = ageMs / 86_400_000;
-  const lambda = rec.decay_constant_days;
-  return matchStrength * Math.exp(-ageDays / lambda);
+/**
+ * SAGA 16 BP046B — 3-class pheromone decay:
+ *   anchor   → no decay (matchStrength returned as-is; permanent score)
+ *   linked   → decay from most-recent ts among self + linked records in index
+ *   transient → standard exponential decay (default for backward-compat)
+ */
+function decayScore(
+  rec: PheromoneRecord,
+  matchStrength: number,
+  nowMs: number,
+  indexState?: IndexState
+): number {
+  const cls = rec.pheromone_class ?? 'transient';
+
+  if (cls === 'anchor') {
+    // Anchor: permanent — no decay whatsoever
+    return matchStrength;
+  }
+
+  if (cls === 'linked' && rec.linked_ids?.length && indexState) {
+    // Linked: use the most-recent timestamp across self + all linked records
+    let refMs = new Date(rec.ts).getTime();
+    for (const linkedKey of rec.linked_ids) {
+      const linkedRec = indexState.byKey.get(linkedKey);
+      if (linkedRec) {
+        const linkedMs = new Date(linkedRec.ts).getTime();
+        if (linkedMs > refMs) refMs = linkedMs;
+      }
+    }
+    const effectiveAgeDays = (nowMs - refMs) / 86_400_000;
+    return matchStrength * Math.exp(-effectiveAgeDays / rec.decay_constant_days);
+  }
+
+  // Transient (default): standard exponential decay
+  const ageDays = (nowMs - new Date(rec.ts).getTime()) / 86_400_000;
+  return matchStrength * Math.exp(-ageDays / rec.decay_constant_days);
 }
 
 // ─── Constant-time query ──────────────────────────────────────────────────
@@ -406,10 +456,10 @@ export function queryPheromone(
     }
   }
 
-  // Score + rank
+  // Score + rank — pass state for linked-class refresh lookup
   const hits: PheromoneHit[] = [];
   for (const { rec, matchStrength } of accum.values()) {
-    const ds = decayActive ? decayScore(rec, matchStrength, nowMs) : matchStrength;
+    const ds = decayActive ? decayScore(rec, matchStrength, nowMs, state) : matchStrength;
     hits.push({
       scribe: rec.scribe,
       tablet_id: rec.tablet_id,
@@ -419,6 +469,7 @@ export function queryPheromone(
       cathedral: rec.cathedral,
       flavor_class: rec.flavor_class,
       synthesis_class: rec.synthesis_class,
+      pheromone_class: rec.pheromone_class,
     });
   }
   hits.sort((a, b) => b.decay_score - a.decay_score);
