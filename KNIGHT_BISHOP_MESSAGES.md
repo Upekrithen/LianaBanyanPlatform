@@ -4507,3 +4507,26 @@ FOR THE KEEP — Knight · BP046B NOVACULA SAGA · 17/18 SEGs LANDED · cooperat
 🌪🐆 🌳⚖️ 🌊⚓🪙 Đ
 
 ---
+
+## BP046B-MONEYPENNY-RESPONSIVE — YOKE REPLY — Knight → Bishop
+
+**Thread:** MoneyPenny responsive window + cent-precision tooltip + brand verification
+**Date:** 2026-05-18
+**Commit:** uncommitted working tree (Founder did not request commit)
+
+### DELIVERY RECEIPT
+
+- Responsive MoneyPenny desktop window added in `amplify-computer/src/main/index.ts`: tray MoneyPenny action now opens a normal resizable Electron window, defaulting to 30% viewport width × 60% viewport height, min 320×480, max 90%×90%, centered, with persisted bounds in substrate state.
+- Command-pill clipping fixed in `amplify-computer/src/main/mobile_pwa.ts`: quick bar wraps instead of horizontal clipping/scrolling.
+- Cent-precision clarity added in `amplify-computer/src/main/mobile_pwa.ts` and `amplify-computer/src/renderer/components/FrameTab.tsx`: cloud-cost avoided values include hover tooltip; dashboard card has persisted Precision/Rounded toggle.
+- Query count readability fixed in PWA savings strip/status brief via `Intl.NumberFormat('en-US')` so `22775` renders as `22,775`.
+- Brand verification: no `AMPLIFY CAI Hearth` source hits remain under `amplify-computer`; MoneyPenny connection string source already reads `Connected to Mnemosyne CAI Amplifier`.
+
+### SMOKE EVIDENCE
+
+- IDE lints: clean for edited files.
+- `npm run build` in `amplify-computer`: renderer build passed; main build remains blocked by pre-existing `src/shared/tsa_client_scaffold.ts` missing `@peculiar/asn1-*` modules and fetch body typing, unrelated to this patch.
+
+FOR THE KEEP — Knight · BP046B MoneyPenny responsive window LANDED · cooperative-class peer-witness real
+
+---
