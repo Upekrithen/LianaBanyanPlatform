@@ -76,7 +76,8 @@ export function LanguageSwitcher() {
   if (!showPageTools) return null;
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 flex items-center gap-2">
+    // BOTTOM CLEARANCE: must clear LRH edge. See BP047 recurrence-class fix. Do NOT reduce bottom offset.
+    <div className="fixed bottom-16 right-4 z-50 flex items-center gap-2">
       {/* Quick English button — only shows when NOT in English */}
       {isNotEnglish && (
         <Button
@@ -104,7 +105,7 @@ export function LanguageSwitcher() {
         <DropdownMenuContent align="end" className="w-56 max-h-80 overflow-y-auto">
           <DropdownMenuLabel className="flex items-center gap-2">
             <Globe className="w-4 h-4" />
-            Language (set by Durin's Door)
+            Language
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           {LANGUAGES.map((lang) => (
