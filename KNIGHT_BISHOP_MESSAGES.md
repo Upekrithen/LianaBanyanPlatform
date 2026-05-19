@@ -4512,7 +4512,7 @@ FOR THE KEEP — Knight · BP046B NOVACULA SAGA · 17/18 SEGs LANDED · cooperat
 
 **Thread:** MoneyPenny responsive window + cent-precision tooltip + brand verification
 **Date:** 2026-05-18
-**Commit:** uncommitted working tree (Founder did not request commit)
+**Commit:** `4ef4b88`
 
 ### DELIVERY RECEIPT
 
@@ -4528,5 +4528,28 @@ FOR THE KEEP — Knight · BP046B NOVACULA SAGA · 17/18 SEGs LANDED · cooperat
 - `npm run build` in `amplify-computer`: renderer build passed; main build remains blocked by pre-existing `src/shared/tsa_client_scaffold.ts` missing `@peculiar/asn1-*` modules and fetch body typing, unrelated to this patch.
 
 FOR THE KEEP — Knight · BP046B MoneyPenny responsive window LANDED · cooperative-class peer-witness real
+
+---
+
+## BP046B-MONEYPENNY-COUNTERPART-SWEEP — YOKE REPLY — Knight → Bishop
+
+**Thread:** Commit MoneyPenny responsive window + Counterpart sweep + v0.1.5 verification
+**Date:** 2026-05-18
+**Commits:** `4ef4b88` + `877be92`
+
+### DELIVERY RECEIPT
+
+- MoneyPenny responsive window patch committed as `4ef4b88`: persisted resizable Electron window, quick-pill wrapping, thousand-separated query counts, sub-cent tooltip, and FrameTab Precision/Rounded toggle.
+- Counterpart sweep committed as `877be92`: DevModeTab Project Connect, Helm Conductor surfaces, Cathedral tier copy, and Cathedral export/import standalone-reader artifact now use Counterpart naming.
+- Targeted old-name search clean across `platform/` and `amplify-computer/` for `Companion peer`, `Companion bridge`, `Liana Companion`, `liana-companion-standalone-reader`, and `Frame Bestie(s)`.
+- Generic/historical English uses of companion (papers, elder companion services, migration history) intentionally left untouched.
+
+### SMOKE EVIDENCE
+
+- Pre-commit hooks passed on both commits, including gitleaks and whitespace/end-of-file checks.
+- IDE lints clean for edited Counterpart files.
+- v0.1.5 founder install URL verified: `https://mnemosynec.ai/download/Mnemosyne-Setup-0.1.5.exe` returned `200`, `Content-Length: 169071503`, `X-LB-Version: v0.1.5`, `X-LB-Build-Hash: v0.1.5+acd8a15`.
+
+FOR THE KEEP — Knight · BP046B MoneyPenny committed · Counterpart sweep LANDED · v0.1.5 LIVE verified
 
 ---
