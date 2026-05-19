@@ -79,7 +79,7 @@ function addAlert(alert: SagaAlert): void {
  */
 function checkWaveWallClock(signal: SagaHealthSignal): SagaAlert | null {
   if (
-    signal.wave_wall_clock > THRESHOLDS.WAVE_WALL_CLOCK &&
+    (signal.wave_wall_clock_seconds ?? 0) > THRESHOLDS.WAVE_WALL_CLOCK &&
     !hasActiveAlert(signal.saga_id, 'wave_wall_clock_exceeded')
   ) {
     return {
@@ -88,7 +88,7 @@ function checkWaveWallClock(signal: SagaHealthSignal): SagaAlert | null {
       trigger: 'wave_wall_clock_exceeded',
       timestamp: new Date().toISOString(),
       resolved: false,
-      details: `Wave wall-clock exceeded ${THRESHOLDS.WAVE_WALL_CLOCK}s: ${signal.wave_wall_clock}s`,
+      details: `Wave wall-clock exceeded ${THRESHOLDS.WAVE_WALL_CLOCK}s: ${signal.wave_wall_clock_seconds}s`,
     };
   }
   return null;
@@ -99,7 +99,7 @@ function checkWaveWallClock(signal: SagaHealthSignal): SagaAlert | null {
  */
 function checkSagaWallClock(signal: SagaHealthSignal): SagaAlert | null {
   if (
-    signal.saga_wall_clock > THRESHOLDS.SAGA_WALL_CLOCK &&
+    signal.saga_wall_clock_seconds > THRESHOLDS.SAGA_WALL_CLOCK &&
     !hasActiveAlert(signal.saga_id, 'saga_wall_clock_warning')
   ) {
     return {
@@ -108,7 +108,7 @@ function checkSagaWallClock(signal: SagaHealthSignal): SagaAlert | null {
       trigger: 'saga_wall_clock_warning',
       timestamp: new Date().toISOString(),
       resolved: false,
-      details: `Saga wall-clock approaching limit: ${Math.round(signal.saga_wall_clock / 60)}m`,
+      details: `Saga wall-clock approaching limit: ${Math.round(signal.saga_wall_clock_seconds / 60)}m`,
     };
   }
   return null;
@@ -118,14 +118,14 @@ function checkSagaWallClock(signal: SagaHealthSignal): SagaAlert | null {
  * Check for errored SEGs (Red alert)
  */
 function checkErroredSegs(signal: SagaHealthSignal): SagaAlert | null {
-  if (signal.errored_segs > 0 && !hasActiveAlert(signal.saga_id, 'seg_errored')) {
+  if (signal.segs_errored > 0 && !hasActiveAlert(signal.saga_id, 'seg_errored')) {
     return {
       saga_id: signal.saga_id,
       alert_class: 'red',
       trigger: 'seg_errored',
       timestamp: new Date().toISOString(),
       resolved: false,
-      details: `${signal.errored_segs} SEG(s) in error state`,
+      details: `${signal.segs_errored} SEG(s) in error state`,
     };
   }
   return null;
@@ -146,7 +146,7 @@ function checkCurationOverdue(signal: SagaHealthSignal): SagaAlert | null {
   }
 
   // Calculate time since completion
-  const completedAt = new Date(signal.completed_at || signal.timestamp);
+  const completedAt = new Date(signal.completed_at || signal.timestamp || new Date().toISOString());
   const now = new Date();
   const timeSinceCompletion = (now.getTime() - completedAt.getTime()) / 1000;
 

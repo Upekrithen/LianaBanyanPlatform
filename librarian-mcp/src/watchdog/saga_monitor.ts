@@ -14,11 +14,15 @@ export interface SagaHealthSignal {
   segs_done: number;
   segs_errored: number;
   saga_wall_clock_seconds: number;
+  wave_wall_clock_seconds?: number; // Average per-wave wall-clock (derived)
   g_saga_1_ok: boolean; // All waves G1-G5 pass
   g_saga_2_ok: boolean; // Wall-clock < 30min
   g_saga_3_ok: boolean; // 0 errors
   g_saga_4_ok: boolean; // Bishop curated synthesis
   health: 'green' | 'yellow' | 'red';
+  status?: string; // e.g. 'complete' when all waves done and G-Saga-4 curated
+  completed_at?: string; // ISO timestamp when saga reached complete status
+  timestamp?: string; // ISO timestamp of last signal update
 }
 
 interface WaveMetadata {
@@ -226,6 +230,11 @@ async function scanWaveArchive(): Promise<void> {
         gSaga4Ok
       );
 
+      const waveWallClockSeconds =
+        wavesTotal > 0 ? Math.round(wallClockSeconds / wavesTotal) : 0;
+      const isComplete = gSaga4Ok && wavesComplete === wavesTotal && wavesTotal > 0;
+      const nowIso = new Date().toISOString();
+
       const signal: SagaHealthSignal = {
         saga_id: sagaId,
         waves_total: wavesTotal,
@@ -234,11 +243,15 @@ async function scanWaveArchive(): Promise<void> {
         segs_done: segsTotal,
         segs_errored: segsErrored,
         saga_wall_clock_seconds: Math.round(wallClockSeconds),
+        wave_wall_clock_seconds: waveWallClockSeconds,
         g_saga_1_ok: gSaga1Ok,
         g_saga_2_ok: gSaga2Ok,
         g_saga_3_ok: gSaga3Ok,
         g_saga_4_ok: gSaga4Ok,
         health,
+        status: isComplete ? 'complete' : 'in_progress',
+        completed_at: isComplete ? synthesis?.timestamp ? new Date(synthesis.timestamp * 1000).toISOString() : nowIso : undefined,
+        timestamp: nowIso,
       };
 
       newHealthCache.set(sagaId, signal);
