@@ -69,7 +69,7 @@ export function ConductorCostTicker({
 
         {empty ? (
           <p className="text-xs text-muted-foreground">
-            No routed queries yet in this window. Once you start using the Companion,
+            No routed queries yet in this window. Once you start using the Counterpart,
             this ticker will show what you spent and how much you saved.
           </p>
         ) : (

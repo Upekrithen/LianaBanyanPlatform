@@ -81,7 +81,7 @@ export default function CathedralLanding() {
                 <CardDescription>
                   {health?.tier === "paid"
                     ? "Paid membership — full sync enabled."
-                    : "Free tier — upgrade to unlock cross-device sync and the Companion bridge."}
+                    : "Free tier — upgrade to unlock cross-device sync and the Counterpart bridge."}
                 </CardDescription>
               </div>
               <div className="flex gap-2">

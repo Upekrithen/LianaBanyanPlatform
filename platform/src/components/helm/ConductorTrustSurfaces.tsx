@@ -107,7 +107,7 @@ export function ConductorTrustSurfaces() {
           {routes.length === 0 ? (
             <p className="text-xs text-muted-foreground">
               No recent routing events. Decisions appear here as soon as you
-              start querying through the Companion.
+              start querying through the Counterpart.
             </p>
           ) : (
             <div className="space-y-2">

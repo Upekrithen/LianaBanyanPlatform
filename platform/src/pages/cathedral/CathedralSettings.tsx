@@ -2,7 +2,7 @@
  * /my/cathedral/settings — Cathedral settings
  * ===========================================
  * Member-facing controls:
- *   - Tier display + upgrade CTA (paid unlocks the Companion bridge in K445)
+ *   - Tier display + upgrade CTA (paid unlocks the Counterpart bridge in K445)
  *   - Professional domain (seeds the 'Work' Scribe's primary field)
  *   - Cathedral metadata (created, last sync)
  *   - Danger zone — full delete (deferred to K438b Phase E once we have the
@@ -80,7 +80,7 @@ export default function CathedralSettings() {
             </CardTitle>
             <CardDescription>
               The Cathedral is part of your $5/year membership. Free tier preserves
-              the storage substrate; paid unlocks cross-device sync and the Companion
+              the storage substrate; paid unlocks cross-device sync and the Counterpart
               bridge (K445).
             </CardDescription>
           </CardHeader>

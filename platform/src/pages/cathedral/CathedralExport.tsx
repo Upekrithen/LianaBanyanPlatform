@@ -148,7 +148,7 @@ export default function CathedralExport() {
               <li><code>fates_log.jsonl</code> — Three Fates routing decisions</li>
               <li><code>member_cathedral.json</code> — top-level Cathedral metadata (tier, dates)</li>
               <li><code>README.md</code> — schema documentation + reader usage</li>
-              <li><code>liana-companion-standalone-reader.py</code> — minimal offline reader (zero deps)</li>
+              <li><code>liana-counterpart-standalone-reader.py</code> — minimal offline reader (zero deps)</li>
               <li><code>LICENSE</code> — AGPL-3.0 + Pledged Commons grant per #2260</li>
             </ul>
           </CardContent>

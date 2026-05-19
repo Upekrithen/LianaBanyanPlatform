@@ -5,7 +5,7 @@
  * ==============================================
  * Symmetric inverse of cathedral-export. Accepts a multipart/form-data
  * POST with a ZIP bundle (produced by cathedral-export OR by a future
- * Liana Companion CLI ship) and restores it into the caller's Cathedral.
+ * Liana Counterpart CLI ship) and restores it into the caller's Cathedral.
  *
  * Form fields:
  *   bundle              — the ZIP file

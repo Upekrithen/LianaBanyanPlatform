@@ -39,7 +39,7 @@ export function ConductorTab() {
             </Badge>
           </CardTitle>
           <CardDescription>
-            Every question you ask the Companion is auto-routed to the AI
+            Every question you ask the Counterpart is auto-routed to the AI
             provider that performs best — and costs least — for that specific
             question. This page shows you exactly what the Conductor did,
             and lets you override or cap if you want to.

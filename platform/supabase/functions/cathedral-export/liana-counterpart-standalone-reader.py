@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 """
-liana-companion-standalone-reader.py
-=====================================
+liana-counterpart-standalone-reader.py
+======================================
 Offline reader for a Liana Banyan Cathedral export bundle (#2268 Claim 1(d)).
 
 A member can run this script against any ZIP produced by the LB Cathedral
-export (or by a future Liana Companion CLI ship). NO LB platform
+export (or by a future Liana Counterpart CLI ship). NO LB platform
 dependency — it operates purely on the bundle.
 
 Usage:
-    python liana-companion-standalone-reader.py consult "my query" [--top 5]
-    python liana-companion-standalone-reader.py list-scribes
-    python liana-companion-standalone-reader.py stats
+    python liana-counterpart-standalone-reader.py consult "my query" [--top 5]
+    python liana-counterpart-standalone-reader.py list-scribes
+    python liana-counterpart-standalone-reader.py stats
 
 The script auto-locates the bundle:
   1. --bundle PATH/TO/cathedral-export.zip   (explicit)
@@ -43,9 +43,7 @@ for clarity over cleverness.
 from __future__ import annotations
 
 import argparse
-import io
 import json
-import os
 import sys
 import zipfile
 from pathlib import Path
@@ -313,7 +311,7 @@ def _resolve_bundle_path(arg: str | None) -> Path:
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Liana Companion standalone Cathedral reader.")
+    parser = argparse.ArgumentParser(description="Liana Counterpart standalone Cathedral reader.")
     parser.add_argument("--bundle", help="Path to cathedral-export.zip or unzipped dir.")
     sub = parser.add_subparsers(dest="cmd", required=True)
 

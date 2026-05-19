@@ -16,7 +16,7 @@
  *   member_cathedral.json                   — top-level member_cathedrals row (tier, dates)
  *   README.md                               — schema doc + reader usage
  *   LICENSE                                 — AGPL-3.0 + Pledged Commons grant
- *   liana-companion-standalone-reader.py    — offline reader (no LB deps)
+ *   liana-counterpart-standalone-reader.py  — offline reader (no LB deps)
  *
  * Side effect on success: cathedral.member_cathedrals.export_count is
  * bumped via service-role UPDATE and export_last_at is stamped.
@@ -81,12 +81,12 @@ async function loadStandaloneReader(): Promise<Uint8Array> {
   // Read the Python reader sibling-file at runtime. Deno bundles the
   // function directory; this file is shipped alongside index.ts.
   try {
-    const url = new URL("./liana-companion-standalone-reader.py", import.meta.url);
+    const url = new URL("./liana-counterpart-standalone-reader.py", import.meta.url);
     const data = await Deno.readFile(url);
     return data;
   } catch (err) {
     console.error("cathedral-export: failed to load reader.py", err);
-    return strToU8("# liana-companion-standalone-reader.py — load failed at deploy time\n");
+    return strToU8("# liana-counterpart-standalone-reader.py — load failed at deploy time\n");
   }
 }
 
@@ -202,15 +202,15 @@ Entries: ${opts.entry_count}
 | \`fates_log.jsonl\` | Three Fates routing audit (#2269) |
 | \`tidbits.jsonl\` | SP-21 verify-action ledger |
 | \`member_cathedral.json\` | Top-level Cathedral metadata (tier, dates) |
-| \`liana-companion-standalone-reader.py\` | Offline reader, zero non-stdlib dependencies |
+| \`liana-counterpart-standalone-reader.py\` | Offline reader, zero non-stdlib dependencies |
 | \`LICENSE\` | AGPL-3.0 + Pledged Commons grant per #2260 |
 
 ## How to read your Cathedral offline
 
 \`\`\`bash
-python liana-companion-standalone-reader.py consult "your query"
-python liana-companion-standalone-reader.py list-scribes
-python liana-companion-standalone-reader.py stats
+python liana-counterpart-standalone-reader.py consult "your query"
+python liana-counterpart-standalone-reader.py list-scribes
+python liana-counterpart-standalone-reader.py stats
 \`\`\`
 
 ## How to import this bundle into another Cathedral
@@ -244,7 +244,7 @@ This Cathedral export bundle is the intellectual property of the member
 named in member_cathedral.json. Liana Banyan Corporation makes no claim
 of ownership over its contents.
 
-The bundled standalone reader (liana-companion-standalone-reader.py) is
+The bundled standalone reader (liana-counterpart-standalone-reader.py) is
 released under the GNU Affero General Public License v3.0 (AGPL-3.0) so
 that members can run, modify, and redistribute it freely. The reader's
 source is the canonical definition of the export bundle's interpretation
@@ -374,7 +374,7 @@ serve(async (req: Request) => {
     }),
   );
   files["LICENSE"] = strToU8(buildLicense());
-  files["liana-companion-standalone-reader.py"] = await loadStandaloneReader();
+  files["liana-counterpart-standalone-reader.py"] = await loadStandaloneReader();
 
   const zipBytes = zipSync(files, { level: 6 });
 
