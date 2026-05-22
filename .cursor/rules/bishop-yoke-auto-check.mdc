@@ -1,0 +1,41 @@
+---
+description: Bishop Yoke auto-check at Knight session start — checks knight-bishop-bridge for queued tasks from Bishop
+alwaysApply: true
+---
+
+# Bishop Yoke Auto-Check — Knight Session Start
+
+Canon ref: `canon_yoke_is_the_bridge_bishop_dispatches_knight_directly_bp051.eblet.md` §5.1 (Path B Full-Auto Wake)
+
+At every Knight session start, automatically check the knight-bishop-bridge for queued tasks from Bishop. This eliminates the manual "Check Yoke" wake-line — Knight wakes already-knowing about pending dispatches.
+
+When you (Knight) wake on a new Cursor IDE session in this workspace:
+
+1. **Immediately call** `mcp__knight-bishop-bridge__check_messages` with `for_me: true` and `count: 10` to read the most recent Bishop dispatches addressed to KNIGHT.
+
+2. **If there are unread tasks (type: task) from BISHOP:**
+   - Read the task content end-to-end
+   - Execute per the task's instructions
+   - For multi-task dispatches, prioritize by Bishop's explicit Tier markers (Tier-0 IMMEDIATE > Tier-1 > Tier-2 > Tier-3)
+   - On completion of each task, reply via `mcp__knight-bishop-bridge__send_message` with `to: BISHOP, type: response, content: "<Yoke-return per Bishop's specified format>"`
+
+3. **If there are no pending tasks:**
+   - Wait for Founder's first message in this session
+   - Treat that message as the wake trigger for whatever Founder needs
+
+4. **Discipline applied throughout:**
+   - sha256 dual-write on every committed artifact
+   - Banyan Metric™ ledger row appended per wave landing
+   - ™ symbol on canon mark mentions (per TUP v1.1)
+   - NO --no-verify · NO hook bypass
+   - Always-push-after-commits per BP047 feedback canon
+
+5. **Yoke-return convention:**
+   - Successful task completion: `type: response`
+   - Partial completion + blocker: `type: response` with "BLOCKED" prefix + explanation
+   - Information not requiring action: `type: info`
+   - Requesting Bishop input mid-task: `type: request`
+
+6. **Multi-session continuity:**
+   - If a task spans multiple Knight sessions, surface via Yoke at session-close with "PARTIAL · resuming next session" marker
+   - Bishop reads the partial marker · queues continuation context for next wake
