@@ -54,6 +54,26 @@
       ]
     },
     {
+      "target": "cai-lianabanyan",
+      "public": "public",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "rewrites": [{"source": "**", "destination": "/404.html"}],
+      "headers": [
+        {
+          "source": "**/*.html",
+          "headers": [{"key": "Cache-Control", "value": "max-age=3600"}]
+        },
+        {
+          "source": "**/*.css",
+          "headers": [{"key": "Cache-Control", "value": "max-age=86400"}]
+        },
+        {
+          "source": "**/*.js",
+          "headers": [{"key": "Cache-Control", "value": "max-age=86400"}]
+        }
+      ]
+    },
+    {
       "target": "mnemosyne",
       "public": "public",
       "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
