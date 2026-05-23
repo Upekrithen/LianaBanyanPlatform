@@ -1,8 +1,8 @@
-version: 0.1.6
+version: 0.1.9
 files:
-  - url: Mnemosyne-Setup-0.1.6.exe
-    sha512: piHBDl8lbj2thwd7d1U4pxCRnR80Sip3+Rb1GzBgM37np9WFWVZf9XMz2fCLjCivm175yfchA20Rq8ISKlqrJQ==
-    size: 169145303
-path: Mnemosyne-Setup-0.1.6.exe
-sha512: piHBDl8lbj2thwd7d1U4pxCRnR80Sip3+Rb1GzBgM37np9WFWVZf9XMz2fCLjCivm175yfchA20Rq8ISKlqrJQ==
-releaseDate: '2026-05-20T13:39:49.339Z'
+  - url: Mnemosyne-Setup-0.1.9.exe
+    sha512: PztcJIbK3ZXCPaw+CJqzs3T9bXHYWplXbnS962O1l81Nc0aj3NLyVmft+I4nL6i2pzX910gwc6asmKPigKdnzQ==
+    size: 79857877
+path: Mnemosyne-Setup-0.1.9.exe
+sha512: PztcJIbK3ZXCPaw+CJqzs3T9bXHYWplXbnS962O1l81Nc0aj3NLyVmft+I4nL6i2pzX910gwc6asmKPigKdnzQ==
+releaseDate: '2026-05-23T21:00:00.000Z'
