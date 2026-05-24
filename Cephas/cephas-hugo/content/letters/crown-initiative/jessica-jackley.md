@@ -5,6 +5,7 @@ letter_type: "Crown Letter"
 recipient: "Jackley"
 initiative: "VSL"
 initiative_number: 10
+status: "WAVE 2 GATED — holds pending Kimmel Pedestal Vote. Contact info to be added at dispatch."
 tags: ["crown-letter", "initiative", "jessica-jackley"]
 wrasseTriggers:
   - ðÿ crown letter jessica jackley

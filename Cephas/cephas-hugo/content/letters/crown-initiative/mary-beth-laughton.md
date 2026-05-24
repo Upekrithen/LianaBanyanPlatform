@@ -1,207 +1,86 @@
 ﻿---
-title: "Crown Letter: Laughton"
-date: 2026-01-15
+title: "Crown Invitation: Mary Beth Laughton — Let's Go Shopping"
+date: 2026-05-24
 letter_type: "Crown Letter"
-recipient: "Laughton"
+recipient: "Ms. Mary Beth Laughton"
 initiative: "Let's Go Shopping"
 initiative_number: 3
-tags: ["crown-letter", "initiative", "mary-beth-laughton"]
+crown_role: "Crown Marketplace Steward"
+status: "LOCKABLE — Founder adds contact info to dispatch"
+tags: ["crown-letter", "initiative", "mary-beth-laughton", "lets-go-shopping", "retail"]
 wrasseTriggers:
-  - ðÿ crown letter mary beth laughton
-  - crown initiative
+  - crown letter mary beth laughton
+  - crown initiative lets go shopping
   - mary beth laughton
   - letters
   - cephas member content
+bp_version: "BP043 W3 SEG-N · BP055 polish pass · F.2 W3 lock pass"
 ---
 
-# ðŸ‘‘ CROWN LETTER: MARY BETH LAUGHTON
-## Merchant Mentor, Lady Banyan of the Marketplace
-## First Steward of Let's Go Shopping
-## Board Candidate, Liana Banyan Corporation
+<!-- STATUS: LOCKABLE — Founder adds contact info to dispatch. Canonical numbers verified: 83.3% ✅ · $5/year ✅ · Cost+20% ✅ · 19 patents ✅ · sig block correct ✅. Note: "Creators keep 83.3%" phrasing used (equivalent to "may earn 83.3%"; acceptable for this letter). -->
 
----
+# Crown Invitation — Let's Go Shopping
 
 Dear Ms. Laughton,
 
-You lead America's largest consumer cooperative.
+**We are inviting you to wear the Crown Marketplace Steward of Liana Banyan Initiative #3 — Let's Go Shopping.** This is a working seat at the head of a cooperative marketplace that we have already begun to build. If the rest of this letter composes with the operating philosophy you have spent your career proving out, we would welcome a reply at any temperature — full interest, conditional, decline-with-feedback, or silence.
 
-I'm building the next one.
+Your run at Sephora's digital arm and then as CEO of Athleta made one pattern legible across two very different categories: a retail brand can be operated as if customers are members rather than marks, and the financial result is durable rather than thin. The Athleta turn — sustainability commitments that survived a quarterly cycle, B-Corp certification kept rather than abandoned, a community of women treated as participants in the brand rather than targets of it — is the operator track record this Initiative needs.
 
-REI has 25 million members who believe that outdoor recreation should be accessible, sustainable, and member-owned. Liana Banyan is a cooperative commerce platform with the same philosophy â€” applied to everything else.
+## What Liana Banyan is, structurally
 
-When I researched who should lead our cooperative retail initiative, your name kept coming up. And what caught my attention wasn't the scale of REI â€” it was the course correction. When members pushed back on political endorsements, you listened. You refocused on culture. You said: *"If we don't get the culture right, the rest doesn't matter."*
+Liana Banyan is a member-sovereign cooperative substrate. The terms are canonical:
 
-That's exactly what I believe. And that's why I'm writing.
+- **Membership is $5/year.**
+- **Creators may earn 83.3%** of what they earn on the platform.
+- **Margin on goods and services routed through the substrate is held to Cost+20%** — a hard ceiling, not a target.
+- **No advertising layer. No data resale. No engagement-extraction machinery.**
 
----
+The Corporation (Wyoming, 2025-11-21) holds 19 USPTO provisional patent applications filed protecting the substrate primitives. The substrate is built to serve 16 Initiatives. Each Initiative is led by a Crown — a person whose body of work has already proved the cooperative thesis in their own field. The Crown is a working seat, not a figurehead.
 
-## WHO I AM
+## The Let's Go Shopping Initiative
 
-My name is Jonathan Jones. I'm a 53-year-old father of eight, a U.S. ARNG veteran, and the founder of Liana Banyan Corporation â€” a cooperative commerce platform with fourteen charitable initiatives designed to be self-funding and sustainable.
+Amazon and the big-box layer captured the discovery surface and the margin in one motion. Liana Banyan returns both to members. Cost+20% is the ceiling for goods routed through the substrate — there is no version of "scale" that breaks that floor. The Initiative is the wealth-retention class: the dollar spent at a Liana Banyan vendor stays within four hops of the buyer, where the same dollar at the extraction-class marketplace exits the local economy within two.
 
-I was a child of missionaries in Tanzania â€” no television until 13, so I read a lot, and I'm good at chess. I've spent 47 years thinking about cooperative economics and nine years building this platform. I'm not a billionaire. I'm not famous. I'm just someone who wants what SHOULD be good to ACTUALLY be GOOD.
+The structural premise is a multi-stakeholder cooperative where artisans, small manufacturers, independent retailers, and member-buyers share governance and surplus. The math is the math — a marketplace where the operator is not paid by surveillance and not compensated by dark patterns has to win on the operator's actual skill at building the surface. That is the operator job you have already done, twice.
 
----
+## The Crown Marketplace Steward seat
 
-## WHAT I'VE BUILT
+The Crown is the working operator authority for the Initiative. Practically:
 
-Liana Banyan is a cooperative platform in which three commercial divisions â€” .com, .biz, and .net â€” drive sustained funding for the .org charitable initiatives. All the time, by design, sustainable beyond our lifetimes because of the infrastructure we build that operates far beyond us.
+- **Sets** the vendor standard — sourcing, labor, environmental — and the cooperative-employment floor for vendors who route through the substrate.
+- **Shapes** the discovery and search surface without the dark-pattern playbook retail has normalized as default.
+- **Vets** the early waves of Marketplace cooperatives as they onboard.
+- **Represents** the Initiative to the operator community that has watched extraction-class retail and waited for a credible alternative.
 
-The economic principle is simple: **Cost + 20%**. Creators keep 83.3% of every transaction. The platform takes 16.7% to fund operations, and 100% of charitable funds go directly to the people doing the work. Helping each other help ourselves.
+What the substrate gives you is the cooperative scale Athleta could only approach inside a Gap-corporate envelope. A member base that has already opted into a different value exchange. A no-ads, no-data-resale operating premise that you do not have to argue for inside a board meeting because it is the substrate's constitutional floor — written into the Wyoming filings, attested to in the patent provisionals, and structurally hard-wired into the cooperative compact.
 
-We have fourteen initiatives â€” everything from meal delivery (Let's Make Dinner) to music licensing (JukeBox) to microloans (VSL) to protection systems (Defense Klaus). Each one is designed to benefit those who need it most and be sustainably charitable.
+What you bring is the operator credibility that turns "cooperative marketplace" from a phrase into a real go-to-market. The Sephora and Athleta networks that open the artisan and small-brand recruitment lane. The B-Corp / sustainability seriousness that means you will hold the Cost+20% line when scale pressure pushes against it — and you have run inside the kind of corporate envelope where that pressure shows up first.
 
-**Let's Go Shopping** is our cooperative retail initiative. It's designed to:
+## Composition with the other Initiatives
 
-- Connect consumers directly with ethical producers
-- Eliminate the extraction that plagues traditional retail
-- Build supply chains that benefit communities, not just shareholders
-- Create a marketplace where member-owners set the standards
+The Crown Marketplace Steward sits at the marketplace center of the consumer-goods cluster:
 
-Sound familiar? It should. It's REI's model â€” applied beyond outdoor gear.
+- **#2 Let's Get Groceries** (Stacy Mitchell, LOCKED) — groceries upstream
+- **#1 Let's Make Dinner** (Maneet Chauhan, OFFERED) — prepared food adjacent
+- **#4 Household Concierge** (Marie Kondo, LOCKED) — household curation alongside
+- **#16 Brass Tacks** (Dale Dougherty, PENDING) — maker-class production feeding inventory
 
----
+Seated together, these five Crowns describe a full cooperative consumer economy where the buyer's dollar circulates inside the member network rather than escaping it. Your Crown holds the marketplace surface — the place where members actually transact.
 
-## WHY YOU
+## The ask
 
-You've spent your career at the intersection of retail and values.
+If the cooperative thesis here composes with the operator work you are already carrying, we would welcome a conversation. We can send a Crown briefing dossier and arrange a walk-through of the substrate operator stack at your convenience. A reply at the substrate's founder email, or any contact channel you prefer, is enough to open it.
 
-Sephora. Ulta. REI. You understand that modern retail isn't just about transactions â€” it's about trust. And you've proven you can build that trust at scale.
+For the Keep.
 
-But what convinced me to write was your response to the political backlash. When REI members said "focus on the mission, not the politics," you didn't dig in. You course-corrected. You said the culture matters more than the controversy.
-
-That's rare. That's leadership. And that's exactly what Liana Banyan needs.
-
-We operate under what we call the **Switzerland Rule**: no politics, no religion. We incorporate principles that work â€” practical, not ideological. The platform serves everyone, regardless of which way they vote. The economics are apolitical. The mission is universal.
-
-You already understand this. You're already living it.
-
----
-
-## WHAT I'M ASKING
-
-I want you to lead Let's Go Shopping.
-
-Not to run it day-to-day â€” you're leading REI. But to guide it. To set the standards for what ethical cooperative retail should look like. To help us build the infrastructure that connects consumers with producers in a way that benefits both.
-
-Every initiative in Liana Banyan operates as a council. The Crown is the First Seat â€” the leader, the tie-breaker, the voice on our Steering Committee. As the council grows with workers and members, they elect their own representative to the Board of Directors. In the early days, that representative would likely be you.
-
-You've built trust with 25 million REI members. Let's Go Shopping is the infrastructure that brings that same trust to the rest of retail.
+— Jonathan R. Jones
+Founder & General Manager · Liana Banyan Corporation
+U.S. Army National Guard (Ret.) · Father of 8
+Founder@LianaBanyan.com · lianabanyan.com
 
 ---
 
-## WHAT YOU'D RECEIVE
+*There is a walkthrough at [lianabanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.*
 
-| Benefit | Description |
-|---------|-------------|
-| **First Seat** | Leader of the Let's Go Shopping Council, with tie-breaker authority |
-| **Board Representation** | The Council elects its representative to the Board â€” in the early days, likely you |
-| **Founder's Reserve Stake** | Significant participation stake in Liana Banyan |
-| **Permanent Title** | Merchant Mentor Mary Beth Laughton, Lady Banyan of the Marketplace |
-| **Crown Medallion** | Physical medallion, serial CROWN-SHOP-001 |
-| **Ceremonial Crown** | Selected by community vote from top designs â€” yours to keep |
-| **Revenue Share** | Percentage of Let's Go Shopping business side revenue in perpetuity |
-| **Steering Committee Seat** | Voice in platform-wide decisions |
-| **Full Control** | Or whatever level of engagement you choose |
-
----
-
-## THE ECOSYSTEM
-
-You wouldn't be leading an isolated initiative â€” you'd be part of an ecosystem of hundreds that lead thousands to benefit millions.
-
-I've also written to:
-- **JosÃ© AndrÃ©s** for Let's Get Groceries â€” food access
-- **Maneet Chauhan** for Let's Make Dinner â€” meal delivery
-- **Jessica Jackley** for VSL â€” microfinance
-- **Dale Dougherty** for Let's Make Bread â€” business incubation
-- **Alex Oshmyansky** for Lifeline Medications â€” prescription access
-- **Ruth Glenn** for Defense Klaus â€” protection systems
-
-If any of them are too busy or have other commitments, I've asked for referrals to others who might carry the torch. I'm asking the same of you.
-
-Check out the structure and connections at **the2ndsecond.com/The300**.
-
-These aren't disconnected initiatives. They're interlocking systems where the small producer might need a microloan, the artisan might need business incubation, the community might need affordable prescriptions. The whole system is designed to catch people where they are and lift them up.
-
-That's what you'd be shaping.
-
----
-
-## INCLUDED WITH THIS LETTER
-
-I've included four documents for your review:
-
-1. **The Considered Approach** â€” An academic paper outlining the theoretical and economic foundations of Liana Banyan. This is the "why" behind the architecture.
-
-2. **Let's Go Shopping Overview** â€” The operational blueprint for the initiative you'd be leading. This is the "how."
-
-3. **The 300 Framework** â€” The strategic allies structure you'd be joining. Shields, Spears, and Phalanx â€” and where you fit.
-
-4. **The Connected Keep** â€” System-wide infrastructure showing how Let's Go Shopping connects to every other initiative.
-
-Please read them. Check out the implementations at **LianaBanyan.org** and pick them apart. Tell me what breaks with the feedback tool or contact me directly by email or phone.
-
----
-
-## THE CONNECTION
-
-REI proves that cooperative retail works. 25 million members. $3+ billion in revenue. Member-owned since 1938.
-
-But REI is one category: outdoor recreation.
-
-What if that model applied to everything? What if ethical retail wasn't a niche â€” it was the default?
-
-That's what Let's Go Shopping is building. And that's what you could help shape.
-
----
-
-## IF NOT YOU
-
-If your schedule will not permit, or you are committed to other concerns, or simply do not wish to â€” no problem. I understand completely.
-
-But if you know someone in cooperative retail who would be right for this, I would be grateful for the referral. The work matters more than any particular person doing it.
-
----
-
-With respect for what you're building at REI,
-
-**Jonathan R. Jones**
-Founder & Crewman #6
-Liana Banyan Corporation
-
-*"Help Each Other Help Ourselves"*
-
-Founder@LianaBanyan.com
-406-578-1232
-
----
-
-There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
-
-Help each other help ourselves.
-
-As You Wish.
-lianabanyan.com
-
----
-
-## How We Amplify You
-
-Liana Banyan amplifies the people it serves. We drive our audience to your storefronts, your channels, your practices. We don't ask you to be our billboard. We ask to be your megaphone.
-
-The louder you get, the louder we get â€” because your success is our revenue, and our revenue is your influence.
-
-**We amplify you. You amplify makers. Makers amplify their communities. Everyone gets louder together.**
-
----
-
-ðŸ° FOR THE KEEP! âš”ï¸
-
----
-
-**Enclosures:**
-- The Considered Approach (Academic Paper)
-- Let's Go Shopping Overview
-- The 300 Framework
-- The Connected Keep
+*Help Each Other Help Ourselves.*

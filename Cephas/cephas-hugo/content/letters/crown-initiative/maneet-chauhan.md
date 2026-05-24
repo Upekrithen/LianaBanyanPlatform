@@ -1,266 +1,81 @@
 ﻿---
-title: "Crown Letter: Maneet Chauhan"
-date: 2026-01-15
+title: "Crown Invitation: Maneet Chauhan — Let's Make Dinner"
+date: 2026-05-24
 letter_type: "Crown Letter"
-recipient: "Maneet Chauhan"
+recipient: "Chef Maneet Chauhan"
 initiative: "Let's Make Dinner"
 initiative_number: 1
-tags: ["crown-letter", "initiative", "maneet-chauhan"]
+crown_role: "Crown Grand Chef"
+status: "LOCKABLE — Founder adds contact info to dispatch"
+tags: ["crown-letter", "initiative", "maneet-chauhan", "lets-make-dinner", "food"]
 wrasseTriggers:
-  - ðÿ crown letter maneet chauhan
-  - crown initiative
+  - crown letter maneet chauhan
+  - crown initiative lets make dinner
   - maneet chauhan
   - letters
   - cephas member content
+bp_version: "BP043 W3 SEG-N · BP055 polish pass · F.1 W3 lock pass"
 ---
 
-# ðŸ‘‘ CROWN LETTER: MANEET CHAUHAN
-## Grand Chef Mentor, Lady Banyan of the Table
-## Spice Queen â€¢ Empress of Cuisine
-## Let's Make Dinner Initiative
-## Liana Banyan Corporation
+<!-- STATUS: LOCKABLE — Founder adds contact info to dispatch. Canonical numbers verified: 83.3% ✅ · $5/year ✅ · Cost+20% ✅ · 19 patents ✅ · "may earn" ✅ · sig block correct ✅ -->
 
----
+# Crown Invitation — Let's Make Dinner
 
-Dear Chef Maneet Chauhan,
+Dear Chef Chauhan,
 
-I'm writing to offer you a Crown.
+**We are inviting you to wear the Crown Grand Chef of Liana Banyan Initiative #1 — Let's Make Dinner.** This is a working seat at the head of a cooperative food economy we are building, not a figurehead role and not a marketing line. If the rest of this letter composes with your work and your values, we would welcome a reply at any temperature — full interest, conditional, decline-with-feedback, or silence.
 
-Not a metaphorical crown â€” a real one. A founding leadership position in **Let's Make Dinner**, one of fourteen initiatives within Liana Banyan, a platform built on the principle of *"Help Each Other Help Ourselves."*
+You spent your career proving two things at once: that immigrant kitchens carry technique the food establishment was slow to credit, and that a chef can run a restaurant group while staying recognizable as the cook who learned at her grandmother's stove in Ranchi. Chaatable, Tánsuŏ, the Morph Hospitality kitchens, *Chopped* across more than two hundred episodes — across all of them, you treat dinner as a structural act, not a luxury. That is the operating philosophy this Initiative needs at its head.
 
----
+## What Liana Banyan is, structurally
 
-## WHY YOU
+Liana Banyan is a member-sovereign cooperative substrate. The terms are canonical, not aspirational:
 
-My wife and I discovered you from the latest season of *Master of Cue*, and rabbit-holed from there.
+- **Membership is $5/year.** That is the entire price of admission.
+- **Creators may earn 83.3%** of what they earn on the platform.
+- **Margin on goods and services routed through the substrate is held to Cost+20%** — a hard ceiling, not a target.
+- **No advertising layer, no data resale, no engagement-extraction machinery.** Members own their relationships and their work.
 
-You are empathetic, highly intelligent, and skilled â€” including the nuance which is showcased in your food and interpersonal interactions. These are precisely the traits I hope to enlist for a greater purpose.
+The Corporation (Wyoming, filed 2025-11-21) holds 19 USPTO provisional patent applications filed protecting the substrate primitives. The substrate is built to serve 16 Initiatives — coordinated cooperative responses to the categories of need that markets have systematically failed (food, housing, healthcare, family, education, manufacturing, music, civic life). Each Initiative is led by a Crown — a person whose body of work has already proved the cooperative thesis in their own field.
 
-My own forte is strategy (chess, engineering, military) and being poor â€” which quickly teaches survival. Most Americans don't know what living in another country, especially living among the poor in other countries, is like.
+## The Let's Make Dinner Initiative
 
-When I was young, my parents were missionaries in Tanzania, East Africa. I served in the U.S. Army (National Guard) from 1989 through 2004. I know what the America I believe in can offer the world â€” and receive so much more in return.
+Dinner is the world's largest employment category by hours-worked and the most extracted. The cooperative inversion is a self-employed cook routing through cooperative infrastructure she co-owns. The Initiative coordinates three primitives:
 
-Like a shirt my wife has that says *"Give a Little, Get a Lot"* â€” realizing how true that is in all areas and walks of life makes generosity the obvious solution.
+- **Freezer Hosts** — member-cooks who batch-prepare home meals for neighbors, routed through the substrate's protected-identity layer and paid through the cooperative-finance trio (Initiatives #10 / #11 / #7).
+- **The Larder** — a shared-pantry credit system that lets households pre-pay for staples at Cost+20%, with the dollar staying inside the local member network.
+- **A direct-employment lane** for line cooks and prep cooks who currently work in restaurant-group structures that capture most of the surplus they generate.
 
----
+The math is the math. *Chopped* does not pay forward to the line cook who taught the recipe; Liana Banyan does. A protégé on the substrate may earn 83.3% rather than 30%. A recipe licensed through the substrate pays you and them on every use.
 
-## WHAT LET'S MAKE DINNER IS
+## The Crown Grand Chef seat
 
-**Let's Make Dinner (LMD)** is a cooperative initiative that enables anyone to start their own home-based meal business, providing nutritious food for their neighbors.
+The Crown is the working culinary authority for the Initiative. Practically, that means:
 
-Here's how it works:
+- **Vetting** the Freezer Host onboarding standard — kitchen safety, sourcing, recipe IP.
+- **Shaping** the Larder catalogue and the cooperative-employment standard for line cooks routed through the substrate.
+- **Opening doors** to the chef community for recruitment of fellow Crown-class collaborators (we have a 30-seat Council we are populating) and for the press surface that gets Let's Make Dinner from substrate to streets.
+- **Representing** the Initiative when food policy is on the table — the Bill Explainer "I'm Just a Bill" pilot and the Political Expedition Council Ambassador Position are member-organized civic surfaces food workers can plug into.
 
-**For Home Cooks:**
-- Sign up for $5/year membership
-- Access **The Larder â€” Recipes from our Heritage** (dishes from every culture, every region, every time period â€” costed and tested)
-- Cook meals from your own kitchen â€” by adding servings to the dinner you're making for yourself, or graduating to a more dedicated business model
-- Liana Banyan handles: business formation, operations, orders, pickup/delivery logistics, 120% reimbursement payments, taxes, and benefits
-- You focus on what you do best: cooking
+What you bring is the Ranchi-to-Nashville arc that anchors the Initiative culturally, and the Morph operator experience that means you know what it takes to run a kitchen group end-to-end — and can call out where the cooperative version has to be better than the extraction version, not just morally cleaner.
 
-**For Neighbors:**
-- Order home-cooked meals from people in your community
-- Nutritious, affordable, culturally diverse options
-- Support your neighbors while feeding your family
+## Composition with the other Initiatives
 
-**Meal Pricing:**
-| Option | Price | Description |
-|--------|-------|-------------|
-| **Standard** | $5 per serving | Cost-effective, nutritious meal |
-| **Convenience** | $10 + 20% per order | Additional charge for added convenience |
-| **Charitable** | $0 per serving | Funded by Standard/Convenience orders + Liana Banyan Corporation |
+The Crown Grand Chef sits at the cooking center of a four-Crown consumer constellation: #2 Let's Get Groceries (Stacy Mitchell, LOCKED — independent grocery cooperatives), #3 Let's Go Shopping (Mary Beth Laughton, OFFERED — cooperative marketplace), #5 The Family Table (three-Crown configuration — household and care work), and #16 Brass Tacks (Dale Dougherty, PENDING — the maker stack that includes home-kitchen tooling). Seated together, these Crowns describe a full cooperative meal: ingredient sourcing, cooking, sharing, soundtrack.
 
-**The Economics:**
-- 100% of all monies from charitable initiative funds go to members providing the services â€” whether cooking, funding, or driving
-- Separate, transparent accounting
-- Cost+20% model: creators keep 100% of their costs, 20% covers platform operations
-- Backers can fund meals in return for platform credits (as Joules â€” eventual benefit, not immediate cash)
+## The ask
 
-**The Community:**
-- Weekly, monthly, and yearly cooking competitions
-- Showcase different flavor palettes from around the world
-- Automatic, autonomous awards system
-- A platform for culinary voices that deserve to be heard
+If the cooperative thesis here composes with the work you are already carrying, we would welcome a conversation. We can send a short Crown briefing dossier and arrange a call at your convenience. A reply at the substrate's founder email, or via any contact channel you prefer, is enough to open it.
+
+For the Keep.
+
+— Jonathan R. Jones
+Founder & General Manager · Liana Banyan Corporation
+U.S. Army National Guard (Ret.) · Father of 8
+Founder@LianaBanyan.com · lianabanyan.com
 
 ---
 
-## WHAT WE NEED FROM YOU
+*There is a walkthrough at [lianabanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.*
 
-LMD needs innovative recipes that â€” like the food my wife makes â€” are **cheap, nutritious, and tasty**. Bonus points for easy to make, with enough variety to serve everyone.
-
-You fit the bill perfectly with your connections and expertise to cover all that food covers â€” and for ALL, specifically. We means all mankind.
-
-We're asking you to serve as **Grand Chef Mentor** â€” the guiding voice of Let's Make Dinner. This means:
-
-- **Setting direction** for the initiative's culinary standards
-- **Setting standards** by which recipes are vetted and judged (ratings systems, ingredient categories, etc.)
-- **Making sure community values** are upheld
-- **Delegating day-to-day operations** to The Hearth Guild
-- **Mentoring** the next generation of home cooks
-- **Being the face** of LMD when you choose to be
-
-**Your involvement does not have to be exhaustive.** I'm sure you have many spinning plates. That's why we've made the system as automated as possible â€” you don't have to personally approve every recipe. You set the standards by which each is vetted, judged, and rated by users. It could literally take a few hours each week â€” or month â€” if you wish.
-
-You don't have to cook every meal. You guide. You set the standard. You mentor. That's what Crowns do.
-
----
-
-## WHAT YOU RECEIVE
-
-Every initiative in Liana Banyan operates as a council. The Crown is the First Seat â€” the leader, the tie-breaker, the voice on our Steering Committee. As the council grows with workers and members, they elect their own representative to the Board of Directors. In the early days, that representative would likely be you.
-
-As Crown Holder of Let's Make Dinner, you would receive:
-
-| Benefit | Description |
-|---------|-------------|
-| **First Seat** | Leader of the Let's Make Dinner Council, with tie-breaker authority |
-| **Board Representation** | The Council elects its representative to the Board â€” in the early days, likely you |
-| **Founder's Reserve Stake** | Significant participation stake in Liana Banyan |
-| **Permanent Title** | Grand Chef Mentor Maneet Chauhan, Lady Banyan of the Table |
-| **Additional Titles** | Spice Queen â€¢ Empress of Cuisine |
-| **Crown Medallion** | Physical medallion, serial CROWN-LMD-001 |
-| **Ceremonial Crown** | Selected by community vote from top designs â€” yours to keep |
-| **Revenue Share** | Percentage of LMD business side revenue in perpetuity |
-| **Steering Committee Seat** | Voice in platform-wide decisions |
-| **Your Own Show** | The competition/awards system is yours to host if you wish |
-| **Full Control** | Or whatever level of engagement you choose |
-
----
-
-## THE STRUCTURE
-
-**The Hearth Guild** operates under LMD:
-
-| Role | Function |
-|------|----------|
-| **Grand Chef** (You) | Crown Holder, overall leadership |
-| **Hearth Master** | Guild Master, day-to-day operations |
-| **Head Cook** | Regional/specialty leads |
-| **Line Cook** | Active meal providers |
-| **Prep Cook** | Learning members |
-| **Kitchen Helper** | Entry level |
-
-**The Larder â€” Recipes from our Heritage** contains:
-- Tested recipes from every culture, region, and time period
-- Costing sheets (ingredient costs, portion costs, pricing)
-- Technique videos
-- Equipment guides
-- Dietary adaptations (vegan, gluten-free, allergen-free)
-- Cultural notes (origin, significance, respectful preparation)
-- Scaling guides (cook for 4, 10, 50, 100)
-
-You would set the standards by which recipes enter The Larder â€” not personally approve each one.
-
----
-
-## THE PARTNERSHIP
-
-I've also written to JosÃ© AndrÃ©s for Let's Get Groceries. You and JosÃ© would be natural partners â€” you're building the meal preparation side, he'd be building the grocery sourcing side. Two initiatives, one food ecosystem.
-
-The whole platform is designed so the initiatives support each other. Let's Make Dinner needs groceries. Let's Get Groceries needs kitchen partners. The meal providers need microloans to start their businesses. The whole system interlocks.
-
-You wouldn't be leading an isolated project â€” you'd be part of an ecosystem of hundreds that lead thousands to benefit millions. Check out the structure and connections at **Cephas.LianaBanyan.com/The300**.
-
----
-
-## WHY THIS MATTERS
-
-This can be a **POWERFUL force for good**, especially in these times.
-
-And incidentally, it can also be a profitable endeavor â€” particularly for the recipients and workers that make it happen. But the crown jewel of opportunity is one I hope to sweeten the pot by giving to you.
-
-You did not ask for this. But if you agree to serve as Grand Chef Mentor for a term (which you set), you will most assuredly deserve the reward.
-
-If enough people choose to, we can make life better for others AND ourselves. We need to focus on the reason for having a job at all â€” and for ALL. We means all mankind.
-
-Being able to work from home with food, benefits, and safe and cost-effective transportation â€” no matter where home is. We can do it if we do it together.
-
-I like to say that each of us can do anything, but not everything. So I'm asking a giant from each industry to guide, advise, mentor, or refer â€” so that this worthy effort endures and succeeds.
-
-You give Let's Make Dinner the BEST chance of success I can imagine.
-
----
-
-## INCLUDED WITH THIS LETTER
-
-I've included two documents for your review:
-
-1. **The Considered Approach** â€” An academic paper outlining the theoretical and economic foundations of Liana Banyan. This is the "why" behind the architecture.
-
-2. **Let's Make Dinner Business Plan** â€” The operational blueprint for the initiative you'd be leading. This is the "how."
-
-Read them. Check out the implementations at **LianaBanyan.org** and pick them apart. Tell me what breaks with the feedback tool or contact me directly by email or phone.
-
----
-
-## ONE CROWN, ONE OFFER
-
-And no â€” no one else is getting this letter.
-
-If you aren't interested, we'll have to go back to the drawing board. We have made no backup plans â€” because we want you to know how wanted you are.
-
-Of course, we will carry on if disappointed. But we have hope that you will engage at any level you choose.
-
----
-
-## THE BELL
-
-> "Can you hear the bell? I can. I've always been able to hear it. The bell still rings for all who truly believe."
-
-I believe we can build something that feeds people â€” body and soul. I believe you can help us do it right.
-
-The Arctic Ghost Train is leaving the station. We'd love for you to climb aboard.
-
----
-
-With respect and hope,
-
-**Jonathan R. Jones**
-Founder & Redshirt Crewman #6
-Liana Banyan Corporation
-
-*"Help Each Other Help Ourselves"*
-
----
-
-## ðŸ“¬ TO RESPOND
-
-Reply to this letter at: **Founder@LianaBanyan.com**
-
-Or find us at: **lianabanyan.com**
-
----
-
-## ðŸ”‘ GOLDEN KEY
-
-This letter unlocks: **CROWN-LMD-001**
-
-Finding this key grants early access to The Hearth Guild and The Larder.
-
----
-
-ðŸ° FOR THE KEEP! âš”ï¸
-
----
-
-**Enclosures:**
-- The Considered Approach (Academic Paper)
-- Let's Make Dinner Business Plan
-
-
----
-
-## How We Amplify You
-
-Liana Banyan amplifies the people it serves. We drive our audience to your storefronts, your channels, your practices. We don't ask you to be our billboard. We ask to be your megaphone.
-
-The louder you get, the louder we get â€” because your success is our revenue, and our revenue is your influence.
-
-**We amplify you. You amplify makers. Makers amplify their communities. Everyone gets louder together.**
-
----
-
-There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/RedCarpet). No scheduling, no pitch deck, no salesman.
-
-Help each other help ourselves.
-
-As You Wish.
+*Help Each Other Help Ourselves.*
