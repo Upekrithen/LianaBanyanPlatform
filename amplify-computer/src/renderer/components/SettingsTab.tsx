@@ -32,6 +32,357 @@ interface PieceModels {
   rook: ModelAssignment;
 }
 
+// ─── Chronos Research Consent (KniPr038) ────────────────────────────────────
+
+interface ChronosConsent {
+  enabled: boolean;
+  consentTimestamp?: string;
+  consentEbletPath?: string;
+  actionClasses: {
+    stamping: boolean;
+    voting: boolean;
+    recipeCompose: boolean;
+    puddingPublish: boolean;
+    crownLetterDraft: boolean;
+  };
+  revocationAvailable: boolean;
+}
+
+const DEFAULT_CHRONOS_CONSENT: ChronosConsent = {
+  enabled: false,
+  actionClasses: {
+    stamping: false,
+    voting: false,
+    recipeCompose: false,
+    puddingPublish: false,
+    crownLetterDraft: false,
+  },
+  revocationAvailable: true,
+};
+
+const ACTION_CLASS_LABELS: Array<{ key: keyof ChronosConsent['actionClasses']; label: string }> = [
+  { key: 'stamping',        label: 'Stamping & attestation' },
+  { key: 'voting',          label: 'Voting & signal actions' },
+  { key: 'recipeCompose',   label: 'Recipe composition' },
+  { key: 'puddingPublish',  label: 'Content publishing' },
+  { key: 'crownLetterDraft', label: 'Crown letter drafting' },
+];
+
+function loadChronosConsent(): ChronosConsent {
+  try {
+    const raw = localStorage.getItem('mnemo_chronos_consent');
+    if (raw) return { ...DEFAULT_CHRONOS_CONSENT, ...JSON.parse(raw) };
+  } catch { /* fall through */ }
+  return { ...DEFAULT_CHRONOS_CONSENT };
+}
+
+function saveChronosConsent(c: ChronosConsent): void {
+  localStorage.setItem('mnemo_chronos_consent', JSON.stringify(c));
+}
+
+function ChronosResearchPanel() {
+  const [consent, setConsent] = useState<ChronosConsent>(loadChronosConsent);
+  const [showModal, setShowModal] = useState(false);
+  const [revoking, setRevoking] = useState(false);
+  const [writeError, setWriteError] = useState<string | null>(null);
+
+  async function handleMasterToggle() {
+    const next = !consent.enabled;
+    const ts = new Date().toISOString();
+
+    if (next) {
+      // Turn ON — write signed consent Eblet via IPC
+      const updated: ChronosConsent = {
+        ...consent,
+        enabled: true,
+        consentTimestamp: ts,
+      };
+      setWriteError(null);
+      try {
+        const result = await (window as any).amplify?.writeChronosConsent?.({
+          consent: updated,
+          timestamp: ts,
+        });
+        if (result?.ok) {
+          updated.consentEbletPath = result.ebletPath;
+        }
+      } catch (e) {
+        setWriteError('Could not write consent Eblet — check permissions.');
+      }
+      setConsent(updated);
+      saveChronosConsent(updated);
+    } else {
+      // Turn OFF — just disable in localStorage (use Revoke for full retraction)
+      const updated: ChronosConsent = { ...consent, enabled: false };
+      setConsent(updated);
+      saveChronosConsent(updated);
+    }
+  }
+
+  async function handleRevoke() {
+    setRevoking(true);
+    setWriteError(null);
+    try {
+      await (window as any).amplify?.revokeChronosConsent?.({
+        originalConsentTs: consent.consentTimestamp,
+      });
+    } catch (e) {
+      setWriteError('Revocation write failed — check permissions.');
+    }
+    const cleared: ChronosConsent = {
+      ...DEFAULT_CHRONOS_CONSENT,
+      revocationAvailable: true,
+    };
+    setConsent(cleared);
+    saveChronosConsent(cleared);
+    setRevoking(false);
+  }
+
+  function handleActionClass(key: keyof ChronosConsent['actionClasses'], val: boolean) {
+    const updated: ChronosConsent = {
+      ...consent,
+      actionClasses: { ...consent.actionClasses, [key]: val },
+    };
+    setConsent(updated);
+    saveChronosConsent(updated);
+  }
+
+  const s = styles;
+  const cs = chronosStyles;
+
+  return (
+    <section style={s.section}>
+      <div style={s.sectionHeader}>🔬 Research Participation</div>
+
+      <div style={s.card}>
+        {/* Master toggle row */}
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 10 }}>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: 11, fontWeight: 600, color: '#e2e8f0', marginBottom: 4 }}>
+              Chronos Research Opt-In
+            </div>
+            <div style={cs.desc}>
+              Contribute anonymized action data to the Liana Banyan research corpus.
+              Your participation earns Marks and supports the cooperative's AI research mission.
+              <br />
+              <span style={cs.kNote}>k-anonymity = 10: your data is only shared when at least 10 other members take the same action.</span>
+            </div>
+          </div>
+          <button
+            onClick={handleMasterToggle}
+            style={{
+              ...s.chip,
+              minWidth: 38,
+              ...(consent.enabled ? { ...s.chipActive, color: '#6ee7b7', borderColor: 'rgba(110,231,183,0.4)' } : {}),
+            }}
+          >
+            {consent.enabled ? 'ON' : 'OFF'}
+          </button>
+        </div>
+
+        {writeError && (
+          <div style={{ fontSize: 9, color: '#f87171', marginTop: 6 }}>{writeError}</div>
+        )}
+
+        {/* Per-action-class checkboxes — only when master is ON */}
+        {consent.enabled && (
+          <>
+            <div style={cs.divider} />
+            <div style={{ fontSize: 10, color: '#64748b', marginBottom: 6 }}>
+              Choose which action types to include:
+            </div>
+            {ACTION_CLASS_LABELS.map(({ key, label }) => (
+              <label key={key} style={cs.checkRow}>
+                <input
+                  type="checkbox"
+                  checked={consent.actionClasses[key]}
+                  onChange={(e) => handleActionClass(key, e.target.checked)}
+                  style={cs.checkbox}
+                />
+                <span style={cs.checkLabel}>{label}</span>
+              </label>
+            ))}
+          </>
+        )}
+
+        <div style={cs.divider} />
+
+        {/* Footer: revoke + learn more */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 6 }}>
+          <button
+            onClick={handleRevoke}
+            disabled={revoking}
+            style={{ ...cs.revokeBtn, opacity: revoking ? 0.6 : 1 }}
+          >
+            {revoking ? 'Revoking…' : 'Revoke participation'}
+          </button>
+          <button
+            onClick={() => setShowModal(true)}
+            style={cs.learnMoreBtn}
+          >
+            Learn more: What is Chronos? →
+          </button>
+        </div>
+
+        {consent.enabled && consent.consentTimestamp && (
+          <div style={{ fontSize: 9, color: '#475569', marginTop: 6 }}>
+            Opted in: {new Date(consent.consentTimestamp).toLocaleDateString()}
+            {consent.consentEbletPath && (
+              <span style={{ marginLeft: 6 }}>· Eblet written</span>
+            )}
+          </div>
+        )}
+      </div>
+
+      <div style={cs.revokeNote}>
+        [Revoke participation] removes your consent Eblet and clears future data collection.
+        Prior anonymized data cannot be recalled from the aggregation corpus.
+      </div>
+
+      {/* Chronos info modal */}
+      {showModal && (
+        <div style={cs.modalOverlay} onClick={() => setShowModal(false)}>
+          <div style={cs.modal} onClick={(e) => e.stopPropagation()}>
+            <div style={cs.modalTitle}>What is Chronos?</div>
+            <div style={cs.modalBody}>
+              <p>
+                <strong>Chronos</strong> is the Liana Banyan cooperative's research telemetry layer.
+                Every action you take (stamping, voting, composing recipes, etc.) carries a
+                timestamped, sha256-signed observation — the Chronos tab.
+              </p>
+              <p>
+                When you opt in, anonymized versions of these observations are contributed to
+                the cooperative's research corpus. Academic institutions, policy bodies, and
+                cooperative-class research projects may license this aggregated data.
+              </p>
+              <p>
+                <strong>k-anonymity = 10:</strong> your data only enters an aggregation when
+                at least 10 other members performed the same action class. Your identity is
+                never linkable across queries — member IDs rotate per query family.
+              </p>
+              <p>
+                Revenue from data licensing returns to opted-in members as <strong>Banyan Mark dividends</strong>,
+                distributed quarterly through the cooperative treasury.
+              </p>
+              <p>
+                You may revoke at any time. Future emissions stop immediately. The cooperative
+                cannot recall prior anonymized contributions from the aggregation corpus, but
+                your revocation Eblet is sha256-logged as a cryptographic commitment.
+              </p>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 14 }}>
+              <button
+                onClick={() => (window as any).amplify?.openExternal?.('https://cephas.lianabanyan.com/chronos')}
+                style={cs.learnMoreBtn}
+              >
+                Full Chronos docs →
+              </button>
+              <button onClick={() => setShowModal(false)} style={{ ...s.btn }}>
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}
+
+const chronosStyles = {
+  desc: {
+    fontSize: 9,
+    color: '#64748b',
+    lineHeight: 1.6,
+    marginBottom: 4,
+  },
+  kNote: {
+    color: '#475569',
+    fontStyle: 'italic' as const,
+  },
+  divider: {
+    height: 1,
+    background: 'rgba(100,116,139,0.12)',
+    margin: '8px 0',
+  },
+  checkRow: {
+    display: 'flex' as const,
+    alignItems: 'center',
+    gap: 7,
+    marginBottom: 5,
+    cursor: 'pointer',
+  },
+  checkbox: {
+    width: 12,
+    height: 12,
+    accentColor: '#6ee7b7',
+    cursor: 'pointer',
+  } as React.CSSProperties,
+  checkLabel: {
+    fontSize: 10,
+    color: '#94a3b8',
+  },
+  revokeBtn: {
+    background: 'none',
+    border: '1px solid rgba(248,113,113,0.25)',
+    borderRadius: 5,
+    color: '#f87171',
+    fontSize: 9,
+    fontWeight: 500,
+    padding: '3px 9px',
+    cursor: 'pointer',
+  } as React.CSSProperties,
+  learnMoreBtn: {
+    background: 'none',
+    border: 'none',
+    color: '#6ee7b7',
+    fontSize: 9,
+    cursor: 'pointer',
+    padding: 0,
+    fontWeight: 500,
+    textDecoration: 'underline',
+    textDecorationColor: 'rgba(110,231,183,0.35)',
+  } as React.CSSProperties,
+  revokeNote: {
+    fontSize: 9,
+    color: '#475569',
+    marginTop: 5,
+    fontStyle: 'italic' as const,
+    lineHeight: 1.5,
+  },
+  modalOverlay: {
+    position: 'fixed' as const,
+    inset: 0,
+    background: 'rgba(0,0,0,0.7)',
+    zIndex: 200,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  modal: {
+    background: 'rgba(15,23,42,0.98)',
+    border: '1px solid rgba(100,116,139,0.3)',
+    borderRadius: 10,
+    padding: '18px 20px',
+    maxWidth: 360,
+    width: '90%',
+    boxShadow: '0 8px 32px rgba(0,0,0,0.6)',
+  },
+  modalTitle: {
+    fontSize: 13,
+    fontWeight: 700,
+    color: '#e2e8f0',
+    marginBottom: 10,
+  },
+  modalBody: {
+    fontSize: 10,
+    color: '#94a3b8',
+    lineHeight: 1.7,
+    display: 'flex',
+    flexDirection: 'column' as const,
+    gap: 8,
+  },
+};
+
 // TODO KniPr034-next: wire to Chronos aggregation IPC + Trail Eblet count from ~/.claude/state/eblets/TRAILS/
 interface ContributionStats {
   ebletsContributed: number;
@@ -522,7 +873,10 @@ export function SettingsTab({ authState, onDevModeToggle, devEnabled = false }: 
         </section>
       )}
 
-      {/* ── Section 6: MY CONTRIBUTION ───────────────────────────────────── */}
+      {/* ── Section 6: RESEARCH PARTICIPATION (KniPr038) ─────────────────── */}
+      <ChronosResearchPanel />
+
+      {/* ── Section 7: MY CONTRIBUTION ───────────────────────────────────── */}
       <MyContributionPanel />
 
     </div>

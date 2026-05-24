@@ -1,0 +1,1 @@
+{"ts":"2026-05-03T20:57:57.474Z","rule":"R-CHECK-1","primitive_slug":"r_check_1_always_check_substrate","action":"grep -r \"catechist|KN036\" ./librarian-mcp/src","session":"B18_SENTINEL_TEST","note":"Controlled test violation — do not count against session health","test_controlled":true}

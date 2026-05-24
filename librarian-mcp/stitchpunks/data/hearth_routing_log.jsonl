@@ -1,0 +1,2 @@
+{"ts":"2026-05-06T02:22:51.192Z","query_hash":"sha256:7dcd2500bde1fef81768cff3ced912486a8ee9b2c29cd4cd7787ffc548c2b497","routing":"local_ollama","model":"llama3.1:8b-instruct-q4_K_M","total_duration_ms":10499,"tokens_used":71,"quality_score":0.7799999999999999}
+{"ts":"2026-05-06T02:23:01.725Z","query_hash":"sha256:f10a8eb24dc4731dc520f498b097eef04d6a09209e0c377735bbaeb6639996ae","routing":"substrate_hit","quality_score":1}

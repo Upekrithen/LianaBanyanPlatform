@@ -1,0 +1,3 @@
+{"type": "session_open", "session_id": "0e3b1f03-765f-4a3f-b910-73863088ae97", "pod_id": "", "agent": "Knight", "bean_sequence": [], "context_pct_at_open": null, "wall_time_iso": "2026-05-21T18:14:50.282797Z"}
+{"type": "session_open", "session_id": "0e3b1f03-765f-4a3f-b910-73863088ae97", "pod_id": "", "agent": "Knight", "bean_sequence": [], "context_pct_at_open": 28.4, "wall_time_iso": "2026-05-22T21:01:02.114419Z"}
+{"type": "session_open", "session_id": "0e3b1f03-765f-4a3f-b910-73863088ae97", "pod_id": "", "agent": "Knight", "bean_sequence": [], "context_pct_at_open": 6.7, "wall_time_iso": "2026-05-23T03:06:27.326192Z"}

@@ -1,0 +1,1 @@
+{"type": "appeal", "classification_id": "fake-cls-001", "partner_id": "partner-test-001", "appeal_reason": "Algorithm missed custom alias pattern.", "status": "pending_three_fates_review", "ts": "2026-04-30T02:19:44.866337Z", "classifier_version": "1.0.0", "graph_version": "1.0.0"}
