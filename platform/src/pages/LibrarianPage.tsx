@@ -35,6 +35,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const DEPLOYMENT_HOLD = true;
 
+import PFPowl1 from "@/assets/mascots/son-final-art/PFPowl1.png";
 import { useParams, Link, useLocation } from "react-router-dom";
 import {
   LibrarianMedallion,
@@ -280,8 +281,12 @@ function LibrarianHome() {
       >
         <div className="flex justify-center mb-4">
           <div className="relative">
-            <div className="w-20 h-20 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center">
-              <BookOpen className="w-10 h-10 text-primary" />
+            <div className="w-20 h-20 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center overflow-hidden">
+              <img
+                src={PFPowl1}
+                alt="The Owl · Moneypenny · Librarian"
+                className="w-16 h-16 object-contain"
+              />
             </div>
             <div
               className="absolute -bottom-1 -right-1 rounded-full px-1.5 py-0.5 text-[9px] font-bold border"
@@ -291,6 +296,11 @@ function LibrarianHome() {
             </div>
           </div>
         </div>
+
+        {/* Owl · Moneypenny · Librarian — character identity · BP053 */}
+        <p className="text-[11px] text-muted-foreground/60 tracking-wider text-center">
+          The Owl · Moneypenny · Your Librarian™ — sees through your substrate to find what matters
+        </p>
 
         <div className="space-y-3">
           <p className="text-sm font-medium text-muted-foreground tracking-wide uppercase">
@@ -315,6 +325,10 @@ function LibrarianHome() {
           AGPL v3 free. Federation Library unlocks with{" "}
           <span className="font-semibold text-foreground">ONE OF US</span>{" "}
           membership ($5/year).
+        </p>
+        <p className="text-xs text-muted-foreground/50 max-w-xl mx-auto leading-relaxed italic">
+          The Librarian™ gives Mnemosyne™ X-Ray Goggles — seeing through your document pile to find what matters.
+          The Owl's eyes are the X-Ray Goggles. Wisdom · sees-in-the-dark · night-shift · silent flight.
         </p>
 
         <div className="flex justify-center gap-3 flex-wrap">
