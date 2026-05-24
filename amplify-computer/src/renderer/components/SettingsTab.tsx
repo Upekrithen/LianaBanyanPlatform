@@ -1,7 +1,8 @@
 // SettingsTab — Mnemosyne CAI Amplifier Settings
 // Tab 4 (always visible) — BP047 W1
-// Sections: Update · Appearance · AI Model Assignment · Substrate · Developer Mode
+// Sections: Update · Appearance · AI Model Assignment · Substrate · Developer Mode · My Contribution
 // Auto-updater is top-priority item (Founder direct)
+// KniPr034: My Contribution panel added — read-only scaffold, data binding next wave
 
 import React, { useState, useEffect } from 'react';
 import type { AuthState } from '../amplify.d';
@@ -30,6 +31,248 @@ interface PieceModels {
   pawn: ModelAssignment;
   rook: ModelAssignment;
 }
+
+// TODO KniPr034-next: wire to Chronos aggregation IPC + Trail Eblet count from ~/.claude/state/eblets/TRAILS/
+interface ContributionStats {
+  ebletsContributed: number;
+  marksEarned: number;
+  patronageProjected: number;
+  privacyBudgetRemaining: number;
+  codeBreaker: {
+    eligible: boolean;
+    tier: 'none' | 'apprentice' | 'master';
+    progress: {
+      easy: number;
+      moderate: number;
+      strenuous: number;
+      veryStrenuous: number;
+    };
+  };
+}
+
+const PLACEHOLDER_STATS: ContributionStats = {
+  ebletsContributed: 0,
+  marksEarned: 0,
+  patronageProjected: 0,
+  privacyBudgetRemaining: 100,
+  codeBreaker: {
+    eligible: false,
+    tier: 'none',
+    progress: { easy: 0, moderate: 0, strenuous: 0, veryStrenuous: 0 },
+  },
+};
+
+function MyContributionPanel() {
+  const stats = PLACEHOLDER_STATS;
+  const [showTooltip, setShowTooltip] = useState(false);
+
+  const marksGoal = 61;
+  const pct = Math.min(100, Math.round((stats.marksEarned / marksGoal) * 100));
+
+  const s = styles;
+
+  return (
+    <section style={s.section}>
+      <div style={s.sectionHeader}>★ My Contribution</div>
+
+      <div style={s.card}>
+        {/* Eblets + Marks */}
+        <div style={contribStyles.row}>
+          <span style={contribStyles.rowLabel}>Eblets contributed</span>
+          <span style={contribStyles.rowValue}>{stats.ebletsContributed}</span>
+        </div>
+        <div style={contribStyles.row}>
+          <span style={contribStyles.rowLabel}>Weighted Marks earned</span>
+          <span style={contribStyles.rowValue}>{stats.marksEarned}</span>
+        </div>
+
+        {/* Patronage projection with info tooltip */}
+        <div style={{ ...contribStyles.row, position: 'relative' }}>
+          <span style={contribStyles.rowLabel}>
+            Quarterly patronage projection
+            <span
+              style={contribStyles.infoIcon}
+              onMouseEnter={() => setShowTooltip(true)}
+              onMouseLeave={() => setShowTooltip(false)}
+              aria-label="About patronage projection"
+            >
+              ℹ
+            </span>
+            {showTooltip && (
+              <div style={contribStyles.tooltip}>
+                Marks earn patronage dividends once the cooperative treasury is established.
+                Actual amounts depend on platform revenue and member participation.
+              </div>
+            )}
+          </span>
+          <span style={contribStyles.rowValue}>
+            ${stats.patronageProjected.toFixed(2)}{' '}
+            <span style={contribStyles.dimNote}>(projected, not guaranteed)</span>
+          </span>
+        </div>
+
+        {/* Privacy budget */}
+        <div style={contribStyles.row}>
+          <span style={contribStyles.rowLabel}>Privacy budget remaining</span>
+          <span style={contribStyles.rowValue}>{stats.privacyBudgetRemaining}%</span>
+        </div>
+
+        <div style={contribStyles.divider} />
+
+        {/* Code Breaker progress */}
+        <div style={{ marginBottom: 8 }}>
+          <div style={{ ...contribStyles.rowLabel, marginBottom: 6 }}>Code Breaker progress</div>
+
+          {/* Progress bar */}
+          <div style={contribStyles.progressTrack}>
+            <div style={{ ...contribStyles.progressFill, width: `${pct}%` }} />
+          </div>
+          <div style={{ fontSize: 9, color: '#64748b', marginTop: 3, marginBottom: 6 }}>
+            {stats.marksEarned} / {marksGoal} Marks for Apprentice
+          </div>
+
+          {/* Breakdown */}
+          <div style={contribStyles.breakdownRow}>
+            <span style={contribStyles.breakdownItem}>Easy: {stats.codeBreaker.progress.easy}/10</span>
+            <span style={contribStyles.breakdownDot}>·</span>
+            <span style={contribStyles.breakdownItem}>Moderate: {stats.codeBreaker.progress.moderate}/5</span>
+            <span style={contribStyles.breakdownDot}>·</span>
+            <span style={contribStyles.breakdownItem}>Strenuous: {stats.codeBreaker.progress.strenuous}/2</span>
+            <span style={contribStyles.breakdownDot}>·</span>
+            <span style={contribStyles.breakdownItem}>Very Strenuous: {stats.codeBreaker.progress.veryStrenuous}/1</span>
+          </div>
+        </div>
+
+        <div style={contribStyles.divider} />
+
+        {/* Revocation control */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <span style={contribStyles.rowLabel}>Revocation control</span>
+          <button
+            style={contribStyles.linkBtn}
+            onClick={() => (window as any).amplify?.openExternal?.('https://lianabanyan.com/privacy')}
+          >
+            Manage privacy settings →
+          </button>
+        </div>
+      </div>
+
+      <div style={contribStyles.zeroNote}>
+        All zeros = new account. Numbers grow as you contribute Trails and earn Bounties.
+      </div>
+    </section>
+  );
+}
+
+const contribStyles = {
+  row: {
+    display: 'flex',
+    alignItems: 'baseline',
+    justifyContent: 'space-between',
+    marginBottom: 6,
+    flexWrap: 'wrap' as const,
+    gap: 4,
+  },
+  rowLabel: {
+    fontSize: 10,
+    color: '#64748b',
+    position: 'relative' as const,
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: 4,
+  },
+  rowValue: {
+    fontSize: 11,
+    fontWeight: 600,
+    color: '#e2e8f0',
+  },
+  dimNote: {
+    fontSize: 9,
+    fontWeight: 400,
+    color: '#475569',
+  },
+  infoIcon: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 13,
+    height: 13,
+    borderRadius: '50%',
+    background: 'rgba(100,116,139,0.2)',
+    border: '1px solid rgba(100,116,139,0.3)',
+    color: '#94a3b8',
+    fontSize: 8,
+    fontWeight: 700,
+    cursor: 'default',
+    userSelect: 'none' as const,
+    lineHeight: 1,
+  },
+  tooltip: {
+    position: 'absolute' as const,
+    bottom: '110%',
+    left: 0,
+    width: 200,
+    background: 'rgba(15,23,42,0.97)',
+    border: '1px solid rgba(100,116,139,0.3)',
+    borderRadius: 6,
+    padding: '7px 9px',
+    fontSize: 9,
+    color: '#94a3b8',
+    lineHeight: 1.5,
+    zIndex: 100,
+    pointerEvents: 'none' as const,
+    boxShadow: '0 4px 12px rgba(0,0,0,0.4)',
+  },
+  divider: {
+    height: 1,
+    background: 'rgba(100,116,139,0.12)',
+    margin: '8px 0',
+  },
+  progressTrack: {
+    height: 6,
+    background: 'rgba(100,116,139,0.15)',
+    borderRadius: 3,
+    overflow: 'hidden',
+  },
+  progressFill: {
+    height: '100%',
+    background: 'linear-gradient(90deg, #6ee7b7 0%, #34d399 100%)',
+    borderRadius: 3,
+    transition: 'width 0.4s ease',
+    minWidth: 0,
+  },
+  breakdownRow: {
+    display: 'flex',
+    flexWrap: 'wrap' as const,
+    gap: 3,
+    alignItems: 'center',
+  },
+  breakdownItem: {
+    fontSize: 9,
+    color: '#64748b',
+  },
+  breakdownDot: {
+    fontSize: 9,
+    color: '#334155',
+  },
+  linkBtn: {
+    background: 'none',
+    border: 'none',
+    color: '#6ee7b7',
+    fontSize: 10,
+    cursor: 'pointer',
+    padding: 0,
+    fontWeight: 500,
+    textDecoration: 'underline',
+    textDecorationColor: 'rgba(110,231,183,0.35)',
+  } as React.CSSProperties,
+  zeroNote: {
+    fontSize: 9,
+    color: '#475569',
+    marginTop: 5,
+    fontStyle: 'italic',
+  },
+};
 
 const MODEL_OPTIONS: Array<{ id: ModelAssignment; label: string; desc: string }> = [
   { id: 'ollama_local', label: 'Ollama (local)',      desc: 'Free · runs on your hardware · no API key needed' },
@@ -278,6 +521,9 @@ export function SettingsTab({ authState, onDevModeToggle, devEnabled = false }: 
           </div>
         </section>
       )}
+
+      {/* ── Section 6: MY CONTRIBUTION ───────────────────────────────────── */}
+      <MyContributionPanel />
 
     </div>
   );

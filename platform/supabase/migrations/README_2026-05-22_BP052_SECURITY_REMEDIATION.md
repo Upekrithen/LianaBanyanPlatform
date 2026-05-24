@@ -168,3 +168,38 @@ This remediation follows the doctrine established in:
 3. **Security Definer functions with `search_path = ''`**: Any SECURITY DEFINER function that uses unqualified references to `auth.users` (e.g., `SELECT email FROM users WHERE id = ...` instead of `SELECT email FROM auth.users WHERE id = ...`) will break after File 3 is applied. Review post-apply function errors carefully. The `award_referral_bonus` function and similar functions that query `auth.users` inside SECURITY DEFINER bodies already use the qualified `auth.users` name — these are safe.
 
 4. **Views kept as SECURITY DEFINER**: The 6 views listed as "kept" may still trigger Security Advisor warnings (not errors). If the advisor flags them as errors, revisit whether they need `security_invoker` with appropriate upstream RLS policies.
+
+---
+
+## KniPr023 Verification Receipt (2026-05-24)
+
+**Verified by:** Knight (Cursor IDE · Sonnet 4.6) · KniPr023 · BP053 SAGA-5
+**Verification date:** 2026-05-24
+**Commit where files landed:** `a731092` (NOVACULI SAGA-7, 2026-05-23)
+
+### Verification summary
+
+All 5 migration files read end-to-end and confirmed production-quality:
+
+| File | Category | Tables/Objects | Status |
+|---|---|---|---|
+| `20260522230000_enable_rls_on_public_tables.sql` | RLS Disabled in Public | `captain_level_requirements`, `librarian_section_map`, `lnc_ingest_manifests`, `loc_ingest_manifests` | ✓ Verified |
+| `20260522230001_add_policy_for_pedestal_intermediary_config.sql` | RLS Enabled No Policy | `pedestal_intermediary_config` | ✓ Verified |
+| `20260522230002_lock_function_search_path.sql` | Function Search Path Mutable | All public schema functions (dynamic DO block + 3 explicit) | ✓ Verified |
+| `20260522230003_revoke_security_definer_views.sql` | Security Definer View | 27 named views + dynamic catch-all pass | ✓ Verified |
+| `20260522230004_fix_exposed_auth_users_view.sql` | Exposed Auth Users | All public views referencing `auth.users` (dynamic discovery) | ✓ Verified |
+
+**New tables added post-BP052 (BP053 SAGA-s+t+v+w):**
+`sitg_beacon_alerts`, `sitg_volunteers`, `calling_medallions`, `restoration_expungement_flags`, `steady_recovery_log` — all confirmed RLS-enabled with policies in their own migration files (`20260524000001–20260524000004`). No new security gaps introduced.
+
+### Apply instruction
+
+These migrations are committed and git-tracked. They have NOT yet been applied to the live Supabase PROD database. Apply via:
+
+```bash
+cd platform && supabase db push
+```
+
+Or apply each file via the Supabase Dashboard SQL editor in order (20260522230000 → 20260522230004).
+
+**Pre-apply reminder:** Review Uncertainty Flags 1–4 above before applying. Particularly flag 3 (SECURITY DEFINER functions with unqualified references may break post-File-3).
