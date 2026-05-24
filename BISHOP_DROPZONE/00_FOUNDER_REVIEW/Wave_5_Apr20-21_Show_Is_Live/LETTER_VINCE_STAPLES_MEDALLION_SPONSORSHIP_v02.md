@@ -27,7 +27,7 @@ You're not chasing fame. You understand it's a tool, and you use it for what it 
 
 I want to give you a utility patent.
 
-Your choice. From {{innovationCount}} innovations I've developed across more than two decades, spanning eight interconnected disciplines—from deterministic economics to AI-human hybrid governance. Worth—conservatively—millions of dollars in the aggregate. These aren't theoretical. They're filed. More than {{patentClaims}} formal claims across {{patentApplications}} provisional applications filed since November 26, 2025. Protected. Real.
+Your choice. From 2,270 innovations I've developed across more than two decades, spanning eight interconnected disciplines—from deterministic economics to AI-human hybrid governance. Worth—conservatively—millions of dollars in the aggregate. These aren't theoretical. They're filed. More than ~2,506 formal claims across 19 provisional applications filed since November 26, 2025. Protected. Real.
 
 In return: **Sponsor 50 people for $5,000 total.**
 
@@ -148,7 +148,7 @@ I'll walk away successful, limping, or crawling. The math says successful. But t
 
 2. **If it passes your smell test:** Sponsor 50 people for $5,000.
 
-3. **Choose your patent.** Any one of {{innovationCount}} innovations across 8 disciplines. I'll walk you through the portfolio and explain the options. Your patent. Full ownership upon non-provisional conversion (which your sponsorship helps fund).
+3. **Choose your patent.** Any one of 2,270 innovations across 8 disciplines. I'll walk you through the portfolio and explain the options. Your patent. Full ownership upon non-provisional conversion (which your sponsorship helps fund).
 
 4. **Be part of proving this works.** Not as the face of it—unless you want to be. As someone who looked at the math, thought it through, and decided it was worth $5,000 to find out.
 
