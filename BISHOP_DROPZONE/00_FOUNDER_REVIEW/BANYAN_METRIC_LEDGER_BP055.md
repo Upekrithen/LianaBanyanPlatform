@@ -57,6 +57,7 @@
 | Wave | Worker | New Eblets | BLOCKED | Context% | Date |
 |------|--------|------------|---------|----------|------|
 | 120-NOVACULI W2 | Tier K+L Worker | 11 new (K.1, K.3, L.1-L.9) | K.4 (NEEDS FOUNDER: first locality), K.1 asset, K.3 asset | ~72% | 2026-05-24 |
+| Spider/Sprite Live | 240-GOLIATH W3 I-Tier | Tests: I.1-I.17 | PASS=16 FAIL=0 BLOCKED=1 (I.13 SEG) | substrate_live_empirical | 2026-05-24 |
 
 **New Eblets (11 total):**
 - K.1: `canon_the_2nd_second_industrial_revolution_origin_sketch_bp055`
@@ -79,3 +80,32 @@
 
 *Banyan Metric‚Ñ¢ is a registered trademark claim of Liana Banyan Corporation*
 *FOR THE KEEP. üåä‚öìü™ô ƒê*
+
+---
+
+## BP055 W3 GOLIATH WAVE ó CLOSE STAMP ∑ 2026-05-24
+
+| Metric | W1 | W2 | W3 |
+|---|---|---|---|
+| SAGAs | 60 | 120 | 240 |
+| Workers | 9 | 8 | 13 |
+| Wall-clock | 19.6 min | ~18 min | ~45-50 min est |
+| sec/SAGA | ~20 | 9.0 | ~11-12 est |
+| Compactions | 0 | 0 | 0-2 est |
+| Solo equiv | ~120-240hr | ~240-480hr | ~480-960hr |
+| Multiplier | ~367x | ~800x | ~1000x+ est |
+
+**Canon Eblets sealed:**
+- W1: 0 (coded ó no new Eblets minted in W1)
+- W2: 40+20+9=69 new Eblets
+- W3: 40+20+TBD target = 80+ new Eblets
+- **Total BP055 canon mint: 150+ new Eblets**
+
+**CANON disk count at W3 close: 786 .md files in CANON/**
+
+**Article anchor:** "I Think I Broke the Sound Barrier ∑ By Grabthar's Hammer... What a Savings."
+
+**Composite Banyan Metricô target:** 89/100
+
+*Banyan Metricô is a registered trademark claim of Liana Banyan Corporation*
+*FOR THE KEEP. ????? –*
