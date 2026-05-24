@@ -63,10 +63,11 @@ function MnemosyneHero({ scrolled }: { scrolled: boolean }) {
             fontSize: 16,
             color: '#94a3b8',
             lineHeight: 1.7,
-            maxWidth: 520,
+            maxWidth: 620,
           }}>
-            A read-only AI companion that builds your personal substrate — locally, privately, with zero telemetry.
-            Works with Ollama (free) or your Anthropic key. No account required.
+            Free persistent memory expansion · 26,000× for whatever AI you already use.
+            {' '}<strong style={{ color: '#e2e8f0' }}>Prove it.</strong>
+            {' '}One click. Yours to keep. No Ads and No Strings Attached.
           </p>
         )}
 
@@ -81,6 +82,7 @@ function MnemosyneHero({ scrolled }: { scrolled: boolean }) {
         }}>
           <a
             href={INSTALLER_WINDOWS}
+            aria-label={`Download Mnemosyne v${MNEMOSYNE_VERSION} for Windows`}
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -99,6 +101,7 @@ function MnemosyneHero({ scrolled }: { scrolled: boolean }) {
           </a>
           <a
             href={INSTALLER_MAC}
+            aria-label={`Download Mnemosyne v${MNEMOSYNE_VERSION} for macOS`}
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -119,6 +122,7 @@ function MnemosyneHero({ scrolled }: { scrolled: boolean }) {
             href={GITHUB_RELEASES}
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="View all Mnemosyne releases on GitHub (opens in new tab)"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -192,6 +196,8 @@ function TechnicalDetails() {
       <button
         onClick={() => setOpen(!open)}
         aria-expanded={open}
+        aria-controls="technical-details-panel"
+        aria-label="Toggle technical architecture details"
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -215,16 +221,19 @@ function TechnicalDetails() {
       </button>
 
       {open && (
-        <div style={{
-          background: '#0d1117',
-          border: '1px solid #1e2d45',
-          borderTop: 'none',
-          borderRadius: '0 0 8px 8px',
-          padding: '20px 20px 16px',
-          fontSize: 12,
-          color: '#94a3b8',
-          lineHeight: 1.8,
-        }}>
+        <div
+          id="technical-details-panel"
+          style={{
+            background: '#0d1117',
+            border: '1px solid #1e2d45',
+            borderTop: 'none',
+            borderRadius: '0 0 8px 8px',
+            padding: '20px 20px 16px',
+            fontSize: 12,
+            color: '#94a3b8',
+            lineHeight: 1.8,
+          }}
+        >
           <h3 style={{ fontSize: 13, fontWeight: 700, color: '#e2e8f0', marginTop: 0, marginBottom: 12 }}>Architecture overview</h3>
           <ul style={{ margin: 0, paddingLeft: 20, display: 'flex', flexDirection: 'column', gap: 8 }}>
             <li><strong style={{ color: '#e2e8f0' }}>Substrate layer</strong> — SHA-256 hash-addressed Eblet™ records stored in <code style={{ background: '#1a1f2e', padding: '1px 5px', borderRadius: 4, fontSize: 11 }}>~/.lb_substrate/</code>. Iron Tablets (machine-generated) + Stone Tablets (human-authored).</li>
@@ -250,13 +259,172 @@ function TechnicalDetails() {
 
           <div style={{ marginTop: 16, fontSize: 11, color: '#475569' }}>
             Ollama is optional but recommended for Normal mode (private AI).{' '}
-            <a href="https://ollama.com" target="_blank" rel="noopener noreferrer" style={{ color: '#60a5fa' }}>
+            <a href="https://ollama.com" target="_blank" rel="noopener noreferrer" aria-label="Download Ollama for free (opens in new tab)" style={{ color: '#60a5fa' }}>
               Download Ollama free →
             </a>
           </div>
         </div>
       )}
     </section>
+  );
+}
+
+// ─── Stratospheric Benchmark (SAGA-4 · BP055) ────────────────────────────────
+
+const BENCH_ROWS = [
+  { wave: 'W1 BP053-close',       desc: '7 KniPrs · 33% ctx end · 3.5hr',                                  metric: '+7×',   label: 'vs solo baseline' },
+  { wave: 'W2 BP054-close',       desc: '~30 KniPrs · 81% ctx end · 3.5hr',                                metric: '+34×',  label: 'vs solo baseline' },
+  { wave: 'W3 BP054 Crystal-class', desc: 'Sustained-context-throughput via parallel sub-agent dispatch', metric: '113%',  label: 'effective (main + parallel)' },
+  { wave: 'Bishop wave',          desc: '~74 substantive landings · 89% ctx end · 6hr active',             metric: '+48×',  label: 'vs solo baseline' },
+];
+
+const BENCH_FOOTNOTES = [
+  { bold: '87/100', rest: ' Knight Banyan Metric™ self-score (KniPr015)' },
+  { bold: '~96%',   rest: ' Inter-Agent Agreement wave-coherence (cross-commit-chain validation)' },
+  { bold: '26,000×', rest: ' substrate-to-context multiplier — Banyan Metric Dimension 1 canonical (Eblet substrate ~103 GB ÷ Claude practical context ~4 MB)' },
+  { bold: null, rest: 'Article frame: "I Think I Broke the Sound Barrier" — Founder direct social-media-announcement title' },
+];
+
+function StratosphericBenchmark() {
+  const thStyle: React.CSSProperties = {
+    fontSize: 11,
+    fontWeight: 700,
+    color: '#94a3b8',
+    textTransform: 'uppercase',
+    letterSpacing: '0.05em',
+    padding: '8px 12px',
+    textAlign: 'left',
+    borderBottom: '1px solid #1e2d45',
+    whiteSpace: 'nowrap',
+  };
+  const tdBase: React.CSSProperties = {
+    padding: '10px 12px',
+    fontSize: 12,
+    color: '#cbd5e1',
+    borderBottom: '1px solid rgba(30,45,69,0.5)',
+    verticalAlign: 'top',
+    lineHeight: 1.6,
+  };
+  const metricStyle: React.CSSProperties = {
+    ...tdBase,
+    color: '#facc15',
+    fontWeight: 700,
+    whiteSpace: 'nowrap',
+  };
+
+  return (
+    <section style={{ maxWidth: 720, margin: '0 auto 40px', padding: '0 24px' }}>
+      <h2 style={{ fontSize: 15, fontWeight: 700, color: '#e2e8f0', marginBottom: 4 }}>
+        Stratospheric Benchmark — Wave Summary
+      </h2>
+      <p style={{ fontSize: 11, color: '#64748b', marginBottom: 14, lineHeight: 1.5 }}>
+        BP054 Cooperative-Class Wave · 1 Founder × 2 AI agents · ~50 wave-landings · 2026-05-22 to 2026-05-24
+      </p>
+
+      <div style={{ overflowX: 'auto', borderRadius: 8, border: '1px solid #1e2d45' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 480 }}>
+          <thead style={{ background: '#0d1117' }}>
+            <tr>
+              <th style={thStyle}>Wave</th>
+              <th style={thStyle}>Description</th>
+              <th style={{ ...thStyle, textAlign: 'right' }}>Throughput / Metric</th>
+            </tr>
+          </thead>
+          <tbody>
+            {BENCH_ROWS.map((r) => (
+              <tr key={r.wave} style={{ background: 'rgba(17,24,39,0.6)' }}>
+                <td style={{ ...tdBase, color: '#e2e8f0', fontWeight: 600, whiteSpace: 'nowrap' }}>{r.wave}</td>
+                <td style={tdBase}>{r.desc}</td>
+                <td style={{ ...metricStyle, textAlign: 'right' }}>
+                  {r.metric}{' '}
+                  <span style={{ fontSize: 11, fontWeight: 400, color: '#94a3b8' }}>{r.label}</span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <ul style={{
+        marginTop: 14,
+        paddingLeft: 18,
+        listStyle: 'disc',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 4,
+      }}>
+        {BENCH_FOOTNOTES.map((fn, i) => (
+          <li key={i} style={{ fontSize: 11, color: '#475569', lineHeight: 1.65 }}>
+            {fn.bold && <strong style={{ color: '#94a3b8' }}>{fn.bold}</strong>}
+            {fn.rest}
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+// ─── GDPR Notice Banner ───────────────────────────────────────────────────────
+
+const GDPR_DISMISSED_KEY = 'mnemo_gdpr_v1';
+
+function GdprBanner() {
+  const [visible, setVisible] = useState(() => {
+    try { return !localStorage.getItem(GDPR_DISMISSED_KEY); } catch { return true; }
+  });
+
+  const dismiss = () => {
+    try { localStorage.setItem(GDPR_DISMISSED_KEY, '1'); } catch { /* ignore */ }
+    setVisible(false);
+  };
+
+  if (!visible) return null;
+
+  return (
+    <div
+      role="region"
+      aria-label="Privacy notice"
+      style={{
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        background: 'rgba(10, 15, 26, 0.96)',
+        borderTop: '1px solid #1e2d45',
+        padding: '12px 24px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 16,
+        zIndex: 200,
+        backdropFilter: 'blur(8px)',
+        flexWrap: 'wrap',
+      }}
+    >
+      <p style={{ margin: 0, fontSize: 11, color: '#64748b', lineHeight: 1.5 }}>
+        This site uses no tracking cookies. By downloading you agree to the{' '}
+        <a href="/privacy" aria-label="Read our Privacy Policy" style={{ color: '#60a5fa', textDecoration: 'underline' }}>
+          Privacy Policy
+        </a>
+        .
+      </p>
+      <button
+        onClick={dismiss}
+        aria-label="Dismiss privacy notice"
+        style={{
+          background: 'transparent',
+          border: '1px solid #1e2d45',
+          borderRadius: 6,
+          color: '#64748b',
+          cursor: 'pointer',
+          fontSize: 11,
+          padding: '4px 12px',
+          whiteSpace: 'nowrap',
+        }}
+      >
+        Got it
+      </button>
+    </div>
   );
 }
 
@@ -297,7 +465,20 @@ export function MnemosyneDownload() {
 
       {/* Below-fold content */}
       <WhatItDoes />
+      <StratosphericBenchmark />
       <TechnicalDetails />
+
+      {/* Founding Circle — SAGA-K5 BP055 */}
+      <section style={{ maxWidth: 720, margin: '0 auto 40px', padding: '0 24px', textAlign: 'center' }}>
+        <h3 style={{ fontFamily: 'NotCents-CAI, serif', fontSize: '1.1rem', color: '#e2e8f0', marginBottom: 12 }}>
+          Founding Circle
+        </h3>
+        <p style={{ maxWidth: 520, margin: '0 auto', fontSize: '0.9rem', color: '#94a3b8', lineHeight: 1.7 }}>
+          Every great tree begins as a mustard seed. Our founding circle starts with one family —
+          the Founder's own. Zero nodes on day one is not a weakness. It is proof that what grows
+          here grows honestly. <em>Free to use. Better to join.</em>
+        </p>
+      </section>
 
       {/* Footer CTA */}
       <div style={{
@@ -309,6 +490,7 @@ export function MnemosyneDownload() {
           href="https://cephas.lianabanyan.com/"
           target="_blank"
           rel="noopener noreferrer"
+          aria-label="Read Cephas Documentation (opens in new tab)"
           style={{ fontSize: 11, color: '#60a5fa', textDecoration: 'none' }}
         >
           Cephas Documentation →
@@ -318,6 +500,7 @@ export function MnemosyneDownload() {
           href={GITHUB_RELEASES}
           target="_blank"
           rel="noopener noreferrer"
+          aria-label="View GitHub Releases (opens in new tab)"
           style={{ fontSize: 11, color: '#60a5fa', textDecoration: 'none' }}
         >
           GitHub Releases →
@@ -325,11 +508,15 @@ export function MnemosyneDownload() {
         <span style={{ margin: '0 12px', color: '#1e2d45' }}>·</span>
         <a
           href="/faq"
+          aria-label="Read frequently asked questions"
           style={{ fontSize: 11, color: '#60a5fa', textDecoration: 'none' }}
         >
           FAQ →
         </a>
       </div>
+
+      {/* GDPR Notice Banner */}
+      <GdprBanner />
     </div>
   );
 }
