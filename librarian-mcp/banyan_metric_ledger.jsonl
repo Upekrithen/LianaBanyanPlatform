@@ -19,3 +19,4 @@
 {"hash": "fbfcd7c", "wave": "KniPr002", "date": "2026-05-22", "score": null, "committed_at": "2026-05-22T11:53:17-05:00", "subject": "yoke(knight): TASK G complete + KniPr002 absorbed BP051"}
 {"hash": "1558b2c", "wave": "feat(mnemosyne)", "date": "2026-05-22", "score": null, "committed_at": "2026-05-22T11:51:13-05:00", "subject": "feat(mnemosyne): TASK G wire mnemosynec.ai/download to v0.1.7 GitHub release"}
 {"hash": "7110d92", "wave": "KniPr016b", "date": "2026-05-24", "score": null, "committed_at": "2026-05-24T01:10:21-05:00", "subject": "KniPr016b: Unblock Prov 20 amendment Families G/H/I populated from SEG-Q output"}
+{"hash": "0842413", "wave": "KniPr024", "date": "2026-05-24", "score": null, "committed_at": "2026-05-24T01:10:59-05:00", "subject": "KniPr024: Banyan Metric auto-append tool + back-fill ledger from recent KniPr wave commits"}
