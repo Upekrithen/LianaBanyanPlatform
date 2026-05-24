@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated_at": "2026-04-23T12:51:49.982836+00:00",
+  "updated_at": "2026-05-23T05:00:00.000000+00:00",
   "deliverables": [
     {
       "id": "B096-pudding-182",
@@ -24,7 +24,10 @@
       ],
       "status": "completed",
       "completed_at": "2026-04-10T18:30:00Z",
-      "notes": "NAMED-ATTRIBUTION-PENDING D&M Service Center"
+      "notes": "NAMED-ATTRIBUTION-PENDING D&M Service Center",
+      "ev_promoted": true,
+      "promoted_at": "2026-05-23",
+      "promoted_by": "KniPr014"
     },
     {
       "id": "B096-pudding-183",
@@ -48,7 +51,10 @@
       ],
       "status": "completed",
       "completed_at": "2026-04-10T19:00:00Z",
-      "notes": null
+      "notes": null,
+      "ev_promoted": true,
+      "promoted_at": "2026-05-23",
+      "promoted_by": "KniPr014"
     },
     {
       "id": "B096-pudding-184",
@@ -89,7 +95,10 @@
       ],
       "status": "completed",
       "completed_at": "2026-04-10T20:00:00Z",
-      "notes": "CJ candidate"
+      "notes": "CJ candidate",
+      "ev_promoted": true,
+      "promoted_at": "2026-05-23",
+      "promoted_by": "KniPr014"
     },
     {
       "id": "B096-innovation-2235",
@@ -106,7 +115,10 @@
       ],
       "status": "completed",
       "completed_at": "2026-04-10T20:00:00Z",
-      "notes": "CJ candidate"
+      "notes": "CJ candidate",
+      "ev_promoted": true,
+      "promoted_at": "2026-05-23",
+      "promoted_by": "KniPr014"
     },
     {
       "id": "B096-innovation-2236",
@@ -123,7 +135,10 @@
       ],
       "status": "completed",
       "completed_at": "2026-04-10T20:00:00Z",
-      "notes": null
+      "notes": null,
+      "ev_promoted": true,
+      "promoted_at": "2026-05-23",
+      "promoted_by": "KniPr014"
     },
     {
       "id": "B096-canonical-stats-update",
@@ -145,7 +160,10 @@
       ],
       "status": "completed",
       "completed_at": "2026-04-12T20:14:00Z",
-      "notes": "K420: migration 20260413100003_canonical_stats_b102.sql deployed. 13 keys updated."
+      "notes": "K420: migration 20260413100003_canonical_stats_b102.sql deployed. 13 keys updated.",
+      "ev_promoted": true,
+      "promoted_at": "2026-05-23",
+      "promoted_by": "KniPr014"
     },
     {
       "id": "B096-librarian-index-rebuild",
@@ -166,7 +184,10 @@
       ],
       "status": "completed",
       "completed_at": "2026-04-12T20:14:00Z",
-      "notes": "K420: Rebuilt twice — canonical.json now shows 2263 innovations, 222 CJ, 2412 claims, 36 prod systems."
+      "notes": "K420: Rebuilt twice — canonical.json now shows 2263 innovations, 222 CJ, 2412 claims, 36 prod systems.",
+      "ev_promoted": true,
+      "promoted_at": "2026-05-23",
+      "promoted_by": "KniPr014"
     },
     {
       "id": "B096-spoonfuls-pudding-182",
@@ -262,7 +283,10 @@
       ],
       "status": "completed",
       "completed_at": "2026-04-10T20:01:00Z",
-      "notes": null
+      "notes": null,
+      "ev_promoted": true,
+      "promoted_at": "2026-05-23",
+      "promoted_by": "KniPr014"
     },
     {
       "id": "B096-crown-letter-buffett-patch",
@@ -281,7 +305,10 @@
       ],
       "status": "completed",
       "completed_at": "2026-04-10T20:01:00Z",
-      "notes": null
+      "notes": null,
+      "ev_promoted": true,
+      "promoted_at": "2026-05-23",
+      "promoted_by": "KniPr014"
     },
     {
       "id": "B096-crown-letter-simon-patch",
@@ -300,7 +327,10 @@
       ],
       "status": "completed",
       "completed_at": "2026-04-10T20:01:00Z",
-      "notes": null
+      "notes": null,
+      "ev_promoted": true,
+      "promoted_at": "2026-05-23",
+      "promoted_by": "KniPr014"
     },
     {
       "id": "B096-bst-episode-marks-loop",
@@ -357,7 +387,10 @@
       ],
       "status": "completed",
       "completed_at": "2026-04-12T20:12:00Z",
-      "notes": "K420: Inserted into cephas_content_registry with See Also cross-ref to Pudding #183."
+      "notes": "K420: Inserted into cephas_content_registry with See Also cross-ref to Pudding #183.",
+      "ev_promoted": true,
+      "promoted_at": "2026-05-23",
+      "promoted_by": "KniPr014"
     },
     {
       "id": "B096-paper-patch-five-dollar-career",
@@ -377,7 +410,10 @@
       ],
       "status": "completed",
       "completed_at": "2026-04-12T20:12:00Z",
-      "notes": "K420: Inserted into cephas_content_registry with Section 8 — The Cold Start Proof."
+      "notes": "K420: Inserted into cephas_content_registry with Section 8 — The Cold Start Proof.",
+      "ev_promoted": true,
+      "promoted_at": "2026-05-23",
+      "promoted_by": "KniPr014"
     },
     {
       "id": "B096-deck-card-auto-shop",
@@ -396,7 +432,10 @@
       ],
       "status": "completed",
       "completed_at": "2026-04-12T21:28:08.545Z",
-      "notes": "Queued for future Knight session"
+      "notes": "Queued for future Knight session",
+      "ev_promoted": true,
+      "promoted_at": "2026-05-23",
+      "promoted_by": "KniPr014"
     },
     {
       "id": "B096-deck-card-triple-double",
@@ -415,7 +454,10 @@
       ],
       "status": "completed",
       "completed_at": "2026-04-12T21:28:09.751Z",
-      "notes": "Queued for K403"
+      "notes": "Queued for K403",
+      "ev_promoted": true,
+      "promoted_at": "2026-05-23",
+      "promoted_by": "KniPr014"
     },
     {
       "id": "B096-k401-cephas-basement-wire",
@@ -444,7 +486,10 @@
       ],
       "status": "completed",
       "completed_at": "2026-04-10T21:20:00Z",
-      "notes": "K390/K401 — shipped with pagination, filter bar, SummonMascot calls, three-depth nav"
+      "notes": "K390/K401 — shipped with pagination, filter bar, SummonMascot calls, three-depth nav",
+      "ev_promoted": true,
+      "promoted_at": "2026-05-23",
+      "promoted_by": "KniPr014"
     },
     {
       "id": "B096-k401-brynjolfsson-patch",
@@ -468,7 +513,10 @@
       ],
       "status": "completed",
       "completed_at": "2026-04-10T21:30:00Z",
-      "notes": "Verified live — still_has_leak=false, has_template=true"
+      "notes": "Verified live — still_has_leak=false, has_template=true",
+      "ev_promoted": true,
+      "promoted_at": "2026-05-23",
+      "promoted_by": "KniPr014"
     },
     {
       "id": "B096-mascot-stag-rename",
@@ -485,7 +533,10 @@
       ],
       "status": "completed",
       "completed_at": "2026-04-12T19:30:00Z",
-      "notes": "mascots.ts exists and ships stag. Cleared B102."
+      "notes": "mascots.ts exists and ships stag. Cleared B102.",
+      "ev_promoted": true,
+      "promoted_at": "2026-05-23",
+      "promoted_by": "KniPr014"
     },
     {
       "id": "B096-pollination-manifest",
@@ -509,7 +560,10 @@
       ],
       "status": "completed",
       "completed_at": "2026-04-10T19:52:00Z",
-      "notes": null
+      "notes": null,
+      "ev_promoted": true,
+      "promoted_at": "2026-05-23",
+      "promoted_by": "KniPr014"
     },
     {
       "id": "B096-scholz-letter",
@@ -526,7 +580,10 @@
       ],
       "status": "completed",
       "completed_at": "2026-04-10T21:11:00Z",
-      "notes": null
+      "notes": null,
+      "ev_promoted": true,
+      "promoted_at": "2026-05-23",
+      "promoted_by": "KniPr014"
     },
     {
       "id": "B096-touchstone-v1",
@@ -568,7 +625,10 @@
       ],
       "status": "completed",
       "completed_at": "2026-04-12T19:30:00Z",
-      "notes": "K402 shipped. All files present. Cleared B102."
+      "notes": "K402 shipped. All files present. Cleared B102.",
+      "ev_promoted": true,
+      "promoted_at": "2026-05-23",
+      "promoted_by": "KniPr014"
     },
     {
       "id": "B096-scrambler-v1",
@@ -599,7 +659,10 @@
       ],
       "status": "completed",
       "completed_at": "2026-04-12T19:30:00Z",
-      "notes": "K418 shipped full scrambler suite. Cleared B102."
+      "notes": "K418 shipped full scrambler suite. Cleared B102.",
+      "ev_promoted": true,
+      "promoted_at": "2026-05-23",
+      "promoted_by": "KniPr014"
     },
     {
       "id": "crown-letter-melinda-french-gates",
