@@ -1,6 +1,6 @@
 {
   "name": "librarian-mcp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "The Librarian — MCP knowledge server for Liana Banyan Platform",
   "type": "module",
   "main": "dist/server.js",
