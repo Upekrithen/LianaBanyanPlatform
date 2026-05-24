@@ -45,5 +45,6 @@
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^22.0.0",
     "typescript": "^5.7.0"
-  }
+  },
+  "license": "SSPL-1.0"
 }
