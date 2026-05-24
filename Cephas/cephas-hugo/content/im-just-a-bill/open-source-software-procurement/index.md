@@ -1,4 +1,4 @@
----
+﻿---
 title: "I'm Just a Bill: Federal Open-Source Software Procurement Preference"
 date: 2026-05-12
 council_initiative: 15
@@ -19,7 +19,7 @@ Federal open-source software procurement preference in the 119th Congress, build
 - Federal-agency contributor-back-to-upstream provisions
 
 ## How does this affect cooperative-class families?
-Direct composing — Liana Banyan's substrate is AGPL Free Forever. Federal procurement preference for AGPL-class software composes with the cooperative's structural commitment to substrate availability.
+Direct composing — Liana Banyan's substrate is SSPL Free Forever · Pledge #2260. Federal procurement preference for AGPL-class software composes with the cooperative's structural commitment to substrate availability.
 
 ## Shirley Temple Truth Score
 🟡 Provisional.

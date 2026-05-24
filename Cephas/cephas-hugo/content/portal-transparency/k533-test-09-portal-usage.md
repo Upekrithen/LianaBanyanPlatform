@@ -154,4 +154,4 @@ Get-Content "$env:USERPROFILE\.lb_substrate\ip_ledger\ledger.jsonl" |
 
 ---
 
-*R17 SHOW-RESULTS binds: the portal logs are on disk. The substrate is AGPL. Every claim is verifiable.*
+*R17 SHOW-RESULTS binds: the portal logs are on disk. The substrate is SSPL v1 · Pledge #2260. Every claim is verifiable.*

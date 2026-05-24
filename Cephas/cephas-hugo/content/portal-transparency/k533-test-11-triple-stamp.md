@@ -195,7 +195,7 @@ Harper Guild Tier 1 monitoring uses this surface to review sessions in real-time
 - [K533 Test #9 — Portal Usage Logs](/portal-transparency/k533-test-09-portal-usage/)
 - [K533 Test #12 — Harper Rule Disclosure](/portal-transparency/k533-test-12-harper-rule-disclosure/)
 - [Harper Guild Rules](/static/harper_guild_rules.yaml) — Triple-Stamp + Monitoring Tiers
-- [Triple-Stamp Verifier Source (AGPL)](/under-the-hood/triple-stamp-verifier/)
+- [Triple-Stamp Verifier Source (SSPL)](/under-the-hood/triple-stamp-verifier/)
 
 ---
 

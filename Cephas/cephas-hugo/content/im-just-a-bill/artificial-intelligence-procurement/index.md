@@ -1,4 +1,4 @@
----
+﻿---
 title: "I'm Just a Bill: Federal AI Procurement Standards Act"
 date: 2026-05-12
 council_initiative: 15
@@ -20,7 +20,7 @@ Federal AI procurement standards legislation in the 119th Congress addressing ho
 - Cooperative-class AI enterprise eligibility for federal contract competition
 
 ## How does this affect cooperative-class families?
-Composes with **Save-the-World Paper 8** (CAI Substrate Orchestra). The cooperative's AGPL-licensed Conducted AI Substrate is structurally compatible with federal open-source-preference procurement. Composes with [AI Accountability and Innovation Act](../ai-accountability-innovation/) Bounty Poster.
+Composes with **Save-the-World Paper 8** (CAI Substrate Orchestra). The cooperative's SSPL-licensed Conducted AI Substrate is structurally compatible with federal open-source-preference procurement. Composes with [AI Accountability and Innovation Act](../ai-accountability-innovation/) Bounty Poster.
 
 ## Shirley Temple Truth Score
 🟡 Provisional.
