@@ -1,0 +1,22 @@
+chore: bump version to v0.1.12 (Tier G BP055 W3)
+
+G.1  UpdateToast: "Updated to v[X] check — restart to apply" per KniPr011
+G.2  SettingsTab: wire update section to electron-updater onUpdateStateChanged
+     state machine: idle=Check; checking=Checking; downloading=progress bar;
+     downloaded=Restart to update; not-available=up to date
+G.3  Title bar: already Mnemosyne v${app.getVersion()} (PASS)
+G.4  MnemosyneTabView: mode chip => clickable button; toggles AI Burst via
+     window.amplify.setFrameMode per KniPr011
+G.7  TrailEbletViewer: empty-state copy => "No trails yet — your cooperative
+     history will appear here."
+G.9  MyContributionPanel: [PLACEHOLDER: IPC data binding for Marks ledger]
+G.10 Chronos Research: Founder voice — lets your Mnemosyne help everyone
+     anonymously. You keep control. The cooperative gets smarter.
+G.12 LoC FAQ: add "What does Library of Congress registration mean?" Founder
+     voice Q&A (timestamp, no lawyers needed)
+G.13 PhoebePage: basic save/get idea flow scaffold with IPC stubs
+D.15 substrate_api: EADDRINUSE singleton-reuse guard — zombie port detection
+     resolves instead of rejecting on relaunch
+
+SHA-256 (Mnemosyne-Setup-0.1.12.exe):
+  D85CAFF2E9E7152B20C80E9BBC1703EEE9EB77BA00E168C05506DFAB6AC44E93
