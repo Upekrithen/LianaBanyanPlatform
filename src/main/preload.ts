@@ -659,6 +659,18 @@ contextBridge.exposeInMainWorld('amplify', {
   creditFirstInstallMarks: (): void =>
     ipcRenderer.send('credit-first-install-marks'),
 
+  // ── Trail Eblet Reader (KniPr035) ────────────────────────────────────────
+  trailEblet: {
+    list: (): Promise<{ files: string[]; dir: string }> =>
+      ipcRenderer.invoke('trail-eblet:list'),
+    read: (args: { filePath: string }): Promise<{ ok: boolean; content?: string; error?: string }> =>
+      ipcRenderer.invoke('trail-eblet:read', args),
+    listScreenshots: (args: { ebletPath: string }): Promise<{ files: string[]; dir: string }> =>
+      ipcRenderer.invoke('trail-eblet:list-screenshots', args),
+    readScreenshot: (args: { filePath: string }): Promise<{ ok: boolean; dataUrl?: string; error?: string }> =>
+      ipcRenderer.invoke('trail-eblet:read-screenshot', args),
+  },
+
   // ── Utility (SAGA 07 BP046B) ─────────────────────────────────────────────
   /** Open a URL in the system default browser */
   openExternal: (url: string): void =>
@@ -804,6 +816,13 @@ declare global {
         openFolderDialog: () => Promise<{ canceled: boolean; filePaths: string[] }>;
         onEbletMinted: (callback: (eblet: unknown) => void) => void;
         onFolderError: (callback: (payload: { folderId: string; error: string }) => void) => void;
+      };
+      // Trail Eblet Reader (KniPr035)
+      trailEblet?: {
+        list: () => Promise<{ files: string[]; dir: string }>;
+        read: (args: { filePath: string }) => Promise<{ ok: boolean; content?: string; error?: string }>;
+        listScreenshots: (args: { ebletPath: string }) => Promise<{ files: string[]; dir: string }>;
+        readScreenshot: (args: { filePath: string }) => Promise<{ ok: boolean; dataUrl?: string; error?: string }>;
       };
       // SAGA 13 BP046B
       creditFirstInstallMarks: () => void;

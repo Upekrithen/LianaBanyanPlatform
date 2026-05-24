@@ -1322,6 +1322,57 @@ function registerIPCHandlers(): void {
     return dialog.showOpenDialog({ properties: ['openDirectory'] });
   });
 
+  // ── Trail Eblet Reader (KniPr035) ─────────────────────────────────────────
+  ipcMain.handle('trail-eblet:list', async () => {
+    const fs = require('fs') as typeof import('fs');
+    const path = require('path') as typeof import('path');
+    const os = require('os') as typeof import('os');
+    const trailsDir = path.join(os.homedir(), '.claude', 'state', 'eblets', 'TRAILS');
+    if (!fs.existsSync(trailsDir)) return { files: [], dir: trailsDir };
+    const files = fs.readdirSync(trailsDir)
+      .filter((f: string) => f.endsWith('.eblet.md'))
+      .sort((a: string, b: string) => a.localeCompare(b));
+    return { files, dir: trailsDir };
+  });
+
+  ipcMain.handle('trail-eblet:read', async (_event, { filePath }: { filePath: string }) => {
+    const fs = require('fs') as typeof import('fs');
+    if (!fs.existsSync(filePath)) return { ok: false, error: 'File not found' };
+    try {
+      const content = fs.readFileSync(filePath, 'utf-8');
+      return { ok: true, content };
+    } catch (e) {
+      return { ok: false, error: String(e) };
+    }
+  });
+
+  ipcMain.handle('trail-eblet:list-screenshots', async (_event, { ebletPath }: { ebletPath: string }) => {
+    const fs = require('fs') as typeof import('fs');
+    const path = require('path') as typeof import('path');
+    const screenshotsDir = path.join(path.dirname(ebletPath), 'screenshots');
+    if (!fs.existsSync(screenshotsDir)) return { files: [], dir: screenshotsDir };
+    const files = fs.readdirSync(screenshotsDir)
+      .filter((f: string) => /\.(png|jpg|jpeg|webp|gif)$/i.test(f));
+    return { files, dir: screenshotsDir };
+  });
+
+  ipcMain.handle('trail-eblet:read-screenshot', async (_event, { filePath }: { filePath: string }) => {
+    const fs = require('fs') as typeof import('fs');
+    const path = require('path') as typeof import('path');
+    if (!fs.existsSync(filePath)) return { ok: false };
+    try {
+      const buf = fs.readFileSync(filePath);
+      const ext = path.extname(filePath).toLowerCase().slice(1);
+      const mime = ext === 'jpg' || ext === 'jpeg' ? 'image/jpeg'
+        : ext === 'png' ? 'image/png'
+        : ext === 'webp' ? 'image/webp'
+        : 'image/gif';
+      return { ok: true, dataUrl: `data:${mime};base64,${buf.toString('base64')}` };
+    } catch (e) {
+      return { ok: false, error: String(e) };
+    }
+  });
+
   // ── MV-CN Peer Mesh (SAGA 3 BP045 W1) ─────────────────────────────────────
   ipcMain.handle('get-mesh-state', () => ({
     peers: peerDiscovery?.getAllPeers() ?? [],

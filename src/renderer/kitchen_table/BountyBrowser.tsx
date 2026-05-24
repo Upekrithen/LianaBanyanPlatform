@@ -86,7 +86,7 @@ function BountyCard({ bounty }: { bounty: Bounty }) {
   };
 
   const handleViewTrail = () => {
-    alert(`Trail viewer for ${bounty.id} coming soon — KniPr035 (TrailEbletViewer) not yet landed.`);
+    alert(`Trail viewer for ${bounty.id} coming soon — KniPr035 (TrailEbletViewer) not yet wired to Bounty IDs.`);
   };
 
   return (

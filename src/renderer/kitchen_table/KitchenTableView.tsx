@@ -1,16 +1,19 @@
 // Kitchen Table™ composite view — Mnemosyne™ v0.1.8 · SEG-FT-8 · BP052 NOVACULA
 // KniPr035: Trail Eblets tab added alongside Recipes + P2P
+// KniPr036: Bounty Board tab added
 
 import React, { useState } from 'react';
 import { RecipesView } from './RecipesView';
 import { P2PDiscoveryPanel } from './P2PDiscoveryPanel';
 import { TrailEbletViewer } from './TrailEbletViewer';
+import { BountyBrowser } from './BountyBrowser';
 
-type KitchenTab = 'kitchen' | 'trails';
+type KitchenTab = 'kitchen' | 'trails' | 'bounty-board';
 
 const TAB_ITEMS: Array<{ id: KitchenTab; label: string }> = [
-  { id: 'kitchen', label: '🍽️ Kitchen' },
-  { id: 'trails',  label: '🥾 Trail Eblets' },
+  { id: 'kitchen',      label: '🍽️ Kitchen' },
+  { id: 'trails',       label: '🥾 Trail Eblets' },
+  { id: 'bounty-board', label: '🏹 Bounty Board' },
 ];
 
 export function KitchenTableView() {
@@ -64,6 +67,11 @@ export function KitchenTableView() {
             Pawn Phase 3 outputs · TRAILS eblet store
           </div>
         )}
+        {activeTab === 'bounty-board' && (
+          <div style={{ fontSize: 9, color: '#475569', paddingBottom: 6 }}>
+            Pawn Phase 3 · accept Trails · earn Marks
+          </div>
+        )}
       </div>
 
       {/* Body */}
@@ -86,6 +94,7 @@ export function KitchenTableView() {
           </div>
         )}
         {activeTab === 'trails' && <TrailEbletViewer />}
+        {activeTab === 'bounty-board' && <BountyBrowser />}
       </div>
     </div>
   );
