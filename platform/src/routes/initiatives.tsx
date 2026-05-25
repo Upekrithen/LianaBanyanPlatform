@@ -44,6 +44,8 @@ const PioneerShowcasePage = lazy(() => import("@/pages/PioneerShowcasePage"));
 const PioneerProfilePage = lazy(() => import("@/pages/PioneerProfilePage"));
 const FreezerNodesPage = lazy(() => import("@/pages/FreezerNodesPage"));
 const FreezerNodeSetup = lazy(() => import("@/pages/FreezerNodeSetup"));
+const BanyanGalleriesPage = lazy(() => import("@/pages/BanyanGalleriesPage"));
+const HearthInitiativePage = lazy(() => import("@/pages/HearthInitiativePage"));
 
 export const initiativeRoutes = (
   <>
@@ -98,5 +100,7 @@ export const initiativeRoutes = (
     <Route path="/farmer-supply-chain" element={<ExplorerRoute><LazyPage><FarmerSupplyChainPage /></LazyPage></ExplorerRoute>} />
     <Route path="/meal-kits" element={<ExplorerRoute><LazyPage><FarmerSupplyChainPage /></LazyPage></ExplorerRoute>} />
     <Route path="/freeze-dried" element={<ExplorerRoute><LazyPage><FarmerSupplyChainPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/banyan-galleries" element={<ExplorerRoute><LazyPage><BanyanGalleriesPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/initiatives/hearth" element={<ExplorerRoute><LazyPage><HearthInitiativePage /></LazyPage></ExplorerRoute>} />
   </>
 );
