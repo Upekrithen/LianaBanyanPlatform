@@ -1,0 +1,33 @@
+{{- $tier := .Get "tier" | default "celebration" -}}
+{{- $line := .Get "line" -}}
+<div class="grabthar-banner" style="
+  background: linear-gradient(135deg, #FFF8DC, #FFD700);
+  border: 2px solid #B8860B;
+  border-radius: 4px;
+  padding: 1rem 1.5rem;
+  margin: 1.5rem 0;
+  font-family: 'Georgia', serif;
+  position: relative;
+">
+  <div style="font-size: 1.1rem; font-weight: bold; text-transform: uppercase; letter-spacing: 0.05em; color: #5C3D00;">
+    ⚒️ BY GRABTHAR'S HAMMER — WHAT A SAVINGS
+  </div>
+  <div style="margin-top: 0.5rem; font-size: 0.95rem; color: #3D2600; font-style: italic;">
+    "{{ $line }}"
+  </div>
+  <div style="margin-top: 0.75rem; display: flex; align-items: center; gap: 1rem;">
+    <audio id="grabthar-audio-{{ $tier }}" src="/audio/grabthars_hammer_savings.m4a" preload="none"></audio>
+    <button onclick="document.getElementById('grabthar-audio-{{ $tier }}').play()" style="
+      background: #B8860B;
+      color: #FFF8DC;
+      border: none;
+      padding: 0.3rem 0.8rem;
+      cursor: pointer;
+      font-family: monospace;
+      font-size: 0.8rem;
+    ">▶ Play</button>
+    <span style="font-size: 0.75rem; color: #7A6000; font-family: monospace;">
+      — Dr. Lazarus; Galaxy Quest (1999)
+    </span>
+  </div>
+</div>
