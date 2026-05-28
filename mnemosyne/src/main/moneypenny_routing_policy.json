@@ -1,0 +1,52 @@
+{
+  "version": "1.0",
+  "bp_tag": "BP060_W3_WAKIZASHI",
+  "description": "MoneyPenny task-class routing policy — Scribe-class local compute delegation",
+  "routes": [
+    {
+      "task_class": "M",
+      "description": "Mechanical (file ops, data transforms, format conversion)",
+      "routing": "PYTHON_LOCAL",
+      "cost_class": "zero",
+      "examples": ["file read/write", "sha256", "format conversion", "rename", "copy"]
+    },
+    {
+      "task_class": "C-refinement",
+      "description": "Composition refinement (polish existing draft, fix errors, light editing)",
+      "routing": "OLLAMA_7B_LOCAL",
+      "fallback": "CLOUD_SONNET",
+      "cost_class": "local",
+      "examples": ["fix typos", "polish prose", "add (industry term)", "audit compliance"]
+    },
+    {
+      "task_class": "H",
+      "description": "Hybrid (read + light compose, structured output from existing content)",
+      "routing": "OLLAMA_7B_LOCAL",
+      "fallback": "CLOUD_SONNET",
+      "cost_class": "local",
+      "examples": ["summarize document", "extract key points", "structured conversion"]
+    },
+    {
+      "task_class": "C-synthesis",
+      "description": "Composition synthesis (combine multiple sources into new artifact)",
+      "routing": "OLLAMA_70B_LOCAL",
+      "fallback": "CLOUD_SONNET",
+      "cost_class": "local-heavy",
+      "examples": ["combine research", "write section from outline", "technical synthesis"]
+    },
+    {
+      "task_class": "C-novel",
+      "description": "Composition novel (original content, first-draft, creative)",
+      "routing": "CLOUD_SONNET",
+      "cost_class": "cloud-standard",
+      "examples": ["first draft paper", "patent application", "new article"]
+    },
+    {
+      "task_class": "C-architecture",
+      "description": "Composition architecture (system design, canonical decisions, blueprint)",
+      "routing": "CLOUD_OPUS",
+      "cost_class": "cloud-premium",
+      "examples": ["system architecture", "canonical naming", "policy definition", "statute"]
+    }
+  ]
+}
