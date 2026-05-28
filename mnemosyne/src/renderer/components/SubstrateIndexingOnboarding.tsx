@@ -128,6 +128,36 @@ export const SubstrateIndexingOnboarding: React.FC<SubstrateIndexingOnboardingPr
           </button>
         </div>
       )}
+      {!showOverlay && (
+        <div style={{
+          position: 'fixed', bottom: '2rem', right: '2rem',
+          zIndex: 100, textAlign: 'center'
+        }}>
+          <a
+            href="https://cephas.lianabanyan.com/membership/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'inline-block',
+              padding: '0.75rem 2rem',
+              background: 'linear-gradient(135deg, #FFD700, #FFA500)',
+              color: '#0A0A2E',
+              fontFamily: 'monospace',
+              fontWeight: 'bold',
+              fontSize: '1rem',
+              textDecoration: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              boxShadow: '0 4px 15px rgba(255, 215, 0, 0.4)'
+            }}
+          >
+            ⚓ Join the Ranks — $5/year
+          </a>
+          <p style={{ color: '#888', fontSize: '0.7rem', marginTop: '0.3rem' }}>
+            Free to use · Better to join
+          </p>
+        </div>
+      )}
       <div className="substrate-onboarding">
         <h3>Index your Documents folder?</h3>
         <p>
