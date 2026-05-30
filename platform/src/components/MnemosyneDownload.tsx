@@ -8,10 +8,10 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 
-const MNEMOSYNE_VERSION = '0.1.19';
-const GITHUB_RELEASES = 'https://github.com/lianabanyan/mnemosyne/releases/latest';
-const INSTALLER_WINDOWS = `https://github.com/lianabanyan/mnemosyne/releases/download/v${MNEMOSYNE_VERSION}/Mnemosyne-Setup-${MNEMOSYNE_VERSION}.exe`;
-const INSTALLER_MAC = `https://github.com/lianabanyan/mnemosyne/releases/download/v${MNEMOSYNE_VERSION}/Mnemosyne-${MNEMOSYNE_VERSION}.dmg`;
+const MNEMOSYNE_VERSION = '0.1.21';
+const GITHUB_RELEASES = 'https://github.com/liana-banyan/mnemosyne/releases/latest';
+const INSTALLER_WINDOWS = `https://github.com/liana-banyan/mnemosyne/releases/download/v${MNEMOSYNE_VERSION}/Mnemosyne-Setup-${MNEMOSYNE_VERSION}.exe`;
+const INSTALLER_MAC = `https://github.com/liana-banyan/mnemosyne/releases/download/v${MNEMOSYNE_VERSION}/Mnemosyne-${MNEMOSYNE_VERSION}.dmg`;
 
 // ─── Hero Section ─────────────────────────────────────────────────────────────
 
