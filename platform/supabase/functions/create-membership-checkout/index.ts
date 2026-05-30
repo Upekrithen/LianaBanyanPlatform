@@ -35,11 +35,14 @@ Deno.serve(async (req) => {
 
     let inviteCode = "";
     let isRenewal = false;
+    let autoRenew = false;
     if (req.method === "POST") {
       try {
         const body = await req.json();
         inviteCode = body.inviteCode || "";
         isRenewal = body.isRenewal || false;
+        // BP065 PART 0: auto-renew opt-in (default unchecked — no dark-pattern pre-check)
+        autoRenew = body.autoRenew === true;
       } catch { /* no body is ok */ }
     }
 
@@ -89,14 +92,19 @@ Deno.serve(async (req) => {
 
     log(`Step 3: Stripe API (origin: ${origin})`);
 
+    // BP065 PART 0: auto-renew = subscription mode; one-time = payment mode
+    const stripeMode = autoRenew ? "subscription" : "payment";
+
     const stripeParams: Record<string, string> = {
       "customer_email": user.email,
       "line_items[0][price_data][currency]": "usd",
       "line_items[0][price_data][product_data][name]": "Liana Banyan Access Key",
-      "line_items[0][price_data][product_data][description]": "Annual cooperative membership — $5/year",
+      "line_items[0][price_data][product_data][description]": autoRenew
+        ? "Annual cooperative membership — $5/year · auto-renews annually · cancel anytime"
+        : "Annual cooperative membership — $5/year",
       "line_items[0][price_data][unit_amount]": "500",
       "line_items[0][quantity]": "1",
-      "mode": "payment",
+      "mode": stripeMode,
       "success_url": `${origin}/membership-success?session_id={CHECKOUT_SESSION_ID}`,
       "cancel_url": `${origin}/join?membership=cancelled`,
       "client_reference_id": user.id,
@@ -104,10 +112,16 @@ Deno.serve(async (req) => {
       "metadata[payment_type]": "lb_membership_stake",
       "metadata[type]": "membership",
       "metadata[is_renewal]": isRenewal ? "true" : "false",
+      "metadata[auto_renew]": autoRenew ? "true" : "false",
     };
 
     if (inviteCode) {
       stripeParams["metadata[invite_code]"] = inviteCode;
+    }
+
+    // BP065 PART 0: subscription mode requires recurring interval on price_data
+    if (autoRenew) {
+      stripeParams["line_items[0][price_data][recurring][interval]"] = "year";
     }
 
     const stripeResponse = await fetch("https://api.stripe.com/v1/checkout/sessions", {
