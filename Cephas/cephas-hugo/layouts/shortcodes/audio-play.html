@@ -1,0 +1,6 @@
+{{- $src := .Get "src" -}}
+{{- $label := .Get "label" | default "▶ Listen" -}}
+<span class="audio-play-wrap">
+  <button class="audio-play-btn" onclick="(function(btn){var a=btn.nextElementSibling;if(a.paused){a.play();btn.textContent='⏸ Pause';}else{a.pause();btn.textContent='▶ Listen';}})(this)" aria-label="{{ $label }}">▶ Listen</button>
+  <audio src="{{ $src }}" preload="none"></audio>
+</span>
