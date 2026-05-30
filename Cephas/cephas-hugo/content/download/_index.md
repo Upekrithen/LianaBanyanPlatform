@@ -36,9 +36,9 @@ tldr: "Download Mnemosyne™ free, forever. Open-source. No ads. No strings. Six
 
 ## Download
 
-> **Mnemosyne™ v0.1.20 · LB Alpha-phase · BP063 release**
+> **Mnemosyne™ v0.1.21 · LB Alpha-phase · BP063 release**
 >
-> Build receipt: `v0.1.20` · [View Release on GitHub](https://github.com/liana-banyan/mnemosyne/releases/tag/v0.1.20) · [Release changelog](/changelog/) · SHA-256 hashes below · K533 Reproducibility Pack: [Run Your Own Cabinet](/run-your-own-cabinet/)
+> Build receipt: `v0.1.21` · [View Release on GitHub](https://github.com/liana-banyan/mnemosyne/releases/tag/v0.1.21) · [Release changelog](/changelog/) · SHA-256 hashes below · K533 Reproducibility Pack: [Run Your Own Cabinet](/run-your-own-cabinet/)
 
 <div class="disclosure-block" style="background:#1e3a5f;border:2px solid #2d5a8e;border-radius:8px;padding:20px;margin:20px 0;line-height:1.7;">
 <p><strong>🛡️ What Mnemosyne™ does to your computer</strong></p>
@@ -54,12 +54,12 @@ tldr: "Download Mnemosyne™ free, forever. Open-source. No ads. No strings. Six
 <p><em>Verify the install matches the official SHA-256 listed in the table below.</em></p>
 </div>
 
-**[→ Download Mnemosyne™ v0.1.20 on GitHub](https://github.com/liana-banyan/mnemosyne/releases/tag/v0.1.20)**
+**[→ Download Mnemosyne™ v0.1.21 on GitHub](https://github.com/liana-banyan/mnemosyne/releases/tag/v0.1.21)**
 
 | Platform | Download | Size | SHA-256 |
 |---|---|---|---|
-| **Windows (installer)** | [`Mnemosyne-Setup-0.1.20.exe`](https://github.com/liana-banyan/mnemosyne/releases/download/v0.1.20/Mnemosyne-Setup-0.1.20.exe) | 80,972,383 bytes | `3291EA569643C2AAEC4BCD411266C9C413E5AD1A3FD2B819192D0DBE744904DC` |
-| **Windows (portable)** | [`Mnemosyne-Portable-0.1.20.exe`](https://github.com/liana-banyan/mnemosyne/releases/download/v0.1.20/Mnemosyne-Portable-0.1.20.exe) | 80,741,257 bytes | `BAE6A5783C144A3A001A2B3AABBEB030949505508B433EAF990EE4450FEED386` |
+| **Windows (installer)** | [`Mnemosyne-Setup-0.1.21.exe`](https://github.com/liana-banyan/mnemosyne/releases/download/v0.1.21/Mnemosyne-Setup-0.1.21.exe) | 80,424,024 bytes | `C14BFDCFD3BFFC42C347E610631966E5D061AEF251AE4C0372D7D53776060A27` |
+| **Windows (portable)** | [`Mnemosyne-Portable-0.1.21.exe`](https://github.com/liana-banyan/mnemosyne/releases/download/v0.1.21/Mnemosyne-Portable-0.1.21.exe) | 80,192,921 bytes | `CFD9AADF1A19ECD60C652D80D8CE6FCCB631B4CBC2BF4CE11BF727C074DB6CFB` |
 | macOS | `Mnemosyne-<version>.dmg` *(BP051+ — pending macOS notarization pass)* | — | — |
 | Linux (Debian/Ubuntu) | `Mnemosyne-<version>.deb` *(BP051+ — pending Linux build slot)* | — | — |
 | Linux (AppImage) | `Mnemosyne-<version>.AppImage` *(BP051+ — pending Linux build slot)* | — | — |
@@ -69,24 +69,22 @@ tldr: "Download Mnemosyne™ free, forever. Open-source. No ads. No strings. Six
 
 All builds ship the same source. SSPL Free Forever · Pledge #2260. SHA-256 hashes published with every release. No telemetry without opt-in.
 
-- Built: 2026-05-30 from `LianaBanyanPlatform/amplify-computer/` · v0.1.20 (Vite + Electron 31 + React 18.3)
-- **Version bump: 0.1.19 → 0.1.20** — launch crash fix (ERR_PACKAGE_PATH_NOT_EXPORTED) + AGPL→SSPL license correction
-- In-app version display: MnemosyneTabView surfaces `v0.1.20` via `app.getVersion()` IPC
+- Built: 2026-05-30 from `LianaBanyanPlatform/` · v0.1.21 (Vite + Electron 31 + React 18.3)
+- **Version bump: 0.1.20 → 0.1.21** — 3 renderer fixes: canonical voice + Caithedral™ footer + NotCents glyph white
+- In-app version display: MnemosyneTabView surfaces `v0.1.21` via `app.getVersion()` IPC
 - Trademark Use Policy: `TRADEMARK_USE_POLICY.md` ships at repo root · NOTICE includes cooperative-class discipline
 - SSPL v1 license: `LICENSE_SSPL.md` ships at repo root per BP051 binding
-- Previous: `Mnemosyne-Setup-0.1.18.exe` — superseded · [v0.1.18 release notes](/changelog/#v0118)
+- Previous: `Mnemosyne-Setup-0.1.20.exe` — superseded
 
-### v0.1.20 - What's new
+### v0.1.21 - What's new
 
-- **Launch crash fixed (OG-027)** — v0.1.19 crashed on launch (ERR_PACKAGE_PATH_NOT_EXPORTED). Fixed: caithedral-core raw dist/ imports replaced with exported short aliases
-- **SSPL license corrected** — All AGPL strings replaced with "SSPL + Cooperative Defensive Patent Pledge #2260"
-- **Battery Dispatch Tab (Tab 15)** — Universal remote for cooperative energy dispatch (BP063 SEG-1, carried from v0.1.19)
-- **Broadcast Schedule Tab (Tab 14)** — TV-Guide-style broadcast coordination interface (BP063 SEG-2, carried from v0.1.19)
-- **Yvaine SHINE Splash** — Yvaine mirror splash screen (carried from v0.1.19)
-- **UNSIGNED** — Azure code signing still pending; Windows SmartScreen will warn (More Info → Run Anyway)
-- **Setup SHA-256:** `3291EA569643C2AAEC4BCD411266C9C413E5AD1A3FD2B819192D0DBE744904DC`
-- **Portable SHA-256:** `BAE6A5783C144A3A001A2B3AABBEB030949505508B433EAF990EE4450FEED386`
-- **Build:** v0.1.20+f86cca3 · [Release on GitHub](https://github.com/liana-banyan/mnemosyne/releases/tag/v0.1.20)
+- **Canonical voice fix** — Onboarding tagline now correctly names all three classes: "Workers, Builders, and Creators may earn 83.3% of every transaction" (canon §5; never "creators" alone)
+- **Caithedral™ footer** — Version line updated from "CAI Amplifier" to "Caithedral™": `v0.1.21 · Caithedral™ · Liana Banyan`
+- **NotCents glyph corrected** — Symbol in Hearth Conjunction Window header now renders WHITE with corrected vertical alignment (was gray via currentColor inheritance)
+- **UNSIGNED** — Azure code signing pending; Windows SmartScreen will warn (More Info → Run Anyway)
+- **Setup SHA-256:** `C14BFDCFD3BFFC42C347E610631966E5D061AEF251AE4C0372D7D53776060A27`
+- **Portable SHA-256:** `CFD9AADF1A19ECD60C652D80D8CE6FCCB631B4CBC2BF4CE11BF727C074DB6CFB`
+- **Build:** v0.1.21+e2c4a98 · [Release on GitHub](https://github.com/liana-banyan/mnemosyne/releases/tag/v0.1.21)
 
 ### v0.1.9 - What's new
 
@@ -171,4 +169,4 @@ CAI (Cooperative AI) is the engine. Mnemosyne™ ships with sixteen substrate co
 
 ---
 
-🌳📜⚔️🧠☕📦🌌 **FOR THE KEEP.** *(BP063 · v0.1.20 ship · Mnemosyne™ LIVE · launch-fix + SSPL)*
+🌳📜⚔️🧠☕📦🌌 **FOR THE KEEP.** *(BP063 · v0.1.21 ship · Mnemosyne™ LIVE · renderer fixes + two-host mesh gate)*
