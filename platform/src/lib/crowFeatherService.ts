@@ -23,7 +23,8 @@ export type FeatherCategory =
   | 'discovery'        // Most areas discovered in time bracket
   | 'golden_keys'      // Most golden keys in time bracket
   | 'candles'          // Most candles collected
-  | 'mirror_travel';   // Most mirrors traversed
+  | 'mirror_travel'    // Most mirrors traversed
+  | 'red_crow';        // Honor badge — first-cohort unsigned-install members (BP063)
 
 export interface CrowFeather {
   id: string;
@@ -414,3 +415,175 @@ export default {
   getHalfLifeLeaderboard,
   processChaseCompletion,
 };
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// RED CROW FEATHER — Honor badge · First-cohort unsigned-install members
+// canon_red_crow_feather_first_cohort_unsigned_install_honor_badge_bp062
+// pearl_7890a4f9 · BP063
+// GUARDRAIL: No monetary/value fields. Honor-not-security. Art XI.
+// ═══════════════════════════════════════════════════════════════════════════════
+
+export type RedCrowConnectSource = 'creator_referrals' | 'profiles_fallback';
+
+export interface RedCrowProof {
+  userId: string;
+  firstConnectTs: string;          // ISO-8601 UTC
+  certActivationTs: string | null; // ISO-8601 UTC or null if window still open
+  connectSource: RedCrowConnectSource;
+  connectReferralId?: string;
+}
+
+/**
+ * Get the cert-activation timestamp from config table.
+ * Returns null if cert is not yet active (window open — ALL connects qualify).
+ */
+export async function getCertActivationTs(): Promise<string | null> {
+  const { data, error } = await supabase
+    .from('red_crow_feather_config')
+    .select('config_value')
+    .eq('config_key', 'CERT_ACTIVATION_TS')
+    .single();
+
+  if (error || !data) return null;
+  return data.config_value ?? null;
+}
+
+/**
+ * Compute HMAC-SHA256 proof over the issuance payload.
+ * Uses Web Crypto API (same pattern as verify-codex-hmac edge function).
+ */
+export async function computeRedCrowProofHmac(
+  proof: RedCrowProof,
+  secret: string
+): Promise<string> {
+  const encoder = new TextEncoder();
+  const payload = JSON.stringify({
+    user_id: proof.userId,
+    first_connect_ts: proof.firstConnectTs,
+    cert_activation_ts: proof.certActivationTs,
+    connect_source: proof.connectSource,
+    issued_at: new Date().toISOString(),
+  });
+  const keyData = encoder.encode(secret);
+  const messageData = encoder.encode(payload);
+  const key = await crypto.subtle.importKey(
+    'raw', keyData, { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']
+  );
+  const signature = await crypto.subtle.sign('HMAC', key, messageData);
+  return Array.from(new Uint8Array(signature))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('');
+}
+
+/**
+ * Check if a member qualifies for the Red Crow Feather.
+ * Criterion: first_connect_ts < cert_activation_ts (or cert not yet active → always qualifies).
+ * Idempotent: returns false if feather already issued.
+ */
+export async function checkRedCrowFeatherEligibility(userId: string): Promise<{
+  eligible: boolean;
+  alreadyIssued: boolean;
+  proof?: RedCrowProof;
+}> {
+  const { data: existing } = await supabase
+    .from('red_crow_feather_issuances')
+    .select('id')
+    .eq('user_id', userId)
+    .maybeSingle();
+
+  if (existing) return { eligible: false, alreadyIssued: true };
+
+  const certTs = await getCertActivationTs();
+
+  let firstConnectTs: string | null = null;
+  let connectSource: RedCrowConnectSource = 'creator_referrals';
+  let connectReferralId: string | undefined;
+
+  const { data: referral } = await supabase
+    .from('creator_referrals')
+    .select('id, signed_up_at')
+    .eq('referred_user_id', userId)
+    .in('handshake_vesting_state', ['HANDSHAKE_COMPLETED', 'REWARDS_VESTED'])
+    .order('signed_up_at', { ascending: true })
+    .limit(1)
+    .maybeSingle();
+
+  if (referral?.signed_up_at) {
+    firstConnectTs = referral.signed_up_at;
+    connectReferralId = referral.id;
+  } else {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('created_at')
+      .eq('id', userId)
+      .maybeSingle();
+    if (profile?.created_at) {
+      firstConnectTs = profile.created_at;
+      connectSource = 'profiles_fallback';
+    }
+  }
+
+  if (!firstConnectTs) return { eligible: false, alreadyIssued: false };
+
+  // certTs === null means cert not yet active → window open → all connects qualify
+  const qualifies = certTs === null || firstConnectTs < certTs;
+  if (!qualifies) return { eligible: false, alreadyIssued: false };
+
+  return {
+    eligible: true,
+    alreadyIssued: false,
+    proof: { userId, firstConnectTs, certActivationTs: certTs, connectSource, connectReferralId },
+  };
+}
+
+/**
+ * Award the Red Crow Feather to a qualified member.
+ * Must be called from service-role context (edge function) — RLS blocks client INSERT.
+ * Idempotent via UNIQUE(user_id) on red_crow_feather_issuances.
+ * GUARDRAIL: metadata contains no monetary/investment fields (honor-not-security, Art XI).
+ */
+export async function awardRedCrowFeather(
+  userId: string,
+  proof: RedCrowProof,
+  proofHmac: string
+): Promise<{ featherId: string | null; error?: string }> {
+  const { data: feather, error: featherErr } = await supabase
+    .from('crow_feathers')
+    .insert({
+      user_id: userId,
+      category: 'red_crow',
+      record_value: 1,
+      metadata: {
+        honor_badge: true,
+        badge_class: 'first_cohort_unsigned_install',
+        first_connect_ts: proof.firstConnectTs,
+        cert_activation_ts: proof.certActivationTs,
+        connect_source: proof.connectSource,
+        informed_trust: true,
+        // GUARDRAIL: no investment_value, roi, equity, shares, dividends — honor badge only
+      },
+    })
+    .select('id')
+    .single();
+
+  if (featherErr) return { featherId: null, error: featherErr.message };
+
+  const { error: issuanceErr } = await supabase
+    .from('red_crow_feather_issuances')
+    .insert({
+      user_id: userId,
+      crow_feather_id: feather.id,
+      first_connect_ts: proof.firstConnectTs,
+      cert_activation_ts: proof.certActivationTs ?? null,
+      connect_source: proof.connectSource,
+      connect_referral_id: proof.connectReferralId ?? null,
+      proof_hmac: proofHmac,
+    });
+
+  if (issuanceErr) {
+    if (issuanceErr.code === '23505') return { featherId: feather.id };
+    return { featherId: feather.id, error: issuanceErr.message };
+  }
+
+  return { featherId: feather.id };
+}

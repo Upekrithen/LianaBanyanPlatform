@@ -27,6 +27,7 @@ const CATEGORY_ICONS: Record<string, string> = {
   candles_earned: "🕯️",
   deck_cards_viewed: "🃏",
   beacon_journeys: "📍",
+  red_crow: "🔴",
 };
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -38,6 +39,7 @@ const CATEGORY_LABELS: Record<string, string> = {
   candles_earned: "Most Candles Earned",
   deck_cards_viewed: "Most Deck Cards Viewed",
   beacon_journeys: "Most Beacon Journeys",
+  red_crow: "Red Crow — First Cohort",
 };
 
 export function CrowFeathersDisplay({ compact = false }: { compact?: boolean }) {

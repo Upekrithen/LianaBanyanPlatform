@@ -86,7 +86,8 @@ export type LeaderboardCategory =
   | 'beacon_journeys'
   | 'beacon_run_speed'      // Fastest completion of a Beacon Run
   | 'beacons_dropped'       // Most beacons dropped in a session
-  | 'beacon_runs_created';  // Total Beacon Runs created
+  | 'beacon_runs_created'   // Total Beacon Runs created
+  | 'red_crow';             // Honor badge — first-cohort unsigned-install members (BP063)
 
 export type TimeBracket =
   | 'under_15m'
@@ -614,6 +615,7 @@ export const CATEGORY_NAMES: Record<LeaderboardCategory, string> = {
   beacon_run_speed: 'Beacon Run Speed',
   beacons_dropped: 'Beacons Dropped',
   beacon_runs_created: 'Beacon Runs Created',
+  red_crow: 'Red Crow — First Cohort',
 };
 
 export const TIME_BRACKET_NAMES: Record<TimeBracket, string> = {

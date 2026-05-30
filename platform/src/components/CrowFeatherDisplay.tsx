@@ -99,6 +99,20 @@ const CATEGORY_INFO: Record<FeatherCategory, CategoryInfo> = {
     description: 'Most mirrors traversed',
     color: '#22d3ee',
   },
+  red_crow: {
+    icon: (
+      <img
+        src="/characters/pfp/PFPcrow_red.png"
+        alt="Red Crow"
+        className="w-4 h-4 object-contain"
+        style={{ filter: 'hue-rotate(300deg) saturate(3) brightness(0.85)' }}
+        onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+      />
+    ),
+    name: 'Red Crow',
+    description: 'First cohort — connected before the cert. The crow remembers.',
+    color: '#ef4444',
+  },
 };
 
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -167,6 +181,8 @@ function formatRecordValue(category: FeatherCategory, value: number): string {
       return `${value} Marks`;
     case 'chase_streak':
       return `${value} wins`;
+    case 'red_crow':
+      return 'First cohort';
     default:
       return `${value}`;
   }
