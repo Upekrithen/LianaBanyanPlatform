@@ -76,6 +76,8 @@ export function HEOHOCardFront() {
   const [friendMatch, setFriendMatch] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const clearTimers = useCallback(() => {
     timerRef.current.forEach(clearTimeout);
@@ -190,6 +192,17 @@ export function HEOHOCardFront() {
     if (friendInput && inputRef.current) inputRef.current.focus();
   }, [friendInput]);
 
+  // Pause + reset audio when quote rotates away from Yvaine
+  useEffect(() => {
+    if (!QUOTES[quoteIndex]?.isYvaine) {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
+      setIsPlaying(false);
+    }
+  }, [quoteIndex]);
+
   const quote = QUOTES[quoteIndex];
   const isDarkening = fadeToBlack > 0;
   const fadedOpacity = Math.max(0.75 - fadeToBlack * 0.75, 0);
@@ -215,7 +228,34 @@ export function HEOHOCardFront() {
               cursor: "pointer",
             }}
           >SHINE</span>
-          .
+          .{" "}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              if (!audioRef.current) return;
+              if (isPlaying) {
+                audioRef.current.pause();
+                setIsPlaying(false);
+              } else {
+                audioRef.current.play();
+                setIsPlaying(true);
+              }
+            }}
+            aria-label={isPlaying ? "Pause audio" : "Play audio"}
+            style={{
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              color: "rgba(255,255,255,0.5)",
+              fontSize: "0.65rem",
+              padding: "0 0.15rem",
+              verticalAlign: "middle",
+              lineHeight: 1,
+              display: "inline",
+            }}
+          >
+            {isPlaying ? "⏸" : "▶"}
+          </button>
         </span>
         <span style={{ opacity: isDarkening ? fadedOpacity : 0.75, transition: "opacity 0.1s ease" }}>
           &rsquo;{afterShine}&rdquo;
@@ -235,6 +275,13 @@ export function HEOHOCardFront() {
 
   return (
     <div className="w-full max-w-sm mx-auto" data-heoho-card>
+      {/* Hidden audio — Yvaine SHINE quote */}
+      <audio
+        ref={audioRef}
+        src="/audio/WhatDoStarsDOShine.m4a"
+        preload="auto"
+        onEnded={() => setIsPlaying(false)}
+      />
       <motion.div
         className="rounded-2xl overflow-hidden relative"
         initial={{ opacity: 0, scale: 0.97 }}

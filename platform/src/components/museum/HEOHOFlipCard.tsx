@@ -76,10 +76,31 @@ export function HEOHOFlipCard() {
   const [friendMatch, setFriendMatch] = useState<FriendWord | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const clearTimers = useCallback(() => {
     timerRef.current.forEach(clearTimeout);
     timerRef.current = [];
+  }, []);
+
+  // Pause + reset audio when rotating away from Yvaine quote
+  useEffect(() => {
+    if (!QUOTES[quoteIndex]?.isYvaine && audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      setIsPlaying(false);
+    }
+  }, [quoteIndex]);
+
+  // Pause + reset audio on unmount
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
+    };
   }, []);
 
   // ═══ QUOTE ROTATION ═══
@@ -212,7 +233,34 @@ export function HEOHOFlipCard() {
               cursor: "pointer",
             }}
           >SHINE</span>
-          .
+          .{" "}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              if (!audioRef.current) return;
+              if (isPlaying) {
+                audioRef.current.pause();
+                setIsPlaying(false);
+              } else {
+                audioRef.current.play().then(() => setIsPlaying(true)).catch(() => {});
+              }
+            }}
+            aria-label={isPlaying ? "Pause audio" : "Play audio"}
+            style={{
+              background: "none",
+              border: "none",
+              padding: "0 0.1em",
+              cursor: "pointer",
+              color: `rgba(255,255,255,${isPlaying ? 0.8 : 0.4})`,
+              fontSize: "0.75em",
+              verticalAlign: "middle",
+              lineHeight: 1,
+              display: "inline",
+              transition: "color 0.2s",
+            }}
+          >
+            {isPlaying ? "⏸" : "▶"}
+          </button>
         </span>
         <span style={{ opacity: isDarkening ? fadedOpacity : 0.75, transition: "opacity 0.1s ease" }}>
           &rsquo;{afterShine}&rdquo;
@@ -226,7 +274,9 @@ export function HEOHOFlipCard() {
   const keyholeColor = keyholeHovered ? "#d69e2e" : isLingerPhase ? "rgba(255,255,255,0.9)" : "#0a1628";
 
   return (
-    <div className="w-full max-w-sm mx-auto" style={{ perspective: "1000px" }}>
+    <>
+      <audio ref={audioRef} src="/audio/WhatDoStarsDOShine.m4a" preload="auto" onEnded={() => setIsPlaying(false)} />
+      <div className="w-full max-w-sm mx-auto" style={{ perspective: "1000px" }}>
       <div className="relative w-full" style={{ aspectRatio: "5/7" }}>
         <div
           className="rounded-2xl overflow-hidden"
@@ -425,6 +475,7 @@ export function HEOHOFlipCard() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 

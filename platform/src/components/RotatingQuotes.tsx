@@ -7,7 +7,7 @@
  * Used at the top of the landing page.
  */
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -205,6 +205,8 @@ export function RotatingQuotes({
 }: RotatingQuotesProps) {
   const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
     if (!isActive) return;
@@ -214,6 +216,18 @@ export function RotatingQuotes({
 
     return () => clearInterval(timer);
   }, [intervalMs, isActive]);
+
+  // Pause and reset audio when navigating away from the Yvaine quote
+  useEffect(() => {
+    if (!QUOTES[currentIndex]?.isYvaine) {
+      const audio = audioRef.current;
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+      }
+      setIsPlaying(false);
+    }
+  }, [currentIndex]);
 
   useEffect(() => {
     if (!isActive) return;
@@ -232,6 +246,18 @@ export function RotatingQuotes({
   const handleClick = () => {
     if (currentQuote.link) {
       navigate(currentQuote.link);
+    }
+  };
+
+  const handlePlayToggle = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    if (isPlaying) {
+      audio.pause();
+      setIsPlaying(false);
+    } else {
+      audio.play();
+      setIsPlaying(true);
     }
   };
 
@@ -281,8 +307,32 @@ export function RotatingQuotes({
               <span className="ml-1 text-xs">→</span>
             )}
           </p>
+          {currentQuote.isYvaine && (
+            <button
+              onClick={(e) => { e.stopPropagation(); handlePlayToggle(); }}
+              className="mt-2 text-white/50 hover:text-white/80 text-xs"
+              style={{
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                display: 'block',
+                margin: '0 auto',
+                transition: 'color 0.2s ease',
+              }}
+              aria-label={isPlaying ? 'Pause' : 'Play'}
+            >
+              {isPlaying ? '⏸' : '▶'}
+            </button>
+          )}
         </motion.div>
       </AnimatePresence>
+
+      {/* Hidden audio element for Yvaine quote */}
+      <audio
+        ref={audioRef}
+        src="/audio/WhatDoStarsDOShine.m4a"
+        onEnded={() => setIsPlaying(false)}
+      />
 
       {/* Progress dots */}
       <div className="flex gap-1.5 mt-3">
