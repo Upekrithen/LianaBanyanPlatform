@@ -20,15 +20,15 @@
         {
           "source": "/download/**",
           "headers": [
-            {"key": "X-LB-Version", "value": "v0.1.9"},
-            {"key": "X-LB-Build-Hash", "value": "v0.1.9+7c406bf"},
+            {"key": "X-LB-Version", "value": "v0.1.19"},
+            {"key": "X-LB-Build-Hash", "value": "v0.1.19+251d52e"},
             {"key": "X-LB-Phase", "value": "alpha"}
           ]
         },
         {
           "source": "/changelog/**",
           "headers": [
-            {"key": "X-LB-Version", "value": "v0.1.9"},
+            {"key": "X-LB-Version", "value": "v0.1.19"},
             {"key": "Cache-Control", "value": "max-age=1800"}
           ]
         }
@@ -38,26 +38,6 @@
       "target": "museum",
       "public": "public",
       "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-      "headers": [
-        {
-          "source": "**/*.html",
-          "headers": [{"key": "Cache-Control", "value": "max-age=3600"}]
-        },
-        {
-          "source": "**/*.css",
-          "headers": [{"key": "Cache-Control", "value": "max-age=86400"}]
-        },
-        {
-          "source": "**/*.js",
-          "headers": [{"key": "Cache-Control", "value": "max-age=86400"}]
-        }
-      ]
-    },
-    {
-      "target": "cai-lianabanyan",
-      "public": "public",
-      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-      "rewrites": [{"source": "**", "destination": "/404.html"}],
       "headers": [
         {
           "source": "**/*.html",
@@ -96,15 +76,15 @@
         {
           "source": "/download/**",
           "headers": [
-            {"key": "X-LB-Version", "value": "v0.1.9"},
-            {"key": "X-LB-Build-Hash", "value": "v0.1.9+7c406bf"},
+            {"key": "X-LB-Version", "value": "v0.1.19"},
+            {"key": "X-LB-Build-Hash", "value": "v0.1.19+251d52e"},
             {"key": "X-LB-Phase", "value": "alpha"}
           ]
         },
         {
           "source": "/changelog/**",
           "headers": [
-            {"key": "X-LB-Version", "value": "v0.1.9"},
+            {"key": "X-LB-Version", "value": "v0.1.19"},
             {"key": "Cache-Control", "value": "max-age=1800"}
           ]
         }
