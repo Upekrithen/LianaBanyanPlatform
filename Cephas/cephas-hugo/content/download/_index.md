@@ -36,9 +36,9 @@ tldr: "Download Mnemosyne™ free, forever. Open-source. No ads. No strings. Six
 
 ## Download
 
-> **Mnemosyne™ v0.1.19 · LB Alpha-phase · BP063 release**
+> **Mnemosyne™ v0.1.20 · LB Alpha-phase · BP063 release**
 >
-> Build receipt: `v0.1.19` · [View Release on GitHub](https://github.com/liana-banyan/mnemosyne/releases/tag/v0.1.19) · [Release changelog](/changelog/) · SHA-256 hashes below · K533 Reproducibility Pack: [Run Your Own Cabinet](/run-your-own-cabinet/)
+> Build receipt: `v0.1.20` · [View Release on GitHub](https://github.com/liana-banyan/mnemosyne/releases/tag/v0.1.20) · [Release changelog](/changelog/) · SHA-256 hashes below · K533 Reproducibility Pack: [Run Your Own Cabinet](/run-your-own-cabinet/)
 
 <div class="disclosure-block" style="background:#1e3a5f;border:2px solid #2d5a8e;border-radius:8px;padding:20px;margin:20px 0;line-height:1.7;">
 <p><strong>🛡️ What Mnemosyne™ does to your computer</strong></p>
@@ -54,12 +54,12 @@ tldr: "Download Mnemosyne™ free, forever. Open-source. No ads. No strings. Six
 <p><em>Verify the install matches the official SHA-256 listed in the table below.</em></p>
 </div>
 
-**[→ Download Mnemosyne™ v0.1.19 on GitHub](https://github.com/liana-banyan/mnemosyne/releases/tag/v0.1.19)**
+**[→ Download Mnemosyne™ v0.1.20 on GitHub](https://github.com/liana-banyan/mnemosyne/releases/tag/v0.1.20)**
 
 | Platform | Download | Size | SHA-256 |
 |---|---|---|---|
-| **Windows (installer)** | [`Mnemosyne-Setup-0.1.19.exe`](https://github.com/liana-banyan/mnemosyne/releases/download/v0.1.19/Mnemosyne-Setup-0.1.19.exe) | 80,972,328 bytes | `CFF52DF2F28DD2618F5D7BD45E00DB390627BA3D6A0B08B4452FC21059D6B080` |
-| **Windows (portable)** | [`Mnemosyne-Portable-0.1.19.exe`](https://github.com/liana-banyan/mnemosyne/releases/download/v0.1.19/Mnemosyne-Portable-0.1.19.exe) | 80,741,220 bytes | `51A6EA0BF478F93416B342E3BA3ED1D336C900737BB409EAB0AC0AAA9350254F` |
+| **Windows (installer)** | [`Mnemosyne-Setup-0.1.20.exe`](https://github.com/liana-banyan/mnemosyne/releases/download/v0.1.20/Mnemosyne-Setup-0.1.20.exe) | 80,972,383 bytes | `3291EA569643C2AAEC4BCD411266C9C413E5AD1A3FD2B819192D0DBE744904DC` |
+| **Windows (portable)** | [`Mnemosyne-Portable-0.1.20.exe`](https://github.com/liana-banyan/mnemosyne/releases/download/v0.1.20/Mnemosyne-Portable-0.1.20.exe) | 80,741,257 bytes | `BAE6A5783C144A3A001A2B3AABBEB030949505508B433EAF990EE4450FEED386` |
 | macOS | `Mnemosyne-<version>.dmg` *(BP051+ — pending macOS notarization pass)* | — | — |
 | Linux (Debian/Ubuntu) | `Mnemosyne-<version>.deb` *(BP051+ — pending Linux build slot)* | — | — |
 | Linux (AppImage) | `Mnemosyne-<version>.AppImage` *(BP051+ — pending Linux build slot)* | — | — |
@@ -69,22 +69,24 @@ tldr: "Download Mnemosyne™ free, forever. Open-source. No ads. No strings. Six
 
 All builds ship the same source. SSPL Free Forever · Pledge #2260. SHA-256 hashes published with every release. No telemetry without opt-in.
 
-- Built: 2026-05-30 from `LianaBanyanPlatform/amplify-computer/` · v0.1.19 (Vite + Electron 31 + React 18.3)
-- **Version bump: 0.1.18 → 0.1.19** — BP063 release · Battery Dispatch Tab 15 + Broadcast Tab 14 + Yvaine Splash
-- In-app version display: MnemosyneTabView surfaces `v0.1.19` via `app.getVersion()` IPC
+- Built: 2026-05-30 from `LianaBanyanPlatform/amplify-computer/` · v0.1.20 (Vite + Electron 31 + React 18.3)
+- **Version bump: 0.1.19 → 0.1.20** — launch crash fix (ERR_PACKAGE_PATH_NOT_EXPORTED) + AGPL→SSPL license correction
+- In-app version display: MnemosyneTabView surfaces `v0.1.20` via `app.getVersion()` IPC
 - Trademark Use Policy: `TRADEMARK_USE_POLICY.md` ships at repo root · NOTICE includes cooperative-class discipline
 - SSPL v1 license: `LICENSE_SSPL.md` ships at repo root per BP051 binding
 - Previous: `Mnemosyne-Setup-0.1.18.exe` — superseded · [v0.1.18 release notes](/changelog/#v0118)
 
-### v0.1.19 - What's new
+### v0.1.20 - What's new
 
-- **Battery Dispatch Tab (Tab 15)** — Universal remote for cooperative energy dispatch (BP063 SEG-1)
-- **Broadcast Schedule Tab (Tab 14)** — TV-Guide-style broadcast coordination interface (BP063 SEG-2)
-- **Yvaine SHINE Splash** — Yvaine mirror splash screen added natively (BP063)
+- **Launch crash fixed (OG-027)** — v0.1.19 crashed on launch (ERR_PACKAGE_PATH_NOT_EXPORTED). Fixed: caithedral-core raw dist/ imports replaced with exported short aliases
+- **SSPL license corrected** — All AGPL strings replaced with "SSPL + Cooperative Defensive Patent Pledge #2260"
+- **Battery Dispatch Tab (Tab 15)** — Universal remote for cooperative energy dispatch (BP063 SEG-1, carried from v0.1.19)
+- **Broadcast Schedule Tab (Tab 14)** — TV-Guide-style broadcast coordination interface (BP063 SEG-2, carried from v0.1.19)
+- **Yvaine SHINE Splash** — Yvaine mirror splash screen (carried from v0.1.19)
 - **UNSIGNED** — Azure code signing still pending; Windows SmartScreen will warn (More Info → Run Anyway)
-- **Setup SHA-256:** `CFF52DF2F28DD2618F5D7BD45E00DB390627BA3D6A0B08B4452FC21059D6B080`
-- **Portable SHA-256:** `51A6EA0BF478F93416B342E3BA3ED1D336C900737BB409EAB0AC0AAA9350254F`
-- **Build:** v0.1.19+251d52e · [Release on GitHub](https://github.com/liana-banyan/mnemosyne/releases/tag/v0.1.19)
+- **Setup SHA-256:** `3291EA569643C2AAEC4BCD411266C9C413E5AD1A3FD2B819192D0DBE744904DC`
+- **Portable SHA-256:** `BAE6A5783C144A3A001A2B3AABBEB030949505508B433EAF990EE4450FEED386`
+- **Build:** v0.1.20+f86cca3 · [Release on GitHub](https://github.com/liana-banyan/mnemosyne/releases/tag/v0.1.20)
 
 ### v0.1.9 - What's new
 
@@ -169,4 +171,4 @@ CAI (Cooperative AI) is the engine. Mnemosyne™ ships with sixteen substrate co
 
 ---
 
-🌳📜⚔️🧠☕📦🌌 **FOR THE KEEP.** *(BP063 · v0.1.19 ship · Mnemosyne™ LIVE)*
+🌳📜⚔️🧠☕📦🌌 **FOR THE KEEP.** *(BP063 · v0.1.20 ship · Mnemosyne™ LIVE · launch-fix + SSPL)*

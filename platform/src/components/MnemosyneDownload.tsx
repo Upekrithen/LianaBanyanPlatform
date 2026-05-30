@@ -142,7 +142,7 @@ function MnemosyneHero({ scrolled }: { scrolled: boolean }) {
 
         {!scrolled && (
           <p style={{ fontSize: 10, color: '#475569', marginTop: 16 }}>
-            Free to use. Open source (AGPL). No subscription for the desktop app.
+            Free to use. Open source (SSPL · Pledge #2260). No subscription for the desktop app.
           </p>
         )}
       </div>
@@ -241,7 +241,7 @@ function TechnicalDetails() {
             <li><strong style={{ color: '#e2e8f0' }}>Pantheon personas</strong> — Six mining agents (Miners · Fates · Foragers · Pixies · Shadow Spiders · Sprites) process opted-in folders and write Tablets.</li>
             <li><strong style={{ color: '#e2e8f0' }}>Federation protocol</strong> — mDNS peer discovery + SHA-256 handshake on your local network. No relay server. Cooperative-class sovereignty.</li>
             <li><strong style={{ color: '#e2e8f0' }}>LB Frame overlay</strong> — Electron transparent always-on-top window. Zero pointer-capture in Fallback mode. Mode visible via color + icon + dash-pattern (8-dim accessibility spec).</li>
-            <li><strong style={{ color: '#e2e8f0' }}>Open source</strong> — AGPL-3.0. Cooperative Defensive Patent Pledge #2260 applies.</li>
+            <li><strong style={{ color: '#e2e8f0' }}>Open source</strong> — SSPL-1.0. Cooperative Defensive Patent Pledge #2260 applies.</li>
           </ul>
 
           <h3 style={{ fontSize: 13, fontWeight: 700, color: '#e2e8f0', marginTop: 20, marginBottom: 12 }}>System requirements</h3>

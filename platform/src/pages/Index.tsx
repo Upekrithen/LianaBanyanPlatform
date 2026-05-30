@@ -735,7 +735,7 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
   const foundationQuizzes = [
     {
       passage: "\"The platform margin is fixed at Cost + 20%. This cannot be changed by future leadership, investors, or market pressure. Ever.\"",
-      question: "What percentage does a creator keep on every transaction?",
+      question: "What percentage do Creators AND Workers keep on every transaction?",
       options: [
         { text: "70%", correct: false, route: null },
         { text: "83.3%", correct: true, route: "/discover" },
@@ -4107,7 +4107,7 @@ function PublicLandingView({ navigate, user }: { navigate: (path: string) => voi
 
           {/* ─── Invitation prose — B129/BP005 canon ─── */}
           <p style={{ color: '#a0aec0', fontSize: '0.85rem', lineHeight: 1.7, margin: '0 0 1rem' }}>
-            Liana Banyan is <strong style={{ color: '#e2e8f0' }}>free</strong> — fully featured, AGPL open-source,
+            Liana Banyan is <strong style={{ color: '#e2e8f0' }}>free</strong> — fully featured, SSPL open-source,
             no gating, no ads, no investors. The substrate is yours to use as-is.
             Want the cooperative library? That's Federation: <strong style={{ color: '#C8A951' }}>$5/year</strong> unlocks
             the shared network — member-curated resources, collaborative tools, and the full cooperative engine.
