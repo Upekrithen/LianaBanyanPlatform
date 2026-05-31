@@ -53,7 +53,7 @@ let n = 0;
 
 const IDENTITY_TOPICS = [
   { day: 1,  title: 'Cost + 20%',             content: 'Every platform has a margin. Ours is locked — permanently — at Cost + 20%. Not "up to." Not "starting at." Exactly 20% over actual cost, written into the operating agreement. The platform literally cannot raise its take.\n\nThat\'s not a promise. That\'s architecture.\n\nlianabanyan.com' },
-  { day: 2,  title: 'Creators AND Workers Keep 83.3%',    content: 'On a $500 transaction, Creators AND Workers keep $416.67. Not $325. Not $350. Four hundred sixteen dollars and sixty-seven cents.\n\n83.3%. Every time. Constitutionally locked. Because the people who create the value should keep the value.\n\n#LianaBanyan #CostPlus20' },
+  { day: 2,  title: 'Workers, Builders, and Creators Keep 83.3%',    content: 'On a $500 transaction, Workers, Builders, and Creators keep $416.67. Not $325. Not $350. Four hundred sixteen dollars and sixty-seven cents.\n\n83.3%. Every time. Constitutionally locked. Because the people who create the value should keep the value.\n\n#LianaBanyan #CostPlus20' },
   { day: 3,  title: '$5/Year Membership',      content: 'It costs $5 a year to join Liana Banyan. Start a business. Sell your work. Access 16 initiatives. Five dollars.\n\nNot $500. Not $50. Not free-with-ads. Five real dollars, because the cooperative belongs to its members, and membership has to mean something.\n\nlianabanyan.com/join' },
   { day: 4,  title: 'Three Currencies',        content: 'Credits = spending money (1:1 with USD)\nMarks = earned contribution power\nJoules = permanent record of value created\n\nNone of them convert to cash. None can be speculated on. A maker in Lagos and a maker in Louisville earn equivalent purchasing power for equivalent work. Not by charity. By math.' },
   { day: 5,  title: 'Cooperative Ownership',   content: 'When you contribute to Liana Banyan, you become an owner. Not a metaphorical owner. A real one — with governance weight, a voice in decisions, and a permanent record of your contribution on-chain.\n\nMedallions are non-tradeable. No speculation. Just proof that you showed up and built something.' },
@@ -86,7 +86,7 @@ const STREAM_1: SalvoPost[] = IDENTITY_TOPICS.map(t => ({
 
 const CUE_CARD_TOPICS: Array<{ day: number; slot: 'AM' | 'PM'; title: string; hook: string }> = [
   { day: 1,  slot: 'AM', title: 'The Margin Lock',         hook: 'Cost + 20%. Locked in the operating agreement. The platform literally cannot raise its take. [Cue Card]' },
-  { day: 1,  slot: 'PM', title: 'The 83.3% Promise',       hook: 'On $500, Creators AND Workers keep $416.67. Always. Here\'s the math. [Cue Card]' },
+  { day: 1,  slot: 'PM', title: 'The 83.3% Promise',       hook: 'On $500, Workers, Builders, and Creators keep $416.67. Always. Here\'s the math. [Cue Card]' },
   { day: 2,  slot: 'AM', title: '$5 to Start a Business',  hook: 'Five dollars. One membership. Start a business, sell your work, join 16 initiatives. [Cue Card]' },
   { day: 2,  slot: 'PM', title: 'Three Gears, No Cash-Out', hook: 'Credits, Marks, Joules — three currencies that can never be speculated on. [Cue Card]' },
   { day: 3,  slot: 'AM', title: 'Failure Is a Feature',    hook: 'Your failed attempt teaches the next person what not to do. No effort is wasted. [Cue Card]' },
@@ -102,7 +102,7 @@ const CUE_CARD_TOPICS: Array<{ day: number; slot: 'AM' | 'PM'; title: string; ho
   { day: 8,  slot: 'AM', title: 'Defense Klaus',           hook: 'Self-defense products and legal defense for people who can\'t afford it. "For Someone You Love." [Cue Card]' },
   { day: 8,  slot: 'PM', title: 'Let\'s Make Dinner',      hook: 'Standard: $5/serving. Convenience: $10+20%. Charitable: $0 — funded by the other tiers. [Cue Card]' },
   { day: 9,  slot: 'AM', title: 'VSL Microloans',          hook: '$50 microloans backed by community vouchers. Zero-to-five percent interest. No collateral. [Cue Card]' },
-  { day: 9,  slot: 'PM', title: 'JukeBox',                 hook: 'Every use pays. The artist decides the terms. Creators AND Workers keep 83.3%. No label skimming. [Cue Card]' },
+  { day: 9,  slot: 'PM', title: 'JukeBox',                 hook: 'Every use pays. The artist decides the terms. Workers, Builders, and Creators keep 83.3%. No label skimming. [Cue Card]' },
   { day: 10, slot: 'AM', title: 'Health Accords',          hook: 'Affordable prescriptions modeled on Cost Plus Drugs. Because insulin shouldn\'t cost a mortgage payment. [Cue Card]' },
   { day: 10, slot: 'PM', title: 'Didasko Education',       hook: 'Education access. Not education-as-a-service. Not student-loan-funded-extraction. Access. [Cue Card]' },
   { day: 11, slot: 'AM', title: 'Political Expedition',    hook: 'What if your political voice had economic weight? Not voting. Economic expression. [Cue Card]' },
@@ -132,11 +132,11 @@ const STREAM_2: SalvoPost[] = CUE_CARD_TOPICS.map(t => ({
 // ═══════════════════════════════════════════════════════════════════════════
 
 const ACADEMIC_TAGS: Array<{ day: number; name: string; handle: string; angle: string }> = [
-  { day: 1, name: 'Trebor Scholz',      handle: '@TreborS',        angle: 'Your work on platform cooperativism laid the groundwork. We built the architecture. Cost + 20%, locked. Creators AND Workers keep 83.3%. 2,270 innovations protecting the model. The cooperative platform you\'ve been writing about — it exists now.' },
+  { day: 1, name: 'Trebor Scholz',      handle: '@TreborS',        angle: 'Your work on platform cooperativism laid the groundwork. We built the architecture. Cost + 20%, locked. Workers, Builders, and Creators keep 83.3%. 2,270 innovations protecting the model. The cooperative platform you\'ve been writing about — it exists now.' },
   { day: 2, name: 'Nathan Schneider',   handle: '@ntnsndr',        angle: 'Your research on cooperative governance at CU Boulder asks: can cooperatives scale digitally? We built the answer. Three-gear currency. Medallion governance. 16 initiatives funded by architecture, not pledges. The math is at cephas.lianabanyan.com.' },
   { day: 3, name: 'Cory Doctorow',      handle: '@doctorow',       angle: 'You coined "enshittification." We built the antidote. The margin is locked in the operating agreement — not a settings panel. You literally cannot enshittify Liana Banyan without rewriting the corporate charter. Structurally impossible by design.' },
   { day: 4, name: 'Yochai Benkler',     handle: '@ybenkler',       angle: 'Commons-based peer production meets cooperative commerce. Your Wealth of Networks thesis — what if the infrastructure existed to make it economically self-sustaining? 2,270 innovations. Cost + 20%. The commons has an engine now.' },
-  { day: 5, name: 'Kate Raworth',       handle: '@KateRaworth',    angle: 'Your Doughnut Economics asks: what does a thriving economy look like within planetary and social boundaries? We built it for commerce. Cost + 20%. Creators AND Workers keep 83.3%. 16 initiatives from food security to healthcare to education. The doughnut has a platform.' },
+  { day: 5, name: 'Kate Raworth',       handle: '@KateRaworth',    angle: 'Your Doughnut Economics asks: what does a thriving economy look like within planetary and social boundaries? We built it for commerce. Cost + 20%. Workers, Builders, and Creators keep 83.3%. 16 initiatives from food security to healthcare to education. The doughnut has a platform.' },
   { day: 6, name: 'Douglas Rushkoff',   handle: '@Rushkoff',       angle: 'You asked "is the internet good for us?" and the answer keeps getting worse. But what if the platform couldn\'t extract? Cost + 20%, locked. No VC. No IPO pathway. The cooperative owns itself. Team Human has a marketplace now.' },
   { day: 7, name: 'Shoshana Zuboff',    handle: '@ShoshanaZuboff', angle: 'Surveillance capitalism requires extraction. Remove extraction — architecturally, constitutionally — and the surveillance business model collapses. No data harvesting. No attention brokering. Cost + 20%. The alternative to surveillance capitalism is cooperative commerce.' },
 ];
@@ -167,8 +167,8 @@ const MEDIUM_ARTICLES: Array<{ day: number; title: string; subtitle: string; tea
   {
     day: 4,
     title: 'The 83.3% Platform: Why Cost+20% Changes Everything',
-    subtitle: 'On every platform, creators lose 30-50% to fees. We take Cost+20% — Creators AND Workers keep 83.3%.',
-    teaser: 'Amazon takes 35%. Etsy takes 30%. Uber takes 40%+. Every platform in existence raises fees once users are locked in.\n\nWhat if the margin was locked — permanently — in the operating agreement? What if the platform was structurally incapable of raising its take?\n\nThat\'s Liana Banyan. Cost + 20%. Creators AND Workers keep 83.3%. On $500, that\'s $416.67.\n\nFull article: [link]\n\n#CooperativeEconomics',
+    subtitle: 'On every platform, creators lose 30-50% to fees. We take Cost+20% — Workers, Builders, and Creators keep 83.3%.',
+    teaser: 'Amazon takes 35%. Etsy takes 30%. Uber takes 40%+. Every platform in existence raises fees once users are locked in.\n\nWhat if the margin was locked — permanently — in the operating agreement? What if the platform was structurally incapable of raising its take?\n\nThat\'s Liana Banyan. Cost + 20%. Workers, Builders, and Creators keep 83.3%. On $500, that\'s $416.67.\n\nFull article: [link]\n\n#CooperativeEconomics',
   },
   {
     day: 7,
@@ -212,7 +212,7 @@ So I built Liana Banyan with my family's savings. $5,000 to seed the first 300 m
 
 The team? Four AI agents: Bishop writes letters and articles. Knight builds code and deploys. Rook extracts innovations and files patents. Pawn runs compliance and QA. Together we've produced 2,270 documented innovations and filed 20 provisional patent applications with ~2,700 formal claims.
 
-This isn't a startup. It's a cooperative. The people who build it own it. And the economics are locked — Cost + 20%, Creators AND Workers keep 83.3%, permanently.
+This isn't a startup. It's a cooperative. The people who build it own it. And the economics are locked — Cost + 20%, Workers, Builders, and Creators keep 83.3%, permanently.
 
 $5/year to join. No Plan B.
 
@@ -227,7 +227,7 @@ Amazon charges sellers 35%+ in fees. Etsy takes 30%. Uber takes 40%+ from driver
 
 At Liana Banyan, the margin is locked in the operating agreement. Not a settings panel. Not a board decision. The corporate charter. To change it, you'd have to rewrite the founding documents — and our governance structure makes that structurally impossible without a cooperative-wide supermajority.
 
-On a $500 sale: Creators AND Workers keep $416.67. The platform takes $83.33. That $83.33 covers operating costs plus a 20% margin — and that margin funds 16 charitable initiatives automatically.
+On a $500 sale: Workers, Builders, and Creators keep $416.67. The platform takes $83.33. That $83.33 covers operating costs plus a 20% margin — and that margin funds 16 charitable initiatives automatically.
 
 The math works because we don't have investors demanding 10× returns. No VC. No board seats sold. No IPO pathway. The cooperative serves its members because that's literally the only thing it's designed to do.
 
