@@ -40,7 +40,7 @@ Dear Ms. Danes,
 
 There is a moment in *Stardust* — the one that stays — when Yvaine understands that the star who falls without choosing direction is just a falling star. The star who chooses direction becomes something else entirely. She becomes herself. {{< audio-play src="/audio/WhatDoStarsDOShine.m4a" label="Hear it from the Founder" >}}
 
-I am Jonathan Jones — U.S. Army National Guard veteran, father of eight, and Founder of Liana Banyan Corporation, a Wyoming C-Corp building cooperative commerce infrastructure for the people who actually do the work. We have 2,270 documented innovations, 15 provisional patent applications protecting more than 2,500 formal claims, 36 production systems running, and a civic-architecture substrate designed around a single structural premise: that people, given the actual tools to choose direction, choose better than any categorical assignment ever could.
+I am Jonathan Jones — U.S. Army National Guard veteran, father of eight, and Founder of Liana Banyan Corporation, a Wyoming C-Corp building cooperative commerce infrastructure for the people who actually do the work. We have 2,270 documented innovations, 20 provisional patent applications protecting approximately 2,700 formal claims, 36 production systems running, and a civic-architecture substrate designed around a single structural premise: that people, given the actual tools to choose direction, choose better than any categorical assignment ever could.
 
 This letter is not a pitch. It is a demonstration. We built something that solves the cooperative-infrastructure problem in at least three different ways simultaneously. I want you to see it — and I want to tell you why the Yvaine arc is not an analogy here. It is a worked structural example.
 
@@ -169,7 +169,7 @@ There is a walkthrough at [LianaBanyan.com/RedCarpet](https://lianabanyan.com/Re
 
 The thing that makes a falling star different from a star that chose to fall is the same thing that makes a cooperative different from a company that calls itself cooperative: one assigns the direction; the other enables the choosing.
 
-We already built the substrate that enables the choosing. It runs 36 production systems. It costs $5 a year to join. It has filed 15 provisional patents protecting 2,500+ innovations. It solved three Millennium Prize Problem structures for $0.22 in API spend. It is owned by its members.
+We already built the substrate that enables the choosing. It runs 36 production systems. It costs $5 a year to join. It has filed 20 provisional patents covering 2,270 innovations and ~2,700 formal claims. It solved three Millennium Prize Problem structures for $0.22 in API spend. It is owned by its members.
 
 Not Left, Not Right; Forward.
 

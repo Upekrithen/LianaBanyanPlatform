@@ -138,12 +138,12 @@ My name is Jonathan Jones. I'm a U.S. Army National Guard veteran (Infantry 11B,
 
 Liana Banyan is what came from forty years of thinking about that. A cooperative commerce platform where:
 
-→ Creators keep 83.3% of every transaction
+→ Creators AND Workers keep 83.3% of every transaction
 → The margin is constitutionally locked at Cost + 20%
 → 16 charitable initiatives are funded by architecture, not pledges
 → Every member can start a business for $5
 
-The platform is live. The architecture is backed by 2,097 patent claims. The operating agreement locks the economics.
+The platform is live. The architecture is backed by 2,700 patent claims. The operating agreement locks the economics.
 
 I'm looking for 300 founding members who are tired of eking their way through life.
 
@@ -182,9 +182,9 @@ Cross-link: Full article from BISHOP_DROPZONE/ARTICLE_01_EKING_DRAFT.md`,
     title: "Day 1 — Reddit r/Entrepreneur: 9 Years Building",
     content: `I spent 9 years building a cooperative commerce platform. Here's why I'm giving the IP away.
 
-I'm a 53-year-old U.S. Army National Guard veteran and father of eight. For the last 9 years I've been building Liana Banyan — a cooperative commerce platform where creators keep 83.3% of every transaction, the margin is constitutionally locked, and 16 charitable initiatives are funded by the architecture itself.
+I'm a 53-year-old U.S. Army National Guard veteran and father of eight. For the last 9 years I've been building Liana Banyan — a cooperative commerce platform where Creators AND Workers keep 83.3% of every transaction, the margin is constitutionally locked, and 16 charitable initiatives are funded by the architecture itself.
 
-I put 2,097 patent claims into this. But here's the thing — about 80% of that IP goes into the cooperative. Not because I'm generous. Because hoarding it would make me the exact kind of landlord I'm trying to replace.
+I put 2,700 patent claims into this. But here's the thing — about 80% of that IP goes into the cooperative. Not because I'm generous. Because hoarding it would make me the exact kind of landlord I'm trying to replace.
 
 The cost to join: $5/year. The economic model: Cost + 20%, locked in the operating agreement. The goal: 300 founding members who want to build something that can't be enshittified.
 
@@ -343,17 +343,17 @@ lianabanyan.com/join`,
     platform: "hackernews",
     postType: "single",
     title: "Day 3 — Show HN: Cooperative Commerce Platform",
-    content: `Show HN: Liana Banyan \u2013 Cooperative commerce platform where creators keep 83.3%
+    content: `Show HN: Liana Banyan – Cooperative commerce platform where Creators AND Workers keep 83.3%
 
 Hi HN. I'm Jonathan, a U.S. Army National Guard vet and 21-year IT developer. I spent 9 years building a cooperative commerce platform.
 
 Tech stack: Supabase (Postgres + RLS), React/Vite, Firebase multi-portal hosting, three-gear currency system (Credits/Marks/Joules), non-tradeable medallion governance on-chain.
 
-The economic model: Cost + 20%, constitutionally locked. Creators keep 83.3%. The 16.7% margin funds 16 charitable initiatives by architecture, not pledge.
+The economic model: Cost + 20%, constitutionally locked. Creators AND Workers keep 83.3%. The 16.7% margin funds 16 charitable initiatives by architecture, not pledge.
 
 What makes it different: The margin is in the operating agreement, not a settings panel. You literally cannot enshittify it without rewriting the corporate charter.
 
-2,097 patent claims (80% contributed to the cooperative). Live at lianabanyan.com.
+2,700 patent claims (80% contributed to the cooperative). Live at lianabanyan.com.
 
 Looking for 300 founding members at $5/year to stress-test the model.
 
@@ -459,7 +459,7 @@ That's what @LianaBanyan is. A different game.`,
 Our game:
 → Lock the margin on Day 1
 → Make extraction architecturally impossible
-→ Let creators keep 83.3% forever
+→ Let Creators AND Workers keep 83.3% forever
 → Fund 16 initiatives automatically`,
 
       `Three-Gear Currency:
@@ -473,8 +473,7 @@ Not by charity. By math.`,
 
       `Because in OUR Castle, we build more arrows instead of escape tunnels.
 
-// TIME-CAPSULE PIN — value reflects pre-Prov 16/17 snapshot (BP030); do not migrate. Annotated BP031 Bushel 64.
-Most platforms build escape hatches for the people who run them. We built 2,128 innovations — and 80% of the IP goes into the cooperative.
+Most platforms build escape hatches for the people who run them. We built 2,270 innovations — and 80% of the IP goes into the cooperative.
 
 That's not idealism. That's architecture.
 
