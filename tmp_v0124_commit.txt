@@ -1,0 +1,15 @@
+feat(mnemosyne): v0.1.24 installer + Cephas download page v0.1.24
+
+- Build: MnemosyneC-Setup-0.1.24.exe (76.7 MB, SHA-256 9308DB5FF63034DF0E2365B7083C511AF5A7CE0CFD518701744AFA4BDC0C9475)
+- GitHub release v0.1.24 live: github.com/liana-banyan/mnemosyne/releases/tag/v0.1.24
+- Cephas download page: bump download href + strapline + SHA-256 + GitHub link to v0.1.24
+  Also commits BP067 download page v2 rebuild (prior session was unstaged)
+- Fix scripts/prepare-floor-model.mjs: copy only gemma2:2b blobs not entire ~/.ollama/models
+  Old script would have bundled all 56 GB of other models on this machine
+  New script: parse manifest, copy only referenced blob digests by SHA256
+- Gemma variant: gemma2:2b (Google, non-Meta, Founder-locked, FLOOR_MODEL in src/shared/floor-model.ts)
+  First run pulls 1.6 GB once via transparent install screen (ensureFloorModel)
+  Bundled model path available via npm run prepare:floor-model for future builds
+- BP067 spec compliant: one-spine first-run, transparent install, no dead-ends
+
+Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
