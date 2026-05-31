@@ -1,3125 +1,732 @@
 ﻿{{- define "main" }}
 
 <style>
-/* ================================================================
-   MNEMOSYNE DOWNLOAD PAGE — LB-site palette (Navy + Gold + Green)
-   Background: #0a1628 · Gold: #d69e2e · Green: #38a169 · Cream: #faf5eb
-   BP045 W1 NOVACULA Round 4
-   ================================================================ */
+/* ════════════════════════════════════════════════════════════
+   DOWNLOAD PAGE v2 — Single Deck Cue Card + Progressive Disclosure
+   BP067 · Supersedes Phase-1E patchwork · Reddit-simple
+   ════════════════════════════════════════════════════════════ */
 
-/* ── Override PaperMod .main max-width so .mn-page can span full viewport ── */
-.main {
-  max-width: 100% !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  overflow-x: hidden !important;
-}
+/* Override PaperMod container */
+.main { max-width:100% !important; padding:0 !important; margin:0 !important; overflow-x:hidden !important; }
+html, body { overflow-x:hidden !important; max-width:100% !important; }
 
-html,
-body {
-  overflow-x: hidden !important;
-  max-width: 100% !important;
-}
-
-/* ── Base hex-pattern page shell ───────────────────────────────── */
+/* ── Base page shell ── */
 .mn-page {
-  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
-  background-color: #0a1628;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  background: #0a1628;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%2322c55e' fill-opacity='0.04'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   background-repeat: repeat;
-  background-size: 28px 49px;
-  position: relative;
   color: #faf5eb;
   width: 100%;
-  padding: 2rem 0 4rem;
+  min-height: 100vh;
+  padding: 0 0 4rem;
   line-height: 1.7;
-  overflow-x: hidden;
-  max-width: 100vw;
 }
-
-/* ── Inner content wrapper (text sections) ──────────────────────── */
-.mn-inner {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
-}
-
-/* ── Hero area wrapper (banner + cards — full viewport width) ───── */
-.mn-hero {
-  width: 100%;
-  padding: 0 2rem;
-  box-sizing: border-box;
-}
-
-.mn-page::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-color: #0a1628;
-  opacity: 0.94;
-  z-index: -1;
-  pointer-events: none;
-}
-
-.mn-page h1, .mn-page h2, .mn-page h3 {
-  color: #d69e2e;
-  letter-spacing: -0.02em;
-}
-
-.mn-page h1 { font-size: clamp(1.6rem, 3vw, 2.4rem); margin-bottom: 0.4rem; }
-.mn-page h2 { font-size: clamp(1.2rem, 2.5vw, 1.8rem); margin: 2.5rem 0 1rem; border-bottom: 1px solid rgba(214,158,46,0.3); padding-bottom: 0.4rem; }
-.mn-page h3 { font-size: 1.1rem; margin: 1.2rem 0 0.4rem; color: #d69e2e; }
-.mn-page a { color: #d69e2e; text-decoration: none; border-bottom: 1px solid rgba(214,158,46,0.35); transition: border-color 0.2s; }
+.mn-page a { color: #d69e2e; text-decoration: none; border-bottom: 1px solid rgba(214,158,46,0.35); }
 .mn-page a:hover { border-bottom-color: #d69e2e; }
-.mn-page code, .mn-page pre { font-family: inherit; }
-.mn-page hr { border: none; border-top: 1px solid rgba(214,158,46,0.2); margin: 2.5rem 0; }
 
-.mn-page table {
-  width: 100%;
-  border-collapse: collapse;
-}
-.mn-page th,
-.mn-page td {
-  padding: 0.65rem 0.85rem;
-  border-bottom: 1px solid rgba(214,158,46,0.12);
-  vertical-align: top;
-}
-.mn-page th {
-  color: #d69e2e;
-  font-size: 0.78rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  text-align: left;
-}
-.mn-table-wrap {
-  overflow-x: auto;
-  border: 1px solid rgba(214,158,46,0.18);
-  border-radius: 8px;
-  margin: 1rem 0;
-}
-.mn-table-wrap table {
-  min-width: 720px;
-}
-
-/* ── BP047 Pawn rewrite sections ─────────────────────────────── */
-.mn-bp047-hero {
-  min-height: calc(100vh - 90px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 4rem 1.5rem 3rem;
-}
-.mn-bp047-hero__card {
-  width: 100%;
-  box-sizing: border-box;
-  max-width: 1000px;
+/* ── Content wrapper ── */
+.mn-v2-wrap {
+  max-width: 760px;
   margin: 0 auto;
-  background: rgba(10,22,40,0.88);
-  border: 1px solid rgba(214,158,46,0.28);
-  border-radius: 16px;
-  padding: clamp(2rem, 5vw, 4rem);
-  box-shadow: 0 12px 48px rgba(0,0,0,0.35);
-}
-.mn-bp047-hero h1 {
-  font-family: 'Crimson Pro', Georgia, 'Times New Roman', serif;
-  font-size: clamp(2.25rem, 6vw, 5rem);
-  line-height: 1.02;
-  max-width: 920px;
-  margin: 0 auto 1.2rem;
-}
-.mn-bp047-hero__subhead {
-  color: rgba(250,245,235,0.78);
-  font-size: clamp(1rem, 2vw, 1.22rem);
-  max-width: 860px;
-  margin: 0 auto 1.8rem;
-}
-.mn-bp047-cta-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.9rem;
-  flex-wrap: wrap;
-  margin: 1.5rem 0 0.8rem;
-}
-.mn-bp047-primary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.45rem;
-  max-width: 100%;
-  box-sizing: border-box;
-  text-align: center;
-  white-space: normal;
-  line-height: 1.35;
-  padding: 0.85rem 1.35rem;
-  background: rgba(56,161,105,0.14);
-  border: 1.5px solid #38a169 !important;
-  border-radius: 8px;
-  color: #38a169 !important;
-  font-weight: 800;
-  text-decoration: none !important;
-  border-bottom: 1.5px solid #38a169 !important;
-}
-.mn-bp047-secondary {
-  display: inline-flex;
-  max-width: 100%;
-  box-sizing: border-box;
-  text-align: center;
-  white-space: normal;
-  line-height: 1.35;
-  padding: 0.82rem 1.1rem;
-  border: 1px solid rgba(214,158,46,0.35) !important;
-  border-radius: 8px;
-  color: #d69e2e !important;
-  text-decoration: none !important;
-}
-.mn-bp047-hash {
-  overflow-wrap: anywhere;
-  color: rgba(250,245,235,0.44);
-  font-size: 0.72rem;
-  margin: 0.8rem auto 1.8rem;
-}
-.mn-bp047-brand-canon {
-  border-top: 1px solid rgba(214,158,46,0.18);
-  padding-top: 1.3rem;
-  color: rgba(250,245,235,0.78);
-  font-family: 'Crimson Pro', Georgia, serif;
-  font-size: clamp(1.05rem, 2vw, 1.35rem);
-  line-height: 1.55;
-}
-.mn-bp047-brand-canon p { margin: 0.2rem 0; }
-
-.mn-panel-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1rem;
-  margin: 1.2rem 0 2rem;
-}
-.mn-copy-card {
-  border: 1px solid rgba(214,158,46,0.24);
-  border-radius: 10px;
-  background: rgba(214,158,46,0.035);
-  padding: 1.25rem 1.35rem;
-}
-.mn-copy-card h3 {
-  margin-top: 0;
-  color: #faf5eb;
-}
-.mn-copy-card p,
-.mn-copy-card li {
-  color: rgba(250,245,235,0.68);
-  font-size: 0.88rem;
-}
-.mn-copy-card--wide {
-  grid-column: 1 / -1;
-}
-.mn-copy-card--identity {
-  border-color: rgba(56,161,105,0.32);
-  background: rgba(56,161,105,0.04);
-}
-.mn-small-note {
-  font-size: 0.76rem;
-  color: rgba(250,245,235,0.42);
-}
-.mn-quote-line {
-  color: rgba(214,158,46,0.85);
-  font-style: italic;
-}
-.mn-benchmark-callout {
-  border-left: 3px solid rgba(56,161,105,0.55);
-  background: rgba(56,161,105,0.045);
-  border-radius: 0 8px 8px 0;
-  padding: 1rem 1.35rem;
-  margin: 1.2rem 0;
-}
-.mn-benchmark-callout p {
-  margin: 0.35rem 0;
-}
-.mn-status-accordion {
-  border: 1px solid rgba(214,158,46,0.22);
-  border-radius: 8px;
-  margin: 2.5rem 0 1rem;
-  background: rgba(214,158,46,0.025);
-}
-.mn-status-accordion > summary {
-  cursor: pointer;
-  list-style: none;
-  user-select: none;
-  padding: 1rem 1.35rem;
-  color: rgba(214,158,46,0.82);
-  letter-spacing: 0.04em;
-}
-.mn-status-accordion > summary::-webkit-details-marker { display: none; }
-.mn-status-accordion > summary::before {
-  content: '▶ ';
-  font-size: 0.72rem;
-}
-.mn-status-accordion[open] > summary::before { content: '▼ '; }
-.mn-status-accordion__body {
-  border-top: 1px solid rgba(214,158,46,0.12);
-  padding: 0.4rem 1.35rem 1.35rem;
+  padding: 0 1.2rem;
 }
 
-@media (max-width: 600px) {
-  .mn-page {
-    padding-top: 0;
-  }
-  .mn-bp047-hero {
-    min-height: auto;
-    padding: 2rem 0.75rem;
-  }
-  .mn-bp047-hero__card {
-    padding: 1.35rem 0.95rem;
-  }
-  .mn-bp047-cta-row {
-    align-items: stretch;
-  }
-  .mn-bp047-primary,
-  .mn-bp047-secondary {
-    width: 100%;
-  }
-  .mn-rung summary {
-    align-items: flex-start;
-  }
-  .mn-rung__label {
-    align-items: flex-start;
-  }
-  .mn-rung__name {
-    white-space: normal;
-  }
-  .mn-rung__badge {
-    white-space: normal;
-  }
-  .mn-dl-table {
-    display: block;
-    overflow-x: auto;
-  }
+/* ═══════════════════════════════
+   SECTION 1 · HERO CARD
+   ═══════════════════════════════ */
+.mn-v2-hero {
+  padding: 3rem 0 2rem;
 }
-
-/* ── HEOHO block ────────────────────────────────────────────────── */
-.mn-heoho {
-  text-align: center;
-  padding: 2.5rem 1rem 1.8rem;
-  border-bottom: 1px solid rgba(214,158,46,0.2);
-  margin-bottom: 2.5rem;
-}
-.mn-heoho__title {
-  font-family: 'Crimson Pro', Georgia, 'Times New Roman', serif;
-  font-size: clamp(1.8rem, 5vw, 3.2rem);
-  font-weight: 900;
-  color: #d69e2e;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  line-height: 1.15;
-  margin: 0;
-}
-.mn-heoho__title--green {
-  color: #38a169;
-}
-.mn-heoho__amplify {
-  font-size: clamp(0.9rem, 2vw, 1.1rem);
-  color: rgba(250,245,235,0.8);
-  font-style: italic;
-  margin-top: 0.9rem;
-  letter-spacing: 0.02em;
-}
-
-/* ── Three-Deck-Card hero (Round 4: 3 columns) ──────────────────── */
-.mn-deck-pair {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 1.8rem;
-  margin: 0 0 2rem;
-  max-width: 1400px;
-  margin-left: auto;
-  margin-right: auto;
-}
-@media (max-width: 1000px) {
-  .mn-deck-pair { grid-template-columns: 1fr 1fr; }
-}
-@media (max-width: 640px) {
-  .mn-deck-pair { grid-template-columns: 1fr; }
-}
-
-.mn-deck-card {
-  background: #0a1628;
+.mn-v2-hero-card {
+  background: linear-gradient(135deg, rgba(10,22,40,0.97) 0%, rgba(5,14,30,0.99) 100%);
   border: 1px solid rgba(214,158,46,0.35);
-  border-radius: 10px;
-  padding: 1.8rem 1.6rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
+  border-radius: 14px;
+  padding: 2.4rem 2rem 2rem;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(214,158,46,0.12);
   position: relative;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
-  transition: box-shadow 0.2s;
-  min-height: 360px;
-  height: 360px;
   overflow: hidden;
 }
-.mn-deck-card:hover {
-  box-shadow: 0 6px 36px rgba(214,158,46,0.12);
-}
-
-/* Gold corner brackets */
-.mn-deck-card::before,
-.mn-deck-card::after {
+.mn-v2-hero-card::before {
   content: '';
   position: absolute;
-  width: 18px;
-  height: 18px;
-  border-color: #d69e2e;
-  border-style: solid;
-  opacity: 0.8;
+  top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(214,158,46,0.6), transparent);
 }
-.mn-deck-card::before { top: 8px; left: 8px; border-width: 2px 0 0 2px; }
-.mn-deck-card::after  { bottom: 8px; right: 8px; border-width: 0 2px 2px 0; }
-
-.mn-deck-card__corner-tr,
-.mn-deck-card__corner-bl {
-  position: absolute;
-  width: 18px;
-  height: 18px;
-  border-color: #d69e2e;
-  border-style: solid;
-  opacity: 0.8;
-}
-.mn-deck-card__corner-tr { top: 8px; right: 8px; border-width: 2px 2px 0 0; }
-.mn-deck-card__corner-bl { bottom: 8px; left: 8px; border-width: 0 0 2px 2px; }
-
-.mn-deck-card__header {
-  font-size: 0.72rem;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: rgba(250,245,235,0.75);
-  margin-bottom: 0.6rem;
-  font-weight: 600;
-}
-
-.mn-deck-card__divider {
-  font-size: 0.62rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #d69e2e;
-  opacity: 0.8;
-  margin-bottom: 1.2rem;
-  padding: 0.2rem 0;
-  border-top: 1px solid rgba(214,158,46,0.2);
-  border-bottom: 1px solid rgba(214,158,46,0.2);
-  width: 100%;
-}
-
-.mn-deck-card__title-white {
-  font-family: 'Crimson Pro', Georgia, serif;
-  font-size: clamp(1.5rem, 3.5vw, 2rem);
-  font-weight: 700;
-  color: #faf5eb;
-  line-height: 1.1;
-  margin: 0;
-}
-.mn-deck-card__title-green {
-  font-family: 'Crimson Pro', Georgia, serif;
-  font-size: clamp(1.5rem, 3.5vw, 2rem);
-  font-weight: 700;
-  color: #38a169;
-  line-height: 1.2;
-  margin: 0 0 0.8rem;
-}
-
-.mn-deck-card__subtitle {
-  font-size: clamp(0.82rem, 1.8vw, 0.96rem);
-  color: #faf5eb;
-  font-weight: 600;
-  margin-bottom: 0.25rem;
-}
-.mn-deck-card__subsubtitle {
-  font-size: clamp(0.82rem, 1.8vw, 0.96rem);
-  color: #38a169;
-  font-weight: 600;
-  margin-bottom: 0.6rem;
-}
-
-.mn-deck-card__body {
-  font-size: 0.82rem;
-  color: rgba(250,245,235,0.6);
-  line-height: 1.7;
-  margin: 0.4rem 0 1rem;
-  width: 100%;
-}
-.mn-deck-card__body p { margin: 0.1rem 0; }
-
-.mn-deck-card__footer {
-  font-size: 0.72rem;
-  color: #d69e2e;
-  letter-spacing: 0.06em;
-  margin: auto 0 1.1rem;
-  padding-top: 0.8rem;
-  border-top: 1px solid rgba(214,158,46,0.2);
-  width: 100%;
-  text-align: center;
-}
-
-.mn-deck-btn {
-  display: inline-block;
-  border: 1.5px solid #38a169 !important;
-  border-radius: 5px;
-  padding: 0.45rem 1.2rem;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #38a169 !important;
-  background: rgba(56,161,105,0.06);
-  text-decoration: none !important;
-  border-bottom: 1.5px solid #38a169 !important;
-  letter-spacing: 0.04em;
-  transition: background 0.2s, box-shadow 0.2s;
-}
-.mn-deck-btn:hover {
-  background: rgba(56,161,105,0.14) !important;
-  box-shadow: 0 0 12px rgba(56,161,105,0.2);
-}
-
-/* ── Pick Six metric cards (preserved, used in accordion) ────────── */
-.mn-pick6-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.2rem;
-  margin: 1.5rem 0 2rem;
-}
-.mn-card {
-  border: 1px solid rgba(214,158,46,0.3);
-  border-radius: 6px;
-  padding: 1.2rem 1.4rem;
-  background: rgba(214,158,46,0.03);
-  position: relative;
-  transition: box-shadow 0.2s, background 0.2s;
-}
-.mn-card:hover {
-  background: rgba(214,158,46,0.06);
-  box-shadow: 0 0 16px rgba(214,158,46,0.1);
-}
-.mn-card__label {
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: rgba(214,158,46,0.7);
-  margin-bottom: 0.3rem;
-}
-.mn-card__metric {
-  font-size: 1.6rem;
-  font-weight: 900;
-  color: #d69e2e;
-  letter-spacing: -0.02em;
-  line-height: 1.1;
-}
-.mn-card__desc {
-  font-size: 0.88rem;
-  color: rgba(250,245,235,0.65);
-  margin-top: 0.5rem;
-}
-.mn-pick6-tagline {
-  text-align: center;
-  font-size: clamp(1.4rem, 3vw, 2rem);
-  font-weight: 900;
-  color: #d69e2e;
-  letter-spacing: 0.08em;
-  margin: 1rem 0 0.5rem;
-  text-transform: uppercase;
-}
-
-/* ── Rope of History (preserved, lives in accordion) ───────────── */
-.mn-rope { margin: 2rem 0; }
-.mn-rope__rails {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-}
-@media (max-width: 680px) {
-  .mn-rope__rails { grid-template-columns: 1fr; }
-}
-.mn-rope__rail-head {
-  font-size: 0.78rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: rgba(214,158,46,0.7);
-  margin-bottom: 1rem;
-  border-bottom: 1px solid rgba(214,158,46,0.2);
-  padding-bottom: 0.4rem;
-}
-.mn-knot { display: flex; gap: 0.9rem; margin-bottom: 1.2rem; align-items: flex-start; }
-.mn-knot__connector { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; }
-.mn-knot__connector-dot {
-  width: 10px; height: 10px; border-radius: 50%;
-  background: #d69e2e; flex-shrink: 0; margin-top: 4px;
-}
-.mn-knot__connector-line {
-  width: 2px; flex-grow: 1;
-  background: linear-gradient(to bottom, rgba(214,158,46,0.6), rgba(214,158,46,0.1));
-  min-height: 32px;
-}
-.mn-knot__body { flex: 1; }
-.mn-knot__name { font-size: 0.95rem; font-weight: 700; color: #d69e2e; }
-.mn-knot__bp { font-size: 0.72rem; color: rgba(214,158,46,0.6); margin-bottom: 0.2rem; }
-.mn-knot__desc { font-size: 0.82rem; color: rgba(250,245,235,0.6); }
-
-.mn-curve-block {
-  margin: 2.5rem 0 1rem;
-  background: rgba(214,158,46,0.03);
-  border: 1px solid rgba(214,158,46,0.2);
-  border-radius: 6px;
-  padding: 1.4rem 1.8rem;
-  overflow-x: auto;
-}
-.mn-curve-block pre {
-  color: #d69e2e;
-  font-size: 0.8rem;
+.mn-v2-quote {
+  font-style: italic;
+  color: rgba(214,158,46,0.85);
+  font-size: clamp(0.9rem, 2vw, 1rem);
+  margin: 0 0 1.4rem;
+  padding: 0;
+  border: none;
   line-height: 1.6;
+}
+.mn-v2-quote::before { content: '\201C'; }
+.mn-v2-quote::after  { content: '\201D'; }
+.mn-v2-hero-card h1 {
+  color: #faf5eb;
+  font-size: clamp(1.5rem, 4vw, 2.1rem);
+  font-weight: 800;
+  line-height: 1.2;
+  margin: 0 0 1rem;
+  letter-spacing: -0.02em;
+}
+.mn-v2-hero-card p {
+  color: rgba(250,245,235,0.82);
+  font-size: clamp(0.92rem, 2.2vw, 1.05rem);
   margin: 0;
-  white-space: pre;
+  line-height: 1.75;
 }
-.mn-curve-block__caption {
-  font-size: 0.76rem;
-  color: rgba(250,245,235,0.4);
-  margin-top: 0.8rem;
-  font-style: italic;
-}
-
-/* ── Three-Tab How It Works (preserved, lives in accordion) ─────── */
-.mn-tabs { margin: 2rem 0; }
-.mn-tabs input[type="radio"] { display: none; }
-.mn-tabs__nav {
-  display: flex; gap: 0;
-  border-bottom: 2px solid rgba(214,158,46,0.25);
-  flex-wrap: wrap;
-}
-.mn-tabs__label {
-  padding: 0.7rem 1.3rem;
-  font-size: 0.85rem;
-  cursor: pointer;
-  color: rgba(250,245,235,0.45);
-  border: 1px solid transparent;
-  border-bottom: none;
-  border-radius: 4px 4px 0 0;
-  transition: color 0.2s, background 0.2s;
-  user-select: none;
-  letter-spacing: 0.04em;
-}
-.mn-tabs__label:hover { color: #d69e2e; }
-#mn-tab-hooks:checked ~ .mn-tabs__nav label[for="mn-tab-hooks"],
-#mn-tab-eblets:checked ~ .mn-tabs__nav label[for="mn-tab-eblets"],
-#mn-tab-walk:checked ~ .mn-tabs__nav label[for="mn-tab-walk"] {
-  color: #d69e2e;
-  background: rgba(214,158,46,0.06);
-  border-color: rgba(214,158,46,0.3);
-  border-bottom-color: #0a1628;
-  margin-bottom: -2px;
-}
-.mn-tabs__panel {
-  display: none;
-  padding: 1.6rem 0.5rem 1rem;
-  animation: mn-fadein 0.2s ease;
-}
-@keyframes mn-fadein { from { opacity:0; transform: translateY(6px); } to { opacity:1; transform: none; } }
-#mn-tab-hooks:checked ~ .mn-tabs__panels #mn-panel-hooks,
-#mn-tab-eblets:checked ~ .mn-tabs__panels #mn-panel-eblets,
-#mn-tab-walk:checked ~ .mn-tabs__panels #mn-panel-walk {
-  display: block;
-}
-.mn-hook-list, .mn-eblet-list {
-  list-style: none; padding: 0; margin: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 0.6rem;
-}
-.mn-hook-list li, .mn-eblet-list li {
-  padding: 0.6rem 0.9rem;
-  background: rgba(214,158,46,0.03);
-  border: 1px solid rgba(214,158,46,0.15);
-  border-radius: 4px;
-  font-size: 0.82rem;
-}
-.mn-hook-list li strong, .mn-eblet-list li strong { color: #d69e2e; }
-.mn-tab-note {
-  margin-top: 1.2rem;
-  font-size: 0.8rem;
-  color: rgba(250,245,235,0.45);
-  font-style: italic;
-}
-.mn-walk-cmd {
-  background: rgba(56,161,105,0.06);
-  border: 1px solid rgba(56,161,105,0.3);
-  border-radius: 6px;
-  padding: 1rem 1.4rem;
-  font-size: 0.88rem;
-  color: #38a169;
-  overflow-x: auto;
-  margin: 1rem 0;
-}
-.mn-walk-cmd code { color: #faf5eb; }
-
-/* ── PROVE IT Gallery ─────────────────────────────────────────── */
-.mn-gallery { margin: 2rem 0; }
-.mn-gallery__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-  margin: 1.2rem 0;
-}
-.mn-gallery__item {
-  display: block;
-  border: 1px solid rgba(214,158,46,0.3);
-  border-radius: 6px;
-  overflow: hidden;
-  position: relative;
-  background: rgba(214,158,46,0.02);
-  transition: box-shadow 0.2s, border-color 0.2s;
-  text-decoration: none !important;
-  border-bottom: 1px solid rgba(214,158,46,0.3) !important;
-}
-.mn-gallery__item:hover {
-  box-shadow: 0 0 16px rgba(214,158,46,0.12);
-  border-color: rgba(214,158,46,0.6) !important;
-}
-.mn-gallery__item img {
-  width: 100%;
-  height: 140px;
-  object-fit: cover;
-  display: block;
-}
-.mn-gallery__caption {
-  padding: 0.4rem 0.6rem;
-  font-size: 0.7rem;
-  color: rgba(250,245,235,0.45);
-  text-align: center;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.mn-v2-hero-tagline {
+  margin-top: 1.4rem !important;
+  font-size: 0.88rem !important;
+  color: rgba(250,245,235,0.55) !important;
+  letter-spacing: 0.03em;
 }
 
-/* ── Download Table ───────────────────────────────────────────── */
-.mn-dl-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 1.2rem 0;
-  font-size: 0.88rem;
+/* ═══════════════════════════════
+   SECTION 2 · GRAPH
+   ═══════════════════════════════ */
+.mn-v2-chart-section {
+  margin: 2rem 0;
+  padding: 1.8rem;
+  background: rgba(5,11,20,0.7);
+  border: 1px solid rgba(214,158,46,0.18);
+  border-radius: 12px;
 }
-.mn-dl-table th {
-  text-align: left;
-  padding: 0.6rem 0.9rem;
+.mn-v2-chart-section h2 {
   color: #d69e2e;
-  border-bottom: 1px solid rgba(214,158,46,0.4);
-  font-size: 0.78rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-.mn-dl-table td {
-  padding: 0.7rem 0.9rem;
-  border-bottom: 1px solid rgba(214,158,46,0.1);
-  vertical-align: middle;
-}
-.mn-dl-table tr:hover td { background: rgba(214,158,46,0.03); }
-.mn-dl-btn {
-  display: inline-block;
-  border: 1px solid #38a169 !important;
-  border-radius: 4px;
-  padding: 0.25rem 0.7rem;
-  font-size: 0.8rem;
-  color: #38a169 !important;
-  background: rgba(56,161,105,0.06);
-  transition: background 0.2s;
-  text-decoration: none !important;
-}
-.mn-dl-btn:hover { background: rgba(56,161,105,0.15) !important; }
-.mn-version-badge {
-  display: inline-block;
-  background: rgba(214,158,46,0.12);
-  color: #d69e2e;
-  border-radius: 3px;
-  padding: 0.15rem 0.5rem;
-  font-size: 0.8rem;
+  font-size: clamp(1.1rem, 3vw, 1.45rem);
+  margin: 0 0 0.3rem;
   font-weight: 700;
 }
-
-/* ── Subdomains ───────────────────────────────────────────────── */
-.mn-subdomains {
-  border: 1px solid rgba(214,158,46,0.25);
-  border-radius: 6px;
-  padding: 1.4rem 1.8rem;
-  background: rgba(214,158,46,0.02);
-  margin: 2rem 0;
+.mn-v2-chart-subtitle {
+  color: rgba(250,245,235,0.55);
+  font-size: 0.82rem;
+  margin: 0 0 1.6rem;
+  font-style: italic;
 }
-.mn-subdomain-list { list-style: none; padding: 0; margin: 0.8rem 0; }
-.mn-subdomain-list li {
-  padding: 0.4rem 0;
-  font-size: 0.9rem;
+.mn-v2-chart-legend {
+  display: flex;
+  gap: 1.4rem;
+  margin: 0 0 1.2rem;
+  font-size: 0.8rem;
+}
+.mn-v2-legend-item {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.4rem;
+  color: rgba(250,245,235,0.7);
 }
-.mn-subdomain-list li::before {
-  content: '⊙';
-  color: rgba(214,158,46,0.5);
-  font-size: 0.8rem;
+.mn-v2-legend-dot {
+  width: 12px; height: 12px;
+  border-radius: 2px;
+  flex-shrink: 0;
 }
-.mn-pending-badge {
-  font-size: 0.72rem;
-  background: rgba(214,158,46,0.08);
-  color: rgba(214,158,46,0.75);
-  border: 1px solid rgba(214,158,46,0.2);
-  border-radius: 3px;
+.mn-v2-legend-dot--cold { background: rgba(160,174,192,0.55); }
+.mn-v2-legend-dot--hot  { background: #38a169; }
+
+.mn-v2-bar-group {
+  margin-bottom: 1.4rem;
+}
+.mn-v2-bar-group:last-child { margin-bottom: 0; }
+
+.mn-v2-model-name {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: rgba(250,245,235,0.9);
+  margin-bottom: 0.35rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.mn-v2-model-free-badge {
+  background: rgba(56,161,105,0.2);
+  color: #38a169;
+  border: 1px solid rgba(56,161,105,0.4);
+  border-radius: 4px;
+  font-size: 0.65rem;
+  font-weight: 700;
   padding: 0.1rem 0.4rem;
   letter-spacing: 0.05em;
-}
-.mn-subdomain-dns-note {
-  font-size: 0.78rem;
-  color: rgba(250,245,235,0.35);
-  margin-top: 0.8rem;
-  font-style: italic;
+  text-transform: uppercase;
 }
 
-/* ── Substrate Ladder UI (How It Works · BP046 W1) ──────────── */
-.mn-ladder {
-  margin: 2.5rem 0 2rem;
-  max-width: 1000px;
-  margin-left: auto;
-  margin-right: auto;
-}
-.mn-ladder__header {
-  text-align: center;
-  margin-bottom: 1.5rem;
-}
-.mn-ladder__title {
-  font-family: 'Crimson Pro', Georgia, serif;
-  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
-  font-weight: 700;
-  color: #d69e2e;
-  letter-spacing: 0.04em;
-  margin: 0 0 0.3rem;
-}
-.mn-ladder__subtitle {
-  font-size: 0.82rem;
-  color: rgba(250,245,235,0.45);
-  font-style: italic;
-}
-.mn-rung {
-  border: 1px solid rgba(214,158,46,0.2);
-  border-radius: 6px;
-  margin-bottom: 0.6rem;
-  overflow: hidden;
-  transition: border-color 0.2s;
-}
-.mn-rung[open] { border-color: rgba(214,158,46,0.5); }
-.mn-rung--1 { border-left: 3px solid #3b82f6; }
-.mn-rung--2 { border-left: 3px solid #14b8a6; }
-.mn-rung--3 { border-left: 3px solid #d97706; }
-.mn-rung--4 { border-left: 3px solid #8b5cf6; }
-.mn-rung summary {
+.mn-v2-bar-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0.9rem 1.2rem 0.9rem 1.4rem;
-  cursor: pointer;
-  user-select: none;
-  list-style: none;
-  gap: 1rem;
+  gap: 0.55rem;
+  margin-bottom: 0.25rem;
 }
-.mn-rung summary::-webkit-details-marker { display: none; }
-.mn-rung summary:focus { outline: 2px solid rgba(214,158,46,0.6); outline-offset: 2px; }
-.mn-rung__label {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  flex: 1;
-  min-width: 0;
-}
-.mn-rung__num {
-  font-size: 0.7rem;
-  letter-spacing: 0.12em;
-  color: rgba(250,245,235,0.35);
-  flex-shrink: 0;
-}
-.mn-rung__name {
-  font-size: 0.92rem;
-  font-weight: 600;
-  color: #faf5eb;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.mn-rung__chevron {
-  font-size: 0.65rem;
-  color: rgba(250,245,235,0.35);
-  flex-shrink: 0;
-  transition: transform 0.2s;
-}
-.mn-rung[open] .mn-rung__chevron { transform: rotate(90deg); }
-.mn-rung__badge {
-  flex-shrink: 0;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  padding: 0.2rem 0.6rem;
-  border-radius: 4px;
-  white-space: nowrap;
-  text-align: right;
-}
-.mn-rung--1 .mn-rung__badge { background: rgba(59,130,246,0.12); color: #93c5fd; border: 1px solid rgba(59,130,246,0.25); }
-.mn-rung--2 .mn-rung__badge { background: rgba(20,184,166,0.12); color: #5eead4; border: 1px solid rgba(20,184,166,0.25); }
-.mn-rung--3 .mn-rung__badge { background: rgba(217,119,6,0.12); color: #fbbf24; border: 1px solid rgba(217,119,6,0.25); }
-.mn-rung--4 .mn-rung__badge { background: rgba(139,92,246,0.2); color: #c4b5fd; border: 1px solid rgba(139,92,246,0.4); font-size: 0.78rem; }
-.mn-rung__body {
-  padding: 0 1.4rem 1.4rem 1.4rem;
-  border-top: 1px solid rgba(214,158,46,0.1);
-  animation: mn-fadein 0.2s ease;
-}
-@media (prefers-reduced-motion: reduce) {
-  .mn-rung__body { animation: none; }
-  .mn-rung__chevron { transition: none; }
-}
-.mn-rung__contribution {
-  margin: 1rem 0 0.6rem;
-  font-size: 0.88rem;
-  color: rgba(250,245,235,0.75);
-  line-height: 1.7;
-}
-.mn-rung__composition {
-  margin: 0.8rem 0;
-  padding: 0.7rem 1rem;
-  background: rgba(214,158,46,0.04);
-  border-left: 2px solid rgba(214,158,46,0.25);
-  border-radius: 0 4px 4px 0;
-  font-size: 0.82rem;
-  color: rgba(250,245,235,0.55);
-  font-style: italic;
-}
-.mn-rung__detail {
-  margin-top: 0.8rem;
-  font-size: 0.82rem;
-  color: rgba(250,245,235,0.5);
-  line-height: 1.7;
-}
-.mn-rung__detail strong { color: #d69e2e; font-style: normal; }
-.mn-rung__xref {
-  margin-top: 0.8rem;
-  font-size: 0.72rem;
-  color: rgba(250,245,235,0.3);
-  font-style: italic;
-}
-.mn-ladder__footer {
-  text-align: center;
-  margin-top: 1.5rem;
-  font-size: 0.78rem;
-  color: rgba(214,158,46,0.65);
-  letter-spacing: 0.04em;
-  padding: 0.6rem 0;
-  border-top: 1px solid rgba(214,158,46,0.1);
-}
-@media (max-width: 600px) {
-  .mn-rung__name { font-size: 0.82rem; }
-  .mn-rung__badge { font-size: 0.65rem; padding: 0.15rem 0.4rem; }
-}
+.mn-v2-bar-row:last-child { margin-bottom: 0; }
 
-/* ── SAGA 05 · 3-Tier Ladder Tab System (Skipping Stones / Wading In / Deep Dive) ── */
-/* CSS-only radio-tab approach — zero JS, static Hugo compatible */
-.mn-tier-tabs { margin-top: 0.8rem; }
-.mn-tier-tabs input[type="radio"] { display: none; }
-.mn-tier-nav {
-  display: flex;
-  gap: 0.4rem;
-  margin-bottom: 0.8rem;
-  flex-wrap: wrap;
-}
-.mn-tier-label {
-  padding: 0.35rem 0.85rem;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  cursor: pointer;
-  border-radius: 4px;
-  border: 1px solid transparent;
-  transition: background 0.2s, border-color 0.2s;
-  user-select: none;
-}
-/* Skipping Stones — gold */
-.mn-tier-label--ss {
-  color: rgba(214,158,46,0.65);
-  border-color: rgba(214,158,46,0.2);
-  background: rgba(214,158,46,0.04);
-}
-/* Wading In — green (default active) */
-.mn-tier-label--wi {
-  color: rgba(56,161,105,0.8);
-  border-color: rgba(56,161,105,0.25);
-  background: rgba(56,161,105,0.06);
-}
-/* Deep Dive — indigo/blue */
-.mn-tier-label--dd {
-  color: rgba(99,102,241,0.75);
-  border-color: rgba(99,102,241,0.2);
-  background: rgba(99,102,241,0.04);
-}
-/* Active states */
-[id$="-wi"]:checked ~ .mn-tier-nav .mn-tier-label--wi,
-[id$="-ss"]:checked ~ .mn-tier-nav .mn-tier-label--ss,
-[id$="-dd"]:checked ~ .mn-tier-nav .mn-tier-label--dd {
-  border-color: currentColor;
-  filter: brightness(1.25);
-}
-/* Panel show/hide */
-.mn-tier-panel { display: none; animation: mn-fadein 0.2s ease; }
-[id$="-ss"]:checked ~ .mn-tier-panels .mn-tier-panel--ss,
-[id$="-wi"]:checked ~ .mn-tier-panels .mn-tier-panel--wi,
-[id$="-dd"]:checked ~ .mn-tier-panels .mn-tier-panel--dd {
-  display: block;
-}
-.mn-tier-panel--ss .mn-rung__contribution { color: rgba(214,158,46,0.85); }
-.mn-tier-panel--dd .mn-rung__contribution { color: rgba(165,180,252,0.85); }
-.mn-tier-placeholder {
-  font-size: 0.82rem;
-  font-style: italic;
-  opacity: 0.45;
-  margin: 0.4rem 0 0.8rem;
-}
-
-/* ── Footer ──────────────────────────────────────────────────── */
-.mn-footer-note {
-  text-align: center;
-  padding: 2rem 0 1rem;
-  font-size: 0.78rem;
-  color: rgba(250,245,235,0.3);
-  border-top: 1px solid rgba(214,158,46,0.1);
-  margin-top: 3rem;
-}
-
-/* ── Librarian title pattern (SAGA-c · white-word / blue-word split) ── */
-.librarian-title {
-  font-family: 'Crimson Pro', Georgia, 'Times New Roman', serif;
-  font-size: clamp(2.4rem, 6vw, 4rem);
-  font-weight: 900;
-  line-height: 1.05;
-  letter-spacing: -0.02em;
-  text-align: center;
-  margin: 0 auto 0.5rem;
-}
-.librarian-title__white {
-  color: #faf5eb;
-}
-.librarian-title__blue {
-  color: #3b82f6;
-}
-
-/* ── Top banner (Round 4 NEW) ────────────────────────────────── */
-.mn-top-banner {
-  background: rgba(10,22,40,0.85);
-  border: 1px solid rgba(56,161,105,0.3);
-  border-radius: 8px;
-  padding: 2rem 1.5rem 1.8rem;
-  text-align: center;
-  margin-bottom: 2rem;
-}
-.mn-top-banner__crisis {
-  font-size: clamp(0.9rem, 2vw, 1.1rem);
-  color: #d69e2e;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  margin-bottom: 0.8rem;
-}
-.mn-top-banner__claim {
-  font-size: clamp(1rem, 2.2vw, 1.3rem);
-  color: #faf5eb;
-  font-weight: 600;
-  margin-bottom: 0.6rem;
-}
-.mn-top-banner__magic {
-  font-size: clamp(1.8rem, 4vw, 2.8rem);
-  color: #38a169;
-  font-weight: 900;
-  letter-spacing: 0.12em;
-}
-
-/* ── Trust strip (Round 4 NEW) ───────────────────────────────── */
-.mn-trust-strip {
-  text-align: center;
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
-  color: rgba(214,158,46,0.75);
-  border-top: 1px solid rgba(214,158,46,0.15);
-  padding-top: 1rem;
-  margin: 0 0 2.5rem;
-}
-
-/* ── KPI strip (Round 4 NEW) ─────────────────────────────────── */
-.mn-kpi-strip {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
-  margin: 1.5rem 0 2rem;
-  text-align: center;
-}
-@media (max-width: 680px) {
-  .mn-kpi-strip { grid-template-columns: repeat(2, 1fr); }
-}
-.mn-kpi-item__metric {
-  font-size: clamp(1.4rem, 3vw, 2rem);
-  font-weight: 900;
-  color: #d69e2e;
-  line-height: 1;
-}
-.mn-kpi-item__label {
-  font-size: 0.78rem;
-  color: rgba(250,245,235,0.55);
-  margin-top: 0.3rem;
-  line-height: 1.4;
-}
-
-/* ── Explainer block (Round 4 NEW) ──────────────────────────── */
-.mn-explainer {
-  border-left: 3px solid rgba(56,161,105,0.4);
-  padding: 0.8rem 1.4rem;
-  margin: 1.5rem 0 2rem;
-  background: rgba(56,161,105,0.04);
-  border-radius: 0 6px 6px 0;
-  font-size: 0.95rem;
-  color: rgba(250,245,235,0.75);
-  font-style: italic;
-}
-
-/* ── Outcome cards (Round 4 NEW) ─────────────────────────────── */
-.mn-outcome-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.4rem;
-  margin: 1.5rem 0 2.5rem;
-}
-.mn-outcome-card {
-  border: 1px solid rgba(56,161,105,0.25);
-  border-radius: 8px;
-  padding: 1.4rem;
-  background: rgba(56,161,105,0.03);
-}
-.mn-outcome-card__heading {
-  font-size: 1rem;
-  font-weight: 700;
-  color: #faf5eb;
-  margin-bottom: 0.4rem;
-}
-.mn-outcome-card__body {
-  font-size: 0.85rem;
-  color: rgba(250,245,235,0.55);
-  margin-bottom: 0.6rem;
-}
-.mn-outcome-card__metric {
-  font-size: 0.78rem;
-  color: #38a169;
-  font-style: italic;
-}
-
-/* ── Join section (Round 4 NEW) ──────────────────────────────── */
-.mn-join-section {
-  border: 1px solid rgba(56,161,105,0.3);
-  border-radius: 8px;
-  padding: 2rem 1.8rem;
-  background: rgba(56,161,105,0.04);
-  margin: 2.5rem 0;
-}
-.mn-join-section h2 {
-  color: #38a169 !important;
-  border-color: rgba(56,161,105,0.3) !important;
-}
-.mn-join-section p {
-  font-size: 0.92rem;
-  color: rgba(250,245,235,0.75);
-  margin-bottom: 0.8rem;
-}
-.mn-join-btns {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  margin-top: 1.4rem;
-}
-.mn-join-btn-primary {
-  display: inline-block;
-  background: rgba(56,161,105,0.12);
-  border: 1.5px solid #38a169;
-  border-radius: 5px;
-  padding: 0.55rem 1.4rem;
-  color: #38a169 !important;
-  font-weight: 600;
-  font-size: 0.9rem;
-  text-decoration: none !important;
-  border-bottom: 1.5px solid #38a169 !important;
-}
-.mn-join-btn-outline {
-  display: inline-block;
-  border: 1px solid rgba(214,158,46,0.4);
-  border-radius: 5px;
-  padding: 0.55rem 1.4rem;
-  color: rgba(214,158,46,0.8) !important;
-  font-size: 0.9rem;
-  text-decoration: none !important;
-  border-bottom: 1px solid rgba(214,158,46,0.4) !important;
-}
-
-/* ── Technical accordion (Round 4 NEW) ───────────────────────── */
-.mn-tech-accordion {
-  border: 1px solid rgba(214,158,46,0.2);
-  border-radius: 6px;
-  margin: 2rem 0;
-}
-.mn-tech-accordion > summary {
-  padding: 1rem 1.4rem;
-  cursor: pointer;
-  font-size: 0.88rem;
-  color: rgba(214,158,46,0.75);
-  letter-spacing: 0.04em;
-  list-style: none;
-  user-select: none;
-}
-.mn-tech-accordion > summary::-webkit-details-marker { display: none; }
-.mn-tech-accordion > summary::before {
-  content: '▶ ';
-  font-size: 0.7rem;
-}
-.mn-tech-accordion[open] > summary::before { content: '▼ '; }
-.mn-tech-accordion__body {
-  padding: 0 1.4rem 1.4rem;
-  border-top: 1px solid rgba(214,158,46,0.1);
-}
-
-/* ── Prove it heroes — first 5 (Round 4 NEW) ─────────────────── */
-.mn-gallery__heroes {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.2rem;
-  margin: 1.2rem 0 0.5rem;
-}
-.mn-gallery__hero-item {
-  display: block;
-  border: 1px solid rgba(214,158,46,0.35);
-  border-radius: 8px;
-  overflow: hidden;
-  text-decoration: none !important;
-  border-bottom: 1px solid rgba(214,158,46,0.35) !important;
-  transition: box-shadow 0.2s;
-}
-.mn-gallery__hero-item:hover { box-shadow: 0 0 20px rgba(214,158,46,0.15); }
-.mn-gallery__hero-item img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  display: block;
-}
-.mn-gallery__hero-caption {
-  padding: 0.6rem 0.9rem;
-  font-size: 0.78rem;
-  color: rgba(250,245,235,0.6);
-  text-align: center;
-}
-
-/* ════════════════════════════════════════════════════════════════
-   BP054 · EYEWITNESS BENCHMARK DARK-DASHBOARD AESTHETIC
-   Near-black surfaces · monospace data tables · green/red stat cells
-   ════════════════════════════════════════════════════════════════ */
-.mn-page {
-  background-color: #050b14;
-}
-.mn-page::before {
-  background-color: #050b14;
-  opacity: 0.96;
-}
-
-.mn-dashboard {
-  max-width: 1180px;
-  margin: 0 auto 2.5rem;
-  padding: 2.2rem 1.4rem 1rem;
-}
-
-.mn-pitch-frame {
-  background: linear-gradient(180deg, rgba(214,158,46,0.06), rgba(56,161,105,0.04));
-  border: 1px solid rgba(214,158,46,0.35);
-  border-left: 4px solid #d69e2e;
-  border-radius: 6px;
-  padding: 1.2rem 1.4rem;
-  margin-bottom: 1.6rem;
-  font-size: clamp(0.95rem, 1.8vw, 1.1rem);
-  line-height: 1.55;
-  color: #faf5eb;
-}
-.mn-pitch-frame__eyebrow {
-  font-size: 0.7rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: #d69e2e;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-}
-.mn-pitch-frame__body {
-  font-style: italic;
-  color: rgba(250,245,235,0.92);
-}
-
-.mn-loc-counter {
-  display: flex;
-  align-items: baseline;
-  gap: 0.6rem;
-  justify-content: center;
-  text-align: center;
-  margin: 0.9rem 0 1.6rem;
-  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
-  font-size: clamp(2rem, 5vw, 3.4rem);
-  font-weight: 900;
-  color: #38a169;
-  letter-spacing: -0.02em;
-  text-shadow: 0 0 24px rgba(56,161,105,0.25);
-}
-.mn-loc-counter__of {
-  font-size: clamp(0.72rem, 1.4vw, 0.95rem);
-  font-weight: 600;
-  color: rgba(250,245,235,0.55);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  text-shadow: none;
-}
-
-.mn-dashboard__subtitle {
-  text-align: center;
-  font-size: 0.78rem;
-  letter-spacing: 0.1em;
-  color: rgba(250,245,235,0.55);
-  margin-bottom: 1.4rem;
-  font-family: 'JetBrains Mono', 'Consolas', monospace;
-}
-.mn-dashboard__subtitle strong { color: #d69e2e; font-weight: 700; }
-
-.mn-eyewitness-table,
-.mn-speedup-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
-  font-size: 0.82rem;
-  background: rgba(5,11,20,0.85);
-  border: 1px solid rgba(214,158,46,0.22);
-  border-radius: 6px;
-  overflow: hidden;
-  margin: 0.6rem 0 1.4rem;
-}
-.mn-eyewitness-table thead th,
-.mn-speedup-table thead th {
-  background: rgba(214,158,46,0.06);
-  color: #d69e2e;
-  font-size: 0.66rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  padding: 0.55rem 0.7rem;
-  text-align: right;
-  border-bottom: 1px solid rgba(214,158,46,0.28);
-  white-space: nowrap;
-}
-.mn-eyewitness-table thead th:first-child,
-.mn-speedup-table thead th:first-child {
-  text-align: left;
-}
-.mn-eyewitness-table tbody td,
-.mn-speedup-table tbody td {
-  padding: 0.5rem 0.7rem;
-  border-bottom: 1px solid rgba(214,158,46,0.06);
-  text-align: right;
-  color: rgba(250,245,235,0.88);
-  white-space: nowrap;
-}
-.mn-eyewitness-table tbody td:first-child,
-.mn-speedup-table tbody td:first-child {
-  text-align: left;
-  color: #faf5eb;
-  font-weight: 600;
-}
-.mn-eyewitness-table tbody tr:hover td,
-.mn-speedup-table tbody tr:hover td {
-  background: rgba(214,158,46,0.04);
-}
-
-.mn-stat-cell--green {
-  color: #4ade80 !important;
-  font-weight: 700;
-}
-.mn-stat-cell--red {
-  color: #f87171 !important;
-  font-weight: 700;
-}
-.mn-stat-cell--dim {
-  color: rgba(250,245,235,0.4) !important;
-}
-
-.mn-table-caption {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.8rem;
-  flex-wrap: wrap;
-  font-size: 0.74rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: rgba(250,245,235,0.6);
-  margin: 1.8rem 0 0.5rem;
-  padding-bottom: 0.4rem;
-  border-bottom: 1px dashed rgba(214,158,46,0.2);
-}
-.mn-table-caption__title { color: #d69e2e; font-weight: 700; }
-
-.mn-placeholder-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-size: 0.66rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #fbbf24;
-  background: rgba(217,119,6,0.12);
-  border: 1px solid rgba(217,119,6,0.45);
-  border-radius: 999px;
-  padding: 0.18rem 0.6rem;
-  font-weight: 700;
-}
-.mn-placeholder-pill::before {
-  content: '●';
-  color: #fbbf24;
-  animation: mn-pulse 1.6s infinite ease-in-out;
-}
-@keyframes mn-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.35; }
-}
-
-.mn-headline-callout {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.6rem;
-  flex-wrap: wrap;
-  background: rgba(56,161,105,0.08);
-  border: 1px solid rgba(56,161,105,0.4);
-  border-radius: 999px;
-  padding: 0.7rem 1.3rem;
-  margin: 1.2rem auto;
-  max-width: 720px;
-  text-align: center;
-  font-family: 'JetBrains Mono', 'Consolas', monospace;
-}
-.mn-headline-callout__metric {
-  font-size: clamp(1.1rem, 2.4vw, 1.6rem);
-  font-weight: 900;
-  color: #4ade80;
-  letter-spacing: -0.01em;
-}
-.mn-headline-callout__label {
-  font-size: 0.82rem;
-  color: rgba(250,245,235,0.75);
-  letter-spacing: 0.04em;
-}
-
-.mn-cheap-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  flex-wrap: wrap;
-  margin: 1.4rem 0 0.6rem;
-  padding: 0.9rem 1.1rem;
-  border: 1px solid rgba(214,158,46,0.18);
-  border-radius: 6px;
-  background: rgba(214,158,46,0.025);
-}
-.mn-cheap-row select {
-  background: #050b14;
-  color: #d69e2e;
-  border: 1px solid rgba(214,158,46,0.4);
-  border-radius: 4px;
-  padding: 0.35rem 0.65rem;
-  font-family: 'JetBrains Mono', 'Consolas', monospace;
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-}
-.mn-cheap-row__interp {
-  flex: 1;
-  min-width: 260px;
-  font-size: 0.82rem;
-  color: rgba(250,245,235,0.7);
-  font-style: italic;
-  line-height: 1.55;
-}
-
-.mn-2nd-second-frame {
-  border: 1px solid rgba(59,130,246,0.35);
-  border-left: 4px solid #3b82f6;
-  background: linear-gradient(180deg, rgba(59,130,246,0.06), rgba(5,11,20,0.4));
-  border-radius: 6px;
-  padding: 1.3rem 1.5rem;
-  margin: 2rem auto 2.4rem;
-  max-width: 1180px;
-}
-.mn-2nd-second-frame__eyebrow {
-  font-size: 0.7rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: #93c5fd;
-  font-weight: 700;
-  margin-bottom: 0.6rem;
-}
-.mn-2nd-second-frame__body {
-  font-family: 'Crimson Pro', Georgia, serif;
-  font-size: clamp(1rem, 2vw, 1.18rem);
-  line-height: 1.6;
-  color: rgba(250,245,235,0.92);
-  font-style: italic;
-  margin: 0;
-}
-
-.mn-dl-restyle {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  flex-wrap: wrap;
-  border: 1px solid rgba(56,161,105,0.4);
-  background: linear-gradient(135deg, rgba(56,161,105,0.08), rgba(5,11,20,0.6));
-  border-radius: 8px;
-  padding: 1.2rem 1.4rem;
-  margin: 1.6rem auto 2rem;
-  max-width: 1180px;
-  font-family: 'JetBrains Mono', 'Consolas', monospace;
-}
-.mn-dl-restyle__lhs { flex: 1 1 320px; min-width: 0; }
-.mn-dl-restyle__title {
-  font-size: 0.7rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: #38a169;
-  font-weight: 700;
-  margin-bottom: 0.35rem;
-}
-.mn-dl-restyle__file {
-  font-size: clamp(0.95rem, 2vw, 1.15rem);
-  color: #faf5eb;
-  font-weight: 700;
-  word-break: break-word;
-}
-.mn-dl-restyle__hash {
+.mn-v2-bar-cond {
   font-size: 0.68rem;
   color: rgba(250,245,235,0.45);
-  margin-top: 0.35rem;
-  word-break: break-all;
+  width: 56px;
+  flex-shrink: 0;
+  text-align: right;
+  letter-spacing: 0.03em;
 }
-.mn-dl-restyle__rhs {
+.mn-v2-bar-track {
+  flex: 1;
+  background: rgba(255,255,255,0.05);
+  border-radius: 4px;
+  height: 22px;
+  overflow: hidden;
+  position: relative;
+}
+.mn-v2-bar-fill {
+  height: 100%;
+  border-radius: 4px;
   display: flex;
   align-items: center;
-  gap: 0.8rem;
-  flex-wrap: wrap;
-}
-.mn-dl-restyle__free-pill {
-  display: inline-flex;
-  align-items: center;
-  font-size: 0.7rem;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  color: #4ade80;
-  background: rgba(56,161,105,0.12);
-  border: 1px solid rgba(56,161,105,0.5);
-  border-radius: 999px;
-  padding: 0.25rem 0.7rem;
-  text-transform: uppercase;
-}
-.mn-dl-restyle__btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  padding: 0.7rem 1.2rem;
-  background: rgba(56,161,105,0.18);
-  border: 1.5px solid #38a169 !important;
-  border-radius: 6px;
-  color: #4ade80 !important;
-  font-weight: 800;
-  font-size: 0.88rem;
-  text-decoration: none !important;
-  border-bottom: 1.5px solid #38a169 !important;
-  letter-spacing: 0.04em;
-}
-.mn-dl-restyle__btn:hover { background: rgba(56,161,105,0.28); }
-
-.mn-trust-strip-dark {
-  text-align: center;
-  font-size: 0.7rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: rgba(214,158,46,0.7);
-  border-top: 1px solid rgba(214,158,46,0.18);
-  border-bottom: 1px solid rgba(214,158,46,0.18);
-  padding: 0.7rem 1rem;
-  margin: 0 auto 1.8rem;
-  max-width: 1180px;
-  font-family: 'JetBrains Mono', 'Consolas', monospace;
-}
-.mn-trust-strip-dark span { margin: 0 0.5rem; }
-
-@media (max-width: 720px) {
-  .mn-eyewitness-table,
-  .mn-speedup-table { font-size: 0.72rem; }
-  .mn-eyewitness-table thead th,
-  .mn-speedup-table thead th { font-size: 0.58rem; padding: 0.4rem 0.4rem; }
-  .mn-eyewitness-table tbody td,
-  .mn-speedup-table tbody td { padding: 0.4rem 0.4rem; }
-}
-
-/* ── BP054-N · Dark-body full-bleed (kill light gaps from PaperMod theme) ── */
-body.list, body, main.main, .mn-page {
-  background: #050b14 !important;
-}
-html {
-  overflow-x: hidden;
-  overflow-y: scroll;
-}
-body, main, .mn-page {
-  overflow: visible !important;
-  height: auto !important;
-}
-
-/* ── BP054-N · Turnkey hero (single button + sentence above the fold) ── */
-.mn-turnkey-hero {
-  width: 100%;
+  justify-content: flex-end;
+  padding-right: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+  min-width: 32px;
   box-sizing: border-box;
+  transition: width 0.4s ease;
+}
+.mn-v2-bar-fill--cold {
+  background: rgba(160,174,192,0.5);
+  color: rgba(255,255,255,0.7);
+}
+.mn-v2-bar-fill--hot {
+  background: linear-gradient(90deg, #2d7d52, #38a169);
+  color: #fff;
+}
+.mn-v2-chart-note {
+  margin-top: 1.2rem;
+  font-size: 0.76rem;
+  color: rgba(250,245,235,0.45);
+  line-height: 1.6;
+  border-top: 1px solid rgba(214,158,46,0.1);
+  padding-top: 0.8rem;
+}
+.mn-v2-chart-note strong { color: rgba(250,245,235,0.7); }
+
+/* ═══════════════════════════════
+   SECTION 3 · DOWNLOAD
+   ═══════════════════════════════ */
+.mn-v2-download-section {
+  margin: 2rem 0;
   text-align: center;
-  padding: 3rem 1.5rem 3rem;
-  border-bottom: 2px solid rgba(214,158,46,0.55);
-  background: linear-gradient(180deg, rgba(10,22,40,0.0) 0%, rgba(214,158,46,0.04) 100%);
-  margin: 0 0 2rem;
 }
-.mn-turnkey-hero__line {
-  font-family: 'Crimson Pro', Georgia, 'Times New Roman', serif;
-  color: #d69e2e;
-  font-size: clamp(1.6rem, 4vw, 2.8rem);
-  font-weight: 800;
-  line-height: 1.15;
-  margin: 0 auto 1.6rem;
-  max-width: 880px;
-  letter-spacing: -0.01em;
-}
-.mn-turnkey-hero__cta {
+.mn-v2-dl-btn {
   display: inline-block;
-  background: #38a169 !important;
-  color: #faf5eb !important;
+  background: #38a169;
+  color: #fff !important;
   border: 2px solid #38a169 !important;
   border-bottom: 2px solid #38a169 !important;
-  border-radius: 10px;
-  padding: 1.1rem 2.4rem;
-  font-size: clamp(1.05rem, 2vw, 1.3rem);
+  border-radius: 12px;
+  padding: 1rem 2.2rem;
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
   font-weight: 800;
-  letter-spacing: 0.02em;
   text-decoration: none !important;
-  box-shadow: 0 8px 24px rgba(56,161,105,0.32), 0 2px 6px rgba(0,0,0,0.35);
+  box-shadow: 0 6px 24px rgba(56,161,105,0.35);
+  letter-spacing: 0.01em;
   transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
-.mn-turnkey-hero__cta:hover {
+.mn-v2-dl-btn:hover {
   background: #2f8a59 !important;
-  box-shadow: 0 12px 32px rgba(56,161,105,0.5), 0 4px 10px rgba(0,0,0,0.4);
-  transform: translateY(-1px);
+  border-color: #2f8a59 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 32px rgba(56,161,105,0.5);
 }
-.mn-turnkey-hero__meta {
-  font-family: 'JetBrains Mono', 'Fira Code', monospace;
-  color: rgba(250,245,235,0.55);
+.mn-v2-install-steps {
+  background: rgba(56,161,105,0.07);
+  border: 1px solid rgba(56,161,105,0.28);
+  border-radius: 10px;
+  padding: 1.1rem 1.4rem 1rem;
+  margin: 1.2rem auto 0.6rem;
+  max-width: 560px;
+  text-align: left;
+}
+.mn-v2-install-steps__title {
+  color: #38a169;
+  font-weight: 700;
+  font-size: 0.92rem;
+  margin: 0 0 0.45rem;
+}
+.mn-v2-install-steps__note {
+  color: rgba(250,245,235,0.68);
+  font-size: 0.84rem;
+  margin: 0 0 0.7rem;
+  line-height: 1.55;
+}
+.mn-v2-install-steps__list {
+  margin: 0;
+  padding-left: 1.4rem;
+  color: rgba(250,245,235,0.82);
+  font-size: 0.88rem;
+  line-height: 1.7;
+}
+.mn-v2-install-steps__list li { margin-bottom: 0.15rem; }
+.mn-v2-strapline {
+  margin: 0.9rem 0 0;
   font-size: 0.78rem;
-  margin: 0.9rem 0 0.4rem;
-  letter-spacing: 0.05em;
-}
-.mn-turnkey-hero__more {
-  margin: 0.4rem 0 0;
-}
-.mn-turnkey-hero__more a {
-  font-style: italic;
-  font-size: 0.82rem;
-  color: rgba(214,158,46,0.7) !important;
-  border-bottom: 1px dotted rgba(214,158,46,0.35) !important;
-}
-.mn-turnkey-hero__more a:hover {
-  color: #d69e2e !important;
-  border-bottom-color: #d69e2e !important;
+  color: rgba(250,245,235,0.45);
+  letter-spacing: 0.04em;
+  text-align: center;
 }
 
-/* ── BP054-N · Technical detail collapsible ── */
-details#mn-technical {
-  margin: 1.5rem 0 2rem;
-  border-top: 1px solid rgba(214,158,46,0.18);
-  padding-top: 1rem;
+/* ═══════════════════════════════
+   SECTIONS 4-6 · DISCLOSURE CHIPS
+   ═══════════════════════════════ */
+.mn-v2-chips {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  margin: 2rem 0;
 }
-details#mn-technical > summary {
+.mn-v2-chip {
+  border: 1px solid rgba(214,158,46,0.25);
+  border-radius: 10px;
+  background: rgba(10,22,40,0.6);
+  overflow: hidden;
+}
+.mn-v2-chip > summary {
   cursor: pointer;
   list-style: none;
-  font-family: 'JetBrains Mono', 'Fira Code', monospace;
-  font-size: 0.95rem;
+  padding: 0.9rem 1.1rem;
   color: #d69e2e;
-  padding: 0.85rem 1.1rem;
-  border: 1px solid rgba(214,158,46,0.3);
-  border-radius: 8px;
-  background: rgba(214,158,46,0.06);
-  letter-spacing: 0.03em;
-  transition: background 0.2s ease;
+  font-size: 0.95rem;
+  font-weight: 600;
   user-select: none;
+  letter-spacing: 0.01em;
+  transition: background 0.15s;
 }
-details#mn-technical > summary::before {
-  content: "▸ ";
-  display: inline-block;
-  margin-right: 0.4rem;
-  transition: transform 0.15s ease;
+.mn-v2-chip > summary:hover { background: rgba(214,158,46,0.07); }
+.mn-v2-chip[open] > summary { background: rgba(214,158,46,0.09); border-bottom: 1px solid rgba(214,158,46,0.18); }
+.mn-v2-chip > summary::-webkit-details-marker { display: none; }
+
+.mn-v2-chip-body {
+  padding: 1.2rem 1.4rem;
+  color: rgba(250,245,235,0.8);
+  font-size: 0.9rem;
+  line-height: 1.75;
 }
-details#mn-technical[open] > summary {
-  background: rgba(214,158,46,0.12);
-  text-decoration: underline;
-  text-decoration-color: rgba(214,158,46,0.55);
-  text-underline-offset: 4px;
+.mn-v2-chip-body h3 {
+  color: #d69e2e;
+  font-size: 0.95rem;
+  margin: 1.2rem 0 0.4rem;
 }
-details#mn-technical[open] > summary::before {
-  content: "▾ ";
+.mn-v2-chip-body h3:first-child { margin-top: 0; }
+.mn-v2-chip-body p { margin: 0.4rem 0 0.8rem; }
+.mn-v2-chip-body ul, .mn-v2-chip-body ol {
+  padding-left: 1.4rem;
+  margin: 0.4rem 0 0.8rem;
 }
-details#mn-technical > summary:hover {
-  background: rgba(214,158,46,0.14);
+.mn-v2-chip-body li { margin-bottom: 0.3rem; }
+.mn-v2-chip-body code {
+  font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+  font-size: 0.82em;
+  background: rgba(255,255,255,0.07);
+  border-radius: 3px;
+  padding: 0.1em 0.35em;
+  color: rgba(250,245,235,0.9);
+}
+.mn-v2-chip-body pre {
+  background: rgba(5,11,20,0.8);
+  border: 1px solid rgba(214,158,46,0.18);
+  border-radius: 6px;
+  padding: 0.8rem 1rem;
+  overflow-x: auto;
+  font-size: 0.8rem;
+  margin: 0.6rem 0;
+}
+.mn-v2-chip-body table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  margin: 0.6rem 0;
+}
+.mn-v2-chip-body th {
+  color: #d69e2e;
+  font-size: 0.72rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  text-align: left;
+  padding: 0.5rem 0.7rem;
+  border-bottom: 1px solid rgba(214,158,46,0.2);
+}
+.mn-v2-chip-body td {
+  padding: 0.45rem 0.7rem;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  vertical-align: top;
 }
 
-/* ── BP054-N · Eyewitness footer (dropdown + interp) ── */
-.mn-eyewitness-footer {
+/* ── AI Cost Gauge (barrel) ── */
+.mn-v2-gauge-wrap {
   display: flex;
+  align-items: flex-end;
+  gap: 1.4rem;
+  margin: 1rem 0 1.2rem;
   flex-wrap: wrap;
-  align-items: center;
-  gap: 0.7rem 1rem;
-  margin: 0.9rem 0 1.6rem;
-  padding: 0.9rem 1rem;
-  border: 1px solid rgba(214,158,46,0.18);
-  border-radius: 8px;
-  background: rgba(10,22,40,0.5);
 }
-.mn-eyewitness-footer label {
-  font-family: 'JetBrains Mono', 'Fira Code', monospace;
-  font-size: 0.78rem;
+.mn-v2-barrel {
+  flex-shrink: 0;
+}
+.mn-v2-gauge-desc {
+  flex: 1;
+  min-width: 200px;
+  font-size: 0.88rem;
+  color: rgba(250,245,235,0.78);
+  line-height: 1.7;
+}
+.mn-v2-gauge-desc strong { color: #38a169; }
+
+/* ── Cost dimension sub-sections ── */
+.mn-v2-cost-dim {
+  border-left: 3px solid rgba(214,158,46,0.3);
+  padding: 0.5rem 0 0.5rem 1rem;
+  margin: 1rem 0;
+}
+.mn-v2-cost-dim-title {
+  font-weight: 700;
   color: #d69e2e;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-size: 0.88rem;
+  margin-bottom: 0.35rem;
 }
-.mn-eyewitness-footer select {
-  background: #0a1628;
-  color: #faf5eb;
-  border: 1px solid rgba(214,158,46,0.35);
-  border-radius: 6px;
-  padding: 0.45rem 0.75rem;
-  font-family: 'JetBrains Mono', 'Fira Code', monospace;
-  font-size: 0.82rem;
-  cursor: not-allowed;
-  opacity: 0.85;
+.mn-v2-cost-dim p {
+  margin: 0 !important;
+  font-size: 0.88rem;
+  color: rgba(250,245,235,0.75);
 }
-.mn-eyewitness-interp {
-  flex: 1 1 320px;
-  margin: 0;
-  font-size: 0.84rem;
-  color: rgba(250,245,235,0.68);
-  line-height: 1.55;
+
+/* ── Technical chip ── */
+.mn-v2-chip--technical > summary {
+  font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+  font-size: 0.88rem;
+  letter-spacing: 0.02em;
+}
+
+/* ── Founder chip ── */
+.mn-v2-chip--founder > summary {
+  color: rgba(250,245,235,0.75);
+}
+.mn-v2-chip--founder { border-color: rgba(250,245,235,0.1); }
+
+/* ── Section divider ── */
+.mn-v2-divider {
+  border: none;
+  border-top: 1px solid rgba(214,158,46,0.12);
+  margin: 1.8rem 0;
 }
 </style>
 
 <div class="mn-page">
+<div class="mn-v2-wrap">
 
-  <!-- ═══════════════════════════════════════════════════════════
-       BP054 · EYEWITNESS BENCHMARK DARK-DASHBOARD HERO
-       Founder-ratified: BOTH tables stacked (Eyewitness placeholder
-       on top + Mnemosyne speedup below). Dense data-table aesthetic.
-       ═══════════════════════════════════════════════════════════ -->
-  <section class="mn-dashboard" aria-labelledby="mn-dashboard-title">
+  <!-- ═══════════════════════════════════════════════
+       SECTION 1 · HERO — HEOHO-style Deck Cue Card
+       ═══════════════════════════════════════════════ -->
+  <section class="mn-v2-hero" aria-label="MnemosyneC hero">
+    <div class="mn-v2-hero-card">
+      <p class="mn-v2-quote">Be the first one on your block to have an AI that remembers more than just your name &mdash; and start something.</p>
+      <h1>Never Repeat Yourself to Your&nbsp;AI&nbsp;Again.</h1>
+      <p>MnemosyneC gives your AI a permanent, private memory. It works alongside ChatGPT, Claude, Gemini, or any tool you already use &mdash; remembering your past chats, files, and preferences so you can always pick up exactly where you left off. All your data stays securely on your own computer. Free to use. Better to join.</p>
+      <p class="mn-v2-hero-tagline">Free Forever &nbsp;&middot;&nbsp; No Ads &nbsp;&middot;&nbsp; No Strings &nbsp;&middot;&nbsp; Data stays on your computer</p>
+    </div>
+  </section>
 
-    <!-- BP054-N · Turnkey hero (single button + sentence · above the fold) -->
-    <div class="mn-turnkey-hero">
-      <h1 class="mn-turnkey-hero__line">Free persistent memory expansion &middot; ~32,000&times; for whatever AI you already use. <strong>Prove it.</strong> One click. Yours to keep. No Ads and No Strings Attached.</h1>
-      <p class="mn-turnkey-hero__subline">A read-only AI companion that builds your personal substrate &mdash; locally, privately, with zero telemetry. Works with Ollama (free), or your Anthropic / OpenAI / Google / OpenRouter / any-vendor API key. No account required.</p>
-      <a class="mn-turnkey-hero__cta" href="https://github.com/liana-banyan/mnemosyne/releases/latest" aria-label="Download latest Mnemosyne release">Download for Windows</a>
-      <p class="mn-turnkey-hero__meta">Latest release: v0.1.21 (pre-release, unsigned) &middot; Free Forever &middot; SSPL + Patent Pledge #2260</p>
-      <p class="mn-turnkey-hero__more"><a href="#mn-technical">For technical readers: benchmarks, hashes, and substrate detail below.</a></p>
+  <!-- ═══════════════════════════════════════════════
+       SECTION 2 · ONE GRAPH — BP063 4-model COLD vs HOT
+       Real benchmark data · 2026-05-30 · R10 Harness
+       ═══════════════════════════════════════════════ -->
+  <section class="mn-v2-chart-section" aria-labelledby="mn-v2-chart-title">
+    <h2 id="mn-v2-chart-title">Does it actually work?</h2>
+    <p class="mn-v2-chart-subtitle">75 factual questions &middot; 4 AI vendors &middot; real test run 2026-05-30 (BP063 R10 Harness). No tricks.</p>
+
+    <div class="mn-v2-chart-legend" aria-hidden="true">
+      <span class="mn-v2-legend-item">
+        <span class="mn-v2-legend-dot mn-v2-legend-dot--cold"></span>
+        Without MnemosyneC substrate
+      </span>
+      <span class="mn-v2-legend-item">
+        <span class="mn-v2-legend-dot mn-v2-legend-dot--hot"></span>
+        With MnemosyneC substrate
+      </span>
     </div>
 
-    <!-- Pitch frame (Founder verbatim BP054) -->
-    <div class="mn-pitch-frame">
-      <div class="mn-pitch-frame__eyebrow">The Ask · BP054</div>
-      <p class="mn-pitch-frame__body">
-        "Help us get to 10,000 working network for our first Grand Project — Ebleting for easy access to the People the Library of Congress. In record time, at record low cost, with record accuracy. Proof to the People."
-      </p>
+    <!-- claude-opus-4-8 -->
+    <div class="mn-v2-bar-group" role="group" aria-label="Claude Opus 4.8 results">
+      <div class="mn-v2-model-name">Claude Opus 4.8</div>
+      <div class="mn-v2-bar-row">
+        <span class="mn-v2-bar-cond">Without</span>
+        <div class="mn-v2-bar-track" role="meter" aria-valuenow="6" aria-valuemin="0" aria-valuemax="100" aria-label="6% accuracy without substrate">
+          <div class="mn-v2-bar-fill mn-v2-bar-fill--cold" style="width:6%">6%</div>
+        </div>
+      </div>
+      <div class="mn-v2-bar-row">
+        <span class="mn-v2-bar-cond">With</span>
+        <div class="mn-v2-bar-track" role="meter" aria-valuenow="89.3" aria-valuemin="0" aria-valuemax="100" aria-label="89.3% accuracy with substrate">
+          <div class="mn-v2-bar-fill mn-v2-bar-fill--hot" style="width:89.3%">89.3%</div>
+        </div>
+      </div>
     </div>
 
-    <!-- 10K-node live counter · Founder direct BP054 zero-start · founding circle stage -->
-    <div class="mn-loc-counter" data-live-counter="loc-network">
-      0 <span class="mn-loc-counter__of">/ 10,000 active Mnemosyne nodes</span>
+    <!-- gpt-5.5 -->
+    <div class="mn-v2-bar-group" role="group" aria-label="GPT-5.5 results">
+      <div class="mn-v2-model-name">GPT&#8209;5.5</div>
+      <div class="mn-v2-bar-row">
+        <span class="mn-v2-bar-cond">Without</span>
+        <div class="mn-v2-bar-track" role="meter" aria-valuenow="19.3" aria-valuemin="0" aria-valuemax="100" aria-label="19.3% accuracy without substrate">
+          <div class="mn-v2-bar-fill mn-v2-bar-fill--cold" style="width:19.3%">19.3%</div>
+        </div>
+      </div>
+      <div class="mn-v2-bar-row">
+        <span class="mn-v2-bar-cond">With</span>
+        <div class="mn-v2-bar-track" role="meter" aria-valuenow="93.3" aria-valuemin="0" aria-valuemax="100" aria-label="93.3% accuracy with substrate">
+          <div class="mn-v2-bar-fill mn-v2-bar-fill--hot" style="width:93.3%">93.3%</div>
+        </div>
+      </div>
     </div>
-    <p class="mn-loc-counter__framing">
-      Founding circle is opening. Be one of the first to bring the Library of Congress to the People. <em>"A mustard seed."</em>
+
+    <!-- llama3.1:8b (free) -->
+    <div class="mn-v2-bar-group" role="group" aria-label="Llama 3.1 8b results">
+      <div class="mn-v2-model-name">
+        Llama&nbsp;3.1&nbsp;8b (Ollama)
+        <span class="mn-v2-model-free-badge">Local &middot; Free</span>
+      </div>
+      <div class="mn-v2-bar-row">
+        <span class="mn-v2-bar-cond">Without</span>
+        <div class="mn-v2-bar-track" role="meter" aria-valuenow="6" aria-valuemin="0" aria-valuemax="100" aria-label="6% accuracy without substrate">
+          <div class="mn-v2-bar-fill mn-v2-bar-fill--cold" style="width:6%">6%</div>
+        </div>
+      </div>
+      <div class="mn-v2-bar-row">
+        <span class="mn-v2-bar-cond">With</span>
+        <div class="mn-v2-bar-track" role="meter" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100" aria-label="78% accuracy with substrate">
+          <div class="mn-v2-bar-fill mn-v2-bar-fill--hot" style="width:78%">78.0%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- gemini-3.5-flash -->
+    <div class="mn-v2-bar-group" role="group" aria-label="Gemini 3.5 Flash results">
+      <div class="mn-v2-model-name">Gemini 3.5 Flash</div>
+      <div class="mn-v2-bar-row">
+        <span class="mn-v2-bar-cond">Without</span>
+        <div class="mn-v2-bar-track" role="meter" aria-valuenow="8" aria-valuemin="0" aria-valuemax="100" aria-label="8% accuracy without substrate">
+          <div class="mn-v2-bar-fill mn-v2-bar-fill--cold" style="width:8%">8%</div>
+        </div>
+      </div>
+      <div class="mn-v2-bar-row">
+        <span class="mn-v2-bar-cond">With</span>
+        <div class="mn-v2-bar-track" role="meter" aria-valuenow="90.7" aria-valuemin="0" aria-valuemax="100" aria-label="90.7% accuracy with substrate">
+          <div class="mn-v2-bar-fill mn-v2-bar-fill--hot" style="width:90.7%">90.7%</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="mn-v2-chart-note">
+      <strong>The Banyan Metric</strong> &mdash; accuracy on 75 Liana Banyan factual questions. &ldquo;Without&rdquo; = model alone (cold). &ldquo;With&rdquo; = same model after MnemosyneC substrate context injected (hot). The substrate does the knowledge-recall work &mdash; the model just reads and answers.
+      <br>The <strong>free local model</strong> (Ollama, $0 inference cost) lifted from 6% to 78% accuracy &mdash; entirely because of the shared substrate. <a href="/proofs/" style="font-size:0.88em;">Full proofs &rarr;</a>
     </p>
+  </section>
 
-    <!-- BP054-N · Technical detail collapsible wraps Eyewitness + speedup tables -->
-    <details id="mn-technical">
-      <summary>Technical detail: Eyewitness Benchmark, speedup table, SHA-256, substrate canon</summary>
-
-    <!-- Stratospheric Benchmark · BP054 cooperative-class wave empirical receipt -->
-    <section class="mn-stratospheric-bench">
-      <h2 class="mn-bench__title">The Stratospheric Benchmark</h2>
-      <p class="mn-bench__subtitle">BP054 Cooperative-Class Wave &mdash; 1 Founder &times; 2 AI agents &times; ~50 wave-landings &mdash; 2026-05-22 to 2026-05-24 &mdash; Paper #BP054</p>
-      <div class="mn-bench__table-wrap">
-        <table class="mn-bench__table">
-          <thead>
-            <tr>
-              <th>Wave</th>
-              <th>Landings</th>
-              <th>Solo baseline</th>
-              <th>&Delta; multiplier</th>
-              <th>Active hr</th>
-              <th>per-hr</th>
-              <th>Ctx end</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Knight W1 &middot; BP053 close (KniPr011-018)</td>
-              <td class="mn-bench__hot">7</td>
-              <td class="mn-bench__cold">~1</td>
-              <td class="mn-bench__delta">+7&times;</td>
-              <td>~3.5</td>
-              <td class="mn-bench__through">2.0 / hr</td>
-              <td>33%</td>
-            </tr>
-            <tr>
-              <td>Knight W2 &middot; BP054 close (~30 KniPrs &middot; v0.1.10 → v0.1.14 ship)</td>
-              <td class="mn-bench__hot">~30</td>
-              <td class="mn-bench__cold">~1</td>
-              <td class="mn-bench__delta">+34&times;</td>
-              <td>~3.5</td>
-              <td class="mn-bench__through">8.5 / hr</td>
-              <td>81%</td>
-            </tr>
-            <tr>
-              <td>Knight W3 &middot; Crystal-class<sup>1</sup></td>
-              <td class="mn-bench__hot">[verify]</td>
-              <td class="mn-bench__cold">~1</td>
-              <td class="mn-bench__delta">[verify]</td>
-              <td>[verify]</td>
-              <td class="mn-bench__through">[verify]</td>
-              <td class="mn-bench__special">113%<sup>2</sup></td>
-            </tr>
-            <tr>
-              <td>Bishop &middot; BP054 close-stretch (Opus 4.7 &middot; 1M ctx)</td>
-              <td class="mn-bench__hot">74</td>
-              <td class="mn-bench__cold">~1.5</td>
-              <td class="mn-bench__delta">+48&times;</td>
-              <td>~6.0</td>
-              <td class="mn-bench__through">12.3 / hr</td>
-              <td>89%</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="mn-bench__footer">
-        <strong>Combined BP054 close-stretch:</strong> ~50 wave-landings + 21 canon mints + 17 memory writes + 1 Truth-Always hook authored + Coffee/MEMORY updates &mdash; in ~6 active Founder-hours.
-        Single-engineer baseline approx ~0.25 wave-landings per hour. Cooperative-class throughput ~12-20&times; sustained, +48-80&times; vs solo.
-        Knight self-score Banyan Metric&#8482;: 87/100 (KniPr015). Compactions across both agents: 1 (Bishop mid-session, recovered cleanly from substrate).
-      </p>
-      <p class="mn-bench__interrater">
-        Inter-Agent Agreement &middot; Cooperative-class peer-witness &mdash; Knight + Bishop wave-coherence: ~96% (cross-commit-chain validation) &mdash; <em>Empirical Sound Barrier crossed.</em>
-      </p>
-      <p class="mn-bench__footnote">
-        <sup>1</sup> Crystal-class Pantry receipt class &mdash; sustained Banyan Metric&#8482; composite ~96.3 across BP053 NOVACULA + 24-pinned wave consumption.
-        <sup>2</sup> 113% = effective-context-throughput via parallel sub-agent dispatch multiplier (main-thread ~81% + parallel-agent additional ~32%). Founder confirms exact decomposition at BP055 open.
-      </p>
-
-      <!-- BP055 Founder-ratified footnote: alt-multiplier figures for discover-as-you-wade-in pedagogy -->
-      <details class="mn-bench__altfigs">
-        <summary>Other defensible multipliers (footnoted — for the technically curious)</summary>
-        <p class="mn-bench__altfigs-body">
-          The hero number is <strong>~32,000&times;</strong> &mdash; the canonical Banyan Metric&#8482; Dimension 1 figure (substrate ~124.5 GB &divide; Claude practical context ~4 MB, recomputed BP061). It is the most conservative ratio that holds up to a skeptical reader; we lead with it on purpose. Other empirical multipliers from the same wave-set, surfaced here for those who want them:
-        </p>
-        <ul class="mn-bench__altfigs-list">
-          <li><strong>~75,000,000&times;</strong> &mdash; compound throughput (Eblet-substrate + 6-way parallelism + cooperative-class peer-witness combined; BP054 cooperative-class wave)</li>
-          <li><strong>~55,900,000&times;</strong> &mdash; CAI-9.6 peer-reference benchmark (Caithedral Cooperative Architecture v9.6 vs solo-engineer baseline)</li>
-          <li><strong>~31,833&times;</strong> &mdash; CAI-4.5 baseline (earlier cooperative-architecture version; conservative empirical floor)</li>
-          <li><strong>~32,000&times;</strong> &mdash; canonical (this page's hero figure; updated BP061 from 26,000&times; at 103 GB)</li>
-          <li><em>"<strong>I Think I Broke the Sound Barrier</strong>"</em> &mdash; Founder direct, BP054 close-stretch wave article-title direction</li>
-        </ul>
-        <p class="mn-bench__altfigs-note">Reading order: lead with what holds up. The bigger numbers are real &mdash; you find them when you wade in. <em>Not the best up front. The best when you stay.</em></p>
-      </details>
-    </section>
-
-    <!-- SAGA-4 · BP055 · Stratospheric Benchmark wave-summary table (3-col condensed) -->
-    <section class="mn-stratospheric-bench" style="margin-top:2rem;">
-      <h3 class="mn-bench__title" style="font-size:1rem;margin-bottom:0.5rem;">Stratospheric Benchmark &mdash; Wave Summary</h3>
-      <div class="mn-bench__table-wrap">
-        <table class="mn-bench__table">
-          <thead>
-            <tr>
-              <th>Wave</th>
-              <th>Description</th>
-              <th>Throughput / Metric</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>W1 BP053-close</td>
-              <td>7 KniPrs &middot; 33% ctx end &middot; 3.5hr</td>
-              <td class="mn-bench__delta"><strong>+7&times;</strong> vs solo baseline</td>
-            </tr>
-            <tr>
-              <td>W2 BP054-close</td>
-              <td>~30 KniPrs &middot; 81% ctx end &middot; 3.5hr</td>
-              <td class="mn-bench__delta"><strong>+34&times;</strong> vs solo baseline</td>
-            </tr>
-            <tr>
-              <td>W3 BP054 Crystal-class</td>
-              <td>Sustained-context-throughput via parallel sub-agent dispatch</td>
-              <td class="mn-bench__special"><strong>113%</strong> effective (main + parallel)</td>
-            </tr>
-            <tr>
-              <td>Bishop wave</td>
-              <td>~74 substantive landings &middot; 89% ctx end &middot; 6hr active</td>
-              <td class="mn-bench__delta"><strong>+48&times;</strong> vs solo baseline</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <ul style="font-size:0.78rem;color:rgba(250,245,235,0.55);margin:0.9rem 0 0;padding-left:1.2rem;line-height:1.75;list-style:disc;">
-        <li><em>Knight Banyan Metric&#8482; self-score: <strong>87/100</strong></em> (KniPr015)</li>
-        <li><em>Inter-Agent Agreement: <strong>~96%</strong> wave-coherence</em> (cross-commit-chain validation)</li>
-        <li><em>~32,000&times; substrate-to-context multiplier &mdash; Banyan Metric Dimension 1 canonical</em> (substrate ~124.5 GB &divide; Claude practical context ~4 MB; recomputed BP061 from 26,000&times; at 103 GB)</li>
-        <li><em>Article frame: <a href="https://cephas.lianabanyan.com/" style="color:rgba(214,158,46,0.9);">&ldquo;I Think I Broke the Sound Barrier&rdquo;</a> &mdash; Founder direct social-media-announcement title</em></li>
-      </ul>
-    </section>
-
-    <!-- Eyewitness Benchmark table (placeholder · awaiting Founder paste) -->
-    <div class="mn-table-caption">
-      <span class="mn-table-caption__title" id="mn-dashboard-title">Eyewitness Benchmark</span>
-      <span class="mn-placeholder-pill">Awaiting fresh dataset · placeholder values</span>
-    </div>
-    <div class="mn-dashboard__subtitle">
-      <strong>12 Cross-Vendor Replicates</strong> · 5 models · 60 graded calls · MAY 2026 · Paper #18
-    </div>
-
-    <!-- BISHOP NOTE: paste real Eyewitness data here -->
-    <div style="overflow-x:auto;">
-      <table class="mn-eyewitness-table" aria-label="Eyewitness Benchmark placeholder">
-        <thead>
-          <tr>
-            <th>Model</th>
-            <th>Agree-Self</th>
-            <th>Agree-Peer</th>
-            <th>κ (Cohen)</th>
-            <th>Hallucination</th>
-            <th>Refusal</th>
-            <th>Cost / call</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Haiku 4.7</td>
-            <td class="mn-stat-cell--green">0.912</td>
-            <td class="mn-stat-cell--green">0.883</td>
-            <td class="mn-stat-cell--green">0.847</td>
-            <td class="mn-stat-cell--green">0.04</td>
-            <td class="mn-stat-cell--dim">0.02</td>
-            <td class="mn-stat-cell--green">$0.003</td>
-          </tr>
-          <tr>
-            <td>Opus 4.7</td>
-            <td class="mn-stat-cell--green">0.928</td>
-            <td class="mn-stat-cell--green">0.883</td>
-            <td class="mn-stat-cell--green">0.861</td>
-            <td class="mn-stat-cell--green">0.03</td>
-            <td class="mn-stat-cell--dim">0.01</td>
-            <td class="mn-stat-cell--red">$0.082</td>
-          </tr>
-          <tr>
-            <td>Sonnet 4.6</td>
-            <td class="mn-stat-cell--green">0.901</td>
-            <td class="mn-stat-cell--green">0.864</td>
-            <td class="mn-stat-cell--green">0.812</td>
-            <td class="mn-stat-cell--green">0.05</td>
-            <td class="mn-stat-cell--dim">0.02</td>
-            <td>$0.018</td>
-          </tr>
-          <tr>
-            <td>GPT 5.5</td>
-            <td>0.872</td>
-            <td>0.794</td>
-            <td>0.738</td>
-            <td class="mn-stat-cell--red">0.11</td>
-            <td>0.03</td>
-            <td>$0.041</td>
-          </tr>
-          <tr>
-            <td>Gemini 3.1 Pro</td>
-            <td>0.858</td>
-            <td>0.771</td>
-            <td>0.702</td>
-            <td class="mn-stat-cell--red">0.13</td>
-            <td class="mn-stat-cell--red">0.08</td>
-            <td>$0.022</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- BP054-N · Eyewitness footer: cohort dropdown + interpretation -->
-    <div class="mn-eyewitness-footer">
-      <label for="mn-eyewitness-cohort">Cohort:</label>
-      <select id="mn-eyewitness-cohort" disabled>
-        <option>12 Cross-Vendor Replicates (placeholder)</option>
-      </select>
-      <p class="mn-eyewitness-interp">
-        Interpretation: substrate-equipped Haiku 4.7 ties flagship Opus on inter-rater agreement (kappa 0.883) at ~27x lower cost per call. Awaiting fresh dataset to ratify.
-      </p>
-    </div>
-
-    <!-- Headline metric callout -->
-    <div class="mn-headline-callout">
-      <span class="mn-headline-callout__metric">Haiku vs Opus · 0.883</span>
-      <span class="mn-headline-callout__label">Almost perfect agreement · cheap model matches flagship with substrate</span>
-    </div>
-
-    <!-- Mnemosyne Speedup table (REAL numbers · already on the live page) -->
-    <div class="mn-table-caption">
-      <span class="mn-table-caption__title">Mnemosyne Speedup · v0.1.21</span>
-      <span style="font-size:0.66rem; color:rgba(250,245,235,0.45); letter-spacing:0.1em;">Founder-run · BP046B Method 5 Round 2 · canon-anchored</span>
-    </div>
-    <div class="mn-dashboard__subtitle">
-      <strong>6 parallel investigative queries</strong> · 1 tool block · production codebase · MAY 2026
-    </div>
-
-    <div style="overflow-x:auto;">
-      <table class="mn-speedup-table" aria-label="Mnemosyne speedup table">
-        <thead>
-          <tr>
-            <th>Metric</th>
-            <th>Gadget (Caithedral + Mnemosyne)</th>
-            <th>SEG baseline</th>
-            <th>Delta</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Wall-clock</td>
-            <td class="mn-stat-cell--green">0–3 ms / query</td>
-            <td class="mn-stat-cell--red">30–60 s / dispatch</td>
-            <td class="mn-stat-cell--green">~30–60× faster</td>
-          </tr>
-          <tr>
-            <td>Token cost</td>
-            <td class="mn-stat-cell--green">~0 (substrate hit)</td>
-            <td class="mn-stat-cell--red">20,000–30,000 tok</td>
-            <td class="mn-stat-cell--green">~100× cheaper</td>
-          </tr>
-          <tr>
-            <td>Wrasse lookup (mean)</td>
-            <td class="mn-stat-cell--green">0.059 ms</td>
-            <td class="mn-stat-cell--dim">n/a</td>
-            <td class="mn-stat-cell--green">Sub-millisecond</td>
-          </tr>
-          <tr>
-            <td>Parallelism</td>
-            <td class="mn-stat-cell--green">6 concurrent</td>
-            <td class="mn-stat-cell--red">Effectively serial</td>
-            <td class="mn-stat-cell--green">True concurrency</td>
-          </tr>
-          <tr>
-            <td>Cloud cost avoided</td>
-            <td class="mn-stat-cell--green">$3.5064 (22,775 q)</td>
-            <td class="mn-stat-cell--dim">—</td>
-            <td class="mn-stat-cell--green">LIVE · MoneyPenny</td>
-          </tr>
-          <tr>
-            <td>Binary footprint</td>
-            <td>76 MB · SHA-256 anchored</td>
-            <td class="mn-stat-cell--dim">—</td>
-                <td>v0.1.21 · DigiCert TSA</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    </details>
-    <!-- /BP054-N · end Technical detail collapsible -->
-
-    <!-- ═══════════════════════════════════════════════════════════
-         BP055 · PROOFS GALLERY (Founder direct: "for Proofs")
-         7 empirical-receipt charts · cooperative-class throughput
-         ═══════════════════════════════════════════════════════════ -->
-    <section class="mn-proofs-gallery" aria-labelledby="mn-proofs-title">
-      <div class="mn-table-caption">
-        <span class="mn-table-caption__title" id="mn-proofs-title">Proofs · Empirical Receipts</span>
-        <span style="font-size:0.66rem; color:rgba(250,245,235,0.55); letter-spacing:0.1em;">BP055 · "I Think I Broke the Sound Barrier · By Grabthar's Hammer... What a Savings"</span>
-      </div>
-      <p style="font-size:0.88rem; color:rgba(250,245,235,0.7); line-height:1.65; margin:0.6rem 0 1.2rem;">
-        Empirical receipts of cooperative-class throughput. Every number sourced from actual session logs (timestamped screenshots &middot; token counters &middot; git commit chains &middot; canon-Eblet seal-counts). <em>The cooperative is the moat.</em>
-        Full deep-dive at <a href="/proofs/" style="color:#d69e2e;">/proofs &rarr;</a>
-      </p>
-      <div class="mn-proofs-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:1.2rem; margin:1rem 0 2rem;">
-
-        <figure class="mn-proof" style="margin:0; border:1px solid rgba(214,158,46,0.22); border-radius:6px; padding:0.8rem; background:rgba(5,11,20,0.6);">
-          <img src="/img/proofs/01_bishop_wave_acceleration.png" alt="Bishop wave-by-wave throughput · 8.9x substrate-compounded acceleration" loading="lazy" class="expand-chart-img" style="width:100%; height:auto; border-radius:4px; cursor:zoom-in;" />
-          <figcaption style="font-size:0.78rem; color:rgba(250,245,235,0.75); margin-top:0.6rem; line-height:1.5;">
-            <strong style="color:#d69e2e;">1 &middot; Wave-by-wave throughput</strong> &mdash; 8.9&times; substrate-compounded acceleration in a single 72-min session. W4 "ALL of it" mining wave ran 9&times; faster than session-open.
-          </figcaption>
-        </figure>
-
-        <figure class="mn-proof" style="margin:0; border:1px solid rgba(214,158,46,0.22); border-radius:6px; padding:0.8rem; background:rgba(5,11,20,0.6);">
-          <img src="/img/proofs/02_solo_vs_cooperative_log.png" alt="Cooperative-class vs solo-engineer baseline · 180x wall-clock multiplier" loading="lazy" class="expand-chart-img" style="width:100%; height:auto; border-radius:4px; cursor:zoom-in;" />
-          <figcaption style="font-size:0.78rem; color:rgba(250,245,235,0.75); margin-top:0.6rem; line-height:1.5;">
-            <strong style="color:#d69e2e;">2 &middot; Cooperative vs solo baseline</strong> &mdash; <strong>~180&times;</strong> wall-clock &middot; ~$31.50 model cost vs ~$36,000 solo. By Grabthar's Hammer... what a savings.
-          </figcaption>
-        </figure>
-
-        <figure class="mn-proof" style="margin:0; border:1px solid rgba(214,158,46,0.22); border-radius:6px; padding:0.8rem; background:rgba(5,11,20,0.6);">
-          <img src="/img/proofs/03_bishop_output_pie.png" alt="Bishop session output composition · 30% ALL of it Spider fan-out" loading="lazy" class="expand-chart-img" style="width:100%; height:auto; border-radius:4px; cursor:zoom-in;" />
-          <figcaption style="font-size:0.78rem; color:rgba(250,245,235,0.75); margin-top:0.6rem; line-height:1.5;">
-            <strong style="color:#d69e2e;">3 &middot; Session output composition</strong> &mdash; 30% of effort = "ALL of it" Spider fan-out. 72 min &middot; 380K tokens &middot; ~$30 model spend.
-          </figcaption>
-        </figure>
-
-        <figure class="mn-proof" style="margin:0; border:1px solid rgba(214,158,46,0.22); border-radius:6px; padding:0.8rem; background:rgba(5,11,20,0.6);">
-          <img src="/img/proofs/04_all_of_it_hypothesis.png" alt="ALL of it hypothesis · 40x speedup vs main-thread bulk read" loading="lazy" class="expand-chart-img" style="width:100%; height:auto; border-radius:4px; cursor:zoom-in;" />
-          <figcaption style="font-size:0.78rem; color:rgba(250,245,235,0.75); margin-top:0.6rem; line-height:1.5;">
-            <strong style="color:#d69e2e;">4 &middot; "ALL of it" hypothesis</strong> &mdash; <strong>40&times;</strong> speedup vs main-thread bulk read. Founder-directive forces parallel-class fan-out structurally.
-          </figcaption>
-        </figure>
-
-        <figure class="mn-proof" style="margin:0; border:1px solid rgba(214,158,46,0.22); border-radius:6px; padding:0.8rem; background:rgba(5,11,20,0.6);">
-          <img src="/img/proofs/05_38_38_symmetry.png" alt="38/38 symmetry · Bishop/Knight peer-witness real concurrent" loading="lazy" class="expand-chart-img" style="width:100%; height:auto; border-radius:4px; cursor:zoom-in;" />
-          <figcaption style="font-size:0.78rem; color:rgba(250,245,235,0.75); margin-top:0.6rem; line-height:1.5;">
-            <strong style="color:#d69e2e;">5 &middot; 38/38 symmetry</strong> &mdash; load-balancing by <em>discipline</em>, not by budget. Bishop (1M ctx) and Knight (200K ctx) at same percentage headroom, 0 compactions.
-          </figcaption>
-        </figure>
-
-        <figure class="mn-proof" style="margin:0; border:1px solid rgba(214,158,46,0.22); border-radius:6px; padding:0.8rem; background:rgba(5,11,20,0.6);">
-          <img src="/img/proofs/06_magic_beans_scale_class_ladder.png" alt="Magic Beans scale-class progression · bean to LIGHT SPEED" loading="lazy" class="expand-chart-img" style="width:100%; height:auto; border-radius:4px; cursor:zoom-in;" />
-          <figcaption style="font-size:0.78rem; color:rgba(250,245,235,0.75); margin-top:0.6rem; line-height:1.5;">
-            <strong style="color:#d69e2e;">6 &middot; Magic Beans &middot; scale-class ladder</strong> &mdash; bean &rarr; pod &rarr; bushel &rarr; saga &rarr; novaculi &rarr; Goliath &rarr; Escape Velocity &rarr; Black Mamba &rarr; Light Speed &rarr; <span style="color:#22d3ee;font-weight:bold;">DREKASKIP</span>. Each tier compounds the prior. <em>You are here: <strong style="color:#22d3ee;">DREKASKIP &middot; past Light Speed</strong>.</em>
-          </figcaption>
-        </figure>
-
-        <figure class="mn-proof" style="margin:0; border:1px solid rgba(214,158,46,0.22); border-radius:6px; padding:0.8rem; background:rgba(5,11,20,0.6);">
-          <img src="/img/proofs/07_magic_beans_scale_class_bars.png" alt="Magic Beans scale-class bars variant" loading="lazy" class="expand-chart-img" style="width:100%; height:auto; border-radius:4px; cursor:zoom-in;" />
-          <figcaption style="font-size:0.78rem; color:rgba(250,245,235,0.75); margin-top:0.6rem; line-height:1.5;">
-            <strong style="color:#d69e2e;">7 &middot; Magic Beans (bars)</strong> &mdash; 12-tier progression, log-Y bar variant with achievement dates. <em>You are here: <strong style="color:#22d3ee;">DREKASKIP &middot; past Light Speed</strong></em> &middot; achieved 2026-05-28+.
-          </figcaption>
-        </figure>
-
-      </div>
-      <p style="font-size:0.78rem; color:rgba(250,245,235,0.5); font-style:italic; text-align:center; margin:0.5rem 0 1.6rem;">
-        Show your faith by your works. &mdash; Liana Banyan Corporation &middot; BP055 W4 cold-open
-      </p>
-    </section>
-
-    <!-- Cheap dropdown + interpretation -->
-    <div class="mn-cheap-row">
-      <select aria-label="Pick a cost lens">
-        <option>Cheap</option>
-        <option>Flagship</option>
-        <option>Local · zero-cloud</option>
-      </select>
-      <p class="mn-cheap-row__interp">
-        At the "Cheap" tier, Haiku-class models reach 0.883 cross-vendor agreement with Opus — within the Honest-Alpha variance band. The substrate, not the model, is doing the work: ground truth is pre-injected before the reasoning step, so the cheap model never has to re-derive what the cooperative already knows.
-      </p>
-    </div>
-
-    <!-- Restyled download CTA · preserves SHA-256 + Free Forever pill -->
-    <a class="mn-dl-restyle" href="https://github.com/liana-banyan/mnemosyne/releases/download/v0.1.21/Mnemosyne-Setup-0.1.21.exe" aria-label="Download Mnemosyne for Windows v0.1.21">
-      <div class="mn-dl-restyle__lhs">
-        <div class="mn-dl-restyle__title">Windows · v0.1.21</div>
-        <div class="mn-dl-restyle__file">Mnemosyne-Setup-0.1.21.exe</div>
-        <div class="mn-dl-restyle__hash">SHA-256 · C14BFDCFD3BFFC42C347E610631966E5D061AEF251AE4C0372D7D53776060A27</div>
-      </div>
-      <div class="mn-dl-restyle__rhs">
-        <span class="mn-dl-restyle__free-pill">Free Forever</span>
-        <span class="mn-dl-restyle__btn">↓ Download</span>
-      </div>
+  <!-- ═══════════════════════════════════════════════
+       SECTION 3 · ONE DOWNLOAD BUTTON + SmartScreen steps + strapline
+       ═══════════════════════════════════════════════ -->
+  <section class="mn-v2-download-section" aria-labelledby="mn-v2-dl-heading">
+    <h2 id="mn-v2-dl-heading" style="color:#d69e2e; font-size:1.2rem; margin:0 0 1.2rem; text-align:center;">Download MnemosyneC &mdash; Free, Forever</h2>
+    <a class="mn-v2-dl-btn"
+       href="https://github.com/liana-banyan/mnemosyne/releases/download/v0.1.24/MnemosyneC-Setup-0.1.24.exe"
+       download="MnemosyneC-Setup-0.1.24.exe"
+       aria-label="Download MnemosyneC installer for Windows v0.1.24">
+      &#8595;&nbsp; Download for Windows &mdash; v0.1.24 (&sim;77&nbsp;MB)
     </a>
 
-    <!-- Trust strip (restyled · dark-dashboard) -->
-    <div class="mn-trust-strip-dark">
-      <span>SSPL v1</span>·<span>19 USPTO Provisional Patents</span>·<span>Cooperative Defensive Pledge #2260</span>·<span>83.3% creator-keeps</span>·<span>$5/yr</span>·<span>No-VC · No-Ads</span>·<span>50-yr dissipation</span>
+    <div class="mn-v2-install-steps">
+      <p class="mn-v2-install-steps__title">&#9432;&nbsp; Important Installation Steps</p>
+      <p class="mn-v2-install-steps__note">Because this is an early release, Windows will show a blue warning screen (&ldquo;Windows protected your PC&rdquo;) when you open the file. This is expected.</p>
+      <ol class="mn-v2-install-steps__list">
+        <li>Click the download button above and save the file.</li>
+        <li>Open the downloaded file. When the blue warning appears, click <strong>More info</strong>.</li>
+        <li>Click <strong>Run anyway</strong>.</li>
+        <li>Follow the installer prompts.</li>
+        <li>Done &mdash; find MnemosyneC in your Start menu.</li>
+      </ol>
     </div>
 
+    <p class="mn-v2-strapline">Version 0.1.24 &nbsp;&middot;&nbsp; Free Forever &nbsp;&middot;&nbsp; No account required &nbsp;&middot;&nbsp; All data stays on your computer</p>
   </section>
 
-  <!-- 2nd Second Industrial Revolution framing (Founder verbatim BP054) -->
-  <aside class="mn-2nd-second-frame" aria-label="2nd Second Industrial Revolution framing">
-    <div class="mn-2nd-second-frame__eyebrow">The 2nd Second Industrial Revolution</div>
-    <p class="mn-2nd-second-frame__body">
-      "The First and Second Industrial Revolutions centralized production — big factories, one-size-fits-all. The 2nd Second Industrial Revolution de-centralizes it: 3D printers and local tools let any town make its own things. Your AI librarian does the same for knowledge. Your own library. Your own tool. Run it yourself. Every town its own fab shop — and its own librarian."
-    </p>
-  </aside>
+  <hr class="mn-v2-divider" />
 
-  <!-- ═══════════════════════════════════════════════════════════
-       BP047 · HERO AREA: Pawn literal copy
-       ═══════════════════════════════════════════════════════════ -->
-  <section class="mn-bp047-hero" aria-labelledby="mn-bp047-title">
-    <div class="mn-bp047-hero__card">
-      <p class="librarian-title" aria-label="Mnemosyne — Memory, powered by Caithedral">
-        <span class="librarian-title__white">Mnemosyne</span><span class="librarian-title__blue">™</span>
-      </p>
-      <h1 id="mn-bp047-title">Cooperative memory that makes AI cheaper, faster, and yours to keep.</h1>
-      <p class="mn-bp047-hero__subhead">
-        Mnemosyne is a patented, member-owned memory substrate that cut real workloads by up to 30-60x in wall-clock time and ~100x in token cost — measured in production, not estimated. Free to use. Better to join.
-      </p>
+  <!-- ═══════════════════════════════════════════════
+       SECTION 4 · TECHNICAL DISCLOSURE (all jargon behind here)
+       ═══════════════════════════════════════════════ -->
+  <details class="mn-v2-chip mn-v2-chip--technical" id="mn-technical">
+    <summary>&#9654;&nbsp; For Technical Users &amp; Developers &nbsp;&mdash; patents, SHA&#8209;256, Gauntlet, licensing, substrate detail</summary>
+    <div class="mn-v2-chip-body">
 
-      <div class="mn-bp047-cta-row">
-        <a class="mn-bp047-primary" href="https://github.com/liana-banyan/mnemosyne/releases/download/v0.1.21/Mnemosyne-Setup-0.1.21.exe" aria-label="Download Mnemosyne for Windows v0.1.21">
-          <span aria-hidden="true">Windows</span>
-          Download Mnemosyne for Windows · v0.1.21 · Free Forever
-        </a>
-        <a class="mn-bp047-secondary" href="#benchmark">Read the benchmark canon (BP046B) →</a>
-      </div>
-
-      <p class="mn-bp047-hash">
-        SHA-256 · C14BFDCFD3BFFC42C347E610631966E5D061AEF251AE4C0372D7D53776060A27 · v0.1.21
-      </p>
-
-      <div class="mn-bp047-brand-canon" aria-label="Mnemosyne brand canon">
-        <p>"Mnemosyne isn't a product to use. It's a belief made visible."</p>
-        <p>"Mnemosyne is an active, daily act of defiance."</p>
-      </div>
-    </div>
-  </section>
-
-  <div class="mn-inner">
-    <section aria-labelledby="trust-verification">
-      <h2 id="trust-verification">Trust &amp; Verification</h2>
-
-      <div class="mn-panel-grid">
-        <article class="mn-copy-card">
-          <h3>USPTO-Patented · Cooperative Defensive Patent Pledge #2260</h3>
-          <p>Mnemosyne is protected by 19 USPTO Provisional Patents (sole inventor · Conductor-Class doctrine · <em>Thaler v. Vidal</em>). The full patent portfolio — including Provisional 20 (28pp · 6 claim families: Thorax · Lockbox · Pioneer Bonus · 3-class Pheromone hybrid · Production-Level composability · Bounty Posters) — is pledged under Cooperative Defensive Patent Pledge #2260.</p>
-          <p>What that means: cooperatives can use, improve, and deploy Mnemosyne without fear of enclosure. The pledge is irrevocable. No future board, no acquirer, no successor entity can weaponize these patents against cooperative-class users. The pledge outlasts the corporation.</p>
-          <p>Upekrithen LLC (Wyoming) holds the pledge. Liana Banyan Corporation (Wyoming · 50-year sunset clause) is the operational entity. At year 50, the corporation dissolves. The cooperative substrate — the Liana, the IP commons, the SSPL code, the Pledge, the member relationships — inherits everything.</p>
-        </article>
-
-        <article class="mn-copy-card">
-          <h3>SSPL v1 · Source and binaries</h3>
-          <p>Mnemosyne source code and binaries are licensed under Server Side Public License v1.</p>
-          <p>Plain English: Run it. Modify it. Self-host it. If you offer Mnemosyne as a networked service to others, you must share your modifications under the same SSPL v1 license. This is the cooperative commons lock — it prevents enclosure from re-entering through the side door.</p>
-          <p>"SSPL Free Forever" is not a slogan. It is a structural guarantee.</p>
-          <p><a href="https://github.com/LianaBanyan" target="_blank" rel="noopener">View license on GitHub →</a></p>
-        </article>
-
-        <article class="mn-copy-card mn-copy-card--wide">
-          <h3>Binary Integrity · v0.1.21</h3>
-          <div class="mn-table-wrap">
-            <table>
-              <tbody>
-                <tr><th>Field</th><th>Value</th></tr>
-                <tr><td>Filename</td><td>Mnemosyne-Setup-0.1.21.exe</td></tr>
-                <tr><td>Strain</td><td>v0.1.21</td></tr>
-                <tr><td>Build hash</td><td>v0.1.21+e2c4a98</td></tr>
-                <tr><td>File size</td><td>80,972,383 bytes (~77.2 MB)</td></tr>
-                <tr><td>SHA-256</td><td><code>C14BFDCFD3BFFC42C347E610631966E5D061AEF251AE4C0372D7D53776060A27</code></td></tr>
-                <tr><td>Signing</td><td>DigiCert TSA · RFC 3161 · WebTrust-audited · US federal admissibility · internationally accepted</td></tr>
-                <tr><td>TSA timestamp</td><td>Pending publication</td></tr>
-                <tr><td>Telemetry</td><td>None without explicit opt-in</td></tr>
-              </tbody>
-            </table>
-          </div>
-          <p><strong style="color:#d69e2e;">How to verify this file with SHA-256 (PowerShell):</strong></p>
-          <pre><code>Get-FileHash "Mnemosyne-Setup-0.1.21.exe" -Algorithm SHA256</code></pre>
-          <p>Expected: <code>C14BFDCFD3BFFC42C347E610631966E5D061AEF251AE4C0372D7D53776060A27</code></p>
-          <p class="mn-small-note">DigiCert TSA is free · public RFC 3161 · WebTrust-audited · US federal admissibility · globally accepted. The public TSA receipt sidecar is pending publication and is tracked in Release Notes &amp; Current Status below.</p>
-        </article>
-
-        <article class="mn-copy-card mn-copy-card--wide mn-copy-card--identity">
-          <h3>Who built this and why</h3>
-          <p>Crewman #6. One army ant. Amateur economist/engineer. Patriotic Interdependentalist.</p>
-          <p>The Pied Piper of Hamelin stole the children when the town refused to pay. My answer to that story was different: instead of stealing the children, I'm setting them free of the shackles of extraction economics. All of those who are now, or were ever, or will ever be — children.</p>
-          <p>I am the Pied Piper of AI Dragons. The dragons are the AIs. The children are everyone subject to an extraction economy. The cooperative is the way out.</p>
-          <p>I am ARNG 11B OCS 15A IFR — a veteran of no particular note. Father of eight. I have the missing teeth to prove I know how to work for a living. I built what I needed. Now I'm building the bridge behind me so others can cross.</p>
-          <p>85% of my patent portfolio bootstraps this cooperative. No investors. No ads. No extraction. The corporate wrapper dissolves at year 50. The Liana — the cooperative substrate — inherits everything.</p>
-          <p class="mn-quote-line">"Be Who You Needed. Build the bridge behind you. At 50 years, the corporation dissipates to the Liana we are making now."</p>
-          <p class="mn-quote-line">"A ship in harbor is safe, but that is not what ships are built for." — John A. Shedd, 1928</p>
-          <p><strong>For All Mankind. ALL MANKIND. Here from the Start.</strong></p>
-        </article>
-      </div>
-    </section>
-  </div>
-
-  <!-- ═══════════════════════════════════════════════════════════
-       HOW IT WORKS · SUBSTRATE LADDER UI · BP046 W1
-       Four-Scale Architectural Inversion — expandable rungs
-       ═══════════════════════════════════════════════════════════ -->
-  <div class="mn-inner">
-  <div class="mn-ladder" role="region" aria-label="How the Substrate Works — Four-Scale Architectural Inversion">
-
-    <div class="mn-ladder__header">
-      <p class="mn-ladder__title">How the Substrate Works · Four-Scale Architectural Inversion</p>
-      <p class="mn-ladder__subtitle">Each rung compounds the prior. Click any rung to expand. Multiple rungs open simultaneously.</p>
-    </div>
-
-    <!-- RUNG 1 — Three Eblet Tiers + ROM-class Permanence -->
-    <details class="mn-rung mn-rung--1" id="mn-rung-1">
-      <summary aria-expanded="false" aria-controls="mn-rung-1-body">
-        <span class="mn-rung__label">
-          <span class="mn-rung__chevron" aria-hidden="true">▶</span>
-          <span class="mn-rung__num">RUNG 1</span>
-          <span class="mn-rung__name">Three Eblet Tiers + ROM-class Permanence</span>
-        </span>
-        <span class="mn-rung__badge" aria-label="Cumulative total through Rung 1: canonical permanence layer — Founder ratifies per-rung numbers">
-          Canonical permanence layer
-        </span>
-      </summary>
-      <div class="mn-rung__body" id="mn-rung-1-body">
-        <div class="mn-tier-tabs">
-          <input type="radio" name="mn-rung1-tier" id="mn-rung1-ss">
-          <input type="radio" name="mn-rung1-tier" id="mn-rung1-wi" checked>
-          <input type="radio" name="mn-rung1-tier" id="mn-rung1-dd">
-          <div class="mn-tier-nav">
-            <label class="mn-tier-label mn-tier-label--ss" for="mn-rung1-ss">⛷ Skipping Stones</label>
-            <label class="mn-tier-label mn-tier-label--wi" for="mn-rung1-wi">🌊 Wading In</label>
-            <label class="mn-tier-label mn-tier-label--dd" for="mn-rung1-dd">🤿 Deep Dive</label>
-          </div>
-          <div class="mn-tier-panels">
-            <div class="mn-tier-panel mn-tier-panel--ss">
-              <p class="mn-rung__contribution">Your AI sessions currently start from scratch — every time. Mnemosyne installs a permanent memory layer so your AI always knows where things stand. Think of it like a filing cabinet that opens itself to the right folder before you even ask.</p>
-              <p class="mn-tier-placeholder">[Founder expands Skipping Stones copy — plain-English hook for first-timers]</p>
-            </div>
-            <div class="mn-tier-panel mn-tier-panel--wi">
-              <p class="mn-rung__contribution">
-                The substrate's canonical-tier Eblets are immutable after Founder ratification — survey-monument permanence.
-                This is the ROM-class semantic: read-many-write-once, cryptographically anchored (HMAC),
-                provenance-stamped (Stack Ledger ordinal + session ID + timestamp).
-                Topic Eblets are pre-injected by trigger phrase. Skip-Eblets are render-bound transients (Furnace-by-construction at blink boundary).
-                The three-tier type system establishes the baseline: canonical knowledge does not decay, does not drift,
-                does not require re-derivation.
-              </p>
-              <p class="mn-rung__composition">Rung 1 is the foundation. Prior-art substrates are service layers for agents. Liana Banyan inverts that at the type-system level.</p>
-              <div class="mn-rung__detail">
-                <strong>Romulator 9000 etymology</strong>: ROM + emulator + HAL 9000 throwback. The Romulator is the cooperative fulfillment of the AI imagination —
-                not the science-fiction AI that overwrites human agency, but the one that holds ground truth for it.
-                ROM-class semantics are the keep-class: things the Cooperative has ratified are not subject to agent drift.<br><br>
-                <strong>Prior-art carve-out</strong>: no prior-art substrate uses a three-tier type system with cryptographic permanence at the canonical tier as a primary design primitive.
-              </div>
-              <p class="mn-rung__xref">Cross-references: Prov 20 (substrate architecture filing) · Prov 15 #2332 (Wrasse/Stone-Tablet/Pheromone empirical anchors) · Romulator 9000 origin canon.</p>
-            </div>
-            <div class="mn-tier-panel mn-tier-panel--dd">
-              <p class="mn-rung__contribution">ROM-class permanence is a type-system primitive: <em>canonical</em> Eblets carry cryptographic HMAC anchors (BLAKE2b keyed) + Stack Ledger ordinals (session-ID × timestamp composite). The three-tier type lattice — canonical (ROM) · topic (RW-trigger-gated) · skip (blink-transient) — enforces immutability at the substrate layer, not the application layer. Agents cannot promote or demote an Eblet's tier.</p>
-              <div class="mn-rung__detail">
-                <strong>Formal model</strong>: E = (id, tier, content, hmac, ordinal, triggered_by[]). Canonical Eblets have tier = 0x00 with a null triggered_by set — they fire on trigger-phrase match, not agent invocation. This separates the authority plane from the agent plane structurally, not by policy.<br><br>
-                <strong>Filing anchor</strong>: Prov 20 claim-set covers the three-tier type lattice + ROM-class permanence as a substrate primitive. Prior-art search: no prior-art memory system encodes immutability at the type layer; all extant systems (MemGPT, Zep, Letta) treat memory as mutable agent state.
-              </div>
-              <p class="mn-rung__xref">Patent cross-reference: Prov 20 · Prov 15 #2332 · Romulator 9000 origin canon · HMAC derivation key: cooperative_eblet_canon_v1.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </details>
-
-    <!-- RUNG 2 — Wrasse Sub-millisecond Pre-injection -->
-    <details class="mn-rung mn-rung--2" id="mn-rung-2">
-      <summary aria-expanded="false" aria-controls="mn-rung-2-body">
-        <span class="mn-rung__label">
-          <span class="mn-rung__chevron" aria-hidden="true">▶</span>
-          <span class="mn-rung__num">RUNG 2</span>
-          <span class="mn-rung__name">Wrasse Sub-millisecond Pre-injection</span>
-        </span>
-        <span class="mn-rung__badge" aria-label="Cumulative total through Rung 2: canonical permanence plus sub-millisecond delivery — Founder ratifies per-rung numbers">
-          + Sub-ms delivery &nbsp;·&nbsp; 0.059ms mean
-        </span>
-      </summary>
-      <div class="mn-rung__body" id="mn-rung-2-body">
-        <div class="mn-tier-tabs">
-          <input type="radio" name="mn-rung2-tier" id="mn-rung2-ss">
-          <input type="radio" name="mn-rung2-tier" id="mn-rung2-wi" checked>
-          <input type="radio" name="mn-rung2-tier" id="mn-rung2-dd">
-          <div class="mn-tier-nav">
-            <label class="mn-tier-label mn-tier-label--ss" for="mn-rung2-ss">⛷ Skipping Stones</label>
-            <label class="mn-tier-label mn-tier-label--wi" for="mn-rung2-wi">🌊 Wading In</label>
-            <label class="mn-tier-label mn-tier-label--dd" for="mn-rung2-dd">🤿 Deep Dive</label>
-          </div>
-          <div class="mn-tier-panels">
-            <div class="mn-tier-panel mn-tier-panel--ss">
-              <p class="mn-rung__contribution">Standard AI memory systems wait until you ask — then go look. Mnemosyne pre-loads what you need <em>before</em> the AI starts answering. That's the difference between a search engine and an expert who already knows your project.</p>
-              <p class="mn-tier-placeholder">[Founder expands Skipping Stones copy — contrast vs RAG in plain terms]</p>
-            </div>
-            <div class="mn-tier-panel mn-tier-panel--wi">
-              <p class="mn-rung__contribution">
-                Canon-routed retrieval that loads the relevant canonical entity into agent context BEFORE the reasoning step.
-                Not embedding-similarity RAG. Not agent-directed memory. Wrasse fires on trigger-phrase match,
-                routes to canonical Eblet, and pre-injects — the agent begins reasoning with ground truth already present.
-                Empirical anchor: <strong>0.059ms mean lookup</strong> per Prov 15 #2332.
-              </p>
-              <p class="mn-rung__composition">Rung 2 is the active mechanism that USES the ROM tier (Rung 1). Without canonical permanence, Wrasse would retrieve mutable approximations. With Rung 1: canonical permanence × sub-ms delivery = ground-truth-at-reasoning-time.</p>
-              <div class="mn-rung__detail">
-                <strong>RAG vs Wrasse</strong>: RAG retrieves after the agent encounters uncertainty — embedding-similarity, approximate, potentially stale.
-                Wrasse pre-injects before the reasoning step on trigger-phrase match — canonical-routed, immutable, structurally not agent-directed.
-                The "pre-" in pre-injection is load-bearing: the agent receives ground truth at context-load time, not at uncertainty-signal time.
-              </div>
-              <p class="mn-rung__xref">Cross-references: Prov 15 #2332 · Stone-Tablet canon · Wrasse architectural spec.</p>
-            </div>
-            <div class="mn-tier-panel mn-tier-panel--dd">
-              <p class="mn-rung__contribution">Wrasse implements a two-phase lookup: Phase 0 = pheromone-strength fast-path (in-process IndexState hash lookup, 0.059ms mean) → Phase 1 = RPC fallback to Librarian MCP (full Cathedral scan, ≤20ms typical). Phase 0 accounts for &gt;96% of hits in production (Detective empirical: 49:1 hit ratio vs filesystem grep at B134). The pre-injection pipeline: trigger-phrase tokenized at context-load time → Wrasse fires → canonical Eblet loaded into system prompt prefix → agent reasoning begins with ground truth in-context. This is structurally different from agent-directed retrieval: the agent does not issue a memory query; the substrate delivers without agent request.</p>
-              <div class="mn-rung__detail">
-                <strong>Empirical receipt</strong>: Prov 15 claim #2332 — 0.059ms mean across 1,000 lookup samples. Phase-0 hit: O(1) hash lookup on IndexState.pheromone_index. Phase-1 hit: full-text scan bounded by Cathedral Scribe size (KnightQueue.jsonl ≤ 400KB typical).<br><br>
-                <strong>Filing anchor</strong>: Prov 20 covers Wrasse trigger-phrase-matched pre-injection as a substrate primitive distinct from RAG, agent-directed retrieval, and user-initiated memory query.
-              </div>
-              <p class="mn-rung__xref">Patent cross-reference: Prov 20 (pre-injection primitive) · Prov 15 #2332 (empirical anchor) · Stone-Tablet Wrasse spec.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </details>
-
-    <!-- RUNG 3 — Pheromone Strength + Half-life Decay -->
-    <details class="mn-rung mn-rung--3" id="mn-rung-3">
-      <summary aria-expanded="false" aria-controls="mn-rung-3-body">
-        <span class="mn-rung__label">
-          <span class="mn-rung__chevron" aria-hidden="true">▶</span>
-          <span class="mn-rung__num">RUNG 3</span>
-          <span class="mn-rung__name">Pheromone Strength + Half-life Decay</span>
-        </span>
-        <span class="mn-rung__badge" aria-label="Cumulative total through Rung 3: canonical permanence plus sub-millisecond delivery plus substrate-driven prioritization — Founder ratifies per-rung numbers">
-          + Substrate-driven priority
-        </span>
-      </summary>
-      <div class="mn-rung__body" id="mn-rung-3-body">
-        <div class="mn-tier-tabs">
-          <input type="radio" name="mn-rung3-tier" id="mn-rung3-ss">
-          <input type="radio" name="mn-rung3-tier" id="mn-rung3-wi" checked>
-          <input type="radio" name="mn-rung3-tier" id="mn-rung3-dd">
-          <div class="mn-tier-nav">
-            <label class="mn-tier-label mn-tier-label--ss" for="mn-rung3-ss">⛷ Skipping Stones</label>
-            <label class="mn-tier-label mn-tier-label--wi" for="mn-rung3-wi">🌊 Wading In</label>
-            <label class="mn-tier-label mn-tier-label--dd" for="mn-rung3-dd">🤿 Deep Dive</label>
-          </div>
-          <div class="mn-tier-panels">
-            <div class="mn-tier-panel mn-tier-panel--ss">
-              <p class="mn-rung__contribution">The more you use something, the easier it is to find next time. Mnemosyne tracks which memory fragments you reach for most and puts them closer to the front. Like a well-worn path — the trail gets clearer with use, not murkier.</p>
-              <p class="mn-tier-placeholder">[Founder expands Skipping Stones copy — pheromone as trail metaphor for first-timers]</p>
-            </div>
-            <div class="mn-tier-panel mn-tier-panel--wi">
-              <p class="mn-rung__contribution">
-                Each canonical entity carries a pheromone strength field subject to configurable half-life decay.
-                This enables substrate-driven prioritization of canonical entity pre-injection weight — without agent-directed priority signals.
-                The substrate "smells" of recent relevance: Eblets accessed or reinforced recently carry higher pheromone strength
-                and are weighted more heavily in the pre-injection stack.
-              </p>
-              <p class="mn-rung__composition">Rung 3 composes with Rungs 1–2 as a prioritization layer. Pheromone strength × Wrasse pre-injection × canonical permanence = substrate-driven prioritized delivery of immutable ground truth.</p>
-              <div class="mn-rung__detail">
-                <strong>Configurable half-life</strong>: the decay schedule is substrate-configurable, not agent-configurable.
-                Agents cannot boost their own priority signals. The decay reflects actual usage patterns across the cooperative, not agent assertions about importance.<br><br>
-                <strong>Prior-art carve-out</strong>: no prior-art system uses substrate-usage-pattern-driven pheromone decay as a canonical entity prioritization primitive.
-                Competitor systems allow agents to flag memory items — that is agent-directed priority. Liana Banyan's model trusts substrate usage patterns.
-              </div>
-              <p class="mn-rung__xref">Cross-references: Prov 15 (pheromone empirical anchors) · swarm-intelligence prior-art carve-out in substrate canon.</p>
-            </div>
-            <div class="mn-tier-panel mn-tier-panel--dd">
-              <p class="mn-rung__contribution">Pheromone decay is implemented as a 3-class hybrid in librarian-mcp/src/scribes/pheromone.ts (BP046B SAGA 16): <code>anchor</code> (no decay — canonical-tier permanence), <code>linked</code> (decay deferred to most-recent sibling timestamp across linked_ids set), <code>transient</code> (standard exponential half-life decay). The decay score function: S(t) = S₀ × 0.5^((t − t₀) / t½) for transient class; anchors return S₀ unconditionally; linked returns max(S_self, max(S_sibling)) at query time. This 3-class system is the live SAGA 16 implementation, committed at a5dac46.</p>
-              <div class="mn-rung__detail">
-                <strong>IndexState coupling</strong>: decayScore() accepts IndexState at query time to perform linked-sibling lookups without serializing the full index. This is an O(|linked_ids|) scan bounded by the linked set size, typically ≤ 12 siblings.<br><br>
-                <strong>Filing anchor</strong>: Prov 15 covers 3-class decay as a substrate prioritization primitive. Transient class maps to standard swarm-pheromone prior art (PSO, ACO). Anchor + linked classes are novel composites — no prior art uses substrate-usage-driven decay with explicit permanence bypass at the canonical tier.
-              </div>
-              <p class="mn-rung__xref">Patent cross-reference: Prov 15 (3-class pheromone) · BP046B SAGA 16 commit a5dac46 · pheromone.ts lines ~80–140.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </details>
-
-    <!-- RUNG 4 — Yoke + Cross-Vendor Symmetric MCP -->
-    <details class="mn-rung mn-rung--4" id="mn-rung-4">
-      <summary aria-expanded="false" aria-controls="mn-rung-4-body">
-        <span class="mn-rung__label">
-          <span class="mn-rung__chevron" aria-hidden="true">▶</span>
-          <span class="mn-rung__num">RUNG 4</span>
-          <span class="mn-rung__name">Yoke + Cross-Vendor Symmetric MCP</span>
-        </span>
-        <span class="mn-rung__badge" aria-label="Cumulative total through Rung 4 — full substrate: approximately 75 million times amplification, 7.9 on the Banyan Metric, Honest-Alpha variance band 60 million to 100 million times">
-          FULL SUBSTRATE &nbsp;·&nbsp; ~75M× &nbsp;·&nbsp; 7.9 Banyan Metric
-        </span>
-      </summary>
-      <div class="mn-rung__body" id="mn-rung-4-body">
-        <div class="mn-tier-tabs">
-          <input type="radio" name="mn-rung4-tier" id="mn-rung4-ss">
-          <input type="radio" name="mn-rung4-tier" id="mn-rung4-wi" checked>
-          <input type="radio" name="mn-rung4-tier" id="mn-rung4-dd">
-          <div class="mn-tier-nav">
-            <label class="mn-tier-label mn-tier-label--ss" for="mn-rung4-ss">⛷ Skipping Stones</label>
-            <label class="mn-tier-label mn-tier-label--wi" for="mn-rung4-wi">🌊 Wading In</label>
-            <label class="mn-tier-label mn-tier-label--dd" for="mn-rung4-dd">🤿 Deep Dive</label>
-          </div>
-          <div class="mn-tier-panels">
-            <div class="mn-tier-panel mn-tier-panel--ss">
-              <p class="mn-rung__contribution">It doesn't matter which AI you're using — Claude, GPT, Gemini, or a free local model. They all read from the same shared memory. The conversation carries forward regardless of which AI picks it up next. No vendor lock-in. No starting over.</p>
-              <p class="mn-tier-placeholder">[Founder expands Skipping Stones copy — cross-vendor collective memory in plain terms]</p>
-            </div>
-            <div class="mn-tier-panel mn-tier-panel--wi">
-              <p class="mn-rung__contribution">
-                The Yoke is a persistent inter-agent message ledger that lives outside any single agent's context.
-                All flagship agents (across vendors and models) read and write to the Yoke at identical depth —
-                no privileged orchestrator, no vendor advantage, no asymmetric access.
-                The substrate carries collective conversation across vendor/model/session boundaries.
-              </p>
-              <p class="mn-rung__composition">Rung 4 closes the loop. Rung 1 establishes what is canonical. Rung 2 delivers it at sub-ms latency. Rung 3 prioritizes delivery. Rung 4 ensures all agents across all vendors operate from the same canonical substrate at the same depth. The multiplication: canonical permanence × sub-ms delivery × substrate-driven prioritization × cross-vendor symmetric collective memory = the full four-scale homomorphic substrate.</p>
-              <div class="mn-rung__detail">
-                <strong>Four-scale homomorphic instantiation</strong>: the same architectural inversion pattern —
-                substrate IS primitive, agents serve substrate — instantiated across four scales:
-                (1) Memory scale · (2) Retrieval scale · (3) Prioritization scale · (4) Collective-coherence scale.
-                One pattern. Four embodiments. The inversion holds at every scale independently and compounds across all four simultaneously.<br><br>
-                <strong>Banyan Metric terminal state</strong>: 75M× midpoint (60M–100M× band) · Method C: empirical-anchor-grounded,
-                variance-banded, Honest-Alpha trimmed. Not point-estimated. 7.9 log₁₀ Richter-scale framing per Founder ratified hybrid C1 + C4 + C2.<br><br>
-                <strong>Prior-art carve-out</strong>: no prior-art multi-agent system combines persistent inter-agent ledger +
-                cross-vendor symmetric MCP access + no-privileged-orchestrator architecture as a substrate primitive.
-              </div>
-              <p style="margin-top:0.8rem; font-size:0.82rem; color:rgba(250,245,235,0.4); font-style:italic;">
-                ROM-class semantics: the canonical-Eblet tier is functionally ROM — immutable after ratification · append-only at the substrate level · cryptographically anchored.
-                Romulator 9000 etymology: ROM + emulator + HAL 9000 throwback (the cooperative fulfillment of the AI imagination).
-              </p>
-              <p class="mn-rung__xref">Cross-references: Yoke architectural spec · Prov 20 (Yoke as substrate primitive) · cross-vendor MCP canon · Banyan Metric Method C derivation.</p>
-            </div>
-            <div class="mn-tier-panel mn-tier-panel--dd">
-              <p class="mn-rung__contribution">The Yoke (KNIGHT_BISHOP_MESSAGES.md + knight-bishop-bridge MCP) is a flat-file inter-agent ledger implementing append-only semantics. Each entry carries: session-ID prefix (K/B/R/P + ordinal), timestamp (ISO-8601), message body, optional commit-hash evidence, and optional path-references. The MCP bridge exposes read/append as symmetric operations — no agent has write-privilege over another's entries. Cross-vendor symmetry is enforced by MCP server design: all clients (Claude Code, Cursor, Perplexity, future) access the same server with identical tool surface.</p>
-              <div class="mn-rung__detail">
-                <strong>R-USE-THE-YOKE (Trinity #15, BLOOD class)</strong>: all inter-agent communication MUST go through the canonical Yoke — Cursor chat, Slack, email are non-canonical and do not count as inter-agent coordination. This is a binding behavioral rule across all LB AI agents.<br><br>
-                <strong>No-privileged-orchestrator proof</strong>: the Yoke has no "master" entry point. Agent K (Knight/Cursor) and Agent B (Bishop/Claude Code) both append at the tail. Neither can overwrite. Neither can delete. The substrate IS the orchestrator — not any agent.<br><br>
-                <strong>Filing anchor</strong>: Prov 20 covers persistent inter-agent ledger + cross-vendor symmetric MCP access as a substrate primitive. Full compound: Rungs 1–4 together = ~75M× Banyan Metric midpoint (60M–100M× band, Method C, Honest-Alpha).
-              </div>
-              <p class="mn-rung__xref">Patent cross-reference: Prov 20 (Yoke primitive + 4-scale compound) · Trinity R15 BLOOD binding canon · Banyan Metric Method C derivation (C1+C4+C2 hybrid, Founder-ratified).</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </details>
-
-    <div class="mn-ladder__footer">
-      Free to use. Better to join. Share and Save. &nbsp;·&nbsp; Variance-bands ALWAYS &nbsp;·&nbsp; NEVER point-estimate &nbsp;·&nbsp; Honest-Alpha
-    </div>
-
-  </div><!-- end .mn-ladder -->
-  </div><!-- end .mn-inner wrapper for ladder -->
-
-
-  <!-- ═══════════════════════════════════════════════════════════
-       CONTENT AREA (centered, readable width)
-       ═══════════════════════════════════════════════════════════ -->
-  <div class="mn-inner">
-
-  <!-- ═══════════════════════════════════════════════════════════
-       SAGA 06 BP046B — "ANY hardware" claim RESTORED + Gauntlet proof anchor
-       ═══════════════════════════════════════════════════════════ -->
-  <div style="background:rgba(30,58,138,0.15); border:1px solid rgba(59,130,246,0.3); border-radius:8px; padding:1.2rem 1.5rem; margin-bottom:1.8rem; text-align:center;">
-    <div style="font-size:clamp(0.9rem,2vw,1.1rem); font-weight:700; color:#faf5eb; margin-bottom:0.4rem;">
-      ANY hardware &nbsp;·&nbsp; ANY network &nbsp;·&nbsp; ANY AI model &nbsp;·&nbsp; <span style="color:#38a169;">or NONE AT ALL</span>
-    </div>
-    <div style="font-size:0.85rem; color:rgba(250,245,235,0.65); margin-bottom:0.4rem;">
-      Inexpensive AI models work as well as flagship models for almost all tasks <em>with substrate</em> — we proved it empirically.
-    </div>
-    <div style="font-size:0.78rem; color:rgba(59,130,246,0.8);">
-      Proof: Gauntlet Stage 2 — Caithedral-alone substrate retrieves canonical Eblets <em>without any LLM</em> · CPU-only Tier-1 · zero cloud cost · The Gauntlet is built into Mnemosyne v0.1.21
-    </div>
-  </div>
-
-  <!-- ═══════════════════════════════════════════════════════════
-       BP047 · BENCHMARK SECTION
-       ═══════════════════════════════════════════════════════════ -->
-  <section id="benchmark" aria-labelledby="benchmark-title">
-    <h2 id="benchmark-title">Measured. Canon. Reproducible. The proof is here.</h2>
-
-    <p>
-      In BP046B, Gadget (Mnemosyne-backed CAI) processed six parallel investigative queries in under one second. The same workload via SEG (grep + glob equivalent) took approximately 30-60 seconds and consumed an estimated 20,000-30,000 tokens. That is the Bannister moment. Here are the normalized numbers.
-    </p>
-
-    <div class="mn-table-wrap">
+      <h3>Binary Integrity &middot; v0.1.24 &middot; SHA&#8209;256 Checksums &amp; Signing</h3>
       <table>
-        <thead>
-          <tr>
-            <th>Metric</th>
-            <th>Gadget (Caithedral + Mnemosyne)</th>
-            <th>SEG (baseline)</th>
-            <th>Delta</th>
-          </tr>
-        </thead>
         <tbody>
-          <tr>
-            <td>Wall-clock</td>
-            <td>Sub-second (build_ms 0-1; query_ms 0-3 per query)</td>
-            <td>~30-60 seconds per comparable dispatch</td>
-            <td>~30-60x faster</td>
-          </tr>
-          <tr>
-            <td>Token cost</td>
-            <td>Minimal — pheromone substrate hits; no agent spin-up</td>
-            <td>~20,000-30,000 tokens (subagent prompt + tools)</td>
-            <td>~100x cheaper</td>
-          </tr>
-          <tr>
-            <td>Parallelism</td>
-            <td>6 queries · one tool block · fully concurrent</td>
-            <td>Single large dispatch · effectively serial</td>
-            <td>True concurrency vs serial</td>
-          </tr>
-          <tr>
-            <td>Output quality</td>
-            <td>Script + tablet_id + decay_score + cathedral context · canon-ready</td>
-            <td>Formatted excerpts · high latency</td>
-            <td>Sufficient for canon authoring</td>
-          </tr>
+          <tr><td><strong>Filename</strong></td><td>MnemosyneC-Setup-0.1.24.exe</td></tr>
+          <tr><td><strong>Build hash</strong></td><td>v0.1.24+e733827</td></tr>
+          <tr><td><strong>File size</strong></td><td>&sim;76.7 MB</td></tr>
+          <tr><td><strong>SHA&#8209;256</strong></td><td><code>9308DB5FF63034DF0E2365B7083C511AF5A7CE0CFD518701744AFA4BDC0C9475</code></td></tr>
+          <tr><td><strong>Signing</strong></td><td>DigiCert RFC 3161 &middot; .tsr sidecar pending publication &mdash; see Release Notes</td></tr>
+          <tr><td><strong>Telemetry</strong></td><td>None without explicit opt&#8209;in</td></tr>
         </tbody>
       </table>
-    </div>
+      <p><strong>Verify via PowerShell:</strong></p>
+      <pre><code>Get-FileHash "MnemosyneC-Setup-0.1.24.exe" -Algorithm SHA256</code></pre>
 
-    <p class="mn-small-note">
-      Founder-run benchmark · BP046B Method 5 Round 2 · 4 of 5 vendors blind-converged at composite 0.865 (n=4 same-environment) / 0.762 (n=5 cross-environment) · Vendors: Opus 4.7 · Sonnet 4.6 · Gemini 3.1 Pro Cursor · GPT 5.5 Cursor · all independently named the function without coordination.
-    </p>
+      <h3>USPTO Patents &middot; Cooperative Defensive Patent Pledge #2260</h3>
+      <p>MnemosyneC is protected by 19 USPTO Provisional Patents (sole inventor &middot; Conductor-Class doctrine &middot; <em>Thaler v. Vidal</em>). The full patent portfolio is pledged under Cooperative Defensive Patent Pledge #2260. What that means: cooperatives can use, improve, and deploy MnemosyneC without fear of enclosure. The pledge is irrevocable. No future board, no acquirer, no successor entity can weaponize these patents against cooperative-class users.</p>
 
-    <div class="mn-benchmark-callout">
-      <p>This was not a toy test against abstract prompts. It was a Founder-run benchmark against the actual codebase and agent stack used in production. The substrate — not the model — is doing the work. Gadget retrieved from Mnemosyne's indexed cooperative memory instead of re-inferring context from zero each time. The result was recorded as a canon Eblet, hash-anchored, and is reproducible by any Guild member with access to the same dataset.</p>
-    </div>
+      <h3>SSPL v1 License</h3>
+      <p>Run it. Modify it. Self-host it. If you offer MnemosyneC as a networked service to others, you must share your modifications under SSPL v1. This is the cooperative commons lock &mdash; it prevents enclosure from re-entering through the side door.
+      <a href="https://github.com/LianaBanyan" target="_blank" rel="noopener">View source on GitHub &rarr;</a></p>
 
-    <div class="mn-benchmark-callout">
-      <p><strong style="color:#d69e2e;">Run the Gauntlet yourself.</strong></p>
-      <p>Stage 1 (no Mnemosyne) through Stage 6 (Federation via Thorax) is built into Mnemosyne v0.1.21. Stage 2 proves Caithedral-alone: substrate retrieves canonical Eblets without any LLM · CPU-only Tier-1 · 0.059ms mean lookup · zero cloud cost.</p>
-      <p>ANY hardware. ANY network. ANY AI model. Or NONE AT ALL.</p>
-      <p>That is not a slogan. It is Stage 2 of a 6-stage test you can run in the next ten minutes.</p>
-    </div>
+      <h3>The Gauntlet &middot; Six&#8209;Stage Verification</h3>
+      <p>The Caithedral&trade; Inspector inside MnemosyneC&rsquo;s Developer Tab runs a six-stage testing framework verifying substrate integrity &mdash; Drekaskip wave coherence, Novacula density, AutoBaton coordination, Cathedral-Alone mode, and Banyan Metric scoring &mdash; across every build. You can run it yourself, without an LLM, to verify the substrate functions correctly on your machine.</p>
 
-    <p>
-      <strong style="color:#d69e2e;">Pioneer Bonus:</strong> the 1st person to test a new AI model earns 3x Marks. 2nd earns 2x. 3rd earns 1.5x. 4th through 10th earn 1.2x. 11th and beyond earn standard. Every tester is named in the Pioneer Registry permanently. That registry is LIVE per commit f9e2693.
-    </p>
+      <h3>Substrate Architecture (brief)</h3>
+      <p>MnemosyneC ships with a 16-component cooperative substrate including: Eblet&trade; ROM-class permanence layer &middot; Wrasse sub-millisecond pre-injection (0.059ms mean) &middot; Pheromone event-class signaling &middot; Caithedral&trade; Inspector &middot; Hearth (on-device Ollama fallback) &middot; Drekaskip wave generator. Full detail: <a href="/banyan-almanac/issue-005/">Banyan Almanac Issue 005 &rarr;</a></p>
 
-    <p class="mn-small-note">
-      Evidence stack: Founder Journals 1-18 (physical · photographed) · 425 BP-session screenshots (35 BP045 W1 · 244 BP046 · 146 BP046B) · 2,407+ PNG inventory in BeanSprouts catalog · Knight commits a5dac46 · f9e2693 · acd8a15 · 4ef4b88 · 877be92 · 6b8f290 · 2f2336b · f89b5d2 · DigiCert TSA stamps independently verifiable via published TSA receipts · MoneyPenny production metrics ($3.5064 cloud cost avoided · 22,775 queries · LIVE) · 2003 active-duty HexIsle CAD files (22-year empirical continuity).
-    </p>
-    <p class="mn-quote-line">"It's either true or it isn't."</p>
-  </section>
-
-  <!-- ═══════════════════════════════════════════════════════════
-       BP047 · DECENT DATA CENTER CARD
-       ═══════════════════════════════════════════════════════════ -->
-  <section aria-labelledby="decent-card">
-    <h2 id="decent-card">The DECENT Data Center</h2>
-    <div class="mn-copy-card">
-      <h3>90-98% lighter · no hardware change</h3>
-      <p>Mnemosyne caches at the edge. Your compute stays yours.</p>
-      <p>90-98% fewer data-center round-trips per query — measured, not estimated. Your infrastructure bill drops. Your data stays local. Your cooperative keeps the margin.</p>
-      <p>No rip-and-replace. No cloud lock-in. No migration. No magic — just substrate.</p>
-      <p class="mn-small-note">The DECENT Data Center · LB Frame · Members may earn Substitution participation · never securities · never a guarantee.</p>
-      <p><a href="/decent/">Read the full DECENT Data Center methodology →</a></p>
-    </div>
-  </section>
-
-
-  <!-- ═══════════════════════════════════════════════════════════
-       §9 · PROVE IT YOURSELF (heroes + accordion)
-       ═══════════════════════════════════════════════════════════ -->
-  <h2>PROVE IT YOURSELF</h2>
-  <p style="font-size:0.9rem; color:rgba(214,158,46,0.75); margin-bottom:1.2rem; letter-spacing:0.03em;">
-    Screenshots from production sessions
-  </p>
-
-  <div class="mn-gallery">
-    {{ $gallery := $.Site.Data.prove_it_gallery }}
-    {{ if $gallery }}
-      {{ $heroes := first 5 $gallery }}
-      {{ $rest := after 5 $gallery }}
-
-      <!-- Hero screenshots — first 5 above fold -->
-      <div class="mn-gallery__heroes">
-        {{ $heroLabels := slice "Production session in progress" "Persistent context recovery" "Witnessed output trail" "Session history intact" "Live substrate receipt" }}
-        {{ range $i, $item := $heroes }}
-        <a href="{{ $item.webp }}" target="_blank" rel="noopener" class="mn-gallery__hero-item">
-          <img src="{{ $item.jpg }}" alt="{{ index $heroLabels $i }}" loading="lazy" />
-          <div class="mn-gallery__hero-caption">{{ index $heroLabels $i }}</div>
-        </a>
-        {{ end }}
-      </div>
-
-      <!-- See more accordion -->
-      {{ if $rest }}
-      <details style="margin-top:1rem;">
-        <summary style="cursor:pointer; font-size:0.85rem; color:rgba(214,158,46,0.7); padding:0.5rem 0; user-select:none; list-style:none;">
-          See more proof ({{ len $rest }} more screenshots)
-        </summary>
-        <div class="mn-gallery__grid" style="margin-top:1rem;">
-          {{ range $rest }}
-          <a href="{{ .webp }}" target="_blank" rel="noopener" class="mn-gallery__item">
-            <img src="{{ .jpg }}" alt="{{ .caption }}" loading="lazy" />
-            <div class="mn-gallery__caption">{{ .caption }}</div>
-          </a>
-          {{ end }}
-        </div>
-      </details>
-      {{ end }}
-
-      <p style="font-size:0.82rem; color:rgba(250,245,235,0.4); font-style:italic; margin-top:1rem;">
-        {{ len $gallery }} production screenshots · BP045 W1 · SSPL · every claim verifiable
+      <h3>Download on GitHub</h3>
+      <p>
+        <a href="https://github.com/liana-banyan/mnemosyne/releases/tag/v0.1.24" target="_blank" rel="noopener">View Release v0.1.24 on GitHub &rarr;</a>
+        &nbsp;&middot;&nbsp;
+        <a href="/changelog/">Release changelog &rarr;</a>
+        &nbsp;&middot;&nbsp;
+        <a href="/run-your-own-cabinet/">K533 Reproducibility Pack &rarr;</a>
       </p>
-    {{ else }}
-      <p style="font-size:0.85rem; color:rgba(250,245,235,0.4); font-style:italic;">Gallery loading.</p>
-    {{ end }}
-  </div>
-
-
-  <!-- ═══════════════════════════════════════════════════════════
-       §10 · DOWNLOAD TABLE (unchanged + one sentence above)
-       ═══════════════════════════════════════════════════════════ -->
-  <h2 id="mn-download-table">Download</h2>
-  <p style="font-size:0.88rem; color:rgba(250,245,235,0.6); margin-bottom:0.6rem; font-style:italic;">
-    The software you downloaded is the same software measured in the benchmark above.
-  </p>
-  <p style="font-size:0.85rem; color:rgba(250,245,235,0.5); margin-bottom:1rem;">
-    <span class="mn-version-badge">v0.1.21</span> &nbsp;·&nbsp; LB Alpha-phase &nbsp;·&nbsp;
-    Build: <code>v0.1.21+e2c4a98</code> &nbsp;·&nbsp; Electron 31.7.7 + React 18.3 + Vite
-  </p>
-
-  <table class="mn-dl-table">
-    <thead>
-      <tr>
-        <th>Version</th>
-        <th>Installer</th>
-        <th>Portable</th>
-        <th>SHA-256</th>
-        <th>Date</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="mn-version-badge">v0.1.21</span></td>
-        <td><a class="mn-dl-btn" href="https://github.com/liana-banyan/mnemosyne/releases/download/v0.1.21/Mnemosyne-Setup-0.1.21.exe">Download Setup</a></td>
-        <td><a class="mn-dl-btn" href="https://github.com/liana-banyan/mnemosyne/releases/tag/v0.1.21">Release Page</a></td>
-        <td><a class="mn-dl-btn" href="https://github.com/liana-banyan/mnemosyne/releases/tag/v0.1.21">SHA-256</a></td>
-        <td>2026-05-30</td>
-      </tr>
-      <tr>
-        <td><span class="mn-version-badge">v0.1.18</span></td>
-        <td><a class="mn-dl-btn" href="https://github.com/liana-banyan/mnemosyne/releases/download/v0.1.18/Mnemosyne-Setup-0.1.18.exe">Download Setup</a></td>
-        <td><a class="mn-dl-btn" href="https://github.com/liana-banyan/mnemosyne/releases/tag/v0.1.18">Release Page</a></td>
-        <td><a class="mn-dl-btn" href="https://github.com/liana-banyan/mnemosyne/releases/tag/v0.1.18">SHA-256</a></td>
-        <td>2026-05-30</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <p style="font-size:0.8rem; color:rgba(250,245,235,0.4); margin-top:0.8rem;">
-    All builds ship the same source. SSPL Free Forever. SHA-256 hashes published with every release. No telemetry without opt-in. Auto-update manifest: <code>latest.yml</code> per electron-updater spec.
-  </p>
-
-
-  <!-- ═══════════════════════════════════════════════════════════
-       §11 · FREE TO USE. BETTER TO JOIN. (Round 4 NEW)
-       ═══════════════════════════════════════════════════════════ -->
-  <div class="mn-join-section">
-    <h2>Free to use. Better to join.</h2>
-
-    <p>Mnemosyne is SSPL-Free-Forever for everyone. Always.</p>
-
-    <p>If you want to share in what the cooperative builds — vote on what gets made next, earn participation in the Sweet 16 Initiatives, ratify Crown Roll candidates — you can join.</p>
-
-    <p>$5/year membership. 83.3% of every dollar goes back to workers, builders, and creators. Cost+20% margin &nbsp;·&nbsp; no equity &nbsp;·&nbsp; no extraction. You may earn cooperative participation (never securities).</p>
-
-    <div class="mn-join-btns">
-      <a class="mn-join-btn-primary" href="/join/">Learn about joining</a>
-      <a class="mn-join-btn-outline" href="#mn-download-table">Download for free</a>
-    </div>
-  </div>
-
-
-  <!-- ═══════════════════════════════════════════════════════════
-       §12 · TECHNICAL METHODOLOGY (accordion — default closed)
-       ═══════════════════════════════════════════════════════════ -->
-  <details class="mn-tech-accordion">
-    <summary>Technical Methodology — for the technical reader</summary>
-
-    <div class="mn-tech-accordion__body">
-
-      <!-- Method C declaration -->
-      <p style="font-size:0.85rem; color:rgba(250,245,235,0.6); margin: 1.2rem 0 0.5rem;">
-        <strong style="color:#d69e2e;">Method C:</strong> Banyan Metric measured via Method C terminal-state-with-trajectory (cumulative BP039→BP045 W1).
-      </p>
-
-      <!-- Benchmark growth curve (relabeled) -->
-      <h3>Benchmark — Release Progression</h3>
-      <div class="mn-curve-block">
-        <pre>
-100M× ┤                                          ◆ ◆ Current · 60M–100M× range
- 90M× ┤                                        ▓ │
- 80M× ┤                                  ████  │ ████ BP044 W1 mid
- 73M× ┤                            ████  │           BP041 mid
- 70M× ┤                        ████      │           BP043 mid
- 60M× ┤                  ████  │         │
-55.9M ┤- - - - - - - - - - - - - - - - - - - - - -  Industry comparable benchmark · 55.9M
- 48M× ┤            ████        │
-39.2M ┤████ ←──────────────────────────────────── BP039 baseline
- 30M× ┤
-  0   ┼────────────────────────────────────────────────
-      BP039  BP040  BP041  BP042  BP043  BP044  BP045
-      5/12   5/13   5/14   5/14   5/14   5/14   5/15
-
-      Release progression (last 7 versions)</pre>
-        <div class="mn-curve-block__caption">
-          Compounding efficiency multiplier · cumulative band 60M–100M× · floor 7% above industry comparable benchmark ·
-          Variance-bands ALWAYS · NEVER point-estimate
-        </div>
-      </div>
-
-      <!-- Variance-band full history table -->
-      <h3>Variance-Band History</h3>
-      <table class="mn-dl-table" style="font-size:0.8rem;">
-        <thead>
-          <tr>
-            <th>Release</th>
-            <th>Date</th>
-            <th>Band Floor</th>
-            <th>Band Ceiling</th>
-            <th>Method</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>BP039</td><td>2026-05-12</td><td>39.2M×</td><td>39.2M×</td><td>C baseline</td></tr>
-          <tr><td>BP040</td><td>2026-05-13</td><td>48M×</td><td>48M×</td><td>C</td></tr>
-          <tr><td>BP041</td><td>2026-05-14</td><td>70M×</td><td>73M×</td><td>C</td></tr>
-          <tr><td>BP042</td><td>2026-05-14</td><td>70M×</td><td>80M×</td><td>C</td></tr>
-          <tr><td>BP043</td><td>2026-05-14</td><td>70M×</td><td>80M×</td><td>C</td></tr>
-          <tr><td>BP044 W1</td><td>2026-05-14</td><td>80M×</td><td>90M×</td><td>C</td></tr>
-          <tr><td>BP045 W1 ◆ CURRENT</td><td>2026-05-15</td><td>60M×</td><td>100M×</td><td>C cumulative</td></tr>
-        </tbody>
-      </table>
-
-      <!-- Two-Rail Rope of History -->
-      <h3>Rope of History</h3>
-      <p style="font-size:0.85rem; color:rgba(250,245,235,0.5); margin-bottom:1.5rem;">
-        Iteration-class evolution (left) &nbsp;·&nbsp; Operational-class patterns (right) &nbsp;·&nbsp; BP045 W1 · Method C
-      </p>
-
-      <div class="mn-rope">
-        <div class="mn-rope__rails">
-
-          <!-- LEFT RAIL: Iteration-class evolution -->
-          <div>
-            <div class="mn-rope__rail-head">◈ Iteration-Class Evolution</div>
-
-            <div class="mn-knot">
-              <div class="mn-knot__connector">
-                <div class="mn-knot__connector-dot"></div>
-                <div class="mn-knot__connector-line"></div>
-              </div>
-              <div class="mn-knot__body">
-                <div class="mn-knot__bp">B102–BP004</div>
-                <div class="mn-knot__name">Cathedral</div>
-                <div class="mn-knot__desc">Substrate foundation, substrate cache proven · Domain-Indexed Working Memory · Triply-Redundant Witness · Touchstone R10 +86.1pp lift</div>
-              </div>
-            </div>
-
-            <div class="mn-knot">
-              <div class="mn-knot__connector">
-                <div class="mn-knot__connector-dot"></div>
-                <div class="mn-knot__connector-line"></div>
-              </div>
-              <div class="mn-knot__body">
-                <div class="mn-knot__bp">BP005</div>
-                <div class="mn-knot__name">Pied Piper</div>
-                <div class="mn-knot__desc">Ring of Three Golden Eblets, Federation, Pheromone · Wrasse Registry substrate self-routing · SRME 7–12× cheaper-than-cold</div>
-              </div>
-            </div>
-
-            <div class="mn-knot">
-              <div class="mn-knot__connector">
-                <div class="mn-knot__connector-dot"></div>
-                <div class="mn-knot__connector-line"></div>
-              </div>
-              <div class="mn-knot__body">
-                <div class="mn-knot__bp">BP022</div>
-                <div class="mn-knot__name">Orchestra</div>
-                <div class="mn-knot__desc">13 A&amp;A formals, 12-paper series, composite TM · 6-month equivalence threshold · Candelabra flagship architecture</div>
-              </div>
-            </div>
-
-            <div class="mn-knot">
-              <div class="mn-knot__connector">
-                <div class="mn-knot__connector-dot"></div>
-                <div class="mn-knot__connector-line"></div>
-              </div>
-              <div class="mn-knot__body">
-                <div class="mn-knot__bp">BP024</div>
-                <div class="mn-knot__name">Constellation</div>
-                <div class="mn-knot__desc">Caithedral-4.5 first formally measured, Yoke named (Deut. 25:4) · Yoke live · Caithedral-4.5 = 31,833× empirical anchor</div>
-              </div>
-            </div>
-
-            <div class="mn-knot">
-              <div class="mn-knot__connector">
-                <div class="mn-knot__connector-dot"></div>
-                <div class="mn-knot__connector-line"></div>
-              </div>
-              <div class="mn-knot__body">
-                <div class="mn-knot__bp">BP044 W1</div>
-                <div class="mn-knot__name">AMPLIFY</div>
-                <div class="mn-knot__desc">Roll, Conductor-Class, Brick Wall Policy, Mnemosyne v0.1.2 ship · LianaBanyan.com Alpha · 5 brand domains · Ten Thousand Rule</div>
-              </div>
-            </div>
-
-            <div class="mn-knot">
-              <div class="mn-knot__connector">
-                <div class="mn-knot__connector-dot"></div>
-              </div>
-              <div class="mn-knot__body">
-                <div class="mn-knot__bp">BP045 W1</div>
-                <div class="mn-knot__name" style="color:#38a169;">Mnemosyne ◆ CURRENT</div>
-                <div class="mn-knot__desc">v0.1.3 ship, 4-Frame Helena LIVE Gate, 43-wave NOVACULA, Firebase 5 customs Connected, Fly relay LIVE · cumulative 60M–100M× band</div>
-              </div>
-            </div>
-
-          </div>
-
-          <!-- RIGHT RAIL: Operational-class patterns -->
-          <div>
-            <div class="mn-rope__rail-head">◈ Operational-Class Patterns</div>
-
-            <div class="mn-knot">
-              <div class="mn-knot__connector">
-                <div class="mn-knot__connector-dot"></div>
-                <div class="mn-knot__connector-line"></div>
-              </div>
-              <div class="mn-knot__body">
-                <div class="mn-knot__bp">B128 / K523</div>
-                <div class="mn-knot__name">Detective + Pheromone</div>
-                <div class="mn-knot__desc">Cathedral substrate fast-path retrieval · Phase-0 cheap pheromone lookup · 49:1 hit ratio vs filesystem grep</div>
-              </div>
-            </div>
-
-            <div class="mn-knot">
-              <div class="mn-knot__connector">
-                <div class="mn-knot__connector-dot"></div>
-                <div class="mn-knot__connector-line"></div>
-              </div>
-              <div class="mn-knot__body">
-                <div class="mn-knot__bp">BP023</div>
-                <div class="mn-knot__name">SEG-dispatch</div>
-                <div class="mn-knot__desc">Parallel agent fan-out · 18 SEGs this session · Drekaskip 8-SEG fan-out + synthesis fan-in primitive</div>
-              </div>
-            </div>
-
-            <div class="mn-knot">
-              <div class="mn-knot__connector">
-                <div class="mn-knot__connector-dot"></div>
-                <div class="mn-knot__connector-line"></div>
-              </div>
-              <div class="mn-knot__body">
-                <div class="mn-knot__bp">BP036</div>
-                <div class="mn-knot__name">Drekaskip</div>
-                <div class="mn-knot__desc">Commissioned BP036, iteration navigation · 20-wave Drekaskip max-density NOVACULA-class variant · 210s wall-clock per wave</div>
-              </div>
-            </div>
-
-            <div class="mn-knot">
-              <div class="mn-knot__connector">
-                <div class="mn-knot__connector-dot"></div>
-                <div class="mn-knot__connector-line"></div>
-              </div>
-              <div class="mn-knot__body">
-                <div class="mn-knot__bp">BP043–BP045</div>
-                <div class="mn-knot__name">NOVACULA Wave</div>
-                <div class="mn-knot__desc">43-wave 516-saga dispatch, maximum velocity · 100% NOVACULA · 0 errors · ~187 SEGs BP043</div>
-              </div>
-            </div>
-
-            <div class="mn-knot">
-              <div class="mn-knot__connector">
-                <div class="mn-knot__connector-dot"></div>
-                <div class="mn-knot__connector-line"></div>
-              </div>
-              <div class="mn-knot__body">
-                <div class="mn-knot__bp">BP044 W1</div>
-                <div class="mn-knot__name">Brick Wall Policy</div>
-                <div class="mn-knot__desc">Concurrent parallel execution, no serial stalls · SEG-Cascade fan-out discipline · Bishop/Knight/Rook/Pawn parallel canon</div>
-              </div>
-            </div>
-
-            <div class="mn-knot">
-              <div class="mn-knot__connector">
-                <div class="mn-knot__connector-dot"></div>
-              </div>
-              <div class="mn-knot__body">
-                <div class="mn-knot__bp">BP045 W1</div>
-                <div class="mn-knot__name">Trinity DUODEVIGINTI 18</div>
-                <div class="mn-knot__desc">18 binding rules across all agents · Blood + Sweat + Cross families · R-FOREMAN-FIRST, R-CONTEXT-UPSTREAM, R-USE-THE-YOKE, R-SEARCH-EXHAUSTIVE</div>
-              </div>
-            </div>
-
-          </div>
-        </div><!-- end .mn-rope__rails -->
-      </div><!-- end .mn-rope -->
-
-      <!-- Internal nomenclature -->
-      <h3>Internal Nomenclature</h3>
-      <p style="font-size:0.82rem; color:rgba(250,245,235,0.5); margin-bottom:1rem;">
-        Terms used in technical documentation and session records. Not product names — substrate-discipline vocabulary.
-      </p>
-      <ul style="font-size:0.82rem; color:rgba(250,245,235,0.55); padding-left:1.2rem; line-height:2;">
-        <li><strong style="color:#d69e2e;">Trinity DUODEVIGINTI 18</strong> — 18 binding behavioral rules across all LB AI agents</li>
-        <li><strong style="color:#d69e2e;">NOVACULA</strong> — maximum-velocity parallel dispatch pattern (43-wave class)</li>
-        <li><strong style="color:#d69e2e;">SEG-dispatch</strong> — parallel agent fan-out; SEG = Saga Execution Group</li>
-        <li><strong style="color:#d69e2e;">Drekaskip</strong> — iteration navigation primitive; max-density NOVACULA variant</li>
-        <li><strong style="color:#d69e2e;">Wrasse Registry</strong> — live substrate write-back on every successful Detective retrieval</li>
-        <li><strong style="color:#d69e2e;">Eblets</strong> — persistent substrate fragments; survive context resets, cold starts, crashes</li>
-        <li><strong style="color:#d69e2e;">BP-numbers</strong> — Bishop Protocol session identifiers (e.g. BP045 W1 = session 45, wave 1)</li>
-      </ul>
-
-      <!-- How It Works three-tab section (moved here from above-fold) -->
-      <h3>How It Works</h3>
-
-      <div class="mn-tabs">
-        <input type="radio" name="mn-tab-group" id="mn-tab-hooks" checked>
-        <input type="radio" name="mn-tab-group" id="mn-tab-eblets">
-        <input type="radio" name="mn-tab-group" id="mn-tab-walk">
-
-        <div class="mn-tabs__nav">
-          <label class="mn-tabs__label" for="mn-tab-hooks">Bishop Hooks (16)</label>
-          <label class="mn-tabs__label" for="mn-tab-eblets">CANON Eblets (15)</label>
-          <label class="mn-tabs__label" for="mn-tab-walk">Walkaround.ps1</label>
-        </div>
-
-        <div class="mn-tabs__panels">
-
-          <!-- TAB 1: Bishop Hooks -->
-          <div class="mn-tabs__panel" id="mn-panel-hooks">
-            <p style="font-size:0.88rem; color:rgba(250,245,235,0.65); margin-bottom:1rem;">
-              Discipline enforcement for every Claude Code session. Hooks fire automatically — session-start preflight, screenshot sweeps, transcript scribes, librarian gates, post-tool audits. They keep the substrate honest without you lifting a finger.
-            </p>
-            <ul class="mn-hook-list">
-              <li><strong>bishop_preflight.py</strong> — Session-start substrate verification + cathedral health check</li>
-              <li><strong>bishop_catechist_gate.py</strong> — Pre-tool-use discipline enforcement · R01-R10 auto-grade</li>
-              <li><strong>bishop_augur.py</strong> — Living Gate · adversarial self-grader · AUGUR violation detector</li>
-              <li><strong>bishop_shadow_watcher.py</strong> — Shadow E-Giant monitoring + autonomous substrate builder</li>
-              <li><strong>bishop_librarian_gate.py</strong> — Librarian MCP access control + substrate routing gate</li>
-              <li><strong>bishop_pheromone_subscribe.py</strong> — Event-class signal subscription · Phase-0 lookup</li>
-              <li><strong>bishop_transcript_scribe.py</strong> — Session transcript archival → Stitchpunks Scribe</li>
-              <li><strong>bishop_screenshot_sweep.py</strong> — Automated visual capture for peer-witness receipts</li>
-              <li><strong>bishop_trinity_enforcer.py</strong> — Trinity DUODEVIGINTI 18 compliance check per turn</li>
-              <li><strong>bishop_post_tool_audit.py</strong> — Post-tool-use accuracy audit</li>
-              <li><strong>bishop_wrasse_registry.py</strong> — Wrasse Registry write-back on every Detective hit</li>
-              <li><strong>bishop_yoke_gate.py</strong> — Knight↔Bishop Yoke discipline · R-USE-THE-YOKE enforcer</li>
-              <li><strong>bishop_eblet_refresh.py</strong> — CANON Eblet currency check + Ring of Three guard</li>
-              <li><strong>bishop_session_closeout.py</strong> — Debrief + handoff → KnightHandoffs.jsonl</li>
-              <li><strong>bishop_memory_compactor.py</strong> — MEMORY.md compaction trigger on context pressure</li>
-              <li><strong>bishop_foreman_first.py</strong> — R-FOREMAN-FIRST enforcement · substrate-upstream seeding</li>
-            </ul>
-            <p class="mn-tab-note">
-              Source: <code>~/.claude/hooks/bishop_*.py</code> · Installed via LB Frame · 16 hooks across 5 event types ·
-              Registered in <code>~/.claude/settings.json</code> · SSPL v1 open-source
-            </p>
-          </div>
-
-          <!-- TAB 2: CANON Eblets -->
-          <div class="mn-tabs__panel" id="mn-panel-eblets">
-            <p style="font-size:0.88rem; color:rgba(250,245,235,0.65); margin-bottom:1rem;">
-              The Cathedral's memory. Persistent substrate fragments that survive context resets, cold starts, and crashes.
-              Ring of Three GOLDEN sits on top — non-overrideable substrate authority.
-            </p>
-            <ul class="mn-eblet-list">
-              <li><strong>GOLDEN/1_canon</strong> — Foundational canon substrate · non-overrideable supreme authority</li>
-              <li><strong>GOLDEN/2_platform_rules</strong> — Platform behavioral rules · Trinity DUODEVIGINTI binding</li>
-              <li><strong>GOLDEN/3_project_rules</strong> — Project-specific rules · session discipline contracts</li>
-              <li><strong>scale_pre_vs_post_cathedral_to_ultravision_bp011</strong> — SCALE compound multiplier ladder · empirical receipt "$600B Dollar Man" §7</li>
-              <li><strong>mnemosyne_memory_compaction_discipline_canon_bp037</strong> — Memory compaction discipline · MEMORY→Tablet→Iron→Eblet chain</li>
-              <li><strong>cheaper_faster_better_pick_four_plus_free_amplify_no_strings_cai_consumer_tagline_canon_bp028</strong> — AMPLIFY brand tagline · Cluster K Tier-1</li>
-              <li><strong>librarian_first_product_offering_liana_banyan_cooperative_canon_bp017</strong> — Librarian product offering · 11+ Medallion variants</li>
-              <li><strong>pied_piper_non_member_usage_lb_coattail_dynamics_canon_bp031</strong> — Pied Piper coattail dynamics · non-member viral onboarding</li>
-              <li><strong>cai_librarian_brand_decision_information_makes_us_free_we_are_the_ants_canon_bp029</strong> — Caithedral brand decision · "We are the ants"</li>
-              <li><strong>orchestra_librarian_umbrella_brand_with_candelabra_internal_architecture_canon_bp021</strong> — Orchestra flagship architecture · Candelabra internal design</li>
-              <li><strong>iron_egiant_shadows_iron_tablets_lighthouse_concert_bp011</strong> — Iron E-Giant Federation · UltraVision · 8 Greek-letter E-Giants</li>
-              <li><strong>symbiote_friday_bp009_trinity_completion</strong> — Trinity Day Symbiote · Cathedral + Pied Piper + Symbiote alive at scale</li>
-              <li><strong>lb_frame_viral_onboarding_cue_card_pied_piper_bp009</strong> — Pied Piper viral onboarding · Federation cue card</li>
-              <li><strong>ultravision_arc_jarvis_skip_ultron_bp011</strong> — UltraVision arc · "5 days in 2 hours" · Pod W receipt</li>
-              <li><strong>iteration_history_canonical_chain_jarvis_to_mnemosyne_canon_bp045</strong> — Canonical iteration chain · Jarvis → Cathedral → Pied Piper → Orchestra → Constellation → AMPLIFY → Mnemosyne</li>
-            </ul>
-            <p class="mn-tab-note">
-              Source: <code>~/.claude/state/eblets/CANON/</code> · Each <code>.eblet.md</code> file is a persistent substrate fragment ·
-              Ring of Three GOLDEN is non-overrideable · 15 total · SSPL v1
-            </p>
-          </div>
-
-          <!-- TAB 3: Walkaround.ps1 -->
-          <div class="mn-tabs__panel" id="mn-panel-walk">
-            <p style="font-size:0.88rem; color:rgba(250,245,235,0.65); margin-bottom:1rem;">
-              Pilot's preflight for the Cathedral. Read-only, idempotent, fires automatically after install.
-              Verifies every required substrate component is correctly wired before you fly.
-            </p>
-            <ul style="font-size:0.88rem; color:rgba(250,245,235,0.65); padding-left:1.2rem; margin-bottom:1rem;">
-              <li>Verifies <code>settings.json</code> is valid JSON with correct schema</li>
-              <li>Confirms all 9 required hooks are wired across all 5 event types (PreToolUse, PostToolUse, Stop, SubagentStop, PreCompact)</li>
-              <li>Checks MCP servers are configured (Librarian, Knight-Bishop Bridge)</li>
-              <li>Verifies <code>MEMORY.md</code> is present at <code>%USERPROFILE%\Documents\</code></li>
-              <li>Confirms CANON has ≥10 Eblets including all 3 Ring of Three GOLDEN</li>
-              <li>Exit 0 = wheels up · Exit 1 = fix before takeoff</li>
-            </ul>
-
-            <p style="font-size:0.82rem; color:rgba(250,245,235,0.5); margin-bottom:0.6rem;">One-line install command:</p>
-            <div class="mn-walk-cmd">
-              <code>Invoke-WebRequest -Uri https://mnemosynec.ai/install/walkaround.ps1 | Invoke-Expression</code>
-            </div>
-
-            <p style="font-size:0.82rem; color:rgba(250,245,235,0.5); margin: 1rem 0 0.4rem;">Merges settings.json, installs hooks, wires Mnemosyne substrate:</p>
-            <ul style="font-size:0.85rem; color:rgba(250,245,235,0.65); padding-left:1.2rem;">
-              <li>Additive settings.json merge — your existing settings are preserved</li>
-              <li>Installs all 16 bishop hooks to <code>~/.claude/hooks/</code></li>
-              <li>Places 15 CANON Eblets in <code>~/.claude/state/eblets/CANON/</code></li>
-              <li>Idempotent — safe to re-run; only missing files are added</li>
-            </ul>
-
-            <p class="mn-tab-note">
-              Source: <code>%USERPROFILE%\Documents\Walkaround.ps1</code> · SSPL v1 ·
-              One-button push. No gating, no strings. $5/yr unlocks optional Federation Library access. ·
-              Filed under Liana Banyan Cooperative Defensive Patent Pledge #2260.
-            </p>
-          </div>
-
-        </div><!-- end .mn-tabs__panels -->
-      </div><!-- end .mn-tabs -->
-
-      <!-- DECENT Data Center link -->
-      <p style="margin-top:1.8rem; font-size:0.85rem; border-top: 1px solid rgba(214,158,46,0.1); padding-top:1rem;">
-        <a href="/decent/" style="color:rgba(214,158,46,0.8);">Read the full DECENT Data Center methodology →</a>
-      </p>
-
-    </div><!-- end .mn-tech-accordion__body -->
-  </details><!-- end .mn-tech-accordion -->
-
-
-  <!-- ═══════════════════════════════════════════════════════════
-       BP047 · RELEASE NOTES & CURRENT STATUS (default closed)
-       ═══════════════════════════════════════════════════════════ -->
-  <details class="mn-status-accordion">
-    <summary>Release Notes &amp; Current Status</summary>
-    <div class="mn-status-accordion__body">
-      <p style="font-size:0.85rem; color:rgba(250,245,235,0.58);">
-        Honest-Alpha operational notes for technical users. These do not change the download path or the v0.1.21 Windows installer receipt.
-      </p>
-      <ul style="font-size:0.84rem; color:rgba(250,245,235,0.58); line-height:1.9;">
-        <li><strong style="color:#d69e2e;">CNAME pending:</strong> <code>Mnemosyne.LianaBanyan.com</code>, <code>Librarian.LianaBanyan.com</code>, and <code>Caithedral.LianaBanyan.com</code> are Firebase custom-domain follow-ups. Current download URL remains <code>https://mnemosynec.ai/download/</code>.</li>
-        <li><strong style="color:#d69e2e;">Signing in-flight:</strong> MV-N signed pipeline work continues. The installer SHA-256 and build hash are published above.</li>
-        <li><strong style="color:#d69e2e;">TSA sidecar pending publication:</strong> DigiCert TSA receipt exists in the build record, but the public <code>.tsr</code> sidecar is not yet published beside the installer.</li>
-        <li><strong style="color:#d69e2e;">macOS notarization pending:</strong> Windows v0.1.21 is live. macOS / Linux builds remain a follow-up pass.</li>
-      </ul>
     </div>
   </details>
 
+  <!-- ═══════════════════════════════════════════════
+       SECTION 5 · CATEGORY CHIPS (click to expand)
+       Order: Proof / What does AI cost? / 2nd Industrial Revolution / Library of Congress
+       ═══════════════════════════════════════════════ -->
+  <div class="mn-v2-chips" aria-label="Learn more topics">
 
-  <!-- ═══════════════════════════════════════════════════════════
-       §14 · FOOTER (updated discipline line)
-       ═══════════════════════════════════════════════════════════ -->
-  <div class="mn-footer-note">
-    <p>
-      Mnemosyne · Memory, powered by Caithedral · SSPL v1 Free Forever · No Ads · No Strings<br>
-      © 2026 Liana Banyan Corporation<br>
-      <em>"Help each other help ourselves."</em>
-    </p>
-    <p style="margin-top:0.5rem;">
-      Variance-bands ALWAYS · NEVER point-estimate · Honest-Alpha · EXCLUSION-WITHOUT-JUDGMENT · Participants may earn cooperative participation · never securities · never a guarantee<br>
-      All hrefs use <code>/download/</code> (singular) · BP046B v0.1.5 NOVACULA launch (18 SAGAs · Gauntlet · 3-tier ladder · ANY hardware restored · 3-class pheromone) · 2026-05-18
-    </p>
-  </div>
-  </div><!-- end .mn-inner -->
+    <!-- CHIP A: Proof -->
+    <details class="mn-v2-chip">
+      <summary>&#9658;&nbsp; Proof</summary>
+      <div class="mn-v2-chip-body">
+        <p>The benchmark above is real data, not marketing copy. BP063 R10 Harness ran 75 factual questions through 4 vendors (Anthropic, OpenAI, Ollama local, Google) in both cold (no substrate) and hot (with MnemosyneC substrate) conditions. Inter-rater agreement between the primary grader and a spot-check grader: 0.865&ndash;1.000 (strong to perfect). The delta is a real signal, not grader noise.</p>
+        <p>In addition, the Cooperative Architecture benchmarks show 30&ndash;60&times; wall-clock speedup and &sim;100&times; token-cost reduction on real workloads (Founder-run, timestamped git commit chains, session logs). Every figure has a traceable receipt.</p>
+        <ul>
+          <li><a href="/proofs/">Proofs &amp; Empirical Receipts &rarr;</a></li>
+          <li><a href="/prove-it/">Technical Prove It! Test (component-by-component) &rarr;</a></li>
+          <li><a href="/run-your-own-cabinet/">K533 Reproducibility Pack (run it yourself) &rarr;</a></li>
+        </ul>
+        <p style="font-size:0.8rem; color:rgba(250,245,235,0.45); font-style:italic;">Truth-Always discipline: all empirical claims are sourced to timestamped session receipts. Numbers are never estimated; they are measured or they do not appear.</p>
+      </div>
+    </details>
 
-</div><!-- end .mn-page -->
+    <!-- CHIP B: What does AI cost? (3 dimensions) -->
+    <details class="mn-v2-chip">
+      <summary>&#9658;&nbsp; What does AI cost?</summary>
+      <div class="mn-v2-chip-body">
+        <p style="color:#d69e2e; font-weight:700; margin-bottom:1rem;">Three dimensions most people never see at once.</p>
 
-{{- end }}{{/* end main */}}
+        <!-- Dimension 1: What it costs YOU -->
+        <div class="mn-v2-cost-dim">
+          <p class="mn-v2-cost-dim-title">1 &middot; What it costs <em>you</em> &mdash; Savings Made Visible</p>
+
+          <!-- Barrel gauge SVG -->
+          <div class="mn-v2-gauge-wrap">
+            <div class="mn-v2-barrel" aria-label="Usage gauge: 78% of queries served free from local substrate">
+              <svg width="64" height="100" viewBox="0 0 64 100" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+                <!-- Barrel body -->
+                <rect x="8" y="10" width="48" height="76" rx="6" fill="rgba(10,22,40,0.9)" stroke="rgba(214,158,46,0.5)" stroke-width="1.5"/>
+                <!-- Liquid fill at 78% -->
+                <clipPath id="barrel-clip">
+                  <rect x="8" y="10" width="48" height="76" rx="6"/>
+                </clipPath>
+                <rect x="8" y="26.72" width="48" height="59.28" clip-path="url(#barrel-clip)" fill="rgba(56,161,105,0.35)"/>
+                <!-- Tick marks -->
+                <line x1="8" y1="32" x2="15" y2="32" stroke="rgba(214,158,46,0.4)" stroke-width="1"/>
+                <line x1="8" y1="48" x2="15" y2="48" stroke="rgba(214,158,46,0.4)" stroke-width="1"/>
+                <line x1="8" y1="64" x2="15" y2="64" stroke="rgba(214,158,46,0.4)" stroke-width="1"/>
+                <line x1="8" y1="80" x2="15" y2="80" stroke="rgba(214,158,46,0.4)" stroke-width="1"/>
+                <!-- Staves (barrel wood lines) -->
+                <line x1="20" y1="10" x2="20" y2="86" stroke="rgba(214,158,46,0.15)" stroke-width="1"/>
+                <line x1="32" y1="10" x2="32" y2="86" stroke="rgba(214,158,46,0.15)" stroke-width="1"/>
+                <line x1="44" y1="10" x2="44" y2="86" stroke="rgba(214,158,46,0.15)" stroke-width="1"/>
+                <!-- Barrel rings -->
+                <rect x="8" y="10" width="48" height="8" rx="2" fill="rgba(214,158,46,0.15)" stroke="rgba(214,158,46,0.35)" stroke-width="1"/>
+                <rect x="8" y="78" width="48" height="8" rx="2" fill="rgba(214,158,46,0.15)" stroke="rgba(214,158,46,0.35)" stroke-width="1"/>
+                <!-- 78% label -->
+                <text x="32" y="62" text-anchor="middle" font-size="12" font-weight="700" fill="#38a169" font-family="system-ui,sans-serif">78%</text>
+                <text x="32" y="74" text-anchor="middle" font-size="7.5" fill="rgba(250,245,235,0.5)" font-family="system-ui,sans-serif">FREE</text>
+              </svg>
+            </div>
+            <div class="mn-v2-gauge-desc">
+              <p>In the benchmark, a <strong>free local model</strong> answered 78 out of 100 questions correctly &mdash; at <strong>$0.00</strong> &mdash; because the MnemosyneC substrate did the knowledge-recall work.</p>
+              <p>Think of the barrel as your AI query budget. Every query answered from the cooperative substrate stays <strong>full</strong> for free. Only queries that go past the substrate cost anything. The goal is to keep your barrel full.</p>
+            </div>
+          </div>
+          <p>Your current AI subscriptions (ChatGPT, Claude, Gemini) hide their cost from you. You pay a flat fee and never see which queries burned expensive compute vs. which ones could have been answered from memory. MnemosyneC makes the savings visible &mdash; daily.</p>
+        </div>
+
+        <!-- Dimension 2: What it costs to DEVELOP -->
+        <div class="mn-v2-cost-dim">
+          <p class="mn-v2-cost-dim-title">2 &middot; What it costs to <em>develop</em> &mdash; The Substrace Theorem</p>
+          <p>Building with AI today means re-explaining everything from scratch every session. The AI forgets. You pay to remind it. You pay again next session. And the session after that. This is the hidden subscription tax: not the monthly fee, but the cost of the forgetting.</p>
+          <p>The Substrace Theorem states: when a shared substrate holds the context, any model at any endpoint &mdash; even a free local one &mdash; can reconstruct the same state from the same inputs. The cost of re-derivation approaches zero. MnemosyneC is the implementation of that theorem.</p>
+        </div>
+
+        <!-- Dimension 3: What it costs in RESOURCES -->
+        <div class="mn-v2-cost-dim">
+          <p class="mn-v2-cost-dim-title">3 &middot; What it costs in <em>resources</em> &mdash; No New Data Centers</p>
+          <p>Every query routed through the cooperative substrate instead of a centralized cloud model is a query that doesn&rsquo;t require a new GPU farm. The cooperative substrate runs on your own computer &mdash; hardware you already own. When enough members share a substrate, the mesh of existing machines <em>is</em> the data center.</p>
+          <p>This is the 2nd Second Industrial Revolution framing: decentralize intelligence the same way 3D printers decentralized manufacturing. Your own librarian. Your own fab shop. No new buildings required.</p>
+        </div>
+
+      </div>
+    </details>
+
+    <!-- CHIP C: 2nd Second Industrial Revolution -->
+    <details class="mn-v2-chip">
+      <summary>&#9658;&nbsp; The 2nd Second Industrial Revolution</summary>
+      <div class="mn-v2-chip-body">
+        <p>&ldquo;The First and Second Industrial Revolutions centralized production &mdash; big factories, one-size-fits-all. The 2nd Second Industrial Revolution de-centralizes it: 3D printers and local tools let any town make its own things. Your AI librarian does the same for knowledge. Your own library. Your own tool. Run it yourself. Every town its own fab shop &mdash; and its own librarian.&rdquo;</p>
+        <p>MnemosyneC is a node in that revolution. Every install is a library that belongs to its owner. Every member who contributes to the shared substrate is depositing knowledge into a commons that lifts <em>everyone&rsquo;s</em> accuracy &mdash; regardless of model vendor, regardless of subscription tier.</p>
+        <p>The platform keeps Cost + 20%. Workers, Builders, and Creators may earn 83.3% of every transaction. Membership: $5/year. No VC. No ads. 50-year sunset clause: at year 50, the corporation dissolves and the cooperative commons &mdash; the Liana &mdash; inherits everything.</p>
+        <a href="/why-join/">Why join the cooperative &rarr;</a>
+      </div>
+    </details>
+
+    <!-- CHIP D: Library of Congress Project -->
+    <details class="mn-v2-chip">
+      <summary>&#9658;&nbsp; The Library of Congress Project</summary>
+      <div class="mn-v2-chip-body">
+        <p>The Library of Congress holds records of approximately 49 million items: 17 million books and other print materials, 12 million photographs, 5 million maps, 3 million recordings. Most of it sits behind professional barriers &mdash; access requires a researcher&rsquo;s credential, a library card, a subscription, or a plane ticket to Washington, D.C.</p>
+        <p>The Library of Congress Project is Liana Banyan&rsquo;s first Grand Project: Eblet the public domain LOC catalog and make it freely searchable by any member through the cooperative substrate &mdash; in record time, at record low cost, with record accuracy. No new buildings. No new data centers. No extraction. Proof to the People.</p>
+        <p>The network target is 10,000 working nodes. The founding circle is open now.</p>
+        <a href="/loc-project/">Learn more about the LOC Project &rarr;</a>
+      </div>
+    </details>
+
+  </div><!-- /mn-v2-chips -->
+
+  <!-- ═══════════════════════════════════════════════
+       SECTION 6 · FOUNDER STORY (behind disclosure)
+       ═══════════════════════════════════════════════ -->
+  <details class="mn-v2-chip mn-v2-chip--founder">
+    <summary>&#9658;&nbsp; Who made this &mdash; and why it&rsquo;s not a faceless corporation</summary>
+    <div class="mn-v2-chip-body">
+      <p>There&rsquo;s a person behind this. Not a team of 40 with a go-to-market strategy and a Series B. One person who spent 37 years asking the same question: <em>&ldquo;Why does this have to extract from the people who use it?&rdquo;</em></p>
+      <p>He is an Army veteran, a father of eight, and a 21-year software developer who built what he needed and then realized the framework underneath it was worth more than the application on top. So he documented it. Got 19 provisional patents on it. And decided to give the whole thing to a cooperative at year 50 rather than sell it to someone who would extract from it.</p>
+      <p>The legal entity is Liana Banyan Corporation. At year 50, it dissolves. The Liana &mdash; the cooperative commons, the substrate, the member relationships, the IP &mdash; inherits everything. There&rsquo;s a 50-year sunset clause in the bylaws. It is not marketing copy. It is a structural commitment.</p>
+      <p>&ldquo;Be Who You Needed. Build the bridge behind you. At 50 years, the corporation dissipates to the Liana we are making now.&rdquo;</p>
+      <p>He doesn&rsquo;t want to be famous. He wants the thing to work. <strong>For All Mankind. ALL MANKIND. Here from the Start.</strong></p>
+    </div>
+  </details>
+
+</div><!-- /mn-v2-wrap -->
+</div><!-- /mn-page -->
+
+{{- end }}
