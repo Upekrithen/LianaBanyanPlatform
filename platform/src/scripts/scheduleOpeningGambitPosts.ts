@@ -74,7 +74,7 @@ The core idea: What if the people who create the value keep the value?
 
 Not 60% after fees. Not whatever the algorithm decides you're worth.
 
-83.3%. Every time. Constitutionally locked. Cost + 20%, and the creator keeps the rest.
+Creators AND Workers keep 83.3%. Every time. Constitutionally locked. Cost + 20%.
 
 ---
 
@@ -130,12 +130,12 @@ My name is Jonathan Jones. I'm a U.S. Army National Guard veteran (Infantry 11B,
 
 Liana Banyan is what came from forty years of thinking about that. A cooperative commerce platform where:
 
-→ Creators keep 83.3% of every transaction
+→ Creators AND Workers keep 83.3% of every transaction
 → The margin is constitutionally locked at Cost + 20%
 → 16 charitable initiatives are funded by architecture, not pledges
 → Every member can start a business for $5
 
-The platform is live. The architecture is backed by 2,097 patent claims. The operating agreement locks the economics.
+The platform is live. The architecture is backed by 2,700 patent claims. The operating agreement locks the economics.
 
 I'm looking for 300 founding members who are tired of eking their way through life.
 
@@ -169,9 +169,9 @@ $5 a year. No Plan B.`,
     title: 'I spent 9 years building a cooperative commerce platform. Here\'s why I\'m giving the IP away.',
     type: 'ama',
     priority: 'high',
-    content: `I'm a 53-year-old U.S. Army National Guard veteran and father of eight. For the last 9 years I've been building Liana Banyan — a cooperative commerce platform where creators keep 83.3% of every transaction, the margin is constitutionally locked, and 16 charitable initiatives are funded by the architecture itself.
+    content: `I'm a 53-year-old U.S. Army National Guard veteran and father of eight. For the last 9 years I've been building Liana Banyan — a cooperative commerce platform where Creators AND Workers keep 83.3% of every transaction, the margin is constitutionally locked, and 16 charitable initiatives are funded by the architecture itself.
 
-I put 2,097 patent claims into this. But here's the thing — about 80% of that IP goes into the cooperative. Not because I'm generous. Because hoarding it would make me the exact kind of landlord I'm trying to replace.
+I put 2,700 patent claims into this. But here's the thing — about 80% of that IP goes into the cooperative. Not because I'm generous. Because hoarding it would make me the exact kind of landlord I'm trying to replace.
 
 The cost to join: $5/year. The economic model: Cost + 20%, locked in the operating agreement. The goal: 300 founding members who want to build something that can't be enshittified.
 
@@ -329,18 +329,18 @@ lianabanyan.com/join`,
     dayName: 'The Proof',
     platform: 'hackernews',
     scheduledTime: '10:00 AM',
-    title: 'Show HN: Liana Banyan – Cooperative commerce platform where creators keep 83.3%',
+    title: 'Show HN: Liana Banyan – Cooperative commerce platform where creators and workers keep 83.3%',
     type: 'post',
     priority: 'high',
     content: `Hi HN. I'm Jonathan, a U.S. Army National Guard vet and 21-year IT developer. I spent 9 years building a cooperative commerce platform.
 
 Tech stack: Supabase (Postgres + RLS), React/Vite, Firebase multi-portal hosting, three-gear currency system (Credits/Marks/Joules), non-tradeable medallion governance.
 
-The economic model: Cost + 20%, constitutionally locked. Creators keep 83.3%. The 16.7% margin funds 16 charitable initiatives by architecture, not pledge.
+The economic model: Cost + 20%, constitutionally locked. Creators AND Workers keep 83.3%. The 16.7% margin funds 16 charitable initiatives by architecture, not pledge.
 
 What makes it different: The margin is in the operating agreement, not a settings panel. You literally cannot enshittify it without rewriting the corporate charter.
 
-2,097 patent claims (80% contributed to the cooperative). Live at lianabanyan.com.
+2,700 patent claims (80% contributed to the cooperative). Live at lianabanyan.com.
 
 Looking for 300 founding members at $5/year to stress-test the model.
 
@@ -355,7 +355,7 @@ Full technical architecture: cephas.lianabanyan.com`,
     dayName: 'The Proof',
     platform: 'reddit',
     scheduledTime: '12:00 PM',
-    title: 'Maker Communities — 3D creators keep 83.3%',
+    title: 'Maker Communities — 3D creators and workers keep 83.3%',
     type: 'post',
     priority: 'medium',
     content: `I've spent 3 years designing a modular terrain system that's actually cooperative-owned. The IP belongs to the members who use it. Here's the tech:
@@ -368,7 +368,7 @@ HexIsle uses 60mm hexagonal tiles — not 42mm like most hex games. The larger f
 
 → Tereno certification tiers: creators can submit terrain designs for testing. Tier 1 (tested by creator), Tier 2 (community-verified), Tier 3 (stress-tested for tournament play). Your certification level follows the design forever — it's a permanent quality signal.
 
-The founding run is live now. SLA resin miniatures + PLA+ terrain tiles, cooperative-produced. Creators keep 83.3% of every sale — the margin is constitutionally locked at Cost + 20%. That 20% funds 16 charitable initiatives.
+The founding run is live now. SLA resin miniatures + PLA+ terrain tiles, cooperative-produced. Creators AND Workers keep 83.3% of every sale — the margin is constitutionally locked at Cost + 20%. That 20% funds 16 charitable initiatives.
 
 Pre-orders open: lianabanyan.com/hexisle/founding-run
 
@@ -472,7 +472,7 @@ The game most platforms play:
 Our game:
 → Lock the margin on Day 1
 → Make extraction architecturally impossible
-→ Let creators keep 83.3% forever
+→ Let creators AND Workers keep 83.3% forever
 → Fund 16 initiatives automatically
 
 ---
@@ -490,8 +490,7 @@ Not by charity. By math.
 
 Because in OUR Castle, we build more arrows instead of escape tunnels.
 
-// TIME-CAPSULE PIN — value reflects pre-Prov 16/17 snapshot (BP030); do not migrate. Annotated BP031 Bushel 64.
-Most platforms build escape hatches for the people who run them. We built 2,128 innovations — and 80% of the IP goes into the cooperative.
+Most platforms build escape hatches for the people who run them. We built 2,270 innovations — and 80% of the IP goes into the cooperative.
 
 That's not idealism. That's architecture.
 
