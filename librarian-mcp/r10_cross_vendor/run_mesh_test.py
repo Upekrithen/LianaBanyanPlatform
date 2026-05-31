@@ -328,12 +328,13 @@ def substrate_emit(host: str, port: int, pearls: list, bindings: dict = None, fa
 
 
 def substrate_lookup(host: str, port: int, sid: str) -> Optional[dict]:
-    """Look up a DAG node by SID. Returns node dict or None."""
+    """Look up a DAG node by SID. Returns node dict only if found=true, else None."""
     resp = _http_request(host, port, "GET", f"/dag/lookup/{sid}", timeout=10.0)
     if resp["status"] == 200:
         try:
             data = json.loads(resp["body"])
-            if data.get("found") or data.get("ok") or data.get("node"):
+            # Only return data if the node was actually found
+            if data.get("found") is True and data.get("node"):
                 return data
         except json.JSONDecodeError:
             pass
@@ -453,8 +454,8 @@ def cmd_setup(args):
             q_id = q.get("id") or q.get("q_id") or str(questions.index(q))
             # Use canonical_answer as the pearl (the answerable fact)
             pearls = q.get("pearls") or [q.get("canonical_answer", "")]
-            bindings = {"q_id": q_id, "bank": bank, "machine": args.machine, "ts": str(int(time.time()))}
-            faces = {"question": q.get("question", "")[:200]}
+            bindings = {}  # substrate faces schema: keys must be "0"-"5" only; bindings are arbitrary
+            faces = {"0": q.get("question", "")[:200], "1": q_id, "2": bank}
 
             sid = substrate_emit(host, port, pearls, bindings, faces)
             if sid:
@@ -582,9 +583,13 @@ def cmd_run(args):
 
     for i, q in enumerate(all_questions):
         q_id = q.get("id") or q.get("q_id") or str(i)
-        bank = "A" if q_id.startswith("Q") or q_id.isdigit() else q_id[0]
-        if q_id in [b["id"] for b in BANK_B_QUESTIONS]:
+        # Determine bank: B-ids start with "B", A-ids start with "Q" or digit
+        if q_id.startswith("B") and q_id[1:].isdigit():
             bank = "B"
+        elif q_id.startswith("Q") or q_id[0].isdigit():
+            bank = "A"
+        else:
+            bank = q_id[0] if q_id else "A"
         question_text = q.get("question", "")
 
         # Get SID for this question
@@ -649,7 +654,7 @@ def cmd_run(args):
             cost_usd=grade_result["cost_usd"]
         ))
 
-        status = "✓" if node_found else "✗"
+        status = "OK" if node_found else "MISS"
         print(f"  [{i+1:3d}/{len(all_questions)}] {status} {q_id:<8} {condition.upper():<7} bank={q_bank} "
               f"grade={grade_result['grade']:<10} score={grade_result['score']:.1f} "
               + (f"latency={fetch_latency_ms:.0f}ms" if fetch_latency_ms else ""))
@@ -745,7 +750,7 @@ def cmd_run(args):
     ]
     for r in results[:30]:
         md_lines.append(
-            f"| {r.q_id} | {r.bank} | {'✓' if r.resolved else '✗'} | {r.grade} | {r.score:.1f} "
+            f"| {r.q_id} | {r.bank} | {'OK' if r.resolved else 'MISS'} | {r.grade} | {r.score:.1f} "
             f"| {r.hash_verified if r.hash_verified is not None else 'N/A'} "
             f"| {f'{r.fetch_latency_ms:.0f}' if r.fetch_latency_ms else 'N/A'} |"
         )
@@ -775,7 +780,7 @@ def cmd_run(args):
     print(f"  JSONL:    {jsonl_path}")
     print(f"  Summary:  {summary_path}")
     print(f"  Receipt:  {md_path}")
-    print(f"\nFOR THE KEEP. ⚓ — BP065 Mesh Test")
+    print("\nFOR THE KEEP. -- BP065 Mesh Test")
 
     return summary
 
