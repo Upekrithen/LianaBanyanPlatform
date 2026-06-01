@@ -1,0 +1,170 @@
+{
+  "source": "CADRE_V4_TEST2_BP067_20260601_0104.json",
+  "models": [
+    "gemma2:2b",
+    "llama3.1:8b-instruct-q4_K_M",
+    "qwen2.5:7b"
+  ],
+  "conditions": {
+    "cold": {
+      "pairwise": {
+        "gemma2 vs llama3.1": {
+          "kappa": 0.3323,
+          "p_o": 0.64,
+          "p_e": 0.4608,
+          "n": 25,
+          "table": {
+            "both_correct": 8,
+            "both_incorrect": 8,
+            "a_correct_b_wrong": 1,
+            "a_wrong_b_correct": 8
+          }
+        },
+        "gemma2 vs qwen2.5": {
+          "kappa": 0.2466,
+          "p_o": 0.56,
+          "p_e": 0.416,
+          "n": 25,
+          "table": {
+            "both_correct": 9,
+            "both_incorrect": 5,
+            "a_correct_b_wrong": 0,
+            "a_wrong_b_correct": 11
+          }
+        },
+        "llama3.1 vs qwen2.5": {
+          "kappa": 0.4231,
+          "p_o": 0.76,
+          "p_e": 0.584,
+          "n": 25,
+          "table": {
+            "both_correct": 15,
+            "both_incorrect": 4,
+            "a_correct_b_wrong": 1,
+            "a_wrong_b_correct": 5
+          }
+        }
+      },
+      "vs_quorum": {
+        "gemma2": {
+          "kappa": 0.4807,
+          "p_o": 0.72,
+          "p_e": 0.4608,
+          "n": 25,
+          "table": {
+            "both_correct": 9,
+            "both_incorrect": 9,
+            "a_correct_b_wrong": 0,
+            "a_wrong_b_correct": 7
+          }
+        },
+        "llama3.1": {
+          "kappa": 0.8264,
+          "p_o": 0.92,
+          "p_e": 0.5392,
+          "n": 25,
+          "table": {
+            "both_correct": 15,
+            "both_incorrect": 8,
+            "a_correct_b_wrong": 1,
+            "a_wrong_b_correct": 1
+          }
+        },
+        "qwen2.5": {
+          "kappa": 0.6154,
+          "p_o": 0.84,
+          "p_e": 0.584,
+          "n": 25,
+          "table": {
+            "both_correct": 16,
+            "both_incorrect": 5,
+            "a_correct_b_wrong": 4,
+            "a_wrong_b_correct": 0
+          }
+        }
+      },
+      "avg_pairwise_kappa": 0.334,
+      "avg_vs_quorum_kappa": 0.6408
+    },
+    "hot": {
+      "pairwise": {
+        "gemma2 vs llama3.1": {
+          "kappa": 0.5312,
+          "p_o": 0.76,
+          "p_e": 0.488,
+          "n": 25,
+          "table": {
+            "both_correct": 10,
+            "both_incorrect": 9,
+            "a_correct_b_wrong": 1,
+            "a_wrong_b_correct": 5
+          }
+        },
+        "gemma2 vs qwen2.5": {
+          "kappa": 0.1935,
+          "p_o": 0.56,
+          "p_e": 0.4544,
+          "n": 25,
+          "table": {
+            "both_correct": 11,
+            "both_incorrect": 3,
+            "a_correct_b_wrong": 0,
+            "a_wrong_b_correct": 11
+          }
+        },
+        "llama3.1 vs qwen2.5": {
+          "kappa": 0.3396,
+          "p_o": 0.72,
+          "p_e": 0.576,
+          "n": 25,
+          "table": {
+            "both_correct": 15,
+            "both_incorrect": 3,
+            "a_correct_b_wrong": 0,
+            "a_wrong_b_correct": 7
+          }
+        }
+      },
+      "vs_quorum": {
+        "gemma2": {
+          "kappa": 0.613,
+          "p_o": 0.8,
+          "p_e": 0.4832,
+          "n": 25,
+          "table": {
+            "both_correct": 11,
+            "both_incorrect": 9,
+            "a_correct_b_wrong": 0,
+            "a_wrong_b_correct": 5
+          }
+        },
+        "llama3.1": {
+          "kappa": 0.9153,
+          "p_o": 0.96,
+          "p_e": 0.528,
+          "n": 25,
+          "table": {
+            "both_correct": 15,
+            "both_incorrect": 9,
+            "a_correct_b_wrong": 0,
+            "a_wrong_b_correct": 1
+          }
+        },
+        "qwen2.5": {
+          "kappa": 0.3902,
+          "p_o": 0.76,
+          "p_e": 0.6064,
+          "n": 25,
+          "table": {
+            "both_correct": 16,
+            "both_incorrect": 3,
+            "a_correct_b_wrong": 6,
+            "a_wrong_b_correct": 0
+          }
+        }
+      },
+      "avg_pairwise_kappa": 0.3548,
+      "avg_vs_quorum_kappa": 0.6395
+    }
+  }
+}
