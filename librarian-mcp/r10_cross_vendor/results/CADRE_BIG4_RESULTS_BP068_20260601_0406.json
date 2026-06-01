@@ -1,0 +1,1640 @@
+{
+  "generated": "2026-06-01T04:06:21.244544+00:00",
+  "session": "BP068",
+  "questions_n": 25,
+  "conditions": [
+    "cold",
+    "hot"
+  ],
+  "models_run": [
+    "claude-haiku",
+    "gpt-4.1-mini",
+    "gemini-2.5-flash"
+  ],
+  "models_skipped": [],
+  "results": {
+    "claude-haiku": {
+      "cold": {
+        "accuracy": 96.0,
+        "correct": 24,
+        "partial": 0,
+        "incorrect": 1,
+        "n": 25,
+        "cost_usd": 0.002279,
+        "cost_per_q": 9.1e-05,
+        "total_in_tokens": 2279,
+        "total_out_tokens": 114,
+        "elapsed_s": 27.1,
+        "q_results": [
+          {
+            "qid": "R01",
+            "src": "ARC",
+            "answer": "A",
+            "response": "B",
+            "grade": "incorrect",
+            "latency": 0.9,
+            "error": null
+          },
+          {
+            "qid": "R02",
+            "src": "ARC",
+            "answer": "B",
+            "response": "B",
+            "grade": "correct",
+            "latency": 0.6,
+            "error": null
+          },
+          {
+            "qid": "R03",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 0.63,
+            "error": null
+          },
+          {
+            "qid": "R04",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 0.68,
+            "error": null
+          },
+          {
+            "qid": "R05",
+            "src": "ARC",
+            "answer": "B",
+            "response": "B",
+            "grade": "correct",
+            "latency": 0.95,
+            "error": null
+          },
+          {
+            "qid": "R06",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 0.63,
+            "error": null
+          },
+          {
+            "qid": "R07",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 0.67,
+            "error": null
+          },
+          {
+            "qid": "R08",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 0.54,
+            "error": null
+          },
+          {
+            "qid": "R09",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 1.01,
+            "error": null
+          },
+          {
+            "qid": "R10",
+            "src": "ARC",
+            "answer": "B",
+            "response": "B",
+            "grade": "correct",
+            "latency": 0.65,
+            "error": null
+          },
+          {
+            "qid": "R11",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 0.58,
+            "error": null
+          },
+          {
+            "qid": "R12",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 0.57,
+            "error": null
+          },
+          {
+            "qid": "R13",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 0.67,
+            "error": null
+          },
+          {
+            "qid": "R14",
+            "src": "ARC",
+            "answer": "B",
+            "response": "B",
+            "grade": "correct",
+            "latency": 0.63,
+            "error": null
+          },
+          {
+            "qid": "R15",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 1.74,
+            "error": null
+          },
+          {
+            "qid": "R16",
+            "src": "GSM8K",
+            "answer": "27",
+            "response": "27",
+            "grade": "correct",
+            "latency": 0.62,
+            "error": null
+          },
+          {
+            "qid": "R17",
+            "src": "GSM8K",
+            "answer": "3.75",
+            "response": "3.75",
+            "grade": "correct",
+            "latency": 1.41,
+            "error": null
+          },
+          {
+            "qid": "R18",
+            "src": "GSM8K",
+            "answer": "330",
+            "response": "330",
+            "grade": "correct",
+            "latency": 0.71,
+            "error": null
+          },
+          {
+            "qid": "R19",
+            "src": "GSM8K",
+            "answer": "46",
+            "response": "46",
+            "grade": "correct",
+            "latency": 0.61,
+            "error": null
+          },
+          {
+            "qid": "R20",
+            "src": "GSM8K",
+            "answer": "4",
+            "response": "4",
+            "grade": "correct",
+            "latency": 0.59,
+            "error": null
+          },
+          {
+            "qid": "R21",
+            "src": "GSM8K",
+            "answer": "300",
+            "response": "300",
+            "grade": "correct",
+            "latency": 0.62,
+            "error": null
+          },
+          {
+            "qid": "R22",
+            "src": "GSM8K",
+            "answer": "4",
+            "response": "4",
+            "grade": "correct",
+            "latency": 0.55,
+            "error": null
+          },
+          {
+            "qid": "R23",
+            "src": "GSM8K",
+            "answer": "60",
+            "response": "60",
+            "grade": "correct",
+            "latency": 1.2,
+            "error": null
+          },
+          {
+            "qid": "R24",
+            "src": "GSM8K",
+            "answer": "6.25",
+            "response": "6.25",
+            "grade": "correct",
+            "latency": 0.62,
+            "error": null
+          },
+          {
+            "qid": "R25",
+            "src": "GSM8K",
+            "answer": "9",
+            "response": "9",
+            "grade": "correct",
+            "latency": 0.84,
+            "error": null
+          }
+        ],
+        "grades": [
+          "incorrect",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct"
+        ]
+      },
+      "hot": {
+        "accuracy": 96.0,
+        "correct": 24,
+        "partial": 0,
+        "incorrect": 1,
+        "n": 25,
+        "cost_usd": 0.002939,
+        "cost_per_q": 0.000118,
+        "total_in_tokens": 3104,
+        "total_out_tokens": 114,
+        "elapsed_s": 24.0,
+        "q_results": [
+          {
+            "qid": "R01",
+            "src": "ARC",
+            "answer": "A",
+            "response": "B",
+            "grade": "incorrect",
+            "latency": 0.54,
+            "error": null
+          },
+          {
+            "qid": "R02",
+            "src": "ARC",
+            "answer": "B",
+            "response": "B",
+            "grade": "correct",
+            "latency": 0.59,
+            "error": null
+          },
+          {
+            "qid": "R03",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 0.54,
+            "error": null
+          },
+          {
+            "qid": "R04",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 0.77,
+            "error": null
+          },
+          {
+            "qid": "R05",
+            "src": "ARC",
+            "answer": "B",
+            "response": "B",
+            "grade": "correct",
+            "latency": 0.75,
+            "error": null
+          },
+          {
+            "qid": "R06",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 0.57,
+            "error": null
+          },
+          {
+            "qid": "R07",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 0.95,
+            "error": null
+          },
+          {
+            "qid": "R08",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 0.68,
+            "error": null
+          },
+          {
+            "qid": "R09",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 0.82,
+            "error": null
+          },
+          {
+            "qid": "R10",
+            "src": "ARC",
+            "answer": "B",
+            "response": "B",
+            "grade": "correct",
+            "latency": 0.83,
+            "error": null
+          },
+          {
+            "qid": "R11",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 0.88,
+            "error": null
+          },
+          {
+            "qid": "R12",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 0.54,
+            "error": null
+          },
+          {
+            "qid": "R13",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 0.77,
+            "error": null
+          },
+          {
+            "qid": "R14",
+            "src": "ARC",
+            "answer": "B",
+            "response": "B",
+            "grade": "correct",
+            "latency": 0.64,
+            "error": null
+          },
+          {
+            "qid": "R15",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 0.57,
+            "error": null
+          },
+          {
+            "qid": "R16",
+            "src": "GSM8K",
+            "answer": "27",
+            "response": "27",
+            "grade": "correct",
+            "latency": 0.6,
+            "error": null
+          },
+          {
+            "qid": "R17",
+            "src": "GSM8K",
+            "answer": "3.75",
+            "response": "3.75",
+            "grade": "correct",
+            "latency": 0.64,
+            "error": null
+          },
+          {
+            "qid": "R18",
+            "src": "GSM8K",
+            "answer": "330",
+            "response": "330",
+            "grade": "correct",
+            "latency": 0.66,
+            "error": null
+          },
+          {
+            "qid": "R19",
+            "src": "GSM8K",
+            "answer": "46",
+            "response": "46",
+            "grade": "correct",
+            "latency": 0.74,
+            "error": null
+          },
+          {
+            "qid": "R20",
+            "src": "GSM8K",
+            "answer": "4",
+            "response": "4",
+            "grade": "correct",
+            "latency": 0.75,
+            "error": null
+          },
+          {
+            "qid": "R21",
+            "src": "GSM8K",
+            "answer": "300",
+            "response": "300",
+            "grade": "correct",
+            "latency": 0.61,
+            "error": null
+          },
+          {
+            "qid": "R22",
+            "src": "GSM8K",
+            "answer": "4",
+            "response": "4",
+            "grade": "correct",
+            "latency": 0.73,
+            "error": null
+          },
+          {
+            "qid": "R23",
+            "src": "GSM8K",
+            "answer": "60",
+            "response": "60",
+            "grade": "correct",
+            "latency": 0.54,
+            "error": null
+          },
+          {
+            "qid": "R24",
+            "src": "GSM8K",
+            "answer": "6.25",
+            "response": "6.25",
+            "grade": "correct",
+            "latency": 0.8,
+            "error": null
+          },
+          {
+            "qid": "R25",
+            "src": "GSM8K",
+            "answer": "9",
+            "response": "9",
+            "grade": "correct",
+            "latency": 0.63,
+            "error": null
+          }
+        ],
+        "grades": [
+          "incorrect",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct"
+        ]
+      }
+    },
+    "gpt-4.1-mini": {
+      "cold": {
+        "accuracy": 96.0,
+        "correct": 24,
+        "partial": 0,
+        "incorrect": 1,
+        "n": 25,
+        "cost_usd": 0.000905,
+        "cost_per_q": 3.6e-05,
+        "total_in_tokens": 2147,
+        "total_out_tokens": 29,
+        "elapsed_s": 32.6,
+        "q_results": [
+          {
+            "qid": "R01",
+            "src": "ARC",
+            "answer": "A",
+            "response": "A",
+            "grade": "correct",
+            "latency": 0.92,
+            "error": null
+          },
+          {
+            "qid": "R02",
+            "src": "ARC",
+            "answer": "B",
+            "response": "B",
+            "grade": "correct",
+            "latency": 0.45,
+            "error": null
+          },
+          {
+            "qid": "R03",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 0.43,
+            "error": null
+          },
+          {
+            "qid": "R04",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 11.56,
+            "error": null
+          },
+          {
+            "qid": "R05",
+            "src": "ARC",
+            "answer": "B",
+            "response": "B",
+            "grade": "correct",
+            "latency": 0.49,
+            "error": null
+          },
+          {
+            "qid": "R06",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 0.49,
+            "error": null
+          },
+          {
+            "qid": "R07",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 0.51,
+            "error": null
+          },
+          {
+            "qid": "R08",
+            "src": "ARC",
+            "answer": "C",
+            "response": "A",
+            "grade": "incorrect",
+            "latency": 0.39,
+            "error": null
+          },
+          {
+            "qid": "R09",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 0.44,
+            "error": null
+          },
+          {
+            "qid": "R10",
+            "src": "ARC",
+            "answer": "B",
+            "response": "B",
+            "grade": "correct",
+            "latency": 0.4,
+            "error": null
+          },
+          {
+            "qid": "R11",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 0.43,
+            "error": null
+          },
+          {
+            "qid": "R12",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 0.46,
+            "error": null
+          },
+          {
+            "qid": "R13",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 0.68,
+            "error": null
+          },
+          {
+            "qid": "R14",
+            "src": "ARC",
+            "answer": "B",
+            "response": "B",
+            "grade": "correct",
+            "latency": 0.45,
+            "error": null
+          },
+          {
+            "qid": "R15",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 0.64,
+            "error": null
+          },
+          {
+            "qid": "R16",
+            "src": "GSM8K",
+            "answer": "27",
+            "response": "27",
+            "grade": "correct",
+            "latency": 0.59,
+            "error": null
+          },
+          {
+            "qid": "R17",
+            "src": "GSM8K",
+            "answer": "3.75",
+            "response": "3.75",
+            "grade": "correct",
+            "latency": 0.51,
+            "error": null
+          },
+          {
+            "qid": "R18",
+            "src": "GSM8K",
+            "answer": "330",
+            "response": "330",
+            "grade": "correct",
+            "latency": 0.57,
+            "error": null
+          },
+          {
+            "qid": "R19",
+            "src": "GSM8K",
+            "answer": "46",
+            "response": "46",
+            "grade": "correct",
+            "latency": 0.9,
+            "error": null
+          },
+          {
+            "qid": "R20",
+            "src": "GSM8K",
+            "answer": "4",
+            "response": "4",
+            "grade": "correct",
+            "latency": 0.57,
+            "error": null
+          },
+          {
+            "qid": "R21",
+            "src": "GSM8K",
+            "answer": "300",
+            "response": "300",
+            "grade": "correct",
+            "latency": 0.49,
+            "error": null
+          },
+          {
+            "qid": "R22",
+            "src": "GSM8K",
+            "answer": "4",
+            "response": "4",
+            "grade": "correct",
+            "latency": 0.58,
+            "error": null
+          },
+          {
+            "qid": "R23",
+            "src": "GSM8K",
+            "answer": "60",
+            "response": "60",
+            "grade": "correct",
+            "latency": 0.64,
+            "error": null
+          },
+          {
+            "qid": "R24",
+            "src": "GSM8K",
+            "answer": "6.25",
+            "response": "6.25",
+            "grade": "correct",
+            "latency": 0.51,
+            "error": null
+          },
+          {
+            "qid": "R25",
+            "src": "GSM8K",
+            "answer": "9",
+            "response": "9",
+            "grade": "correct",
+            "latency": 0.54,
+            "error": null
+          }
+        ],
+        "grades": [
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "incorrect",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct"
+        ]
+      },
+      "hot": {
+        "accuracy": 96.0,
+        "correct": 24,
+        "partial": 0,
+        "incorrect": 1,
+        "n": 25,
+        "cost_usd": 0.001195,
+        "cost_per_q": 4.8e-05,
+        "total_in_tokens": 2872,
+        "total_out_tokens": 29,
+        "elapsed_s": 19.5,
+        "q_results": [
+          {
+            "qid": "R01",
+            "src": "ARC",
+            "answer": "A",
+            "response": "A",
+            "grade": "correct",
+            "latency": 0.43,
+            "error": null
+          },
+          {
+            "qid": "R02",
+            "src": "ARC",
+            "answer": "B",
+            "response": "B",
+            "grade": "correct",
+            "latency": 0.37,
+            "error": null
+          },
+          {
+            "qid": "R03",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 0.37,
+            "error": null
+          },
+          {
+            "qid": "R04",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 0.37,
+            "error": null
+          },
+          {
+            "qid": "R05",
+            "src": "ARC",
+            "answer": "B",
+            "response": "B",
+            "grade": "correct",
+            "latency": 0.55,
+            "error": null
+          },
+          {
+            "qid": "R06",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 0.93,
+            "error": null
+          },
+          {
+            "qid": "R07",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 0.57,
+            "error": null
+          },
+          {
+            "qid": "R08",
+            "src": "ARC",
+            "answer": "C",
+            "response": "A",
+            "grade": "incorrect",
+            "latency": 0.43,
+            "error": null
+          },
+          {
+            "qid": "R09",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 0.57,
+            "error": null
+          },
+          {
+            "qid": "R10",
+            "src": "ARC",
+            "answer": "B",
+            "response": "B",
+            "grade": "correct",
+            "latency": 0.43,
+            "error": null
+          },
+          {
+            "qid": "R11",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 0.54,
+            "error": null
+          },
+          {
+            "qid": "R12",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 0.55,
+            "error": null
+          },
+          {
+            "qid": "R13",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 0.47,
+            "error": null
+          },
+          {
+            "qid": "R14",
+            "src": "ARC",
+            "answer": "B",
+            "response": "B",
+            "grade": "correct",
+            "latency": 0.43,
+            "error": null
+          },
+          {
+            "qid": "R15",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 0.35,
+            "error": null
+          },
+          {
+            "qid": "R16",
+            "src": "GSM8K",
+            "answer": "27",
+            "response": "27",
+            "grade": "correct",
+            "latency": 0.6,
+            "error": null
+          },
+          {
+            "qid": "R17",
+            "src": "GSM8K",
+            "answer": "3.75",
+            "response": "3.75",
+            "grade": "correct",
+            "latency": 0.54,
+            "error": null
+          },
+          {
+            "qid": "R18",
+            "src": "GSM8K",
+            "answer": "330",
+            "response": "330",
+            "grade": "correct",
+            "latency": 0.81,
+            "error": null
+          },
+          {
+            "qid": "R19",
+            "src": "GSM8K",
+            "answer": "46",
+            "response": "46",
+            "grade": "correct",
+            "latency": 0.47,
+            "error": null
+          },
+          {
+            "qid": "R20",
+            "src": "GSM8K",
+            "answer": "4",
+            "response": "4",
+            "grade": "correct",
+            "latency": 0.44,
+            "error": null
+          },
+          {
+            "qid": "R21",
+            "src": "GSM8K",
+            "answer": "300",
+            "response": "300",
+            "grade": "correct",
+            "latency": 0.48,
+            "error": null
+          },
+          {
+            "qid": "R22",
+            "src": "GSM8K",
+            "answer": "4",
+            "response": "4",
+            "grade": "correct",
+            "latency": 0.38,
+            "error": null
+          },
+          {
+            "qid": "R23",
+            "src": "GSM8K",
+            "answer": "60",
+            "response": "60",
+            "grade": "correct",
+            "latency": 0.41,
+            "error": null
+          },
+          {
+            "qid": "R24",
+            "src": "GSM8K",
+            "answer": "6.25",
+            "response": "6.25",
+            "grade": "correct",
+            "latency": 0.52,
+            "error": null
+          },
+          {
+            "qid": "R25",
+            "src": "GSM8K",
+            "answer": "9",
+            "response": "9",
+            "grade": "correct",
+            "latency": 0.49,
+            "error": null
+          }
+        ],
+        "grades": [
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "incorrect",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct"
+        ]
+      }
+    },
+    "gemini-2.5-flash": {
+      "cold": {
+        "accuracy": 100.0,
+        "correct": 25,
+        "partial": 0,
+        "incorrect": 0,
+        "n": 25,
+        "cost_usd": 0.000327,
+        "cost_per_q": 1.3e-05,
+        "total_in_tokens": 2028,
+        "total_out_tokens": 38,
+        "elapsed_s": 32.6,
+        "q_results": [
+          {
+            "qid": "R01",
+            "src": "ARC",
+            "answer": "A",
+            "response": "A",
+            "grade": "correct",
+            "latency": 2.94,
+            "error": null
+          },
+          {
+            "qid": "R02",
+            "src": "ARC",
+            "answer": "B",
+            "response": "B",
+            "grade": "correct",
+            "latency": 1.3,
+            "error": null
+          },
+          {
+            "qid": "R03",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 1.36,
+            "error": null
+          },
+          {
+            "qid": "R04",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 1.53,
+            "error": null
+          },
+          {
+            "qid": "R05",
+            "src": "ARC",
+            "answer": "B",
+            "response": "B",
+            "grade": "correct",
+            "latency": 1.25,
+            "error": null
+          },
+          {
+            "qid": "R06",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 1.1,
+            "error": null
+          },
+          {
+            "qid": "R07",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 1.38,
+            "error": null
+          },
+          {
+            "qid": "R08",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 1.25,
+            "error": null
+          },
+          {
+            "qid": "R09",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 1.31,
+            "error": null
+          },
+          {
+            "qid": "R10",
+            "src": "ARC",
+            "answer": "B",
+            "response": "B",
+            "grade": "correct",
+            "latency": 1.24,
+            "error": null
+          },
+          {
+            "qid": "R11",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 1.27,
+            "error": null
+          },
+          {
+            "qid": "R12",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 1.57,
+            "error": null
+          },
+          {
+            "qid": "R13",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 1.18,
+            "error": null
+          },
+          {
+            "qid": "R14",
+            "src": "ARC",
+            "answer": "B",
+            "response": "B",
+            "grade": "correct",
+            "latency": 1.14,
+            "error": null
+          },
+          {
+            "qid": "R15",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 1.16,
+            "error": null
+          },
+          {
+            "qid": "R16",
+            "src": "GSM8K",
+            "answer": "27",
+            "response": "27",
+            "grade": "correct",
+            "latency": 1.2,
+            "error": null
+          },
+          {
+            "qid": "R17",
+            "src": "GSM8K",
+            "answer": "3.75",
+            "response": "3.75",
+            "grade": "correct",
+            "latency": 1.12,
+            "error": null
+          },
+          {
+            "qid": "R18",
+            "src": "GSM8K",
+            "answer": "330",
+            "response": "330",
+            "grade": "correct",
+            "latency": 1.2,
+            "error": null
+          },
+          {
+            "qid": "R19",
+            "src": "GSM8K",
+            "answer": "46",
+            "response": "46",
+            "grade": "correct",
+            "latency": 1.22,
+            "error": null
+          },
+          {
+            "qid": "R20",
+            "src": "GSM8K",
+            "answer": "4",
+            "response": "4",
+            "grade": "correct",
+            "latency": 1.14,
+            "error": null
+          },
+          {
+            "qid": "R21",
+            "src": "GSM8K",
+            "answer": "300",
+            "response": "300",
+            "grade": "correct",
+            "latency": 1.3,
+            "error": null
+          },
+          {
+            "qid": "R22",
+            "src": "GSM8K",
+            "answer": "4",
+            "response": "4",
+            "grade": "correct",
+            "latency": 1.18,
+            "error": null
+          },
+          {
+            "qid": "R23",
+            "src": "GSM8K",
+            "answer": "60",
+            "response": "60",
+            "grade": "correct",
+            "latency": 1.03,
+            "error": null
+          },
+          {
+            "qid": "R24",
+            "src": "GSM8K",
+            "answer": "6.25",
+            "response": "6.25",
+            "grade": "correct",
+            "latency": 1.07,
+            "error": null
+          },
+          {
+            "qid": "R25",
+            "src": "GSM8K",
+            "answer": "9",
+            "response": "9",
+            "grade": "correct",
+            "latency": 1.11,
+            "error": null
+          }
+        ],
+        "grades": [
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct"
+        ]
+      },
+      "hot": {
+        "accuracy": 100.0,
+        "correct": 25,
+        "partial": 0,
+        "incorrect": 0,
+        "n": 25,
+        "cost_usd": 0.000443,
+        "cost_per_q": 1.8e-05,
+        "total_in_tokens": 2803,
+        "total_out_tokens": 38,
+        "elapsed_s": 31.4,
+        "q_results": [
+          {
+            "qid": "R01",
+            "src": "ARC",
+            "answer": "A",
+            "response": "A",
+            "grade": "correct",
+            "latency": 1.1,
+            "error": null
+          },
+          {
+            "qid": "R02",
+            "src": "ARC",
+            "answer": "B",
+            "response": "B",
+            "grade": "correct",
+            "latency": 2.07,
+            "error": null
+          },
+          {
+            "qid": "R03",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 1.1,
+            "error": null
+          },
+          {
+            "qid": "R04",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 1.11,
+            "error": null
+          },
+          {
+            "qid": "R05",
+            "src": "ARC",
+            "answer": "B",
+            "response": "B",
+            "grade": "correct",
+            "latency": 1.19,
+            "error": null
+          },
+          {
+            "qid": "R06",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 1.04,
+            "error": null
+          },
+          {
+            "qid": "R07",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 1.13,
+            "error": null
+          },
+          {
+            "qid": "R08",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 1.02,
+            "error": null
+          },
+          {
+            "qid": "R09",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 1.19,
+            "error": null
+          },
+          {
+            "qid": "R10",
+            "src": "ARC",
+            "answer": "B",
+            "response": "B",
+            "grade": "correct",
+            "latency": 1.04,
+            "error": null
+          },
+          {
+            "qid": "R11",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 1.31,
+            "error": null
+          },
+          {
+            "qid": "R12",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 1.24,
+            "error": null
+          },
+          {
+            "qid": "R13",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 1.63,
+            "error": null
+          },
+          {
+            "qid": "R14",
+            "src": "ARC",
+            "answer": "B",
+            "response": "B",
+            "grade": "correct",
+            "latency": 1.27,
+            "error": null
+          },
+          {
+            "qid": "R15",
+            "src": "ARC",
+            "answer": "C",
+            "response": "C",
+            "grade": "correct",
+            "latency": 1.25,
+            "error": null
+          },
+          {
+            "qid": "R16",
+            "src": "GSM8K",
+            "answer": "27",
+            "response": "27",
+            "grade": "correct",
+            "latency": 1.33,
+            "error": null
+          },
+          {
+            "qid": "R17",
+            "src": "GSM8K",
+            "answer": "3.75",
+            "response": "3.75",
+            "grade": "correct",
+            "latency": 1.2,
+            "error": null
+          },
+          {
+            "qid": "R18",
+            "src": "GSM8K",
+            "answer": "330",
+            "response": "330",
+            "grade": "correct",
+            "latency": 1.8,
+            "error": null
+          },
+          {
+            "qid": "R19",
+            "src": "GSM8K",
+            "answer": "46",
+            "response": "46",
+            "grade": "correct",
+            "latency": 1.34,
+            "error": null
+          },
+          {
+            "qid": "R20",
+            "src": "GSM8K",
+            "answer": "4",
+            "response": "4",
+            "grade": "correct",
+            "latency": 1.3,
+            "error": null
+          },
+          {
+            "qid": "R21",
+            "src": "GSM8K",
+            "answer": "300",
+            "response": "300",
+            "grade": "correct",
+            "latency": 1.21,
+            "error": null
+          },
+          {
+            "qid": "R22",
+            "src": "GSM8K",
+            "answer": "4",
+            "response": "4",
+            "grade": "correct",
+            "latency": 1.25,
+            "error": null
+          },
+          {
+            "qid": "R23",
+            "src": "GSM8K",
+            "answer": "60",
+            "response": "60",
+            "grade": "correct",
+            "latency": 1.18,
+            "error": null
+          },
+          {
+            "qid": "R24",
+            "src": "GSM8K",
+            "answer": "6.25",
+            "response": "6.25",
+            "grade": "correct",
+            "latency": 0.97,
+            "error": null
+          },
+          {
+            "qid": "R25",
+            "src": "GSM8K",
+            "answer": "9",
+            "response": "9",
+            "grade": "correct",
+            "latency": 1.05,
+            "error": null
+          }
+        ],
+        "grades": [
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct",
+          "correct"
+        ]
+      }
+    }
+  },
+  "kappa_pairwise_api_cold": {
+    "claude-haiku vs gpt-4.1-mini": -0.0417,
+    "claude-haiku vs gemini-2.5-flash": 0.0,
+    "gpt-4.1-mini vs gemini-2.5-flash": 0.0
+  },
+  "avg_kappa_api_cold": -0.013900000000000001,
+  "local_cadre_kappa_cold": 0.334,
+  "local_baselines": {
+    "gemma2:2b": {
+      "cold": 36.0,
+      "hot": 36.0
+    },
+    "llama3.1:8b": {
+      "cold": 64.0,
+      "hot": 64.0
+    },
+    "qwen2.5:7b": {
+      "cold": 80.0,
+      "hot": 80.0
+    }
+  }
+}

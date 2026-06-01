@@ -105,12 +105,12 @@ MODELS = [
         "cost_per_m_out": 1.60,
     },
     {
-        "id": "gemini-2.0-flash",
-        "label": "gemini-2.0-flash",
+        "id": "gemini-2.5-flash",
+        "label": "gemini-2.5-flash",
         "vendor": "Google",
         "key_env": "GEMINI_API_KEY",
-        "cost_per_m_in": 0.10,
-        "cost_per_m_out": 0.40,
+        "cost_per_m_in": 0.15,
+        "cost_per_m_out": 0.60,
     },
 ]
 
@@ -226,24 +226,30 @@ def call_openai(model_id: str, api_key: str, sys_prompt: str, user_q: str,
 
 def call_gemini(model_id: str, api_key: str, sys_prompt: str, user_q: str,
                 timeout: int = 60) -> dict:
+    t0 = time.time()
     try:
-        import google.generativeai as genai
-        genai.configure(api_key=api_key)
-        model = genai.GenerativeModel(
-            model_name=model_id,
-            system_instruction=sys_prompt,
-            generation_config={"max_output_tokens": 128, "temperature": 0.0},
+        from google import genai as gai
+        from google.genai import types as gai_types
+        client = gai.Client(api_key=api_key)
+        resp = client.models.generate_content(
+            model=model_id,
+            contents=user_q,
+            config=gai_types.GenerateContentConfig(
+                system_instruction=sys_prompt,
+                max_output_tokens=512,
+                temperature=0.0,
+                thinking_config=gai_types.ThinkingConfig(thinking_budget=0),
+            ),
         )
-        t0 = time.time()
-        resp = model.generate_content(user_q)
         lat = round(time.time() - t0, 2)
         text = resp.text.strip() if resp.text else ""
-        in_tok = getattr(getattr(resp, "usage_metadata", None), "prompt_token_count", 0) or 0
-        out_tok = getattr(getattr(resp, "usage_metadata", None), "candidates_token_count", 0) or 0
+        usage = getattr(resp, "usage_metadata", None)
+        in_tok = getattr(usage, "prompt_token_count", 0) or 0
+        out_tok = getattr(usage, "candidates_token_count", 0) or 0
         return {"text": text, "latency": lat, "error": None,
                 "in_tokens": in_tok, "out_tokens": out_tok}
     except Exception as exc:
-        lat = round(time.time() - t0, 2) if 't0' in dir() else 0
+        lat = round(time.time() - t0, 2)
         return {"text": "", "latency": lat, "error": str(exc)[:200],
                 "in_tokens": 0, "out_tokens": 0}
 
