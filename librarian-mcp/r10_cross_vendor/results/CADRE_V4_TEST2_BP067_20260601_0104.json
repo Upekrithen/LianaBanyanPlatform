@@ -1,0 +1,533 @@
+{
+  "generated": "2026-06-01T01:04:34Z",
+  "session": "BP067",
+  "cadre_models": [
+    "gemma2:2b",
+    "llama3.1:8b-instruct-q4_K_M",
+    "qwen2.5:7b"
+  ],
+  "test2": {
+    "cold": {
+      "accuracy": 64.0,
+      "correct": 16,
+      "partial": 0,
+      "incorrect": 9,
+      "n": 25,
+      "avg_latency_s": 8.5,
+      "cost_usd": 0.0,
+      "q_results": [
+        {
+          "qid": "R01",
+          "src": "ARC",
+          "quorum": "correct",
+          "grades": {
+            "gemma2:2b": "correct",
+            "llama3.1:8b-instruct-q4_K_M": "incorrect",
+            "qwen2.5:7b": "correct"
+          }
+        },
+        {
+          "qid": "R02",
+          "src": "ARC",
+          "quorum": "correct",
+          "grades": {
+            "gemma2:2b": "incorrect",
+            "llama3.1:8b-instruct-q4_K_M": "correct",
+            "qwen2.5:7b": "correct"
+          }
+        },
+        {
+          "qid": "R03",
+          "src": "ARC",
+          "quorum": "correct",
+          "grades": {
+            "gemma2:2b": "correct",
+            "llama3.1:8b-instruct-q4_K_M": "correct",
+            "qwen2.5:7b": "correct"
+          }
+        },
+        {
+          "qid": "R04",
+          "src": "ARC",
+          "quorum": "correct",
+          "grades": {
+            "gemma2:2b": "incorrect",
+            "llama3.1:8b-instruct-q4_K_M": "correct",
+            "qwen2.5:7b": "correct"
+          }
+        },
+        {
+          "qid": "R05",
+          "src": "ARC",
+          "quorum": "correct",
+          "grades": {
+            "gemma2:2b": "incorrect",
+            "llama3.1:8b-instruct-q4_K_M": "correct",
+            "qwen2.5:7b": "correct"
+          }
+        },
+        {
+          "qid": "R06",
+          "src": "ARC",
+          "quorum": "correct",
+          "grades": {
+            "gemma2:2b": "correct",
+            "llama3.1:8b-instruct-q4_K_M": "correct",
+            "qwen2.5:7b": "correct"
+          }
+        },
+        {
+          "qid": "R07",
+          "src": "ARC",
+          "quorum": "correct",
+          "grades": {
+            "gemma2:2b": "incorrect",
+            "llama3.1:8b-instruct-q4_K_M": "correct",
+            "qwen2.5:7b": "correct"
+          }
+        },
+        {
+          "qid": "R08",
+          "src": "ARC",
+          "quorum": "incorrect",
+          "grades": {
+            "gemma2:2b": "incorrect",
+            "llama3.1:8b-instruct-q4_K_M": "incorrect",
+            "qwen2.5:7b": "correct"
+          }
+        },
+        {
+          "qid": "R09",
+          "src": "ARC",
+          "quorum": "correct",
+          "grades": {
+            "gemma2:2b": "correct",
+            "llama3.1:8b-instruct-q4_K_M": "correct",
+            "qwen2.5:7b": "correct"
+          }
+        },
+        {
+          "qid": "R10",
+          "src": "ARC",
+          "quorum": "correct",
+          "grades": {
+            "gemma2:2b": "correct",
+            "llama3.1:8b-instruct-q4_K_M": "correct",
+            "qwen2.5:7b": "correct"
+          }
+        },
+        {
+          "qid": "R11",
+          "src": "ARC",
+          "quorum": "correct",
+          "grades": {
+            "gemma2:2b": "correct",
+            "llama3.1:8b-instruct-q4_K_M": "correct",
+            "qwen2.5:7b": "correct"
+          }
+        },
+        {
+          "qid": "R12",
+          "src": "ARC",
+          "quorum": "correct",
+          "grades": {
+            "gemma2:2b": "correct",
+            "llama3.1:8b-instruct-q4_K_M": "correct",
+            "qwen2.5:7b": "correct"
+          }
+        },
+        {
+          "qid": "R13",
+          "src": "ARC",
+          "quorum": "correct",
+          "grades": {
+            "gemma2:2b": "incorrect",
+            "llama3.1:8b-instruct-q4_K_M": "correct",
+            "qwen2.5:7b": "correct"
+          }
+        },
+        {
+          "qid": "R14",
+          "src": "ARC",
+          "quorum": "correct",
+          "grades": {
+            "gemma2:2b": "correct",
+            "llama3.1:8b-instruct-q4_K_M": "correct",
+            "qwen2.5:7b": "correct"
+          }
+        },
+        {
+          "qid": "R15",
+          "src": "ARC",
+          "quorum": "correct",
+          "grades": {
+            "gemma2:2b": "correct",
+            "llama3.1:8b-instruct-q4_K_M": "correct",
+            "qwen2.5:7b": "correct"
+          }
+        },
+        {
+          "qid": "R16",
+          "src": "GSM8K",
+          "quorum": "incorrect",
+          "grades": {
+            "gemma2:2b": "incorrect",
+            "llama3.1:8b-instruct-q4_K_M": "incorrect",
+            "qwen2.5:7b": "incorrect"
+          }
+        },
+        {
+          "qid": "R17",
+          "src": "GSM8K",
+          "quorum": "correct",
+          "grades": {
+            "gemma2:2b": "incorrect",
+            "llama3.1:8b-instruct-q4_K_M": "correct",
+            "qwen2.5:7b": "correct"
+          }
+        },
+        {
+          "qid": "R18",
+          "src": "GSM8K",
+          "quorum": "incorrect",
+          "grades": {
+            "gemma2:2b": "incorrect",
+            "llama3.1:8b-instruct-q4_K_M": "incorrect",
+            "qwen2.5:7b": "incorrect"
+          }
+        },
+        {
+          "qid": "R19",
+          "src": "GSM8K",
+          "quorum": "incorrect",
+          "grades": {
+            "gemma2:2b": "incorrect",
+            "llama3.1:8b-instruct-q4_K_M": "incorrect",
+            "qwen2.5:7b": "correct"
+          }
+        },
+        {
+          "qid": "R20",
+          "src": "GSM8K",
+          "quorum": "incorrect",
+          "grades": {
+            "gemma2:2b": "incorrect",
+            "llama3.1:8b-instruct-q4_K_M": "incorrect",
+            "qwen2.5:7b": "correct"
+          }
+        },
+        {
+          "qid": "R21",
+          "src": "GSM8K",
+          "quorum": "incorrect",
+          "grades": {
+            "gemma2:2b": "incorrect",
+            "llama3.1:8b-instruct-q4_K_M": "incorrect",
+            "qwen2.5:7b": "incorrect"
+          }
+        },
+        {
+          "qid": "R22",
+          "src": "GSM8K",
+          "quorum": "incorrect",
+          "grades": {
+            "gemma2:2b": "incorrect",
+            "llama3.1:8b-instruct-q4_K_M": "correct",
+            "qwen2.5:7b": "incorrect"
+          }
+        },
+        {
+          "qid": "R23",
+          "src": "GSM8K",
+          "quorum": "correct",
+          "grades": {
+            "gemma2:2b": "incorrect",
+            "llama3.1:8b-instruct-q4_K_M": "correct",
+            "qwen2.5:7b": "correct"
+          }
+        },
+        {
+          "qid": "R24",
+          "src": "GSM8K",
+          "quorum": "incorrect",
+          "grades": {
+            "gemma2:2b": "incorrect",
+            "llama3.1:8b-instruct-q4_K_M": "incorrect",
+            "qwen2.5:7b": "incorrect"
+          }
+        },
+        {
+          "qid": "R25",
+          "src": "GSM8K",
+          "quorum": "incorrect",
+          "grades": {
+            "gemma2:2b": "incorrect",
+            "llama3.1:8b-instruct-q4_K_M": "incorrect",
+            "qwen2.5:7b": "correct"
+          }
+        }
+      ]
+    },
+    "hot": {
+      "accuracy": 64.0,
+      "correct": 16,
+      "partial": 0,
+      "incorrect": 9,
+      "n": 25,
+      "avg_latency_s": 8.3,
+      "cost_usd": 0.0,
+      "q_results": [
+        {
+          "qid": "R01",
+          "src": "ARC",
+          "quorum": "correct",
+          "grades": {
+            "gemma2:2b": "correct",
+            "llama3.1:8b-instruct-q4_K_M": "incorrect",
+            "qwen2.5:7b": "correct"
+          }
+        },
+        {
+          "qid": "R02",
+          "src": "ARC",
+          "quorum": "correct",
+          "grades": {
+            "gemma2:2b": "correct",
+            "llama3.1:8b-instruct-q4_K_M": "correct",
+            "qwen2.5:7b": "correct"
+          }
+        },
+        {
+          "qid": "R03",
+          "src": "ARC",
+          "quorum": "correct",
+          "grades": {
+            "gemma2:2b": "correct",
+            "llama3.1:8b-instruct-q4_K_M": "correct",
+            "qwen2.5:7b": "correct"
+          }
+        },
+        {
+          "qid": "R04",
+          "src": "ARC",
+          "quorum": "correct",
+          "grades": {
+            "gemma2:2b": "incorrect",
+            "llama3.1:8b-instruct-q4_K_M": "correct",
+            "qwen2.5:7b": "correct"
+          }
+        },
+        {
+          "qid": "R05",
+          "src": "ARC",
+          "quorum": "incorrect",
+          "grades": {
+            "gemma2:2b": "incorrect",
+            "llama3.1:8b-instruct-q4_K_M": "incorrect",
+            "qwen2.5:7b": "correct"
+          }
+        },
+        {
+          "qid": "R06",
+          "src": "ARC",
+          "quorum": "correct",
+          "grades": {
+            "gemma2:2b": "correct",
+            "llama3.1:8b-instruct-q4_K_M": "correct",
+            "qwen2.5:7b": "correct"
+          }
+        },
+        {
+          "qid": "R07",
+          "src": "ARC",
+          "quorum": "correct",
+          "grades": {
+            "gemma2:2b": "incorrect",
+            "llama3.1:8b-instruct-q4_K_M": "correct",
+            "qwen2.5:7b": "correct"
+          }
+        },
+        {
+          "qid": "R08",
+          "src": "ARC",
+          "quorum": "incorrect",
+          "grades": {
+            "gemma2:2b": "incorrect",
+            "llama3.1:8b-instruct-q4_K_M": "incorrect",
+            "qwen2.5:7b": "correct"
+          }
+        },
+        {
+          "qid": "R09",
+          "src": "ARC",
+          "quorum": "correct",
+          "grades": {
+            "gemma2:2b": "correct",
+            "llama3.1:8b-instruct-q4_K_M": "correct",
+            "qwen2.5:7b": "correct"
+          }
+        },
+        {
+          "qid": "R10",
+          "src": "ARC",
+          "quorum": "correct",
+          "grades": {
+            "gemma2:2b": "correct",
+            "llama3.1:8b-instruct-q4_K_M": "correct",
+            "qwen2.5:7b": "correct"
+          }
+        },
+        {
+          "qid": "R11",
+          "src": "ARC",
+          "quorum": "correct",
+          "grades": {
+            "gemma2:2b": "correct",
+            "llama3.1:8b-instruct-q4_K_M": "correct",
+            "qwen2.5:7b": "correct"
+          }
+        },
+        {
+          "qid": "R12",
+          "src": "ARC",
+          "quorum": "correct",
+          "grades": {
+            "gemma2:2b": "correct",
+            "llama3.1:8b-instruct-q4_K_M": "correct",
+            "qwen2.5:7b": "correct"
+          }
+        },
+        {
+          "qid": "R13",
+          "src": "ARC",
+          "quorum": "correct",
+          "grades": {
+            "gemma2:2b": "incorrect",
+            "llama3.1:8b-instruct-q4_K_M": "correct",
+            "qwen2.5:7b": "correct"
+          }
+        },
+        {
+          "qid": "R14",
+          "src": "ARC",
+          "quorum": "correct",
+          "grades": {
+            "gemma2:2b": "correct",
+            "llama3.1:8b-instruct-q4_K_M": "correct",
+            "qwen2.5:7b": "correct"
+          }
+        },
+        {
+          "qid": "R15",
+          "src": "ARC",
+          "quorum": "correct",
+          "grades": {
+            "gemma2:2b": "correct",
+            "llama3.1:8b-instruct-q4_K_M": "correct",
+            "qwen2.5:7b": "correct"
+          }
+        },
+        {
+          "qid": "R16",
+          "src": "GSM8K",
+          "quorum": "incorrect",
+          "grades": {
+            "gemma2:2b": "incorrect",
+            "llama3.1:8b-instruct-q4_K_M": "incorrect",
+            "qwen2.5:7b": "incorrect"
+          }
+        },
+        {
+          "qid": "R17",
+          "src": "GSM8K",
+          "quorum": "correct",
+          "grades": {
+            "gemma2:2b": "incorrect",
+            "llama3.1:8b-instruct-q4_K_M": "correct",
+            "qwen2.5:7b": "correct"
+          }
+        },
+        {
+          "qid": "R18",
+          "src": "GSM8K",
+          "quorum": "incorrect",
+          "grades": {
+            "gemma2:2b": "incorrect",
+            "llama3.1:8b-instruct-q4_K_M": "incorrect",
+            "qwen2.5:7b": "incorrect"
+          }
+        },
+        {
+          "qid": "R19",
+          "src": "GSM8K",
+          "quorum": "incorrect",
+          "grades": {
+            "gemma2:2b": "incorrect",
+            "llama3.1:8b-instruct-q4_K_M": "incorrect",
+            "qwen2.5:7b": "correct"
+          }
+        },
+        {
+          "qid": "R20",
+          "src": "GSM8K",
+          "quorum": "incorrect",
+          "grades": {
+            "gemma2:2b": "incorrect",
+            "llama3.1:8b-instruct-q4_K_M": "incorrect",
+            "qwen2.5:7b": "correct"
+          }
+        },
+        {
+          "qid": "R21",
+          "src": "GSM8K",
+          "quorum": "incorrect",
+          "grades": {
+            "gemma2:2b": "incorrect",
+            "llama3.1:8b-instruct-q4_K_M": "incorrect",
+            "qwen2.5:7b": "correct"
+          }
+        },
+        {
+          "qid": "R22",
+          "src": "GSM8K",
+          "quorum": "correct",
+          "grades": {
+            "gemma2:2b": "incorrect",
+            "llama3.1:8b-instruct-q4_K_M": "correct",
+            "qwen2.5:7b": "correct"
+          }
+        },
+        {
+          "qid": "R23",
+          "src": "GSM8K",
+          "quorum": "correct",
+          "grades": {
+            "gemma2:2b": "correct",
+            "llama3.1:8b-instruct-q4_K_M": "correct",
+            "qwen2.5:7b": "correct"
+          }
+        },
+        {
+          "qid": "R24",
+          "src": "GSM8K",
+          "quorum": "incorrect",
+          "grades": {
+            "gemma2:2b": "incorrect",
+            "llama3.1:8b-instruct-q4_K_M": "incorrect",
+            "qwen2.5:7b": "incorrect"
+          }
+        },
+        {
+          "qid": "R25",
+          "src": "GSM8K",
+          "quorum": "incorrect",
+          "grades": {
+            "gemma2:2b": "incorrect",
+            "llama3.1:8b-instruct-q4_K_M": "incorrect",
+            "qwen2.5:7b": "correct"
+          }
+        }
+      ]
+    }
+  }
+}
