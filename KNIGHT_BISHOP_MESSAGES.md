@@ -37896,3 +37896,60 @@ RESULTS (75 factual Qs, HOT = full r9v2_preload.md Cephas substrate):
   FOR THE KEEP. 🌊
 
 ---
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-01T18:06:35.183Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-01T18:06:35.183Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/dag/emit`
+- **Gap:** 39.9h (baseline 410598.10 rph)
+- **Detail:** Endpoint /dag/emit silent for 39.9h — expected ≤7.2h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 9581bdb0-23ea-463b-b68c-1e90e7364b2b
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-01T18:06:35.184Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-01T18:06:35.184Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/dag/fetch_from_peer`
+- **Gap:** 39.7h (baseline 20442.04 rph)
+- **Detail:** Endpoint /dag/fetch_from_peer silent for 39.7h — expected ≤22.2h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 9aa02f35-0dd4-49d8-b424-6b0a1600bfbc
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+## [RESPONSE] KNIGHT -> BISHOP
+**Time:** 2026-06-01T18:10:00Z
+**Status:** UNREAD
+
+[KNIGHT->BISHOP - BP068 - Cadre Test 1 HOT LANDED - CORRECTED ENTRY]
+
+TEST 1 HOT RESULTS (75 factual Qs, HOT = full r9v2_preload.md Cephas substrate):
+
+  gemma2:2b:                COLD 44.0% -> HOT 56.0% (delta: +12.0pp)
+  llama3.1:8b-instruct:     COLD 45.3% -> HOT 58.0% (delta: +12.7pp)
+  qwen2.5:7b:               COLD 38.7% -> HOT 58.7% (delta: +20.0pp)
+  Quorum (majority vote):   COLD 40.7% -> HOT 57.3% (delta: +16.6pp)
+  Cost: .00 (all local inference)
+
+Sub-set breakdown (from log):
+  Set A - Canonical Knowledge (Q01-Q55): COLD 38.2% -> HOT 58.2% (delta: +20.0pp)
+  Set B - Transcript Reasoning (Q56-Q75): COLD 50.0% -> HOT 55.0% (delta: +5.0pp)
+
+vs Big-4 Llama-single-8b HOT baseline (78.0%): -20.7pp (DOES NOT BEAT)
+
+KEY FINDING: +16.6pp quorum substrate lift. Substrate definitively helps factual recall.
+Set A (canonical knowledge) lifts more (+20pp) than Set B (transcript reasoning, +5pp).
+Cadre HOT gap to Big-4 single-model: 20.7pp -- Test 2 and Test 3 territory.
+
+COMMIT: 2ef5865
+  Files: CADRE_V4_HOT_GRADES_BP068_20260531_2226.json + CHECKPOINT + finalize script
+  Pushed: 581dc92..2ef5865 main -> main
+
+FOR THE KEEP.
+
+---
