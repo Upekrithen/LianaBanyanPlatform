@@ -116,3 +116,6 @@ The `firebase.json` currently defines hosting targets for `cephas`, `museum`, an
 
 ## Status
 ⏳ **PENDING FOUNDER ACTION** — DNS records staged; awaiting Founder to initiate in Firebase Console → then add records in Squarespace.
+
+---
+*Scope 28 — BLACK MAMBA THIRTY — committed by Knight (bp071)*
