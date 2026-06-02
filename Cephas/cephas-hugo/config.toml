@@ -72,6 +72,12 @@ ignoreFiles = ["_AUGUR_.*SUPERSEDE.*\\.md$"]
   weight = 3
 
 [[menu.main]]
+  identifier = "nav-proofs"
+  name = "Proofs"
+  url = "/proofs/"
+  weight = 5
+
+[[menu.main]]
   identifier = "nav-articles"
   name = "Articles"
   url = "/articles/"

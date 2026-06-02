@@ -520,6 +520,131 @@ html, body { overflow-x:hidden !important; max-width:100% !important; }
   line-height: 1.7;
 }
 .mn-v2-commons-ledger strong { color: #d69e2e; }
+
+/* ── TASK 3: Dark header — no white band above hero (BP072) ── */
+body { background: #0a1628 !important; }
+.header { background: rgba(8,18,34,0.96) !important; border-bottom: 1px solid rgba(214,158,46,0.15) !important; }
+.header a, .header button, .logo a, .nav a, #menu a { color: rgba(250,245,235,0.85) !important; }
+#menu .active { border-bottom-color: rgba(214,158,46,0.7) !important; }
+/* Nav overflow fix: compact spacing so all items fit */
+#menu a { font-size: 13px !important; }
+#menu li + li { margin-inline-start: 10px !important; }
+.logo a { font-size: 18px !important; }
+.logo a img { height: 32px !important; }
+
+/* ── TASK 7: Prove-It Pill CTA ── */
+.prove-it-pill {
+  display: inline-block;
+  padding: 0.42rem 1.1rem;
+  border-radius: 9999px;
+  background: #c9a84c;
+  color: #0f1117 !important;
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  white-space: nowrap;
+  border-bottom: none !important;
+  flex-shrink: 0;
+  line-height: 1.4;
+}
+.prove-it-pill:hover { opacity: 0.85; border-bottom: none !important; }
+
+/* ── TASK 8b: Pinned-Proof Carousel ── */
+.mn-pinned-proofs {
+  margin: 0 0 2rem;
+  padding: 1.5rem 1.8rem 1.2rem;
+  background: rgba(5,11,20,0.75);
+  border: 1px solid rgba(214,158,46,0.22);
+  border-radius: 12px;
+}
+.mn-pinned-proofs__header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  margin: 0 0 0.9rem;
+  flex-wrap: wrap;
+}
+.mn-pinned-proofs__title {
+  color: #d69e2e;
+  font-size: clamp(0.95rem, 2.5vw, 1.2rem);
+  font-weight: 700;
+  margin: 0;
+}
+.mn-pinned-proofs__subtitle {
+  color: rgba(250,245,235,0.45);
+  font-size: 0.75rem;
+  font-style: italic;
+}
+.mn-pinned-proofs__track {
+  display: flex;
+  gap: 0.85rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 0.6rem;
+  -webkit-overflow-scrolling: touch;
+}
+.mn-pinned-proofs__track::-webkit-scrollbar { height: 4px; }
+.mn-pinned-proofs__track::-webkit-scrollbar-thumb { background: rgba(214,158,46,0.25); border-radius: 2px; }
+.mn-proof-card {
+  flex: 0 0 250px;
+  background: rgba(10,22,40,0.85);
+  border: 1px solid rgba(214,158,46,0.18);
+  border-radius: 10px;
+  padding: 1rem 1.1rem;
+  scroll-snap-align: start;
+  line-height: 1.55;
+  position: relative;
+}
+.mn-proof-card--pinned::after {
+  content: '📌';
+  position: absolute;
+  top: 0.55rem;
+  right: 0.7rem;
+  font-size: 0.7rem;
+  opacity: 0.55;
+}
+.mn-proof-card__label {
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #d69e2e;
+  font-weight: 700;
+  margin: 0 0 0.35rem;
+}
+.mn-proof-card__title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #faf5eb;
+  margin: 0 0 0.45rem;
+  line-height: 1.35;
+}
+.mn-proof-card__body {
+  font-size: 0.78rem;
+  color: rgba(250,245,235,0.68);
+  margin: 0 0 0.5rem;
+  line-height: 1.55;
+}
+.mn-proof-card__stamp {
+  font-size: 0.68rem;
+  color: rgba(214,158,46,0.55);
+  font-style: italic;
+  border-top: 1px solid rgba(214,158,46,0.1);
+  padding-top: 0.35rem;
+  margin-top: 0.35rem;
+}
+.mn-proof-card__result {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #3ddc84;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+@media (max-width: 520px) {
+  .mn-proof-card { flex: 0 0 210px; }
+  .mn-pinned-proofs { padding: 1.2rem 1rem 0.9rem; }
+}
 </style>
 
 <div class="mn-page">
@@ -542,7 +667,11 @@ html, body { overflow-x:hidden !important; max-width:100% !important; }
        Real benchmark data · 2026-05-30 · R10 Harness
        ═══════════════════════════════════════════════ -->
   <section class="mn-v2-chart-section" aria-labelledby="mn-v2-chart-title">
-    <h2 id="mn-v2-chart-title">Does it actually work?</h2>
+    <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem; margin:0 0 0.3rem;">
+      <h2 id="mn-v2-chart-title" style="margin:0;">Does it actually work?</h2>
+      <a href="https://github.com/liana-banyan/lb-reproducibility-pack#quick-start"
+         class="prove-it-pill" target="_blank" rel="noopener">PROVE IT YOURSELF</a>
+    </div>
     <p class="mn-v2-chart-subtitle">75 factual questions &middot; 4 AI vendors &middot; real test run 2026-05-30 (BP063 R10 Harness). No tricks.</p>
 
     <div class="mn-v2-chart-legend" aria-hidden="true">
@@ -633,6 +762,67 @@ html, body { overflow-x:hidden !important; max-width:100% !important; }
     </p>
   </section>
 
+  <!-- ═══════════════════════════════════════════════
+       PINNED-PROOF CAROUSEL — BP072 · Storm-test receipts
+       ═══════════════════════════════════════════════ -->
+  <section class="mn-pinned-proofs" aria-label="Pinned proof receipts">
+    <div class="mn-pinned-proofs__header">
+      <h3 class="mn-pinned-proofs__title">&#128204;&nbsp; Pinned Proofs &mdash; What Actually Happened</h3>
+      <span class="mn-pinned-proofs__subtitle">Plain receipts. Caveats stated aloud. No hype.</span>
+    </div>
+    <div class="mn-pinned-proofs__track" role="list">
+
+      <!-- Card 1: Storm Test — Three Failures, Zero Lost -->
+      <div class="mn-proof-card mn-proof-card--pinned" role="listitem">
+        <div class="mn-proof-card__label">BP071 &middot; Storm Test</div>
+        <div class="mn-proof-card__title">Three Failures at Once &mdash; Nothing Lost</div>
+        <div class="mn-proof-card__body">A routine update wiped the assistant&rsquo;s connectors. A hook-script deletion blocked every prompt. The AI service returned overload errors. Three simultaneous infrastructure failures &mdash; the substrate held.</div>
+        <div class="mn-proof-card__result">&#10003; Zero work lost</div>
+        <div class="mn-proof-card__stamp">Receipt: Asteroid-ProofVault/BP071_CLOSE_STAMP.md</div>
+      </div>
+
+      <!-- Card 2: Mesh Proof — Node answered for data it didn't hold -->
+      <div class="mn-proof-card mn-proof-card--pinned" role="listitem">
+        <div class="mn-proof-card__label">BP067 &middot; Mesh Proof</div>
+        <div class="mn-proof-card__title">A Node Answered for Data It Did Not Hold</div>
+        <div class="mn-proof-card__body">Machine A had never seen the data. Machine B held it. Connected on local network, Machine A answered 20 of 20 questions correctly &mdash; hash-verified. Median response: 16.6&nbsp;ms.</div>
+        <div class="mn-proof-card__result">&#10003; 20/20 &middot; 16.6 ms p50</div>
+        <div class="mn-proof-card__stamp">Receipt: Asteroid-ProofVault/MESH_6_RECEIPT_BP063.md</div>
+      </div>
+
+      <!-- Card 3: Banyan Metric — Benchmark Cold vs Hot -->
+      <div class="mn-proof-card mn-proof-card--pinned" role="listitem">
+        <div class="mn-proof-card__label">BP063 &middot; R10 Harness</div>
+        <div class="mn-proof-card__title">75 Questions &middot; 4 Vendors &middot; Real Run</div>
+        <div class="mn-proof-card__body">Cold (no substrate): 6&ndash;19% accuracy. Hot (with substrate): 78&ndash;93%. Inter-rater agreement 0.865&ndash;1.000. Free local model (Ollama) lifted from 6% to 78% at $0 inference cost.</div>
+        <div class="mn-proof-card__result">&#10003; +72 to +83 pts accuracy</div>
+        <div class="mn-proof-card__stamp">Receipt: BP063 session log &middot; 2026-05-30</div>
+      </div>
+
+      <!-- Card 4: Immutability — Append-only, sha256 -->
+      <div class="mn-proof-card mn-proof-card--pinned" role="listitem">
+        <div class="mn-proof-card__label">Architecture &middot; Immutability</div>
+        <div class="mn-proof-card__title">Content-Addressed, Append-Only</div>
+        <div class="mn-proof-card__body">Every fact written into the substrate is sha256-stamped. The address <em>is</em> the hash of the content. Nothing can be silently overwritten. Re-running a write produces the same address &mdash; same fact, same hash, same place.</div>
+        <div class="mn-proof-card__result">&#10003; Deterministic &middot; Verifiable</div>
+        <div class="mn-proof-card__stamp">Verify: <code>Get-FileHash -Algorithm SHA256</code></div>
+      </div>
+
+      <!-- Card 5: Cathedral-Alone Mode -->
+      <div class="mn-proof-card" role="listitem">
+        <div class="mn-proof-card__label">Architecture &middot; Resilience</div>
+        <div class="mn-proof-card__title">Works When the Cloud Goes Down</div>
+        <div class="mn-proof-card__body">Cathedral-Alone mode activates when no LLM API is reachable. The substrate answers from local memory. Hearth (on-device Ollama) provides inference at zero inference cost &mdash; no internet required.</div>
+        <div class="mn-proof-card__result">&#10003; Offline-capable</div>
+        <div class="mn-proof-card__stamp">Spec: Gauntlet Stage 4 &middot; Cathedral-Alone</div>
+      </div>
+
+    </div>
+    <p style="margin:0.7rem 0 0; font-size:0.75rem; color:rgba(250,245,235,0.38); text-align:right;">
+      &#8592; scroll for more &nbsp;&middot;&nbsp; <a href="/proofs/" style="color:rgba(214,158,46,0.55); font-size:0.75rem;">All proofs &rarr;</a>
+    </p>
+  </section>
+
   <!-- ===== PICK SIX GRAPHIC - BP070 ===== -->
   <section class="mn-v2-pick-six" aria-label="Good Fast Cheap Private Free Yours" style="margin:0 0 2rem;">
     <div class="mn-v2-wrap">
@@ -668,7 +858,7 @@ html, body { overflow-x:hidden !important; max-width:100% !important; }
         <td style="padding:16px 22px;text-align:right;font-size:22px;color:#3ddc84;white-space:nowrap;">&#10004;</td>
       </tr>
       <tr style="border-top:1px solid #1c3f63;border-bottom:1px solid #1c3f63;">
-        <td style="padding:16px 20px;line-height:1.5;"><strong style="color:#ffffff;">Yours</strong> — Your data <strong>never moves</strong> — sha256&#8209;verifiable, byte&#8209;for&#8209;byte. Uninstall anytime; your originals are untouched.</td>
+        <td style="padding:16px 20px;line-height:1.5;"><strong style="color:#ffffff;">Yours</strong> — <strong>Storm-proof immutability.</strong> Three infrastructure failures hit at once &mdash; the substrate held. Every fact is sha256-stamped, content-addressed, append-only. Nothing can be overwritten. Nothing was lost. Uninstall anytime; your originals are untouched and independently verifiable. <span style="font-size:0.8em;color:rgba(214,158,46,0.65);font-style:italic;">Receipts: BP071 close stamp.</span></td>
         <td style="padding:16px 22px;text-align:right;font-size:22px;color:#3ddc84;white-space:nowrap;">&#10004;</td>
       </tr>
     </tbody>
