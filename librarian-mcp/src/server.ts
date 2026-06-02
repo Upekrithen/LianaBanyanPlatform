@@ -850,7 +850,7 @@ const INITIATIVES: Record<string, { number: number; crown?: string }> = {
   "msa": { number: 7 },
   "defense_klaus": { number: 8 },
   "rally_group": { number: 9, crown: "Kimberly A. Williams" },
-  "vsl": { number: 10, crown: "Cathie Mahon" },
+  "vsl": { number: 10, crown: "Jessica Jackley" },
   "lets_make_bread": { number: 11 },
   "harper_guild": { number: 12 },
   "jukebox": { number: 13 },
