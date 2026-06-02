@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+﻿import React, { useState, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -199,7 +199,7 @@ function OverviewView({ stats }: { stats: ReturnType<typeof useCanonicalStats> }
               <tr className="border-b border-border"><td className="py-2 font-mono">63/989,913</td><td>Feb 24, 2026</td><td className="text-right">408</td><td>LEVIATHAN PLUS</td></tr>
               <tr className="border-b border-border"><td className="py-2 font-mono">64/006,010</td><td>Mar 15, 2026</td><td className="text-right">464</td><td>Full Specs (#1001–#1662)</td></tr>
               <tr className="border-b border-border"><td className="py-2 font-mono">64/009,803</td><td>Mar 18, 2026</td><td className="text-right">89</td><td>Six Degrees + Game Mechanics + Demand Signaling (#1663–#1751)</td></tr>
-              <tr className="font-bold text-white"><td className="py-2">Total</td><td></td><td className="text-right">2,097+</td><td>{{provisionalApps}} provisional applications filed</td></tr>
+              <tr className="font-bold text-white"><td className="py-2">Total</td><td></td><td className="text-right">2,473+</td><td>{{provisionalApps}} provisional applications filed</td></tr>
             </tbody>
           </table>
         </div>

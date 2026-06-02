@@ -1,4 +1,4 @@
-/**
+﻿/**
  * LibrarianPage — CAI ◌ NotCents Download & Information Page
  * ============================================================
  * Lives at Librarian.the2ndSecond.com
@@ -126,7 +126,7 @@ const CAI_APPLICATIONS = [
     description: "USPTO provisional and formal application scaffolding at scale.",
     examples: [
       "15 USPTO provisionals filed (Prov 1–15)",
-      "2,506 formal patent claims generated",
+      "2,473 formal patent claims generated",
       "Cross-provisional consistency checking",
     ],
     package: "librarian-mcp + chandelier-bench",

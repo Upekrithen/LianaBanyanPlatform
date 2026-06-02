@@ -1,4 +1,4 @@
-/**
+﻿/**
  * FOUNDING TRANSACTIONS
  * =====================
  * Historical ledger entries representing the founding period (2017-2026).
@@ -72,7 +72,7 @@ export const FOUNDING_LEDGER_SUMMARY = {
   periodEnd: '2026-02-24',
   innovationsProduced: 2270,
   patentApplicationsFiled: 11,
-  formalClaims: 2097,
+  formalClaims: 2473,
   crownJewels: 167,
 
   // Breakdown by category (approximate)

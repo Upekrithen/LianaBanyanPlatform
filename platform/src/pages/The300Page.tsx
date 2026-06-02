@@ -1,4 +1,4 @@
-import { PortalPageLayout } from "@/components/PortalPageLayout";
+﻿import { PortalPageLayout } from "@/components/PortalPageLayout";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Shield, Anchor, ArrowRight } from "lucide-react";
@@ -76,7 +76,7 @@ export default function The300Page() {
 
         {/* Innovation stats */}
         <div className="text-center text-xs text-slate-600 pt-4">
-          {{innovationCount}} innovations | 2,097 claims | {{provisionalApps}} provisional patents | 23 production systems
+          {{innovationCount}} innovations | 2,473 claims | {{provisionalApps}} provisional patents | 23 production systems
         </div>
       </div>
     </PortalPageLayout>

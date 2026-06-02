@@ -1,4 +1,4 @@
-/**
+﻿/**
  * IPFS SERVICE — Immutable Metadata Storage
  * ==========================================
  *
@@ -350,13 +350,13 @@ export async function createIPLedgerEntry(
 export const PATENT_PORTFOLIO_STATS = {
   total_innovations: 2270,
   utility_patent_percentage: 99,
-  formal_claims: 2097,
-  filed_applications: 8,
+  formal_claims: 2473,
+  filed_applications: 21,
   crown_jewels_definite: 161,
   crown_jewels_possible: 0,
   queries_run: 130,
   prior_art_reviewed: 330,
 
   // Standard description for use across platform
-  description: "The patent portfolio behind this platform includes {{innovationCount}} documented innovations — 99% utility patents, not design — protected by 2,097 formal claims across {{provisionalApps}} provisional applications. Eight definite with 9 more out of the first 130 so far have survived a deep dive against the U.S. patent office with no prior art found.",
+  description: "The patent portfolio behind this platform includes {{innovationCount}} documented innovations — 99% utility patents, not design — protected by 2,473 formal claims across {{provisionalApps}} provisional applications. Eight definite with 9 more out of the first 130 so far have survived a deep dive against the U.S. patent office with no prior art found.",
 } as const;

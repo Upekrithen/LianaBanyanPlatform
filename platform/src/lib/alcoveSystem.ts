@@ -1,4 +1,4 @@
-/**
+﻿/**
  * THE ALCOVE SYSTEM — Progressive Disclosure Hallway
  * ====================================================
  * Landing pages are "alcoves in a hallway" — stopping points
@@ -437,10 +437,10 @@ export const ALCOVES: Alcove[] = [
     position: 14,
     tier: 3,
     title: 'The Patent Portfolio',
-    subtitle: '2,097 claims, $65 each',
+    subtitle: '2,473 claims, $65 each',
     icon: '📜',
     route: '/learn/patents',
-    preview: 'Micro-entity filing at $65 per provisional. 2,097 claims across {{provisionalApps}} provisional applications. IP as cooperative asset.',
+    preview: 'Micro-entity filing at $65 per provisional. 2,473 claims across {{provisionalApps}} provisional applications. IP as cooperative asset.',
     innovations: [],
     questions: [
       {

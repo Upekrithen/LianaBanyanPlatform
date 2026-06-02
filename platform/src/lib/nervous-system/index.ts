@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Nervous System
  *
  * Central monitoring and synchronization layer for the Liana Banyan platform.
@@ -101,8 +101,8 @@ export const CRITICAL_NUMBERS = {
   CREATOR_KEEPS: 83.3,
   PLATFORM_MARGIN: 20,
   INNOVATIONS: 2270,
-  PATENT_CLAIMS: 2097,
-  PATENT_APPLICATIONS: 11,
+  PATENT_CLAIMS: 2473,
+  PATENT_APPLICATIONS: 21,
   CROWN_JEWELS: 167,
   MEMBERSHIP_COST: 5,
   INITIATIVES: 16,

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Medium Article Drafts — Opening Gambit Salvo Stream 4
  * K372 / B091 | April 2026
  *
@@ -24,7 +24,7 @@ export const MEDIUM_ARTICLE_DRAFTS: MediumArticleDraft[] = [
     subtitle: 'One founder, four AI agents, 2,224 innovations, 12 provisional patents, zero investors.',
     bodyOutline: [
       'The Team: Bishop (writes), Knight (builds), Rook (extracts/protects), Pawn (reviews)',
-      'The Numbers: 2,270 innovations, 17 provisionals, ~2,506 claims, 228 Crown Jewels',
+      'The Numbers: 2,270 innovations, 21 provisionals, ~2,473 claims, 228 Crown Jewels',
       'Why No VC: extraction math doesn\'t work with Cost + 20%',
       'How AI Changed the Game: 7 months of output from a 4-agent team',
       'The IP Fortress: 80% contributed to cooperative, 20% Founder protection block',

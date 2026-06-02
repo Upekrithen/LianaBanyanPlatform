@@ -96,7 +96,7 @@ export default function CrownLetterUpdate() {
           </Card>
           <Card>
             <CardContent className="pt-6 text-center">
-              <p className="text-3xl font-extrabold text-emerald-600">2,097</p>
+              <p className="text-3xl font-extrabold text-emerald-600">2,473</p>
               <p className="text-sm text-muted-foreground mt-1">Formal Patent Claims</p>
             </CardContent>
           </Card>

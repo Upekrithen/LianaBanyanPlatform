@@ -1,4 +1,4 @@
-/**
+﻿/**
  * LIKE WHAT — Patent Portfolio Examples & Founder's Vernacular
  * =============================================================
  * Linked from Patent Portfolio page. Shows:
@@ -114,7 +114,7 @@ const HEXISLE_FEATURES = [
   {
     icon: <FileText className="h-6 w-6" />,
     title: '{{innovationCount}} Documented Innovations',
-    desc: '{{provisionalApps}} provisional patent applications. 2,097+ formal claims. Micro-entity filing cost: $0.34 per claim.',
+    desc: '{{provisionalApps}} provisional patent applications. 2,473+ formal claims. Micro-entity filing cost: $0.34 per claim.',
     innovations: 'Full portfolio',
     link: '/patent-portfolio',
   },

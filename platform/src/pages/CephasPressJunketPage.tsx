@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Press Junket — published articles, pending submissions, embargoed content, press kit (Session 20)
  */
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,7 +10,7 @@ import { PortalPageLayout } from "@/components/PortalPageLayout";
 
 // MIGRATED BP031: triple-stale fix — was "2,128"; provisionals was "10". Pulls from canonical_values.
 const INNOVATION_COUNT = "{{innovationCount}}";
-const PATENT_CLAIMS = "2,097";
+const PATENT_CLAIMS = "2,473";
 const PROVISIONAL_APPS = "10";
 
 export default function CephasPressJunketPage() {

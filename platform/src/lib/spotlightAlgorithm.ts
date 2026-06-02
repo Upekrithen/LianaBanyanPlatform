@@ -1,4 +1,4 @@
-export interface SpotlightCard {
+﻿export interface SpotlightCard {
   id: string;
   category: string;
   title: string;
@@ -146,7 +146,7 @@ export const SEED_CARDS: SpotlightCard[] = [
     id: 'patent-filing-8',
     category: 'announcements',
     title: '11th Patent Filing Ready',
-    bodyPreview: '114 innovations across 5 Crown Jewels. 2,097 formal claims filed.',
+    bodyPreview: '114 innovations across 5 Crown Jewels. 2,473 formal claims filed.',
     ctaLabel: 'View Patent Portfolio',
     ctaRoute: '/patent-portfolio',
     priority: 85,

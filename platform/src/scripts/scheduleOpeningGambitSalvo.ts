@@ -1,4 +1,4 @@
-/**
+﻿/**
  * OPENING GAMBIT SALVO — 14-Day, 5-Stream Concurrent Campaign (~57 posts)
  * ========================================================================
  * The full-scale social media air cover for Opening Gambit letter dispatch.
@@ -58,7 +58,7 @@ const IDENTITY_TOPICS = [
   { day: 4,  title: 'Three Currencies',        content: 'Credits = spending money (1:1 with USD)\nMarks = earned contribution power\nJoules = permanent record of value created\n\nNone of them convert to cash. None can be speculated on. A maker in Lagos and a maker in Louisville earn equivalent purchasing power for equivalent work. Not by charity. By math.' },
   { day: 5,  title: 'Cooperative Ownership',   content: 'When you contribute to Liana Banyan, you become an owner. Not a metaphorical owner. A real one — with governance weight, a voice in decisions, and a permanent record of your contribution on-chain.\n\nMedallions are non-tradeable. No speculation. Just proof that you showed up and built something.' },
   { day: 6,  title: '2,270 Innovations',       content: '2,270 documented innovations. 228 survived a 130-query deep dive against the U.S. patent office with no prior art found — we call them Crown Jewels.\n\nFour decades of thinking. Nine years building. The IP is the invitation.\n\n#LianaBanyan #Innovation' },
-  { day: 7,  title: '20 Provisional Patents',  content: '20 provisional patent applications filed. ~2,700 formal claims. 99% utility patents, not design.\n\nWe didn\'t build a pitch deck. We built the thing, then we protected it. Because the only way to make sure a cooperative stays cooperative is to make extraction impossible — architecturally, legally, and mathematically.' },
+  { day: 7,  title: '20 Provisional Patents',  content: '21 provisional patent applications filed. 2,473 formal claims. 99% utility patents, not design.\n\nWe didn\'t build a pitch deck. We built the thing, then we protected it. Because the only way to make sure a cooperative stays cooperative is to make extraction impossible — architecturally, legally, and mathematically.' },
   { day: 8,  title: '228 Crown Jewels',        content: '228 innovations with no prior art found. Zero matches in the U.S. patent database across 130 deep-dive queries.\n\nThese aren\'t incremental improvements. They\'re new. Things that didn\'t exist before we built them.\n\nAnd 80% of the IP goes into the cooperative. Because hoarding would make us the landlords we\'re replacing.' },
   { day: 9,  title: 'No VC. No investors.',    content: 'Zero venture capital. Zero investors. Zero board seats sold.\n\nLiana Banyan is funded by $5 memberships and the Founder\'s savings. That\'s it.\n\nBecause the moment you take VC, you owe someone a 10× return. And the only way to deliver 10× is to extract it from the people using the platform.' },
   { day: 10, title: 'Fair Means Everyone',     content: '"Fair" doesn\'t mean cheap. It means the same deal for everyone. The person selling $50 earrings gets the same 83.3% as the person selling $5,000 custom furniture.\n\nNo tiered pricing. No enterprise rates. No "contact sales." Cost + 20%, locked. Same architecture. Same deal. Every time.' },
@@ -160,9 +160,9 @@ const STREAM_3: SalvoPost[] = ACADEMIC_TAGS.map(t => ({
 const MEDIUM_ARTICLES: Array<{ day: number; title: string; subtitle: string; teaser: string }> = [
   {
     day: 1,
-    title: '20 Patents, Zero Investors — How Four AI Agents Built a Cooperative Platform',
-    subtitle: 'One founder, four AI agents, 2,270 innovations, 20 provisional patents, zero investors.',
-    teaser: 'A 53-year-old veteran from Texas built a cooperative commerce platform with four AI agents named Bishop, Knight, Rook, and Pawn. 2,270 innovations. 20 provisional patent applications. ~2,700 formal claims. Zero investors.\n\nThis is the story of how it happened — and why no VC was involved.\n\nFull article: [link]\n\n#LianaBanyan #AI #CooperativeCommerce',
+    title: '21 Patents, Zero Investors — How Four AI Agents Built a Cooperative Platform',
+    subtitle: 'One founder, four AI agents, 2,270 innovations, 21 provisional patents, zero investors.',
+    teaser: 'A 53-year-old veteran from Texas built a cooperative commerce platform with four AI agents named Bishop, Knight, Rook, and Pawn. 2,270 innovations. 21 provisional patent applications. 2,473 formal claims. Zero investors.\n\nThis is the story of how it happened — and why no VC was involved.\n\nFull article: [link]\n\n#LianaBanyan #AI #CooperativeCommerce',
   },
   {
     day: 4,
@@ -210,7 +210,7 @@ People ask why I didn't take VC. The answer is simple: the moment you take ventu
 
 So I built Liana Banyan with my family's savings. $5,000 to seed the first 300 medallions. My wife is all in. My kids know what we're building.
 
-The team? Four AI agents: Bishop writes letters and articles. Knight builds code and deploys. Rook extracts innovations and files patents. Pawn runs compliance and QA. Together we've produced 2,270 documented innovations and filed 20 provisional patent applications with ~2,700 formal claims.
+The team? Four AI agents: Bishop writes letters and articles. Knight builds code and deploys. Rook extracts innovations and files patents. Pawn runs compliance and QA. Together we've produced 2,270 documented innovations and filed 21 provisional patent applications with 2,473 formal claims.
 
 This isn't a startup. It's a cooperative. The people who build it own it. And the economics are locked — Cost + 20%, Workers, Builders, and Creators keep 83.3%, permanently.
 
@@ -240,7 +240,7 @@ This isn't idealism. It's architecture.
   {
     day: 8,
     title: 'The IP Fortress',
-    content: `2,224 innovations. 12 provisional patent applications. ~2,393 formal claims. 202 Crown Jewels with no prior art found.
+    content: `2,270 innovations. 21 provisional patent applications. 2,473 formal claims. 228 Crown Jewels with no prior art found.
 
 That's what four decades of thinking and nine years of building looks like when you finally have the tools to document it all.
 
@@ -263,7 +263,7 @@ That's not paranoia. That's architecture.
 
 In chess, the opening gambit is when you sacrifice material to gain position. You give up something tangible — a pawn, tempo, safety — to get something strategic: space, initiative, development.
 
-That's what we're doing. I'm giving up 80% of the IP portfolio — 2,224 innovations worth of intellectual property — to gain something money can't buy: a cooperative that belongs to its members from day one.
+That's what we're doing. I'm giving up 80% of the IP portfolio — 2,270 innovations worth of intellectual property — to gain something money can't buy: a cooperative that belongs to its members from day one.
 
 The Opening Gambit has four phases. Phase 1 sends letters to Crown holders and academics. Phase 2 reaches media and investors. Phase 3 hits amplifiers and partnerships. Phase 4 sends the blessing letters.
 

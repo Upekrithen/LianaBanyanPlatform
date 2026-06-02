@@ -1,4 +1,4 @@
-/**
+﻿/**
  * StarterKitPage — $100 Business Starter Kit
  * 10,000 kits target. Sponsor or claim.
  * Innovation #2056 (renumbered from #2037 in B044 reconciliation)
@@ -128,7 +128,7 @@ export default function StarterKitPage() {
                 <Gift className="h-10 w-10 text-emerald-500" />
                 <p className="text-4xl font-black text-emerald-500">$100</p>
                 // TIME-CAPSULE PIN — value reflects pre-Prov 16/17 snapshot (BP030); do not migrate. Annotated BP031 Bushel 64.
-                <p className="text-sm text-muted-foreground">Total kit value — backed by 11 provisional patents and 2,097 formal claims</p>
+                <p className="text-sm text-muted-foreground">Total kit value — backed by 11 provisional patents and 2,473 formal claims</p>
               </CardContent>
             </Card>
           </div>
@@ -146,7 +146,7 @@ export default function StarterKitPage() {
           </CardHeader>
           <CardContent className="space-y-4 text-center">
             <p className="text-sm text-muted-foreground">
-              Backed by our patent portfolio: 11 provisionals, 2,097 formal claims.
+              Backed by our patent portfolio: 11 provisionals, 2,473 formal claims.
             </p>
             <Button size="lg" className="gap-2">
               <Gift className="h-5 w-5" /> Sponsor a Kit — $100

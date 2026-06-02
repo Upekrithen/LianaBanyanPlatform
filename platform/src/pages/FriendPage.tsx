@@ -1,4 +1,4 @@
-/**
+﻿/**
  * FRIEND PAGE — The Warp Room
  * ============================
  * /friend — Where "friend words" from Durin's Door lead.
@@ -260,7 +260,7 @@ export default function FriendPage() {
                   </div>
                   <div className="p-2 bg-white dark:bg-slate-900 rounded border">
                     <p className="font-medium text-slate-900 dark:text-white">
-                      2,097 Patent Claims
+                      2,473 Patent Claims
                     </p>
                     <p className="text-xs text-slate-500 mt-0.5">
                       Your work is protected by the portfolio.

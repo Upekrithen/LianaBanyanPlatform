@@ -1,4 +1,4 @@
-/**
+﻿/**
  * SENATE — Governance Navigation Hub
  * ===================================
  * MYST-style navigation through the governance halls.
@@ -511,7 +511,7 @@ export default function Senate() {
               <p className="text-xs text-muted-foreground">Halls</p>
             </div>
             <div>
-              <p className="text-2xl font-bold text-primary">2,097</p>
+              <p className="text-2xl font-bold text-primary">2,473</p>
               <p className="text-xs text-muted-foreground">Patent Claims</p>
             </div>
             <div>

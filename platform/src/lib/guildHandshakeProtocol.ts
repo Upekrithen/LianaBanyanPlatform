@@ -1,4 +1,4 @@
-/**
+﻿/**
  * guildHandshakeProtocol.ts — The Handshake: Formal Protocol Document
  *
  * This is the structured, exportable version of The Handshake —
@@ -85,7 +85,7 @@ export const HANDSHAKE_DOCUMENT: HandshakeDocument = {
         "to real information so you can make a real decision.",
       bullets: [
         "Full transparency into the platform's current state, challenges, and trajectory",
-        "Access to the patent portfolio (2,097 claims across {{provisionalApps}} provisional applications)",
+        "Access to the patent portfolio (2,473 claims across {{provisionalApps}} provisional applications)",
         "Access to the innovation log ({{innovationCount}} canonical innovations)",
         "Marks compensation starting from conversation 1 — your time has value from day one",
         "Guild standing regardless of outcome — you belong here even if the timing is not right",

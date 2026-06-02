@@ -1,4 +1,4 @@
-/**
+﻿/**
  * DURIN'S DOOR — Enhanced Password Gate System
  * =============================================
  * Each "door" is a location with its OWN set of passwords.
@@ -213,7 +213,7 @@ export const WRONG_TRY_DESTINATIONS: WrongTryDestination[] = [
     title: "The Empty Workshop",
     description: "Blueprints line the walls. Someone was here recently.",
     icon: "🔧",
-    teaserFact: "2,097 patent claims protect every innovation on this platform. Micro-entity filing means $65 per provisional — accessible to everyone.",
+    teaserFact: "2,473 patent claims protect every innovation on this platform. Micro-entity filing means $65 per provisional — accessible to everyone.",
   },
   {
     id: "C",

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * RED CARPET PERSONALIZED WALKTHROUGH
  * ====================================
  * Type-specific sections based on recipient category.
@@ -314,8 +314,8 @@ function PressKitSection() {
                   <h4 className="font-semibold text-foreground mb-1">The Numbers</h4>
                   <ul className="text-sm text-muted-foreground space-y-1">
                     <li>2,270 documented innovations</li>
-                    <li>17 provisional patent applications</li>
-                    <li>~2,506 formal claims</li>
+                    <li>21 provisional patent applications</li>
+                    <li>~2,473 formal claims</li>
                     <li>228 Crown Jewel innovations</li>
                     <li>36 production systems live</li>
                     <li>$5/year membership</li>

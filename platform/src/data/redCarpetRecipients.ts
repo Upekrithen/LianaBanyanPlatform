@@ -1,4 +1,4 @@
-/**
+﻿/**
  * RED CARPET RECIPIENT REGISTRY
  * =============================
  * Maps email domains and known addresses to personalized walkthrough content.
@@ -182,7 +182,7 @@ export const RECIPIENTS: Recipient[] = [
     bio: "Former CEO of Y Combinator, launched Twitch",
     purpose: "CEO of Liana Banyan Corporation",
     whyYou:
-      "You've spent your career finding founders who see what others miss. This platform was built by an engineer over 37 years — not a pitch deck founder. It has {{innovationCount}} documented innovations — 99% utility patents, not design — protected by 2,097 formal claims across {{provisionalApps}} provisional applications. Eight definite with 9 more from the first 130 survived a deep dive with no prior art found. Economics constitutionally locked against extraction. The CEO seat was designed for a professional, not the founder's ego. You're the one we built it for.",
+      "You've spent your career finding founders who see what others miss. This platform was built by an engineer over 37 years — not a pitch deck founder. It has {{innovationCount}} documented innovations — 99% utility patents, not design — protected by 2,473 formal claims across {{provisionalApps}} provisional applications. Eight definite with 9 more from the first 130 survived a deep dive with no prior art found. Economics constitutionally locked against extraction. The CEO seat was designed for a professional, not the founder's ego. You're the one we built it for.",
     category: "crown",
     categoryLabel: "Crown Leadership",
     crownTitle: "Chief Executive Officer",
@@ -535,7 +535,7 @@ export const RECIPIENTS: Recipient[] = [
     bio: "Writes Platformer newsletter, top tech platform critic",
     purpose: "Coverage — he covers exactly what we're disrupting",
     whyYou:
-      "You write about platform power every day. What happens when a platform constitutionally locks its margin at Cost+20%, gives creators 83.3%, and makes the economics impossible to change? That's not a thought experiment. We built it. Backed by {{innovationCount}} innovations and 2,097 formal claims across {{provisionalApps}} provisional applications — 8 definite with 9 more from the first 130 survived a deep dive with no prior art.",
+      "You write about platform power every day. What happens when a platform constitutionally locks its margin at Cost+20%, gives creators 83.3%, and makes the economics impossible to change? That's not a thought experiment. We built it. Backed by {{innovationCount}} innovations and 2,473 formal claims across {{provisionalApps}} provisional applications — 8 definite with 9 more from the first 130 survived a deep dive with no prior art.",
     category: "journalist",
     categoryLabel: "Press & Media",
     emailDomains: ["platformer.news"],
@@ -630,7 +630,7 @@ export const RECIPIENTS: Recipient[] = [
     bio: "The New School — coined 'platform cooperativism'",
     purpose: "Academic ally — literally named what we're building",
     whyYou:
-      "You coined 'platform cooperativism.' We built it. {{innovationCount}} innovations — 99% utility patents — protected by 2,097 formal claims across {{provisionalApps}} provisional applications. Eight definite with 9 more from the first 130 survived a deep dive with no prior art. This isn't a theory anymore — it's a cooperative with 16 charitable initiatives and a patent portfolio worth $630K declared — $116M pessimist's floor.",
+      "You coined 'platform cooperativism.' We built it. {{innovationCount}} innovations — 99% utility patents — protected by 2,473 formal claims across {{provisionalApps}} provisional applications. Eight definite with 9 more from the first 130 survived a deep dive with no prior art. This isn't a theory anymore — it's a cooperative with 16 charitable initiatives and a patent portfolio worth $630K declared — $116M pessimist's floor.",
     category: "academic",
     categoryLabel: "Academic Partnership",
     emailDomains: ["newschool.edu"],
@@ -682,7 +682,7 @@ export const RECIPIENTS: Recipient[] = [
     bio: "Harvard Law — peer production & commons theory",
     purpose: "Academic ally — his theory of commons IS our platform",
     whyYou:
-      "You theorized peer production and the networked commons. We built the commercial infrastructure for it — a platform where commons-based production meets constitutional economics. Your theory. Our implementation. {{innovationCount}} innovations — 2,097 formal claims across {{provisionalApps}} provisional applications — proving it works.",
+      "You theorized peer production and the networked commons. We built the commercial infrastructure for it — a platform where commons-based production meets constitutional economics. Your theory. Our implementation. {{innovationCount}} innovations — 2,473 formal claims across {{provisionalApps}} provisional applications — proving it works.",
     category: "academic",
     categoryLabel: "Academic Partnership",
     emailDomains: ["law.harvard.edu", "harvard.edu"],
@@ -1062,7 +1062,7 @@ export interface PressOutlet {
 export const PRESS_OUTLETS: PressOutlet[] = [
   { id: "hackernews", name: "Hacker News", tagline: "Show HN: A cooperative commerce platform with constitutionally locked economics", angle: "Builder community — stress-test the model, read the patents, fork the philosophy", launchFlag: "AA" },
   { id: "producthunt", name: "Product Hunt", tagline: "Liana Banyan — Cooperative commerce where creators keep 83.3%", angle: "Product launch — see the economics, try the platform, join for $5/year", launchFlag: "AA" },
-  { id: "techcrunch", name: "TechCrunch", tagline: "Startup disrupts platform economics with constitutional margins", angle: "Startup launch story — {{innovationCount}} innovations, 2,097 claims across {{provisionalApps}} provisional applications, $5/year membership", launchFlag: "AB" },
+  { id: "techcrunch", name: "TechCrunch", tagline: "Startup disrupts platform economics with constitutional margins", angle: "Startup launch story — {{innovationCount}} innovations, 2,473 claims across {{provisionalApps}} provisional applications, $5/year membership", launchFlag: "AB" },
   { id: "theverge", name: "The Verge", tagline: "The platform that constitutionally locked its margins against extraction", angle: "Platform policy — what happens when enshittification is architecturally impossible?", launchFlag: "AB" },
   { id: "arstechnica", name: "Ars Technica", tagline: "Inside the 1,200-innovation patent portfolio of a cooperative commerce platform", angle: "Deep tech dive — patent architecture, DNA Lock, three-gear currency system", launchFlag: "AC" },
   { id: "shareable", name: "Shareable", tagline: "A cooperative platform with 16 charitable initiatives funded by commerce", angle: "Cooperative economy — this is your audience, this is your story", launchFlag: "BA" },
@@ -1322,7 +1322,7 @@ export async function findRecipientBySlugAsync(slug: string): Promise<Recipient 
  */
 export const PLATFORM_STATS = {
   innovations: "{{innovationCount}}",
-  formalClaims: 2097,
+  formalClaims: 2473,
   filedApplications: 11,
   crownJewels: 167,
   plannedFilings: 11,

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * guildSystem.ts — Guild (NOID) Data Layer
  *
  * Guilds are Named Organizations of Interest & Discipline (NOIDs).
@@ -213,7 +213,7 @@ export const GUILDS: Guild[] = [
     focus: "Patent law, IP strategy, cooperative compliance, SEC-safe language",
     partnerRole: "Patent Attorney + Business Attorney",
     partnerDescription:
-      "Legal professionals who can manage a 2,097-claim patent portfolio, " +
+      "Legal professionals who can manage a 2,473-claim patent portfolio, " +
       "navigate cooperative law, ensure SEC compliance for the three-currency " +
       "system, and provide strategic counsel as the platform scales.",
     currentMembers: 0,
@@ -223,7 +223,7 @@ export const GUILDS: Guild[] = [
         title: "Founding Partner — Patent Attorney",
         type: "founding_partner",
         description:
-          "Own the patent strategy for 2,097 claims across {{provisionalApps}} provisional " +
+          "Own the patent strategy for 2,473 claims across {{provisionalApps}} provisional " +
           "filings. Convert provisionals to non-provisionals. Identify white space " +
           "for new filings. Coordinate with the Founder on IP priorities.",
         marksCompensation: "500 Marks/month",

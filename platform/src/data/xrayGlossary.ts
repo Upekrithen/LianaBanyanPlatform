@@ -1,4 +1,4 @@
-/**
+﻿/**
  * X-RAY GLOSSARY — Explanations for every annotated element
  * ==========================================================
  * Maps data-xray-id values to brief explanations + learn-more links.
@@ -767,7 +767,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
 
   // ─── FOOTER ───
   "platform-footer": {
-    explanation: "Platform footer — links to legal, community, and platform tools. 2,097 patent claims, {{innovationCount}} innovations. Service sponsorship, not securities.",
+    explanation: "Platform footer — links to legal, community, and platform tools. 2,473 patent claims, {{innovationCount}} innovations. Service sponsorship, not securities.",
     elbowGreaseLevel: 1,
   },
 

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * SocialShareBar — Shareable moment generator for ATTI Campaign
  * ==============================================================
  * Provides share buttons for Twitter/X, copy-link, and generic
@@ -69,7 +69,7 @@ function buildShareContent(
     case "general":
     default:
       return {
-        text: `Check out Liana Banyan — a cooperative platform where creators keep 83.3% of every sale, backed by 2,097 patent claims. $5/year. No speculation. Just services.`,
+        text: `Check out Liana Banyan — a cooperative platform where creators keep 83.3% of every sale, backed by 2,473 patent claims. $5/year. No speculation. Just services.`,
         url,
         hashtags,
       };

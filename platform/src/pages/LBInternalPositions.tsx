@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -105,7 +105,7 @@ const lbInternalPositions: LBPosition[] = [
   {
     category: 'legal_services',
     title: 'General Counsel',
-    description: 'Primary legal architect. Defense Klaus fund. IP protection for 2,097 patent claims. Harper Guild ethics oversight.',
+    description: 'Primary legal architect. Defense Klaus fund. IP protection for 2,473 patent claims. Harper Guild ethics oversight.',
     icon: Scale,
     priority: 'critical',
     tier: 'c_suite',
@@ -115,7 +115,7 @@ const lbInternalPositions: LBPosition[] = [
     keyResponsibilities: [
       'Design legal framework for cooperative operations',
       'Manage Defense Klaus legal protection fund',
-      'IP strategy for 2,097 patent claims across multiple provisionals',
+      'IP strategy for 2,473 patent claims across multiple provisionals',
       'Review and draft all major contracts and member agreements',
       'Securities compliance — ensure Marks are not classified as securities',
       'Regulatory compliance (crowdfunding, financial, cooperative law)',
@@ -527,7 +527,7 @@ const lbInternalPositions: LBPosition[] = [
   {
     category: 'research_development',
     title: 'Patent Filing Specialist',
-    description: 'Provisional patent applications. Micro-entity filings ($65 each). 2,097 claims across {{provisionalApps}} provisional applications.',
+    description: 'Provisional patent applications. Micro-entity filings ($65 each). 2,473 claims across {{provisionalApps}} provisional applications.',
     icon: BookOpen,
     priority: 'high',
     tier: 'guild_staff',

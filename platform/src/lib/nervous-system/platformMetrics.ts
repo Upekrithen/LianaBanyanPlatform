@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Platform Metrics Service
  *
  * Real-time health and performance tracking for the Nervous System.
@@ -199,7 +199,7 @@ export async function getHealthDashboard(): Promise<{
 
   return {
     innovationCount: metrics[0]?.metric_value || 2270,
-    patentClaims: metrics[1]?.metric_value || 2097,
+    patentClaims: metrics[1]?.metric_value || 2473,
     activeMembers: metrics[2]?.metric_value || 0,
     creatorEarnings: metrics[3]?.metric_value || 0,
     platformMargin: metrics[4]?.metric_value || 20,
@@ -216,7 +216,7 @@ export async function getHealthDashboard(): Promise<{
 export async function recordCriticalNumbers(): Promise<void> {
   await Promise.all([
     recordMetric('innovation_count', 2270, 'count', { source: 'manual', date: '2026-04-01' }),
-    recordMetric('patent_claims', 2097, 'count', { applications: 11 }),
+    recordMetric('patent_claims', 2473, 'count', { applications: 21 }),
     recordMetric('platform_margin', 20, 'percent', { locked: true }),
   ]);
 }
