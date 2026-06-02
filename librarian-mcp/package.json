@@ -12,7 +12,7 @@
     "start:raw": "node dist/server.js",
     "stop": "node scripts/supervise.mjs --stop",
     "dev": "tsc && node dist/server.js",
-    "rebuild": "tsc && node dist/indexer/buildIndex.js --incremental && node scripts/codegen-canonical-hook.mjs && node scripts/verify-canonical.mjs && node scripts/render-knight-queue.mjs && node scripts/pheromone-bloodhound.mjs",
+    "rebuild": "tsc && node dist/indexer/buildIndex.js --incremental && node scripts/codegen-canonical-hook.mjs && node scripts/verify-canonical.mjs && node scripts/render-knight-queue.mjs && node scripts/pheromone-bloodhound.mjs && python scrambler/staleness.py --coverage",
     "rebuild:full": "tsc && node dist/indexer/buildIndex.js && node scripts/codegen-canonical-hook.mjs && node scripts/verify-canonical.mjs && node scripts/render-knight-queue.mjs && node scripts/pheromone-bloodhound.mjs",
     "rebuild:incremental": "tsc && node dist/indexer/buildIndex.js --incremental && node scripts/codegen-canonical-hook.mjs && node scripts/verify-canonical.mjs && node scripts/render-knight-queue.mjs && node scripts/pheromone-bloodhound.mjs",
     "verify:canonical": "node scripts/verify-canonical.mjs",

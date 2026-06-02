@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { readFileSync, existsSync, writeFileSync, mkdirSync, unlinkSync, statSync, appendFileSync } from "fs";
+import { readFileSync, existsSync, writeFileSync, mkdirSync, unlinkSync, statSync, appendFileSync, readdirSync } from "fs";
 import { autoRegisterFromDetective } from "./wrasse_auto_register.js";
 import { tmpdir, homedir } from "os";
 import { checkRebuildLock, clearPostBuildReloadLock } from "./buildGate.js";
@@ -1271,6 +1271,32 @@ registerTool(
 
 const WORKSPACE_ROOT = resolve(__dirname, "..", "..");
 
+// ── MAMBA Scope 1: Un-ingested BP session warning (BP070) ──────────────────
+// Scans Asteroid-ProofVault for BP*_INGEST_RECEIPT* files and returns the
+// list of BP session IDs (BP001–BP070) that have no receipt on file.
+// NEVER hard-blocks — caller surfaces a warn-only STONE IN THE FIELD notice.
+const BP_SESSION_MAX = 70;
+
+function scanUningestedBPSessions(): string[] {
+  const vaultDir = resolve(WORKSPACE_ROOT, "Asteroid-ProofVault");
+  if (!existsSync(vaultDir)) return [];
+  let files: string[];
+  try {
+    files = readdirSync(vaultDir);
+  } catch {
+    return [];
+  }
+  const uningested: string[] = [];
+  for (let n = 1; n <= BP_SESSION_MAX; n++) {
+    const hasReceipt = files.some((f) =>
+      /^BP0*\d+_INGEST_RECEIPT/i.test(f) &&
+      new RegExp(`^BP0*${n}_INGEST_RECEIPT`, "i").test(f)
+    );
+    if (!hasReceipt) uningested.push(`BP${String(n).padStart(3, "0")}`);
+  }
+  return uningested;
+}
+
 registerTool(
   "get_architecture",
   "Returns architectural concept explanation from Cephas. Searches by keyword, slug, or title. Pass 'list' to see all concepts, or a keyword like 'joules', 'cost+20', 'three-gear', 'crown', 'medallion', etc. Set brief=true (default) for summary only, brief=false for full markdown content.",
@@ -2180,10 +2206,23 @@ registerTool(
     // Trigger 3 self-monitoring
     const hookStatus = checkHooksConfigured();
     if (!hookStatus.configured) {
-      verificationSections.push(`\n### ΓÜá∩╕Å TRIGGER 3 INCOMPLETE`);
+      verificationSections.push(`\n### ⚠️ TRIGGER 3 INCOMPLETE`);
       verificationSections.push(`Missing hooks: ${hookStatus.missing.join(", ")}`);
       verificationSections.push(`Run: \`node librarian-mcp/scripts/install-hooks.js\``);
     }
+
+    // MAMBA Scope 1: Un-ingested BP session gate (warn-only, never hard-blocks)
+    let uningestedBPSessions: string[] = [];
+    try {
+      uningestedBPSessions = scanUningestedBPSessions();
+      if (uningestedBPSessions.length > 0) {
+        const listed = uningestedBPSessions.slice(0, 20).join(", ");
+        const overflow = uningestedBPSessions.length > 20 ? ` (+${uningestedBPSessions.length - 20} more)` : "";
+        verificationSections.push(`\n### ⚠️ STONE IN THE FIELD: ${uningestedBPSessions.length} BP sessions have no ingest receipt`);
+        verificationSections.push(`Sessions: ${listed}${overflow}`);
+        verificationSections.push(`Ingest now via \`ingest_session\` or continue with override. (Check Asteroid-ProofVault for BP*_INGEST_RECEIPT* files.)`);
+      }
+    } catch { /* non-fatal */ }
 
     // K429 Half B: Index freshness check in brief_me
     let indexDrift = false;
@@ -2204,7 +2243,8 @@ registerTool(
     const hasIssues = !scramblerResult._error && (
       scramblerResult.system_health?.status === "NEEDS_ATTENTION" ||
       !hookStatus.configured ||
-      indexDrift
+      indexDrift ||
+      uningestedBPSessions.length > 0
     );
 
     let finalOutput: string;
