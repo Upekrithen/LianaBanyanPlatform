@@ -110,6 +110,30 @@ Member benefits (better AI, mesh access, cooperative track record, Marks earning
 
 </details>
 
+<details>
+<summary><strong>Founder Speak — Glossary of Coined Terms</strong></summary>
+
+A quick reference for the vocabulary Liana Banyan uses that you will not find in a standard dictionary.
+
+| Term | What it means |
+|---|---|
+| **Eblet** | A single immutable record in the cooperative substrate. Every fact, file, or event is an Eblet, sha256-stamped and append-only. |
+| **Socceri** | Your member address inside the cooperative. It is your identity on the network, portable and self-sovereign. |
+| **Yoke** | The structured message-passing protocol between cooperative AI agents (Knight, Bishop, etc.). A Yoke Return is a formal reply that closes a task loop. |
+| **Coffee** | An informal cooperative gathering, in-person or remote, where members connect and build relationships. The smallest unit of community. |
+| **HEOHO** | "He/she/they/I/we/us/our." A compact pronoun stack used to signal inclusive framing in cooperative documents. |
+| **Banyan Metric** | The composite score for cooperative AI quality: accuracy, trust-calibration, and cooperative-class behavior measured together. 94% is the current high-water mark. |
+| **Cathedral Effect** | The phenomenon where each member's substrate contribution improves every other member's AI accuracy. The cooperative knowledge commons compounds. |
+| **Marks** | The cooperative's participation record. Marks track work performed on unfunded projects and serve as contingent accounts payable, not equity or investment shares. |
+| **Substrace** | The theorem stating that when a shared substrate holds context, any model at any endpoint can reconstruct the same state from the same inputs. The cost of re-derivation approaches zero. |
+| **Pearl** | A particularly refined Eblet or cooperative contribution, recognized by the community for exceptional quality or durability. |
+
+**Pedestal voting rules:** Members vote by pledging support for a letter or initiative. Each vote carries weight based on the member's standing in the cooperative. Standing is earned through demonstrated participation, not capital invested.
+
+**Six-degrees logic:** When you vote for a letter, you also receive it. You become part of the network it touches. Every pledge connects you to the people and work inside that letter. This is how the cooperative's reach compounds. One vote, one connection, one new neighbor in the network.
+
+</details>
+
 ---
 
 ## Bounty Posters {#bounty-posters}

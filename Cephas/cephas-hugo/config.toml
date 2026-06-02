@@ -2,16 +2,28 @@ baseURL = "https://cephas.lianabanyan.com/"
 languageCode = "en-us"
 title = "Cephas - Liana Banyan Knowledge Center"
 theme = "PaperMod"
+refLinksErrorLevel = "error"
 copyright = "Ã¢â€Â¬Ã¢Å’Â 2026 Liana Banyan Corporation. All rights reserved."
 enableRobotsTXT = true
 buildFuture = true
 ignoreFiles = ["_AUGUR_.*SUPERSEDE.*\\.md$"]
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+
 [pagination]
   pagerSize = 10
 
 [params]
   description = "The authoritative source for understanding Liana Banyan's philosophy, economics, and mission"
   author = "Liana Banyan Corporation"
+  defaultTheme = "dark"
   ShowReadingTime = true
   ShowShareButtons = true
   ShowPostNavLinks = true
@@ -62,7 +74,7 @@ ignoreFiles = ["_AUGUR_.*SUPERSEDE.*\\.md$"]
 [[menu.main]]
   identifier = "nav-join"
   name = "Join"
-  url = "/join/"
+  url = "https://lianabanyan.com/join"
   weight = 2
 
 [[menu.main]]
@@ -86,7 +98,7 @@ ignoreFiles = ["_AUGUR_.*SUPERSEDE.*\\.md$"]
 [[menu.main]]
   identifier = "nav-pudding"
   name = "Pudding"
-  url = "/pudding/"
+  url = "/articles/pudding/"
   weight = 11
 
 [[menu.main]]

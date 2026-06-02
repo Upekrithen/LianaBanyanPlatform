@@ -8,7 +8,15 @@
 
 /* Override PaperMod container */
 .main { max-width:100% !important; padding:0 !important; margin:0 !important; overflow-x:hidden !important; }
-html, body { overflow-x:hidden !important; max-width:100% !important; }
+html, body { overflow-x:hidden !important; max-width:100% !important; background:#0a1628 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%2322c55e' fill-opacity='0.04'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat; }
+.mn-page { background: transparent !important; }
+
+/* Download page: bare "Liana Banyan" wordmark on the page background — no bar, no menu, no toggle */
+header.header { background: transparent !important; border: none !important; box-shadow: none !important; padding: 0.6rem 0 0 !important; }
+#menu { display: none !important; }
+.logo img { display: none !important; }
+.lang-switch { display: none !important; }   /* show the moon toggle next to the wordmark; hide only the language switch */
+.mn-v2-hero { padding-top: 1rem !important; }   /* let the hero box rise */
 
 /* ── Base page shell ── */
 .mn-page {
@@ -522,7 +530,7 @@ html, body { overflow-x:hidden !important; max-width:100% !important; }
 .mn-v2-commons-ledger strong { color: #d69e2e; }
 
 /* ── TASK 3: Dark header — no white band above hero (BP072) ── */
-body { background: #0a1628 !important; }
+body { background: #0a1628; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%2322c55e' fill-opacity='0.04'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); background-repeat: repeat; }
 .header { background: rgba(8,18,34,0.96) !important; border-bottom: 1px solid rgba(214,158,46,0.15) !important; }
 .header a, .header button, .logo a, .nav a, #menu a { color: rgba(250,245,235,0.85) !important; }
 #menu .active { border-bottom-color: rgba(214,158,46,0.7) !important; }
@@ -641,9 +649,38 @@ body { background: #0a1628 !important; }
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
+/* Image-backed proof cards */
+.mn-proof-card--img {
+  padding: 0;
+  overflow: hidden;
+}
+.mn-proof-card--img .mn-proof-card__img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+  background: #0a1628;
+}
+.mn-proof-card--img .mn-proof-card__caption {
+  padding: 0.6rem 0.85rem 0.75rem;
+  font-size: 0.72rem;
+  color: rgba(250,245,235,0.72);
+  line-height: 1.45;
+  border-top: 1px solid rgba(214,158,46,0.12);
+}
+.mn-proof-card--img .mn-proof-card__caption strong {
+  display: block;
+  color: #d69e2e;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.2rem;
+}
 @media (max-width: 520px) {
   .mn-proof-card { flex: 0 0 210px; }
   .mn-pinned-proofs { padding: 1.2rem 1rem 0.9rem; }
+  .mn-proof-card--img .mn-proof-card__img { height: 180px; }
 }
 </style>
 
@@ -773,6 +810,7 @@ body { background: #0a1628 !important; }
     <div class="mn-pinned-proofs__track" role="list">
 
       <!-- Card 1: Storm Test — Three Failures, Zero Lost -->
+      <!-- TODO: replace with real screenshot when Founder supplies -->
       <div class="mn-proof-card mn-proof-card--pinned" role="listitem">
         <div class="mn-proof-card__label">BP071 &middot; Storm Test</div>
         <div class="mn-proof-card__title">Three Failures at Once &mdash; Nothing Lost</div>
@@ -782,6 +820,7 @@ body { background: #0a1628 !important; }
       </div>
 
       <!-- Card 2: Mesh Proof — Node answered for data it didn't hold -->
+      <!-- TODO: replace with real screenshot when Founder supplies -->
       <div class="mn-proof-card mn-proof-card--pinned" role="listitem">
         <div class="mn-proof-card__label">BP067 &middot; Mesh Proof</div>
         <div class="mn-proof-card__title">A Node Answered for Data It Did Not Hold</div>
@@ -790,31 +829,22 @@ body { background: #0a1628 !important; }
         <div class="mn-proof-card__stamp">Receipt: Asteroid-ProofVault/MESH_6_RECEIPT_BP063.md</div>
       </div>
 
-      <!-- Card 3: Banyan Metric — Benchmark Cold vs Hot -->
-      <div class="mn-proof-card mn-proof-card--pinned" role="listitem">
-        <div class="mn-proof-card__label">BP063 &middot; R10 Harness</div>
-        <div class="mn-proof-card__title">75 Questions &middot; 4 Vendors &middot; Real Run</div>
-        <div class="mn-proof-card__body">Cold (no substrate): 6&ndash;19% accuracy. Hot (with substrate): 78&ndash;93%. Inter-rater agreement 0.865&ndash;1.000. Free local model (Ollama) lifted from 6% to 78% at $0 inference cost.</div>
-        <div class="mn-proof-card__result">&#10003; +72 to +83 pts accuracy</div>
-        <div class="mn-proof-card__stamp">Receipt: BP063 session log &middot; 2026-05-30</div>
+      <!-- Card 3: Benchmark R10 — real screenshot -->
+      <div class="mn-proof-card mn-proof-card--pinned mn-proof-card--img" role="listitem">
+        <img class="mn-proof-card__img" src="/img/proofs/deck/deck-benchmark-r10.png" alt="Benchmark R10 — 4-model cold vs hot bar chart, BP063, 2026-05-30" loading="lazy">
+        <div class="mn-proof-card__caption"><strong>BP063 &middot; R10 Harness &middot; 2026-05-30</strong>Benchmark R10 &mdash; 4-model cold&rarr;hot bar chart. Claude 6%&rarr;89%, GPT 19%&rarr;91%, Llama 6%&rarr;78%, Gemini 8%&rarr;91%. Real run, no tricks.</div>
       </div>
 
-      <!-- Card 4: Immutability — Append-only, sha256 -->
-      <div class="mn-proof-card mn-proof-card--pinned" role="listitem">
-        <div class="mn-proof-card__label">Architecture &middot; Immutability</div>
-        <div class="mn-proof-card__title">Content-Addressed, Append-Only</div>
-        <div class="mn-proof-card__body">Every fact written into the substrate is sha256-stamped. The address <em>is</em> the hash of the content. Nothing can be silently overwritten. Re-running a write produces the same address &mdash; same fact, same hash, same place.</div>
-        <div class="mn-proof-card__result">&#10003; Deterministic &middot; Verifiable</div>
-        <div class="mn-proof-card__stamp">Verify: <code>Get-FileHash -Algorithm SHA256</code></div>
+      <!-- Card 4: Immutability — real screenshot -->
+      <div class="mn-proof-card mn-proof-card--pinned mn-proof-card--img" role="listitem">
+        <img class="mn-proof-card__img" src="/img/proofs/deck/deck-immutability.png" alt="Immutability proof — FS-WATCHER SHA256 eblet writes, idempotent match, 2026-06-02" loading="lazy">
+        <div class="mn-proof-card__caption"><strong>Architecture &middot; Immutability</strong>FS-WATCHER live terminal: sha256-addressed eblet writes. Re-running a write skips (idempotent_sha256_match). Nothing can be silently overwritten.</div>
       </div>
 
-      <!-- Card 5: Cathedral-Alone Mode -->
-      <div class="mn-proof-card" role="listitem">
-        <div class="mn-proof-card__label">Architecture &middot; Resilience</div>
-        <div class="mn-proof-card__title">Works When the Cloud Goes Down</div>
-        <div class="mn-proof-card__body">Cathedral-Alone mode activates when no LLM API is reachable. The substrate answers from local memory. Hearth (on-device Ollama) provides inference at zero inference cost &mdash; no internet required.</div>
-        <div class="mn-proof-card__result">&#10003; Offline-capable</div>
-        <div class="mn-proof-card__stamp">Spec: Gauntlet Stage 4 &middot; Cathedral-Alone</div>
+      <!-- Card 5: Cathedral-Alone Mode — real screenshot -->
+      <div class="mn-proof-card mn-proof-card--img" role="listitem">
+        <img class="mn-proof-card__img" src="/img/proofs/deck/deck-cathedral-alone.png" alt="Cathedral-Alone mode — MnemosyneC v0.1.22 Fallback substrate-cache-only, offline-capable" loading="lazy">
+        <div class="mn-proof-card__caption"><strong>Architecture &middot; Cathedral-Alone &middot; v0.1.22</strong>MnemosyneC Fallback mode: substrate cache only, zero cost, offline-capable. Works when no LLM API is reachable.</div>
       </div>
 
     </div>
@@ -1141,16 +1171,50 @@ body { background: #0a1628 !important; }
   <hr class="mn-v2-divider" />
 
   <!-- ═══════════════════════════════════════════════
+       SECTION 5c · FOUNDER SPEAK GLOSSARY + PEDESTAL + SIX-DEGREES
+       ═══════════════════════════════════════════════ -->
+  <details class="mn-v2-chip" id="founder-speak">
+    <summary>&#9658;&nbsp; Founder Speak &mdash; Glossary of Coined Terms</summary>
+    <div class="mn-v2-chip-body">
+      <p>A quick reference for the vocabulary Liana Banyan uses that you will not find in a standard dictionary.</p>
+      <table>
+        <thead>
+          <tr><th>Term</th><th>What it means</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Eblet</strong></td><td>A single immutable record in the cooperative substrate. Every fact, file, or event is an Eblet, sha256-stamped and append-only.</td></tr>
+          <tr><td><strong>Socceri</strong></td><td>Your member address inside the cooperative. It is your identity on the network, portable and self-sovereign.</td></tr>
+          <tr><td><strong>Yoke</strong></td><td>The structured message-passing protocol between cooperative AI agents (Knight, Bishop, etc.). A Yoke Return is a formal reply that closes a task loop.</td></tr>
+          <tr><td><strong>Coffee</strong></td><td>An informal cooperative gathering, in-person or remote, where members connect and build relationships. The smallest unit of community.</td></tr>
+          <tr><td><strong>HEOHO</strong></td><td>"He/she/they/I/we/us/our." A compact pronoun stack used to signal inclusive framing in cooperative documents.</td></tr>
+          <tr><td><strong>Banyan Metric</strong></td><td>The composite score for cooperative AI quality: accuracy, trust-calibration, and cooperative-class behavior measured together. 94% is the current high-water mark.</td></tr>
+          <tr><td><strong>Cathedral Effect</strong></td><td>The phenomenon where each member's substrate contribution improves every other member's AI accuracy. The cooperative knowledge commons compounds.</td></tr>
+          <tr><td><strong>Marks</strong></td><td>The cooperative's participation record. Marks track work performed on unfunded projects and serve as contingent accounts payable, not equity or investment shares.</td></tr>
+          <tr><td><strong>Substrace</strong></td><td>The theorem stating that when a shared substrate holds context, any model at any endpoint can reconstruct the same state from the same inputs. The cost of re-derivation approaches zero.</td></tr>
+          <tr><td><strong>Pearl</strong></td><td>A particularly refined Eblet or cooperative contribution, recognized by the community for exceptional quality or durability.</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Pedestal Voting Rules</h3>
+      <p>Members vote by pledging support for a letter or initiative. Each vote carries weight based on the member's standing in the cooperative. Standing is earned through demonstrated participation, not capital invested. You vote with what you have contributed, not what you have paid.</p>
+
+      <h3>Six-Degrees Logic</h3>
+      <p>When you vote for a letter, you also receive it. You become part of the network it touches. Every pledge connects you to the people and work inside that letter. This is how the cooperative's reach compounds: one vote, one connection, one new neighbor in the network. The cooperative does not grow by recruitment alone. It grows by every vote drawing a thread between members who would never otherwise meet.</p>
+    </div>
+  </details>
+
+  <hr class="mn-v2-divider" />
+
+  <!-- ═══════════════════════════════════════════════
        SECTION 6 · FOUNDER STORY (behind disclosure)
        ═══════════════════════════════════════════════ -->
   <details class="mn-v2-chip mn-v2-chip--founder">
     <summary>&#9658;&nbsp; Who Made This &mdash; Why It&rsquo;s Not a Faceless Corporation</summary>
     <div class="mn-v2-chip-body">
-      <p>There&rsquo;s a person behind this. Not a team of forty with a go-to-market deck and a Series B. One person &mdash; who has spent the better part of his life circling the same question: &ldquo;Why does this have to extract from the very people who use it?&rdquo;</p>
-      <p>He&rsquo;s an Army veteran, a father of eight, and a software developer of more than two decades who built what he needed &mdash; and then realized the framework underneath it was worth more than the application on top. So he documented it. Filed twenty-one provisional patents on it. And decided to give the whole thing to a cooperative at year fifty, rather than sell it to anyone who would extract from it.</p>
-      <p>The legal entity is Liana Banyan Corporation. At year fifty, it dissolves. The Liana &mdash; the cooperative commons, the substrate, the member relationships, the patents &mdash; inherits everything. The fifty-year sunset is written into the bylaws. It is not marketing copy. It is a structural commitment.</p>
-      <p>&ldquo;Be Who You Needed. Build the bridge behind you. At fifty years, the corporation dissipates into the Liana we are growing right now.&rdquo;</p>
-      <p>He doesn&rsquo;t want to be famous. He wants the thing to work. For all mankind &mdash; here from the start.</p>
+      <p>There is no team of forty. There is no go-to-market deck, no Series B, and no venture capital waiting in the wings. There is just one person who has spent the last two decades circling a single question: Why does technology always end up extracting from the very people who use it?</p>
+      <p>In his own words: &ldquo;I can&rsquo;t do everything, but I can do something. And this is what I&rsquo;m doing.&rdquo; He built the tools he needed, only to realize the framework underneath them was far more valuable than the applications on top &mdash; so he documented it all and filed twenty-one provisional patents. Then he made a decision that breaks every rule of modern tech. As he puts it: &ldquo;I&rsquo;d like to have a million dollars so I could personally pay salaries for a thousand people. But I can&rsquo;t. So instead, we build something together that supports everyone.&rdquo; Rather than sell it to the highest bidder, he is giving it to the users.</p>
+      <p>The legal entity, Liana Banyan Corporation, is built with a fifty-year sunset clause hardcoded into its bylaws. At year fifty, the corporation dissolves. &ldquo;The Liana&rdquo;&mdash;the cooperative commons, the technological substrate, the patents, and the member network&mdash;inherits everything. This isn&rsquo;t a marketing promise; it is a structural commitment.</p>
+      <p>The ethos is simple: Be who you needed. Build the bridge behind you. Half a century from now, the corporation will dissipate into the cooperative we are growing today. The founder doesn&rsquo;t want to be famous. He just wants the engine to work&mdash;for all mankind, exactly as it was designed to from the start.</p>
     </div>
   </details>
 
