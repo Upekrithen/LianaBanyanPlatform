@@ -90,6 +90,7 @@ export const initiativeRoutes = (
     <Route path="/initiatives/lets-get-groceries" element={<ExplorerRoute><LazyPage><LetsGetGroceriesPage /></LazyPage></ExplorerRoute>} />
     <Route path="/initiatives/lets-get-groceries/box" element={<ExplorerRoute><LazyPage><GroceryBoxPage /></LazyPage></ExplorerRoute>} />
     <Route path="/initiatives/lets-get-groceries/start-node" element={<ExplorerRoute><LazyPage><GroceryNodeRegistration /></LazyPage></ExplorerRoute>} />
+    <Route path="/initiatives/recipe-vault" element={<Navigate to="/initiatives/proprietary-recipes" replace />} />
     <Route path="/initiatives/proprietary-recipes" element={<ExplorerRoute><LazyPage><ProprietaryRecipesPage /></LazyPage></ExplorerRoute>} />
     <Route path="/initiatives/taste-tester" element={<ExplorerRoute><LazyPage><TasteTesterDashboard /></LazyPage></ExplorerRoute>} />
     <Route path="/initiatives/cottage-law" element={<ExplorerRoute><LazyPage><CottageLawPage /></LazyPage></ExplorerRoute>} />
