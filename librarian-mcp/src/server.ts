@@ -8634,7 +8634,10 @@ server.tool(
 );
 
 server.tool(
-    "Builds promotion chain history. Bedrock rejects further promotion. Cannot demote.",
+  "strata_promote",
+  "KN-T2 / BP018 Pod-T — Promote a topic to a higher stratum in the Keyword-Pyramid. " +
+    "Builds promotion chain history. Bedrock rejects further promotion. Cannot demote. " +
+    "Bedrock-gate recursion fix: depth guard active (MAX_PROMOTE_DEPTH=10).",
   {
     topic: z.string().describe("Topic to promote."),
     to_stratum: z.enum(["sand", "soil", "sediment", "sandstone", "limestone", "granite", "bedrock"])

@@ -24,6 +24,9 @@ import {
   type StratumAssignment,
 } from "./schema.js";
 
+/** Maximum recursion depth for promote() to guard against circular call chains. */
+const MAX_PROMOTE_DEPTH = 10;
+
 export class StrataQuery {
   /**
    * Return topics at higher strata (toward Bedrock) from the current topic's level.
@@ -65,17 +68,32 @@ export class StrataQuery {
    * Promote a topic to a higher stratum (immutable constraint: cannot demote).
    * Bedrock rejects further promotion.
    *
+   * Bedrock-gate recursion fix (BP071 / Knight 2026-06-02):
+   * A recursion depth guard prevents infinite call chains that could arise if
+   * an external hook (e.g. pheromone callback, SE4 listener) re-enters promote()
+   * during the same call stack. The guard throws at MAX_PROMOTE_DEPTH (10).
+   *
    * @param topic       the topic to promote
    * @param to_stratum  target stratum (must be higher than current)
    * @param signer      session ID or agent signing the promotion
    * @param session     ratification session ID (default = signer)
+   * @param _depth      internal recursion counter — callers must not pass this
    */
   promote(
     topic: string,
     to_stratum: Stratum,
     signer: string,
-    session?: string
+    session?: string,
+    _depth: number = 0,
   ): StratumAssignment {
+    if (_depth >= MAX_PROMOTE_DEPTH) {
+      throw new Error(
+        `strata.promote(): recursion depth ${_depth} exceeded MAX_PROMOTE_DEPTH (${MAX_PROMOTE_DEPTH}) ` +
+        `for topic='${topic}' to_stratum='${to_stratum}'. ` +
+        "Circular call chain detected — possible re-entrant hook. Aborting."
+      );
+    }
+
     if (!isValidStratum(to_stratum)) {
       throw new Error(`Invalid stratum: '${to_stratum}'. Must be one of: ${ALL_STRATA.join(", ")}`);
     }
