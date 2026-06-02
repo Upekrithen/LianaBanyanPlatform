@@ -16,6 +16,16 @@ export interface FlavorClass {
     cognition?: string;
     audience?: string;
 }
+/**
+ * SAGA 16 BP046B — 3-class pheromone hybrid
+ * Three independent decay classes:
+ *   transient (default) — exponential decay with decay_constant_days half-life
+ *   anchor              — permanent, no decay; for BLOOD RULES + Founder-ratified canon
+ *   linked              — decays, but uses most-recent timestamp of self OR any linked record
+ *
+ * Fully backward-compatible: existing records with no pheromone_class = transient.
+ */
+export type PheromoneClass = 'transient' | 'anchor' | 'linked';
 export interface PheromoneRecord {
     ts: string;
     scribe: string;
@@ -25,6 +35,8 @@ export interface PheromoneRecord {
     cathedral?: string;
     flavor_class?: FlavorClass;
     synthesis_class?: string;
+    pheromone_class?: PheromoneClass;
+    linked_ids?: string[];
     se4?: import('../se4/se4_envelope.js').SE4Envelope;
     se4_shadow_id?: string;
 }
@@ -37,6 +49,7 @@ export interface PheromoneHit {
     cathedral?: string;
     flavor_class?: FlavorClass;
     synthesis_class?: string;
+    pheromone_class?: PheromoneClass;
 }
 export interface PheromoneQueryResult {
     hits: PheromoneHit[];
@@ -74,6 +87,8 @@ export declare function emitPheromone(scribe: string, tabletId: string, content:
     ts?: string;
     flavorClass?: FlavorClass;
     synthesisClass?: string;
+    pheromoneClass?: PheromoneClass;
+    linkedIds?: string[];
 }): PheromoneRecord;
 export interface QueryOptions {
     freshnessThresholdSeconds?: number;

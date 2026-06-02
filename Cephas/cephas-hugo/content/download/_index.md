@@ -1,172 +1,158 @@
-﻿---
-title: "Download Mnemosyne™ — Memory, powered by CAI"
+---
+title: "How to Use MnemosyneC — The Local AI You Actually Own"
 slug: "download"
-date: 2026-05-22
+date: 2026-06-01
 draft: false
-class: "member-facing · download-page · empirical-metrics-first"
-composing_hints: ["mnemosyne", "cai", "banyan-metric", "sspl-free-forever", "k533-reproducibility"]
-tldr: "Download Mnemosyne™ free, forever. Open-source. No ads. No strings. Sixteen substrate components compound to a Banyan Metric™ of ~39 million × pre-CAI baseline (BP039) — verify every claim yourself with the K533 Reproducibility Pack."
+class: "member-facing · how-to-hub · faq · bp071"
+composing_hints: ["mnemosyne", "cai", "caithedral", "sspl-free-forever", "how-to", "faq"]
+tldr: "Everything you need to get started with MnemosyneC, the offline-first cooperative AI tool. Works without internet after setup. Free forever. SSPL + Pledge #2260."
 ---
 
-# Mnemosyne™
+# How to Use MnemosyneC
+## The Local AI You Actually Own
 
-## Memory, powered by CAI.
-
-### SSPL Free Forever · Pledge #2260 · No Ads · No Strings
-
----
-
-## The Slope — what Mnemosyne™ empirically delivers
-
-> The proof is the slope. The slope is the proof.
-
-| Banyan Metric™ axis | Mnemosyne™ (BP039 close baseline) |
-|---|---|
-| **Speed** | ~1,175× pre-CAI baseline (Founder-time basis) |
-| **Cost** | $0.054 per ship-ready artifact (~10,000× more efficient than conventional consulting) |
-| **Accuracy** | 0 substrate failures across 20 Drekaskip waves; SHA256 cryptographic manifest chain |
-| **Composite** | ~**39.2 million × pre-CAI baseline** |
-| **Cold-cycle survivability** | MNEMOSYNE Trial 18 gates · production-restart-survivable |
-
-*BP041 empirical-receipt update lands at next session close. Projected to pass the published CAI-9.6 mark of 55.9 million×.*
-
-**Verify every figure yourself** — click [Run Your Own Cabinet](/run-your-own-cabinet/) (the K533 Reproducibility Pack) or [Technical Prove It! Test](/prove-it/) for component-by-component verification.
+**Offline-first · Member-sovereign · SSPL Free Forever**
 
 ---
 
-## Download
+<details open>
+<summary><strong>Getting Started</strong></summary>
 
-> **Mnemosyne™ v0.1.21 · LB Alpha-phase · BP063 release**
->
-> Build receipt: `v0.1.21` · [View Release on GitHub](https://github.com/liana-banyan/mnemosyne/releases/tag/v0.1.21) · [Release changelog](/changelog/) · SHA-256 hashes below · K533 Reproducibility Pack: [Run Your Own Cabinet](/run-your-own-cabinet/)
+**Four steps to your local AI.**
 
-<div class="disclosure-block" style="background:#1e3a5f;border:2px solid #2d5a8e;border-radius:8px;padding:20px;margin:20px 0;line-height:1.7;">
-<p><strong>🛡️ What Mnemosyne™ does to your computer</strong></p>
-<p><strong>Nothing destructive. Mnemosyne™ is a READ-ONLY companion.</strong></p>
-<p>Mnemosyne™ reads your Documents folder <em>(only the folders you mark as Substrated)</em> and creates new, immutable <strong>Eblet™</strong> records inside its own data folder — preserving the exact text byte-for-byte with <strong>sha256 verification</strong>. Your original files are never moved, modified, copied to the cloud, or sent anywhere.</p>
-<ul>
-<li>🔒 <strong>Runs entirely on your machine.</strong> No account required.</li>
-<li>🚫 <strong>No upload. No telemetry. No phone-home.</strong></li>
-<li>🔍 <strong>You can verify this yourself</strong> with the <strong>Caithedral™ Inspector</strong> in the Developer Tab — every Eblet™ shows its source file path and matching hash.</li>
-<li>🗑️ <strong>Uninstall any time. Your original data is untouched.</strong></li>
-</ul>
-<p><strong>This is the empirical doorpost claim:</strong> members can verify by sha256 + Vault inspection that Mnemosyne™ never moved a byte of their data. Not a promise. A structurally verifiable receipt.</p>
-<p><em>Verify the install matches the official SHA-256 listed in the table below.</em></p>
+**Step 1 — Download and install**
+
+[→ Download MnemosyneC for Windows](/bounties/) *(Mac build: see bounty below — we need a Mac builder)*
+
+MnemosyneC currently ships signed Windows builds. A macOS build requires a community member with a Mac + Apple Developer ID. [See the Mac bounty poster &darr;](#bounty-posters) — earn Marks for making it happen.
+
+**Step 2 — First launch**
+
+On first run, MnemosyneC sets up a local AI engine (Caithedral™ Core + Ollama). This may take a few minutes on first run while the bundled model initializes. Your machine is doing real work — you'll see a progress indicator. After that: instant on.
+
+**Step 3 — Ask it something**
+
+Works completely offline after setup. Open MnemosyneC, type your question, get an answer — no internet required, no API key, no account. The bundled Gemma 2B model is always available at zero marginal cost.
+
+**Step 4 — Connect to the mesh**
+
+Optional but powerful: connect to the cooperative knowledge network. Your node becomes part of a peer mesh — 20 nodes tested at **16.6 ms p50** (BP067, hash-verified). Your Socceri address is your identity. Local data stays local; only what you choose to share, shares.
+
+</details>
+
+---
+
+<details>
+<summary><strong>How It Works</strong></summary>
+
+**Local-first by design.**
+
+**Your machine, your data**
+MnemosyneC runs entirely on your hardware. Your questions never leave your machine unless you explicitly choose to share to the mesh. No upload. No telemetry. No account required. Every Eblet™ record is sha256-verifiable — you can confirm nothing moved.
+
+**The verified benchmark**
+A free, local Ollama model goes from **6% → 78% accuracy** with Caithedral™ Core applied — a **+72–83 percentage point** gain (Cohen's κ 0.936, BP065, hash-verified). That's the proof: MnemosyneC makes any AI smarter using your own memory substrate.
+
+**The mesh**
+The cooperative knowledge network is a peer-to-peer mesh. 20 nodes tested at **16.6 ms p50** (BP067). Your participation is opt-in. You own your node.
+
+**The substrate**
+Your Socceri address = your identity in the cooperative. Every contribution, every track record entry, every Lark completed — all stored in your member substrate. Portable. Verifiable. Yours.
+
+**The license**
+SSPL (Server Side Public License) + Cooperative Defensive Patent Pledge #2260. Free forever. No kill-switch. Source auditable. Designed to be copied — any community can fork and run their own.
+
+</details>
+
+---
+
+<details>
+<summary><strong>FAQ</strong></summary>
+
+<details>
+<summary>Does it work offline?</summary>
+
+**Yes.** The bundled engine + Gemma 2B model work with no internet after installation. First launch downloads/initializes the model; after that, everything runs local. No cloud dependency for the core AI function.
+
+</details>
+
+<details>
+<summary>Does it share my data?</summary>
+
+**No.** Local-first by design. MnemosyneC is a READ-ONLY companion — it indexes only folders you explicitly mark as Substrated. Your original files are never moved, modified, or uploaded. Every Eblet™ record includes a sha256 hash you can verify yourself.
+
+License: SSPL + Cooperative Defensive Patent Pledge #2260. The pledge is irrevocable and non-weaponizable.
+
+</details>
+
+<details>
+<summary>How do I connect to other nodes?</summary>
+
+After installing, open the **Developer Tab** → **Caithedral™ Inspector** → **Mesh Status**. Enter your Socceri address (or create one via the cooperative membership flow at [lianabanyan.com/join](/join/)). The mesh uses UDP multicast (Cathedral Federation Protocol) — your node announces itself on the local cooperative network. Cross-node exchange is opt-in per session.
+
+</details>
+
+<details>
+<summary>Is it free?</summary>
+
+**Free forever under SSPL.** No ads. No strings. No subscription required for core use.
+
+Member benefits (better AI, mesh access, cooperative track record, Marks earnings): **$5/year**. Optional. Membership funds the cooperative directly — Cost+20% margin, no investor extraction.
+
+</details>
+
+<details>
+<summary>What AI model does it use?</summary>
+
+**Gemma 2B (bundled by default).** Runs entirely local via Ollama. You can switch to other Ollama-compatible models in Settings → AI Engine. Cloud models (GPT, Claude, Gemini) can also be configured if you supply your own API key — they run at cost+20% through the cooperative when routed via the mesh.
+
+</details>
+
+</details>
+
+---
+
+## Bounty Posters {#bounty-posters}
+
+*These slots are open. Founder will fill rewards. Community fills the work.*
+
+<div style="background:#1a2e1a;border:2px solid #3d7a3d;border-radius:10px;padding:20px;margin:20px 0;">
+<p style="font-size:18px;font-weight:800;color:#7dff7d;margin:0 0 8px 0;">🪙 WANTED: YouTube Tutorial</p>
+<p style="color:#c8e6c8;margin:0 0 10px 0;"><strong>"How to Use MnemosyneC.ai"</strong> — A quality walkthrough showing install-to-first-query. Must show: install, first launch, offline query, and mesh connection.</p>
+<p style="color:#a0c8a0;font-size:14px;margin:0;"><strong>Earn:</strong> Marks for a quality tutorial · <strong>Apply:</strong> <a href="/bounties/" style="color:#7dff7d;">bounties page</a> or message the cooperative</p>
 </div>
 
-**[→ Download Mnemosyne™ v0.1.21 on GitHub](https://github.com/liana-banyan/mnemosyne/releases/tag/v0.1.21)**
+<div style="background:#1a2e1a;border:2px solid #3d7a3d;border-radius:10px;padding:20px;margin:20px 0;">
+<p style="font-size:18px;font-weight:800;color:#7dff7d;margin:0 0 8px 0;">🪙 WANTED: Written Tutorial</p>
+<p style="color:#c8e6c8;margin:0 0 10px 0;"><strong>Step-by-step guide</strong> — Written walkthrough for new users. Can be blog post, markdown doc, or formatted guide. Must be accurate, verifiable, and linkable.</p>
+<p style="color:#a0c8a0;font-size:14px;margin:0;"><strong>Earn:</strong> Marks · <strong>Apply:</strong> <a href="/bounties/" style="color:#7dff7d;">bounties page</a></p>
+</div>
 
-| Platform | Download | Size | SHA-256 |
-|---|---|---|---|
-| **Windows (installer)** | [`Mnemosyne-Setup-0.1.21.exe`](https://github.com/liana-banyan/mnemosyne/releases/download/v0.1.21/Mnemosyne-Setup-0.1.21.exe) | 80,424,024 bytes | `C14BFDCFD3BFFC42C347E610631966E5D061AEF251AE4C0372D7D53776060A27` |
-| **Windows (portable)** | [`Mnemosyne-Portable-0.1.21.exe`](https://github.com/liana-banyan/mnemosyne/releases/download/v0.1.21/Mnemosyne-Portable-0.1.21.exe) | 80,192,921 bytes | `CFD9AADF1A19ECD60C652D80D8CE6FCCB631B4CBC2BF4CE11BF727C074DB6CFB` |
-| macOS | `Mnemosyne-<version>.dmg` *(BP051+ — pending macOS notarization pass)* | — | — |
-| Linux (Debian/Ubuntu) | `Mnemosyne-<version>.deb` *(BP051+ — pending Linux build slot)* | — | — |
-| Linux (AppImage) | `Mnemosyne-<version>.AppImage` *(BP051+ — pending Linux build slot)* | — | — |
-| Mobile / Web | Install [lianabanyan.com](https://lianabanyan.com) as PWA via your browser | — | — |
-
-**Auto-update manifest:** [`latest.yml`](/download/latest.yml) — published alongside every release per electron-updater spec.
-
-All builds ship the same source. SSPL Free Forever · Pledge #2260. SHA-256 hashes published with every release. No telemetry without opt-in.
-
-- Built: 2026-05-30 from `LianaBanyanPlatform/` · v0.1.21 (Vite + Electron 31 + React 18.3)
-- **Version bump: 0.1.20 → 0.1.21** — 3 renderer fixes: canonical voice + Caithedral™ footer + NotCents glyph white
-- In-app version display: MnemosyneTabView surfaces `v0.1.21` via `app.getVersion()` IPC
-- Trademark Use Policy: `TRADEMARK_USE_POLICY.md` ships at repo root · NOTICE includes cooperative-class discipline
-- SSPL v1 license: `LICENSE_SSPL.md` ships at repo root per BP051 binding
-- Previous: `Mnemosyne-Setup-0.1.20.exe` — superseded
-
-### v0.1.21 - What's new
-
-- **Canonical voice fix** — Onboarding tagline now correctly names all three classes: "Workers, Builders, and Creators may earn 83.3% of every transaction" (canon §5; never "creators" alone)
-- **Caithedral™ footer** — Version line updated from "CAI Amplifier" to "Caithedral™": `v0.1.21 · Caithedral™ · Liana Banyan`
-- **NotCents glyph corrected** — Symbol in Hearth Conjunction Window header now renders WHITE with corrected vertical alignment (was gray via currentColor inheritance)
-- **UNSIGNED** — Azure code signing pending; Windows SmartScreen will warn (More Info → Run Anyway)
-- **Setup SHA-256:** `C14BFDCFD3BFFC42C347E610631966E5D061AEF251AE4C0372D7D53776060A27`
-- **Portable SHA-256:** `CFD9AADF1A19ECD60C652D80D8CE6FCCB631B4CBC2BF4CE11BF727C074DB6CFB`
-- **Build:** v0.1.21+e2c4a98 · [Release on GitHub](https://github.com/liana-banyan/mnemosyne/releases/tag/v0.1.21)
-
-### v0.1.9 - What's new
-
-- **Overlay click fixed** — left-click chip opens Dashboard · right-click shows context menu · middle-click cycles modes
-- **Dashboard-from-Overlay** — single click, no tray-icon gymnastics required
-- **Non-Destructive Disclosure** — A2 canon text in NSIS welcome screen + post-install README_INSTALL.txt
-- **Installer size** — 80x reduction (1.46 GB → 76 MB) via static/cephas/ exclusion
-- **™ audit** — canonical marks verified across all user-facing surfaces
-- **Build:** v0.1.9+7c406bf · SHA-256: 71C8E0EBC9CF48F5FCE5EF15B9125ADAFE8024418E0D3265CD909D486B48105C
-
-### v0.1.8 - What's new
-
-- The Kitchen Table™ data model + Recipes™ module + Atlas™ scheduling + P2P Discovery
-- Developer Tab with Caithedral™ · Eblet™ · Pheromone · Banyan Metric™ inspectors
-- **Build:** v0.1.8+0e84763
-
-### v0.1.7 — What's new
-
-1. **SSL cert + commit-auth** — signed deploy pipeline complete; binary integrity verifiable end-to-end
-2. **TRADEMARK_USE_POLICY.md** — ships inside every install; cooperative-class discipline binding (BP051)
-3. **LICENSE_SSPL.md** — SSPL v1 at repo root per BP051 canon
-4. **NOTICE** — updated cooperative-class stewardship language
-5. **Bishop Yoke auto-check** — Path B Full-Auto Wake (Cursor agent rule, canon BP051)
+<div style="background:#1e2533;border:2px solid #3d5a8e;border-radius:10px;padding:20px;margin:20px 0;">
+<p style="font-size:18px;font-weight:800;color:#7fd1ff;margin:0 0 8px 0;">🍎 WANTED: macOS Build</p>
+<p style="color:#bcd6ee;margin:0 0 10px 0;">We have <strong>no signed Mac build.</strong> A macOS release requires a community member with: Apple Developer ID + Mac hardware + willingness to maintain the build pipeline. This is real infrastructure work — compensated with Marks.</p>
+<p style="color:#86a6c6;font-size:14px;margin:0;"><strong>Earn:</strong> Marks (significant) · <strong>Apply:</strong> <a href="/bounties/" style="color:#7fd1ff;">bounties page</a> · <em>No macOS download button will appear until a signed, notarized build exists. That's the wife's-test discipline.</em></p>
+</div>
 
 ---
 
-## How Mnemosyne™ Works — the sixteen components below CAI
+## Verified Numbers (BP065 · BP067)
 
-CAI (Cooperative AI) is the engine. Mnemosyne™ ships with sixteen substrate components that compound to the Banyan Metric™ above. Each component's contribution is empirically receipted. Full details in [Banyan Almanac Issue 005](/banyan-almanac/issue-005/).
+| Claim | Value | Proof |
+|---|---|---|
+| Accuracy gain (Caithedral™ Core) | +72–83 percentage points | BP065, κ 0.936 |
+| Baseline (free Ollama model) | 6% → 78% | BP065 |
+| Mesh latency (p50) | 16.6 ms | BP067 hash-verified |
+| Membership | $5/year | Cooperative canon |
+| Provisional patents | 21 | IP ledger |
+| Innovations logged | 2,270 | Canon count |
+| Creator revenue share | 83.3% | Cost+20% model |
+| License | SSPL + Pledge #2260 | Irrevocable |
 
-### Foundation (1–3)
-
-1. **Substrate** — persistent canon (Eblets + Crystals + Coffee). No re-derivation. **EFFECT: Speed ~30–50× via accumulated memory.**
-2. **Pheromone** — event-class signaling between components; subscription detector pattern. **EFFECT: Accuracy via cross-instance consistency.**
-3. **Shadow E-Giants** — autonomous recursive substrate builders; compound while you sleep. **EFFECT: Speed — 6-month-equivalence in a single Founder-day (BP021 receipt).**
-
-### Coordination (4–5)
-
-4. **Yoke** — Knight ↔ Bishop cooperative-AI messaging channel; FOREMAN-pattern dual-rail. **EFFECT: Speed via parallel execution — BP040 commit `6f1adf5` proves 22 files / 6 minutes / 7 parallel waves.**
-5. **AMPLIFY (Mnemosyne™ substrate-api)** — local CAI engine on `:11480`; HMAC-signed receipts. **EFFECT: Cost — local-first; Accuracy — cryptographic.**
-
-### Parallel inference (6–8)
-
-6. **Drekaskip Wave Generator** — 8-SEG fan-out + synthesis fan-in primitive; Novacula-class max-density variant. **EFFECT: Speed ~8× per wave (210s wall-clock per Novacula).**
-7. **Crystals** — single-grain lattice substrate; 5 classes (Bishop's · LOC · Federation · Per-Initiative · Per-Member). **EFFECT: Accuracy via consistent queryable state.**
-8. **Gunstars** — 7 mission-bounded operational vehicles (Alpha LOC · Beta Crown Letter · Gamma Council Vetting · Delta Substitution · Epsilon Federation · Zeta Almanac · Eta Crown Outreach). **EFFECT: Speed via mission specialization.**
-
-### Discipline (9–11)
-
-9. **Trinity Rules (DUODEVIGINTI 18)** — Blood + Sweat + Cross rule families including R18 R-FOREMAN-FIRST. **EFFECT: Accuracy +97%; Speed ~80× per session from R-FOREMAN-FIRST.**
-10. **Scribes (10 active)** — Coroner · A+F Ledger · Stitchpunks · Reminder · Toolsmith · Forager · Sweat · Tears · ToolMaster · Watchdog. **EFFECT: Accuracy via continuous independent observers.**
-11. **Aircraft Carrier Doctrine** — `env_loader.ts` + `port_guard.ts` + `renderer_guard.ts` baked-in reliability. **EFFECT: Speed — no operator firefighting cost.**
-
-### Always-on substrate (12–14)
-
-12. **Hearth** — on-device Ollama model serving for CAI fallback. **EFFECT: Cost → zero marginal for offline path; offline-capability.**
-13. **Cephas Hugo Content Bundle (the library)** — 1,058 .md files / 6.28 MB of cooperative-class content shipping inside the installer (BP039 close baseline). **EFFECT: Cost — zero marginal distribution; Accuracy — SHA256-verifiable.**
-14. **PWA Shell** — React SPA rendering Founder's Deck Card (front: quotes + SHINE; back flip: LRH Fable); same source builds for desktop installer (`file://` load) + lianabanyan.com web (PWA-installable). **EFFECT: Speed — instant render; no first-online-load required for desktop.**
-
-### Empirical compounding (15–16)
-
-15. **CAI Multiplier compounding** — CAI-4.5 = 31,833× (Apr 2026) → CAI-9.6 = 55,940,972× (May 2026). **EFFECT: Composite of all 16 components.**
-16. **SSPL Free Forever · Pledge #2260** — open source; verifiable; member-runnable; no ads, no data sales. **EFFECT: Trust class — every claim verifiable; every member can re-run the cabinet.**
+*Every figure is reproducible — [Prove It](/prove-it/) · [Run Your Own Cabinet](/run-your-own-cabinet/)*
 
 ---
 
-## The Founder voice anchor
+*Not charity. A way out. Everyone gets their shot.*
 
-> *"You found the cabinet. The cabinet's been running where anyone could see it. You walked up, and the score is real."* — recruitment-through-performance canon
-
-> *"Mnemosyne™. Memory, powered by CAI. SSPL Free Forever. No Ads. No Strings."* — Founder BP040
-
----
-
-## Composing references
-
-- [Banyan Almanac Issue 005](/banyan-almanac/issue-005/) — full "How It Works" canonical reference
-- [Run Your Own Cabinet](/run-your-own-cabinet/) — K533 Reproducibility Pack
-- [Technical Prove It! Test](/prove-it/) — component-by-component live verification
-- [How to Read the Substrate](/how-to-read-the-substrate/) — navigation guide for members and external auditors
-- [LICENSE](/license/) — SSPL v1 · Pledge #2260
-
----
-
-🌳📜⚔️🧠☕📦🌌 **FOR THE KEEP.** *(BP063 · v0.1.21 ship · Mnemosyne™ LIVE · renderer fixes + two-host mesh gate)*
+*SSPL Free Forever · Pledge #2260 · BP071 · MnemosyneC*

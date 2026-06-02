@@ -164,6 +164,8 @@ export function emitPheromone(scribe, tabletId, content, options = {}) {
         cathedral: options.cathedral ?? "bishop",
         ...(options.flavorClass ? { flavor_class: options.flavorClass } : {}),
         ...(options.synthesisClass ? { synthesis_class: options.synthesisClass } : {}),
+        ...(options.pheromoneClass ? { pheromone_class: options.pheromoneClass } : {}),
+        ...(options.linkedIds?.length ? { linked_ids: options.linkedIds } : {}),
     };
     // Append to JSONL (single-writer; append is atomic on all supported platforms)
     ensureDir(PHEROMONE_INDEX_PATH);
@@ -208,11 +210,35 @@ export function emitPheromone(scribe, tabletId, content, options = {}) {
     return record;
 }
 // ─── Decay scoring ────────────────────────────────────────────────────────
-function decayScore(rec, matchStrength, nowMs) {
-    const ageMs = nowMs - new Date(rec.ts).getTime();
-    const ageDays = ageMs / 86_400_000;
-    const lambda = rec.decay_constant_days;
-    return matchStrength * Math.exp(-ageDays / lambda);
+/**
+ * SAGA 16 BP046B — 3-class pheromone decay:
+ *   anchor   → no decay (matchStrength returned as-is; permanent score)
+ *   linked   → decay from most-recent ts among self + linked records in index
+ *   transient → standard exponential decay (default for backward-compat)
+ */
+function decayScore(rec, matchStrength, nowMs, indexState) {
+    const cls = rec.pheromone_class ?? 'transient';
+    if (cls === 'anchor') {
+        // Anchor: permanent — no decay whatsoever
+        return matchStrength;
+    }
+    if (cls === 'linked' && rec.linked_ids?.length && indexState) {
+        // Linked: use the most-recent timestamp across self + all linked records
+        let refMs = new Date(rec.ts).getTime();
+        for (const linkedKey of rec.linked_ids) {
+            const linkedRec = indexState.byKey.get(linkedKey);
+            if (linkedRec) {
+                const linkedMs = new Date(linkedRec.ts).getTime();
+                if (linkedMs > refMs)
+                    refMs = linkedMs;
+            }
+        }
+        const effectiveAgeDays = (nowMs - refMs) / 86_400_000;
+        return matchStrength * Math.exp(-effectiveAgeDays / rec.decay_constant_days);
+    }
+    // Transient (default): standard exponential decay
+    const ageDays = (nowMs - new Date(rec.ts).getTime()) / 86_400_000;
+    return matchStrength * Math.exp(-ageDays / rec.decay_constant_days);
 }
 /**
  * Query the pheromone substrate for a claim.
@@ -260,10 +286,10 @@ export function queryPheromone(claim, options = {}) {
             }
         }
     }
-    // Score + rank
+    // Score + rank — pass state for linked-class refresh lookup
     const hits = [];
     for (const { rec, matchStrength } of accum.values()) {
-        const ds = decayActive ? decayScore(rec, matchStrength, nowMs) : matchStrength;
+        const ds = decayActive ? decayScore(rec, matchStrength, nowMs, state) : matchStrength;
         hits.push({
             scribe: rec.scribe,
             tablet_id: rec.tablet_id,
@@ -273,6 +299,7 @@ export function queryPheromone(claim, options = {}) {
             cathedral: rec.cathedral,
             flavor_class: rec.flavor_class,
             synthesis_class: rec.synthesis_class,
+            pheromone_class: rec.pheromone_class,
         });
     }
     hits.sort((a, b) => b.decay_score - a.decay_score);

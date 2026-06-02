@@ -196,7 +196,7 @@ The Founder identity is now canonically:
 - **Heart:** Heart-of-Peace toward the cooperative-class · Arbinger discipline
 - **Hands:** Saladin's Pattern™ mercy-at-war IP discipline · "One shot · One kill" · Thou-Shalt-Not-MURDER
 - **Hull:** Boat-in-Water structural posture · in the world not of it
-- **Service:** Veteran (ARNG 11B OCS 15A IFR) · Crewman #6 · Founder & GM · Pied Piper of AI Dragons
+- **Service:** Veteran (ARNG 11B DRT OCS BOLC 15A IFR) · Crewman #6 · Founder & GM · Pied Piper of AI Dragons
 - **Body:** Mark 9:24 right-forearm tattoo · the doorpost on the body · "Lord, I believe; help thou mine unbelief"
 - **Daily defiance:** *"pray for potatoes at the end of a hoe handle. Liana Banyan is my garden."*
 

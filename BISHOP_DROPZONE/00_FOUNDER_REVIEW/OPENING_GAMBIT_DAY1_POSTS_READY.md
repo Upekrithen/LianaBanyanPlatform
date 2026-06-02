@@ -3,12 +3,33 @@
 
 **Canonical numbers used:**
 - Innovations: **2,270** (updated from stale 2,128)
-- Patent claims: **2,700** (updated from stale 2,097)
+- Documented innovations: **2,270** (the OUTWARD metric — BP070: prior "patent claims 2,700" was a debunked planning figure; exact written claims ≈2,459, re-verifying for the record)
 - Creator/Worker share: **83.3%** (confirmed correct)
 - Founding member price: **$5/year** (confirmed correct)
 - Charitable initiatives: **16** (confirmed correct)
 
 **Securities clean:** No equity, shares, dividends, ROI, or investment language in any post. ✅
+
+---
+
+## === LAUNCH HOOK / BANNER (BP070 · Founder) ===
+Use as the **front line / subtitle** for the first posts — especially the savings/benchmark angle that pairs with the "MnemosyneC gives you all six" graphic:
+
+> **Check my Math — I think I Broke the Sound Barrier: By Grabthar's Hammer — what a SAVINGS!**
+
+*(Galaxy Quest nod — Dr. Lazarus's "By Grabthar's hammer… what a savings." "Check my Math" = the reproducible COLD-vs-HOT benchmark; every figure is yours to re-run. Truth-Always: "broke the sound barrier" is enthusiasm offered up for verification, not a measured speed claim — the proven result is the +72–83pp accuracy lift; invite people to check it.)*
+
+✅ **Number CORRECTED (BP070):** the old "2,700 patent claims" was a debunked *planning* figure. An exact recount of all 21 filed provisionals found **~2,459 *written* claims — BELOW 2,700.** Per Founder, Posts #2 & #4 now cite the solid canonical metric instead: **"2,270 documented innovations across 21 provisional filings."** (Exact written-claims integer re-verifying for the internal record.)
+
+---
+
+## === ORIGIN-STORY SPINE (BP070 · Founder: "wire into rollout") ===
+The launch's origin spine — the war that started it all (Nov 2025, the Lovable/Jarvis brick-wall sprint):
+
+> **"The Starscreaming loop and the Blizzard crash are DEAD."**
+
+The substrate was born from 72 hours fighting a runaway 5,000-request loop (**Starscream** — the agent betraying the app it served) and a silent white-screen build failure (**Blizzard** — success reported, nothing on the page) — the night the memory wall forced the first *"store your persona"* file (the Phoenix Protocol). Use as the origin beat: *here is the war I won, and the weapon I forged in it — MnemosyneC — is the one I'm handing you, free.*
+Source essays (already written): `PAPER_STARSCREAMING_THROUGH_THE_AI_BRICK_WALL_B069.md` + `PAPER_THE_BLIZZARD_WHEN_AI_SAYS_SUCCESS_B070.md` → seeds the "Blood, Sweat & Tears" content series (52 + 42 episodes).
 
 ---
 
@@ -102,7 +123,7 @@ Liana Banyan is what came from forty years of thinking about that. A cooperative
 → 16 charitable initiatives are funded by architecture, not pledges
 → Every member can start a business for $5
 
-The platform is live. The architecture is backed by 2,700 patent claims. The operating agreement locks the economics.
+The platform is live. The architecture is backed by 2,270 documented innovations across 21 provisional patent filings. The operating agreement locks the economics.
 
 I'm looking for 300 founding members who are tired of eking their way through life.
 
@@ -124,7 +145,7 @@ $5 a year. No Plan B.
 
 I'm a 53-year-old U.S. Army National Guard veteran and father of eight. For the last 9 years I've been building Liana Banyan — a cooperative commerce platform where Workers, Builders, and Creators keep 83.3% of every transaction, the margin is constitutionally locked, and 16 charitable initiatives are funded by the architecture itself.
 
-I put 2,700 patent claims into this. But here's the thing — about 80% of that IP goes into the cooperative. Not because I'm generous. Because hoarding it would make me the exact kind of landlord I'm trying to replace.
+I put 2,270 documented innovations across 21 provisional filings into this. But here's the thing — about 80% of that IP goes into the cooperative. Not because I'm generous. Because hoarding it would make me the exact kind of landlord I'm trying to replace.
 
 The cost to join: $5/year. The economic model: Cost + 20%, locked in the operating agreement. The goal: 300 founding members who want to build something that can't be enshittified.
 
