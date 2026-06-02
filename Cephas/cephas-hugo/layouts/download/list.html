@@ -1,4 +1,4 @@
-﻿{{- define "main" }}
+{{- define "main" }}
 
 <style>
 /* ════════════════════════════════════════════════════════════
@@ -417,6 +417,109 @@ html, body { overflow-x:hidden !important; max-width:100% !important; }
   border-top: 1px solid rgba(214,158,46,0.12);
   margin: 1.8rem 0;
 }
+
+/* ── Bounty poster cards ── */
+.mn-v2-bounty-row {
+  display: flex;
+  gap: 1rem;
+  margin: 1.4rem auto 0;
+  max-width: 560px;
+  flex-wrap: wrap;
+}
+.mn-v2-bounty-card {
+  flex: 1;
+  min-width: 220px;
+  background: rgba(5,11,20,0.85);
+  border: 1px dashed rgba(214,158,46,0.5);
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  text-align: left;
+}
+.mn-v2-bounty-card__wanted {
+  color: #d69e2e;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin: 0 0 0.3rem;
+}
+.mn-v2-bounty-card__title {
+  color: #faf5eb;
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin: 0 0 0.45rem;
+  line-height: 1.35;
+}
+.mn-v2-bounty-card__body {
+  color: rgba(250,245,235,0.68);
+  font-size: 0.82rem;
+  line-height: 1.55;
+  margin: 0 0 0.6rem;
+}
+.mn-v2-bounty-card__cta {
+  display: inline-block;
+  background: rgba(214,158,46,0.12);
+  color: #d69e2e !important;
+  border: 1px solid rgba(214,158,46,0.4) !important;
+  border-bottom: 1px solid rgba(214,158,46,0.4) !important;
+  border-radius: 6px;
+  padding: 0.3rem 0.8rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-decoration: none !important;
+  letter-spacing: 0.03em;
+}
+.mn-v2-bounty-note {
+  margin: 0.7rem auto 0;
+  max-width: 560px;
+  font-size: 0.76rem;
+  color: rgba(250,245,235,0.4);
+  text-align: center;
+  font-style: italic;
+}
+
+/* ── "Designed to Be Copied" section ── */
+.mn-v2-commons-section {
+  margin: 2rem 0;
+  padding: 1.8rem;
+  background: rgba(5,11,20,0.7);
+  border: 1px solid rgba(214,158,46,0.22);
+  border-radius: 12px;
+}
+.mn-v2-commons-section h2 {
+  color: #d69e2e;
+  font-size: clamp(1.05rem, 3vw, 1.35rem);
+  margin: 0 0 1rem;
+  font-weight: 700;
+}
+.mn-v2-commons-section p {
+  color: rgba(250,245,235,0.82);
+  font-size: 0.92rem;
+  line-height: 1.78;
+  margin: 0 0 0.9rem;
+}
+.mn-v2-commons-section p:last-child { margin-bottom: 0; }
+.mn-v2-commons-section strong { color: #faf5eb; }
+.mn-v2-commons-em {
+  display: block;
+  border-left: 3px solid rgba(214,158,46,0.5);
+  padding: 0.5rem 0 0.5rem 1rem;
+  margin: 1rem 0;
+  color: rgba(214,158,46,0.9) !important;
+  font-style: italic;
+  font-size: 0.95rem !important;
+}
+.mn-v2-commons-ledger {
+  background: rgba(10,22,40,0.7);
+  border: 1px solid rgba(214,158,46,0.18);
+  border-radius: 8px;
+  padding: 0.9rem 1.1rem;
+  margin: 0.8rem 0;
+  font-size: 0.86rem;
+  color: rgba(250,245,235,0.78);
+  line-height: 1.7;
+}
+.mn-v2-commons-ledger strong { color: #d69e2e; }
 </style>
 
 <div class="mn-page">
@@ -530,6 +633,57 @@ html, body { overflow-x:hidden !important; max-width:100% !important; }
     </p>
   </section>
 
+  <!-- ===== PICK SIX GRAPHIC - BP070 ===== -->
+  <section class="mn-v2-pick-six" aria-label="Good Fast Cheap Private Free Yours" style="margin:0 0 2rem;">
+    <div class="mn-v2-wrap">
+
+<div class="pick-six" style="max-width:760px;margin:0 auto;background:#11243a;border:1px solid #21527e;border-radius:14px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.35);">
+
+  <div class="pick-six-title" style="padding:26px 28px 18px;text-align:center;background:linear-gradient(180deg,#143456 0%,#11243a 100%);border-bottom:1px solid #21527e;">
+    <div style="font-size:30px;font-weight:800;color:#ffffff;letter-spacing:.5px;line-height:1.15;">Good. Fast. Cheap.</div>
+    <div style="font-size:20px;font-weight:600;color:#7fd1ff;margin-top:6px;">MnemosyneC gives you all&nbsp;six.</div>
+    <div style="font-size:16px;font-style:italic;color:#bcd6ee;margin-top:10px;">Can't we all just get along?</div>
+  </div>
+
+  <table style="width:100%;border-collapse:collapse;font-size:15px;color:#e7f0fa;">
+    <tbody>
+      <tr style="border-top:1px solid #1c3f63;">
+        <td style="padding:16px 20px;line-height:1.5;"><strong style="color:#ffffff;">Good</strong> — Every AI we tested got smarter on a shared memory: <strong>+72 to +83 points of accuracy</strong> across four model families (Cohen's κ&nbsp;0.936). A free, local model jumped from <strong>6% to 78%.</strong></td>
+        <td style="padding:16px 22px;text-align:right;font-size:22px;color:#3ddc84;white-space:nowrap;">&#10004;</td>
+      </tr>
+      <tr style="border-top:1px solid #1c3f63;">
+        <td style="padding:16px 20px;line-height:1.5;"><strong style="color:#ffffff;">Fast</strong> — Answers resolve against <em>your own</em> memory in milliseconds — a hash-verified mesh measured <strong>16.6&nbsp;ms</strong> — instead of a metered round-trip to someone else's server.</td>
+        <td style="padding:16px 22px;text-align:right;font-size:22px;color:#3ddc84;white-space:nowrap;">&#10004;</td>
+      </tr>
+      <tr style="border-top:1px solid #1c3f63;">
+        <td style="padding:16px 20px;line-height:1.5;"><strong style="color:#ffffff;">Cheap</strong> — That free local model answers at <strong>$0 a call.</strong> Everything else runs at <strong>cost&#8209;plus&#8209;20%</strong>, on hardware you already own — no new data center.</td>
+        <td style="padding:16px 22px;text-align:right;font-size:22px;color:#3ddc84;white-space:nowrap;">&#10004;</td>
+      </tr>
+      <tr style="border-top:1px solid #1c3f63;">
+        <td style="padding:16px 20px;line-height:1.5;"><strong style="color:#ffffff;">Private</strong> — Runs <strong>entirely on your machine.</strong> No account, no upload, no telemetry, no phone&#8209;home.</td>
+        <td style="padding:16px 22px;text-align:right;font-size:22px;color:#3ddc84;white-space:nowrap;">&#10004;</td>
+      </tr>
+      <tr style="border-top:1px solid #1c3f63;">
+        <td style="padding:16px 20px;line-height:1.5;"><strong style="color:#ffffff;">Free</strong> — <strong>SSPL Free Forever</strong>, Pledge&nbsp;#2260. No ads. No strings. No subscription.<br><span style="color:rgba(214,158,46,0.8);font-size:0.88em;">Patent-pending &mdash; 21 provisional filings, pledged to the member commons, never sold for extraction.</span></td>
+        <td style="padding:16px 22px;text-align:right;font-size:22px;color:#3ddc84;white-space:nowrap;">&#10004;</td>
+      </tr>
+      <tr style="border-top:1px solid #1c3f63;border-bottom:1px solid #1c3f63;">
+        <td style="padding:16px 20px;line-height:1.5;"><strong style="color:#ffffff;">Yours</strong> — Your data <strong>never moves</strong> — sha256&#8209;verifiable, byte&#8209;for&#8209;byte. Uninstall anytime; your originals are untouched.</td>
+        <td style="padding:16px 22px;text-align:right;font-size:22px;color:#3ddc84;white-space:nowrap;">&#10004;</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div style="padding:12px 20px;text-align:center;font-size:12px;color:#86a6c6;background:#0e1f33;">
+    Every figure is reproducible — <a href="/prove-it/" style="color:#7fd1ff;text-decoration:none;">Prove It</a> · <a href="/run-your-own-cabinet/" style="color:#7fd1ff;text-decoration:none;">Run Your Own Cabinet</a>
+  </div>
+
+</div>
+
+    </div>
+  </section>
+
+
   <!-- ═══════════════════════════════════════════════
        SECTION 3 · ONE DOWNLOAD BUTTON + SmartScreen steps + strapline
        ═══════════════════════════════════════════════ -->
@@ -541,6 +695,34 @@ html, body { overflow-x:hidden !important; max-width:100% !important; }
        aria-label="Download MnemosyneC installer for Windows v0.1.24">
       &#8595;&nbsp; Download for Windows &mdash; v0.1.24 (&sim;77&nbsp;MB)
     </a>
+
+    <!-- ── Mac + Linux Bounty Posters ── -->
+    <div class="mn-v2-bounty-row" aria-label="Community build bounties for macOS and Linux">
+      <div class="mn-v2-bounty-card">
+        <p class="mn-v2-bounty-card__wanted">&#9888; Wanted</p>
+        <p class="mn-v2-bounty-card__title">Mac Build of MnemosyneC</p>
+        <p class="mn-v2-bounty-card__body">The build targets are configured (dmg&nbsp;+&nbsp;zip, x64/arm64). Be the builder who ships it. Earn Marks.</p>
+        <a class="mn-v2-bounty-card__cta" href="/bounties/">View Mac Bounty &rarr;</a>
+      </div>
+      <div class="mn-v2-bounty-card">
+        <p class="mn-v2-bounty-card__wanted">&#9888; Wanted</p>
+        <p class="mn-v2-bounty-card__title">Linux Build of MnemosyneC</p>
+        <p class="mn-v2-bounty-card__body">deb/rpm/AppImage targets ready. Be the builder who ships it. Earn Marks.</p>
+        <a class="mn-v2-bounty-card__cta" href="/bounties/">View Linux Bounty &rarr;</a>
+      </div>
+    </div>
+
+    <!-- 3rd Bounty Slot: YouTube How-To -->
+    <div class="mn-v2-bounty-row" style="margin-top:0.6rem;" aria-label="YouTube how-to video bounty">
+      <div class="mn-v2-bounty-card" style="min-width:unset; max-width:560px; margin:0 auto; flex:unset; width:100%;">
+        <p class="mn-v2-bounty-card__wanted">&#127916; Wanted</p>
+        <p class="mn-v2-bounty-card__title">YouTube Video &mdash; How to Use MnemosyneC.ai</p>
+        <p class="mn-v2-bounty-card__body">Record a clear walkthrough: install MnemosyneC, run the Gauntlet, ask your AI a question it&rsquo;s already answered before. Show real results. Post publicly. Earn Marks + Founding-Contributor credit.</p>
+        <a class="mn-v2-bounty-card__cta" href="/bounties/">Claim This Bounty &rarr;</a>
+      </div>
+    </div>
+
+    <p class="mn-v2-bounty-note">Windows ships now. Mac and Linux community builds coming.</p>
 
     <div class="mn-v2-install-steps">
       <p class="mn-v2-install-steps__title">&#9432;&nbsp; Important Installation Steps</p>
@@ -581,7 +763,7 @@ html, body { overflow-x:hidden !important; max-width:100% !important; }
       <pre><code>Get-FileHash "MnemosyneC-Setup-0.1.24.exe" -Algorithm SHA256</code></pre>
 
       <h3>USPTO Patents &middot; Cooperative Defensive Patent Pledge #2260</h3>
-      <p>MnemosyneC is protected by 19 USPTO Provisional Patents (sole inventor &middot; Conductor-Class doctrine &middot; <em>Thaler v. Vidal</em>). The full patent portfolio is pledged under Cooperative Defensive Patent Pledge #2260. What that means: cooperatives can use, improve, and deploy MnemosyneC without fear of enclosure. The pledge is irrevocable. No future board, no acquirer, no successor entity can weaponize these patents against cooperative-class users.</p>
+      <p>MnemosyneC is covered by 21 USPTO Provisional Patent filings (sole inventor &middot; Conductor-Class doctrine &middot; <em>Thaler v. Vidal</em>). The full patent portfolio is pledged under Cooperative Defensive Patent Pledge #2260. What that means: cooperatives can use, improve, and deploy MnemosyneC without fear of enclosure. The pledge is irrevocable. No future board, no acquirer, no successor entity can weaponize these patents against cooperative-class users.</p>
 
       <h3>SSPL v1 License</h3>
       <p>Run it. Modify it. Self-host it. If you offer MnemosyneC as a networked service to others, you must share your modifications under SSPL v1. This is the cooperative commons lock &mdash; it prevents enclosure from re-entering through the side door.
@@ -622,6 +804,30 @@ html, body { overflow-x:hidden !important; max-width:100% !important; }
           <li><a href="/run-your-own-cabinet/">K533 Reproducibility Pack (run it yourself) &rarr;</a></li>
         </ul>
         <p style="font-size:0.8rem; color:rgba(250,245,235,0.45); font-style:italic;">Truth-Always discipline: all empirical claims are sourced to timestamped session receipts. Numbers are never estimated; they are measured or they do not appear.</p>
+      </div>
+    </details>
+
+    <!-- CHIP: Designed to Be Copied — and Improved -->
+    <details class="mn-v2-chip">
+      <summary>&#9658;&nbsp; Designed to Be Copied &mdash; and Improved</summary>
+      <div class="mn-v2-chip-body">
+        <h3>A Defensive Moat That Gets Stronger the More We File</h3>
+        <p>Every provisional patent filed is <strong>priority-dated prior art</strong> &mdash; a date-stamped stake in the ground that prevents anyone from coming in afterward and fencing the commons. The more we file, the wider the protected territory. The moat does not protect us from users; it protects users from enclosure.</p>
+
+        <p>The whole architecture is <strong>built to be copied and forked</strong>: SSPL + Pledge&nbsp;#2260. Run it. Self-host it. Improve it. The license is designed to let you build on it without fear and to prevent anyone from quietly re-privatizing the substrate underneath you.</p>
+
+        <p class="mn-v2-commons-em">We patent so no one can FENCE it, then give it away so everyone can BUILD on it &mdash; deterrence + invitation in one.</p>
+
+        <h3>One Ledger. One Path.</h3>
+        <div class="mn-v2-commons-ledger">
+          <strong>How patents flow:</strong> lone inventor &rarr; Upekrithen, LLC &rarr; irrevocably pledged to Liana Banyan Corporation / the cooperative commons.<br>
+          There is <strong>one ledger</strong> and <strong>one path</strong>. Every filing enters the commons and stays there.
+        </div>
+
+        <h3>The One Way to Sponsor a Patent Into the Commons</h3>
+        <p>There is exactly one way to &ldquo;acquire&rdquo; a patent: <strong>sponsor it for $5,000 through Upekrithen, LLC</strong>, structured as an <strong>irrevocable donation INTO the commons</strong> &mdash; Founding-Sponsor recognition + Defensive Patent Pledge&nbsp;#2260. This is NOT ownership and NOT extraction rights.</p>
+        <p>You can fund a patent <em>into</em> the commons. You cannot buy one <em>out</em>. Every sponsorship makes the commons <strong>stronger, never smaller</strong>.</p>
+        <p style="font-size:0.8rem;color:rgba(250,245,235,0.45);font-style:italic;">Truth-Always: we do not say &ldquo;never for sale&rdquo; &mdash; we say <strong style="color:rgba(250,245,235,0.6);">&ldquo;never sold for extraction.&rdquo;</strong> The one acquisition path is a donation into the commons, not extraction out. The distinction is the whole point.</p>
       </div>
     </details>
 
@@ -716,13 +922,13 @@ html, body { overflow-x:hidden !important; max-width:100% !important; }
        SECTION 6 · FOUNDER STORY (behind disclosure)
        ═══════════════════════════════════════════════ -->
   <details class="mn-v2-chip mn-v2-chip--founder">
-    <summary>&#9658;&nbsp; Who made this &mdash; and why it&rsquo;s not a faceless corporation</summary>
+    <summary>&#9658;&nbsp; Who Made This &mdash; Why It&rsquo;s Not a Faceless Corporation</summary>
     <div class="mn-v2-chip-body">
-      <p>There&rsquo;s a person behind this. Not a team of 40 with a go-to-market strategy and a Series B. One person who spent 37 years asking the same question: <em>&ldquo;Why does this have to extract from the people who use it?&rdquo;</em></p>
-      <p>He is an Army veteran, a father of eight, and a 21-year software developer who built what he needed and then realized the framework underneath it was worth more than the application on top. So he documented it. Got 19 provisional patents on it. And decided to give the whole thing to a cooperative at year 50 rather than sell it to someone who would extract from it.</p>
-      <p>The legal entity is Liana Banyan Corporation. At year 50, it dissolves. The Liana &mdash; the cooperative commons, the substrate, the member relationships, the IP &mdash; inherits everything. There&rsquo;s a 50-year sunset clause in the bylaws. It is not marketing copy. It is a structural commitment.</p>
-      <p>&ldquo;Be Who You Needed. Build the bridge behind you. At 50 years, the corporation dissipates to the Liana we are making now.&rdquo;</p>
-      <p>He doesn&rsquo;t want to be famous. He wants the thing to work. <strong>For All Mankind. ALL MANKIND. Here from the Start.</strong></p>
+      <p>There&rsquo;s a person behind this. Not a team of forty with a go-to-market deck and a Series B. One person &mdash; who has spent the better part of his life circling the same question: &ldquo;Why does this have to extract from the very people who use it?&rdquo;</p>
+      <p>He&rsquo;s an Army veteran, a father of eight, and a software developer of more than two decades who built what he needed &mdash; and then realized the framework underneath it was worth more than the application on top. So he documented it. Filed twenty-one provisional patents on it. And decided to give the whole thing to a cooperative at year fifty, rather than sell it to anyone who would extract from it.</p>
+      <p>The legal entity is Liana Banyan Corporation. At year fifty, it dissolves. The Liana &mdash; the cooperative commons, the substrate, the member relationships, the patents &mdash; inherits everything. The fifty-year sunset is written into the bylaws. It is not marketing copy. It is a structural commitment.</p>
+      <p>&ldquo;Be Who You Needed. Build the bridge behind you. At fifty years, the corporation dissipates into the Liana we are growing right now.&rdquo;</p>
+      <p>He doesn&rsquo;t want to be famous. He wants the thing to work. For all mankind &mdash; here from the start.</p>
     </div>
   </details>
 

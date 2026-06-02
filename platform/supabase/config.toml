@@ -226,3 +226,7 @@ verify_jwt = false
 # K189: Pioneer Bonus Disbursement
 [functions.disburse-pioneer-bonuses]
 verify_jwt = false
+
+# BP071: DD-11 STL files storage bucket
+[storage.buckets.stl-files]
+public = true
