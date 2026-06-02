@@ -1,0 +1,126 @@
+baseURL = "https://cephas.lianabanyan.com/"
+languageCode = "en-us"
+title = "Cephas - Liana Banyan Knowledge Center"
+theme = "PaperMod"
+copyright = "Ã¢â€Â¬Ã¢Å’Â 2026 Liana Banyan Corporation. All rights reserved."
+enableRobotsTXT = true
+buildFuture = true
+ignoreFiles = ["_AUGUR_.*SUPERSEDE.*\\.md$"]
+[pagination]
+  pagerSize = 10
+
+[params]
+  description = "The authoritative source for understanding Liana Banyan's philosophy, economics, and mission"
+  author = "Liana Banyan Corporation"
+  ShowReadingTime = true
+  ShowShareButtons = true
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = true
+  ShowCodeCopyButtons = true
+  ShowWordCount = true
+  ShowRssButtonInSectionTermList = true
+  UseHugoToc = true
+
+  [params.homeInfoParams]
+    Title = "Cephas: The Foundation"
+    Content = "The math is here. The system architecture is here. The human story is here."
+
+  [[params.socialIcons]]
+    name = "email"
+    url = "mailto:support@lianabanyan.org"
+
+  [[params.socialIcons]]
+    name = "github"
+    url = "https://github.com/lianabanyan"
+
+  [params.fuseOpts]
+    isCaseSensitive = false
+    shouldSort = true
+    location = 0
+    distance = 1000
+    threshold = 0.4
+    minMatchCharLength = 0
+    keys = ["title", "permalink", "summary", "content"]
+
+  [params.label]
+    text = "Liana Banyan"
+    icon = "/LianaBanyanLogo.png"
+    iconHeight = 50
+
+[[menu.main]]
+  identifier = "nav-download"
+  name = "Download"
+  url = "/download/"
+  weight = 0
+
+[[menu.main]]
+  identifier = "nav-decent"
+  name = "Decent DC"
+  url = "/decent/"
+  weight = 1
+
+[[menu.main]]
+  identifier = "nav-join"
+  name = "Join"
+  url = "/join/"
+  weight = 2
+
+[[menu.main]]
+  identifier = "nav-letters"
+  name = "Letters"
+  url = "/letters/"
+  weight = 3
+
+[[menu.main]]
+  identifier = "nav-articles"
+  name = "Articles"
+  url = "/articles/"
+  weight = 10
+
+[[menu.main]]
+  identifier = "nav-pudding"
+  name = "Pudding"
+  url = "/pudding/"
+  weight = 11
+
+[[menu.main]]
+  identifier = "nav-innovations"
+  name = "Innovations"
+  url = "/innovations/"
+  weight = 12
+
+[[menu.main]]
+  identifier = "nav-about"
+  name = "About"
+  url = "/about/"
+  weight = 13
+
+[[menu.main]]
+  identifier = "nav-press"
+  name = "Press Room"
+  url = "/press/"
+  weight = 14
+
+[[menu.main]]
+  identifier = "nav-treasure"
+  name = "Treasure Hunt"
+  url = "https://lianabanyan.com/treasure"
+  weight = 15
+
+[[menu.main]]
+  identifier = "nav-platform"
+  name = "Main Platform"
+  url = "https://lianabanyan.com"
+  weight = 16
+
+[[menu.main]]
+  identifier = "nav-ops"
+  name = "Ops & Transparency"
+  url = "/ops/"
+  weight = 17
+
+[[menu.main]]
+  identifier = "nav-admin"
+  name = "Admin"
+  url = "/admin/"
+  weight = 99

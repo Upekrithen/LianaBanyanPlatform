@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "lianabanyan-403dc"
+  },
+  "targets": {
+    "lianabanyan-403dc": {
+      "hosting": {
+        "cephas": ["cephas-lianabanyan"],
+        "museum": ["lianabanyan-museum"],
+        "mnemosyne": ["mnemosyne-lianabanyan"]
+      }
+    }
+  }
+}
