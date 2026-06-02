@@ -1275,6 +1275,7 @@ const WORKSPACE_ROOT = resolve(__dirname, "..", "..");
 // Scans Asteroid-ProofVault for BP*_INGEST_RECEIPT* files and returns the
 // list of BP session IDs (BP001–BP070) that have no receipt on file.
 // NEVER hard-blocks — caller surfaces a warn-only STONE IN THE FIELD notice.
+// MCP server restart required for this change to take effect
 const BP_SESSION_MAX = 70;
 
 function scanUningestedBPSessions(): string[] {
@@ -1435,7 +1436,7 @@ const ARCHITECTURAL_RULES: ArchitecturalRule[] = [
   { id: "firebase-hosting-main", rule: "lianabanyan.com uses hosting:main, NOT hosting:dotcom.", source: "Deployment", severity: "important" },
   { id: "surgical-edits", rule: "For files over 200 lines, use surgical edits (Edit), not full file rewrites (Write).", source: "Development", severity: "guideline" },
   { id: "crown-jewels-count", rule: "Crown Jewel count is canonical per canonical_values.yaml (~237 post-B126). Read from YAML rather than hardcoding.", source: "IP Portfolio", severity: "important" },
-  { id: "patent-portfolio", rule: "Formal claims approximate canonical per canonical_values.yaml (~2,806 post-B126 across 13 provisionals filed + Prov 14 open). Read from YAML rather than hardcoding.", source: "IP Portfolio", severity: "important" },
+  { id: "patent-portfolio", rule: "≈2,473 posterity-verified written claims across 21 provisionals (Prov-3 best-effort 397; range ≈2,376–2,483); OUTWARD materials use innovation_count 2,270.", source: "IP Portfolio", severity: "important" },
   { id: "wyoming-c-corp", rule: "Legal entity is LIANA BANYAN CORPORATION, EIN 41-2797446, Wyoming C-Corp.", source: "Legal", severity: "critical" },
   { id: "cost-breakdown-required", rule: "All marketplace listings must show cost breakdown. Harper Auditors can verify costs.", source: "Marketplace Rules", severity: "important" },
   { id: "structural-bylaw-immutable", rule: "Structural Bylaws (Cost+20%, $5 membership, privacy, etc.) cannot be changed by normal vote. Requires Founder approval.", source: "Governance", severity: "critical" },
