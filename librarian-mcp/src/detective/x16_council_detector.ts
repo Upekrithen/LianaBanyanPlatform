@@ -68,3 +68,75 @@ JOIN public.initiatives i ON ic.initiative_id = i.id
 WHERE i.initiative_number = 15
   AND ic.crown_status IN ('accepted', 'active')
 \`\`\`
+`;
+
+  const dir = path.dirname(NOTIFICATION_PATH);
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+
+  fs.writeFileSync(NOTIFICATION_PATH, content, 'utf-8');
+  console.log(`[X16 Council Detector] Notification written to ${NOTIFICATION_PATH}`);
+}
+
+// ─── Result type ────────────────────────────────────────────────────────────
+
+export interface X16DetectorResult {
+  fired: boolean;
+  count: number;
+  reason: string;
+}
+
+// ─── Main detector ──────────────────────────────────────────────────────────
+
+/**
+ * Run the X16 Council Detector.
+ * Queries Supabase for the count of accepted/active seats in Initiative #15
+ * (Political Expedition Council). If count >= 16 and not within the 7-day
+ * dedup window, writes a Founder Ratification notification to the Bishop
+ * dropzone inbox.
+ */
+export async function runX16CouncilDetector(): Promise<X16DetectorResult> {
+  const url = process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.SUPABASE_ANON_KEY;
+
+  if (!url || !key) {
+    return { fired: false, count: 0, reason: 'Supabase credentials not configured' };
+  }
+
+  const supabase = createClient(url, key, { auth: { persistSession: false } });
+
+  let count = 0;
+  try {
+    // PostgREST join: initiative_crowns → initiatives (inner join on initiative_id)
+    // Equivalent SQL: SELECT COUNT(*) AS n FROM initiative_crowns ic
+    //   JOIN initiatives i ON ic.initiative_id = i.id
+    //   WHERE i.initiative_number = 15
+    //     AND ic.crown_status IN ('accepted', 'active')
+    const response = await supabase
+      .from('initiative_crowns')
+      .select('initiatives!inner(initiative_number)', { count: 'exact', head: true })
+      .eq('initiatives.initiative_number', 15)
+      .in('crown_status', ['accepted', 'active']);
+
+    const { count: c, error } = response as unknown as { count: number | null; error: unknown };
+
+    if (error) {
+      return { fired: false, count: 0, reason: `Query error: ${String(error)}` };
+    }
+    count = c ?? 0;
+  } catch (err) {
+    return { fired: false, count: 0, reason: `Exception: ${String(err)}` };
+  }
+
+  if (count < THRESHOLD) {
+    return { fired: false, count, reason: `Below threshold (${count}/${THRESHOLD})` };
+  }
+
+  if (isWithinDedupWindow()) {
+    return { fired: false, count, reason: 'Within dedup window — notification already sent' };
+  }
+
+  writeNotification(count);
+  return { fired: true, count, reason: `Threshold reached: ${count} >= ${THRESHOLD}` };
+}

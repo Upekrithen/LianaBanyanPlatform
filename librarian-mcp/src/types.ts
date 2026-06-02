@@ -360,3 +360,18 @@ export interface FullIndex {
   domains: DomainIndex;
   concepts: ConceptsIndex;
 }
+
+export interface SessionEssenceEntry {
+  bp: string;
+  date: string | undefined;
+  title: string;
+  snippet: string;
+  keywords: string[];
+  filename: string;
+  path: string;
+}
+
+export interface SessionEssenceIndex {
+  entries: Record<string, SessionEssenceEntry>;
+  count: number;
+}
