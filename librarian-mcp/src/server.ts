@@ -1118,7 +1118,8 @@ registerTool(
       pendingMigrations: [],
       buildCommands: {
         "lianabanyan.com": "cd platform; npm run build; firebase deploy --only hosting:main -P default",
-        "cephas.lianabanyan.com": "cd Cephas/cephas-hugo; hugo --minify; firebase deploy",
+        "cephas.lianabanyan.com": "cd Cephas/cephas-hugo; hugo --minify; firebase deploy --only hosting:cephas --project lianabanyan-403dc",
+        "mnemosynec.ai": "cd Cephas/cephas-hugo; hugo --minify; firebase deploy --only hosting:mnemosyne --project lianabanyan-403dc",
         "lianabanyan.biz": "cd business-trunk; firebase deploy --only hosting:biz",
         "the2ndsecond.com": "cd dss-the2ndsecond; npm run build; firebase deploy --only hosting:2ndsecond -P default",
       },
