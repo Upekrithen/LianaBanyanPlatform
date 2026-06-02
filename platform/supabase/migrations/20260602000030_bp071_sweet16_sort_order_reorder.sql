@@ -2,6 +2,10 @@
 -- Ratified by Founder 2026-06-02. Order: Feed (1-4) → Employ (5-8) → Build (9-10) →
 -- Power (11-13) → Belong (14-16). Level the Field = MnemosyneC platform (no initiative slot).
 
+-- Add sort_order column if it doesn't exist
+ALTER TABLE public.initiatives
+  ADD COLUMN IF NOT EXISTS sort_order integer;
+
 -- Map: new sort_order → current initiative_slug
 UPDATE public.initiatives SET sort_order = 1  WHERE initiative_slug = 'lets-make-dinner';
 UPDATE public.initiatives SET sort_order = 2  WHERE initiative_slug = 'lets-get-groceries';
