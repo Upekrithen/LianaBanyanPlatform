@@ -6,7 +6,7 @@ recipient: "Tatiana Schlossburg"
 initiative: "Tatiana Schlossburg Health Accords"
 initiative_number: 6
 crown_role: "Crown Health Accord Steward"
-status: "DRAFTED — NEW F.11 · Founder review + contact info needed before dispatch"
+status: "VACANT — TRIBUTE-CLASS (per BP071 SWEET-16 CROWN ROSTER DEFINITIVE). Initiative #6 is named in honor of Tatiana Schlossberg. Crown seat is currently vacant. Letter preserved as tribute-class reference."
 bp_version: "BP055 F.11 Spider-G · NEW DRAFT"
 tags: ["crown-letter", "initiative", "tatiana-schlossburg", "health-accords", "cooperative-healthcare"]
 wrasseTriggers:
@@ -16,7 +16,7 @@ wrasseTriggers:
   - cooperative wellness crown letter
 ---
 
-<!-- STATUS: NEW DRAFT — F.11 · Founder review required before dispatch. -->
+<!-- STATUS: VACANT — TRIBUTE-CLASS per BP071 SWEET-16 CROWN ROSTER DEFINITIVE. Initiative #6 is named as a tribute to Tatiana Schlossberg. Crown seat is vacant. Do not dispatch without Founder direction. -->
 <!-- Canonical numbers check: 83.3% ✅ · "may earn" ✅ · $5/year ✅ · Cost+20% ✅ · 19 patents ✅ · sig block correct ✅ -->
 <!-- Initiative #6 = Tatiana Schlossburg Health Accords (named in honor · cooperative healthcare access · health outcomes accountability · wellness coordination) -->
 <!-- Heart-of-Peace voice throughout. -->

@@ -5,7 +5,9 @@ letter_type: "Crown Letter"
 recipient: "AndrÃ©s"
 initiative: "Let's Get Groceries"
 initiative_number: 2
-tags: ["crown-letter", "initiative", "jose-andres"]
+crown_status: "SUPERSEDED — Stacy Mitchell is Crown for #2 Let's Get Groceries (per BP071 SWEET-16 CROWN ROSTER). See stacy-mitchell.md."
+status: "SUPERSEDED — DO NOT DISPATCH. Active #2 crown letter is stacy-mitchell.md."
+tags: ["crown-letter", "initiative", "jose-andres", "superseded"]
 wrasseTriggers:
   - ðÿ crown letter josã andrãs
   - crown initiative
@@ -14,7 +16,9 @@ wrasseTriggers:
   - cephas member content
 ---
 
-# ðŸ‘‘ CROWN LETTER: JOSÃ‰ ANDRÃ‰S
+<!-- SUPERSEDED: Jose Andres was originally proposed as Crown for #2 Let's Get Groceries. Per BP071 SWEET-16 CROWN ROSTER DEFINITIVE, Stacy Mitchell is the canonical Crown for #2. This letter is archived for reference only - do not dispatch. Active #2 crown letter: stacy-mitchell.md -->
+
+# [SUPERSEDED - Active Crown for #2 is Stacy Mitchell] ðŸ‘‘ CROWN LETTER: JOSÃ‰ ANDRÃ‰S
 ## Provisioner Mentor
 ## Lord Banyan of Let's Get Groceries
 ## Board Member, Liana Banyan Corporation
