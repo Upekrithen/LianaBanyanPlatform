@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -17,9 +17,9 @@ import {
 import BillDetailDrawer from "@/components/political/BillDetailDrawer";
 import BillSearch from "@/components/political/BillSearch";
 
-// ═══════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // Types
-// ═══════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 interface Rep {
   id: string;
@@ -103,9 +103,9 @@ const TAG_COLORS: Record<string, string> = {
   transportation: "bg-rose-100 text-rose-800 dark:bg-rose-900/40 dark:text-rose-300",
 };
 
-// ═══════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // Rep Card Component
-// ═══════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 function RepCard({ rep, onSave, isSaved, saving }: {
   rep: Rep;
@@ -134,7 +134,7 @@ function RepCard({ rep, onSave, isSaved, saving }: {
                 </Badge>
               )}
               <span className="text-xs text-muted-foreground/70">
-                {rep.state}{rep.district ? ` — District ${rep.district}` : ""}
+                {rep.state}{rep.district ? ` â€” District ${rep.district}` : ""}
               </span>
             </div>
           </div>
@@ -174,9 +174,9 @@ function RepCard({ rep, onSave, isSaved, saving }: {
   );
 }
 
-// ═══════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // Main Page Component
-// ═══════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 export default function PoliticalExpedition() {
   const { user } = useAuth();
@@ -198,7 +198,7 @@ export default function PoliticalExpedition() {
   const [drawerBill, setDrawerBill] = useState<TrackedBill | null>(null);
   const [syncing, setSyncing] = useState(false);
 
-  // ─── Admin check ───
+  // â”€â”€â”€ Admin check â”€â”€â”€
   const { data: isAdmin = false } = useQuery({
     queryKey: ["is-admin", user?.id],
     enabled: !!user,
@@ -208,7 +208,7 @@ export default function PoliticalExpedition() {
     },
   });
 
-  // ─── Saved reps query ───
+  // â”€â”€â”€ Saved reps query â”€â”€â”€
   const { data: savedReps = [] } = useQuery({
     queryKey: ["member-reps", user?.id],
     enabled: !!user,
@@ -225,7 +225,7 @@ export default function PoliticalExpedition() {
 
   const savedRepIds = new Set(savedReps.map((s: SavedRep) => s.rep_id));
 
-  // ─── Tracked bills query ───
+  // â”€â”€â”€ Tracked bills query â”€â”€â”€
   const { data: bills = [] } = useQuery({
     queryKey: ["tracked-bills"],
     queryFn: async () => {
@@ -238,7 +238,7 @@ export default function PoliticalExpedition() {
     },
   });
 
-  // ─── User's tracked bills ───
+  // â”€â”€â”€ User's tracked bills â”€â”€â”€
   const { data: userTrackedBills = [] } = useQuery({
     queryKey: ["member-bill-tracking", user?.id],
     enabled: !!user,
@@ -254,7 +254,7 @@ export default function PoliticalExpedition() {
 
   const trackedBillIds = new Set(userTrackedBills);
 
-  // ─── Letter templates query ───
+  // â”€â”€â”€ Letter templates query â”€â”€â”€
   const { data: templates = [] } = useQuery({
     queryKey: ["rep-letter-templates"],
     queryFn: async () => {
@@ -267,7 +267,7 @@ export default function PoliticalExpedition() {
     },
   });
 
-  // ─── Lookup reps by address ───
+  // â”€â”€â”€ Lookup reps by address â”€â”€â”€
   const handleLookup = async () => {
     if (!address.trim()) return;
     setLookupLoading(true);
@@ -294,7 +294,7 @@ export default function PoliticalExpedition() {
     }
   };
 
-  // ─── Save rep mutation ───
+  // â”€â”€â”€ Save rep mutation â”€â”€â”€
   const saveRepMutation = useMutation({
     mutationFn: async (repId: string) => {
       const { error } = await (supabase as any)
@@ -309,7 +309,7 @@ export default function PoliticalExpedition() {
     onError: () => toast.error("Failed to save representative"),
   });
 
-  // ─── Unsave rep mutation ───
+  // â”€â”€â”€ Unsave rep mutation â”€â”€â”€
   const unsaveRepMutation = useMutation({
     mutationFn: async (repId: string) => {
       const { error } = await (supabase as any)
@@ -326,7 +326,7 @@ export default function PoliticalExpedition() {
     onError: () => toast.error("Failed to remove representative"),
   });
 
-  // ─── Track bill mutation ───
+  // â”€â”€â”€ Track bill mutation â”€â”€â”€
   const trackBillMutation = useMutation({
     mutationFn: async (billId: string) => {
       if (trackedBillIds.has(billId)) {
@@ -348,7 +348,7 @@ export default function PoliticalExpedition() {
     },
   });
 
-  // ─── Template fill logic ───
+  // â”€â”€â”€ Template fill logic â”€â”€â”€
   const selectedRep = savedReps.find((s: SavedRep) => s.rep_id === selectedRepId);
   const selectedTemplate = templates.find((t: LetterTemplate) => t.topic === selectedTopic);
 
@@ -368,7 +368,7 @@ export default function PoliticalExpedition() {
     }
   }, [selectedRepId, selectedTopic, memberName, selectedTemplate, selectedRep]);
 
-  // ─── Your Reps' Bills — join through bill_cosponsors ───
+  // â”€â”€â”€ Your Reps' Bills â€” join through bill_cosponsors â”€â”€â”€
   const repBioguides = savedReps.map((sr: SavedRep) => sr.rep_cache.bioguide_id).filter(Boolean);
   const { data: repsBills = [] } = useQuery({
     queryKey: ["reps-bills", repBioguides.join(",")],
@@ -419,7 +419,7 @@ export default function PoliticalExpedition() {
     return Array.from(map.values());
   }, [repsBills, sponsoredBills]);
 
-  // ─── Admin sync handler ───
+  // â”€â”€â”€ Admin sync handler â”€â”€â”€
   const handleSync = async (mode: string) => {
     setSyncing(true);
     try {
@@ -458,26 +458,26 @@ export default function PoliticalExpedition() {
           .eq("id", selectedTemplate.id);
       }
     } catch {
-      toast.error("Failed to copy — try selecting and copying manually");
+      toast.error("Failed to copy â€” try selecting and copying manually");
     }
   };
 
   const handleEmailLetter = () => {
     if (!letterBody || !selectedRep) return;
-    const subject = encodeURIComponent(`From a constituent — ${selectedTemplate?.title || "Civic Engagement"}`);
+    const subject = encodeURIComponent(`From a constituent â€” ${selectedTemplate?.title || "Civic Engagement"}`);
     const body = encodeURIComponent(letterBody);
     window.open(`mailto:?subject=${subject}&body=${body}`, "_blank");
   };
 
-  // ═══════════════════════════════════════════════════════════════
+  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
   // RENDER
-  // ═══════════════════════════════════════════════════════════════
+  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
   return (
     <PortalPageLayout maxWidth="lg" xrayId="political-expedition">
       <div className="space-y-8">
 
-        {/* ═══ HEADER ═══ */}
+        {/* â•â•â• HEADER â•â•â• */}
         <div className="flex items-center gap-4">
           <div className="p-3 bg-purple-600 rounded-full text-white shrink-0">
             <Flag className="h-8 w-8" />
@@ -487,7 +487,7 @@ export default function PoliticalExpedition() {
               Political Expedition
             </h1>
             <p className="text-muted-foreground mt-1">
-              Civic engagement infrastructure — not partisan messaging
+              Civic engagement infrastructure â€” not partisan messaging
             </p>
             <p className="text-xs text-purple-400 font-semibold mt-1 tracking-wider uppercase">
               It&rsquo;s What you Use it FOR
@@ -495,7 +495,7 @@ export default function PoliticalExpedition() {
           </div>
         </div>
 
-        {/* ═══ NON-PARTISAN BANNER ═══ */}
+        {/* â•â•â• NON-PARTISAN BANNER â•â•â• */}
         <div className="bg-blue-950/50 border border-blue-800 rounded-lg p-4" data-xray-id="pe-switzerland-banner">
           <h3 className="text-amber-400 font-semibold flex items-center gap-2 mb-2">
             <Shield className="h-4 w-4" /> The Switzerland Protocol
@@ -503,13 +503,13 @@ export default function PoliticalExpedition() {
           <p className="text-sm text-slate-300">
             Not left or right. <strong>Forward.</strong> This tool helps you engage with YOUR representatives
             regardless of party. Democracy works when citizens participate. We track what elected officials{" "}
-            <em>do</em> — not what they say.
+            <em>do</em> â€” not what they say.
           </p>
         </div>
 
-        {/* ═══════════════════════════════════════════════════════
+        {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
             SECTION 1: Find Your Representatives
-            ═══════════════════════════════════════════════════════ */}
+            â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
         <section data-xray-id="pe-find-reps">
           <h2 className="text-2xl font-bold text-foreground mb-4 flex items-center gap-2">
             <Search className="h-6 w-6 text-purple-500" /> Find Your Representatives
@@ -569,9 +569,9 @@ export default function PoliticalExpedition() {
           )}
         </section>
 
-        {/* ═══════════════════════════════════════════════════════
+        {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
             SECTION 2: Your Representatives (logged-in)
-            ═══════════════════════════════════════════════════════ */}
+            â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
         {user && savedReps.length > 0 && (
           <section data-xray-id="pe-your-reps">
             <h2 className="text-2xl font-bold text-foreground mb-4 flex items-center gap-2">
@@ -591,7 +591,7 @@ export default function PoliticalExpedition() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <h4 className="font-semibold text-foreground">{sr.rep_cache.name}</h4>
-                        <p className="text-sm text-muted-foreground">{sr.rep_cache.title} — {sr.rep_cache.state}</p>
+                        <p className="text-sm text-muted-foreground">{sr.rep_cache.title} â€” {sr.rep_cache.state}</p>
                       </div>
                     </div>
                     <div className="flex gap-2 mt-3 flex-wrap">
@@ -636,9 +636,9 @@ export default function PoliticalExpedition() {
           </section>
         )}
 
-        {/* ═══════════════════════════════════════════════════════
+        {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
             SECTION 2B: Your Reps' Bills (K90)
-            ═══════════════════════════════════════════════════════ */}
+            â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
         {user && allRepBills.length > 0 && (
           <section data-xray-id="pe-reps-bills">
             <h2 className="text-2xl font-bold text-foreground mb-4 flex items-center gap-2">
@@ -705,9 +705,9 @@ export default function PoliticalExpedition() {
           </section>
         )}
 
-        {/* ═══════════════════════════════════════════════════════
+        {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
             SECTION 3: Bills That Matter
-            ═══════════════════════════════════════════════════════ */}
+            â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
         <section data-xray-id="pe-bills">
           <h2 className="text-2xl font-bold text-foreground mb-4 flex items-center gap-2">
             <FileText className="h-6 w-6 text-amber-500" /> Bills That Matter
@@ -802,9 +802,9 @@ export default function PoliticalExpedition() {
           )}
         </section>
 
-        {/* ═══════════════════════════════════════════════════════
+        {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
             SECTION 4: Write Your Rep
-            ═══════════════════════════════════════════════════════ */}
+            â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
         <section id="write-your-rep" data-xray-id="pe-write-rep">
           <h2 className="text-2xl font-bold text-foreground mb-4 flex items-center gap-2">
             <Mail className="h-6 w-6 text-green-500" /> Write Your Rep
@@ -849,7 +849,7 @@ export default function PoliticalExpedition() {
                         }`}
                       >
                         <span className="font-medium text-foreground">{sr.rep_cache.name}</span>
-                        <span className="text-muted-foreground ml-2">— {sr.rep_cache.title}</span>
+                        <span className="text-muted-foreground ml-2">â€” {sr.rep_cache.title}</span>
                       </button>
                     ))}
                   </div>
@@ -907,9 +907,9 @@ export default function PoliticalExpedition() {
           )}
         </section>
 
-        {/* ═══════════════════════════════════════════════════════
+        {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
             ADMIN: Sync Controls (K90)
-            ═══════════════════════════════════════════════════════ */}
+            â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
         {isAdmin && (
           <section data-xray-id="pe-admin-sync" className="border border-amber-500/30 rounded-lg p-4 bg-amber-900/10">
             <h3 className="text-sm font-semibold text-amber-400 mb-3 flex items-center gap-2">
@@ -937,13 +937,13 @@ export default function PoliticalExpedition() {
           </section>
         )}
 
-        {/* ═══ FOOTER ═══ */}
+        {/* â•â•â• FOOTER â•â•â• */}
         <div className="mt-12 text-center border-t border-border pt-8">
           <p className="text-muted-foreground text-sm">
-            <strong className="text-foreground">Political Expedition</strong> — Initiative #15: Power to the People
+            <strong className="text-foreground">Political Expedition</strong> â€” Initiative #11: Power to the People
           </p>
           <p className="text-xs mt-2 text-muted-foreground/70">
-            "Not left or right. Forward." — Help Each Other Help Ourselves
+            "Not left or right. Forward." â€” Help Each Other Help Ourselves
           </p>
         </div>
       </div>

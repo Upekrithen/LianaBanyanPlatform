@@ -19,170 +19,211 @@ import { PortalPageLayout } from '@/components/PortalPageLayout';
  * Real Marks are earned by completing tasks. These are test Marks.
  */
 
-// The CORRECT Sweet Sixteen — in priority order, then category order
+// Sweet Sixteen — ordered by Six Steps (ratified BP071 Scope 1, 2026-06-02)
+// Step 2 Feed Your Neighbors: #1-4 | Step 3 Employ the World: #5-8
+// Step 4 Build Businesses & Make Things: #9-10 | Step 5 Power to the People: #11-13
+// Step 6 Belong Together: #14-16
 const SWEET_SIXTEEN = [
-  // PRIORITY TIER — Free to unlock (doing these first)
+  // STEP 2 — Feed Your Neighbors
   {
     id: "lets-make-dinner",
+    number: 1,
     name: "Let's Make Dinner",
     emoji: "🍽️",
     tagline: "Neighbors Paid to Feed Neighbors",
     description: "Home cooks earn 83.3% preparing meals for busy neighbors. Volume purchasing, shared kitchens, community connection.",
     route: "/initiatives/lets-make-dinner",
     priority: true,
-    category: "food"
+    category: "food",
+    step: "Feed Your Neighbors"
   },
   {
     id: "lets-get-groceries",
+    number: 2,
     name: "Let's Get Groceries",
     emoji: "🛒",
     tagline: "Volume Discount Grocery Runs",
     description: "Aggregate neighborhood grocery orders for wholesale pricing. Delivery by members, savings for everyone.",
     route: "/initiatives/lets-get-groceries",
     priority: true,
-    category: "food"
+    category: "food",
+    step: "Feed Your Neighbors"
+  },
+  {
+    id: "family-table",
+    number: 3,
+    name: "The Family Table",
+    emoji: "👨‍👩‍👧‍👦",
+    tagline: "Meal Planning & Connected Portfolios",
+    description: "Shared schedules, gift lists, family portfolios. Keep your tribe connected.",
+    route: "/initiatives/family-table",
+    priority: false,
+    category: "family",
+    step: "Feed Your Neighbors"
   },
   {
     id: "lets-make-bread",
+    number: 4,
     name: "Let's Make Bread",
     emoji: "🍞",
     tagline: "$5 Business Simulator → Real Business",
     description: "Start with a $5 simulation. Learn business fundamentals. Graduate to real operations when ready.",
     route: "/initiatives/bread",
     priority: true,
-    category: "business"
-  },
-  {
-    id: "defense-klaus",
-    name: "Defense Klaus",
-    emoji: "🛡️",
-    tagline: "For Someone You Love",
-    description: "$6 safety bracelet with pull-up palm claws + GPS broadcast monitoring. 100% of proceeds fund pooled legal defense for all members. Physical protection AND legal protection in one.",
-    route: "/initiatives/defense-klaus",
-    priority: true,
-    category: "safety"
-  },
-  {
-    id: "didasko",
-    name: "Didasko (Academic)",
-    emoji: "🎓",
-    tagline: "College of Hard Knocks",
-    description: "K-12 curriculum. Skills training. Tutoring. Mentoring. Education as cooperative enterprise.",
-    route: "/initiatives/didasko",
-    priority: true,
-    category: "education"
+    category: "business",
+    step: "Feed Your Neighbors"
   },
 
-  // STANDARD TIER — 1 Mark per lock (4 total)
+  // STEP 3 — Employ the World
   {
     id: "lets-go-shopping",
+    number: 5,
     name: "Let's Go Shopping",
     emoji: "🛍️",
     tagline: "Volume Discount Product Purchases",
     description: "Holiday specials, bulk buying, member discounts. Shopping together saves everyone money.",
     route: "/initiatives/lets-go-shopping",
     priority: false,
-    category: "commerce"
+    category: "commerce",
+    step: "Employ the World"
   },
   {
     id: "household-concierge",
+    number: 6,
     name: "Household Concierge",
     emoji: "🏠",
     tagline: "Home Services by Vetted Members",
     description: "Maintenance, repairs, scheduling — all by trusted community members at Cost+20%.",
     route: "/initiatives/household-concierge",
     priority: false,
-    category: "services"
+    category: "services",
+    step: "Employ the World"
   },
   {
-    id: "family-table",
-    name: "Family Table",
-    emoji: "👨‍👩‍👧‍👦",
-    tagline: "Meal Planning & Connected Portfolios",
-    description: "Shared schedules, gift lists, family portfolios. Keep your tribe connected.",
-    route: "/initiatives/family-table",
-    priority: false,
-    category: "family"
-  },
-  {
-    id: "tatiana-schlossburg-health-accords",
-    name: "Tatiana Schlossburg Health Accords",
-    emoji: "💊",
-    tagline: "Cost+20% Prescriptions & Supplies",
-    description: "Medications at cost plus 20%. No insurance games. No surprise bills.",
-    route: "/initiatives/tatiana-schlossburg-health-accords",
-    priority: false,
-    category: "health"
-  },
-  {
-    id: "msa",
-    name: "MSA",
-    emoji: "🏥",
-    tagline: "Member Savings Accounts for Healthcare",
-    description: "Pre-tax healthcare savings. Community-pooled for emergencies. Your health, your money.",
-    route: "/initiatives/msa",
-    priority: false,
-    category: "health"
+    id: "defense-klaus",
+    number: 7,
+    name: "Defense Klaus",
+    emoji: "🛡️",
+    tagline: "For Someone You Love",
+    description: "$6 safety bracelet with pull-up palm claws + GPS broadcast monitoring. 100% of proceeds fund pooled legal defense for all members. Physical protection AND legal protection in one.",
+    route: "/initiatives/defense-klaus",
+    priority: true,
+    category: "safety",
+    step: "Employ the World"
   },
   {
     id: "rally-group",
+    number: 8,
     name: "Rally Group",
     emoji: "📢",
     tagline: "Crisis Response & Community Mobilization",
     description: "When disaster strikes, Rally Group coordinates response. Neighbors helping neighbors, fast.",
     route: "/initiatives/rally-group",
     priority: false,
-    category: "community"
+    category: "community",
+    step: "Employ the World"
   },
+
+  // STEP 4 — Build Businesses & Make Things
   {
     id: "vsl",
-    name: "VSL",
+    number: 9,
+    name: "VSL (Vouch Short Loans)",
     emoji: "💳",
-    tagline: "Voucher Short Loans 0-5%",
+    tagline: "Vouch Short Loans 0–5%",
     description: "No-collateral member-to-member loans. 0-5% interest. Because banks shouldn't own your future.",
     route: "/initiatives/vsl",
     priority: false,
-    category: "finance"
-  },
-  {
-    id: "harper-guild",
-    name: "Harper Guild",
-    emoji: "⚖️",
-    tagline: "HR & Ethics for Small Businesses",
-    description: "Fair employment practices. Skills training. Career development. Ethics support.",
-    route: "/initiatives/harper-guild",
-    priority: false,
-    category: "business"
-  },
-  {
-    id: "jukebox",
-    name: "JukeBox",
-    emoji: "🎵",
-    tagline: "Artist-Controlled Royalties",
-    description: "Cooperative music licensing. Artists keep 83.3%. Transparent royalty distribution.",
-    route: "/initiatives/jukebox",
-    priority: false,
-    category: "creative"
+    category: "finance",
+    step: "Build Businesses & Make Things"
   },
   {
     id: "brass-tacks",
+    number: 10,
     name: "Brass Tacks",
     emoji: "🔩",
     tagline: "Manufacturing & Makers",
     description: "Tooling, mechanics, physical products. The maker economy at Cost+20%.",
     route: "/initiatives/brass-tacks",
     priority: false,
-    category: "manufacturing"
+    category: "manufacturing",
+    step: "Build Businesses & Make Things"
   },
+
+  // STEP 5 — Power to the People
   {
     id: "power-to-the-people",
+    number: 11,
     name: "Power to the People",
     emoji: "⚡",
-    tagline: "Citizen Advocacy & Cooperative Energy",
+    tagline: "Not left or right. Simply effective.",
     description: "Congressional tracking. Cooperative energy purchasing. Per the Switzerland Protocol.",
     route: "/initiatives/power-to-the-people",
     priority: false,
-    category: "advocacy"
+    category: "advocacy",
+    step: "Power to the People"
+  },
+  {
+    id: "tatiana-schlossburg-health-accords",
+    number: 12,
+    name: "Tatiana Schlossberg Health Accords",
+    emoji: "💊",
+    tagline: "Cost+20% Prescriptions & Supplies",
+    description: "Medications at cost plus 20%. No insurance games. No surprise bills.",
+    route: "/initiatives/tatiana-schlossburg-health-accords",
+    priority: false,
+    category: "health",
+    step: "Power to the People"
+  },
+  {
+    id: "msa",
+    number: 13,
+    name: "MSA",
+    emoji: "🏥",
+    tagline: "Member Savings Accounts for Healthcare",
+    description: "Pre-tax healthcare savings. Community-pooled for emergencies. Your health, your money.",
+    route: "/initiatives/msa",
+    priority: false,
+    category: "health",
+    step: "Power to the People"
+  },
+
+  // STEP 6 — Belong Together
+  {
+    id: "harper-guild",
+    number: 14,
+    name: "Harper Guild",
+    emoji: "⚖️",
+    tagline: "HR & Ethics for Small Businesses",
+    description: "Fair employment practices. Skills training. Career development. Ethics support.",
+    route: "/initiatives/harper-guild",
+    priority: false,
+    category: "business",
+    step: "Belong Together"
+  },
+  {
+    id: "jukebox",
+    number: 15,
+    name: "JukeBox",
+    emoji: "🎵",
+    tagline: "Artist-Controlled Royalties",
+    description: "Cooperative music licensing. Artists keep 83.3%. Transparent royalty distribution.",
+    route: "/initiatives/jukebox",
+    priority: false,
+    category: "creative",
+    step: "Belong Together"
+  },
+  {
+    id: "didasko",
+    number: 16,
+    name: "Didasko (Academic)",
+    emoji: "🎓",
+    tagline: "College of Hard Knocks",
+    description: "K-12 curriculum. Skills training. Tutoring. Mentoring. Education as cooperative enterprise.",
+    route: "/initiatives/didasko",
+    priority: false,
+    category: "education",
+    step: "Belong Together"
   },
 ];
 

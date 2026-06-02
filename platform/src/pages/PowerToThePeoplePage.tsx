@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+﻿import React, { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -15,9 +15,9 @@ import { useNavigate } from "react-router-dom";
 import LaunchConditionOverlay from "@/components/LaunchConditionOverlay";
 import { PortalPageLayout } from '@/components/PortalPageLayout';
 
-// ═══════════════════════════════════════════════════════════════
-// SAMPLE DATA — No Supabase wiring this session
-// ═══════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// SAMPLE DATA â€” No Supabase wiring this session
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 const SAMPLE_DISTRICT = {
   name: "District 7",
@@ -96,7 +96,7 @@ const TRACKED_LEGISLATION: LegislationItem[] = [
     description: "Tax incentives for companies that transition to worker ownership models.",
     sponsors: 12, cosponsors: 45,
     communityImpact: "Could reduce cooperative formation costs by 30% in the first year.",
-    watching: true, lastAction: "Referred to Ways & Means — March 5, 2026", chamber: "House",
+    watching: true, lastAction: "Referred to Ways & Means â€” March 5, 2026", chamber: "House",
   },
   {
     id: "bill-002", number: "S 2025", title: "Cooperative Commerce Enhancement Act",
@@ -104,7 +104,7 @@ const TRACKED_LEGISLATION: LegislationItem[] = [
     description: "Reduces regulatory burden for cooperative business structures.",
     sponsors: 8, cosponsors: 23,
     communityImpact: "Simplifies annual reporting for co-ops with <1,000 members.",
-    watching: true, lastAction: "Floor vote scheduled — March 22, 2026", chamber: "Senate",
+    watching: true, lastAction: "Floor vote scheduled â€” March 22, 2026", chamber: "Senate",
   },
   {
     id: "bill-003", number: "HR 3030", title: "Community Food Security Act",
@@ -112,7 +112,7 @@ const TRACKED_LEGISLATION: LegislationItem[] = [
     description: "Supports local food systems and neighborhood meal sharing programs.",
     sponsors: 5, cosponsors: 89,
     communityImpact: "Enables cottage food licenses in all 50 states.",
-    watching: false, lastAction: "Passed House 278-145 — March 1, 2026", chamber: "House",
+    watching: false, lastAction: "Passed House 278-145 â€” March 1, 2026", chamber: "House",
   },
   {
     id: "bill-004", number: "S 1890", title: "Small Business Zoning Reform Act",
@@ -120,7 +120,7 @@ const TRACKED_LEGISLATION: LegislationItem[] = [
     description: "Allows mixed-use home-based manufacturing in residential zones for businesses under $100K revenue.",
     sponsors: 3, cosponsors: 11,
     communityImpact: "Would let LMB operators run 3D print nodes from home legally.",
-    watching: false, lastAction: "Introduced — February 28, 2026", chamber: "Senate",
+    watching: false, lastAction: "Introduced â€” February 28, 2026", chamber: "Senate",
   },
   {
     id: "bill-005", number: "HR 4101", title: "Cooperative Tax Credit Extension",
@@ -128,7 +128,7 @@ const TRACKED_LEGISLATION: LegislationItem[] = [
     description: "Extends and expands Section 1042 tax-free rollovers for sales to worker cooperatives.",
     sponsors: 15, cosponsors: 67,
     communityImpact: "Makes employee buyouts 40% more affordable for retiring business owners.",
-    watching: true, lastAction: "Hearing scheduled — March 18, 2026", chamber: "House",
+    watching: true, lastAction: "Hearing scheduled â€” March 18, 2026", chamber: "House",
   },
 ];
 
@@ -146,12 +146,12 @@ const SAMPLE_CIVIC_SCORECARD = {
     { id: "a5", type: "education" as const, label: "Civic Courses Completed", count: 3, xp: 450 },
   ],
   badges: [
-    { name: "First Vote", icon: "🗳️", earned: true },
-    { name: "Town Crier", icon: "📯", earned: true },
-    { name: "Pen Pal", icon: "✉️", earned: true },
-    { name: "Week Warrior", icon: "🔥", earned: true },
-    { name: "Month Maven", icon: "⭐", earned: false },
-    { name: "Century Club", icon: "💯", earned: false },
+    { name: "First Vote", icon: "ðŸ—³ï¸", earned: true },
+    { name: "Town Crier", icon: "ðŸ“¯", earned: true },
+    { name: "Pen Pal", icon: "âœ‰ï¸", earned: true },
+    { name: "Week Warrior", icon: "ðŸ”¥", earned: true },
+    { name: "Month Maven", icon: "â­", earned: false },
+    { name: "Century Club", icon: "ðŸ’¯", earned: false },
   ],
 };
 
@@ -164,9 +164,9 @@ const SAMPLE_COVERAGE = {
   chunkMinutes: 3,
 };
 
-// ═══════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // CIVIC LEVEL TIERS
-// ═══════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 const CIVIC_LEVELS = [
   { level: 1, name: "Observer", minXP: 0 },
@@ -185,9 +185,9 @@ function getCivicLevel(xp: number) {
   return CIVIC_LEVELS.reduce((best, l) => (xp >= l.minXP ? l : best), CIVIC_LEVELS[0]);
 }
 
-// ═══════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // COMPONENT
-// ═══════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 type TabKey = "dashboard" | "reps" | "legislation" | "scorecard" | "minutes";
 
@@ -244,7 +244,7 @@ export default function PowerToThePeoplePage() {
   return (
     <LaunchConditionOverlay initiativeSlug="power-to-the-people" initiativeName="Power to the People">
       <PortalPageLayout maxWidth="xl" xrayId="political-expedition-hub">
-        {/* ═══ HEADER ═══ */}
+        {/* â•â•â• HEADER â•â•â• */}
         <div className="flex items-center gap-4 mb-6">
           <div className="p-3 bg-purple-600 rounded-full text-white">
             <Flag className="h-8 w-8" />
@@ -254,7 +254,7 @@ export default function PowerToThePeoplePage() {
               Power to the People
             </h1>
             <p className="text-lg text-muted-foreground">
-              The Political Expedition — civic engagement infrastructure, not partisan messaging
+              The Political Expedition â€” civic engagement infrastructure, not partisan messaging
             </p>
           </div>
           <Badge
@@ -265,7 +265,7 @@ export default function PowerToThePeoplePage() {
           </Badge>
         </div>
 
-        {/* ═══ SWITZERLAND PROTOCOL BANNER ═══ */}
+        {/* â•â•â• SWITZERLAND PROTOCOL BANNER â•â•â• */}
         <div className="bg-blue-950/50 border border-blue-800 rounded-lg p-4 mb-8 max-w-3xl">
           <h3 className="text-amber-400 font-semibold flex items-center gap-2 mb-2">
             <Shield className="h-4 w-4" /> The Switzerland Protocol
@@ -273,11 +273,11 @@ export default function PowerToThePeoplePage() {
           <p className="text-sm text-slate-300">
             This arena exists <em>outside</em> the cooperative's economic mission. No party
             names. No endorsements. No culture wars. We track what elected officials{" "}
-            <strong>do</strong> — not what they say. "Vote FOR people who vote for you."
+            <strong>do</strong> â€” not what they say. "Vote FOR people who vote for you."
           </p>
         </div>
 
-        {/* ═══ DASHBOARD STAT STRIP ═══ */}
+        {/* â•â•â• DASHBOARD STAT STRIP â•â•â• */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <Card className="bg-purple-50 dark:bg-purple-950/20 border-purple-200 dark:border-purple-800">
             <CardContent className="pt-4 pb-3 text-center">
@@ -319,7 +319,7 @@ export default function PowerToThePeoplePage() {
           </Card>
         </div>
 
-        {/* ═══ TAB NAVIGATION ═══ */}
+        {/* â•â•â• TAB NAVIGATION â•â•â• */}
         <div className="flex flex-wrap gap-2 border-b border-border pb-4 mb-6">
           {TAB_ITEMS.map((tab) => (
             <Button
@@ -337,9 +337,9 @@ export default function PowerToThePeoplePage() {
           ))}
         </div>
 
-        {/* ═══════════════════════════════════════════════════════
+        {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
             DASHBOARD TAB
-            ═══════════════════════════════════════════════════════ */}
+            â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
         {activeTab === "dashboard" && (
           <div className="space-y-8">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -383,7 +383,7 @@ export default function PowerToThePeoplePage() {
                           Petitions & Vote Tracking
                         </h4>
                         <p className="text-sm text-muted-foreground mt-1">
-                          We don't tell you what to believe. We simply remember — in public — who
+                          We don't tell you what to believe. We simply remember â€” in public â€” who
                           did what, when.
                         </p>
                       </div>
@@ -396,7 +396,7 @@ export default function PowerToThePeoplePage() {
                         </h4>
                         <p className="text-sm text-muted-foreground mt-1">
                           We do not allow the platform to be weaponized. If a policy helps
-                          families get groceries, make dinner, or afford medicine — we support it.
+                          families get groceries, make dinner, or afford medicine â€” we support it.
                           That's the line.
                         </p>
                       </div>
@@ -463,15 +463,15 @@ export default function PowerToThePeoplePage() {
                 that tells the way we go."
               </p>
               <p className="text-purple-400 text-sm mt-3 font-medium text-center">
-                — Ella Wheeler Wilcox
+                â€” Ella Wheeler Wilcox
               </p>
             </div>
           </div>
         )}
 
-        {/* ═══════════════════════════════════════════════════════
+        {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
             REPRESENTATIVES TAB
-            ═══════════════════════════════════════════════════════ */}
+            â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
         {activeTab === "reps" && (
           <div className="space-y-6">
             <div className="flex gap-4 max-w-xl">
@@ -491,7 +491,7 @@ export default function PowerToThePeoplePage() {
             </div>
 
             <h3 className="text-xl font-semibold text-foreground">
-              Your Representatives — {SAMPLE_DISTRICT.city}, {SAMPLE_DISTRICT.state}
+              Your Representatives â€” {SAMPLE_DISTRICT.city}, {SAMPLE_DISTRICT.state}
             </h3>
 
             <div className="grid md:grid-cols-2 gap-6">
@@ -567,9 +567,9 @@ export default function PowerToThePeoplePage() {
           </div>
         )}
 
-        {/* ═══════════════════════════════════════════════════════
+        {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
             LEGISLATION TRACKER TAB
-            ═══════════════════════════════════════════════════════ */}
+            â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
         {activeTab === "legislation" && (
           <div className="space-y-6">
             <div className="flex items-center justify-between flex-wrap gap-3">
@@ -659,9 +659,9 @@ export default function PowerToThePeoplePage() {
           </div>
         )}
 
-        {/* ═══════════════════════════════════════════════════════
+        {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
             CIVIC ENGAGEMENT SCORECARD TAB
-            ═══════════════════════════════════════════════════════ */}
+            â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
         {activeTab === "scorecard" && (
           <div className="space-y-6">
             <h3 className="text-xl font-semibold text-foreground">
@@ -678,7 +678,7 @@ export default function PowerToThePeoplePage() {
                     <div className="flex-1">
                       <p className="text-lg font-bold text-foreground">{civicLevel.name}</p>
                       <p className="text-sm text-muted-foreground">
-                        {SAMPLE_CIVIC_SCORECARD.totalXP.toLocaleString()} XP — Next level at{" "}
+                        {SAMPLE_CIVIC_SCORECARD.totalXP.toLocaleString()} XP â€” Next level at{" "}
                         {SAMPLE_CIVIC_SCORECARD.nextLevelXP.toLocaleString()} XP
                       </p>
                       <Progress value={xpProgress} className="mt-2 h-3" />
@@ -759,9 +759,9 @@ export default function PowerToThePeoplePage() {
           </div>
         )}
 
-        {/* ═══════════════════════════════════════════════════════
+        {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
             COVERAGE MINUTES TAB
-            ═══════════════════════════════════════════════════════ */}
+            â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
         {activeTab === "minutes" && (
           <div className="space-y-6">
             <h3 className="text-xl font-semibold text-foreground flex items-center gap-2">
@@ -780,7 +780,7 @@ export default function PowerToThePeoplePage() {
                     <p className="text-sm text-muted-foreground">
                       Before you can speak on political topics, you must first{" "}
                       <strong>listen</strong>. Coverage Minutes are earned by reading, watching,
-                      and engaging with civic content. Speaking is gated by listening —{" "}
+                      and engaging with civic content. Speaking is gated by listening â€”{" "}
                       {SAMPLE_COVERAGE.chunkMinutes}-minute chunks, {SAMPLE_COVERAGE.cap}-minute
                       cap, {SAMPLE_COVERAGE.expiresInDays}-day expiry.
                     </p>
@@ -905,14 +905,14 @@ export default function PowerToThePeoplePage() {
           </div>
         )}
 
-        {/* ═══ FOOTER ═══ */}
+        {/* â•â•â• FOOTER â•â•â• */}
         <div className="mt-12 text-center border-t border-border pt-8">
           <p className="text-muted-foreground text-sm">
-            <strong className="text-foreground">Power to the People</strong> —
-            Initiative #15
+            <strong className="text-foreground">Power to the People</strong> â€”
+            Initiative #11
           </p>
           <p className="text-xs mt-2 text-muted-foreground/70">
-            "Not left or right. Forward." — Help Each Other Help Ourselves
+            "Not left or right. Forward." â€” Help Each Other Help Ourselves
           </p>
         </div>
       </PortalPageLayout>
