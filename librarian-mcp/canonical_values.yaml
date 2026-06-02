@@ -1,5 +1,6 @@
 ---
 # Liana Banyan Canonical Values Registry
+# Updated: BP070 Jun 02 2026 (Bishop drift-fix — Prov 21 USPTO-FILED App #64/079,336 filed 2026-06-01 per BP069; this dev copy was STALE at provisionals=20 while the public canonical already read 21. Synced provisionals 20→21 + most_recent_prov→21 + added prov_21 block + next_prov→22. formal_claims pending verified recount SEG — known stale/low per Founder "it is over that".)
 # Updated: BP067 May 31 2026 (Knight Do-It-All Let's Roll — Prov 20 USPTO-FILED App #64/073,890 filed 2026-05-25 per BP056B; canonical_values.yaml updated Prov 19→20; Prov 21 filing prep complete; number sweep executed)
 # Prior update: BP036 May 11 2026 (USPTO-FILED Prov 18 + Prov 19 within 5 minutes; App #64/062,332 + 64/062,334; total filed = 19; SR-015 ≤100pp HARD RULE empirically validated; Drekaskip 12-cohort Bishop AGENT fan-out per BP036 SEG-Cascade Discipline canon)
 # Prior update: BP030 May 7 2026 (INDL-9 Geneva fire — Prov 16 + Prov 17 USPTO-FILED; App #64/060,080 + 64/060,093; total then = 17; same-day Mitchell Hashimoto departure receipt window for Cooperative Code Infrastructure canon LB-STACK-0159)
@@ -11,8 +12,8 @@ stats:
   innovation_count: 2270
   crown_jewels: 228
   production_systems: 36
-  patent_provisionals_filed: 20
-  formal_claims_approximate: 2700
+  patent_provisionals_filed: 21
+  formal_claims_approximate: 2473 # BP070 EXACT-COUNT AUDIT, POSTERITY-VERIFIED (written claims across all 21 filed provisionals, counted from source). SUPERSEDES 2700 (BP039 auto-bump), 2806 (DEBUNKED), interim-3000 (over-est). Provs 1-6 re-verified = 1,336 (Provs 1,2,4,5,6 EXACT=939; Prov3=397 BEST-EFFORT — cover "~300+", no machine-readable spec, journals/handwritten); Prov13 resolved 103→117; Provs 7-12,14-21 = 1,020. Range ≈2,376-2,483 (Prov3 ±). ⚠️ Outward/public materials use innovation_count (2,270) per Founder — claims metric is INTERNAL/POSTERITY only.
   puddings: 189
   papers: 41
   letters_in_dispatch_queue: 95
@@ -29,7 +30,7 @@ economics:
 
 ip_allocation:
   patent_buckets_percentage: 60
-  founder_creator_percentage: 20
+  founder_creator_percentage: 15
   global_sponsor_pool_percentage: 10
   individual_patent_pedestals_percentage: 10
   herjavec_rpa_source: "founder_creator_slice"
@@ -47,15 +48,21 @@ entity:
   holding_company_owner_percentage: 100
 
 patents:
-  most_recent_prov_number: 20
-  most_recent_prov_application: "64/073,890"
-  most_recent_prov_filed: "2026-05-25"
-  next_prov_number: 21
-  next_prov_status: "in_progress"
-  next_prov_filing_target: "2026-07-10"
-  next_prov_current_draft: "PROV_21_v3_BP058_W15.md (v3 compiled 2026-05-26; filing-ready pending BP059-BP067 addendum)"
+  most_recent_prov_number: 21
+  most_recent_prov_application: "64/079,336"
+  most_recent_prov_filed: "2026-06-01"
+  next_prov_number: 22
+  next_prov_status: "scaffold_pending"
+  next_prov_filing_target: "TBD (Prov-22 = Bob's Diner / Locality-First boundary; scaffold per BP067)"
+  next_prov_current_draft: "PROV_22 scaffold (Bob's Diner / Locality-First) — see TIER_F_W5b_PROV_21_EXPAND_PROV_22_SCAFFOLD_RECEIPT.md"
   conversion_deadline_first_prov: "2026-11-26"
   # Historical app # chain (most recent first; MEMORY.md preserves full history)
+  prov_21_application: "64/079,336"
+  prov_21_filed: "2026-06-01"
+  prov_21_attorney_docket: "LB-PROV-021"
+  prov_21_confirmation: "6635"
+  prov_21_patent_center: "76863253"
+  prov_21_scope: "Methods and Systems for a Cooperative, Content-Addressed Memory Substrate with Cross-Vendor Context Pre-Injection and Hash-Verified Distributed Reconstruction (BP059-BP067 empirical addendum); filed 2026-06-01 12:41 AM Z ET, Micro Entity"
   prov_20_application: "64/073,890"
   prov_20_filed: "2026-05-25"
   prov_20_attorney_docket: "LB-PROV-020"
@@ -285,12 +292,12 @@ banyan_metric_bp043_close:
 sticky_canonical_numbers:
   innovations: 2270
   crown_jewels: 228
-  formal_claims: 2700
+  formal_claims: 2473  # BP070 posterity-verified (see stats.formal_claims_approximate); Prov3 best-effort; outward uses 2,270 innovations
   production_systems: 36
   puddings: 196          # 189 BP032 baseline + 7 BP043 new
   papers: 41
   glass_door_letters: 95
-  provisionals: 20
+  provisionals: 21
   bootstrap_initiatives: 16
   spinout_entities: 3
   candidate_class_reserves: 8
