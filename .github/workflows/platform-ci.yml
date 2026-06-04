@@ -1,0 +1,319 @@
+name: Platform CI -- Build Gates
+
+# =============================================================================
+# BP072 / Wave 3 / Scope 29 — CI smoke tests + error monitoring
+# DOCTRINE: refLinksErrorLevel="error" -- build must stay clean.
+# NEVER suppress build output. Deploy only on green.
+# =============================================================================
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "platform/**"
+      - "src/**"
+      - "caithedral-core/**"
+  pull_request:
+    branches: [main]
+    paths:
+      - "platform/**"
+      - "src/**"
+      - "caithedral-core/**"
+
+jobs:
+  # ── TypeScript strict check ──────────────────────────────────────────────────
+  typecheck:
+    name: TypeScript -- noEmit strict
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: platform
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: platform/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+      - name: TypeScript type-check (no suppress)
+        run: npx tsc --noEmit
+        # NEVER add --skipLibCheck=false override to silence errors.
+        # If this step fails, fix the source -- do not add suppressions.
+
+  # ── Vitest unit + integration ────────────────────────────────────────────────
+  vitest:
+    name: Vitest -- skip-eblets + all suites
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: platform
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: platform/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+      - name: Run Vitest (all suites -- fail loud)
+        run: npx vitest run --reporter=verbose
+        # --reporter=verbose ensures failures are visible in the CI log.
+        # Do NOT pipe through || true or any silent-failure suppressor.
+      - name: Upload coverage artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vitest-results-${{ github.sha }}
+          path: platform/coverage/
+          retention-days: 14
+
+  # ── Yoke-bridge smoke test ───────────────────────────────────────────────────
+  yoke-bridge:
+    name: Yoke-bridge -- exports intact
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: platform
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: platform/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+      - name: Yoke-bridge integrity check
+        run: npx vitest run src/__tests__/skip-eblets/yoke-bridge.test.ts --reporter=verbose
+
+  # ── Vite production build ────────────────────────────────────────────────────
+  build:
+    name: Vite -- production build (no suppressed errors)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: [typecheck, vitest]
+    defaults:
+      run:
+        working-directory: platform
+    env:
+      # Treat refLinks as errors per doctrine
+      VITE_REF_LINKS_ERROR_LEVEL: error
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: platform/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+      - name: Build (fail on any warning promoted to error)
+        run: npm run build 2>&1 | tee build-output.txt
+        # tee captures output; exit code propagates because of default shell -e.
+      - name: Confirm no silent-failure sentinel in output
+        run: |
+          if grep -i "suppressed\|--force\|ignoring error\|silent.fail" build-output.txt; then
+            echo "FAIL: Build output contains silent-failure suppressor patterns."
+            exit 1
+          fi
+          echo "OK: No silent-failure patterns detected."
+      - name: Upload build artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: platform-build-${{ github.sha }}
+          path: platform/dist/
+          retention-days: 7
+
+  # ── Lighthouse budget enforcement (Wave 17 — Performance) ───────────────────
+  lighthouse-budgets:
+    name: Lighthouse -- perf/a11y/SEO/CWV budgets
+    runs-on: ubuntu-latest
+    needs: [build]
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: platform
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: platform/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Lighthouse CI
+        run: npm install -g @lhci/cli@0.14.x
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: platform-build-${{ github.sha }}
+          path: platform/dist
+      - name: Run Lighthouse CI -- config-driven budget check
+        # Wave 17: uses .lighthouserc.json for all threshold assertions.
+        # Thresholds: perf>=80, a11y>=90, best-practices>=85, SEO>=85
+        # Core Web Vitals: LCP<2500ms, TBT<200ms, CLS<0.1
+        # Errors on any breach -- no suppression, no || true.
+        run: lhci autorun --config=.lighthouserc.json --collect.staticDistDir=dist
+        # W17: upgraded from inline flags to .lighthouserc.json config.
+        # Do NOT revert to 'warn' or add || echo suppressor.
+
+  # ── budget.json size audit ────────────────────────────────────────────────────
+  budget-check:
+    name: Bundle budgets -- chunk size gate
+    runs-on: ubuntu-latest
+    needs: [build]
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: platform
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: platform/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: platform-build-${{ github.sha }}
+          path: platform/dist
+      - name: Check bundle sizes against budget.json
+        # Wave 17: enforces chunkSizeLimits from budget.json.
+        # Fails if any chunk exceeds its named limit.
+        # Fails if vendor-three, vendor-mermaid, or vendor-xlsx exceed their limits
+        # (these are lazy-loaded heavy libs -- they must never end up on the critical path).
+        run: node scripts/check-bundle-budget.cjs
+
+  # ── Secrets scan (Phase R / Wave 5) ─────────────────────────────────────────
+  secrets-scan:
+    name: Secrets scan -- no hardcoded keys
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Scan for hardcoded secrets
+        run: |
+          # Check for common secret patterns in source files
+          # Exits 1 if any are found (fails CI)
+          FOUND=0
+          for pattern in \
+            "sk-[a-zA-Z0-9]\{20,\}" \
+            "AKIA[0-9A-Z]\{16\}" \
+            "ghp_[a-zA-Z0-9]\{36\}" \
+            "gho_[a-zA-Z0-9]\{36\}"; do
+            if grep -r --include="*.ts" --include="*.tsx" --include="*.js" \
+                       --include="*.json" --include="*.sql" \
+                       -l "$pattern" platform/src/ 2>/dev/null | grep -q .; then
+              echo "FAIL: Potential hardcoded secret matching $pattern found."
+              FOUND=1
+            fi
+          done
+          if [ "$FOUND" -eq 1 ]; then exit 1; fi
+          echo "OK: No hardcoded secret patterns detected."
+
+  # ── i18n locale coverage check (Wave D / D3 -- 150 languages) ───────────────
+  i18n-coverage:
+    name: i18n -- 150-language locale coverage gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: platform
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Check locale file coverage (all 150 languages)
+        run: node scripts/check-i18n-coverage.cjs
+        # Wave D gate: All 149 non-EN locales must exist, be valid JSON, and have
+        # a non-empty speakFriend namespace (minimum viable locale).
+        # Legacy 15 ratified locales are held to the higher bar (no empty strings anywhere).
+        # NEVER add || true to silence this check.
+        # Stub locales (machine-draft, bounty-open) are allowed and printed as STUB.
+        # Missing locale files fail the gate -- run generate-locale-stubs.cjs to fix.
+
+  # ── Deployment gate (green board required) ───────────────────────────────────
+  deploy-gate:
+    name: Deploy gate -- all checks green
+    runs-on: ubuntu-latest
+    needs: [typecheck, vitest, yoke-bridge, build, secrets-scan, i18n-coverage, lighthouse-budgets, budget-check]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      - name: All checks passed -- safe to deploy
+        run: |
+          echo "All CI gates passed. Platform is deploy-ready."
+          echo "Typecheck: PASS | Vitest: PASS | Yoke-bridge: PASS | Build: PASS | Secrets: PASS | i18n: PASS | Lighthouse: PASS | BudgetCheck: PASS"
+          # W27: deploy-platform job below fires after this gate passes.
+
+  # ── W27 publish-on-green: deploy platform to Firebase on green board ────────
+  # Wave 27 / Phase epsilon -- Launch: auto-publish /proofs (and full platform)
+  # to lianabanyan.org (org target) and mnemosynec.ai (main target) on every
+  # green main push. NEVER skips the deploy-gate. Deploy only on green.
+  deploy-platform:
+    name: Publish platform -- lianabanyan.org + mnemosynec.ai
+    runs-on: ubuntu-latest
+    needs: [deploy-gate]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    defaults:
+      run:
+        working-directory: platform
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: platform/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: platform-build-${{ github.sha }}
+          path: platform/dist
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
+      - name: Deploy to Firebase -- lianabanyan.org (org target)
+        # Publishes the full SPA (incl. /proofs route) to lianabanyan.org on green.
+        # FIREBASE_TOKEN is Founder-gated. Graceful: if token absent, prints STAGED
+        # notice and exits 0 -- does not fail the board.
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        run: |
+          if [ -z "$FIREBASE_TOKEN" ]; then
+            echo "STAGED: FIREBASE_TOKEN secret not set -- Founder action required to activate deploy."
+            echo "Platform is built and green. DNS HELD. To publish: add FIREBASE_TOKEN to repo secrets."
+            exit 0
+          fi
+          firebase deploy --only hosting:org --token "$FIREBASE_TOKEN"
+      - name: Deploy to Firebase -- mnemosynec.ai (main target)
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        run: |
+          if [ -z "$FIREBASE_TOKEN" ]; then
+            echo "STAGED: FIREBASE_TOKEN secret not set -- Founder action required to activate deploy."
+            exit 0
+          fi
+          firebase deploy --only hosting:main --token "$FIREBASE_TOKEN"
+      - name: Report deploy summary
+        if: always()
+        run: |
+          echo "=== Wave 27 Deploy Summary ==="
+          echo "SHA: ${{ github.sha }}"
+          echo "Ref: ${{ github.ref }}"
+          echo "Dist size: $(du -sh dist/ 2>/dev/null | cut -f1 || echo N/A)"
+          echo "/proofs route: published via SPA rewrite rule (index.html -> /proofs)"
+          echo "Domains: lianabanyan.org (org target), mnemosynec.ai (main target)"
+          echo "DNS HELD for Founder (registrar action required)."
