@@ -828,6 +828,24 @@ contextBridge.exposeInMainWorld('amplify', {
   }> =>
     ipcRenderer.invoke('lb:get-frontier-status'),
 
+  // ── Frontier Borrow (WAVE-24) ─────────────────────────────────────────────
+
+  lbGetBorrowStatus: (): Promise<{ borrow_opt_in: boolean; trust_list: string[] }> =>
+    ipcRenderer.invoke('lb:get-borrow-status'),
+
+  lbSetBorrowOptIn: (enabled: boolean): Promise<{ ok: boolean }> =>
+    ipcRenderer.invoke('lb:set-borrow-opt-in', { enabled }),
+
+  lbRequestFrontierBorrow: (): Promise<{
+    ok: boolean;
+    error?: string;
+    cost_transport_usd?: number;
+    cost_compute_usd_approx?: number;
+    node_count?: number;
+    disclosure?: string;
+  }> =>
+    ipcRenderer.invoke('lb:request-frontier-borrow'),
+
   // ── Opt-In Strike Tracker IPC (BP065 3-strikes · SEG-C from renderer) ────
 
   lbOptInGetState: (): Promise<{ strikes: number; lastShown: number | null; decision: string }> =>

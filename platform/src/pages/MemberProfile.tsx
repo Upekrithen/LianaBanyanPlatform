@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -12,7 +12,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import {
   User, MapPin, Calendar, Edit, Save, X, Map, Trophy,
-  Users, Ghost, Palette, Shield,
+  Users, Ghost, Palette, Shield, Briefcase, Star, Linkedin,
 } from 'lucide-react';
 
 interface MemberProfileData {
@@ -27,6 +27,18 @@ interface MemberProfileData {
   tags: string[];
   joined_at: string;
 }
+
+interface ProfileExtras {
+  account_type: 'personal' | 'business' | 'professional';
+  linkedin_verified: boolean;
+  linkedin_headline: string | null;
+}
+
+const ACCOUNT_TYPE_CONFIG: Record<string, { label: string; icon: React.ElementType; className: string }> = {
+  personal:     { label: 'Personal',              icon: User,     className: 'bg-slate-100 text-slate-700' },
+  business:     { label: 'Business',              icon: Briefcase, className: 'bg-amber-100 text-amber-800' },
+  professional: { label: 'Professional (Guild Master)', icon: Star, className: 'bg-violet-100 text-violet-800' },
+};
 
 interface MapProgressRow { map_id: string; current_phase: number; }
 interface ArenaSubmission { id: string; title: string; category: string; rating: number | null; }
@@ -49,6 +61,7 @@ export default function MemberProfile() {
   const { toast } = useToast();
 
   const [profile, setProfile] = useState<MemberProfileData | null>(null);
+  const [extras, setExtras] = useState<ProfileExtras>({ account_type: 'personal', linkedin_verified: false, linkedin_headline: null });
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(searchParams.get('edit') === 'true');
   const [editForm, setEditForm] = useState({ display_name: '', bio: '', location: '', avatar_url: '', is_public: true });
@@ -80,6 +93,14 @@ export default function MemberProfile() {
           avatar_url: data.avatar_url || '',
           is_public: data.is_public,
         });
+
+        // Fetch account_type and LinkedIn credentials from profiles table
+        const { data: profRow } = await supabase
+          .from('profiles' as never)
+          .select('account_type, linkedin_verified, linkedin_headline')
+          .eq('id', data.user_id)
+          .maybeSingle() as { data: ProfileExtras | null };
+        if (profRow) setExtras(profRow);
 
         // Load activity data
         const [mapRes, arenaRes, crewRes] = await Promise.all([
@@ -216,6 +237,26 @@ export default function MemberProfile() {
                   <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
                     <Calendar className="h-3 w-3" /> Member since {new Date(profile.joined_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
                   </p>
+                  {/* Account type + credential badges */}
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {(() => {
+                      const cfg = ACCOUNT_TYPE_CONFIG[extras.account_type] || ACCOUNT_TYPE_CONFIG.personal;
+                      const Icon = cfg.icon;
+                      return (
+                        <Badge variant="secondary" className={cfg.className}>
+                          <Icon className="h-3 w-3 mr-1" /> {cfg.label}
+                        </Badge>
+                      );
+                    })()}
+                    {extras.linkedin_verified && (
+                      <Badge variant="secondary" className="bg-blue-100 text-blue-800">
+                        <Linkedin className="h-3 w-3 mr-1" /> LinkedIn Verified
+                      </Badge>
+                    )}
+                  </div>
+                  {extras.linkedin_verified && extras.linkedin_headline && (
+                    <p className="text-xs text-muted-foreground mt-1 italic">{extras.linkedin_headline}</p>
+                  )}
                   {profile.bio && <p className="mt-3 text-sm">{profile.bio}</p>}
                   {profile.tags.length > 0 && (
                     <div className="flex flex-wrap gap-1.5 mt-3">

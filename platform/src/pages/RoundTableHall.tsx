@@ -57,7 +57,11 @@ import {
   canSpeak,
 } from "@/lib/discourse/coverageMinutes";
 
-// ── Mock Data (until Supabase integration) ─────────────────────────────────
+// ── Stub Data (until Supabase integration, BP072-W9-C5) ─────────────────────
+// TODO: Replace with real Supabase query from `round_tables` table.
+// Expected DB table: round_tables(id, topic_id, topic_name, topic_description,
+//   status, moderator_id, participant_ids, session_started_at, ...)
+// Typed stub maintained to preserve component contract.
 
 const MOCK_TABLES: RoundTable[] = [
   {

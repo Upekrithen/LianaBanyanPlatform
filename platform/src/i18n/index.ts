@@ -94,6 +94,121 @@ export const SUPPORTED_LANGUAGES: {
   // Special entries (lore languages)
   { code: "qya", name: "Quenya (Elvish)", nativeName: "Quenya", friendWord: "mellon" },
   { code: "rap", name: "Rapa Nui", nativeName: "Vananga Rapa Nui", friendWord: "hoa" },
+
+  // Wave D: 150-language expansion (no thinkingWord/friendWord yet -- community bounties)
+  { code: "bn",  name: "Bengali",          nativeName: "বাংলা" },
+  { code: "mr",  name: "Marathi",          nativeName: "मराठी" },
+  { code: "te",  name: "Telugu",           nativeName: "తెలుగు" },
+  { code: "tr",  name: "Turkish",          nativeName: "Türkçe" },
+  { code: "yue", name: "Cantonese",        nativeName: "廣東話" },
+  { code: "ta",  name: "Tamil",            nativeName: "தமிழ்" },
+  { code: "vi",  name: "Vietnamese",       nativeName: "Tiếng Việt" },
+  { code: "gu",  name: "Gujarati",         nativeName: "ગુજરાતી" },
+  { code: "kn",  name: "Kannada",          nativeName: "ಕನ್ನಡ" },
+  { code: "pa",  name: "Punjabi",          nativeName: "ਪੰਜਾਬੀ" },
+  { code: "jv",  name: "Javanese",         nativeName: "Basa Jawa" },
+  { code: "or",  name: "Odia",             nativeName: "ଓଡ଼ିଆ" },
+  { code: "ff",  name: "Fula",             nativeName: "Fulfulde" },
+  { code: "so",  name: "Somali",           nativeName: "Soomaali" },
+  { code: "az",  name: "Azerbaijani",      nativeName: "Azərbaycan" },
+  { code: "tl",  name: "Filipino",         nativeName: "Filipino" },
+  { code: "ceb", name: "Cebuano",          nativeName: "Cebuano" },
+  { code: "mg",  name: "Malagasy",         nativeName: "Malagasy" },
+  { code: "sd",  name: "Sindhi",           nativeName: "سنڌي" },
+  { code: "ku",  name: "Kurdish",          nativeName: "Kurdî" },
+  { code: "kk",  name: "Kazakh",           nativeName: "Қазақша" },
+  { code: "sn",  name: "Shona",            nativeName: "Shona" },
+  { code: "bo",  name: "Tibetan",          nativeName: "བོད་སྐད།" },
+  { code: "su",  name: "Sundanese",        nativeName: "Basa Sunda" },
+  { code: "bho", name: "Bhojpuri",         nativeName: "भोजपुरी" },
+  { code: "mai", name: "Maithili",         nativeName: "मैथिली" },
+  { code: "ro",  name: "Romanian",         nativeName: "Română" },
+  { code: "cs",  name: "Czech",            nativeName: "Čeština" },
+  { code: "el",  name: "Greek",            nativeName: "Ελληνικά" },
+  { code: "hu",  name: "Hungarian",        nativeName: "Magyar" },
+  { code: "hr",  name: "Croatian",         nativeName: "Hrvatski" },
+  { code: "sr",  name: "Serbian",          nativeName: "Српски" },
+  { code: "bs",  name: "Bosnian",          nativeName: "Bosanski" },
+  { code: "rw",  name: "Kinyarwanda",      nativeName: "Ikinyarwanda" },
+  { code: "ln",  name: "Lingala",          nativeName: "Lingála" },
+  { code: "ny",  name: "Chichewa",         nativeName: "Chichewa" },
+  { code: "lo",  name: "Lao",              nativeName: "ລາວ" },
+  { code: "fi",  name: "Finnish",          nativeName: "Suomi" },
+  { code: "da",  name: "Danish",           nativeName: "Dansk" },
+  { code: "no",  name: "Norwegian",        nativeName: "Norsk" },
+  { code: "sk",  name: "Slovak",           nativeName: "Slovenčina" },
+  { code: "sl",  name: "Slovenian",        nativeName: "Slovenščina" },
+  { code: "et",  name: "Estonian",         nativeName: "Eesti" },
+  { code: "lv",  name: "Latvian",          nativeName: "Latviešu" },
+  { code: "lt",  name: "Lithuanian",       nativeName: "Lietuvių" },
+  { code: "hy",  name: "Armenian",         nativeName: "Հայերեն" },
+  { code: "ca",  name: "Catalan",          nativeName: "Català" },
+  { code: "mk",  name: "Macedonian",       nativeName: "Македонски" },
+  { code: "be",  name: "Belarusian",       nativeName: "Беларуская" },
+  { code: "af",  name: "Afrikaans",        nativeName: "Afrikaans" },
+  { code: "xh",  name: "Xhosa",            nativeName: "isiXhosa" },
+  { code: "st",  name: "Sesotho",          nativeName: "Sesotho" },
+  { code: "tn",  name: "Setswana",         nativeName: "Setswana" },
+  { code: "wo",  name: "Wolof",            nativeName: "Wolof" },
+  { code: "ak",  name: "Akan",             nativeName: "Akan" },
+  { code: "ee",  name: "Ewe",              nativeName: "Eʋegbe" },
+  { code: "ky",  name: "Kyrgyz",           nativeName: "Кыргызча" },
+  { code: "tg",  name: "Tajik",            nativeName: "Тоҷикӣ" },
+  { code: "tk",  name: "Turkmen",          nativeName: "Türkmen" },
+  { code: "ug",  name: "Uyghur",           nativeName: "ئۇيغۇرچە" },
+  { code: "yi",  name: "Yiddish",          nativeName: "ייִדיש" },
+  { code: "mt",  name: "Maltese",          nativeName: "Malti" },
+  { code: "eu",  name: "Basque",           nativeName: "Euskara" },
+  { code: "gl",  name: "Galician",         nativeName: "Galego" },
+  { code: "cy",  name: "Welsh",            nativeName: "Cymraeg" },
+  { code: "ga",  name: "Irish",            nativeName: "Gaeilge" },
+  { code: "is",  name: "Icelandic",        nativeName: "Íslenska" },
+  { code: "lb",  name: "Luxembourgish",    nativeName: "Lëtzebuergesch" },
+  { code: "ht",  name: "Haitian Creole",   nativeName: "Kreyol ayisyen" },
+  { code: "qu",  name: "Quechua",          nativeName: "Runasimi" },
+  { code: "war", name: "Waray",            nativeName: "Winaray" },
+  { code: "nso", name: "Northern Sotho",   nativeName: "Sepedi" },
+  { code: "lg",  name: "Luganda",          nativeName: "Luganda" },
+  { code: "ts",  name: "Tsonga",           nativeName: "Xitsonga" },
+  { code: "ss",  name: "Swati",            nativeName: "siSwati" },
+  { code: "sat", name: "Santali",          nativeName: "ᱥᱟᱱᱛᱟᱲᱤ" },
+  { code: "doi", name: "Dogri",            nativeName: "डोगरी" },
+  { code: "kok", name: "Konkani",          nativeName: "कोंकणी" },
+  { code: "mni", name: "Manipuri",         nativeName: "মেইতেই লোন্" },
+  { code: "as",  name: "Assamese",         nativeName: "অসমীয়া" },
+  { code: "ckb", name: "Central Kurdish",  nativeName: "کوردیی ناوەندی" },
+  { code: "ay",  name: "Aymara",           nativeName: "Aymar aru" },
+  { code: "sm",  name: "Samoan",           nativeName: "Gagana Samoa" },
+  { code: "mi",  name: "Maori",            nativeName: "Te Reo Maori" },
+  { code: "fj",  name: "Fijian",           nativeName: "Na Vosa Vakaviti" },
+  { code: "to",  name: "Tongan",           nativeName: "Lea faka-Tonga" },
+  { code: "haw", name: "Hawaiian",         nativeName: "Olelo Hawaii" },
+  { code: "dv",  name: "Dhivehi",          nativeName: "ދިވެހި" },
+  { code: "om",  name: "Oromo",            nativeName: "Afaan Oromoo" },
+  { code: "ti",  name: "Tigrinya",         nativeName: "ትግርኛ" },
+  { code: "rn",  name: "Kirundi",          nativeName: "Kirundi" },
+  { code: "sg",  name: "Sango",            nativeName: "Sango" },
+  { code: "lu",  name: "Luba-Katanga",     nativeName: "Kiluba" },
+  { code: "kg",  name: "Kongo",            nativeName: "Kikongo" },
+  { code: "gn",  name: "Guarani",          nativeName: "Avañe'e" },
+  { code: "tet", name: "Tetum",            nativeName: "Tetun" },
+  { code: "tpi", name: "Tok Pisin",        nativeName: "Tok Pisin" },
+  { code: "ilo", name: "Ilocano",          nativeName: "Ilokano" },
+  { code: "tt",  name: "Tatar",            nativeName: "Татар теле" },
+  { code: "zgh", name: "Tamazight",        nativeName: "ⵜⴰⵎⴰⵣⵉⵖⵜ" },
+  { code: "hil", name: "Hiligaynon",       nativeName: "Ilonggo" },
+  { code: "min", name: "Minangkabau",      nativeName: "Baso Minangkabau" },
+  { code: "bug", name: "Buginese",         nativeName: "Basa Ugi" },
+  { code: "cv",  name: "Chuvash",          nativeName: "Чӑваш чӗлхи" },
+  { code: "br",  name: "Breton",           nativeName: "Brezhoneg" },
+  { code: "ve",  name: "Venda",            nativeName: "Tshivenda" },
+  { code: "pam", name: "Kapampangan",      nativeName: "Kapampangan" },
+  { code: "dz",  name: "Dzongkha",         nativeName: "རྫོང་ཁ" },
+  { code: "nr",  name: "Southern Ndebele", nativeName: "isiNdebele" },
+  { code: "gd",  name: "Scottish Gaelic",  nativeName: "Gaidhlig" },
+  { code: "kab", name: "Kabyle",           nativeName: "Taqbaylit" },
+  { code: "ps",  name: "Pashto",           nativeName: "پښتو" },
+  { code: "uk",  name: "Ukrainian",        nativeName: "Українська" },
 ];
 
 /**
@@ -137,10 +252,25 @@ const domainLanguageDetector = {
   },
 };
 
+// ── Query-param language detector (?lang=es) ──
+// Supports hreflang alternate URLs and direct locale links.
+// Stores to lb_language so i18n caches the choice.
+
+const queryParamDetector = {
+  name: "queryParam",
+  lookup(): string | undefined {
+    if (typeof window === "undefined") return undefined;
+    const params = new URLSearchParams(window.location.search);
+    const lang = params.get("lang");
+    return lang || undefined;
+  },
+};
+
 // ── Initialize i18next ──
 
 const languageDetector = new LanguageDetector();
 languageDetector.addDetector(domainLanguageDetector);
+languageDetector.addDetector(queryParamDetector);
 
 i18n
   .use(HttpBackend)           // Load translations from /public/locales/
@@ -150,9 +280,9 @@ i18n
     fallbackLng: "en",
     supportedLngs: SUPPORTED_LANGUAGES.map((l) => l.code),
 
-    // Detection order: domain → localStorage (set by Durin's Door) → browser
+    // Detection order: domain → ?lang= query param → localStorage → browser
     detection: {
-      order: ["domainDetector", "localStorage", "navigator", "htmlTag"],
+      order: ["domainDetector", "queryParam", "localStorage", "navigator", "htmlTag"],
       lookupLocalStorage: "lb_language",
       caches: ["localStorage"],
     },

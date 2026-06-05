@@ -57,6 +57,8 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        /* BP074-W3: Banyan brand green — resolves from CSS var per dark/light mode */
+        banyan: "var(--banyan-green)",
       },
       borderRadius: {
         lg: "var(--radius)",

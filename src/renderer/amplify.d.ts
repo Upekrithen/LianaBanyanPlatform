@@ -276,6 +276,9 @@ declare global {
       lbRegisterFrontierNode?: () => Promise<{ ok: boolean; frontier_node_id?: string; error?: string }>;
       lbWithdrawFrontierNode?: () => Promise<{ ok: boolean; error?: string }>;
       lbGetFrontierStatus?: () => Promise<{ registered: boolean; frontier_node_id?: string; last_heartbeat?: string; withdrawn?: boolean }>;
+      lbGetBorrowStatus?: () => Promise<{ borrow_opt_in: boolean; trust_list: string[] }>;
+      lbSetBorrowOptIn?: (enabled: boolean) => Promise<{ ok: boolean }>;
+      lbRequestFrontierBorrow?: () => Promise<{ ok: boolean; error?: string; cost_transport_usd?: number; cost_compute_usd_approx?: number; node_count?: number; disclosure?: string }>;
 
       // BP060 Application 002 Step 1 — Caithedral Tools
       caithedralTools?: {

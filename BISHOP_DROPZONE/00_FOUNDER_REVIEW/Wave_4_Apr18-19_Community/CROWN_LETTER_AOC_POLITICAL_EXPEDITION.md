@@ -27,7 +27,7 @@ Dear Representative Ocasio-Cortez,
 
 You have spent your career saying the economy should work for the people who actually work in it. I spent nine years building one that does.
 
-Liana Banyan is a cooperative commerce platform — three commercial websites with a constitutionally locked Cost+20% margin that sustainably funds {{charitableInitiatives}} charitable initiatives across food security, healthcare access, education, financial inclusion, civic engagement, and crisis response. Creators keep 83.3% of every transaction. Workers own the platform. Membership costs five dollars a year. No venture capital. No shareholders extracting value. No exit strategy — because the point is not to sell it, it is to sustain it.
+Liana Banyan is a cooperative commerce platform — three commercial websites with a constitutionally locked Cost+20% margin that sustainably funds sixteen charitable initiatives across food security, healthcare access, education, financial inclusion, civic engagement, and crisis response. Creators keep 83.3% of every transaction. Workers own the platform. Membership costs five dollars a year. No venture capital. No shareholders extracting value. No exit strategy — because the point is not to sell it, it is to sustain it.
 
 I am not writing to ask for money. I am not writing to ask for an endorsement. I am writing because Initiative #15 — Power to the People, our Political Expedition — needs a leader who understands that civic participation and economic participation are the same fight, and you have been making that argument louder and more effectively than anyone in American public life.
 
@@ -37,7 +37,7 @@ I am not writing to ask for money. I am not writing to ask for an endorsement. I
 
 The Political Expedition is not a PAC. It is not partisan infrastructure dressed up in cooperative language. It is civic engagement built on a cooperative backbone — voter education, community organizing, and political participation tools funded by the same margin that funds our food security and healthcare initiatives. The goal is not to tell people how to vote. The goal is to make participation so accessible and so well-supported that not participating becomes the harder choice.
 
-When I was a teenager, I won second place in a VFW essay contest writing about democracy using Mortimer Adler's *Six Great Ideas*. The title was "Democracy: The Vanguard of Freedom." I have been thinking about civic structure ever since — through enlisted Army Infantry service at sixteen, through Officer Candidate School, through two decades of building systems, through raising eight children in a country where the tools of participation keep getting harder to reach for the people who need them most.
+When I was a teenager, I won second place in a VFW essay contest writing about democracy using Mortimer Adler's *Six Great Ideas*. The title was "Democracy: The Vanguard of Freedom." I have been thinking about civic structure ever since — through enlisted Army National Guard Infantry service at sixteen, through Officer Candidate School, through two decades of building systems, through raising eight children in a country where the tools of participation keep getting harder to reach for the people who need them most.
 
 This initiative exists because democracy is a muscle. Use it or lose it. And too many people have been told their arm does not count.
 
@@ -57,7 +57,7 @@ Your audience needs to see that this is not charity. It is structure. It is not 
 
 ## THE OFFER
 
-I am offering you the Door-Opening Crown for Power to the People — the First Seat on the Political Expedition Council. The Crown holder leads the initiative, sets standards for civic engagement programming, breaks ties, and holds a seat on the Steering Committee that governs all {{charitableInitiatives}} initiatives. As the council grows, its members elect their own Board representative. In the early days, that representative would likely be you.
+I am offering you the Door-Opening Crown for Power to the People — the First Seat on the Political Expedition Council. The Crown holder leads the initiative, sets standards for civic engagement programming, breaks ties, and holds a seat on the Steering Committee that governs all sixteen initiatives. As the council grows, its members elect their own Board representative. In the early days, that representative would likely be you.
 
 This is not a figurehead position. The council does real work: voter education tools, community organizing frameworks, civic participation infrastructure — all funded sustainably by cooperative commerce, not by donation cycles that dry up after election years.
 

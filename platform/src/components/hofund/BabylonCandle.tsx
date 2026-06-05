@@ -179,7 +179,7 @@ function CardDesignDialog({
           </p>
           <p>
             Your design could become the official card seen by all members. Compensation is backed by
-            our patent portfolio (1,244 innovations).
+            our patent portfolio (2,270 innovations).
           </p>
           <div className="bg-primary/10 border border-primary/20 rounded-lg p-3">
             <p className="text-xs">

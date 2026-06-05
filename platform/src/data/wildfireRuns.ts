@@ -184,7 +184,7 @@ export const PLANT_SEEDS_RUN: WildfireRun = {
       id: "seed-2",
       order: 2,
       title: "Patent Portfolio",
-      description: "1,244 innovations across 7 applications",
+      description: "2,270 innovations across 7 applications",
       route: "/patent-portfolio",
       duration: 5,
       learningLink: "/cephas/under-the-hood/patent-portfolio",
@@ -687,7 +687,7 @@ export const ONBOARDING_QUICK_RUN: WildfireRun = {
       id: "onboard-4",
       order: 4,
       title: "Patent Portfolio",
-      description: "1,244 innovations",
+      description: "2,270 innovations",
       route: "/patent-portfolio",
       duration: 5,
     },
@@ -858,6 +858,212 @@ export const TLDR_TOUR_RUN: WildfireRun = {
 };
 
 // ═══════════════════════════════════════════════════════════════════════════════
+// CORPUS EXPLAINER TOURS — Scope 23 Renderer 3 (BLACK_MAMBA_WAVE_2 / BP072)
+// Corpus-to-WildfireRun adapter: one tour per subsystem cluster.
+// Each tour visits the How-It-All-Works page subsystem cards.
+// ═══════════════════════════════════════════════════════════════════════════════
+
+export const CORPUS_FOUNDATIONS_RUN: WildfireRun = {
+  id: "corpus-foundations",
+  slug: "corpus-foundations",
+  name: "Platform Foundations",
+  description: "Ingest Pipeline, Pearl/Eblet/SSPS, Substrate DAG -- the three systems every contribution passes through",
+  category: "onboarding",
+  difficulty: "intermediate",
+  estimatedMinutes: 12,
+  icon: "🏛️",
+  totalNodes: 3,
+  goldenKeysRequired: 15,
+  nodes: [
+    {
+      id: "cf-1",
+      order: 1,
+      title: "Ingest Pipeline + Soccerball",
+      description: "How your contribution gets its permanent ID",
+      route: "/how-it-all-works?subsystem=ingest-pipeline",
+      duration: 30,
+      learningLink: "/how-it-all-works#ingest-pipeline",
+      goldenKeysReward: 5,
+    },
+    {
+      id: "cf-2",
+      order: 2,
+      title: "Pearl / Eblet / SSPS",
+      description: "The atom, the wrapper, and the certificate of authenticity",
+      route: "/how-it-all-works?subsystem=pearl-eblet-ssps",
+      duration: 30,
+      learningLink: "/how-it-all-works#pearl-eblet-ssps",
+      goldenKeysReward: 5,
+    },
+    {
+      id: "cf-3",
+      order: 3,
+      title: "Substrate DAG",
+      description: "The graph that remembers every relationship",
+      route: "/how-it-all-works?subsystem=substrate-dag",
+      duration: 30,
+      learningLink: "/how-it-all-works#substrate-dag",
+      goldenKeysReward: 5,
+    },
+  ],
+};
+
+export const CORPUS_ECONOMICS_RUN: WildfireRun = {
+  id: "corpus-economics",
+  slug: "corpus-economics",
+  name: "Platform Economics",
+  description: "Three currencies, 83.3% participation, Cost+20% -- the financial architecture of the cooperative",
+  category: "onboarding",
+  difficulty: "intermediate",
+  estimatedMinutes: 15,
+  icon: "💰",
+  totalNodes: 4,
+  goldenKeysRequired: 20,
+  nodes: [
+    {
+      id: "ce-1",
+      order: 1,
+      title: "Three-Currency System",
+      description: "Credits, Marks, Joules -- three gears, one cooperative engine",
+      route: "/how-it-all-works?subsystem=three-currency",
+      duration: 30,
+      learningLink: "/how-it-all-works#three-currency",
+      goldenKeysReward: 5,
+    },
+    {
+      id: "ce-2",
+      order: 2,
+      title: "83.3% + Cost+20%",
+      description: "The economic constitution of the cooperative",
+      route: "/how-it-all-works?subsystem=economics-participation",
+      duration: 30,
+      learningLink: "/how-it-all-works#economics-participation",
+      goldenKeysReward: 5,
+    },
+    {
+      id: "ce-3",
+      order: 3,
+      title: "Puddings",
+      description: "Cooperative curation -- how quality surfaces without gatekeeping",
+      route: "/how-it-all-works?subsystem=puddings",
+      duration: 30,
+      learningLink: "/how-it-all-works#puddings",
+      goldenKeysReward: 5,
+    },
+    {
+      id: "ce-4",
+      order: 4,
+      title: "Medallion System",
+      description: "Coasters to business cards to initiative stamps -- physical proof of participation",
+      route: "/how-it-all-works?subsystem=medallion-system",
+      duration: 30,
+      learningLink: "/how-it-all-works#medallion-system",
+      goldenKeysReward: 5,
+    },
+  ],
+};
+
+export const CORPUS_GOVERNANCE_RUN: WildfireRun = {
+  id: "corpus-governance",
+  slug: "corpus-governance",
+  name: "Cooperative Governance",
+  description: "Switzerland Policy, Defense Klaus, Contingency Operators -- how the cooperative protects itself and its members",
+  category: "governance",
+  difficulty: "advanced",
+  estimatedMinutes: 18,
+  icon: "⚖️",
+  totalNodes: 4,
+  goldenKeysRequired: 20,
+  nodes: [
+    {
+      id: "cg-1",
+      order: 1,
+      title: "Switzerland Policy",
+      description: "No Politics, No Religion -- and why the table stays neutral",
+      route: "/how-it-all-works?subsystem=switzerland-policy",
+      duration: 30,
+      learningLink: "/how-it-all-works#switzerland-policy",
+      goldenKeysReward: 5,
+    },
+    {
+      id: "cg-2",
+      order: 2,
+      title: "Defense Klaus",
+      description: "Institutional cooperative protection for members facing external threats",
+      route: "/how-it-all-works?subsystem=defense-klaus",
+      duration: 30,
+      learningLink: "/how-it-all-works#defense-klaus",
+      goldenKeysReward: 5,
+    },
+    {
+      id: "cg-3",
+      order: 3,
+      title: "Shirley Temple Badges",
+      description: "Affiliation badges as verifiable proof of participation",
+      route: "/how-it-all-works?subsystem=shirley-temple-badges",
+      duration: 30,
+      learningLink: "/how-it-all-works#shirley-temple-badges",
+      goldenKeysReward: 5,
+    },
+    {
+      id: "cg-4",
+      order: 4,
+      title: "Contingency Operators",
+      description: "Emergency governance tools and the Dragonriders who fly them",
+      route: "/how-it-all-works?subsystem=contingency-operators",
+      duration: 30,
+      learningLink: "/how-it-all-works#contingency-operators",
+      goldenKeysReward: 5,
+    },
+  ],
+};
+
+export const CORPUS_SUBSTRACE_RUN: WildfireRun = {
+  id: "corpus-substrace",
+  slug: "corpus-substrace",
+  name: "The Substrace Theorem",
+  description: "Mesh/Frontier, Novaculi/Yoke, and the Substrace Theorem -- why the cooperative is mathematically worth more than the sum of its parts",
+  category: "onboarding",
+  difficulty: "expert",
+  estimatedMinutes: 20,
+  icon: "🏔️",
+  totalNodes: 3,
+  goldenKeysRequired: 15,
+  nodes: [
+    {
+      id: "cs-1",
+      order: 1,
+      title: "Mesh / Frontier",
+      description: "Cross-node network effects: V(N) = N(N-1)/2 + 1",
+      route: "/how-it-all-works?subsystem=mesh-frontier",
+      duration: 30,
+      learningLink: "/how-it-all-works#mesh-frontier",
+      goldenKeysReward: 5,
+    },
+    {
+      id: "cs-2",
+      order: 2,
+      title: "Novaculi / Yoke + Chess Crew",
+      description: "The execution layer, the Yoke bridge, and the parallel operators",
+      route: "/how-it-all-works?subsystem=novaculi-yoke",
+      duration: 30,
+      learningLink: "/how-it-all-works#novaculi-yoke",
+      goldenKeysReward: 5,
+    },
+    {
+      id: "cs-3",
+      order: 3,
+      title: "The Substrace Theorem",
+      description: "V(cooperative) > sum(V(individual)) -- the mathematical proof",
+      route: "/proofs/",
+      duration: 30,
+      learningLink: "/how-it-all-works#substrace-theorem",
+      goldenKeysReward: 5,
+    },
+  ],
+};
+
+// ═══════════════════════════════════════════════════════════════════════════════
 // ALL RUNS EXPORT
 // ═══════════════════════════════════════════════════════════════════════════════
 
@@ -882,14 +1088,19 @@ export const ALL_WILDFIRE_RUNS: WildfireRun[] = [
   GOVERNANCE_RUN,
   // Creative
   CREATIVE_RUN,
+  // Corpus Explainer Tours (BP072 Scope 23 Renderer 3)
+  CORPUS_FOUNDATIONS_RUN,
+  CORPUS_ECONOMICS_RUN,
+  CORPUS_GOVERNANCE_RUN,
+  CORPUS_SUBSTRACE_RUN,
 ];
 
 export const RUNS_BY_CATEGORY = {
   'level-1': [GET_A_JOB_RUN, BUILD_A_BUSINESS_RUN, PLANT_SEEDS_RUN],
   business: [BUSINESS_EXISTING_RUN, BUSINESS_IDEA_RUN, BUSINESS_WORK_RUN],
   initiatives: [INITIATIVES_FOOD_RUN, INITIATIVES_HEALTH_RUN, INITIATIVES_FULL_RUN],
-  onboarding: [TLDR_TOUR_RUN, ONBOARDING_QUICK_RUN, ONBOARDING_DEEP_RUN],
-  governance: [GOVERNANCE_RUN],
+  onboarding: [TLDR_TOUR_RUN, ONBOARDING_QUICK_RUN, ONBOARDING_DEEP_RUN, CORPUS_FOUNDATIONS_RUN, CORPUS_ECONOMICS_RUN, CORPUS_SUBSTRACE_RUN],
+  governance: [GOVERNANCE_RUN, CORPUS_GOVERNANCE_RUN],
   creative: [CREATIVE_RUN],
 };
 

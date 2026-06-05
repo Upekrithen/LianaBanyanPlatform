@@ -85,9 +85,10 @@ The platform's history is best visualized as a **rope** along which **knots** ar
 
 **2026-05-25 — Patent Session BP056B**
 - Provisional application 20 filed (App #64/073,890)
-- Total: 20 provisional applications filed
-- Formal claims: ~2,700 across 20 provisionals
-- Prov 21 in progress — filing target 2026-07-10
+- Total: 21 provisional applications filed
+<!-- Historical: 20 provisionals at time of writing (2026-05-25 BP056B); updated BP073 2026-06-04 to reflect current filing: 21 provisionals -->
+- Formal claims: ~2,473 across 21 provisionals
+- Prov 21 filed (updated BP073 2026-06-04)
 
 **2026-05-11 — Patent Session BP036**
 - Provisional applications 18 + 19 filed

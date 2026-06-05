@@ -14,11 +14,12 @@ export type HeroProps = {
   body: string;
   primaryCTA?: CTA;
   secondaryCTA?: CTA;
+  joinCTA?: CTA;
   proofStrip?: ProofStripItem[];
   variant: "focus" | "app";
 };
 
-function renderCTA(cta: CTA, variant: "default" | "outline" = "default") {
+function renderCTA(cta: CTA, variant: "default" | "outline" | "secondary" = "default") {
   if (cta.href) {
     return (
       <Button asChild size="lg" variant={variant}>
@@ -40,6 +41,7 @@ export function Hero({
   body,
   primaryCTA,
   secondaryCTA,
+  joinCTA,
   proofStrip,
   variant,
 }: HeroProps) {
@@ -73,6 +75,12 @@ export function Hero({
           {primaryCTA ? renderCTA(primaryCTA) : null}
           {secondaryCTA ? renderCTA(secondaryCTA, primaryCTA ? "outline" : "default") : null}
         </div>
+
+        {joinCTA ? (
+          <div className={cn("mt-5 flex items-center", isFocus ? "justify-center" : "justify-start")}>
+            {renderCTA(joinCTA, "secondary")}
+          </div>
+        ) : null}
 
         {proofStrip && proofStrip.length > 0 ? (
           <ProofStrip

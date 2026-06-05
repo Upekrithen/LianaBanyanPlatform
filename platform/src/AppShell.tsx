@@ -18,9 +18,12 @@ import { PWAInstallPrompt } from "@/components/PWAInstallPrompt";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import BetaBanner from "@/components/BetaBanner";
 import { CrossPortalNav } from "@/components/CrossPortalNav";
+import { BanyanWordmark } from "@/components/BanyanWordmark";
 import { FeedbackTutorialOverlay } from "@/components/tour/FeedbackTutorialOverlay";
 import { MarksMilestonePopup } from "@/components/marks/MarksMilestonePopup";
 import { useMarksMilestone } from "@/hooks/useMarksMilestone";
+import { useRtlDirection } from "@/hooks/useRtlDirection";
+import { useLocaleRouting } from "@/hooks/useLocaleRouting";
 import { supabase } from "@/integrations/supabase/client";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -32,6 +35,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const isMobile = useIsMobile();
   const marks = useMarksMilestone();
   useDiscoveryTracker();
+  useLocaleRouting(); // Wave 15: path-prefix locale detection (/ar/, /he/, etc.)
 
   useEffect(() => {
     import("@/lib/analytics").then(({ trackPageView }) => {
@@ -67,6 +71,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     }
   }, [user, location.pathname]);
 
+  useRtlDirection();
+
   const isLanding = location.pathname === '/';
   const FOCUS_ROUTES = ['/membership', '/membership/confirm', '/ghost', '/explore', '/free-explore'];
   const isFocusRoute = FOCUS_ROUTES.some(r => location.pathname === r || location.pathname.startsWith(r + '/'));
@@ -76,6 +82,23 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     <DiscoveryProvider>
       <DiscoveryGateProvider>
         <SidebarProvider defaultOpen={false}>
+          {/* W16 AAA SC 2.4.1 — skip navigation links; visible on keyboard focus */}
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[9999] focus:bg-background focus:text-foreground focus:px-4 focus:py-2 focus:rounded focus:ring-2 focus:ring-primary focus:outline-none font-medium text-sm"
+          >
+            Skip to main content
+          </a>
+          {/* W16 AAA — aria-live polite region for dynamic content announcements.
+              Marks balance updates, vote confirmations, and queue depth changes
+              are announced here via useA11yAnnouncer hook. */}
+          <div
+            id="lb-sr-announcer"
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+            className="sr-only"
+          />
           <div className="min-h-screen flex w-full overflow-x-hidden">
             {showChrome && <AppSidebar />}
             <div className="flex-1 flex flex-col min-w-0">
@@ -84,6 +107,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               {showChrome && (
                 <div className="flex items-center gap-3 px-4 py-2 border-b bg-background/80 backdrop-blur-sm">
                   <SidebarTrigger className="shrink-0" />
+                  {/* BP074-W3: Liana Banyan wordmark + moon/sun theme toggle */}
+                  <BanyanWordmark />
                   <div className="flex-1" />
                   <GlobalSearch />
                   <CreditBalanceHeader />
@@ -94,7 +119,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 </div>
               )}
               <div className="flex flex-1 overflow-x-hidden">
-                <main className="flex-1 overflow-x-hidden flex flex-col">
+                <main id="main-content" className="flex-1 overflow-x-hidden flex flex-col" tabIndex={-1}>
                   <div className="flex-1">{children}</div>
                   <PlatformFooter />
                 </main>

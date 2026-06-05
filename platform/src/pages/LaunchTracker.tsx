@@ -16,7 +16,7 @@ interface InitiativeData {
 
 const INITIATIVE_META: Record<string, { name: string; number: number; route: string }> = {
   'hexisle':              { name: 'HexIsle', number: 1, route: '/hexisle' },
-  'lets-make-bread':      { name: "Let's Make Bread", number: 2, route: '/initiatives/bread' },
+  'lets-make-bread':      { name: "Let's Make Bread", number: 2, route: '/initiatives/lets-make-bread' },
   'jukebox':              { name: 'JukeBox', number: 3, route: '/initiatives/jukebox' },
   'lets-go-shopping':     { name: "Let's Go Shopping", number: 4, route: '/initiatives/lets-go-shopping' },
   'household-concierge':  { name: 'Household Concierge', number: 5, route: '/initiatives/household-concierge' },

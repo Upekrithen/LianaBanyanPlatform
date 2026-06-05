@@ -31,6 +31,8 @@ export interface EconomicPaper {
   tldrSource?: string;
   sixthGradeSource?: string;
   relatedPapers: string[];
+  /** Subsystem explainer IDs (from explainerCorpus.ts) that this paper underpins. */
+  subsystemRefs?: string[];
   tags: string[];
 }
 
@@ -118,7 +120,8 @@ export const SEVEN_ECONOMIC_LAWS = NINE_ECONOMIC_LAWS.slice(0, 7);
 export const FIVE_ECONOMIC_LAWS = NINE_ECONOMIC_LAWS.slice(0, 5);
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// ALL 16 ECONOMIC PAPERS
+// ALL 25 ECONOMIC PAPERS
+// (9 Laws + 7 System Design + 5 Application + 4 Civic Engagement + 1 Interdependence)
 // ═══════════════════════════════════════════════════════════════════════════════
 
 export const ECONOMIC_PAPERS: EconomicPaper[] = [
@@ -146,6 +149,7 @@ export const ECONOMIC_PAPERS: EconomicPaper[] = [
     tldrSource: 'EMPEROR_VERIFICATION_PACKAGE_V3/Academic_Papers/three-gear-currency-tldr.md',
     sixthGradeSource: 'BISHOP_DROPZONE/PAPERS_SIMPLE/THREE_GEAR_CURRENCY_6TH_GRADE.md',
     relatedPapers: ['hivi', 'one-way-valve', 'joules-explained'],
+    subsystemRefs: ['three-currency', 'economics-participation'],
     tags: ['currency', 'global', 'fairness', 'forex'],
   },
   {
@@ -169,6 +173,7 @@ export const ECONOMIC_PAPERS: EconomicPaper[] = [
     tldrSource: 'BISHOP_DROPZONE/PAPERS_CONVERSATIONAL/HIVI_COLLEGE_FRESHMAN.md',
     sixthGradeSource: 'BISHOP_DROPZONE/PAPERS_SIMPLE/HIVI_6TH_GRADE.md',
     relatedPapers: ['three-gear-currency', 'one-way-valve', 'transaction-anchored'],
+    subsystemRefs: ['three-currency', 'economics-participation'],
     tags: ['valuation', 'history', 'deterministic', 'ratchet'],
   },
   {
@@ -192,6 +197,7 @@ export const ECONOMIC_PAPERS: EconomicPaper[] = [
     tldrSource: 'BISHOP_DROPZONE/PAPERS_CONVERSATIONAL/ANTI_EXTRACTIVE_DERIVATIVE_COLLEGE_FRESHMAN.md',
     sixthGradeSource: 'BISHOP_DROPZONE/PAPERS_SIMPLE/ANTI_EXTRACTIVE_DERIVATIVE_6TH_GRADE.md',
     relatedPapers: ['boaz-principle', 'service-value-predictability', 'pay-your-rent'],
+    subsystemRefs: ['economics-participation', 'puddings', 'medallion-system'],
     tags: ['margin', 'quality', 'incentives', 'economics'],
   },
   {
@@ -215,6 +221,7 @@ export const ECONOMIC_PAPERS: EconomicPaper[] = [
     tldrSource: 'BISHOP_DROPZONE/PAPERS_CONVERSATIONAL/HIVI_COLLEGE_FRESHMAN.md',
     sixthGradeSource: 'BISHOP_DROPZONE/PAPERS_SIMPLE/HIVI_6TH_GRADE.md',
     relatedPapers: ['hivi', 'three-gear-currency', 'transaction-anchored'],
+    subsystemRefs: ['three-currency', 'ingest-pipeline', 'substrate-dag'],
     tags: ['decoupling', 'stability', 'isolation', 'forex'],
   },
   {
@@ -238,6 +245,7 @@ export const ECONOMIC_PAPERS: EconomicPaper[] = [
     tldrSource: 'BISHOP_DROPZONE/PAPERS_CONVERSATIONAL/BOAZ_PRINCIPLE_COLLEGE_FRESHMAN.md',
     sixthGradeSource: 'BISHOP_DROPZONE/PAPERS_SIMPLE/BOAZ_PRINCIPLE_6TH_GRADE.md',
     relatedPapers: ['anti-extractive', '300-framework', 'ghost-credits', 'boaz-generosity'],
+    subsystemRefs: ['economics-participation', 'puddings', 'medallion-system'],
     tags: ['generosity', 'gleaning', 'inclusion', 'structural'],
   },
   {
@@ -260,6 +268,7 @@ export const ECONOMIC_PAPERS: EconomicPaper[] = [
     academicSource: 'Cephas/cephas-hugo/content/academic/boaz-generosity-potential.md',
     tldrSource: 'Cephas/cephas-hugo/content/academic/boaz-principle-tldr.md',
     relatedPapers: ['boaz-principle', 'anti-extractive', 'inception-principle'],
+    subsystemRefs: ['economics-participation', 'heoho-bounty-stewards'],
     tags: ['generosity', 'potential', 'kiva', 'microfinance', 'enabling'],
   },
   {
@@ -273,14 +282,15 @@ export const ECONOMIC_PAPERS: EconomicPaper[] = [
     summary: 'Helicopters would have flown in 500 BC — the aerodynamics existed then as now. We simply lacked the knowledge and technology to see how. Innovation isn\'t creating new laws of nature; it\'s finding new ways to see existing ones.',
     keyInsight: 'The laws of physics God set in motion applied in any B.C. time as they do now. Innovation is perspective, not creation.',
     problemStatement: 'Patent law and innovation discourse often confuse "new" with "novel combination." Critics dismiss innovations as "obvious" when they\'re actually profound reframings.',
-    solution: 'Recognize that all innovation is inception — seeing existing principles in new ways. Hacking in its true sense: finding new perspectives on existing systems. This is why 1,244 innovations are legitimate IP, not "obvious" combinations.',
+    solution: 'Recognize that all innovation is inception — seeing existing principles in new ways. Hacking in its true sense: finding new perspectives on existing systems. This is why 2,270 innovations are legitimate IP, not "obvious" combinations.',
     metrics: [
-      { label: 'Innovations', value: '1,244', unit: '' },
+      { label: 'Innovations', value: '2,270', unit: '' },
       { label: 'Nature', value: 'Perspective', unit: '' },
       { label: 'Legitimacy', value: 'Novel Combination', unit: '' },
     ],
     academicSource: 'Cephas/cephas-hugo/content/academic/inception-principle.md',
     relatedPapers: ['boaz-generosity', 'ip-load-balancing', 'hivi'],
+    subsystemRefs: ['ingest-pipeline', 'pearl-eblet-ssps', 'substrate-dag'],
     tags: ['innovation', 'perspective', 'hacking', 'IP', 'philosophy'],
   },
   {
@@ -302,6 +312,7 @@ export const ECONOMIC_PAPERS: EconomicPaper[] = [
     ],
     academicSource: 'Cephas/cephas-hugo/content/academic/simultaneous-pricing.md',
     relatedPapers: ['ghost-credits', 'joules-explained', 'cold-start-theseus'],
+    subsystemRefs: ['medallion-system', 'three-currency', 'economics-participation'],
     tags: ['pricing', 'economics', 'paradox', 'forever-stamp', 'strategy'],
   },
   {
@@ -323,6 +334,7 @@ export const ECONOMIC_PAPERS: EconomicPaper[] = [
     ],
     academicSource: 'Cephas/cephas-hugo/content/academic/cold-start-theseus.md',
     relatedPapers: ['simultaneous-pricing', 'ghost-credits', '300-framework'],
+    subsystemRefs: ['medallion-system', 'battery-dispatch', 'mesh-frontier'],
     tags: ['cold-start', 'risk', 'prediction', 'decentralized', 'nodes', 'theseus'],
   },
 
@@ -348,6 +360,7 @@ export const ECONOMIC_PAPERS: EconomicPaper[] = [
     academicSource: 'KNIGHT_DROPZONE/ACADEMIC_PAPER_GHOST_CREDITS.md',
     tldrSource: 'EMPEROR_VERIFICATION_PACKAGE_V3/Academic_Papers/ghost-credits-tldr.md',
     relatedPapers: ['boaz-principle', 'service-value-predictability', 'joules-explained'],
+    subsystemRefs: ['puddings', 'three-currency', 'cue-cards'],
     tags: ['demand', 'validation', 'crowdfunding', 'testing'],
   },
   {
@@ -369,6 +382,7 @@ export const ECONOMIC_PAPERS: EconomicPaper[] = [
     academicSource: 'KNIGHT_DROPZONE/ACADEMIC_PAPER_300_FRAMEWORK.md',
     tldrSource: 'EMPEROR_VERIFICATION_PACKAGE_V3/Academic_Papers/300-framework-tldr.md',
     relatedPapers: ['boaz-principle', 'harper-certification', 'star-chamber'],
+    subsystemRefs: ['heoho-bounty-stewards', 'switzerland-policy', 'defense-klaus'],
     tags: ['organization', 'scaling', 'governance', 'dunbar'],
   },
   {
@@ -389,6 +403,7 @@ export const ECONOMIC_PAPERS: EconomicPaper[] = [
     ],
     academicSource: 'LAUNCH_DOCUMENTS_MASTER/articles/PAPER_TRANSACTION_ANCHORED_ECONOMICS.md',
     relatedPapers: ['hivi', 'proof-of-transaction', 'one-way-valve'],
+    subsystemRefs: ['substrate-dag', 'ingest-pipeline', 'pearl-eblet-ssps'],
     tags: ['transactions', 'anchoring', 'history', 'anti-speculation'],
   },
   {
@@ -409,6 +424,7 @@ export const ECONOMIC_PAPERS: EconomicPaper[] = [
     ],
     academicSource: 'LAUNCH_DOCUMENTS_MASTER/articles/PAPER_PROOF_OF_TRANSACTION.md',
     relatedPapers: ['transaction-anchored', 'hivi', 'star-chamber'],
+    subsystemRefs: ['substrate-dag', 'ingest-pipeline', 'pearl-eblet-ssps'],
     tags: ['blockchain', 'provenance', 'verification', 'testnet'],
   },
   {
@@ -429,6 +445,7 @@ export const ECONOMIC_PAPERS: EconomicPaper[] = [
     ],
     academicSource: 'LAUNCH_DOCUMENTS_MASTER/articles/PAPER_AUTOMATED_TRUST_HARPER_CERTIFICATION.md',
     relatedPapers: ['star-chamber', '300-framework', 'boaz-principle'],
+    subsystemRefs: ['shirley-temple-badges', 'puddings', 'furnace'],
     tags: ['quality', 'certification', 'trust', 'automation'],
   },
   {
@@ -451,6 +468,7 @@ export const ECONOMIC_PAPERS: EconomicPaper[] = [
     tldrSource: 'BISHOP_DROPZONE/PAPERS_CONVERSATIONAL/STAR_CHAMBER_COLLEGE_FRESHMAN.md',
     sixthGradeSource: 'BISHOP_DROPZONE/PAPERS_SIMPLE/STAR_CHAMBER_6TH_GRADE.md',
     relatedPapers: ['harper-certification', 'proof-of-transaction', '300-framework'],
+    subsystemRefs: ['switzerland-policy', 'contingency-operators', 'furnace'],
     tags: ['verification', 'consensus', 'AI', 'multi-agent'],
   },
 
@@ -475,6 +493,7 @@ export const ECONOMIC_PAPERS: EconomicPaper[] = [
     ],
     academicSource: 'LAUNCH_DOCUMENTS_MASTER/articles/ARTICLE_JOULES_EXPLAINED_ARCADE_TOKEN_MODEL.md',
     relatedPapers: ['three-gear-currency', 'hivi', 'pay-your-rent'],
+    subsystemRefs: ['three-currency', 'economics-participation', 'medallion-system'],
     tags: ['joules', 'currency', 'arcade', 'forever-stamp'],
   },
   {
@@ -495,6 +514,7 @@ export const ECONOMIC_PAPERS: EconomicPaper[] = [
     ],
     academicSource: 'Cephas/cephas-hugo/content/academic/ip-load-balancing-academic.md',
     relatedPapers: ['boaz-principle', '300-framework', 'anti-extractive'],
+    subsystemRefs: ['ingest-pipeline', 'pearl-eblet-ssps', 'substrate-dag'],
     tags: ['patents', 'IP', 'distribution', 'participation'],
   },
   {
@@ -517,6 +537,7 @@ export const ECONOMIC_PAPERS: EconomicPaper[] = [
     tldrSource: 'BISHOP_DROPZONE/PAPERS_CONVERSATIONAL/ROI_PREDICTABILITY_COLLEGE_FRESHMAN.md',
     sixthGradeSource: 'BISHOP_DROPZONE/PAPERS_SIMPLE/ROI_PREDICTABILITY_6TH_GRADE.md',
     relatedPapers: ['anti-extractive', 'hivi', 'pay-your-rent'],
+    subsystemRefs: ['economics-participation', 'medallion-system', 'battery-dispatch'],
     tags: ['service-value', 'predictability', 'margin', 'determinism'],
   },
   {
@@ -537,6 +558,7 @@ export const ECONOMIC_PAPERS: EconomicPaper[] = [
     ],
     academicSource: 'LAUNCH_DOCUMENTS_MASTER/articles/PAPER_HOW_TO_PAY_YOUR_RENT_WITH_LIANA_BANYAN.md',
     relatedPapers: ['anti-extractive', 'joules-explained', 'service-value-predictability'],
+    subsystemRefs: ['economics-participation', 'heoho-bounty-stewards', 'medallion-system'],
     tags: ['income', 'business', 'rent', 'practical'],
   },
   {
@@ -557,6 +579,7 @@ export const ECONOMIC_PAPERS: EconomicPaper[] = [
     ],
     academicSource: 'LAUNCH_DOCUMENTS_MASTER/articles/PAPER_THE_BAND_STRATEGY_MAXIMUM_PERSONAL_SUCCESS.md',
     relatedPapers: ['300-framework', 'pay-your-rent', 'boaz-principle'],
+    subsystemRefs: ['heoho-bounty-stewards', 'novaculi-yoke', 'mesh-frontier'],
     tags: ['collaboration', 'strategy', 'success', 'teamwork'],
   },
 
@@ -584,6 +607,7 @@ export const ECONOMIC_PAPERS: EconomicPaper[] = [
     tldrSource: 'academic-papers/PAPER_ATTENTION_AS_FUNDING_TLDR.md',
     sixthGradeSource: 'academic-papers/PAPER_ATTENTION_AS_FUNDING_6TH_GRADE.md',
     relatedPapers: ['grassroots-intelligence', 'muffled-rule', 'marks-democracy'],
+    subsystemRefs: ['puddings', 'furnace', 'substrate-dag'],
     tags: ['attention', 'funding', 'data', 'civic', 'causes', 'participation'],
   },
   {
@@ -606,6 +630,7 @@ export const ECONOMIC_PAPERS: EconomicPaper[] = [
     tldrSource: 'academic-papers/PAPER_GRASSROOTS_INTELLIGENCE_TLDR.md',
     sixthGradeSource: 'academic-papers/PAPER_GRASSROOTS_INTELLIGENCE_6TH_GRADE.md',
     relatedPapers: ['attention-as-funding', 'marks-democracy', 'muffled-rule'],
+    subsystemRefs: ['puddings', 'substrate-dag', 'furnace'],
     tags: ['intelligence', 'demographics', 'privacy', 'civic', 'petitions', 'effort'],
   },
   {
@@ -628,6 +653,7 @@ export const ECONOMIC_PAPERS: EconomicPaper[] = [
     tldrSource: 'academic-papers/PAPER_MUFFLED_RULE_CIVILITY_TLDR.md',
     sixthGradeSource: 'academic-papers/PAPER_MUFFLED_RULE_CIVILITY_6TH_GRADE.md',
     relatedPapers: ['marks-democracy', 'grassroots-intelligence', 'attention-as-funding'],
+    subsystemRefs: ['furnace', 'puddings', 'battery-dispatch'],
     tags: ['civility', 'moderation', 'architecture', 'discourse', 'coverage-minutes'],
   },
   {
@@ -650,7 +676,36 @@ export const ECONOMIC_PAPERS: EconomicPaper[] = [
     tldrSource: 'academic-papers/PAPER_MARKS_DEMOCRATIC_PARTICIPATION_TLDR.md',
     sixthGradeSource: 'academic-papers/PAPER_MARKS_DEMOCRATIC_PARTICIPATION_6TH_GRADE.md',
     relatedPapers: ['muffled-rule', 'grassroots-intelligence', 'attention-as-funding'],
+    subsystemRefs: ['puddings', 'furnace', 'substrate-dag', 'novaculi-yoke'],
     tags: ['democracy', 'marks', 'voting', 'effort', 'civic', 'petitions'],
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // STRUCTURAL SYNTHESIS PAPER (1)
+  // "The Margin Economics of Interdependence" -- named in W27 brief, bound here
+  // ─────────────────────────────────────────────────────────────────────────────
+  {
+    id: 'margin-economics-interdependence',
+    title: 'The Margin Economics of Interdependence',
+    subtitle: 'How Locked Margins Create Structural Solidarity',
+    category: 'system',
+    icon: '🔗',
+    color: '#7c3aed',
+    summary: 'When every actor on a platform is subject to the same Cost+20% floor and the same 83.3% distribution rule, the platform becomes structurally interdependent: no member can succeed by extracting from others, because the math prevents it. Interdependence is not a value -- it is an equation. The same formula that protects 2,270 innovations guarantees that the 228 Crown Jewels and 21 provisionals share a common economic floor.',
+    keyInsight: 'A platform where extraction is mathematically impossible is a platform where everyone\'s success reinforces everyone else\'s.',
+    problemStatement: 'Standard platform economics create adversarial relationships: platform vs. creator, creator vs. creator, creator vs. consumer. Each actor maximizes at the expense of others. The result is a race to the bottom -- extract more, pay less, capture more margin -- until the platform collapses or the creators leave.',
+    solution: 'Lock the margin at Cost+20%. Distribute 83.3% to creators. Apply both rules to every transaction without exception. When the math is uniform, the incentives align: 2,270 innovations on the same infrastructure all benefit from the same network effects. The Substrace Theorem proves the cooperative value exceeds the sum of individual values by exactly the authenticated-edge premium -- and every new member adds edges, not just nodes. The cooperative is structurally forced to grow together because the alternative (extraction) is structurally forbidden.',
+    metrics: [
+      { label: 'Creator Share', value: 83.3, unit: '%' },
+      { label: 'Margin Floor', value: 'Cost+20%', unit: 'always' },
+      { label: 'Platform Share', value: 16.67, unit: '%' },
+      { label: 'Crown Jewels', value: 228, unit: '' },
+      { label: 'Provisionals', value: 21, unit: '' },
+    ],
+    academicSource: 'academic-papers/PAPER_MARGIN_ECONOMICS_INTERDEPENDENCE.md',
+    relatedPapers: ['anti-extractive', 'hivi', 'boaz-principle', 'simultaneous-pricing', 'service-value-predictability'],
+    subsystemRefs: ['economics-participation', 'three-currency', 'mesh-frontier', 'substrace-theorem', 'medallion-system'],
+    tags: ['economics', 'interdependence', 'margin', 'cooperation', 'structural', 'math'],
   },
 ];
 

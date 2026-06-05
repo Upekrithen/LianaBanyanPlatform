@@ -3,7 +3,7 @@
  * =============================================================
  * Lives at lb-test-frame.lianabanyan.com (or librarian.the2ndsecond.com/test-frame)
  *
- * One-line value prop: "Verify the Cathedral Effect on your own AI"
+ * One-line value prop: "Verify the Caithedral Effect on your own AI"
  * Downloads: Mac / Windows / Linux / Chrome Extension
  */
 
@@ -22,7 +22,7 @@ const FAQ = [
   { q: "Does this cost anything?", a: "The extension and Casual mode are free. Developer mode uses your own API keys (your API costs apply). Membership is $5/year and unlocks the full Liana Banyan platform." },
   { q: "Will this access my AI conversations?", a: "No. LB Test Frame only reads the question you're about to send and offers to wrap it with LB context. Your AI chat history is never read, stored, or transmitted to LB." },
   { q: "Which AIs does it support?", a: "Claude (Anthropic), ChatGPT (OpenAI), Gemini (Google), Perplexity, and Copilot (Microsoft). The desktop version also supports API-key integration for the same vendors plus Mistral." },
-  { q: "What is the Cathedral Effect?", a: "It's the measured improvement in AI accuracy when Liana Banyan's knowledge substrate (the 'cathedral') is pre-injected into AI sessions. Our research found a mean +86 percentage point lift. The Test Frame lets you verify this on your own AI session." },
+  { q: "What is the Caithedral Effect?", a: "It's the measured improvement in AI accuracy when Liana Banyan's knowledge substrate (the 'cathedral') is pre-injected into AI sessions. Our research found a mean +86 percentage point lift. The Test Frame lets you verify this on your own AI session." },
   { q: "What happens to my verification results?", a: "You choose: private (stays on your machine), anonymous (aggregated to the community dashboard without any identifier), or public (with your name). Default is private." },
   { q: "What is substrate-savings telemetry?", a: "K506 adds automatic tracking of how much the LB substrate reduces your AI costs. Each query you run measures estimated token counts with- and without-substrate. You always see your own savings in the Test Frame popup — sharing with LB is opt-in only." },
   { q: "Can I delete my telemetry data?", a: "Yes, always. Go to Settings → Privacy & Telemetry → Delete all my data. LB complies within 24 hours and confirms in writing. No dark patterns, no retention games." },
@@ -66,7 +66,7 @@ export default function TestFrameLanding() {
           LB Test Frame
         </h1>
         <p className="text-xl text-blue-300 font-medium mb-4">
-          Verify the Cathedral Effect on your own AI
+          Verify the Caithedral Effect on your own AI
         </p>
         <p className="text-slate-400 text-lg max-w-2xl mx-auto mb-12 leading-relaxed">
           Works with Claude, ChatGPT, Gemini, Perplexity, and Copilot —
@@ -113,7 +113,7 @@ export default function TestFrameLanding() {
           <h2 className="text-2xl font-bold mb-6">One installer, three modes</h2>
           <div className="grid md:grid-cols-3 gap-4">
             {[
-              { icon: "🌿", name: "Casual", price: "Free", desc: "Verify the Cathedral Effect and use LB-amplified browsing. No API keys, no setup." },
+              { icon: "🌿", name: "Casual", price: "Free", desc: "Verify the Caithedral Effect and use LB-amplified browsing. No API keys, no setup." },
               { icon: "⚡", name: "Developer", price: "Your API costs", desc: "Full benchmark reproducibility harness. API key management. R13/R14 results export as JSONL." },
               { icon: "🏛", name: "Member", price: "$5/year", desc: "The whole Liana Banyan platform unlocks — Helm, Marks, Trust Match, Six Sparks, Furnace badges." },
             ].map((p) => (
@@ -198,7 +198,7 @@ export default function TestFrameLanding() {
               <a href="https://librarian.the2ndsecond.com/community-empirical" className="text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer">
                 librarian.the2ndsecond.com/community-empirical
               </a>.
-              Population-scale empirical basis for the Cathedral Effect public-policy claim — as of K506.
+              Population-scale empirical basis for the Caithedral Effect public-policy claim — as of K506.
             </div>
           </div>
         </div>

@@ -1,7 +1,6 @@
 import { lazy } from "react";
 import { Route, Navigate } from "react-router-dom";
 import { ExplorerRoute } from "@/components/ProtectedRoute";
-import { useAuth } from "@/contexts/AuthContext";
 import { LazyPage } from "./LazyPage";
 import Index from "@/pages/Index";
 
@@ -72,20 +71,12 @@ const FrontierBorrowPage = lazy(() => import("@/pages/FrontierBorrowPage"));
 const OverlayGalleryPage = lazy(() => import("@/pages/OverlayGalleryPage"));
 
 function HomepageGateway() {
-  const { user, loading } = useAuth();
-  // frame.lianabanyan.com — route / directly to the demo page
+  // frame.lianabanyan.com -- route / directly to the demo page
   if (typeof window !== "undefined" && window.location.hostname === "frame.lianabanyan.com") {
     return <Navigate to="/demo" replace />;
   }
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="animate-pulse text-foreground">Loading...</div>
-      </div>
-    );
-  }
-  if (!user) return <Navigate to="/welcome" replace />;
-  return <Index />;
+  // Canonical root landing (BP074-W3 Founder ratify): Deck Card / WelcomeV2 for all visitors
+  return <Navigate to="/welcome" replace />;
 }
 
 export const publicRoutes = (

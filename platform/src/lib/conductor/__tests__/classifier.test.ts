@@ -78,7 +78,7 @@ const TEST_CASES: TestCase[] = [
 
   // --- CREATIVE (10 clear cases) ---
   {
-    query: "Write a short poem about the Cathedral Effect and model routing",
+    query: "Write a short poem about the Caithedral Effect and model routing",
     expectedClass: "creative",
     description: "Creative: poem",
   },
@@ -98,7 +98,7 @@ const TEST_CASES: TestCase[] = [
     description: "Creative: story opening",
   },
   {
-    query: "Write a blog post about how the Cathedral Effect equalizes AI model performance",
+    query: "Write a blog post about how the Caithedral Effect equalizes AI model performance",
     expectedClass: "creative",
     description: "Creative: blog post",
   },
@@ -172,7 +172,7 @@ const TEST_CASES: TestCase[] = [
 
   // --- RETRIEVAL ONLY (12 clear cases) ---
   {
-    query: "What is the Cathedral Effect?",
+    query: "What is the Caithedral Effect?",
     expectedClass: "retrieval_only",
     description: "Retrieval: what-is question",
   },
@@ -197,7 +197,7 @@ const TEST_CASES: TestCase[] = [
     description: "Retrieval: fee question",
   },
   {
-    query: "Cathedral Effect HOT% rate",
+    query: "Caithedral Effect HOT% rate",
     expectedClass: "retrieval_only",
     description: "Retrieval: very short factual lookup",
   },
@@ -234,7 +234,7 @@ const TEST_CASES: TestCase[] = [
 
   // --- REASONING REQUIRED (5 clear cases) ---
   {
-    query: "Why does the Cathedral Effect equalize AI model performance across vendors?",
+    query: "Why does the Caithedral Effect equalize AI model performance across vendors?",
     expectedClass: "reasoning_required",
     description: "Reasoning: why question with explanation needed",
   },

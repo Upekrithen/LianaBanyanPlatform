@@ -95,14 +95,14 @@ export const PortalPageLayout: React.FC<PortalPageLayoutProps> = ({
       className={`min-h-screen bg-background text-foreground ${className}`}
     >
       <div className={`mx-auto px-4 sm:px-6 py-8 sm:py-12 ${maxWidthMap[maxWidth]}`}>
-        {/* Back button */}
+        {/* Back button — min-h-[44px] ensures AAA SC 2.5.5 touch target */}
         {backButton && (
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-6 group"
-            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+            aria-label="Go back to previous page"
+            className="flex items-center gap-2 min-h-[44px] min-w-[44px] px-2 -ml-2 text-muted-foreground hover:text-foreground transition-colors mb-6 group rounded bg-transparent border-0 cursor-pointer"
           >
-            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
+            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" aria-hidden="true" />
             <span className="text-sm font-medium">Back</span>
           </button>
         )}

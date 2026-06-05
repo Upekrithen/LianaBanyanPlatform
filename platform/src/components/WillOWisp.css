@@ -241,6 +241,36 @@
 .wisp-timer { right: 20px; }
 */
 
+/* W16 AAA: Reduce motion for wisp animations */
+@media (prefers-reduced-motion: reduce) {
+  .wisp-light {
+    animation: none;
+  }
+  .wisp-emoji {
+    animation: none;
+  }
+  .wisp-glow {
+    animation: none;
+  }
+  .wisp-mask ellipse {
+    transition: none;
+  }
+  .wisp-tooltip {
+    transition: none;
+  }
+  .wisp-progress-bar {
+    transition: none;
+  }
+  .wisp-exit,
+  .wisp-next {
+    transition: none;
+  }
+  .wisp-next:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}
+
 /* Mobile adjustments */
 @media (max-width: 480px) {
   .wisp-tooltip {

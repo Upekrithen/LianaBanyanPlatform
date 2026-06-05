@@ -56,7 +56,7 @@ const CANON = {
 
   /** The empirical anchor (drop-in for hostile/skeptical readers) (BP015 lock-in) */
   empirical_anchor:
-    "The Cathedral Effect's 51%→84% HOT lift isn't magic — it's the structural delta between " +
+    "The Caithedral Effect's 51%→84% HOT lift isn't magic — it's the structural delta between " +
     "(a) raw-electricity-loose-components and (b) raw-electricity-through-properly-ground-and-interlocked-gears. " +
     "Same models, same vendors, same compute cost. Different gears.",
 
@@ -76,7 +76,7 @@ const CANON = {
 const TITLE_CANDIDATES = [
   "What Everyone Else Is Doing — and What It Costs",
   "The Floor Is Pre-Cathedral. Here's the Ceiling.",
-  "Same Electricity, Different Gears: The Cathedral Effect Explained",
+  "Same Electricity, Different Gears: The Caithedral Effect Explained",
   "Go Ask Any AI a Hard Question. Then Come Back.",
 ] as const;
 
@@ -178,7 +178,7 @@ export default function SubstackHookPage() {
               [Article body — Bishop scaffold / Founder prose-pass at fire-time]
             </p>
             <p className="text-sm text-muted-foreground leading-relaxed italic">
-              Section: How the Cathedral Effect works mechanically.
+              Section: How the Caithedral Effect works mechanically.
               The substrate-shape-of-gears analogy developed from electrical to mechanical to AI.
               Why "good prompts + RAG + fine-tuning" are the wrong levers.
               The structural delta explained for a skeptical technical reader.
@@ -212,7 +212,7 @@ export default function SubstackHookPage() {
             <p className="text-sm text-muted-foreground leading-relaxed italic">
               Section: Self-verifiable without trust. The five-step reader-runnable comparison.
               "1. Pick any AI. 2. Ask a hard institutional-knowledge question. 3. Note the HOT rate.
-              4. Compare to the Cathedral Effect receipts at lianabanyan.com/cephas/under-the-hood.
+              4. Compare to the Caithedral Effect receipts at lianabanyan.com/cephas/under-the-hood.
               5. Draw your own conclusion." Why this is structurally distinct from a marketing claim.
             </p>
           </CardContent>

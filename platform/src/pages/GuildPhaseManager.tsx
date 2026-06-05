@@ -46,7 +46,10 @@ import {
 } from "@/lib/discourse/guildTribePhases";
 import { PortalPageLayout } from '@/components/PortalPageLayout';
 
-// ── Mock Data ──────────────────────────────────────────────────────────────
+// ── Stub Data (BP072-W9-C5, until Supabase integration) ──────────────────
+// TODO: Replace MOCK_GUILD and MOCK_TRIBES with real Supabase queries.
+// Expected DB tables: guilds(id, name, description, status, leader_id, ...) and
+// tribes(id, guild_id, name, member_ids, ...).
 
 const MOCK_GUILD: Guild = {
   id: "guild-001",

@@ -23,7 +23,7 @@ I've found a way. Simultaneous market penetration AND price skimming — we pre-
 - Three-Gear Currency System (Credits, Marks, Joules) — mathematical solvency proofs, not promises
 - Position Funding model — democratic project financing without equity dilution
 - Tab System — graduated contribution based on success, not debt
-- 2,270 innovations with ~2,506 formal claims across 17 provisional applications
+- 2,270 innovations with ~2,473 formal claims across 21 provisional applications
 
 **The manufacturing backbone exists:**
 
@@ -53,9 +53,9 @@ Canada just canceled 40,000 startup visas. We're launching a "Rescue Fleet" — 
 
 **What I'm asking:**
 
-I'm looking for a CEO. Someone who understands startups but sees beyond extraction economics. Someone who can take what I've built and scale it without breaking what makes it work.
+I am nominating you for the CEO seat. You understand startups but you also see beyond extraction economics. You could take what I've built and scale it without breaking what makes it work.
 
-The cascade is: CEO → Industry Chancellor → Board Member → Advisory. I'm offering the top of that ladder.
+The cascade is: CEO - Industry Chancellor - Board Member - Advisory. I'm offering you the top of that ladder as a nomination - one person, one seat, one conversation.
 
 **Who I am:**
 

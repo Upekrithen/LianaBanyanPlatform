@@ -21,6 +21,9 @@ import {
   UtensilsCrossed, ShoppingCart, ShoppingBag, Pill, Shield, Zap, Snowflake,
 } from "lucide-react";
 import { PortalPageLayout } from '@/components/PortalPageLayout';
+import { InitiativeWalkthrough } from '@/components/initiatives/InitiativeWalkthrough';
+import { InitiativeCueCard } from '@/components/initiatives/InitiativeCueCard';
+import { getWalkthrough, getCueCard } from '@/data/initiativeWalkthroughs';
 
 interface InitiativeConfig {
   slug: string;
@@ -53,11 +56,11 @@ const INITIATIVE_CONFIGS: Record<string, InitiativeConfig> = {
   },
   vsl: {
     slug: "vsl",
-    title: "VSL — Voucher Short Loans",
+    title: "VSL (Vouch Short Loans)",
     icon: Banknote,
     color: "from-emerald-500/5 to-green-500/10 border-emerald-500/20",
     features: [
-      { title: "Voucher Short Loans", items: ["Peer-to-peer lending circles using voucher credits", "Three-gear currency integration", "Transparent terms — no hidden fees", "Community accountability"] },
+      { title: "Community Trust Coordination", items: ["Members vouch for each other's trustworthiness", "No credit scores or collateral requirements", "Transparent coordination -- not a financial service", "Community accountability and trust circles"] },
       { title: "How It Works", items: ["Join a lending circle (5-20 members)", "Contribute monthly to shared pool", "Take turns borrowing from the pool", "Non-extractive terms — community first"] },
     ],
   },
@@ -278,6 +281,9 @@ export default function InitiativePage() {
   const goalAmount = Number(initiative?.goal_amount || 0);
   const progressPercent = goalAmount > 0 ? (totalRaised / goalAmount) * 100 : 0;
 
+  const walkthrough = getWalkthrough(slug ?? "");
+  const cueCard = getCueCard(slug ?? "");
+
   return (
     <PortalPageLayout maxWidth="xl" xrayId="initiative-page" variant="stage"><div className="space-y-6">
       {/* Back to Initiatives button */}
@@ -299,55 +305,95 @@ export default function InitiativePage() {
         </div>
       </div>
 
-      <Card className={`border bg-gradient-to-br ${config.color}`}>
-        <CardHeader>
-          <CardTitle>About This Initiative</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <p className="text-sm text-muted-foreground">{initiative?.description}</p>
-          <div className="grid md:grid-cols-2 gap-6">
-            {config.features.map((feature, i) => (
-              <div key={i} className="space-y-2">
-                <h3 className="font-semibold">{feature.title}</h3>
-                <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
-                  {feature.items.map((item, j) => <li key={j}>{item}</li>)}
-                </ul>
+      {/* Tabbed view: About / Walkthrough / Cue Card */}
+      <Tabs defaultValue="about">
+        <TabsList>
+          <TabsTrigger value="about">About</TabsTrigger>
+          {walkthrough && <TabsTrigger value="walkthrough">Member Walkthrough</TabsTrigger>}
+          {cueCard && <TabsTrigger value="cue-card">Cue Card</TabsTrigger>}
+        </TabsList>
+
+        <TabsContent value="about" className="space-y-4 mt-4">
+          <Card className={`border bg-gradient-to-br ${config.color}`}>
+            <CardHeader>
+              <CardTitle>About This Initiative</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-muted-foreground">{initiative?.description}</p>
+              <div className="grid md:grid-cols-2 gap-6">
+                {config.features.map((feature, i) => (
+                  <div key={i} className="space-y-2">
+                    <h3 className="font-semibold">{feature.title}</h3>
+                    <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+                      {feature.items.map((item, j) => <li key={j}>{item}</li>)}
+                    </ul>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+            </CardContent>
+          </Card>
 
-      {goalAmount > 0 && (
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex justify-between text-sm mb-2">
-              <span className="font-medium">Funding Progress</span>
-              <span>${totalRaised.toLocaleString()} / ${goalAmount.toLocaleString()}</span>
-            </div>
-            <Progress value={Math.min(progressPercent, 100)} className="h-3" />
-            <div className="flex justify-between text-xs text-muted-foreground mt-2">
-              <span>{initiative?.donation_count || 0} donations</span>
-              <span>{initiative?.unique_donors || 0} donors</span>
-            </div>
-          </CardContent>
-        </Card>
-      )}
+          {goalAmount > 0 && (
+            <Card>
+              <CardContent className="pt-6">
+                <div className="flex justify-between text-sm mb-2">
+                  <span className="font-medium">Funding Progress</span>
+                  <span>${totalRaised.toLocaleString()} / ${goalAmount.toLocaleString()}</span>
+                </div>
+                <Progress value={Math.min(progressPercent, 100)} className="h-3" />
+                <div className="flex justify-between text-xs text-muted-foreground mt-2">
+                  <span>{initiative?.donation_count || 0} donations</span>
+                  <span>{initiative?.unique_donors || 0} donors</span>
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
-      {initiative?.volunteer_roles && initiative.volunteer_roles.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Volunteer Roles Needed</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-wrap gap-2">
-              {initiative.volunteer_roles.map((role: string) => (
-                <Badge key={role} variant="outline">{role}</Badge>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
+          {initiative?.volunteer_roles && initiative.volunteer_roles.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Volunteer Roles Needed</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-wrap gap-2">
+                  {initiative.volunteer_roles.map((role: string) => (
+                    <Badge key={role} variant="outline">{role}</Badge>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Onboarding hook */}
+          {cueCard && (
+            <Card className="bg-primary/5 border-primary/20">
+              <CardContent className="py-4 flex items-center justify-between gap-4">
+                <p className="text-sm text-muted-foreground">
+                  Ready to participate? See the Cue Card for a quick summary and getting-started steps.
+                </p>
+                <Button size="sm" variant="outline" onClick={() => navigate(`/initiatives/${slug}?tab=cue-card`)}>
+                  Get Started →
+                </Button>
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
+
+        {walkthrough && (
+          <TabsContent value="walkthrough" className="mt-4">
+            <InitiativeWalkthrough
+              steps={walkthrough.steps}
+              initiativeName={config.title}
+            />
+          </TabsContent>
+        )}
+
+        {cueCard && (
+          <TabsContent value="cue-card" className="mt-4 max-w-md">
+            <InitiativeCueCard card={cueCard} />
+          </TabsContent>
+        )}
+      </Tabs>
 
       <div className="flex gap-4">
         <Button className="gap-2" onClick={() => navigate("/initiatives")}>

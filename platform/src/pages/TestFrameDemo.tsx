@@ -2,7 +2,7 @@
  * TestFrameDemo — LB Frame Public Web Demo
  *
  * URL: frame.lianabanyan.com (also lianabanyan.com/demo as fallback)
- * Purpose: 30-second browser-native Cathedral Effect demo — no install, no signup, no friction.
+ * Purpose: 30-second browser-native Caithedral Effect demo — no install, no signup, no friction.
  *   1. User picks a canonical question (or types their own).
  *   2. We return the pre-computed cold answer instantly ($0 cost).
  *   3. We call Haiku 4.5 with LB substrate and show the cathedral answer.
@@ -31,8 +31,8 @@ const DEMO_QUESTIONS = [
   { id: "q04", question: "On a $500 transaction on Liana Banyan, how much does the creator or worker receive?", category: "economics", hint: "math" },
   { id: "q13", question: "Can Liana Banyan Credits be converted back to dollars (cashed out)?", category: "economics", hint: "currency" },
   { id: "q12", question: "What are the three currencies in Liana Banyan's system?", category: "economics", hint: "currency" },
-  { id: "q07", question: "What is the Romulator 9000?", category: "technology", hint: "tech" },
-  { id: "q19", question: "What is the Cathedral Effect in the context of Liana Banyan's AI research?", category: "research", hint: "research" },
+  { id: "q07", question: "What is MnemosyneC?", category: "technology", hint: "tech" },
+  { id: "q19", question: "What is the Caithedral Effect in the context of Liana Banyan's AI research?", category: "research", hint: "research" },
 ] as const;
 
 type QuestionId = typeof DEMO_QUESTIONS[number]["id"];
@@ -186,7 +186,7 @@ export default function TestFrameDemo() {
         {/* ── Hero ── */}
         <div className="text-center mb-10">
           <div className="inline-flex items-center gap-2 bg-blue-900/30 border border-blue-700/30 rounded-full px-4 py-1.5 mb-6 text-blue-400 text-sm">
-            ⛩ LB Frame — Cathedral Effect Demo
+            ⛩ LB Frame — Caithedral Effect Demo
           </div>
           <h1 className="text-4xl md:text-5xl font-bold mb-3 leading-tight">
             See the difference.<br />
@@ -265,7 +265,7 @@ export default function TestFrameDemo() {
             >
               {isRunning
                 ? (phase === "running_cold" ? "Fetching cold answer…" : "Calling the Cathedral (Haiku 4.5)…")
-                : "See the Cathedral Effect →"}
+                : "See the Caithedral Effect →"}
             </button>
 
             {isRunning && (
@@ -382,7 +382,7 @@ export default function TestFrameDemo() {
             {state.liftPp === 0 && (
               <div className="bg-slate-800/30 border border-slate-700/40 rounded-xl p-4 mb-6 text-sm text-slate-400 text-center">
                 Both answers scored similarly on this question — this can happen with well-known topics or small samples.
-                The Cathedral Effect is consistent over larger question banks. Try another question or{" "}
+                The Caithedral Effect is consistent over larger question banks. Try another question or{" "}
                 <a href="https://lb-test-frame.lianabanyan.com" className="text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer">
                   run the full 25-question bank
                 </a>.

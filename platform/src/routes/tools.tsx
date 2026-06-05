@@ -75,6 +75,13 @@ const PuddingAnalyticsPage = lazy(() => import("@/pages/staff/PuddingAnalyticsPa
 const BatteryDispatchAccessAudit = lazy(() => import("@/pages/staff/BatteryDispatchAccessAudit"));
 const FounderSavingsDashboard = lazy(() => import("@/pages/FounderSavingsDashboard"));
 
+// Wave 6 Phase V+W — People Flows + Outreach
+const MikeyKickoffPage = lazy(() => import("@/pages/MikeyKickoffPage"));
+const CrownLetterWavesPage = lazy(() => import("@/pages/CrownLetterWavesPage"));
+const AIGangStagingPage = lazy(() => import("@/pages/AIGangStagingPage"));
+const SocialThursdayPage = lazy(() => import("@/pages/SocialThursdayPage"));
+const ProgressReportCadencePage = lazy(() => import("@/pages/ProgressReportCadencePage"));
+
 // SAGA 10 BP046B — Hub Source /hub/ai-models/
 const AIModelsHubPage = lazy(() => import("@/pages/hub/AIModelsHubPage"));
 
@@ -91,6 +98,13 @@ const HallOfRecords = lazy(() => import("@/pages/cue-cards/HallOfRecords"));
 const MainlandHub = lazy(() => import("@/pages/cue-cards/MainlandHub"));
 const CodeBreakersHub = lazy(() => import("@/pages/cue-cards/CodeBreakersHub"));
 const BusinessCardPortal = lazy(() => import("@/pages/cue-cards/BusinessCardPortal"));
+
+// Wave 25 -- Frontier Mesh
+const FrontierBorrowPage = lazy(() => import("@/pages/FrontierBorrowPage"));
+const FrontierMarketplacePage = lazy(() => import("@/pages/FrontierMarketplacePage"));
+
+// BP073 Wave B -- Cross-Frame Cooperation
+const CrossFrameCooperationPage = lazy(() => import("@/pages/mesh/CrossFrameCooperationPage"));
 
 export const toolsRoutes = (
   <>
@@ -182,6 +196,15 @@ export const toolsRoutes = (
     <Route path="/staff/battery-dispatch-access" element={<ProtectedRoute><LazyPage><BatteryDispatchAccessAudit /></LazyPage></ProtectedRoute>} />
     <Route path="/founder-savings" element={<ProtectedRoute><LazyPage><FounderSavingsDashboard /></LazyPage></ProtectedRoute>} />
 
+    {/* Wave 6 Phase V — People Flows */}
+    <Route path="/people/mikey-kickoff" element={<ExplorerRoute><LazyPage><MikeyKickoffPage /></LazyPage></ExplorerRoute>} />
+
+    {/* Wave 6 Phase W — Outreach Breadth (staged, admin-access) */}
+    <Route path="/outreach/crown-letters" element={<ProtectedRoute><LazyPage><CrownLetterWavesPage /></LazyPage></ProtectedRoute>} />
+    <Route path="/outreach/ai-gang" element={<ProtectedRoute><LazyPage><AIGangStagingPage /></LazyPage></ProtectedRoute>} />
+    <Route path="/outreach/social-thursday" element={<ProtectedRoute><LazyPage><SocialThursdayPage /></LazyPage></ProtectedRoute>} />
+    <Route path="/outreach/progress-report" element={<ExplorerRoute><LazyPage><ProgressReportCadencePage /></LazyPage></ExplorerRoute>} />
+
     {/* Bushel 8 — LB Frame Substrate UI (BP021) */}
     <Route path="/helm/substrate" element={<ProtectedRoute><LazyPage><SubstrateBrowserPage /></LazyPage></ProtectedRoute>} />
     <Route path="/helm/substrate/browser" element={<ProtectedRoute><LazyPage><SubstrateBrowserPage /></LazyPage></ProtectedRoute>} />
@@ -221,5 +244,12 @@ export const toolsRoutes = (
     <Route path="/mainland" element={<LazyPage><MainlandHub /></LazyPage>} />
     <Route path="/bounties" element={<LazyPage><CodeBreakersHub /></LazyPage>} />
     <Route path="/business-cards" element={<LazyPage><BusinessCardPortal /></LazyPage>} />
+
+    {/* Wave 25 -- Mesh / Frontier */}
+    <Route path="/frontier/borrow" element={<ProtectedRoute><LazyPage><FrontierBorrowPage /></LazyPage></ProtectedRoute>} />
+    <Route path="/frontier/marketplace" element={<ProtectedRoute><LazyPage><FrontierMarketplacePage /></LazyPage></ProtectedRoute>} />
+
+    {/* BP073 Wave B -- Cross-Frame Cooperation */}
+    <Route path="/mesh/cross-frame" element={<ProtectedRoute><LazyPage><CrossFrameCooperationPage /></LazyPage></ProtectedRoute>} />
   </>
 );

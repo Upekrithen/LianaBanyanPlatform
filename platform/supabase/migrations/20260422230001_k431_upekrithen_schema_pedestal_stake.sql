@@ -42,7 +42,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS idx_upekrithen_early_interest_email
 -- Table 2: upekrithen.pedestal_applications
 -- Full application pipeline — K432 wires the real flow
 -- ============================================================================
-CREATE TABLE IF NOT EXISTS upekrithen.pedestal_applications (
+CREATE TABLE upekrithen.pedestal_applications (
     id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     investor_id         UUID NOT NULL REFERENCES auth.users(id),
     status              TEXT NOT NULL DEFAULT 'draft' CHECK (status IN (
@@ -79,7 +79,7 @@ CREATE INDEX IF NOT EXISTS idx_upekrithen_applications_status
 -- Table 3: upekrithen.pedestal_holders
 -- Issued stake records — NO FK to public.members
 -- ============================================================================
-CREATE TABLE IF NOT EXISTS upekrithen.pedestal_holders (
+CREATE TABLE upekrithen.pedestal_holders (
     holder_id           UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     subscription_id     UUID REFERENCES upekrithen.pedestal_applications(id),
     user_id             UUID NOT NULL REFERENCES auth.users(id),

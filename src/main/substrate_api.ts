@@ -2125,6 +2125,31 @@ export class SubstrateAPIServer {
       return;
     }
 
+    // ── GET /mnemosyne/context — Chrome extension + external memory snapshot ──
+    // Returns a brief context snapshot for the extension popup and overlay frame.
+    // No body required. CORS * already set in the response headers above.
+    if (req.method === 'GET' && url === '/mnemosyne/context') {
+      const snap = this.getAMPLIFYSnapshot() as Record<string, unknown>;
+      res.end(JSON.stringify({
+        ok: true,
+        version: '0.4.0',
+        port: API_PORT,
+        index_size: this.index.size,
+        mode: this.router.getEffectiveMode(),
+        substrate_hits: snap.substrate_hits ?? 0,
+        total_queries: snap.total_queries ?? 0,
+        substrate_hit_ratio: snap.substrate_hit_ratio ?? 0,
+        local_ratio: snap.local_ratio ?? 0,
+        as_of: new Date().toISOString(),
+        endpoints: {
+          query: 'POST /substrate/query',
+          note: 'POST /yoke/note',
+          health: 'GET /health',
+        },
+      }));
+      return;
+    }
+
     res.statusCode = 404;
     res.end(JSON.stringify({ error: 'Not found' }));
   }

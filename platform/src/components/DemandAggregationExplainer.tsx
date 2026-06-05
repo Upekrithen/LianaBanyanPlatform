@@ -15,6 +15,7 @@ import { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { VideoPlaceholderStub } from '@/components/VideoPlaceholderStub';
 import {
   PlayCircle,
   ShoppingCart,
@@ -57,9 +58,12 @@ export function DemandAggregationExplainer({
 
         <div className="space-y-6">
           {/* Video Section */}
-          <div className="aspect-video bg-muted rounded-lg flex items-center justify-center">
+          <VideoPlaceholderStub
+            title="The Food Ecosystem — From Order to Delivery"
+            transcriptStub="This video walks through the cooperative food ecosystem: how member orders are aggregated, how local fulfillment hubs work, how demand pooling lowers costs, and how the delivery chain connects producer to table. Topics: demand aggregation, local hubs, cost-plus pricing, member ownership of the supply chain."
+          >
             <div className="text-center space-y-4">
-              <PlayCircle className="w-16 h-16 mx-auto text-primary" />
+              <PlayCircle className="w-16 h-16 mx-auto text-primary" aria-hidden="true" />
               <p className="text-sm text-muted-foreground">
                 Video: The Food Ecosystem — From Order to Delivery
               </p>
@@ -70,7 +74,7 @@ export function DemandAggregationExplainer({
                 {videoWatched ? 'Video Watched ✓' : 'Play Video'}
               </Button>
             </div>
-          </div>
+          </VideoPlaceholderStub>
 
           {/* Quick Visual Flow */}
           <div className="bg-muted/30 p-4 rounded-lg">

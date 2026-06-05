@@ -1564,7 +1564,7 @@ export default function RedCarpet() {
 
                 {/* Crown Jewels as expandable blocks */}
                 <ExpandableBlock
-                  title="The 167 Crown Jewel Innovations"
+                  title="The 228 Crown Jewel Innovations"
                   subtitle="Zero prior art found — completely novel innovations"
                   preview="PPP/Economic Opportunity Differential, Seedling Guarantee, Tereno Hydraulic, The 300 Framework..."
                   accentColor="#eab308"
@@ -1582,7 +1582,7 @@ export default function RedCarpet() {
                   </div>
                   <div className="mt-4 p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
                     <p className="text-sm text-muted-foreground">
-                      <strong className="text-yellow-600">Why "Crown Jewels"?</strong> These 167 innovations had zero relevant prior art
+                      <strong className="text-yellow-600">Why "Crown Jewels"?</strong> These 228 innovations had zero relevant prior art
                       in USPTO searches. They represent genuinely novel approaches that no one has patented before.
                     </p>
                   </div>

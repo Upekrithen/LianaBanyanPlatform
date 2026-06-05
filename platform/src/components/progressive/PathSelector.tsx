@@ -127,7 +127,7 @@ export function PathSelector() {
       benefits: [
         'Access to all bounties ($500-$2000+ in Credits)',
         'Post your own bounties to hire help',
-        'Access to 1,244 documented innovations',
+        'Access to 2,270 documented innovations',
         'Keep 83.3% of everything you earn',
       ],
     },
@@ -171,7 +171,7 @@ export function PathSelector() {
         </h2>
         <p className="text-lg text-white/60 max-w-2xl mx-auto">
           Three ways in. Same destination. All paths lead to the $5 membership
-          with access to 1,244 innovations and fractional patent participation.
+          with access to 2,270 innovations and fractional patent participation.
         </p>
       </div>
 

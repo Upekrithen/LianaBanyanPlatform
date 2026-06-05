@@ -46,6 +46,8 @@ import { PortalPageLayout } from '@/components/PortalPageLayout';
 
 // ── Mock Data ──────────────────────────────────────────────────────────────
 
+// TODO (BP072-W9-C5): Replace MOCK_PUZZLES with Supabase query from `real_world_puzzles`
+// table when schema is wired. Typed stub preserved.
 const MOCK_PUZZLES: RealWorldPuzzle[] = [
   {
     id: "rwp-1",

@@ -15,6 +15,10 @@ import {
 } from "@/components/v2/calendar";
 import { cn } from "@/lib/utils";
 
+// TODO (BP072-W9-C5): Replace with real Supabase query from `calendar_events` or
+// `craft_treasure_map_progress` table when the user's thread-calendar schema is wired.
+// Typed stub: `WeekThreadEvent[]` matching the component contract.
+// Expected DB table: calendar_events(id, user_id, title, day_index, start_hour, end_hour, thread)
 const MOCK_WEEK_EVENTS: WeekThreadEvent[] = [
   { id: "e1", title: "Morning planning block", dayIndex: 0, startHour: 8, endHour: 9, thread: "personal" },
   { id: "e2", title: "Family table check-in", dayIndex: 0, startHour: 18, endHour: 19, thread: "family" },

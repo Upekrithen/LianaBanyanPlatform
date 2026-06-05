@@ -37,7 +37,7 @@ export const LRH_MOMENTS: Record<string, LRHMoment> = {
   persona_picker: {
     id: "lrh_m2_persona_picker",
     surface: "persona_picker_dialog",
-    text: "Three ways to use this. Casual: just check the Cathedral Effect on your AI. Developer: bring your own API keys, run our benchmarks yourself. Member: the whole cooperative — five dollars a year. Pick what fits today; you can change anytime.",
+    text: "Three ways to use this. Casual: just check the Caithedral Effect on your AI. Developer: bring your own API keys, run our benchmarks yourself. Member: the whole cooperative — five dollars a year. Pick what fits today; you can change anytime.",
     assetKey: "lrh_three_paths",
   },
 
@@ -71,7 +71,7 @@ export const LRH_MOMENTS: Record<string, LRHMoment> = {
   demo_results: {
     id: "lrh_m5_demo_results",
     surface: "verification_results_display",
-    text: "Your AI got [X] more questions right with the substrate. That's the Cathedral Effect — measured on your own session, not ours. By their fruits.",
+    text: "Your AI got [X] more questions right with the substrate. That's the Caithedral Effect — measured on your own session, not ours. By their fruits.",
     assetKey: "lrh_presenting_results",
   },
 

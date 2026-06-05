@@ -65,11 +65,11 @@ const TIER_BOUNTY_META: TierBountyMeta[] = [
     tier_label: "Tier A — NEEDS",
     marks_multiplier: 1.0,
     poster_headline: "Verify the Tier A Floor",
-    poster_subhead: "Does Cathedral Effect hold on a default plan? Prove it.",
+    poster_subhead: "Does Caithedral Effect hold on a default plan? Prove it.",
     description:
-      "Run LB Frame Cathedral Effect benchmark (R10/R11/R13 question bank) at Tier A " +
+      "Run LB Frame Caithedral Effect benchmark (R10/R11/R13 question bank) at Tier A " +
       "(default plan). Document cold vs HOT accuracy. Submit empirical-receipt JSON " +
-      "showing ≥30pp Cathedral Effect lift. Confirms the floor — substrate value at " +
+      "showing ≥30pp Caithedral Effect lift. Confirms the floor — substrate value at " +
       "the universal access tier.",
     empirical_anchor: "TIER_A_EMPIRICAL_FLOOR_RECEIPT_BP017.json",
   },
@@ -81,7 +81,7 @@ const TIER_BOUNTY_META: TierBountyMeta[] = [
     poster_subhead: "Is Tier B faster? Measure it. Prove it. Earn Marks.",
     description:
       "Run benchmark at Tier B (recommended plan). Compare to a Tier A floor receipt. " +
-      "Verify Reckoning velocity ≥1.5× faster than Tier A with Cathedral Effect preserved " +
+      "Verify Reckoning velocity ≥1.5× faster than Tier A with Caithedral Effect preserved " +
       "(≥30pp). Documents the measurable value of the recommended tier.",
     empirical_anchor: "tier_a_floor_verification.ts (Tier A anchor)",
   },
@@ -105,7 +105,7 @@ const TIER_BOUNTY_META: TierBountyMeta[] = [
     poster_subhead: "Run all three. Show the deltas. Highest Marks in the tier-test corpus.",
     description:
       "Same question bank, same submitter, three separate runs (Tier A / B / C). " +
-      "Document Cathedral Effect lift at each tier and lift deltas between tiers. " +
+      "Document Caithedral Effect lift at each tier and lift deltas between tiers. " +
       "Definitive empirical artifact. Feeds the Three-Tier canon with member-generated " +
       "generalization evidence. Highest Bounty class (2.0× Marks).",
     empirical_anchor: "R10/R11/R13 cross-vendor benchmark (K477/K481/K499)",
@@ -228,7 +228,7 @@ function MarksMultiplierBadge({
 const SUBMISSION_PREVIEW: Record<TierBountyClass, string[]> = {
   tier_a_floor_verification: [
     "cold_accuracy_pct + hot_accuracy_pct",
-    "lift_pp ≥ 30 (Cathedral Effect floor)",
+    "lift_pp ≥ 30 (Caithedral Effect floor)",
     "tier_config: 'needs'",
     "ai_model + question_bank_version + run_timestamp",
   ],

@@ -1,129 +1,202 @@
 /**
- * LANGUAGE SWITCHER — Easy way to switch back to English (or any language)
- * ========================================================================
- * Appears as a small floating button when language is not English.
- * One click → back to English. Or open the menu to pick any language.
- * Language is set by Durin's Door passwords but can always be overridden here.
+ * LANGUAGE SWITCHER -- Wave 15 / Phase γ i18n Hardening
+ * =======================================================
+ * Expanded from 15 (Wave 10 D5) to 150 BCP 47 languages.
+ * New in Wave 15:
+ *   - All 150 languages from LANGUAGES data array (languages.ts)
+ *   - Search/filter input for quick navigation
+ *   - RTL badge indicator for RTL-script languages
+ *   - Ratified badge for the 16 community-verified translations
+ *   - Locale persistence to lb_language (localStorage)
+ *
+ * Bridges two systems:
+ *   1. i18next (BCP 47 codes via i18n.changeLanguage) -- drives UI translations
+ *   2. Durin's Door (language names via setLanguageFromDoor) -- drives password UX
+ *
+ * Appears as a floating button when page tools are enabled.
+ * Quick-switch to English shown when any non-English locale is active.
+ *
+ * BOTTOM CLEARANCE: must clear LRH edge. See BP047 recurrence-class fix.
  */
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import {
-  DropdownMenu, DropdownMenuContent, DropdownMenuItem,
-  DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuLabel,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
-import { Globe, Check } from "lucide-react";
-import { getLanguagePreference, setLanguageFromDoor } from "@/lib/durinsDoor";
+import { Globe, Check, Search } from "lucide-react";
+import { setLanguageFromDoor } from "@/lib/durinsDoor";
+import i18n from "@/i18n";
+import { LANGUAGES } from "@/data/languages";
 
-const LANGUAGES = [
-  { code: "english", label: "English", flag: "🇺🇸" },
-  { code: "spanish", label: "Español", flag: "🇪🇸" },
-  { code: "french", label: "Français", flag: "🇫🇷" },
-  { code: "german", label: "Deutsch", flag: "🇩🇪" },
-  { code: "japanese", label: "日本語", flag: "🇯🇵" },
-  { code: "mandarin", label: "中文", flag: "🇨🇳" },
-  { code: "korean", label: "한국어", flag: "🇰🇷" },
-  { code: "arabic", label: "العربية", flag: "🇸🇦" },
-  { code: "hindi", label: "हिन्दी", flag: "🇮🇳" },
-  { code: "swahili", label: "Kiswahili", flag: "🇰🇪" },
-  { code: "elvish", label: "Elvish (Sindarin)", flag: "🧝" },
-  { code: "norse", label: "Norse", flag: "⚔️" },
-  { code: "tolkien", label: "Tolkien Lore", flag: "📖" },
-  { code: "liana", label: "Liana Banyan", flag: "🌿" },
-];
+/** Durin's Door doorName lookup for the 15 ratified Speak Friend languages. */
+const DOOR_NAMES: Record<string, string> = {
+  en: "english",    es: "spanish",   pt: "portuguese", fr: "french",
+  de: "german",     zh: "mandarin",  ja: "japanese",   ko: "korean",
+  ar: "arabic",     hi: "hindi",     ru: "russian",    it: "italian",
+  nl: "dutch",      pl: "polish",    sv: "swedish",    he: "hebrew",
+};
 
 export function LanguageSwitcher() {
-  const [currentLang, setCurrentLang] = useState("english");
-  const [showPageTools, setShowPageTools] = useState(true);
+  const { t } = useTranslation();
+  const [currentCode, setCurrentCode] = useState<string>("en");
+  const [showPageTools, setShowPageTools] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
-    setCurrentLang(getLanguagePreference());
+    const stored = localStorage.getItem("lb_language");
+    const detected = (stored || i18n.language || "en").split("-")[0];
+    if (LANGUAGES.find((l) => l.code === detected)) {
+      setCurrentCode(detected);
+    }
+  }, []);
 
-    // Check page tools visibility setting (default to hidden)
-    const checkPageTools = () => {
-      const stored = localStorage.getItem('lb_show_page_tools');
-      setShowPageTools(stored === 'true'); // Only show if explicitly set to 'true'
+  useEffect(() => {
+    const check = () => {
+      const stored = localStorage.getItem("lb_show_page_tools");
+      setShowPageTools(stored === "true");
     };
-    checkPageTools();
-
-    // Listen for storage changes (when user toggles in Index.tsx)
+    check();
     const handleStorage = (e: StorageEvent) => {
-      if (e.key === 'lb_show_page_tools') {
-        setShowPageTools(e.newValue === 'true');
-      }
+      if (e.key === "lb_show_page_tools") check();
     };
-    window.addEventListener('storage', handleStorage);
-
-    // Also listen for custom event for same-tab updates
-    const handleCustomEvent = () => checkPageTools();
-    window.addEventListener('lb_page_tools_changed', handleCustomEvent);
-
+    const handleCustom = () => check();
+    window.addEventListener("storage", handleStorage);
+    window.addEventListener("lb_page_tools_changed", handleCustom);
     return () => {
-      window.removeEventListener('storage', handleStorage);
-      window.removeEventListener('lb_page_tools_changed', handleCustomEvent);
+      window.removeEventListener("storage", handleStorage);
+      window.removeEventListener("lb_page_tools_changed", handleCustom);
     };
   }, []);
 
-  const handleSwitch = (langCode: string) => {
-    setLanguageFromDoor(langCode);
-    setCurrentLang(langCode);
+  const handleSwitch = (code: string) => {
+    i18n.changeLanguage(code);
+    const doorName = DOOR_NAMES[code];
+    if (doorName) setLanguageFromDoor(doorName);
+    setCurrentCode(code);
+    setSearchQuery("");
   };
 
-  const currentFlag = LANGUAGES.find(l => l.code === currentLang)?.flag || "🌐";
-  const isNotEnglish = currentLang !== "english";
+  const filteredLanguages = useMemo(() => {
+    if (!searchQuery.trim()) return LANGUAGES;
+    const q = searchQuery.toLowerCase();
+    return LANGUAGES.filter(
+      (l) =>
+        l.name.toLowerCase().includes(q) ||
+        l.nativeName.toLowerCase().includes(q) ||
+        l.code.toLowerCase().includes(q) ||
+        l.region.toLowerCase().includes(q)
+    );
+  }, [searchQuery]);
 
-  // Hide if page tools are toggled off
+  const current = LANGUAGES.find((l) => l.code === currentCode);
+  const isNotEnglish = currentCode !== "en";
+
   if (!showPageTools) return null;
 
   return (
     // BOTTOM CLEARANCE: must clear LRH edge. See BP047 recurrence-class fix. Do NOT reduce bottom offset.
     <div className="fixed bottom-16 right-4 z-50 flex items-center gap-2">
-      {/* Quick English button — only shows when NOT in English */}
       {isNotEnglish && (
         <Button
           variant="secondary"
           size="sm"
           className="rounded-full shadow-lg gap-1.5 bg-background/90 backdrop-blur border"
-          onClick={() => handleSwitch("english")}
+          onClick={() => handleSwitch("en")}
         >
-          🇺🇸 English
+          🇺🇸 {t("languageSwitcher.quickEnglish")}
         </Button>
       )}
 
-      {/* Full language menu */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
             variant="outline"
             size="icon"
             className="rounded-full shadow-lg w-10 h-10 bg-background/90 backdrop-blur"
-            aria-label="Change language"
+            aria-label={t("languageSwitcher.changeLanguage")}
           >
-            <span className="text-lg">{currentFlag}</span>
+            <Globe className="w-4 h-4" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-56 max-h-80 overflow-y-auto">
+        <DropdownMenuContent align="end" className="w-72">
           <DropdownMenuLabel className="flex items-center gap-2">
             <Globe className="w-4 h-4" />
-            Language
+            {t("languageSwitcher.selectLanguage")}
+            <span className="ml-auto text-xs text-muted-foreground font-normal">
+              {current?.nativeName ?? currentCode}
+              {current?.rtl && (
+                <span className="ml-1 text-xs bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200 px-1 rounded">
+                  RTL
+                </span>
+              )}
+            </span>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          {LANGUAGES.map((lang) => (
-            <DropdownMenuItem
-              key={lang.code}
-              onClick={() => handleSwitch(lang.code)}
-              className="flex items-center justify-between"
-            >
-              <span className="flex items-center gap-2">
-                <span>{lang.flag}</span>
-                <span>{lang.label}</span>
-              </span>
-              {currentLang === lang.code && <Check className="w-4 h-4 text-primary" />}
-            </DropdownMenuItem>
-          ))}
+
+          {/* Search input */}
+          <div className="px-2 py-1.5">
+            <div className="relative">
+              <Search className="absolute left-2 top-1/2 -translate-y-1/2 w-3 h-3 text-muted-foreground pointer-events-none" />
+              <input
+                type="search"
+                className="w-full pl-6 pr-2 py-1 text-sm bg-muted rounded-md border-0 outline-none focus:ring-1 focus:ring-ring placeholder:text-muted-foreground"
+                placeholder={t("languageSwitcher.search", "Search 150 languages...")}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                aria-label="Search languages"
+              />
+            </div>
+          </div>
+          <DropdownMenuSeparator />
+
+          {/* Language list - scrollable */}
+          <div className="max-h-72 overflow-y-auto">
+            {filteredLanguages.length === 0 && (
+              <div className="px-3 py-2 text-sm text-muted-foreground">
+                No languages match &quot;{searchQuery}&quot;
+              </div>
+            )}
+            {filteredLanguages.map((lang) => (
+              <DropdownMenuItem
+                key={lang.code}
+                onClick={() => handleSwitch(lang.code)}
+                className="flex items-center justify-between gap-2 cursor-pointer"
+              >
+                <span className="flex items-center gap-2 min-w-0">
+                  <span className="font-medium text-sm truncate">{lang.nativeName}</span>
+                  <span className="text-xs text-muted-foreground shrink-0">{lang.code}</span>
+                </span>
+                <span className="flex items-center gap-1 shrink-0">
+                  {lang.rtl && (
+                    <span className="text-xs bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200 px-1 rounded">
+                      RTL
+                    </span>
+                  )}
+                  {lang.ratified && (
+                    <span className="text-xs bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 px-1 rounded">
+                      ✓
+                    </span>
+                  )}
+                  {currentCode === lang.code && (
+                    <Check className="w-3.5 h-3.5 text-primary" />
+                  )}
+                </span>
+              </DropdownMenuItem>
+            ))}
+          </div>
+
           <DropdownMenuSeparator />
           <div className="px-2 py-1.5 text-xs text-muted-foreground">
-            Tip: Use different language passwords at Durin's Door to unlock unique experiences!
+            {filteredLanguages.length < LANGUAGES.length
+              ? `${filteredLanguages.length} of ${LANGUAGES.length} languages`
+              : t("languageSwitcher.tip", `${LANGUAGES.length} languages available`)}
           </div>
         </DropdownMenuContent>
       </DropdownMenu>

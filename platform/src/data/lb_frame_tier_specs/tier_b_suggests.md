@@ -47,7 +47,7 @@ lift over cold baseline). **Tier B does not degrade retrieval quality.** Tier B 
 | HOT-rate (hard-retrieval) | 89.3%–98.7% (8 vendors) | ≥ Tier A (Fluid Cathedral may improve in fast-evolving domains) | R10 cross-vendor (K477+K481); substrate-dependent |
 | Reckoning velocity | ~1× baseline | 2–3× Tier A (5-min cluster fan-out vs 15-min) | BP017 canon spec; architectural basis (higher token budget + message-rate limits) |
 | Pod scaffolding rate | ~1 K-prompt per 60 min | ~1 K-prompt per 30 min sustained | BP017 canon spec; architectural basis |
-| Cathedral Effect HOT-rate at Pied Piper+ | Brittle fingerprint (cron-refresh) | HOT 70–85% maintained between rebuilds (Fluid event-driven) | KN102/KN103 Cue Card recency gate |
+| Caithedral Effect HOT-rate at Pied Piper+ | Brittle fingerprint (cron-refresh) | HOT 70–85% maintained between rebuilds (Fluid event-driven) | KN102/KN103 Cue Card recency gate |
 
 Receipt pointer: `BISHOP_DROPZONE/14_CanonicalReferences/TIER_B_EMPIRICAL_UPLIFT_RECEIPT_BP017.json`
 

@@ -48,6 +48,7 @@ import {
   type CottageLawRule,
 } from '@/lib/cottageLawService';
 import { PortalPageLayout } from '@/components/PortalPageLayout';
+import { usePageSEO } from "@/hooks/usePageSEO";
 
 const US_STATES = [
   { code: 'AL', name: 'Alabama' }, { code: 'AK', name: 'Alaska' }, { code: 'AZ', name: 'Arizona' },
@@ -70,6 +71,11 @@ const US_STATES = [
 ];
 
 export default function CottageLawPage() {
+  usePageSEO({
+    title: "Cottage Law | Liana Banyan",
+    description: "Know your cottage food and small-business rights. Community-curated legal guides for home-based food producers.",
+    canonical: "https://lianabanyan.com/initiatives/cottage-law",
+  });
   const { user } = useAuth();
   const [selectedState, setSelectedState] = useState<string>('');
   const [weeklyOutput, setWeeklyOutput] = useState<number>(0);

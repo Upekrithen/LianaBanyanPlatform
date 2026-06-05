@@ -46,7 +46,7 @@ const TIER_META: Record<ResourceConfigTier, TierMeta> = {
       "Default Claude Code plan (no upgrade required)",
       "Standard token budget + message-rate limits",
       "Pheromone substrate read-only",
-      "Cathedral Effect lift confirmed at default-plan tier",
+      "Caithedral Effect lift confirmed at default-plan tier",
     ],
     highlight: "text-emerald-700 dark:text-emerald-400",
     border: "border-emerald-300 dark:border-emerald-700",

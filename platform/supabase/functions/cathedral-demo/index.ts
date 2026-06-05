@@ -37,7 +37,7 @@ const CONTEXT_TEMPLATES: Record<string, string> = {
 
   platform: `Liana Banyan platform systems: Six Sparks = six effortful paths for new member visibility. Trust Match = mutual Mark-staking between strangers — each party stakes Marks; bad behavior forfeits stake. Good Standing Roll = inverted allowlist (platform tracks the good-standing list, not bad actors). Seasoning = time-gating on trust accumulation. Pedestal = featured creator recognition system. The Furnace = verification system + immutable public ledger that stamps badges, listings, and Marks.`,
 
-  technology: `Liana Banyan technology: The Romulator 9000 is a ROM-first context persistence system for AI agents — context is pre-loaded before the agent's first token, eliminating cold-start re-establishment. The Furnace is LB's verification + immutable public ledger. Slow Blade is the rate-limit on Furnace stamps per account per unit time (bots rely on speed; Slow Blade makes speed useless). The Cathedral Effect is the measured improvement in AI accuracy when LB substrate context is pre-injected.`,
+  technology: `Liana Banyan technology: The Romulator 9000 is a ROM-first context persistence system for AI agents — context is pre-loaded before the agent's first token, eliminating cold-start re-establishment. The Furnace is LB's verification + immutable public ledger. Slow Blade is the rate-limit on Furnace stamps per account per unit time (bots rely on speed; Slow Blade makes speed useless). The Caithedral Effect is the measured improvement in AI accuracy when LB substrate context is pre-injected.`,
 
   identity: `Liana Banyan Corporation facts: Legal name is LIANA BANYAN CORPORATION. Wyoming C-Corporation, filed November 21, 2025. EIN: 41-2797446. Holding company: Upekrithen LLC (Wyoming, 100% owned). Founder: Jonathan Jones — 53-year-old ARNG veteran, FAA Commercial Rotary Wing IFR rating, father of eight, 37 years developing this system. Platform motto: "Help each other help ourselves." LRH is the platform guide character — animal/chess-piece visual, not human.`,
 
@@ -45,7 +45,7 @@ const CONTEXT_TEMPLATES: Record<string, string> = {
 
   governance: `Liana Banyan governance — The 300 Model: Three tiers — Crowns (invited domain experts, named seats), Board (elected by members), Captains (operational leaders). ADAPT Score replaces demographics with demonstrated capability. The Good Standing Roll is an inverted allowlist — platform maintains the in-good-standing list, not a blocklist. XP × Reputation weighting: every action multiplied by account's XP × Rep. Sybil accounts at 0 × 0 = 0 aggregate leverage.`,
 
-  research: `The Cathedral Effect: Measured improvement in AI accuracy when Liana Banyan's substrate context (the "cathedral" — canonical memory pre-loaded before first token) is injected into AI sessions. Research benchmark R13 found a mean lift of approximately 86 percentage points across 8 AI vendors (cold HOT% vs cathedral HOT%). The Cathedral is the Romulator 9000's implementation in practice — the highway line painter carrying the paint can instead of walking back to the start.`,
+  research: `The Caithedral Effect: Measured improvement in AI accuracy when Liana Banyan's substrate context (the "cathedral" — canonical memory pre-loaded before first token) is injected into AI sessions. Research benchmark R13 found a mean lift of approximately 86 percentage points across 8 AI vendors (cold HOT% vs cathedral HOT%). The Cathedral is the Romulator 9000's implementation in practice — the highway line painter carrying the paint can instead of walking back to the start.`,
 };
 
 const FULL_CONTEXT = Object.values(CONTEXT_TEMPLATES).join("\n\n");
@@ -79,7 +79,7 @@ const DEMO_QUESTIONS: DemoQuestion[] = [
   { id: "q07", question: "What is the Romulator 9000?", correct_answers: ["rom-first context persistence", "context persistence system", "ai context persistence"], category: "technology" },
   { id: "q12", question: "What are the three currencies in Liana Banyan's system?", correct_answers: ["credits marks joules", "credits, marks, and joules", "credits, marks"], category: "economics" },
   { id: "q13", question: "Can Liana Banyan Credits be converted back to dollars (cashed out)?", correct_answers: ["no", "never", "one-way valve"], category: "economics" },
-  { id: "q19", question: "What is the Cathedral Effect in the context of Liana Banyan's AI research?", correct_answers: ["improvement in ai accuracy", "lift in correct answers", "context injection improvement"], category: "research" },
+  { id: "q19", question: "What is the Caithedral Effect in the context of Liana Banyan's AI research?", correct_answers: ["improvement in ai accuracy", "lift in correct answers", "context injection improvement"], category: "research" },
 ];
 
 // ── Grading ──────────────────────────────────────────────────────────────────

@@ -27,13 +27,15 @@ The platform is live. The patents are filed. The first medallions are minted.
 
 ## What I'm Asking
 
-Not money. I'm asking for your network.
+I am nominating you for the Infrastructure Chancellor Crown - the seat in our structure reserved for someone who has built enduring civic infrastructure and understands what it takes to keep it trustworthy at scale. The Infrastructure Chancellor advises on technical architecture, community trust systems, and the long-term resilience of the platform's public layer. It is a fractional role: a few hours a month, your name lending credibility to the infrastructure we are building together.
 
-You've spent decades finding people who build trustworthy things. I need introductions to operators who know how to scale community-driven solutions without breaking them. A fractional CTO who's seen what happens when good ideas meet bad architecture. Someone in food security who can tell me what I don't know yet.
+If the seat itself does not fit, I'm asking for your network.
+
+You've spent decades finding people who build trustworthy things. I need introductions to operators who know how to scale community-driven solutions without breaking them. A fractional CTO who has seen what happens when good ideas meet bad architecture. Someone in food security who can tell me what I don't know yet.
 
 One connection from you could save me a year of trial and error. And a year matters when people are choosing between insulin and rent.
 
-I'm prepared to hand any or all of these initiatives to people you trust. The goal isn't for me to run this. The goal is for it to exist and work.
+I'm prepared to hand any or all of these initiatives to people you trust. The goal is not for me to run this. The goal is for it to exist and work.
 
 With respect for what you've built and rebuilt,
 

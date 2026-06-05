@@ -46,6 +46,20 @@ const FreezerNodesPage = lazy(() => import("@/pages/FreezerNodesPage"));
 const FreezerNodeSetup = lazy(() => import("@/pages/FreezerNodeSetup"));
 const BanyanGalleriesPage = lazy(() => import("@/pages/BanyanGalleriesPage"));
 const HearthInitiativePage = lazy(() => import("@/pages/HearthInitiativePage"));
+const SpinoutsIndexPage = lazy(() => import("@/pages/SpinoutsIndexPage"));
+const SpinoutPage = lazy(() => import("@/pages/SpinoutPage"));
+const DefenseKlausSpinoutPage = lazy(() => import("@/pages/DefenseKlausSpinoutPage"));
+const BatteryDispatchSpinoutPage = lazy(() => import("@/pages/BatteryDispatchSpinoutPage"));
+const StandInTheGapSpinoutPage = lazy(() => import("@/pages/StandInTheGapSpinoutPage"));
+const MnemosyneCSpinoutPage = lazy(() => import("@/pages/MnemosyneCSpinoutPage"));
+const HarperGuildSpinoutPage = lazy(() => import("@/pages/HarperGuildSpinoutPage"));
+// Wave 22 Phase B -- Anchor, CAI Bonfire, Map & Compass deep-builds
+const AnchorSpinoutPage = lazy(() => import("@/pages/AnchorSpinoutPage"));
+const CaiBonfirePage = lazy(() => import("@/pages/CaiBonfirePage"));
+const MapAndCompassPage = lazy(() => import("@/pages/MapAndCompassPage"));
+const StewardsGuildPage = lazy(() => import("@/pages/StewardsGuildPage"));
+const HealthAccordsPage = lazy(() => import("@/pages/HealthAccordsPage"));
+const HouseholdConciergePage = lazy(() => import("@/pages/HouseholdConciergePage"));
 
 export const initiativeRoutes = (
   <>
@@ -75,8 +89,8 @@ export const initiativeRoutes = (
     <Route path="/initiatives/jukebox" element={<ExplorerRoute><LazyPage><JukeboxInitiative /></LazyPage></ExplorerRoute>} />
     <Route path="/initiatives/harper-guild" element={<ExplorerRoute><LazyPage><HarperGuildPage /></LazyPage></ExplorerRoute>} />
     <Route path="/initiatives/vsl" element={<ExplorerRoute><LazyPage><VSLPage /></LazyPage></ExplorerRoute>} />
-    <Route path="/initiatives/lets-make-bread" element={<Navigate to="/initiatives/bread" replace />} />
-    <Route path="/initiatives/bread" element={<ExplorerRoute><LazyPage><LetsMakeBreadPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/initiatives/lets-make-bread" element={<ExplorerRoute><LazyPage><LetsMakeBreadPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/initiatives/bread" element={<Navigate to="/initiatives/lets-make-bread" replace />} />
     <Route path="/initiatives/didasko" element={<ExplorerRoute><LazyPage><DidaskoPage /></LazyPage></ExplorerRoute>} />
     <Route path="/classroom" element={<ExplorerRoute><LazyPage><ClassroomPage /></LazyPage></ExplorerRoute>} />
     <Route path="/classroom/setup" element={<ProtectedRoute><LazyPage><TeacherSetupPage /></LazyPage></ProtectedRoute>} />
@@ -87,6 +101,7 @@ export const initiativeRoutes = (
     <Route path="/initiatives/power-to-the-people" element={<ExplorerRoute><LazyPage><PowerToThePeoplePage /></LazyPage></ExplorerRoute>} />
     <Route path="/initiatives/brass-tacks" element={<ExplorerRoute><LazyPage><BrassTacksPage /></LazyPage></ExplorerRoute>} />
     <Route path="/initiatives/lets-go-shopping" element={<ExplorerRoute><LazyPage><LetsGoShoppingPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/initiatives/household-concierge" element={<ExplorerRoute><LazyPage><HouseholdConciergePage /></LazyPage></ExplorerRoute>} />
     <Route path="/initiatives/lets-get-groceries" element={<ExplorerRoute><LazyPage><LetsGetGroceriesPage /></LazyPage></ExplorerRoute>} />
     <Route path="/initiatives/lets-get-groceries/box" element={<ExplorerRoute><LazyPage><GroceryBoxPage /></LazyPage></ExplorerRoute>} />
     <Route path="/initiatives/lets-get-groceries/start-node" element={<ExplorerRoute><LazyPage><GroceryNodeRegistration /></LazyPage></ExplorerRoute>} />
@@ -103,5 +118,29 @@ export const initiativeRoutes = (
     <Route path="/freeze-dried" element={<ExplorerRoute><LazyPage><FarmerSupplyChainPage /></LazyPage></ExplorerRoute>} />
     <Route path="/banyan-galleries" element={<ExplorerRoute><LazyPage><BanyanGalleriesPage /></LazyPage></ExplorerRoute>} />
     <Route path="/initiatives/hearth" element={<ExplorerRoute><LazyPage><HearthInitiativePage /></LazyPage></ExplorerRoute>} />
+    {/* Wave 6 Phase T — 7 Spinouts index + generic */}
+    <Route path="/spinouts" element={<ExplorerRoute><LazyPage><SpinoutsIndexPage /></LazyPage></ExplorerRoute>} />
+    {/* Wave 21 Phase beta — Defense Klaus + Battery Dispatch deep-builds (must come before :slug) */}
+    <Route path="/spinouts/defense-klaus" element={<ExplorerRoute><LazyPage><DefenseKlausSpinoutPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/spinouts/battery-dispatch" element={<ExplorerRoute><LazyPage><BatteryDispatchSpinoutPage /></LazyPage></ExplorerRoute>} />
+    {/* Wave 23 Phase beta — Stand in the Gap, MnemosyneC, Harper Guild deep-builds */}
+    <Route path="/spinouts/stand-in-the-gap" element={<ExplorerRoute><LazyPage><StandInTheGapSpinoutPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/spinouts/mnemosyne-c" element={<ExplorerRoute><LazyPage><MnemosyneCSpinoutPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/spinouts/mnemosynec-spinout" element={<ExplorerRoute><LazyPage><MnemosyneCSpinoutPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/spinouts/harper-guild" element={<ExplorerRoute><LazyPage><HarperGuildSpinoutPage /></LazyPage></ExplorerRoute>} />
+    {/* Wave 22 Phase B — Anchor, CAI Bonfire, Map & Compass deep-builds (before generic :slug) */}
+    <Route path="/spinouts/anchor" element={<ExplorerRoute><LazyPage><AnchorSpinoutPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/spinouts/anchor-spinout" element={<Navigate to="/spinouts/anchor" replace />} />
+    <Route path="/spinouts/cai-bonfire" element={<ExplorerRoute><LazyPage><CaiBonfirePage /></LazyPage></ExplorerRoute>} />
+    <Route path="/spinouts/cai-bonfire-spinout" element={<Navigate to="/spinouts/cai-bonfire" replace />} />
+    <Route path="/spinouts/map-and-compass" element={<ExplorerRoute><LazyPage><MapAndCompassPage /></LazyPage></ExplorerRoute>} />
+    {/* Generic spinout fallback */}
+    <Route path="/spinouts/:slug" element={<ExplorerRoute><LazyPage><SpinoutPage /></LazyPage></ExplorerRoute>} />
+    {/* Wave 6 Phase V — Stewards Guild */}
+    <Route path="/stewards-guild" element={<ExplorerRoute><LazyPage><StewardsGuildPage /></LazyPage></ExplorerRoute>} />
+    {/* Wave 15 — Health Accords */}
+    <Route path="/initiatives/health-accords" element={<ExplorerRoute><LazyPage><HealthAccordsPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/initiatives/tatiana-schlossburg-health-accords" element={<Navigate to="/initiatives/health-accords" replace />} />
+    <Route path="/initiatives/tatiana-health" element={<Navigate to="/initiatives/health-accords" replace />} />
   </>
 );

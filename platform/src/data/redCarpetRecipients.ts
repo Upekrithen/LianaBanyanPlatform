@@ -1324,7 +1324,7 @@ export const PLATFORM_STATS = {
   innovations: "{{innovationCount}}",
   formalClaims: 2473,
   filedApplications: 11,
-  crownJewels: 167,
+  crownJewels: 228,
   plannedFilings: 11,
   productionSystems: 35,
   possibleMore: 9,

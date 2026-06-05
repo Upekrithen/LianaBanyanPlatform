@@ -71,6 +71,10 @@ const SubscriptionChannelsPage = lazy(() => import("@/pages/SubscriptionChannels
 const CreateSubscriptionChannelPage = lazy(() => import("@/pages/CreateSubscriptionChannelPage"));
 const SubscriptionChannelV2Page = lazy(() => import("@/pages/SubscriptionChannelV2Page"));
 
+// BP072-W9 — Data / Dashboards / Telemetry / Thermometer
+const BanyanMetricPage = lazy(() => import("@/pages/BanyanMetricPage"));
+const ThermometerPage = lazy(() => import("@/pages/ThermometerPage"));
+
 export const commerceRoutes = (
   <>
     <Route path="/marketplace" element={<ExplorerRoute><LazyPage><Marketplace /></LazyPage></ExplorerRoute>} />
@@ -167,5 +171,9 @@ export const commerceRoutes = (
     <Route path="/subscription-channels" element={<LazyPage><SubscriptionChannelsPage /></LazyPage>} />
     <Route path="/subscription-channels/create" element={<ProtectedRoute><LazyPage><CreateSubscriptionChannelPage /></LazyPage></ProtectedRoute>} />
     <Route path="/subscription-channel/:slug" element={<LazyPage><SubscriptionChannelV2Page /></LazyPage>} />
+
+    {/* BP072-W9 — Banyan Metric (C2) + Thermometer (C3) */}
+    <Route path="/metrics" element={<LazyPage><BanyanMetricPage /></LazyPage>} />
+    <Route path="/thermometer" element={<LazyPage><ThermometerPage /></LazyPage>} />
   </>
 );

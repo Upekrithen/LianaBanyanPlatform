@@ -1,14 +1,15 @@
-/**
- * LET'S MAKE DINNER — Chalk-Outline Progressive Disclosure
- * =========================================================
- * NOT tabs and sidebars. NOT a firehose.
+﻿/**
+ * LET'S MAKE DINNER — Chalk-Outline Progressive Disclosure + Group Dinners
+ * =========================================================================
+ * Wave 13: Added GroupDinnerCoordinator (group meal coordination mini-app).
  *
  * Shows available meals with dynamic pricing tiers.
  * Pricing: $5 preorder | $10 day-before | $15 rush
  * Chefs keep 83.3% — locked forever.
+ * Group Dinners: potluck-style coordination, ingredient slots, Marks for hosting/contributing.
  */
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { format, addDays, isSameDay } from "date-fns";
@@ -25,11 +26,13 @@ import { DemandAggregationExplainer } from "@/components/DemandAggregationExplai
 import { BecomeAStewardCard } from "@/components/cue-cards/BecomeAStewardCard";
 import { AnonymousVolumeExplainer } from "@/components/AnonymousVolumeExplainer";
 import { ExpandableBlock, DataVizBar } from "@/components/pudding";
-import { ChefHat, Clock, MapPin, Users, Heart, ArrowLeft, Calendar, HelpCircle, Target, Search, ShoppingCart, Coins, ArrowRight, MessageSquare } from "lucide-react";
+import { ChefHat, Clock, MapPin, Users, Heart, ArrowLeft, Calendar, HelpCircle, Target, Search, Coins, ArrowRight, MessageSquare } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { PortalPageLayout } from '@/components/PortalPageLayout';
+import { GroupDinnerCoordinator } from "@/components/lmd/GroupDinnerCoordinator";
 import '@/styles/landing.css';
+import { usePageSEO } from "@/hooks/usePageSEO";
 
 interface LmdMeal {
   id: string;
@@ -63,6 +66,12 @@ function getDateRange(): Date[] {
 }
 
 export default function LetsMakeDinnerPage() {
+  usePageSEO({
+    title: "Let's Make Dinner | Liana Banyan",
+    description: "Find home-cooked meals from neighbors in your area. Chefs keep 83.3% of every meal. Ethical local food, built on cooperation.",
+    canonical: "https://lianabanyan.com/initiatives/lets-make-dinner",
+  });
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { user } = useAuth();
   const { openOnboard } = useSeamlessOnboard();
@@ -787,6 +796,11 @@ export default function LetsMakeDinnerPage() {
           <div style={{ maxWidth: 900, margin: '0 auto' }}>
             <AnonymousVolumeExplainer variant="inline" showComparison={false} />
           </div>
+        </div>
+
+        {/* Group Dinner Coordinator — Wave 13 */}
+        <div className="trunk-info" style={{ marginTop: '2rem' }}>
+          <GroupDinnerCoordinator />
         </div>
 
         {/* Ghost Banner (if not logged in) */}

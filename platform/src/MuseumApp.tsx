@@ -25,6 +25,7 @@ import { TourCompletionModal } from "./components/wildfire/TourCompletionModal";
 import { SummonFloatingAlert } from "./components/museum/DMSummonPanel";
 
 const HomeScreen = lazy(() => import("./pages/museum/HomeScreen"));
+const HEOHOLanding = lazy(() => import("./pages/HEOHOLanding"));
 const HelmPage = lazy(() => import("./pages/museum/HelmPage"));
 const EnterDoors = lazy(() => import("./pages/museum/EnterDoors"));
 const WatchFable = lazy(() => import("./pages/museum/WatchFable"));
@@ -90,7 +91,8 @@ const MuseumApp = () => {
             <Sonner />
             <Suspense fallback={<MuseumLoadingFallback />}>
               <Routes>
-                <Route path="/" element={<HomeScreen />} />
+                {/* BM30 Scope 5: HEOHO landing variant for museum.lianabanyan.com */}
+                <Route path="/" element={<HEOHOLanding />} />
                 <Route path="/helm" element={<HelmPage />} />
                 {/* WildFire Tour entry */}
                 <Route path="/tour" element={<TourEntry />} />

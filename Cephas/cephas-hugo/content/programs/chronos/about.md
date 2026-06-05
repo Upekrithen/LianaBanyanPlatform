@@ -9,7 +9,7 @@ draft: false
 
 ## Why a Research Portal?
 
-The Liana Banyan Platform is not a startup with a three-year history. It is a 37-year design project that has produced 2,270 documented innovations, 19 provisional patent applications, and 228 Crown Jewels. That record is not marketing material — it is a research archive.
+The Liana Banyan Platform is not a startup with a three-year history. It is a 37-year design project that has produced 2,270 documented innovations, 21 provisional patent applications, and 228 Crown Jewels. That record is not marketing material — it is a research archive.
 
 Chronos exists because the archive deserves a research interface. Not a website timeline that cherry-picks milestones. A substrate query system that lets you ask real questions and get empirically grounded answers.
 

@@ -1,5 +1,17 @@
+/* Wave 17: async-load OpenDyslexic (non-critical accessibility font).
+   font-display:swap prevents FOIT for users who enable this font.
+   The CDN URL already returns font-display:swap but we reinforce it here. */
 @import url('https://fonts.cdnfonts.com/css/opendyslexic');
 @import "./styles/v2-tokens.css";
+
+/* Wave 17: ensure font-display:swap for any @font-face rules added downstream */
+@layer base {
+  @font-face {
+    font-family: 'OpenDyslexic';
+    font-display: swap;
+  }
+}
+@import "./styles/rtl.css";
 
 @tailwind base;
 @tailwind components;
@@ -39,7 +51,7 @@ All colors MUST be HSL.
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
     --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted-foreground: 215 20% 28%;
     --accent: 210 40% 96.1%;
     --accent-foreground: 222.2 47.4% 11.2%;
     --destructive: 0 84.2% 60.2%;
@@ -56,6 +68,41 @@ All colors MUST be HSL.
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    /* BP074-W3: Banyan brand green (light mode) — #15803d on white = ~5.3:1 contrast (WCAG AA) */
+    --banyan-green: #15803d;
+  }
+
+  /* BP074-W3: Dark mode (toggled via .dark class on <html> by useDarkMode hook) */
+  .dark {
+    --background: 222.2 47.4% 11.2%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 47.4% 11.2%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 47.4% 11.2%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Banyan green (dark mode) — #4ade80 on dark bg ~8:1 contrast (WCAG AA) */
+    --banyan-green: #4ade80;
   }
 
   /* Raw Materials Theme - Warm & Vibrant */
@@ -94,7 +141,7 @@ All colors MUST be HSL.
     --secondary: 30 10% 88%;
     --secondary-foreground: 0 0% 10%;
     --muted: 30 10% 92%;
-    --muted-foreground: 0 0% 40%;
+    --muted-foreground: 0 0% 28%;
     --accent: 30 10% 85%;
     --accent-foreground: 0 0% 10%;
     --destructive: 0 70% 50%;
@@ -117,7 +164,7 @@ All colors MUST be HSL.
     --secondary: 280 50% 75%;
     --secondary-foreground: 0 0% 10%;
     --muted: 140 30% 80%;
-    --muted-foreground: 0 0% 30%;
+    --muted-foreground: 0 0% 22%;
     --accent: 340 60% 75%;
     --accent-foreground: 0 0% 10%;
     --destructive: 0 70% 60%;
@@ -140,7 +187,7 @@ All colors MUST be HSL.
     --secondary: 290 20% 95%;
     --secondary-foreground: 290 70% 50%;
     --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 45%;
+    --muted-foreground: 0 0% 28%;
     --accent: 290 60% 60%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 85% 60%;
@@ -163,7 +210,7 @@ All colors MUST be HSL.
     --secondary: 75 70% 60%;
     --secondary-foreground: 0 0% 10%;
     --muted: 185 40% 75%;
-    --muted-foreground: 0 0% 30%;
+    --muted-foreground: 0 0% 20%;
     --accent: 75 70% 60%;
     --accent-foreground: 0 0% 10%;
     --destructive: 25 85% 55%;
@@ -209,7 +256,7 @@ All colors MUST be HSL.
     --secondary: 122 40% 50%;
     --secondary-foreground: 0 0% 100%;
     --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 45%;
+    --muted-foreground: 0 0% 28%;
     --accent: 220 90% 40%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 85% 60%;
@@ -222,17 +269,17 @@ All colors MUST be HSL.
   /* Phamily Theme - Rich Forest Green (Mobile-First) */
   [data-theme="phamily"] {
     --background: 0 0% 100%;
-    --foreground: 0 0% 100%;
+    --foreground: 165 60% 15%;
     --card: 0 0% 100%;
-    --card-foreground: 165 60% 20%;
+    --card-foreground: 165 60% 15%;
     --popover: 0 0% 100%;
-    --popover-foreground: 165 60% 20%;
+    --popover-foreground: 165 60% 15%;
     --primary: 165 60% 25%;
     --primary-foreground: 35 15% 90%;
     --secondary: 35 20% 85%;
-    --secondary-foreground: 165 60% 20%;
+    --secondary-foreground: 165 60% 15%;
     --muted: 35 15% 92%;
-    --muted-foreground: 165 30% 40%;
+    --muted-foreground: 165 30% 22%;
     --accent: 165 50% 30%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 75% 55%;
@@ -255,7 +302,7 @@ All colors MUST be HSL.
     --secondary: 265 50% 20%;
     --secondary-foreground: 280 20% 85%;
     --muted: 265 40% 18%;
-    --muted-foreground: 280 15% 60%;
+    --muted-foreground: 280 15% 67%;
     --accent: 280 70% 65%;
     --accent-foreground: 265 75% 8%;
     --destructive: 0 80% 60%;
@@ -278,7 +325,7 @@ All colors MUST be HSL.
     --secondary: 35 35% 70%;
     --secondary-foreground: 25 60% 25%;
     --muted: 35 25% 82%;
-    --muted-foreground: 25 30% 45%;
+    --muted-foreground: 25 30% 25%;
     --accent: 45 90% 55%;
     --accent-foreground: 25 60% 25%;
     --destructive: 0 80% 55%;
@@ -286,6 +333,39 @@ All colors MUST be HSL.
     --border: 35 25% 75%;
     --input: 35 25% 75%;
     --ring: 18 100% 50%;
+  }
+
+  /* System dark-mode auto-apply (Tailwind class="dark" takes precedence via specificity) */
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme]):not([data-portal]) {
+      --background: 222.2 84% 4.9%;
+      --foreground: 210 40% 98%;
+      --card: 222.2 84% 4.9%;
+      --card-foreground: 210 40% 98%;
+      --popover: 222.2 84% 4.9%;
+      --popover-foreground: 210 40% 98%;
+      --primary: 210 40% 98%;
+      --primary-foreground: 222.2 47.4% 11.2%;
+      --secondary: 217.2 32.6% 17.5%;
+      --secondary-foreground: 210 40% 98%;
+      --muted: 217.2 32.6% 17.5%;
+      --muted-foreground: 215 20.2% 65.1%;
+      --accent: 217.2 32.6% 17.5%;
+      --accent-foreground: 210 40% 98%;
+      --destructive: 0 62.8% 30.6%;
+      --destructive-foreground: 210 40% 98%;
+      --border: 217.2 32.6% 17.5%;
+      --input: 217.2 32.6% 17.5%;
+      --ring: 212.7 26.8% 83.9%;
+      --sidebar-background: 240 5.9% 10%;
+      --sidebar-foreground: 240 4.8% 95.9%;
+      --sidebar-primary: 224.3 76.3% 48%;
+      --sidebar-primary-foreground: 0 0% 100%;
+      --sidebar-accent: 240 3.7% 15.9%;
+      --sidebar-accent-foreground: 240 4.8% 95.9%;
+      --sidebar-border: 240 3.7% 15.9%;
+      --sidebar-ring: 217.2 91.2% 59.8%;
+    }
   }
 
   .dark {
@@ -338,7 +418,7 @@ All colors MUST be HSL.
     --secondary: 35 15% 93%;
     --secondary-foreground: 222 47% 11%;
     --muted: 35 15% 93%;
-    --muted-foreground: 215 16% 47%;
+    --muted-foreground: 215 20% 28%;
     --accent: 38 92% 50%;
     --accent-foreground: 222 47% 11%;
     --border: 35 15% 88%;
@@ -359,7 +439,7 @@ All colors MUST be HSL.
     --secondary: 210 20% 96%;
     --secondary-foreground: 215 25% 27%;
     --muted: 210 20% 96%;
-    --muted-foreground: 215 16% 47%;
+    --muted-foreground: 215 20% 28%;
     --accent: 221 83% 53%;
     --accent-foreground: 0 0% 100%;
     --border: 214 32% 91%;
@@ -380,7 +460,7 @@ All colors MUST be HSL.
     --secondary: 160 20% 94%;
     --secondary-foreground: 160 60% 15%;
     --muted: 160 20% 94%;
-    --muted-foreground: 160 20% 40%;
+    --muted-foreground: 160 25% 22%;
     --accent: 38 92% 50%;
     --accent-foreground: 160 60% 15%;
     --border: 160 15% 88%;
@@ -401,7 +481,7 @@ All colors MUST be HSL.
     --secondary: 210 15% 95%;
     --secondary-foreground: 217 33% 17%;
     --muted: 210 15% 95%;
-    --muted-foreground: 215 16% 47%;
+    --muted-foreground: 215 20% 28%;
     --accent: 188 90% 42%;
     --accent-foreground: 0 0% 100%;
     --border: 210 15% 90%;
@@ -422,7 +502,7 @@ All colors MUST be HSL.
     --secondary: 215 25% 20%;
     --secondary-foreground: 213 27% 84%;
     --muted: 215 25% 20%;
-    --muted-foreground: 215 20% 55%;
+    --muted-foreground: 215 20% 67%;
     --accent: 18 100% 60%;
     --accent-foreground: 215 30% 12%;
     --border: 215 25% 22%;
@@ -449,7 +529,7 @@ All colors MUST be HSL.
     --secondary: 222 30% 16%;
     --secondary-foreground: 35 20% 90%;
     --muted: 222 30% 16%;
-    --muted-foreground: 215 20% 60%;
+    --muted-foreground: 215 20% 67%;
     --accent: 38 92% 50%;
     --accent-foreground: 222 47% 7%;
     --border: 222 25% 18%;
@@ -468,7 +548,7 @@ All colors MUST be HSL.
     --secondary: 215 25% 18%;
     --secondary-foreground: 210 20% 90%;
     --muted: 215 25% 18%;
-    --muted-foreground: 215 16% 55%;
+    --muted-foreground: 215 20% 67%;
     --border: 215 22% 20%;
     --input: 215 22% 20%;
     --ring: 221 83% 53%;
@@ -485,7 +565,7 @@ All colors MUST be HSL.
     --secondary: 160 25% 16%;
     --secondary-foreground: 35 20% 90%;
     --muted: 160 25% 16%;
-    --muted-foreground: 160 15% 55%;
+    --muted-foreground: 160 15% 67%;
     --border: 160 20% 18%;
     --input: 160 20% 18%;
     --ring: 38 92% 50%;
@@ -502,7 +582,7 @@ All colors MUST be HSL.
     --secondary: 217 25% 18%;
     --secondary-foreground: 210 15% 88%;
     --muted: 217 25% 18%;
-    --muted-foreground: 215 16% 55%;
+    --muted-foreground: 215 20% 67%;
     --border: 217 22% 20%;
     --input: 217 22% 20%;
     --ring: 188 90% 42%;
@@ -523,7 +603,7 @@ All colors MUST be HSL.
     --secondary: 215 30% 18%;
     --secondary-foreground: 35 30% 85%;
     --muted: 215 30% 18%;
-    --muted-foreground: 215 20% 55%;
+    --muted-foreground: 215 20% 67%;
     --accent: 160 84% 39%;
     --accent-foreground: 215 40% 10%;
     --border: 215 30% 20%;
@@ -546,16 +626,70 @@ All colors MUST be HSL.
   }
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════════
+   WAVE 16 AAA — GLOBAL PREFERS-REDUCED-MOTION (SC 2.3.3 / 2.5.4)
+   OS-level motion preference: stop all animations and transitions site-wide.
+   Complements the opt-in .lb-reduced-motion class (user toggle).
+   ═══════════════════════════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+  /* Flip-card: skip rotation entirely */
+  .flip-card-inner {
+    transition: none !important;
+    transform: none !important;
+  }
+  .flip-card:hover .flip-card-inner,
+  .flip-card.flipped .flip-card-inner {
+    transform: none !important;
+  }
+  /* Body background crossfade: instant */
+  body {
+    transition: none !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   WAVE 16 AAA — FORCED-COLORS / WINDOWS HIGH CONTRAST (SC 1.4.11)
+   Ensures focus rings, interactive states remain distinguishable in HC mode.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+@media (forced-colors: active) {
+  :focus-visible {
+    outline: 3px solid ButtonText;
+    outline-offset: 2px;
+    forced-color-adjust: none;
+  }
+  button,
+  [role="button"],
+  a[href],
+  input,
+  select,
+  textarea {
+    forced-color-adjust: auto;
+  }
+  /* Preserve decorative SVG icons in HC mode */
+  svg[aria-hidden="true"] {
+    forced-color-adjust: none;
+  }
+}
+
 /* Mobile-specific optimizations */
 @media (max-width: 768px) {
-  /* Larger touch targets for mobile */
+  /* Larger touch targets for mobile — 48px AAA (SC 2.5.5 Enhanced) */
   button,
   a,
   input[type="checkbox"],
   input[type="radio"],
   select {
-    min-height: 44px;
-    min-width: 44px;
+    min-height: 48px;
+    min-width: 48px;
   }
 
   /* Better spacing for touch interfaces */
@@ -819,4 +953,177 @@ html.lb-reduced-motion *::after {
   animation-iteration-count: 1 !important;
   transition-duration: 0.001ms !important;
   scroll-behavior: auto !important;
+}
+
+/* ── Hex Backdrop — BP072 ───────────────────────────────────────────────── */
+/* Dark (default) */
+:root {
+  --hex-bg-color: #0a1628;
+  --hex-bg-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%2322c55e' fill-opacity='0.04'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* Light (moon toggled) */
+[data-hex-mode="light"] {
+  --hex-bg-color: #f5efe1;
+  --hex-bg-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%2316324a' fill-opacity='0.05'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+body, #root {
+  min-height: 100vh;
+}
+
+/* Unlayered — wins over @layer base body { @apply bg-background } */
+body {
+  background-color: var(--hex-bg-color);
+  background-image: var(--hex-bg-pattern);
+  transition: background-color 0.3s ease;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   WAVE 8 B2 — MOBILE RESPONSIVE DEEP PASS
+   Touch: >=44px targets, gesture manipulation, no horizontal overflow.
+   Tables: responsive card layout at 375–767px.
+   Dark mode: ensured via CSS custom properties (Tailwind dark: classes supplement).
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* Prevent any element from causing horizontal scroll */
+*:not(html):not(body):not(pre):not(code) {
+  max-width: 100%;
+}
+
+/* Responsive tables — stack as cards on small screens */
+@media (max-width: 640px) {
+  .table-responsive-cards table,
+  .table-responsive-cards thead,
+  .table-responsive-cards tbody,
+  .table-responsive-cards th,
+  .table-responsive-cards td,
+  .table-responsive-cards tr {
+    display: block;
+  }
+
+  .table-responsive-cards thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  .table-responsive-cards tr {
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.5rem;
+    margin-bottom: 0.75rem;
+    padding: 0.25rem 0;
+  }
+
+  .table-responsive-cards td {
+    border: none;
+    border-bottom: 1px solid hsl(var(--border) / 0.4);
+    position: relative;
+    padding: 0.5rem 0.75rem 0.5rem 45%;
+    text-align: left;
+  }
+
+  .table-responsive-cards td:last-child {
+    border-bottom: none;
+  }
+
+  .table-responsive-cards td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0.75rem;
+    width: 40%;
+    padding-right: 0.5rem;
+    font-weight: 600;
+    font-size: 0.75rem;
+    color: hsl(var(--muted-foreground));
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+/* 375px viewport: ensure readable text and full-width elements */
+@media (max-width: 375px) {
+  .container,
+  [class*="max-w-"] {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  h1 { font-size: 1.5rem !important; }
+  h2 { font-size: 1.25rem !important; }
+  h3 { font-size: 1.1rem !important; }
+
+  .text-4xl,
+  .text-5xl,
+  .text-6xl,
+  .text-7xl { font-size: 2rem !important; }
+
+  .text-3xl { font-size: 1.75rem !important; }
+}
+
+/* Touch gesture classes — apply to carousels, sliders, swipeable areas */
+.gesture-area {
+  touch-action: pan-x pan-y;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+.gesture-swipe-x {
+  touch-action: pan-x;
+  overscroll-behavior-x: contain;
+}
+
+/* Tap highlight on interactive elements (touch devices) */
+@media (hover: none) and (pointer: coarse) {
+  button,
+  a,
+  [role="button"],
+  [role="tab"] {
+    -webkit-tap-highlight-color: rgba(79, 70, 229, 0.15);
+  }
+
+  /* Active press state for touch */
+  button:active,
+  [role="button"]:active {
+    opacity: 0.85;
+    transform: scale(0.98);
+    transition: opacity 0.1s, transform 0.1s;
+  }
+}
+
+/* Horizontal overflow guard — catches rogue fixed-width children */
+@media (max-width: 768px) {
+  pre, code {
+    overflow-x: auto;
+    max-width: calc(100vw - 2rem);
+  }
+
+  /* Image responsiveness */
+  img:not([class*="w-"]):not([style*="width"]) {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Video / iframe aspect ratio on mobile */
+  iframe,
+  video {
+    max-width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+}
+
+/* Video wrapper utility for 16:9 embeds */
+.aspect-video-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%;
+}
+
+.aspect-video-wrapper > * {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }

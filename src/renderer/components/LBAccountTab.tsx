@@ -331,6 +331,9 @@ export function LBAccountTab() {
             onJoin={handleJoinFrontier}
             onLeave={handleLeaveFrontier}
           />
+
+          {/* ── Frontier Borrow Section (WAVE-24) ── */}
+          <FrontierBorrowSection linked={true} />
         </>
       ) : (
         /* ── Unlinked State ── */
@@ -384,6 +387,126 @@ export function LBAccountTab() {
             </>
           )}
         </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Frontier Borrow Section (WAVE-24) ────────────────────────────────────────
+
+function FrontierBorrowSection({ linked }: { linked: boolean }) {
+  const [borrowOptIn, setBorrowOptIn] = React.useState(false);
+  const [borrowLoading, setBorrowLoading] = React.useState(false);
+  const [borrowResult, setBorrowResult] = React.useState<{
+    ok: boolean;
+    cost_transport_usd?: number;
+    cost_compute_usd_approx?: number;
+    disclosure?: string;
+    error?: string;
+  } | null>(null);
+
+  React.useEffect(() => {
+    void window.amplify?.lbGetBorrowStatus?.()
+      .then((res) => { if (res) setBorrowOptIn(res.borrow_opt_in); })
+      .catch(() => {});
+  }, []);
+
+  const handleToggleBorrow = async () => {
+    const next = !borrowOptIn;
+    setBorrowOptIn(next);
+    await window.amplify?.lbSetBorrowOptIn?.(next).catch(() => {});
+  };
+
+  const handleRequestBorrow = async () => {
+    setBorrowLoading(true);
+    setBorrowResult(null);
+    try {
+      const res = await window.amplify?.lbRequestFrontierBorrow?.();
+      setBorrowResult(res ?? { ok: false, error: 'No response from main process.' });
+    } catch {
+      setBorrowResult({ ok: false, error: 'Request failed.' });
+    } finally {
+      setBorrowLoading(false);
+    }
+  };
+
+  return (
+    <div style={s.card}>
+      <div style={s.row}>
+        <span style={{ fontSize: 16 }}>+</span>
+        <div style={{ fontSize: 13, fontWeight: 600, color: '#e2e8f0' }}>
+          Borrow a Frontier Node
+        </div>
+        <span style={{
+          fontSize: 9,
+          fontWeight: 700,
+          padding: '2px 6px',
+          borderRadius: 10,
+          background: 'rgba(59,130,246,0.12)',
+          border: '1px solid rgba(59,130,246,0.3)',
+          color: 'rgb(96,165,250)',
+          whiteSpace: 'nowrap' as const,
+        }}>
+          OPT-IN
+        </span>
+      </div>
+
+      <p style={s.sub}>
+        Your computer is busy -- borrow a trusted Frontier node for this inference.
+        Opt-in only. You choose which nodes to trust.
+      </p>
+
+      <div style={{ display: 'flex', gap: 14, marginBottom: 4 }}>
+        <div style={{ textAlign: 'center' as const }}>
+          <div style={{ fontSize: 16, fontWeight: 800, color: '#4ade80' }}>$0</div>
+          <div style={{ fontSize: 10, color: '#64748b' }}>transport</div>
+        </div>
+        <div style={{ textAlign: 'center' as const }}>
+          <div style={{ fontSize: 16, fontWeight: 800, color: '#94a3b8' }}>~$0.01</div>
+          <div style={{ fontSize: 10, color: '#64748b' }}>compute / inference</div>
+        </div>
+      </div>
+
+      {!linked && (
+        <div style={s.error}>
+          Link your LB account above to access Frontier nodes.
+        </div>
+      )}
+
+      <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: linked ? 'pointer' : 'not-allowed' }}>
+        <input
+          type="checkbox"
+          checked={borrowOptIn}
+          onChange={() => void handleToggleBorrow()}
+          disabled={!linked}
+          style={{ accentColor: '#6ee7b7', width: 14, height: 14 }}
+        />
+        <span style={{ fontSize: 12, color: linked ? '#94a3b8' : '#475569' }}>
+          Enable borrowing from trusted Frontier nodes
+        </span>
+      </label>
+
+      {borrowOptIn && linked && (
+        <>
+          <div style={{ ...s.sub, fontSize: 10, color: '#475569' }}>
+            Trust list is shared from your LB cooperative membership. Nodes are verified cooperative members only.
+          </div>
+          <button
+            style={s.btnFrontier}
+            onClick={() => void handleRequestBorrow()}
+            disabled={borrowLoading}
+          >
+            {borrowLoading ? 'Requesting...' : 'Borrow a node for this session'}
+          </button>
+          {borrowResult?.ok && (
+            <div style={s.success}>
+              Ready. {borrowResult.disclosure ?? ''}
+            </div>
+          )}
+          {borrowResult && !borrowResult.ok && (
+            <div style={s.error}>{borrowResult.error}</div>
+          )}
+        </>
       )}
     </div>
   );

@@ -65,7 +65,7 @@ export default function Tier_A_NEEDS_Page() {
           </div>
           <p className="text-base text-muted-foreground leading-relaxed max-w-2xl">
             Whatever you have out-of-box. No subscription upgrade required. No extra spend.
-            LB Frame runs on your default Claude Code plan and demonstrates Cathedral Effect
+            LB Frame runs on your default Claude Code plan and demonstrates Caithedral Effect
             retrieval lift at this tier.
           </p>
           <p className="text-sm italic text-muted-foreground">

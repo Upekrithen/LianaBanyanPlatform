@@ -4,6 +4,7 @@ import { ProfileVisibilitySettings } from '@/components/ProfileVisibilitySetting
 import { LegalFormationStatus } from '@/components/LegalFormationStatus';
 import { CharitableLoanAccount } from '@/components/CharitableLoanAccount';
 import { PortalPageLayout } from '@/components/PortalPageLayout';
+import { AccountTypeSettings } from '@/components/AccountTypeSettings';
 
 export default function ProfileSettings() {
   const { t } = useTranslation();
@@ -18,6 +19,7 @@ export default function ProfileSettings() {
       </div>
 
       <div className="grid gap-6">
+        <AccountTypeSettings />
         <ProfileVisibilitySettings />
         <PhysicalBadgeDesigner />
         <LegalFormationStatus />

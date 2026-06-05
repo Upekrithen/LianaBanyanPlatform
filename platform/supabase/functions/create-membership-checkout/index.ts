@@ -97,12 +97,7 @@ Deno.serve(async (req) => {
 
     const stripeParams: Record<string, string> = {
       "customer_email": user.email,
-      "line_items[0][price_data][currency]": "usd",
-      "line_items[0][price_data][product_data][name]": "Liana Banyan Access Key",
-      "line_items[0][price_data][product_data][description]": autoRenew
-        ? "Annual cooperative membership — $5/year · auto-renews annually · cancel anytime"
-        : "Annual cooperative membership — $5/year",
-      "line_items[0][price_data][unit_amount]": "500",
+      "line_items[0][price]": "price_1SIXWsDMOngHJB3UxKPFmXZE",
       "line_items[0][quantity]": "1",
       "mode": stripeMode,
       "success_url": `${origin}/membership-success?session_id={CHECKOUT_SESSION_ID}`,
@@ -117,11 +112,6 @@ Deno.serve(async (req) => {
 
     if (inviteCode) {
       stripeParams["metadata[invite_code]"] = inviteCode;
-    }
-
-    // BP065 PART 0: subscription mode requires recurring interval on price_data
-    if (autoRenew) {
-      stripeParams["line_items[0][price_data][recurring][interval]"] = "year";
     }
 
     const stripeResponse = await fetch("https://api.stripe.com/v1/checkout/sessions", {

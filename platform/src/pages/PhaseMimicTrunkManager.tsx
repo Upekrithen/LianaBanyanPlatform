@@ -71,7 +71,10 @@ function getStatusIcon(status: PhaseConnectionStatus) {
   }
 }
 
-// ── Mock Data ──────────────────────────────────────────────────────────────
+// ── Stub Data (BP072-W9-C5, until Supabase integration) ──────────────────
+// TODO: Replace MOCK_TRUNKS with real Supabase query from `phase_mimic_trunks` table.
+// Expected DB table: phase_mimic_trunks(id, owner_id, trunk_type, phase_budget,
+//   phase_spent, contributions[], ...)
 
 const MOCK_TRUNKS: PhaseMimicTrunk[] = [
   {

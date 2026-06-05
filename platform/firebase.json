@@ -164,6 +164,33 @@
         { "source": "**/*.css", "headers": [{ "key": "Content-Type", "value": "text/css; charset=UTF-8" }, { "key": "Cache-Control", "value": "max-age=31536000" }] },
         { "source": "**/*.@(jpg|jpeg|gif|png|svg|webp|ico)", "headers": [{ "key": "Cache-Control", "value": "max-age=31536000" }] }
       ]
+    },
+    {
+      "_comment": "Wave 28 (BP073 Phase epsilon) -- museum.lianabanyan.com frozen snapshot. DNS HELD for Founder.",
+      "target": "museum-frozen",
+      "public": "dist",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "rewrites": [
+        { "source": "/history", "destination": "/index.html" },
+        { "source": "/rope-of-history", "destination": "/index.html" },
+        { "source": "**", "destination": "/index.html" }
+      ],
+      "headers": [
+        {
+          "source": "**",
+          "headers": [
+            { "key": "Strict-Transport-Security", "value": "max-age=31536000; includeSubDomains" },
+            { "key": "X-Museum-Frozen", "value": "wave-28-2026-06-03" },
+            { "key": "X-Robots-Tag", "value": "index, follow" }
+          ]
+        },
+        { "source": "index.html", "headers": [{ "key": "Content-Type", "value": "text/html; charset=UTF-8" }, { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }] },
+        { "source": "**/*.html", "headers": [{ "key": "Content-Type", "value": "text/html; charset=UTF-8" }] },
+        { "source": "**/*.@(js|mjs)", "headers": [{ "key": "Content-Type", "value": "application/javascript; charset=UTF-8" }, { "key": "Cache-Control", "value": "max-age=31536000" }] },
+        { "source": "**/*.css", "headers": [{ "key": "Content-Type", "value": "text/css; charset=UTF-8" }, { "key": "Cache-Control", "value": "max-age=31536000" }] },
+        { "source": "**/*.@(jpg|jpeg|gif|png|svg|webp|ico)", "headers": [{ "key": "Cache-Control", "value": "max-age=31536000" }] },
+        { "source": "/museum-sitemap.xml", "headers": [{ "key": "Content-Type", "value": "application/xml; charset=UTF-8" }, { "key": "Cache-Control", "value": "public, max-age=86400" }] }
+      ]
     }
   ]
 }

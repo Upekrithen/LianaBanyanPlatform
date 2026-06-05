@@ -46,7 +46,10 @@ import {
 } from "@/lib/discourse/pedestals";
 import { PortalPageLayout } from '@/components/PortalPageLayout';
 
-// ── Mock Data ──────────────────────────────────────────────────────────────
+// ── Stub Data (BP072-W9-C5, until Supabase integration) ──────────────────
+// TODO: Replace MOCK_PEDESTALS with real Supabase query from `pedestals` table.
+// Expected DB table: pedestals(id, name, description, curator_member_id, status,
+//   total_funding, funder_count, subscription_feeds[])
 
 const MOCK_PEDESTALS: Pedestal[] = [
   {

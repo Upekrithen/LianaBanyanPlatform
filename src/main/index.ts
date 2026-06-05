@@ -105,6 +105,9 @@ import { setDagBridgeMeshHook, getDagEmitCount } from './dag_bridge';
 import { registerDeepLinkProtocol, handleStartupDeepLink } from './deep-link-handler';
 import type { DeepLinkPayload } from './deep-link-handler';
 
+// BP072 — Paired-Frame Mutual-Aid Layer
+import { PairedFrameManager } from './federation/paired-frame-manager';
+
 // BP065 Part A — LB Account authentication + device linking
 import {
   startLBAuthFlow,
@@ -265,6 +268,7 @@ let authManager: AuthManager | null = null;
 let peerDiscovery: PeerDiscovery | null = null;
 let relayClient: RelayClient | null = null;
 let connectivityTimer: ReturnType<typeof setInterval> | null = null;
+let pairedFrameManager: PairedFrameManager | null = null;
 
 // ─── MESH-6: in-flight relay fetch listeners ──────────────────────────────────
 const meshFetchListeners = new Map<string, (payload: SidFetchResponsePayload) => void>();
@@ -420,6 +424,11 @@ function _handleInboundMeshMsg(msg: FedMsg): void {
         console.warn('[MESH-6] auto-fetch on pointer_advance failed:', e),
       );
     }
+  }
+
+  // BP072: forward pair_* and assist_* to PairedFrameManager
+  if (msg.type.startsWith('pair_') || msg.type.startsWith('assist_')) {
+    pairedFrameManager?.handleInbound(msg);
   }
 }
 
@@ -1859,6 +1868,40 @@ function registerIPCHandlers(): void {
     };
   });
 
+  // ── Frontier Borrow (WAVE-24) ──────────────────────────────────────────────
+  // "Your computer is busy -- borrow a trusted node."
+  // Opt-in only. Returns a borrow ticket with cost disclosure.
+  const _borrowOptIn = { enabled: false, trustList: [] as string[] };
+
+  ipcMain.handle('lb:get-borrow-status', () => ({
+    borrow_opt_in: _borrowOptIn.enabled,
+    trust_list: _borrowOptIn.trustList,
+  }));
+
+  ipcMain.handle('lb:set-borrow-opt-in', (_event, { enabled }: { enabled: boolean }) => {
+    _borrowOptIn.enabled = enabled;
+    return { ok: true };
+  });
+
+  ipcMain.handle('lb:request-frontier-borrow', async () => {
+    if (!_borrowOptIn.enabled) {
+      return { ok: false, error: 'Borrow opt-in not enabled. Toggle it on first.' };
+    }
+    // Session check -- must be linked
+    const session = getLBSession();
+    if (!session) {
+      return { ok: false, error: 'Link your LB account first to access Frontier nodes.' };
+    }
+    // Cost disclosure: always $0 transport, ~$0.01 compute
+    return {
+      ok: true,
+      cost_transport_usd: 0,
+      cost_compute_usd_approx: 0.01,
+      node_count: _borrowOptIn.trustList.length,
+      disclosure: 'Borrow is opt-in only. Cost: $0 transport, ~$0.01 compute per inference on a trusted Frontier node.',
+    };
+  });
+
   // Opt-In Strike Tracker IPC stubs (renderer primarily uses localStorage; IPC for cross-window sync)
   const _optInStore = { strikes: 0, lastShown: null as number | null, decision: 'pending' as string };
 
@@ -1944,6 +1987,44 @@ function registerIPCHandlers(): void {
     relayConnected: relayClient?.isConnected() ?? false,
     ownPeerId: peerDiscovery ? (() => { const { getStablePeerId: gsp } = require('./federation/peer-discovery'); return gsp(); })() : '',
   }));
+
+  // ── BP072 — Paired-Frame Mutual-Aid IPC ──────────────────────────────────
+
+  ipcMain.handle('paired-frame:get-status', () => {
+    return pairedFrameManager?.getStatus() ?? {
+      paired: false,
+      pairedPeerId: null,
+      pairedAt: null,
+      assistModeActive: false,
+      assistModeEnabled: false,
+      missedHeartbeats: 0,
+      lastPartnerContactAt: null,
+    };
+  });
+
+  ipcMain.handle('paired-frame:request-pairing', (_ev, { peerId, displayName }: { peerId: string; displayName?: string }) => {
+    if (!pairedFrameManager) return { ok: false, error: 'PairedFrameManager not initialized' };
+    pairedFrameManager.requestPairing(peerId, displayName);
+    return { ok: true };
+  });
+
+  ipcMain.handle('paired-frame:accept-pairing', (_ev, { peerId, displayName }: { peerId: string; displayName?: string }) => {
+    if (!pairedFrameManager) return { ok: false, error: 'PairedFrameManager not initialized' };
+    pairedFrameManager.acceptPairing(peerId, displayName);
+    return { ok: true };
+  });
+
+  ipcMain.handle('paired-frame:reject-pairing', (_ev, { peerId, reason }: { peerId: string; reason?: string }) => {
+    if (!pairedFrameManager) return { ok: false, error: 'PairedFrameManager not initialized' };
+    pairedFrameManager.rejectPairing(peerId, reason);
+    return { ok: true };
+  });
+
+  ipcMain.handle('paired-frame:unpair', (_ev, { reason }: { reason?: string } = {}) => {
+    if (!pairedFrameManager) return { ok: false, error: 'PairedFrameManager not initialized' };
+    pairedFrameManager.unpair(reason);
+    return { ok: true };
+  });
 
   // ── MESH-6: SID-targeted peer fetch ────────────────────────────────────────
   ipcMain.handle(
@@ -2188,6 +2269,21 @@ app.whenReady().then(async () => {
   // MESH-6: Wire relay inbound hook for sid_fetch_*, pointer_advance
   relayClient.setInboundHook(_handleInboundMeshMsg);
 
+  // BP072: Initialize Paired-Frame Mutual-Aid layer
+  pairedFrameManager = new PairedFrameManager(peerId, peerDiscovery, relayClient);
+  pairedFrameManager.start();
+  // Wire TCP inbound hook so pair_*/assist_* messages arriving on port 11481 are handled
+  federationClient?.setInboundHook((msg) => pairedFrameManager?.handleInbound(msg as FedMsg));
+  // Log assist-mode state changes
+  pairedFrameManager.on('assist-mode-entered', (partnerId) => {
+    console.log(`[BP072] ASSIST_MODE ENTERED for partner=${partnerId} — healthy frame now serving`);
+    _broadcastMeshStateChanged();
+  });
+  pairedFrameManager.on('assist-mode-exited', (partnerId) => {
+    console.log(`[BP072] ASSIST_MODE EXITED — partner=${partnerId ?? 'none'} back online`);
+    _broadcastMeshStateChanged();
+  });
+
   // MESH-6: Wire pointer-advance hook from caithedral tools IPC
   setMeshPointerAdvanceHook(_emitPointerAdvanceToPeers);
 
@@ -2398,6 +2494,7 @@ app.on('window-all-closed', () => {
 app.on('before-quit', async () => {
   stopOverlayWatchdog();
   if (connectivityTimer) clearInterval(connectivityTimer);
+  pairedFrameManager?.stop();
   folderWatcher?.stopAll();
   autoUpdater?.destroy();
   await ollamaManager?.shutdown();

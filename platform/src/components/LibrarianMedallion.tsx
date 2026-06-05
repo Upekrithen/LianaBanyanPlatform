@@ -264,7 +264,7 @@ const VARIANT_CONFIGS: Record<LibrarianMedallionVariant, VariantConfig> = {
     authorityLabel: "Substrate Authority",
     accessTier: "public-agpl",
     stage2Demo: {
-      title: "Cathedral Effect HOT-Lift Demo",
+      title: "Caithedral Effect HOT-Lift Demo",
       subtitle: "Run a live benchmark — see COLD vs HOT context lift.",
       ctaLabel: "Run Benchmark",
       steps: [
@@ -393,7 +393,7 @@ const VARIANT_CONFIGS: Record<LibrarianMedallionVariant, VariantConfig> = {
       subtitle: "Three bodies synchronizing — watch the compound amplify.",
       ctaLabel: "Begin Handshake",
       steps: [
-        { id: "frame", label: "LB Frame", prompt: "LB Frame activating Cathedral Effect substrate…", receipt: "✓ LB Frame: +86.1pp HOT lift baseline · AGPL v3 free" },
+        { id: "frame", label: "LB Frame", prompt: "LB Frame activating Caithedral Effect substrate…", receipt: "✓ LB Frame: +86.1pp HOT lift baseline · AGPL v3 free" },
         { id: "mechanical", label: "Mechanical Computer", prompt: "Mechanical Computer handshaking with LB Frame…", receipt: "✓ Mechanical Computer: persistent AI layer connected · 3 DragonRiders coordinating" },
         { id: "federation", label: "Federation Library", prompt: "Federation Library syncing cross-member Stone Tablets…", receipt: "✓ Federation Library: 4th-power amplifier active · Trinity handshake complete" },
       ],
@@ -423,7 +423,7 @@ const VARIANT_CONFIGS: Record<LibrarianMedallionVariant, VariantConfig> = {
       subtitle: "Layer-by-layer compound — watch the 81× projection build.",
       ctaLabel: "Measure the Ceiling",
       steps: [
-        { id: "l1", label: "L1 — Cathedral", prompt: "Measuring Cathedral Effect baseline (Touchstone R10 / K499)…", receipt: "✓ L1: +86.1pp HOT lift · 5 vendors · 8 models · Touchstone R10 locked B112" },
+        { id: "l1", label: "L1 — Cathedral", prompt: "Measuring Caithedral Effect baseline (Touchstone R10 / K499)…", receipt: "✓ L1: +86.1pp HOT lift · 5 vendors · 8 models · Touchstone R10 locked B112" },
         { id: "l2", label: "L2 — SRME", prompt: "Adding Substrate-Resident Memory Enhancement layer…", receipt: "✓ L2: compound stack building · Chandelier L1+L2 receipts · 25.6×-50× range" },
         { id: "l3", label: "L3–L5 — Projection", prompt: "Projecting Mechanical Computer + Symbiote + Scale layers…", receipt: "✓ L3-L5: 81× compound projection · COLOSSUS ceiling pending receipt · STUPENDOUS operational" },
       ],
@@ -443,21 +443,21 @@ const VARIANT_CONFIGS: Record<LibrarianMedallionVariant, VariantConfig> = {
     centerLock: false,
     ebletPath: "CANON/GOLDEN/liana-banyan",
     backSummary:
-      "Librarian-Liana-Banyan is the corporate anchor — broadest audience-tier, counsel-formal. Liana Banyan Corporation (EIN [REDACTED-PRIVATE], C-Corp). 37 years of development, 2,270 innovations, 228 Crown Jewels, 17 provisional patents. The substrate is AGPL v3 free — full-featured, no gating. Federation Library opt-in at $5/year. 83.3% creator-keeps on every transaction.",
+      "Librarian-Liana-Banyan is the corporate anchor — broadest audience-tier, counsel-formal. Liana Banyan Corporation (EIN [REDACTED-PRIVATE], C-Corp). 37 years of development, 2,270 innovations, 228 Crown Jewels, 21 provisional patents. The substrate is AGPL v3 free — full-featured, no gating. Federation Library opt-in at $5/year. 83.3% creator-keeps on every transaction.",
     bountyTagline: "Join the Cooperative — Help Each Other Help Ourselves.",
     tier: "Liana Banyan — Corporate Anchor",
     authorityLabel: "Corporate Canon Authority",
     accessTier: "public-agpl",
     stage2Demo: {
       title: "Liana Banyan Platform Overview",
-      subtitle: "37 years. 2,270 innovations. 17 provisionals. One cooperative.",
+      subtitle: "37 years. 2,270 innovations. 21 provisionals. One cooperative.",
       ctaLabel: "See the Platform",
       steps: [
-        { id: "foundation", label: "Foundation", prompt: "Loading Liana Banyan canonical context…", receipt: "✓ Foundation: 2,270 innovations · 228 Crown Jewels · 17 provisional patents filed" },
-        { id: "substrate", label: "Substrate", prompt: "Activating Cathedral Effect substrate…", receipt: "✓ Substrate: +86.1pp HOT lift · 5 vendors tested · AGPL v3 free full-version" },
+        { id: "foundation", label: "Foundation", prompt: "Loading Liana Banyan canonical context…", receipt: "✓ Foundation: 2,270 innovations · 228 Crown Jewels · 21 provisional patents filed" },
+        { id: "substrate", label: "Substrate", prompt: "Activating Caithedral Effect substrate…", receipt: "✓ Substrate: +86.1pp HOT lift · 5 vendors tested · AGPL v3 free full-version" },
         { id: "cooperative", label: "Cooperative", prompt: "Federation Library membership check…", receipt: "✓ Cooperative: $5/year · 83.3% creator keeps · FOR THE KEEP!" },
       ],
-      finalReceipt: "LB-PLATFORM-DEMO · 2,270 innovations · 17 provisionals · AGPL v3 free · Federation Library $5/year ONE OF US",
+      finalReceipt: "LB-PLATFORM-DEMO · 2,270 innovations · 21 provisionals · AGPL v3 free · Federation Library $5/year ONE OF US",
     },
   },
   apiarist: {

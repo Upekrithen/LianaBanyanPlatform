@@ -94,6 +94,11 @@ export function OutreachLetterVotePanel({
             You previously voted: <span style={{ color: "#d4a853" }}>{existingVote.vote_type}</span> — you can change your vote
           </p>
         )}
+        {/* Scope 3: "if you vote for a letter, it is also sent to you" note */}
+        <p className="text-[10px] mt-1.5 leading-relaxed" style={{ color: "#94a3b8" }}>
+          If you vote to approve this letter, a copy will also be sent to you --
+          so you can see exactly what was dispatched on behalf of the cooperative.
+        </p>
       </div>
 
       <div className="px-4 py-3 space-y-2">

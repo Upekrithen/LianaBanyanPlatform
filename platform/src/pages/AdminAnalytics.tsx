@@ -6,6 +6,7 @@
  * Data from analytics_daily_summary and analytics_page_views views.
  *
  * Innovation #1548 — Admin Analytics Dashboard (Session 8A)
+ * BP072-W9-C4: Test telemetry + Star-Chamber/Augur logs + error budget
  */
 
 import { useState } from "react";
@@ -20,7 +21,8 @@ import { PortalPageLayout } from "@/components/PortalPageLayout";
 import {
   BarChart3, TrendingUp, Users, Eye, MousePointer, CreditCard,
   ArrowRight, Calendar, RefreshCw, ShieldCheck, Activity,
-  Layers, Globe,
+  Layers, Globe, TestTube, Gavel, AlertTriangle, CheckCircle2,
+  XCircle, Clock, Gauge,
 } from "lucide-react";
 
 // ─── Types ──────────────────────────────────────────────────
@@ -50,6 +52,31 @@ interface PlatformStats {
   dailyTrend: Array<{ date: string; events: number; users: number }>;
   pledgeStats: { totalPledges: number; totalAmount: number; uniqueBackers: number };
   creditStats: { totalPurchases: number };
+}
+
+// ─── C4: Additional Types ────────────────────────────────────
+
+interface TestTelemetryEntry {
+  metric_name: string;
+  metric_value: number;
+  recorded_at: string;
+  context: Record<string, unknown> | null;
+}
+
+interface VerdictLogEntry {
+  id: string;
+  case_id?: string;
+  verdict?: string;
+  status?: string;
+  created_at: string;
+  context?: Record<string, unknown> | null;
+}
+
+interface ErrorBudget {
+  errorRate: number;
+  budget: number;
+  consumed: number;
+  remaining: number;
 }
 
 // ─── Helpers ─────────────────────────────────────────────────
@@ -184,6 +211,107 @@ function useAnalyticsData(days: number) {
   });
 }
 
+// ─── C4: Test Telemetry Hook ─────────────────────────────────
+
+function useTestTelemetry() {
+  return useQuery({
+    queryKey: ["admin-test-telemetry"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("platform_metrics" as any)
+        .select("metric_name, metric_value, recorded_at, context")
+        .ilike("metric_name", "test_%")
+        .order("recorded_at", { ascending: false })
+        .limit(100) as { data: TestTelemetryEntry[] | null };
+
+      const entries = data || [];
+
+      // Aggregate by metric name for sparkline/summary
+      const nameMap = new Map<string, { latest: number; history: number[] }>();
+      entries.forEach((e) => {
+        const existing = nameMap.get(e.metric_name) || { latest: 0, history: [] };
+        existing.history.push(e.metric_value);
+        if (existing.history.length === 1) existing.latest = e.metric_value;
+        nameMap.set(e.metric_name, existing);
+      });
+
+      const summary = Array.from(nameMap.entries()).map(([name, d]) => ({
+        name,
+        latest: d.latest,
+        history: d.history.slice(0, 20).reverse(),
+        total: d.history.reduce((s, v) => s + v, 0),
+      }));
+
+      // Pass/fail extraction if stored as test_pass / test_fail metrics
+      const passSeries = entries.filter((e) => e.metric_name === "test_pass");
+      const failSeries = entries.filter((e) => e.metric_name === "test_fail");
+      const totalPass = passSeries.reduce((s, e) => s + e.metric_value, 0);
+      const totalFail = failSeries.reduce((s, e) => s + e.metric_value, 0);
+
+      return { summary, entries, totalPass, totalFail };
+    },
+    staleTime: 60_000,
+  });
+}
+
+// ─── C4: Verdict Log / Augur Hook ────────────────────────────
+
+function useVerdictLog(limit = 30) {
+  return useQuery({
+    queryKey: ["admin-verdict-log", limit],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("verdict_log" as any)
+        .select("id, case_id, verdict, status, created_at, context")
+        .order("created_at", { ascending: false })
+        .limit(limit) as { data: VerdictLogEntry[] | null };
+
+      const entries = data || [];
+
+      // Reconciliation state summary
+      const statusCounts = entries.reduce<Record<string, number>>((acc, e) => {
+        const s = e.status || "unknown";
+        acc[s] = (acc[s] || 0) + 1;
+        return acc;
+      }, {});
+
+      const verdictCounts = entries.reduce<Record<string, number>>((acc, e) => {
+        const v = e.verdict || "pending";
+        acc[v] = (acc[v] || 0) + 1;
+        return acc;
+      }, {});
+
+      return { entries, statusCounts, verdictCounts };
+    },
+    staleTime: 30_000,
+  });
+}
+
+// ─── C4: Error Budget Hook ───────────────────────────────────
+
+function useErrorBudget() {
+  return useQuery({
+    queryKey: ["admin-error-budget"],
+    queryFn: async (): Promise<ErrorBudget> => {
+      const { data } = await supabase
+        .from("platform_metrics" as any)
+        .select("metric_name, metric_value")
+        .eq("metric_name", "error_rate")
+        .order("recorded_at", { ascending: false })
+        .limit(1)
+        .maybeSingle() as { data: { metric_name: string; metric_value: number } | null };
+
+      const errorRate = data?.metric_value ?? 0;
+      const budget = 0.1; // 0.1% SLO error budget
+      const consumed = Math.min(errorRate, budget);
+      const remaining = Math.max(0, budget - consumed);
+
+      return { errorRate, budget, consumed, remaining };
+    },
+    staleTime: 60_000,
+  });
+}
+
 // ─── Components ─────────────────────────────────────────────
 
 function StatCard({
@@ -274,6 +402,9 @@ function DailyTrendChart({ data }: { data: Array<{ date: string; events: number;
 export default function AdminAnalytics() {
   const [days, setDays] = useState(7);
   const { data: stats, isLoading, refetch, isRefetching } = useAnalyticsData(days);
+  const { data: testTelemetry } = useTestTelemetry();
+  const { data: verdictLog } = useVerdictLog();
+  const { data: errorBudget } = useErrorBudget();
 
   return (
     <PortalPageLayout maxWidth="xl" xrayId="admin-analytics">
@@ -342,6 +473,9 @@ export default function AdminAnalytics() {
               <TabsTrigger value="events">Event Breakdown</TabsTrigger>
               <TabsTrigger value="pages">Page Views</TabsTrigger>
               <TabsTrigger value="engagement">Engagement</TabsTrigger>
+              <TabsTrigger value="tests">Test Telemetry</TabsTrigger>
+              <TabsTrigger value="augur">Augur / Verdicts</TabsTrigger>
+              <TabsTrigger value="error-budget">Error Budget</TabsTrigger>
             </TabsList>
 
             {/* ════════ OVERVIEW ════════ */}
@@ -592,6 +726,275 @@ export default function AdminAnalytics() {
                       );
                     })}
                   </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            {/* ════════ TEST TELEMETRY ════════ */}
+            <TabsContent value="tests" className="space-y-6">
+              <div className="grid gap-4 md:grid-cols-3">
+                <StatCard
+                  title="Total Passes"
+                  value={testTelemetry?.totalPass ?? 0}
+                  description="Summed test_pass metric entries"
+                  icon={CheckCircle2}
+                />
+                <StatCard
+                  title="Total Failures"
+                  value={testTelemetry?.totalFail ?? 0}
+                  description="Summed test_fail metric entries"
+                  icon={XCircle}
+                />
+                <StatCard
+                  title="Test Metrics Tracked"
+                  value={testTelemetry?.summary.length ?? 0}
+                  description="Distinct test_* metric names"
+                  icon={TestTube}
+                />
+              </div>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <TestTube className="w-5 h-5" />
+                    Test Metric Breakdown
+                  </CardTitle>
+                  <CardDescription>
+                    Platform metrics with test_* prefix — run counts, pass/fail trends.
+                    Populated by CI pipeline via platform_metrics table.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {!testTelemetry || testTelemetry.summary.length === 0 ? (
+                    <div className="py-10 text-center text-muted-foreground">
+                      <TestTube className="w-10 h-10 mx-auto mb-3 opacity-30" />
+                      <p className="text-sm">No test telemetry data yet.</p>
+                      <p className="text-xs mt-1">
+                        CI pipeline should emit <code>test_pass</code> / <code>test_fail</code> metrics
+                        via <code>recordMetric()</code> in <code>lib/nervous-system/platformMetrics.ts</code>.
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      <div className="grid grid-cols-[1fr_auto_auto] gap-4 text-xs text-muted-foreground font-semibold uppercase border-b pb-2 mb-2">
+                        <span>Metric</span>
+                        <span className="w-20 text-right">Latest</span>
+                        <span className="w-20 text-right">Total</span>
+                      </div>
+                      {testTelemetry.summary.map((m) => (
+                        <div key={m.name} className="grid grid-cols-[1fr_auto_auto] gap-4 text-sm py-1 border-b border-border/50 last:border-0">
+                          <span className="font-mono text-xs text-muted-foreground">{m.name}</span>
+                          <span className="w-20 text-right font-medium">{formatNumber(m.latest)}</span>
+                          <span className="w-20 text-right text-muted-foreground">{formatNumber(m.total)}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            {/* ════════ AUGUR / VERDICT LOGS ════════ */}
+            <TabsContent value="augur" className="space-y-6">
+              <div className="grid gap-4 md:grid-cols-3">
+                {Object.entries(verdictLog?.statusCounts || {}).slice(0, 3).map(([status, count]) => (
+                  <StatCard
+                    key={status}
+                    title={`Status: ${status}`}
+                    value={count as number}
+                    icon={Gavel}
+                  />
+                ))}
+                {Object.keys(verdictLog?.statusCounts || {}).length === 0 && (
+                  <StatCard
+                    title="Total Verdicts"
+                    value={verdictLog?.entries.length ?? 0}
+                    description="From verdict_log table"
+                    icon={Gavel}
+                  />
+                )}
+              </div>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Gavel className="w-5 h-5" />
+                    Star-Chamber / Augur Log
+                  </CardTitle>
+                  <CardDescription>
+                    Recent augur firings, reconciliation state, and verdict outcomes.
+                    Source: <code>verdict_log</code> table.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {!verdictLog || verdictLog.entries.length === 0 ? (
+                    <div className="py-10 text-center text-muted-foreground">
+                      <Gavel className="w-10 h-10 mx-auto mb-3 opacity-30" />
+                      <p className="text-sm">No verdict log entries yet.</p>
+                      <p className="text-xs mt-1">
+                        Star Chamber verdicts and Augur gate firings will appear here
+                        as they are recorded in the <code>verdict_log</code> table.
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="space-y-1.5">
+                      {verdictLog.entries.map((entry) => (
+                        <div
+                          key={entry.id}
+                          className="flex items-center gap-3 text-sm rounded-md border px-3 py-2"
+                        >
+                          <div className={`w-2 h-2 rounded-full shrink-0 ${
+                            entry.verdict === "approved" ? "bg-green-500"
+                            : entry.verdict === "rejected" ? "bg-red-500"
+                            : "bg-amber-500"
+                          }`} />
+                          <span className="font-mono text-xs text-muted-foreground w-24 shrink-0 truncate">
+                            {entry.id.slice(0, 8)}
+                          </span>
+                          {entry.case_id && (
+                            <span className="text-xs text-muted-foreground">
+                              case: {entry.case_id.slice(0, 8)}
+                            </span>
+                          )}
+                          <Badge
+                            variant="outline"
+                            className={`text-[10px] ml-auto shrink-0 ${
+                              entry.verdict === "approved" ? "border-green-500/40 text-green-600"
+                              : entry.verdict === "rejected" ? "border-red-500/40 text-red-600"
+                              : "border-amber-500/40 text-amber-600"
+                            }`}
+                          >
+                            {entry.verdict || entry.status || "pending"}
+                          </Badge>
+                          <span className="text-xs text-muted-foreground shrink-0">
+                            {formatDate(entry.created_at)}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Reconciliation Summary */}
+              {verdictLog && Object.keys(verdictLog.verdictCounts).length > 0 && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-sm">Verdict Distribution</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <BarChart
+                      data={Object.entries(verdictLog.verdictCounts).map(([label, value]) => ({
+                        label,
+                        value: value as number,
+                      }))}
+                      maxValue={Math.max(...Object.values(verdictLog.verdictCounts) as number[])}
+                    />
+                  </CardContent>
+                </Card>
+              )}
+            </TabsContent>
+
+            {/* ════════ ERROR BUDGET ════════ */}
+            <TabsContent value="error-budget" className="space-y-6">
+              <div className="grid gap-4 md:grid-cols-3">
+                <StatCard
+                  title="Current Error Rate"
+                  value={errorBudget ? `${(errorBudget.errorRate * 100).toFixed(3)}%` : "Loading..."}
+                  description="From platform_metrics error_rate"
+                  icon={AlertTriangle}
+                />
+                <StatCard
+                  title="SLO Budget"
+                  value={errorBudget ? `${(errorBudget.budget * 100).toFixed(2)}%` : "--"}
+                  description="Target: 0.1% error budget"
+                  icon={Gauge}
+                />
+                <StatCard
+                  title="Budget Remaining"
+                  value={
+                    errorBudget
+                      ? `${((errorBudget.remaining / errorBudget.budget) * 100).toFixed(1)}%`
+                      : "--"
+                  }
+                  description="Available error capacity"
+                  icon={Activity}
+                />
+              </div>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Gauge className="w-5 h-5" />
+                    Error Budget
+                  </CardTitle>
+                  <CardDescription>
+                    SLO: 99.9% uptime (0.1% error budget). Tracks platform reliability against target.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {errorBudget ? (
+                    <>
+                      <div className="space-y-1">
+                        <div className="flex justify-between text-xs text-muted-foreground">
+                          <span>Budget consumed</span>
+                          <span>
+                            {errorBudget.budget > 0
+                              ? `${((errorBudget.consumed / errorBudget.budget) * 100).toFixed(1)}%`
+                              : "0%"}
+                          </span>
+                        </div>
+                        <div className="h-4 bg-muted rounded overflow-hidden">
+                          <div
+                            className={`h-full rounded transition-all duration-700 ${
+                              errorBudget.consumed / errorBudget.budget > 0.8
+                                ? "bg-red-500"
+                                : errorBudget.consumed / errorBudget.budget > 0.5
+                                ? "bg-amber-500"
+                                : "bg-green-500"
+                            }`}
+                            style={{
+                              width: `${Math.min(100, errorBudget.budget > 0
+                                ? (errorBudget.consumed / errorBudget.budget) * 100
+                                : 0)}%`,
+                            }}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-3 text-sm">
+                        <div className="rounded-lg border bg-muted/30 p-3">
+                          <p className="text-xs text-muted-foreground">Error rate</p>
+                          <p className="text-xl font-bold">{(errorBudget.errorRate * 100).toFixed(3)}%</p>
+                        </div>
+                        <div className="rounded-lg border bg-muted/30 p-3">
+                          <p className="text-xs text-muted-foreground">Budget remaining</p>
+                          <p className="text-xl font-bold text-green-600">
+                            {(errorBudget.remaining * 100).toFixed(3)}%
+                          </p>
+                        </div>
+                      </div>
+
+                      {errorBudget.consumed / errorBudget.budget > 0.5 && (
+                        <div className="flex items-start gap-2 rounded-lg border border-amber-500/30 bg-amber-500/5 px-3 py-2">
+                          <AlertTriangle className="h-4 w-4 text-amber-600 mt-0.5 shrink-0" />
+                          <p className="text-xs text-amber-700 dark:text-amber-400">
+                            Error budget is over 50% consumed. Review recent deployments and
+                            incident logs to protect the SLO.
+                          </p>
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <div className="py-8 text-center text-muted-foreground">
+                      <Gauge className="w-10 h-10 mx-auto mb-3 opacity-30" />
+                      <p className="text-sm">No error rate data recorded yet.</p>
+                      <p className="text-xs mt-1">
+                        Emit <code>error_rate</code> metrics via{" "}
+                        <code>recordMetric('error_rate', value)</code> in the platform metrics service.
+                      </p>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </TabsContent>

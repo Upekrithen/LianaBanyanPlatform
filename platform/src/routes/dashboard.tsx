@@ -81,6 +81,19 @@ const RouteDetailPage = lazy(() => import("@/pages/v2/vehicle/RouteDetailPage"))
 const LemonLotV2 = lazy(() => import("@/pages/v2/vehicle/LemonLotV2"));
 const VehicleListingDetail = lazy(() => import("@/pages/v2/vehicle/VehicleListingDetail"));
 
+// BM30 — Scope 29 + 30
+const BountyDispatchPage = lazy(() => import("@/pages/BountyDispatchPage"));
+const SpotlightConsentPage = lazy(() => import("@/pages/SpotlightConsentPage"));
+
+// BP072-W9 — Data / Dashboards / Telemetry / Thermometer
+const MemberDashboardPage = lazy(() => import("@/pages/MemberDashboardPage"));
+
+// BP072-W26 — Economy: Bounty Feed / Marks Redeem / Substitution Explainer / Pedestal Nominate
+const BountyFeedPage = lazy(() => import("@/pages/BountyFeedPage"));
+const MarksRedeemPage = lazy(() => import("@/pages/MarksRedeemPage"));
+const SubstitutionExplainerPage = lazy(() => import("@/pages/SubstitutionExplainerPage"));
+const PedestalNominatePage = lazy(() => import("@/pages/PedestalNominatePage"));
+
 // Bushel 25 — Code Breakers Corps Guild + LB Elves Guild (BP022)
 const CodeBreakersCorps = lazy(() => import("@/pages/helm/CodeBreakersCorps"));
 const LBElvesGuild = lazy(() => import("@/pages/helm/LBElvesGuild"));
@@ -196,5 +209,20 @@ export const dashboardRoutes = (
     <Route path="/my/cathedral/settings" element={<ProtectedRoute gateContext="open Cathedral settings"><LazyPage><CathedralSettings /></LazyPage></ProtectedRoute>} />
     <Route path="/my/cathedral/:scribeId/share" element={<ProtectedRoute gateContext="adjust a Scribe's share level"><LazyPage><CathedralShare /></LazyPage></ProtectedRoute>} />
     <Route path="/my/cathedral/:scribeId" element={<ProtectedRoute gateContext="open a Scribe's tablet"><LazyPage><CathedralTablet /></LazyPage></ProtectedRoute>} />
+
+    {/* BM30 Scope 29 -- Battery Dispatch + DeckCueCard */}
+    <Route path="/admin/bounty-dispatch" element={<ProtectedRoute gateContext="use Battery Dispatch"><LazyPage><BountyDispatchPage /></LazyPage></ProtectedRoute>} />
+
+    {/* BP072-W9 — Member Dashboard (C1) */}
+    <Route path="/dashboard/member" element={<ProtectedRoute><LazyPage><MemberDashboardPage /></LazyPage></ProtectedRoute>} />
+
+    {/* BM30 Scope 30 -- Spotlight / Eyewitness */}
+    <Route path="/spotlight" element={<ProtectedRoute><LazyPage><SpotlightConsentPage /></LazyPage></ProtectedRoute>} />
+
+    {/* BP072-W26 -- Economy: Bounty Feed / Marks / Substitution / Pedestal */}
+    <Route path="/bounties" element={<LazyPage><BountyFeedPage /></LazyPage>} />
+    <Route path="/marks/redeem" element={<ProtectedRoute><LazyPage><MarksRedeemPage /></LazyPage></ProtectedRoute>} />
+    <Route path="/substitution" element={<LazyPage><SubstitutionExplainerPage /></LazyPage>} />
+    <Route path="/governance/pedestal/nominate" element={<ProtectedRoute><LazyPage><PedestalNominatePage /></LazyPage></ProtectedRoute>} />
   </>
 );

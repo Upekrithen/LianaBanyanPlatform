@@ -30,6 +30,7 @@ export default function WelcomeV2Page() {
               body="Explore a cooperative platform for commerce, creation, production, and local coordination—then choose your path when you're ready."
               primaryCTA={{ label: "Explore the pathways", href: "/cold-start" }}
               secondaryCTA={{ label: "Browse as a guest", href: "/ghost-browse" }}
+              joinCTA={{ label: "Join Liana Banyan \u2014 $5/year. Be the first one on your block.", href: "/join" }}
               proofStrip={[
                 "6 starting pathways",
                 "$5/year membership",

@@ -197,7 +197,7 @@ export default function WhyNoVC() {
           </div>
           <div className="p-4 bg-muted rounded-lg space-y-3">
             <p className="text-sm text-muted-foreground">
-              Our <strong className="text-primary">127 Crown Jewel patents</strong> out of {{innovationCount}} documented innovations
+              Our <strong className="text-primary">228 Crown Jewel patents</strong> out of {{innovationCount}} documented innovations
               have an independent valuation of <strong className="text-green-600 dark:text-green-400">$116 Million</strong> — but
               we only claim <strong className="text-primary">$630,000</strong>.
             </p>

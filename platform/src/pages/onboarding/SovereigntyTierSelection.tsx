@@ -65,7 +65,7 @@ const TIERS = [
       "Pheromone substrate read-only",
       "Detective TEAM read-only (canon fan-out)",
       "Brittle Cathedral fingerprint",
-      "Cathedral Effect lift demonstrated at this tier",
+      "Caithedral Effect lift demonstrated at this tier",
     ],
   },
   {
@@ -148,7 +148,7 @@ export default function SovereigntyTierSelection() {
                 Architecture Beats More
               </p>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                The Cathedral Effect's +51–84 pp HOT-retrieval lift holds at Tier A — default plan,
+                The Caithedral Effect's +51–84 pp HOT-retrieval lift holds at Tier A — default plan,
                 no upgrades. Architecture is the lever, not raw model tier. Your seat at the
                 Grown-Up table is reserved.
               </p>

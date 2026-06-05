@@ -58,8 +58,8 @@ export const SACRIFICE_PRINCIPLE = {
     "Through raising eight children — four grown, four still at home",
     "Through building 8 utility patents worth $630K declared — $116M pessimist's floor",
     "$525,000 of personal commitment over 9 years into patent portfolio",
-    "2,128 innovations cataloged and documented",
-    "2,473 patent claims across 11 provisional applications",
+    "2,270 innovations cataloged and documented",
+    "2,473 patent claims across 21 provisional applications",
     "The platform exists because someone was willing to do what others wouldn't",
   ],
 } as const;
@@ -82,8 +82,8 @@ export const PRINCIPLES = {
 // ─── INNOVATION STATS ────────────────────────────────────────────────────────
 
 export const INNOVATION_STATS = {
-  canonicalCount: 2128,         // Current canonical innovation count
-  patentClaims: 2473,           // Across 11 provisional applications
+  canonicalCount: 2270,         // Current canonical innovation count
+  patentClaims: 2473,           // Across 21 provisional applications
   utilityPatents: 11,
   patentPortfolioValue: { low: 116_000_000, high: 15_740_000_000 },
   personalInvestment: 525_000,  // Over 9 years

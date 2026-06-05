@@ -124,7 +124,7 @@ BEGIN
                           'plan_requirement', 'default Claude Code plan',
                           'upgrade_required', false,
                           'anyone_can_run',   true,
-                          'empirical_note',   'Cathedral Effect baseline lift at default-plan-class'
+                          'empirical_note',   'Caithedral Effect baseline lift at default-plan-class'
                         )
                         WHEN 'suggests' THEN jsonb_build_object(
                           'plan_recommendation', 'Claude Code Max or equivalent',

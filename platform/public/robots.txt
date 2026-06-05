@@ -1,14 +1,25 @@
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-User-agent: Twitterbot
-Allow: /
-
-User-agent: facebookexternalhit
-Allow: /
+# robots.txt -- Liana Banyan Cooperative Platform
+# BP072 Wave 3 / Scope 28 -- SEO + Performance
+# Canonical: https://lianabanyan.com
 
 User-agent: *
 Allow: /
+
+# Staff-only and internal pages -- do not index
+Disallow: /staff/
+Disallow: /admin/
+Disallow: /dev/
+Disallow: /my/
+Disallow: /my-pledges
+Disallow: /settings/
+
+# Auth flows -- not useful for search
+Disallow: /auth
+Disallow: /auth/
+
+# Supabase and function endpoints
+Disallow: /functions/
+Disallow: /rest/
+
+# Sitemap location
+Sitemap: https://lianabanyan.com/sitemap.xml

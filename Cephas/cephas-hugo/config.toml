@@ -12,11 +12,6 @@ ignoreFiles = ["_AUGUR_.*SUPERSEDE.*\\.md$"]
     [markup.goldmark.renderer]
       unsafe = true
 
-[markup]
-  [markup.goldmark]
-    [markup.goldmark.renderer]
-      unsafe = true
-
 [pagination]
   pagerSize = 10
 
@@ -129,6 +124,12 @@ ignoreFiles = ["_AUGUR_.*SUPERSEDE.*\\.md$"]
   identifier = "nav-platform"
   name = "Main Platform"
   url = "https://lianabanyan.com"
+  weight = 16
+
+[[menu.main]]
+  identifier = "nav-rewards"
+  name = "Rewards"
+  url = "/rewards-and-marks/"
   weight = 16
 
 [[menu.main]]

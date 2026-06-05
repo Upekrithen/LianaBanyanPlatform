@@ -47,7 +47,17 @@ export type FedMsgType =
   | 'pong'
   | 'sid_fetch_request'   // Requester → holder: "do you have dag_id X?"
   | 'sid_fetch_response'  // Holder → requester: full DagNode or null
-  | 'pointer_advance';    // Emitter → all peers: "root dag_id pointer moved from old→new"
+  | 'pointer_advance'     // Emitter → all peers: "root dag_id pointer moved from old→new"
+  // BP072 — Paired-Frame Mutual-Aid (PF-1/2/3)
+  | 'pair_request'         // A→B: consent-gated binding proposal
+  | 'pair_accept'          // B→A: binding accepted; both sides persist state
+  | 'pair_reject'          // B→A: binding declined
+  | 'pair_heartbeat'       // A↔B: liveness ping (30 s interval)
+  | 'pair_heartbeat_ack'   // B→A: explicit heartbeat acknowledgement
+  | 'pair_unpair'          // A→B: dissolve current pairing
+  | 'assist_substrate_serve'  // PF-3a: healthy→deaf: serve SIDs from warm replica
+  | 'assist_inference_lend'   // PF-3b: route deaf frame's ask→answer (STUBBED)
+  | 'assist_state_mirror';    // PF-3c: replicate new Eblets to partner (STUBBED)
 
 export interface FedMsg {
   type: FedMsgType;
@@ -119,6 +129,55 @@ export interface PointerAdvancePayload {
   pointer_label: string;         // human tag e.g. "session-root"
   emitter_peer_id: string;
   advanced_at: string;           // ISO-8601 UTC
+}
+
+// ─── BP072 — Paired-Frame Mutual-Aid payloads ──────────────────────────────
+
+export interface PairRequestPayload {
+  fromPeerId: string;
+  displayName?: string;
+  requestedAt: string;
+}
+
+export interface PairAcceptPayload {
+  fromPeerId: string;
+  displayName?: string;
+}
+
+export interface PairRejectPayload {
+  fromPeerId: string;
+  reason?: string;
+}
+
+export interface PairHeartbeatPayload {
+  fromPeerId: string;
+  seq: number;
+}
+
+export interface PairHeartbeatAckPayload {
+  fromPeerId: string;
+  seq: number;
+}
+
+export interface PairUnpairPayload {
+  fromPeerId: string;
+  reason?: string;
+}
+
+export interface AssistSubstrateServePayload {
+  dag_id: string;
+  requester_peer_id: string;
+}
+
+export interface AssistInferenceLendPayload {
+  prompt: string;
+  requester_peer_id: string;
+  session_id: string;
+}
+
+export interface AssistStateMirrorPayload {
+  dag_id: string;
+  emitter_peer_id: string;
 }
 
 // ─── 4-Frame telemetry ─────────────────────────────────────────────────────

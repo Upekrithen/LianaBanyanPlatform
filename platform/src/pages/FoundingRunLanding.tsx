@@ -26,6 +26,8 @@ const DEFAULT_FUNDING = {
 };
 
 const MOCK_ITEMS = [
+  // TODO (BP072-W9-C5): Replace with Supabase query from `founding_run_items` or
+  // `production_catalog` table when schema is wired. Typed stub preserved.
   {
     id: "starter-set",
     name: "Starter Set — 6 Miniatures",
@@ -57,6 +59,8 @@ const MOCK_ITEMS = [
 ];
 
 const MOCK_JOURNAL: JournalEntry[] = [
+  // TODO (BP072-W9-C5): Replace with Supabase query from `founding_run_journal`
+  // or `production_log` table when schema is wired. Typed stub preserved.
   {
     id: "j1",
     date: "2026-03-11",

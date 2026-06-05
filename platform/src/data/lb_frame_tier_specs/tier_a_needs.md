@@ -33,7 +33,7 @@ cohort-class advancement is the gate.
 
 ## Empirical floor (what to expect)
 
-LB Frame at Tier A demonstrates Cathedral Effect lift over default-AI baseline. The
+LB Frame at Tier A demonstrates Caithedral Effect lift over default-AI baseline. The
 retrieval mechanism depends on substrate presence, not on Claude Code plan resource tier.
 Plan tier affects **reckoning velocity**, not retrieval quality.
 

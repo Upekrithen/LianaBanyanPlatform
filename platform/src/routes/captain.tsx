@@ -16,6 +16,11 @@ const ProposalsListing = lazy(() => import("@/pages/ProposalsListing"));
 const ProposalDetail = lazy(() => import("@/pages/ProposalDetail"));
 const The300Page = lazy(() => import("@/pages/The300Page"));
 const PedestalDetailPage = lazy(() => import("@/pages/PedestalDetailPage"));
+// Wave 11 governance pages
+const VotingPage = lazy(() => import("@/pages/VotingPage"));
+const GovernanceStarChamberPage = lazy(() => import("@/pages/GovernanceStarChamberPage"));
+const GovernancePedestalPage = lazy(() => import("@/pages/GovernancePedestalPage"));
+const GovernanceAuditPage = lazy(() => import("@/pages/GovernanceAuditPage"));
 const Senate = lazy(() => import("@/pages/Senate"));
 const HallOfInnovations = lazy(() => import("@/pages/HallOfInnovations"));
 const StewardDashboard = lazy(() => import("@/pages/StewardDashboard"));
@@ -43,6 +48,11 @@ export const captainRoutes = (
     <Route path="/governance" element={<LazyPage><Governance /></LazyPage>} />
     <Route path="/governance/proposals" element={<ExplorerRoute><LazyPage><ProposalsListing /></LazyPage></ExplorerRoute>} />
     <Route path="/governance/proposals/:id" element={<LazyPage><ProposalDetail /></LazyPage>} />
+    {/* Wave 11 governance sub-pages */}
+    <Route path="/governance/voting" element={<ProtectedRoute><LazyPage><VotingPage /></LazyPage></ProtectedRoute>} />
+    <Route path="/governance/star-chamber" element={<ProtectedRoute><LazyPage><GovernanceStarChamberPage /></LazyPage></ProtectedRoute>} />
+    <Route path="/governance/pedestal" element={<ProtectedRoute><LazyPage><GovernancePedestalPage /></LazyPage></ProtectedRoute>} />
+    <Route path="/governance/audit" element={<ProtectedRoute><LazyPage><GovernanceAuditPage /></LazyPage></ProtectedRoute>} />
     <Route path="/the-300" element={<LazyPage><Governance /></LazyPage>} />
     <Route path="/star-chamber-legacy" element={<LazyPage><Governance /></LazyPage>} />
     <Route path="/the300" element={<LazyPage><The300Page /></LazyPage>} />

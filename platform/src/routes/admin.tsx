@@ -42,8 +42,16 @@ const ResponseLoggingPage = lazy(() => import("@/pages/admin/ResponseLoggingPage
 const ResponseDashboardPage = lazy(() => import("@/pages/admin/ResponseDashboardPage"));
 // K537: Glass Door admin
 const OutreachLettersAdminPage = lazy(() => import("@/pages/admin/OutreachLettersAdminPage"));
+// BP072 Wave 3 / Scope 6: Social Announcement Set (Thursday-gated)
+const SocialAnnouncementSet = lazy(() => import("@/pages/staff/SocialAnnouncementSet"));
 // [CAI] [B40] FOREMAN Dashboard — Founder-only mission control
 const ForemanDashboard = lazy(() => import("@/pages/ForemanDashboard"));
+// Wave 30 / Phase delta -- Launch Readiness Dashboard
+const LaunchReadinessPage = lazy(() => import("@/pages/LaunchReadinessPage"));
+// BP073 Wave C -- MoneyPenny Switchboard Dashboard
+const MoneyPennyDashboard = lazy(() => import("@/pages/admin/MoneyPennyDashboard"));
+// BP073 Wave 26 / Phase epsilon -- Letter send-readiness packaging
+const LetterPackagingPage = lazy(() => import("@/pages/admin/LetterPackagingPage"));
 
 export const adminRoutes = (
   <>
@@ -86,5 +94,13 @@ export const adminRoutes = (
     <Route path="/admin/outreach-letters" element={<ProtectedRoute><LazyPage><OutreachLettersAdminPage /></LazyPage></ProtectedRoute>} />
     {/* [CAI] [B40] FOREMAN Dashboard — Founder-only, auth-gated internally */}
     <Route path="/foreman" element={<LazyPage><ForemanDashboard /></LazyPage>} />
+    {/* BP072 Wave 3 / Scope 6: Social Announcement Set -- Thursday-gated */}
+    <Route path="/staff/social-announcement-set" element={<ProtectedRoute><LazyPage><SocialAnnouncementSet /></LazyPage></ProtectedRoute>} />
+    {/* Wave 30 / Phase delta -- Launch Readiness Dashboard */}
+    <Route path="/launch-readiness" element={<ProtectedRoute><LazyPage><LaunchReadinessPage /></LazyPage></ProtectedRoute>} />
+    {/* BP073 Wave C -- MoneyPenny Switchboard (staff-gated) */}
+    <Route path="/admin/moneypenny" element={<ProtectedRoute><LazyPage><MoneyPennyDashboard /></LazyPage></ProtectedRoute>} />
+    {/* BP073 Wave 26 / Phase epsilon -- Letter send-readiness packaging (Founder-gated) */}
+    <Route path="/admin/letters" element={<ProtectedRoute><LazyPage><LetterPackagingPage /></LazyPage></ProtectedRoute>} />
   </>
 );

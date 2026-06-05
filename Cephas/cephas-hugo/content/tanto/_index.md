@@ -113,7 +113,8 @@ What comes next:
 - The Knowledge Index grows with every member's Documents folder
 - The DietAI pitch lands in the first editorial outlets
 - The "Why We Call It Bread" paper reaches its 13 target publications
-- Prov 22 (locality-first naming) files alongside the 19 provisionals already on record
+- Prov 22 (locality-first naming) files alongside the 21 provisionals already on record
+<!-- Historical: 19 provisionals at time of writing (2026-05-28); updated BP073 2026-06-04 to reflect current filing: 21 provisionals -->
 
 The session arc was the proof. The product is the demonstration.
 

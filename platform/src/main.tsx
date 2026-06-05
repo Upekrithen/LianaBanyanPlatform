@@ -17,6 +17,14 @@ import { consumeAuthRelay } from "./utils/crossDomainAuth";
 import "./i18n"; // Full react-i18next with 58-language HttpBackend (Option B)
 import "./index.css";
 
+// BP072: Apply hex theme before React renders to prevent flash of light background
+(function initHexTheme() {
+  try {
+    const saved = localStorage.getItem('lb-theme');
+    if (saved === 'light') document.documentElement.setAttribute('data-hex-mode', 'light');
+  } catch { /* ignore */ }
+})();
+
 // Consume cross-domain auth relay before anything renders
 consumeAuthRelay();
 

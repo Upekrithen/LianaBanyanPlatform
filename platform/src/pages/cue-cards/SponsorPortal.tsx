@@ -118,7 +118,7 @@ export default function SponsorPortal() {
                 Patent IP Purchasing
               </CardTitle>
               <CardDescription className="text-zinc-400">
-                Acquire fractional participation in the 1,244 documented innovations protected by our 7 Patent Applications.
+                Acquire fractional participation in the 2,270 documented innovations protected by our 7 Patent Applications.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">

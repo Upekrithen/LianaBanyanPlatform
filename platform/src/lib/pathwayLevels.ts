@@ -126,7 +126,7 @@ export const LEVEL_2_PATHWAYS: PathwayNode[] = [
     route: '/patent-portfolio',
     name: 'Patent Portfolio',
     level: 2,
-    description: '1,244 innovations across 7 applications',
+    description: '2,270 innovations across 7 applications',
     icon: '📜',
     prerequisitePathways: ['plant-seeds'],
   },

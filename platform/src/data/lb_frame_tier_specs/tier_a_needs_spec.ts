@@ -72,7 +72,7 @@ export const TIER_A_PLAN_SPEC = {
 export const TIER_A_TOOLTIP =
   "Tier A runs on whatever Claude Code plan you have today. No upgrade required. " +
   "The cooperative is non-extractive: capital alone cannot purchase higher-tier participation. " +
-  "Cathedral Effect retrieval lift (~+78–93 pp over default AI baseline, mean +86 pp) is demonstrated at this tier. " +
+  "Caithedral Effect retrieval lift (~+78–93 pp over default AI baseline, mean +86 pp) is demonstrated at this tier. " +
   "Reckoning velocity increases with Tier B/C but retrieval quality holds at Tier A.";
 
 // ─── What Tier A cannot do (without advancement) ─────────────────────────────

@@ -14,12 +14,19 @@ import { RecordingProvider } from "@/contexts/RecordingContext";
 import { NotesOverlayProvider } from "@/contexts/NotesOverlayContext";
 import { SubdomainRouter } from "@/components/SubdomainRouter";
 import { BuilderModeProvider } from "@/components/builder/BuilderModeContext";
+import { useWebVitals } from "@/hooks/useWebVitals";
 
 const queryClient = new QueryClient();
+
+function WebVitalsTracker() {
+  useWebVitals();
+  return null;
+}
 
 export function AppProviders({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
+      <WebVitalsTracker />
       <BuilderModeProvider>
         <TooltipProvider>
           <Toaster />

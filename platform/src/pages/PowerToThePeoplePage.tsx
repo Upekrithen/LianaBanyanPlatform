@@ -1,4 +1,7 @@
-﻿import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -9,15 +12,17 @@ import {
   Vote, Search, MapPin, ThumbsUp, ThumbsDown, AlertCircle, CheckCircle, XCircle,
   Eye, Building2, FileText, Star, Timer, Flame, Award, BookOpen, Mic,
   Zap, VolumeX, Play, Pause, RotateCcw, Gavel, Send, Target,
-  CalendarDays, BarChart3,
+  CalendarDays, BarChart3, Lock, Dna, Crown, Globe, Landmark,
+  Newspaper, BookMarked, Swords,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import LaunchConditionOverlay from "@/components/LaunchConditionOverlay";
 import { PortalPageLayout } from '@/components/PortalPageLayout';
+import { usePageSEO } from "@/hooks/usePageSEO";
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-// SAMPLE DATA â€” No Supabase wiring this session
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════════════════
+// SAMPLE DATA — No Supabase wiring this session
+// ═══════════════════════════════════════════════════════════════
 
 const SAMPLE_DISTRICT = {
   name: "District 7",
@@ -96,7 +101,7 @@ const TRACKED_LEGISLATION: LegislationItem[] = [
     description: "Tax incentives for companies that transition to worker ownership models.",
     sponsors: 12, cosponsors: 45,
     communityImpact: "Could reduce cooperative formation costs by 30% in the first year.",
-    watching: true, lastAction: "Referred to Ways & Means â€” March 5, 2026", chamber: "House",
+    watching: true, lastAction: "Referred to Ways & Means — March 5, 2026", chamber: "House",
   },
   {
     id: "bill-002", number: "S 2025", title: "Cooperative Commerce Enhancement Act",
@@ -104,7 +109,7 @@ const TRACKED_LEGISLATION: LegislationItem[] = [
     description: "Reduces regulatory burden for cooperative business structures.",
     sponsors: 8, cosponsors: 23,
     communityImpact: "Simplifies annual reporting for co-ops with <1,000 members.",
-    watching: true, lastAction: "Floor vote scheduled â€” March 22, 2026", chamber: "Senate",
+    watching: true, lastAction: "Floor vote scheduled — March 22, 2026", chamber: "Senate",
   },
   {
     id: "bill-003", number: "HR 3030", title: "Community Food Security Act",
@@ -112,7 +117,7 @@ const TRACKED_LEGISLATION: LegislationItem[] = [
     description: "Supports local food systems and neighborhood meal sharing programs.",
     sponsors: 5, cosponsors: 89,
     communityImpact: "Enables cottage food licenses in all 50 states.",
-    watching: false, lastAction: "Passed House 278-145 â€” March 1, 2026", chamber: "House",
+    watching: false, lastAction: "Passed House 278-145 — March 1, 2026", chamber: "House",
   },
   {
     id: "bill-004", number: "S 1890", title: "Small Business Zoning Reform Act",
@@ -120,7 +125,7 @@ const TRACKED_LEGISLATION: LegislationItem[] = [
     description: "Allows mixed-use home-based manufacturing in residential zones for businesses under $100K revenue.",
     sponsors: 3, cosponsors: 11,
     communityImpact: "Would let LMB operators run 3D print nodes from home legally.",
-    watching: false, lastAction: "Introduced â€” February 28, 2026", chamber: "Senate",
+    watching: false, lastAction: "Introduced — February 28, 2026", chamber: "Senate",
   },
   {
     id: "bill-005", number: "HR 4101", title: "Cooperative Tax Credit Extension",
@@ -128,7 +133,7 @@ const TRACKED_LEGISLATION: LegislationItem[] = [
     description: "Extends and expands Section 1042 tax-free rollovers for sales to worker cooperatives.",
     sponsors: 15, cosponsors: 67,
     communityImpact: "Makes employee buyouts 40% more affordable for retiring business owners.",
-    watching: true, lastAction: "Hearing scheduled â€” March 18, 2026", chamber: "House",
+    watching: true, lastAction: "Hearing scheduled — March 18, 2026", chamber: "House",
   },
 ];
 
@@ -146,12 +151,12 @@ const SAMPLE_CIVIC_SCORECARD = {
     { id: "a5", type: "education" as const, label: "Civic Courses Completed", count: 3, xp: 450 },
   ],
   badges: [
-    { name: "First Vote", icon: "ðŸ—³ï¸", earned: true },
-    { name: "Town Crier", icon: "ðŸ“¯", earned: true },
-    { name: "Pen Pal", icon: "âœ‰ï¸", earned: true },
-    { name: "Week Warrior", icon: "ðŸ”¥", earned: true },
-    { name: "Month Maven", icon: "â­", earned: false },
-    { name: "Century Club", icon: "ðŸ’¯", earned: false },
+    { name: "First Vote", icon: "🗳️", earned: true },
+    { name: "Town Crier", icon: "📯", earned: true },
+    { name: "Pen Pal", icon: "✉️", earned: true },
+    { name: "Week Warrior", icon: "🔥", earned: true },
+    { name: "Month Maven", icon: "⭐", earned: false },
+    { name: "Century Club", icon: "💯", earned: false },
   ],
 };
 
@@ -164,9 +169,9 @@ const SAMPLE_COVERAGE = {
   chunkMinutes: 3,
 };
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════════════════
 // CIVIC LEVEL TIERS
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════════════════
 
 const CIVIC_LEVELS = [
   { level: 1, name: "Observer", minXP: 0 },
@@ -185,19 +190,136 @@ function getCivicLevel(xp: number) {
   return CIVIC_LEVELS.reduce((best, l) => (xp >= l.minXP ? l : best), CIVIC_LEVELS[0]);
 }
 
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════════════════
 // COMPONENT
-// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ═══════════════════════════════════════════════════════════════
 
-type TabKey = "dashboard" | "reps" | "legislation" | "scorecard" | "minutes";
+// ---------------------------------------------------------------------------
+// 7-Crown Council data (mirrors Governance.tsx)
+// ---------------------------------------------------------------------------
+
+const GOVERNANCE_COUNCILS = [
+  {
+    id: "stewards-guild",
+    name: "Stewards Guild Council",
+    abbr: "SGC",
+    boardSeats: 2,
+    icon: Shield,
+    color: "text-emerald-500",
+    bg: "bg-emerald-500/10",
+    purpose: "Platform integrity and bylaw review.",
+  },
+  {
+    id: "harper-guild",
+    name: "Harper Guild Council",
+    abbr: "HGC",
+    boardSeats: 2,
+    icon: Newspaper,
+    color: "text-blue-500",
+    bg: "bg-blue-500/10",
+    purpose: "Journalism standards and content quality.",
+  },
+  {
+    id: "areopagus",
+    name: "Areopagus Council",
+    abbr: "ARC",
+    boardSeats: 1,
+    icon: BookMarked,
+    color: "text-violet-500",
+    bg: "bg-violet-500/10",
+    purpose: "Doctrine, canon, and philosophical direction.",
+  },
+  {
+    id: "initiative-captains",
+    name: "Initiative Captains Council",
+    abbr: "ICC",
+    boardSeats: 2,
+    icon: Landmark,
+    color: "text-amber-500",
+    bg: "bg-amber-500/10",
+    purpose: "The 16 Sweet Sixteen initiatives and spinout oversight.",
+  },
+  {
+    id: "member-at-large",
+    name: "Member-at-Large Council",
+    abbr: "MAL",
+    boardSeats: 1,
+    icon: Users,
+    color: "text-indigo-500",
+    bg: "bg-indigo-500/10",
+    purpose: "Direct member representation, elected by full membership.",
+  },
+  {
+    id: "community-safety",
+    name: "Community Safety Council",
+    abbr: "CSC",
+    boardSeats: 1,
+    icon: Swords,
+    color: "text-red-500",
+    bg: "bg-red-500/10",
+    purpose: "Defense Klaus and neighborhood safety network governance.",
+  },
+  {
+    id: "switzerland-protocol",
+    name: "Switzerland Protocol Council",
+    abbr: "SPC",
+    boardSeats: 1,
+    icon: Globe,
+    color: "text-cyan-500",
+    bg: "bg-cyan-500/10",
+    purpose: "Neutrality enforcement and political/religious content flagging.",
+  },
+] as const;
+
+const DNA_LOCK_ITEMS = [
+  { label: "Membership Fee", value: "$5/year flat -- no tiers, no upgrades, no premium class" },
+  { label: "5% Participation Cap", value: "No member or coordinated group may exceed 5% of votes on any item" },
+  { label: "Marks = Participation Only", value: "Marks are cooperative participation records -- no equity, no financial interest" },
+  { label: "Securities-Clean Language", value: "No governance action may be described in terms that constitute a securities offering" },
+  { label: "Founder Ratification Requirement", value: "DNA Lock amendments require 80% supermajority of The 300 plus Founder ratification" },
+  { label: "IP Ledger Immutability", value: "IP Ledger entries are append-only -- no record may be modified or deleted after creation" },
+];
+
+type TabKey = "dashboard" | "reps" | "legislation" | "scorecard" | "minutes" | "governance";
 
 export default function PowerToThePeoplePage() {
+  usePageSEO({
+    title: "Power to the People | Liana Banyan",
+    description: "Community-owned energy coordination and Battery Dispatch network. Cooperative power for neighborhoods.",
+    canonical: "https://lianabanyan.com/initiatives/power-to-the-people",
+  });
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<TabKey>("dashboard");
   const [searchQuery, setSearchQuery] = useState("");
   const [watchList, setWatchList] = useState<Set<string>>(
     new Set(TRACKED_LEGISLATION.filter((b) => b.watching).map((b) => b.id))
   );
+
+  const { data: liveScorecard } = useQuery({
+    queryKey: ["pttp_civic_scorecard", "me"],
+    queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return null;
+      const { data, error } = await (supabase as any)
+        .from("pttp_civic_scorecard")
+        .select("*")
+        .eq("user_id", user.id)
+        .maybeSingle();
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const civicScorecard = liveScorecard
+    ? {
+        totalXP: liveScorecard.total_xp,
+        sessionsRead: liveScorecard.sessions_read,
+        billsTracked: liveScorecard.bills_tracked,
+        repsContacted: liveScorecard.reps_contacted,
+        nextLevelXP: Math.ceil((liveScorecard.total_xp + 1) / 100) * 100,
+      }
+    : SAMPLE_CIVIC_SCORECARD;
 
   const [timerActive, setTimerActive] = useState(false);
   const [timerSeconds, setTimerSeconds] = useState(SAMPLE_COVERAGE.chunkMinutes * 60);
@@ -227,14 +349,15 @@ export default function PowerToThePeoplePage() {
   const fmtTime = (s: number) =>
     `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, "0")}`;
 
-  const civicLevel = getCivicLevel(SAMPLE_CIVIC_SCORECARD.totalXP);
+  const civicLevel = getCivicLevel(civicScorecard.totalXP);
   const xpProgress =
-    ((SAMPLE_CIVIC_SCORECARD.totalXP - civicLevel.minXP) /
-      (SAMPLE_CIVIC_SCORECARD.nextLevelXP - civicLevel.minXP)) *
+    ((civicScorecard.totalXP - civicLevel.minXP) /
+      (civicScorecard.nextLevelXP - civicLevel.minXP)) *
     100;
 
   const TAB_ITEMS: { key: TabKey; label: string; icon: React.ReactNode }[] = [
     { key: "dashboard", label: "Dashboard", icon: <BarChart3 className="h-4 w-4" /> },
+    { key: "governance", label: "How We Govern", icon: <Crown className="h-4 w-4" /> },
     { key: "reps", label: "Representatives", icon: <Users className="h-4 w-4" /> },
     { key: "legislation", label: "Legislation", icon: <Gavel className="h-4 w-4" /> },
     { key: "scorecard", label: "Scorecard", icon: <Award className="h-4 w-4" /> },
@@ -244,7 +367,7 @@ export default function PowerToThePeoplePage() {
   return (
     <LaunchConditionOverlay initiativeSlug="power-to-the-people" initiativeName="Power to the People">
       <PortalPageLayout maxWidth="xl" xrayId="political-expedition-hub">
-        {/* â•â•â• HEADER â•â•â• */}
+        {/* ═══ HEADER ═══ */}
         <div className="flex items-center gap-4 mb-6">
           <div className="p-3 bg-purple-600 rounded-full text-white">
             <Flag className="h-8 w-8" />
@@ -254,7 +377,7 @@ export default function PowerToThePeoplePage() {
               Power to the People
             </h1>
             <p className="text-lg text-muted-foreground">
-              The Political Expedition â€” civic engagement infrastructure, not partisan messaging
+              The Political Expedition — civic engagement infrastructure, not partisan messaging
             </p>
           </div>
           <Badge
@@ -265,7 +388,7 @@ export default function PowerToThePeoplePage() {
           </Badge>
         </div>
 
-        {/* â•â•â• SWITZERLAND PROTOCOL BANNER â•â•â• */}
+        {/* ═══ SWITZERLAND PROTOCOL BANNER ═══ */}
         <div className="bg-blue-950/50 border border-blue-800 rounded-lg p-4 mb-8 max-w-3xl">
           <h3 className="text-amber-400 font-semibold flex items-center gap-2 mb-2">
             <Shield className="h-4 w-4" /> The Switzerland Protocol
@@ -273,11 +396,11 @@ export default function PowerToThePeoplePage() {
           <p className="text-sm text-slate-300">
             This arena exists <em>outside</em> the cooperative's economic mission. No party
             names. No endorsements. No culture wars. We track what elected officials{" "}
-            <strong>do</strong> â€” not what they say. "Vote FOR people who vote for you."
+            <strong>do</strong> — not what they say. "Vote FOR people who vote for you."
           </p>
         </div>
 
-        {/* â•â•â• DASHBOARD STAT STRIP â•â•â• */}
+        {/* ═══ DASHBOARD STAT STRIP ═══ */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <Card className="bg-purple-50 dark:bg-purple-950/20 border-purple-200 dark:border-purple-800">
             <CardContent className="pt-4 pb-3 text-center">
@@ -319,7 +442,7 @@ export default function PowerToThePeoplePage() {
           </Card>
         </div>
 
-        {/* â•â•â• TAB NAVIGATION â•â•â• */}
+        {/* ═══ TAB NAVIGATION ═══ */}
         <div className="flex flex-wrap gap-2 border-b border-border pb-4 mb-6">
           {TAB_ITEMS.map((tab) => (
             <Button
@@ -337,9 +460,9 @@ export default function PowerToThePeoplePage() {
           ))}
         </div>
 
-        {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        {/* ═══════════════════════════════════════════════════════
             DASHBOARD TAB
-            â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+            ═══════════════════════════════════════════════════════ */}
         {activeTab === "dashboard" && (
           <div className="space-y-8">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -383,7 +506,7 @@ export default function PowerToThePeoplePage() {
                           Petitions & Vote Tracking
                         </h4>
                         <p className="text-sm text-muted-foreground mt-1">
-                          We don't tell you what to believe. We simply remember â€” in public â€” who
+                          We don't tell you what to believe. We simply remember — in public — who
                           did what, when.
                         </p>
                       </div>
@@ -396,7 +519,7 @@ export default function PowerToThePeoplePage() {
                         </h4>
                         <p className="text-sm text-muted-foreground mt-1">
                           We do not allow the platform to be weaponized. If a policy helps
-                          families get groceries, make dinner, or afford medicine â€” we support it.
+                          families get groceries, make dinner, or afford medicine — we support it.
                           That's the line.
                         </p>
                       </div>
@@ -463,15 +586,203 @@ export default function PowerToThePeoplePage() {
                 that tells the way we go."
               </p>
               <p className="text-purple-400 text-sm mt-3 font-medium text-center">
-                â€” Ella Wheeler Wilcox
+                — Ella Wheeler Wilcox
               </p>
             </div>
           </div>
         )}
 
-        {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        {/* ═══════════════════════════════════════════════════════
             REPRESENTATIVES TAB
-            â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+            ═══════════════════════════════════════════════════════ */}
+        {/* HOW WE GOVERN TAB */}
+        {activeTab === "governance" && (
+          <div className="space-y-8">
+            {/* Intro */}
+            <Card className="border-2 border-purple-200 dark:border-purple-900 bg-purple-50/30 dark:bg-purple-950/10">
+              <CardHeader>
+                <Badge variant="outline" className="w-fit bg-purple-100 text-purple-800 border-purple-300 dark:bg-purple-900/50 dark:text-purple-300 mb-2">
+                  Member Governance
+                </Badge>
+                <CardTitle className="text-2xl text-purple-900 dark:text-purple-400">
+                  How Members Govern This Platform
+                </CardTitle>
+                <CardDescription className="text-base text-muted-foreground mt-2">
+                  Liana Banyan is member-governed. No founder can override a proper council vote.
+                  No board seat is appointed from above. Every crown is earned by community election.
+                  The DNA Lock defines what no vote can ever change.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Button
+                  className="bg-purple-600 hover:bg-purple-700 text-white gap-2"
+                  onClick={() => navigate("/governance")}
+                >
+                  <Shield className="h-4 w-4" />
+                  Open Governance Hub
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* DNA Lock */}
+            <div>
+              <h3 className="text-lg font-bold text-foreground flex items-center gap-2 mb-3">
+                <Dna className="h-5 w-5 text-red-500" />
+                DNA Lock -- The Immovable Foundation
+              </h3>
+              <p className="text-sm text-muted-foreground mb-4">
+                These rules cannot be overridden by any vote, any election, or any Board action
+                short of an 80% supermajority of The 300 plus Founder ratification.
+                The councils operate within these boundaries -- not above them.
+              </p>
+              <div className="space-y-2">
+                {DNA_LOCK_ITEMS.map((item) => (
+                  <div
+                    key={item.label}
+                    className="flex items-start gap-3 p-3 rounded-lg bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800"
+                  >
+                    <Lock className="h-3.5 w-3.5 text-red-500 mt-0.5 shrink-0" />
+                    <div>
+                      <p className="text-sm font-semibold text-foreground">{item.label}</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">{item.value}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* The 300 */}
+            <div>
+              <h3 className="text-lg font-bold text-foreground flex items-center gap-2 mb-3">
+                <Users className="h-5 w-5 text-primary" />
+                The 300 -- AI-Human Hybrid Legislature
+              </h3>
+              <div className="grid md:grid-cols-3 gap-4">
+                {[
+                  {
+                    title: "The Pledged (100 seats)",
+                    icon: <Shield className="h-5 w-5 text-slate-400" />,
+                    bg: "bg-slate-50 dark:bg-slate-900/50 border-slate-200 dark:border-slate-700",
+                    desc: "AI Agents. Permanent. 24/7 monitoring, fraud detection, proposal scoring, compliance checking.",
+                  },
+                  {
+                    title: "The Committed (100 seats)",
+                    icon: <Users className="h-5 w-5 text-blue-400" />,
+                    bg: "bg-blue-50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-800",
+                    desc: "Human Members. Elected by community, 1-year terms. Represent member interests. This is your seat.",
+                  },
+                  {
+                    title: "The Covenant (100 seats)",
+                    icon: <Scale className="h-5 w-5 text-violet-400" />,
+                    bg: "bg-violet-50 dark:bg-violet-950/20 border-violet-200 dark:border-violet-800",
+                    desc: "Mixed AI-Human. Domain experts, technical specialists, emergency coordinators.",
+                  },
+                ].map((group) => (
+                  <Card key={group.title} className={`border ${group.bg}`}>
+                    <CardContent className="pt-4">
+                      <div className="flex items-center gap-2 mb-2">
+                        {group.icon}
+                        <p className="font-semibold text-sm text-foreground">{group.title}</p>
+                      </div>
+                      <p className="text-xs text-muted-foreground">{group.desc}</p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                className="mt-3 gap-2 text-xs"
+                onClick={() => navigate("/governance/voting")}
+              >
+                <Vote className="h-3.5 w-3.5" />
+                Cast Your Vote
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Button>
+            </div>
+
+            {/* 7-Crown Councils */}
+            <div>
+              <h3 className="text-lg font-bold text-foreground flex items-center gap-2 mb-3">
+                <Crown className="h-5 w-5 text-amber-500" />
+                The 7-Crown Council Structure
+              </h3>
+              <p className="text-sm text-muted-foreground mb-4">
+                The Board has {GOVERNANCE_COUNCILS.reduce((sum, c) => sum + c.boardSeats, 0)} seats
+                distributed across 7 councils. Every seat is elected -- no appointments.
+                The 5% participation cap applies to all elections.
+              </p>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {GOVERNANCE_COUNCILS.map((council) => {
+                  const Icon = council.icon;
+                  return (
+                    <Card key={council.id} className="hover:border-primary/30 transition-colors">
+                      <CardContent className="pt-4 pb-3">
+                        <div className="flex items-start gap-3">
+                          <div className={`p-1.5 rounded-md ${council.bg} shrink-0`}>
+                            <Icon className={`h-4 w-4 ${council.color}`} />
+                          </div>
+                          <div className="min-w-0">
+                            <p className="text-sm font-semibold text-foreground leading-tight">{council.name}</p>
+                            <p className="text-xs text-muted-foreground mt-0.5">{council.purpose}</p>
+                            <Badge variant="outline" className={`mt-2 text-xs ${council.color}`}>
+                              {council.boardSeats} board seat{council.boardSeats > 1 ? "s" : ""}
+                            </Badge>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Switzerland Protocol */}
+            <Card className="bg-blue-950/50 border border-blue-800">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-amber-400 flex items-center gap-2">
+                  <Globe className="h-5 w-5" /> Switzerland Protocol -- LIVE
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3 text-sm text-slate-300">
+                <p>
+                  No party names. No endorsements. No culture wars. The Switzerland Protocol
+                  is the enforcement mechanism that keeps Liana Banyan neutral ground.
+                  Political content triggers auto-flag, dual AI review, and Star Chamber
+                  escalation. The Switzerland Protocol Council holds one dedicated board seat.
+                </p>
+                <div className="grid grid-cols-2 gap-2 mt-3">
+                  <div className="p-2 bg-white/5 rounded border border-white/10">
+                    <p className="text-xs font-semibold text-white mb-1">Allowed in Platform</p>
+                    <p className="text-xs text-slate-400">Civic engagement, voting records, constituent accountability, cooperative policy</p>
+                  </div>
+                  <div className="p-2 bg-red-900/30 rounded border border-red-700/40">
+                    <p className="text-xs font-semibold text-red-300 mb-1">Goes Outside the Gates</p>
+                    <p className="text-xs text-slate-400">Party advocacy, religious doctrine, endorsements, culture-war framing</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* CTAs */}
+            <div className="grid sm:grid-cols-3 gap-3">
+              <Button variant="outline" className="gap-2 justify-start" onClick={() => navigate("/governance")}>
+                <Shield className="h-4 w-4 text-purple-500" />
+                Governance Hub
+              </Button>
+              <Button variant="outline" className="gap-2 justify-start" onClick={() => navigate("/governance/voting")}>
+                <Vote className="h-4 w-4 text-blue-500" />
+                Cast Votes
+              </Button>
+              <Button variant="outline" className="gap-2 justify-start" onClick={() => navigate("/governance/star-chamber")}>
+                <Star className="h-4 w-4 text-violet-500" />
+                Star Chamber
+              </Button>
+            </div>
+          </div>
+        )}
+
         {activeTab === "reps" && (
           <div className="space-y-6">
             <div className="flex gap-4 max-w-xl">
@@ -491,7 +802,7 @@ export default function PowerToThePeoplePage() {
             </div>
 
             <h3 className="text-xl font-semibold text-foreground">
-              Your Representatives â€” {SAMPLE_DISTRICT.city}, {SAMPLE_DISTRICT.state}
+              Your Representatives — {SAMPLE_DISTRICT.city}, {SAMPLE_DISTRICT.state}
             </h3>
 
             <div className="grid md:grid-cols-2 gap-6">
@@ -567,9 +878,9 @@ export default function PowerToThePeoplePage() {
           </div>
         )}
 
-        {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        {/* ═══════════════════════════════════════════════════════
             LEGISLATION TRACKER TAB
-            â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+            ═══════════════════════════════════════════════════════ */}
         {activeTab === "legislation" && (
           <div className="space-y-6">
             <div className="flex items-center justify-between flex-wrap gap-3">
@@ -659,9 +970,9 @@ export default function PowerToThePeoplePage() {
           </div>
         )}
 
-        {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        {/* ═══════════════════════════════════════════════════════
             CIVIC ENGAGEMENT SCORECARD TAB
-            â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+            ═══════════════════════════════════════════════════════ */}
         {activeTab === "scorecard" && (
           <div className="space-y-6">
             <h3 className="text-xl font-semibold text-foreground">
@@ -678,8 +989,8 @@ export default function PowerToThePeoplePage() {
                     <div className="flex-1">
                       <p className="text-lg font-bold text-foreground">{civicLevel.name}</p>
                       <p className="text-sm text-muted-foreground">
-                        {SAMPLE_CIVIC_SCORECARD.totalXP.toLocaleString()} XP â€” Next level at{" "}
-                        {SAMPLE_CIVIC_SCORECARD.nextLevelXP.toLocaleString()} XP
+                        {civicScorecard.totalXP.toLocaleString()} XP — Next level at{" "}
+                        {civicScorecard.nextLevelXP.toLocaleString()} XP
                       </p>
                       <Progress value={xpProgress} className="mt-2 h-3" />
                     </div>
@@ -691,11 +1002,11 @@ export default function PowerToThePeoplePage() {
                 <CardContent className="pt-6 text-center">
                   <Flame className="h-10 w-10 mx-auto text-orange-500 mb-2" />
                   <p className="text-3xl font-bold text-orange-600 dark:text-orange-400">
-                    {SAMPLE_CIVIC_SCORECARD.streakDays}
+                    {(liveScorecard?.streak_days ?? SAMPLE_CIVIC_SCORECARD.streakDays)}
                   </p>
                   <p className="text-sm text-muted-foreground">Day Streak</p>
                   <p className="text-xs text-muted-foreground/70 mt-1">
-                    Longest: {SAMPLE_CIVIC_SCORECARD.longestStreak} days
+                    Longest: {(liveScorecard?.longest_streak ?? SAMPLE_CIVIC_SCORECARD.longestStreak)} days
                   </p>
                 </CardContent>
               </Card>
@@ -759,9 +1070,9 @@ export default function PowerToThePeoplePage() {
           </div>
         )}
 
-        {/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+        {/* ═══════════════════════════════════════════════════════
             COVERAGE MINUTES TAB
-            â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */}
+            ═══════════════════════════════════════════════════════ */}
         {activeTab === "minutes" && (
           <div className="space-y-6">
             <h3 className="text-xl font-semibold text-foreground flex items-center gap-2">
@@ -780,7 +1091,7 @@ export default function PowerToThePeoplePage() {
                     <p className="text-sm text-muted-foreground">
                       Before you can speak on political topics, you must first{" "}
                       <strong>listen</strong>. Coverage Minutes are earned by reading, watching,
-                      and engaging with civic content. Speaking is gated by listening â€”{" "}
+                      and engaging with civic content. Speaking is gated by listening —{" "}
                       {SAMPLE_COVERAGE.chunkMinutes}-minute chunks, {SAMPLE_COVERAGE.cap}-minute
                       cap, {SAMPLE_COVERAGE.expiresInDays}-day expiry.
                     </p>
@@ -905,14 +1216,14 @@ export default function PowerToThePeoplePage() {
           </div>
         )}
 
-        {/* â•â•â• FOOTER â•â•â• */}
+        {/* ═══ FOOTER ═══ */}
         <div className="mt-12 text-center border-t border-border pt-8">
           <p className="text-muted-foreground text-sm">
-            <strong className="text-foreground">Power to the People</strong> â€”
+            <strong className="text-foreground">Power to the People</strong> —
             Initiative #11
           </p>
           <p className="text-xs mt-2 text-muted-foreground/70">
-            "Not left or right. Forward." â€” Help Each Other Help Ourselves
+            "Not left or right. Forward." — Help Each Other Help Ourselves
           </p>
         </div>
       </PortalPageLayout>

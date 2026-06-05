@@ -15,7 +15,7 @@ wrasseTriggers:
 
 **Designed to be copied. Member-sovereign. Not extractive.**
 
-A 50-year cooperative-class charter. No VC. No ads. No surveillance. **83.3% of every dollar stays with the creator.** $5 a year. One vote. Everything we build is published under a Cooperative Defensive Patent Pledge so members — and any community on Earth — can fork it, run it, and keep it.
+A 50-year cooperative-class charter. No VC. No ads. No surveillance. **83.3% of every dollar stays with the Workers, Builders, and Creators that make it.** $5 a year. One vote. Everything we build is published under a Cooperative Defensive Patent Pledge so members — and any community on Earth — can fork it, run it, and keep it.
 
 <div class="cta-row">
 

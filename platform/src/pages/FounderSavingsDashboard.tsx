@@ -277,7 +277,7 @@ export default function FounderSavingsDashboard() {
                       of counterfactual cost saved via substrate — {windowData.entries} sessions
                     </div>
                     <div className="text-emerald-200 text-sm mt-2">
-                      R13 baseline: +86.2 pp Cathedral Effect · {snapshot.multiplier_provisional ? "multipliers provisional" : "calibrated"}
+                      R13 baseline: +86.2 pp Caithedral Effect · {snapshot.multiplier_provisional ? "multipliers provisional" : "calibrated"}
                     </div>
                   </div>
                 )}

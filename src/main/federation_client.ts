@@ -87,6 +87,13 @@ export class FederationClient {
     this.peerDiscoverySource = fn;
   }
 
+  // BP072: inbound TCP hook for pair_* and assist_* messages not handled by this server
+  private inboundHook: ((msg: { type: string; peerId: string; payload?: unknown; ts: string }) => void) | null = null;
+
+  setInboundHook(fn: (msg: { type: string; peerId: string; payload?: unknown; ts: string }) => void): void {
+    this.inboundHook = fn;
+  }
+
   constructor(index: SubstrateLocalIndex) {
     this.index = index;
     if (!existsSync(FEDERATION_DATA_DIR)) {
@@ -401,6 +408,9 @@ export class FederationClient {
                 socket.end();
               });
             }
+          } else {
+            // BP072: forward pair_* and assist_* (and any future message types) to registered hook
+            this.inboundHook?.(msg as { type: string; peerId: string; payload?: unknown; ts: string });
           }
         } catch {
           // Malformed — ignore

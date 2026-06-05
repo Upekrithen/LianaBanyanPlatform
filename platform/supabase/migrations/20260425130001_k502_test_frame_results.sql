@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS "public"."test_frame_results" (
 );
 
 COMMENT ON TABLE "public"."test_frame_results" IS
-  'Cathedral Effect verification results from member opt-in submissions. Private results are NOT stored here; only anonymous or public shares.';
+  'Caithedral Effect verification results from member opt-in submissions. Private results are NOT stored here; only anonymous or public shares.';
 COMMENT ON COLUMN "public"."test_frame_results"."member_id" IS
   'NULL for anonymous shares. Non-null only when share_preference = ''public''.';
 

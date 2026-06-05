@@ -7,7 +7,7 @@
       "headers": [
         {
           "source": "**/*.html",
-          "headers": [{"key": "Cache-Control", "value": "max-age=3600"}]
+          "headers": [{"key": "Cache-Control", "value": "max-age=300"}]
         },
         {
           "source": "**/*.css",
@@ -20,15 +20,15 @@
         {
           "source": "/download/**",
           "headers": [
-            {"key": "X-LB-Version", "value": "v0.1.20"},
-            {"key": "X-LB-Build-Hash", "value": "v0.1.20+f86cca3"},
+            {"key": "X-LB-Version", "value": "v0.1.25"},
+            {"key": "X-LB-Build-Hash", "value": "v0.1.25+4d2d19f"},
             {"key": "X-LB-Phase", "value": "alpha"}
           ]
         },
         {
           "source": "/changelog/**",
           "headers": [
-            {"key": "X-LB-Version", "value": "v0.1.20"},
+            {"key": "X-LB-Version", "value": "v0.1.25"},
             {"key": "Cache-Control", "value": "max-age=1800"}
           ]
         }
@@ -41,7 +41,7 @@
       "headers": [
         {
           "source": "**/*.html",
-          "headers": [{"key": "Cache-Control", "value": "max-age=3600"}]
+          "headers": [{"key": "Cache-Control", "value": "max-age=300"}]
         },
         {
           "source": "**/*.css",
@@ -63,7 +63,7 @@
       "headers": [
         {
           "source": "**/*.html",
-          "headers": [{"key": "Cache-Control", "value": "max-age=3600"}]
+          "headers": [{"key": "Cache-Control", "value": "max-age=300"}]
         },
         {
           "source": "**/*.css",
@@ -76,15 +76,15 @@
         {
           "source": "/download/**",
           "headers": [
-            {"key": "X-LB-Version", "value": "v0.1.20"},
-            {"key": "X-LB-Build-Hash", "value": "v0.1.20+f86cca3"},
+            {"key": "X-LB-Version", "value": "v0.1.25"},
+            {"key": "X-LB-Build-Hash", "value": "v0.1.25+4d2d19f"},
             {"key": "X-LB-Phase", "value": "alpha"}
           ]
         },
         {
           "source": "/changelog/**",
           "headers": [
-            {"key": "X-LB-Version", "value": "v0.1.20"},
+            {"key": "X-LB-Version", "value": "v0.1.25"},
             {"key": "Cache-Control", "value": "max-age=1800"}
           ]
         }

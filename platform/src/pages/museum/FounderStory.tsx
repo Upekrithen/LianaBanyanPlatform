@@ -1,20 +1,22 @@
 /**
- * FounderStory — /founder/story
+ * FounderStory -- /founder/story
  * ===============================
  * Innovation #2234 (CJ candidate: Founder-First Anecdote Mapping). K404 / B096.
+ * ADD-21 migration: content migrated from Escape Velocity Site founder/index.html. BP073.
  *
  * The Founder goes first. Every innovation traces to a real lived experience
- * with a photograph. This page is a reference work — clean, library-quality
+ * with a photograph. This page is a reference work -- clean, library-quality
  * typography. Not a scrapbook, not a social feed.
  *
  * Route: /founder/story
  */
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { MuseumShell } from "@/components/museum/MuseumShell";
 import { SummonMascot } from "@/components/museum/SummonMascot";
 import { AnecdoteCard } from "@/components/museum/AnecdoteCard";
 import { supabase } from "@/integrations/supabase/client";
-import { BookOpen, Mountain } from "lucide-react";
+import { BookOpen } from "lucide-react";
 
 const FOUNDER_EMAIL = "upekrithen@gmail.com";
 
@@ -70,23 +72,17 @@ export default function FounderStory() {
         <div className="max-w-2xl mx-auto">
           {/* ── Hero Section ── */}
           <div className="text-center mb-8">
-            {/* Placeholder photo area */}
-            <div
-              className="w-32 h-32 mx-auto rounded-full mb-4 flex items-center justify-center"
-              style={{ background: "#0d1b2a", border: "2px solid rgba(56,161,105,0.3)" }}
-            >
-              <Mountain className="w-12 h-12 text-emerald-500/40" />
-            </div>
-
             <h1
-              className="text-2xl font-bold mb-2"
+              className="text-3xl font-bold mb-1"
               style={{ color: "#faf5eb", fontFamily: "'Crimson Pro', Georgia, serif" }}
             >
-              Jonathan Jones &mdash; Founder&rsquo;s Story
+              I yam what I yam.
             </h1>
-            <p className="text-sm text-slate-400 italic leading-relaxed max-w-md mx-auto">
-              &ldquo;Every innovation on this platform traces to a real moment.
-              Here are mine. I&rsquo;m going first so the rest of you know how.&rdquo;
+            <p className="text-sm text-slate-400 italic leading-relaxed max-w-md mx-auto mb-1">
+              Living life on Purpose, WITH Purpose.
+            </p>
+            <p className="text-xs text-slate-500 italic max-w-md mx-auto">
+              Popeye the Sailor Man (E.C. Segar 1929) &middot; Founder direct BP073 2026-06-04 canonical signature.
             </p>
 
             {/* Counter */}
@@ -103,6 +99,34 @@ export default function FounderStory() {
             </div>
           </div>
 
+          {/* ── Credentials Strip ── */}
+          <div
+            className="rounded-xl p-4 mb-6 text-center"
+            style={{ background: "#0a1628", border: "1px solid rgba(56,161,105,0.2)" }}
+          >
+            <p className="text-xs text-slate-300 leading-relaxed mb-3">
+              PK &middot; BA Bible &middot; 2yr Seminary (non-Catholic) &middot; Ordained Minister &middot;{" "}
+              ARNG 11B DRT OCS BOLC 15A IFR &middot; Veteran &middot; Father of 8 &middot; the Anjin &middot;{" "}
+              Crewman #6 &middot; One Army Ant &middot; Founder &amp; General Manager, Liana Banyan Corporation
+            </p>
+            <div className="flex flex-col items-center gap-1">
+              <img
+                src="/img/founder/mark-9-24-forearm-01.jpg"
+                alt="Mark 9:24 -- Lord, I believe; help thou mine unbelief."
+                style={{ width: 120, borderRadius: 6, border: "1px solid rgba(56,161,105,0.3)" }}
+              />
+              <p className="text-xs text-slate-500 italic">
+                Mark 9:24 -- Lord, I believe; help thou mine unbelief.
+              </p>
+              <Link
+                to="/founder/faith-statement"
+                className="text-xs text-emerald-400 hover:text-emerald-300 underline underline-offset-2"
+              >
+                Read the full Faith Statement
+              </Link>
+            </div>
+          </div>
+
           {/* ── Goat Summon (top) ── */}
           <SummonMascot
             mascotId="goat"
@@ -111,10 +135,10 @@ export default function FounderStory() {
             message={
               <>
                 Every feature on Liana Banyan was born from something that actually happened
-                to someone. The Founder is documenting his version first &mdash; 2,236 innovations,
+                to someone. The Founder is documenting his version first -- 2,236 innovations,
                 all traceable to lived moments, with photographs. When you contribute your own
                 innovation, you&rsquo;ll follow the same template. Going first is not a
-                performance &mdash; it&rsquo;s how the platform stays honest across decades.
+                performance -- it&rsquo;s how the platform stays honest across decades.
               </>
             }
             className="mb-6"
@@ -162,7 +186,7 @@ export default function FounderStory() {
                 <>
                   The Founder is telling the stories behind the features. Each one has a
                   photograph (or will, as he gets them into the system). Each one traces to a
-                  specific moment. Nothing here is invented in theory &mdash; it&rsquo;s all
+                  specific moment. Nothing here is invented in theory -- it&rsquo;s all
                   memorialized after the fact, once we knew it worked. That&rsquo;s the whole
                   epistemology in one page.
                 </>

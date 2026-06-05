@@ -77,8 +77,8 @@ export const miscRoutes = (
     <Route path="/defense-claws" element={<Navigate to="/initiatives/defense-claws" replace />} />
     <Route path="/harper-guild" element={<Navigate to="/initiatives/harper-guild" replace />} />
     <Route path="/vsl" element={<Navigate to="/initiatives/vsl" replace />} />
-    <Route path="/bread" element={<Navigate to="/initiatives/bread" replace />} />
-    <Route path="/lets-make-bread" element={<Navigate to="/initiatives/bread" replace />} />
+    <Route path="/bread" element={<Navigate to="/initiatives/lets-make-bread" replace />} />
+    <Route path="/lets-make-bread" element={<Navigate to="/initiatives/lets-make-bread" replace />} />
     <Route path="/didasko" element={<Navigate to="/initiatives/didasko" replace />} />
     <Route path="/power-to-the-people" element={<Navigate to="/initiatives/power-to-the-people" replace />} />
     <Route path="/brass-tacks" element={<Navigate to="/initiatives/brass-tacks" replace />} />

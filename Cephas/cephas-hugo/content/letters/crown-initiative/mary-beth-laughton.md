@@ -17,7 +17,7 @@ wrasseTriggers:
 bp_version: "BP043 W3 SEG-N · BP055 polish pass · F.2 W3 lock pass"
 ---
 
-<!-- STATUS: LOCKABLE — Founder adds contact info to dispatch. Canonical numbers verified: 83.3% ✅ · $5/year ✅ · Cost+20% ✅ · 19 patents ✅ · sig block correct ✅. Note: "Creators keep 83.3%" phrasing used (equivalent to "may earn 83.3%"; acceptable for this letter). -->
+<!-- STATUS: LOCKABLE — Founder adds contact info to dispatch. Canonical numbers verified: 83.3% ✅ · $5/year ✅ · Cost+20% ✅ · 21 patents ✅ · sig block correct ✅. Note: "Creators keep 83.3%" phrasing used (equivalent to "may earn 83.3%"; acceptable for this letter). -->
 
 # Crown Invitation — Let's Go Shopping
 

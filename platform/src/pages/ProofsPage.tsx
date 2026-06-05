@@ -20,7 +20,7 @@
  *   S29-S30: FOUNDER_PUNCH_LIST.md final; KNIGHT_TO_FOUNDER_HANDOFF.md written
  *
  * Core verification proofs (12):
- *   b90073d3 / 405808f5 / dbfc78c6 / 5f4b9e84 -- Cathedral Effect baseline runs
+ *   b90073d3 / 405808f5 / dbfc78c6 / 5f4b9e84 -- Caithedral Effect baseline runs
  *   e9c2b1a7 -- MnemosyneC benchmark re-verification (Wave 5)
  *   w12f1c0de -- Substrace scale stress test (Wave 12 / Phase F1)
  *   w12f3c057 -- Cost/savings proof (Wave 12 / Phase F3)
@@ -41,7 +41,7 @@
  * Total: 24/24 proofs. 2251/2251 tests. 30/30 waves. 900+ scopes. Yoke 2/2.
  */
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -60,6 +60,12 @@ import { cn } from "@/lib/utils";
 import { SoundBarrierChart } from "@/components/proofs/SoundBarrierChart";
 import { MarathonRetrospectiveCarousel } from "@/components/proofs/MarathonRetrospectiveChart";
 import { getHarnessResults } from "@/lib/benchmark/loadHarnessResults";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 // =========================================================================
 // GEMMA 4 12B SCREENSHOTS -- γ-W26-A Sound Barrier Pinned Proof
@@ -332,7 +338,7 @@ const PROOF_RECORDS: ProofRecord[] = [
     cathedralEffectConfirmed: true,
     confidenceThreshold: "83.3%",
     summary:
-      "Cold-run verification of the Substrace Theorem. The grader evaluated 50 canonical question-answer pairs against the cooperative IP corpus. Cathedral Effect confirmed: V(cooperative) > sum(V(individual)) at 83.3% threshold. This run established the baseline for all subsequent verification rounds.",
+      "Cold-run verification of the Substrace Theorem. The grader evaluated 50 canonical question-answer pairs against the cooperative IP corpus. Caithedral Effect confirmed: V(cooperative) > sum(V(individual)) at 83.3% threshold. This run established the baseline for all subsequent verification rounds.",
     marksForVerification: 100,
     verificationRoute: "/proofs/verify/b90073d3",
     sourceTestFile: "src/tests/wave12_f1_substrace_stress.test.ts",
@@ -346,7 +352,7 @@ const PROOF_RECORDS: ProofRecord[] = [
     cathedralEffectConfirmed: true,
     confidenceThreshold: "83.3%",
     summary:
-      "Hot-run (context-loaded) verification. Same 50-question corpus, different run conditions. Confirmed: cooperative value exceeds sum-of-individuals at 83.3% threshold. Hot-run result is consistent with cold-run, ruling out context-priming as the explanation for the Cathedral Effect.",
+      "Hot-run (context-loaded) verification. Same 50-question corpus, different run conditions. Confirmed: cooperative value exceeds sum-of-individuals at 83.3% threshold. Hot-run result is consistent with cold-run, ruling out context-priming as the explanation for the Caithedral Effect.",
     marksForVerification: 100,
     verificationRoute: "/proofs/verify/405808f5",
     sourceTestFile: "src/tests/wave12_f1_substrace_stress.test.ts",
@@ -360,7 +366,7 @@ const PROOF_RECORDS: ProofRecord[] = [
     cathedralEffectConfirmed: true,
     confidenceThreshold: "83.3%",
     summary:
-      "Cross-model verification using a smaller, faster model family. The Cathedral Effect holds at the 83.3% threshold across model scale, ruling out large-model-specific pattern matching as the explanation. This is the cross-vendor robustness check.",
+      "Cross-model verification using a smaller, faster model family. The Caithedral Effect holds at the 83.3% threshold across model scale, ruling out large-model-specific pattern matching as the explanation. This is the cross-vendor robustness check.",
     marksForVerification: 100,
     verificationRoute: "/proofs/verify/dbfc78c6",
     sourceTestFile: "src/tests/wave12_f1_substrace_stress.test.ts",
@@ -374,7 +380,7 @@ const PROOF_RECORDS: ProofRecord[] = [
     cathedralEffectConfirmed: true,
     confidenceThreshold: "83.3%",
     summary:
-      "Automated conductor-mode verification. The conductor selects the optimal model per question type. Combined result confirms Cathedral Effect at 83.3% threshold. This run is the production-grade verification benchmark used for ongoing platform health monitoring.",
+      "Automated conductor-mode verification. The conductor selects the optimal model per question type. Combined result confirms Caithedral Effect at 83.3% threshold. This run is the production-grade verification benchmark used for ongoing platform health monitoring.",
     marksForVerification: 100,
     verificationRoute: "/proofs/verify/5f4b9e84",
     sourceTestFile: "src/lib/conductor/__tests__/router.test.ts",
@@ -949,12 +955,314 @@ const PROGRAM_30x30_RECORDS: ProgramProofRecord[] = [
 ];
 
 // =========================================================================
+// SOUND BARRIER PINNED CARD -- γ-W26-A / BP074-W3 polish
+// Three mechanics applied:
+//   1. Hex background tile overlay (violet hex SVG, same pattern as body)
+//   2. Deck card flip: FRONT = headline + chart; BACK = methodology + hashes + audit
+//   3. Click-to-expand chart dialog
+// =========================================================================
+
+/** URL-encoded violet hex tile SVG, matching the body hex-bg pattern from index.css */
+const SB_HEX_BG =
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%237c3aed' fill-opacity='1'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E";
+
+function SoundBarrierPinnedCard() {
+  const harnessResults = getHarnessResults();
+  const soundBarrierVerdict = harnessResults.soundBarrierVerdict;
+  const hasSoundBarrierResult = soundBarrierVerdict !== "PENDING";
+
+  const [isFlipped, setIsFlipped] = useState(false);
+  const [isChartExpanded, setIsChartExpanded] = useState(false);
+
+  return (
+    <>
+      <Card
+        className="border-2 border-violet-500 bg-gradient-to-br from-violet-50 to-indigo-50 mb-6 shadow-md relative overflow-hidden"
+        data-xray-id="sound-barrier-pinned-proof-gamma"
+      >
+        {/* (1) Hex background overlay -- violet hex tile at low opacity */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-0"
+          style={{
+            backgroundImage: `url("${SB_HEX_BG}")`,
+            opacity: 0.06,
+          }}
+        />
+
+        {/* Flip container -- z-10 so it sits above the hex overlay */}
+        <div className="relative z-10">
+          <AnimatePresence mode="wait" initial={false}>
+            {/* ── FRONT FACE ── headline + WINS badge + Predict-Then-Test meta + chart */}
+            {!isFlipped ? (
+              <motion.div
+                key="sb-front"
+                initial={{ rotateY: -90, opacity: 0 }}
+                animate={{ rotateY: 0, opacity: 1 }}
+                exit={{ rotateY: 90, opacity: 0 }}
+                transition={{ duration: 0.26, ease: "easeInOut" }}
+                style={{ transformOrigin: "center" }}
+              >
+                <CardHeader className="pb-3">
+                  <div className="flex items-start gap-4">
+                    <div className="p-2.5 bg-violet-500/20 rounded-xl shrink-0">
+                      <Zap className="h-7 w-7 text-violet-700" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+                        <Badge className="bg-violet-600 hover:bg-violet-600 text-white text-xs">
+                          Wave gamma -- BP073
+                        </Badge>
+                        <Badge variant="outline" className="border-violet-500 text-violet-700 text-xs">
+                          Predict-Then-Test
+                        </Badge>
+                        {!hasSoundBarrierResult && (
+                          <Badge variant="outline" className="border-amber-400 text-amber-700 text-xs">
+                            PENDING -- run not yet executed
+                          </Badge>
+                        )}
+                        {hasSoundBarrierResult && soundBarrierVerdict === "WINS" && (
+                          <Badge className="bg-emerald-600 hover:bg-emerald-600 text-white text-xs">
+                            WINS -- Sound Barrier crossed
+                          </Badge>
+                        )}
+                        {hasSoundBarrierResult && soundBarrierVerdict === "PARTIAL" && (
+                          <Badge className="bg-amber-500 hover:bg-amber-500 text-white text-xs">
+                            PARTIAL
+                          </Badge>
+                        )}
+                        {hasSoundBarrierResult && soundBarrierVerdict === "LOSES" && (
+                          <Badge className="bg-red-600 hover:bg-red-600 text-white text-xs">
+                            LOSES
+                          </Badge>
+                        )}
+                      </div>
+                      <CardTitle className="text-xl text-violet-900">
+                        The Sound Barrier: Gemma 4 12B + MnemosyneC Substrate
+                      </CardTitle>
+                      <p className="text-sm font-mono text-violet-800 mt-1.5 leading-relaxed">
+                        Predicted: 85 &plusmn; 3 &middot; Same harness as BP067 &middot; $0 marginal cost (local, Apache 2.0)
+                      </p>
+                    </div>
+                    <div className="flex flex-col items-end gap-1 shrink-0">
+                      {!hasSoundBarrierResult && (
+                        <div className="flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-full bg-amber-100 text-amber-800">
+                          <Clock className="h-3 w-3" />
+                          PENDING
+                        </div>
+                      )}
+                      {hasSoundBarrierResult && soundBarrierVerdict === "WINS" && (
+                        <div className="flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-full bg-emerald-100 text-emerald-800">
+                          <CheckCircle className="h-3 w-3" />
+                          WINS
+                        </div>
+                      )}
+                      {hasSoundBarrierResult && soundBarrierVerdict === "PARTIAL" && (
+                        <div className="flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-full bg-amber-100 text-amber-800">
+                          <Clock className="h-3 w-3" />
+                          PARTIAL
+                        </div>
+                      )}
+                      {hasSoundBarrierResult && soundBarrierVerdict === "LOSES" && (
+                        <div className="flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-full bg-red-100 text-red-800">
+                          LOSES
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </CardHeader>
+
+                <CardContent className="pt-0">
+                  {/* (3) Click-to-expand chart */}
+                  <div
+                    className="bg-white rounded-xl border border-violet-200 p-4 mb-4 cursor-pointer hover:border-violet-400 hover:shadow-md transition-all group"
+                    onClick={() => setIsChartExpanded(true)}
+                    role="button"
+                    tabIndex={0}
+                    aria-label="Expand Sound Barrier chart"
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") setIsChartExpanded(true);
+                    }}
+                  >
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-[10px] font-mono text-violet-500 uppercase tracking-wide select-none">
+                        Click chart to expand
+                      </span>
+                      <ExternalLink className="h-3 w-3 text-violet-400 group-hover:text-violet-600 transition-colors" />
+                    </div>
+                    <SoundBarrierChart />
+                  </div>
+
+                  {/* (2) Flip trigger -- to back */}
+                  <div className="flex justify-end">
+                    <button
+                      onClick={() => setIsFlipped(true)}
+                      className="text-xs font-mono text-violet-600 hover:text-violet-800 hover:underline flex items-center gap-1 py-1"
+                      aria-label="Flip card to back: methodology, hashes, and audit chain"
+                    >
+                      Flip for methodology &amp; audit chain
+                      <span aria-hidden="true" className="text-sm">&rsaquo;</span>
+                    </button>
+                  </div>
+                </CardContent>
+              </motion.div>
+            ) : (
+              /* ── BACK FACE ── methodology + hashes + audit chain + run results + screenshots */
+              <motion.div
+                key="sb-back"
+                initial={{ rotateY: 90, opacity: 0 }}
+                animate={{ rotateY: 0, opacity: 1 }}
+                exit={{ rotateY: -90, opacity: 0 }}
+                transition={{ duration: 0.26, ease: "easeInOut" }}
+                style={{ transformOrigin: "center" }}
+              >
+                <CardHeader className="pb-2">
+                  <div className="flex items-center justify-between gap-2 flex-wrap">
+                    <div className="flex items-center gap-2">
+                      <div className="p-1.5 bg-violet-500/20 rounded-lg shrink-0">
+                        <Zap className="h-5 w-5 text-violet-700" />
+                      </div>
+                      <CardTitle className="text-base text-violet-900">
+                        Sound Barrier -- Methodology &amp; Audit Chain
+                      </CardTitle>
+                    </div>
+                    <button
+                      onClick={() => setIsFlipped(false)}
+                      className="text-xs font-mono text-violet-600 hover:text-violet-800 hover:underline flex items-center gap-1 shrink-0"
+                      aria-label="Flip back to chart view"
+                    >
+                      <span aria-hidden="true" className="text-sm">&lsaquo;</span>
+                      Back to chart
+                    </button>
+                  </div>
+                </CardHeader>
+
+                <CardContent className="pt-0">
+                  {/* Methodology / cooperative-class thesis */}
+                  <p className="text-sm text-violet-900/80 leading-relaxed mb-5">
+                    Gemma 4 12B is a free, locally-runnable (Apache 2.0) model. The MnemosyneC Substrate
+                    is applied identically to BP067. The prediction: score crosses the Sound Barrier (85)
+                    even with a model that costs $0 per inference at the margin. This tests the
+                    cooperative-class thesis: the substrate -- not the frontier model -- carries the load.
+                    ~227x cost ratio in favor of local (W12 F3 historical anchor).
+                  </p>
+
+                  {/* Full PRE-PUBLISHED PREDICTION HASHES block */}
+                  <div className="bg-violet-50 border border-violet-200 rounded-xl p-4 mb-4">
+                    <h4 className="text-xs font-semibold text-violet-800 uppercase tracking-wide mb-3">
+                      Pre-Published Prediction Hashes (publish-before-run protocol)
+                    </h4>
+                    <div className="space-y-2 font-mono text-xs">
+                      <div className="flex items-start gap-2">
+                        <Badge className="bg-emerald-600 text-white text-[10px] shrink-0 mt-0.5">
+                          BISHOP
+                        </Badge>
+                        <span className="text-slate-700 break-all">
+                          f42ad2942f311e005a01b5f3134979de562e445962c2d5b522b7dd46673aac58
+                        </span>
+                        <Badge variant="outline" className="border-emerald-500 text-emerald-700 text-[10px] shrink-0">
+                          LOCKED
+                        </Badge>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <Badge className="bg-emerald-600 text-white text-[10px] shrink-0 mt-0.5">
+                          KNIGHT
+                        </Badge>
+                        <span className="text-emerald-800 break-all">
+                          9839b78b40cd012431035f0d8dc230c0ecbc30f00ff59ea1f9a12a32e570d87b
+                        </span>
+                        <Badge variant="outline" className="border-emerald-500 text-emerald-700 text-[10px] shrink-0">
+                          LOCKED
+                        </Badge>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <Badge className="bg-slate-400 text-white text-[10px] shrink-0 mt-0.5">
+                          FOUNDER
+                        </Badge>
+                        <span className="text-slate-400 italic">
+                          [PENDING -- to be published before run]
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Audit chain */}
+                  <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-4">
+                    <h4 className="text-xs font-semibold text-slate-700 uppercase tracking-wide mb-2">
+                      Audit Chain
+                    </h4>
+                    <p className="text-xs font-mono text-slate-600 leading-relaxed">
+                      Harness identity: BP067 4-of-4 Star-Chamber (&kappa; 0.936 historical) -- same prompts,
+                      same dimensions, same grading rubric. Run will add harness commit SHA.
+                      Cross-reference: BP067 historical anchor receipt (see proof records below).
+                      Cost ratio: ~227x in favor of local (W12 F3 historical anchor).
+                      Predicted &kappa; &gt;= 0.85 (BP067 historical: 0.936).
+                    </p>
+                  </div>
+
+                  {/* WORKS/PARTIAL/NOT YET cells */}
+                  <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-4">
+                    <h4 className="text-xs font-semibold text-slate-700 uppercase tracking-wide mb-3">
+                      Run Results (PENDING until harness executes)
+                    </h4>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs font-mono">
+                      {[
+                        "Score >= 85",
+                        "Kappa >= 0.85",
+                        "4-of-4 rater agreement",
+                        "Substrate ON vs OFF delta",
+                        "Cost = $0 marginal",
+                        "Same harness as BP067",
+                      ].map((cell) => (
+                        <div
+                          key={cell}
+                          className="flex items-center justify-between bg-white border border-dashed border-slate-300 rounded-lg px-2 py-1.5 gap-2"
+                        >
+                          <span className="text-slate-600 truncate">{cell}</span>
+                          <Badge variant="outline" className="border-amber-400 text-amber-700 text-[10px] shrink-0">
+                            PENDING
+                          </Badge>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Screenshot slots */}
+                  <div className="flex gap-3 flex-wrap">
+                    {GEMMA412B_SCREENSHOTS.map((name) => (
+                      <Gemma412bScreenshot key={name} name={name} />
+                    ))}
+                  </div>
+                  <p className="text-xs text-violet-700/70 mt-3 font-mono">
+                    Screenshots: Drop PNGs into platform/public/img/proofs/deck/ (deck-gemma412b-01.png
+                    through deck-gemma412b-06.png). Placeholders shown until images land.
+                  </p>
+                </CardContent>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </Card>
+
+      {/* (3) Expanded chart dialog */}
+      <Dialog open={isChartExpanded} onOpenChange={setIsChartExpanded}>
+        <DialogContent className="max-w-4xl w-full" draggable>
+          <DialogTitle className="text-violet-900 font-semibold">
+            Sound Barrier: Gemma 4 12B + MnemosyneC Substrate -- Full Chart
+          </DialogTitle>
+          <div className="bg-white rounded-xl border border-violet-200 p-4 mt-2 overflow-x-auto">
+            <SoundBarrierChart />
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+}
+
+// =========================================================================
 // MAIN PAGE COMPONENT
 // =========================================================================
 export default function ProofsPage() {
-  const harnessResults = getHarnessResults();
-  const soundBarrierVerdict = harnessResults.soundBarrierVerdict;
-  const hasSoundBarrierResult = soundBarrierVerdict !== 'PENDING';
   // S25-S27: og:image meta for social sharing on both lianabanyan.org and mnemosynec.ai.
   // SPA without SSR -- useEffect updates meta tags for crawlers that execute JS.
   // The og:image PNG at /img/proofs/og-proof-card.png is staged for Founder.
@@ -984,19 +1292,19 @@ export default function ProofsPage() {
 
     const prevTitle = document.title;
     document.title =
-      "Cathedral Effect Verified -- 30/30 Waves, 900+ Scopes, 2251/2251 Tests | Liana Banyan";
+      "Caithedral Effect Verified -- 30/30 Waves, 900+ Scopes, 2251/2251 Tests | Liana Banyan";
 
-    setMeta("og:title", "Cathedral Effect Verified -- 30/30 Waves, 900+ Scopes, 2251/2251 Tests");
+    setMeta("og:title", "Caithedral Effect Verified -- 30/30 Waves, 900+ Scopes, 2251/2251 Tests");
     setMeta(
       "og:description",
       "24/24 proofs confirmed. Substrace Theorem verified across 4 models. 30/30 program COMPLETE: 30 waves, 900+ scopes, 2251/2251 tests. 0 prod CVEs. Yoke 2/2. Wife Test: DONE."
     );
     setMeta("og:url", `${origin}/proofs`);
     setMeta("og:image", proofCardImg);
-    setMeta("og:image:alt", "Liana Banyan -- Cathedral Effect Proof Card");
+    setMeta("og:image:alt", "Liana Banyan -- Caithedral Effect Proof Card");
     setMeta("og:type", "article");
 
-    setMetaName("twitter:title", "Cathedral Effect Verified -- 24/24 Proofs");
+    setMetaName("twitter:title", "Caithedral Effect Verified -- 24/24 Proofs");
     setMetaName(
       "twitter:description",
       "30/30 waves COMPLETE. 900+ scopes. 2251/2251 tests. The Substrace Theorem holds at scale. Wife Test: DONE."
@@ -1023,7 +1331,7 @@ export default function ProofsPage() {
                 Verified
               </Badge>
               <h1 className="text-3xl font-bold text-white">
-                Cathedral Effect Verification
+                Caithedral Effect Verification
               </h1>
             </div>
           </div>
@@ -1035,7 +1343,7 @@ export default function ProofsPage() {
           </p>
           <p className="text-slate-400 text-sm max-w-2xl">
             Each proof run graded 50 canonical question-answer pairs from the IP Ledger corpus.
-            All Cathedral Effect runs confirm at the 83.3% confidence threshold. 30x30 program
+            All Caithedral Effect runs confirm at the 83.3% confidence threshold. 30x30 program
             proofs use empirical WORKS / PARTIAL / NOT YET -- no conjecture.
             Members who verify earn Marks (participation tokens, not equity or returns).
           </p>
@@ -1136,183 +1444,8 @@ export default function ProofsPage() {
           </CardContent>
         </Card>
 
-        {/* γ-W26-A SOUND BARRIER: Gemma 4 12B + MnemosyneC Substrate -- Predict-Then-Test */}
-        <Card
-          className="border-2 border-violet-500 bg-gradient-to-br from-violet-50 to-indigo-50 mb-6 shadow-md"
-          data-xray-id="sound-barrier-pinned-proof-gamma"
-        >
-          <CardHeader className="pb-3">
-            <div className="flex items-start gap-4">
-              <div className="p-2.5 bg-violet-500/20 rounded-xl shrink-0">
-                <Zap className="h-7 w-7 text-violet-700" />
-              </div>
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-                  <Badge className="bg-violet-600 hover:bg-violet-600 text-white text-xs">
-                    Wave gamma -- BP073
-                  </Badge>
-                  <Badge variant="outline" className="border-violet-500 text-violet-700 text-xs">
-                    Predict-Then-Test
-                  </Badge>
-                  {!hasSoundBarrierResult && (
-                    <Badge variant="outline" className="border-amber-400 text-amber-700 text-xs">
-                      PENDING -- run not yet executed
-                    </Badge>
-                  )}
-                  {hasSoundBarrierResult && soundBarrierVerdict === 'WINS' && (
-                    <Badge className="bg-emerald-600 hover:bg-emerald-600 text-white text-xs">
-                      WINS -- Sound Barrier crossed
-                    </Badge>
-                  )}
-                  {hasSoundBarrierResult && soundBarrierVerdict === 'PARTIAL' && (
-                    <Badge className="bg-amber-500 hover:bg-amber-500 text-white text-xs">
-                      PARTIAL
-                    </Badge>
-                  )}
-                  {hasSoundBarrierResult && soundBarrierVerdict === 'LOSES' && (
-                    <Badge className="bg-red-600 hover:bg-red-600 text-white text-xs">
-                      LOSES
-                    </Badge>
-                  )}
-                </div>
-                <CardTitle className="text-xl text-violet-900">
-                  The Sound Barrier: Gemma 4 12B + MnemosyneC Substrate
-                </CardTitle>
-                <p className="text-sm font-mono text-violet-800 mt-1.5 leading-relaxed">
-                  Predicted: 85 &plusmn; 3 &middot; Same harness as BP067 &middot; $0 marginal cost (local, Apache 2.0)
-                </p>
-              </div>
-              <div className="flex flex-col items-end gap-1 shrink-0">
-                {!hasSoundBarrierResult && (
-                  <div className="flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-full bg-amber-100 text-amber-800">
-                    <Clock className="h-3 w-3" />
-                    PENDING
-                  </div>
-                )}
-                {hasSoundBarrierResult && soundBarrierVerdict === 'WINS' && (
-                  <div className="flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-full bg-emerald-100 text-emerald-800">
-                    <CheckCircle className="h-3 w-3" />
-                    WINS
-                  </div>
-                )}
-                {hasSoundBarrierResult && soundBarrierVerdict === 'PARTIAL' && (
-                  <div className="flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-full bg-amber-100 text-amber-800">
-                    <Clock className="h-3 w-3" />
-                    PARTIAL
-                  </div>
-                )}
-                {hasSoundBarrierResult && soundBarrierVerdict === 'LOSES' && (
-                  <div className="flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-full bg-red-100 text-red-800">
-                    LOSES
-                  </div>
-                )}
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent className="pt-0">
-            {/* Description */}
-            <p className="text-sm text-violet-900/80 leading-relaxed mb-5">
-              Gemma 4 12B is a free, locally-runnable (Apache 2.0) model. The MnemosyneC Substrate
-              is applied identically to BP067. The prediction: score crosses the Sound Barrier (85)
-              even with a model that costs $0 per inference at the margin. This tests the
-              cooperative-class thesis: the substrate -- not the frontier model -- carries the load.
-              ~227x cost ratio in favor of local (W12 F3 historical anchor).
-            </p>
-
-            {/* Sound Barrier Chart */}
-            <div className="bg-white rounded-xl border border-violet-200 p-4 mb-5">
-              <SoundBarrierChart />
-            </div>
-
-            {/* Pre-published prediction hashes */}
-            <div className="bg-violet-50 border border-violet-200 rounded-xl p-4 mb-4">
-              <h4 className="text-xs font-semibold text-violet-800 uppercase tracking-wide mb-3">
-                Pre-Published Prediction Hashes (publish-before-run protocol)
-              </h4>
-              <div className="space-y-2 font-mono text-xs">
-                <div className="flex items-start gap-2">
-                  <Badge className="bg-emerald-600 text-white text-[10px] shrink-0 mt-0.5">
-                    BISHOP
-                  </Badge>
-                  <span className="text-slate-700 break-all">
-                    f42ad2942f311e005a01b5f3134979de562e445962c2d5b522b7dd46673aac58
-                  </span>
-                  <Badge variant="outline" className="border-emerald-500 text-emerald-700 text-[10px] shrink-0">
-                    LOCKED
-                  </Badge>
-                </div>
-                <div className="flex items-start gap-2">
-                  <Badge className="bg-slate-400 text-white text-[10px] shrink-0 mt-0.5">
-                    KNIGHT
-                  </Badge>
-                  <span className="text-slate-400 italic">
-                    [PENDING -- to be published before run]
-                  </span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <Badge className="bg-slate-400 text-white text-[10px] shrink-0 mt-0.5">
-                    FOUNDER
-                  </Badge>
-                  <span className="text-slate-400 italic">
-                    [PENDING -- to be published before run]
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Audit chain note */}
-            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-4">
-              <h4 className="text-xs font-semibold text-slate-700 uppercase tracking-wide mb-2">
-                Audit Chain
-              </h4>
-              <p className="text-xs font-mono text-slate-600 leading-relaxed">
-                Harness identity: BP067 4-of-4 Star-Chamber (&kappa; 0.936 historical) -- same prompts,
-                same dimensions, same grading rubric. Run will add harness commit SHA.
-                Cross-reference: BP067 historical anchor receipt (see proof records below).
-                Cost ratio: ~227x in favor of local (W12 F3 historical anchor).
-                Predicted &kappa; &gt;= 0.85 (BP067 historical: 0.936).
-              </p>
-            </div>
-
-            {/* WORKS/PARTIAL/NOT YET cells -- shown PENDING until harness runs */}
-            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-4">
-              <h4 className="text-xs font-semibold text-slate-700 uppercase tracking-wide mb-3">
-                Run Results (PENDING until harness executes)
-              </h4>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs font-mono">
-                {[
-                  "Score >= 85",
-                  "Kappa >= 0.85",
-                  "4-of-4 rater agreement",
-                  "Substrate ON vs OFF delta",
-                  "Cost = $0 marginal",
-                  "Same harness as BP067",
-                ].map((cell) => (
-                  <div
-                    key={cell}
-                    className="flex items-center justify-between bg-white border border-dashed border-slate-300 rounded-lg px-2 py-1.5 gap-2"
-                  >
-                    <span className="text-slate-600 truncate">{cell}</span>
-                    <Badge variant="outline" className="border-amber-400 text-amber-700 text-[10px] shrink-0">
-                      PENDING
-                    </Badge>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Screenshot slots */}
-            <div className="flex gap-3 flex-wrap">
-              {GEMMA412B_SCREENSHOTS.map((name) => (
-                <Gemma412bScreenshot key={name} name={name} />
-              ))}
-            </div>
-            <p className="text-xs text-violet-700/70 mt-3 font-mono">
-              Screenshots: Drop PNGs into platform/public/img/proofs/deck/ (deck-gemma412b-01.png
-              through deck-gemma412b-06.png). Placeholders shown until images land.
-            </p>
-          </CardContent>
-        </Card>
+        {/* γ-W26-A SOUND BARRIER -- BP074-W3 polished card (hex bg + flip + expand) */}
+        <SoundBarrierPinnedCard />
 
         {/* BP074 Marathon Retrospective -- Sound Barrier proved */}
         <Card
@@ -1857,7 +1990,7 @@ export default function ProofsPage() {
         <div className="mt-12 border-t pt-10">
           <h2 className="text-xl font-bold mb-2">How Verification Works</h2>
           <p className="text-muted-foreground text-sm mb-6">
-            Any member can independently verify the Cathedral Effect. The verification
+            Any member can independently verify the Caithedral Effect. The verification
             process runs the same 50-question grading protocol used in the original proofs.
           </p>
           <div className="grid md:grid-cols-3 gap-6">
@@ -1875,7 +2008,7 @@ export default function ProofsPage() {
               {
                 step: "3",
                 title: "Earn Marks",
-                body: "If your run confirms the Cathedral Effect at 83.3%, you earn 100 Marks (participation tokens). Your result is recorded in the Transparency Ledger.",
+                body: "If your run confirms the Caithedral Effect at 83.3%, you earn 100 Marks (participation tokens). Your result is recorded in the Transparency Ledger.",
               },
             ].map((step) => (
               <div key={step.step} className="flex gap-3">

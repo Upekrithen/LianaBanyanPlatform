@@ -3,12 +3,12 @@
  * ==================================================
  * Public page at librarian.the2ndsecond.com/community-empirical
  *
- * Shows aggregate Cathedral Effect verification results from all members
+ * Shows aggregate Caithedral Effect verification results from all members
  * who opted in. This is the reproducibility-at-scale evidence for AAAI §6
  * and the public letters.
  *
  * Claim: "X verified members' independent runs aggregate to a +Y pp mean
- * Cathedral Effect, consistent with our published R13 finding."
+ * Caithedral Effect, consistent with our published R13 finding."
  */
 
 import React, { useEffect, useState } from "react";
@@ -127,7 +127,7 @@ export default function CommunityEmpiricalDashboard() {
             <span className="text-blue-600 dark:text-blue-400 text-sm font-medium">Live community data</span>
           </div>
           <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-3">
-            Cathedral Effect — Community Empirical
+            Caithedral Effect — Community Empirical
           </h1>
           <p className="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed">
             Independent verification runs submitted by LB Test Frame members.
@@ -156,7 +156,7 @@ export default function CommunityEmpiricalDashboard() {
                   : "No data yet"}
               </div>
               <div className="text-blue-100 text-lg">
-                mean Cathedral Effect lift across {stats.total_runs} member verification run{stats.total_runs !== 1 ? "s" : ""}
+                mean Caithedral Effect lift across {stats.total_runs} member verification run{stats.total_runs !== 1 ? "s" : ""}
               </div>
               {stats.total_runs > 0 && (
                 <div className="text-blue-200 text-sm mt-2">

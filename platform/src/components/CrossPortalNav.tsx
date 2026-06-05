@@ -5,6 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { buildAuthRelayUrl } from '@/utils/crossDomainAuth';
 import { ShoppingBag, Hammer, Briefcase, Globe, Heart, Rocket, Hexagon, Anchor, Menu, X } from 'lucide-react';
+import { useHexTheme } from '@/hooks/useHexTheme';
 
 const PORTALS: { key: PortalType; label: string; icon: typeof ShoppingBag; domain: string }[] = [
   { key: 'marketplace', label: 'Marketplace', icon: ShoppingBag, domain: 'lianabanyan.com' },
@@ -27,6 +28,7 @@ export function CrossPortalNav() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const drawerRef = useRef<HTMLDivElement>(null);
   const isSpanish = isHexisloSite();
+  const { hexTheme, toggleHexTheme } = useHexTheme();
 
   useEffect(() => { setDrawerOpen(false); }, [pathname]);
 
@@ -66,13 +68,23 @@ export function CrossPortalNav() {
             <CurrentIcon className="w-3.5 h-3.5" />
             {currentPortal ? portalLabel(currentPortal) : 'Portal'}
           </a>
-          <button
-            onClick={() => setDrawerOpen(o => !o)}
-            className="p-1.5 rounded-lg hover:bg-muted transition-colors"
-            aria-label={drawerOpen ? 'Close portal menu' : 'Open portal menu'}
-          >
-            {drawerOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
+          <div className="flex items-center gap-1">
+            <button
+              onClick={toggleHexTheme}
+              className="p-1.5 rounded-lg hover:bg-muted transition-colors text-sm"
+              aria-label={hexTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+              title={hexTheme === 'dark' ? 'Light mode' : 'Dark mode'}
+            >
+              {hexTheme === 'dark' ? '☽' : '☀'}
+            </button>
+            <button
+              onClick={() => setDrawerOpen(o => !o)}
+              className="p-1.5 rounded-lg hover:bg-muted transition-colors"
+              aria-label={drawerOpen ? 'Close portal menu' : 'Open portal menu'}
+            >
+              {drawerOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
         </nav>
 
         {drawerOpen && (
@@ -177,6 +189,15 @@ export function CrossPortalNav() {
           </a>
         </>
       )}
+      <span className="mx-1 text-muted-foreground/30">|</span>
+      <button
+        onClick={toggleHexTheme}
+        className="px-2 py-1 rounded-full hover:bg-muted transition-colors text-muted-foreground hover:text-foreground whitespace-nowrap"
+        aria-label={hexTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+        title={hexTheme === 'dark' ? 'Light mode' : 'Dark mode'}
+      >
+        {hexTheme === 'dark' ? '☽' : '☀'}
+      </button>
     </nav>
   );
 }

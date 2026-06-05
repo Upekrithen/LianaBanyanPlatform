@@ -44,6 +44,9 @@ const ContractScaleManager = lazy(() => import("@/pages/ContractScaleManager"));
 const CoasterMedallionProject = lazy(() => import("@/pages/CoasterMedallionProject"));
 const RecipePotPage = lazy(() => import("@/pages/RecipePotPage"));
 const CanisterConfiguratorV2 = lazy(() => import("@/pages/tools/CanisterConfiguratorV2"));
+const ProductionSystemsPage = lazy(() => import("@/pages/ProductionSystemsPage"));
+const VolumeDiscountPage = lazy(() => import("@/pages/VolumeDiscountPage"));
+const LocalFulfillmentBountiesPage = lazy(() => import("@/pages/LocalFulfillmentBountiesPage"));
 
 export const productionRoutes = (
   <>
@@ -92,5 +95,9 @@ export const productionRoutes = (
     <Route path="/tereno-certification" element={<ExplorerRoute><LazyPage><TerenoCertificationPage /></LazyPage></ExplorerRoute>} />
     <Route path="/coaster-medallion" element={<ExplorerRoute><LazyPage><CoasterMedallionProject /></LazyPage></ExplorerRoute>} />
     <Route path="/bridge/recipe" element={<ProtectedRoute><LazyPage><RecipePotPage /></LazyPage></ProtectedRoute>} />
+    {/* Wave 6 Phase U — Decentralized Factory / Six Production Systems */}
+    <Route path="/factory/production-systems" element={<ExplorerRoute><LazyPage><ProductionSystemsPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/factory/volume-discount" element={<ExplorerRoute><LazyPage><VolumeDiscountPage /></LazyPage></ExplorerRoute>} />
+    <Route path="/factory/local-fulfillment" element={<ExplorerRoute><LazyPage><LocalFulfillmentBountiesPage /></LazyPage></ExplorerRoute>} />
   </>
 );

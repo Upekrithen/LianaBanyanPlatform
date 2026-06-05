@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { PlayCircle, TrendingUp, Users, Package, DollarSign } from 'lucide-react';
+import { VideoPlaceholderStub } from '@/components/VideoPlaceholderStub';
 
 interface PreorderVotingExplainerProps {
   open: boolean;
@@ -22,11 +23,14 @@ export function PreorderVotingExplainer({ open, onOpenChange, onUnderstood }: Pr
 
         <div className="space-y-6">
           {/* Video Section */}
-          <div className="aspect-video bg-muted rounded-lg flex items-center justify-center">
+          <VideoPlaceholderStub
+            title="Understanding Volume Production and Pricing"
+            transcriptStub="This video explains how cooperative volume purchasing works: the more members preorder a product, the larger the production run, and the lower the unit cost for everyone. Key topics: demand pooling, tiered pricing thresholds, and how your preorder vote directly impacts what the cooperative can manufacture together."
+          >
             <div className="text-center space-y-4">
-              <PlayCircle className="w-16 h-16 mx-auto text-primary" />
+              <PlayCircle className="w-16 h-16 mx-auto text-primary" aria-hidden="true" />
               <p className="text-sm text-muted-foreground">
-                Video: Understanding Volume Production & Pricing
+                Video: Understanding Volume Production &amp; Pricing
               </p>
               <Button
                 variant="outline"
@@ -35,7 +39,7 @@ export function PreorderVotingExplainer({ open, onOpenChange, onUnderstood }: Pr
                 {videoWatched ? 'Video Watched ✓' : 'Play Video'}
               </Button>
             </div>
-          </div>
+          </VideoPlaceholderStub>
 
           {/* Accordion Explanation */}
           <Accordion type="single" collapsible className="w-full">

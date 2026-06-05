@@ -447,7 +447,7 @@ export default function SaltMines() {
         <ProgressiveSection
           id="patent-showcase"
           title="Patent Showcase"
-          subtitle="{{innovationCount}} innovations. 167 Crown Jewels. Your competitive moat."
+          subtitle="{{innovationCount}} innovations. 228 Crown Jewels. Your competitive moat."
           sectionNumber={3}
           totalSections={totalSections}
           benefit={{ id: 'patent-access', text: 'Access to {{innovationCount}} documented innovations', category: 'job' }}
@@ -470,7 +470,7 @@ export default function SaltMines() {
             </div>
           </div>
 
-          <h4 className="text-lg font-semibold text-white mb-4">The Crown Jewels (167)</h4>
+          <h4 className="text-lg font-semibold text-white mb-4">The Crown Jewels (228)</h4>
           <div className="grid md:grid-cols-2 gap-3">
             {CROWN_JEWELS.map((jewel, idx) => (
               <motion.div

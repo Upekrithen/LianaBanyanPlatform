@@ -123,7 +123,7 @@ A quick reference for the vocabulary Liana Banyan uses that you will not find in
 | **Coffee** | An informal cooperative gathering, in-person or remote, where members connect and build relationships. The smallest unit of community. |
 | **HEOHO** | "He/she/they/I/we/us/our." A compact pronoun stack used to signal inclusive framing in cooperative documents. |
 | **Banyan Metric** | The composite score for cooperative AI quality: accuracy, trust-calibration, and cooperative-class behavior measured together. 94% is the current high-water mark. |
-| **Cathedral Effect** | The phenomenon where each member's substrate contribution improves every other member's AI accuracy. The cooperative knowledge commons compounds. |
+| **Caithedral Effect** | The phenomenon where each member's substrate contribution improves every other member's AI accuracy. The cooperative knowledge commons compounds. |
 | **Marks** | The cooperative's participation record. Marks track work performed on unfunded projects and serve as contingent accounts payable, not equity or investment shares. |
 | **Substrace** | The theorem stating that when a shared substrate holds context, any model at any endpoint can reconstruct the same state from the same inputs. The cost of re-derivation approaches zero. |
 | **Pearl** | A particularly refined Eblet or cooperative contribution, recognized by the community for exceptional quality or durability. |

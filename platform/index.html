@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#4F46E5" />
+    <meta name="color-scheme" content="light dark" />
     <title>Liana Banyan — Help Each Other Help Ourselves</title>
     <meta name="description" content="Member-owned. Community-governed. Creators keep 83.3%. Cost + 20% locked forever. $5/year. 16 charitable initiatives funded by commerce, not donations." />
     <meta name="author" content="Liana Banyan Corporation" />
@@ -11,20 +12,226 @@
     <link rel="apple-touch-icon" href="/LianaBanyanLogo.png" />
     <link rel="icon" type="image/png" href="/LianaBanyanLogo.png" />
     <link rel="shortcut icon" href="/LianaBanyanLogo.png" />
+    <!-- PWA / iOS full-screen support -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Liana Banyan" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <!-- Wave 17: preconnect for font CDNs (avoids extra round-trips) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
+    <!-- Wave 17: font-display=swap prevents FOIT; preload critical weight -->
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@400;600;700&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@400;600;700&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@400;600;700&display=swap"
+      />
+    </noscript>
+    <!-- Wave 17: preload logo for LCP (hero image, above-fold) -->
+    <link
+      rel="preload"
+      as="image"
+      href="/LianaBanyanLogo.png"
+      fetchpriority="high"
+    />
 
-    <meta property="og:title" content="Liana Banyan — Help Each Other Help Ourselves" />
-    <meta property="og:description" content="Creators keep 83.3%. Constitutionally locked. $5/year. 16 charitable initiatives funded by commerce, not donations." />
+    <!-- OpenGraph (BP072 Wave 3 / Scope 28) -->
+    <meta property="og:title" content="Liana Banyan -- Help Each Other Help Ourselves" />
+    <meta property="og:description" content="2,270 innovations. 228 Crown Jewels. Creators keep 83.3%. Cost+20% locked forever. $5/year. 16 charitable initiatives funded by commerce, not donations." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://lianabanyan.com" />
+    <meta property="og:image" content="https://lianabanyan.com/LianaBanyanLogo.png" />
+    <meta property="og:image:alt" content="Liana Banyan cooperative platform logo" />
+    <meta property="og:site_name" content="Liana Banyan" />
+    <meta property="og:locale" content="en_US" />
 
+    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@LianaBanyan" />
+    <meta name="twitter:title" content="Liana Banyan -- Help Each Other Help Ourselves" />
+    <meta name="twitter:description" content="2,270 innovations. 228 Crown Jewels. 83.3% to creators. $5/year membership. A cooperative platform that cannot enshittify." />
+    <meta name="twitter:image" content="https://lianabanyan.com/LianaBanyanLogo.png" />
+
+    <!-- SEO canonical -->
+    <link rel="canonical" href="https://lianabanyan.com/" />
+
+    <!-- hreflang -- Wave 15 i18n Hardening: full 150-language coverage (BCP 47, SPA root) -->
+    <!-- Generated from public/locales/languages.json via scripts/generate-hreflang-sitemap.cjs -->
+    <link rel="alternate" hreflang="x-default" href="https://lianabanyan.com/" />
+    <link rel="alternate" hreflang="en"  href="https://lianabanyan.com/" />
+    <link rel="alternate" hreflang="zh"  href="https://lianabanyan.com/?lang=zh" />
+    <link rel="alternate" hreflang="hi"  href="https://lianabanyan.com/?lang=hi" />
+    <link rel="alternate" hreflang="es"  href="https://lianabanyan.com/?lang=es" />
+    <link rel="alternate" hreflang="fr"  href="https://lianabanyan.com/?lang=fr" />
+    <link rel="alternate" hreflang="ar"  href="https://lianabanyan.com/?lang=ar" />
+    <link rel="alternate" hreflang="bn"  href="https://lianabanyan.com/?lang=bn" />
+    <link rel="alternate" hreflang="ru"  href="https://lianabanyan.com/?lang=ru" />
+    <link rel="alternate" hreflang="pt"  href="https://lianabanyan.com/?lang=pt" />
+    <link rel="alternate" hreflang="ur"  href="https://lianabanyan.com/?lang=ur" />
+    <link rel="alternate" hreflang="id"  href="https://lianabanyan.com/?lang=id" />
+    <link rel="alternate" hreflang="de"  href="https://lianabanyan.com/?lang=de" />
+    <link rel="alternate" hreflang="ja"  href="https://lianabanyan.com/?lang=ja" />
+    <link rel="alternate" hreflang="sw"  href="https://lianabanyan.com/?lang=sw" />
+    <link rel="alternate" hreflang="mr"  href="https://lianabanyan.com/?lang=mr" />
+    <link rel="alternate" hreflang="te"  href="https://lianabanyan.com/?lang=te" />
+    <link rel="alternate" hreflang="tr"  href="https://lianabanyan.com/?lang=tr" />
+    <link rel="alternate" hreflang="yue" href="https://lianabanyan.com/?lang=yue" />
+    <link rel="alternate" hreflang="ta"  href="https://lianabanyan.com/?lang=ta" />
+    <link rel="alternate" hreflang="vi"  href="https://lianabanyan.com/?lang=vi" />
+    <link rel="alternate" hreflang="fa"  href="https://lianabanyan.com/?lang=fa" />
+    <link rel="alternate" hreflang="ko"  href="https://lianabanyan.com/?lang=ko" />
+    <link rel="alternate" hreflang="it"  href="https://lianabanyan.com/?lang=it" />
+    <link rel="alternate" hreflang="ha"  href="https://lianabanyan.com/?lang=ha" />
+    <link rel="alternate" hreflang="th"  href="https://lianabanyan.com/?lang=th" />
+    <link rel="alternate" hreflang="gu"  href="https://lianabanyan.com/?lang=gu" />
+    <link rel="alternate" hreflang="am"  href="https://lianabanyan.com/?lang=am" />
+    <link rel="alternate" hreflang="kn"  href="https://lianabanyan.com/?lang=kn" />
+    <link rel="alternate" hreflang="pl"  href="https://lianabanyan.com/?lang=pl" />
+    <link rel="alternate" hreflang="pa"  href="https://lianabanyan.com/?lang=pa" />
+    <link rel="alternate" hreflang="jv"  href="https://lianabanyan.com/?lang=jv" />
+    <link rel="alternate" hreflang="or"  href="https://lianabanyan.com/?lang=or" />
+    <link rel="alternate" hreflang="yo"  href="https://lianabanyan.com/?lang=yo" />
+    <link rel="alternate" hreflang="ml"  href="https://lianabanyan.com/?lang=ml" />
+    <link rel="alternate" hreflang="ms"  href="https://lianabanyan.com/?lang=ms" />
+    <link rel="alternate" hreflang="uz"  href="https://lianabanyan.com/?lang=uz" />
+    <link rel="alternate" hreflang="ig"  href="https://lianabanyan.com/?lang=ig" />
+    <link rel="alternate" hreflang="my"  href="https://lianabanyan.com/?lang=my" />
+    <link rel="alternate" hreflang="ne"  href="https://lianabanyan.com/?lang=ne" />
+    <link rel="alternate" hreflang="ps"  href="https://lianabanyan.com/?lang=ps" />
+    <link rel="alternate" hreflang="ff"  href="https://lianabanyan.com/?lang=ff" />
+    <link rel="alternate" hreflang="uk"  href="https://lianabanyan.com/?lang=uk" />
+    <link rel="alternate" hreflang="nl"  href="https://lianabanyan.com/?lang=nl" />
+    <link rel="alternate" hreflang="so"  href="https://lianabanyan.com/?lang=so" />
+    <link rel="alternate" hreflang="az"  href="https://lianabanyan.com/?lang=az" />
+    <link rel="alternate" hreflang="tl"  href="https://lianabanyan.com/?lang=tl" />
+    <link rel="alternate" hreflang="km"  href="https://lianabanyan.com/?lang=km" />
+    <link rel="alternate" hreflang="ceb" href="https://lianabanyan.com/?lang=ceb" />
+    <link rel="alternate" hreflang="mg"  href="https://lianabanyan.com/?lang=mg" />
+    <link rel="alternate" hreflang="si"  href="https://lianabanyan.com/?lang=si" />
+    <link rel="alternate" hreflang="sd"  href="https://lianabanyan.com/?lang=sd" />
+    <link rel="alternate" hreflang="ku"  href="https://lianabanyan.com/?lang=ku" />
+    <link rel="alternate" hreflang="kk"  href="https://lianabanyan.com/?lang=kk" />
+    <link rel="alternate" hreflang="sn"  href="https://lianabanyan.com/?lang=sn" />
+    <link rel="alternate" hreflang="mn"  href="https://lianabanyan.com/?lang=mn" />
+    <link rel="alternate" hreflang="bo"  href="https://lianabanyan.com/?lang=bo" />
+    <link rel="alternate" hreflang="su"  href="https://lianabanyan.com/?lang=su" />
+    <link rel="alternate" hreflang="bho" href="https://lianabanyan.com/?lang=bho" />
+    <link rel="alternate" hreflang="mai" href="https://lianabanyan.com/?lang=mai" />
+    <link rel="alternate" hreflang="ro"  href="https://lianabanyan.com/?lang=ro" />
+    <link rel="alternate" hreflang="zu"  href="https://lianabanyan.com/?lang=zu" />
+    <link rel="alternate" hreflang="cs"  href="https://lianabanyan.com/?lang=cs" />
+    <link rel="alternate" hreflang="el"  href="https://lianabanyan.com/?lang=el" />
+    <link rel="alternate" hreflang="sv"  href="https://lianabanyan.com/?lang=sv" />
+    <link rel="alternate" hreflang="hu"  href="https://lianabanyan.com/?lang=hu" />
+    <link rel="alternate" hreflang="hr"  href="https://lianabanyan.com/?lang=hr" />
+    <link rel="alternate" hreflang="sr"  href="https://lianabanyan.com/?lang=sr" />
+    <link rel="alternate" hreflang="he"  href="https://lianabanyan.com/?lang=he" />
+    <link rel="alternate" hreflang="bs"  href="https://lianabanyan.com/?lang=bs" />
+    <link rel="alternate" hreflang="rw"  href="https://lianabanyan.com/?lang=rw" />
+    <link rel="alternate" hreflang="ln"  href="https://lianabanyan.com/?lang=ln" />
+    <link rel="alternate" hreflang="ny"  href="https://lianabanyan.com/?lang=ny" />
+    <link rel="alternate" hreflang="lo"  href="https://lianabanyan.com/?lang=lo" />
+    <link rel="alternate" hreflang="sq"  href="https://lianabanyan.com/?lang=sq" />
+    <link rel="alternate" hreflang="fi"  href="https://lianabanyan.com/?lang=fi" />
+    <link rel="alternate" hreflang="da"  href="https://lianabanyan.com/?lang=da" />
+    <link rel="alternate" hreflang="no"  href="https://lianabanyan.com/?lang=no" />
+    <link rel="alternate" hreflang="bg"  href="https://lianabanyan.com/?lang=bg" />
+    <link rel="alternate" hreflang="sk"  href="https://lianabanyan.com/?lang=sk" />
+    <link rel="alternate" hreflang="sl"  href="https://lianabanyan.com/?lang=sl" />
+    <link rel="alternate" hreflang="et"  href="https://lianabanyan.com/?lang=et" />
+    <link rel="alternate" hreflang="lv"  href="https://lianabanyan.com/?lang=lv" />
+    <link rel="alternate" hreflang="lt"  href="https://lianabanyan.com/?lang=lt" />
+    <link rel="alternate" hreflang="ka"  href="https://lianabanyan.com/?lang=ka" />
+    <link rel="alternate" hreflang="hy"  href="https://lianabanyan.com/?lang=hy" />
+    <link rel="alternate" hreflang="ca"  href="https://lianabanyan.com/?lang=ca" />
+    <link rel="alternate" hreflang="mk"  href="https://lianabanyan.com/?lang=mk" />
+    <link rel="alternate" hreflang="be"  href="https://lianabanyan.com/?lang=be" />
+    <link rel="alternate" hreflang="af"  href="https://lianabanyan.com/?lang=af" />
+    <link rel="alternate" hreflang="xh"  href="https://lianabanyan.com/?lang=xh" />
+    <link rel="alternate" hreflang="st"  href="https://lianabanyan.com/?lang=st" />
+    <link rel="alternate" hreflang="tn"  href="https://lianabanyan.com/?lang=tn" />
+    <link rel="alternate" hreflang="wo"  href="https://lianabanyan.com/?lang=wo" />
+    <link rel="alternate" hreflang="ak"  href="https://lianabanyan.com/?lang=ak" />
+    <link rel="alternate" hreflang="ee"  href="https://lianabanyan.com/?lang=ee" />
+    <link rel="alternate" hreflang="ky"  href="https://lianabanyan.com/?lang=ky" />
+    <link rel="alternate" hreflang="tg"  href="https://lianabanyan.com/?lang=tg" />
+    <link rel="alternate" hreflang="tk"  href="https://lianabanyan.com/?lang=tk" />
+    <link rel="alternate" hreflang="ug"  href="https://lianabanyan.com/?lang=ug" />
+    <link rel="alternate" hreflang="yi"  href="https://lianabanyan.com/?lang=yi" />
+    <link rel="alternate" hreflang="mt"  href="https://lianabanyan.com/?lang=mt" />
+    <link rel="alternate" hreflang="eu"  href="https://lianabanyan.com/?lang=eu" />
+    <link rel="alternate" hreflang="gl"  href="https://lianabanyan.com/?lang=gl" />
+    <link rel="alternate" hreflang="cy"  href="https://lianabanyan.com/?lang=cy" />
+    <link rel="alternate" hreflang="ga"  href="https://lianabanyan.com/?lang=ga" />
+    <link rel="alternate" hreflang="is"  href="https://lianabanyan.com/?lang=is" />
+    <link rel="alternate" hreflang="lb"  href="https://lianabanyan.com/?lang=lb" />
+    <link rel="alternate" hreflang="ht"  href="https://lianabanyan.com/?lang=ht" />
+    <link rel="alternate" hreflang="qu"  href="https://lianabanyan.com/?lang=qu" />
+    <link rel="alternate" hreflang="war" href="https://lianabanyan.com/?lang=war" />
+    <link rel="alternate" hreflang="nso" href="https://lianabanyan.com/?lang=nso" />
+    <link rel="alternate" hreflang="lg"  href="https://lianabanyan.com/?lang=lg" />
+    <link rel="alternate" hreflang="ts"  href="https://lianabanyan.com/?lang=ts" />
+    <link rel="alternate" hreflang="ss"  href="https://lianabanyan.com/?lang=ss" />
+    <link rel="alternate" hreflang="sat" href="https://lianabanyan.com/?lang=sat" />
+    <link rel="alternate" hreflang="doi" href="https://lianabanyan.com/?lang=doi" />
+    <link rel="alternate" hreflang="kok" href="https://lianabanyan.com/?lang=kok" />
+    <link rel="alternate" hreflang="mni" href="https://lianabanyan.com/?lang=mni" />
+    <link rel="alternate" hreflang="as"  href="https://lianabanyan.com/?lang=as" />
+    <link rel="alternate" hreflang="ckb" href="https://lianabanyan.com/?lang=ckb" />
+    <link rel="alternate" hreflang="ay"  href="https://lianabanyan.com/?lang=ay" />
+    <link rel="alternate" hreflang="sm"  href="https://lianabanyan.com/?lang=sm" />
+    <link rel="alternate" hreflang="mi"  href="https://lianabanyan.com/?lang=mi" />
+    <link rel="alternate" hreflang="fj"  href="https://lianabanyan.com/?lang=fj" />
+    <link rel="alternate" hreflang="to"  href="https://lianabanyan.com/?lang=to" />
+    <link rel="alternate" hreflang="haw" href="https://lianabanyan.com/?lang=haw" />
+    <link rel="alternate" hreflang="dv"  href="https://lianabanyan.com/?lang=dv" />
+    <link rel="alternate" hreflang="om"  href="https://lianabanyan.com/?lang=om" />
+    <link rel="alternate" hreflang="ti"  href="https://lianabanyan.com/?lang=ti" />
+    <link rel="alternate" hreflang="rn"  href="https://lianabanyan.com/?lang=rn" />
+    <link rel="alternate" hreflang="sg"  href="https://lianabanyan.com/?lang=sg" />
+    <link rel="alternate" hreflang="lu"  href="https://lianabanyan.com/?lang=lu" />
+    <link rel="alternate" hreflang="kg"  href="https://lianabanyan.com/?lang=kg" />
+    <link rel="alternate" hreflang="gn"  href="https://lianabanyan.com/?lang=gn" />
+    <link rel="alternate" hreflang="tet" href="https://lianabanyan.com/?lang=tet" />
+    <link rel="alternate" hreflang="tpi" href="https://lianabanyan.com/?lang=tpi" />
+    <link rel="alternate" hreflang="ilo" href="https://lianabanyan.com/?lang=ilo" />
+    <link rel="alternate" hreflang="tt"  href="https://lianabanyan.com/?lang=tt" />
+    <link rel="alternate" hreflang="zgh" href="https://lianabanyan.com/?lang=zgh" />
+    <link rel="alternate" hreflang="hil" href="https://lianabanyan.com/?lang=hil" />
+    <link rel="alternate" hreflang="min" href="https://lianabanyan.com/?lang=min" />
+    <link rel="alternate" hreflang="bug" href="https://lianabanyan.com/?lang=bug" />
+    <link rel="alternate" hreflang="cv"  href="https://lianabanyan.com/?lang=cv" />
+    <link rel="alternate" hreflang="br"  href="https://lianabanyan.com/?lang=br" />
+    <link rel="alternate" hreflang="ve"  href="https://lianabanyan.com/?lang=ve" />
+    <link rel="alternate" hreflang="pam" href="https://lianabanyan.com/?lang=pam" />
+    <link rel="alternate" hreflang="dz"  href="https://lianabanyan.com/?lang=dz" />
+    <link rel="alternate" hreflang="nr"  href="https://lianabanyan.com/?lang=nr" />
+    <link rel="alternate" hreflang="gd"  href="https://lianabanyan.com/?lang=gd" />
+    <link rel="alternate" hreflang="kab" href="https://lianabanyan.com/?lang=kab" />
+
+    <!-- Sitemap reference -->
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
   </head>
 
   <body>
+    <!-- Skip-to-content link for keyboard and screen-reader users (Scope 27 / WCAG AA) -->
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[9999] focus:px-4 focus:py-2 focus:bg-white focus:text-slate-900 focus:rounded-md focus:shadow-lg focus:ring-2 focus:ring-indigo-600"
+    >
+      Skip to main content
+    </a>
     <div id="root"></div>
     <!-- React SPA handles both authenticated and unauthenticated views -->
     <!-- The Index.tsx component now matches landing.html aesthetic -->

@@ -67,7 +67,7 @@ export const FEATURED_BOUNTIES_BP009: FeaturedBounty[] = [
     description:
       'Replicate the KN042 substrate-routed memory expansion test on at least two of: ' +
       'Apple Silicon (M3/M4), NVIDIA H100, Cerebras CS-2/CS-3, Groq LPU, AMD MI300X. ' +
-      'Report: tokens/second, cost per token, Cathedral Effect quality gain vs cold-start baseline, ' +
+      'Report: tokens/second, cost per token, Caithedral Effect quality gain vs cold-start baseline, ' +
       'Conductor model-tier routing savings. Each approved silicon variant earns the full reward independently.',
     empiricalAnchor: 'Chip-maker Wave 1 cohort empirical anchor — NVIDIA / AMD / Intel / Cerebras / Groq / Sambanova / Apple outreach',
     enterpriseCohort: 'NVIDIA / AMD / Intel / Cerebras / Groq / Sambanova / Apple',
@@ -113,7 +113,7 @@ export const FEATURED_BOUNTIES_BP009: FeaturedBounty[] = [
     tagline: 'Map every LB substrate primitive to the NIST AI Risk Management Framework.',
     description:
       'Produce a complete cross-reference mapping every substrate primitive ' +
-      '(Wrasse, Conductor\'s Baton, Cathedral Effect, Augur, Furnace, Slow Blade, ' +
+      '(Wrasse, Conductor\'s Baton, Caithedral Effect, Augur, Furnace, Slow Blade, ' +
       'Pheromone, Stone Tablet, CheckBook Suite, Catechist) to the relevant ' +
       'NIST AI RMF 1.0 function, category, and subcategory. Verified by Catechist for completeness. ' +
       'This establishes substrate as an empirical standards primitive (#2299) before the NIST conversation.',
@@ -160,7 +160,7 @@ export const FEATURED_BOUNTIES_BP009: FeaturedBounty[] = [
     title: 'Anthropic-Compatible LB Frame Demo',
     tagline: 'Demonstrate LB substrate amplifying Claude Haiku to near-Sonnet quality on the R10 benchmark.',
     description:
-      'Run the Cathedral Effect R10/R11 benchmark with LB substrate on Anthropic Claude Haiku ' +
+      'Run the Caithedral Effect R10/R11 benchmark with LB substrate on Anthropic Claude Haiku ' +
       '(or equivalent entry-level tier), demonstrating it achieves quality scores within 10% of ' +
       'Sonnet on knowledge-retrieval questions. This is the empirical anchor for the Anthropic ' +
       'partner-lane Wave 1 conversation — substrate making cheap models capable.',

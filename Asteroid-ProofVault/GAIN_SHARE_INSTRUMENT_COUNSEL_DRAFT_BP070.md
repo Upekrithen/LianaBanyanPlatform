@@ -52,6 +52,60 @@ Reasoning (for counsel to confirm):
 
 ---
 
+## §1A — Brulotte/Kimble Compliance: PATHWAY 2 PRIMARY (BP071 · canon: pearl_31d296d6)
+
+> **Status:** This section supersedes the Pathway 1 (step-down as primary) framing in Q1 §5 above. Pathway 2 is now the primary legal basis; the step-down is retained as belt-and-suspenders fallback only. Canon locked: `canon_launch_legal_posture_locked_not_a_security_primary_regcf_506c_fallback_brulotte_pathway2_bp071` · pearl_31d296d6 · BP071.
+
+### §1A.1 — Why *Brulotte/Kimble* Do Not Apply (Pathway 2 Primary)
+
+The *Brulotte* rule (*Brulotte v. Thys Co.*, 379 U.S. 29 (1964)) and *Kimble* (*Kimble v. Marvel Entertainment*, 576 U.S. 446 (2015)) prohibit patent royalties that extend beyond the expiration of the licensed patent. They operate on a simple premise: once a patent expires, the patentee cannot collect royalties for practice of that patent.
+
+**The cooperative's primary legal position is that *Brulotte/Kimble* are inapplicable in the first place**, for the following structural reason:
+
+The underlying intellectual property — all patents, patent applications, and patent-eligible inventions comprising MnemosyneC and the cooperative commons — were **irrevocably donated** by the inventor (J. Jones) to the Liana Banyan cooperative commons. The IP donation is recorded in the IP Donation Agreement (see §1A.4 below). This donation is not a license; it is an unconditional transfer to the cooperative entity for the benefit of all members past, present, and future.
+
+Because the IP is now **cooperative property**, the Cooperative Margin (Cost+20%) and the 83.3% creator-and-worker keep are **cooperative platform economics and governance allocations** — not a payment by a licensee to a patentee. Specifically:
+
+- The **Cost+20% Cooperative Margin** is the platform infrastructure fee that covers cooperative operating costs plus a 20% overhead for ecosystem maintenance, not a royalty extracted in exchange for a right to practice a patent.
+- The **83.3% creator-and-worker keep** is the cooperative's governance-mandated allocation formula under Statute §5, distributing platform revenues to the people and entities who generate value on the platform.
+- Neither figure is computed by reference to any patented claim, patent life, or patent coverage. Both are bylaw-level rules that would apply identically if every patent in the cooperative commons expired tomorrow.
+
+**Conclusion (counsel to confirm):** Because the cooperative owns the IP outright (via irrevocable donation, not license), there is no licensor–licensee royalty relationship. *Brulotte/Kimble* address royalties a *patentee* collects from a *licensee* for use of a *specific patent*. The Cooperative Margin is none of those things — it is a platform fee from a member or commercial partner to their own cooperative, for platform services, governance, and non-expiring know-how. The structure holds for the full 50-year charter with **no operative step-down on patent expiry.**
+
+### §1A.2 — Severability Step-Down Clause (Pathway 2 Belt-and-Suspenders Fallback)
+
+Notwithstanding Pathway 2 (§1A.1 above), the instrument shall include the following severability clause as belt-and-suspenders protection in the event any portion of the Cooperative Margin is ever characterized as a patent royalty by a court or regulator:
+
+> **Severability Step-Down (verbatim for counsel to place in instrument):**
+> *"To the extent any portion of the Cooperative Margin is ever deemed a royalty for the use of patented technology, that portion shall automatically step down by [X]% upon expiration of the last-to-expire patent in the cooperative commons, with the remainder of the Margin strictly attributed to non-expiring intellectual property — software copyrights, trade secrets, trademarks — and ongoing platform services."*
+
+The bracketed [X]% is counsel-to-confirm based on the IP donation delineation schedule (§1A.4). The baseline position is that the patent-attributable portion is **zero** (Pathway 2), making the step-down a null operation — but the clause ensures that if a court recharacterizes, the recharacterized amount steps down and the Margin survives on a non-patent basis.
+
+### §1A.3 — Immutability of §5 Allocations on Patent Expiry
+
+**The 83.3% creator-and-worker keep and the Cost+20% Cooperative Margin are immutable cooperative bylaws (Statute §5). They do not change on patent expiry under any scenario.**
+
+Specifically:
+- No step-down (Pathway 1 or Pathway 2 severability) touches the **83.3% allocation** — this is the cooperative's internal distribution formula for creator and worker members, which is wholly independent of any patent consideration.
+- No step-down touches the **Cost+20% Cooperative Margin** as a whole — the step-down, if ever triggered, applies only to the sub-portion of the Margin that a court has characterized as patent-attributable, not to the entire Margin.
+- The **Cost basis** (the "Cost" in Cost+20%) is a platform-services cost recovery, not a patent toll, and is unaffected by patent status at all times.
+
+**Counsel to confirm:** that the instrument's severability clause is drafted to make this immutability unambiguous — the step-down is a surgical sub-portion adjustment, not a wholesale Margin reduction, and the §5 allocation formula is expressly carved out of any patent-expiry trigger.
+
+### §1A.4 — IP Donation Delineation Schedule (Drafting Action)
+
+The IP Donation Agreement (Upekrithen LLC → Liana Banyan Corporation) must include, as a schedule or exhibit, a **patent-vs.-know-how delineation schedule** that:
+
+1. **Lists the donated patented inventions** (by patent number, application number, or disclosure reference) separately from the know-how, trade secrets, algorithms, governance mechanics, and trademarks also donated.
+2. **Expressly attributes** the Cooperative Margin primarily to the non-expiring components (software copyrights, trade secrets, governance protocols, trademarks) and to ongoing platform services, with any patent contribution stated as subordinate and separately identified.
+3. **Provides the basis** for counsel to set the [X]% step-down figure in §1A.2, by quantifying what fraction (if any) of the Margin is attributable to the patented inventions specifically.
+
+**Purpose:** This schedule is the evidentiary backbone of both Pathway 2 (demonstrating the Margin is not patent-derived) and the Pathway 1 severability fallback (establishing what step-down percentage is supportable). Without the schedule, the instrument's Brulotte defense is asserted but unanchored.
+
+**Action item for counsel:** confirm the delineation schedule form, advise on the standard of specificity required to make it court-defensible, and integrate it into the IP Donation Agreement as a formal exhibit.
+
+---
+
 ## Question 2 — AUDIT RIGHTS: how does the counterparty let LB verify the "savings"?
 
 **Bishop-recommended structure (revised per Pawn): (1) a DEFINED SAVINGS FORMULA anchored to an OBJECTIVE EXTERNAL BENCHMARK, (2) certified COUNTERPARTY SELF-REPORT on a fixed cadence, (3) a CLEAN-ROOM INDEPENDENT AUDIT (mutually-agreed Big-4, binary/top-line reporting only) as the verification backstop.**
@@ -117,9 +171,10 @@ Reasoning (for tax counsel to confirm):
 
 ## §5 — Summary of the Points Counsel Must Return
 
-| # | Question | Recommended structure (v2) | The point counsel must confirm |
-|---|----------|----------------------------|--------------------------------|
-| 1 | Instrument form | Hybrid: **license** + **covenant-not-to-assert** (#2260) + 20% as **verified-savings payment covenant**, **+ severability (patent vs trade-secret/software) + patent-expiry step-down** | Confirm hybrid; confirm the *Brulotte/Kimble* cure is structural not cosmetic; confirm Howey recitals |
+| # | Question | Recommended structure (v2 · BP071) | The point counsel must confirm |
+|---|----------|-------------------------------------|--------------------------------|
+| 1 | Instrument form | Hybrid: **license** + **covenant-not-to-assert** (#2260) + 20% as **Cooperative Margin / verified-savings payment covenant** | Confirm hybrid; confirm Howey recitals; confirm Cooperative Margin is not a patent running royalty |
+| 1A | *Brulotte/Kimble* compliance | **PATHWAY 2 PRIMARY:** IP irrevocably donated → Cooperative Margin is platform economics, not a patent royalty → *Brulotte/Kimble* inapplicable → 50-year charter holds with NO step-down. **Belt-and-suspenders:** severability clause (§1A.2) with [X]% step-down on patent-attributable sub-portion only. **Immutables fixed:** 83.3% keep and Cost+20% Margin are Statute §5 bylaws, unaffected by patent expiry. **IP Donation delineation schedule required (§1A.4).** | Confirm Pathway 2 holds (donated IP → no licensor/licensee royalty relationship); confirm severability step-down language; confirm [X]%; confirm immutables drafting; confirm delineation schedule form |
 | 2 | Audit rights | **Objective-external-benchmark formula → certified self-report → Big-4 clean-room audit** (binary/top-line, no log inspection), materiality cost-shift + true-up | Confirm mechanic; confirm formula defeats void-for-uncertainty; resolve open-vs-confidential posture |
 | 3 | Mercy clause | **Objective tiers** (free/reduced/full) as a **Conditional Covenant-Not-to-Sue**, auto-terminate on non-qualifying acquisition, **MFL carve-out**, no-exhaustion/no-partnership recitals | Confirm tier vehicle + thresholds; confirm no misuse/exhaustion/partnership; confirm MFL carve-out |
 | 4 | Subchapter-T | **Path A** (non-patronage, taxed, after-tax narrative) **or Path B** ($5 member-patrons, patronage) — Founder open to either; **Path B must clear Pawn's dividend-circularity** | **TAX-SPECIALIST CALL:** pick the path that fixes the tax without breaking Subchapter-T; resolve circularity; UBIT; wall-off |
@@ -158,3 +213,5 @@ Each item is **counsel-to-confirm**. These were absent from the BP069 draft and 
 ---
 
 *Prepared by Bishop (Opus 4.8 · 1M) as a BP070 redline · adversarially pressure-tested by Pawn (Gemini 3.1 Pro Thinking) · Non-lawyer draft · Truth-Always: no invented numbers, no asserted legal conclusions, every characterization marked counsel-to-confirm · 2026-06-02. Supersedes BP069 v1 (preserved).*
+
+*BP071 addendum (2026-06-02): §1A added — Brulotte/Kimble Pathway 2 PRIMARY (IP donation → no licensor/licensee royalty relationship → Brulotte inapplicable); §1A.2 severability step-down verbatim clause; §1A.3 immutability of Statute §5 allocations; §1A.4 IP delineation schedule drafting action. §5 table updated to reflect Pathway 2. Canon: `canon_launch_legal_posture_locked_not_a_security_primary_regcf_506c_fallback_brulotte_pathway2_bp071` · pearl_31d296d6. Royalty-scrub: 0 cooperative-charge substitutions required — all pre-existing "royalty" occurrences are in Brulotte/Kimble disclaimer/contrast context (correct usage preserved per instruction). Prepared by Bishop (Sonnet 4.6 · Claude Code) · BP071.*

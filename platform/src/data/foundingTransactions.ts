@@ -59,7 +59,7 @@ export const FOUNDING_TRANSACTIONS: FoundingTransaction[] = [
     counterparty: 'R&D Account (AH-****)',
     isAggregated: true,
     aggregatedCount: 1243, // Approximate number of individual R&D expenses
-    notes: 'Aggregated R&D expenditures including: system architecture, patent development, prototype iterations, legal filings, infrastructure. 1,244 documented innovations produced.',
+    notes: 'Aggregated R&D expenditures including: system architecture, patent development, prototype iterations, legal filings, infrastructure. 2,270 documented innovations produced.',
   },
 ];
 
@@ -73,7 +73,7 @@ export const FOUNDING_LEDGER_SUMMARY = {
   innovationsProduced: 2270,
   patentApplicationsFiled: 11,
   formalClaims: 2473,
-  crownJewels: 167,
+  crownJewels: 228,
 
   // Breakdown by category (approximate)
   expenditureBreakdown: {

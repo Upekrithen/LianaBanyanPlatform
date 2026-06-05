@@ -1,5 +1,5 @@
-/**
- * Auth — mascot-voiced auth gate.
+﻿/**
+ * Auth -- mascot-voiced auth gate.
  * ================================
  * Replaces the legacy "Sign in to access your dashboard" Card modal
  * with a context-aware, character-voiced <MascotAuthGate />.

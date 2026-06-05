@@ -1,10 +1,10 @@
-﻿/**
- * LibrarianPage — CAI ◌ NotCents Download & Information Page
+/**
+ * LibrarianPage � CAI ? NotCents Download & Information Page
  * ============================================================
  * Lives at Librarian.the2ndSecond.com
  *
  * CAI = Conducted AI (pronounced "Kay-Eye")
- * Formula: CAI = log₁₀(S × A × E)
+ * Formula: CAI = log10(S � A � E)
  *   S = Speed multiplier (substrate-routed vs cold)
  *   A = Accuracy lift (HOT score delta)
  *   E = Efficiency multiplier (cost reduction)
@@ -13,19 +13,19 @@
  *   Prov 16: Distributed Substrate Mesh / VoIP cooperative network (in flight)
  *   Prov 17: 12-Paper Series supplementary disclosure (supplementary)
  *   Prov 18: Cooperative Mesh Network physical layer (BP024)
- *   → Remove DEPLOYMENT_HOLD flag when all three are cleared.
+ *   ? Remove DEPLOYMENT_HOLD flag when all three are cleared.
  *
  * Routes:
- *   /                     → CAI home + applications + architectural boundaries
- *   /medallion/:variant   → Single medallion full-page
- *   /install              → Install / AGPL v3 + packages for replication
- *   /federation           → Federation Library access (ONE OF US, $5/year)
- *   /receipts             → Cross-vendor benchmark receipts (public)
+ *   /                     ? CAI home + applications + architectural boundaries
+ *   /medallion/:variant   ? Single medallion full-page
+ *   /install              ? Install / AGPL v3 + packages for replication
+ *   /federation           ? Federation Library access (ONE OF US, $5/year)
+ *   /receipts             ? Cross-vendor benchmark receipts (public)
  *
  * Architecture:
- *   - Librarian.LianaBanyan.com → redirects here
- *   - Librarian.the2ndSecond.com → this page (primary CAI surface)
- *   - CAI ◌ NotCents composite brand canon (BP021 Crown-Jewel-class)
+ *   - Librarian.LianaBanyan.com ? redirects here
+ *   - Librarian.the2ndSecond.com ? this page (primary CAI surface)
+ *   - CAI ? NotCents composite brand canon (BP021 Crown-Jewel-class)
  *   - AGPL v3: solo substrate free; Federation Library = $5/yr member-only
  *
  * Tags: KN064 / BP005 (Pod Y) / BP024 (CAI page rebrand)
@@ -65,9 +65,9 @@ import {
   AlertCircle,
 } from "lucide-react";
 
-// ─────────────────────────────────────────────────────────
+// ---------------------------------------------------------
 // TYPES
-// ─────────────────────────────────────────────────────────
+// ---------------------------------------------------------
 
 const VALID_VARIANTS = new Set<LibrarianMedallionVariant>([
   "canon",
@@ -101,9 +101,9 @@ function isValidVariant(v: string | undefined): v is LibrarianMedallionVariant {
   return !!v && VALID_VARIANTS.has(v as LibrarianMedallionVariant);
 }
 
-// ─────────────────────────────────────────────────────────
-// APPLICATION DOMAINS — what CAI has been proven on
-// ─────────────────────────────────────────────────────────
+// ---------------------------------------------------------
+// APPLICATION DOMAINS � what CAI has been proven on
+// ---------------------------------------------------------
 
 const CAI_APPLICATIONS = [
   {
@@ -125,12 +125,12 @@ const CAI_APPLICATIONS = [
     icon: FileText,
     description: "USPTO provisional and formal application scaffolding at scale.",
     examples: [
-      "15 USPTO provisionals filed (Prov 1–15)",
+      "15 USPTO provisionals filed (Prov 1�15)",
       "2,473 formal patent claims generated",
       "Cross-provisional consistency checking",
     ],
     package: "librarian-mcp + chandelier-bench",
-    receipt: "Prov 13–15 / B133 BP001",
+    receipt: "Prov 13�15 / B133 BP001",
   },
   {
     id: "medical",
@@ -140,7 +140,7 @@ const CAI_APPLICATIONS = [
     examples: [
       "Healthcare systems paper (12-Paper Save-the-World Series)",
       "Cross-study synthesis across 455+ publications",
-      "Skipping Stones depth routing: Skim → Article → Full Paper",
+      "Skipping Stones depth routing: Skim ? Article ? Full Paper",
     ],
     package: "librarian-mcp",
     receipt: "Bushel 12 / BP022",
@@ -177,30 +177,30 @@ const CAI_APPLICATIONS = [
     icon: FlaskConical,
     description: "Empirical HOT-lift measurement across models and providers.",
     examples: [
-      "+86.1pp mean HOT lift · 8 models · 5 vendors · 1,200 calls",
-      "23× cost spread measured across providers",
+      "+86.1pp mean HOT lift � 8 models � 5 vendors � 1,200 calls",
+      "23� cost spread measured across providers",
       "Chandelier L1 + L2 receipt infrastructure (KN019)",
     ],
     package: "chandelier-bench (open-source, part of librarian-mcp)",
-    receipt: "K499 / B123 · K535 / B132",
+    receipt: "K499 / B123 � K535 / B132",
   },
 ];
 
-// ─────────────────────────────────────────────────────────
+// ---------------------------------------------------------
 // PACKAGES FOR REPLICATION
-// ─────────────────────────────────────────────────────────
+// ---------------------------------------------------------
 
 const CAI_PACKAGES = [
   {
     name: "librarian-mcp",
     install: "pip install librarian-mcp",
-    description: "Full Librarian MCP server. Cathedral Effect, Wrasse, Chronos, Herder, Detective. AGPL v3.",
+    description: "Full Librarian MCP server. Caithedral Effect, Wrasse, Chronos, Herder, Detective. AGPL v3.",
     license: "AGPL v3 Free",
     replicates: "All 6 application domains above",
   },
   {
     name: "chandelier-bench",
-    install: "pip install librarian-mcp  # included",
+    install: "# bundled � install librarian-mcp (see above)",
     description: "Chandelier L1 + L2 benchmarking suite. Reproduce the +86.1pp HOT lift receipts.",
     license: "AGPL v3 Free",
     replicates: "Cross-vendor AI benchmarking",
@@ -214,9 +214,9 @@ const CAI_PACKAGES = [
   },
 ];
 
-// ─────────────────────────────────────────────────────────
+// ---------------------------------------------------------
 // NAV
-// ─────────────────────────────────────────────────────────
+// ---------------------------------------------------------
 
 function LibrarianNav({ showBack }: { showBack?: boolean }) {
   return (
@@ -240,9 +240,11 @@ function LibrarianNav({ showBack }: { showBack?: boolean }) {
           className="font-semibold text-sm hover:text-primary transition-colors"
           data-testid="librarian-nav-home"
         >
-          CAI ◌ NotCents
+          The Librarian
         </Link>
-        <span className="text-muted-foreground/40 text-xs">·</span>
+        <span className="text-muted-foreground/40 text-xs">�</span>
+        <span className="text-xs text-muted-foreground/60 font-mono">CAI ? NotCents</span>
+        <span className="text-muted-foreground/40 text-xs">�</span>
         <Badge variant="outline" className="text-[10px]">
           Conducted AI
         </Badge>
@@ -257,7 +259,7 @@ function LibrarianNav({ showBack }: { showBack?: boolean }) {
           </Link>
           <Link to="/federation">
             <Button size="sm" className="text-[11px] h-7">
-              ONE OF US →
+              ONE OF US ?
             </Button>
           </Link>
         </div>
@@ -266,15 +268,15 @@ function LibrarianNav({ showBack }: { showBack?: boolean }) {
   );
 }
 
-// ─────────────────────────────────────────────────────────
+// ---------------------------------------------------------
 // HOME VIEW
-// ─────────────────────────────────────────────────────────
+// ---------------------------------------------------------
 
 function LibrarianHome() {
   return (
     <div className="space-y-14" data-testid="librarian-home">
 
-      {/* Hero — CAI ◌ NotCents */}
+      {/* Hero � CAI ? NotCents */}
       <div
         className="text-center space-y-5 py-14"
         data-testid="librarian-hero"
@@ -284,7 +286,7 @@ function LibrarianHome() {
             <div className="w-20 h-20 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center overflow-hidden">
               <img
                 src={PFPowl1}
-                alt="The Owl · Moneypenny · Librarian"
+                alt="The Owl � Moneypenny � Librarian"
                 className="w-16 h-16 object-contain"
               />
             </div>
@@ -297,38 +299,38 @@ function LibrarianHome() {
           </div>
         </div>
 
-        {/* Owl · Moneypenny · Librarian — character identity · BP053 */}
+        {/* Owl � Moneypenny � Librarian � character identity � BP053 */}
         <p className="text-[11px] text-muted-foreground/60 tracking-wider text-center">
-          The Owl · Moneypenny · Your Librarian™ — sees through your substrate to find what matters
+          The Owl � Moneypenny � Your Librarian� � sees through your substrate to find what matters
         </p>
 
         <div className="space-y-3">
           <p className="text-sm font-medium text-muted-foreground tracking-wide uppercase">
-            Conducted AI · Unparalleled accuracy, speed, with diminished cost
+            Conducted AI � Unparalleled accuracy, speed, with diminished cost
           </p>
           <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight">
-            CAI ◌ NotCents.{" "}
+            CAI ? NotCents.{" "}
             <span className="text-primary">It's HOW You Use It.</span>
           </h1>
           <div
             className="inline-block mx-auto rounded-lg px-4 py-2 font-mono text-sm border"
             style={{ background: "#0a0a0a", color: "#22d3ee", borderColor: "rgba(34,211,238,0.3)" }}
           >
-            CAI = log₁₀(S × A × E)
-            <span className="text-zinc-500 ml-3 text-xs">Speed · Accuracy · Efficiency</span>
+            CAI = log10(S � A � E)
+            <span className="text-zinc-500 ml-3 text-xs">Speed � Accuracy � Efficiency</span>
           </div>
         </div>
 
         <p className="text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed">
           Conducted AI is not a model. It's an architecture. Route knowledge before the model sees the
-          question — proven +86.1pp HOT lift across 5 vendors, 8 models, 1,200 calls.
+          question � proven +86.1pp HOT lift across 5 vendors, 8 models, 1,200 calls.
           AGPL v3 free. Federation Library unlocks with{" "}
           <span className="font-semibold text-foreground">ONE OF US</span>{" "}
           membership ($5/year).
         </p>
         <p className="text-xs text-muted-foreground/50 max-w-xl mx-auto leading-relaxed italic">
-          The Librarian™ gives Mnemosyne™ X-Ray Goggles — seeing through your document pile to find what matters.
-          The Owl's eyes are the X-Ray Goggles. Wisdom · sees-in-the-dark · night-shift · silent flight.
+          The Librarian� gives Mnemosyne� X-Ray Goggles � seeing through your document pile to find what matters.
+          The Owl's eyes are the X-Ray Goggles. Wisdom � sees-in-the-dark � night-shift � silent flight.
         </p>
 
         <div className="flex justify-center gap-3 flex-wrap">
@@ -406,7 +408,7 @@ function LibrarianHome() {
                 <ul className="space-y-1">
                   {app.examples.map((ex, i) => (
                     <li key={i} className="flex gap-1.5 text-[11px] text-muted-foreground/80">
-                      <span className="text-green-500 flex-shrink-0 mt-0.5">·</span>
+                      <span className="text-green-500 flex-shrink-0 mt-0.5">�</span>
                       <span>{ex}</span>
                     </li>
                   ))}
@@ -425,7 +427,7 @@ function LibrarianHome() {
         </div>
       </div>
 
-      {/* Architectural Boundaries — why mining/hacking is impossible */}
+      {/* Architectural Boundaries � why mining/hacking is impossible */}
       <div
         className="rounded-xl border border-red-500/20 bg-red-500/5 p-6 space-y-4"
         data-testid="cai-architectural-boundaries"
@@ -434,7 +436,7 @@ function LibrarianHome() {
           <Lock className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
           <div className="space-y-1">
             <h2 className="font-bold text-base">
-              What CAI Cannot Do — By Architecture, Not Policy
+              What CAI Cannot Do � By Architecture, Not Policy
             </h2>
             <p className="text-sm text-muted-foreground">
               This is not a terms-of-service restriction. The architecture does not contain the
@@ -447,7 +449,7 @@ function LibrarianHome() {
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <AlertCircle className="w-4 h-4 text-red-400 flex-shrink-0" />
-              <p className="font-semibold text-sm">Cryptocurrency Mining — Architecturally Impossible</p>
+              <p className="font-semibold text-sm">Cryptocurrency Mining � Architecturally Impossible</p>
             </div>
             <p className="text-[13px] text-muted-foreground leading-relaxed pl-6">
               Mining requires a tight compute loop executing SHA-256 or equivalent hashing billions
@@ -455,13 +457,13 @@ function LibrarianHome() {
             </p>
             <ul className="pl-6 space-y-1">
               {[
-                "Arm A routes to external AI model APIs — it does not compute hashes",
-                "Arm B reads from append-only JSONL files — it is a read layer, not a compute engine",
-                "Wrasse pre-injection enriches text context — there is no GPU pipeline",
+                "Arm A routes to external AI model APIs � it does not compute hashes",
+                "Arm B reads from append-only JSONL files � it is a read layer, not a compute engine",
+                "Wrasse pre-injection enriches text context � there is no GPU pipeline",
                 "No proof-of-work mechanism exists anywhere in the substrate",
               ].map((item, i) => (
                 <li key={i} className="text-[11px] text-muted-foreground/70 flex gap-1.5">
-                  <span className="text-red-400/60 flex-shrink-0">✗</span>
+                  <span className="text-red-400/60 flex-shrink-0">?</span>
                   <span>{item}</span>
                 </li>
               ))}
@@ -471,7 +473,7 @@ function LibrarianHome() {
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <AlertCircle className="w-4 h-4 text-red-400 flex-shrink-0" />
-              <p className="font-semibold text-sm">Network Intrusion / Hacking — Architecturally Impossible</p>
+              <p className="font-semibold text-sm">Network Intrusion / Hacking � Architecturally Impossible</p>
             </div>
             <p className="text-[13px] text-muted-foreground leading-relaxed pl-6">
               Intrusion requires network scanners, exploit delivery, credential interception,
@@ -482,10 +484,10 @@ function LibrarianHome() {
                 "Outbound calls: AI model APIs only (OpenAI, Anthropic, Google, etc.)",
                 "No network scanner, port prober, or exploit framework",
                 "No shellcode generation, no arbitrary code execution against external targets",
-                "No credential harvesting pipeline — the substrate stores knowledge, not secrets",
+                "No credential harvesting pipeline � the substrate stores knowledge, not secrets",
               ].map((item, i) => (
                 <li key={i} className="text-[11px] text-muted-foreground/70 flex gap-1.5">
-                  <span className="text-red-400/60 flex-shrink-0">✗</span>
+                  <span className="text-red-400/60 flex-shrink-0">?</span>
                   <span>{item}</span>
                 </li>
               ))}
@@ -514,23 +516,23 @@ function LibrarianHome() {
         <div className="grid md:grid-cols-2 gap-4 text-sm">
           <div className="space-y-2">
             <p className="font-semibold text-foreground">
-              Solo Substrate — AGPL v3 Free
+              Solo Substrate � AGPL v3 Free
             </p>
             <p className="text-muted-foreground text-[13px] leading-relaxed">
               Install Librarian-MCP. Run it with your own data. Cathedral
               Effect, Wrasse pre-injection, Chronos signing, Herder predictions
-              — every component, full-featured, no gating. Zero cost beyond
+              � every component, full-featured, no gating. Zero cost beyond
               your AI provider tokens.
             </p>
           </div>
           <div className="space-y-2">
             <p className="font-semibold text-foreground">
-              Federation Library — ONE OF US ($5/year)
+              Federation Library � ONE OF US ($5/year)
             </p>
             <p className="text-muted-foreground text-[13px] leading-relaxed">
               Cross-member Stone Tablets, shared Eblets, personality chips,
               cooperative Wrasse registry writes. The community is opt-in; the
-              substrate is always open. Identical price for all members —
+              substrate is always open. Identical price for all members �
               founder to latest joiner.
             </p>
           </div>
@@ -541,7 +543,7 @@ function LibrarianHome() {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-bold" data-testid="librarian-gallery-heading">
-            11 Medallions — One Brand, Many Doors
+            11 Medallions � One Brand, Many Doors
           </h2>
           <p className="text-sm text-muted-foreground">
             All Medallions are CAI variants.
@@ -575,7 +577,7 @@ function LibrarianHome() {
           ))}
         </div>
         <p className="text-[11px] text-muted-foreground/60">
-          "More the merrier" — open-set framing. Future variants append per Founder ratification.
+          "More the merrier" � open-set framing. Future variants append per Founder ratification.
         </p>
       </div>
 
@@ -588,15 +590,15 @@ function LibrarianHome() {
           Empirical Anchor
         </p>
         <p className="text-[11px] text-muted-foreground/70 leading-relaxed italic">
-          81× compound multiplier projection per B127 algorithm L1-L5 (25.6×-50× empirical-anchored
-          compound across Cathedral + SRME + Mechanical Computer + Symbiote layers); 7-12×
-          cheaper-than-cold measured per KN042 Pod O receipt; ~24× velocity multiplier per BP011 Pod W
-          receipt; ~360× combined Founder-time × vendor-API-spend reduction per SCALE document.
+          81� compound multiplier projection per B127 algorithm L1-L5 (25.6�-50� empirical-anchored
+          compound across Cathedral + SRME + Mechanical Computer + Symbiote layers); 7-12�
+          cheaper-than-cold measured per KN042 Pod O receipt; ~24� velocity multiplier per BP011 Pod W
+          receipt; ~360� combined Founder-time � vendor-API-spend reduction per SCALE document.
           STUPENDOUS BP012 measures actual operational compound; COLOSSUS BP015+ measures
           upgraded-substrate ceiling. Receipts published as they land.
         </p>
         <p className="text-[10px] text-muted-foreground/50">
-          Touchstone R10: +86.1pp mean HOT lift · 8 models · 5 vendors · 1,200 calls · locked B112
+          Touchstone R10: +86.1pp mean HOT lift � 8 models � 5 vendors � 1,200 calls � locked B112
         </p>
       </div>
 
@@ -606,7 +608,7 @@ function LibrarianHome() {
         data-testid="librarian-footer"
       >
         <p>
-          CAI ◌ NotCents · Librarian.the2ndSecond.com · Liana Banyan Corporation (EIN [REDACTED-PRIVATE]) · C-Corp
+          CAI ? NotCents � Librarian.the2ndSecond.com � Liana Banyan Corporation (EIN [REDACTED-PRIVATE]) � C-Corp
         </p>
         <p className="flex flex-wrap justify-center gap-x-2 gap-y-0.5">
           <a
@@ -615,9 +617,9 @@ function LibrarianHome() {
             rel="noopener noreferrer"
             className="hover:text-muted-foreground transition-colors underline-offset-2 hover:underline"
           >
-            ← LB Frame (lianabanyan.com)
+            ? LB Frame (lianabanyan.com)
           </a>
-          <span className="text-muted-foreground/30">·</span>
+          <span className="text-muted-foreground/30">�</span>
           <a
             href="https://lianabanyan.com/auth"
             target="_blank"
@@ -626,7 +628,7 @@ function LibrarianHome() {
           >
             Federation Library opt-in ($5/year)
           </a>
-          <span className="text-muted-foreground/30">·</span>
+          <span className="text-muted-foreground/30">�</span>
           <a
             href="https://cephas.lianabanyan.com"
             target="_blank"
@@ -635,7 +637,7 @@ function LibrarianHome() {
           >
             Cephas docs
           </a>
-          <span className="text-muted-foreground/30">·</span>
+          <span className="text-muted-foreground/30">�</span>
           <a
             href="https://github.com/lianabanyan/librarian-mcp"
             target="_blank"
@@ -644,7 +646,7 @@ function LibrarianHome() {
           >
             AGPL v3 source
           </a>
-          <span className="text-muted-foreground/30">·</span>
+          <span className="text-muted-foreground/30">�</span>
           <a
             href="https://cephas.lianabanyan.com/patents/cooperative-defensive-pledge"
             target="_blank"
@@ -659,9 +661,9 @@ function LibrarianHome() {
   );
 }
 
-// ─────────────────────────────────────────────────────────
+// ---------------------------------------------------------
 // INSTALL VIEW
-// ─────────────────────────────────────────────────────────
+// ---------------------------------------------------------
 
 function LibrarianInstall() {
   return (
@@ -670,11 +672,23 @@ function LibrarianInstall() {
       data-testid="librarian-install"
     >
       <div className="space-y-2">
-        <h1 className="text-2xl font-bold">Install CAI — Packages for Replication</h1>
+        <h1 className="text-2xl font-bold">Install CAI � Packages for Replication</h1>
         <p className="text-muted-foreground">
           AGPL v3 free. Full-version. No gating. No signup required.
           Every application domain above is reproducible with these packages.
         </p>
+      </div>
+
+      {/* Primary quick-install block */}
+      <div
+        className="rounded-lg bg-zinc-950 border border-zinc-800 p-4 font-mono"
+        data-testid="install-code-block"
+      >
+        <div className="flex items-center gap-2 mb-2 text-zinc-500 text-[11px]">
+          <Terminal className="w-3 h-3" />
+          <span>Terminal</span>
+        </div>
+        <p className="text-green-400 text-sm">pip install librarian-mcp</p>
       </div>
 
       {/* Packages */}
@@ -694,16 +708,22 @@ function LibrarianInstall() {
             <p className="text-[13px] text-muted-foreground leading-relaxed">
               {pkg.description}
             </p>
-            <div
-              className="rounded-lg bg-zinc-950 border border-zinc-800 p-3 font-mono text-sm"
-              data-testid={`install-cmd-${pkg.name}`}
-            >
-              <div className="flex items-center gap-2 mb-2 text-zinc-500 text-[10px]">
-                <Terminal className="w-3 h-3" />
-                <span>Terminal</span>
+            {pkg.name === "librarian-mcp" ? (
+              <p className="text-[11px] text-muted-foreground/60" data-testid={`install-cmd-${pkg.name}`}>
+                Install command shown in the block above.
+              </p>
+            ) : (
+              <div
+                className="rounded-lg bg-zinc-950 border border-zinc-800 p-3 font-mono text-sm"
+                data-testid={`install-cmd-${pkg.name}`}
+              >
+                <div className="flex items-center gap-2 mb-2 text-zinc-500 text-[10px]">
+                  <Terminal className="w-3 h-3" />
+                  <span>Terminal</span>
+                </div>
+                <p className="text-green-400 text-[12px]">{pkg.install}</p>
               </div>
-              <p className="text-green-400 text-[12px]">{pkg.install}</p>
-            </div>
+            )}
             <p className="text-[11px] text-muted-foreground/60">
               Replicates: {pkg.replicates}
             </p>
@@ -731,15 +751,15 @@ function LibrarianInstall() {
       <div className="space-y-3 text-sm">
         <h2 className="font-semibold">What you get (free, always):</h2>
         {[
-          "Cathedral Effect context substrate — proven +86.2pp HOT lift across 5 vendors",
-          "Wrasse pre-injection — context-enriches your Eblets before AI sees them",
-          "Chronos signing — every action signed + append-only audit trail",
-          "Herder prediction — estimates context cost before running bundles",
-          "Chandelier benchmarking — L1 + L2 receipt infrastructure",
-          "Detective + Pheromone index — sub-ms cross-scribe queries",
+          "Caithedral Effect context substrate � proven +86.2pp HOT lift across 5 vendors",
+          "Wrasse pre-injection � context-enriches your Eblets before AI sees them",
+          "Chronos signing � every action signed + append-only audit trail",
+          "Herder prediction � estimates context cost before running bundles",
+          "Chandelier benchmarking � L1 + L2 receipt infrastructure",
+          "Detective + Pheromone index � sub-ms cross-scribe queries",
         ].map((item) => (
           <div key={item} className="flex gap-2 text-muted-foreground">
-            <span className="text-green-500 flex-shrink-0">✓</span>
+            <span className="text-green-500 flex-shrink-0">?</span>
             <span>{item}</span>
           </div>
         ))}
@@ -773,9 +793,9 @@ function LibrarianInstall() {
   );
 }
 
-// ─────────────────────────────────────────────────────────
+// ---------------------------------------------------------
 // FEDERATION VIEW
-// ─────────────────────────────────────────────────────────
+// ---------------------------------------------------------
 
 function LibrarianFederation() {
   return (
@@ -784,7 +804,7 @@ function LibrarianFederation() {
       data-testid="librarian-federation"
     >
       <div className="space-y-2">
-        <h1 className="text-2xl font-bold">Federation Library — ONE OF US</h1>
+        <h1 className="text-2xl font-bold">Federation Library � ONE OF US</h1>
         <p className="text-muted-foreground">
           $5/year. Identical price for all members, from Founder to latest joiner.
         </p>
@@ -815,7 +835,7 @@ function LibrarianFederation() {
             "Pied Piper DragonRider tier (demonstrated receipts required)",
           ].map((item) => (
             <div key={item} className="flex gap-2">
-              <span className="text-primary flex-shrink-0">→</span>
+              <span className="text-primary flex-shrink-0">?</span>
               <span className="text-muted-foreground">{item}</span>
             </div>
           ))}
@@ -829,14 +849,14 @@ function LibrarianFederation() {
         >
           <Button className="w-full mt-2">
             <Users className="w-4 h-4 mr-2" />
-            Be ONE OF US — $5/year
+            Be ONE OF US � $5/year
           </Button>
         </a>
       </div>
 
       <p className="text-xs text-muted-foreground/60 leading-relaxed">
         The substrate is always AGPL v3 free. The Federation Library is the
-        cooperative layer — opt-in, identical price for all, no tiers beyond
+        cooperative layer � opt-in, identical price for all, no tiers beyond
         solo vs. federated. Cooperative Defensive Patent Pledge (#2260)
         applies to all members.
       </p>
@@ -844,9 +864,9 @@ function LibrarianFederation() {
   );
 }
 
-// ─────────────────────────────────────────────────────────
+// ---------------------------------------------------------
 // RECEIPTS VIEW
-// ─────────────────────────────────────────────────────────
+// ---------------------------------------------------------
 
 function LibrarianReceipts() {
   return (
@@ -857,7 +877,7 @@ function LibrarianReceipts() {
       <div className="space-y-2">
         <h1 className="text-2xl font-bold">Empirical Receipts</h1>
         <p className="text-muted-foreground">
-          Cross-vendor benchmark results. All receipts are reproducible — each
+          Cross-vendor benchmark results. All receipts are reproducible � each
           includes a reproducibility_instructions_hash per #2326.
         </p>
       </div>
@@ -866,33 +886,33 @@ function LibrarianReceipts() {
         {[
           {
             id: "k499",
-            label: "K499 — Cross-Vendor HOT Lift",
+            label: "K499 � Cross-Vendor HOT Lift",
             result: "+86.2pp mean accuracy",
-            vendors: "5 vendors · 8 models",
+            vendors: "5 vendors � 8 models",
             commit: "K499 / B123",
             tag: "public",
           },
           {
             id: "k535",
-            label: "K535 — Cost Spread Analysis",
-            result: "23× cost spread · 3.5pp HOT spread tightening",
+            label: "K535 � Cost Spread Analysis",
+            result: "23� cost spread � 3.5pp HOT spread tightening",
             vendors: "5 vendors",
             commit: "K535 / B132",
             tag: "public",
           },
           {
             id: "kn019",
-            label: "KN019 — Chandelier L1+L2 Benchmark",
-            result: "9+ L1 receipts · 6+ L2 synergy receipts",
+            label: "KN019 � Chandelier L1+L2 Benchmark",
+            result: "9+ L1 receipts � 6+ L2 synergy receipts",
             vendors: "Sonnet 4.6 / Opus 4.7 / Haiku 4.5",
             commit: "KN019 / BP002 (604f097)",
             tag: "public",
           },
           {
             id: "pod-x",
-            label: "PAPER 004 — Magic Beans 9-Bean Test",
-            result: "Scenario A: all 9 beans landed · 126 tests clean",
-            vendors: "Pod G+H+I · BP002 carry-forward",
+            label: "PAPER 004 � Magic Beans 9-Bean Test",
+            result: "Scenario A: all 9 beans landed � 126 tests clean",
+            vendors: "Pod G+H+I � BP002 carry-forward",
             commit: "a34a631",
             tag: "public",
           },
@@ -927,9 +947,9 @@ function LibrarianReceipts() {
   );
 }
 
-// ─────────────────────────────────────────────────────────
+// ---------------------------------------------------------
 // MEDALLION DETAIL VIEW
-// ─────────────────────────────────────────────────────────
+// ---------------------------------------------------------
 
 function LibrarianMedallionDetail() {
   const { variant } = useParams<{ variant?: string }>();
@@ -939,17 +959,17 @@ function LibrarianMedallionDetail() {
     return (
       <div className="space-y-8">
         <div className="text-center space-y-2">
-          <h1 className="text-2xl font-bold">11 Medallions — One Brand, Many Doors</h1>
+          <h1 className="text-2xl font-bold">11 Medallions � One Brand, Many Doors</h1>
           <p className="text-sm text-muted-foreground max-w-xl mx-auto">
             All Medallions are CAI variants. Cathedral / Pied Piper /
             Furnace / Canon / Platform Rules / Project Rules / AI Tuning /
-            Symbiote / UltraVision / Liana Banyan / Titan Librarian — one substrate, eleven doors.
+            Symbiote / UltraVision / Liana Banyan / Titan Librarian � one substrate, eleven doors.
           </p>
         </div>
         <LibrarianMedallionGallery />
         <div className="text-center">
           <Link to="/">
-            <Button variant="outline" size="sm">← Back to CAI Home</Button>
+            <Button variant="outline" size="sm">? Back to CAI Home</Button>
           </Link>
         </div>
       </div>
@@ -1015,9 +1035,9 @@ function LibrarianMedallionDetail() {
   );
 }
 
-// ─────────────────────────────────────────────────────────
+// ---------------------------------------------------------
 // ROOT COMPONENT
-// ─────────────────────────────────────────────────────────
+// ---------------------------------------------------------
 
 export default function LibrarianPage() {
   const location = useLocation();

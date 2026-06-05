@@ -68,7 +68,7 @@ const SWEET_SIXTEEN = [
     emoji: "🍞",
     tagline: "$5 Business Simulator → Real Business",
     description: "Start with a $5 simulation. Learn business fundamentals. Graduate to real operations when ready.",
-    route: "/initiatives/bread",
+    route: "/initiatives/lets-make-bread",
     priority: true,
     category: "business",
     step: "Feed Your Neighbors"

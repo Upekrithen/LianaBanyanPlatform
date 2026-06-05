@@ -83,6 +83,12 @@ No hype. No fabricated following. No guarantee that everything works seamlessly 
 
 ---
 
+## Two is better than one
+
+This is the part we keep proving, not just promising. In one working session, three pieces of our own infrastructure failed at the same time — and we lost nothing, because the work lived in the durable commons and was spread across more than one worker and more than one machine. One went deaf; the rest still heard. And on the mesh, a machine that had never seen a batch of facts answered 100% of the questions about them correctly — hash-verified — the moment it was connected to a neighbor that did hold them (local-network only so far; $0 transport, ~$0.01 to grade). That is the whole idea behind joining: two consenting nodes, agreeing to serve, lend, and mirror for each other, are stronger than either alone — and the system is built so that holds when something breaks. The receipts are at [/proofs/](/proofs/).
+
+---
+
 ## The reason to join now rather than later
 
 The commons is cumulative. Joining earlier means:
