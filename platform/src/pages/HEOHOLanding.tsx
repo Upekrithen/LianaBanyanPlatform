@@ -284,7 +284,7 @@ const HEOHOLanding = () => {
         {/* Watch + Enter CTAs */}
         <div
           className="flex items-center justify-center gap-4"
-          style={{ marginTop: "0.5rem", marginBottom: "0.25rem" }}
+          style={{ marginTop: "0.5rem", marginBottom: "0.25rem", position: "relative", zIndex: 10 }}
         >
           <button
             onClick={() => navigate("/watch")}

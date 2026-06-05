@@ -19,6 +19,7 @@ import { useCanonicalStats } from '@/hooks/useCanonicalStats';
 
 // Pages where footer is hidden (immersive experiences)
 const HIDE_FOOTER_ROUTES = [
+  "/",
   "/hexisle-game",
   "/treasure-map-game",
   "/52-cards",
