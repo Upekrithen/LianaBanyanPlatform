@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.820Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Πες φίλος και μπες.",
+    "description": "Η Liana Banyan έχει κατασκευαστεί για να είναι ανοιχτή σε κάθε γλώσσα. Κάθε ανοιχτή γλώσσα έχει ένα βραβείο μετάφρασης.",
+    "languages": "γλώσσες",
+    "openBounties": "ανοιχτά βραβεία",
+    "marksAwarded": "Marks απονεμήθηκαν (μάρκες συμμετοχής)",
+    "provisional": "Προσωρινά:",
+    "provisionalNotice": "Η λίστα γλωσσών και οι τιμές Marks είναι προσωρινές. Τα Marks είναι μάρκες συμμετοχής, όχι μετοχές.",
+    "bountyOpen": "Βραβείο ανοιχτό",
+    "claimed": "Διεκδικήθηκε",
+    "complete": "Ολοκληρώθηκε",
+    "translationBountyTitle": "Βραβείο Μετάφρασης",
+    "bountyDescription": "Μεταφράστε το Liana Banyan σε {{language}}. Κερδίστε {{marks}} Marks μετά την αποδοχή.",
+    "scopeWelcome": "Οθόνες Καλωσορίσματος / Κόσμος Φαντασμάτων",
+    "scopeCueCards": "Βασικό Σετ Καρτών Υπόδειξης",
+    "scopeNavigation": "Ετικέτες πλοήγησης και μηνύματα σφάλματος",
+    "scopeWildfire": "Wildfire Beacon Run: Βρες Δουλειά",
+    "claimBounty": "Διεκδίκηση αυτού του Βραβείου Μετάφρασης",
+    "baseLanguage": "Βασική γλώσσα -- δεν χρειάζεται βραβείο.",
+    "claimedBy": "Το βραβείο διεκδικήθηκε από @{{handle}} -- σε εξέλιξη.",
+    "marksProvisional": "{{marks}} Marks (προσωρινά)",
+    "speakFounderTitle": "Φωνή Ιδρυτή: Γιατί Αυτές οι Λέξεις",
+    "speakFounderDesc": "Κάθε όρος σε αυτήν την πλατφόρμα ονομάζεται για κάποιο λόγο. Προέλευση των 26 πιο σημαντικών ονομάτων.",
+    "howBountiesWork": "Πώς Λειτουργούν τα Βραβεία Μετάφρασης",
+    "step1Title": "Διεκδίκηση Βραβείου",
+    "step1Body": "Ανοίξτε ένα Βραβείο Μετάφρασης από τον πίνακα Help Wanted.",
+    "step2Title": "Μεταφράστε και Υποβάλετε",
+    "step2Body": "Μεταφράστε όλες τις απαραίτητες συμβολοσειρές. Υποβάλετε μέσω Bounty Poster.",
+    "step3Title": "Κερδίστε Marks",
+    "step3Body": "Μετά την αποδοχή, λαμβάνετε Marks και καταχωρείστε στο IP Ledger.",
+    "hide": "απόκρυψη",
+    "why": "γιατί;",
+    "subtitle": "\"Πες φίλος και μπες.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Αλλαγή γλώσσας",
+    "selectLanguage": "Επιλογή γλώσσας",
+    "quickEnglish": "Αγγλικά",
+    "tip": "Χρησιμοποιήστε κωδικούς γλώσσας στην Πύλη του Δουρίν για να ξεκλειδώσετε μοναδικές εμπειρίες!"
+  }
+}

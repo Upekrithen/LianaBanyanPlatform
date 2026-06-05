@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.847Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Sano ystava ja astu sisaan.",
+    "description": "Liana Banyan on rakennettu avoimeksi jokaiselle kielelle. Jokaisella avoimella kielella on yksi kaannospalkinto.",
+    "languages": "kielet",
+    "openBounties": "avoimet palkinnot",
+    "marksAwarded": "Marks myonnetty (osallistumistokenit)",
+    "provisional": "Valiaikaisesti:",
+    "provisionalNotice": "Kielilista ja Marks-hinnat ovat valiaikaisesti. Marks ovat osallistumistokeneita, ei osakkeita.",
+    "bountyOpen": "Palkinto avoinna",
+    "claimed": "Vaadittu",
+    "complete": "Valmis",
+    "translationBountyTitle": "Kaannospalkinto",
+    "bountyDescription": "Kaanna Liana Banyan kielelle {{language}}. Ansaitse {{marks}} Marks hyvaksymisen jalkeen.",
+    "scopeWelcome": "Tervetuloa / Haamumaailma naytot",
+    "scopeCueCards": "Perus Vinkki-korttisetti",
+    "scopeNavigation": "Navigointimerkinnot ja virheilmoitukset",
+    "scopeWildfire": "Wildfire Beacon Run: Loyda tyo",
+    "claimBounty": "Vaadi tata Kaannosmerkintaa",
+    "baseLanguage": "Peruskieli -- ei palkintoa tarvita.",
+    "claimedBy": "@{{handle}} vaati -- kaynnissa.",
+    "marksProvisional": "{{marks}} Marks (valiaikaisesti)",
+    "speakFounderTitle": "Perustajan aani: Miksi Nama Sanat",
+    "speakFounderDesc": "Jokainen termi talla alustalla on nimetty syyta varten. 26 tarkeimman nimen alkupera.",
+    "howBountiesWork": "Kuinka Kaannospalkinnot Toimivat",
+    "step1Title": "Vaadi Palkinto",
+    "step1Body": "Avaa Kaannospalkinto Help Wanted -taulusta.",
+    "step2Title": "Kaanna ja Laheta",
+    "step2Body": "Kaanna kaikki tarvittavat merkkijonot. Laheta Bounty Poster -prosessin kautta.",
+    "step3Title": "Ansaitse Marks",
+    "step3Body": "Hyvaksymisen jalkeen saat Marks ja kirjataan IP Ledger -rekisteriin.",
+    "hide": "piilota",
+    "why": "miksi?",
+    "subtitle": "\"Sano ystava, ja astu sisaan.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Vaihda kielta",
+    "selectLanguage": "Valitse kieli",
+    "quickEnglish": "Englanti",
+    "tip": "Kayta eri kielten salasanoja Durinin portilla avataksesi ainutlaatuisia kokemuksia!"
+  }
+}

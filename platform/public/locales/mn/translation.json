@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.815Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Найз гэж хэлж ор.",
+    "description": "Liana Banyan нь аль ч хэлэнд нээлттэй байхаар баригдсан. Нэг бүр хэлэнд орчуулгын нэг урамшуулал байдаг.",
+    "languages": "хэлүүд",
+    "openBounties": "нээлттэй урамшуулал",
+    "marksAwarded": "Marks олгосон (оролцооны токен)",
+    "provisional": "Түр:",
+    "provisionalNotice": "Хэлний жагсаалт болон Marks-ийн хүү түр зуурынх. Marks оролцооны токен, хувьцаа биш.",
+    "bountyOpen": "Урамшуулал нээлттэй",
+    "claimed": "Нэхэмжилсэн",
+    "complete": "Дуусгасан",
+    "translationBountyTitle": "Орчуулгын Урамшуулал",
+    "bountyDescription": "Liana Banyan-ыг {{language}} хэлрүү орчуулна уу. {{marks}} Marks олох.",
+    "scopeWelcome": "Тавтай морил / Сүнсний Ертөнцийн дэлгэц",
+    "scopeCueCards": "Үндсэн Зөвлөмжийн Картуудын иж бүрдэл",
+    "scopeNavigation": "Навигацийн шошго ба алдааны мессеж",
+    "scopeWildfire": "Wildfire Beacon Run: Ажил ол",
+    "claimBounty": "Энэ Орчуулгын Урамшуулалыг нэхэмжилнэ үү",
+    "baseLanguage": "Үндсэн хэл -- урамшуулал хэрэгтэй биш.",
+    "claimedBy": "@{{handle}} нэхэмжилсэн -- явагдаж байна.",
+    "marksProvisional": "{{marks}} Marks (түр)",
+    "speakFounderTitle": "Үүсгэн байгуулагчийн дуу хоолой: Яагаад эдгээр үг",
+    "speakFounderDesc": "Энэ платформын тоо томшгүй нэр томьёо нь учиртай нэрлэгдсэн. 26 чухал нэрийн гарал.",
+    "howBountiesWork": "Орчуулгын Урамшуулал Хэрхэн Ажилладаг Вэ",
+    "step1Title": "Урамшуулал нэхэмжилнэ үү",
+    "step1Body": "Help Wanted самбараас Орчуулгын Урамшуулал нээнэ үү.",
+    "step2Title": "Орчуулж илгээнэ үү",
+    "step2Body": "Бүх шаардлагатай мөрийг орчуул. Bounty Poster-ийн урсгалаар илгээнэ үү.",
+    "step3Title": "Marks олно уу",
+    "step3Body": "Хүлээн авсны дараа Marks авна. IP Ledger-т бүртгэгдэнэ.",
+    "hide": "нуух",
+    "why": "яагаад?",
+    "subtitle": "\"Найз гэж хэлж ор.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Хэлийг солих",
+    "selectLanguage": "Хэл сонгоно уу",
+    "quickEnglish": "Англи",
+    "tip": "Онцгой туршлагуудыг нээхийн тулд Дурины хаалган дээр өөр өөр хэлний нууц үг ашиглаарай!"
+  }
+}

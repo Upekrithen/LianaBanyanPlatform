@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.887Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Ibaga ti kakaduam, ken sumrek.",
+    "description": "Liana Banyan napatakder tapno naabriranna iti tunggal pagsasao. Tunggal pagsasao ket addaan iti maysa nga padaya ti patarus.",
+    "languages": "pagsasao",
+    "openBounties": "naabriran a padaya",
+    "marksAwarded": "Natted dagiti Marks (dagiti token ti panangiturong)",
+    "provisional": "Temporal:",
+    "provisionalNotice": "Ti listaan ti pagsasao ken dagiti rate ti Marks temporal. Dagiti Marks dagiti token ti panangiturong, saan nga stock.",
+    "bountyOpen": "Naabriran ti padaya",
+    "claimed": "Naalpas",
+    "complete": "Natungpal",
+    "translationBountyTitle": "Padaya ti Patarus",
+    "bountyDescription": "Ikkat ti Liana Banyan idiay {{language}}. Mangala iti {{marks}} Marks.",
+    "scopeWelcome": "Daytoy / Lubong dagiti Espiritu",
+    "scopeCueCards": "Grupo dagiti Kard ti Tagubilin",
+    "scopeNavigation": "Dagiti marka ti pagsasao ken dagiti mensahe ti biddut",
+    "scopeWildfire": "Wildfire Beacon Run: Agbirbirok ti Trabaho",
+    "claimBounty": "Alpasan Daytoy nga Padaya ti Patarus",
+    "baseLanguage": "Nakabasaran a pagsasao -- awan padaya nga masapul.",
+    "claimedBy": "@{{handle}} ti nagalpa -- agpadapadayon.",
+    "marksProvisional": "{{marks}} Marks (temporal)",
+    "speakFounderTitle": "Timek ti Mangaramid: Apay Dagitoy a Sasao",
+    "speakFounderDesc": "Tunggal termino iti daytoy a plataporma nasanganaan iti rason. Nagsaritan dagiti 26 a naganyo.",
+    "howBountiesWork": "Kasano Mangagmamula dagiti Padaya ti Patarus",
+    "step1Title": "Alpasan ti Padaya",
+    "step1Body": "Abriran ti Padaya ti Patarus manipud Help Wanted.",
+    "step2Title": "Pataruse ken Ibalhoy",
+    "step2Body": "Pataruse amin a napateg a linya. Ibalhoy babaen ti Bounty Poster.",
+    "step3Title": "Mangala iti Marks",
+    "step3Body": "Kalpasan ti aprobaran, makala iti Marks ken nairehistro iti IP Ledger.",
+    "hide": "itago",
+    "why": "apay?",
+    "subtitle": "\"Sawen gagayyem, sumrek.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Bagayan ti pagsasao",
+    "selectLanguage": "Piliem ti pagsasao",
+    "quickEnglish": "Ingles",
+    "tip": "Usaren dagiti password ti nadumaduma a pagsasao iti Ridaw ni Durin tapno mailukat dagiti naidumduma nga aramid!"
+  }
+}

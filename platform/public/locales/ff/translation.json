@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.807Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Wiy tappude, inna.",
+    "description": "Liana Banyan nawnii so hannde yooltee e kala demngal. Kala demngal woni gootol murdin ngurndan.",
+    "languages": "demde",
+    "openBounties": "murdi dinde yubbinoooje",
+    "marksAwarded": "Marks nabaama (kontooji goongaaji)",
+    "provisional": "Bodal:",
+    "provisionalNotice": "Libol demde e njeeyru Marks ko bodal. Marks ko kontooji goongaaji, alaa nafa.",
+    "bountyOpen": "Murdi din yubbii",
+    "claimed": "Beydaama",
+    "complete": "Timminii",
+    "translationBountyTitle": "Murdi Din Ngurndan",
+    "bountyDescription": "Ngurndanu Liana Banyan e {{language}}. Heb {{marks}} Marks.",
+    "scopeWelcome": "Jangirde Naamaare / Aduna Ruuhu",
+    "scopeCueCards": "Kade Tiitoonde Toownde",
+    "scopeNavigation": "Niooode laawol e bataake moortiingo",
+    "scopeWildfire": "Wildfire Beacon Run: Yiynu liggaade",
+    "claimBounty": "Heb Murdi Din Ngurndan ngo",
+    "baseLanguage": "Demngal dadol -- alaa murdi din.",
+    "claimedBy": "@{{handle}} hebii -- ina dabba.",
+    "marksProvisional": "{{marks}} Marks (bodal)",
+    "speakFounderTitle": "Kulol Goddo Gawtori: Hol to tii wolde ndee",
+    "speakFounderDesc": "Kala tiitoonde e nder dee sifa ko nder mbaadi. Asaluuji 26 innde.",
+    "howBountiesWork": "No Murdi Din Ngurndan Nguurdi",
+    "step1Title": "Heb Murdi Din",
+    "step1Body": "Uddit Murdi Din Ngurndan e Help Wanted.",
+    "step2Title": "Ngurndanu e Naat",
+    "step2Body": "Ngurndanu kala damirde. Naat e Bounty Poster.",
+    "step3Title": "Heb Marks",
+    "step3Body": "Caggal nalngo, heban Marks e a winndirtoo IP Ledger.",
+    "hide": "soofu",
+    "why": "no?",
+    "subtitle": "\"Wiy tappude, inna.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Sokku demngal",
+    "selectLanguage": "Sub demngal",
+    "quickEnglish": "Engele",
+    "tip": "Huutooro binndi demde godde e Damal Durin ngam udditde miijo!"
+  }
+}

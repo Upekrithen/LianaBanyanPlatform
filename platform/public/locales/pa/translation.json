@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.800Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "ਦੋਸਤ ਕਹੋ ਅਤੇ ਅੰਦਰ ਆਓ।",
+    "description": "Liana Banyan ਹਰ ਭਾਸ਼ਾ ਲਈ ਖੁੱਲੀ ਹੈ। ਹਰ ਭਾਸ਼ਾ ਲਈ ਇੱਕ ਅਨੁਵਾਦ ਇਨਾਮ ਹੈ।",
+    "languages": "ਭਾਸ਼ਾਵਾਂ",
+    "openBounties": "ਖੁੱਲੇ ਇਨਾਮ",
+    "marksAwarded": "Marks ਦਿੱਤੇ (ਭਾਗੀਦਾਰੀ ਟੋਕਨ)",
+    "provisional": "ਅਸਥਾਈ:",
+    "provisionalNotice": "ਭਾਸ਼ਾਵਾਂ ਦੀ ਸੂਚੀ ਅਤੇ Marks ਦਰਾਂ ਅਸਥਾਈ ਹਨ। Marks ਭਾਗੀਦਾਰੀ ਟੋਕਨ ਹਨ, ਹਿੱਸੇਦਾਰੀ ਨਹੀਂ।",
+    "bountyOpen": "ਇਨਾਮ ਖੁੱਲਾ",
+    "claimed": "ਦਾਅਵਾ ਕੀਤਾ",
+    "complete": "ਪੂਰਾ",
+    "translationBountyTitle": "ਅਨੁਵਾਦ ਇਨਾਮ",
+    "bountyDescription": "Liana Banyan ਨੂੰ {{language}} ਵਿੱਚ ਅਨੁਵਾਦ ਕਰੋ। {{marks}} Marks ਕਮਾਓ।",
+    "scopeWelcome": "ਜੀ ਆਇਆਂ / ਭੂਤ ਦੁਨੀਆ ਸਕਰੀਨ",
+    "scopeCueCards": "ਮੁੱਖ ਕਿਊ ਕਾਰਡ ਸੈੱਟ (ਆਰਥਿਕ ਕਾਨੂੰਨ + ਸ਼ਾਸਨ)",
+    "scopeNavigation": "ਨੈਵੀਗੇਸ਼ਨ ਲੇਬਲ ਅਤੇ ਗਲਤੀ ਸੁਨੇਹੇ",
+    "scopeWildfire": "Wildfire Beacon Run: ਨੌਕਰੀ ਮਿਲੋ",
+    "claimBounty": "ਇਹ ਅਨੁਵਾਦ ਇਨਾਮ ਦਾਅਵਾ ਕਰੋ",
+    "baseLanguage": "ਮੂਲ ਭਾਸ਼ਾ -- ਕੋਈ ਇਨਾਮ ਦੀ ਲੋੜ ਨਹੀਂ।",
+    "claimedBy": "@{{handle}} ਨੇ ਦਾਅਵਾ ਕੀਤਾ -- ਜਾਰੀ ਹੈ।",
+    "marksProvisional": "{{marks}} Marks (ਅਸਥਾਈ)",
+    "speakFounderTitle": "ਸੰਸਥਾਪਕ ਦੀ ਆਵਾਜ਼: ਇਹ ਸ਼ਬਦ ਕਿਉਂ",
+    "speakFounderDesc": "ਇਸ ਪਲੇਟਫਾਰਮ ਤੇ ਹਰ ਸ਼ਬਦ ਦਾ ਕਾਰਨ ਹੈ। 26 ਮਹੱਤਵਪੂਰਨ ਨਾਵਾਂ ਦਾ ਮੂਲ।",
+    "howBountiesWork": "ਅਨੁਵਾਦ ਇਨਾਮ ਕਿਵੇਂ ਕੰਮ ਕਰਦੇ ਹਨ",
+    "step1Title": "ਇਨਾਮ ਦਾਅਵਾ ਕਰੋ",
+    "step1Body": "Help Wanted ਬੋਰਡ ਤੋਂ ਅਨੁਵਾਦ ਇਨਾਮ ਖੋਲ੍ਹੋ।",
+    "step2Title": "ਅਨੁਵਾਦ ਕਰੋ ਅਤੇ ਜਮ੍ਹਾਂ ਕਰੋ",
+    "step2Body": "ਸਾਰੀਆਂ ਲੋੜੀਂਦੀਆਂ ਸਟ੍ਰਿੰਗਾਂ ਦਾ ਅਨੁਵਾਦ ਕਰੋ। Bounty Poster ਰਾਹੀਂ ਜਮ੍ਹਾਂ ਕਰੋ।",
+    "step3Title": "Marks ਕਮਾਓ",
+    "step3Body": "ਸਵੀਕ੍ਰਿਤੀ ਤੋਂ ਬਾਅਦ Marks ਮਿਲਦੇ ਹਨ। IP Ledger ਵਿੱਚ ਦਰਜ ਹੋ।",
+    "hide": "ਲੁਕਾਓ",
+    "why": "ਕਿਉਂ?",
+    "subtitle": "\"ਦੋਸਤ ਕਹੋ ਅਤੇ ਅੰਦਰ ਆਓ।\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "ਭਾਸ਼ਾ ਬਦਲੋ",
+    "selectLanguage": "ਭਾਸ਼ਾ ਚੁਣੋ",
+    "quickEnglish": "ਅੰਗਰੇਜ਼ੀ",
+    "tip": "ਵਿਲੱਖਣ ਅਨੁਭਵ ਲਈ Durin's Door ਤੇ ਵੱਖ ਭਾਸ਼ਾ ਪਾਸਵਰਡ ਵਰਤੋ!"
+  }
+}

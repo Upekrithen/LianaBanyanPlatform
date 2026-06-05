@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.812Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "යාළුවා කිව්ව, ඇතුල් වෙල්ලා.",
+    "description": "Liana Banyan සෑම භාෂාවකටම විවෘතව ගොඩනඟා ඇත. සෑම භාෂාවකටම පරිවර්තන ත්‍යාගයක් ඇත.",
+    "languages": "භාෂා",
+    "openBounties": "විවෘත ත්‍යාග",
+    "marksAwarded": "Marks ලබාදී ඇත (සහභාගිත්ව ටෝකන)",
+    "provisional": "තාවකාලික:",
+    "provisionalNotice": "භාෂා ලැයිස්තුව සහ Marks අනුපාත තාවකාලිකයි. Marks සහභාගිත්ව ටෝකන, කොටස් නොවේ.",
+    "bountyOpen": "ත්‍යාගය විවෘතයි",
+    "claimed": "ඉල්ලා ඇත",
+    "complete": "සම්පූර්ණ",
+    "translationBountyTitle": "පරිවර්තන ත්‍යාගය",
+    "bountyDescription": "Liana Banyan {{language}} වෙත පරිවර්තනය කරන්න. {{marks}} Marks උපයන්න.",
+    "scopeWelcome": "ආයුබෝවන් / අවතාර ලෝකය තිරය",
+    "scopeCueCards": "මූල සෙල්ලු කාඩ් කට්ටලය",
+    "scopeNavigation": "සංචලන ලේබල සහ දෝෂ පණිවිඩ",
+    "scopeWildfire": "Wildfire Beacon Run: රැකියා ලබාගන්න",
+    "claimBounty": "මෙම පරිවර්තන ත්‍යාගය ඉල්ලා ගන්න",
+    "baseLanguage": "මූල භාෂාව -- ත්‍යාගයක් අවශ්‍ය නොවේ.",
+    "claimedBy": "@{{handle}} විසින් ඉල්ලා ඇත -- ක්‍රියාවලිය.",
+    "marksProvisional": "{{marks}} Marks (තාවකාලික)",
+    "speakFounderTitle": "ආරම්භකයාගේ හඬ: මෙම වචන ඇයි",
+    "speakFounderDesc": "මෙම වේදිකාවේ සෑම පදයක්ම හේතුවක් සඳහා නම් කර ඇත. 26 වැදගත් නම්වල මූලය.",
+    "howBountiesWork": "පරිවර්තන ත්‍යාග ක්‍රියා කරන ආකාරය",
+    "step1Title": "ත්‍යාගය ඉල්ලා ගන්න",
+    "step1Body": "Help Wanted ෆලකයෙන් පරිවර්තන ත්‍යාගය විවෘත කරන්න.",
+    "step2Title": "පරිවර්තනය කර ඉදිරිපත් කරන්න",
+    "step2Body": "අවශ්‍ය සියලු strings පරිවර්තනය කරන්න. Bounty Poster හරහා ඉදිරිපත් කරන්න.",
+    "step3Title": "Marks උපයන්න",
+    "step3Body": "පිළිගැනීමෙන් පසු Marks ලැබේ. IP Ledger හි සටහන් කෙරේ.",
+    "hide": "සඟවන්න",
+    "why": "ඇයි?",
+    "subtitle": "\"යාළුවා කිව්ව, ඇතුල් වෙල්ලා.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "භාෂාව වෙනස් කරන්න",
+    "selectLanguage": "භාෂාව තෝරන්න",
+    "quickEnglish": "ඉංග්‍රීසි",
+    "tip": "Durin's Door හි විවිධ භාෂා මුරපද භාවිත කරා අපූරු අත්දැකීම් විවෘත කරන්න!"
+  }
+}

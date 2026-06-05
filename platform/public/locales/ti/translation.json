@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.882Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "ሓዊ ኢልካ ኣቱ።",
+    "description": "Liana Banyan ንኹሉ ቋንቋ ክፉት ተሃኒጽዋ። ነፍሲ ወከፍ ቋንቋ ሓደ ሽልማት ትርጉም ኣለዎ።",
+    "languages": "ቋንቋታት",
+    "openBounties": "ክፉት ሽልማታት",
+    "marksAwarded": "Marks ተዋሂቡ (ምስታፍ ቶኬናት)",
+    "provisional": "ግዚያዊ:",
+    "provisionalNotice": "ዝርዝር ቋንቋ ክምኡ Marks ዋጋ ግዚያዊ እዮም። Marks ምስታፍ ቶኬናት ኢዮም፡ ዋርሳ ኣይኮነን።",
+    "bountyOpen": "ሽልማት ክፉት",
+    "claimed": "ተሓቲቱ",
+    "complete": "ተዛዚሙ",
+    "translationBountyTitle": "ሽልማት ትርጉም",
+    "bountyDescription": "Liana Banyan ናብ {{language}} ትርጉም ምለሶ። {{marks}} Marks ርኸብ።",
+    "scopeWelcome": "ብርሃን / ዓለም መናፍስቲ",
+    "scopeCueCards": "ዋና ካርድ ቡዙሕ",
+    "scopeNavigation": "ሳጺናት ምምራሕን ዓንቀፎ",
+    "scopeWildfire": "Wildfire Beacon Run: ስራሕ ርኸብ",
+    "claimBounty": "ሽልማት ትርጉም ሕተቶ",
+    "baseLanguage": "ቋንቋ መሰረት -- ሽልማት ኣየድሊ።",
+    "claimedBy": "@{{handle}} ሓቲቱ -- ቀጺሉ።",
+    "marksProvisional": "{{marks}} Marks (ግዚያዊ)",
+    "speakFounderTitle": "ድምጺ መስረቲ: ዝናምሲ ቃላት",
+    "speakFounderDesc": "ኣብ ፕላትፎርም ነፍሲ ወከፍ ቃል ንሓደ ምኽንያት ተዓዝዚቡ። 26 ሽማ ምንጪ።",
+    "howBountiesWork": "ሽልማቶ ትርጉም ከምዚ ምዃን",
+    "step1Title": "ሽልማት ሕተቶ",
+    "step1Body": "ሽልማት ትርጉም ካብ Help Wanted ክፈቶ።",
+    "step2Title": "ተርጉምዶ ልኣኾ",
+    "step2Body": "ዘድሊ ሕብረቁምፊ ተርጉምዶ Bounty Poster ካብ ልኣኾ።",
+    "step3Title": "Marks ርኸብ",
+    "step3Body": "ምስ ተቐበሉ Marks ርኸብ IP Ledger ምዝጋብ።",
+    "hide": "ደብቅ",
+    "why": "ስለምንታይ?",
+    "subtitle": "\"ፈታዊ ኑ እለ ኣቱ።\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "ቋንቋ ቀይር",
+    "selectLanguage": "ቋንቋ ምረጽ",
+    "quickEnglish": "እንግሊዝኛ",
+    "tip": "Durin ሰጊናት ቋንቋ ናይ ዝተፈላለዩ ሊዋ ዓምዩ!"
+  }
+}

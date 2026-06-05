@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.871Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Hlamula xinghana, u nghena.",
+    "description": "Liana Banyan yakhiwe ku vula eka ririmi ra le henhla. Ririmi rin'wana na rin'wana ri na mholo un'we wa ku hundzuluxiwa.",
+    "languages": "tindzimi",
+    "openBounties": "tiholo ta ku vuliwa",
+    "marksAwarded": "Marks yi nyikhiwa (ti-token ta ku teka xiphemu)",
+    "provisional": "Ku henhla na nkarhi:",
+    "provisionalNotice": "Xilotana xa tindzimi na tirate ta Marks a ku henhla na nkarhi. Marks ti-token ta ku teka xiphemu, hakunene a tihisa.",
+    "bountyOpen": "Mholo wu vuliwa",
+    "claimed": "Ku kombela",
+    "complete": "Ku heteleriwa",
+    "translationBountyTitle": "Mholo wa Ku Hundzuluxiwa",
+    "bountyDescription": "Hundzuluxa Liana Banyan eka {{language}}. Kuma {{marks}} Marks.",
+    "scopeWelcome": "Swikombelo swa Amukeriweni / Misava ya Swikwembu",
+    "scopeCueCards": "Seti ya Makarata ya Matimba",
+    "scopeNavigation": "Manimelo ya ndlela na mitlhela ya swiboxi",
+    "scopeWildfire": "Wildfire Beacon Run: Kuma Ntirho",
+    "claimBounty": "Kombela Mholo Lowu wa Ku Hundzuluxiwa",
+    "baseLanguage": "Ririmi ra ntlawa -- a ku na mholo wu lavekaka.",
+    "claimedBy": "@{{handle}} u kombele -- ku hamba.",
+    "marksProvisional": "{{marks}} Marks (ku henhla na nkarhi)",
+    "speakFounderTitle": "Rito ra Musimisi: Hikwalaho ka Tinyimpi Leti",
+    "speakFounderDesc": "Rito ra le henhla na rin'wana eCross a ri vuliwile hi leswi. Ntlawa wa Mamingi 26 wa ntlawa.",
+    "howBountiesWork": "Tiholo ta Ku Hundzuluxiwa ti Tirhisa Njhani",
+    "step1Title": "Kombela Mholo",
+    "step1Body": "Vula Mholo wa Ku Hundzuluxiwa eka Help Wanted.",
+    "step2Title": "Hundzuluxa Tlhela u Rhumelela",
+    "step2Body": "Hundzuluxa swiringeti hinkwaswo. Rhumelela hi Bounty Poster.",
+    "step3Title": "Kuma Marks",
+    "step3Body": "Endzhaku ka ku amukeriweni, u kuma Marks u ŋwala eka IP Ledger.",
+    "hide": "fihla",
+    "why": "hikwalaho?",
+    "subtitle": "\"Vula munghana, uya.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Hintsheka ririmi",
+    "selectLanguage": "Hlawula ririmi",
+    "quickEnglish": "Xinghezi",
+    "tip": "Tirhisa tisintha ta tindzimi tintshwa eka Ntsena wa Durin ku vula swiphiqo swa le henhla!"
+  }
+}

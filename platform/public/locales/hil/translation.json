@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.891Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Hamuon hi abyan, kag sulod.",
+    "description": "Ang Liana Banyan ginhimo para maabri sa bisan ano nga pinulongan. Ang tagsa ka bukas nga pinulongan may isa ka premyo sa paghubad.",
+    "languages": "mga pinulongan",
+    "openBounties": "bukas nga premyo",
+    "marksAwarded": "Marks gin-hatag (mga token sang pakig-ambit)",
+    "provisional": "Temporaryo:",
+    "provisionalNotice": "Ang listahan sang mga pinulongan kag mga rate sang Marks temporaryo. Ang Marks mga token sang pakig-ambit, indi equity.",
+    "bountyOpen": "Bukas ang premyo",
+    "claimed": "Gin-angkon na",
+    "complete": "Natapos",
+    "translationBountyTitle": "Premyo sang Paghubad",
+    "bountyDescription": "Hubaron ang Liana Banyan sa {{language}}. Makuha ang {{marks}} Marks.",
+    "scopeWelcome": "Mga screen sang Maayong Pag-abot / Ghost World",
+    "scopeCueCards": "Core nga hanay sang Cue Card",
+    "scopeNavigation": "Mga label sang navigasyon kag mensahe sang sala",
+    "scopeWildfire": "Wildfire Beacon Run: Pangita sang Trabaho",
+    "claimBounty": "Angkona ini nga Premyo sang Paghubad",
+    "baseLanguage": "Sukaranan nga pinulongan -- wala premyo nga kinahanglan.",
+    "claimedBy": "Gin-angkon ni @{{handle}} -- nagapadayon.",
+    "marksProvisional": "{{marks}} Marks (temporaryo)",
+    "speakFounderTitle": "Tingog sang Nagtukod: Ngaa ini nga mga Pulong",
+    "speakFounderDesc": "Ang tagsa ka termino ginganlan tungod sa isa ka rason. Ang ginikanan sang 26 pinaka-importante nga mga ngalan.",
+    "howBountiesWork": "Paano Nagaobra ang mga Premyo sang Paghubad",
+    "step1Title": "Angkona ang Premyo",
+    "step1Body": "Ablihan ang Premyo sang Paghubad halin sa Help Wanted.",
+    "step2Title": "Hubad kag Isumite",
+    "step2Body": "Hubaron ang tanan nga kinahanglan nga mga string. Isumite pinaagi sa Bounty Poster.",
+    "step3Title": "Makuha ang Marks",
+    "step3Body": "Sa pagdawat, makatanggap ka sang Marks kag ma-rekord sa IP Ledger.",
+    "hide": "itago",
+    "why": "ngaa?",
+    "subtitle": "\"Silbi abyan, sulod.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Usba ang pinulongan",
+    "selectLanguage": "Pilion ang pinulongan",
+    "quickEnglish": "Iningles",
+    "tip": "Gamiton ang lain-laing mga password sang pinulongan sa Pintuan ni Durin para ma-unlock ang natatanging kasinatian!"
+  }
+}

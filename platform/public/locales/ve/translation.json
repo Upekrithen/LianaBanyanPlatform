@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.895Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Amba muhasho, ndo dzhena.",
+    "description": "Liana Banyan yo vhewa u bva i vhulelwa kha luambo luṅwe na luṅwe. Luambo luṅwe na luṅwe vhu na mupfumedzano muthihi wa u shandulula.",
+    "languages": "luambo",
+    "openBounties": "mipfumedzano i vhulaho",
+    "marksAwarded": "Marks dzhiwa (zwishandiso zwa u dzhena)",
+    "provisional": "Tshifhinga:",
+    "provisionalNotice": "Tshedu ya luambo na mitengo ya Marks ndi ya tshifhinga. Marks zwishandiso zwa u dzhena, si manweledza.",
+    "bountyOpen": "Mupfumedzano wo vuliwa",
+    "claimed": "Zwa humbulwa",
+    "complete": "Zwa fhedzwa",
+    "translationBountyTitle": "Mupfumedzano wa U Shandulula",
+    "bountyDescription": "Shandulula Liana Banyan kha {{language}}. Dzhia {{marks}} Marks.",
+    "scopeWelcome": "Dzanga zwavhudi / Shango ya Miphefumulo",
+    "scopeCueCards": "Tshiseto tsha Kaḓi ya Fungo",
+    "scopeNavigation": "Zwidodombedzwa zwa nḓila na mafhungo a phoso",
+    "scopeWildfire": "Wildfire Beacon Run: Wana mushumo",
+    "claimBounty": "Humbula Mupfumedzano uyu wa U Shandulula",
+    "baseLanguage": "Luambo lwa tshiofhisi -- a si na mupfumedzano.",
+    "claimedBy": "@{{handle}} a humbula -- tsho khou ita.",
+    "marksProvisional": "{{marks}} Marks (tshifhinga)",
+    "speakFounderTitle": "Ipfi la Muṱanganedzi: Ndi Ngani Maipfi Aṱo",
+    "speakFounderDesc": "Ipfi riṅwe na riṅwe kha platform iyi riṇavha zina nga ndivho. Ḓisendeko ḽa madzina 26 a botshelo.",
+    "howBountiesWork": "Mipfumedzano ya U Shandulula I Shuma Hani",
+    "step1Title": "Humbula Mupfumedzano",
+    "step1Body": "Vhula Mupfumedzano wa U Shandulula kha Help Wanted.",
+    "step2Title": "Shandulula Ruma",
+    "step2Body": "Shandulula maḓagasi oṱhe. Ruma nga Bounty Poster.",
+    "step3Title": "Dzhia Marks",
+    "step3Body": "Nga murahu ha u amukela, u dzhia Marks u ṅwalwa kha IP Ledger.",
+    "hide": "fihla",
+    "why": "ndi ngani?",
+    "subtitle": "\"Ri muhasho, zwi ite.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Shandukisa luambo",
+    "selectLanguage": "Nanga luambo",
+    "quickEnglish": "Luambo lwa English",
+    "tip": "Shandukisa mufinyu wa luambo lwa nnḓa kha Muḓo wa Durin u vhula zwiimo zwa tshenzhelo!"
+  }
+}

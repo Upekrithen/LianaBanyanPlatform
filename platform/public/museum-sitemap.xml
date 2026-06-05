@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Museum Sitemap -- Wave 28 (Phase epsilon -- Launch)
+  ===================================================
+  Sitemap for museum.lianabanyan.com (frozen historical snapshot).
+
+  This sitemap covers the public museum routes:
+    - /          Museum home (Rope of History, milestones, Founder bio, platform genesis)
+    - /history   Alias for museum home
+    - /rope-of-history  Alias for museum home
+
+  Status: STAGED -- museum.lianabanyan.com DNS activation HELD for Founder.
+  Once DNS is live, submit this sitemap to Google Search Console at:
+    https://search.google.com/search-console
+    Property: museum.lianabanyan.com
+    Sitemap URL: https://museum.lianabanyan.com/museum-sitemap.xml
+
+  Also available at https://lianabanyan.com/museum-sitemap.xml
+  (redirect to museum.lianabanyan.com once custom domain is active)
+
+  BP073 Wave 28 -- Knight -- 2026-06-03
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- Museum home / Rope of History -->
+  <url>
+    <loc>https://museum.lianabanyan.com/</loc>
+    <lastmod>2026-06-03</lastmod>
+    <changefreq>never</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://museum.lianabanyan.com/"/>
+  </url>
+
+  <!-- /history alias -->
+  <url>
+    <loc>https://museum.lianabanyan.com/history</loc>
+    <lastmod>2026-06-03</lastmod>
+    <changefreq>never</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- /rope-of-history alias -->
+  <url>
+    <loc>https://museum.lianabanyan.com/rope-of-history</loc>
+    <lastmod>2026-06-03</lastmod>
+    <changefreq>never</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!--
+    Platform /museum route (lianabanyan.com canonical)
+    This is the same content served on the primary platform domain.
+    The frozen snapshot at museum.lianabanyan.com is the authoritative copy.
+  -->
+  <url>
+    <loc>https://lianabanyan.com/museum</loc>
+    <lastmod>2026-06-03</lastmod>
+    <changefreq>never</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="canonical" href="https://museum.lianabanyan.com/"/>
+  </url>
+
+</urlset>

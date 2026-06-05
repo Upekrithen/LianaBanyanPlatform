@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.876Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Amuyu sata, manqhani.",
+    "description": "Liana Banyan aru aru armas mayacht'ayatawa. Uru aru ukham mayni utasiwa.",
+    "languages": "arukuna",
+    "openBounties": "katatawi ñanakiwa",
+    "marksAwarded": "Marks apaniwa (takikuna jach'a)",
+    "provisional": "Arumaki:",
+    "provisionalNotice": "Arukuna amtawi Marks janiwa arumakiw. Marks takikuna, janiwa akullakiwi.",
+    "bountyOpen": "Ñanaki jutiriwa",
+    "claimed": "Apaniwa",
+    "complete": "Tukuyi",
+    "translationBountyTitle": "Arunaka Ñanaki",
+    "bountyDescription": "Liana Banyan {{language}} arukt'ayapxisa. {{marks}} Marks luratawa.",
+    "scopeWelcome": "Waliki Jutimpi / Achachilanaka",
+    "scopeCueCards": "Jach'a Yatiyawi Qillqa",
+    "scopeNavigation": "Uñstawi mayniwa nayrawiñ",
+    "scopeWildfire": "Wildfire Beacon Run: Utjawayu",
+    "claimBounty": "Ukham Arunaka Ñanaki Apanipxata",
+    "baseLanguage": "Aru jiska -- ñanaki janiwa utjirikiti.",
+    "claimedBy": "@{{handle}} apanipxi -- jichhaki.",
+    "marksProvisional": "{{marks}} Marks (arumaki)",
+    "speakFounderTitle": "Yatichiri Kamachiri: Kunan Arunaka",
+    "speakFounderDesc": "Ukhamar layra aru mayjt'ayatanwa mayni kamachiriwa. 26 sutin yatiyani.",
+    "howBountiesWork": "Arunaka Ñanaki Kunjamakiwa",
+    "step1Title": "Ñanaki Apanipxta",
+    "step1Body": "Help Wanted aru qillqatata Arunaka Ñanaki uñt'ayapxta.",
+    "step2Title": "Arukt'ata Ulanipxta",
+    "step2Body": "Yäqikuna arukt'ata. Bounty Poster jiliriw ulanipxta.",
+    "step3Title": "Marks Lurapxta",
+    "step3Body": "Apanipxtana ukhamaki Marks luratawa, IP Ledger qillqatawa.",
+    "hide": "Kankayawi",
+    "why": "Kunjamsa?",
+    "subtitle": "\"Sasa masicama, mantani.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Aru mayjt'ayapxta",
+    "selectLanguage": "Aru arunaka",
+    "quickEnglish": "Inglisaru",
+    "tip": "Durin Nayra arukuna jankuwi umanaña!"
+  }
+}

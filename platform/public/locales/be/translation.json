@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.856Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Скажы сябар і ўвайдзі.",
+    "description": "Liana Banyan пабудавана адкрытай для кожнай мовы. Кожная адкрытая мова мае адну ўзнагароду за пераклад.",
+    "languages": "мовы",
+    "openBounties": "адкрытыя ўзнагароды",
+    "marksAwarded": "Marks прысвоены (токены ўдзелу)",
+    "provisional": "Часова:",
+    "provisionalNotice": "Спіс моў і стаўкі Marks з'яўляюцца часовымі. Marks з'яўляюцца токенамі ўдзелу, не акцыямі.",
+    "bountyOpen": "Узнагарода адкрытая",
+    "claimed": "Запатрабавана",
+    "complete": "Завершана",
+    "translationBountyTitle": "Узнагарода за Пераклад",
+    "bountyDescription": "Перакладзіце Liana Banyan на {{language}}. Атрымайце {{marks}} Marks.",
+    "scopeWelcome": "Экраны Сардэчна запрашаем / Свет прывідаў",
+    "scopeCueCards": "Асноўны набор картак падказак",
+    "scopeNavigation": "Навігацыйныя пазнакі і паведамленні пра памылкі",
+    "scopeWildfire": "Wildfire Beacon Run: Знайдзі працу",
+    "claimBounty": "Запатрабаваць гэтую ўзнагароду за пераклад",
+    "baseLanguage": "Базавая мова -- узнагарода не патрэбная.",
+    "claimedBy": "Узнагарода запатрабавана @{{handle}} -- у працэсе.",
+    "marksProvisional": "{{marks}} Marks (часова)",
+    "speakFounderTitle": "Голас заснавальніка: чаму гэтыя словы",
+    "speakFounderDesc": "Кожны тэрмін на гэтай платформе названы не выпадкова. Паходжанне 26 найважнейшых назваў.",
+    "howBountiesWork": "Як працуюць узнагароды за пераклад",
+    "step1Title": "Запатрабаваць узнагароду",
+    "step1Body": "Адкрыйце ўзнагароду за пераклад з дошкі Help Wanted.",
+    "step2Title": "Перакласці і падаць",
+    "step2Body": "Перакладзіце ўсе неабходныя радкі. Падайце праз Bounty Poster.",
+    "step3Title": "Зарабіць Marks",
+    "step3Body": "Пасля прыняцця атрымаеце Marks і будзеце ўнесены ў IP Ledger.",
+    "hide": "схаваць",
+    "why": "чаму?",
+    "subtitle": "\"Скажы сябар і ўвайдзі.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Змяніць мову",
+    "selectLanguage": "Выбраць мову",
+    "quickEnglish": "Англійская",
+    "tip": "Выкарыстоўвайце паролі розных моў у Дзверах Дурына для унікальных уражанняў!"
+  }
+}

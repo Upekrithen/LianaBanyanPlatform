@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.849Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Кажи приятел и влез.",
+    "description": "Liana Banyan е изградена да бъде отворена за всеки език. Всеки отворен език има една награда за превод.",
+    "languages": "езици",
+    "openBounties": "отворени награди",
+    "marksAwarded": "Marks присъдени (токени за участие)",
+    "provisional": "Временно:",
+    "provisionalNotice": "Списъкът с езици и ставките Marks са временни. Marks са токени за участие, не акции.",
+    "bountyOpen": "Наградата е отворена",
+    "claimed": "Поискано",
+    "complete": "Завършено",
+    "translationBountyTitle": "Награда за Превод",
+    "bountyDescription": "Преведете Liana Banyan на {{language}}. Спечелете {{marks}} Marks.",
+    "scopeWelcome": "Екрани Добре дошли / Свят на духовете",
+    "scopeCueCards": "Основен набор от карти с подсказки",
+    "scopeNavigation": "Навигационни етикети и съобщения за грешки",
+    "scopeWildfire": "Wildfire Beacon Run: Намери работа",
+    "claimBounty": "Поискайте тази Награда за Превод",
+    "baseLanguage": "Основен език -- не е нужна награда.",
+    "claimedBy": "Наградата е поискана от @{{handle}} -- в ход.",
+    "marksProvisional": "{{marks}} Marks (временно)",
+    "speakFounderTitle": "Гласът на Основателя: Защо Тези Думи",
+    "speakFounderDesc": "Всеки термин на тази платформа е наименован с причина. Произходът на 26-те най-важни имена.",
+    "howBountiesWork": "Как Работят Наградите за Превод",
+    "step1Title": "Поискайте Наградата",
+    "step1Body": "Отворете Награда за Превод от таблото Help Wanted.",
+    "step2Title": "Преведете и Изпратете",
+    "step2Body": "Преведете всички необходими низове. Изпратете чрез Bounty Poster.",
+    "step3Title": "Спечелете Marks",
+    "step3Body": "След приемане получавате Marks и сте записани в IP Ledger.",
+    "hide": "скрий",
+    "why": "защо?",
+    "subtitle": "\"Кажи приятел и влез.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Смени езика",
+    "selectLanguage": "Избери език",
+    "quickEnglish": "Английски",
+    "tip": "Използвайте пароли на различни езици на Вратата на Дурин за уникални преживявания!"
+  }
+}

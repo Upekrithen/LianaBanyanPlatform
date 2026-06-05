@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.893Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Passé bija-é, narekko.",
+    "description": "Liana Banyan nabangun mangekka terbuka ri sininna basa. Sininna basa nasibawang satu hadiah pallebbangeng.",
+    "languages": "basa",
+    "openBounties": "hadiah nateruka",
+    "marksAwarded": "Marks nawere (token partisipasi)",
+    "provisional": "Makkatenni:",
+    "provisionalNotice": "Laddere basa enreng tarif Marks makkatenni. Marks token partisipasi, de ekuitas.",
+    "bountyOpen": "Hadiah nateruka",
+    "claimed": "Napatungka",
+    "complete": "Naputtama",
+    "translationBountyTitle": "Hadiah Pallebbangeng",
+    "bountyDescription": "Pallebbang Liana Banyan ri {{language}}. Waré {{marks}} Marks.",
+    "scopeWelcome": "Layar Tabe / Lino Bunting",
+    "scopeCueCards": "Set Kartu Pandeng",
+    "scopeNavigation": "Label navigasi enreng pesan sala",
+    "scopeWildfire": "Wildfire Beacon Run: Pappole Nawa",
+    "claimBounty": "Patungka Hadiah Pallebbangeng Kiyai",
+    "baseLanguage": "Basa asalenna -- de perlu hadiah.",
+    "claimedBy": "@{{handle}} napatungka -- napolei.",
+    "marksProvisional": "{{marks}} Marks (makkatenni)",
+    "speakFounderTitle": "Lontara Passé: Aga Elo Makkeda Ko",
+    "speakFounderDesc": "Sininna istilah nasibawangi alasan ri lalenna narangi. 26 aseng natinggi.",
+    "howBountiesWork": "Pole Hadiah Pallebbangeng Maneng",
+    "step1Title": "Patungka Hadiah",
+    "step1Body": "Teruka Hadiah Pallebbangeng ri Help Wanted.",
+    "step2Title": "Pallebbang Kirim",
+    "step2Body": "Pallebbang sininna string. Kirim ri Bounty Poster.",
+    "step3Title": "Waré Marks",
+    "step3Body": "Sanggenna naterima, namawa Marks enreng natulis ri IP Ledger.",
+    "hide": "saléng",
+    "why": "aga?",
+    "subtitle": "\"Mattitai ada, muttama.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Pèkke basa",
+    "selectLanguage": "Pilih basa",
+    "quickEnglish": "Basa Inggeris",
+    "tip": "Pakéi kata sandi basa laing ri Pakkita Durin!"
+  }
+}

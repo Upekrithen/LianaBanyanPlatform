@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.871Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Yogera mukwano, olinge okuyingira.",
+    "description": "Liana Banyan yazimbwa okuba evunaamu eri olulimi lulilwona. Olulimi oluwona olufunzibwa olulina musawo ogumu gwa kukyusa.",
+    "languages": "olulimi",
+    "openBounties": "emisawo efunzibwa",
+    "marksAwarded": "Marks yaweebwa (ebyuma bya kuyingira)",
+    "provisional": "Akabanga:",
+    "provisionalNotice": "Erinnya ery'olulimi ne Marks enkalu ya akabanga. Marks bwe byuma bya kuyingira, si bisina.",
+    "bountyOpen": "Omusawo gufunzibwa",
+    "claimed": "Gyakozesebwa",
+    "complete": "Okumalirira",
+    "translationBountyTitle": "Omusawo gwa Kukyusa",
+    "bountyDescription": "Kyusa Liana Banyan mu {{language}}. Wa {{marks}} Marks.",
+    "scopeWelcome": "Ebizika bya Musuze / Ensi ya Mizimu",
+    "scopeCueCards": "Setti ya Kaada Ennamba",
+    "scopeNavigation": "Emikutu gyokugendera n'obutebutebu",
+    "scopeWildfire": "Wildfire Beacon Run: Noonya Omulimu",
+    "claimBounty": "Saba Omusawo Guno gwa Kukyusa",
+    "baseLanguage": "Olulimi olw'ekifo -- tewali musawo gw'okwetaaga.",
+    "claimedBy": "@{{handle}} yagisaba -- esolera.",
+    "marksProvisional": "{{marks}} Marks (akabanga)",
+    "speakFounderTitle": "Eddoboozi ly'Omutondaali: Kye Kino Ebyavugibwa",
+    "speakFounderDesc": "Ekimu kyonna wano kisubizibwako erinnya olw'empaka. Ensibuko y'amannya 26 agatenderezebwa.",
+    "howBountiesWork": "Emisawo gya Kukyusa Gikola Gutya",
+    "step1Title": "Saba Omusawo",
+    "step1Body": "Fungula Omusawo gwa Kukyusa okuva Help Wanted.",
+    "step2Title": "Kyusa Owonawo",
+    "step2Body": "Kyusa ebimu byonna ebyetaagibwa. Wonawo Bounty Poster.",
+    "step3Title": "Wa Marks",
+    "step3Body": "Oluvannyuma lw'okuwaakana, ofuna Marks n'okukyusibwako ku IP Ledger.",
+    "hide": "kisa",
+    "why": "lwaki?",
+    "subtitle": "\"Gamba mukwano, ojje.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Kyusa olulimi",
+    "selectLanguage": "Londa olulimi",
+    "quickEnglish": "Olungereza",
+    "tip": "Kozesa ebigambo by'olulimi obukyufu ku Mulyango gwa Durin okusobola okufungula ebirungi bisooka!"
+  }
+}

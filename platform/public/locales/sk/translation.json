@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.850Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Poved priatel a vstup.",
+    "description": "Liana Banyan je postavena otvorene pre kazdy jazyk. Kazdy otvoreny jazyk ma jednu prekladatelsku odmenu.",
+    "languages": "jazyky",
+    "openBounties": "otvorene odmeny",
+    "marksAwarded": "Marks udelene (tokeny ucasti)",
+    "provisional": "Docasne:",
+    "provisionalNotice": "Zoznam jazykov a sadzby Marks su docasne. Marks su tokeny ucasti, nie akcie.",
+    "bountyOpen": "Odmena otvorena",
+    "claimed": "Narokovana",
+    "complete": "Dokoncene",
+    "translationBountyTitle": "Prekladatelska Odmena",
+    "bountyDescription": "Prelozit Liana Banyan do {{language}}. Ziskat {{marks}} Marks po akceptacii.",
+    "scopeWelcome": "Obrazovky Vitajte / Svet Duchov",
+    "scopeCueCards": "Zakladna sada Karet Napovedy",
+    "scopeNavigation": "Navigacne stitky a chybove spravy",
+    "scopeWildfire": "Wildfire Beacon Run: Najdi pracu",
+    "claimBounty": "Narokovat tuto Prekladatelsku Odmenu",
+    "baseLanguage": "Zakladny jazyk -- odmena nie je potrebna.",
+    "claimedBy": "Odmena narokovana @{{handle}} -- prebieha.",
+    "marksProvisional": "{{marks}} Marks (docasne)",
+    "speakFounderTitle": "Hlas Zakladatela: Preco Tieto Slova",
+    "speakFounderDesc": "Kazdy pojem na tejto platforme je pomenuvany z dovodu. Povod 26 najdolezitejsich mien.",
+    "howBountiesWork": "Ako Funguju Prekladatelske Odmeny",
+    "step1Title": "Narokovat Odmenu",
+    "step1Body": "Otvorit Prekladatelsku Odmenu z nastenky Help Wanted.",
+    "step2Title": "Prelozit a Odoslat",
+    "step2Body": "Prelozit vsetky potrebne retazce. Odoslat prostrednictvom Bounty Poster.",
+    "step3Title": "Ziskat Marks",
+    "step3Body": "Po akceptacii dostanete Marks a ste zaznamenani v IP Ledger.",
+    "hide": "skryt",
+    "why": "preco?",
+    "subtitle": "\"Povedz priatel a vstup.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Zmenit jazyk",
+    "selectLanguage": "Vybrat jazyk",
+    "quickEnglish": "Anglictina",
+    "tip": "Pouzite rozne jazykove hesla u Durinovych dveri na odomknutie jedinecnych zazitkov!"
+  }
+}

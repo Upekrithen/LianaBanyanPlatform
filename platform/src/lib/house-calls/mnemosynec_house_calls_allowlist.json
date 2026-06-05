@@ -1,0 +1,53 @@
+{
+  "allowlist_version": "1.0.0",
+  "allowlist_hash": "TODO_HASH",
+  "created_at": "2026-06-04",
+  "program": "BP073",
+  "tiers": {
+    "tier_0": {
+      "label": "Auto-execute, no ratify",
+      "operations": [
+        "restart_named_mcp_server",
+        "reload_config_file",
+        "clear_cache",
+        "run_health_check"
+      ]
+    },
+    "tier_1": {
+      "label": "Notify-but-execute",
+      "operations": [
+        "restart_known_background_process",
+        "reinstall_mcp_server_at_pinned_version",
+        "reset_connection"
+      ]
+    },
+    "tier_2": {
+      "label": "Founder ratify required",
+      "operations": [
+        "install_new_mcp_server",
+        "update_mcp_server_to_new_version",
+        "modify_allowlist",
+        "change_credentials",
+        "modify_files_outside_runtime_config_scope"
+      ]
+    },
+    "forbidden": {
+      "label": "No ratify path -- never execute",
+      "operations": [
+        "modify_user_data",
+        "alter_substrate_eblets",
+        "send_messages_on_founders_behalf",
+        "access_financial_credentials",
+        "any_action_in_bishop_standing_doctrine_prohibited_list"
+      ]
+    }
+  },
+  "privacy_doorpost": "House Calls is runtime-tool-state only. The paired AI cannot read conversation history, substrate data, or credentials. Read-only access to: (a) runtime health log, (b) failure signatures explicitly published by the patient, (c) Founder pre-authorized scope.",
+  "ip_ledger_event_types": [
+    "runtime.health.degraded",
+    "runtime.health.restored",
+    "house_call.initiated",
+    "house_call.completed",
+    "house_call.escalated_to_founder"
+  ]
+}

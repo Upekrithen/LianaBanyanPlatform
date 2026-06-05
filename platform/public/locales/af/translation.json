@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.856Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Se vriend en gaan in.",
+    "description": "Liana Banyan is gebou om oop te wees vir elke taal. Elke oop taal het een vertaalpremie.",
+    "languages": "tale",
+    "openBounties": "oop premies",
+    "marksAwarded": "Marks toegeken (deelname-tekens)",
+    "provisional": "Voorlopig:",
+    "provisionalNotice": "Die taallys en Marks-koerse is voorlopig. Marks is deelname-tekens, nie aandele nie.",
+    "bountyOpen": "Premie oop",
+    "claimed": "Geeis",
+    "complete": "Voltooi",
+    "translationBountyTitle": "Vertaalpremie",
+    "bountyDescription": "Vertaal Liana Banyan na {{language}}. Verdien {{marks}} Marks.",
+    "scopeWelcome": "Welkom / Spookwereld skerms",
+    "scopeCueCards": "Basis Wenk-kaart stel",
+    "scopeNavigation": "Navigasie-etikette en foutberichte",
+    "scopeWildfire": "Wildfire Beacon Run: Kry werk",
+    "claimBounty": "Eis hierdie Vertaalpremie",
+    "baseLanguage": "Baastaal -- geen premie nodig nie.",
+    "claimedBy": "@{{handle}} het geeis -- aan die gang.",
+    "marksProvisional": "{{marks}} Marks (voorlopig)",
+    "speakFounderTitle": "Die Stigter se Stem: Hoekom Hierdie Woorde",
+    "speakFounderDesc": "Elke term op hierdie platform is om 'n rede vernoem. Die oorsprong van die 26 belangrikste name.",
+    "howBountiesWork": "Hoe Vertaalpremies Werk",
+    "step1Title": "Eis die Premie",
+    "step1Body": "Maak 'n Vertaalpremie oop van die Help Wanted-bord.",
+    "step2Title": "Vertaal en Stuur",
+    "step2Body": "Vertaal al die nodige strings. Stuur via die Bounty Poster-stroom.",
+    "step3Title": "Verdien Marks",
+    "step3Body": "Na aanvaarding ontvang jy Marks en word by IP Ledger aangeteken.",
+    "hide": "verberg",
+    "why": "hoekom?",
+    "subtitle": "\"Se vriend en gaan in.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Verander taal",
+    "selectLanguage": "Kies taal",
+    "quickEnglish": "Engels",
+    "tip": "Gebruik wagwoorde in verskillende tale by Durin se Deur om unieke ervaringe te ontsluit!"
+  }
+}

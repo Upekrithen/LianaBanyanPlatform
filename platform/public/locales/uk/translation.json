@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.808Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Скажи «друг» -- і увійди.",
+    "description": "Liana Banyan побудована відкритою для кожної мови. Кожна мова має одну перекладацьку нагороду.",
+    "languages": "мови",
+    "openBounties": "відкриті нагороди",
+    "marksAwarded": "Marks нараховано (токени участі)",
+    "provisional": "Тимчасово:",
+    "provisionalNotice": "Список мов і ставки Marks є тимчасовими. Marks є токенами участі, не акціями.",
+    "bountyOpen": "Нагорода відкрита",
+    "claimed": "Заявлено",
+    "complete": "Завершено",
+    "translationBountyTitle": "Нагорода за Переклад",
+    "bountyDescription": "Перекладіть Liana Banyan на {{language}}. Отримайте {{marks}} Marks.",
+    "scopeWelcome": "Екрани Ласкаво просимо / Світ привидів",
+    "scopeCueCards": "Основний набір карток підказок",
+    "scopeNavigation": "Навігаційні мітки та повідомлення про помилки",
+    "scopeWildfire": "Wildfire Beacon Run: Знайди роботу",
+    "claimBounty": "Заявити цю нагороду за переклад",
+    "baseLanguage": "Базова мова -- нагорода не потрібна.",
+    "claimedBy": "Нагороду заявив @{{handle}} -- у процесі.",
+    "marksProvisional": "{{marks}} Marks (тимчасово)",
+    "speakFounderTitle": "Голос засновника: чому ці слова",
+    "speakFounderDesc": "Кожен термін на цій платформі названо не випадково. Походження 26 найважливіших назв.",
+    "howBountiesWork": "Як працюють нагороди за переклад",
+    "step1Title": "Заявити нагороду",
+    "step1Body": "Відкрийте нагороду за переклад з дошки Help Wanted.",
+    "step2Title": "Перекласти та подати",
+    "step2Body": "Перекладіть усі необхідні рядки. Подайте через Bounty Poster.",
+    "step3Title": "Заробити Marks",
+    "step3Body": "Після прийняття ви отримаєте Marks і будете внесені до IP Ledger.",
+    "hide": "приховати",
+    "why": "чому?",
+    "subtitle": "\"Скажи «друг» -- і увійди.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Змінити мову",
+    "selectLanguage": "Вибрати мову",
+    "quickEnglish": "Англійська",
+    "tip": "Використовуйте паролі різних мов у Дверях Дуріна, щоб відкривати унікальні враження!"
+  }
+}

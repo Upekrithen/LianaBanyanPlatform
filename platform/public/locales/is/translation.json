@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.866Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Segðu vin og farðu inn.",
+    "description": "Liana Banyan er byggð til að vera opin fyrir hvert mál. Hvert opið mál hefur eitt þýðingaverðlaun.",
+    "languages": "mál",
+    "openBounties": "opin verðlaun",
+    "marksAwarded": "Marks veitt (þátttökutókar)",
+    "provisional": "Tímabundið:",
+    "provisionalNotice": "Málalisti og Marks-hlutfall eru tímabundin. Marks eru þátttökutókar, ekki hlutabréf.",
+    "bountyOpen": "Verðlaun opin",
+    "claimed": "Krafist",
+    "complete": "Lokið",
+    "translationBountyTitle": "Þýðingaverðlaun",
+    "bountyDescription": "Þýddu Liana Banyan yfir á {{language}}. Þjónaðu {{marks}} Marks.",
+    "scopeWelcome": "Velkominn / Draugaheimur skjáir",
+    "scopeCueCards": "Grunnlegt vísbending-kortasett",
+    "scopeNavigation": "Leiðsagnarmerki og villuskilaboð",
+    "scopeWildfire": "Wildfire Beacon Run: Finndu starf",
+    "claimBounty": "Krefjast þessara Þýðingaverðlauna",
+    "baseLanguage": "Grunnmál -- engin verðlaun þörf.",
+    "claimedBy": "@{{handle}} krafðist -- í gangi.",
+    "marksProvisional": "{{marks}} Marks (tímabundið)",
+    "speakFounderTitle": "Rödd Stofnanda: Af Hverju Þessi Orð",
+    "speakFounderDesc": "Sérhver hugtak á þessum vettvangi er nafngift með ástæðu. Uppruni 26 mikilvægustu nafna.",
+    "howBountiesWork": "Hvernig Þýðingaverðlaun Virka",
+    "step1Title": "Krefjast Verðlauna",
+    "step1Body": "Opnaðu Þýðingaverðlaun frá Help Wanted-töflu.",
+    "step2Title": "Þýddu og Sendu",
+    "step2Body": "Þýddu allar nauðsynlegar strengjar. Sendu í gegnum Bounty Poster.",
+    "step3Title": "Þjónaðu Marks",
+    "step3Body": "Eftir samþykki færðu Marks og ert skráður í IP Ledger.",
+    "hide": "fela",
+    "why": "af hverju?",
+    "subtitle": "\"Segjum vin og farum inn.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Skipta um mál",
+    "selectLanguage": "Veldu mál",
+    "quickEnglish": "Enska",
+    "tip": "Notaðu lykilorð á mismunandi málum við Dyr Durins til að opna einstæð reynsla!"
+  }
+}

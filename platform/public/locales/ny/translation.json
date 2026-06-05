@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.824Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Nena bwenzi, ndipo ulowe.",
+    "description": "Liana Banyan yamezengedwa kuti isungunuke pa chilankhulo chilichonse. Chilankhulo chilichonse chili ndi mphoto imodzi ya kumasulira.",
+    "languages": "zilankhulo",
+    "openBounties": "mphoto zotsegulika",
+    "marksAwarded": "Marks zapatsidwa (ma token a kutenga nawo gawo)",
+    "provisional": "Kwa nthawi ino:",
+    "provisionalNotice": "Mndandanda wa zilankhulo ndi mitengo ya Marks ndi ya kwa nthawi ino. Marks ndi ma token a kutenga nawo gawo, osati udziwe.",
+    "bountyOpen": "Mphoto yatsegulidwa",
+    "claimed": "Yafunsidwa",
+    "complete": "Yakwanira",
+    "translationBountyTitle": "Mphoto ya Kumasulira",
+    "bountyDescription": "Masulira Liana Banyan mu {{language}}. Peza {{marks}} Marks.",
+    "scopeWelcome": "Zosakira Moni / Dziko la Mizimu",
+    "scopeCueCards": "Gulu la Kadi za Malangizo Oyamba",
+    "scopeNavigation": "Zizindikiro za njira ndi mauthenga olakwika",
+    "scopeWildfire": "Wildfire Beacon Run: Peza Ntchito",
+    "claimBounty": "Funsani Mphoto iyi ya Kumasulira",
+    "baseLanguage": "Chilankhulo chachikulu -- palibe mphoto yofunika.",
+    "claimedBy": "@{{handle}} wafunsa -- ikupitilira.",
+    "marksProvisional": "{{marks}} Marks (kwa nthawi ino)",
+    "speakFounderTitle": "Mawu a Woyambitsa: Chifukwa Cha Mawu Awa",
+    "speakFounderDesc": "Mawu aliyense pa platform iyi atumikiridwa ndi chifukwa. Chiyambi cha mayina 26 ofunika kwambiri.",
+    "howBountiesWork": "Mphoto za Kumasulira Zimayendera Bwanji",
+    "step1Title": "Funsani Mphoto",
+    "step1Body": "Tsegurani Mphoto ya Kumasulira kuchokera pa Help Wanted.",
+    "step2Title": "Masulira ndi Tumiza",
+    "step2Body": "Masulira misintho yonse yofunika. Tumizani kudzera mu Bounty Poster.",
+    "step3Title": "Peza Marks",
+    "step3Body": "Atangowona, mudzalandira Marks ndipo mudzalembedwa mu IP Ledger.",
+    "hide": "bisa",
+    "why": "chifukwa chiyani?",
+    "subtitle": "\"Nena bwenzi, ndulowe.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Sinthani chilankhulo",
+    "selectLanguage": "Sankhani chilankhulo",
+    "quickEnglish": "Chingerezi",
+    "tip": "Gwiritsani ntchito mawu achinsinsi a zilankhulo zosiyanasiyana pa Chitseko cha Durin kuti mutsegule zinthu zapadera!"
+  }
+}

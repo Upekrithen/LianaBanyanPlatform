@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.861Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Дӯст гӯ ва дохил шав.",
+    "description": "Liana Banyan барои ҳар як забон кушода сохта шудааст. Ҳар забони кушода як мукофоти тарҷума дорад.",
+    "languages": "забонҳо",
+    "openBounties": "мукофоти кушода",
+    "marksAwarded": "Marks дода шуд (нишонаҳои иштирок)",
+    "provisional": "Муваққатан:",
+    "provisionalNotice": "Рӯйхати забонҳо ва меъёрҳои Marks муваққатӣ мебошанд. Marks нишонаҳои иштирок мебошанд, на саҳмияҳо.",
+    "bountyOpen": "Мукофот кушода аст",
+    "claimed": "Талаб карда шуд",
+    "complete": "Тамом",
+    "translationBountyTitle": "Мукофоти Тарҷума",
+    "bountyDescription": "Liana Banyan-ро ба забони {{language}} тарҷума кунед. {{marks}} Marks ба даст оред.",
+    "scopeWelcome": "Экранҳои Хуш омадед / Дунёи Арвоҳ",
+    "scopeCueCards": "Маҷмӯи Корти Маслиҳати Асосӣ",
+    "scopeNavigation": "Тамғаҳои навигатсия ва паёмҳои хато",
+    "scopeWildfire": "Wildfire Beacon Run: Корро ёбед",
+    "claimBounty": "Ин мукофоти тарҷумаро талаб кунед",
+    "baseLanguage": "Забони асосӣ -- мукофот лозим нест.",
+    "claimedBy": "@{{handle}} талаб кард -- дар ҷараён.",
+    "marksProvisional": "{{marks}} Marks (муваққатан)",
+    "speakFounderTitle": "Овози Асосгузор: Чаро Ин Калимаҳо",
+    "speakFounderDesc": "Ҳар истилоҳ дар ин платформа бо сабаб номгузорӣ шудааст. Пайдоиши 26 номи муҳимтарин.",
+    "howBountiesWork": "Мукофотҳои Тарҷума Чӣ Тавр Кор Мекунанд",
+    "step1Title": "Мукофотро талаб кунед",
+    "step1Body": "Мукофоти тарҷумаро аз тахтаи Help Wanted кушоед.",
+    "step2Title": "Тарҷума кунед ва Фиристед",
+    "step2Body": "Ҳамаи риштаҳои заруриро тарҷума кунед. Тавассути Bounty Poster фиристед.",
+    "step3Title": "Marks ба даст оред",
+    "step3Body": "Пас аз қабул, Marks мегиред ва дар IP Ledger сабт мешавед.",
+    "hide": "пинҳон кунед",
+    "why": "чаро?",
+    "subtitle": "\"Дуст гу ва даром.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Забонро иваз кунед",
+    "selectLanguage": "Забонро интихоб кунед",
+    "quickEnglish": "Англисӣ",
+    "tip": "Барои таҷрибаҳои беназир дар Дари Дурин рамзҳои забонҳои гуногунро истифода баред!"
+  }
+}

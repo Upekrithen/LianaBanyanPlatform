@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.796Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "بگو دوست، و وارد شو.",
+    "description": "لیانا بنیان برای همه زبان‌ها ساخته شده است. هر زبان یک جایزه ترجمه دارد.",
+    "languages": "زبان‌ها",
+    "openBounties": "جوایز باز",
+    "marksAwarded": "Marks اعطا شد (توکن‌های مشارکت)",
+    "provisional": "موقت:",
+    "provisionalNotice": "فهرست زبان‌ها و نرخ‌های Marks موقتی است. Marks توکن‌های مشارکت هستند، نه سهام.",
+    "bountyOpen": "جایزه باز",
+    "claimed": "ادعا شده",
+    "complete": "کامل",
+    "translationBountyTitle": "جایزه ترجمه",
+    "bountyDescription": "لیانا بنیان را به {{language}} ترجمه کنید. {{marks}} Marks دریافت کنید.",
+    "scopeWelcome": "صفحات خوش‌آمدگویی / دنیای روح",
+    "scopeCueCards": "مجموعه کارت‌های راهنما (قوانین اقتصادی + حکمرانی)",
+    "scopeNavigation": "برچسب‌های ناوبری و پیام‌های خطا",
+    "scopeWildfire": "Wildfire Beacon Run: کار پیدا کن",
+    "claimBounty": "این جایزه ترجمه را ادعا کنید",
+    "baseLanguage": "زبان پایه -- نیازی به جایزه نیست.",
+    "claimedBy": "جایزه توسط @{{handle}} ادعا شده -- در جریان.",
+    "marksProvisional": "{{marks}} Marks (موقت)",
+    "speakFounderTitle": "صدای بنیان‌گذار: چرا این کلمات",
+    "speakFounderDesc": "هر اصطلاح در این پلتفرم دلیلی دارد. ریشه 26 نام مهم‌ترین.",
+    "howBountiesWork": "نحوه کار جوایز ترجمه",
+    "step1Title": "جایزه را ادعا کنید",
+    "step1Body": "یک جایزه ترجمه از تابلوی Help Wanted باز کنید.",
+    "step2Title": "ترجمه کنید و ارسال کنید",
+    "step2Body": "همه رشته‌های مورد نیاز را ترجمه کنید و از طریق جریان Bounty Poster ارسال کنید.",
+    "step3Title": "Marks کسب کنید",
+    "step3Body": "پس از پذیرش، Marks دریافت می‌کنید و در IP Ledger ثبت می‌شوید.",
+    "hide": "پنهان",
+    "why": "چرا؟",
+    "subtitle": "\"بگو دوست، و وارد شو.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "تغییر زبان",
+    "selectLanguage": "انتخاب زبان",
+    "quickEnglish": "انگلیسی",
+    "tip": "برای تجربه‌های منحصربه‌فرد از رمزهای عبور زبان مختلف در درب دورین استفاده کنید!"
+  }
+}

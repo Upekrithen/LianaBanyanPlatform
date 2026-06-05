@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.862Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "دوست دە، كىرىپ كەل.",
+    "description": "Liana Banyan ھەر بىر تىل ئۈچۈن ئوچۇق قۇرۇلغان. ھەر ئوچۇق تىلدا بىر تەرجىمە مۇكاپاتى بار.",
+    "languages": "تىللار",
+    "openBounties": "ئوچۇق مۇكاپاتلار",
+    "marksAwarded": "Marks بېرىلدى (ئىشتىراك تالونلىرى)",
+    "provisional": "ۋاقتىنچە:",
+    "provisionalNotice": "تىللار تىزىملىكى ۋە Marks نىسبىتى ۋاقتىنچە. Marks ئىشتىراك تالونلىرى، ھىسسە ئەمەس.",
+    "bountyOpen": "مۇكاپات ئوچۇق",
+    "claimed": "تەلەپ قىلىندى",
+    "complete": "تامام",
+    "translationBountyTitle": "تەرجىمە مۇكاپاتى",
+    "bountyDescription": "Liana Banyan نى {{language}} تىلىگە تەرجىمە قىلىڭ. {{marks}} Marks قازاندۇرۇلىدۇ.",
+    "scopeWelcome": "خوش كەلدىڭىز / روھ دۇنياسى ئېكرانلىرى",
+    "scopeCueCards": "ئاساسىي ئورۇنتۇتقۇچ كارتا توپلىمى",
+    "scopeNavigation": "يۆنىلىش بەلگىلىرى ۋە خاتالىق ئۇچۇرلىرى",
+    "scopeWildfire": "Wildfire Beacon Run: ئىش تاپىڭ",
+    "claimBounty": "بۇ تەرجىمە مۇكاپاتىنى تەلەپ قىلىڭ",
+    "baseLanguage": "ئاساسىي تىل -- مۇكاپات ھاجەت يوق.",
+    "claimedBy": "@{{handle}} تەلەپ قىلدى -- جەريانىدا.",
+    "marksProvisional": "{{marks}} Marks (ۋاقتىنچە)",
+    "speakFounderTitle": "ئاساسلاشتۇرغۇچىنىڭ ئاۋازى: نېمىشقا بۇ سۆزلەر",
+    "speakFounderDesc": "بۇ سۇپىدىكى ھەر بىر ئاتالغۇ سەۋەبى بىلەن ئاتالغان. 26 مۇھىم ئىسىمنىڭ كېلىپ چىقىشى.",
+    "howBountiesWork": "تەرجىمە مۇكاپاتلىرى قانداق ئىشلەيدۇ",
+    "step1Title": "مۇكاپاتنى تەلەپ قىلىڭ",
+    "step1Body": "Help Wanted تاختىسىدىن تەرجىمە مۇكاپاتىنى ئاچىڭ.",
+    "step2Title": "تەرجىمە قىلىڭ ۋە يوللاڭ",
+    "step2Body": "بارلىق زۆرۈر قۇرلارنى تەرجىمە قىلىڭ. Bounty Poster ئارقىلىق يوللاڭ.",
+    "step3Title": "Marks قازانا",
+    "step3Body": "قوبۇل قىلىنغاندىن كېيىن Marks ئالىسىز. IP Ledger گە تىزىملىتىسىز.",
+    "hide": "يوشۇر",
+    "why": "نېمىشقا؟",
+    "subtitle": "\"دوست دېگين، كېل كىر.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "تىل ئالماشتۇر",
+    "selectLanguage": "تىل تاللاڭ",
+    "quickEnglish": "ئىنگلىزچە",
+    "tip": "Durin نىڭ دەرۋازىسىدا ھەر خىل تىل پارولىنى ئىشلىتىپ ئۆزگىچە تەجرىبىنى ئاچىڭ!"
+  }
+}

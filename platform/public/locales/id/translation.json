@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.791Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Ucapkan teman, dan masuklah.",
+    "description": "Liana Banyan terbuka untuk semua bahasa. Setiap bahasa memiliki satu hadiah terjemahan.",
+    "languages": "bahasa",
+    "openBounties": "hadiah terbuka",
+    "marksAwarded": "Marks diberikan (token partisipasi)",
+    "provisional": "Sementara:",
+    "provisionalNotice": "Daftar bahasa dan tarif Marks bersifat sementara. Marks adalah token partisipasi, bukan ekuitas.",
+    "bountyOpen": "Hadiah terbuka",
+    "claimed": "Diklaim",
+    "complete": "Selesai",
+    "translationBountyTitle": "Hadiah Terjemahan",
+    "bountyDescription": "Terjemahkan Liana Banyan ke {{language}}. Dapatkan {{marks}} Marks setelah diterima.",
+    "scopeWelcome": "Layar Selamat Datang / Dunia Hantu",
+    "scopeCueCards": "Set Kartu Isyarat Inti (Hukum Ekonomi + Tata Kelola)",
+    "scopeNavigation": "Label navigasi dan pesan kesalahan",
+    "scopeWildfire": "Wildfire Beacon Run: Cari Kerja (tur masuk)",
+    "claimBounty": "Klaim Hadiah Terjemahan Ini",
+    "baseLanguage": "Bahasa dasar -- tidak perlu hadiah.",
+    "claimedBy": "Hadiah diklaim oleh @{{handle}} -- sedang berlangsung.",
+    "marksProvisional": "{{marks}} Marks (sementara)",
+    "speakFounderTitle": "Suara Pendiri: Mengapa Kata-Kata Ini",
+    "speakFounderDesc": "Setiap istilah di platform ini dinamai dengan alasan. Asal usul 26 nama terpenting.",
+    "howBountiesWork": "Cara Kerja Hadiah Terjemahan",
+    "step1Title": "Klaim Hadiahnya",
+    "step1Body": "Buka Hadiah Terjemahan dari papan Help Wanted.",
+    "step2Title": "Terjemahkan dan Kirim",
+    "step2Body": "Terjemahkan semua string yang diperlukan dan kirim melalui alur Bounty Poster.",
+    "step3Title": "Dapatkan Marks",
+    "step3Body": "Setelah diterima, Anda mendapat Marks dan tercatat di IP Ledger.",
+    "hide": "sembunyikan",
+    "why": "mengapa?",
+    "subtitle": "\"Ucapkan teman, dan masuklah.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Ganti bahasa",
+    "selectLanguage": "Pilih bahasa",
+    "quickEnglish": "Inggris",
+    "tip": "Gunakan kata sandi berbahasa berbeda di Durin's Door untuk membuka pengalaman unik!"
+  }
+}

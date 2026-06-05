@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.809Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Dost de, daxil ol.",
+    "description": "Liana Banyan her dil ucun aciq qurulmusdur. Her aciq dil ucun bir tercume mukafati var.",
+    "languages": "diller",
+    "openBounties": "aciq mukafatlar",
+    "marksAwarded": "Marks verildi (istirak tokenlerj)",
+    "provisional": "Muvegqeti:",
+    "provisionalNotice": "Dillerin siyahisi ve Marks dereceleri muvegqetidir. Marks istirak tokenleri, kapital deyil.",
+    "bountyOpen": "Mukafat aciqdir",
+    "claimed": "Teleb edilib",
+    "complete": "Tamamlandi",
+    "translationBountyTitle": "Tercume Mukafati",
+    "bountyDescription": "Liana Banyan-i {{language}} diline tercume edin. {{marks}} Marks qazanin.",
+    "scopeWelcome": "Xos gelmissiniz / Xeyal Dunyasi ekranlari",
+    "scopeCueCards": "Esasi Ipucu Kartlari desti",
+    "scopeNavigation": "Naviqasiya etiketleri ve xeta mesajlari",
+    "scopeWildfire": "Wildfire Beacon Run: Is tap",
+    "claimBounty": "Bu Tercume Mukafatini teleb edin",
+    "baseLanguage": "Esas dil -- mukafat teleb olunmur.",
+    "claimedBy": "Mukafat @{{handle}} terefjinden teleb edilib -- davam edir.",
+    "marksProvisional": "{{marks}} Marks (muvegqeti)",
+    "speakFounderTitle": "Qurucunun Sesi: Niye Bu Sozler",
+    "speakFounderDesc": "Bu platformdaki her termin bir sebeple adlandirilb. 26 muhum adin mensejj.",
+    "howBountiesWork": "Tercume Mukafatlari Nece Isleyir",
+    "step1Title": "Mukafati teleb edin",
+    "step1Body": "Help Wanted lovhesinden Tercume Mukafati acin.",
+    "step2Title": "Tercume edin ve gonderin",
+    "step2Body": "Butun teleb olunan satirlari tercume edin. Bounty Poster vasitesile gonderin.",
+    "step3Title": "Marks qazanin",
+    "step3Body": "Qebul edildikden sonra Marks alirsiniz. IP Ledger-e qeyd olunursunuz.",
+    "hide": "gizlet",
+    "why": "niye?",
+    "subtitle": "\"Dost de, daxil ol.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Dil deyisdir",
+    "selectLanguage": "Dil secin",
+    "quickEnglish": "Ingilis",
+    "tip": "Unikal tecrubelər ucun Durin Qapisinda muxtəlif dil sifrelerindən istifade edin!"
+  }
+}

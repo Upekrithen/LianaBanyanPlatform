@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.825Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "ເວົ້າເຈົ້າຫມູ່, ແລ້ວເຂົ້າມາ.",
+    "description": "Liana Banyan ສ້າງຂຶ້ນເພື່ອເປີດໃຫ້ທຸກພາສາ. ແຕ່ລະພາສາທີ່ເປີດມີລາງວັນການແປໜຶ່ງ.",
+    "languages": "ພາສາ",
+    "openBounties": "ລາງວັນທີ່ເປີດ",
+    "marksAwarded": "Marks ໄດ້ຮັບ (ໂທເຄັນການມີສ່ວນຮ່ວມ)",
+    "provisional": "ຊົ່ວຄາວ:",
+    "provisionalNotice": "ລາຍຊື່ພາສາ ແລະ ອັດຕາ Marks ເປັນຊົ່ວຄາວ. Marks ເປັນໂທເຄັນການມີສ່ວນຮ່ວມ, ບໍ່ແມ່ນຫຸ້ນ.",
+    "bountyOpen": "ລາງວັນເປີດ",
+    "claimed": "ຮຽກຮ້ອງແລ້ວ",
+    "complete": "ສຳເລັດ",
+    "translationBountyTitle": "ລາງວັນການແປ",
+    "bountyDescription": "ແປ Liana Banyan ເປັນ {{language}}. ຮັບ {{marks}} Marks.",
+    "scopeWelcome": "ໜ້າຕ້ອນຮັບ / ໂລກວິນຍານ",
+    "scopeCueCards": "ຊຸດບັດຄຳແນະນຳຫຼັກ",
+    "scopeNavigation": "ປ້າຍນຳທາງ ແລະ ຂໍ້ຄວາມຜິດພາດ",
+    "scopeWildfire": "Wildfire Beacon Run: ຫາວຽກ",
+    "claimBounty": "ຮຽກຮ້ອງລາງວັນການແປນີ້",
+    "baseLanguage": "ພາສາພື້ນຖານ -- ບໍ່ຕ້ອງການລາງວັນ.",
+    "claimedBy": "@{{handle}} ຮຽກຮ້ອງ -- ກຳລັງດຳເນີນ.",
+    "marksProvisional": "{{marks}} Marks (ຊົ່ວຄາວ)",
+    "speakFounderTitle": "ສຽງຜູ້ກໍ່ຕັ້ງ: ເປັນຫຍັງຄຳເຫຼົ່ານີ້",
+    "speakFounderDesc": "ທຸກຄຳໃນເວທີນີ້ຖືກຕັ້ງຊື່ດ້ວຍເຫດຜົນ. ຕົ້ນກຳເນີດຂອງ 26 ຊື່ສຳຄັນທີ່ສຸດ.",
+    "howBountiesWork": "ລາງວັນການແປເຮັດວຽກແນວໃດ",
+    "step1Title": "ຮຽກຮ້ອງລາງວັນ",
+    "step1Body": "ເປີດລາງວັນການແປຈາກກະດານ Help Wanted.",
+    "step2Title": "ແປ ແລະ ສົ່ງ",
+    "step2Body": "ແປສະຕຣິງທີ່ຕ້ອງການທັງໝົດ. ສົ່ງຜ່ານ Bounty Poster.",
+    "step3Title": "ຮັບ Marks",
+    "step3Body": "ເມື່ອຮັບຮອງ, ທ່ານໄດ້ Marks ແລະ ຖືກບັນທຶກໃນ IP Ledger.",
+    "hide": "ເຊົ້າ",
+    "why": "ເປັນຫຍັງ?",
+    "subtitle": "\"ເວົ້າວ່າໝູ່, ແລ້ວເຂົ້າ.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "ປ່ຽນພາສາ",
+    "selectLanguage": "ເລືອກພາສາ",
+    "quickEnglish": "ພາສາອັງກິດ",
+    "tip": "ໃຊ້ລະຫັດຜ່ານພາສາຕ່າງໆທີ່ປະຕູ Durin ເພື່ອປົດລ໊ອກປະສົບການທີ່ພິເສດ!"
+  }
+}

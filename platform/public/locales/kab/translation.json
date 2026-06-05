@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.898Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Ini ameddakel, qqim-d.",
+    "description": "Liana Banyan tebna akken ad tili tamurt i yiwen wemdan kullu. Kullu tutlayt tezmer ad tawi uferdis n tisuγin.",
+    "languages": "tutlayin",
+    "openBounties": "uferdisen ifṭiṭen",
+    "marksAwarded": "Marks ttunefken (tiktutin n usekcem)",
+    "provisional": "Akka drus:",
+    "provisionalNotice": "Tabdart n tutlayin d lqima n Marks akka drus. Marks tiktutin n usekcem, mačči yimawlan.",
+    "bountyOpen": "Uferdis yettwali",
+    "claimed": "Yettusraga",
+    "complete": "Yekfa",
+    "translationBountyTitle": "Uferdis n Tisuγin",
+    "bountyDescription": "Siγel Liana Banyan γer {{language}}. Awi {{marks}} Marks.",
+    "scopeWelcome": "Anewway / Akal n Iruhanen",
+    "scopeCueCards": "Tasddart n Tkarin n Tilitit",
+    "scopeNavigation": "Taddart n uzriz d yizen n tεulliwin",
+    "scopeWildfire": "Wildfire Beacon Run: Nadi amahil",
+    "claimBounty": "Sraga Uferdis-a n Tisuγin",
+    "baseLanguage": "Tutlayt n izazen -- uferdis ur yettudarkel.",
+    "claimedBy": "@{{handle}} yesraga -- iruhu.",
+    "marksProvisional": "{{marks}} Marks (akka drus)",
+    "speakFounderTitle": "Asγar n Amserwes: Mel d Tiγri n Tigawt-a",
+    "speakFounderDesc": "Kull awal deg unekcum-agi yesεa imawlan. Anẓad n 26 n yismawen n tallit.",
+    "howBountiesWork": "Amek Uferdisen n Tisuγin Tteddu",
+    "step1Title": "Sraga Uferdis",
+    "step1Body": "Badu Uferdis n Tisuγin seg Help Wanted.",
+    "step2Title": "Siγel Unekcum",
+    "step2Body": "Siγel widen yettusentem. Uned Bounty Poster.",
+    "step3Title": "Awi Marks",
+    "step3Body": "Awali yekcem Marks ttwanafken IP Ledger.",
+    "hide": "fer",
+    "why": "acimi?",
+    "subtitle": "\"Ini ameddakel, qqim-d.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Snifel tutlayt",
+    "selectLanguage": "Fren tutlayt",
+    "quickEnglish": "Tanglizt",
+    "tip": "Seqdec tawrakin n tutlayin niḍen deg Tabburt n Durin akken ad tebdiḍ isallen ara ttwasṭen!"
+  }
+}

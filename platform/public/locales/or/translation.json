@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.801Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "ବନ୍ଧୁ କୁହ ଏବଂ ଭିତରକୁ ଆସ।",
+    "description": "Liana Banyan ସମସ୍ତ ଭାଷା ପାଇଁ ଖୋଲା ଅଛି। ପ୍ରତ୍ୟେକ ଭାଷା ପାଇଁ ଏକ ଅନୁବାଦ ଇନାମ ଅଛି।",
+    "languages": "ଭାଷା",
+    "openBounties": "ଖୋଲା ଇନାମ",
+    "marksAwarded": "Marks ପ୍ରଦାନ ହୋଇଛି (ଅଂଶଗ୍ରହଣ ଟୋକେନ)",
+    "provisional": "ଅସ୍ଥାୟୀ:",
+    "provisionalNotice": "ଭାଷା ତାଲିକା ଓ Marks ହାର ଅସ୍ଥାୟୀ। Marks ଅଂଶଗ୍ରହଣ ଟୋକେନ, ଇକ୍ୱିଟି ନୁହେ।",
+    "bountyOpen": "ଇନାମ ଖୋଲା",
+    "claimed": "ଦାବି ହୋଇଛି",
+    "complete": "ସଂପୂର୍ଣ",
+    "translationBountyTitle": "ଅନୁବାଦ ଇନାମ",
+    "bountyDescription": "Liana Banyan କୁ {{language}} ରେ ଅନୁବାଦ କରନ୍ତୁ। {{marks}} Marks ଅର୍ଜନ କରନ୍ତୁ।",
+    "scopeWelcome": "ସ୍ୱାଗତ / ଭୂତ ଜଗତ ସ୍କ୍ରିନ",
+    "scopeCueCards": "ମୂଳ ସୂଚକ କାର୍ଡ ସେଟ",
+    "scopeNavigation": "ନ୍ୟାଭିଗେସନ ଲେବଲ ଓ ତ୍ରୁଟି ବାର୍ତ୍ତା",
+    "scopeWildfire": "Wildfire Beacon Run: ଚାକିରି ପାଆ",
+    "claimBounty": "ଏହି ଅନୁବାଦ ଇନାମ ଦାବି କରନ୍ତୁ",
+    "baseLanguage": "ମୂଳ ଭାଷା -- କୌଣସି ଇନାମ ଦରକାର ନାହିଁ।",
+    "claimedBy": "@{{handle}} ଦ୍ୱାରା ଦାବି -- ଚଲୁ ଅଛି।",
+    "marksProvisional": "{{marks}} Marks (ଅସ୍ଥାୟୀ)",
+    "speakFounderTitle": "ପ୍ରତିଷ୍ଠାତାଙ୍କ ସ୍ୱର: ଏହି ଶବ୍ଦ ଗୁଡ଼ିକ କାହିଁକି",
+    "speakFounderDesc": "ଏହି ପ୍ଲାଟଫର୍ମରେ ପ୍ରତ୍ୟେକ ଶବ୍ଦ ଏକ କାରଣ ସହ ନାମ ଦିଆ। 26 ଗୁରୁତ୍ୱପୂର୍ଣ ନାମ।",
+    "howBountiesWork": "ଅନୁବାଦ ଇନାମ କିପରି କାମ କରେ",
+    "step1Title": "ଇନାମ ଦାବି କରନ୍ତୁ",
+    "step1Body": "Help Wanted ବୋର୍ଡ଼ ରୁ ଅନୁବାଦ ଇନାମ ଖୋଲନ୍ତୁ।",
+    "step2Title": "ଅନୁବାଦ ଓ ଦାଖଲ",
+    "step2Body": "ଆବଶ୍ୟକ ସ୍ଟ୍ରିଂ ଅନୁବାଦ କରି Bounty Poster ବ୍ୟବହାର କରି ଦାଖଲ କରନ୍ତୁ।",
+    "step3Title": "Marks ଅର୍ଜନ",
+    "step3Body": "ଗ୍ରହଣ ହେଲେ Marks ଓ IP Ledger ଲେଖ।",
+    "hide": "ଲୁଚାନ୍ତୁ",
+    "why": "କାହିଁକି?",
+    "subtitle": "\"ବନ୍ଧୁ କୁହ ଏବଂ ଭିତରକୁ ଆସ।\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "ଭାଷା ବଦଳାନ୍ତୁ",
+    "selectLanguage": "ଭାଷା ବଛାନ୍ତୁ",
+    "quickEnglish": "ଇଂରାଜୀ",
+    "tip": "ଅଦ୍ୱିତୀୟ ଅଭିଜ୍ଞତା ପାଇଁ Durin's Door ରେ ବିଭିନ୍ନ ଭାଷା ପାସୱର୍ଡ ବ୍ୟବହାର କରନ୍ତୁ!"
+  }
+}

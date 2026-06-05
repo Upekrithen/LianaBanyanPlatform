@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.887Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Дус ди, кер.",
+    "description": "Liana Banyan һәр тел өчен ачык итеп төзелгән. Ачык теллернең берсе тәрҗемә бүләгенә ия.",
+    "languages": "телләр",
+    "openBounties": "ачык бүләкләр",
+    "marksAwarded": "Marks бирелде (катнашу токеннары)",
+    "provisional": "Вакытлыча:",
+    "provisionalNotice": "Телләр исемлеге һәм Marks ставкалары вакытлыча. Marks катнашу токеннары, акция түгел.",
+    "bountyOpen": "Бүләк ачык",
+    "claimed": "Таләп ителде",
+    "complete": "Тамамланды",
+    "translationBountyTitle": "Тәрҗемә Бүләге",
+    "bountyDescription": "Liana Banyan-ны {{language}} теленә тәрҗемә итегез. {{marks}} Marks казаныгыз.",
+    "scopeWelcome": "Хуш килдегез / Рухлар Дөньясы экраннары",
+    "scopeCueCards": "Төп Киңәш картасы тупланмасы",
+    "scopeNavigation": "Навигация билгеләре һәм хата хәбәрләре",
+    "scopeWildfire": "Wildfire Beacon Run: Эш тап",
+    "claimBounty": "Бу Тәрҗемә Бүләгенә таләп кил",
+    "baseLanguage": "Нигез теле -- бүләк кирәк түгел.",
+    "claimedBy": "@{{handle}} таләп итте -- дәвам итә.",
+    "marksProvisional": "{{marks}} Marks (вакытлыча)",
+    "speakFounderTitle": "Нигезче Тавышы: Нигә Бу Сүзләр",
+    "speakFounderDesc": "Бу платформадагы һәр термин бер сәбәп белән аталган. 26 мөһим исемнең чыгышы.",
+    "howBountiesWork": "Тәрҗемә Бүләкләре Ничек Эшли",
+    "step1Title": "Бүләккә таләп кил",
+    "step1Body": "Help Wanted такталасыннан Тәрҗемә Бүләгенә ача торгыз.",
+    "step2Title": "Тәрҗемә ит һәм Сул тот",
+    "step2Body": "Барлык кирәкле юлларны тәрҗемә итегез. Bounty Poster аша тот.",
+    "step3Title": "Marks казан",
+    "step3Body": "Кабул ителгәннән соң Marks алдыгыз. IP Ledger-да язылдыгыз.",
+    "hide": "яшерергә",
+    "why": "нигә?",
+    "subtitle": "\"Yar di, ker.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Телне алмаштыр",
+    "selectLanguage": "Тел сайлагыз",
+    "quickEnglish": "Инглиз",
+    "tip": "Дурин Ишегендә төрле тел паролларын куллан үзенчәлекле тәҗрибәләр ачу өчен!"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.875Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "বন্ধু বুলি কোৱা আৰু সোমোৱা।",
+    "description": "লিয়ানা বান্যান প্ৰতিটো ভাষাৰ বাবে মুকলি। প্ৰতিটো ভাষাৰ বাবে এটা অনুবাদ পুৰস্কাৰ আছে।",
+    "languages": "ভাষা",
+    "openBounties": "মুকলি পুৰস্কাৰ",
+    "marksAwarded": "Marks দিয়া হৈছে (অংশগ্ৰহণ টোকেন)",
+    "provisional": "অস্থায়ী:",
+    "provisionalNotice": "ভাষাৰ তালিকা আৰু Marks হাৰ অস্থায়ী। Marks অংশগ্ৰহণ টোকেন, শ্বেয়াৰ নহয়।",
+    "bountyOpen": "পুৰস্কাৰ মুকলি",
+    "claimed": "দাবী কৰা হৈছে",
+    "complete": "সম্পূৰ্ণ",
+    "translationBountyTitle": "অনুবাদ পুৰস্কাৰ",
+    "bountyDescription": "লিয়ানা বান্যান {{language}} লৈ অনুবাদ কৰক। {{marks}} Marks উপাৰ্জন কৰক।",
+    "scopeWelcome": "স্বাগত / ভূত পৃথিৱী স্ক্ৰিন",
+    "scopeCueCards": "মূল কিউ কাৰ্ড ছেট",
+    "scopeNavigation": "নেভিগেশ্যন লেবেল আৰু ত্ৰুটি বাৰ্তা",
+    "scopeWildfire": "Wildfire Beacon Run: চাকৰি পাওক",
+    "claimBounty": "এই অনুবাদ পুৰস্কাৰ দাবী কৰক",
+    "baseLanguage": "মূল ভাষা -- কোনো পুৰস্কাৰ নালাগে।",
+    "claimedBy": "@{{handle}} দাবী কৰিছে -- চলি আছে।",
+    "marksProvisional": "{{marks}} Marks (অস্থায়ী)",
+    "speakFounderTitle": "প্ৰতিষ্ঠাপকৰ কথা: এই শব্দবোৰ কিয়",
+    "speakFounderDesc": "এই প্লেটফৰ্মত প্ৰতিটো শব্দ কাৰণ সহ নামকৰণ। ২৬ গুৰুত্বপূৰ্ণ নামৰ উৎপত্তি।",
+    "howBountiesWork": "অনুবাদ পুৰস্কাৰ কেনেকৈ কাম কৰে",
+    "step1Title": "পুৰস্কাৰ দাবী কৰক",
+    "step1Body": "Help Wanted বোৰ্ডৰ পৰা অনুবাদ পুৰস্কাৰ খোলক।",
+    "step2Title": "অনুবাদ কৰক আৰু দাখিল কৰক",
+    "step2Body": "সকলো প্ৰয়োজনীয় ষ্ট্ৰিং অনুবাদ কৰক। Bounty Poster মাধ্যমেৰে দাখিল কৰক।",
+    "step3Title": "Marks উপাৰ্জন কৰক",
+    "step3Body": "গ্ৰহণৰ পিছত Marks পাব। IP Ledger-ত নথিভুক্ত হ'ব।",
+    "hide": "লুকাওক",
+    "why": "কিয়?",
+    "subtitle": "\"বন্ধু বোলা আৰু ভিতৰলৈ আহা।\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "ভাষা সলনি কৰক",
+    "selectLanguage": "ভাষা বাছক",
+    "quickEnglish": "ইংৰাজী",
+    "tip": "অনন্য অভিজ্ঞতাৰ বাবে Durin's Door-ত বিভিন্ন ভাষাৰ পাছৱৰ্ড ব্যৱহাৰ কৰক!"
+  }
+}

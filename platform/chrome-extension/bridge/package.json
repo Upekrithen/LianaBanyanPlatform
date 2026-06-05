@@ -1,0 +1,17 @@
+{
+  "name": "mnemosyne-bridge",
+  "version": "1.1.0",
+  "description": "Local HTTP bridge server for the Mnemosyne Chrome extension",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "start:auth": "MNEMO_TOKEN=mnemo_tok_changeme node server.js",
+    "start:win": "set MNEMO_TOKEN=mnemo_tok_changeme && node server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": ["mnemosyne", "local-ai", "bridge", "chrome-extension"],
+  "license": "UNLICENSED"
+}

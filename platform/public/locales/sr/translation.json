@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.821Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Реци пријатељ и уђи.",
+    "description": "Liana Banyan је изграђена да буде отворена за сваки језик. Сваки отворени језик има једну награду за превод.",
+    "languages": "језици",
+    "openBounties": "отворене награде",
+    "marksAwarded": "Marks додељени (жетони учешћа)",
+    "provisional": "Привремено:",
+    "provisionalNotice": "Списак језика и стопе Marks су привремени. Marks су жетони учешћа, не акције.",
+    "bountyOpen": "Награда отворена",
+    "claimed": "Затражено",
+    "complete": "Завршено",
+    "translationBountyTitle": "Награда за Превод",
+    "bountyDescription": "Преведите Liana Banyan на {{language}}. Зарадите {{marks}} Marks.",
+    "scopeWelcome": "Екрани Добродошлице / Свет Духова",
+    "scopeCueCards": "Основни скуп картица са упутствима",
+    "scopeNavigation": "Навигациони ознаке и поруке о грешкама",
+    "scopeWildfire": "Wildfire Beacon Run: Нађи Посао",
+    "claimBounty": "Затражите ову Награду за Превод",
+    "baseLanguage": "Основни језик -- не треба награда.",
+    "claimedBy": "Награду затражио @{{handle}} -- у току.",
+    "marksProvisional": "{{marks}} Marks (привремено)",
+    "speakFounderTitle": "Глас Оснивача: Зашто Ове Речи",
+    "speakFounderDesc": "Сваки термин на овој платформи именован је са разлогом. Порекло 26 најважнијих назива.",
+    "howBountiesWork": "Kako Rade Награде за Превод",
+    "step1Title": "Затражите Награду",
+    "step1Body": "Отворите Награду за Превод са табле Help Wanted.",
+    "step2Title": "Преведите и Пошаљите",
+    "step2Body": "Преведите све потребне низове. Пошаљите путем Bounty Poster.",
+    "step3Title": "Зарадите Marks",
+    "step3Body": "Након прихватања добијате Marks и евидентирани сте у IP Ledger.",
+    "hide": "сакриј",
+    "why": "зашто?",
+    "subtitle": "\"Реци пријатељ и уђи.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Промени језик",
+    "selectLanguage": "Одабери језик",
+    "quickEnglish": "Енглески",
+    "tip": "Користите лозинке различитих језика на Дуриновим Вратима за јединствена искуства!"
+  }
+}

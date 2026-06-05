@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.799Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "ወዳጅ ብለህ ግባ።",
+    "description": "ሊያና ባንያን ለሁሉም ቋንቋዎች ክፍት ነው። ለእያንዳንዱ ቋንቋ አንድ ትርጉም ሽልማት አለ።",
+    "languages": "ቋንቋዎች",
+    "openBounties": "ክፍት ሽልማቶች",
+    "marksAwarded": "Marks ተሰጥቷል (የተሳትፎ ቶኬን)",
+    "provisional": "ጊዜያዊ:",
+    "provisionalNotice": "የቋንቋ ዝርዝር እና Marks ዋጋ ጊዜያዊ ናቸው። Marks የተሳትፎ ቶኬን ናቸው፣ ድርሻ አይደሉም።",
+    "bountyOpen": "ሽልማት ክፍት ነው",
+    "claimed": "ተጠይቋል",
+    "complete": "ተጠናቋል",
+    "translationBountyTitle": "የትርጉም ሽልማት",
+    "bountyDescription": "ሊያና ባንያንን ወደ {{language}} ተርጉሙ። {{marks}} Marks ያካሂዳሉ።",
+    "scopeWelcome": "እንኳን ደህና መጡ / የምትባ ዓለም ስክሪን",
+    "scopeCueCards": "ዋና የፍንጭ ካርድ ስብስብ (የኢኮኖሚ ሕጎች + አስተዳደር)",
+    "scopeNavigation": "የአሰሳ መለያዎች እና የስህተት መልዕክቶች",
+    "scopeWildfire": "Wildfire Beacon Run: ሥራ ፈልጉ",
+    "claimBounty": "ይህን የትርጉም ሽልማት ጠይቁ",
+    "baseLanguage": "መሠረታዊ ቋንቋ -- ሽልማት አያስፈልግም።",
+    "claimedBy": "@{{handle}} ጠየቁ -- በሂደት ላይ።",
+    "marksProvisional": "{{marks}} Marks (ጊዜያዊ)",
+    "speakFounderTitle": "የመስራቹ ድምፅ: ለምን እነዚህ ቃላቶች",
+    "speakFounderDesc": "ይህ መድረክ ላይ እያንዳንዱ ቃል ምክንያት አለው። 26 ዋና ስሞች ምንጭ።",
+    "howBountiesWork": "የትርጉም ሽልማቶች እንዴት ይሰራሉ",
+    "step1Title": "ሽልማቱን ጠይቁ",
+    "step1Body": "ከ Help Wanted ሰሌዳ የትርጉም ሽልማት ክፈቱ።",
+    "step2Title": "ተርጉሙ እና ያስረክቡ",
+    "step2Body": "ሁሉ የሚያስፈልጉ ሕብረቁምፊዎች ተርጉሙ። Bounty Poster በኩል ያስረክቡ።",
+    "step3Title": "Marks ያካሂዱ",
+    "step3Body": "ከተቀበሉ በኋላ Marks ያገኛሉ። IP Ledger ላይ ይመዘግባሉ።",
+    "hide": "ደብቅ",
+    "why": "ለምን?",
+    "subtitle": "\"ወዳጅ ብለህ ግባ።\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "ቋንቋ ቀይር",
+    "selectLanguage": "ቋንቋ ምረጥ",
+    "quickEnglish": "እንግሊዝኛ",
+    "tip": "ልዩ ተሞክሮዎችን ለማስጀመር Durin's Door ላይ የተለያዩ ቋንቋ ይለፍ ቃሎችን ተጠቀሙ!"
+  }
+}

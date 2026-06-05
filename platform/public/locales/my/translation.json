@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.805Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "မိတ်ဆွေဟု ပြောပြီး ဝင်လာပါ။",
+    "description": "Liana Banyan ကို ဘာသာစကားတိုင်းအတွက် ဖွင့်ဆောက်ထားသည်။ ဘာသာစကားတိုင်းတွင် ဘာသာပြန်ဆုတစ်ခုရှိသည်။",
+    "languages": "ဘာသာစကားများ",
+    "openBounties": "ဖွင့်ထားသောဆုများ",
+    "marksAwarded": "Marks ချီးမြှင့် (ပါဝင်မှု တိုကင်များ)",
+    "provisional": "ယာယီ:",
+    "provisionalNotice": "ဘာသာစကားစာရင်းနှင့် Marks နှုန်းများ ယာယီဖြစ်သည်။ Marks သည် ပါဝင်မှုတိုကင်များ၊ အစုရှယ်ယာ မဟုတ်ပါ။",
+    "bountyOpen": "ဆုဖွင့်ထားသည်",
+    "claimed": "တောင်းဆိုပြီး",
+    "complete": "ပြည့်စုံ",
+    "translationBountyTitle": "ဘာသာပြန်ဆု",
+    "bountyDescription": "Liana Banyan ကို {{language}} သို့ ဘာသာပြန်ပါ။ {{marks}} Marks ရရှိပါမည်။",
+    "scopeWelcome": "ကြိုဆိုခြင်း / ဝိညာဉ်ကမ္ဘာ မျက်နှာပြင်",
+    "scopeCueCards": "အဓိက လမ်းညွှန်ကတ်ဇုန်",
+    "scopeNavigation": "လမ်းညွှန် အညွှန်းများနှင့် အမှားစာများ",
+    "scopeWildfire": "Wildfire Beacon Run: အလုပ်ရှာ",
+    "claimBounty": "ဤဘာသာပြန်ဆုကို တောင်းဆိုပါ",
+    "baseLanguage": "အခြေခံဘာသာ -- ဆုမလိုပါ။",
+    "claimedBy": "@{{handle}} တောင်းဆိုသည် -- ဆောင်ရွက်ဆဲ။",
+    "marksProvisional": "{{marks}} Marks (ယာယီ)",
+    "speakFounderTitle": "တည်ထောင်သူ၏ အသံ: ဤစကားလုံးများ အဘယ်ကြောင့်",
+    "speakFounderDesc": "ဤပလပ်ဖောင်းရှိ စကားလုံးတိုင်းကို အကြောင်းကြောင့် အမည်ပေးသည်။ ၂၆ ခု အဓိကနာမည်၏ မူလ။",
+    "howBountiesWork": "ဘာသာပြန်ဆုများ မည်သို့ အလုပ်လုပ်သည်",
+    "step1Title": "ဆုတောင်းဆိုပါ",
+    "step1Body": "Help Wanted ဘုတ်ကနေ ဘာသာပြန်ဆုဖွင့်ပါ။",
+    "step2Title": "ဘာသာပြန်ပြီး တင်သွင်းပါ",
+    "step2Body": "လိုအပ်သော string တိုင်းကို ဘာသာပြန်ပြီး Bounty Poster မှတဆင့် တင်ပါ။",
+    "step3Title": "Marks ရရှိပါ",
+    "step3Body": "လက်ခံပြီးနောက် Marks ရမည်ဖြစ်ပြီး IP Ledger တွင် မှတ်တမ်းတင်ပါမည်။",
+    "hide": "ဖျောက်ထား",
+    "why": "ဘာကြောင့်?",
+    "subtitle": "\"မိတ်ဆွေဟု ပြောပြီး ဝင်လာပါ။\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "ဘာသာပြောင်းပါ",
+    "selectLanguage": "ဘာသာရွေးပါ",
+    "quickEnglish": "အင်္ဂလိပ်",
+    "tip": "Durin's Door တွင် မတူသောဘာသာ စကားဝှက်များ သုံးပြီး ထူးခြားသောအတွေ့အကြုံများ ဖွင့်ပါ!"
+  }
+}

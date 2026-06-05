@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.885Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Emombe'u amigo, ha eike.",
+    "description": "Liana Banyan omopu'ã haguã ojehecha oĩ ñe'ẽ rehe. Ñe'ẽ peteĩ peteĩ ojehecha oĩ pe'a ojupe rembiporu.",
+    "languages": "ñe'ẽ",
+    "openBounties": "pe'a ojehecha oĩ",
+    "marksAwarded": "Marks ojeguereko (token ñemyatyrõ)",
+    "provisional": "Umi peteĩ aravo:",
+    "provisionalNotice": "Lista ñe'ẽ Marks rëi umi peteĩ aravo. Marks token ñemyatyrõ, ndaha'éi acción.",
+    "bountyOpen": "Pe'a ojehecha",
+    "claimed": "Ojeporu",
+    "complete": "Oĩporãkuéra",
+    "translationBountyTitle": "Pe'a Ñembohasa",
+    "bountyDescription": "Eñembohasa Liana Banyan {{language}}. Egueru {{marks}} Marks.",
+    "scopeWelcome": "Terekome / Yvy Añã",
+    "scopeCueCards": "Karîi Ñeha'ã",
+    "scopeNavigation": "Tembirehe ñande jepoha ha mba'e'akatúpe",
+    "scopeWildfire": "Wildfire Beacon Run: Eikuaasa Tembiapo",
+    "claimBounty": "Ejeporu Pe'a Ñembohasa Kõi",
+    "baseLanguage": "Ñe'ẽ ñemoha -- pe'a ndaipóri.",
+    "claimedBy": "@{{handle}} ojeporu -- oĩporã.",
+    "marksProvisional": "{{marks}} Marks (umi peteĩ aravo)",
+    "speakFounderTitle": "Ñe'ẽ Ñemoha: Mba'érepa Ko Mba'e",
+    "speakFounderDesc": "Mba'ety ko plataforma-pe oĩ rire ñemombeu. 26 réra ambuépe.",
+    "howBountiesWork": "Mba'éicha Pe'a Ñembohasa Oiko",
+    "step1Title": "Ejeporu Pe'a",
+    "step1Body": "Eja Pe'a Ñembohasa Help Wanted-gui.",
+    "step2Title": "Eñembohasa Embou",
+    "step2Body": "Eñembohasa mba'e oĩ porãite. Embou Bounty Poster rupive.",
+    "step3Title": "Egueru Marks",
+    "step3Body": "Oñembohasa rire eike Marks IP Ledger-pe.",
+    "hide": "embyky",
+    "why": "mba'érepa?",
+    "subtitle": "\"Echami amigo, ikove.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Embosako ñe'ẽ",
+    "selectLanguage": "Eiporavo ñe'ẽ",
+    "quickEnglish": "Ingléso ñe'ẽ",
+    "tip": "Eiporu ñe'ẽ mbyky heta Durin tape-pe!"
+  }
+}

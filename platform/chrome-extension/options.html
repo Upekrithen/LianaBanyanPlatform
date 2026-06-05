@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mnemosyne Extension Options</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-width: 480px;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 32px 24px;
+      background: #0a0f1a;
+      color: #e2e8f0;
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 28px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(110,231,183,0.15);
+    }
+
+    .brand-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: #6ee7b7;
+      letter-spacing: -0.3px;
+    }
+
+    .brand-sub {
+      font-size: 12px;
+      color: #475569;
+    }
+
+    .section {
+      margin-bottom: 28px;
+    }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: #6ee7b7;
+      margin-bottom: 12px;
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #94a3b8;
+      margin-bottom: 5px;
+    }
+
+    .field-desc {
+      font-size: 11px;
+      color: #475569;
+      margin-bottom: 6px;
+      line-height: 1.5;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="password"] {
+      width: 100%;
+      background: rgba(15,23,42,0.8);
+      border: 1px solid rgba(100,116,139,0.3);
+      border-radius: 8px;
+      color: #e2e8f0;
+      font-size: 13px;
+      padding: 9px 12px;
+      outline: none;
+      font-family: inherit;
+      transition: border-color 0.15s;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    input[type="password"]:focus {
+      border-color: rgba(110,231,183,0.4);
+    }
+
+    input::placeholder { color: #475569; }
+
+    .input-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .input-row input { flex: 1; }
+
+    .inline-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 8px;
+      background: rgba(110,231,183,0.1);
+      border: 1px solid rgba(110,231,183,0.2);
+      color: #6ee7b7;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+
+    .status-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      font-size: 12px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #334155;
+      flex-shrink: 0;
+    }
+
+    .status-dot.online { background: #22c55e; }
+    .status-dot.offline { background: #ef4444; }
+    .status-dot.checking { background: #f59e0b; }
+
+    .status-label { color: #64748b; }
+
+    .save-btn {
+      background: rgba(110,231,183,0.12);
+      border: 1px solid rgba(110,231,183,0.3);
+      border-radius: 8px;
+      color: #6ee7b7;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .save-btn:hover { background: rgba(110,231,183,0.2); }
+    .save-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .test-btn {
+      background: rgba(100,116,139,0.1);
+      border: 1px solid rgba(100,116,139,0.25);
+      border-radius: 8px;
+      color: #94a3b8;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 9px 14px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .test-btn:hover { background: rgba(100,116,139,0.18); }
+
+    .toast {
+      display: none;
+      margin-top: 10px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .toast.success {
+      background: rgba(34,197,94,0.1);
+      border: 1px solid rgba(34,197,94,0.25);
+      color: #4ade80;
+    }
+
+    .toast.error {
+      background: rgba(239,68,68,0.08);
+      border: 1px solid rgba(239,68,68,0.2);
+      color: #fca5a5;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid rgba(100,116,139,0.12);
+      margin: 24px 0;
+    }
+
+    .shortcut-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      background: rgba(15,23,42,0.5);
+      border: 1px solid rgba(100,116,139,0.15);
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+
+    .shortcut-name { font-size: 12px; color: #94a3b8; }
+
+    .kbd {
+      display: inline-block;
+      background: rgba(100,116,139,0.12);
+      border: 1px solid rgba(100,116,139,0.25);
+      border-radius: 5px;
+      padding: 2px 8px;
+      font-family: monospace;
+      font-size: 11px;
+      color: #cbd5e1;
+    }
+
+    .info-box {
+      background: rgba(15,23,42,0.5);
+      border: 1px solid rgba(100,116,139,0.15);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 12px;
+      color: #64748b;
+      line-height: 1.6;
+    }
+
+    .info-box a {
+      color: #6ee7b7;
+      text-decoration: none;
+    }
+
+    .info-box a:hover { text-decoration: underline; }
+
+    .version-footer {
+      margin-top: 32px;
+      text-align: center;
+      font-size: 11px;
+      color: #334155;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div>
+      <div class="brand-name">Mnemosyne Memory</div>
+      <div class="brand-sub">Extension Options</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Bridge Connection</div>
+
+    <div class="field">
+      <label for="portInput">Bridge Port <span class="inline-badge">default 11480</span></label>
+      <div class="field-desc">The local port your Mnemosyne bridge server is listening on. Change this only if you configured a custom port.</div>
+      <div class="input-row">
+        <input type="number" id="portInput" min="1024" max="65535" placeholder="11480" />
+        <button class="test-btn" id="testBtn">Test Connection</button>
+      </div>
+      <div class="status-row">
+        <div class="status-dot checking" id="connDot"></div>
+        <span class="status-label" id="connLabel">Not tested</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="tokenInput">Auth Token <span class="inline-badge">optional</span></label>
+      <div class="field-desc">
+        If your bridge server requires authentication, paste the token here. Leave empty for localhost trust mode (no token required).
+        The token is stored locally in your browser profile only.
+      </div>
+      <input type="password" id="tokenInput" placeholder="mnemo_tok_xxxxxxxxxxxxxxxx" autocomplete="off" />
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <div class="section">
+    <div class="section-title">Keyboard Shortcuts</div>
+
+    <div class="shortcut-row">
+      <span class="shortcut-name">Open Mnemosyne popup</span>
+      <span class="kbd">Ctrl+Shift+M</span>
+    </div>
+    <div class="shortcut-row">
+      <span class="shortcut-name">Copy context for Copilot</span>
+      <span class="kbd">Ctrl+Shift+C</span>
+    </div>
+
+    <div class="info-box" style="margin-top:10px;">
+      To change keyboard shortcuts, open <strong>chrome://extensions/shortcuts</strong> in your browser.
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <div class="section">
+    <div class="section-title">Windows Copilot Workaround</div>
+    <div class="info-box">
+      Windows Copilot cannot directly connect to localhost apps (no local plugin API exists as of 2026).
+      Use the <strong>"Copy for Copilot"</strong> button in the extension popup to copy a formatted context block,
+      then paste it into Copilot's chat window. This gives Copilot your local Mnemosyne context in one action.
+      <br /><br />
+      The button queries your local memory, formats the result as a prompt prefix, and copies it to the clipboard.
+      In Copilot: just paste (Ctrl+V) and ask your follow-up question.
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <div class="btn-row">
+    <button class="save-btn" id="saveBtn">Save Settings</button>
+    <div class="toast" id="toast"></div>
+  </div>
+
+  <div class="version-footer" id="versionFooter">Mnemosyne Extension v1.1.0</div>
+
+  <script src="options.js"></script>
+</body>
+</html>

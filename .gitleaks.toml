@@ -1,0 +1,19 @@
+﻿title = "LianaBanyanPlatform gitleaks config"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Archive vaults, session transcripts, and test placeholder files"
+paths = [
+  '''Asteroid-ProofVault/''',
+  '''BISHOP_DROPZONE/''',
+  '''ARCHIVE2April2026/''',
+  '''platform/src/tests/''',
+  '''platform/src/hooks/usePushNotifications\.ts''',
+  '''node_modules/''',
+  '''Upekrithen-Trunk/''',
+  '''Cephas/''',
+  '''static/''',
+  '''KNIGHT_BISHOP_MESSAGES''',
+]

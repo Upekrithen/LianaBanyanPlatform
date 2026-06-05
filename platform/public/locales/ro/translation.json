@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.818Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Spune prieten si intra.",
+    "description": "Liana Banyan este construita sa fie deschisa fiecarei limbi. Fiecare limba are o recompensa de traducere.",
+    "languages": "limbi",
+    "openBounties": "recompense deschise",
+    "marksAwarded": "Marks acordate (token-uri de participare)",
+    "provisional": "Provizoriu:",
+    "provisionalNotice": "Lista limbilor si ratele Marks sunt provizorii. Marks sunt token-uri de participare, nu actiuni.",
+    "bountyOpen": "Recompensa deschisa",
+    "claimed": "Revendicata",
+    "complete": "Complet",
+    "translationBountyTitle": "Recompensa de Traducere",
+    "bountyDescription": "Traduceti Liana Banyan in {{language}}. Castigati {{marks}} Marks la acceptare.",
+    "scopeWelcome": "Ecrane de Bun venit / Lumea Fantomelor",
+    "scopeCueCards": "Set de Carduri de Sfaturi de Baza",
+    "scopeNavigation": "Etichete de navigare si mesaje de eroare",
+    "scopeWildfire": "Wildfire Beacon Run: Gaseste un Job",
+    "claimBounty": "Revendicati aceasta Recompensa de Traducere",
+    "baseLanguage": "Limba de baza -- nu este nevoie de recompensa.",
+    "claimedBy": "Recompensa revendicata de @{{handle}} -- in curs.",
+    "marksProvisional": "{{marks}} Marks (provizoriu)",
+    "speakFounderTitle": "Vocea Fondatorului: De ce Aceste Cuvinte",
+    "speakFounderDesc": "Fiecare termen din aceasta platforma este denumit cu un motiv. Originea celor 26 de nume importante.",
+    "howBountiesWork": "Cum Functioneaza Recompensele de Traducere",
+    "step1Title": "Revendica Recompensa",
+    "step1Body": "Deschide o Recompensa de Traducere din panoul Help Wanted.",
+    "step2Title": "Traduci si Trimite",
+    "step2Body": "Traduceti toate sirurile necesare. Trimiteti prin fluxul Bounty Poster.",
+    "step3Title": "Castiga Marks",
+    "step3Body": "Dupa acceptare primesti Marks si esti inregistrat in IP Ledger.",
+    "hide": "ascunde",
+    "why": "de ce?",
+    "subtitle": "\"Spune prieten si intra.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Schimba limba",
+    "selectLanguage": "Selecteaza limba",
+    "quickEnglish": "Engleza",
+    "tip": "Foloseste parole in limbi diferite la Usa lui Durin pentru a debloca experiente unice!"
+  }
+}

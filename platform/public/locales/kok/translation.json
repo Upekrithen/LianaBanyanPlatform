@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.874Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "मित्र सांग आनी भितर ये.",
+    "description": "Liana Banyan सर्व भाशांखातीर उगती केल्ली आसा. प्रत्येक भाशेखातीर एक अनुवाद बक्षीस आसा.",
+    "languages": "भाशा",
+    "openBounties": "उगतीं बक्षिसां",
+    "marksAwarded": "Marks दिल्ले (सहभाग टोकन)",
+    "provisional": "तात्पुरतें:",
+    "provisionalNotice": "भाशांची यादी आनी Marks दर तात्पुरते आसात. Marks सहभाग टोकन जावन आसात, इक्विटी न्हय.",
+    "bountyOpen": "बक्षीस उगतें",
+    "claimed": "दावो केलो",
+    "complete": "पूर्ण",
+    "translationBountyTitle": "अनुवाद बक्षीस",
+    "bountyDescription": "Liana Banyan {{language}} भाशेत अनुवाद करा. {{marks}} Marks जोडा.",
+    "scopeWelcome": "स्वागत / भुताचें जग स्क्रीन",
+    "scopeCueCards": "मूळ क्यू कार्ड सेट",
+    "scopeNavigation": "नेव्हिगेशन लेबलां आनी चूक संदेश",
+    "scopeWildfire": "Wildfire Beacon Run: नोकरी मेळा",
+    "claimBounty": "हें अनुवाद बक्षीस दावो करा",
+    "baseLanguage": "मूळ भाशा -- बक्षीस नाका.",
+    "claimedBy": "@{{handle}} दावो केलो -- चालू.",
+    "marksProvisional": "{{marks}} Marks (तात्पुरतें)",
+    "speakFounderTitle": "संस्थापकाचो आवाज: हे शब्द कित्याक",
+    "speakFounderDesc": "ह्या प्लॅटफॉर्मार प्रत्येक शब्द कारणान नांव दिल्लें. 26 म्हत्वाच्या नावांचें मूळ.",
+    "howBountiesWork": "अनुवाद बक्षिसां कशीं काम करतात",
+    "step1Title": "बक्षीस दावो करा",
+    "step1Body": "Help Wanted बोर्डावेल्यान अनुवाद बक्षीस उगता करा.",
+    "step2Title": "अनुवाद करा आनी सादर करा",
+    "step2Body": "सर्व गरजेचे स्ट्रिंग अनुवाद करा. Bounty Poster जरिया सादर करा.",
+    "step3Title": "Marks जोडा",
+    "step3Body": "मान्यतेनंतर Marks मेळटात. IP Ledger त नोंद जाता.",
+    "hide": "लिपोवा",
+    "why": "कित्याक?",
+    "subtitle": "\"मित्र म्हण आनी भितर ये.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "भाशा बदला",
+    "selectLanguage": "भाशा निवडा",
+    "quickEnglish": "इंग्लीश",
+    "tip": "Durin's Door वयर वेगवेगळ्या भाशांचे पासवर्ड वापरा!"
+  }
+}

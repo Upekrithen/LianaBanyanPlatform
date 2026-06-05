@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.880Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "ތިމާގެ ދޮސްތި ހިފަހައްޓާ، ވަދޭ.",
+    "description": "Liana Banyan ހުރިހާ ބަހެއްގެ ދޮރު ހުޅުވިފައިވޭ. ކޮންމެ ދޭތީ ތަރިޖަމަ ހިނގައިދޭ.",
+    "languages": "ބަސްތައް",
+    "openBounties": "ހުޅުވިފައިވާ ބަދަލު",
+    "marksAwarded": "Marks ދީފިން (ބައިވެރިވުން ޓޯކަން)",
+    "provisional": "ވަގުތީ:",
+    "provisionalNotice": "ބަސްތަކުގެ ލިސްޓް، Marks ރޭޓް ވަގުތީ. Marks ބައިވެރިވުން ޓޯކަން، ހިއްސާ ނޫން.",
+    "bountyOpen": "ބަދަލު ހުޅުވިފައި",
+    "claimed": "ދައުވާ ކޮށްފި",
+    "complete": "ފުރިހަމަ",
+    "translationBountyTitle": "ތަރިޖަމަ ބަދަލު",
+    "bountyDescription": "Liana Banyan {{language}} ތަރިޖަމަ ކުރޭ. {{marks}} Marks ލިބިދޭ.",
+    "scopeWelcome": "ވަދޭ / ރޫހުގެ ދުނިޔެ",
+    "scopeCueCards": "ބޮޑު ހިލޭ ހިންދި",
+    "scopeNavigation": "ނެވިގޭޝަން ލޭބަލް، ގޯސް ޚަބަރު",
+    "scopeWildfire": "Wildfire Beacon Run: ވަޒީފާ ހޯދޭ",
+    "claimBounty": "ތަރިޖަމަ ބަދަލު ހޯދޭ",
+    "baseLanguage": "ބޮޑު ބަސް -- ބަދަލު ނުކިޔޭ.",
+    "claimedBy": "@{{handle}} ދައުވާ ކޮށްފި -- ކުރިޔަށް.",
+    "marksProvisional": "{{marks}} Marks (ވަގުތީ)",
+    "speakFounderTitle": "ބަނިކިޔަ ލިބިފިތިލަ: ކީއްވެ ބަސްތަކެ",
+    "speakFounderDesc": "ދިމާ ކޮންމެ ބަހެއް ދިވެހި. 26 ނަން ތިލަ.",
+    "howBountiesWork": "ތަރިޖަމަ ބަދަލު ކުރިޔަށ",
+    "step1Title": "ބަދަލު ދައުވާ",
+    "step1Body": "Help Wanted ތިލަ ތަރިޖަމަ ހުޅުވޭ.",
+    "step2Title": "ތަރިޖަމަ ފޮނިތެޔ",
+    "step2Body": "ތަރިޖަމަ ހުރިހާ ސިލްސިލާ. Bounty Poster ފޮނިތެ.",
+    "step3Title": "Marks ލިބިދޭ",
+    "step3Body": "ލިބިދޭ Marks ، IP Ledger ލިޔިފިތި.",
+    "hide": "ފޮރުވޭ",
+    "why": "ކީއްވެ?",
+    "subtitle": "\"ރަހުމަތްތެރިޔާ ބުނެ ވަދޭ.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "ބަސް ބަދަލު ކުރޭ",
+    "selectLanguage": "ބަސް ހޮވޭ",
+    "quickEnglish": "އިނގިރޭސި",
+    "tip": "Durin ދޮރުން ތަފާތު ބަސް ލެވި ބޭހެ!"
+  }
+}

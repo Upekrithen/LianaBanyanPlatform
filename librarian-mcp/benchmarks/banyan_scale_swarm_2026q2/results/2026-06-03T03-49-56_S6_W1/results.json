@@ -1,0 +1,94 @@
+{
+  "benchmark": "Banyan Scale Swarm Substrate Benchmark 2026Q2",
+  "version": "v0.1",
+  "edition": "LB-EDITION-09 (BP036)",
+  "pretty_good_caveat": "v0.1 — counsel + Founder iterate",
+  "run_ts": "2026-06-03T03:49:57.072Z",
+  "hardware_profile": {
+    "ram_gb": 16,
+    "cpu": "unknown (set BENCHMARK_CPU env var)",
+    "os": "Win11"
+  },
+  "results": [
+    {
+      "stack_id": "S6",
+      "stack_name": "LB Substrate",
+      "implementation_status": "dry_run_capable",
+      "workload": "W1",
+      "runs": 1,
+      "scores": {
+        "A": {
+          "tier": 4,
+          "score": 100,
+          "score_p50": 100,
+          "score_p95": 100,
+          "wall_clock_p50_seconds": 0,
+          "wall_clock_p95_seconds": 0
+        },
+        "B": {
+          "tier": 4,
+          "score": 90,
+          "measured_usd_per_task": 0,
+          "equivalent_usd_per_task": 0.0306,
+          "total_input_tokens": 1200,
+          "total_output_tokens": 1800
+        },
+        "C": {
+          "tier": 4,
+          "score": 65,
+          "inter_agent_messages_p50": 4,
+          "cross_verification_rate": 1,
+          "failure_recovery_handoff": false
+        },
+        "D": {
+          "tier": 4,
+          "score": 75,
+          "crash_rate": 0,
+          "partial_recovery_rate": 0,
+          "soak_60min_recovery": false
+        },
+        "E": {
+          "tier": 4,
+          "score": 58,
+          "pass_rate": 0.583,
+          "detail": {
+            "pass": false,
+            "passingTests": 14,
+            "totalTests": 24,
+            "esmConversionRate": 0.583,
+            "filesConverted": 7,
+            "filesTotal": 12,
+            "detail": "7/12 files have import syntax"
+          }
+        },
+        "F": {
+          "tier": 4,
+          "score": 0,
+          "win11_pass": false,
+          "ubuntu_pass": null,
+          "cross_os_verified": false,
+          "note": "Ubuntu run pending — Pawn P-12 cross-OS verification dispatch"
+        },
+        "G": {
+          "tier": 4,
+          "score": 92,
+          "rubric_breakdown": {
+            "policy": 20,
+            "safety": 18,
+            "audit": 18,
+            "discipline": 18,
+            "cooperative_posture": 18
+          }
+        },
+        "H": {
+          "tier": 4,
+          "score": 100,
+          "cross_vendor_continuity": true,
+          "token_loss_pct": 0
+        }
+      },
+      "subscription_extension_factor": null,
+      "failure_modes_observed": []
+    }
+  ]
+}

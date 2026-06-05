@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.849Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Si venn, og gaa inn.",
+    "description": "Liana Banyan er bygget for aa vaere aapen for hvert spraak. Hvert aapent spraak har en oversettelsespremie.",
+    "languages": "spraak",
+    "openBounties": "aapne premier",
+    "marksAwarded": "Marks tildelt (deltakelsestokens)",
+    "provisional": "Midlertidig:",
+    "provisionalNotice": "Spraaksliste og Marks-satser er midlertidige. Marks er deltakelsestokens, ikke aksjer.",
+    "bountyOpen": "Premier aapen",
+    "claimed": "Krevd",
+    "complete": "Fullfort",
+    "translationBountyTitle": "Oversettelsespremie",
+    "bountyDescription": "Oversett Liana Banyan til {{language}}. Tjen {{marks}} Marks ved godkjenning.",
+    "scopeWelcome": "Velkomst / Spøkelsesverden skjermer",
+    "scopeCueCards": "Grunnleggende Cue-kortsett",
+    "scopeNavigation": "Navigasjonsmerker og feilmeldinger",
+    "scopeWildfire": "Wildfire Beacon Run: Finn jobb",
+    "claimBounty": "Krev denne Oversettelsespremien",
+    "baseLanguage": "Grunnspraak -- ingen premier noedvendig.",
+    "claimedBy": "@{{handle}} krevde -- paagaar.",
+    "marksProvisional": "{{marks}} Marks (midlertidig)",
+    "speakFounderTitle": "Grunnleggerens stemme: Hvorfor disse ordene",
+    "speakFounderDesc": "Hvert uttrykk paa denne plattformen er navngitt med en grunn. Opprinnelsen til de 26 viktigste navnene.",
+    "howBountiesWork": "Slik fungerer Oversettelsespremier",
+    "step1Title": "Krev Premien",
+    "step1Body": "Aapne en Oversettelsespremie fra Help Wanted-tavlen.",
+    "step2Title": "Oversett og send inn",
+    "step2Body": "Oversett alle noedvendige strenger. Send inn via Bounty Poster.",
+    "step3Title": "Tjen Marks",
+    "step3Body": "Etter godkjenning faar du Marks og registreres i IP Ledger.",
+    "hide": "skjul",
+    "why": "hvorfor?",
+    "subtitle": "\"Si venn, og gaa inn.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Bytt spraak",
+    "selectLanguage": "Velg spraak",
+    "quickEnglish": "Engelsk",
+    "tip": "Bruk passord paa ulike spraak ved Durins Dor for aa laase opp unike opplevelser!"
+  }
+}

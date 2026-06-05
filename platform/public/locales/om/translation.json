@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.881Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Jaalas jedhi, gali.",
+    "description": "Liana Banyan afaan hundaaf banaatii ijaarame. Afaan tokko tokkoon badhaasa hiikkaa qaba.",
+    "languages": "afaanota",
+    "openBounties": "badhaasa banaa",
+    "marksAwarded": "Marks kenname (mallattoo hirmaannaa)",
+    "provisional": "Yeroo duraaf:",
+    "provisionalNotice": "Tarree afaanota fi gatiin Marks yeroo duraafi. Marks mallattoo hirmaannaa, akka hirmaannaa qabeenyaa miti.",
+    "bountyOpen": "Badhaasni banaa",
+    "claimed": "Gaafatame",
+    "complete": "Xumurame",
+    "translationBountyTitle": "Badhaasa Hiikuu",
+    "bountyDescription": "Liana Banyan gara {{language}} hiiki. {{marks}} Marks argadhu.",
+    "scopeWelcome": "Baga Nagaan Dhuftan / Addunyaa Ayyaannaa",
+    "scopeCueCards": "Seetii Kaardii Qajeelfamaa",
+    "scopeNavigation": "Mallattoolee qajeelfamaa fi ergaa dogoggoraa",
+    "scopeWildfire": "Wildfire Beacon Run: Hojii Argadhu",
+    "claimBounty": "Badhaasa Hiikuu Kana Gaafadhu",
+    "baseLanguage": "Afaan madda -- badhaasni hin barbaachisu.",
+    "claimedBy": "@{{handle}} gaafate -- itti fufaa.",
+    "marksProvisional": "{{marks}} Marks (yeroo duraaf)",
+    "speakFounderTitle": "Sagalee Hundeessaa: Maaliif Jechoota Kunneen",
+    "speakFounderDesc": "Jechoonni karri tokko tokkoon sababaa qabanitti moggaafame. Madda maqaa 26 cimoo.",
+    "howBountiesWork": "Badhaasni Hiikuu Akkamitti Hojjeta",
+    "step1Title": "Badhaasa Gaafadhu",
+    "step1Body": "Badhaasa Hiikuu Help Wanted irraa bana.",
+    "step2Title": "Hiiki Ergi",
+    "step2Body": "Hunda strings barbaachisan hiiki. Bounty Poster dhan ergi.",
+    "step3Title": "Marks Argadhu",
+    "step3Body": "Erga fudhatamee booda, Marks argatta IP Ledger galmeeffama.",
+    "hide": "dhoksi",
+    "why": "maaliif?",
+    "subtitle": "\"Jaalatamaa jedhi, gali.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Afaan jijjiiri",
+    "selectLanguage": "Afaan fili",
+    "quickEnglish": "Ingliffaa",
+    "tip": "Fuula Durin irra jechoolee afaan gara garaa fayyadami muuxannoo addaa banachuuf!"
+  }
+}

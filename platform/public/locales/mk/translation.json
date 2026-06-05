@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.855Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Kazi prijatel i vlezi.",
+    "description": "Liana Banyan e izgradena da bide otvorena za sekoj jazik. Sekoj otvoreni jazik ima edna nagrada za prevod.",
+    "languages": "jazici",
+    "openBounties": "otvoreni nagradi",
+    "marksAwarded": "Marks dodeleni (tokeni za ucestvo)",
+    "provisional": "Privremeno:",
+    "provisionalNotice": "Listata na jazici i stopkite Marks se privremeni. Marks se tokeni za ucestvo, ne akcii.",
+    "bountyOpen": "Nagradata otvorena",
+    "claimed": "Pobarano",
+    "complete": "Zavrseno",
+    "translationBountyTitle": "Nagrada za Prevod",
+    "bountyDescription": "Prevedete Liana Banyan na {{language}}. Zarabotete {{marks}} Marks.",
+    "scopeWelcome": "Ekrani Dobrodojdovte / Svetot na Duhovi",
+    "scopeCueCards": "Osnoven set na Karticki so soveti",
+    "scopeNavigation": "Navigaciski oznaki i poraki za greski",
+    "scopeWildfire": "Wildfire Beacon Run: Najdi Rabota",
+    "claimBounty": "Pobarajte ja ovaa Nagrada za Prevod",
+    "baseLanguage": "Osnoven jazik -- nagradata ne e potrebna.",
+    "claimedBy": "Nagradata pobara @{{handle}} -- vo tek.",
+    "marksProvisional": "{{marks}} Marks (privremeno)",
+    "speakFounderTitle": "Glasot na Osnivacot: Zosto Ovie Zborovi",
+    "speakFounderDesc": "Sekoj termin na ovaa platforma e naречен so pricina. Potekloto na 26-te najvazni iminji.",
+    "howBountiesWork": "Kako Rabotат Nagradite za Prevod",
+    "step1Title": "Pobarajte Nagradata",
+    "step1Body": "Otvorete Nagrada za Prevod od plocata Help Wanted.",
+    "step2Title": "Prevedete i Pratete",
+    "step2Body": "Prevedete gi site potrebni nizi. Pratete preku Bounty Poster.",
+    "step3Title": "Zarabotete Marks",
+    "step3Body": "Po prifakanjeto dobivate Marks i ste evidentirani vo IP Ledger.",
+    "hide": "skri",
+    "why": "zosto?",
+    "subtitle": "\"Кажи пријател и влези.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Promeni jazik",
+    "selectLanguage": "Izberi jazik",
+    "quickEnglish": "Anglisko",
+    "tip": "Koristete lozinki na razlicni jazici na Poratata na Durin za edinstveni iskustva!"
+  }
+}

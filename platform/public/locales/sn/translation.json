@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.815Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Ti shamwari, upinde.",
+    "description": "Liana Banyan yakavakwa kuti ivhurike kumitauro yose. Mutauro wose une mubayiro wekushandura.",
+    "languages": "mitauro",
+    "openBounties": "mibayiro yakavhurika",
+    "marksAwarded": "Marks yakapihwa (matokeni ekutora chikamu)",
+    "provisional": "Zvekutanga:",
+    "provisionalNotice": "Rondedzero yemitauro uye mibayiro ya Marks inogona kushanduka. Marks matokeni ekutora chikamu, kwete hisa.",
+    "bountyOpen": "Mubayiro wakavhurika",
+    "claimed": "Wakatambirwa",
+    "complete": "Yapera",
+    "translationBountyTitle": "Mubayiro weShanduro",
+    "bountyDescription": "Shandura Liana Banyan ku{{language}}. Wana Marks {{marks}}.",
+    "scopeWelcome": "Machinjikwa ekuMukirirei / Nyika yeZvinhu",
+    "scopeCueCards": "Seti yeKadhi reChikuva",
+    "scopeNavigation": "Zviratidzo zvekufamba uye meseji dzepamishonga",
+    "scopeWildfire": "Wildfire Beacon Run: Tsvaga Basa",
+    "claimBounty": "Tora Mubayiro uyu weShanduro",
+    "baseLanguage": "Mutauro wepasi -- hapana mubayiro unodikanwa.",
+    "claimedBy": "@{{handle}} akatora -- iri kufamba.",
+    "marksProvisional": "{{marks}} Marks (zvekutanga)",
+    "speakFounderTitle": "Inzwi reMuvambi: Nei Mashoko Aya",
+    "speakFounderDesc": "Shoko rega rega pane chirongwa ichi rakapihwa zita nemhaka. Mavambo emazita 26 akakosha.",
+    "howBountiesWork": "Mibayiro yeShanduro inoshanda sei",
+    "step1Title": "Tora Mubayiro",
+    "step1Body": "Vhura Mubayiro weShanduro kubva Help Wanted.",
+    "step2Title": "Shandura uye Tumira",
+    "step2Body": "Shandura mitsetse yose inodikanwa. Tumira neBounty Poster.",
+    "step3Title": "Wana Marks",
+    "step3Body": "Mushure mekugamuchirwa, unowana Marks uye unorekodwa pa IP Ledger.",
+    "hide": "vanza",
+    "why": "nei?",
+    "subtitle": "\"Ti shamwari, upinde.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Shandura mutauro",
+    "selectLanguage": "Sarudza mutauro",
+    "quickEnglish": "Chirungu",
+    "tip": "Shandisa mapasiwedhi emitauro akasiyana paDoor yaDurin kuwana makamuri akakosha!"
+  }
+}

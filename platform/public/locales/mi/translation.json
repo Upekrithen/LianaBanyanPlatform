@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.878Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Ko te hoa, ka uru.",
+    "description": "I hangaia a Liana Banyan kia tuwhera ki ia reo katoa. He moni whakamahana kotahi mo ia reo tuwhera.",
+    "languages": "reo",
+    "openBounties": "moni whakamahana tuwhera",
+    "marksAwarded": "Marks homai (tohu urunga)",
+    "provisional": "Whai waa:",
+    "provisionalNotice": "Ko te rarangi reo me nga reiti Marks he whai waa. Ko Marks he tohu urunga, ehara i te hea.",
+    "bountyOpen": "Moni tuwhera",
+    "claimed": "Kua kiia",
+    "complete": "Oti",
+    "translationBountyTitle": "Moni Whakamāori",
+    "bountyDescription": "Whakamāori a Liana Banyan ki te {{language}}. Whiwhi {{marks}} Marks.",
+    "scopeWelcome": "Ngā mata Nau Mai / Te Ao Wairua",
+    "scopeCueCards": "Huinga Kaari Tohutohu",
+    "scopeNavigation": "Tohu arataki me nga korero hapa",
+    "scopeWildfire": "Wildfire Beacon Run: Kimi Mahi",
+    "claimBounty": "Kiia tenei Moni Whakamāori",
+    "baseLanguage": "Reo putake -- kaore he moni e hiahiatia ana.",
+    "claimedBy": "@{{handle}} i kiia -- kei te haere tonu.",
+    "marksProvisional": "{{marks}} Marks (whai waa)",
+    "speakFounderTitle": "Te Reo o te Kaiwhakaaro: He aha enei kupu",
+    "speakFounderDesc": "Ko ia kupu i tenei papanga he take ma tona ingoa. Ko te putake o nga ingoa 26 tino nui.",
+    "howBountiesWork": "Me pehea te mahi a nga Moni Whakamāori",
+    "step1Title": "Kiia te Moni",
+    "step1Body": "Huakina he Moni Whakamāori mai i te papa Help Wanted.",
+    "step2Title": "Whakamāori ka Tukua",
+    "step2Body": "Whakamāori i ngā raina katoa e hiahiatia ana. Tukua ma te ara Bounty Poster.",
+    "step3Title": "Whiwhi Marks",
+    "step3Body": "I muri i te whakaaetanga, ka whiwhi koe i Marks ka tohua ki te IP Ledger.",
+    "hide": "huna",
+    "why": "he aha?",
+    "subtitle": "\"Ko hoa, tomokia.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Huri reo",
+    "selectLanguage": "Tohua he reo",
+    "quickEnglish": "Ingarihi",
+    "tip": "Whakamahia nga kupu huna reo rereke i te Kuaha o Durin hei whakatuwhera wheako ahurei!"
+  }
+}

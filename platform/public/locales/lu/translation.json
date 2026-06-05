@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.883Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Badia mukwasha, nena.",
+    "description": "Liana Banyan yazengwa kuza yafunguka mu zilimi zonse. Lulimi lonse lufunguka lunawo muswapo umwi wa kusoselela.",
+    "languages": "zilimi",
+    "openBounties": "miswapo ifungulwa",
+    "marksAwarded": "Marks yapelwa (fitambwa fya kukabila)",
+    "provisional": "Nkabalenshi:",
+    "provisionalNotice": "Ulupungu wa zilimi na miimo ya Marks ni ya nkabalenshi. Marks fitambwa fya kukabila, ne fyabufi.",
+    "bountyOpen": "Muswapo ufungulwa",
+    "claimed": "Yasabwa",
+    "complete": "Yalyakana",
+    "translationBountyTitle": "Muswapo wa Kusoselela",
+    "bountyDescription": "Soselela Liana Banyan mu {{language}}. Poka {{marks}} Marks.",
+    "scopeWelcome": "Imitemuko Mutende / Isonde lya Imipepo",
+    "scopeCueCards": "Intulo ya Amakaadi ya Fingulo",
+    "scopeNavigation": "Inshibilo ya njila na makosa",
+    "scopeWildfire": "Wildfire Beacon Run: Poka Umwanya",
+    "claimBounty": "Saba Uyu Muswapo wa Kusoselela",
+    "baseLanguage": "Lulimi lwa kubalilapo -- tamuswapwa.",
+    "claimedBy": "@{{handle}} yasabwa -- ya-pita.",
+    "marksProvisional": "{{marks}} Marks (nkabalenshi)",
+    "speakFounderTitle": "Inshimi ya Mwine: Ifi Fyena Ifyebo",
+    "speakFounderDesc": "Ubupyali bonse bwa platform yi bafilwe ishina pa mulandu. Ipapatilo lya malambo 26.",
+    "howBountiesWork": "Miswapo ya Kusoselela Ikabila Shani",
+    "step1Title": "Saba Muswapo",
+    "step1Body": "Fungula Muswapo wa Kusoselela ku Help Wanted.",
+    "step2Title": "Soselela Tuma",
+    "step2Body": "Soselela imipalamino yonse. Tuma ku Bounty Poster.",
+    "step3Title": "Poka Marks",
+    "step3Body": "Peshya yakibilwa, mupoka Marks na ukuwandika ku IP Ledger.",
+    "hide": "fisa",
+    "why": "ifi?",
+    "subtitle": "\"Bela muntunsumba, kaba.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Sinda lulumi",
+    "selectLanguage": "Sala lulumi",
+    "quickEnglish": "Icingelezi",
+    "tip": "Umishindo ya zilimi ishindwa ku Mwango wa Durin poka ifyafisomwa fya lwakwa!"
+  }
+}

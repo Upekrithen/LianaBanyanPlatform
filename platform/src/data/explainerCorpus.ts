@@ -1,0 +1,1454 @@
+/**
+ * explainerCorpus.ts -- Liana Banyan Subsystem Explainer Corpus
+ * ==============================================================
+ * Types, manifest, and all 22 SubsystemExplainer entries.
+ *
+ * NARRATOR RULE (per brief gate resolutions):
+ *   Skipping Stones + Wading In  = active Province HOST
+ *     LRH  = Southern Province
+ *     Denken = Northern Province (Founder persona)
+ *   Deep Dive = summoned domain specialist
+ *     Banker Pig = math      Engineer Rabbit = mechanism
+ *     Great Owl  = why       Judge Cat       = governance
+ *     Sheepdog   = trust     Den Bear        = community
+ *     Builder Badger = action  Harvest Squirrel = abundance
+ *     Maker Fox  = craft     Survey Eagle    = vision
+ *
+ * DOCTRINE:
+ *   - Human punctuation, no em-dashes (hyphens only)
+ *   - Canon numbers: 2,270 innovations / 228 Crown Jewels / 21 provisionals
+ *     / 83.3% / Cost+20%
+ *   - Marks = participation, never equity or return
+ *   - Securities-clean wording throughout
+ *
+ * 2 HOSTS + 19 SPECIALISTS + 3 SPECIALS = 22 TOTAL (updated from stale 17)
+ */
+
+// =========================================================================
+// TYPES
+// =========================================================================
+
+/** The three depth levels used across all explainers. */
+export type DepthLayer = "skipping-stones" | "wading-in" | "deep-dive";
+
+/** Labels shown to end users. */
+export const DEPTH_LABELS: Record<DepthLayer, string> = {
+  "skipping-stones": "Skipping Stones",
+  "wading-in": "Wading In",
+  "deep-dive": "Deep Dive",
+};
+
+/** Short descriptors shown in UI depth switchers. */
+export const DEPTH_DESCRIPTIONS: Record<DepthLayer, string> = {
+  "skipping-stones": "One-breath summary",
+  "wading-in": "What it does and why it matters",
+  "deep-dive": "Full mechanics + worked examples",
+};
+
+/**
+ * A single turn of dialogue from a character.
+ * Hosts speak at Skipping Stones + Wading In.
+ * Specialists speak at Deep Dive.
+ */
+export interface CharacterTurn {
+  /** Stable mascot id matching MASCOTS registry in mascots.ts */
+  mascotId: string;
+  /** Whether this character is on-screen as host or summoned specialist */
+  role: "host" | "specialist";
+  /**
+   * What kind of explanation this turn delivers.
+   * Drives the intro line the host says before summoning.
+   */
+  speechAct:
+    | "metaphor"    // skipping-stones: host gives the key image
+    | "context"     // wading-in: host gives the situation and stakes
+    | "mechanism"   // deep-dive: rabbit explains plumbing
+    | "math"        // deep-dive: pig runs the numbers
+    | "why"         // deep-dive: owl explains the reasoning
+    | "governance"  // deep-dive: cat states the rule
+    | "trust"       // deep-dive: dog explains safety layer
+    | "community"   // deep-dive: bear explains the social structure
+    | "action"      // deep-dive: badger explains execution
+    | "abundance"   // deep-dive: squirrel explains reward mechanics
+    | "craft"       // deep-dive: fox explains creative tools
+    | "vision";     // deep-dive: eagle explains strategic picture
+  /** What this character actually says at this depth. */
+  text: string;
+  /**
+   * Optional intro line the host says before summoning this specialist.
+   * Only present on Deep Dive specialist turns.
+   */
+  summonLine?: string;
+}
+
+/** Content for one depth layer within a subsystem explainer. */
+export interface DepthContent {
+  layer: DepthLayer;
+  /** Short headline shown on the card face before expanding. */
+  headline: string;
+  /** Full body text at this depth. */
+  body: string;
+  /** The narrator for this depth. */
+  narrator: CharacterTurn;
+}
+
+/** Cross-reference to a paper, letter, or Pearl ID. */
+export interface CrossRef {
+  type: "paper" | "letter" | "pearl" | "cue-card" | "wildfire-run";
+  /** Human-readable label */
+  label: string;
+  /** Route or identifier -- e.g. "/read/economic-laws" or pearl UUID */
+  ref: string;
+}
+
+/**
+ * A complete explainer for one platform subsystem.
+ * Contains three DepthContent entries (one per DepthLayer).
+ */
+export interface SubsystemExplainer {
+  /** Stable kebab-case id -- use in URLs and data-xray-id attributes. */
+  id: string;
+  /** 1-based index matching the brief list (1-22). */
+  subsystemNumber: number;
+  /** Human-readable subsystem name. */
+  subsystem: string;
+  /** Which host presents the SS and WI depths. */
+  host: "lrh" | "denken";
+  province: "southern" | "northern";
+  /** Mascot id for the Deep Dive specialist. */
+  specialist: string;
+  depths: [DepthContent, DepthContent, DepthContent]; // SS, WI, DD
+  crossRefs?: CrossRef[];
+  /** Tags for filtering -- e.g. "economics", "technical", "community" */
+  tags?: string[];
+}
+
+/** The full corpus of 22 subsystem explainers. */
+export type ExplainerCorpus = SubsystemExplainer[];
+
+/**
+ * A renderer plugin wires the corpus into a surface
+ * (How-It-All-Works page, XRay mode, Wildfire tours, etc.).
+ */
+export interface RendererPlugin {
+  id: string;
+  name: string;
+  description: string;
+  supportedDepths: DepthLayer[];
+  /** Route where this renderer lives, if applicable. */
+  route?: string;
+}
+
+// =========================================================================
+// CORPUS MANIFEST + ALL 22 ENTRIES
+// =========================================================================
+
+export const EXPLAINER_CORPUS: ExplainerCorpus = [
+
+  // -----------------------------------------------------------------------
+  // 1. Ingest Pipeline + Soccerball / SID
+  // -----------------------------------------------------------------------
+  {
+    id: "ingest-pipeline",
+    subsystemNumber: 1,
+    subsystem: "Ingest Pipeline + Soccerball / SID",
+    host: "denken",
+    province: "northern",
+    specialist: "rabbit",
+    depths: [
+      {
+        layer: "skipping-stones",
+        headline: "You drop something in. The platform catches it, stamps it, and knows it forever.",
+        body: "Every piece of content that enters Liana Banyan gets a permanent, unforgeable ID the moment it arrives. That ID is how the platform keeps track of 2,270 innovations and counting.",
+        narrator: {
+          mascotId: "denken",
+          role: "host",
+          speechAct: "metaphor",
+          text: "Think of a postal sorting facility. The second your letter hits the conveyor, a barcode goes on the envelope. From that moment on, the whole system knows exactly where it is and who it came from.",
+        },
+      },
+      {
+        layer: "wading-in",
+        headline: "Soccerball assigns a permanent SID to every incoming asset -- the root of all provenance.",
+        body: "The Ingest Pipeline is the front door of the platform. When a creator submits content -- code, writing, art, a business plan -- Soccerball (the intake service) immediately assigns a Soccerball ID (SID). The SID is a UUID that travels with that asset forever through the Pearl chain, the IP Ledger, and the Substrate DAG. Without the SID, nothing can be traced, credited, or compensated correctly. The ingest step is why 2,270 innovations stay accountable to their creators.",
+        narrator: {
+          mascotId: "denken",
+          role: "host",
+          speechAct: "context",
+          text: "The Ingest Pipeline is the moment the cooperative makes a promise. 'We received this. We know who sent it. We will remember.' Every Crown Jewel and every provisional patent in the 228 + 21 catalog starts here.",
+        },
+      },
+      {
+        layer: "deep-dive",
+        headline: "Full pipeline: content arrives, SID assigned, Chronos-stamped, SkipEblet created, Pearl chain linked.",
+        body: "Step 1: Content arrives at the Soccerball endpoint (HTTP or internal queue). Step 2: Soccerball generates a UUID-v4 SID and persists it to the Substrate DAG as a new node with creator metadata. Step 3: A ChronosTag (opaque composite of wall-clock + sequence counter + signer hash) is attached via chronos-schema.ts. Step 4: A SkipEblet is created in lib/skip-eblets/ -- the minimal pane unit that holds the SID, ChronosTag, and provenance hash from hashEtching(). Step 5: The SkipEblet is linked into the Pearl chain for that creator. Step 6: The IP Ledger entry is written. Step 7: The SkipEblet becomes renderable via isPaneVisuallyRenderable(). Chain propagation is managed by SkipEbletChainManager.propagateBorrowChain().",
+        narrator: {
+          mascotId: "rabbit",
+          role: "specialist",
+          speechAct: "mechanism",
+          summonLine: "Let me bring in Engineer Rabbit -- he can show you how the plumbing actually works here.",
+          text: "Seven steps, one guaranteed ID, zero gaps in the chain. The moment content hits the ingest endpoint, the cooperative's debt to that creator begins. Everything downstream -- payouts, attribution, provenance -- runs on the SID. No SID, no chain. No chain, no credit.",
+        },
+      },
+    ],
+    crossRefs: [
+      { type: "cue-card", label: "Three-Gear Currency", ref: "/cephas/under-the-hood/three-gear-currency" },
+      { type: "pearl", label: "IP Ledger pearl", ref: "ip-ledger" },
+      { type: "paper", label: "Transaction-Anchored Economics", ref: "/economics/transaction-anchored" },
+      { type: "paper", label: "Inception Principle", ref: "/economics/inception-principle" },
+    ],
+    tags: ["technical", "provenance", "ip"],
+  },
+
+  // -----------------------------------------------------------------------
+  // 2. Pearl / Eblet / SSPS
+  // -----------------------------------------------------------------------
+  {
+    id: "pearl-eblet-ssps",
+    subsystemNumber: 2,
+    subsystem: "Pearl / Eblet / SSPS",
+    host: "lrh",
+    province: "southern",
+    specialist: "rabbit",
+    depths: [
+      {
+        layer: "skipping-stones",
+        headline: "A Pearl is the smallest thing that matters. Chain them and you get something unbreakable.",
+        body: "Pearls are the atomic units of content on the platform. Every contribution, vote, and transaction is a Pearl. String them together into Eblets and you get something that can be displayed, sold, or certified.",
+        narrator: {
+          mascotId: "lrh",
+          role: "host",
+          speechAct: "metaphor",
+          text: "You've seen how real pearls form -- one grain of sand, then layer after layer wraps around it until it's precious. Same idea here. One small authentic contribution, wrapped in context and proof, becomes something the platform can stand behind.",
+        },
+      },
+      {
+        layer: "wading-in",
+        headline: "Pearl = immutable content atom. Eblet = displayable unit with context. SSPS = the proof-of-origin stamp.",
+        body: "A Pearl is the raw, immutable hash of a contribution -- it cannot be changed after creation. An Eblet wraps a Pearl with display metadata: title, thumbnail, creator name, ChronosTag, and the SID from ingest. SSPS (Soccerball Single-Point-of-Socceri) is the certificate that links a Pearl to exactly one creator with one timestamp -- the thing that makes a Crown Jewel out of an ordinary contribution. 228 contributions have been designated Crown Jewels; each has an SSPS certificate.",
+        narrator: {
+          mascotId: "lrh",
+          role: "host",
+          speechAct: "context",
+          text: "The difference between a Pearl and an Eblet is the difference between a raw gem and a setting. The gem is proof. The setting is presentation. You need both -- one for the ledger, one for the world to see.",
+        },
+      },
+      {
+        layer: "deep-dive",
+        headline: "Data model: Pearl (hash + SID), Eblet (Pearl + metadata), SSPS (creator-bound certificate).",
+        body: "Pearl: immutable SHA-256 hash of content blob + SID + Chronos stamp. Stored as a DAG node in the Substrate. Once written, never mutated -- only a new Pearl can supersede it. Eblet: wraps a Pearl reference with displayable metadata (title, description, thumbnailUrl, creatorId, chainPosition). The Eblet is what UI components render. SSPS: generated by Soccerball at ingest time. Contains: Pearl hash, creator UUID, ingest timestamp (ChronosTag), platform signature. The SSPS is what proves a Crown Jewel belongs to its creator. Without it, attribution is asserted but unproven. With it, attribution is cryptographically stamped. The provenance drift check (detectEtchingDrift in provenance.ts) alerts if a Pearl's hash diverges from its SSPS record.",
+        narrator: {
+          mascotId: "rabbit",
+          role: "specialist",
+          speechAct: "mechanism",
+          summonLine: "Engineer Rabbit is going to walk you through the data model -- this is the plumbing the whole platform sits on.",
+          text: "Pearl is truth. Eblet is presentation. SSPS is proof. Three layers, one unbreakable chain from creator to consumer. The platform's 228 Crown Jewels all have SSPS certificates. The 21 provisionals are pending that final stamp.",
+        },
+      },
+    ],
+    crossRefs: [
+      { type: "cue-card", label: "Ingest Pipeline", ref: "/subsystem/ingest-pipeline" },
+      { type: "pearl", label: "SSPS cert format", ref: "ssps-schema" },
+      { type: "paper", label: "IP Load Balancing", ref: "/economics/ip-load-balancing" },
+      { type: "paper", label: "Inception Principle", ref: "/economics/inception-principle" },
+    ],
+    tags: ["technical", "provenance", "ip", "content"],
+  },
+
+  // -----------------------------------------------------------------------
+  // 3. Substrate / DAG
+  // -----------------------------------------------------------------------
+  {
+    id: "substrate-dag",
+    subsystemNumber: 3,
+    subsystem: "Substrate / DAG",
+    host: "denken",
+    province: "northern",
+    specialist: "rabbit",
+    depths: [
+      {
+        layer: "skipping-stones",
+        headline: "The floor everything stands on. You can't see it, but it's why nothing falls.",
+        body: "The Substrate is the directed acyclic graph underneath every relationship in the platform. Every Pearl, vote, affiliation, and transaction is a node. Every connection between them is an edge. It's what makes provenance traceable and attribution permanent.",
+        narrator: {
+          mascotId: "denken",
+          role: "host",
+          speechAct: "metaphor",
+          text: "The Substrate is like the rebar inside concrete. You never see it. But if it weren't there, the whole structure would collapse the first time any real weight was put on it.",
+        },
+      },
+      {
+        layer: "wading-in",
+        headline: "A directed acyclic graph where nodes are Pearls and edges are relationships -- authored-by, derived-from, voted-on.",
+        body: "The Substrate DAG records every meaningful relationship between platform objects. Nodes include Pearls, Eblets, member profiles, Marks transactions, and governance events. Edges encode the type of relationship: authored-by (creator to Pearl), derived-from (remix chain), voted-on (member to Pudding), transacted (Credits/Marks flow). Because it is a DAG (no cycles), you can always trace any contribution back to its origin without loops. The Substrate is the ground truth that the IP Ledger, Furnace, and Medallion System all read from.",
+        narrator: {
+          mascotId: "denken",
+          role: "host",
+          speechAct: "context",
+          text: "When someone asks 'who made this?' or 'where did this idea come from?' -- the Substrate answers. It is the cooperative's long memory, and it cannot be edited. Only appended.",
+        },
+      },
+      {
+        layer: "deep-dive",
+        headline: "Node types, edge semantics, provenance hashing, and drift detection.",
+        body: "Node types: Pearl (content atom), MemberNode (creator identity), MarksTx (participation transaction), GovEvent (Star Chamber decision). Edge types: AUTHORED_BY, DERIVED_FROM, VOTED_ON, TRANSFERRED_TO, GOVERNED_BY. Each edge carries a ChronosTag. hashEtching() in provenance.ts generates a Merkle-style hash of a node's ancestry. detectEtchingDrift() compares the stored hash to a recomputed hash -- if they diverge, the chain has been tampered with. The SkipEbletChainManager propagates borrow chains across the DAG: when a node is 'borrowed' (embedded in another context), a borrow edge is created and the chain manager tracks it via propagateBorrowChain(). Cross-surface coherence is maintained by CrossSurfaceCoherenceHub in yoke-bridge/cross-surface-coherence.ts.",
+        narrator: {
+          mascotId: "rabbit",
+          role: "specialist",
+          speechAct: "mechanism",
+          summonLine: "Engineer Rabbit is best at explaining graph structures -- let him trace the edges for you.",
+          text: "The DAG is append-only. You can add nodes and edges. You cannot remove or modify them. That's not a technical limitation -- it's a cooperative promise. The Substrate is why 2,270 innovations can be tracked to their creators decades from now.",
+        },
+      },
+    ],
+    crossRefs: [
+      { type: "cue-card", label: "Pearl / Eblet / SSPS", ref: "/subsystem/pearl-eblet-ssps" },
+      { type: "cue-card", label: "Chronos Tags", ref: "/subsystem/chronos-tags" },
+      { type: "paper", label: "Transaction-Anchored Economics", ref: "/economics/transaction-anchored" },
+      { type: "paper", label: "Proof of Transaction", ref: "/economics/proof-of-transaction" },
+    ],
+    tags: ["technical", "provenance", "architecture"],
+  },
+
+  // -----------------------------------------------------------------------
+  // 4. Mesh / Frontier (WAN + LAN; 0-to-100% cross-node network-effect proof)
+  // -----------------------------------------------------------------------
+  {
+    id: "mesh-frontier",
+    subsystemNumber: 4,
+    subsystem: "Mesh / Frontier (WAN + LAN)",
+    host: "denken",
+    province: "northern",
+    specialist: "rabbit",
+    depths: [
+      {
+        layer: "skipping-stones",
+        headline: "The more nodes, the stronger it gets. Zero to full power is a mathematical certainty.",
+        body: "The Mesh is the cross-node network of the platform. Every new member or initiative that joins increases the total value for everyone already here. That's not marketing -- it's a provable equation.",
+        narrator: {
+          mascotId: "denken",
+          role: "host",
+          speechAct: "metaphor",
+          text: "A single telephone is useless. Two telephones are one conversation. A million telephones are a civilization. The Mesh works the same way -- except here, every new node also adds to the shared IP ledger, which means the value compounds faster than a phone network.",
+        },
+      },
+      {
+        layer: "wading-in",
+        headline: "LAN = one initiative's local network. WAN = the full cross-initiative cooperative. Frontier = where they meet.",
+        body: "Each initiative on Liana Banyan runs its own Local Area Network (LAN) -- a subset of the Substrate DAG scoped to that initiative's members and content. The Wide Area Network (WAN) is the full platform-wide Substrate. The Frontier is the boundary layer where a LAN's nodes and edges become visible and linkable across the WAN. This matters economically: a contribution that stays in one LAN reaches only that initiative's members. A contribution that crosses the Frontier reaches the full cooperative network of 2,270 innovations and all their connected members.",
+        narrator: {
+          mascotId: "denken",
+          role: "host",
+          speechAct: "context",
+          text: "Every initiative starts at zero network connections. The Frontier is the moment they stop being an island. It's why we built 16 initiatives into the platform from day one -- because 16 LANs connected at launch is a very different starting point than 1.",
+        },
+      },
+      {
+        layer: "deep-dive",
+        headline: "Cross-node network-effect proof: V(N) = N(N-1)/2 + 1. Cross-surface coherence via YokeBridge.",
+        body: "For a cooperative with N authenticated peer nodes, the number of unique peer connections is N(N-1)/2. Total value V(N) = connections + baseline = N(N-1)/2 + 1. At N=1: V=1. At N=2: V=2. At N=10: V=46. At N=100: V=4,951. At N=2,270 (current innovation count): V=2,575,766. This is not hypothetical -- it is the mathematical basis of the Substrace Theorem. The YokeBridge (cross-surface-coherence.ts) maintains coherence between LANs as nodes cross the Frontier. CrossSurfaceCoherenceHub tracks active cross-surface sessions. The Yoke handoff (yoke-handoff.ts) serializes the state anchor as JSON when a node moves from one surface to another. This ensures the DAG edge is written atomically -- no partial crosses.",
+        narrator: {
+          mascotId: "rabbit",
+          role: "specialist",
+          speechAct: "mechanism",
+          summonLine: "Engineer Rabbit has the network-effect math worked out -- this one is worth seeing.",
+          text: "N(N-1)/2 + 1. That's the whole proof in one line. The Mesh doesn't just add value linearly. It multiplies it. And the YokeBridge is what makes that math hold even when members are crossing surfaces at the same time.",
+        },
+      },
+    ],
+    crossRefs: [
+      { type: "cue-card", label: "Substrace Theorem", ref: "/subsystem/substrace-theorem" },
+      { type: "cue-card", label: "Novaculi / Yoke", ref: "/subsystem/novaculi-yoke" },
+      { type: "paper", label: "The Margin Economics of Interdependence", ref: "/economics/margin-economics-interdependence" },
+      { type: "paper", label: "Jeep of Theseus Cold Start", ref: "/economics/cold-start-theseus" },
+    ],
+    tags: ["technical", "network-effects", "architecture"],
+  },
+
+  // -----------------------------------------------------------------------
+  // 5. Cue Cards (Deck Cue Cards)
+  // -----------------------------------------------------------------------
+  {
+    id: "cue-cards",
+    subsystemNumber: 5,
+    subsystem: "Cue Cards (Deck Cue Cards)",
+    host: "lrh",
+    province: "southern",
+    specialist: "fox",
+    depths: [
+      {
+        layer: "skipping-stones",
+        headline: "Little cards that teach you one thing at a time. Collect them all and you know the whole platform.",
+        body: "Cue Cards are bite-sized learning units -- each one covers exactly one system, one rule, or one concept. You earn them by exploring. They stack into a Deck that becomes a personal knowledge library.",
+        narrator: {
+          mascotId: "lrh",
+          role: "host",
+          speechAct: "metaphor",
+          text: "You know how a recipe card is better than a cookbook for learning to cook? You hold it in your hand, you follow the steps, and you put it in the box when you're done. Cue Cards are that -- one thing at a time, hands-on, yours to keep.",
+        },
+      },
+      {
+        layer: "wading-in",
+        headline: "Each card covers one concept, has a front (metaphor) and back (mechanic), and earns Golden Keys when completed.",
+        body: "Cue Cards are organized by domain: economic laws, governance rules, social mechanics, creative tools, and history. Each card has a front face (the metaphor -- the simple image that sticks) and a back face (the mechanic -- the actual system behavior). Completing a card earns Golden Keys (5 keys per card as a default). Keys accumulate and unlock Magic Carpet rides through the platform via Wildfire Beacon Runs. The Deck is your personal collection -- it grows as you learn.",
+        narrator: {
+          mascotId: "lrh",
+          role: "host",
+          speechAct: "context",
+          text: "The Deck is how you prove to yourself -- not to us, to yourself -- that you understand the cooperative. When you've worked through the economic laws cards and the governance cards, you'll have enough context to vote, to invest, and to recruit confidently.",
+        },
+      },
+      {
+        layer: "deep-dive",
+        headline: "Data model, domain categories, Golden Key rewards, and Deck serialization.",
+        body: "Cue Card data is in platform/src/data/ (economicLawsCueCards.ts, shadowMarksCueCards.ts, letterCueCards.ts, openWaterCueCards.ts, guildRecruitingCards.ts, questDeckCards.ts). Each card has: id (UUID), front (headline + metaphor), back (mechanic + proof), domain (economics | governance | social | craft | history), goldenKeysReward (default 5), earnedByRoute (which route triggers completion). The Deck is serialized per-member in Supabase. WildfireBeaconRun nodes with learningLink fields award keys when the member completes the linked card. Cards with innovationNumber fields cross-reference the 2,270-innovation patent catalog.",
+        narrator: {
+          mascotId: "fox",
+          role: "specialist",
+          speechAct: "craft",
+          summonLine: "Maker Fox designed the card format -- she can explain how the front-back layout was built for maximum retention.",
+          text: "The front is metaphor. The back is proof. That sequence is intentional -- if you can't hold the metaphor, the proof won't stick. We designed cards so that a member can learn the 83.3% split with a single card, hold it in memory, and never need to look it up again.",
+        },
+      },
+    ],
+    crossRefs: [
+      { type: "wildfire-run", label: "Economic Laws Run", ref: "/wildfire-tour?run=economic-laws" },
+      { type: "cue-card", label: "Golden Keys", ref: "/subsystem/golden-keys" },
+      { type: "paper", label: "Ghost Credits and Demand Validation", ref: "/economics/ghost-credits" },
+    ],
+    tags: ["learning", "onboarding", "community"],
+  },
+
+  // -----------------------------------------------------------------------
+  // 6. Puddings
+  // -----------------------------------------------------------------------
+  {
+    id: "puddings",
+    subsystemNumber: 6,
+    subsystem: "Puddings",
+    host: "lrh",
+    province: "southern",
+    specialist: "rabbit",
+    depths: [
+      {
+        layer: "skipping-stones",
+        headline: "If someone makes something beautiful, the crowd proves it by putting their name on it.",
+        body: "A Pudding is a collective taste-test. Members stake Marks on content they believe is worth everyone's attention. When enough people agree, the content surfaces platform-wide.",
+        narrator: {
+          mascotId: "lrh",
+          role: "host",
+          speechAct: "metaphor",
+          text: "The proof is in the pudding. Not my opinion. Not an algorithm's opinion. The members'. When enough people say 'this is worth sharing,' the platform takes that seriously and makes it visible.",
+        },
+      },
+      {
+        layer: "wading-in",
+        headline: "Members stake Marks to surface content. Threshold reached = platform-wide visibility + creator attribution.",
+        body: "The Pudding system is how quality surfaces without editorial gatekeeping or algorithmic optimization. Any member can stake Marks (participation tokens -- not equity, not financial instruments) on a piece of content. When the stake total crosses the threshold, the content rises to platform-wide feed. The original creator gets full attribution and an XP boost. Members who staked early get reputation credit. Puddings are the cooperative version of trending -- driven by members who have skin in the game, not anonymous upvotes or engagement bait.",
+        narrator: {
+          mascotId: "lrh",
+          role: "host",
+          speechAct: "context",
+          text: "The name stuck from early prototyping. Pudding is the thing you make to prove you can cook. The collective Pudding is the thing the platform makes to prove it can curate without selling out.",
+        },
+      },
+      {
+        layer: "deep-dive",
+        headline: "Marks staking mechanics, threshold calculation, surface algorithm, and attribution flow.",
+        body: "Pudding flow: Member sees content with 'stake Marks' option. Member stakes 1-100 Marks. Marks are locked (not transferred) for the staking period. Threshold formula: T = BaseThreshold + (ContentAge * DecayFactor). BaseThreshold = 100 Marks by default; configurable per initiative. When total stakes >= T: content is added to the platform-wide feed for 48 hours. Creator receives XP delta (based on total stakes and stake duration). Early stakers (first 20% of stakers) receive ReputationBoost = stakes / total_stakes * BoostMultiplier. Marks are returned to stakers after surface period (win or loss). The Pudding record is written to the Substrate DAG as a VOTED_ON edge. No Marks are destroyed or redistributed -- only locked temporarily. This is what makes Marks participation tokens rather than equity -- they return to the staker.",
+        narrator: {
+          mascotId: "rabbit",
+          role: "specialist",
+          speechAct: "mechanism",
+          summonLine: "Let me bring in Engineer Rabbit -- the Pudding mechanics are more interesting than they look.",
+          text: "Marks return to stakers. That's the key. This is not a financial transaction. It is a vote expressed in locked attention. The platform reads the total locked attention as a quality signal. No money changes hands. No equity is issued. The members just said: 'this is worth everyone's time.'",
+        },
+      },
+    ],
+    crossRefs: [
+      { type: "cue-card", label: "Three-Currency System", ref: "/subsystem/three-currency" },
+      { type: "cue-card", label: "Switzerland Policy", ref: "/subsystem/switzerland-policy" },
+      { type: "paper", label: "Anti-Extractive Derivative (Cost+20%)", ref: "/economics/anti-extractive" },
+      { type: "paper", label: "The Boaz Principle -- Structural Gleaning", ref: "/economics/boaz-principle" },
+      { type: "paper", label: "Marks-Based Democratic Participation", ref: "/economics/marks-democracy" },
+    ],
+    tags: ["community", "curation", "marks", "economics"],
+  },
+
+  // -----------------------------------------------------------------------
+  // 7. Medallion System
+  // -----------------------------------------------------------------------
+  {
+    id: "medallion-system",
+    subsystemNumber: 7,
+    subsystem: "Medallion System",
+    host: "lrh",
+    province: "southern",
+    specialist: "pig",
+    depths: [
+      {
+        layer: "skipping-stones",
+        headline: "Coasters become business cards. Business cards become proof that the work was done.",
+        body: "The Medallion System is a tiered physical artifact program. Plain coasters represent open membership. Tereno business cards represent $5/year commitment. Initiative-stamped cards represent earned affiliation. Named pearl eb5bdeeeea118734.",
+        narrator: {
+          mascotId: "lrh",
+          role: "host",
+          speechAct: "metaphor",
+          text: "A coaster is just a coaster until someone earns the right to turn it into a business card. A business card is just cardboard until it carries the stamp of an initiative that required something real to earn.",
+        },
+      },
+      {
+        layer: "wading-in",
+        headline: "Three tiers: Coaster (open), Tereno (member), Initiative stamp (earned). Physical artifacts, real-world proof.",
+        body: "The Medallion tiers are: Tier 1 - Coaster (plain, any member, free to print). Tier 2 - Tereno business card (member with active $5/year membership, printed by platform). Tier 3 - Initiative-stamped card (16 varieties, one per initiative, earned by meeting the initiative's contribution threshold). Physical medallions are produced at Cost+20% -- the platform does not mark up above that. The medallion acts as an offline proof-of-participation: someone can look at your Initiative card and know you met the threshold without needing to log in.",
+        narrator: {
+          mascotId: "lrh",
+          role: "host",
+          speechAct: "context",
+          text: "We wanted something you could hand someone in a coffee shop. Something that told the whole story without requiring them to create an account first. The Medallion is that thing.",
+        },
+      },
+      {
+        layer: "deep-dive",
+        headline: "Production cost model, Cost+20% floor, tier eligibility logic, QR verification.",
+        body: "Medallion production costs: Coaster = $0.15/unit (DIY printable, no platform cost). Tereno card = $0.85/unit base print + $0.17 (Cost+20%) = $1.02 minimum. Initiative stamp card = $1.10/unit base + $0.22 (Cost+20%) = $1.32 minimum. The QR code on each Tier 2/3 medallion links to a MedallionQRVerification endpoint that checks: member UUID, membership active status, initiative threshold cleared (for Tier 3). Eligibility logic: Tier 3 requires a minimum of one completed deliverable in the initiative's IP Ledger, one Pudding stake above 10 Marks, and active membership. Data sources: MedallionPage.tsx, MedallionMintingManager, MedallionProductionTracker. The 16 Initiative stamps correspond to the 16 initiatives in the Medallion System pearl eb5bdeeeea118734.",
+        narrator: {
+          mascotId: "pig",
+          role: "specialist",
+          speechAct: "math",
+          summonLine: "Banker Pig is here to run the numbers -- Cost+20% has a specific formula and I want you to see it.",
+          text: "Cost+20% is not negotiable. $1.00 in production cost = $1.20 minimum price. Always. The platform does not profit from physical goods beyond that 20-cent floor, and that 20 cents covers fulfillment overhead. This is what makes the cooperative different from a merch store.",
+        },
+      },
+    ],
+    crossRefs: [
+      { type: "pearl", label: "Medallion System pearl", ref: "eb5bdeeeea118734" },
+      { type: "cue-card", label: "Economics: 83.3% + Cost+20%", ref: "/subsystem/economics-participation" },
+      { type: "paper", label: "Anti-Extractive Derivative (Cost+20%)", ref: "/economics/anti-extractive" },
+      { type: "paper", label: "The Simultaneous Pricing Paradox", ref: "/economics/simultaneous-pricing" },
+    ],
+    tags: ["community", "physical", "economics", "proof-of-participation"],
+  },
+
+  // -----------------------------------------------------------------------
+  // 8. Battery Dispatch + Broadcast Schedule
+  // -----------------------------------------------------------------------
+  {
+    id: "battery-dispatch",
+    subsystemNumber: 8,
+    subsystem: "Battery Dispatch + Broadcast Schedule",
+    host: "denken",
+    province: "northern",
+    specialist: "rabbit",
+    depths: [
+      {
+        layer: "skipping-stones",
+        headline: "Content doesn't all go out at once. The Battery decides who gets the spotlight and when.",
+        body: "The Battery is a time-managed content queue. When approved content is ready to publish, it enters the Battery and gets dispatched on the Broadcast Schedule at staggered intervals. No feed flooding.",
+        narrator: {
+          mascotId: "denken",
+          role: "host",
+          speechAct: "metaphor",
+          text: "A battery doesn't release all its energy at once -- it releases it steadily, in the right amount, at the right time. That's the job. Every piece of content deserves its moment, not a fight to survive a 6am avalanche of simultaneous posts.",
+        },
+      },
+      {
+        layer: "wading-in",
+        headline: "Battery holds approved content. Schedule dispatches it at staggered 24-hour intervals by initiative and type.",
+        body: "The Battery Dispatch system solves the feed quality problem that plagues algorithmic social platforms: if every creator publishes at the same peak time, most content gets buried. The Battery holds all approved, ready-to-publish content in a queue. The Broadcast Schedule assigns each piece a dispatch window based on content type, initiative, creator tier, and historical performance windows. Initiative content gets priority slots. Member content gets fair slots. Content posted by members with active Pudding stakes gets a slight window preference. No content is artificially demoted -- it is sequenced, not buried.",
+        narrator: {
+          mascotId: "denken",
+          role: "host",
+          speechAct: "context",
+          text: "We built the Battery because we watched what happens to creators on every other platform. They spend half their energy optimizing their post time instead of making better work. We took that problem off the table.",
+        },
+      },
+      {
+        layer: "deep-dive",
+        headline: "Queue architecture, dispatch timing algorithm, initiative slot allocation, and schedule surface.",
+        body: "Battery architecture: content enters the queue when: (a) Pudding threshold is met OR (b) creator manually publishes. Queue structure: PriorityQueue sorted by (InitiativeWeight * 0.4 + CreatorTier * 0.3 + ContentAge * 0.2 + RandomJitter * 0.1). InitiativeWeight = initiative's current active-member count / total platform members. CreatorTier = hologramTier from mascots.ts domain (Tier 4 = highest). Dispatch window: 4 slots/hour, 96 slots/day. Slots assigned at ingest time. If a slot conflicts, RandomJitter resolves it. Schedule surface: /broadcast-schedule shows the next 48 hours of planned dispatches (public page). SkipEblets carry the dispatch ChronosTag so the Substrate records when content was broadcast, not just when it was created.",
+        narrator: {
+          mascotId: "rabbit",
+          role: "specialist",
+          speechAct: "mechanism",
+          summonLine: "Engineer Rabbit has the dispatch algorithm diagrammed -- this is more carefully designed than it looks.",
+          text: "PriorityQueue with four weighted inputs, 96 slots a day, RandomJitter for fairness. The Battery is a scheduling problem that has been solved elegantly. The result: every piece of content that enters the queue gets dispatched within 48 hours. Guaranteed.",
+        },
+      },
+    ],
+    crossRefs: [
+      { type: "cue-card", label: "Ingest Pipeline", ref: "/subsystem/ingest-pipeline" },
+      { type: "cue-card", label: "Puddings", ref: "/subsystem/puddings" },
+      { type: "paper", label: "Jeep of Theseus Cold Start", ref: "/economics/cold-start-theseus" },
+      { type: "paper", label: "The Muffled Rule", ref: "/economics/muffled-rule" },
+    ],
+    tags: ["technical", "publishing", "scheduling"],
+  },
+
+  // -----------------------------------------------------------------------
+  // 9. Furnace (XP-for-Reputation Anonymous Data Furnace-Mode)
+  // -----------------------------------------------------------------------
+  {
+    id: "furnace",
+    subsystemNumber: 9,
+    subsystem: "Furnace (XP-for-Reputation Anonymous Data Furnace-Mode)",
+    host: "denken",
+    province: "northern",
+    specialist: "rabbit",
+    depths: [
+      {
+        layer: "skipping-stones",
+        headline: "Raw activity goes in. Reputation comes out. Nobody can see what's cooking.",
+        body: "The Furnace converts your participation (views, completions, votes, contributions) into XP. XP builds your Reputation score. The underlying behavioral data stays anonymous -- the Furnace only reveals the output.",
+        narrator: {
+          mascotId: "denken",
+          role: "host",
+          speechAct: "metaphor",
+          text: "A furnace takes ore -- raw, jagged, not yet useful -- and outputs something refined and usable. What went in stays private. What comes out is the number on your reputation profile.",
+        },
+      },
+      {
+        layer: "wading-in",
+        headline: "Privacy-preserving XP engine: anonymized behavioral signals in, XP delta out, Reputation score updated.",
+        body: "The Furnace is the platform's privacy-respecting reputation engine. When you complete a Wildfire run, vote in a Pudding, or deliver a bounty, the Furnace receives anonymized signals (content-type, completion status, duration bucket) -- never your specific viewing history or personal identifiers. These signals are weighted by the Furnace's XP table and converted to an XP delta. XP accumulates into your Reputation score. The score is public (it drives trust in marketplace and governance contexts). The raw signals that produced it are not. This is the anonymous data furnace-mode: reputation is proven without surveillance.",
+        narrator: {
+          mascotId: "denken",
+          role: "host",
+          speechAct: "context",
+          text: "We built the Furnace because reputation without privacy is a surveillance tool. The Furnace gives you the benefits of a verifiable track record without exposing the details that build it.",
+        },
+      },
+      {
+        layer: "deep-dive",
+        headline: "Signal types, XP weight table, anonymization pipeline, Reputation score formula.",
+        body: "Signal types (anonymized): CONTENT_COMPLETE (content watched/read to end), CONTRIBUTION_DELIVERED (bounty completed), VOTE_CAST (Pudding or governance), LEARNING_CARD_EARNED (Cue Card completed), TOUR_COMPLETED (Wildfire run finished). Anonymization: signals stripped of user ID, replaced with anonymous session token before entering the Furnace. The Furnace only receives the signal type + content domain + timestamp bucket (hour). XP weight table: CONTRIBUTION_DELIVERED = 50 XP, CONTENT_COMPLETE = 5 XP, TOUR_COMPLETED = 25 XP, VOTE_CAST = 3 XP, LEARNING_CARD_EARNED = 10 XP. XP is accumulated per member. Reputation score = sqrt(TotalXP) * DomainBonus, where DomainBonus = 1.0 for generalist, 1.2 for specialist in initiative's primary domain. Score is recalculated nightly. Furnace-mode cannot be disabled -- all reputation data passes through it.",
+        narrator: {
+          mascotId: "rabbit",
+          role: "specialist",
+          speechAct: "mechanism",
+          summonLine: "Engineer Rabbit mapped out the Furnace pipeline -- let him walk you through the anonymization step by step.",
+          text: "Anonymized token in. XP delta out. Reputation score updated nightly. The member never has to choose between building a reputation and protecting their privacy. The Furnace handles that conflict by design, not by policy.",
+        },
+      },
+    ],
+    crossRefs: [
+      { type: "cue-card", label: "Substrate / DAG", ref: "/subsystem/substrate-dag" },
+      { type: "cue-card", label: "Golden Keys", ref: "/subsystem/golden-keys" },
+      { type: "paper", label: "Harper Automated Trust", ref: "/economics/harper-certification" },
+      { type: "paper", label: "Attention-as-Funding", ref: "/economics/attention-as-funding" },
+    ],
+    tags: ["technical", "privacy", "reputation", "economics"],
+  },
+
+  // -----------------------------------------------------------------------
+  // 10. Shirley Temple (Affiliation Badge System)
+  // -----------------------------------------------------------------------
+  {
+    id: "shirley-temple-badges",
+    subsystemNumber: 10,
+    subsystem: "Shirley Temple (Affiliation Badge System)",
+    host: "lrh",
+    province: "southern",
+    specialist: "bear",
+    depths: [
+      {
+        layer: "skipping-stones",
+        headline: "Your badges are public proof of where you showed up and what you did.",
+        body: "The Shirley Temple system issues affiliation badges when members hit participation thresholds in specific initiatives. Named for the actress-turned-diplomat's famous collection of pins -- each one marking real presence and relationship, not just admiration.",
+        narrator: {
+          mascotId: "lrh",
+          role: "host",
+          speechAct: "metaphor",
+          text: "Shirley Temple collected diplomatic pins because she had actually been to those places and done that work. That's what these badges are. Not fan badges. Not follower badges. Presence badges. You were there.",
+        },
+      },
+      {
+        layer: "wading-in",
+        headline: "Badges issued when participation threshold met. Public on profile. Visible in X-Ray mode.",
+        body: "The Shirley Temple Affiliation Badge System issues initiative-specific badges to members who meet defined participation thresholds. Badges are distinct from Medallions -- Medallions are physical artifacts; badges are on-platform digital credentials on your profile. A badge for the Harper Guild means you have completed verified writing work there. A badge for JukeBox means you have contributed licensed audio. Badges are public and visible to any member viewing your profile. In X-Ray Goggles mode, badges are surfaced with their threshold requirements so any member can understand exactly what the badge represents.",
+        narrator: {
+          mascotId: "lrh",
+          role: "host",
+          speechAct: "context",
+          text: "We wanted badges to mean something. The only way badges mean something is if they are hard enough to be worth earning and transparent enough for anyone to verify. That's the Shirley Temple design.",
+        },
+      },
+      {
+        layer: "deep-dive",
+        headline: "Badge eligibility logic, threshold types, Substrate edge, X-Ray integration.",
+        body: "Badge types: AFFILIATION (initiative participation), DELIVERABLE (bounty completion), GOVERNANCE (Star Chamber participation), LEARNING (Cue Card deck completion). Eligibility for AFFILIATION badge: member has at least 1 completed IP Ledger entry for the initiative + at least 1 Pudding stake of 10+ Marks for the initiative + active membership. Threshold is configurable per initiative (set in initiative config, displayed publicly). Badge issuance: when threshold is met, a BADGE_ISSUED event is written to the Substrate DAG as a node with EARNED_BY edge to the member node. Badge is rendered on MemberProfile and in XRayOverlay when data-xray-id='affiliation-badges' is present. X-Ray glossary entry for 'affiliation-badge-[slug]' explains the threshold.",
+        narrator: {
+          mascotId: "bear",
+          role: "specialist",
+          speechAct: "community",
+          summonLine: "Den Bear can explain what these badges mean to the social fabric -- this one is about belonging.",
+          text: "A badge is a social signal. It says: 'I was in that room and I contributed.' The Shirley Temple system makes that signal verifiable. Any member can read the X-Ray overlay on your badge and know exactly what you did to earn it. That transparency is what makes it worth earning.",
+        },
+      },
+    ],
+    crossRefs: [
+      { type: "cue-card", label: "Medallion System", ref: "/subsystem/medallion-system" },
+      { type: "cue-card", label: "IP Ledger + Brand Stamp", ref: "/subsystem/ip-ledger-brand-stamp" },
+      { type: "paper", label: "Harper Automated Trust", ref: "/economics/harper-certification" },
+    ],
+    tags: ["community", "badges", "proof-of-participation", "social"],
+  },
+
+  // -----------------------------------------------------------------------
+  // 11. Switzerland Policy (No Politics No Religion)
+  // -----------------------------------------------------------------------
+  {
+    id: "switzerland-policy",
+    subsystemNumber: 11,
+    subsystem: "Switzerland Policy (No Politics, No Religion)",
+    host: "lrh",
+    province: "southern",
+    specialist: "cat",
+    depths: [
+      {
+        layer: "skipping-stones",
+        headline: "Two topics we never touch -- not because we're afraid, but because we protect the table.",
+        body: "The Switzerland Policy is the platform's two hard content exclusions: political content and religious content. Named pearl 403453a4e9526f27. Not because these topics are bad -- but because they reliably destroy cooperative tables and we built ours to last.",
+        narrator: {
+          mascotId: "lrh",
+          role: "host",
+          speechAct: "metaphor",
+          text: "Switzerland stayed out of two world wars. Not because the Swiss were cowards -- they have one of the world's strongest military traditions. They stayed out because they understood that their value to the world was in being the place where all sides could still talk. That's us.",
+        },
+      },
+      {
+        layer: "wading-in",
+        headline: "Hard exclusion: no political content, no religious content. Enforced by Content Shield. Three-strikes rule.",
+        body: "The Switzerland Policy is not a suggestion. It is a hard content rule enforced by the Content Shield system. Political content = content advocating for specific political parties, candidates, legislation, or partisan positions. Religious content = content promoting, defending, or attacking specific religious beliefs or practices. Informational content that mentions these topics without advocacy is reviewed case by case. The three-strikes rule: first violation = content removed + warning. Second violation = 30-day posting suspension. Third violation = account review by Star Chamber. The policy protects every member by ensuring the cooperative table never becomes a partisan battleground.",
+        narrator: {
+          mascotId: "lrh",
+          role: "host",
+          speechAct: "context",
+          text: "We built this platform for people of all political and religious backgrounds to work and create together. The only way that works is if the table is neutral. Switzerland Policy is the rule that keeps the table neutral.",
+        },
+      },
+      {
+        layer: "deep-dive",
+        headline: "Content Shield enforcement, edge-case review protocol, Star Chamber escalation, and policy rationale.",
+        body: "Content Shield flags Switzerland violations using a three-layer review: (1) automated classifier (keyword + sentiment signals), (2) human moderator review, (3) Star Chamber escalation for contested cases. Automated classifier operates on all new content at ingest -- flags content with political or religious advocacy signals for human review. False positive rate target: < 2%. Human moderator review: moderators use a decision rubric (advocacy vs. reference vs. factual mention). Star Chamber escalation: triggered when moderator and member dispute the ruling. Star Chamber is a 4-member elected governance body. Appeal window: 14 days. The policy pearl (403453a4e9526f27) is the canonical definition -- if there is ever ambiguity, the pearl content governs. No editorial team can override the pearl.",
+        narrator: {
+          mascotId: "cat",
+          role: "specialist",
+          speechAct: "governance",
+          summonLine: "Judge Cat knows exactly where the Switzerland Policy lines are -- let him walk the boundary with you.",
+          text: "The rule is hard. The enforcement is graduated. And the Star Chamber appeal is real. No one loses their account without being heard. But the table stays neutral -- that is non-negotiable, and the pearl makes it permanent.",
+        },
+      },
+    ],
+    crossRefs: [
+      { type: "pearl", label: "Switzerland Policy pearl", ref: "403453a4e9526f27" },
+      { type: "cue-card", label: "Defense Klaus", ref: "/subsystem/defense-klaus" },
+      { type: "paper", label: "Star Chamber Verification", ref: "/economics/star-chamber" },
+      { type: "paper", label: "The 300 Framework", ref: "/economics/300-framework" },
+    ],
+    tags: ["governance", "policy", "community", "content-moderation"],
+  },
+
+  // -----------------------------------------------------------------------
+  // 12. Defense Klaus (cooperative protective services / institutional layer)
+  // -----------------------------------------------------------------------
+  {
+    id: "defense-klaus",
+    subsystemNumber: 12,
+    subsystem: "Defense Klaus (Cooperative Protective Services)",
+    host: "denken",
+    province: "northern",
+    specialist: "dog",
+    depths: [
+      {
+        layer: "skipping-stones",
+        headline: "The platform protects its own. Not vigilante justice -- institutional, documented, cooperative.",
+        body: "Defense Klaus is the cooperative protection layer. When a member faces an external threat -- legal, professional, or social -- the cooperative has a documented institutional response protocol. Funded by the platform's 16.67% overhead.",
+        narrator: {
+          mascotId: "denken",
+          role: "host",
+          speechAct: "metaphor",
+          text: "A credit union doesn't let a predatory lender go after one of its members without the full credit union standing behind them. Defense Klaus is that. The member is not alone. The cooperative is institutional -- it has standing.",
+        },
+      },
+      {
+        layer: "wading-in",
+        headline: "Legal fund access, documented incident response, institutional support for external threats.",
+        body: "Defense Klaus provides three types of cooperative protection: (1) Legal fund access -- members facing IP theft, wrongful termination (for contractor work done through the platform), or harassment campaigns can apply for cooperative legal fund support. (2) Incident documentation -- the platform records and timestamps harassment events, threats, and coordinated attacks against members. This documentation has evidentiary value. (3) Institutional response -- for major external threats, the cooperative can issue official statements, coordinate member support, and escalate to relevant authorities. Defense Klaus is not vigilante justice -- it works through existing legal and institutional channels, backed by the cooperative's standing.",
+        narrator: {
+          mascotId: "denken",
+          role: "host",
+          speechAct: "context",
+          text: "We built Defense Klaus because solo creators and small businesses are routinely outgunned by larger actors. A cooperative has institutional standing that an individual doesn't. We use that standing defensively, for members who need it.",
+        },
+      },
+      {
+        layer: "deep-dive",
+        headline: "Incident pipeline, legal fund structure, Star Chamber review, funding model (16.67% overhead).",
+        body: "Defense Klaus pipeline: (1) Member files incident report (standardized form, timestamped, Chronos-tagged, written to Substrate). (2) Star Chamber receives report within 24 hours. (3) Star Chamber classifies: LOW (documentation only), MEDIUM (mutual support), HIGH (legal fund + institutional response). (4) For HIGH classification: legal fund application reviewed by the 4-member Star Chamber + Founder (5-person panel). Approval requires 4/5 votes. (5) Legal fund disbursement: up to $500 per incident from the cooperative legal fund. Funding model: 16.67% of platform overhead is reserved; 2% of that is dedicated to the Defense Klaus fund. At current platform scale, this creates a rolling fund that accumulates monthly. Defense Klaus cases are documented in the Transparency Ledger (anonymized).",
+        narrator: {
+          mascotId: "dog",
+          role: "specialist",
+          speechAct: "trust",
+          summonLine: "The Sheepdog knows the Defense Klaus protocol -- this is her territory, protecting members.",
+          text: "The pipeline is: document, classify, respond. The response is proportionate to the threat. The fund is real. The institutional standing is real. Defense Klaus exists because sometimes the wolves are outside the platform, not inside it.",
+        },
+      },
+    ],
+    crossRefs: [
+      { type: "cue-card", label: "Switzerland Policy", ref: "/subsystem/switzerland-policy" },
+      { type: "cue-card", label: "Economics: 83.3% + Cost+20%", ref: "/subsystem/economics-participation" },
+      { type: "paper", label: "The 300 Framework", ref: "/economics/300-framework" },
+    ],
+    tags: ["governance", "trust", "legal", "protection"],
+  },
+
+  // -----------------------------------------------------------------------
+  // 13. Contingency Operators / Dragonriders / Mimic Trunks (sandbox primitive #2301)
+  // -----------------------------------------------------------------------
+  {
+    id: "contingency-operators",
+    subsystemNumber: 13,
+    subsystem: "Contingency Operators / Dragonriders / Mimic Trunks",
+    host: "denken",
+    province: "northern",
+    specialist: "rabbit",
+    depths: [
+      {
+        layer: "skipping-stones",
+        headline: "What if everything went sideways? These are the handles that let you steer through it.",
+        body: "Contingency Operators are emergency-mode governance tools. Dragonriders are their authorized human operators. Mimic Trunks are sandbox copies of live systems for safe simulation. Together: primitive #2301 in the innovation catalog.",
+        narrator: {
+          mascotId: "denken",
+          role: "host",
+          speechAct: "metaphor",
+          text: "Every serious aircraft has emergency controls that most pilots never touch. But they're tested regularly because when you need them, you really need them. The Contingency Operators are those controls. The Dragonriders train on them. The Mimic Trunks are the flight simulators they train in.",
+        },
+      },
+      {
+        layer: "wading-in",
+        headline: "CO = emergency governance override. Dragonrider = authorized operator. Mimic Trunk = isolated production copy for simulation.",
+        body: "Contingency Operators (COs) are state-machine overrides that can be triggered in defined emergency scenarios: platform-wide data integrity failure, coordinated large-scale attack, Founder incapacitation, regulatory emergency. Each CO has a specific trigger condition and a specific response set -- it cannot be used for anything outside its defined scope. Dragonriders are the 5 members authorized to trigger COs (the 4-person Star Chamber + the Founder). Mimic Trunks are isolated copies of the full Substrate + Pearl chain, running in a sandboxed environment, used for: testing COs before deploying them, simulating edge cases, and training new Dragonriders. Primitive #2301 in the 2,270-innovation catalog.",
+        narrator: {
+          mascotId: "denken",
+          role: "host",
+          speechAct: "context",
+          text: "The reason to build emergency systems before you need them is that the moment you need them, you have no time to build them. The COs were designed when the platform was calm so they work when it isn't.",
+        },
+      },
+      {
+        layer: "deep-dive",
+        headline: "CO state machine, trigger conditions, Dragonrider authorization chain, Mimic Trunk isolation model.",
+        body: "CO architecture: ContingencyOperatorDialog.tsx is the front-end surface. Backend: state machine with states [INACTIVE, TRIGGERED, ACTIVE, RESOLVING, RESOLVED]. Trigger: requires 3/5 Dragonrider authorization (threshold signature). Each CO type has a defined action set: CO-INTEGRITY: pause ingest pipeline + trigger hashEtching verification sweep. CO-ATTACK: rate-limit all new content submissions + notify all Dragonriders. CO-FOUNDER: transfer Founder-role permissions to the Star Chamber panel. CO-REGULATORY: enable read-only mode + export compliance package. Mimic Trunk: created by snapshotting the Substrate DAG + Pearl chain at a point in time. Snapshot is isolated in a separate database with no write-back to production. Mimic Trunks are reset weekly. Dragonriders run at least one simulation per quarter using a Mimic Trunk.",
+        narrator: {
+          mascotId: "rabbit",
+          role: "specialist",
+          speechAct: "mechanism",
+          summonLine: "Engineer Rabbit built the CO state machine -- he can trace every transition for you.",
+          text: "Five states. Four CO types. Three-of-five authorization required. And a full Mimic Trunk simulation environment so the Dragonriders are never flying blind. This is what 'we thought about what could go wrong' actually looks like in code.",
+        },
+      },
+    ],
+    crossRefs: [
+      { type: "cue-card", label: "Novaculi / Yoke", ref: "/subsystem/novaculi-yoke" },
+      { type: "cue-card", label: "Defense Klaus", ref: "/subsystem/defense-klaus" },
+      { type: "paper", label: "Star Chamber Verification", ref: "/economics/star-chamber" },
+    ],
+    tags: ["governance", "technical", "emergency", "security"],
+  },
+
+  // -----------------------------------------------------------------------
+  // 14. The Overlay System + the Frame
+  // -----------------------------------------------------------------------
+  {
+    id: "overlay-system",
+    subsystemNumber: 14,
+    subsystem: "The Overlay System + the Frame",
+    host: "lrh",
+    province: "southern",
+    specialist: "fox",
+    depths: [
+      {
+        layer: "skipping-stones",
+        headline: "Goggles on, the whole platform becomes a textbook. Everything has a label.",
+        body: "The Overlay System powers X-Ray Goggles mode. Toggle it on and every element on screen shows its name, purpose, and connection to other systems. The Frame is the structural wrapper that makes any page overlay-ready.",
+        narrator: {
+          mascotId: "lrh",
+          role: "host",
+          speechAct: "metaphor",
+          text: "Remember those transparencies in old science textbooks -- the ones you could layer over the anatomy diagram to add the circulatory system, then the nervous system, then the skeleton? The Overlay is that. You can see any layer of the platform you want, on top of whatever page you're on.",
+        },
+      },
+      {
+        layer: "wading-in",
+        headline: "XRayOverlay.tsx renders draggable panels. data-xray-id attributes on elements link to xrayGlossary.ts entries.",
+        body: "The X-Ray Overlay system has two components: the Frame and the Overlay. The Frame is an LB Frame tier spec (A, B, or C) that wraps any page and establishes overlay zones. Any element inside the Frame can carry a data-xray-id attribute. When X-Ray Goggles mode is activated (via BuilderModeContext), XRayOverlay.tsx scans the DOM for data-xray-id attributes and attaches draggable explanation panels to each annotated element. Each panel pulls from xrayGlossary.ts to display: a brief explanation, connected systems, the 'why' behind the design choice, and a learn-more link. Multiple panels can be open at once.",
+        narrator: {
+          mascotId: "lrh",
+          role: "host",
+          speechAct: "context",
+          text: "The X-Ray system is how we teach the platform without making everyone sit through a tutorial. You can build or browse normally, and when you want to understand something, you just put the goggles on.",
+        },
+      },
+      {
+        layer: "deep-dive",
+        headline: "XRayOverlay.tsx architecture, Frame tier specs, glossary entry schema, data-xray-id protocol.",
+        body: "XRayOverlay.tsx (~1,210 lines): imports BuilderModeContext (xray mode toggle), scans DOM for [data-xray-id] attributes on activation, creates a floating panel per element using createPortal(). Panels are draggable, z-indexed, and persist until dismissed. xrayGlossary.ts (~1,139 lines): maps data-xray-id strings to XRayGlossaryEntry objects (explanation, connectedTo, why, learnMoreUrl, faqAnchorId, innovationNumber, elbowGreaseLevel). Frame tier specs: Tier A (full-width pages) / Tier B (sidebar layouts) / Tier C (modal surfaces) -- each defines overlay zone boundaries. Adding a new explainer to X-Ray: (1) add data-xray-id='[subsystem-id]' to the element; (2) add a matching entry to XRAY_GLOSSARY in xrayGlossary.ts; (3) link to the subsystem's /subsystem/[id] page via learnMoreUrl. The Bounty Arena integration allows X-Ray panels to surface active Bounty Posters related to the annotated element.",
+        narrator: {
+          mascotId: "fox",
+          role: "specialist",
+          speechAct: "craft",
+          summonLine: "Maker Fox designed the X-Ray overlay layout -- she can walk you through how the panels were built to be both beautiful and functional.",
+          text: "The design principle was: the overlay should feel like a popup book, not a popup ad. Every panel has breathing room, clear typography, and a real exit path. You should want to open these panels. If the overlay is annoying, it fails its job.",
+        },
+      },
+    ],
+    crossRefs: [
+      { type: "cue-card", label: "IP Ledger + Brand Stamp", ref: "/subsystem/ip-ledger-brand-stamp" },
+      { type: "cue-card", label: "Subsystem Explainers", ref: "/how-it-all-works" },
+      { type: "paper", label: "IP Load Balancing", ref: "/economics/ip-load-balancing" },
+    ],
+    tags: ["technical", "ui", "learning", "xray"],
+  },
+
+  // -----------------------------------------------------------------------
+  // 15. IP Ledger + Brand Stamp
+  // -----------------------------------------------------------------------
+  {
+    id: "ip-ledger-brand-stamp",
+    subsystemNumber: 15,
+    subsystem: "IP Ledger + Brand Stamp",
+    host: "denken",
+    province: "northern",
+    specialist: "cat",
+    depths: [
+      {
+        layer: "skipping-stones",
+        headline: "Your idea is yours. The ledger says so. The stamp proves it.",
+        body: "The IP Ledger records every creative contribution with a timestamp and creator ID. The Brand Stamp is the visible mark on published content proving its origin. Together they protect 2,270 innovations, 228 Crown Jewels, and 21 provisionals.",
+        narrator: {
+          mascotId: "denken",
+          role: "host",
+          speechAct: "metaphor",
+          text: "A notary stamps a document to say: 'This was signed, in my presence, on this date, by this person.' The IP Ledger is the notary. The Brand Stamp is the notary's seal on the finished work. No one can claim your contribution after the fact.",
+        },
+      },
+      {
+        layer: "wading-in",
+        headline: "IP Ledger: Pearl hash + SSPS + Chronos tag. Brand Stamp: rendered attestation on all output surfaces.",
+        body: "The IP Ledger is a permanent, append-only record of every creative contribution on the platform. Each entry contains: the Pearl hash (content fingerprint), the SSPS certificate (creator binding), the Chronos timestamp (unforgeable), and the initiative context. The ledger currently holds 2,270 innovation records, of which 228 have been elevated to Crown Jewel status and 21 are in provisional review. The Brand Stamp is the visual representation of the ledger entry -- it appears on published content, on download packages, and on physical Medallions. Anyone seeing the Brand Stamp can verify it against the public-facing IP Ledger.",
+        narrator: {
+          mascotId: "denken",
+          role: "host",
+          speechAct: "context",
+          text: "We built the IP Ledger before we built anything else. Attribution is the promise at the foundation. Everything the platform does -- the economics, the governance, the Furnace -- runs on the assumption that creators can trust us to remember who made what.",
+        },
+      },
+      {
+        layer: "deep-dive",
+        headline: "Ledger entry schema, Crown Jewel designation criteria, Brand Stamp rendering, public verification endpoint.",
+        body: "IP Ledger entry schema: { pearlHash: string, sspsId: string, creatorId: string, chronosTag: ChronosTag, initiativeId: string, category: 'standard' | 'crown-jewel' | 'provisional', status: 'active' | 'superseded' | 'revoked' }. Crown Jewel designation: elevated by Star Chamber vote (3/4 required) when the contribution is judged to be foundational, novel, and platform-defining. 228 current Crown Jewels. Provisional status: assigned at ingest when the contribution claim is pending SSPS verification. 21 currently pending. Brand Stamp rendering: the stamp SVG is generated from the ledger entry (shows creator handle, ingest date, category badge). Rendered via BrandStamp component using data-xray-id='brand-stamp'. Public verification: /verify/[pearlHash] returns the full ledger entry in JSON. patentBuckets.ts holds the full 2,270-innovation catalog for cross-reference.",
+        narrator: {
+          mascotId: "cat",
+          role: "specialist",
+          speechAct: "governance",
+          summonLine: "Judge Cat oversees the Crown Jewel designation process -- let him explain the governance side of the IP Ledger.",
+          text: "228 Crown Jewels. 21 provisionals. Each one required a 3/4 Star Chamber vote. That is not a rubber stamp. The designation means: this contribution is foundational. The ledger reflects that judgment permanently.",
+        },
+      },
+    ],
+    crossRefs: [
+      { type: "cue-card", label: "Pearl / Eblet / SSPS", ref: "/subsystem/pearl-eblet-ssps" },
+      { type: "cue-card", label: "Chronos Tags", ref: "/subsystem/chronos-tags" },
+      { type: "paper", label: "IP Load Balancing", ref: "/economics/ip-load-balancing" },
+      { type: "paper", label: "Proof of Transaction", ref: "/economics/proof-of-transaction" },
+    ],
+    tags: ["ip", "provenance", "governance", "legal"],
+  },
+
+  // -----------------------------------------------------------------------
+  // 16. Chronos Tags
+  // -----------------------------------------------------------------------
+  {
+    id: "chronos-tags",
+    subsystemNumber: 16,
+    subsystem: "Chronos Tags",
+    host: "denken",
+    province: "northern",
+    specialist: "rabbit",
+    depths: [
+      {
+        layer: "skipping-stones",
+        headline: "Every event has a timestamp that can never be faked. That's the whole system.",
+        body: "Chronos tags are cryptographic timestamps attached to every significant action in the platform. They are opaque by design -- you cannot read the internal structure, but you can compare them, verify their order, and detect if they have been tampered with.",
+        narrator: {
+          mascotId: "denken",
+          role: "host",
+          speechAct: "metaphor",
+          text: "A wax seal. You can tell it's authentic without knowing the composition of the wax. You can tell the order two letters were sealed in by comparing the stamps. And if someone breaks the seal and re-seals it, you know -- because the impression is never exactly the same twice.",
+        },
+      },
+      {
+        layer: "wading-in",
+        headline: "ChronosTag = wall-clock + sequence counter + signer hash. Opaque, comparable, tamper-detectable.",
+        body: "A ChronosTag is attached to: every Pearl at creation, every SkipEblet state change, every Marks transaction, every governance vote, every IP Ledger entry. The tag is an opaque composite value -- its internal structure is intentionally hidden to prevent gaming. You can: compare two tags with compareChronos() (returns -1, 0, or 1), test equality with equalChronos(), and detect drift with detectEtchingDrift() (which hashes the ancestry chain and compares). Chronos tags are what prevent backdating contributions or reordering events. The codegen script (package.json script: codegen:chronos-schema) keeps the schema in sync.",
+        narrator: {
+          mascotId: "denken",
+          role: "host",
+          speechAct: "context",
+          text: "The Chronos tag is the platform's way of saying: we were there. We saw it happen. In that order. No one can rewrite the past by submitting something with an old date.",
+        },
+      },
+      {
+        layer: "deep-dive",
+        headline: "ChronosTag internal structure, compareChronos / equalChronos, codegen pipeline, drift detection.",
+        body: "ChronosTag (chronos-schema.ts): opaque type, internal structure = { wallMs: number, sequence: number, signerHash: string }. The opaque type prevents direct access -- all operations go through the helper functions. compareChronos(a, b): compares wallMs first, then sequence if equal, then signerHash as tiebreaker. Returns -1/0/1. equalChronos(a, b): returns true only if all three fields match. Signer hash: derived from the issuing service's identity key (rotated on each platform deployment). This prevents a rogue service from issuing valid-looking tags. Drift detection: detectEtchingDrift() in provenance.ts takes a chain of ChronosTags and verifies that their order is consistent with the hashEtching ancestry. If any tag is out of order or has an unexpected signerHash, drift is flagged and the chain is quarantined pending Star Chamber review. The codegen script reads the compiled output and produces TypeScript type definitions for consumer services.",
+        narrator: {
+          mascotId: "rabbit",
+          role: "specialist",
+          speechAct: "mechanism",
+          summonLine: "Engineer Rabbit wrote the Chronos schema -- he can explain every field and why it's there.",
+          text: "Three fields. Wall clock for the absolute time. Sequence for within-millisecond ordering. Signer hash to prove which service issued it. You can't fake two out of three. And if you try, drift detection catches it.",
+        },
+      },
+    ],
+    crossRefs: [
+      { type: "cue-card", label: "Ingest Pipeline", ref: "/subsystem/ingest-pipeline" },
+      { type: "cue-card", label: "Substrate / DAG", ref: "/subsystem/substrate-dag" },
+      { type: "paper", label: "Transaction-Anchored Economics", ref: "/economics/transaction-anchored" },
+      { type: "paper", label: "Proof of Transaction", ref: "/economics/proof-of-transaction" },
+    ],
+    tags: ["technical", "provenance", "security"],
+  },
+
+  // -----------------------------------------------------------------------
+  // 17. Golden Keys
+  // -----------------------------------------------------------------------
+  {
+    id: "golden-keys",
+    subsystemNumber: 17,
+    subsystem: "Golden Keys",
+    host: "lrh",
+    province: "southern",
+    specialist: "squirrel",
+    depths: [
+      {
+        layer: "skipping-stones",
+        headline: "Keys unlock rides. Rides teach you everything. You earn keys by learning.",
+        body: "Golden Keys are earned by completing learning activities -- Cue Cards, Wildfire runs, Cephas tutorials. You spend them to unlock Magic Carpet Rides through the platform. The more you learn, the more of the platform opens up.",
+        narrator: {
+          mascotId: "lrh",
+          role: "host",
+          speechAct: "metaphor",
+          text: "There's a kind of house where every room has a key, and every key you find opens a room that has another key in it. You can go as deep as you want, as long as you keep learning what each room teaches you. That's the Golden Key system.",
+        },
+      },
+      {
+        layer: "wading-in",
+        headline: "5 keys per Wildfire node (Magic Carpet unlock). Keys accumulate per member. Spent to activate tour modes.",
+        body: "Golden Keys accumulate in a per-member registry. Earning: completing a Cue Card = 10 keys, completing a Wildfire run node with a learningLink = 5 keys, completing an entire Wildfire run = bonus based on run difficulty (30 beginner, 50 intermediate, 75 advanced, 100 expert). Spending: Magic Carpet Ride (auto-navigate mode) for a Wildfire run requires 5 keys per stop. A 6-stop run = 30 keys. A 9-stop run = 45 keys. Red Carpet Rider members get full access to all stop modes without spending keys. Keys do not expire. They do not convert to Credits or Marks. They are learning indicators -- not currency.",
+        narrator: {
+          mascotId: "lrh",
+          role: "host",
+          speechAct: "context",
+          text: "We wanted the most curious, engaged members to be able to move the fastest. Golden Keys give explorers a real reward for exploration -- not a badge, not a title, but actual expanded access to the platform's tour modes.",
+        },
+      },
+      {
+        layer: "deep-dive",
+        headline: "Key registry, earning events, spending triggers, GoldenKeyQuest page, Wildfire integration.",
+        body: "Key registry: persisted per member in Supabase, incremented by earning events (via beaconPoints.ts extendScenarioPersistence). Earning events: CUE_CARD_EARNED (+10), WILDFIRE_NODE_LEARNING_COMPLETE (+5), WILDFIRE_RUN_COMPLETE (+difficulty bonus), TOUR_STOP_COMPLETE (+goldenKeysReward field from BeaconNode). Spending: triggered when member activates Magic Carpet mode on a WildfireRun. Spending check: user.goldenKeys >= run.goldenKeysRequired. If check fails, Magic Carpet is locked (shown with Lock icon, count displayed). GoldenKeyQuest.tsx (~797 lines): the front-end page for viewing key balance, earning opportunities, and spending history. WildfireBeaconRun.tsx: BeaconNode.goldenKeysReward field sets the per-node key reward. WildfireRun.goldenKeysRequired field sets the total cost to unlock Magic Carpet.",
+        narrator: {
+          mascotId: "squirrel",
+          role: "specialist",
+          speechAct: "abundance",
+          summonLine: "Harvest Squirrel knows everything about accumulating -- she can explain how the keys compound.",
+          text: "Keys don't expire. They pile up. The member who learns the most gets to explore the most. And the more they explore, the more they learn. That feedback loop -- earn by learning, spend to learn more -- is exactly the kind of abundance mechanic that makes long-term members more valuable over time.",
+        },
+      },
+    ],
+    crossRefs: [
+      { type: "cue-card", label: "Cue Cards", ref: "/subsystem/cue-cards" },
+      { type: "wildfire-run", label: "Golden Key Hunt", ref: "/wildfire-tour?run=golden-key-hunt" },
+      { type: "paper", label: "Ghost Credits and Demand Validation", ref: "/economics/ghost-credits" },
+    ],
+    tags: ["learning", "onboarding", "community", "gamification"],
+  },
+
+  // -----------------------------------------------------------------------
+  // 18. Three-Currency (Credits / Marks / Joules) + the Substitution
+  // -----------------------------------------------------------------------
+  {
+    id: "three-currency",
+    subsystemNumber: 18,
+    subsystem: "Three-Currency System (Credits / Marks / Joules) + the Substitution",
+    host: "lrh",
+    province: "southern",
+    specialist: "pig",
+    depths: [
+      {
+        layer: "skipping-stones",
+        headline: "Three gears, each for different motion. Credits for work done. Marks for participation. Joules for the long game.",
+        body: "The platform has three internal currencies. Credits compensate completed work. Marks recognize participation (they are not equity, not returns -- participation tokens only). Joules store long-term cooperative value. They work together but serve different purposes.",
+        narrator: {
+          mascotId: "lrh",
+          role: "host",
+          speechAct: "metaphor",
+          text: "A car has three pedals. The gas moves you forward. The brake controls the motion. The clutch lets you change gears without destroying the engine. Use the wrong pedal for the wrong job and you break things. Credits, Marks, Joules -- same principle. Each one has its lane.",
+        },
+      },
+      {
+        layer: "wading-in",
+        headline: "Credits = compensation, Marks = participation tokens (not equity), Joules = long-term store of value.",
+        body: "Credits: earned by completing bounties and delivering work. Redeemable for real-money equivalent via Stripe payout. Denominated in USD equivalent. Marks: awarded for participation -- voting, staking, attending tours, completing Cue Cards. Important: Marks are participation tokens. They are not investment instruments, they do not represent equity in the cooperative, and they do not promise any financial return. Marks enable platform actions (Pudding staking, governance weighting) but have no external exchange value. Joules: long-term energy storage. Accumulated by sustained platform participation over time. Joules can be substituted for Credits at a locked ratio (Pawn-gated) for specific platform transactions. This is the Substitution -- a defined conversion pathway that requires Pawn-gate approval.",
+        narrator: {
+          mascotId: "lrh",
+          role: "host",
+          speechAct: "context",
+          text: "We use three currencies because one currency can't do all three jobs without becoming something it shouldn't be. Marks especially -- if Marks had exchange value, they would become an investment product and the SEC would rightly come knocking. They don't, because they were designed not to.",
+        },
+      },
+      {
+        layer: "deep-dive",
+        headline: "Securities-clean design, Substitution mechanics, Joule accumulation rate, Pawn-gate requirements.",
+        body: "Securities-clean framing (critical): Marks pass the 'participation token' test: (1) no expectation of profit from others' efforts, (2) no exchange mechanism to external currency, (3) no stated or implied return. Marks can only be used for platform actions (Pudding staking, governance weight, Badge eligibility). They cannot be sold, transferred for value, or exchanged for Credits or dollars. The Substitution (Joules -> Credits): Joules accumulated over 12+ months of continuous membership can be substituted for Credits at a locked ratio (1 Joule = 0.01 Credits, Pawn-gated). Pawn-gate requirements: account in good standing, 12 months tenure, Star Chamber approval for Substitutions above 1,000 Credits. Joule accumulation: passive, 1 Joule per day of active membership. Active = at least one platform action in the preceding 30 days. Joule decay: if membership lapses, Joules enter a 90-day grace period, then decay at 10%/month.",
+        narrator: {
+          mascotId: "pig",
+          role: "specialist",
+          speechAct: "math",
+          summonLine: "Banker Pig is the right one to walk you through the securities-clean design -- the numbers matter here.",
+          text: "Marks are participation. Joules are patience rewarded. Credits are work compensated. The Substitution converts patience into compensation, through a locked ratio, through a gate. No shortcuts, no speculation. The math is clean because the design was clean from the start.",
+        },
+      },
+    ],
+    crossRefs: [
+      { type: "cue-card", label: "Economics: 83.3% + Cost+20%", ref: "/subsystem/economics-participation" },
+      { type: "cue-card", label: "Puddings", ref: "/subsystem/puddings" },
+      { type: "paper", label: "Three-Gear Currency (academic)", ref: "/economics/three-gear-currency" },
+      { type: "paper", label: "One-Way Valve Decoupling", ref: "/economics/one-way-valve" },
+      { type: "paper", label: "The Margin Economics of Interdependence", ref: "/economics/margin-economics-interdependence" },
+      { type: "paper", label: "HIVI -- Historical Influence Value Index", ref: "/economics/hivi" },
+    ],
+    tags: ["economics", "currency", "legal", "securities-clean"],
+  },
+
+  // -----------------------------------------------------------------------
+  // 19. Economics: 83.3% Participation + Cost+20% (worked example $500 -> $416.67)
+  // -----------------------------------------------------------------------
+  {
+    id: "economics-participation",
+    subsystemNumber: 19,
+    subsystem: "Economics: 83.3% Participation + Cost+20%",
+    host: "lrh",
+    province: "southern",
+    specialist: "pig",
+    depths: [
+      {
+        layer: "skipping-stones",
+        headline: "Eighty-three cents of every dollar goes to the people doing the work. That's not a goal -- it's a lock.",
+        body: "83.3% of platform revenue flows to participating creators and contributors. 16.67% stays as cooperative overhead (operations, legal fund, Defense Klaus, team). Cost+20% sets the floor on all prices. These numbers don't change.",
+        narrator: {
+          mascotId: "lrh",
+          role: "host",
+          speechAct: "metaphor",
+          text: "Most platforms keep 30%. Some keep 50%. We keep 16.67%. That's not charity. That's what it takes to run the infrastructure, the legal coverage, and the Furnace, and leave 83.3% for the people who actually made the thing.",
+        },
+      },
+      {
+        layer: "wading-in",
+        headline: "83.3% to creator/contributor pool, 16.67% cooperative overhead. Cost+20% pricing floor prevents extraction.",
+        body: "Every transaction on the platform splits as follows: 83.3% flows to the creator/contributor pool for that transaction. 16.67% stays as cooperative overhead. The 83.3% is further subdivided based on the transaction type (primary creator, collaborators, initiative fund) -- but the total creator pool never drops below 83.3%. Cost+20% is the platform's minimum pricing rule: if the cost to produce a good or service is $X, the minimum price is $1.20X. No one can price below their cost plus 20%. This prevents dumping, prevents race-to-the-bottom pricing, and ensures that every economic actor on the platform can sustain themselves.",
+        narrator: {
+          mascotId: "lrh",
+          role: "host",
+          speechAct: "context",
+          text: "These two numbers -- 83.3% and Cost+20% -- are the economic constitution of the platform. They are not aspirational and they are not negotiable. They are operational. Every checkout, every bounty payout, every Medallion sale, every licensing transaction runs through them. And because they are encoded in the operating agreement's DNA Lock, no board vote, no executive decision, and no investor term sheet can change them. The constitution is the math. The math is the protection. If you ever wonder whether the platform will 'pivot away from the creator-first model' -- the answer is in the denominator: 5/6 goes to creators. Always.",
+        },
+      },
+      {
+        layer: "deep-dive",
+        headline: "Worked example: $500 transaction -> $83.33 overhead, $416.67 creator pool. Cost+20% formula.",
+        body: "Worked example ($500 transaction): Total = $500.00. Platform overhead = $500 * 0.1667 = $83.33. Creator/contributor pool = $500 * 0.833 = $416.67. Pool distribution (standard bounty): Primary creator = $416.67 * 0.70 = $291.67. Collaborator pool = $416.67 * 0.20 = $83.33. Initiative fund = $416.67 * 0.10 = $41.67. Cost+20% formula: if ProductionCost = C, then MinimumPrice = C * 1.20. Example: physical Medallion with $1.10 production cost = $1.32 minimum. A bounty with $200 estimated work cost = $240 minimum posting. Why 83.3% and not 80%? Great Owl explains: 83.3% = 5/6. The sixth part stays with the cooperative. Five parts go to the workers. That fraction was chosen because it is clean, clear, and non-negotiable -- 80% would invite negotiation to 79%, then 75%.",
+        narrator: {
+          mascotId: "pig",
+          role: "specialist",
+          speechAct: "math",
+          summonLine: "Banker Pig is going to run the full worked example -- bring a pencil.",
+          text: "Walk through the $500 transaction with me. Total = $500.00. Platform overhead = $500 times 0.1667 = $83.33. This covers infrastructure, Defense Klaus legal fund, the Furnace, Star Chamber governance, and the Gleaner's Corner. Creator pool = $500 times 0.833 = $416.67. Of that: primary creator gets $416.67 times 0.70 = $291.67. Collaborators split $416.67 times 0.20 = $83.33. Initiative fund gets $416.67 times 0.10 = $41.67. Every decimal is pre-computed and locked. There is no negotiation, no sliding scale, no 'platform takes more this month because infrastructure costs went up.' Why 83.3% and not 80%? Because 83.3% is 5/6 -- a fraction. Fractions invite rounding arguments. 'We're close enough at 82%.' 83.3% stated as a fraction makes the intent visible: five parts to the people, one part to the platform. That is the deal. That is the whole deal.",
+        },
+      },
+    ],
+    crossRefs: [
+      { type: "cue-card", label: "Three-Currency System", ref: "/subsystem/three-currency" },
+      { type: "cue-card", label: "Medallion System", ref: "/subsystem/medallion-system" },
+      { type: "paper", label: "Economic Laws", ref: "/economics" },
+      { type: "paper", label: "Anti-Extractive Derivative (Cost+20%)", ref: "/economics/anti-extractive" },
+      { type: "paper", label: "The Margin Economics of Interdependence", ref: "/economics/margin-economics-interdependence" },
+    ],
+    tags: ["economics", "math", "legal", "pricing"],
+  },
+
+  // -----------------------------------------------------------------------
+  // 20. HEOHO + Bounty Posters + Stewards Guild
+  // -----------------------------------------------------------------------
+  {
+    id: "heoho-bounty-stewards",
+    subsystemNumber: 20,
+    subsystem: "HEOHO + Bounty Posters + Stewards Guild",
+    host: "lrh",
+    province: "southern",
+    specialist: "bear",
+    depths: [
+      {
+        layer: "skipping-stones",
+        headline: "Help Each Other Help Out. Post what you need. Find who can do it. Pay them fairly.",
+        body: "HEOHO is the cooperative work engine. Bounty Posters are the structured job listings. Stewards Guild is the governance body ensuring fair terms. Together they are how the cooperative actually gets things done.",
+        narrator: {
+          mascotId: "lrh",
+          role: "host",
+          speechAct: "metaphor",
+          text: "A barn raising. You announce the barn. The community shows up with tools. Someone verifies the beams are straight. Everyone gets fed. Nobody gets exploited. That's the HEOHO model -- Help Each Other Help Out.",
+        },
+      },
+      {
+        layer: "wading-in",
+        headline: "HEOHO = cooperative work layer. Bounty Poster = structured job listing with IP-Ledger + Brand Stamp. Stewards Guild = arbitration.",
+        body: "HEOHO (Help Each Other Help Out) is the operating principle behind the bounty system. Bounty Posters are structured listings that include: work description, required skills, timeline, compensation (Credits, at Cost+20% minimum), IP terms (who owns what after delivery, always via IP Ledger entry), and a Brand Stamp on the output. The Soccerball ID is issued to the Bounty Poster itself at creation -- so the bounty is tracked in the IP Ledger from the moment it's posted. The Stewards Guild is the cooperative governance body that reviews disputed bounties, sets fair minimum rates, and arbitrates disputes between poster and claimant.",
+        narrator: {
+          mascotId: "lrh",
+          role: "host",
+          speechAct: "context",
+          text: "We built the Bounty Poster system so that creative and technical work could be commissioned fairly. The IP terms are in the listing. The Cost+20% floor is enforced. The Stewards Guild is the backstop when something goes wrong. No surprises.",
+        },
+      },
+      {
+        layer: "deep-dive",
+        headline: "Bounty Poster schema, IP-Ledger entry at creation, Cost+20% enforcement, Stewards Guild arbitration flow.",
+        body: "Bounty Poster schema: { id: UUID, soccerballId: string, title: string, description: string, requiredSkills: string[], compensationCredits: number, costFloor: number (Cost+20% minimum), ipTerms: { ownershipPostDelivery: 'poster' | 'claimant' | 'shared', licenseType: string }, brandStamp: BrandStamp, status: 'open' | 'claimed' | 'delivered' | 'disputed' | 'closed' }. IP Ledger entry at creation: when a Bounty Poster is created, a provisional IP Ledger entry is written with the poster's SID -- so the work intention is recorded before delivery. Post-delivery: the ledger entry is updated with the claimant's SID and the output Pearl hash. Stewards Guild arbitration: triggered when status = 'disputed'. Arbitration panel = 3 Stewards assigned randomly from the active Stewards Guild roster. Resolution timeline: 14 days. Possible outcomes: deliver-as-submitted, revise-and-resubmit, cancel-with-partial-payment, cancel-with-full-payment. BountyPosterGenerator.tsx (scope 26) provides a 5-class UI for all Bounty Poster types.",
+        narrator: {
+          mascotId: "bear",
+          role: "specialist",
+          speechAct: "community",
+          summonLine: "Den Bear understands the social contract behind the bounty system -- let him explain how the community side works.",
+          text: "The Bounty Poster is a social contract, not just a job listing. The IP terms are in the poster because we learned early that 'we'll figure it out later' is how collaborations fall apart. Write it down. Stamp it. Everyone knows where they stand before the work begins.",
+        },
+      },
+    ],
+    crossRefs: [
+      { type: "cue-card", label: "IP Ledger + Brand Stamp", ref: "/subsystem/ip-ledger-brand-stamp" },
+      { type: "cue-card", label: "Economics: 83.3% + Cost+20%", ref: "/subsystem/economics-participation" },
+      { type: "wildfire-run", label: "Get a Job Run", ref: "/wildfire-tour?run=get-a-job" },
+      { type: "paper", label: "Generosity for Potential", ref: "/economics/boaz-generosity" },
+      { type: "paper", label: "How to Pay Your Rent with Liana Banyan", ref: "/economics/pay-your-rent" },
+    ],
+    tags: ["community", "work", "economics", "governance"],
+  },
+
+  // -----------------------------------------------------------------------
+  // 21. Novaculi / Yoke + the Chess Crew
+  // -----------------------------------------------------------------------
+  {
+    id: "novaculi-yoke",
+    subsystemNumber: 21,
+    subsystem: "Novaculi / Yoke + the Chess Crew (Bishop / Knight / Pawn / Rook / Red Queen)",
+    host: "denken",
+    province: "northern",
+    specialist: "rabbit",
+    depths: [
+      {
+        layer: "skipping-stones",
+        headline: "The blades of the platform. Each chess piece cuts a different corner. Together they build the cathedral.",
+        body: "Novaculi is the execution layer (Latin: the blades). Yoke is the bridge that links parallel work streams. The Chess Crew are the specialized AI operators: Bishop designs, Knight executes, Pawn verifies, Rook structures, Red Queen strategizes.",
+        narrator: {
+          mascotId: "denken",
+          role: "host",
+          speechAct: "metaphor",
+          text: "A surgical team. The surgeon doesn't also sterilize the instruments and also take the patient's vitals. Each role is precise. Each hand knows its job. The Yoke is what makes all five hands feel like one coordinated set of movements.",
+        },
+      },
+      {
+        layer: "wading-in",
+        headline: "NOVACULI parallel-batch doctrine: independent work batched. Yoke bridge maintains cross-surface coherence.",
+        body: "Novaculi doctrine: all independent work runs in parallel batches (no trickle). When Knight and Bishop run parallel tasks, the Yoke bridge (CrossSurfaceCoherenceHub) maintains coherence -- both operators can write to the Substrate without conflicting. Chess Crew roles: Bishop = design and architecture decisions. Knight = implementation and execution. Pawn = testing and verification (runs the test suite, verifies Yoke bridge). Rook = structural scaffolding (routes, data models, schemas). Red Queen = strategy and escalation (flags blockers, coordinates across all pieces). Each piece operates in its domain and hands off via the Yoke JSON anchor.",
+        narrator: {
+          mascotId: "denken",
+          role: "host",
+          speechAct: "context",
+          text: "The chess crew is not just a metaphor. These are the actual operational roles that ship the platform. The Yoke bridge is real code. The parallel-batch doctrine is the reason 30 scopes can be delivered in one session instead of 30 sequential sessions.",
+        },
+      },
+      {
+        layer: "deep-dive",
+        headline: "Yoke bridge architecture: CrossSurfaceCoherenceHub, JSON anchor handoff, parallel-batch protocol.",
+        body: "Yoke bridge files: lib/skip-eblets/yoke-bridge/index.ts (re-exports), yoke-bridge/yoke-handoff.ts (JSON anchor handoff v1), yoke-bridge/cross-surface-coherence.ts (CrossSurfaceCoherenceHub). JSON anchor handoff: when Knight completes a task, it writes a JSON anchor to the Yoke bridge -- a serialized state snapshot (completed task IDs, modified files, new SIDs). Bishop reads the anchor before starting design work that touches the same surface. CrossSurfaceCoherenceHub: tracks active cross-surface sessions (chess-piece-id -> surface-id mapping). Prevents two pieces from writing to the same SkipEblet chain simultaneously. Test: yoke-bridge.test.ts (2/2 passing, confirmed green). NOVACULI parallel-batch: before starting a batch, identify all independent tasks. Tasks with no shared file dependencies run in parallel. Tasks with dependencies chain. The result: N-way speedup on independent scopes. Chess Crew brief acronym usage: when a brief says 'per NOVACULI doctrine,' it means: batch independently, chain dependencies, never trickle.",
+        narrator: {
+          mascotId: "rabbit",
+          role: "specialist",
+          speechAct: "mechanism",
+          summonLine: "Engineer Rabbit built the Yoke bridge -- he can trace every call from anchor write to coherence check.",
+          text: "JSON anchor in. Coherence check out. Two tests passing. The Yoke bridge is not experimental -- it is load-bearing. When Bishop and Knight run in parallel, the Yoke is what makes sure their work lands clean. That's why it ships with a test suite.",
+        },
+      },
+    ],
+    crossRefs: [
+      { type: "cue-card", label: "Mesh / Frontier", ref: "/subsystem/mesh-frontier" },
+      { type: "cue-card", label: "Contingency Operators", ref: "/subsystem/contingency-operators" },
+      { type: "paper", label: "The Band Strategy", ref: "/economics/band-strategy" },
+      { type: "paper", label: "Marks-Based Democratic Participation", ref: "/economics/marks-democracy" },
+    ],
+    tags: ["technical", "architecture", "operations", "ai-crew"],
+  },
+
+  // -----------------------------------------------------------------------
+  // 22. The Substrace Theorem
+  // -----------------------------------------------------------------------
+  {
+    id: "substrace-theorem",
+    subsystemNumber: 22,
+    subsystem: "The Substrace Theorem",
+    host: "denken",
+    province: "northern",
+    specialist: "owl",
+    depths: [
+      {
+        layer: "skipping-stones",
+        headline: "If you trace every contribution back to its source, the whole structure proves itself.",
+        body: "The Substrace Theorem is the platform's founding mathematical claim: a cooperative substrate of N authenticated contributions creates provably more value than N independent contributions. Verified by 4 independent proofs.",
+        narrator: {
+          mascotId: "denken",
+          role: "host",
+          speechAct: "metaphor",
+          text: "A cathedral is not just 10,000 stones. It is 10,000 stones, each cut to fit its neighbors, each load-bearing because the others bear load too. Remove one stone from a wall and the arch holds. Remove the arch and the nave falls. The Substrace Theorem is the proof that the cathedral is worth building.",
+        },
+      },
+      {
+        layer: "wading-in",
+        headline: "V(cooperative) > sum(V(individual)) for N > 1 with authenticated cross-contribution links.",
+        body: "The Substrace Theorem states: for a cooperative with N authenticated contributions, the value of the cooperative V(N) is strictly greater than the sum of the individual contribution values for any N greater than 1, provided the contributions are cross-linked via the Substrate DAG. The proof depends on authenticated links -- contributions that are provably connected (derived-from, collaborated-on, voted-on) generate network effects that unlinked contributions do not. This is the Caithedral Effect: the cooperative is worth more than the sum of its parts because the parts are connected. Four independent proofs verify this claim (UUIDs: b90073d3 / 405808f5 / dbfc78c6 / 5f4b9e84), accessible at /proofs/.",
+        narrator: {
+          mascotId: "denken",
+          role: "host",
+          speechAct: "context",
+          text: "The Substrace Theorem is why the platform was worth building -- not as a nice idea, but as a mathematical proof. Think about what it actually claims: a cooperative of N authenticated contributions is worth strictly more than those same N contributions made in isolation. If that is true, then joining is not a sacrifice. It is an upgrade. Every member who contributes to the Substrate adds to the authenticated edge count E -- and the value formula grows with every new edge. When we ask members to contribute, we are not asking them to trust us. We are asking them to look at V(N) = N(N-1)/2 + 1 and decide for themselves whether they want to be node number 501 or wait until node 5,001.",
+        },
+      },
+      {
+        layer: "deep-dive",
+        headline: "Formal statement, Caithedral Effect benchmark, four verification proofs, network-value formula.",
+        body: "Formal statement: Let C = a cooperative with N authenticated contributions {c_1, ..., c_N}. Let G = the Substrate DAG with E authenticated edges between contributions. Then V(C) = V_sum(individual) + V_network(E), where V_network(E) = sum over all edges e in E of w(e) * V_edge_type. V_edge_type weights: DERIVED_FROM = 0.8 * V(source), COLLABORATED_ON = 0.5 * (V(a) + V(b)), VOTED_ON = 0.1 * V(voted). V(C) > sum(V(c_i)) iff |E| > 0 and all edges are authenticated. Caithedral Effect benchmark: measured at /proofs/ via four independent grader runs (b90073d3 = Opus cold, 405808f5 = Opus hot, dbfc78c6 = Haiku hot, 5f4b9e84 = conductor auto). All four runs confirm V(C) > sum(V(c_i)) at the 83.3% confidence threshold -- which is not coincidental. The same 83.3% that governs economic distribution also governs the theorem's confidence level.",
+        narrator: {
+          mascotId: "owl",
+          role: "specialist",
+          speechAct: "why",
+          summonLine: "The Great Owl has waited a long time to explain the Substrace Theorem -- this is the WHY behind the whole platform.",
+          text: "The theorem says: authenticated connections create surplus value that isolated contributions cannot. The word 'authenticated' is doing heavy lifting here -- a connection that can be verified is worth a DERIVED_FROM edge weight of 0.8 times the source value. A collaboration is worth 0.5 times the sum of both parties' values. A vote is worth 0.1 times the voted item's value. These weights are not arbitrary. They reflect how much of the source's value the connection genuinely transfers. Add them all up across E edges and V(cooperative) is strictly greater than the sum of V(individual) for any N greater than 1. The four independent grader runs at /proofs/ confirm this at the 83.3% confidence threshold. That threshold is not a coincidence -- it is the same fraction that governs compensation. The theorem is not separate from the economics. It IS the economics, expressed as proof.",
+        },
+      },
+    ],
+    crossRefs: [
+      { type: "cue-card", label: "Mesh / Frontier", ref: "/subsystem/mesh-frontier" },
+      { type: "cue-card", label: "Substrate / DAG", ref: "/subsystem/substrate-dag" },
+      { type: "paper", label: "Verification Proofs", ref: "/proofs/" },
+      { type: "paper", label: "The Margin Economics of Interdependence", ref: "/economics/margin-economics-interdependence" },
+    ],
+    tags: ["theory", "economics", "proof", "architecture"],
+  },
+];
+
+// =========================================================================
+// LOOKUP HELPERS
+// =========================================================================
+
+/** Get a subsystem explainer by its stable id. Returns undefined if not found. */
+export function getExplainer(id: string): SubsystemExplainer | undefined {
+  return EXPLAINER_CORPUS.find((e) => e.id === id);
+}
+
+/** Get a subsystem explainer by its 1-based subsystem number. */
+export function getExplainerByNumber(n: number): SubsystemExplainer | undefined {
+  return EXPLAINER_CORPUS.find((e) => e.subsystemNumber === n);
+}
+
+/** Get the DepthContent for a specific layer within an explainer. */
+export function getDepthContent(
+  explainer: SubsystemExplainer,
+  layer: DepthLayer
+): DepthContent {
+  const found = explainer.depths.find((d) => d.layer === layer);
+  if (!found) throw new Error(`Depth layer ${layer} not found for ${explainer.id}`);
+  return found;
+}
+
+/** All explainers for a given host (province). */
+export function getExplainersByHost(host: "lrh" | "denken"): SubsystemExplainer[] {
+  return EXPLAINER_CORPUS.filter((e) => e.host === host);
+}
+
+/** All explainers that a given specialist narrates at Deep Dive. */
+export function getExplainersBySpecialist(mascotId: string): SubsystemExplainer[] {
+  return EXPLAINER_CORPUS.filter((e) => e.specialist === mascotId);
+}
+
+/** All explainers filtered by tag. */
+export function getExplainersByTag(tag: string): SubsystemExplainer[] {
+  return EXPLAINER_CORPUS.filter((e) => e.tags?.includes(tag));
+}
+
+// =========================================================================
+// CORPUS MANIFEST (for documentation + How-It-All-Works page header)
+// =========================================================================
+
+export interface CorpusManifestEntry {
+  number: number;
+  id: string;
+  subsystem: string;
+  host: "lrh" | "denken";
+  province: "southern" | "northern";
+  specialist: string;
+  tags: string[];
+}
+
+export const CORPUS_MANIFEST: CorpusManifestEntry[] = EXPLAINER_CORPUS.map((e) => ({
+  number: e.subsystemNumber,
+  id: e.id,
+  subsystem: e.subsystem,
+  host: e.host,
+  province: e.province,
+  specialist: e.specialist,
+  tags: e.tags ?? [],
+}));
+
+// =========================================================================
+// RENDERER REGISTRY (wires corpus into platform surfaces)
+// =========================================================================
+
+export const RENDERER_PLUGINS: RendererPlugin[] = [
+  {
+    id: "how-it-all-works",
+    name: "How It All Works",
+    description: "Full-page subsystem explainer browser with depth switching and narrator portraits.",
+    supportedDepths: ["skipping-stones", "wading-in", "deep-dive"],
+    route: "/how-it-all-works",
+  },
+  {
+    id: "xray-overlay",
+    name: "X-Ray Mode",
+    description: "Inline overlay panels on annotated page elements, showing Skipping Stones depth by default.",
+    supportedDepths: ["skipping-stones", "wading-in"],
+    route: undefined,
+  },
+  {
+    id: "wildfire-tours",
+    name: "Wildfire Tours",
+    description: "Corpus-to-WildfireRun adapter: one tour per subsystem cluster, auto-navigating.",
+    supportedDepths: ["skipping-stones", "wading-in"],
+    route: "/wildfire-tour",
+  },
+  {
+    id: "css-feedback-overlay",
+    name: "Design Feedback Overlay",
+    description: "CSS/design annotation overlay reusing the existing overlay system, Deep Dive depth.",
+    supportedDepths: ["deep-dive"],
+    route: undefined,
+  },
+];

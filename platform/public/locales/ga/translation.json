@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.866Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Abair cara agus isteach.",
+    "description": "Tá Liana Banyan tógtha le bheith oscailte do gach teanga. Tá duais amháin aistriúcháin ag gach teanga oscailte.",
+    "languages": "teangacha",
+    "openBounties": "duaisanna oscailte",
+    "marksAwarded": "Marks bronnta (comharthaí rannpháirtíochta)",
+    "provisional": "Sealadach:",
+    "provisionalNotice": "Tá liosta na dteangacha agus rátaí Marks sealadach. Is comharthaí rannpháirtíochta iad Marks, ní scaireanna.",
+    "bountyOpen": "Duais oscailte",
+    "claimed": "Éilíodh",
+    "complete": "Críochnaithe",
+    "translationBountyTitle": "Duais Aistriúcháin",
+    "bountyDescription": "Aistrigh Liana Banyan go {{language}}. Tuilleamh {{marks}} Marks.",
+    "scopeWelcome": "Scáileáin Fáilte / Domhan na Taibhsí",
+    "scopeCueCards": "Sraith Cárta Leide Bunúsaigh",
+    "scopeNavigation": "Lipéid nascleanúna agus teachtaireachtaí earráide",
+    "scopeWildfire": "Wildfire Beacon Run: Faigh Jab",
+    "claimBounty": "Éiligh an Duais Aistriúcháin seo",
+    "baseLanguage": "Teanga bhunúsach -- níl gá le duais.",
+    "claimedBy": "D'éiligh @{{handle}} an duais -- ar siúl.",
+    "marksProvisional": "{{marks}} Marks (sealadach)",
+    "speakFounderTitle": "Guth an Bhunaitheora: Cén Fáth na Focail Seo",
+    "speakFounderDesc": "Ainmníodh gach téarma ar an ardán seo ar chúis. Bunús na 26 ainm is tábhachtaí.",
+    "howBountiesWork": "Conas a Oibríonn Duaisanna Aistriúcháin",
+    "step1Title": "Éiligh an Duais",
+    "step1Body": "Oscail Duais Aistriúcháin ó chlár Help Wanted.",
+    "step2Title": "Aistrigh agus Cuir Isteach",
+    "step2Body": "Aistrigh gach sreabh riachtanach. Cuir isteach trí shruth Bounty Poster.",
+    "step3Title": "Tuilleamh Marks",
+    "step3Body": "Tar éis glacadh, gheobhaidh tú Marks agus déanfar thú a chlárú sa IP Ledger.",
+    "hide": "folaigh",
+    "why": "cén fáth?",
+    "subtitle": "\"Abair cara, agus tar isteach.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Athraigh teanga",
+    "selectLanguage": "Roghnaigh teanga",
+    "quickEnglish": "Béarla",
+    "tip": "Úsáid pasfhocail i dteangacha éagsúla ag Doras Durin chun eispéiris uathúla a oscailt!"
+  }
+}

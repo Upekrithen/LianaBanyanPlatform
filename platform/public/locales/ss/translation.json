@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.872Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Tsini umngani, ungenele.",
+    "description": "I-Liana Banyan yakhelwe ukuvulwa kululimi lonkhe. Lulimi ngalunye lolukhula lunebhizi lokuhumusha linye.",
+    "languages": "tilulwimi",
+    "openBounties": "tibhizi letivuliwe",
+    "marksAwarded": "Marks anikwe (ematokeni ekubamba inyanga)",
+    "provisional": "Kwesikhashana:",
+    "provisionalNotice": "Uhlu lwetilulwimi namazinga emaMark angesikashana. Marks ematokeni ekubamba inyanga, hhayi temali.",
+    "bountyOpen": "Ibhizi livuliwe",
+    "claimed": "Kukhanyelwe",
+    "complete": "Kuphelele",
+    "translationBountyTitle": "Ibhizi lokuHumusha",
+    "bountyDescription": "Humusha i-Liana Banyan ngelulwimi lwe-{{language}}. Thola {{marks}} Marks.",
+    "scopeWelcome": "Ama-screen Wamukela / Inhlabathi Yemimoya",
+    "scopeCueCards": "Isampula se-Cue Card Esiyinhloko",
+    "scopeNavigation": "Izilebula zokukhomba kanye nemilayezo yamaphoswa",
+    "scopeWildfire": "Wildfire Beacon Run: Thola Umsebenzi",
+    "claimBounty": "Khanyela le-Bhizi lokuHumusha",
+    "baseLanguage": "Lulwimi lwesisekelo -- akudingeki bhizi.",
+    "claimedBy": "@{{handle}} wakhanyela -- uyaqhubeka.",
+    "marksProvisional": "{{marks}} Marks (kwesikhashana)",
+    "speakFounderTitle": "Lizwi loMsunguli: Kungani Lamamagama",
+    "speakFounderDesc": "Igama ngalinye kule platform lanikezwa ibizo ngezizathu. Imvelaphi yamagama angama-26 abalulekile.",
+    "howBountiesWork": "Tibhizi TokuHumusha Timsebenti Kanjani",
+    "step1Title": "Khanyela Ibhizi",
+    "step1Body": "Vula i-Bhizi lokuHumusha ku-Help Wanted.",
+    "step2Title": "Humusha bese Uthumela",
+    "step2Body": "Humusha tonkhe izichazelo ezidzingekayo. Thumela nge-Bounty Poster.",
+    "step3Title": "Thola Marks",
+    "step3Body": "Uma samukela, uthola Marks futhi urekhodi ku-IP Ledger.",
+    "hide": "fihla",
+    "why": "kungani?",
+    "subtitle": "\"Shono umngani, ungene.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Shintsha lulwimi",
+    "selectLanguage": "Khetha lulwimi",
+    "quickEnglish": "IsiNgisi",
+    "tip": "Sebenzisa amagama aphasiwedhi etilulwimi tehlukene eMnyango kaDurin ukuvula izinto ezikhethekile!"
+  }
+}

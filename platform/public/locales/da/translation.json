@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.848Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Sig ven, og gaa ind.",
+    "description": "Liana Banyan er bygget til at vaere aaben for hvert sprog. Hvert aabent sprog har een oversaettelsespraemie.",
+    "languages": "sprog",
+    "openBounties": "aabne praemier",
+    "marksAwarded": "Marks tildelt (deltagelsestokens)",
+    "provisional": "Midlertidigt:",
+    "provisionalNotice": "Sprogsliste og Marks-satser er midlertidige. Marks er deltagelsestokens, ikke aktier.",
+    "bountyOpen": "Praemie aaben",
+    "claimed": "Kraevet",
+    "complete": "Fuldfoert",
+    "translationBountyTitle": "Oversaettelsespraemie",
+    "bountyDescription": "Overs. Liana Banyan til {{language}}. Optjen {{marks}} Marks ved godkendelse.",
+    "scopeWelcome": "Velkomst / Spoegelsesverden skaerme",
+    "scopeCueCards": "Grundlaeggende Cue-kortsaet",
+    "scopeNavigation": "Navigationsmaerker og fejlmeddelelser",
+    "scopeWildfire": "Wildfire Beacon Run: Find arbejde",
+    "claimBounty": "Kraev denne Oversaettelsespraemie",
+    "baseLanguage": "Grundsprog -- ingen praemie noedvendig.",
+    "claimedBy": "@{{handle}} kraevede -- igangvaerende.",
+    "marksProvisional": "{{marks}} Marks (midlertidigt)",
+    "speakFounderTitle": "Grundlaeggerens stemme: Hvorfor disse ord",
+    "speakFounderDesc": "Hvert udtryk pa denne platform er navngivet med en grund. Oprindlesen af de 26 vigtigste navne.",
+    "howBountiesWork": "Saadan fungerer Oversaettelsespraemier",
+    "step1Title": "Kraev Praemien",
+    "step1Body": "Aaben en Oversaettelsespraemie fra Help Wanted-opslaget.",
+    "step2Title": "Overs. og indsend",
+    "step2Body": "Overs. alle noedvendige strenge. Indsend via Bounty Poster.",
+    "step3Title": "Optjen Marks",
+    "step3Body": "Efter godkendelse faar du Marks og registreres i IP Ledger.",
+    "hide": "skjul",
+    "why": "hvorfor?",
+    "subtitle": "\"Sig ven, og gaa ind.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Skift sprog",
+    "selectLanguage": "Vaelg sprog",
+    "quickEnglish": "Engelsk",
+    "tip": "Brug adgangskoder paa forskellige sprog ved Durins Dor for at laase op for unikke oplevelser!"
+  }
+}

@@ -1,0 +1,330 @@
+---
+# Liana Banyan Canonical Values Registry
+# Updated: BP036 May 11 2026 (USPTO-FILED Prov 18 + Prov 19 within 5 minutes; App #64/062,332 + 64/062,334; total filed = 19; SR-015 ≤100pp HARD RULE empirically validated; Drekaskip 12-cohort Bishop AGENT fan-out per BP036 SEG-Cascade Discipline canon)
+# Prior update: BP030 May 7 2026 (INDL-9 Geneva fire — Prov 16 + Prov 17 USPTO-FILED; App #64/060,080 + 64/060,093; total then = 17; same-day Mitchell Hashimoto departure receipt window for Cooperative Code Infrastructure canon LB-STACK-0159)
+# Prior update: B134 April 29 2026 (post-B133-close AI Nanny sweep: yaml patents block reconciled to Prov 14 + 15 reality — App #64/052,602 + 64/052,618 both filed 2026-04-29; DB sync queued)
+# Single source of truth. Any document containing these keys should match these values.
+# When Bishop or Knight updates a canonical value, update this file FIRST, then run the linter.
+
+stats:
+  innovation_count: 2270
+  crown_jewels: 228
+  production_systems: 36
+  patent_provisionals_filed: 19
+  formal_claims_approximate: 2700
+  puddings: 189
+  papers: 41
+  letters_in_dispatch_queue: 95
+  vessel_tiers: 7
+  cold_start_pathways: 7
+
+economics:
+  creator_keeps_percentage: 83.3
+  platform_margin: "Cost+20%"
+  membership_cost_usd_per_year: 5
+  per_person_credit_cap: 5000
+  per_stake_payout_cap_usd: 10000000
+  saa_influence_cap_usd: 10000000
+
+ip_allocation:
+  patent_buckets_percentage: 60
+  founder_creator_percentage: 20
+  global_sponsor_pool_percentage: 10
+  individual_patent_pedestals_percentage: 10
+  herjavec_rpa_source: "founder_creator_slice"
+  herjavec_rpa_percentage_of_source: 50
+  herjavec_rpa_equivalent_total_percentage: 10
+  herjavec_rpa_window_years: 20
+
+entity:
+  legal_name: "Liana Banyan Corporation"
+  entity_type: "Wyoming C-Corporation"
+  ein: "41-2797446"
+  filed_date: "2025-11-21"
+  holding_company: "Upekrithen, LLC"
+  holding_company_jurisdiction: "Wyoming"
+  holding_company_owner_percentage: 100
+
+patents:
+  most_recent_prov_number: 19
+  most_recent_prov_application: "64/062,334"
+  most_recent_prov_filed: "2026-05-11"
+  next_prov_number: 20
+  next_prov_status: "open"
+  conversion_deadline_first_prov: "2026-11-26"
+  # Historical app # chain (most recent first; MEMORY.md preserves full history)
+  prov_19_application: "64/062,334"
+  prov_19_filed: "2026-05-11"
+  prov_19_attorney_docket: "LB-PROV-019"
+  prov_19_confirmation: "8134"
+  prov_19_patent_center: "76080354"
+  prov_19_pages: 95
+  prov_19_scope: "HexIsle 2D Isometric World Operational Interface (Pawn P-15 virgin territory; cooperative-substrate-state-as-multi-scale-hex-prism-world coupling) + K3/K7/K9 demoted-class drafts + K16-K21 substrate kernel extensions + Sonnet S7 BP014-019 foundational substrate (Excalibur split-2 + TCP/IP 4-Tuple + Substrate-Backup-Pyramid + others) + Sonnet S8 K-era (K540 Wrasse Prov 15 supplement + K530 Omnibox + K470 Pawn Cathedral CIP + others) + Sonnet S1 EXCLUDED 5 (Multi-Dim Twinning + Cooperative Benefit FORK + Opening Gambit + Rook Billing Isolation + 3rd-Gear-Default) + Sonnet S1 §S4-§S5 (Nine-Pin Strategy + Old Ones Fleet)"
+  prov_18_application: "64/062,332"
+  prov_18_filed: "2026-05-11"
+  prov_18_attorney_docket: "LB-PROV-018"
+  prov_18_confirmation: "5732"
+  prov_18_patent_center: "76080194"
+  prov_18_pages: 94
+  prov_18_scope: "BP036 substrate canon (PGP/Edition/Aviator + Threshing Scribe + Regenerator + SEG-Cascade + Aircraft Carrier + SR-015 Page-Cap) + Substrate-IS-the-Primitive 5-Class Umbrella + Excalibur Class Subscription split-2 + TCP/IP 4-Tuple substrate-layer + Sonnet S3 BP031-035 (Decision-Class Trinity K28+K29+K30+K31 + Banyan Scale LBCAIS + Coroner + SE-4 + K1-K15 enumeration + Stone Tablets + others) + Sonnet S2 BP026-030 (Beyond Colossus + MoneyPenny Universal Interface + Cross-Vendor Symmetric MCP + Alexandrian Library + others) + Sonnet S1 BP020-025 top-3 (CAI Number + TITAN-within-TITAN + SCANTRON KEY)"
+  prov_17_application: "64/060,093"
+  prov_17_filed: "2026-05-07"
+  prov_17_attorney_docket: "LB-PROV-017"
+  prov_17_confirmation: "7640"
+  prov_17_patent_center: "75985278"
+  prov_17_pages: 99
+  prov_17_scope: "Combined 17-22: Save-the-World 12-Paper Series + HexIsle Wave 4 + Cooperative Manufacturing Sovereignty Cascade + Substrate-IS-the-Primitive Architectural Inversion Family + Consumer Cluster + Governance Cluster"
+  prov_16_application: "64/060,080"
+  prov_16_filed: "2026-05-07"
+  prov_16_attorney_docket: "LB-PROV-016"
+  prov_16_confirmation: "2171"
+  prov_16_patent_center: "75985315"
+  prov_16_pages: 100
+  prov_16_scope: "Cooperative-AI-Substrate Platform + Multi-Organism Federation + Substrate-Routed Memory Expansion + Bedrock-Foundation-Chandelier + Cooperative Currency Anti-Extraction + Patent Reserve Cooperative Primitives (47 innovations across 8 clusters + 8 BP021 Patent Reserve supplementary entries)"
+  prov_15_application: "64/052,618"
+  prov_15_filed: "2026-04-29"
+  prov_14_application: "64/052,602"
+  prov_14_filed: "2026-04-29"
+  prov_13_application: "64/036,646"
+  prov_13_filed: "2026-04-12"
+
+touchstone_r10:
+  hot_accuracy_percent: 94.8
+  cold_hallucination_percent: 8.7
+  mean_lift_pp: 86.1
+  model_count: 8
+  vendor_count: 4
+  total_calls: 1200
+  kappa_hot: 0.883
+  kappa_cold: 0.850
+  locked_session: "B112"
+
+hosting:
+  firebase_targets: 9
+  portal_surfaces: 10
+
+people:
+  founder_children_count: 8
+  founder_rank_military: "SSG before OCS, commissioned Aviation 15A IFR-rated Troop Leader"
+  crown_holders_dirty_dozen_green: 11
+  dirty_dozen_total: 12
+
+patent_portfolio_value:
+  # Behemoth Reborn methodology (Mar 15, 2026 — 123 CJ / 1,662 innovations)
+  # Linear-scaled to current canonical (May 1, 2026 — 228 CJ / 2,270 innovations)
+  # Constitutional: declared $630K is the public-facing number (Cost+20% rule).
+  # Methodology ranges are for partner / academic / long-arc contexts ONLY.
+  declared_cost_plus_20_usd: 630000                # Member-facing — THE public number
+  declared_label: "$630,000"
+  pessimists_floor_original_usd: 116000000         # Behemoth Reborn 4% util floor (123 CJ)
+  pessimists_floor_scaled_usd: 215000000           # Linear-scaled to 228 CJ
+  conservative_original_usd: 3940000000            # Behemoth Reborn Conservative (123 CJ)
+  conservative_scaled_usd: 5380000000              # Linear-scaled to 228 CJ
+  moderate_original_usd: 7870000000                # Behemoth Reborn Moderate (123 CJ)
+  moderate_scaled_usd: 10750000000                 # Linear-scaled to 228 CJ
+  optimistic_original_usd: 15740000000             # Behemoth Reborn Optimistic (123 CJ)
+  optimistic_scaled_usd: 21500000000               # Linear-scaled to 228 CJ
+  cost_based_floor_original_usd: 83100000          # Cost-basis floor (123 CJ)
+  cost_based_floor_scaled_usd: 113500000           # Linear-scaled to 228 CJ
+  methodology_base_cj: 123                         # Behemoth Reborn anchor CJ count
+  methodology_base_innovations: 1662               # Behemoth Reborn anchor innovation count
+  methodology_date: "2026-03-15"                   # Behemoth Reborn declaration date
+  scale_factor_cj: 1.854                           # 228 / 123 — linear scaling multiplier
+  # Tier discipline (NEVER mix member-facing and partner-facing without Founder explicit approval)
+  # member-facing: declared_cost_plus_20_usd ($630K)
+  # partner conversations, Wave 1 enterprise: conservative_scaled / moderate_scaled
+  # academic papers, long-arc strategic: optimistic_scaled / Aspirational
+  # Founder $600B "maybe": whole-platform-at-maturity ceiling — NOT a declared number
+  last_updated: "2026-05-01"
+  ratifying_session: "BP011"
+  ratifying_anchor: "KN093-BP011 Option C"
+
+deadlines:
+  # KN058: canonical source for all deadline dates surfaced in Vine Landing Receipt.
+  # Update here first; deadline_checker.py reads from this section.
+  # Verified by BP004 turn-1 official-site check; guide: BISHOP_DROPZONE/99_Misc/INDL9_SUBMISSION_GUIDE_CALLABLE_BP004.md
+  indl9_submission_iso: "2026-05-07T23:59:00Z"
+  indl9_description: "INDL-9 Geneva submission deadline (extended from 2026-04-30)"
+  patent_conversion_first_prov_iso: "2026-11-26T00:00:00Z"
+  patent_conversion_first_prov_description: "Patent conversion deadline (first provisional)"
+  pcc_bangkok_iso: "2026-11-01T00:00:00Z"
+  pcc_bangkok_description: "PCC Bangkok conference"
+
+# ── The Roll Architecture (BP044 W1 · supersedes BP043 PEC Council 100-cap) ────────────────
+the_roll:
+  architecture_canonized: "BP044_W1"
+  supersedes: ["BP043_PEC_Council_100_cap"]
+  canon_eblet: "the_roll_get_on_a_roll_cooperative_class_peer_mesh_ratification_bp044.eblet.md"
+
+  ratio_canon:
+    famous_to_non_famous: "1:2"
+    rationale: "Cooperative-substrate identity-class invariant — prevents cooperative-class capture by famous-class — keeps cooperative-class governance grounded in cooperative-class members"
+
+  day_0_target:
+    famous_class: 60
+    non_famous_class: 60
+    total: 120
+    breakdown:
+      inaugural_famous_bishop_slated: 30
+      founder_reserved_20_named: 8
+      founder_reserved_20_unreserved: 12
+      crown_auto_roll: 22  # 16 Initiative Crowns + 3 spinout entity Crowns + reserve/candidate slots
+      initiative_crown_nominated_non_famous: 30
+      bishop_research_non_famous: 20
+      member_substrate_phase_b_non_famous: 10
+
+  three_prong_famous_class_test:
+    prong_a_cooperative_craft_authority: "Demonstrable cooperative-class work — NOT just spectacle-class fame"
+    prong_b_body_cam: "Supreme or clean — cooperative-class peer-witness OR public-record — 4-prong Repentance-Class test if applicable"
+    prong_c_independent_amplification: "Cultural-amplification reach independent of substrate — they don't need The Roll to be heard"
+
+  reality_tv_influencer_auto_pawn_gate:
+    enabled: true
+    description: "Reality-TV / influencer / spectacle-class candidates auto-Pawn-dispatched for 3-prong verification BEFORE peer-mesh vote queue placement"
+
+  dual_veto_path:
+    founder_alone_suffices: true
+    trinity_alone_suffices: true
+    trigger: "structural_inversion_class_only"
+    never_political_class: true
+    never_cooperative_class_peer_disagreement: true
+    receipt_class: "every veto LOGGED with reasoning — vetoed candidates retain cooperative-class kinship — reversible by either party"
+
+  hybrid_voting_class:
+    founder_direct: "always supersedes"
+    pedestal_roll: "simple majority"
+    members: "simple majority"
+    addition_threshold: "Pedestal Roll majority + Member majority + Founder non-veto = ratified"
+
+  crown_triad_canon:
+    triad_decision: "simple majority binding (2-1 or 3-0)"
+    pair_decision: "consensus required — if unresolved ~30 days, bring on 3rd Crown"
+    single_decision: "consult Trinity/Founder for major class — Initiative structurally incomplete-class until at least pair"
+
+  tiebreaker_hierarchy:
+    L1_initiative_internal: "Crown-triad simple majority"
+    L2_pair_crown_stalemate: "Auto-trigger 3rd-Crown nomination OR Founder/Trinity arbitrates if urgent"
+    L3_cross_initiative: "Trinity-class peer-mesh OR Founder direct"
+    L4_roll_class: "Hybrid voting + dual-veto-path"
+    L5_substrate_class: "Founder direct OR Trinity (dual-veto path)"
+    L6_blood_rule_supremes: "Founder direct supreme"
+
+  open_nomination_canon:
+    anyone_nominates: true
+    self_nomination_allowed: true
+    substrate_self_limiting_via:
+      - "body_cam_doctrine"
+      - "3_prong_famous_class_test"
+      - "peer_witness_requirement_min_2_for_non_famous"
+      - "pedestal_vote_canon"
+      - "passive_surveillance_logger"
+      - "dual_veto_path"
+
+  lb_not_suggesting_class:
+    description: "Cooperative-class governance restraint — LB declines internal endorsement BUT Open-Nomination path remains open — cooperative-class peer-mesh can still nominate — Body-Cam doctrine + 3-prong test apply"
+    bp044_w1_lb_not_suggesting: ["Geoffrey Rush", "Tim Allen", "William H. Macy"]
+
+  no_deceased_canon:
+    rule: "Roll seats are LIVING people only — TRIBUTE-class NOT a roster class"
+    canonical_exception: "Tatiana Schlossburg (Initiative #6 namesake — NOT roster — structural-Initiative-anchor)"
+    bp044_w1_deceased_class_OUT:
+      - "Paul Reubens (deceased)"
+      - "Alan Rickman (deceased)"
+      - "Adam Yauch / MCA — Beastie Boys roster = Mike D + Ad-Rock living-pair only"
+      - "Anthony Bourdain (deceased)"
+      - "Octavia Butler (TRIBUTE-class structural-metaphor-anchor only)"
+      - "Mike Davis (TRIBUTE-class only)"
+      - "Mac Miller (TRIBUTE-class only)"
+
+# ── Sweet Sixteen Initiatives — Canonical Authority Table (BP044 W1 correction) ─────────────
+# CORRECTIONS APPLIED:
+#   - Initiative #11: "Yunus Bread" WRONG — correct is "Let's Make Bread" (Yunus = Crown)
+#   - Initiative #15: "Cephas" WRONG — correct is "Power to the People" (Cephas = publishing surface)
+#   - "Schlossberg" with E WRONG — correct is "Schlossburg" with U (per DB)
+#   - "Bonfire" is SPINOUT (#17), NOT one of the 16 Bootstrap Initiatives
+sweet_sixteen_initiatives:
+  - { num: 1,  key: "lets_make_dinner",              display: "Let's Make Dinner",                      crown: "Maneet Chauhan",                          second_crown: "Bobby Flay (BP044_W1)",                                                           third_crown_pending: "Sean Sherman (Bishop pref — existing Crowns choose)" }
+  - { num: 2,  key: "lets_get_groceries",            display: "Let's Get Groceries",                    crown: "Stacy Mitchell" }
+  - { num: 3,  key: "lets_go_shopping",              display: "Let's Go Shopping",                      crown: "Mary Beth Laughton" }
+  - { num: 4,  key: "household_concierge",           display: "Household Concierge",                    crown: "Marie Kondo" }
+  - { num: 5,  key: "the_family_table",              display: "The Family Table",                       crown_triad: ["Ai-jen Poo (Household Steward)", "Ashton Applewhite (Age Champion)", "Marshall Freedman (Bridge Builder)"],  fourth_crown_candidate: "Anne Fishel" }
+  - { num: 6,  key: "tatiana_schlossburg_health_accords", display: "Tatiana Schlossburg Health Accords",tribute_namesake: "Tatiana Schlossburg (no-deceased canonical exception)", pre_tribute_pending_crown: "Oshmyansky" }
+  - { num: 7,  key: "msa",                           display: "MSA (Medical Savings Accounts)",         crown: "Cathie Mahon" }
+  - { num: 8,  key: "defense_klaus",                 display: "Defense Klaus",                          crown_pair: ["Kaiser (First Shield UK)", "Ruth Glenn (US Shield DRAFT)"] }
+  - { num: 9,  key: "rally_group",                   display: "Rally Group",                            crown: "Kimberly A. Williams" }
+  - { num: 10, key: "vsl",                           display: "VSL (Village Savings Loan)",             crown_db: "Cathie Mahon",                         note: "BP038 Eblet shows Jackley LOCKED — DB shows Mahon — reconcile pending Founder ratification" }
+  - { num: 11, key: "lets_make_bread",               display: "Let's Make Bread",                       crown: "Muhammad Yunus",                          correction_note: "NOT 'Yunus Bread' — Yunus is Crown — Initiative name is 'Let's Make Bread'" }
+  - { num: 12, key: "harper_guild",                  display: "Harper Guild",                           crown: "Brené Brown (Harper Prime)" }
+  - { num: 13, key: "jukebox",                       display: "JukeBox",                                crown: "Taylor Swift (Maestro Mentor + Lady Banyan of the Stage + First Voice 3-title stack)" }
+  - { num: 14, key: "didasko",                       display: "Didasko",                                crown: "Sal Khan (Chancellor)",                   institutional: "Harvard UDN (DRAFT)",                                                            third_crown_pending: "Stanley Tucci (Bishop pref — existing Crowns choose — cooperative-class educator-class via Searching for Italy)" }
+  - { num: 15, key: "power_to_the_people",           display: "Power to the People",                    crown: "TBD",                                     correction_note: "NOT 'Cephas' — Cephas is the publishing SURFACE — Initiative #15 is 'Power to the People'" }
+  - { num: 16, key: "brass_tacks",                   display: "Brass Tacks",                            crown_pair: ["Dale Dougherty (Maker-Mentor + Lord Banyan of Brass Tacks)", "Harry Moser (secondary)"],  cross_stack: "Danny DeVito cooperative-labor anchor per BP044 W1" }
+
+spinout_entities_NOT_initiatives:
+  - { name: "PolEx (Political Expedition)",  domains: 5, gates: "FEC AO HL#5" }
+  - { name: "Defense Klaus",                 domains: 4, cross_stack_initiative_8: true }
+  - { name: "Bonfire (#17 SPINOUT)",         description: "cooperative-class research arm — NOT one of 16 Bootstrap Initiatives — per BP041 Founder direct 'Bonfire is Option B'" }
+
+# ── Banyan Metric (BP043 close canonical band) ─────────────────────────────────────────────
+banyan_metric_bp043_close:
+  empirical_conservative: "42-46M× (SEG-FZ Augur final-lock)"
+  central_estimate: "54.4M×±15% (SEG-GB)"
+  projection_band: "92M× [68-124M×] (SEG-EP)"
+  honest_alpha_methodology: "K533 #19 receipt-class — NEVER point-estimate publicly"
+  cite_publicly: "42-46M× empirical — K533 #19 receipt link required"
+
+# ── Sticky canonical numbers (BP044 W1 refresh) ────────────────────────────────────────────
+sticky_canonical_numbers:
+  innovations: 2270
+  crown_jewels: 228
+  formal_claims: 2700
+  production_systems: 36
+  puddings: 196          # 189 BP032 baseline + 7 BP043 new
+  papers: 41
+  glass_door_letters: 95
+  provisionals: 19
+  bootstrap_initiatives: 16
+  spinout_entities: 3
+  candidate_class_reserves: 8
+  pec_council_DEPRECATED: "superseded by The Roll architecture BP044 W1"
+  the_roll_day_0_target: 120
+  trademark_portfolio_marks: 51
+
+decision_trinity:
+  # K28+K29+K30+K31 Decision-Class Trinity — all four vertices CONFIRMED
+  k28_name: "§6 Cross-Vendor Hygiene Triad"
+  k28_status: "ADOPTED_PROVISIONAL_HELD"
+  k28_commit: "24261d9"
+  k28_stack: "LB-STACK-0183"
+  k29_name: "Oracle Circuit"
+  k29_status: "CONFIRMED"
+  k29_commit: "03e6337"
+  k29_stack: "LB-STACK-0184"
+  k29_codex: "LB-CODEX-0178"
+  k30_name: "Contingency Operator"
+  k30_status: "CONFIRMED"
+  k30_commit: "03e6337"
+  k30_stack: "LB-STACK-0185"
+  k30_codex: "LB-CODEX-0179"
+  k31_name: "Prophet Circuit"
+  k31_status: "CONFIRMED"
+  k31_session: "K31_B79_BP034"
+  k31_stack: "LB-STACK-0195"
+  k31_codex: "LB-CODEX-0185"
+  k31_confirmed_date: "2026-05-09"
+  k31_corpus_size: 200
+  k31_bp_cohort_count: 4
+  k31_h1_accuracy: 1.000          # 200/200 PASS (target ≥0.75)
+  k31_h2_calibration: 1.000       # 12/12 projections PASS (target ≥0.70)
+  k31_h3_accuracy: 1.000          # 200/200 PASS (target ≥0.80)
+  k31_g_gates_pass: 14
+  k31_g_gates_total: 14
+  k31_meta_strategy: "ensemble_synthesis"
+  k31_commit: "2c5f2a8"
+  k31_heterogeneous_corpus_commit: "244e52b"     # B79-FOLLOWUP-V2 commit
+  k31_empirical_receipt_grade: "heterogeneous_1200"
+  k31_non_prov_receipt_ready: true
+  trinity_complete: true
+  trinity_complete_date: "2026-05-09"
+  trinity_sequence: "Decide → Branch → Forecast → Verify"
+  trinity_integration_test_pass: true

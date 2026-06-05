@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.897Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Abair caraid, agus thig a-steach.",
+    "description": "Chaidh Liana Banyan a thogail gus a bhith fosgailte dha gach cànan. Tha duais eadar-theangachaidh aig gach cànan fosgailte.",
+    "languages": "cànanan",
+    "openBounties": "duaisean fosgailte",
+    "marksAwarded": "Marks air an toirt (comharran com-pàirt)",
+    "provisional": "Sealach:",
+    "provisionalNotice": "Tha liosta nan cànanan agus rèitean Marks sealach. Is comharran com-pàirt Marks, chan e earrannan.",
+    "bountyOpen": "Duais fosgailte",
+    "claimed": "Air iarraidh",
+    "complete": "Coileanta",
+    "translationBountyTitle": "Duais Eadar-theangachaidh",
+    "bountyDescription": "Eadar-theangaich Liana Banyan gu {{language}}. Coisinn {{marks}} Marks.",
+    "scopeWelcome": "Sgrìn Fàilte / Saoghal nan Spiorad",
+    "scopeCueCards": "Stòras Cairt Stiùiridh",
+    "scopeNavigation": "Leubailean seòladh agus teachdaireachdan mearachd",
+    "scopeWildfire": "Wildfire Beacon Run: Lorg obair",
+    "claimBounty": "Iarr an Duais Eadar-theangachaidh seo",
+    "baseLanguage": "Cànain bunaiteach -- chan eil feum air duais.",
+    "claimedBy": "Chaidh an duais iarraidh le @{{handle}} -- a' dol air adhart.",
+    "marksProvisional": "{{marks}} Marks (sealach)",
+    "speakFounderTitle": "Guth an Stèidheadair: Carson na Faclan sin",
+    "speakFounderDesc": "Tha gach teirm air an àrd-ùrlar seo ainmichte le adhbhar. Tùs nan 26 ainmean as cudromaiche.",
+    "howBountiesWork": "Mar a Dh'obraicheas Duaisean Eadar-theangachaidh",
+    "step1Title": "Iarr an Duais",
+    "step1Body": "Fosgail Duais Eadar-theangachaidh bhon bhòrd Help Wanted.",
+    "step2Title": "Eadar-theangaich agus Cuir a-steach",
+    "step2Body": "Eadar-theangaich gach sreang riatanach. Cuir a-steach tro Bounty Poster.",
+    "step3Title": "Coisinn Marks",
+    "step3Body": "Às dèidh gabhail ris, gheibh thu Marks agus thèid do chlàradh ann an IP Ledger.",
+    "hide": "falaich",
+    "why": "carson?",
+    "subtitle": "\"Can caraid, agus thig a-steach.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Atharraich cànan",
+    "selectLanguage": "Tagh cànan",
+    "quickEnglish": "Beurla",
+    "tip": "Cleachd faclan-faire cànanan eadar-dhealaichte aig Doras Durin gus eòlasan sònraichte a thoirt air adhart!"
+  }
+}

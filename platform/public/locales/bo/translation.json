@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.816Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "གྲོགས་པོ་ཟེར་ནས་ཁ་ཡར་བཤད།",
+    "description": "ལིཡཱ་ན་བན་ཡཱན་ཞེས་པ་དེ་སྐད་ཡིག་ཐམས་ཅད་ལ་ཕྱེ་ནས་བཟོས་ཡོད། སྐད་ཡིག་རེར་ལོ་ཙཱ་བའི་གྲངས་ཤིག་ཡོད།",
+    "languages": "སྐད་ཡིག",
+    "openBounties": "ཕྱེ་བའི་གྲངས།",
+    "marksAwarded": "Marks ཕུལ་སོང་ (མཉམ་ཞུགས་ཀྱི་ཊོ་ཀེན)",
+    "provisional": "སྐབས་བཀོལ།",
+    "provisionalNotice": "སྐད་ཡིག་གི་རེའུ་མིག་དང་ Marks ཀྱི་ཚད་སྐབས་བཀོལ་ཡིན། Marks མཉམ་ཞུགས་ཀྱི་ཊོ་ཀེན་ཡིན།",
+    "bountyOpen": "གྲངས་ཕྱེ་ཡོད།",
+    "claimed": "གཏོང་ཞུ་བྱས།",
+    "complete": "ཚར་སོང།",
+    "translationBountyTitle": "ལོ་ཙཱའི་གྲངས།",
+    "bountyDescription": "ལིཡཱ་ན་བན་ཡཱན་ {{language}} ལ་ལོ་ཙཱ་བྱོས། {{marks}} Marks ཐོབ།",
+    "scopeWelcome": "གཤེགས་པ་ལེགས་སོ།",
+    "scopeCueCards": "གཞི་གནད་ཀྱི་ལག་རྟགས་ཚོགས་གྲས།",
+    "scopeNavigation": "འཛུལ་ལམ་ཀྱི་མཚན་གཞི་དང་ནོར་ཆ།",
+    "scopeWildfire": "Wildfire Beacon Run: ལས་ཀ་ལྟོས།",
+    "claimBounty": "ལོ་ཙཱའི་གྲངས་འདི་གཏོང་ཞུ།",
+    "baseLanguage": "གཞི་གནད་སྐད་ཡིག་ -- གྲངས་མི་དགོས།",
+    "claimedBy": "@{{handle}} གིས་གཏོང་ཞུ་བྱས་ -- བྱ་བ་བྱེད་བཞིན།",
+    "marksProvisional": "{{marks}} Marks (སྐབས་བཀོལ)",
+    "speakFounderTitle": "གཞི་བཙུགས་མཁན་གྱི་སྒྲ་ -- ཅིའི་ཕྱིར་ཚིག་འདི་རྣམས།",
+    "speakFounderDesc": "མིང་གི་རྒྱུ་མཚན་དང་ལྷན་བཀོད་ཡོད། གལ་ཆེའི་མིང་ ༢༦ ཀྱི་འབྱུང་ཁུངས།",
+    "howBountiesWork": "ལོ་ཙཱའི་གྲངས་ཇི་ལྟར་འཁྱེར།",
+    "step1Title": "གྲངས་གཏོང་ཞུ།",
+    "step1Body": "Help Wanted ལས་ལོ་ཙཱའི་གྲངས་ཕྱེ།",
+    "step2Title": "ལོ་ཙཱ་བྱས་ནས་ཕུལ།",
+    "step2Body": "ཡིག་ཆ་ཐམས་ཅད་ལོ་ཙཱ་བྱས་ Bounty Poster བརྒྱུད་ཕུལ།",
+    "step3Title": "Marks ཐོབ།",
+    "step3Body": "བལྟས་ནས་ Marks ཐོབ། IP Ledger ལ་བཀོད།",
+    "hide": "སྦས།",
+    "why": "ཅིའི་ཕྱིར།",
+    "subtitle": "\"གྲོགས་པོ་ཟེར་ནས་ཁ་ཡར་བཤད།\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "སྐད་ཡིག་བཅོས།",
+    "selectLanguage": "སྐད་ཡིག་གདམ་།",
+    "quickEnglish": "དབྱིན་ཡིག",
+    "tip": "Durin གྱི་སྒོ་ལ་སྐད་ཡིག་མི་འདྲ་བའི་གསང་ཚིག་སྤྱོད།"
+  }
+}

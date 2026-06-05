@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.798Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "พูดว่าเพื่อน แล้วเข้ามา",
+    "description": "Liana Banyan สร้างขึ้นเพื่อเปิดทุกภาษา ภาษาที่เปิดแต่ละภาษามีรางวัลการแปล",
+    "languages": "ภาษา",
+    "openBounties": "รางวัลที่เปิดอยู่",
+    "marksAwarded": "ได้รับ Marks (โทเค็นการมีส่วนร่วม)",
+    "provisional": "ชั่วคราว:",
+    "provisionalNotice": "รายการภาษาและอัตรา Marks เป็นการชั่วคราว Marks คือโทเค็นการมีส่วนร่วม ไม่ใช่หุ้น",
+    "bountyOpen": "รางวัลเปิดอยู่",
+    "claimed": "อ้างสิทธิ์แล้ว",
+    "complete": "สมบูรณ์",
+    "translationBountyTitle": "รางวัลการแปล",
+    "bountyDescription": "แปล Liana Banyan เป็น {{language}} รับ {{marks}} Marks เมื่อได้รับการยอมรับ",
+    "scopeWelcome": "หน้าจอยินดีต้อนรับ / โลกผี",
+    "scopeCueCards": "ชุดบัตรคำแนะนำหลัก (กฎเศรษฐศาสตร์ + การกำกับดูแล)",
+    "scopeNavigation": "ป้ายนำทางและข้อความข้อผิดพลาด",
+    "scopeWildfire": "Wildfire Beacon Run: หางาน (ทัวร์เข้า)",
+    "claimBounty": "อ้างสิทธิ์รางวัลการแปลนี้",
+    "baseLanguage": "ภาษาพื้นฐาน -- ไม่ต้องการรางวัล",
+    "claimedBy": "@{{handle}} อ้างสิทธิ์แล้ว -- กำลังดำเนินการ",
+    "marksProvisional": "{{marks}} Marks (ชั่วคราว)",
+    "speakFounderTitle": "เสียงผู้ก่อตั้ง: ทำไมถึงเลือกคำเหล่านี้",
+    "speakFounderDesc": "ทุกคำในแพลตฟอร์มนี้มีเหตุผลในการตั้งชื่อ ต้นกำเนิดของ 26 ชื่อสำคัญที่สุด",
+    "howBountiesWork": "วิธีการทำงานของรางวัลการแปล",
+    "step1Title": "อ้างสิทธิ์รางวัล",
+    "step1Body": "เปิดรางวัลการแปลจากกระดาน Help Wanted",
+    "step2Title": "แปลและส่ง",
+    "step2Body": "แปลสตริงที่ต้องการทั้งหมด ส่งผ่านขั้นตอน Bounty Poster",
+    "step3Title": "รับ Marks",
+    "step3Body": "เมื่อได้รับการยอมรับ คุณได้รับ Marks และบันทึกใน IP Ledger",
+    "hide": "ซ่อน",
+    "why": "ทำไม?",
+    "subtitle": "\"พูดว่าเพื่อน แล้วเข้ามา\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "เปลี่ยนภาษา",
+    "selectLanguage": "เลือกภาษา",
+    "quickEnglish": "ภาษาอังกฤษ",
+    "tip": "ใช้รหัสผ่านภาษาต่างๆ ที่ประตู Durin เพื่อปลดล็อคประสบการณ์พิเศษ!"
+  }
+}

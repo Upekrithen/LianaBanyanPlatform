@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.795Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "நண்பன் என்று சொல்லி உள்ளே வா.",
+    "description": "லியானா பன்யான் அனைத்து மொழிகளுக்கும் திறந்தது. ஒவ்வொரு மொழிக்கும் ஒரு மொழிபெயர்ப்பு பரிசு உள்ளது.",
+    "languages": "மொழிகள்",
+    "openBounties": "திறந்த பரிசுகள்",
+    "marksAwarded": "Marks வழங்கப்பட்டது (பங்கேற்பு டோக்கன்கள்)",
+    "provisional": "தற்காலிக:",
+    "provisionalNotice": "மொழிப் பட்டியல் மற்றும் Marks விகிதங்கள் தற்காலிகமானவை. Marks பங்கேற்பு டோக்கன்கள், பங்கு அல்ல.",
+    "bountyOpen": "பரிசு திறந்தது",
+    "claimed": "கோரப்பட்டது",
+    "complete": "முழுமை",
+    "translationBountyTitle": "மொழிபெயர்ப்பு பரிசு",
+    "bountyDescription": "லியானா பன்யானை {{language}} மொழிக்கு மொழிபெயர்க்கவும். {{marks}} Marks சம்பாதிக்கவும்.",
+    "scopeWelcome": "வரவேற்பு / பேய் உலக திரைகள்",
+    "scopeCueCards": "முக்கிய குறிப்பு அட்டை தொகுப்பு (பொருளாதார சட்டங்கள் + ஆட்சி)",
+    "scopeNavigation": "வழிசெலுத்தல் முத்திரைகள் மற்றும் பிழை செய்திகள்",
+    "scopeWildfire": "வைல்ட்ஃபயர் பீக்கன் ரன்: வேலை கிடைக்கும்",
+    "claimBounty": "இந்த மொழிபெயர்ப்பு பரிசைக் கோரவும்",
+    "baseLanguage": "அடிப்படை மொழி -- பரிசு தேவையில்லை.",
+    "claimedBy": "@{{handle}} கோரினார் -- நடக்கிறது.",
+    "marksProvisional": "{{marks}} Marks (தற்காலிக)",
+    "speakFounderTitle": "நிறுவனர் குரல்: இந்த வார்த்தைகள் ஏன்",
+    "speakFounderDesc": "இந்த தளத்தில் ஒவ்வொரு சொல்லும் ஒரு காரணத்தால் பெயரிடப்பட்டது. 26 முக்கிய பெயர்களின் தோற்றம்.",
+    "howBountiesWork": "மொழிபெயர்ப்பு பரிசுகள் எப்படி வேலை செய்கின்றன",
+    "step1Title": "பரிசைக் கோரவும்",
+    "step1Body": "Help Wanted பலகையிலிருந்து மொழிபெயர்ப்பு பரிசை திறக்கவும்.",
+    "step2Title": "மொழிபெயர்த்து சமர்ப்பிக்கவும்",
+    "step2Body": "தேவையான அனைத்து வரிகளையும் மொழிபெயர்க்கவும். Bounty Poster வழியாக சமர்ப்பிக்கவும்.",
+    "step3Title": "Marks சம்பாதிக்கவும்",
+    "step3Body": "ஏற்றுக்கொள்ளப்பட்டால் Marks கிடைக்கும். IP Ledger-ல் பதிவாகும்.",
+    "hide": "மறை",
+    "why": "ஏன்?",
+    "subtitle": "\"நண்பன் என்று சொல்லி உள்ளே வா.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "மொழி மாற்றவும்",
+    "selectLanguage": "மொழி தேர்ந்தெடுக்கவும்",
+    "quickEnglish": "ஆங்கிலம்",
+    "tip": "Durin's Door-ல் வேர்வேறு மொழி கடவுச்சொற்களை பயன்படுத்துங்கள்!"
+  }
+}

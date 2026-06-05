@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.816Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Sebutkeun babaturan, tuluy asup.",
+    "description": "Liana Banyan diwangun pikeun muka pikeun unggal basa. Unggal basa anu muka miboga hiji hadiah tarjamahan.",
+    "languages": "basa",
+    "openBounties": "hadiah muka",
+    "marksAwarded": "Marks dianugrahkeun (token partisipasi)",
+    "provisional": "Samentawis:",
+    "provisionalNotice": "Daptar basa sareng tarif Marks samentawis. Marks token partisipasi, sanes ekuitas.",
+    "bountyOpen": "Hadiah muka",
+    "claimed": "Diklaim",
+    "complete": "Rengse",
+    "translationBountyTitle": "Hadiah Tarjamahan",
+    "bountyDescription": "Tarjamahkeun Liana Banyan kana {{language}}. Meunangkeun {{marks}} Marks.",
+    "scopeWelcome": "Layar Wilujeng Sumping / Dunya Jurig",
+    "scopeCueCards": "Set Kartu Isyarat Inti",
+    "scopeNavigation": "Label navigasi sareng pesen kasalahan",
+    "scopeWildfire": "Wildfire Beacon Run: Neangan Pagawean",
+    "claimBounty": "Klaim Hadiah Tarjamahan Ieu",
+    "baseLanguage": "Basa dasar -- teu butuh hadiah.",
+    "claimedBy": "@{{handle}} ngaklaim -- keur lumangsung.",
+    "marksProvisional": "{{marks}} Marks (samentawis)",
+    "speakFounderTitle": "Sora Pangdiri: Naha Kecap-kecap Ieu",
+    "speakFounderDesc": "Unggal istilah aya alesan ngaran na. Asal 26 ngaran anu paling penting.",
+    "howBountiesWork": "Kumaha Hadiah Tarjamahan Damel",
+    "step1Title": "Klaim Hadiah",
+    "step1Body": "Buka Hadiah Tarjamahan tina papan Help Wanted.",
+    "step2Title": "Tarjamah sareng Kirim",
+    "step2Body": "Tarjamahkeun sadaya string anu dibutuhkeun. Kirim via Bounty Poster.",
+    "step3Title": "Meunang Marks",
+    "step3Body": "Saatos ditampi, anjeun meunang Marks sareng dicatet di IP Ledger.",
+    "hide": "sumputkeun",
+    "why": "naha?",
+    "subtitle": "\"Sebutkeun babaturan, tuluy asup.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Ganti basa",
+    "selectLanguage": "Pilih basa",
+    "quickEnglish": "Inggris",
+    "tip": "Gunakeun kecap konci basa beda di Panto Durin pikeun muka pangalaman unik!"
+  }
+}

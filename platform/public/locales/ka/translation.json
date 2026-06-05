@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.853Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "თქვი მეგობარი და შედი.",
+    "description": "Liana Banyan აგებულია ყველა ენისთვის ღია. ყოველ ღია ენას ერთი თარგმანის ჯილდო აქვს.",
+    "languages": "ენები",
+    "openBounties": "ღია ჯილდოები",
+    "marksAwarded": "Marks მიენიჭა (მონაწილეობის ჟეტონები)",
+    "provisional": "დროებით:",
+    "provisionalNotice": "ენების სია და Marks-ის განაკვეთები დროებითია. Marks არის მონაწილეობის ჟეტონები, არა აქციები.",
+    "bountyOpen": "ჯილდო ღია",
+    "claimed": "მოთხოვნილია",
+    "complete": "დასრულებულია",
+    "translationBountyTitle": "თარგმანის ჯილდო",
+    "bountyDescription": "თარგმნეთ Liana Banyan {{language}} ენაზე. გამოიმუშავეთ {{marks}} Marks.",
+    "scopeWelcome": "კეთილი მობრძანდეთ / მოჩვენებების სამყარო",
+    "scopeCueCards": "ძირითადი სასწავლო ბარათების კომპლექტი",
+    "scopeNavigation": "ნავიგაციის ეტიკეტები და შეცდომის შეტყობინებები",
+    "scopeWildfire": "Wildfire Beacon Run: სამსახური გაიდე",
+    "claimBounty": "მოითხოვეთ ეს თარგმანის ჯილდო",
+    "baseLanguage": "ძირითადი ენა -- ჯილდო არ სჭირდება.",
+    "claimedBy": "@{{handle}} მოითხოვა -- მიმდინარეობს.",
+    "marksProvisional": "{{marks}} Marks (დროებით)",
+    "speakFounderTitle": "დამფუძნებლის ხმა: ეს სიტყვები რატომ",
+    "speakFounderDesc": "ამ პლატფორმაზე ყოველ სიტყვას მიზეზი აქვს. 26 მნიშვნელოვანი სახელის წარმოშობა.",
+    "howBountiesWork": "როგორ მუშაობს თარგმანის ჯილდოები",
+    "step1Title": "ჯილდო მოითხოვეთ",
+    "step1Body": "Help Wanted-დან თარგმანის ჯილდო გახსენით.",
+    "step2Title": "თარგმნეთ და გამოაგზავნეთ",
+    "step2Body": "ყველა საჭირო სტრინგი თარგმნეთ. Bounty Poster-ის მეშვეობით გამოაგზავნეთ.",
+    "step3Title": "Marks გამოიმუშავეთ",
+    "step3Body": "მიღების შემდეგ Marks მიიღებთ. IP Ledger-ში დარეგისტრირდებით.",
+    "hide": "დამალვა",
+    "why": "რატომ?",
+    "subtitle": "\"თქვი მეგობარი და შედი.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "ენის შეცვლა",
+    "selectLanguage": "ენის არჩევა",
+    "quickEnglish": "ინგლისური",
+    "tip": "Durin's Door-ზე სხვადასხვა ენის პაროლები გამოიყენეთ განსაკუთრებული გამოცდილებისთვის!"
+  }
+}

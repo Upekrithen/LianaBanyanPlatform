@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.791Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Sema rafiki, na uingie.",
+    "description": "Liana Banyan imejengwa kufungua kwa kila lugha. Kila lugha ina tuzo moja ya tafsiri.",
+    "languages": "lugha",
+    "openBounties": "tuzo wazi",
+    "marksAwarded": "Marks iliyotolewa (tokeni za ushiriki)",
+    "provisional": "Ya muda:",
+    "provisionalNotice": "Orodha ya lugha na viwango vya Marks ni ya muda. Marks ni tokeni za ushiriki, si hisa.",
+    "bountyOpen": "Tuzo wazi",
+    "claimed": "Imedaiwa",
+    "complete": "Imekamilika",
+    "translationBountyTitle": "Tuzo ya Tafsiri",
+    "bountyDescription": "Tafsiri Liana Banyan kwa {{language}}. Pata {{marks}} Marks baada ya kukubaliwa.",
+    "scopeWelcome": "Skrini za Karibu / Dunia ya Pepo",
+    "scopeCueCards": "Seti kuu ya Kadi za Vidokezo (Sheria za Uchumi + Utawala)",
+    "scopeNavigation": "Lebo za urambazaji na ujumbe wa makosa",
+    "scopeWildfire": "Wildfire Beacon Run: Pata Kazi (ziara ya kuingia)",
+    "claimBounty": "Dai Tuzo Hii ya Tafsiri",
+    "baseLanguage": "Lugha ya msingi -- hakuna tuzo inayohitajika.",
+    "claimedBy": "Tuzo imedaiwa na @{{handle}} -- inaendelea.",
+    "marksProvisional": "{{marks}} Marks (ya muda)",
+    "speakFounderTitle": "Sauti ya Mwanzilishi: Kwa Nini Maneno Haya",
+    "speakFounderDesc": "Kila neno katika mfumo huu limepewa jina kwa sababu. Asili ya majina 26 muhimu.",
+    "howBountiesWork": "Jinsi Tuzo za Tafsiri Zinavyofanya Kazi",
+    "step1Title": "Dai Tuzo",
+    "step1Body": "Fungua Tuzo ya Tafsiri kutoka kwenye ubao wa Help Wanted.",
+    "step2Title": "Tafsiri na Wasilisha",
+    "step2Body": "Tafsiri masharti yote yanayohitajika na uwasilishe kupitia mtiririko wa Bounty Poster.",
+    "step3Title": "Pata Marks",
+    "step3Body": "Baada ya kukubaliwa, unapata Marks na unarekodiwa katika IP Ledger.",
+    "hide": "ficha",
+    "why": "kwa nini?",
+    "subtitle": "\"Sema rafiki, na uingie.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Badilisha lugha",
+    "selectLanguage": "Chagua lugha",
+    "quickEnglish": "Kiingereza",
+    "tip": "Tumia nywila za lugha tofauti kwenye Mlango wa Durin kufungua uzoefu wa kipekee!"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.802Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "So ore, ki o wole.",
+    "description": "Liana Banyan ni a ko lati sii fun gbogbo ede. Ede kookan ni ebun itumoo kan.",
+    "languages": "ede",
+    "openBounties": "awon ebun ti o sii",
+    "marksAwarded": "Marks ti a fun (awon tokeni ikopa)",
+    "provisional": "Igba die:",
+    "provisionalNotice": "Atoko ede ati osu won Marks jẹ igba die. Marks jẹ awon tokeni ikopa, kii se ipin.",
+    "bountyOpen": "Ebun sii",
+    "claimed": "Ti gba",
+    "complete": "Pari",
+    "translationBountyTitle": "Ebun Itumo",
+    "bountyDescription": "Tumo Liana Banyan si {{language}}. Gba {{marks}} Marks lehin gbigba.",
+    "scopeWelcome": "Awon iboju Kaabo / Agbaye Iwin",
+    "scopeCueCards": "Eto Kaadi Itosoona Akoko (Awon Ofin Oro-aje + Ijoba)",
+    "scopeNavigation": "Awon aami itosoona ati awon ifiransẹ asise",
+    "scopeWildfire": "Wildfire Beacon Run: Gba Ise",
+    "claimBounty": "Gba Ebun Itumo Yii",
+    "baseLanguage": "Ede ipile -- ko si ebun ti a nilo.",
+    "claimedBy": "@{{handle}} ti gba -- n sisẹ.",
+    "marksProvisional": "{{marks}} Marks (igba die)",
+    "speakFounderTitle": "Ohun Oludasile: Idi Awon Oro Wonyi",
+    "speakFounderDesc": "Gbogbo oro ninu eto yii ni idi fun oruko re. Orisun awon oruko 26 pataki julọ.",
+    "howBountiesWork": "Bii Awon Ebun Itumo Se N Sisẹ",
+    "step1Title": "Gba Ebun",
+    "step1Body": "Sii Ebun Itumo lati Help Wanted.",
+    "step2Title": "Tumo ati Firansẹ",
+    "step2Body": "Tumo gbogbo awon okun ti a nilo. Firansẹ nipasẹ Bounty Poster.",
+    "step3Title": "Gba Marks",
+    "step3Body": "Lehin gbigba, o gba Marks ati ki a gbasilẹ re ni IP Ledger.",
+    "hide": "fi pamo",
+    "why": "kilode?",
+    "subtitle": "\"So ore, ki o wole.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Yi ede pada",
+    "selectLanguage": "Yan ede",
+    "quickEnglish": "Geẹsi",
+    "tip": "Lo awon ọrọ igbaniwolo ede orisorisii ni Enu-ọna Durin lati sii awon iriri alailegbe!"
+  }
+}

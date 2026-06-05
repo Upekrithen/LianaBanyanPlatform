@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.822Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Reci prijatelju i udi.",
+    "description": "Liana Banyan je izgradujena da bude otvorena za svaki jezik. Svaki otvoreni jezik ima jednu nagradu za prijevod.",
+    "languages": "jezici",
+    "openBounties": "otvorene nagrade",
+    "marksAwarded": "Marks dodijeljeni (zetoni sudjelovanja)",
+    "provisional": "Privremeno:",
+    "provisionalNotice": "Popis jezika i stope Marks su privremene. Marks su zetoni sudjelovanja, ne dionice.",
+    "bountyOpen": "Nagrada otvorena",
+    "claimed": "Zatrazeno",
+    "complete": "Dovrseno",
+    "translationBountyTitle": "Nagrada za Prijevod",
+    "bountyDescription": "Prevedite Liana Banyan na {{language}}. Zaradite {{marks}} Marks.",
+    "scopeWelcome": "Ekrani Dobrodoslice / Svijet Duhova",
+    "scopeCueCards": "Osnovni skup kartica s uputama",
+    "scopeNavigation": "Navigacijske oznake i poruke o greskama",
+    "scopeWildfire": "Wildfire Beacon Run: Nadi Posao",
+    "claimBounty": "Zatrazite ovu Nagradu za Prijevod",
+    "baseLanguage": "Temeljni jezik -- ne treba nagrada.",
+    "claimedBy": "Nagradu zatrazio @{{handle}} -- u toku.",
+    "marksProvisional": "{{marks}} Marks (privremeno)",
+    "speakFounderTitle": "Glas Osnivaca: Zasto Ove Rijeci",
+    "speakFounderDesc": "Svaki pojam na ovoj platformi imenovan je s razlogom. Porijeklo 26 najvaznijih naziva.",
+    "howBountiesWork": "Kako Rade Nagrade za Prijevod",
+    "step1Title": "Zatrazite Nagradu",
+    "step1Body": "Otvorite Nagradu za Prijevod s table Help Wanted.",
+    "step2Title": "Prevedite i Posaljite",
+    "step2Body": "Prevedite sve potrebne nizove. Posaljite putem Bounty Poster.",
+    "step3Title": "Zaradite Marks",
+    "step3Body": "Nakon prihvacanja dobijate Marks i evidentirani ste u IP Ledger.",
+    "hide": "sakrij",
+    "why": "zasto?",
+    "subtitle": "\"Reci prijatelju i udi.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Promijeni jezik",
+    "selectLanguage": "Odaberi jezik",
+    "quickEnglish": "Engleski",
+    "tip": "Koristite lozinke razlicitih jezika na Durinovim Vratima za jedinstvena iskustva!"
+  }
+}

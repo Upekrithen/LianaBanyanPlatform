@@ -1,0 +1,172 @@
+{
+  "_comment": "Wave 19 Phase delta -- Residual Risk Register. Updated: 2026-06-03. BP073.",
+  "_schema": "Each entry: id, package/area, severity, advisory, status, mitigation, action",
+  "generated_at": "2026-06-03",
+  "npm_audit_summary": {
+    "total_vulnerabilities": 51,
+    "moderate": 38,
+    "high": 12,
+    "critical": 1,
+    "audit_level_checked": "moderate"
+  },
+  "residual_risks": [
+    {
+      "id": "RR-001",
+      "package": "xlsx",
+      "severity": "high",
+      "advisories": ["GHSA-4r6h-8v6p-xvw6", "GHSA-5pgg-2g8v-p4x9"],
+      "description": "Prototype Pollution and ReDoS in sheetJS. No upstream fix available.",
+      "status": "ACCEPTED",
+      "mitigation": "xlsx is dev/import-only; no user-supplied XLSX files are parsed server-side. Isolated to admin tooling with trusted inputs. Sandboxed in vendor-xlsx chunk (Tier 10), only loaded on demand.",
+      "action": "Monitor for upstream fix. Consider replacing with exceljs if fix not available by W24.",
+      "owner": "BP073"
+    },
+    {
+      "id": "RR-002",
+      "package": "dompurify",
+      "severity": "moderate",
+      "advisories": ["GHSA-v2wj-7wpq-c8vv", "GHSA-cjmm-f4jc-qw8r", "GHSA-cj63-jhhr-wcxv", "GHSA-39q2-94rc-95cp", "GHSA-h7mw-gpvr-xq4m", "GHSA-crv5-9vww-q3g8", "GHSA-v9jr-rg53-9pgp", "GHSA-h8r8-wccr-v5f2"],
+      "description": "Multiple XSS bypass vectors in DOMPurify <= 3.3.3. Fix available via npm audit fix.",
+      "status": "FIX_AVAILABLE",
+      "mitigation": "Upgrade to DOMPurify >= 3.3.4 via npm audit fix. Priority: HIGH. scopeCustomCss() in useContentShield.ts does NOT use DOMPurify -- it uses a custom regex-based sanitizer that blocks scripts, external URLs, and dangerous selectors.",
+      "action": "Run npm audit fix. Verify DOMPurify is upgraded. Re-test NeighborhoodDetailPage.",
+      "owner": "BP073"
+    },
+    {
+      "id": "RR-003",
+      "package": "defu",
+      "severity": "high",
+      "advisories": ["GHSA-737v-mqg7-c878"],
+      "description": "Prototype Pollution via __proto__ key in defaults argument in defu <= 6.1.4.",
+      "status": "FIX_AVAILABLE",
+      "mitigation": "Upgrade via npm audit fix. defu is a transitive dependency. Sandboxed to server-side bundler tooling only.",
+      "action": "npm audit fix. Verify defu upgraded.",
+      "owner": "BP073"
+    },
+    {
+      "id": "RR-004",
+      "package": "flatted",
+      "severity": "high",
+      "advisories": ["GHSA-25h7-pfq9-p65f", "GHSA-rf6f-7fwh-wjgh"],
+      "description": "Prototype Pollution and unbounded recursion DoS in flatted <= 3.4.1.",
+      "status": "FIX_AVAILABLE",
+      "mitigation": "Upgrade via npm audit fix. flatted is transitive (likely via eslint chain). Not directly called by app code.",
+      "action": "npm audit fix.",
+      "owner": "BP073"
+    },
+    {
+      "id": "RR-005",
+      "package": "hono",
+      "severity": "high",
+      "advisories": ["GHSA-m732-5p4w-x69g", "GHSA-q7jf-gf43-6x6p", "GHSA-3vhc-576x-3qv4", "GHSA-f67f-6cw9-8mq4", "GHSA-9r54-q6cx-xmh5", "GHSA-6wqw-2p9w-4vw4", "GHSA-r354-f388-2fhh", "GHSA-w332-q679-j88p", "GHSA-gq3j-xvxp-8hrf", "GHSA-5pq2-9x2x-5p6w", "GHSA-p6xx-57qc-3wxr", "GHSA-q5qw-h33p-qvwr", "GHSA-v8w9-8mx6-g223", "GHSA-26pp-8wgv-hjvm", "GHSA-r5rp-j6wh-rvv4", "GHSA-xf4j-xp2r-rqqx", "GHSA-wmmm-f939-6g9c"],
+      "description": "Multiple Hono vulnerabilities including auth bypass, XSS, path traversal, cookie injection. Fix available.",
+      "status": "FIX_AVAILABLE",
+      "mitigation": "Hono is used only in Supabase Edge Functions, not in the frontend bundle. Edge functions run server-side with trusted inputs from Supabase. Upgrade via npm audit fix.",
+      "action": "npm audit fix. Verify hono upgraded in edge function dependencies.",
+      "owner": "BP073"
+    },
+    {
+      "id": "RR-006",
+      "package": "h3",
+      "severity": "high",
+      "advisories": ["GHSA-wr4h-v87w-p3r7", "GHSA-4hxc-9384-m385", "GHSA-72gr-qfp7-vwhw", "GHSA-22cc-p3c6-wpvm", "GHSA-mp2g-9vg9-f4cg"],
+      "description": "h3 path traversal and SSE injection vulnerabilities. Fix available.",
+      "status": "FIX_AVAILABLE",
+      "mitigation": "h3 is a transitive server-side dependency. Fix via npm audit fix.",
+      "action": "npm audit fix.",
+      "owner": "BP073"
+    },
+    {
+      "id": "RR-007",
+      "package": "@reown/appkit (walletconnect chain)",
+      "severity": "moderate",
+      "advisories": ["walletconnect-chain"],
+      "description": "Multiple @reown/appkit / @walletconnect/universal-provider vulnerabilities in <= 1.8.9.",
+      "status": "FIX_AVAILABLE",
+      "mitigation": "Web3 functionality is isolated in vendor-web3 chunk (Tier 12), only loaded on Web3-gated pages. Upgrade via npm audit fix.",
+      "action": "npm audit fix. Verify @reown/appkit upgraded.",
+      "owner": "BP073"
+    },
+    {
+      "id": "RR-008",
+      "package": "esbuild",
+      "severity": "moderate",
+      "advisories": ["GHSA-67mh-4wv8-2f99"],
+      "description": "esbuild dev server allows cross-origin requests. Fix available.",
+      "status": "ACCEPTED_DEV_ONLY",
+      "mitigation": "esbuild dev server vulnerability is dev-time only. Production build does not expose esbuild dev server. Not applicable in prod.",
+      "action": "Upgrade esbuild for dev hygiene. Monitor.",
+      "owner": "BP073"
+    },
+    {
+      "id": "RR-009",
+      "package": "ajv",
+      "severity": "moderate",
+      "advisories": ["GHSA-2g4f-4pwh-qvx6"],
+      "description": "ajv ReDoS when using $data option. Fix available.",
+      "status": "FIX_AVAILABLE",
+      "mitigation": "ajv is transitive. We do not use $data option directly. Fix via npm audit fix.",
+      "action": "npm audit fix.",
+      "owner": "BP073"
+    },
+    {
+      "id": "RR-010",
+      "package": "yaml",
+      "severity": "moderate",
+      "advisories": ["GHSA-48c2-rrv3-qjmp"],
+      "description": "yaml Stack Overflow via deeply nested YAML collections. Fix available.",
+      "status": "FIX_AVAILABLE",
+      "mitigation": "yaml is transitive. No deeply nested YAML is parsed from user input. Fix via npm audit fix.",
+      "action": "npm audit fix.",
+      "owner": "BP073"
+    },
+    {
+      "id": "RR-011",
+      "package": "dangerouslySetInnerHTML in NeighborhoodDetailPage.tsx",
+      "severity": "low",
+      "advisories": ["INTERNAL-XSS-001"],
+      "description": "dangerouslySetInnerHTML used for custom CSS injection. Potentially allows style-based attacks.",
+      "status": "MITIGATED",
+      "mitigation": "scopeCustomCss() in useContentShield.ts sanitizes all CSS before injection: blocks body/html/#root selectors, @import url(), external URLs (https://), position:fixed, z-index > 1000. Returns empty string on any violation. Violation = no CSS rendered.",
+      "action": "Add test coverage for scopeCustomCss edge cases. Consider DOMPurify upgrade to cover additional vectors.",
+      "owner": "BP073"
+    },
+    {
+      "id": "RR-012",
+      "package": "CSP headers - production",
+      "severity": "moderate",
+      "advisories": ["INTERNAL-CSP-001"],
+      "description": "No Content-Security-Policy HTTP response headers configured in vite.config.ts or index.html.",
+      "status": "PENDING",
+      "mitigation": "The sandbox overlay CSP (buildOverlayCSP) is production-ready and enforced. The main app CSP for the production web host is not yet configured. This must be set at the hosting/CDN layer (Netlify/Vercel/Supabase headers).",
+      "action": "Configure CSP headers in _headers or netlify.toml before W25 launch. Priority: HIGH.",
+      "owner": "BP073"
+    },
+    {
+      "id": "RR-013",
+      "package": "glob CLI command injection",
+      "severity": "high",
+      "advisories": ["GHSA-5j98-mcp5-4vw2"],
+      "description": "glob CLI -c/--cmd flag allows command injection. Fix available.",
+      "status": "FIX_AVAILABLE",
+      "mitigation": "glob is used for file globbing only, not CLI execution with -c/--cmd. Fix via npm audit fix.",
+      "action": "npm audit fix.",
+      "owner": "BP073"
+    }
+  ],
+  "csrf_surface": {
+    "status": "ASSESSED",
+    "findings": "All state-mutating Supabase RPCs require auth.uid() IS NOT NULL guard. Supabase REST uses JWT Bearer token authentication which provides CSRF protection for cross-origin requests. No cookie-based state mutation endpoints found.",
+    "action": "No additional CSRF mitigation needed for Supabase RPC layer."
+  },
+  "cors_surface": {
+    "status": "ASSESSED",
+    "findings": "CORS configuration is delegated to Supabase's hosted PostgREST and Edge Functions. The frontend does not expose a CORS-configurable server. CANONICAL_FETCH_ORIGINS in ContingencyOperatorsSandbox.ts is a closed allowlist of 3 LB-owned origins with no wildcards.",
+    "action": "No CORS misconfiguration found in platform layer."
+  },
+  "sql_injection_surface": {
+    "status": "ASSESSED",
+    "findings": "All W11 economy RPCs (increment_marks_balance, redeem_marks, process_payout_queue_item, cast_pedestal_vote) use parameterized PL/pgSQL with typed parameters and no dynamic SQL string concatenation. All W12 governance RPCs (cast_vote_with_cap_check, cast_council_vote_with_cap_check, refresh_reputation_score) use parameterized queries. SECURITY DEFINER with search_path locked to public, pg_catalog.",
+    "action": "Continue parameterized query enforcement on all future RPCs."
+  }
+}

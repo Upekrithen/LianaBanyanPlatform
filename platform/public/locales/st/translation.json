@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.857Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Bua motsoalle, ebe o kene.",
+    "description": "Liana Banyan e hahilwe ho bula dipuo tsohle. Puo e ngoe le e ngoe e na le moputso o mong wa phetolelo.",
+    "languages": "dipuo",
+    "openBounties": "meputso e buleha",
+    "marksAwarded": "Marks e fuwe (litokene tsa ho nka karolo)",
+    "provisional": "Ka nakoana:",
+    "provisionalNotice": "Lethathamo la dipuo le litheko tsa Marks ke tsa nakoana. Marks ke litokene tsa ho nka karolo, esio seabo.",
+    "bountyOpen": "Moputso o buleha",
+    "claimed": "Ho kopilwe",
+    "complete": "Ho phethilwe",
+    "translationBountyTitle": "Moputso wa Phetolelo",
+    "bountyDescription": "Fetola Liana Banyan ho {{language}}. Fumana {{marks}} Marks.",
+    "scopeWelcome": "Karete tsa Amohetsoa / Lefatshe la Meea",
+    "scopeCueCards": "Sete e kaholimo ya Karete tsa Maikutlo",
+    "scopeNavigation": "Dihlahlobo tsa tsela le melaetsa ya mathata",
+    "scopeWildfire": "Wildfire Beacon Run: Fumana Mosebetsi",
+    "claimBounty": "Kopa Moputso ona wa Phetolelo",
+    "baseLanguage": "Puo ya motheo -- ha ho moputso o hlokahileng.",
+    "claimedBy": "@{{handle}} o kopile -- e tsoela pele.",
+    "marksProvisional": "{{marks}} Marks (ka nakoana)",
+    "speakFounderTitle": "Lentsoe la Mosehli: Ke Hobaneng le Mantsoe Ana",
+    "speakFounderDesc": "Lentsoe lohle mona le bitswa ka lebaka. Motheo wa mabitso a 26 a bohlokwa.",
+    "howBountiesWork": "Meputso ya Phetolelo e Sebetsa Jwang",
+    "step1Title": "Kopa Moputso",
+    "step1Body": "Bula Moputso wa Phetolelo ho tswa Help Wanted.",
+    "step2Title": "Fetola le Romela",
+    "step2Body": "Fetola listring tsohle tse hlokahileng. Romela ka Bounty Poster.",
+    "step3Title": "Fumana Marks",
+    "step3Body": "Ka mora ho amohelwa, o fumana Marks le ho kwadiswa ho IP Ledger.",
+    "hide": "pata",
+    "why": "hobaneng?",
+    "subtitle": "\"Re moratwi, o kene.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Fetola puo",
+    "selectLanguage": "Khetha puo",
+    "quickEnglish": "Senyesemane",
+    "tip": "Sebedisa diphasewete tsa dipuo tse fapaneng ho Lefako la Durin ho bula maitemogelo a ikhethang!"
+  }
+}

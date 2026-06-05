@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.792Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "मित्र म्हणा आणि आत या।",
+    "description": "लियाना बानयान प्रत्येक भाषेसाठी खुले आहे. प्रत्येक भाषेसाठी भाषांतर बाउंटी आहे.",
+    "languages": "भाषा",
+    "openBounties": "खुल्या बाउंटी",
+    "marksAwarded": "Marks दिले (सहभाग टोकन)",
+    "provisional": "तात्पुरते:",
+    "provisionalNotice": "भाषांची यादी व Marks दर तात्पुरते आहेत. Marks सहभाग टोकन, इक्विटी नाही.",
+    "bountyOpen": "बाउंटी खुली",
+    "claimed": "दावा केला",
+    "complete": "पूर्ण",
+    "translationBountyTitle": "भाषांतर बाउंटी",
+    "bountyDescription": "लियाना बानयान {{language}} मध्ये भाषांतरित करा. {{marks}} Marks मिळवा.",
+    "scopeWelcome": "स्वागत / भूत जग स्क्रीन",
+    "scopeCueCards": "मूळ क्यू कार्ड संच (आर्थिक कायदे + शासन)",
+    "scopeNavigation": "नेव्हिगेशन लेबल्स आणि त्रुटी संदेश",
+    "scopeWildfire": "वाइल्डफायर बीकन रन: नोकरी मिळवा",
+    "claimBounty": "ही भाषांतर बाउंटी दावा करा",
+    "baseLanguage": "मूळ भाषा -- कोणती बाउंटी नाही.",
+    "claimedBy": "बाउंटी @{{handle}} ने दावा केली -- चालू.",
+    "marksProvisional": "{{marks}} Marks (तात्पुरते)",
+    "speakFounderTitle": "संस्थापकाचे बोल: या शब्दांचे कारण",
+    "speakFounderDesc": "या प्लॅटफॉर्मवरील प्रत्येक शब्द कारणासाठी नामित. २६ नावांचे मूळ.",
+    "howBountiesWork": "बाउंटी कशा काम करतात",
+    "step1Title": "बाउंटी दावा करा",
+    "step1Body": "Help Wanted बोर्डवरून भाषांतर बाउंटी उघडा.",
+    "step2Title": "भाषांतर करा आणि सादर करा",
+    "step2Body": "सर्व आवश्यक स्ट्रिंग भाषांतरित करा. Bounty Poster फ्लोद्वारे सादर करा.",
+    "step3Title": "Marks मिळवा",
+    "step3Body": "स्वीकृतीनंतर Marks मिळतात. IP Ledger मध्ये नोंद होते.",
+    "hide": "लपवा",
+    "why": "का?",
+    "subtitle": "\"मित्र म्हणा आणि आत या।\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "भाषा बदला",
+    "selectLanguage": "भाषा निवडा",
+    "quickEnglish": "इंग्रजी",
+    "tip": "Durin's Door वर वेगवेगळ्या भाषांचे पासवर्ड वापरा!"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.812Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Lazao hoe namana ianao, dia midira.",
+    "description": "Liana Banyan dia nataon-dehibe ho misokatra amin'ny fiteny rehetra. Fiteny tsirairay manana valisoa fandikana iray.",
+    "languages": "fiteny",
+    "openBounties": "valisoa misokatra",
+    "marksAwarded": "Marks nomena (famantarana fandraisan'anjara)",
+    "provisional": "Vonjimaika:",
+    "provisionalNotice": "Ny lisitry ny fiteny sy ny vidim-bidy Marks vonjimaika. Marks famantarana fandraisan'anjara, tsy hanankirai-tsoaka.",
+    "bountyOpen": "Valisoa misokatra",
+    "claimed": "Nilefy",
+    "complete": "Vita",
+    "translationBountyTitle": "Valisoa Fandikana",
+    "bountyDescription": "Adikao ny Liana Banyan ho amin'ny {{language}}. Mahazo {{marks}} Marks rehefa noraisina.",
+    "scopeWelcome": "Screenin'ny Fiarahabana / Tontolo Fanahy",
+    "scopeCueCards": "Andiana Karatra Tsentsiny Fototra",
+    "scopeNavigation": "Marika tantana sy hafatra diso",
+    "scopeWildfire": "Wildfire Beacon Run: Mitady Asa",
+    "claimBounty": "Ilefyo ity Valisoa Fandikana ity",
+    "baseLanguage": "Fiteny fototra -- tsy misy valisoa ilaina.",
+    "claimedBy": "@{{handle}} nilefy -- amidy.",
+    "marksProvisional": "{{marks}} Marks (vonjimaika)",
+    "speakFounderTitle": "Feon'ny Mpamorona: Nahoana ireo teny ireo",
+    "speakFounderDesc": "Ny teny tsirairay amin'ity sehatra ity nomena anarana noho ny antony. Loharanon'ny anarana 26 manan-danja indrindra.",
+    "howBountiesWork": "Ahoana ny Fandaharana ny Valisoa Fandikana",
+    "step1Title": "Ilefyo ny Valisoa",
+    "step1Body": "Sokafy ny Valisoa Fandikana avy amin'ny Help Wanted.",
+    "step2Title": "Adikao ary Alefa",
+    "step2Body": "Adikao ny rindram-peo rehetra ilaina. Alefa amin'ny Bounty Poster.",
+    "step3Title": "Mahazo Marks",
+    "step3Body": "Rehefa noraisina, mahazo Marks ianao sary voasoratra ao amin'ny IP Ledger.",
+    "hide": "afeno",
+    "why": "nahoana?",
+    "subtitle": "\"Lazao hoe namana ianao, dia midira.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Ovay ny fiteny",
+    "selectLanguage": "Safidio ny fiteny",
+    "quickEnglish": "Anglisy",
+    "tip": "Ampiasao teny fidirana fiteny samy hafa amin'ny Varavaran'i Durin mba hamokatra traikefa tokana!"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.862Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Dost diý hem gir.",
+    "description": "Liana Banyan her dil ucin acyk guruldy. Her acyk diliň bir terjime sylagy bar.",
+    "languages": "diller",
+    "openBounties": "acyk sylaklar",
+    "marksAwarded": "Marks berildi (gatnaşyk tokenlar)",
+    "provisional": "Wagtlaýynça:",
+    "provisionalNotice": "Dilleriň sanawy we Marks derejesi wagtlaýyn. Marks gatnaşyk tokenlari, paý däl.",
+    "bountyOpen": "Sylak açyk",
+    "claimed": "Talap edildi",
+    "complete": "Tamamlandy",
+    "translationBountyTitle": "Terjime Sylagy",
+    "bountyDescription": "Liana Banyan {{language}} diline terjime ediň. {{marks}} Marks gazanyň.",
+    "scopeWelcome": "Hoş geldiňiz / Ruh Dünýäsi ekranlary",
+    "scopeCueCards": "Esasy Maslahat Kartasy toplumy",
+    "scopeNavigation": "Nawigasiýa bellikleri we ýalňyş habarlar",
+    "scopeWildfire": "Wildfire Beacon Run: Iş tap",
+    "claimBounty": "Bu Terjime Sylagyni Talap Et",
+    "baseLanguage": "Esasy dil -- sylak gerek däl.",
+    "claimedBy": "@{{handle}} talap etdi -- dowam edýär.",
+    "marksProvisional": "{{marks}} Marks (wagtlaýyn)",
+    "speakFounderTitle": "Esasçynyň Sesi: Näme Üçin Bu Sözler",
+    "speakFounderDesc": "Bu platformdaky her bir termin sebäp bilen atlandyrylan. 26 möhüm ady gelip çykmagy.",
+    "howBountiesWork": "Terjime Sylaklar Nähili Işleýär",
+    "step1Title": "Sylagy Talap Et",
+    "step1Body": "Help Wanted tagtasyndan Terjime Sylagyni aç.",
+    "step2Title": "Terjime et we Iberi",
+    "step2Body": "Zerur setirlerini terjime ediň. Bounty Poster arkaly iberiň.",
+    "step3Title": "Marks Gazan",
+    "step3Body": "Kabul edilenden soň Marks alýarsyňyz we IP Ledger-de hasaba alynýarsyňyz.",
+    "hide": "gizle",
+    "why": "näme üçin?",
+    "subtitle": "\"Dost diyip git.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Dili üýtget",
+    "selectLanguage": "Dil saýla",
+    "quickEnglish": "Iňlisçe",
+    "tip": "Özboluşly tejribeler üçin Duriniň Gapysynda dürli dil paroly ulanyň!"
+  }
+}

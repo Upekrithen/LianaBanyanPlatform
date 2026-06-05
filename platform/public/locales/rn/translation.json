@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.882Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Vuga incuti, usome.",
+    "description": "Liana Banyan yaranguwe kugira ngo ivugure ku rurimi rwose. Ururimi rwose rufunguye rufite umusanzu umwe wo guhindura.",
+    "languages": "indimi",
+    "openBounties": "amafaranga y'umusanzu afunguye",
+    "marksAwarded": "Marks yarahawe (ibimenyetso vy'ugutera imbere)",
+    "provisional": "Muri make:",
+    "provisionalNotice": "Urutonde rw'indimi n'ingano z'Marks ni rw'igihe gito. Marks ibimenyetso vy'ugutera imbere, si imigabane.",
+    "bountyOpen": "Umusanzu ufunguye",
+    "claimed": "Basavye",
+    "complete": "Birangiye",
+    "translationBountyTitle": "Umusanzu wo Guhindura",
+    "bountyDescription": "Hindura Liana Banyan mu {{language}}. Unguka {{marks}} Marks.",
+    "scopeWelcome": "Ikaze / Isi y'Imizuka",
+    "scopeCueCards": "Urutonde rw'Amakarata y'Amabwiriza",
+    "scopeNavigation": "Amashira y'inzira n'ubutumwa bw'amakosa",
+    "scopeWildfire": "Wildfire Beacon Run: Shaka Akazi",
+    "claimBounty": "Saba Umusanzu uyu wo Guhindura",
+    "baseLanguage": "Ururimi rw'ibanze -- nta musanzu ukenewe.",
+    "claimedBy": "@{{handle}} yarasavye -- biragenda.",
+    "marksProvisional": "{{marks}} Marks (muri make)",
+    "speakFounderTitle": "Ijwi ry'Umutwazi: Impamvu y'Ayo Majambo",
+    "speakFounderDesc": "Ijambo ryose muri sisitemu iyi ryatowe n'impamvu. Inkomoko y'amazina 26 y'ingenzi.",
+    "howBountiesWork": "Amafaranga y'Umusanzu Agenda Gute",
+    "step1Title": "Saba Umusanzu",
+    "step1Body": "Fungura Umusanzu wo Guhindura ku kibaho Help Wanted.",
+    "step2Title": "Hindura Wohereze",
+    "step2Body": "Hindura ivyari bikenwa vyose. Ohereza ukoresheje Bounty Poster.",
+    "step3Title": "Unguka Marks",
+    "step3Body": "Nyuma yo kwemeranwa, uzahabwa Marks kandi uzandikwe muri IP Ledger.",
+    "hide": "hisha",
+    "why": "impamvu?",
+    "subtitle": "\"Vuga incuti, injira.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Hindura ururimi",
+    "selectLanguage": "Hitamo ururimi",
+    "quickEnglish": "Icongereza",
+    "tip": "Koresha ibifaranga vy'indimi zitandukanye ku muryango wa Durin kugira ngo ukingure uburambe budasanzwe!"
+  }
+}

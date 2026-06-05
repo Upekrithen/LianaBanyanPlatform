@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.807Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "ملګری ووایه او ننوځه.",
+    "description": "لیانا بنیان د هرې ژبې لپاره پرانستي جوړ شوی دی. د هرې ژبې لپاره یو ژباړه جایزه شته.",
+    "languages": "ژبې",
+    "openBounties": "پرانستي جایزې",
+    "marksAwarded": "Marks ورکړل شوي (د ګډون ټوکنونه)",
+    "provisional": "لنډمهاله:",
+    "provisionalNotice": "د ژبو لیست او د Marks نرخونه لنډمهاله دي. Marks د ګډون ټوکنونه دي، ونډه نه دي.",
+    "bountyOpen": "جایزه پرانستې",
+    "claimed": "دعوه شوې",
+    "complete": "بشپړ",
+    "translationBountyTitle": "د ژباړې جایزه",
+    "bountyDescription": "لیانا بنیان {{language}} ته وژباړئ. {{marks}} Marks ترلاسه کړئ.",
+    "scopeWelcome": "د ښه راغلاست / د سیوري نړۍ سکرینونه",
+    "scopeCueCards": "اصلي د لارښوونې کارت ټولګه",
+    "scopeNavigation": "د ناوي لیبلونه او د تیروتنې پیغامونه",
+    "scopeWildfire": "Wildfire Beacon Run: کار پیدا کړئ",
+    "claimBounty": "دا د ژباړې جایزه دعوه کړئ",
+    "baseLanguage": "اصلي ژبه -- جایزې ته اړتیا نشته.",
+    "claimedBy": "@{{handle}} دعوه کړه -- روان دی.",
+    "marksProvisional": "{{marks}} Marks (لنډمهاله)",
+    "speakFounderTitle": "د بنسټ ایښودونکي غږ: ولې دا کلمې",
+    "speakFounderDesc": "پلیټ فارم کې هر اصطلاح د یوه دلیل لپاره نومول شوی دی. د ۲۶ مهمو نومونو اصل.",
+    "howBountiesWork": "د ژباړې جایزې څنګه کار کوي",
+    "step1Title": "جایزه دعوه کړئ",
+    "step1Body": "د Help Wanted تخته نه د ژباړې جایزه پرانستئ.",
+    "step2Title": "وژباړئ او واستوئ",
+    "step2Body": "ټول اړین تارونه وژباړئ. د Bounty Poster له لارې واستوئ.",
+    "step3Title": "Marks ترلاسه کړئ",
+    "step3Body": "د قبلولو وروسته Marks ترلاسه کوئ او IP Ledger کې ثبتیږئ.",
+    "hide": "پټ کړئ",
+    "why": "ولې؟",
+    "subtitle": "\"ملګری ووایه او ننوځه.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "ژبه بدله کړئ",
+    "selectLanguage": "ژبه وټاکئ",
+    "quickEnglish": "انګریزي",
+    "tip": "د ځانګړو تجربو د خلاصولو لپاره د Durin دروازې کې مختلفې ژبې پاسورډونه وکاروئ!"
+  }
+}

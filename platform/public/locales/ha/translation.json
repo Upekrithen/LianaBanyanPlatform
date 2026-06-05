@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.797Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Ce aboki, ka shiga.",
+    "description": "An gina Liana Banyan don bude wa kowane harshe. Kowane harshe yana da lada ta fassara.",
+    "languages": "harsuna",
+    "openBounties": "lada a bude",
+    "marksAwarded": "An ba da Marks (alamun shiga)",
+    "provisional": "Na wucin-gadi:",
+    "provisionalNotice": "Jerin harsunan da kimar Marks na wucin-gadi ne. Marks alamun shiga ne, ba hannun jari ba.",
+    "bountyOpen": "Lada a bude",
+    "claimed": "An yi ikrari",
+    "complete": "Cikakke",
+    "translationBountyTitle": "Ladan Fassara",
+    "bountyDescription": "Fassara Liana Banyan zuwa {{language}}. Samu Marks {{marks}} bayan karba.",
+    "scopeWelcome": "Allon Barka da zuwa / Duniyar Ruhu",
+    "scopeCueCards": "Babban saitin Katin Jagora (Dokokin Tattalin Arziki + Mulki)",
+    "scopeNavigation": "Lakabi na kewayawa da sakonnin kuskure",
+    "scopeWildfire": "Wildfire Beacon Run: Samu Aiki",
+    "claimBounty": "Yi ikrarin wannan Ladan Fassara",
+    "baseLanguage": "Asalin harshe -- babu lada da ake bukata.",
+    "claimedBy": "An yi ikrarin ladan ta @{{handle}} -- yana ci gaba.",
+    "marksProvisional": "Marks {{marks}} (na wucin-gadi)",
+    "speakFounderTitle": "Muryar Wanda Ya Kafa: Me Ya Sa Kalmomi Haka",
+    "speakFounderDesc": "Kowace kalma a wannan dandalin an sanya mata suna da dalili. Asalin sunayen 26 mafi mahimmanci.",
+    "howBountiesWork": "Yadda Ladajen Fassara Ke Aiki",
+    "step1Title": "Yi Ikrarin Lada",
+    "step1Body": "Bude Ladan Fassara daga allon Help Wanted.",
+    "step2Title": "Yi Fassara kuma Ka Tura",
+    "step2Body": "Fassara duk kirtani da ake bukata. Tura ta hanyar saiti na Bounty Poster.",
+    "step3Title": "Samu Marks",
+    "step3Body": "Bayan karba, kuna samun Marks kuma ana rikodin ku a IP Ledger.",
+    "hide": "boye",
+    "why": "me ya sa?",
+    "subtitle": "\"Ce aboki, ka shiga.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Canza harshe",
+    "selectLanguage": "Zabi harshe",
+    "quickEnglish": "Turanci",
+    "tip": "Yi amfani da kalmomin wucewar harshe daban-daban a Kofar Durin don bude kwarewa ta musamman!"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.859Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Wax xarit, bu dem dëkk.",
+    "description": "Liana Banyan dañu ko feri ngir mënees woon ci këlëfum kaw. Këlëfu bu nekk am nanu jëf bu yëgël ci tayre.",
+    "languages": "kañ",
+    "openBounties": "jëfandikoo yi juddu",
+    "marksAwarded": "Marks joxe (tokeniyu dëkku)",
+    "provisional": "Bu dëkku xam-xam:",
+    "provisionalNotice": "Listu kañ yi ak dewe Marks di soxor xam-xam. Marks di tokeniyu dëkku, mënees nekk xëmu.",
+    "bountyOpen": "Jëfandikoo jude",
+    "claimed": "Dindal",
+    "complete": "Jeex",
+    "translationBountyTitle": "Jëfandikoo ci Tayre",
+    "bountyDescription": "Tayre Liana Banyan ci {{language}}. Seet {{marks}} Marks.",
+    "scopeWelcome": "Yëgëlgëm / Àddina Jinne",
+    "scopeCueCards": "Sëtti Kaaru Xam-xam",
+    "scopeNavigation": "Siy ci yoonu ak kiiray njot-buukam",
+    "scopeWildfire": "Wildfire Beacon Run: Seet liggéey",
+    "claimBounty": "Jëfe Jëfandikoo bi ci Tayre bi",
+    "baseLanguage": "Kañ bu mboole -- amul jëfandikoo.",
+    "claimedBy": "@{{handle}} jëfe -- mu giggal.",
+    "marksProvisional": "{{marks}} Marks (xam-xam bu dëkku)",
+    "speakFounderTitle": "Xobalu Dekkanteeku: Lu tax Bataaxal yi",
+    "speakFounderDesc": "Kaw yëp ci réew bi dem nekk ci xam-xam yi. Mbuur mburu 26 bi siy.",
+    "howBountiesWork": "Lu tax Jëfandikoo ci Tayre Dox",
+    "step1Title": "Jëfe Jëfandikoo",
+    "step1Body": "Yëkkati Jëfandikoo ci Tayre ci Help Wanted.",
+    "step2Title": "Tayre Ci Yonn",
+    "step2Body": "Tayre kaw string yi. Yonn ci Bounty Poster.",
+    "step3Title": "Seet Marks",
+    "step3Body": "Bi dem nanu, nga xam Marks ak di ñëw ci IP Ledger.",
+    "hide": "planke",
+    "why": "lu tax?",
+    "subtitle": "\"Wax jaaraama, dem ci biir.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Soppi kañ",
+    "selectLanguage": "Tann kañ",
+    "quickEnglish": "Angale",
+    "tip": "Jëfe bataaxal kañ ci yooyu Dëkk Durin ngir yëgël xam xam bu am solo!"
+  }
+}

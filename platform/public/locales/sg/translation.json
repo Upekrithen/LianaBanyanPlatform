@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.883Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Linga sô-kôlî, kûê lo.",
+    "description": "Liana Banyan balë-ngango yâ bïla sêse. Ngbangâ yângâ mû sêse ayeke nzû ti nzûna.",
+    "languages": "sêse",
+    "openBounties": "nzûna lângö",
+    "marksAwarded": "Marks adukundë (takwë ti fa nzö)",
+    "provisional": "Sîgî:",
+    "provisionalNotice": "Lïngö ti sêse na azo na Marks sîgî. Marks takwë ti fa nzö, ngangö ê nzûna.",
+    "bountyOpen": "Nzûna lângö",
+    "claimed": "Aläkö",
+    "complete": "Pekë",
+    "translationBountyTitle": "Nzûna ti Mbï-tëne",
+    "bountyDescription": "Mbï-tëne Liana Banyan ti {{language}}. Sö {{marks}} Marks.",
+    "scopeWelcome": "Yeke lo / Mbïla Ndë",
+    "scopeCueCards": "Kûta ya Kayë ti Ndô",
+    "scopeNavigation": "Alakö ti ngû na kîrî ti pekë",
+    "scopeWildfire": "Wildfire Beacon Run: Sö Kûa",
+    "claimBounty": "Läkö Nzûna oyo ti Mbï-tëne",
+    "baseLanguage": "Sêse ti leke -- nzûna âwa.",
+    "claimedBy": "@{{handle}} aläkö -- sô-mbï.",
+    "marksProvisional": "{{marks}} Marks (sîgî)",
+    "speakFounderTitle": "Kôlî ti Mbo-tere: Pekë Sô Môdî",
+    "speakFounderDesc": "Sô-kôlî nzö tûndûa yê na ndô. Sô 26 na ndö mbo.",
+    "howBountiesWork": "Nzûna ti Mbï-tëne Sô Yeke",
+    "step1Title": "Läkö Nzûna",
+    "step1Body": "Lângö Nzûna ti Mbï-tëne sô Help Wanted.",
+    "step2Title": "Mbï-tëne Kûê",
+    "step2Body": "Mbï-tëne sô-kôlî yângo. Kûê ti Bounty Poster.",
+    "step3Title": "Sö Marks",
+    "step3Body": "Bïla nzö, sö Marks na IP Ledger.",
+    "hide": "fakara",
+    "why": "pekë?",
+    "subtitle": "\"Kwe zo, a sara.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Sö sêse",
+    "selectLanguage": "Bîla sêse",
+    "quickEnglish": "Zïngo",
+    "tip": "Sëse ni fata sô Durin nzö takwë!"
+  }
+}

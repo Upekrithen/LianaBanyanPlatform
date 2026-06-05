@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.879Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Lea ki e kāinga, pea hū.",
+    "description": "Liana Banyan 'oku langa ke tatala ki he lea kotoa pē. Ko e lea tatala 'oku 'iai ha totongi 'e taha ki he fakatonulea.",
+    "languages": "ngaahi lea",
+    "openBounties": "ngaahi totongi tatala",
+    "marksAwarded": "Marks tuku atu (ngaahi token kau ki ai)",
+    "provisional": "Feave'aki:",
+    "provisionalNotice": "Ko e lisi lea mo e ngaahi 'aata Marks 'oku feave'aki. Ko e Marks ko e ngaahi token kau ki ai, 'ikai ko e saea.",
+    "bountyOpen": "Totongi tatala",
+    "claimed": "Kole'i",
+    "complete": "Kamata",
+    "translationBountyTitle": "Totongi Fakatonulea",
+    "bountyDescription": "Fakatonulea 'a Liana Banyan ki he {{language}}. Ma'u {{marks}} Marks.",
+    "scopeWelcome": "Ngaahi Folofola Malo e Lelei / Māmani Laumālie",
+    "scopeCueCards": "Seti Kaati Huufi",
+    "scopeNavigation": "Ngaahi fakatonu fononga mo e ngaahi pōpoaki hala",
+    "scopeWildfire": "Wildfire Beacon Run: Kumi ngāue",
+    "claimBounty": "Kole e Totongi Fakatonulea ni",
+    "baseLanguage": "Lea 'etangata -- 'ikai fiema'u ha totongi.",
+    "claimedBy": "@{{handle}} 'oku kole -- 'oku 'oku hoko.",
+    "marksProvisional": "{{marks}} Marks (feave'aki)",
+    "speakFounderTitle": "Leá 'a e Tu'i Ngāue: Ko e Ha 'a e Ngaahi Lea ni",
+    "speakFounderDesc": "'Oku 'iai ha'ane 'uhinga 'a e huafa 'o e lea kotoa pē 'i he ngāue ni. 'Uhinga 26 huafa mahu'inga.",
+    "howBountiesWork": "Ko e Ha 'a e Ngaahi Totongi Fakatonulea",
+    "step1Title": "Kole e Totongi",
+    "step1Body": "Tatali e Totongi Fakatonulea mei Help Wanted.",
+    "step2Title": "Fakatonulea mo Tuku Atu",
+    "step2Body": "Fakatonulea e ngaahi laine kotoa pē. Tuku atu 'ia Bounty Poster.",
+    "step3Title": "Ma'u Marks",
+    "step3Body": "Hili hono tali, ke ma'u Marks pea tānaki ki he IP Ledger.",
+    "hide": "fakafufū",
+    "why": "ko e ha?",
+    "subtitle": "\"Pehe ko e kaungame'a, huu mai.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Liliu lea",
+    "selectLanguage": "Fili lea",
+    "quickEnglish": "Pilitānia",
+    "tip": "Fa'ahi ngaahi lea kehekehe ki he Matapā 'o Durin ke hu ki he ngaahi a'usia makehe!"
+  }
+}

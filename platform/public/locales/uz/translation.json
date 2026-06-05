@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.803Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Do'st de va kir.",
+    "description": "Liana Banyan har bir til uchun ochiq qurilgan. Har bir til uchun bitta tarjima mukofoti bor.",
+    "languages": "tillar",
+    "openBounties": "ochiq mukofotlar",
+    "marksAwarded": "Marks berildi (ishtirok tokenlari)",
+    "provisional": "Vaqtinchalik:",
+    "provisionalNotice": "Tillar ro'yxati va Marks stavkalari vaqtinchalik. Marks ishtirok tokenlari, kapital emas.",
+    "bountyOpen": "Mukofot ochiq",
+    "claimed": "Da'vo qilindi",
+    "complete": "Tugallandi",
+    "translationBountyTitle": "Tarjima Mukofoti",
+    "bountyDescription": "Liana Banyan'ni {{language}} tiliga tarjima qiling. {{marks}} Marks ishlang.",
+    "scopeWelcome": "Xush kelibsiz / Arvoh Dunyosi ekranlari",
+    "scopeCueCards": "Asosiy Ko'rsatma Karta to'plami",
+    "scopeNavigation": "Navigatsiya yorliqlari va xato xabarlari",
+    "scopeWildfire": "Wildfire Beacon Run: Ish toping",
+    "claimBounty": "Ushbu Tarjima Mukofotini da'vo qiling",
+    "baseLanguage": "Asosiy til -- mukofot kerak emas.",
+    "claimedBy": "@{{handle}} da'vo qildi -- jarayonda.",
+    "marksProvisional": "{{marks}} Marks (vaqtinchalik)",
+    "speakFounderTitle": "Asoschining Ovozi: Bu So'zlar Nima Uchun",
+    "speakFounderDesc": "Ushbu platformadagi har bir atama sabab bilan nomlangan. 26 muhim ismning kelib chiqishi.",
+    "howBountiesWork": "Tarjima Mukofotlari Qanday Ishlaydi",
+    "step1Title": "Mukofotni da'vo qiling",
+    "step1Body": "Help Wanted taxtasidan Tarjima Mukofotini oching.",
+    "step2Title": "Tarjima qiling va Yuboring",
+    "step2Body": "Barcha kerakli satrlarni tarjima qiling. Bounty Poster orqali yuboring.",
+    "step3Title": "Marks ishlang",
+    "step3Body": "Qabul qilingandan so'ng Marks olasiz. IP Ledger'da qayd etilasiz.",
+    "hide": "yashir",
+    "why": "nima uchun?",
+    "subtitle": "\"Do'st de va kir.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Tilni o'zgartir",
+    "selectLanguage": "Tilni tanlang",
+    "quickEnglish": "Inglizcha",
+    "tip": "Noyob tajribalar uchun Durin Darvozasida turli til parollarini ishlating!"
+  }
+}

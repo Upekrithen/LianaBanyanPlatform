@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.805Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "साथी भन र भित्र आउ।",
+    "description": "Liana Banyan हरेक भाषाको लागि खुला बनाइएको छ। प्रत्येक भाषाको लागि एउटा अनुवाद पुरस्कार छ।",
+    "languages": "भाषाहरू",
+    "openBounties": "खुला पुरस्कारहरू",
+    "marksAwarded": "Marks दिइयो (सहभागिता टोकन)",
+    "provisional": "अस्थायी:",
+    "provisionalNotice": "भाषाहरूको सूची र Marks दरहरू अस्थायी छन्। Marks सहभागिता टोकन हुन्, शेयर होइन।",
+    "bountyOpen": "पुरस्कार खुला",
+    "claimed": "दाबी गरियो",
+    "complete": "पूर्ण",
+    "translationBountyTitle": "अनुवाद पुरस्कार",
+    "bountyDescription": "Liana Banyan लाई {{language}} मा अनुवाद गर्नुस्। {{marks}} Marks कमाउनुस्।",
+    "scopeWelcome": "स्वागत / भूत विश्व स्क्रिनहरू",
+    "scopeCueCards": "मुख्य क्यू कार्ड सेट",
+    "scopeNavigation": "नेभिगेशन लेबल र त्रुटि सन्देश",
+    "scopeWildfire": "Wildfire Beacon Run: काम पाउनुस्",
+    "claimBounty": "यो अनुवाद पुरस्कार दाबी गर्नुस्",
+    "baseLanguage": "आधार भाषा -- पुरस्कार आवश्यक छैन।",
+    "claimedBy": "@{{handle}} ले दाबी गरेको -- जारी छ।",
+    "marksProvisional": "{{marks}} Marks (अस्थायी)",
+    "speakFounderTitle": "संस्थापकको आवाज: यी शब्दहरू किन",
+    "speakFounderDesc": "यस प्लेटफर्ममा प्रत्येक शब्द कारणसहित नामाङ्कन गरिएको छ। २६ महत्त्वपूर्ण नामहरूको उत्पत्ति।",
+    "howBountiesWork": "अनुवाद पुरस्कारहरू कसरी काम गर्छन्",
+    "step1Title": "पुरस्कार दाबी गर्नुस्",
+    "step1Body": "Help Wanted बोर्डबाट अनुवाद पुरस्कार खोल्नुस्।",
+    "step2Title": "अनुवाद गर्नुस् र पेश गर्नुस्",
+    "step2Body": "सबै आवश्यक स्ट्रिङहरू अनुवाद गर्नुस्। Bounty Poster मार्फत पेश गर्नुस्।",
+    "step3Title": "Marks कमाउनुस्",
+    "step3Body": "स्वीकृतिपछि Marks पाउनुहुन्छ। IP Ledger मा दर्ता हुनुहुन्छ।",
+    "hide": "लुकाउनुस्",
+    "why": "किन?",
+    "subtitle": "\"साथी भन र भित्र आउ।\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "भाषा परिवर्तन गर्नुस्",
+    "selectLanguage": "भाषा छान्नुस्",
+    "quickEnglish": "अंग्रेजी",
+    "tip": "अद्वितीय अनुभवहरू अनलक गर्न Durin's Door मा विभिन्न भाषाका पासवर्डहरू प्रयोग गर्नुस्!"
+  }
+}

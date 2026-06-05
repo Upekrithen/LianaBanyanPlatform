@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.860Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Gblɔ ɖoviɖo, eye wɔ dzo.",
+    "description": "Liana Banyan wɔɖe ɖe amedede be woagae ɖe gbegbɔgblɔ siwo katã. Gbegbɔgblɔ siã le akɔuntɔgbe ɖeka ɖe gblɔdzidzi.",
+    "languages": "gbegbɔgblɔ",
+    "openBounties": "akɔuntɔgbewo si woɖe",
+    "marksAwarded": "Marks ná (le kadzɛdzɛ tokens)",
+    "provisional": "Sigenyi:",
+    "provisionalNotice": "Gbegbɔgblɔwoe dzesi kple Marks didi le sigenyi. Marks nye kadzɛdzɛ tokens, manya didia.",
+    "bountyOpen": "Akɔuntɔgbe ɖe",
+    "claimed": "Woñlɔe",
+    "complete": "Woɖoa",
+    "translationBountyTitle": "Akɔuntɔgbe Gblɔdzidzi",
+    "bountyDescription": "Gblɔ Liana Banyan ɖe {{language}} me. Ɖu {{marks}} Marks.",
+    "scopeWelcome": "Deɖeɖe / Tɔxelu Tsiefe",
+    "scopeCueCards": "Akpa Kple Fɔmefɔme Kards",
+    "scopeNavigation": "Kpɔkpɔ-dɔ nutinuwo kple nuvevenyawo",
+    "scopeWildfire": "Wildfire Beacon Run: Kpɔ dɔ",
+    "claimBounty": "Ñlɔ Akɔuntɔgbe sia ɖe Gblɔdzidzi",
+    "baseLanguage": "Gbegbɔgblɔ tititi -- akɔuntɔgbe mehiã o.",
+    "claimedBy": "@{{handle}} ñlɔe -- ede agbenɔnɔ.",
+    "marksProvisional": "{{marks}} Marks (sigenyi)",
+    "speakFounderTitle": "Dɔwɔlawo Gbe: Edze Nusi Ŋkeke Sia Ƒe",
+    "speakFounderDesc": "Nusiwo katã le platform sia me wɔɖe ŋkeke ɖe gbegbɔgblɔ. 26 ŋkeke siwo wɔle ŋutɔŋutɔ.",
+    "howBountiesWork": "Akɔuntɔgbe Gblɔdzidzi le Nusi Dɔ",
+    "step1Title": "Ñlɔ Akɔuntɔgbe no",
+    "step1Body": "Zi Akɔuntɔgbe Gblɔdzidzi le Help Wanted.",
+    "step2Title": "Gblɔ kple Bliɛa",
+    "step2Body": "Gblɔ strings siwo hiã katã. Bliɛa abe Bounty Poster.",
+    "step3Title": "Ɖu Marks",
+    "step3Body": "Kpe le wogaɖeɖe emegbe, ede Marks kple IP Ledger ñlɔ.",
+    "hide": "gbo",
+    "why": "edze nusi?",
+    "subtitle": "\"Gblo nuvitso, eye nao me.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Tia gbegbɔgblɔ",
+    "selectLanguage": "Yi gbegbɔgblɔ",
+    "quickEnglish": "Yevugbe",
+    "tip": "Zã gbegbɔgblɔ siwo ɣe ɣem passwords le Durin ƒe Ŋkɔ dzi ɖe kplɔ nyuitɔ!"
+  }
+}

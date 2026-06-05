@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.851Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Utle song ja mine sisse.",
+    "description": "Liana Banyan on ehitatud igale keelele avatud olemiseks. Igal avatud keelel on uks toelgitsemise auhinnd.",
+    "languages": "keeled",
+    "openBounties": "avatud auhinnad",
+    "marksAwarded": "Marks antud (osaluszetoonid)",
+    "provisional": "Ajutiselt:",
+    "provisionalNotice": "Keelte nimekiri ja Marks-maarad on ajutised. Marks on osaluszetoonid, mitte aktsiad.",
+    "bountyOpen": "Auhind avatud",
+    "claimed": "Noudutud",
+    "complete": "Loetud",
+    "translationBountyTitle": "Tolkimisauhind",
+    "bountyDescription": "Tolkige Liana Banyan keeles {{language}}. Teenige {{marks}} Marks kinnitamisel.",
+    "scopeWelcome": "Tere tulemast / Vaimude Maailm ekraanid",
+    "scopeCueCards": "Pohiline vihjekaartkomplekt",
+    "scopeNavigation": "Navigatsiooni silte ja veateated",
+    "scopeWildfire": "Wildfire Beacon Run: Leia too",
+    "claimBounty": "Noudke seda Tolkimisauhinda",
+    "baseLanguage": "Pohikeel -- auhind pole vajalik.",
+    "claimedBy": "@{{handle}} noudis -- kestab.",
+    "marksProvisional": "{{marks}} Marks (ajutiselt)",
+    "speakFounderTitle": "Asutaja haal: Miks Need Sonad",
+    "speakFounderDesc": "Iga termin sellel platvormil on nimetatud pohjendusel. 26 tahtsaima nime pariolu.",
+    "howBountiesWork": "Kuidas Tolkimisauhinnad Tootavad",
+    "step1Title": "Noudke Auhinda",
+    "step1Body": "Avage Tolkimisauhind Help Wanted tahvlilt.",
+    "step2Title": "Tolkige ja Saatke",
+    "step2Body": "Tolkige koik vajalikud stringid. Saatke Bounty Poster kaudu.",
+    "step3Title": "Teenige Marks",
+    "step3Body": "Kinnitamise jargselt saate Marks ja kantakse IP Ledgerisse.",
+    "hide": "peida",
+    "why": "miks?",
+    "subtitle": "\"Otle sober ja astu sisse.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Muuda keelt",
+    "selectLanguage": "Vali keel",
+    "quickEnglish": "Inglise",
+    "tip": "Kasutage erinevate keelte paroole Durini Ukse juures ainulaadsete kogemuste avamiseks!"
+  }
+}

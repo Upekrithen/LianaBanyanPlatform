@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.818Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "दोस्त कहू आ भीतर आबू।",
+    "description": "Liana Banyan हर भाषा लेल खुला बनाओल गेल छैक। हर भाषा लेल एकटा अनुवाद पुरस्कार छैक।",
+    "languages": "भाषा",
+    "openBounties": "खुला पुरस्कार",
+    "marksAwarded": "Marks देल गेल (सहभागिता टोकन)",
+    "provisional": "अस्थायी:",
+    "provisionalNotice": "भाषाक सूची आ Marks दर अस्थायी अछि। Marks सहभागिता टोकन अछि, शेयर नहि।",
+    "bountyOpen": "पुरस्कार खुला",
+    "claimed": "दावा कएल गेल",
+    "complete": "पूर्ण",
+    "translationBountyTitle": "अनुवाद पुरस्कार",
+    "bountyDescription": "Liana Banyan केँ {{language}} मे अनुवाद करू। {{marks}} Marks कमाउ।",
+    "scopeWelcome": "स्वागत / भूत दुनिया स्क्रीन",
+    "scopeCueCards": "मूल क्यू कार्ड सेट",
+    "scopeNavigation": "नेविगेशन लेबल आ त्रुटि संदेश",
+    "scopeWildfire": "Wildfire Beacon Run: काज पाबू",
+    "claimBounty": "इ अनुवाद पुरस्कार दावा करू",
+    "baseLanguage": "मूल भाषा -- पुरस्कारक आवश्यकता नहि।",
+    "claimedBy": "@{{handle}} द्वारा दावा -- जारी अछि।",
+    "marksProvisional": "{{marks}} Marks (अस्थायी)",
+    "speakFounderTitle": "संस्थापकक आवाज: एहि शब्दक कारण",
+    "speakFounderDesc": "एहि प्लेटफर्म पर हर शब्द कारणसँ नाम रखल गेल अछि। 26 महत्वपूर्ण नामक मूल।",
+    "howBountiesWork": "अनुवाद पुरस्कार कोना काज करैत अछि",
+    "step1Title": "पुरस्कार दावा करू",
+    "step1Body": "Help Wanted बोर्डसँ अनुवाद पुरस्कार खोलू।",
+    "step2Title": "अनुवाद करू आ जमा करू",
+    "step2Body": "सभ आवश्यक स्ट्रिंग अनुवाद करू। Bounty Poster द्वारा जमा करू।",
+    "step3Title": "Marks कमाउ",
+    "step3Body": "स्वीकृति पर Marks भेटत। IP Ledger मे दर्ज भेल।",
+    "hide": "लुकाउ",
+    "why": "किएक?",
+    "subtitle": "\"दोस्त कहू आ भीतर आबू।\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "भाषा बदलू",
+    "selectLanguage": "भाषा चुनू",
+    "quickEnglish": "अंग्रेजी",
+    "tip": "Durin's Door पर भिन्न भाषाक पासवर्ड उपयोग करू!"
+  }
+}

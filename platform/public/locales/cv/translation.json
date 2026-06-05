@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.893Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Юрату тесе, кӗр.",
+    "description": "Liana Banyan кашни чӗлхе валли уçă тунă. Кашни уçă чӗлхен куçару сыйлăхĕ пур.",
+    "languages": "чӗлхесем",
+    "openBounties": "уçă сыйлăхсем",
+    "marksAwarded": "Marks пачĕç (хутшăну токенĕсем)",
+    "provisional": "Вăхăтлăха:",
+    "provisionalNotice": "Чӗлхе çыравĕпе Marks тарифĕсем вăхăтлăха. Marks хутшăну токенĕсем, акцисем мар.",
+    "bountyOpen": "Сыйлăх уçă",
+    "claimed": "Тупсă илнĕ",
+    "complete": "Пĕтернĕ",
+    "translationBountyTitle": "Куçару сыйлăхĕ",
+    "bountyDescription": "Liana Banyan-a {{language}} чӗлхине куçар. {{marks}} Marks туп.",
+    "scopeWelcome": "Аннесем / Ĕмĕт тĕнчи",
+    "scopeCueCards": "Тĕп картă наборĕ",
+    "scopeNavigation": "Навигаци палăкĕсемпе йăнăш çырăвĕсем",
+    "scopeWildfire": "Wildfire Beacon Run: Ĕç тупса ил",
+    "claimBounty": "Ку куçару сыйлăхне тупса ил",
+    "baseLanguage": "Тĕп чӗлхе -- сыйлăх кирлĕ мар.",
+    "claimedBy": "@{{handle}} тупсă илнĕ -- тăсать.",
+    "marksProvisional": "{{marks}} Marks (вăхăтлăха)",
+    "speakFounderTitle": "Йышăну ман сасă: Мĕн тĕлĕшпе ку сăмахсем",
+    "speakFounderDesc": "Ку платформăра кашни çыrav сăмах тĕлĕшпе ятланнă. 26 пĕлтерĕшлĕ ят тымарĕ.",
+    "howBountiesWork": "Куçару сыйлăхĕсем мĕнле ĕçлеç",
+    "step1Title": "Сыйлăх ил",
+    "step1Body": "Help Wanted-тан куçару сыйлăхне уç.",
+    "step2Title": "Куçарпа Яр",
+    "step2Body": "Кирлĕ строксен кашниĕсем куçар. Bounty Poster урлă яр.",
+    "step3Title": "Marks туп",
+    "step3Body": "Хваллăна хыççăн Marks тупатăн, IP Ledger-та палăртатăн.",
+    "hide": "пытар",
+    "why": "мĕн тĕлĕшпе?",
+    "subtitle": "\"Yytash te, kerek.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Чӗлхене улăштар",
+    "selectLanguage": "Чӗлхе суйла",
+    "quickEnglish": "Акăлчан",
+    "tip": "Дуринăн çурçĕрне тĕрлĕ чӗлхе пытарулăхĕпе кĕрсе уникăл тата тупса ил!"
+  }
+}

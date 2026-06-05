@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.810Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Sabihing kaibigan, at pumasok.",
+    "description": "Ang Liana Banyan ay ginawa para buksan sa bawat wika. Bawat bukas na wika ay may isang gantimpala ng pagsasalin.",
+    "languages": "wika",
+    "openBounties": "bukas na gantimpala",
+    "marksAwarded": "Marks na ibinigay (mga token ng pakikilahok)",
+    "provisional": "Pansamantala:",
+    "provisionalNotice": "Ang listahan ng wika at mga rate ng Marks ay pansamantala. Ang Marks ay mga token ng pakikilahok, hindi equity.",
+    "bountyOpen": "Bukas ang gantimpala",
+    "claimed": "Na-claim na",
+    "complete": "Kumpleto",
+    "translationBountyTitle": "Gantimpala ng Pagsasalin",
+    "bountyDescription": "Isalin ang Liana Banyan sa {{language}}. Kumita ng {{marks}} Marks kapag tinanggap.",
+    "scopeWelcome": "Mga screen ng Maligayang Pagdating / Ghost World",
+    "scopeCueCards": "Core na hanay ng Cue Card",
+    "scopeNavigation": "Mga label ng navigation at mensahe ng error",
+    "scopeWildfire": "Wildfire Beacon Run: Maghanap ng Trabaho",
+    "claimBounty": "I-claim ang Gantimpalang Ito ng Pagsasalin",
+    "baseLanguage": "Batayang wika -- hindi kailangan ng gantimpala.",
+    "claimedBy": "Na-claim ng @{{handle}} -- kasalukuyan.",
+    "marksProvisional": "{{marks}} Marks (pansamantala)",
+    "speakFounderTitle": "Tinig ng Tagapagtatag: Bakit Ang Mga Salitang Ito",
+    "speakFounderDesc": "Bawat termino sa platform na ito ay pinangalanan nang may dahilan. Pinagmulan ng 26 pinakamahalgang pangalan.",
+    "howBountiesWork": "Paano Gumagana ang Mga Gantimpala ng Pagsasalin",
+    "step1Title": "I-claim ang Gantimpala",
+    "step1Body": "Buksan ang Gantimpala ng Pagsasalin mula sa Help Wanted.",
+    "step2Title": "Isalin at Isumite",
+    "step2Body": "Isalin ang lahat ng kinakailangang mga string. Isumite sa pamamagitan ng Bounty Poster.",
+    "step3Title": "Kumita ng Marks",
+    "step3Body": "Pagkatapos tanggapin, makakatanggap ka ng Marks at maitala sa IP Ledger.",
+    "hide": "itago",
+    "why": "bakit?",
+    "subtitle": "\"Sabihing kaibigan, at pumasok.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Baguhin ang wika",
+    "selectLanguage": "Piliin ang wika",
+    "quickEnglish": "Ingles",
+    "tip": "Gumamit ng iba't ibang password ng wika sa Pintuan ni Durin para ma-unlock ang natatanging karanasan!"
+  }
+}

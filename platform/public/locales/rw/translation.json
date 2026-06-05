@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.823Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Vuga inshuti, winjire.",
+    "description": "Liana Banyan yubatswe kugira ngo ifunguke ku rurimi rwose. Ururimi rwose rufunguye rufite igihembo kimwe cy'ubusobanuro.",
+    "languages": "indimi",
+    "openBounties": "ibihembo bifunguye",
+    "marksAwarded": "Marks yahawe (ibimenyetso by'intagatifu)",
+    "provisional": "By'agateganyo:",
+    "provisionalNotice": "Urutonde rw'indimi n'ingano z'Marks ni by'agateganyo. Marks ni ibimenyetso by'intagatifu, si imigabane.",
+    "bountyOpen": "Igihembo gifunguye",
+    "claimed": "Cyabajijwe",
+    "complete": "Byarangiye",
+    "translationBountyTitle": "Igihembo cy'Ubusobanuro",
+    "bountyDescription": "Sobanura Liana Banyan mu {{language}}. Unguka {{marks}} Marks.",
+    "scopeWelcome": "Ibigaragaza Murakaza neza / Isi y'Amazimu",
+    "scopeCueCards": "Urutonde rw'Amakarita y'Amabwiriza Nshingiro",
+    "scopeNavigation": "Impano z'inzira n'ubutumwa bw'amakosa",
+    "scopeWildfire": "Wildfire Beacon Run: Shaka Akazi",
+    "claimBounty": "Saba Iki Gihembo cy'Ubusobanuro",
+    "baseLanguage": "Ururimi rw'ibanze -- nta gihembo gikenewe.",
+    "claimedBy": "@{{handle}} yasabye -- biragenda.",
+    "marksProvisional": "{{marks}} Marks (by'agateganyo)",
+    "speakFounderTitle": "Ijwi ry'Umushinga: Impamvu y'Aya Magambo",
+    "speakFounderDesc": "Ijambo ryose muri iyi sisitemu ryatowe n'impamvu. Inkomoko ya mazina 26 y'ingenzi.",
+    "howBountiesWork": "Ibihembo by'Ubusobanuro Bigenda Bite",
+    "step1Title": "Saba Igihembo",
+    "step1Body": "Fungura Igihembo cy'Ubusobanuro ku kibaho Help Wanted.",
+    "step2Title": "Sobanura Ukoheze",
+    "step2Body": "Sobanura imigabane yose ikenewe. Ohereza ukoresheje Bounty Poster.",
+    "step3Title": "Unguka Marks",
+    "step3Body": "Nyuma yo kwemererwa, uzahabwa Marks kandi uzandikwe muri IP Ledger.",
+    "hide": "hisha",
+    "why": "impamvu iki?",
+    "subtitle": "\"Vuga inshuti, winjire.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Hindura ururimi",
+    "selectLanguage": "Hitamo ururimi",
+    "quickEnglish": "Icyongereza",
+    "tip": "Koresha imihango y'indimi zitandukanye ku Muryango wa Durin kugira ngo ukingure uburambe budasanzwe!"
+  }
+}

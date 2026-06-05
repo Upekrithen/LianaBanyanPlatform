@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.859Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Ka se adamfo, na wo ko mu.",
+    "description": "Wode Liana Banyan ama kasa biara betumi ato mu. Kasa biara wɔ bommɔne baako a wɔka nkyerɛ mu.",
+    "languages": "kasa",
+    "openBounties": "bommɔne a wɔkado",
+    "marksAwarded": "Wode Marks maa (token a wɔba ho)",
+    "provisional": "Dapem:",
+    "provisionalNotice": "Kasa nhyehyɛe ne Marks bɛhyɛ no yɛ dapem. Marks yɛ token a wɔba ho, na ɛnyɛ sekyɛn.",
+    "bountyOpen": "Bommɔne wɔ adi",
+    "claimed": "Yɛagye",
+    "complete": "Yɛawie",
+    "translationBountyTitle": "Bommɔne Nkyerɛkyerɛmu",
+    "bountyDescription": "Kyerɛ Liana Banyan mu wɔ {{language}}. Nya {{marks}} Marks.",
+    "scopeWelcome": "Nnae a yɛkye / Asase Honhom",
+    "scopeCueCards": "Kard nhyehyɛe a ɛfa ho nsɛm",
+    "scopeNavigation": "Kwan nhyehyɛe ne nkyerɛmu nsɛm",
+    "scopeWildfire": "Wildfire Beacon Run: Nya Adwuma",
+    "claimBounty": "Gye Bommɔne yi wɔ Nkyerɛkyerɛmu mu",
+    "baseLanguage": "Kasa titiriw -- bommɔne nhia.",
+    "claimedBy": "@{{handle}} agye -- rekɔ so.",
+    "marksProvisional": "{{marks}} Marks (dapem)",
+    "speakFounderTitle": "Ohene no Nne: Adɛn na Nsɛm yi",
+    "speakFounderDesc": "Nsɛm biara wɔ platform yi mu wɔ nea ɛmaa ne din. Fiase 26 din a ɛho hia.",
+    "howBountiesWork": "Nkyerɛkyerɛmu Bommɔne bɛyɛ dɛn",
+    "step1Title": "Gye Bommɔne no",
+    "step1Body": "Bue Bommɔne Nkyerɛkyerɛmu wɔ Help Wanted.",
+    "step2Title": "Kyerɛ Ne Fi",
+    "step2Body": "Kyerɛ strings a ɛhia nyinaa. Fi wɔ Bounty Poster mu.",
+    "step3Title": "Nya Marks",
+    "step3Body": "Wɔagye no akyi, wunya Marks na wɔde wo kɔ IP Ledger mu.",
+    "hide": "kaha",
+    "why": "adɛn?",
+    "subtitle": "\"Ka onua, na wo ba.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Sesa kasa",
+    "selectLanguage": "Yi kasa",
+    "quickEnglish": "Borɔfoɔ Kasa",
+    "tip": "Fa kasa foforo pasowedi wɔ Durin Pon ho na wo benya adeɛ a ɛpɛ so!"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.852Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Pasakyk draugas ir eik vidun.",
+    "description": "Liana Banyan sukurta buti atvirais kiekvienai kalbai. Kiekviena atvira kalba turi viena vertimo premija.",
+    "languages": "kalbos",
+    "openBounties": "atviros premijos",
+    "marksAwarded": "Marks priskirti (dalyvavimo zetonai)",
+    "provisional": "Laikinai:",
+    "provisionalNotice": "Kalbu sarasas ir Marks normos laikinos. Marks yra dalyvavimo zetonai, ne akcijos.",
+    "bountyOpen": "Premija atidaryta",
+    "claimed": "Pareikalauta",
+    "complete": "Baigta",
+    "translationBountyTitle": "Vertimo Premija",
+    "bountyDescription": "Isverskite Liana Banyan i {{language}}. Uzdirbkite {{marks}} Marks.",
+    "scopeWelcome": "Sveikiname / Vaiduokliu Pasaulio ekranai",
+    "scopeCueCards": "Pagrindinis Pataarimu Korteliu rinkinys",
+    "scopeNavigation": "Navigacijos etiketiu ir klaidu pranesimai",
+    "scopeWildfire": "Wildfire Beacon Run: Rask darba",
+    "claimBounty": "Pareikalaukite sios Vertimo Premijos",
+    "baseLanguage": "Pagrindine kalba -- premija nereikalinga.",
+    "claimedBy": "@{{handle}} pareikalavo -- vyksta.",
+    "marksProvisional": "{{marks}} Marks (laikinai)",
+    "speakFounderTitle": "Istegejos balsas: Kodel Sie Zodziai",
+    "speakFounderDesc": "Kiekvienas terminas sioje platformoje pavadintas priezastimi. 26 svarbiausiu pavadinimu kilme.",
+    "howBountiesWork": "Kaip Veikia Vertimo Premijos",
+    "step1Title": "Pareikalaukite Premijos",
+    "step1Body": "Atidarykite Vertimo Premija is Help Wanted lentes.",
+    "step2Title": "Isverskite ir Issiuskite",
+    "step2Body": "Isverskite visas reikalingas eilutes. Siuskite per Bounty Poster.",
+    "step3Title": "Uzdirbkite Marks",
+    "step3Body": "Priemimo metu gausite Marks ir bute registruojami IP Ledger.",
+    "hide": "slept",
+    "why": "kodel?",
+    "subtitle": "\"Sakyk draugas ir eik vidun.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Keisti kalba",
+    "selectLanguage": "Pasirinkite kalba",
+    "quickEnglish": "Anglu",
+    "tip": "Naudokite skirtingu kalbu slaptazodzius prie Durino Vartu, kad atrakintumete unikalias patirtis!"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.814Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Дос де, кір.",
+    "description": "Liana Banyan кез келген тіл үшін ашық болып жасалған. Әрбір ашық тілде бір аударма сыйлығы бар.",
+    "languages": "тілдер",
+    "openBounties": "ашық сыйлықтар",
+    "marksAwarded": "Marks берілді (қатысу токендері)",
+    "provisional": "Уақытша:",
+    "provisionalNotice": "Тілдер тізімі мен Marks мөлшерлемелері уақытша. Marks қатысу токендері, капитал емес.",
+    "bountyOpen": "Сыйлық ашық",
+    "claimed": "Талап етілді",
+    "complete": "Аяқталды",
+    "translationBountyTitle": "Аударма Сыйлығы",
+    "bountyDescription": "Liana Banyan-ды {{language}} тіліне аударыңыз. {{marks}} Marks табыңыз.",
+    "scopeWelcome": "Қош келдіңіз / Аруақтар Әлемі экрандары",
+    "scopeCueCards": "Негізгі кеңес карталары жиынтығы",
+    "scopeNavigation": "Навигация белгілері мен қате хабарлары",
+    "scopeWildfire": "Wildfire Beacon Run: Жұмыс тауып",
+    "claimBounty": "Осы аударма сыйлығын талап ету",
+    "baseLanguage": "Негізгі тіл -- сыйлық қажет емес.",
+    "claimedBy": "@{{handle}} талап етті -- жүріп жатыр.",
+    "marksProvisional": "{{marks}} Marks (уақытша)",
+    "speakFounderTitle": "Негізшінің дауысы: неліктен осы сөздер",
+    "speakFounderDesc": "Бұл платформадағы әрбір термин бір себеппен аталған. 26 маңызды атаудың шығу тегі.",
+    "howBountiesWork": "Аударма сыйлықтары қалай жұмыс істейді",
+    "step1Title": "Сыйлықты талап ету",
+    "step1Body": "Help Wanted тақтасынан аударма сыйлығын ашыңыз.",
+    "step2Title": "Аудару және жіберу",
+    "step2Body": "Барлық қажетті жолдарды аударыңыз. Bounty Poster арқылы жіберіңіз.",
+    "step3Title": "Marks табу",
+    "step3Body": "Қабылданғаннан кейін Marks аласыз. IP Ledger-ге тіркеледіңіз.",
+    "hide": "жасыру",
+    "why": "неге?",
+    "subtitle": "\"Дос де, кір.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Тілді өзгерту",
+    "selectLanguage": "Тіл таңдаңыз",
+    "quickEnglish": "Ағылшын",
+    "tip": "Бірегей тәжірибелер үшін Дурин Есігінде әртүрлі тіл құпия сөздерін пайдаланыңыз!"
+  }
+}

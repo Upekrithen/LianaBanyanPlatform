@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.865Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Di amigo e entra.",
+    "description": "Liana Banyan está construída para ser aberta a cada idioma. Cada idioma aberto ten un premio de tradución.",
+    "languages": "idiomas",
+    "openBounties": "premios abertos",
+    "marksAwarded": "Marks outorgados (tokens de participación)",
+    "provisional": "Provisionalmente:",
+    "provisionalNotice": "A lista de idiomas e as taxas de Marks son provisionais. Os Marks son tokens de participación, non accións.",
+    "bountyOpen": "Premio aberto",
+    "claimed": "Reclamado",
+    "complete": "Completado",
+    "translationBountyTitle": "Premio de Tradución",
+    "bountyDescription": "Traduce Liana Banyan a {{language}}. Gaña {{marks}} Marks.",
+    "scopeWelcome": "Pantallas de Benvida / Mundo Fantasmal",
+    "scopeCueCards": "Conxunto básico de tarxetas de suxestión",
+    "scopeNavigation": "Etiquetas de navegación e mensaxes de erro",
+    "scopeWildfire": "Wildfire Beacon Run: Atopa traballo",
+    "claimBounty": "Reclama este Premio de Tradución",
+    "baseLanguage": "Idioma base -- non é preciso ningún premio.",
+    "claimedBy": "Premio reclamado por @{{handle}} -- en curso.",
+    "marksProvisional": "{{marks}} Marks (provisionalmente)",
+    "speakFounderTitle": "A Voz do Fundador: Por que Estas Palabras",
+    "speakFounderDesc": "Cada termo desta plataforma foi nomeado por un motivo. A orixe dos 26 nomes máis importantes.",
+    "howBountiesWork": "Como Funcionan os Premios de Tradución",
+    "step1Title": "Reclama o Premio",
+    "step1Body": "Abre un Premio de Tradución do taboleiro Help Wanted.",
+    "step2Title": "Traduce e Envía",
+    "step2Body": "Traduce todas as cadeas necesarias. Envía a través do fluxo Bounty Poster.",
+    "step3Title": "Gaña Marks",
+    "step3Body": "Após a aceptación, recibirás Marks e quedarás rexistrado no IP Ledger.",
+    "hide": "agochar",
+    "why": "por que?",
+    "subtitle": "\"Di amigo e entra.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Cambiar idioma",
+    "selectLanguage": "Seleccionar idioma",
+    "quickEnglish": "Inglés",
+    "tip": "Usa contrasinais en idiomas diferentes na Porta de Durin para desbloquear experiencias únicas!"
+  }
+}

@@ -1,0 +1,1046 @@
+/**
+ * Initiative Walkthrough Data — Wave 6 Phase S
+ * =============================================
+ * Member-facing step-by-step journeys for all 16 Sweet Sixteen initiatives.
+ * Each walkthrough answers: "What actually happens when I use this?"
+ *
+ * Canon: 83.3% to creators/workers, Cost+20% pricing, Marks = participation.
+ */
+
+export interface WalkthroughStep {
+  number: number;
+  title: string;
+  description: string;
+  detail: string;
+}
+
+export interface InitiativeCueCardData {
+  slug: string;
+  name: string;
+  emoji: string;
+  tagline: string;
+  quickStat: string;
+  quickStatLabel: string;
+  color: string;
+  bulletPoints: string[];
+  onboardingCta: string;
+  onboardingRoute: string;
+}
+
+export interface InitiativeWalkthroughData {
+  slug: string;
+  steps: WalkthroughStep[];
+  cueCard: InitiativeCueCardData;
+  /**
+   * The unmet-need ORIGIN anecdote for this initiative.
+   * Every initiative stems from a need the Founder or someone he knows lived.
+   * Written in Founder voice. No em-dashes. Securities-clean.
+   */
+  originAnecdote?: string;
+}
+
+const WALKTHROUGHS: InitiativeWalkthroughData[] = [
+  // ─── STEP 2: Feed Your Neighbors ───────────────────────────────────────────
+
+  {
+    slug: "lets-make-dinner",
+    originAnecdote:
+      "When my family was stretched thin - eight kids, a $30,000 annual income - neighbors brought food. Not donations; they cooked what they would have cooked anyway and shared it. That simple act, a neighbor's kitchen to a neighbor's table with nothing between them, showed me the gap. The middleman between a home cook one block away and a family that needs dinner should be nothing more than a quick message and a fair payment. I designed this so that cook keeps 83.3% and the neighbor pays Cost+20%, and both of them know exactly what the other is getting before the first meal is made.",
+    steps: [
+      {
+        number: 1,
+        title: "Find a chef or group cook in your neighborhood",
+        description: "Browse verified home cooks near you.",
+        detail:
+          "Open the Let's Make Dinner directory. Filter by cuisine, dietary restrictions, or pickup time. Every cook has a community rating from real neighbors.",
+      },
+      {
+        number: 2,
+        title: "Order a meal at Cost+20% pricing",
+        description: "Transparent pricing - no hidden markups.",
+        detail:
+          "You see the cook's exact cost breakdown. Price = their cost + 20%. No restaurants extracting 300% margin. The cook keeps 83.3% of what you pay.",
+      },
+      {
+        number: 3,
+        title: "Pick up or receive delivery from a member",
+        description: "Local logistics by community members.",
+        detail:
+          "Delivery drivers are also cooperative members earning 83.3%. Your meal travels one neighborhood, not across a city in a thermal bag.",
+      },
+      {
+        number: 4,
+        title: "Rate the experience and earn Marks",
+        description: "Your review helps the community.",
+        detail:
+          "Honest reviews build community trust. Writing a detailed, useful review earns you Marks - participation credits that unlock platform features.",
+      },
+      {
+        number: 5,
+        title: "Become a cook when you're ready",
+        description: "Your kitchen is a business waiting to happen.",
+        detail:
+          "Any member can start a cooking node. Post your first menu, set your price using Cost+20%, and your first customer could be your next-door neighbor.",
+      },
+    ],
+    cueCard: {
+      slug: "lets-make-dinner",
+      name: "Let's Make Dinner",
+      emoji: "🍽️",
+      tagline: "Neighbors Paid to Feed Neighbors",
+      quickStat: "83.3%",
+      quickStatLabel: "kept by the cook",
+      color: "from-orange-500/20 to-red-500/20 border-orange-500/30",
+      bulletPoints: [
+        "Home cooks earn 83.3% of every meal",
+        "Cost+20% pricing - transparent and fair",
+        "No restaurant middleman extraction",
+        "Community ratings from real neighbors",
+        "Start your own cooking node anytime",
+      ],
+      onboardingCta: "Find a meal near you",
+      onboardingRoute: "/initiatives/lets-make-dinner",
+    },
+  },
+
+  {
+    slug: "lets-get-groceries",
+    originAnecdote:
+      "I watched a single mother in my neighborhood drive 40 minutes to a warehouse club she could barely afford a membership to, because the price-per-pound was the only way she could make her grocery budget work. Her neighbor was making the same drive. And another neighbor. And none of them knew the others were doing it. Three identical trips, three gas tanks burned, three membership fees paid separately. The grocery circle is that discovery: three people who had been paying for the same trip, separately, finally introduced to each other.",
+    steps: [
+      {
+        number: 1,
+        title: "Join your neighborhood's grocery circle",
+        description: "Bulk orders mean wholesale prices for everyone.",
+        detail:
+          "A grocery node serves 20-100 households. The more neighbors who join, the lower everyone's price. Minimum order thresholds unlock the best wholesale rates.",
+      },
+      {
+        number: 2,
+        title: "Add items to the shared order",
+        description: "Browse the weekly staples catalog.",
+        detail:
+          "Every item is priced at Cost+20%. No brand premium, no shrinkflation surprise. You see the exact source and cost before you add anything to your basket.",
+      },
+      {
+        number: 3,
+        title: "Confirm your share before the order closes",
+        description: "Orders batch weekly or bi-weekly.",
+        detail:
+          "The node coordinator confirms the full order once per cycle. You pay only for what you requested. No surprise charges, no substitutions without permission.",
+      },
+      {
+        number: 4,
+        title: "Pick up at the neighborhood node",
+        description: "Nodes are often in a neighbor's garage or church hall.",
+        detail:
+          "Pickup is a 5-minute social event. Meet the people who feed you. Node hosts earn Marks for running the distribution point.",
+      },
+      {
+        number: 5,
+        title: "Host a node and earn for your neighborhood",
+        description: "Become the local distribution hub.",
+        detail:
+          "Node hosts earn 83.3% of the coordination fee. You need a dry space, a scale, and a few hours per cycle. Your garage could fund a year of groceries.",
+      },
+    ],
+    cueCard: {
+      slug: "lets-get-groceries",
+      name: "Let's Get Groceries",
+      emoji: "🛒",
+      tagline: "Volume Discount Grocery Runs",
+      quickStat: "Cost+20%",
+      quickStatLabel: "every item, transparent",
+      color: "from-green-500/20 to-emerald-500/20 border-green-500/30",
+      bulletPoints: [
+        "Bulk purchasing at wholesale prices",
+        "Cost+20% on every item - no hidden markups",
+        "Node hosts earn 83.3% of coordination fee",
+        "Local sourcing whenever possible",
+        "Weekly or bi-weekly batch orders",
+      ],
+      onboardingCta: "Find your grocery node",
+      onboardingRoute: "/initiatives/lets-get-groceries",
+    },
+  },
+
+  {
+    slug: "family-table",
+    originAnecdote:
+      "With eight children ranging from toddler to teenager, the number of times I said 'I didn't know you needed that' or 'I thought someone else handled it' is embarrassing. Meal planning, school schedules, chores, wish lists, calendars - we were running all of it through a combination of memory, sticky notes, and phone calls that never reached everyone. The Family Table exists because the coordination overhead of a large family was crushing us into silos. A family that can see itself whole handles the chaos better. This is the hub I wished we had.",
+    steps: [
+      {
+        number: 1,
+        title: "Create your family's private hub",
+        description: "One shared space for your whole household.",
+        detail:
+          "Invite family members by email. Each person gets their own access level. No one outside your family can see your hub - no data sold, no ads.",
+      },
+      {
+        number: 2,
+        title: "Connect your meal plans and calendars",
+        description: "Who's eating what and when.",
+        detail:
+          "Link to Let's Make Dinner and Let's Get Groceries. Your family's meal plan auto-generates a grocery list. Dietary restrictions flow through automatically.",
+      },
+      {
+        number: 3,
+        title: "Coordinate tasks with shared checklists",
+        description: "Household chores, errands, and reminders.",
+        detail:
+          "Assign tasks with due dates. Kids can mark things done. Parents can see the status. No more 'I didn't know it was my turn' - it's in the shared hub.",
+      },
+      {
+        number: 4,
+        title: "Share wishlists for birthdays and holidays",
+        description: "Coordinated gift-giving without the chaos.",
+        detail:
+          "Family members post wish lists. Others can claim items to avoid duplicates. Linked directly to Let's Go Shopping for Cost+20% purchasing.",
+      },
+      {
+        number: 5,
+        title: "Connect with extended family portfolios",
+        description: "Your family network, one degree out.",
+        detail:
+          "Grandparents, cousins, and close friends can be part of the outer ring. They see only what you share. The Family Table grows with your family.",
+      },
+    ],
+    cueCard: {
+      slug: "family-table",
+      name: "The Family Table",
+      emoji: "👨‍👩‍👧‍👦",
+      tagline: "Meal Planning & Connected Portfolios",
+      quickStat: "100%",
+      quickStatLabel: "private - your data stays yours",
+      color: "from-red-500/20 to-pink-500/20 border-red-500/30",
+      bulletPoints: [
+        "Private family hub - zero data selling",
+        "Shared calendars, meals, and grocery lists",
+        "Task coordination for the whole household",
+        "Family wishlist for gift coordination",
+        "Connects to all food + shopping initiatives",
+      ],
+      onboardingCta: "Set up your family hub",
+      onboardingRoute: "/initiatives/family-table",
+    },
+  },
+
+  {
+    slug: "lets-make-bread",
+    originAnecdote:
+      "I watched a young woman spend $12,000 on a food truck only to close in 90 days because she hadn't modeled what a slow Tuesday actually costs. The idea was solid. The food was good. The financial education gap killed it. She didn't understand what Cost+20% and an 83.3% labor split do to your actual numbers before the money is gone. The $5 simulator exists because the difference between a failed business and a successful one is almost never the idea - it is whether the founder ran the math before writing the check.",
+    steps: [
+      {
+        number: 1,
+        title: "Start with a $5 business simulation",
+        description: "Learn without risking your savings.",
+        detail:
+          "Pay $5 to enter the business simulator. You get a virtual storefront, inventory, and customers. The simulation uses real cooperative economics - Cost+20% pricing, 83.3% to you.",
+      },
+      {
+        number: 2,
+        title: "Run your simulated business for 30 days",
+        description: "Price, market, and operate.",
+        detail:
+          "Make decisions: what to sell, how to price it, who to market to. The simulation shows you real outcomes from your decisions - profits, losses, and customer feedback.",
+      },
+      {
+        number: 3,
+        title: "Pass the simulation and earn your Bread Badge",
+        description: "Proof that you understand cooperative business.",
+        detail:
+          "Score high enough and earn the Bread Badge. This unlocks access to real business incubation resources, mentorship, and the ability to post real bounties.",
+      },
+      {
+        number: 4,
+        title: "Launch your real business with support",
+        description: "From simulation to real customers.",
+        detail:
+          "Use your simulation experience to build a real business plan using the Cost+20% template. Post it, get feedback from experienced members, and iterate before launch.",
+      },
+      {
+        number: 5,
+        title: "Earn 83.3% from day one",
+        description: "Real revenue, cooperative terms.",
+        detail:
+          "Once live, every sale follows the same rules as your simulation: you keep 83.3%, the platform retains 16.7% for infrastructure and the initiative margin. No surprises.",
+      },
+    ],
+    cueCard: {
+      slug: "lets-make-bread",
+      name: "Let's Make Bread",
+      emoji: "🍞",
+      tagline: "$5 Business Simulator - Real Business",
+      quickStat: "$5",
+      quickStatLabel: "to start the simulator",
+      color: "from-amber-500/20 to-yellow-500/20 border-amber-500/30",
+      bulletPoints: [
+        "$5 entry - learn business risk-free",
+        "30-day simulation with real economics",
+        "Earn Bread Badge to unlock incubation",
+        "Cost+20% pricing built in from day one",
+        "Keep 83.3% when you go live",
+      ],
+      onboardingCta: "Start the simulator",
+      onboardingRoute: "/initiatives/lets-make-bread",
+    },
+  },
+
+  // ─── STEP 3: Employ the World ───────────────────────────────────────────────
+
+  {
+    slug: "lets-go-shopping",
+    originAnecdote:
+      "A woman in my extended network made extraordinary hand-sewn quilts. She sold them for $40 on a major marketplace, paid 15% plus transaction fees, and then the algorithm showed her listing to no one because she wouldn't pay for promoted placement. She was paying for the right to compete with people who outspent her on ads. The same quilt through this marketplace puts $33.20 of a $40 sale in her hands - the math is transparent before she lists, and the only curation is real community quality, not paid placement.",
+    steps: [
+      {
+        number: 1,
+        title: "Browse the cooperative marketplace",
+        description: "Member-made products at Cost+20%.",
+        detail:
+          "Every product is made by a cooperative member. You see the exact cost breakdown. Compare to retail: our prices are lower because we remove extraction.",
+      },
+      {
+        number: 2,
+        title: "Find holiday and seasonal deals",
+        description: "Volume purchasing for big-ticket moments.",
+        detail:
+          "The platform aggregates member demand for holidays, back-to-school, and seasonal events. Volume buys unlock deeper discounts. The more members shop together, the lower the price.",
+      },
+      {
+        number: 3,
+        title: "Check the Harper audit badge",
+        description: "Independent quality verification.",
+        detail:
+          "Every product with a Harper badge has been independently reviewed for quality and honest description. Harpers are senior members who earn Marks for audit work.",
+      },
+      {
+        number: 4,
+        title: "Complete checkout with transparent pricing",
+        description: "No dark patterns, no surprise fees.",
+        detail:
+          "The checkout shows every line: product cost, 20% platform margin, delivery cost. You know exactly where every dollar goes before you confirm.",
+      },
+      {
+        number: 5,
+        title: "List your own products and earn 83.3%",
+        description: "The cooperative marketplace is open to all members.",
+        detail:
+          "Any member can list. Set your price using Cost+20% calculator. Your listing goes live immediately. Sales earnings (83.3%) transfer to your account within 48 hours.",
+      },
+    ],
+    cueCard: {
+      slug: "lets-go-shopping",
+      name: "Let's Go Shopping",
+      emoji: "🛍️",
+      tagline: "Volume Discount Product Purchases",
+      quickStat: "0%",
+      quickStatLabel: "extraction margin for middlemen",
+      color: "from-purple-500/20 to-fuchsia-500/20 border-purple-500/30",
+      bulletPoints: [
+        "Member-made products at Cost+20%",
+        "Holiday and seasonal volume deals",
+        "Harper audit badges verify quality",
+        "Transparent checkout - no hidden fees",
+        "Sellers keep 83.3% of every sale",
+      ],
+      onboardingCta: "Browse the marketplace",
+      onboardingRoute: "/initiatives/lets-go-shopping",
+    },
+  },
+
+  {
+    slug: "household-concierge",
+    originAnecdote:
+      "A friend needed a plumber. She found one on a gig app, paid $180 for a job that took 20 minutes. I asked the plumber later what he got: $90. Neither of them knew what the other had paid. The plumber thought he was charging fairly. She thought she was paying fairly. The app captured the confusion and pocketed the difference. Household Concierge removes the app. The neighbor and the plumber see each other's numbers directly - provider states the cost, platform adds 20%, provider keeps 83.3%, both parties know the split before a single wrench turns.",
+    steps: [
+      {
+        number: 1,
+        title: "Post the task you need done",
+        description: "Cleaning, repairs, yard work, errands.",
+        detail:
+          "Describe the job, your location, and when you need it. The platform matches you with vetted members in your area who have that skill and availability.",
+      },
+      {
+        number: 2,
+        title: "Review matched providers",
+        description: "Real community reviews, verifiable track records.",
+        detail:
+          "Each provider has a profile with community ratings from real neighbors. You can see the last 10 jobs, the average rating, and any Harper audit stamps for verified quality.",
+      },
+      {
+        number: 3,
+        title: "Book at Cost+20% pricing",
+        description: "Provider sets their rate. You pay Cost+20%.",
+        detail:
+          "The provider states their direct cost (time + materials). The platform adds 20%. You pay that total. The provider keeps 83.3%. No platform fee gouging.",
+      },
+      {
+        number: 4,
+        title: "Provider completes the work",
+        description: "Your home, their craft.",
+        detail:
+          "Work is done by a neighbor, not a stranger from an algorithm. After completion, both parties rate the experience. The community reputation system updates immediately.",
+      },
+      {
+        number: 5,
+        title: "Offer your own skills to earn",
+        description: "Your skills are worth real money.",
+        detail:
+          "Any member can offer household services. Set your rate, list your services, and start earning. You keep 83.3% of every job. Build your reputation and your income.",
+      },
+    ],
+    cueCard: {
+      slug: "household-concierge",
+      name: "Household Concierge",
+      emoji: "🏠",
+      tagline: "Home Services by Vetted Members",
+      quickStat: "83.3%",
+      quickStatLabel: "kept by every service provider",
+      color: "from-teal-500/20 to-cyan-500/20 border-teal-500/30",
+      bulletPoints: [
+        "Cleaning, repairs, yard work, errands",
+        "All providers rated by real neighbors",
+        "Cost+20% - providers keep 83.3%",
+        "No background surprise fees",
+        "Offer your skills and earn immediately",
+      ],
+      onboardingCta: "Find a provider or offer skills",
+      onboardingRoute: "/initiatives/household-concierge",
+    },
+  },
+
+  {
+    slug: "defense-klaus",
+    originAnecdote:
+      "One of my daughters asked me what to do if someone grabbed her on the way to her car. I gave her the standard advice - make noise, aim for eyes. Then I went home and thought about how many other fathers had that same conversation and still felt inadequate. The bracelet starts from that inadequacy: what is the $6 answer that gives a real tactical option and connects her to help the moment she uses it? The legal defense fund came from watching the news: people who use self-defense legally are routinely bankrupted by the defense costs regardless of the outcome. I could not afford that for my family. Most members cannot either.",
+    steps: [
+      {
+        number: 1,
+        title: "Learn about the $6 safety bracelet",
+        description: "Pull-up palm claws + GPS broadcast + legal protection.",
+        detail:
+          "Defense Klaus is a $6 physical product: a bracelet with deployable palm claws for personal protection and a GPS beacon that broadcasts when activated. Made in the cooperative factory.",
+      },
+      {
+        number: 2,
+        title: "Order yours - 100% of proceeds fund the legal defense pool",
+        description: "The product funds the protection network.",
+        detail:
+          "Every purchase goes into a shared legal-defense fund accessible to all cooperative members. You get a physical safety tool and contribute to collective legal protection.",
+      },
+      {
+        number: 3,
+        title: "Register your bracelet for GPS monitoring",
+        description: "Opt-in location broadcast when you activate it.",
+        detail:
+          "Optional: register your bracelet's serial number. If you pull the activation mechanism, your location broadcasts to your designated safety contacts and the cooperative's emergency network.",
+      },
+      {
+        number: 4,
+        title: "Access the legal defense fund if needed",
+        description: "Every member has equal access.",
+        detail:
+          "The pooled legal defense fund is available to any cooperative member. No means-testing, no tiers. Every member has equal access to the fund for legal representation.",
+      },
+      {
+        number: 5,
+        title: "Become a Defense Klaus factory node",
+        description: "The bracelet is made by members in the factory network.",
+        detail:
+          "Defense Klaus is produced through the decentralized factory system. Any qualified member node can produce units. Production earns Marks and factory node revenue.",
+      },
+    ],
+    cueCard: {
+      slug: "defense-klaus",
+      name: "Defense Klaus",
+      emoji: "🛡️",
+      tagline: "For Someone You Love",
+      quickStat: "$6",
+      quickStatLabel: "physical + legal protection",
+      color: "from-amber-500/20 to-yellow-500/20 border-amber-500/30",
+      bulletPoints: [
+        "$6 bracelet: pull-up palm claws + GPS broadcast",
+        "100% of proceeds fund member legal defense",
+        "Made in the cooperative factory network",
+        "Equal legal fund access for every member",
+        "Optional GPS registration for emergency network",
+      ],
+      onboardingCta: "Get protection for someone you love",
+      onboardingRoute: "/initiatives/defense-klaus",
+    },
+  },
+
+  {
+    slug: "rally-group",
+    originAnecdote:
+      "In the military we had a concept called 'battle buddy': you were never alone in a crisis because someone was assigned to know exactly where you were and what you could do. Civilian disaster response has none of that. When a tornado hit a town near where we lived, neighbors were hoarding information about supplies and help because there was no coordinated system. Good people, uncertain what to do, defaulting to self-preservation. The Rally Group is the battle-buddy concept translated to neighborhood scale: know before the crisis who can do what, where the supplies are, and who needs help. Preparation is the force multiplier.",
+    steps: [
+      {
+        number: 1,
+        title: "Register as a Rally Group responder",
+        description: "Tell the network what you can offer in a crisis.",
+        detail:
+          "Sign up with your skills, resources, and availability. Can you host displaced neighbors? Drive supplies? Cook for 20 people? The network needs to know before the crisis hits.",
+      },
+      {
+        number: 2,
+        title: "Complete crisis preparedness orientation",
+        description: "30-minute online training.",
+        detail:
+          "Learn the Rally Group protocols: how alerts go out, how you respond, how resources are coordinated. The orientation earns you 5 Marks and activates your responder status.",
+      },
+      {
+        number: 3,
+        title: "Receive alerts when your neighborhood needs help",
+        description: "Hyper-local, actionable alerts.",
+        detail:
+          "When crisis hits - flood, power outage, medical emergency, displacement - you get a clear request: 'Can you host 2 people for 3 nights?' or 'Can you deliver supplies to 4th Street?'",
+      },
+      {
+        number: 4,
+        title: "Respond and coordinate through the platform",
+        description: "Real-time coordination, no chaos.",
+        detail:
+          "Accept or decline the specific request. The platform coordinates who is doing what so there is no duplication and no gap. Your status shows as fulfilled when done.",
+      },
+      {
+        number: 5,
+        title: "Host emergency supplies at your Rally Node",
+        description: "Be the stockpile for your street.",
+        detail:
+          "Nodes host pre-positioned supplies: water, food, first aid, blankets. The platform tracks what each node holds. In a crisis, the network knows exactly where to send people.",
+      },
+    ],
+    cueCard: {
+      slug: "rally-group",
+      name: "Rally Group",
+      emoji: "📢",
+      tagline: "Crisis Response & Community Mobilization",
+      quickStat: "30 min",
+      quickStatLabel: "to become a certified responder",
+      color: "from-red-500/20 to-orange-500/20 border-red-500/30",
+      bulletPoints: [
+        "Mutual aid coordination for real crises",
+        "30-minute orientation activates responder status",
+        "Hyper-local alerts with specific requests",
+        "Real-time platform coordination",
+        "Pre-positioned supply nodes by neighborhood",
+      ],
+      onboardingCta: "Become a responder",
+      onboardingRoute: "/initiatives/rally-group",
+    },
+  },
+
+  // ─── STEP 4: Build Businesses & Make Things ────────────────────────────────
+
+  {
+    slug: "vsl",
+    originAnecdote:
+      "My father once needed $400 to repair his truck so he could keep his job. The bank would not touch him - wrong credit score, wrong zip code. He borrowed it from a loan shark at something close to 300% annualized. He paid it back in full and it nearly broke us. The VSL structure comes directly from the rotating savings clubs I studied that have existed in West Africa, Jamaica, and immigrant communities for generations - systems where a small circle of people vouch for each other and take turns borrowing from a common pool they all built together. The cooperative wraps that tradition in formal accountability and makes it accessible to anyone, without the shame.",
+    steps: [
+      {
+        number: 1,
+        title: "Join a lending circle of 5-20 members",
+        description: "Peer-to-peer lending with community accountability.",
+        detail:
+          "A VSL circle is a small group of members who pool monthly contributions. Everyone takes a turn borrowing from the pool. No banks, no collateral, no credit score gatekeeping.",
+      },
+      {
+        number: 2,
+        title: "Establish circle terms collaboratively",
+        description: "The circle sets its own rules.",
+        detail:
+          "Your circle agrees on: monthly contribution amount, borrowing rotation, loan term, and interest rate (0-5%). Terms are transparent and agreed by all members before any money moves.",
+      },
+      {
+        number: 3,
+        title: "Build your borrowing history on the platform",
+        description: "Your track record belongs to you.",
+        detail:
+          "Every loan repaid on time builds your cooperative credit history. This history stays with you - not with a bank. It can unlock larger circles and better rates over time.",
+      },
+      {
+        number: 4,
+        title: "Take your turn borrowing from the pool",
+        description: "Short loans, 0-5% interest, community-backed.",
+        detail:
+          "When it's your turn, borrow the pooled amount. Use it for what you need - equipment, emergency, opportunity. Repay on the agreed schedule. The circle holds you accountable.",
+      },
+      {
+        number: 5,
+        title: "Start or expand your circle as you grow",
+        description: "Circles can scale and specialize.",
+        detail:
+          "After 3 successful cycles, you can start a new circle or apply to join a specialized circle (business lending, equipment, housing). Experienced members mentor new circles.",
+      },
+    ],
+    cueCard: {
+      slug: "vsl",
+      name: "VSL - Vouch Short Loans",
+      emoji: "💳",
+      tagline: "Vouch Short Loans 0-5%",
+      quickStat: "0-5%",
+      quickStatLabel: "interest - community-set",
+      color: "from-emerald-500/20 to-green-500/20 border-emerald-500/30",
+      bulletPoints: [
+        "Peer lending circles of 5-20 members",
+        "0-5% interest - set by the circle, not a bank",
+        "No collateral, no credit score gatekeeping",
+        "Repayment history stays with you, not a bank",
+        "Circles can specialize: business, equipment, housing",
+      ],
+      onboardingCta: "Join a lending circle",
+      onboardingRoute: "/initiatives/vsl",
+    },
+  },
+
+  {
+    slug: "brass-tacks",
+    originAnecdote:
+      "I have 1,200+ Fusion 360 diagrams and SolidWorks files going back to before 2003. HexIsle - the water-powered board game at the center of this work - was built from that archive across four decades of design iteration. The problem was always manufacturing access: I had the designs but not a factory, and traditional manufacturing was either a $50,000 minimum run or a shipping container from overseas. Stereolithographic printing changed the equation. Brass Tacks is the generalization of that discovery: any member with a design file and access to the cooperative's decentralized SLA network can be a manufacturer. The 2nd Second Industrial Revolution does not require a factory floor.",
+    steps: [
+      {
+        number: 1,
+        title: "Submit your physical product idea",
+        description: "From concept to cooperative production.",
+        detail:
+          "Any member with a physical product idea can submit it to Brass Tacks. Describe the product, the materials, the target market, and the production method. The community evaluates viability.",
+      },
+      {
+        number: 2,
+        title: "Get matched with a production node",
+        description: "The decentralized factory finds your maker.",
+        detail:
+          "The platform matches your product spec to factory nodes with the right equipment and skills. You see which nodes can produce your item, at what cost, and with what lead time.",
+      },
+      {
+        number: 3,
+        title: "Run a small prototype batch",
+        description: "Start with 10 units, not 10,000.",
+        detail:
+          "The six production levels let you start small. A prototype run of 10 units tests your design and market response before committing to larger runs. Cost+20% at every level.",
+      },
+      {
+        number: 4,
+        title: "Scale up through the six production levels",
+        description: "Prototype - pilot - small batch - medium - large - mass.",
+        detail:
+          "Each level unlocks volume discounts. Level 1 (prototype) costs more per unit. Level 6 (mass production) achieves the lowest per-unit cost. You decide when to scale.",
+      },
+      {
+        number: 5,
+        title: "Sell through the cooperative and keep 83.3%",
+        description: "Your product, your margin.",
+        detail:
+          "List in the Let's Go Shopping marketplace. Every sale, you keep 83.3%. The 16.7% platform margin funds infrastructure, Harper quality audits, and the initiative charitable pool.",
+      },
+    ],
+    cueCard: {
+      slug: "brass-tacks",
+      name: "Brass Tacks",
+      emoji: "🔩",
+      tagline: "Manufacturing & Makers",
+      quickStat: "6",
+      quickStatLabel: "production levels from prototype to mass",
+      color: "from-gray-500/20 to-slate-500/20 border-gray-500/30",
+      bulletPoints: [
+        "Submit any physical product idea to the network",
+        "Matched to factory nodes with right equipment",
+        "Start with a 10-unit prototype batch",
+        "6 production levels - scale at your pace",
+        "Sell in the marketplace and keep 83.3%",
+      ],
+      onboardingCta: "Submit a product idea",
+      onboardingRoute: "/initiatives/brass-tacks",
+    },
+  },
+
+  // ─── STEP 5: Power to the People ───────────────────────────────────────────
+
+  {
+    slug: "power-to-the-people",
+    originAnecdote:
+      "I am a veteran. I swore an oath to support and defend the Constitution and I take that seriously. And I was repeatedly unable to tell you, without significant research effort, how my representative actually voted on specific bills - not the party position, their actual vote. The voting record tool started as my personal project to answer that one question cleanly. The cooperative energy purchasing came from a different frustration: watching neighbors independently call the same utility company and each getting nowhere, when collectively they represented enough demand to negotiate a real rate.",
+    steps: [
+      {
+        number: 1,
+        title: "Track your congressional representatives",
+        description: "See exactly what they vote for and why.",
+        detail:
+          "The platform pulls public voting records and translates them into plain language. Not left or right - simply factual. 'Your representative voted YES on this bill. Here is what it does.'",
+      },
+      {
+        number: 2,
+        title: "Join cooperative energy purchasing",
+        description: "Your block buys energy together.",
+        detail:
+          "Aggregate neighborhood energy demand for negotiated utility rates. The Switzerland Protocol applies: no political agenda, simply collective buying power to reduce your energy bill.",
+      },
+      {
+        number: 3,
+        title: "Access voter education resources",
+        description: "Non-partisan tools for informed voting.",
+        detail:
+          "Issue-by-issue breakdowns written by Harper Guild members. Every claim is cited. Every source is verified. You decide what matters to you - we just give you the facts.",
+      },
+      {
+        number: 4,
+        title: "Connect with local civic engagement groups",
+        description: "Real-world action, community-organized.",
+        detail:
+          "Find neighborhood groups working on local issues. From zoning to school boards, the platform surfaces local civic opportunities and connects you with neighbors who care.",
+      },
+      {
+        number: 5,
+        title: "Participate in community policy discussions",
+        description: "Your voice, your neighborhood's future.",
+        detail:
+          "The platform hosts structured discussions on local policy. Rules: fact-based, no personal attacks, sources required. Harpers moderate. The best ideas get surfaced to elected officials.",
+      },
+    ],
+    cueCard: {
+      slug: "power-to-the-people",
+      name: "Power to the People",
+      emoji: "⚡",
+      tagline: "Not left or right. Simply effective.",
+      quickStat: "0",
+      quickStatLabel: "political agenda - just facts + power",
+      color: "from-yellow-500/20 to-amber-500/20 border-yellow-500/30",
+      bulletPoints: [
+        "Track your reps - plain language voting records",
+        "Cooperative energy purchasing for lower bills",
+        "Non-partisan voter education with cited sources",
+        "Local civic engagement groups by neighborhood",
+        "Switzerland Protocol: no political agenda",
+      ],
+      onboardingCta: "Track your representatives",
+      onboardingRoute: "/initiatives/power-to-the-people",
+    },
+  },
+
+  {
+    slug: "tatiana-schlossburg-health-accords",
+    originAnecdote:
+      "I know a woman - not rich, not poor - who rationed her insulin. She cut doses to make each vial last longer because she could not afford to fill the prescription at the price her insurance charged. She was doing this quietly, not telling her doctor, just surviving the math. When I looked into the numbers, the difference between the retail price she was paying and the bulk acquisition cost was a platform intermediary capturing 60% of a diabetic's survival budget. The Health Accords is the refusal to let that intermediary exist. The name honors the intention: a treaty on behalf of people who could not negotiate alone.",
+    steps: [
+      {
+        number: 1,
+        title: "Submit your prescription to the cooperative pharmacy network",
+        description: "We shop the exact same drug at every supplier.",
+        detail:
+          "Upload your prescription details. The platform checks the cooperative's network of pharmacies, wholesalers, and patient assistance programs for the lowest legitimate price.",
+      },
+      {
+        number: 2,
+        title: "See the full price comparison",
+        description: "Transparent, side-by-side pricing.",
+        detail:
+          "You see every price: retail, insurance, cooperative bulk, and any patient assistance program that applies to your situation. You choose. We never choose for you.",
+      },
+      {
+        number: 3,
+        title: "Fill through the cooperative network at Cost+20%",
+        description: "Cooperative price + transparent margin.",
+        detail:
+          "When you fill through the cooperative, you pay our bulk cost plus 20%. The 20% funds the program. The savings over retail are typically 40-80% depending on the medication.",
+      },
+      {
+        number: 4,
+        title: "Access the emergency medication fund",
+        description: "If you cannot afford it, the fund covers the gap.",
+        detail:
+          "The charitable pool from the 20% margin funds emergency medication access for members who cannot afford even the cooperative price. No application required - a single Marks verification.",
+      },
+      {
+        number: 5,
+        title: "Connect with the medical supply network",
+        description: "Equipment, supplies, and devices at cooperative prices.",
+        detail:
+          "The Health Accords covers more than prescriptions: blood glucose monitors, CPAP supplies, mobility aids, and chronic condition management supplies, all at Cost+20%.",
+      },
+    ],
+    cueCard: {
+      slug: "tatiana-schlossburg-health-accords",
+      name: "Tatiana Schlossberg Health Accords",
+      emoji: "💊",
+      tagline: "Cost+20% Prescriptions & Supplies",
+      quickStat: "40-80%",
+      quickStatLabel: "typical savings vs. retail",
+      color: "from-blue-500/20 to-cyan-500/20 border-blue-500/30",
+      bulletPoints: [
+        "Prescriptions at cooperative bulk cost + 20%",
+        "Full price comparison before you fill",
+        "Emergency medication fund for members in need",
+        "No insurance required - cooperative access direct",
+        "Medical supplies and equipment also covered",
+      ],
+      onboardingCta: "Check your prescription price",
+      onboardingRoute: "/initiatives/tatiana-schlossburg-health-accords",
+    },
+  },
+
+  {
+    slug: "msa",
+    originAnecdote:
+      "When I changed jobs, I lost the remaining balance in an FSA account - roughly $400 I had contributed specifically for health expenses. Gone. Use it or lose it, and I lost it because the employer's plan year did not line up with when I actually needed the money. The rules were designed for employer convenience, not mine. The Member Savings Account is health savings that belongs to the member, administered at cooperative cost, and never forfeited. The name is intentional: it is yours, it is savings, it is for members. Not for the employer's balance sheet.",
+    steps: [
+      {
+        number: 1,
+        title: "Open your Member Savings Account",
+        description: "Pre-tax health savings, cooperatively administered.",
+        detail:
+          "Your MSA is administered by the cooperative at Cost+20% - not by an insurance company. Setup takes 5 minutes. Your contributions are yours and only usable for qualified health expenses.",
+      },
+      {
+        number: 2,
+        title: "Set your monthly contribution",
+        description: "Any amount from $10 to the annual maximum.",
+        detail:
+          "Contribute what you can afford. The account earns interest (applied at cooperative bulk rates). There is no minimum and no fee to maintain the account.",
+      },
+      {
+        number: 3,
+        title: "Use your MSA with the Health Accords",
+        description: "Your savings pay for cooperative-priced health care.",
+        detail:
+          "MSA funds flow directly to Tatiana Schlossberg Health Accords purchases. Prescriptions, supplies, and approved services are all eligible. The platform connects them automatically.",
+      },
+      {
+        number: 4,
+        title: "Access the community emergency pool",
+        description: "When your savings are not enough.",
+        detail:
+          "A portion of every member's MSA contribution funds a community emergency pool. Members with catastrophic health events can access the pool with a simple request and Marks verification.",
+      },
+      {
+        number: 5,
+        title: "Manage your account through the cooperative dashboard",
+        description: "Your health finances, transparent and yours.",
+        detail:
+          "See your balance, contribution history, and spending. Get alerts when your account is low. Download your annual statement for tax purposes. Your data, your account.",
+      },
+    ],
+    cueCard: {
+      slug: "msa",
+      name: "MSA",
+      emoji: "🏥",
+      tagline: "Member Savings Accounts for Healthcare",
+      quickStat: "Cost+20%",
+      quickStatLabel: "administration - no insurance company",
+      color: "from-slate-500/20 to-zinc-500/20 border-slate-500/30",
+      bulletPoints: [
+        "Pre-tax health savings cooperatively administered",
+        "Any contribution from $10/month",
+        "Integrates with Health Accords purchasing",
+        "Community emergency pool for catastrophic events",
+        "Annual statement for tax filing",
+      ],
+      onboardingCta: "Open your savings account",
+      onboardingRoute: "/initiatives/msa",
+    },
+  },
+
+  // ─── STEP 6: Belong Together ───────────────────────────────────────────────
+
+  {
+    slug: "harper-guild",
+    originAnecdote:
+      "In the early years of building this platform, I posted something in a community forum that I believed was accurate. It was not. Someone corrected me publicly and I was grateful - but the correction was rough, and I realized the community had no mechanism for good-faith fact-checking without it turning into an argument. I wanted a trusted class of fact-finders who operate with audit standards rather than opinion. The name comes from the medieval role of the harper: someone who moved freely between courts, carrying true information, protected by their status from the politics of whoever they were visiting. No court owned the harper. The truth was the credential.",
+    steps: [
+      {
+        number: 1,
+        title: "Understand what Harpers do",
+        description: "Ethics checking, fact-finding, and audit work.",
+        detail:
+          "Harpers are the cooperative's truth-tellers. They audit product listings, verify claims in community discussions, and flag policy violations. They earn Marks for every completed audit.",
+      },
+      {
+        number: 2,
+        title: "Build your track record over 6+ months",
+        description: "Harper status is earned, not applied for.",
+        detail:
+          "There is no Harper application. The algorithm watches your contribution quality over time - review accuracy, community trust ratings, and consistency. Quality over 6+ months triggers eligibility.",
+      },
+      {
+        number: 3,
+        title: "Receive an algorithmic nomination",
+        description: "The system nominates you - your peers confirm.",
+        detail:
+          "When the algorithm flags you as eligible, a peer vote opens. Existing Harpers vote to confirm. The process is transparent and the criteria are public. No committees, no favoritism.",
+      },
+      {
+        number: 4,
+        title: "Complete Harper training and certification",
+        description: "3-hour certification program.",
+        detail:
+          "Learn the audit standards, the documentation requirements, and the escalation protocols. Pass the certification test. Your Harper badge activates. You can now accept audit assignments.",
+      },
+      {
+        number: 5,
+        title: "Earn Marks for audit work",
+        description: "Fact-finding and truth-telling pays.",
+        detail:
+          "Every completed audit earns Marks. Complex audits earn more. Harpers who identify significant violations earn bonus Marks. The most active Harpers form the Community Chalkboard.",
+      },
+    ],
+    cueCard: {
+      slug: "harper-guild",
+      name: "Harper Guild",
+      emoji: "⚖️",
+      tagline: "HR & Ethics for Small Businesses",
+      quickStat: "6 mo",
+      quickStatLabel: "minimum track record for eligibility",
+      color: "from-indigo-500/20 to-violet-500/20 border-indigo-500/30",
+      bulletPoints: [
+        "Ethics checking, auditing, and fact-finding",
+        "Algorithmic nomination - no application, no committees",
+        "6+ month track record required",
+        "Peer vote confirmation by existing Harpers",
+        "Earn Marks for every audit completed",
+      ],
+      onboardingCta: "Build your Harper track record",
+      onboardingRoute: "/initiatives/harper-guild",
+    },
+  },
+
+  {
+    slug: "jukebox",
+    originAnecdote:
+      "A musician I know spent three years building a following on a major streaming platform. 18 million streams. His quarterly payout: $47. He worked out the math: $0.0000026 per stream. His fans thought they were supporting him. They were supporting the platform. He now delivers for a gig company to pay rent. Jukebox is built on that $47 number: 83.3% of every transaction, stated before you sign, locked in the cooperative operating agreement, enforced by math rather than goodwill. The creator economy does not need new promises. It needs a different structure.",
+    steps: [
+      {
+        number: 1,
+        title: "Upload your music to the cooperative catalog",
+        description: "Direct-to-fan, no label required.",
+        detail:
+          "Upload your tracks, albums, or podcasts. Set your own pricing using Cost+20% calculator. Your music is discoverable immediately to all cooperative members.",
+      },
+      {
+        number: 2,
+        title: "Set your licensing terms",
+        description: "You control how your music is used.",
+        detail:
+          "Choose: stream-only, download, sync license, or public performance. Every use type has its own royalty rate. The platform enforces your terms automatically - no lawyers needed.",
+      },
+      {
+        number: 3,
+        title: "Watch transparent royalty tracking",
+        description: "Every play, every download, every license - tracked.",
+        detail:
+          "Your dashboard shows every transaction in real time. Stream by stream, download by download. No black box. No 'trust us' quarterly statements. You see everything live.",
+      },
+      {
+        number: 4,
+        title: "Receive 83.3% of every transaction",
+        description: "Constitutionally locked - cannot be changed.",
+        detail:
+          "The 83.3% artist split is encoded in the cooperative DNA Lock. No board vote, no executive decision can change it. It is permanent by design.",
+      },
+      {
+        number: 5,
+        title: "Build your fan community on the platform",
+        description: "Direct relationships with people who love your work.",
+        detail:
+          "Fans can follow, support, and communicate directly with you. No algorithm suppressing your reach. Your 1,000 true fans are right here - and you keep 83.3% of what they spend.",
+      },
+    ],
+    cueCard: {
+      slug: "jukebox",
+      name: "JukeBox",
+      emoji: "🎵",
+      tagline: "Artist-Controlled Royalties",
+      quickStat: "83.3%",
+      quickStatLabel: "to artists - constitutionally locked",
+      color: "from-pink-500/20 to-rose-500/20 border-pink-500/30",
+      bulletPoints: [
+        "Upload music direct-to-fan, no label required",
+        "You set licensing terms - platform enforces them",
+        "Real-time royalty tracking, no black box",
+        "83.3% split locked in cooperative DNA",
+        "Direct fan relationships with no algorithm tax",
+      ],
+      onboardingCta: "Publish your music",
+      onboardingRoute: "/initiatives/jukebox",
+    },
+  },
+
+  {
+    slug: "didasko",
+    originAnecdote:
+      "I have eight children. I have thought about education every day for decades. One of them learns differently - the standard curriculum paced at standard speed left her behind in ways that took years to repair. The tutoring she needed existed; the price put it out of reach. The tutor we eventually found was excellent and underpaid. She was charging $20 an hour and seeing maybe $14 after the platform she used took its cut. Didasko is what happens when you pay the tutor 83.3% at Cost+20% pricing: the tutor earns a living wage, the family can afford the sessions, and the child gets the time she actually needs.",
+    steps: [
+      {
+        number: 1,
+        title: "Browse the cooperative course catalog",
+        description: "Skills-based learning at Cost+20%.",
+        detail:
+          "Every course is created by a cooperative member - not a corporate content farm. From K-12 tutoring to vocational trades to academic subjects. Prices are transparent and affordable.",
+      },
+      {
+        number: 2,
+        title: "Enroll and learn at your own pace",
+        description: "No deadline pressure, no subscription trap.",
+        detail:
+          "Pay for the course, not the month. You have lifetime access. Learn on your schedule. The platform tracks your progress and reminds you when you have not engaged in a while.",
+      },
+      {
+        number: 3,
+        title: "Earn skills certifications backed by Guilds",
+        description: "Real credentials recognized by the cooperative.",
+        detail:
+          "Complete a course with a passing grade and earn a Guild-backed certification. These certificates are recognized within the cooperative for hiring, bounty assignments, and Harper nominations.",
+      },
+      {
+        number: 4,
+        title: "Tutor or mentor other members",
+        description: "Your knowledge is worth 83.3% to you.",
+        detail:
+          "Post tutoring sessions at your Cost+20% rate. The platform matches you with students who need your specific expertise. Each session earns you 83.3% of the session fee.",
+      },
+      {
+        number: 5,
+        title: "Create and publish a course",
+        description: "Build it once, earn from it forever.",
+        detail:
+          "Record your course, price it at Cost+20%, publish it. Every enrollment earns you 83.3%. The platform handles hosting, payments, and delivery. Your knowledge keeps earning while you sleep.",
+      },
+    ],
+    cueCard: {
+      slug: "didasko",
+      name: "Didasko",
+      emoji: "🎓",
+      tagline: "College of Hard Knocks",
+      quickStat: "83.3%",
+      quickStatLabel: "kept by every course creator",
+      color: "from-sky-500/20 to-blue-500/20 border-sky-500/30",
+      bulletPoints: [
+        "Courses from K-12 to vocational at Cost+20%",
+        "Lifetime access - no subscription trap",
+        "Guild-backed certifications from real courses",
+        "Tutoring: post sessions, earn 83.3%",
+        "Create a course once, earn from it forever",
+      ],
+      onboardingCta: "Browse courses or start teaching",
+      onboardingRoute: "/initiatives/didasko",
+    },
+  },
+];
+
+export const INITIATIVE_WALKTHROUGHS: Record<string, InitiativeWalkthroughData> =
+  Object.fromEntries(WALKTHROUGHS.map((w) => [w.slug, w]));
+
+// Wave 15 route aliases -- health-accords and tatiana-health both resolve to the
+// canonical tatiana-schlossburg-health-accords walkthrough entry.
+INITIATIVE_WALKTHROUGHS["health-accords"] =
+  INITIATIVE_WALKTHROUGHS["tatiana-schlossburg-health-accords"];
+INITIATIVE_WALKTHROUGHS["tatiana-health"] =
+  INITIATIVE_WALKTHROUGHS["tatiana-schlossburg-health-accords"];
+
+export function getWalkthrough(slug: string): InitiativeWalkthroughData | null {
+  return INITIATIVE_WALKTHROUGHS[slug] ?? null;
+}
+
+export function getCueCard(slug: string): InitiativeCueCardData | null {
+  return INITIATIVE_WALKTHROUGHS[slug]?.cueCard ?? null;
+}

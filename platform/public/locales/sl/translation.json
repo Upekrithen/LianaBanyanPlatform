@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.851Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Reci prijatelj in vstopi.",
+    "description": "Liana Banyan je zgrajena, da bo odprta za vsak jezik. Vsak odprt jezik ima eno nagrado za prevod.",
+    "languages": "jeziki",
+    "openBounties": "odprte nagrade",
+    "marksAwarded": "Marks dodeljeni (zdruzki za udelezbo)",
+    "provisional": "Zacasno:",
+    "provisionalNotice": "Seznam jezikov in stopnje Marks so zacasni. Marks so zdruzki za udelezbo, ne delnice.",
+    "bountyOpen": "Nagrada odprta",
+    "claimed": "Zahtevano",
+    "complete": "Dokoncano",
+    "translationBountyTitle": "Nagrada za Prevod",
+    "bountyDescription": "Prevedite Liana Banyan v {{language}}. Zasluzite {{marks}} Marks.",
+    "scopeWelcome": "Zasloni Dobrodosli / Svet Duhov",
+    "scopeCueCards": "Osnovna sestava Karte namigov",
+    "scopeNavigation": "Navigacijske oznake in sporocila o napakah",
+    "scopeWildfire": "Wildfire Beacon Run: Najdi Sluzbeno Mesto",
+    "claimBounty": "Zahtevajte to Nagrado za Prevod",
+    "baseLanguage": "Osnoven jezik -- nagrada ni potrebna.",
+    "claimedBy": "Nagrado zahteval @{{handle}} -- v teku.",
+    "marksProvisional": "{{marks}} Marks (zacasno)",
+    "speakFounderTitle": "Glas Ustanovitelja: Zakaj Te Besede",
+    "speakFounderDesc": "Vsak izraz na tej platformi je poimenovan z razlogom. Izvor 26 najpomembnejsih imen.",
+    "howBountiesWork": "Kako Delujejo Nagrade za Prevod",
+    "step1Title": "Zahtevajte Nagrado",
+    "step1Body": "Odprite Nagrado za Prevod z oglasne plosce Help Wanted.",
+    "step2Title": "Prevedite in Posljite",
+    "step2Body": "Prevedite vse potrebne nize. Posljite prek Bounty Poster.",
+    "step3Title": "Zasluzite Marks",
+    "step3Body": "Po sprejemu prejmete Marks in ste evidentirani v IP Ledger.",
+    "hide": "skrij",
+    "why": "zakaj?",
+    "subtitle": "\"Reci prijatelj in vstopi.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Sprememba jezika",
+    "selectLanguage": "Izberite jezik",
+    "quickEnglish": "Anglescina",
+    "tip": "Uporabite gesla razlicnih jezikov pri Durinovih Vratih za edinstvene izkusnje!"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.852Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Saki draugs un ieej.",
+    "description": "Liana Banyan ir uzbuves ta, lai buts atklata katrai valodai. Katrai atklatajai valodai ir viena tulkosanas balva.",
+    "languages": "valodas",
+    "openBounties": "atverts balvas",
+    "marksAwarded": "Marks pieskirti (dalibas zimes)",
+    "provisional": "Pagaidu:",
+    "provisionalNotice": "Valodu saraksts un Marks liktnes ir pagaidu. Marks ir dalibas zimes, ne akcijas.",
+    "bountyOpen": "Balva atverta",
+    "claimed": "Pieprasita",
+    "complete": "Pabeigts",
+    "translationBountyTitle": "Tulkosanas Balva",
+    "bountyDescription": "Tulkojiet Liana Banyan {{language}} valoda. Nopelniet {{marks}} Marks.",
+    "scopeWelcome": "Laipni lugts / Spooku Pasaule ekrani",
+    "scopeCueCards": "Pamata Padomu Karti komplekts",
+    "scopeNavigation": "Navigacijas etiketju un kludu zinojumi",
+    "scopeWildfire": "Wildfire Beacon Run: Atrod darbu",
+    "claimBounty": "Pieprasit so Tulkosanas Balvu",
+    "baseLanguage": "Pamata valoda -- balva nav nepieciesama.",
+    "claimedBy": "@{{handle}} pieprasija -- turpinas.",
+    "marksProvisional": "{{marks}} Marks (pagaidu)",
+    "speakFounderTitle": "Dibildinatajs Balss: Kapec Sie Vardi",
+    "speakFounderDesc": "Katrs termins saja platforma ir nosaukts ar iemeslu. 26 svarigako nosaukumu izcelsme.",
+    "howBountiesWork": "Ka Darbojas Tulkosanas Balvas",
+    "step1Title": "Pieprasit Balvu",
+    "step1Body": "Atverit Tulkosanas Balvu no Help Wanted.",
+    "step2Title": "Tulkot un Nosutit",
+    "step2Body": "Tulkojiet visas nepieciesamas virknes. Nosutiet caur Bounty Poster.",
+    "step3Title": "Nopelnit Marks",
+    "step3Body": "Pec apstiprinasanas sanemat Marks un tiekat reginstreti IP Ledger.",
+    "hide": "paslept",
+    "why": "kapec?",
+    "subtitle": "\"Saki draugs un ienac.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Maint valodu",
+    "selectLanguage": "Izvelaties valodu",
+    "quickEnglish": "Anglu",
+    "tip": "Izmantojiet dazadu valodu paroles Durins Durvim, lai atblokets unikalas pieredzes!"
+  }
+}

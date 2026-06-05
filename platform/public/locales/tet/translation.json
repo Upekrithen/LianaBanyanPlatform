@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.886Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Ko dehan amigo, no tama.",
+    "description": "Liana Banyan maka halo ba lingua hotu-hotu bele tama. Lingua ida-idak iha rekompensu tradusaun ida.",
+    "languages": "lingua",
+    "openBounties": "rekompensu aberta",
+    "marksAwarded": "Marks fó ona (token partisipasaun)",
+    "provisional": "Provisóriu:",
+    "provisionalNotice": "Lista lingua no taxa Marks provisóriu. Marks token partisipasaun, la'ós asaun.",
+    "bountyOpen": "Rekompensu aberta",
+    "claimed": "Reklamadu",
+    "complete": "Kompletu",
+    "translationBountyTitle": "Rekompensu Tradusaun",
+    "bountyDescription": "Tradus Liana Banyan ba {{language}}. Hetan {{marks}} Marks.",
+    "scopeWelcome": "Bem-vindo / Mundu Espíritu",
+    "scopeCueCards": "Konjuntu Kartu Instrusaun",
+    "scopeNavigation": "Etiketa navigasaun no mensajen erru",
+    "scopeWildfire": "Wildfire Beacon Run: Hetan Servisu",
+    "claimBounty": "Reklamar Rekompensu Tradusaun Ida ne'e",
+    "baseLanguage": "Lingua baze -- la presiza rekompensu.",
+    "claimedBy": "@{{handle}} reklamar -- kontinua.",
+    "marksProvisional": "{{marks}} Marks (provisóriu)",
+    "speakFounderTitle": "Lian Fundadór: Tanba sa Liafuan sira ne'e",
+    "speakFounderDesc": "Termu ida-idak iha plataforma ne'e iha razaun naran. Origem 26 naran importante.",
+    "howBountiesWork": "Oinsá Rekompensu Tradusaun Servisu",
+    "step1Title": "Reklamar Rekompensu",
+    "step1Body": "Abre Rekompensu Tradusaun hosi Help Wanted.",
+    "step2Title": "Tradus no Submete",
+    "step2Body": "Tradus liña hotu-hotu presiza. Submete liu Bounty Poster.",
+    "step3Title": "Hetan Marks",
+    "step3Body": "Depois akseita, simu Marks no rejista iha IP Ledger.",
+    "hide": "taka",
+    "why": "tanba sa?",
+    "subtitle": "\"Dehan belun, halo fali.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Muda lingua",
+    "selectLanguage": "Hili lingua",
+    "quickEnglish": "Inglés",
+    "tip": "Uza senha lingua diferente iha Porta Durin atu loke esperiénsia úniku!"
+  }
+}

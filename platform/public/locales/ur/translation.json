@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.790Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "دوست کہو، اور داخل ہو۔",
+    "description": "لیانا بانیان ہر زبان کے لیے کھلی ہے۔ ہر زبان کا ترجمہ انعام موجود ہے۔",
+    "languages": "زبانیں",
+    "openBounties": "کھلے انعام",
+    "marksAwarded": "Marks دیے گئے (شرکت ٹوکن)",
+    "provisional": "عارضی:",
+    "provisionalNotice": "زبانوں کی فہرست اور Marks کی شرحیں عارضی ہیں۔ Marks شرکت ٹوکن ہیں، حصص نہیں۔",
+    "bountyOpen": "انعام کھلا ہے",
+    "claimed": "دعوی کیا گیا",
+    "complete": "مکمل",
+    "translationBountyTitle": "ترجمہ انعام",
+    "bountyDescription": "لیانا بانیان {{language}} میں ترجمہ کریں۔ قبولیت پر {{marks}} Marks کمائیں۔",
+    "scopeWelcome": "خوش آمدید / بھوت دنیا کی اسکرینیں",
+    "scopeCueCards": "مرکزی کیو کارڈ سیٹ (اقتصادی قوانین + گورننس)",
+    "scopeNavigation": "نیویگیشن لیبل اور ایرر پیغامات",
+    "scopeWildfire": "وائلڈ فائر بیکن رن: نوکری حاصل کریں",
+    "claimBounty": "یہ ترجمہ انعام دعوی کریں",
+    "baseLanguage": "بنیادی زبان -- کوئی انعام ضروری نہیں۔",
+    "claimedBy": "@{{handle}} نے دعوی کیا -- جاری ہے۔",
+    "marksProvisional": "{{marks}} Marks (عارضی)",
+    "speakFounderTitle": "بانی کی آواز: یہ الفاظ کیوں",
+    "speakFounderDesc": "اس پلیٹ فارم کا ہر لفظ ایک وجہ سے نامزد ہے۔ ۲۶ اہم ناموں کی اصل۔",
+    "howBountiesWork": "انعام کیسے کام کرتے ہیں",
+    "step1Title": "انعام دعوی کریں",
+    "step1Body": "Help Wanted بورڈ سے ترجمہ انعام کھولیں۔",
+    "step2Title": "ترجمہ کریں اور جمع کریں",
+    "step2Body": "تمام ضروری تار کا ترجمہ کریں اور Bounty Poster فلو سے جمع کریں۔",
+    "step3Title": "Marks کمائیں",
+    "step3Body": "قبولیت پر Marks ملیں گے۔ IP Ledger میں درج ہوں گے۔",
+    "hide": "چھپائیں",
+    "why": "کیوں؟",
+    "subtitle": "\"دوست کہو، اور داخل ہو۔\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "زبان تبدیل کریں",
+    "selectLanguage": "زبان منتخب کریں",
+    "quickEnglish": "انگریزی",
+    "tip": "Durin's Door پر مختلف زبانوں کے پاس ورڈ استعمال کریں!"
+  }
+}

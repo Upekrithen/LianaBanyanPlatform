@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.870Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Bolela mogwera, go tsene.",
+    "description": "Liana Banyan e agwa go bula go polelo yohle. Polelo ye nngwe le ye nngwe e na le moputso o mongwe wa phetolelo.",
+    "languages": "dipolelo",
+    "openBounties": "meputso ye e bulegilego",
+    "marksAwarded": "Marks e neelwe (ditokene tsa go ba karolo)",
+    "provisional": "Ka nakoana:",
+    "provisionalNotice": "Lenaane la dipuo le diterefe tsa Marks ke tsa nakoana. Marks ke ditokene tsa go ba karolo, esego dikaelo.",
+    "bountyOpen": "Moputso o bulegilego",
+    "claimed": "Go kgopilwe",
+    "complete": "Go phethilwe",
+    "translationBountyTitle": "Moputso wa Phetolelo",
+    "bountyDescription": "Fetola Liana Banyan go {{language}}. Hwetsa {{marks}} Marks.",
+    "scopeWelcome": "Dikgato tsa Kamogelogong / Lefase la Mewa",
+    "scopeCueCards": "Sete ya Karata ya Maele",
+    "scopeNavigation": "Dietemisi tsa tsela le melaetsa ya mathata",
+    "scopeWildfire": "Wildfire Beacon Run: Hwetsa Mošomo",
+    "claimBounty": "Kgopela Moputso ono wa Phetolelo",
+    "baseLanguage": "Polelo ya motheo -- go hlokagala moputso.",
+    "claimedBy": "@{{handle}} o kgopile -- e sepela.",
+    "marksProvisional": "{{marks}} Marks (ka nakoana)",
+    "speakFounderTitle": "Lentšu la Mosadiši: Ke Goreng Mantšu Ao",
+    "speakFounderDesc": "Lentšu lefe lefe mo go phepefatšwa ka lebaka. Motheo wa mabitšo 26 a bohlokwa.",
+    "howBountiesWork": "Meputso ya Phetolelo e Dira Bjang",
+    "step1Title": "Kgopela Moputso",
+    "step1Body": "Bula Moputso wa Phetolelo go tswa Help Wanted.",
+    "step2Title": "Fetola le Romela",
+    "step2Body": "Fetola distring tšohle tše di hlokegago. Romela ka Bounty Poster.",
+    "step3Title": "Hwetsa Marks",
+    "step3Body": "Ka morago ga go amogelwa, o hwetsa Marks le go kwadišwa ho IP Ledger.",
+    "hide": "pata",
+    "why": "goreng?",
+    "subtitle": "\"Botsa mogwera, o tsene.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Fetola polelo",
+    "selectLanguage": "Kgetola polelo",
+    "quickEnglish": "Sekgowa",
+    "tip": "Diriša diphasewete tša polelo tše di fapanago ka Kgoro ya Durin go bula maitemogelo a a ikgethago!"
+  }
+}

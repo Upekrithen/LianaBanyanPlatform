@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.801Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Kandha kanca, banjur mlebu.",
+    "description": "Liana Banyan dibangun kanggo mbukak saben basa. Saben basa duwe siji hadiah terjemahan.",
+    "languages": "basa",
+    "openBounties": "hadiah mbuka",
+    "marksAwarded": "Marks diwenehake (token partisipasi)",
+    "provisional": "Sementara:",
+    "provisionalNotice": "Daftar basa lan tarif Marks sementara. Marks token partisipasi, dudu ekuitas.",
+    "bountyOpen": "Hadiah mbuka",
+    "claimed": "Diklaim",
+    "complete": "Rampung",
+    "translationBountyTitle": "Hadiah Terjemahan",
+    "bountyDescription": "Terjemahake Liana Banyan menyang {{language}}. Entuk {{marks}} Marks.",
+    "scopeWelcome": "Layar Sugeng Rawuh / Donya Memedi",
+    "scopeCueCards": "Set Kartu Isyarat Inti",
+    "scopeNavigation": "Label navigasi lan pesen kesalahan",
+    "scopeWildfire": "Wildfire Beacon Run: Nggoleki Gawean",
+    "claimBounty": "Klaim Hadiah Terjemahan Iki",
+    "baseLanguage": "Basa dhasar -- ora butuh hadiah.",
+    "claimedBy": "@{{handle}} ngeklaim -- lagi mlaku.",
+    "marksProvisional": "{{marks}} Marks (sementara)",
+    "speakFounderTitle": "Suwara Pendiri: Kenapa Tembung-Tembung Iki",
+    "speakFounderDesc": "Saben istilah ana alasane. Asal-usul 26 jeneng sing paling penting.",
+    "howBountiesWork": "Kepiye Cara Kerja Hadiah Terjemahan",
+    "step1Title": "Klaim Hadiah",
+    "step1Body": "Bukak Hadiah Terjemahan saka papan Help Wanted.",
+    "step2Title": "Terjemahake lan Kirima",
+    "step2Body": "Terjemahake kabeh string sing dibutuhake. Kirima liwat alur Bounty Poster.",
+    "step3Title": "Entuk Marks",
+    "step3Body": "Sawise ditampa, kowe entuk Marks lan dicathet ing IP Ledger.",
+    "hide": "sembunyikake",
+    "why": "kenapa?",
+    "subtitle": "\"Kandha kanca, banjur mlebu.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Ganti basa",
+    "selectLanguage": "Pilih basa",
+    "quickEnglish": "Inggris",
+    "tip": "Gunakake sandi basa beda-beda ing Gapura Durin kanggo mbukak pengalaman unik!"
+  }
+}

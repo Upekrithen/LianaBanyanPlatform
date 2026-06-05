@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.884Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Luvutu bantu, yiza.",
+    "description": "Liana Banyan etangwa bue ewusaka bantu yonso. Luninga yonso ezolangwa elunga mosi ya luzolo.",
+    "languages": "mininga",
+    "openBounties": "malunga mazolangwa",
+    "marksAwarded": "Marks epesami (bikangudi bya kosangana)",
+    "provisional": "Ntangu ndambu:",
+    "provisionalNotice": "Lulendo ya mininga na Marks ntangu ndambu. Marks bikangudi bya kosangana.",
+    "bountyOpen": "Lunga ezolangwa",
+    "claimed": "Ebombami",
+    "complete": "Ekosama",
+    "translationBountyTitle": "Lunga ya Kulongulula",
+    "bountyDescription": "Longulula Liana Banyan na {{language}}. Zwa {{marks}} Marks.",
+    "scopeWelcome": "Mbote / Nseke ya Bikokolo",
+    "scopeCueCards": "Biteke bya Lukeno",
+    "scopeNavigation": "Biloko bya nzila na bitoke bya misala",
+    "scopeWildfire": "Wildfire Beacon Run: Yiba Misala",
+    "claimBounty": "Bamba Lunga oyo ya Kulongulula",
+    "baseLanguage": "Luninga yanda -- lunga ke ikele.",
+    "claimedBy": "@{{handle}} ebombami -- etambula.",
+    "marksProvisional": "{{marks}} Marks (ntangu ndambu)",
+    "speakFounderTitle": "Ntiti ya Mfumu: Ndambu Baandike",
+    "speakFounderDesc": "Binkundi yonso platform yina matambu kia nzina. Mikanda 26 ya mbazi.",
+    "howBountiesWork": "Malunga ya Kulongulula Kosala",
+    "step1Title": "Bamba Lunga",
+    "step1Body": "Zola Lunga ya Kulongulula eka Help Wanted.",
+    "step2Title": "Longulula Tinda",
+    "step2Body": "Longulula iyo yonso. Tinda Bounty Poster.",
+    "step3Title": "Zwa Marks",
+    "step3Body": "Mpo yatambulwa, uzwa Marks ya IP Ledger.",
+    "hide": "kumbisa",
+    "why": "bua nini?",
+    "subtitle": "\"Vova nsinga, vanda.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Mona luninga",
+    "selectLanguage": "Sala luninga",
+    "quickEnglish": "Ngelesa",
+    "tip": "Ntoto ya luninga Durin kamba muntu!"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.875Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "ꯃꯤꯇꯩ ꯁꯤꯖꯤꯡꯕꯥ, ꯍꯦꯟꯊꯤꯕ।",
+    "description": "Liana Banyan ꯑꯃꯨ�ꯛ ꯂꯣꯟ ꯑꯃꯗꯝ ꯑꯁꯤ ꯉꯁꯤꯅꯕꯥ ꯋꯥꯈꯜꯂꯣꯛꯄꯥ। ꯂꯣꯟ ꯃꯤꯠꯇꯅꯥ ꯑꯃꯥ ꯃꯈꯜ ꯑꯃꯥ ꯊꯕꯛ।",
+    "languages": "ꯂꯣꯟ",
+    "openBounties": "ꯌꯥꯎꯔꯤ ꯊꯕꯛ",
+    "marksAwarded": "Marks ꯄꯤꯔꯦ (ꯑꯣꯏꯅꯥ ꯂꯦꯞꯄꯥ)",
+    "provisional": "ꯇꯤꯃꯨꯗꯨ:",
+    "provisionalNotice": "ꯂꯣꯟ ꯑꯃꯁꯨꯡ Marks ꯐꯤꯔꯤ ꯇꯤꯃꯨꯗꯨ। Marks ꯑꯣꯏꯅꯥ ꯂꯦꯞꯄꯥ ꯁꯅꯥ, ꯈꯨꯗꯩ ꯱꯰꯰%।",
+    "bountyOpen": "ꯊꯕꯛ ꯌꯥꯎ",
+    "claimed": "ꯂꯨꯁꯤꯟꯅꯔꯤ",
+    "complete": "ꯄꯨꯔꯛ",
+    "translationBountyTitle": "ꯂꯣꯟꯁꯤꯡ ꯊꯕꯛ",
+    "bountyDescription": "Liana Banyan {{language}} ꯂꯣꯟꯗꯥ ꯂꯣꯟꯁꯤꯡ ꯇꯧ। {{marks}} Marks ꯍꯩꯔꯤꯕꯤ।",
+    "scopeWelcome": "ꯋꯥꯐꯝꯃꯤ / ꯃꯤꯠ ꯄꯨꯝꯕꯥ",
+    "scopeCueCards": "ꯃꯍꯩꯀꯤ ꯀꯥꯔꯗ ꯁꯦꯠ",
+    "scopeNavigation": "ꯅꯦꯚꯤꯒꯦꯁꯅ ꯂꯦꯕꯜ ꯑꯃꯁꯨꯡ ꯚꯨꯜ",
+    "scopeWildfire": "Wildfire Beacon Run: ꯀꯥꯟꯕꯥ ꯍꯩꯕꯤ",
+    "claimBounty": "ꯑꯁꯤ ꯂꯣꯟꯁꯤꯡ ꯊꯕꯛ ꯂꯨꯁꯤꯡꯕꯤ",
+    "baseLanguage": "ꯃꯔꯨ ꯂꯣꯟ -- ꯊꯕꯛ ꯅꯠꯇꯦ।",
+    "claimedBy": "@{{handle}} ꯂꯨꯁꯤꯟꯅꯔꯤ -- ꯑꯣꯏꯅꯥ।",
+    "marksProvisional": "{{marks}} Marks (ꯇꯤꯃꯨꯗꯨ)",
+    "speakFounderTitle": "ꯃꯉꯥꯡꯏꯕꯥ ꯀꯣꯜ: ꯑꯁꯤ ꯃꯥꯅꯤꯡ",
+    "speakFounderDesc": "ꯄꯜꯌꯦꯇꯐꯣꯔꯝ ꯑꯁꯤꯗꯥ ꯃꯥꯟ ꯊꯔꯤꯕꯥ ꯀꯣꯟꯕꯥ। 26 ꯅꯩꯡꯕꯥ ꯃꯤꯡ।",
+    "howBountiesWork": "ꯂꯣꯟꯁꯤꯡ ꯊꯕꯛ ꯑꯣꯏꯕꯥ",
+    "step1Title": "ꯊꯕꯛ ꯂꯨꯁꯤꯡꯕꯤ",
+    "step1Body": "Help Wanted ꯗꯥ ꯂꯣꯟꯁꯤꯡ ꯊꯕꯛ ꯕꯨꯄꯥ।",
+    "step2Title": "ꯂꯣꯟꯁꯤꯡ ꯑꯃꯁꯨꯡ ꯁꯦꯟꯗ",
+    "step2Body": "ꯊꯕꯛ ꯁ꯭ꯠꯔꯤꯡ ꯂꯣꯟꯁꯤꯡ ꯇꯧ। Bounty Poster ꯗꯥ ꯁꯦꯟꯗ।",
+    "step3Title": "Marks ꯍꯩꯔꯤꯕꯤ",
+    "step3Body": "ꯑꯃꯁꯨꯡ ꯄꯜꯌꯦꯇꯐꯣꯔꯝ Marks ꯑꯃꯁꯨꯡ IP Ledger ꯗꯥ ꯊꯩꯔꯤꯕꯤ।",
+    "hide": "ꯌꯦꯡꯕꯤ",
+    "why": "ꯀꯗꯥꯢ?",
+    "subtitle": "\"Mit phi loi, chet.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "ꯂꯣꯟ ꯁꯤꯖꯤꯟꯕꯤ",
+    "selectLanguage": "ꯂꯣꯟ ꯁꯦꯂꯦꯛꯇ",
+    "quickEnglish": "ꯏꯡꯂꯤꯁ",
+    "tip": "Durin ꯁꯩꯄꯣꯛꯗꯥ ꯂꯣꯟ ꯐꯔꯣꯕꯥ ꯄꯥꯁꯋꯥꯔꯗ ꯇꯧꯒꯗꯕꯨ!"
+  }
+}

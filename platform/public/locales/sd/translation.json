@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.813Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "دوست چئو ۽ اندر اچو.",
+    "description": "لیانا بانیان هر ٻولي لاءِ کُلي بنيادي تي ٺاهي وئي آهي. هر ٻولي لاءِ هڪ ترجمو انعام آهي.",
+    "languages": "ٻوليون",
+    "openBounties": "کُلا انعام",
+    "marksAwarded": "Marks ڏنل آهن (شرڪت ٽوڪن)",
+    "provisional": "عارضي:",
+    "provisionalNotice": "ٻولين جي فهرست ۽ Marks جا ريٽ عارضي آهن. Marks شرڪت ٽوڪن آهن، حصص نه.",
+    "bountyOpen": "انعام کُلو آهي",
+    "claimed": "دعويٰ ڪئي وئي",
+    "complete": "مڪمل",
+    "translationBountyTitle": "ترجمي جو انعام",
+    "bountyDescription": "لیانا بانیان کي {{language}} ۾ ترجمو ڪريو. {{marks}} Marks حاصل ڪريو.",
+    "scopeWelcome": "ڀلي آيا / روح دنيا اسڪرين",
+    "scopeCueCards": "مُک اشارن ڪارڊ سيٽ",
+    "scopeNavigation": "نيويگيشن ليبلز ۽ غلطي پيغام",
+    "scopeWildfire": "Wildfire Beacon Run: ڪم ڳوليو",
+    "claimBounty": "هن ترجمي جي انعام جي دعويٰ ڪريو",
+    "baseLanguage": "بنيادي ٻولي -- ڪنهن انعام جي ضرورت نه.",
+    "claimedBy": "@{{handle}} پاران دعويٰ ڪئي -- جاري آهي.",
+    "marksProvisional": "{{marks}} Marks (عارضي)",
+    "speakFounderTitle": "بانيءَ جي آواز: اهي لفظ ڇو",
+    "speakFounderDesc": "هن پليٽ فارم تي هر اصطلاح هڪ سبب سان نامزد آهي. 26 اهم نالن جو اصل.",
+    "howBountiesWork": "ترجمي جا انعام ڪيئن ڪم ڪن ٿا",
+    "step1Title": "انعام جي دعويٰ ڪريو",
+    "step1Body": "Help Wanted بورڊ مان ترجمي جو انعام کوليو.",
+    "step2Title": "ترجمو ڪريو ۽ جمع ڪريو",
+    "step2Body": "ضروري سڀ اسٽرنگز ترجمو ڪريو. Bounty Poster ذريعي جمع ڪريو.",
+    "step3Title": "Marks حاصل ڪريو",
+    "step3Body": "قبوليت کان پوءِ Marks ملندا. IP Ledger ۾ درج ٿيندا.",
+    "hide": "لڪايو",
+    "why": "ڇو؟",
+    "subtitle": "\"دوست چئو ۽ اندر اچو.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "ٻولي تبديل ڪريو",
+    "selectLanguage": "ٻولي چونڊيو",
+    "quickEnglish": "انگريزي",
+    "tip": "Durin's Door تي مختلف ٻولين جا پاسورڊ استعمال ڪريو!"
+  }
+}

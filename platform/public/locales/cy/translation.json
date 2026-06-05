@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.865Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Dywed cyfaill ac enter.",
+    "description": "Mae Liana Banyan wedi'i hadeiladu i fod yn agored i bob iaith. Mae gan bob iaith agored un wobr cyfieithiad.",
+    "languages": "ieithoedd",
+    "openBounties": "gwobrau agored",
+    "marksAwarded": "Marks a roddir (tocynnau cyfranogi)",
+    "provisional": "Dros dro:",
+    "provisionalNotice": "Mae rhestr yr ieithoedd a chyfraddau Marks yn dros dro. Mae Marks yn docynnau cyfranogi, nid cyfranddaliadau.",
+    "bountyOpen": "Gwobr ar agor",
+    "claimed": "Hawliwyd",
+    "complete": "Wedi'i gwblhau",
+    "translationBountyTitle": "Gwobr Cyfieithiad",
+    "bountyDescription": "Cyfieithwch Liana Banyan i {{language}}. Enillwch {{marks}} Marks.",
+    "scopeWelcome": "Sgriniau Croeso / Byd Ysbrydion",
+    "scopeCueCards": "Casgliad Cerdyn Cliw Sylfaenol",
+    "scopeNavigation": "Labeli llywio a negeseuon gwall",
+    "scopeWildfire": "Wildfire Beacon Run: Canfod Gwaith",
+    "claimBounty": "Hawliwch y Wobr Cyfieithiad hon",
+    "baseLanguage": "Iaith sylfaen -- nid oes angen gwobr.",
+    "claimedBy": "Hawliwyd y wobr gan @{{handle}} -- ar waith.",
+    "marksProvisional": "{{marks}} Marks (dros dro)",
+    "speakFounderTitle": "Llais y Sylfaenydd: Pam y Geiriau Hyn",
+    "speakFounderDesc": "Mae pob term ar y platfform hwn wedi'i enwi am reswm. Tarddiad y 26 enw pwysicaf.",
+    "howBountiesWork": "Sut Mae Gwobrau Cyfieithiad yn Gweithio",
+    "step1Title": "Hawliwch y Wobr",
+    "step1Body": "Agorwch Wobr Cyfieithiad o'r bwrdd Help Wanted.",
+    "step2Title": "Cyfieithwch ac Anfonwch",
+    "step2Body": "Cyfieithwch yr holl linynni angenrheidiol. Anfonwch drwy lif Bounty Poster.",
+    "step3Title": "Enillwch Marks",
+    "step3Body": "Ar ôl derbyn, byddwch yn derbyn Marks ac yn cael eich cofnodi yn y IP Ledger.",
+    "hide": "cuddio",
+    "why": "pam?",
+    "subtitle": "\"Dywed ffrind a dod i mewn.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Newid iaith",
+    "selectLanguage": "Dewiswch iaith",
+    "quickEnglish": "Saesneg",
+    "tip": "Defnyddiwch gyfrineiriau iaith wahanol wrth Ddrws Durin i ddatgloi profiadau unigryw!"
+  }
+}

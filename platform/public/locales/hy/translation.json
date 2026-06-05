@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.854Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Ases bnger, ev mti.",
+    "description": "Liana Banyan-y karrucvel e bac linel bolor lezvneri hamar. Amorustyun lezu unes mi targmanutyun mtakatrutun.",
+    "languages": "lezuner",
+    "openBounties": "bac mtakatrutunner",
+    "marksAwarded": "Marks shetvel en (mijnord zhetoner)",
+    "provisional": "Zhamamanak:",
+    "provisionalNotice": "Lezvneri cankik ev Marks-i drusherevnern en zhamanakavor. Marks mijnord zhetoner en, ayl stock chi.",
+    "bountyOpen": "Mtakatrutun bac e",
+    "claimed": "Pahanjvec",
+    "complete": "Avartvel e",
+    "translationBountyTitle": "Targmanutyun Mtakatrutun",
+    "bountyDescription": "Targmanecek Liana Banyan-y {{language}} lezvov. Kcerkek {{marks}} Marks.",
+    "scopeWelcome": "Barivkeluts / Hoogor Ashkharh",
+    "scopeCueCards": "Hushagreri Holovashkhar",
+    "scopeNavigation": "Navigatsiayi petakner ev skhalneri petakner",
+    "scopeWildfire": "Wildfire Beacon Run: Gortsoghutyun Gorvatsir",
+    "claimBounty": "Pahanjveck Ays Targmanutyun Mtakatrutun",
+    "baseLanguage": "Hishayin lezun -- mtakatrutun petk chi.",
+    "claimedBy": "@{{handle}} pahanjev -- yndzoghum e.",
+    "marksProvisional": "{{marks}} Marks (zhamanakavor)",
+    "speakFounderTitle": "Hisnateli Dzaynen: Inchu Ayd Bajrery",
+    "speakFounderDesc": "Ayd harkum amenayin bajrern kochvum en parachow: 26 garjanakayin anunner.",
+    "howBountiesWork": "Inch Kaerpov en Katarum Targmanutyun Mtakatrutunnery",
+    "step1Title": "Pahanjveck Mtakatrutun",
+    "step1Body": "Batsek Targmanutyun Mtakatrutun Help Wanted-ic.",
+    "step2Title": "Targmaneck ev Usarkel",
+    "step2Body": "Targmaneck bolor anrakhet taxtakaghery. Usarkel Bounty Poster-ov.",
+    "step3Title": "Shchek Marks",
+    "step3Body": "Chkayummane heto kcerkek Marks ev katagrveck IP Ledger-um.",
+    "hide": "takcnl",
+    "why": "inch u?",
+    "subtitle": "\"Ases barer, ews muts.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Fhokhel lezun",
+    "selectLanguage": "Entel lezun",
+    "quickEnglish": "Angleren",
+    "tip": "Ogtagortsvek tarber lezuneri gorjanisherove Durin-i Derkin mot!"
+  }
+}

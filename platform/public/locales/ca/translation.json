@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.854Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Digues amic i entra.",
+    "description": "Liana Banyan esta construida per ser oberta a cada idioma. Cada idioma obert te una recompensa de traduccio.",
+    "languages": "idiomes",
+    "openBounties": "recompenses obertes",
+    "marksAwarded": "Marks atorgats (tokens de participacio)",
+    "provisional": "Provisionalment:",
+    "provisionalNotice": "La llista d'idiomes i els tipus de Marks son provisionals. Els Marks son tokens de participacio, no accions.",
+    "bountyOpen": "Recompensa oberta",
+    "claimed": "Reclamada",
+    "complete": "Completat",
+    "translationBountyTitle": "Recompensa de Traduccio",
+    "bountyDescription": "Traduiu Liana Banyan a {{language}}. Guanyeu {{marks}} Marks en ser acceptada.",
+    "scopeWelcome": "Pantalles de Benvinguda / Mon Fantasmal",
+    "scopeCueCards": "Conjunt base de targetes de suggeriments",
+    "scopeNavigation": "Etiquetes de navegacio i missatges d'error",
+    "scopeWildfire": "Wildfire Beacon Run: Troba feina",
+    "claimBounty": "Reclameu aquesta Recompensa de Traduccio",
+    "baseLanguage": "Idioma base -- no cal recompensa.",
+    "claimedBy": "Recompensa reclamada per @{{handle}} -- en curs.",
+    "marksProvisional": "{{marks}} Marks (provisionalment)",
+    "speakFounderTitle": "La Veu del Fundador: Per que Aquestes Paraules",
+    "speakFounderDesc": "Cada terme d'aquesta plataforma ha estat nomenat per un motiu. Origen dels 26 noms mes importants.",
+    "howBountiesWork": "Com Funcionen les Recompenses de Traduccio",
+    "step1Title": "Reclameu la Recompensa",
+    "step1Body": "Obriu una Recompensa de Traduccio del tauler Help Wanted.",
+    "step2Title": "Traduiu i Envieu",
+    "step2Body": "Traduiu totes les cadenes necessaries. Envieu-les a traves del flux Bounty Poster.",
+    "step3Title": "Guanyeu Marks",
+    "step3Body": "Despres de l'acceptacio, rebreu Marks i s'us registrara a IP Ledger.",
+    "hide": "amaga",
+    "why": "per que?",
+    "subtitle": "\"Digues amic i entra.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Canvia l'idioma",
+    "selectLanguage": "Selecciona l'idioma",
+    "quickEnglish": "Angles",
+    "tip": "Feu servir contrasenyes en idiomes diferents a la Porta de Durin per desbloquejar experiencies uniques!"
+  }
+}

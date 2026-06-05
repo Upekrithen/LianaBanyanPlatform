@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.846Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Thuaj mik dhe hyr.",
+    "description": "Liana Banyan eshte ndertuar per te qene e hapur per cdo gjuhe. Cdo gjuhe e hapur ka nje shenperblim perkthimi.",
+    "languages": "gjuhe",
+    "openBounties": "shenperblime te hapura",
+    "marksAwarded": "Marks u dha (shenja pjesemarrjeje)",
+    "provisional": "Perkohesisht:",
+    "provisionalNotice": "Lista e gjuheve dhe normat e Marks jane perkohesisht. Marks jane shenja pjesemarrjeje, jo aksione.",
+    "bountyOpen": "Shenperblimi i hapur",
+    "claimed": "U kerkua",
+    "complete": "Perfunduar",
+    "translationBountyTitle": "Shenperblim Perkthimi",
+    "bountyDescription": "Perktheni Liana Banyan ne {{language}}. Fitoni {{marks}} Marks.",
+    "scopeWelcome": "Ekranet e Mireseardhjes / Bota e Fantazmave",
+    "scopeCueCards": "Seti Baze i Kartave te Sugjerimeve",
+    "scopeNavigation": "Etiketa navigimi dhe mesazhe gabimesh",
+    "scopeWildfire": "Wildfire Beacon Run: Gjeni Pune",
+    "claimBounty": "Kerkoni kete Shenperblim Perkthimi",
+    "baseLanguage": "Gjuha baze -- nuk nevojitet shenperblim.",
+    "claimedBy": "@{{handle}} kerkoi -- ne proces.",
+    "marksProvisional": "{{marks}} Marks (perkohesisht)",
+    "speakFounderTitle": "Zeri i Themeluesit: Pse Keto Fjale",
+    "speakFounderDesc": "Cdo term ne kete platforme eshte emertuar me arsye. Origjina e 26 emrave me te rendesishem.",
+    "howBountiesWork": "Si Funksionojne Shenperblime Perkthimi",
+    "step1Title": "Kerkoni Shenperblimin",
+    "step1Body": "Hapni nje Shenperblim Perkthimi nga Help Wanted.",
+    "step2Title": "Perktheni dhe Dergoni",
+    "step2Body": "Perktheni te gjitha vargjet e nevojshme. Dergoni nepermjet Bounty Poster.",
+    "step3Title": "Fitoni Marks",
+    "step3Body": "Pas pranimit, merrni Marks dhe regjistroheni ne IP Ledger.",
+    "hide": "fshih",
+    "why": "pse?",
+    "subtitle": "\"Thuaj mik dhe hyr.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Ndrro gjuhen",
+    "selectLanguage": "Zgjidhni gjuhen",
+    "quickEnglish": "Anglisht",
+    "tip": "Perdorni fjalekalime te gjuheve te ndryshme ne Dyert e Durinit per te shkyequr pervoja unike!"
+  }
+}

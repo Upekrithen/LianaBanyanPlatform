@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.868Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Di zanmi, epi antre.",
+    "description": "Liana Banyan bati pou li louvri pou chak lang. Chak lang ki louvri gen yon prim tradiksyon.",
+    "languages": "lang",
+    "openBounties": "prim louvri",
+    "marksAwarded": "Marks bay (tokèn patisipasyon)",
+    "provisional": "Pwovizoua:",
+    "provisionalNotice": "Lis lang ak pousantaj Marks yo pwovizoua. Marks se tokèn patisipasyon, pa aksyon.",
+    "bountyOpen": "Prim louvri",
+    "claimed": "Mande",
+    "complete": "Fini",
+    "translationBountyTitle": "Prim Tradiksyon",
+    "bountyDescription": "Tradui Liana Banyan nan {{language}}. Touche {{marks}} Marks.",
+    "scopeWelcome": "Ekran Byenveni / Mond Lespri",
+    "scopeCueCards": "Seri Kat Konsèy Debaz",
+    "scopeNavigation": "Etikèt navigasyon ak mesaj erè",
+    "scopeWildfire": "Wildfire Beacon Run: Jwenn Travay",
+    "claimBounty": "Mande Prim Tradiksyon Sa",
+    "baseLanguage": "Lang debaz -- pa gen prim ki nesesè.",
+    "claimedBy": "@{{handle}} mande -- ap kontinye.",
+    "marksProvisional": "{{marks}} Marks (pwovizoua)",
+    "speakFounderTitle": "Vwa Fondatè a: Poukisa Mo Sa Yo",
+    "speakFounderDesc": "Chak tèm sou platfòm sa a gen yon rezon. Orijin 26 non ki pi enpòtan.",
+    "howBountiesWork": "Kijan Prim Tradiksyon Travay",
+    "step1Title": "Mande Prim nan",
+    "step1Body": "Ouvri Prim Tradiksyon nan Help Wanted.",
+    "step2Title": "Tradui epi Soumèt",
+    "step2Body": "Tradui tout chaîn nesesè yo. Soumèt via Bounty Poster.",
+    "step3Title": "Touche Marks",
+    "step3Body": "Apre akseptasyon, ou resevwa Marks e ou anrejistre nan IP Ledger.",
+    "hide": "kache",
+    "why": "poukisa?",
+    "subtitle": "\"Di zanmi, epi antre.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Chanje lang",
+    "selectLanguage": "Chwazi lang",
+    "quickEnglish": "Anglè",
+    "tip": "Itilize mo passe diferan lang nan Pòt Durin pou debloke eksperyans inik!"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.794Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "講朋友，然後入嚟。",
+    "description": "Liana Banyan 對所有語言開放。每種語言有一個翻譯賞金。",
+    "languages": "語言",
+    "openBounties": "開放賞金",
+    "marksAwarded": "Marks 已發放（參與代幣）",
+    "provisional": "暫定:",
+    "provisionalNotice": "語言列表及 Marks 匯率暫定。Marks 係參與代幣，唔係股權。",
+    "bountyOpen": "賞金開放",
+    "claimed": "已認領",
+    "complete": "完成",
+    "translationBountyTitle": "翻譯賞金",
+    "bountyDescription": "將 Liana Banyan 翻譯成 {{language}}。獲接受後賺取 {{marks}} Marks。",
+    "scopeWelcome": "歡迎 / 鬼世界畫面",
+    "scopeCueCards": "核心提示卡套裝（經濟法則 + 管治）",
+    "scopeNavigation": "導航標籤及錯誤訊息",
+    "scopeWildfire": "Wildfire Beacon Run: 搵工（入門導覽）",
+    "claimBounty": "認領呢個翻譯賞金",
+    "baseLanguage": "基礎語言——唔需要賞金。",
+    "claimedBy": "賞金已由 @{{handle}} 認領——進行中。",
+    "marksProvisional": "{{marks}} Marks（暫定）",
+    "speakFounderTitle": "創辦人心聲：點解揀呢啲詞",
+    "speakFounderDesc": "平台每個術語都有原因。26 個最重要名稱嘅起源。",
+    "howBountiesWork": "翻譯賞金點樣運作",
+    "step1Title": "認領賞金",
+    "step1Body": "從 Help Wanted 板開啟翻譯賞金。",
+    "step2Title": "翻譯並提交",
+    "step2Body": "翻譯所有所需字串，透過 Bounty Poster 流程提交。",
+    "step3Title": "賺取 Marks",
+    "step3Body": "獲接受後，你收到 Marks，貢獻記錄於 IP Ledger。",
+    "hide": "隱藏",
+    "why": "點解？",
+    "subtitle": "\"講朋友，然後入嚟。\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "更改語言",
+    "selectLanguage": "選擇語言",
+    "quickEnglish": "英文",
+    "tip": "喺 Durin 之門使用唔同語言密碼，解鎖獨特體驗！"
+  }
+}

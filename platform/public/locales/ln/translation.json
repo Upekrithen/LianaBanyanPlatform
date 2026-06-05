@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.824Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Loba moninga, mpe kota.",
+    "description": "Liana Banyan ezali miso ya bato nyonso. Monoko nyonso ezali na matomba moko ya kobalola.",
+    "languages": "minoko",
+    "openBounties": "matomba ya peli",
+    "marksAwarded": "Marks epesami (tokens ya kozanga)",
+    "provisional": "Sima na:",
+    "provisionalNotice": "Liste ya minoko mpe misure ya Marks ezali ya sima na. Marks ezali tokens ya kozanga, te aksi.",
+    "bountyOpen": "Matomba ya peli",
+    "claimed": "Babongi",
+    "complete": "Ekosi",
+    "translationBountyTitle": "Matomba ya Kobalola",
+    "bountyDescription": "Balola Liana Banyan na {{language}}. Zwa {{marks}} Marks.",
+    "scopeWelcome": "Mikanda ya Boyei bino / Mokili ya Mizimu",
+    "scopeCueCards": "Ensemble ya Makabu ya Toli",
+    "scopeNavigation": "Malembo ya nzela mpe mitindo ya mabuta",
+    "scopeWildfire": "Wildfire Beacon Run: Zwa Mosala",
+    "claimBounty": "Bonga Matomba oyo ya Kobalola",
+    "baseLanguage": "Monoko ya ebandeli -- matomba esengami te.",
+    "claimedBy": "@{{handle}} abongi -- ekosala.",
+    "marksProvisional": "{{marks}} Marks (sima na)",
+    "speakFounderTitle": "Liloba ya Motandisi: Mpo na Nini Maloba Oyo",
+    "speakFounderDesc": "Liloba nyonso na eteni oyo ezwi nkombo na ntina. Ebandeli ya nkombo 26 ya ntina.",
+    "howBountiesWork": "Matomba ya Kobalola Esalaka Ndenge Nini",
+    "step1Title": "Bonga Matomba",
+    "step1Body": "Fungola Matomba ya Kobalola na Help Wanted.",
+    "step2Title": "Balola mpe Tinda",
+    "step2Body": "Balola misinga nyonso. Tinda na Bounty Poster.",
+    "step3Title": "Zwa Marks",
+    "step3Body": "Sima na kobondelema, ozwi Marks mpe ozalisi na IP Ledger.",
+    "hide": "planque",
+    "why": "mpo na nini?",
+    "subtitle": "\"Loba moninga, okota.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Suka monoko",
+    "selectLanguage": "Pona monoko",
+    "quickEnglish": "Lingala ya Angele",
+    "tip": "Zala na mots de passe ya minoko ndenge na ndenge na Porte ya Durin!"
+  }
+}

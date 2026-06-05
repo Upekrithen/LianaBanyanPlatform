@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.877Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Tautala uo, ona ulufale.",
+    "description": "Ua fausia Liana Banyan e tatala mo gagana uma. O gagana tatala taitasi e iai le tasi o le faafoi mea.",
+    "languages": "gagana",
+    "openBounties": "mea tatala",
+    "marksAwarded": "Marks tuuina atu (faailoga o auai)",
+    "provisional": "Faataunuuina:",
+    "provisionalNotice": "O le lisi o gagana ma aano o Marks e faataunuuina. Marks ni faailoga o auai, e le o saea.",
+    "bountyOpen": "Mea tatala",
+    "claimed": "Manaomia",
+    "complete": "Maea",
+    "translationBountyTitle": "Mea Faafoi",
+    "bountyDescription": "Faafoi Liana Banyan i le {{language}}. Maua {{marks}} Marks.",
+    "scopeWelcome": "Malo lava ia / Lalolagi Agaga",
+    "scopeCueCards": "Seti Kaade Faatonuga",
+    "scopeNavigation": "Faailoga faatonu ma fesilafai mea faasese",
+    "scopeWildfire": "Wildfire Beacon Run: Saili se galuega",
+    "claimBounty": "Manaomia le Mea Faafoi lenei",
+    "baseLanguage": "Gagana faavae -- e leai se mea manaomia.",
+    "claimedBy": "@{{handle}} na manaomia -- o lo'o faaauau.",
+    "marksProvisional": "{{marks}} Marks (faataunuuina)",
+    "speakFounderTitle": "Le Leo o le Faavae: Aisea nei Upu",
+    "speakFounderDesc": "O upu uma i luga o le faiga ua faaigoa i se mafuaaga. O le amataga o igoa 26 sili ona taua.",
+    "howBountiesWork": "Pe Faafefea Ona Galue Mea Faafoi",
+    "step1Title": "Manaomia le Mea",
+    "step1Body": "Tatala le Mea Faafoi mai le fao Help Wanted.",
+    "step2Title": "Faafoi ma Auina",
+    "step2Body": "Faafoi ni faamatalaga uma e manaomia. Auina atu e ala i le Bounty Poster.",
+    "step3Title": "Maua Marks",
+    "step3Body": "Ina ua mauaina, e maua Marks ma faamauina i le IP Ledger.",
+    "hide": "natia",
+    "why": "aisea?",
+    "subtitle": "\"Fai e uo, e ulufale.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Suia le gagana",
+    "selectLanguage": "Filifili le gagana",
+    "quickEnglish": "Igilisi",
+    "tip": "Faaaoga upu faasee o gagana eseese i le Faitotoa o Durin e tatala ai ni aafiaga ese!"
+  }
+}

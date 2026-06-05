@@ -1,0 +1,184 @@
+/**
+ * RTL Layout Utilities -- Wave 15 / Phase γ i18n Hardening
+ * ==========================================================
+ * Applied automatically when useRtlDirection sets dir="rtl" on <html>.
+ * Covers all 10 RTL scripts: ar, he, fa, ur, ps, sd, ug, yi, ckb, dv.
+ *
+ * Design rules:
+ *   1. [dir="rtl"] scoping -- never global, never overrides LTR except under RTL root.
+ *   2. CSS logical properties (margin-inline-start, etc.) preferred where Tailwind lacks coverage.
+ *   3. Flex/Grid directional reversal -- row-reverse for row-oriented containers.
+ *   4. Icon mirror class (.rtl-mirror) -- scaleX(-1) for directional icons (arrows, chevrons).
+ *   5. Form inputs dir=auto by default; [dir="rtl"] enforces text-align:right as fallback.
+ *   6. Scroll containers keep native RTL overflow behavior (browsers handle automatically).
+ *   7. Pseudo-locale: [data-pseudo-locale="stretch"] tests elongated strings.
+ */
+
+/* ── Flex row reversal ── */
+[dir="rtl"] .flex-row,
+[dir="rtl"] .flex-row-reverse {
+  /* Already reversed for RTL: row becomes row-reverse and vice versa */
+}
+
+[dir="rtl"] .rtl-flex-reverse {
+  flex-direction: row-reverse;
+}
+
+/* ── Directional icon mirroring ── */
+/* Apply .rtl-mirror to any icon that has directional meaning:
+   arrows (→ ← ↑ ↓), chevrons, send, back, forward, next, etc.
+   Do NOT mirror symmetric icons (search, settings, close, etc.).
+*/
+[dir="rtl"] .rtl-mirror {
+  transform: scaleX(-1);
+}
+
+/* lucide-react specific directional icons */
+[dir="rtl"] .icon-arrow-right,
+[dir="rtl"] .icon-arrow-left,
+[dir="rtl"] .icon-chevron-right,
+[dir="rtl"] .icon-chevron-left,
+[dir="rtl"] .icon-send,
+[dir="rtl"] .icon-forward,
+[dir="rtl"] .icon-external-link {
+  transform: scaleX(-1);
+}
+
+/* ── Text alignment ── */
+[dir="rtl"] .rtl-text-right {
+  text-align: right;
+}
+
+[dir="rtl"] .rtl-text-left {
+  text-align: left;
+}
+
+/* Inputs and textareas: force RTL text direction */
+[dir="rtl"] input[type="text"],
+[dir="rtl"] input[type="email"],
+[dir="rtl"] input[type="search"],
+[dir="rtl"] input[type="url"],
+[dir="rtl"] input[type="tel"],
+[dir="rtl"] input[type="password"],
+[dir="rtl"] textarea {
+  direction: rtl;
+  text-align: right;
+}
+
+/* Number inputs: direction stays LTR for numeric values */
+[dir="rtl"] input[type="number"] {
+  direction: ltr;
+  text-align: right;
+}
+
+/* Select dropdowns */
+[dir="rtl"] select {
+  direction: rtl;
+  text-align: right;
+}
+
+/* Form labels align right in RTL */
+[dir="rtl"] label {
+  text-align: right;
+}
+
+/* ── Margin / Padding logical property helpers ── */
+/* Tailwind does not auto-flip margin-left/right in RTL.
+   Use these utility classes for directional spacing.
+*/
+[dir="rtl"] .rtl-ms-auto {
+  margin-left: auto;
+  margin-right: unset;
+}
+
+[dir="rtl"] .rtl-me-auto {
+  margin-right: auto;
+  margin-left: unset;
+}
+
+[dir="rtl"] .rtl-ps-4 {
+  padding-right: 1rem;
+  padding-left: unset;
+}
+
+[dir="rtl"] .rtl-pe-4 {
+  padding-left: 1rem;
+  padding-right: unset;
+}
+
+/* ── Grid reversal ── */
+/* RTL grids typically do NOT reverse (grid uses logical order),
+   but inline-start/end are swapped by the browser automatically
+   when dir="rtl". No extra CSS needed for grid column order.
+   Override only when visual reversal is explicitly required.
+*/
+[dir="rtl"] .rtl-grid-reverse {
+  direction: rtl;
+}
+
+/* ── Sidebar / panel positioning ── */
+[dir="rtl"] .rtl-sidebar-right {
+  right: 0;
+  left: auto;
+}
+
+[dir="rtl"] .rtl-sidebar-left {
+  left: 0;
+  right: auto;
+}
+
+/* ── Floating action button (LanguageSwitcher) ── */
+/* When dir=rtl, the fixed-bottom-right switcher flips to bottom-left */
+[dir="rtl"] .rtl-fab-flip {
+  right: auto;
+  left: 1rem;
+}
+
+/* ── Borders ── */
+[dir="rtl"] .rtl-border-right {
+  border-right-width: 0;
+  border-left-width: 1px;
+}
+
+[dir="rtl"] .rtl-border-left {
+  border-left-width: 0;
+  border-right-width: 1px;
+}
+
+/* ── Pseudo-locale stretch ── */
+/* Used in pseudo-locale CI testing to verify layout handles
+   elongated strings (e.g. German or Finnish) without overflow.
+   Apply [data-pseudo-locale="stretch"] to test container.
+*/
+[data-pseudo-locale="stretch"] * {
+  letter-spacing: 0.02em;
+  word-spacing: 0.05em;
+}
+
+/* ── RTL scroll container ── */
+/* Modern browsers flip overflow-x scroll direction automatically
+   under dir="rtl". This class makes it explicit for older engines.
+*/
+[dir="rtl"] .rtl-scroll {
+  direction: rtl;
+  overflow-x: auto;
+}
+
+/* ── Inline-start / inline-end shims for Tailwind gaps ── */
+/* Tailwind v3 does not expose logical start/end properties as utilities.
+   These cover the most common layout patterns.
+*/
+[dir="rtl"] .rtl-start-0 {
+  right: 0;
+  left: auto;
+}
+
+[dir="rtl"] .rtl-end-0 {
+  left: 0;
+  right: auto;
+}
+
+/* ── Focus ring direction ── */
+[dir="rtl"] :focus-visible {
+  outline-offset: 2px;
+}

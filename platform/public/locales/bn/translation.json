@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.789Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "বন্ধু বলো, এবং প্রবেশ করো।",
+    "description": "লিয়ানা বানিয়ান সকল ভাষার জন্য উন্মুক্ত। প্রতিটি ভাষার জন্য একটি অনুবাদ বাউন্টি রয়েছে। Marks অর্জন করুন।",
+    "languages": "ভাষা",
+    "openBounties": "খোলা বাউন্টি",
+    "marksAwarded": "Marks প্রদান (অংশগ্রহণ টোকেন)",
+    "provisional": "অস্থায়ী:",
+    "provisionalNotice": "ভাষার তালিকা ও Marks হার অস্থায়ী। Marks অংশগ্রহণ টোকেন -- ইকুইটি নয়, আর্থিক স্বার্থ নেই।",
+    "bountyOpen": "বাউন্টি খোলা",
+    "claimed": "দাবি করা হয়েছে",
+    "complete": "সম্পূর্ণ",
+    "translationBountyTitle": "অনুবাদ বাউন্টি",
+    "bountyDescription": "লিয়ানা বানিয়ান {{language}} ভাষায় অনুবাদ করুন। গৃহীত হলে {{marks}} Marks অর্জন করুন।",
+    "scopeWelcome": "স্বাগত / ভূত বিশ্বের স্ক্রিন",
+    "scopeCueCards": "মূল কিউ কার্ড সেট (অর্থনৈতিক আইন + শাসন)",
+    "scopeNavigation": "নেভিগেশন লেবেল ও ত্রুটি বার্তা",
+    "scopeWildfire": "ওয়াইল্ডফায়ার বিকন রান: চাকরি পান",
+    "claimBounty": "এই অনুবাদ বাউন্টি দাবি করুন",
+    "baseLanguage": "মূল ভাষা -- কোনো বাউন্টি নেই।",
+    "claimedBy": "@{{handle}} দ্বারা দাবি -- চলমান।",
+    "marksProvisional": "{{marks}} Marks (অস্থায়ী)",
+    "speakFounderTitle": "প্রতিষ্ঠাতার বক্তব্য: কেন এই শব্দগুলো",
+    "speakFounderDesc": "এই প্ল্যাটফর্মের প্রতিটি শব্দ একটি কারণে নামকরণ। ২৬টি নামের উৎস।",
+    "howBountiesWork": "বাউন্টি কীভাবে কাজ করে",
+    "step1Title": "বাউন্টি দাবি করুন",
+    "step1Body": "Help Wanted বোর্ড থেকে অনুবাদ বাউন্টি নিন।",
+    "step2Title": "অনুবাদ করুন ও জমা দিন",
+    "step2Body": "সমস্ত স্ট্রিং অনুবাদ করে Bounty Poster ফ্লোতে জমা দিন।",
+    "step3Title": "Marks অর্জন করুন",
+    "step3Body": "গৃহীত হলে Marks পাবেন। IP Ledger-এ নথিভুক্ত হবেন।",
+    "hide": "লুকান",
+    "why": "কেন?",
+    "subtitle": "\"বন্ধু বলো, এবং প্রবেশ করো।\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "ভাষা পরিবর্তন করুন",
+    "selectLanguage": "ভাষা নির্বাচন করুন",
+    "quickEnglish": "ইংরেজি",
+    "tip": "Durin's Door-এ ভিন্ন ভাষার পাসওয়ার্ড ব্যবহার করুন অনন্য অভিজ্ঞতা আনলক করতে!"
+  }
+}

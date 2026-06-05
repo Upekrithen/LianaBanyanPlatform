@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.793Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Dost de ve gir.",
+    "description": "Liana Banyan her dile açık kurulmuştur. Her açık dil için bir çeviri ödülü var.",
+    "languages": "dil",
+    "openBounties": "açık ödüller",
+    "marksAwarded": "Marks verildi (katılım tokenleri)",
+    "provisional": "Geçici:",
+    "provisionalNotice": "Dil listesi ve Marks oranları geçici olarak işleniyor. Marks katılım tokenleri, hisse değil.",
+    "bountyOpen": "Ödül açık",
+    "claimed": "Talep edildi",
+    "complete": "Tamamlandı",
+    "translationBountyTitle": "Çeviri Ödülü",
+    "bountyDescription": "Liana Banyan'ı {{language}} diline çevirin. Kabul üzerine {{marks}} Marks kazanın.",
+    "scopeWelcome": "Hoş Geldiniz / Hayalet Dünya ekranları",
+    "scopeCueCards": "Temel İpucu Kartı seti (Ekonomik Yasalar + Yönetim)",
+    "scopeNavigation": "Navigasyon etiketleri ve hata mesajları",
+    "scopeWildfire": "Wildfire Beacon Run: İş Bul (giriş turu)",
+    "claimBounty": "Bu Çeviri Ödülünü Talep Et",
+    "baseLanguage": "Temel dil -- ödül gerekmiyor.",
+    "claimedBy": "Ödül @{{handle}} tarafından talep edildi -- devam ediyor.",
+    "marksProvisional": "{{marks}} Marks (geçici)",
+    "speakFounderTitle": "Kurucu'nun Sesi: Bu Kelimeler Neden",
+    "speakFounderDesc": "Bu platformdaki her terim bir nedenle adlandırılmıştır. 26 önemli ismin kökeni.",
+    "howBountiesWork": "Çeviri Ödülleri Nasıl Çalışır",
+    "step1Title": "Ödülü Talep Et",
+    "step1Body": "Help Wanted panosundan Çeviri Ödülünü açın.",
+    "step2Title": "Çevir ve Gönder",
+    "step2Body": "Tüm gereken dizeleri çevirin ve Bounty Poster akışıyla gönderin.",
+    "step3Title": "Marks Kazan",
+    "step3Body": "Kabul üzerine Marks alırsınız ve IP Ledger'a kaydedilirsiniz.",
+    "hide": "gizle",
+    "why": "neden?",
+    "subtitle": "\"Dost de ve gir.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Dil değiştir",
+    "selectLanguage": "Dil seç",
+    "quickEnglish": "İngilizce",
+    "tip": "Benzersiz deneyimler için Durin'in Kapısı'nda farklı dil şifreleri kullanın!"
+  }
+}

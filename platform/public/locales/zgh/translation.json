@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.891Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "ⵉⵏⵉ ⴰⵎⴷⴷⴰⴽⴽⴻⵍ, ⵉⵍⵍⴻⵖ.",
+    "description": "Liana Banyan ⵜⴻⴱⵏⴰ ⴰⴽⴽⴻⵏ ⴰⴷ ⵜⴻⴱⴷⵓ ⵉ ⵉⵍⵙⴰⵡⴻⵏ ⴽⵓⵍⵍⵓ. ⴽⵓⵍⵍⵓ ⴰⵍⵙⴰⵡ ⴷⴰⵔⵙ ⵜⴰⵍⵖⴰ ⵢⵉⵡⴻⵜ ⵏ ⵜⴻⵖⵔⵉ.",
+    "languages": "ⵜⵉⵍⵙⴰⵡⵉⵏ",
+    "openBounties": "ⵉⵏⴰⴷⴷⴻⵎ ⵉⴱⴷⴰⵏ",
+    "marksAwarded": "Marks ⵉⵜⵜⵡⴰⴽⵛⵎ (ⵜⵉⴽⴻⵏⴰⵜ ⵏ ⵓⵎⵢⴰⴳⴻⵔ)",
+    "provisional": "ⵉⵎⵉⵔⵏ:",
+    "provisionalNotice": "ⵜⴰⵍⵖⴰ ⵏ ⵜⵉⵍⵙⴰⵡⵉⵏ ⴷ ⵉⵥⴻⴹⵕⴰⵏ ⵏ Marks ⵉⵎⵉⵔⵏ. Marks ⵜⵉⴽⴻⵏⴰⵜ ⵏ ⵓⵎⵢⴰⴳⴻⵔ, ⵓⵔ ⴷ ⴰⵖⵔⴻⵎ.",
+    "bountyOpen": "ⴰⵏⴰⴷⴷⴻⵎ ⵉⴱⴷⴰ",
+    "claimed": "ⵉⵜⵜⵡⴰⴼⵔⴰ",
+    "complete": "ⵉⴽⵎⴻⵍ",
+    "translationBountyTitle": "ⴰⵏⴰⴷⴷⴻⵎ ⵏ ⵜⴻⵖⵔⵉ",
+    "bountyDescription": "Liana Banyan ⵜⴻⵖⵔⵉ ⵙ {{language}}. ⵉⵙⵓ {{marks}} Marks.",
+    "scopeWelcome": "ⴰⵏⵙⵓⴼ / ⴰⴷⴻⵏⵢⴰ ⵏ ⵉⵔⵓⵀⴰⵏ",
+    "scopeCueCards": "ⵜⴰⵙⴳⴰ ⵏ ⵜⴽⴰⵔⴹⴰ ⵏ ⵉⵙⵓⵔⴰ",
+    "scopeNavigation": "ⵉⵔⴰⴽⵉⵙⴻⵏ ⵏ ⵓⵙⴻⵎⵔⴻⵙ ⴷ ⵜⵎⴻⵔⵙⴰⵍ",
+    "scopeWildfire": "Wildfire Beacon Run: ⴼⴻⵔ ⴰⵣⴻⵔⴼⴰⵏ",
+    "claimBounty": "ⴼⴰⵔ ⵓⵏⴰⴷⴷⴻⵎ ⴰⴷ ⵏ ⵜⴻⵖⵔⵉ",
+    "baseLanguage": "ⴰⵍⵙⴰⵡ ⴰⴷⴷⴰⴷ -- ⵓⵔ ⵉⵍⴰ ⴰⵏⴰⴷⴷⴻⵎ.",
+    "claimedBy": "@{{handle}} ⵉⴼⴰⵔ -- ⵉⵎⵎⴻⵙⵍⴰⵢ.",
+    "marksProvisional": "{{marks}} Marks (ⵉⵎⵉⵔⵏ)",
+    "speakFounderTitle": "ⵜⴰⵔⵎⵉⵜ ⵏ ⵓⵏⴻⴳⴳⴰⵔⵓ: ⵎⵏⵉⴷ ⵉⵙⴻⵎⵔⴰⵙⴻⵏ",
+    "speakFounderDesc": "ⴽⵓⵍⵍⵓ ⴰⵎⴰⵍⵙⴰⵡ ⴷⴰⵔⵙ ⵜⵓⵇⵇⴰ. 26 ⵉⵙⵎⴰⵡⴻⵏ ⵉⵎⵇⵔⴰⵏⴻⵏ.",
+    "howBountiesWork": "ⵎⴰⵎⴻⴽ ⵉⵙⴻⵇⵇⴰⵔ ⵓⵏⴰⴷⴷⴻⵎ ⵏ ⵜⴻⵖⵔⵉ",
+    "step1Title": "ⴼⴰⵔ ⵓⵏⴰⴷⴷⴻⵎ",
+    "step1Body": "ⵇⴻⴹ ⵓⵏⴰⴷⴷⴻⵎ ⵏ ⵜⴻⵖⵔⵉ ⴷ Help Wanted.",
+    "step2Title": "ⵜⴻⵖⵔⵉ ⴷ ⵉⵙⵓ",
+    "step2Body": "ⵜⴻⵖⵔⵉ ⴽⵓⵍⵍⵓ ⵜⵉⵏⴻⵙⵇⴰⵎⵜ ⵉⵔⵓⵙⴻⵏ. ⵉⵙⵓ ⴷ Bounty Poster.",
+    "step3Title": "ⵉⵙⵓ Marks",
+    "step3Body": "ⵢⴻⵎⵎⴻⵜ ⴰⴷ ⵉⵙⵓ Marks ⵜⵜⵡⴰⵎⵓⴽⴽⴻⵙ ⴷⴻⴳ IP Ledger.",
+    "hide": "ⵣⵣⵍ",
+    "why": "ⵎⴰⵎⴻⴽ?",
+    "subtitle": "\"Ini amddakkal, urid.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "ⵙⵏⴻⴼⵍⴻⵍ ⴰⵍⵙⴰⵡ",
+    "selectLanguage": "ⵙⵜⵉ ⴰⵍⵙⴰⵡ",
+    "quickEnglish": "ⵜⴰⵏⴳⵍⵉⵣⵜ",
+    "tip": "ⵇⴻⴷⴷⴻⵎ ⵙ ⵜⵢⵓⵔⴹⴰⵏ ⵏ ⵜⵉⵍⵙⴰⵡⵉⵏ ⵢⴰⴹⵏⵉⵏ ⴷ ⵜⵉⴼⵉⵙⵏⵉⵜ ⵏ Durin!"
+  }
+}

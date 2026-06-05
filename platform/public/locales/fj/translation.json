@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.878Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Tavuki vei gone, ka rawa.",
+    "description": "Liana Banyan e vakarautaki me vaka kena lewe mai vei ira kece na vosa. Na vosa kece tale ga e tiko na mereisi ni vosa-vaka-iwase.",
+    "languages": "vosa",
+    "openBounties": "mereisi veivosaki",
+    "marksAwarded": "Marks e solia (na koini ni veivukei)",
+    "provisional": "Vakayagataka tale:",
+    "provisionalNotice": "Na volau ni vosa kei na ivalue ni Marks e vakayagataka tale. Na Marks na koini ni veivukei, se siga yaco.",
+    "bountyOpen": "Mereisi e levu",
+    "claimed": "Kerei",
+    "complete": "Yaco sara",
+    "translationBountyTitle": "Mereisi ni Vosa-vaka-iwase",
+    "bountyDescription": "Vosavaka-iwase a Liana Banyan mai na {{language}}. Rawata {{marks}} Marks.",
+    "scopeWelcome": "Ni vinaka mai / Vanua ni Yalo",
+    "scopeCueCards": "Seti ni Kaadi Veivuke",
+    "scopeNavigation": "Ivakarau ni yaco kei na itukutuku ni sala ca",
+    "scopeWildfire": "Wildfire Beacon Run: Kuceci cakacaka",
+    "claimBounty": "Kerei na Mereisi Vosa-vaka-iwase oqo",
+    "baseLanguage": "Vosa ivakarau -- sega ni dikevi mereisi.",
+    "claimedBy": "@{{handle}} e kerei -- e yaco sara.",
+    "marksProvisional": "{{marks}} Marks (vakayagataka tale)",
+    "speakFounderTitle": "Na Levu-ni-sici: Na cava ko ira?",
+    "speakFounderDesc": "Na vosa kece mai na sitiseni oqo e vakatokai me vakasama. Ivakailevu 26 yacana.",
+    "howBountiesWork": "Veitalia na Mereisi ni Vosa-vaka-iwase",
+    "step1Title": "Kerei na Mereisi",
+    "step1Body": "Dolava na Mereisi ni Vosa-vaka-iwase mai na Help Wanted.",
+    "step2Title": "Vosavaka-iwase ka Solia",
+    "step2Body": "Vosavaka-iwase na strings kece e sega. Solia mai Bounty Poster.",
+    "step3Title": "Rawata Marks",
+    "step3Body": "Ni kerei yacova, o rawata Marks ka ni taukena mai na IP Ledger.",
+    "hide": "turia",
+    "why": "cava?",
+    "subtitle": "\"Kaya veiwekani, mai lako mai.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Solia na vosa",
+    "selectLanguage": "Digitaka na vosa",
+    "quickEnglish": "Vosa Peretania",
+    "tip": "Vakayagataka na ivurevure ni vosa tani mai na mataiValagi ni Durin me rawata na kena yavusa!"
+  }
+}

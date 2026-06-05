@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.873Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "ᱢᱤᱛᱨᱚ ᱠᱟᱹᱫᱟ, ᱧᱟᱢ ᱮᱫ.",
+    "description": "Liana Banyan ᱥᱟᱞᱟ ᱫᱚ ᱱᱟᱶᱟ ᱥᱮᱬᱟᱜᱼᱟᱠᱟᱱ ᱢᱤᱛᱽ ᱥᱮᱬᱮᱡ ᱪᱤᱱᱟᱹᱭ ᱠᱟᱱᱟ। ᱡᱟᱦᱟᱸ ᱥᱮᱬᱟᱜᱼᱟᱠᱟᱱ ᱜᱟᱱᱛᱟ ᱥᱮᱬᱮᱡ ᱠᱟᱱᱟ।",
+    "languages": "ᱥᱮᱬᱮᱡ",
+    "openBounties": "ᱢᱤᱫᱽ ᱜᱟᱱᱛᱟ",
+    "marksAwarded": "Marks ᱠᱷᱚᱨᱱᱚᱜᱼᱟ (ᱥᱟᱢᱟᱱ ᱠᱚ)",
+    "provisional": "ᱩᱛᱟᱹᱨᱤᱡ:",
+    "provisionalNotice": "ᱥᱮᱬᱮᱡ ᱠᱚᱨᱤᱠᱟ ᱟᱨ Marks ᱦᱟᱲᱟᱢ ᱩᱛᱟᱹᱨᱤᱡ। Marks ᱥᱟᱢᱟᱱ ᱠᱚ, ᱜᱟᱦᱟᱸᱠᱤ ᱱᱚᱶᱟ ᱨᱮᱱᱟᱜ।",
+    "bountyOpen": "ᱜᱟᱱᱛᱟ ᱢᱤᱫᱽ ᱮᱱᱟ",
+    "claimed": "ᱫᱷᱟᱸᱠᱚᱣᱟ",
+    "complete": "ᱢᱩᱪᱟᱹᱫ",
+    "translationBountyTitle": "ᱧᱟᱢᱟᱜ ᱜᱟᱱᱛᱟ",
+    "bountyDescription": "Liana Banyan {{language}} ᱥᱮᱬᱮᱡ ᱨᱮ ᱧᱟᱢ। {{marks}} Marks ᱜᱮᱞ।",
+    "scopeWelcome": "ᱯᱟᱨᱥᱟᱞ / ᱥᱮᱸᱫᱽᱨᱟ ᱫᱩᱱᱤᱭᱟ",
+    "scopeCueCards": "ᱢᱩᱞᱟᱹ ᱠᱟᱹᱲᱦᱟ ᱠᱷᱟᱹᱛᱤᱨ",
+    "scopeNavigation": "ᱥᱟᱜᱟᱨ ᱟᱨ ᱦᱚᱲ ᱪᱮᱛᱟᱱ",
+    "scopeWildfire": "Wildfire Beacon Run: ᱚᱨᱠᱟ ᱡᱚᱜᱟᱲ",
+    "claimBounty": "ᱩᱱᱤ ᱧᱟᱢᱟᱜ ᱜᱟᱱᱛᱟ ᱫᱷᱟᱸᱠ",
+    "baseLanguage": "ᱢᱩᱞ ᱥᱮᱬᱮᱡ -- ᱜᱟᱱᱛᱟ ᱵᱟᱶᱟ ᱱᱚᱶᱟ।",
+    "claimedBy": "@{{handle}} ᱫᱷᱟᱸᱠᱮᱫ -- ᱟᱨᱮ ᱥᱟᱦᱮᱸ।",
+    "marksProvisional": "{{marks}} Marks (ᱩᱛᱟᱹᱨᱤᱡ)",
+    "speakFounderTitle": "ᱥᱟᱸᱦᱟᱸᱞᱟᱭ ᱜᱚᱱᱚ: ᱮᱸᱠᱷᱟᱹᱜ ᱠᱟᱦᱟᱸ ᱠᱚ",
+    "speakFounderDesc": "ᱤᱦᱩᱫ ᱯᱞᱮᱴᱯᱷᱚᱨᱢ ᱨᱮ ᱦᱚᱱᱟᱜ ᱫᱚ ᱠᱟᱹᱨᱣᱚ ᱵᱟᱫ। 26 ᱢᱩᱦᱩᱲ ᱱᱩᱛᱩᱢ।",
+    "howBountiesWork": "ᱧᱟᱢᱟᱜ ᱜᱟᱱᱛᱟ ᱠᱮᱫᱚᱭ",
+    "step1Title": "ᱜᱟᱱᱛᱟ ᱫᱷᱟᱸᱠ",
+    "step1Body": "Help Wanted ᱨᱮ ᱜᱟᱱᱛᱟ ᱛᱮᱰ।",
+    "step2Title": "ᱧᱟᱢ ᱟᱨ ᱡᱟᱱᱟᱣ",
+    "step2Body": "ᱥᱟᱵᱚ ᱡᱷᱟᱱ ᱧᱟᱢ। Bounty Poster ᱛᱮ ᱡᱟᱱᱟᱣ।",
+    "step3Title": "Marks ᱜᱮᱞ",
+    "step3Body": "ᱜᱮᱞᱮᱞᱮ Marks ᱟᱨ IP Ledger ᱨᱮ ᱞᱮᱠᱷᱟ।",
+    "hide": "ᱦᱩᱰᱤᱠ",
+    "why": "ᱮᱸᱠᱷᱟᱹᱜ?",
+    "subtitle": "\"Idom mit baha, ar cal.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "ᱥᱮᱬᱮᱡ ᱵᱚᱫᱚᱞ",
+    "selectLanguage": "ᱥᱮᱬᱮᱡ ᱜᱩᱱᱟᱹ",
+    "quickEnglish": "ᱤᱝᱜᱽᱨᱮᱡᱤ",
+    "tip": "Durin ᱫᱟᱲ ᱨᱮ ᱪᱷᱟᱸᱫ ᱥᱮᱬᱮᱡ ᱥᱮᱬᱮᱡ ᱯᱟᱥᱣᱟᱲᱰ ᱢᱮᱛᱟᱣ!"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.863Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "זאָג פֿרײַנד, און אַרײַן.",
+    "description": "Liana Banyan איז אויפֿגעבויט אָפֿן פֿאַר יעדע שפּראַך. יעדע שפּראַך האָט איין איבערזעצונג-בראַוונטי.",
+    "languages": "שפּראַכן",
+    "openBounties": "אָפֿענע בראַוונטיס",
+    "marksAwarded": "Marks באַגאַבט (באַטייליקונג-טאָקענס)",
+    "provisional": "צייטווייליק:",
+    "provisionalNotice": "די שפּראַכן-ליסטע אין Marks-ראַטן זיינען צייטווייליק. Marks זיינען באַטייליקונג-טאָקענס, ניט אַקציעס.",
+    "bountyOpen": "בראַוונטי אָפֿן",
+    "claimed": "פֿאָדערט",
+    "complete": "גענדיקט",
+    "translationBountyTitle": "איבערזעצונג-בראַוונטי",
+    "bountyDescription": "איבערזעצן Liana Banyan אויף {{language}}. פֿאַרדינען {{marks}} Marks.",
+    "scopeWelcome": "ברוכים-הבאים / גייסטווענלט-שירמען",
+    "scopeCueCards": "גרונטלעכע ציגן-קארטן-זאמלונג",
+    "scopeNavigation": "נאַוויגאַציע-אַבצייכנס אין פֿעלער-מעלדונגן",
+    "scopeWildfire": "Wildfire Beacon Run: קריגן אַ אַרבעט",
+    "claimBounty": "פֿאָדערן דאָס איבערזעצונג-בראַוונטי",
+    "baseLanguage": "גרונטשפּראַך -- קיין בראַוונטי נויטיק ניט.",
+    "claimedBy": "@{{handle}} האָט פֿאָדערט -- אין גאַנג.",
+    "marksProvisional": "{{marks}} Marks (צייטווייליק)",
+    "speakFounderTitle": "דעם גרינדערס שטים: פֿאַר וואָס די ווערטער",
+    "speakFounderDesc": "יעדן טערמין אויף דעם פּלאַטפֿאָרם האָט אַ סיבה. דער אורשפּרונג פֿון 26 וויכטיקסטע נעמען.",
+    "howBountiesWork": "ווי איבערזעצונג-בראַוונטיס אַרבעטן",
+    "step1Title": "פֿאָדערן בראַוונטי",
+    "step1Body": "עפֿענען איין איבערזעצונג-בראַוונטי פֿון Help Wanted.",
+    "step2Title": "איבערזעצן אין שיקן",
+    "step2Body": "איבערזעצן אַלע נויטיקע סטרינגען. שיקן דורכן Bounty Poster.",
+    "step3Title": "פֿאַרדינען Marks",
+    "step3Body": "נאָך אַקצעפּטירן, קריגט מען Marks אין ווערט אייינגעשריבן אין IP Ledger.",
+    "hide": "באַהאַלטן",
+    "why": "פֿאַר וואָס?",
+    "subtitle": "\"זאג פריינד, און אַרײַן.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "בייטן שפּראַך",
+    "selectLanguage": "אויסקלייבן שפּראַך",
+    "quickEnglish": "ענגליש",
+    "tip": "נוצן שפּראַכן-פּאַסווערטן ביי דורינס טויערן פֿאַר ייחודיקע דערפֿאַרונגען!"
+  }
+}

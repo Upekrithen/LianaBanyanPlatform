@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.796Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Nói bạn, và bước vào.",
+    "description": "Liana Banyan được xây dựng để mở với mọi ngôn ngữ. Mỗi ngôn ngữ có một phần thưởng dịch thuật.",
+    "languages": "ngôn ngữ",
+    "openBounties": "phần thưởng mở",
+    "marksAwarded": "Marks được trao (token tham gia)",
+    "provisional": "Tạm thời:",
+    "provisionalNotice": "Danh sách ngôn ngữ và tỷ lệ Marks là tạm thời. Marks là token tham gia, không phải cổ phần.",
+    "bountyOpen": "Phần thưởng mở",
+    "claimed": "Đã nhận",
+    "complete": "Hoàn thành",
+    "translationBountyTitle": "Phần Thưởng Dịch Thuật",
+    "bountyDescription": "Dịch Liana Banyan sang {{language}}. Kiếm {{marks}} Marks khi được chấp nhận.",
+    "scopeWelcome": "Màn hình Chào mừng / Thế giới Ma",
+    "scopeCueCards": "Bộ Thẻ Gợi ý Cốt lõi (Luật Kinh tế + Quản trị)",
+    "scopeNavigation": "Nhãn điều hướng và thông báo lỗi",
+    "scopeWildfire": "Wildfire Beacon Run: Tìm Việc (tour nhập môn)",
+    "claimBounty": "Nhận Phần Thưởng Dịch Thuật Này",
+    "baseLanguage": "Ngôn ngữ cơ sở -- không cần phần thưởng.",
+    "claimedBy": "Phần thưởng đã được @{{handle}} nhận -- đang tiến hành.",
+    "marksProvisional": "{{marks}} Marks (tạm thời)",
+    "speakFounderTitle": "Tiếng Sáng Lập Viên: Tại Sao Những Từ Này",
+    "speakFounderDesc": "Mỗi thuật ngữ trên nền tảng này được đặt tên có lý do. Nguồn gốc 26 tên quan trọng nhất.",
+    "howBountiesWork": "Cách Thức Hoạt Động Của Phần Thưởng Dịch Thuật",
+    "step1Title": "Nhận Phần Thưởng",
+    "step1Body": "Mở Phần Thưởng Dịch Thuật từ bảng Help Wanted.",
+    "step2Title": "Dịch và Nộp",
+    "step2Body": "Dịch tất cả các chuỗi cần thiết. Nộp qua luồng Bounty Poster.",
+    "step3Title": "Kiếm Marks",
+    "step3Body": "Khi được chấp nhận, bạn nhận Marks và được ghi vào IP Ledger.",
+    "hide": "ẩn",
+    "why": "tại sao?",
+    "subtitle": "\"Nói bạn, và bước vào.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Đổi ngôn ngữ",
+    "selectLanguage": "Chọn ngôn ngữ",
+    "quickEnglish": "Tiếng Anh",
+    "tip": "Sử dụng mật khẩu ngôn ngữ khác nhau tại Cổng Durin để mở khóa trải nghiệm độc đáo!"
+  }
+}

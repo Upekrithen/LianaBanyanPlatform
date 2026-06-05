@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.895Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Iyabika i kaluguran, at lumubus.",
+    "description": "Ing Liana Banyan ginagawa para magbukas para king balang amanu. Balang bukas a amanu atin yang metung a gantimpala ning salin.",
+    "languages": "amanu",
+    "openBounties": "bukas a gantimpala",
+    "marksAwarded": "Marks a binie (mga token ning pakiamping)",
+    "provisional": "Pansamantala:",
+    "provisionalNotice": "Ing listang amanu at mga rate ning Marks pansamantala. Ang Marks mga token ning pakiamping, e equity.",
+    "bountyOpen": "Bukas ing gantimpala",
+    "claimed": "Mig-angkon na",
+    "complete": "Tapos na",
+    "translationBountyTitle": "Gantimpala ning Salin",
+    "bountyDescription": "Isalin ing Liana Banyan king {{language}}. Kumita ning {{marks}} Marks.",
+    "scopeWelcome": "Mga screen ning Mabusing Piyabia / Ghost World",
+    "scopeCueCards": "Core a set ning Cue Card",
+    "scopeNavigation": "Mga label ning navigasyon at mensahe ning sala",
+    "scopeWildfire": "Wildfire Beacon Run: Mikimawa Trabaho",
+    "claimBounty": "I-angkon iti Gantimpala ning Salin",
+    "baseLanguage": "Abak a amanu -- e mengailangan gantimpala.",
+    "claimedBy": "Mig-angkon ni @{{handle}} -- kasalungsayan.",
+    "marksProvisional": "{{marks}} Marks (pansamantala)",
+    "speakFounderTitle": "Tinig ning Tagpamagal: Bakit Ini Deng Adwa",
+    "speakFounderDesc": "Balang termino iti sinabyan ya ngeni ya rason. Ugatan deng 26 mas mahalaga a ngaran.",
+    "howBountiesWork": "Paanu Magobra Deng Gantimpala ning Salin",
+    "step1Title": "I-angkon ing Gantimpala",
+    "step1Body": "Bukasan ing Gantimpala ning Salin ibat Help Wanted.",
+    "step2Title": "Isalin at Isubmit",
+    "step2Body": "Isalin deng lang-langauang string. Isubmit king Bounty Poster.",
+    "step3Title": "Kumita ng Marks",
+    "step3Body": "Pagka tanggap, makatanggap kang Marks at mairekord sa IP Ledger.",
+    "hide": "itago",
+    "why": "bakit?",
+    "subtitle": "\"Sabian amiku, malukluk ka.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Magbago amanu",
+    "selectLanguage": "Pilian amanu",
+    "quickEnglish": "Ingles",
+    "tip": "Gamitin deng iba-ibang password amanu king Pintuan ni Durin para ma-unlock deng natatanging karanasan!"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.867Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Soe Frënd, a goe erëm.",
+    "description": "Liana Banyan ass gebaut fir all Sprooch oppen ze sinn. All oppene Sprooch huet eng Iwwersetzungspräm.",
+    "languages": "Sproochen",
+    "openBounties": "oppen Prämen",
+    "marksAwarded": "Marks verdeelt (Participatiounstokens)",
+    "provisional": "Provesoresch:",
+    "provisionalNotice": "D'Sproochelëscht an Marks-Tariffer si provesoresch. Marks si Participatiounstokens, net Aktien.",
+    "bountyOpen": "Präm oppen",
+    "claimed": "Ugefuerdert",
+    "complete": "Fäerdeg",
+    "translationBountyTitle": "Iwwersetzungspräm",
+    "bountyDescription": "Iwwersetzt Liana Banyan an {{language}}. Verdéngt {{marks}} Marks.",
+    "scopeWelcome": "Wëllkommen / Geeschterwelt Schiirmer",
+    "scopeCueCards": "Grondsätzleche Hiweiskaartsëtz",
+    "scopeNavigation": "Navigatiounsetiketten a Fehlermeldungen",
+    "scopeWildfire": "Wildfire Beacon Run: Fannen enn Aarbecht",
+    "claimBounty": "Fuerdert dës Iwwersetzungspräm",
+    "baseLanguage": "Grondsproochen -- keng Präm noutwendeg.",
+    "claimedBy": "@{{handle}} huet ugefuerdert -- am Gaang.",
+    "marksProvisional": "{{marks}} Marks (provesoresch)",
+    "speakFounderTitle": "D'Stëmm vum Grënner: Firwat Dës Wierder",
+    "speakFounderDesc": "All Begrëff op dëser Plattform ass mat engem Grond benannt. D'Hierkonft vun de 26 wichtegste Nimm.",
+    "howBountiesWork": "Wéi Iwwersetzungspräme Fonctionéieren",
+    "step1Title": "Fuedert d'Präm",
+    "step1Body": "Öffnet eng Iwwersetzungspräm aus dem Help Wanted-Bord.",
+    "step2Title": "Iwwersetzt a Schéckt",
+    "step2Body": "Iwwersetzt all néidege Strings. Schéckt iwwer Bounty Poster.",
+    "step3Title": "Verdéngt Marks",
+    "step3Body": "No der Akzeptanz kritt Dir Marks a gitt am IP Ledger erfaasst.",
+    "hide": "verstoppen",
+    "why": "firwat?",
+    "subtitle": "\"Soe Frënd an geh eran.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Sprooch wiesselen",
+    "selectLanguage": "Sprooch auswiele",
+    "quickEnglish": "Englesch",
+    "tip": "Benotzt Passwierder a verschiddene Sproochen bei der Duerinstir fir eenzegaarteg Erfarungen opzeschloen!"
+  }
+}

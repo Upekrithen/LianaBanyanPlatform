@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.880Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "ʻōlelo i ka hoaaloha, a komo.",
+    "description": "Ua kūkulu ʻia ʻo Liana Banyan e wehe ana no kēlā me kēia ʻōlelo. He uku hoʻolilo kekahi no kēlā me kēia ʻōlelo.",
+    "languages": "ʻōlelo",
+    "openBounties": "uku wehe",
+    "marksAwarded": "Ua hāʻawi ʻia nā Marks (nā hōʻailona kākoʻo)",
+    "provisional": "Panee:",
+    "provisionalNotice": "He panee ka papa inoa ʻōlelo a me nā huina Marks. He hōʻailona kākoʻo nā Marks, ʻaʻole palena.",
+    "bountyOpen": "Uku wehe",
+    "claimed": "Ua koi ʻia",
+    "complete": "Hoʻopau",
+    "translationBountyTitle": "Uku Unuhi",
+    "bountyDescription": "E unuhi iā Liana Banyan i ka ʻōlelo {{language}}. E loaʻa {{marks}} Marks.",
+    "scopeWelcome": "Nā pale Aloha / Honua Uhane",
+    "scopeCueCards": "Pūʻolo Kāleka Paipai",
+    "scopeNavigation": "Nā hōʻailona alakaʻi a me nā leka hewa",
+    "scopeWildfire": "Wildfire Beacon Run: ʻImi i kahi hana",
+    "claimBounty": "E koi i kēia Uku Unuhi",
+    "baseLanguage": "ʻŌlelo kumu -- ʻaʻohe uku e pono ai.",
+    "claimedBy": "Ua koi ʻia e @{{handle}} -- e hele ana.",
+    "marksProvisional": "{{marks}} Marks (panee)",
+    "speakFounderTitle": "Leo o ka Mea Hoʻokumu: No ke Aha nā Hua Palapala",
+    "speakFounderDesc": "He kumu ko ia hua palapala o kēia kahua. Ke kumu o nā inoa 26 koʻikoʻi.",
+    "howBountiesWork": "Pehea e hana ai nā Uku Unuhi",
+    "step1Title": "E koi i ka Uku",
+    "step1Body": "E wehe i ka Uku Unuhi mai Help Wanted.",
+    "step2Title": "E unuhi a e hāʻawi",
+    "step2Body": "E unuhi i nā kaula like ʻole. E hāʻawi ma Bounty Poster.",
+    "step3Title": "E loaʻa nā Marks",
+    "step3Body": "Ma hope o ke kāpono, loaʻa nā Marks a e hoʻopaʻa ʻia i ka IP Ledger.",
+    "hide": "pee",
+    "why": "no ke aha?",
+    "subtitle": "\"I aku he hoaloha, e komo mai.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "E hoʻololi i ka ʻōlelo",
+    "selectLanguage": "E koho i ka ʻōlelo",
+    "quickEnglish": "Pelekānia",
+    "tip": "E hoʻohana i nā hua huna ʻōlelo ʻokoʻa ma ka Puka o Durin e wehe ai i nā moʻolelo kūʻiʻo!"
+  }
+}

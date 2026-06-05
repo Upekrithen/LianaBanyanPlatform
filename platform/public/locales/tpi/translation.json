@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.886Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Tok pren, na kam insait.",
+    "description": "Liana Banyan i bin wokim olsem olgeta tok ples inap lukim. Wanwan tok ples i gat wanpela prais bilong tanim tok.",
+    "languages": "tok ples",
+    "openBounties": "prais i op",
+    "marksAwarded": "Marks i givim (token bilong painim)",
+    "provisional": "Nau tasol:",
+    "provisionalNotice": "Lis tok ples na rei bilong Marks em nau tasol. Marks em token bilong painim, no share.",
+    "bountyOpen": "Prais i op",
+    "claimed": "I askim pinis",
+    "complete": "I pinis",
+    "translationBountyTitle": "Prais Bilong Tanim Tok",
+    "bountyDescription": "Tanim Liana Banyan long {{language}}. Kisim {{marks}} Marks.",
+    "scopeWelcome": "Kam Gut / Graun Bilong Spirit",
+    "scopeCueCards": "Sik Kasen Bilong Helpim",
+    "scopeNavigation": "Mak bilong wokabaut na tok bilong bagarap",
+    "scopeWildfire": "Wildfire Beacon Run: Painim Wok",
+    "claimBounty": "Askim Dispela Prais Tanim Tok",
+    "baseLanguage": "Namba wan tok ples -- prais i no nidim.",
+    "claimedBy": "@{{handle}} i askim -- i go yet.",
+    "marksProvisional": "{{marks}} Marks (nau tasol)",
+    "speakFounderTitle": "Tok Bilong Namba Wan Man: Bilong Wanem Dispela Tok",
+    "speakFounderDesc": "Wanwan tok long dispela ples i gat nem bilong wanem. 26 nem i olsem.",
+    "howBountiesWork": "Olsem Wanem Prais Tanim Tok i Wok",
+    "step1Title": "Askim Prais",
+    "step1Body": "Opim Prais Tanim Tok long Help Wanted.",
+    "step2Title": "Tanim Tok na Salim",
+    "step2Body": "Tanim olgeta lain i nidim. Salim long Bounty Poster.",
+    "step3Title": "Kisim Marks",
+    "step3Body": "Bihain long orait, kisim Marks na IP Ledger i raitim.",
+    "hide": "hait",
+    "why": "bilong wanem?",
+    "subtitle": "\"Tokim pren, i go insait.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Senis tok ples",
+    "selectLanguage": "Makim tok ples",
+    "quickEnglish": "Tok Inglis",
+    "tip": "Yusim tok hait bilong narapela tok ples long dua Durin bilong opim samting nupela!"
+  }
+}

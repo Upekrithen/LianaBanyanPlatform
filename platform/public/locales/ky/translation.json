@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.860Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Дос де, кире бер.",
+    "description": "Liana Banyan ар бир тил үчүн ачык курулган. Ар бир ачык тилде бир которуу сыйлыгы бар.",
+    "languages": "тилдер",
+    "openBounties": "ачык сыйлыктар",
+    "marksAwarded": "Marks берилди (катышуу токендери)",
+    "provisional": "Убактылуу:",
+    "provisionalNotice": "Тилдердин тизмеси жана Marks ставкалары убактылуу. Marks катышуу токендери, акция эмес.",
+    "bountyOpen": "Сыйлык ачык",
+    "claimed": "Талап кылынды",
+    "complete": "Аяктады",
+    "translationBountyTitle": "Которуу Сыйлыгы",
+    "bountyDescription": "Liana Banyan-ды {{language}} тилине которуңуз. {{marks}} Marks табыңыз.",
+    "scopeWelcome": "Кош келиңиздер / Рухтар Дүйнөсү экрандары",
+    "scopeCueCards": "Негизги Кеңеш карталары жыйындысы",
+    "scopeNavigation": "Навигация белгилери жана ката билдирүүлөр",
+    "scopeWildfire": "Wildfire Beacon Run: Иш тапкыла",
+    "claimBounty": "Бул которуу сыйлыгын талап кылыңыз",
+    "baseLanguage": "Негизги тил -- сыйлык кажет эмес.",
+    "claimedBy": "@{{handle}} талап кылды -- жүрүп жатат.",
+    "marksProvisional": "{{marks}} Marks (убактылуу)",
+    "speakFounderTitle": "Негиздөөчүнүн добушу: Эмне үчүн бул сөздөр",
+    "speakFounderDesc": "Бул платформадагы ар бир термин бир себеп менен аталган. 26 маанилүү атамалардын келип чыгышы.",
+    "howBountiesWork": "Которуу сыйлыктары кандай иштейт",
+    "step1Title": "Сыйлыкты талап кылыңыз",
+    "step1Body": "Help Wanted такталасынан которуу сыйлыгын ачыңыз.",
+    "step2Title": "Которуп жөнөтүңүз",
+    "step2Body": "Бардык керектүү саптарды которуңуз. Bounty Poster аркылуу жөнөтүңүз.",
+    "step3Title": "Marks табыңыз",
+    "step3Body": "Кабыл алынгандан кийин Marks аласыз. IP Ledger-ге катталасыз.",
+    "hide": "жашыруу",
+    "why": "эмне үчүн?",
+    "subtitle": "\"Дос де жана кир.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Тилди өзгөртүү",
+    "selectLanguage": "Тил тандаңыз",
+    "quickEnglish": "Англис",
+    "tip": "Уникалдуу тажрыйбалар үчүн Дурин Дарбазасында ар кандай тил сырсөздөрүн колдонуңуз!"
+  }
+}

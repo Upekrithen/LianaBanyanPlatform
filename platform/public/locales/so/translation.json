@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.809Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Dheh saaxiib, oo gal.",
+    "description": "Liana Banyan waxaa loogu dhisay inuu furan yahay dhammaan luqadaha. Luqad kasta oo furan waxay leedahay hal abaal-marin tarjumad.",
+    "languages": "luqadaha",
+    "openBounties": "abaal-marino furan",
+    "marksAwarded": "Marks la siiyey (calaamadaha ka qaybgalka)",
+    "provisional": "Ku meel-gaar ah:",
+    "provisionalNotice": "Liiska luqadaha iyo heerarka Marks waa ku meel-gaar ah. Marks waa calaamadaha ka qaybgalka, maaha hantida.",
+    "bountyOpen": "Abaal-marin furan",
+    "claimed": "La sheegay",
+    "complete": "Dhameystiran",
+    "translationBountyTitle": "Abaal-marin Tarjumad",
+    "bountyDescription": "Ku turjum Liana Banyan {{language}}. Hel {{marks}} Marks marka la aqbalo.",
+    "scopeWelcome": "Shaashad Soo Dhawayn / Adduunka Ruuxa",
+    "scopeCueCards": "Kooxda Kaarka Tilmaan Asasiga",
+    "scopeNavigation": "Astaamaha saadaasha iyo farriimaha khaladaadka",
+    "scopeWildfire": "Wildfire Beacon Run: Hel Shaqo",
+    "claimBounty": "Sheeg Abaal-marinta Tarjumadda Kani",
+    "baseLanguage": "Luqadda asaasiga -- abaal-marin looma baahna.",
+    "claimedBy": "@{{handle}} ayaa sheegay -- socda.",
+    "marksProvisional": "{{marks}} Marks (ku meel-gaar)",
+    "speakFounderTitle": "Codka Aasaasaha: Sababta Ereyadan",
+    "speakFounderDesc": "Ereyad kasta oo ku jira barnaamijkan waxaa loo magacaabay sabab. Asalka 26 magac ee ugu muhiimsan.",
+    "howBountiesWork": "Sida Abaal-marinnada Tarjumadda u Shaqeeyaan",
+    "step1Title": "Sheeg Abaal-marinta",
+    "step1Body": "Fur Abaal-marin Tarjumad ee Help Wanted.",
+    "step2Title": "Turjum oo Soo Gudbi",
+    "step2Body": "Ku turjum xarfaha oo dhan ee loo baahan yahay. Soo gudbi iyada oo Bounty Poster.",
+    "step3Title": "Hel Marks",
+    "step3Body": "Marka la aqbalo, waad helaysaa Marks waxaana lagu diiwaangeliyaa IP Ledger.",
+    "hide": "qari",
+    "why": "maxaa?",
+    "subtitle": "\"Dheh saaxiib, oo gal.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Beddel luqadda",
+    "selectLanguage": "Xulo luqadda",
+    "quickEnglish": "Ingiriisi",
+    "tip": "Isticmaal eraybixiyaha luqadaha kala duwan ee Albaabka Durin si aad u furto khibradaha gaar ah!"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.892Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Kato sahabat, masuak.",
+    "description": "Liana Banyan dibuek untuak tarbuka untuak satiok bahaso. Satiok bahaso nan tarbuka punyo satu hadiah terjemahan.",
+    "languages": "bahaso",
+    "openBounties": "hadiah tarbuka",
+    "marksAwarded": "Marks dibuerian (token partisipasi)",
+    "provisional": "Samarantaro:",
+    "provisionalNotice": "Daftar bahaso jo tarip Marks samarantaro. Marks token partisipasi, indak ekuitas.",
+    "bountyOpen": "Hadiah tarbuka",
+    "claimed": "Diklaim",
+    "complete": "Salasai",
+    "translationBountyTitle": "Hadiah Terjemahan",
+    "bountyDescription": "Terjemahkan Liana Banyan ka {{language}}. Dapek {{marks}} Marks.",
+    "scopeWelcome": "Layar Salamaik Datang / Dunio Hantu",
+    "scopeCueCards": "Set Kartu Isyarat Inti",
+    "scopeNavigation": "Label navigasi jo pesan kasalahan",
+    "scopeWildfire": "Wildfire Beacon Run: Cari Karajo",
+    "claimBounty": "Klaim Hadiah Terjemahan Ko",
+    "baseLanguage": "Bahaso dasar -- indak paralu hadiah.",
+    "claimedBy": "@{{handle}} ngaklaim -- sadang bajalan.",
+    "marksProvisional": "{{marks}} Marks (samarantaro)",
+    "speakFounderTitle": "Suaro Pandiri: Manga Kato Ko",
+    "speakFounderDesc": "Satiok istilah di platform ko punyo alasan namanya. Asal 26 namo terpenting.",
+    "howBountiesWork": "Camano Hadiah Terjemahan Bakarajo",
+    "step1Title": "Klaim Hadiah",
+    "step1Body": "Buak Hadiah Terjemahan dari papan Help Wanted.",
+    "step2Title": "Terjemah jo Kirim",
+    "step2Body": "Terjemahkan samua string nan diparaluan. Kirim melalui Bounty Poster.",
+    "step3Title": "Dapek Marks",
+    "step3Body": "Sasudah diterima, anda dapek Marks jo tacatat di IP Ledger.",
+    "hide": "sambunyikan",
+    "why": "manga?",
+    "subtitle": "\"Kecekkan kawan, masuak.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Ganti bahaso",
+    "selectLanguage": "Pilih bahaso",
+    "quickEnglish": "Bahaso Inggih",
+    "tip": "Gunakan kata sandi bahaso beda-beda di Pintu Durin untuak mambuka pengalaman unik!"
+  }
+}

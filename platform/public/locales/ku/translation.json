@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.813Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Beje dost, u bikeve.",
+    "description": "Liana Banyan ji bo her zimani vekirî hatiye cekirin. Her zimane vekirî xelatiyek wergerandinê heye.",
+    "languages": "ziman",
+    "openBounties": "xelatên vekirî",
+    "marksAwarded": "Marks hate dan (nisaneyên besdarbûnê)",
+    "provisional": "Demkî:",
+    "provisionalNotice": "Listeyên zimanan û rejeyên Marks demkî ne. Marks nisaneyên besdarbûnê ne, ne sermaye.",
+    "bountyOpen": "Xelat vekirî",
+    "claimed": "Tê daxwazkirinê",
+    "complete": "Temam",
+    "translationBountyTitle": "Xelata Wergerandinê",
+    "bountyDescription": "Liana Banyan bo {{language}} wergêrîne. {{marks}} Marks qezenç bike.",
+    "scopeWelcome": "Ekranên Xêrhatî / Cîhana Giyan",
+    "scopeCueCards": "Komika Kartên Rêberiyê",
+    "scopeNavigation": "Nîsaneyên navîgeriyê û peyamên cewtiyê",
+    "scopeWildfire": "Wildfire Beacon Run: Kar Bibîne",
+    "claimBounty": "Vê Xelata Wergerandinê Daxwaz Bike",
+    "baseLanguage": "Zimane bingehîn -- ne hewce xelat.",
+    "claimedBy": "@{{handle}} daxwaz kir -- di rê de.",
+    "marksProvisional": "{{marks}} Marks (demkî)",
+    "speakFounderTitle": "Denge Damezrîner: Cima Van Peyvan",
+    "speakFounderDesc": "Her têgeh di vê platformê de ji bo sedema xwe hatiye navkirin. Destpêka 26 navên herî girîng.",
+    "howBountiesWork": "Cawa Xelatên Wergerandinê Dixebitin",
+    "step1Title": "Xelat Daxwaz Bike",
+    "step1Body": "Xelata Wergerandinê ji Help Wanted veke.",
+    "step2Title": "Wergêrîne û Bisîne",
+    "step2Body": "Hemû rêzikên pêwist wergêrîne. Bi Bounty Poster bisîne.",
+    "step3Title": "Marks Qezenç Bike",
+    "step3Body": "Piştî pejirandinê, Marks distî û di IP Ledger de tê tomarkirin.",
+    "hide": "vesêre",
+    "why": "cima?",
+    "subtitle": "\"Beje dost, û bikeve.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Zimanan biguheze",
+    "selectLanguage": "Ziman hilbijêre",
+    "quickEnglish": "Îngilîzî",
+    "tip": "Ji bo ezmûnên yekta li Deriyê Durin sîfreyên zimanan cûda bi kar bîne!"
+  }
+}

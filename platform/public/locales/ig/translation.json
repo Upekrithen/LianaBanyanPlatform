@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.804Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Kuo enyi, wee banye.",
+    "description": "E wuru Liana Banyan ka o mepee n'olu nile. Asusụ nosọbụ nọọ na ihe nrite ntụgharị otu.",
+    "languages": "asụsụ",
+    "openBounties": "ihe nrite mepere",
+    "marksAwarded": "E nyere Marks (tokens isonye)",
+    "provisional": "Nke oge a:",
+    "provisionalNotice": "Ndepụta asụsụ na ọnụahịa Marks bụ nke oge a. Marks bụ tokens isonye, ọ bụghị equity.",
+    "bountyOpen": "Ihe nrite mepere",
+    "claimed": "Achibidoola",
+    "complete": "Emechara",
+    "translationBountyTitle": "Ihe Nrite Ntụgharị",
+    "bountyDescription": "Tụgharịa Liana Banyan n'asụsụ {{language}}. Nweta {{marks}} Marks.",
+    "scopeWelcome": "Ihuenyo Nnabata / Ụwa Mmụọ",
+    "scopeCueCards": "Nhọrọ Kaadị Ntụziaka Isi",
+    "scopeNavigation": "Akara ntụzịaka na ọzụzụ njehie",
+    "scopeWildfire": "Wildfire Beacon Run: Nweta Ọrụ",
+    "claimBounty": "Chibido Ihe Nrite Ntụgharị a",
+    "baseLanguage": "Asụsụ isi -- enweghị mkpa ihe nrite.",
+    "claimedBy": "@{{handle}} chibidola -- na-aga n'ihu.",
+    "marksProvisional": "{{marks}} Marks (nke oge a)",
+    "speakFounderTitle": "Olu Onye Guzobe: Ihe Kpatara Okwu Ndị a",
+    "speakFounderDesc": "Okwu ọ bụla n'isi ihe a nwere ihe kpatara aha ya. Mbụ nke aha 26 dị mkpa.",
+    "howBountiesWork": "Otú Ihe Nrite Ntụgharị Si Arụ Ọrụ",
+    "step1Title": "Chibido Ihe Nrite",
+    "step1Body": "Mepee Ihe Nrite Ntụgharị site n'Help Wanted.",
+    "step2Title": "Tụgharịa ma Zipu",
+    "step2Body": "Tụgharịa eriri nile dị mkpa. Zipụ site na Bounty Poster.",
+    "step3Title": "Nweta Marks",
+    "step3Body": "Mgbe ọ nabatara, i nweta Marks ma a debanye aha gị na IP Ledger.",
+    "hide": "zoo",
+    "why": "gịnị mere?",
+    "subtitle": "\"Kuo enyi, wee banye.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Gbanwee asụsụ",
+    "selectLanguage": "Họrọ asụsụ",
+    "quickEnglish": "Bekee",
+    "tip": "Jiri paswọọdị asụsụ dị iche iche na Ọnụ ụzọ Durin ka i mepee ahụmahụ pụrụ iche!"
+  }
+}

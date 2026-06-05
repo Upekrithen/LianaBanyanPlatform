@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.820Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Mondj barat, es lepj be.",
+    "description": "A Liana Banyan nyitottnak van megepitve minden nyelv szamara. Minden nyitott nyelvhez van egy forditasi jutalom.",
+    "languages": "nyelvek",
+    "openBounties": "nyitott jutalmak",
+    "marksAwarded": "Marks juttatva (reszveteli tokenek)",
+    "provisional": "Ideiglenes:",
+    "provisionalNotice": "A nyelvek listaja es a Marks-aranyok ideiglenesek. A Marks reszveteli tokenek, nem reszveny.",
+    "bountyOpen": "Jutalom nyitott",
+    "claimed": "Igénybe véve",
+    "complete": "Befejezve",
+    "translationBountyTitle": "Forditasi Jutalom",
+    "bountyDescription": "Forditsa le a Liana Banyan-t {{language}} nyelvre. Keresson {{marks}} Marks-ot elfogadaskor.",
+    "scopeWelcome": "Udvozlo / Szellemvilag kepernyo",
+    "scopeCueCards": "Alap jelzokartya-keszlet",
+    "scopeNavigation": "Navigacios feliratok es hibaüzenetek",
+    "scopeWildfire": "Wildfire Beacon Run: Talalj Munkat",
+    "claimBounty": "Igenyelje ezt a Forditasi Jutalmat",
+    "baseLanguage": "Alap nyelv -- nincs szukseg jutalomra.",
+    "claimedBy": "A jutalmat @{{handle}} igenyelge -- folyamatban.",
+    "marksProvisional": "{{marks}} Marks (ideiglenes)",
+    "speakFounderTitle": "Alapito Hangja: Miert Ezek a Szavak",
+    "speakFounderDesc": "A platform minden kifejezese egy okkal van elnevezve. A 26 legfontosabb nev eredete.",
+    "howBountiesWork": "Hogyan Mukodnek a Forditasi Jutalmak",
+    "step1Title": "Igenyelje a Jutalmat",
+    "step1Body": "Nyisson egy Forditasi Jutalmat a Help Wanted tablan.",
+    "step2Title": "Forditson es Nyujtson be",
+    "step2Body": "Forditson le minden szukseges karakterlancot. Nyujtson be a Bounty Poster folyamaton.",
+    "step3Title": "Marks Keresese",
+    "step3Body": "Elfogadas utan Marks-ot kap es rogzitve van az IP Ledger-ben.",
+    "hide": "elrejt",
+    "why": "miert?",
+    "subtitle": "\"Mondj barát, és lépj be.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Nyelv modositasa",
+    "selectLanguage": "Valasszon nyelvet",
+    "quickEnglish": "Angol",
+    "tip": "Kulonbozo nyelvi jelszavakat hasznaljon Durin Kapujanal egyedi elmenyek eleresehez!"
+  }
+}

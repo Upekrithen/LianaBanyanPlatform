@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.799Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "ಸ್ನೇಹಿತ ಎಂದು ಹೇಳಿ ಒಳಗೆ ಬಾ.",
+    "description": "ಲಿಯಾನಾ ಬನ್ಯಾನ್ ಎಲ್ಲ ಭಾಷೆಗಳಿಗೆ ತೆರೆದಿದೆ. ಪ್ರತಿ ಭಾಷೆಗೆ ಒಂದು ಅನುವಾದ ಬಹುಮಾನ ಇದೆ.",
+    "languages": "ಭಾಷೆಗಳು",
+    "openBounties": "ತೆರೆದ ಬಹುಮಾನಗಳು",
+    "marksAwarded": "Marks ನೀಡಲಾಗಿದೆ (ಭಾಗವಹಿಸುವ ಟೋಕನ್ಗಳು)",
+    "provisional": "ತಾತ್ಕಾಲಿಕ:",
+    "provisionalNotice": "ಭಾಷೆಗಳ ಪಟ್ಟಿ ಮತ್ತು Marks ದರಗಳು ತಾತ್ಕಾಲಿಕ. Marks ಭಾಗವಹಿಸುವ ಟೋಕನ್, ಇಕ್ವಿಟಿ ಅಲ್ಲ.",
+    "bountyOpen": "ಬಹುಮಾನ ತೆರೆದಿದೆ",
+    "claimed": "ಕ್ಲೈಮ್ ಮಾಡಲಾಗಿದೆ",
+    "complete": "ಪೂರ್ಣ",
+    "translationBountyTitle": "ಅನುವಾದ ಬಹುಮಾನ",
+    "bountyDescription": "ಲಿಯಾನಾ ಬನ್ಯಾನ್ ಅನ್ನು {{language}} ಗೆ ಅನುವಾದಿಸಿ. {{marks}} Marks ಗಳಿಸಿ.",
+    "scopeWelcome": "ಸ್ವಾಗತ / ಭೂತ ಜಗತ್ತು ಪರದೆಗಳು",
+    "scopeCueCards": "ಮೂಲ ಕ್ಯೂ ಕಾರ್ಡ್ ಸೆಟ್ (ಆರ್ಥಿಕ ಕಾನೂನುಗಳು + ಆಡಳಿತ)",
+    "scopeNavigation": "ನ್ಯಾವಿಗೇಶನ್ ಲೇಬಲ್ಗಳು ಮತ್ತು ದೋಷ ಸಂದೇಶಗಳು",
+    "scopeWildfire": "Wildfire Beacon Run: ಕೆಲಸ ಪಡೆಯಿರಿ",
+    "claimBounty": "ಈ ಅನುವಾದ ಬಹುಮಾನ ಕ್ಲೈಮ್ ಮಾಡಿ",
+    "baseLanguage": "ಮೂಲ ಭಾಷೆ -- ಬಹುಮಾನ ಅಗತ್ಯವಿಲ್ಲ.",
+    "claimedBy": "@{{handle}} ಕ್ಲೈಮ್ ಮಾಡಿದ್ದಾರೆ -- ಪ್ರಗತಿಯಲ್ಲಿದೆ.",
+    "marksProvisional": "{{marks}} Marks (ತಾತ್ಕಾಲಿಕ)",
+    "speakFounderTitle": "ಸಂಸ್ಥಾಪಕರ ಧ್ವನಿ: ಈ ಪದಗಳು ಏಕೆ",
+    "speakFounderDesc": "ಈ ವೇದಿಕೆಯ ಪ್ರತಿ ಪದಕ್ಕೂ ಒಂದು ಕಾರಣ ಇದೆ. 26 ಪ್ರಮುಖ ಹೆಸರುಗಳ ಮೂಲ.",
+    "howBountiesWork": "ಅನುವಾದ ಬಹುಮಾನಗಳು ಹೇಗೆ ಕಾರ್ಯ ನಿರ್ವಹಿಸುತ್ತವೆ",
+    "step1Title": "ಬಹುಮಾನ ಕ್ಲೈಮ್ ಮಾಡಿ",
+    "step1Body": "Help Wanted ಬೋರ್ಡ್‌ನಿಂದ ಅನುವಾದ ಬಹುಮಾನ ತೆರೆಯಿರಿ.",
+    "step2Title": "ಅನುವಾದಿಸಿ ಮತ್ತು ಸಲ್ಲಿಸಿ",
+    "step2Body": "ಎಲ್ಲ ಅಗತ್ಯ ಸ್ಟ್ರಿಂಗ್‌ಗಳನ್ನು ಅನುವಾದಿಸಿ. Bounty Poster ಮೂಲಕ ಸಲ್ಲಿಸಿ.",
+    "step3Title": "Marks ಗಳಿಸಿ",
+    "step3Body": "ಸ್ವೀಕೃತಿಯ ನಂತರ Marks ಸಿಗುತ್ತದೆ. IP Ledger ನಲ್ಲಿ ದಾಖಲಾಗುತ್ತೀರಿ.",
+    "hide": "ಮರೆಮಾಡು",
+    "why": "ಏಕೆ?",
+    "subtitle": "\"ಸ್ನೇಹಿತ ಎಂದು ಹೇಳಿ ಒಳಗೆ ಬಾ.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "ಭಾಷೆ ಬದಲಿಸಿ",
+    "selectLanguage": "ಭಾಷೆ ಆಯ್ಕೆಮಾಡಿ",
+    "quickEnglish": "ಆಂಗ್ಲ",
+    "tip": "ಅನನ್ಯ ಅನುಭವಗಳನ್ನು ಅನ್‌ಲಾಕ್ ಮಾಡಲು Durin's Door ನಲ್ಲಿ ವಿವಿಧ ಭಾಷೆ ಪಾಸ್‌ವರ್ಡ್ ಬಳಸಿ!"
+  }
+}

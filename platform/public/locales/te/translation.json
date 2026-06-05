@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.793Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "స్నేహితుడా అని చెప్పి లోపలికి రా.",
+    "description": "లియానా బన్యాన్ అన్ని భాషలకు తెరిచి ఉంది. ప్రతి భాషకు ఒక అనువాద బౌంటీ ఉంది.",
+    "languages": "భాషలు",
+    "openBounties": "తెరిచిన బౌంటీలు",
+    "marksAwarded": "Marks అందించారు (భాగస్వామ్య టోకెన్లు)",
+    "provisional": "తాత్కాలిక:",
+    "provisionalNotice": "భాషల జాబితా మరియు Marks రేట్లు తాత్కాలికంగా ఉన్నాయి. Marks భాగస్వామ్య టోకెన్లు, వాటాలు కావు.",
+    "bountyOpen": "బౌంటీ తెరిచి ఉంది",
+    "claimed": "క్లెయిమ్ చేశారు",
+    "complete": "పూర్తయింది",
+    "translationBountyTitle": "అనువాద బౌంటీ",
+    "bountyDescription": "లియానా బన్యాన్‌ను {{language}}లోకి అనువదించండి. {{marks}} Marks సంపాదించండి.",
+    "scopeWelcome": "స్వాగతం / ఘోస్ట్ వరల్డ్ స్క్రీన్లు",
+    "scopeCueCards": "ముఖ్య క్యూ కార్డ్ సెట్ (ఆర్థిక చట్టాలు + పాలన)",
+    "scopeNavigation": "నావిగేషన్ లేబుల్స్ మరియు లోపాల సందేశాలు",
+    "scopeWildfire": "వైల్డ్‌ఫైర్ బీకన్ రన్: ఉద్యోగం పొందండి",
+    "claimBounty": "ఈ అనువాద బౌంటీని క్లెయిమ్ చేయండి",
+    "baseLanguage": "ప్రాథమిక భాష -- బౌంటీ అవసరం లేదు.",
+    "claimedBy": "@{{handle}} క్లెయిమ్ చేశారు -- పురోగతిలో ఉంది.",
+    "marksProvisional": "{{marks}} Marks (తాత్కాలిక)",
+    "speakFounderTitle": "వ్యవస్థాపకుని స్వరం: ఈ పదాలు ఎందుకు",
+    "speakFounderDesc": "ఈ ప్లాట్‌ఫామ్‌లో ప్రతి పదానికి ఒక కారణం ఉంది. 26 ముఖ్యమైన పేర్ల మూలం.",
+    "howBountiesWork": "బౌంటీలు ఎలా పని చేస్తాయి",
+    "step1Title": "బౌంటీ క్లెయిమ్ చేయండి",
+    "step1Body": "Help Wanted బోర్డు నుండి అనువాద బౌంటీ తెరవండి.",
+    "step2Title": "అనువదించండి మరియు సమర్పించండి",
+    "step2Body": "అన్ని అవసరమైన స్ట్రింగ్‌లను అనువదించి Bounty Poster ద్వారా సమర్పించండి.",
+    "step3Title": "Marks సంపాదించండి",
+    "step3Body": "ఆమోదించిన తర్వాత Marks పొందుతారు. IP Ledger లో నమోదు అవుతారు.",
+    "hide": "దాచు",
+    "why": "ఎందుకు?",
+    "subtitle": "\"స్నేహితుడా అని చెప్పి లోపలికి రా.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "భాష మార్చండి",
+    "selectLanguage": "భాష ఎంచుకోండి",
+    "quickEnglish": "ఇంగ్లీష్",
+    "tip": "ప్రత్యేక అనుభవాలు పొందడానికి Durin's Door వద్ద వేర్వేరు భాష పాస్‌వర్డ్‌లు ఉపయోగించండి!"
+  }
+}

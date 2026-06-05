@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.875Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "بڵێ هاوڕێ، دیکه بچۆ ژوورەوە.",
+    "description": "Liana Banyan بۆ هەموو زمانێک کراوەی دروست کراوە. هەر زمانێکی کراو یەک خەڵاتی وەرگێڕان هەیە.",
+    "languages": "زمانەکان",
+    "openBounties": "خەڵاتە کراوەکان",
+    "marksAwarded": "Marks دراوە (تۆکینی بەشداری)",
+    "provisional": "کاتی:",
+    "provisionalNotice": "لیستی زمانەکان و نرخی Marks کاتین. Marks تۆکینی بەشداری، نە سهامن.",
+    "bountyOpen": "خەڵات کراوەیە",
+    "claimed": "داواکراو",
+    "complete": "تەواو",
+    "translationBountyTitle": "خەڵاتی وەرگێڕان",
+    "bountyDescription": "Liana Banyan بۆ {{language}} وەرگێڕانی بکە. {{marks}} Marks بدەست بهێنە.",
+    "scopeWelcome": "خۆشی هاتنت / دنیای ڕوح",
+    "scopeCueCards": "سێتی کارتی ئیرشادی بنچینەیی",
+    "scopeNavigation": "نیشانەی ئاڕاستەکردن و پەیامی هەڵە",
+    "scopeWildfire": "Wildfire Beacon Run: کار بدۆزەرەوە",
+    "claimBounty": "ئەم خەڵاتی وەرگێڕانەی داوا بکە",
+    "baseLanguage": "زمانی بنچینە -- پێویستی بە خەڵات نییە.",
+    "claimedBy": "@{{handle}} داواکرد -- بەردەوامە.",
+    "marksProvisional": "{{marks}} Marks (کاتی)",
+    "speakFounderTitle": "دەنگی دامەزرێنەر: بۆچی ئەم وشانە",
+    "speakFounderDesc": "هەر تەرمێک لەسەر ئەم پلاتفۆرمە بۆ مەبەستێک ناوی لێناوە. بنەڕەتی 26 ناوی گرنگترین.",
+    "howBountiesWork": "خەڵاتەکانی وەرگێڕان چۆن کار دەکەن",
+    "step1Title": "داوای خەڵاتەکە بکە",
+    "step1Body": "خەڵاتی وەرگێڕان لە Help Wanted بکرەوە.",
+    "step2Title": "وەرگێڕان بکە و بنێرە",
+    "step2Body": "هەموو ستریگی پێویستی وەرگێڕانی بکە. ببنێرە ئەرێ Bounty Poster.",
+    "step3Title": "Marks بدەست بهێنە",
+    "step3Body": "دوای پەسەندکردن، Marks دەسپێی. لە IP Ledger تۆمار دەبیت.",
+    "hide": "شارێت بکە",
+    "why": "بۆچی?",
+    "subtitle": "\"بڵێ هاوڕێ و بکەوە ژوورەوە.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "زمان بگۆڕ",
+    "selectLanguage": "زمان هەڵبژێرە",
+    "quickEnglish": "ئینگلیزی",
+    "tip": "لە دەروازەی Durin پاسوردی زمانی جیاواز بەکاربهێنە بۆ کردنەوەی ئەزموونی بێهاوتا!"
+  }
+}

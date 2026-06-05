@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.802Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "കൂട്ടുകാരൻ എന്ന് പറഞ്ഞ് അകത്ത് കടക്കൂ.",
+    "description": "ലിയാന ബന്യൻ എല്ലാ ഭാഷകൾക്കും തുറന്നിരിക്കുന്നു. ഓരോ ഭാഷക്കും ഒരു വിവർത്തന ബൗണ്ടി ഉണ്ട്.",
+    "languages": "ഭാഷകൾ",
+    "openBounties": "തുറന്ന ബൗണ്ടികൾ",
+    "marksAwarded": "Marks നൽകി (പങ്കാളിത്ത ടോക്കൺ)",
+    "provisional": "താൽക്കാലിക:",
+    "provisionalNotice": "ഭാഷകളുടെ പട്ടിക, Marks നിരക്കുകൾ താൽക്കാലികം. Marks പങ്കാളിത്ത ടോക്കൺ, ഇക്വിറ്റി അല്ല.",
+    "bountyOpen": "ബൗണ്ടി തുറന്നിരിക്കുന്നു",
+    "claimed": "ക്ലെയിം ചെയ്തു",
+    "complete": "പൂർണ്ണം",
+    "translationBountyTitle": "വിവർത്തന ബൗണ്ടി",
+    "bountyDescription": "ലിയാന ബന്യൻ {{language}} ലേക്ക് വിവർത്തനം ചെയ്യുക. {{marks}} Marks നേടുക.",
+    "scopeWelcome": "സ്വാഗതം / ഭൂത ലോകം സ്ക്രീനുകൾ",
+    "scopeCueCards": "കോർ ക്യൂ കാർഡ് സെറ്റ്",
+    "scopeNavigation": "നേവിഗേഷൻ ലേബലുകൾ, പിശക് സന്ദേശങ്ങൾ",
+    "scopeWildfire": "Wildfire Beacon Run: ജോലി നേടൂ",
+    "claimBounty": "ഈ വിവർത്തന ബൗണ്ടി ക്ലെയിം ചെയ്യുക",
+    "baseLanguage": "അടിസ്ഥാന ഭാഷ -- ബൗണ്ടി ആവശ്യമില്ല.",
+    "claimedBy": "@{{handle}} ക്ലെയിം ചെയ്തു -- പ്രവർത്തനത്തിലാണ്.",
+    "marksProvisional": "{{marks}} Marks (താൽക്കാലിക)",
+    "speakFounderTitle": "സ്ഥാപകൻ്റെ ശബ്ദം: ഈ വാക്കുകൾ എന്തുകൊണ്ട്",
+    "speakFounderDesc": "ഈ പ്ലാറ്റ്ഫോമിൽ ഓരോ പദവും ഒരു കാരണത്തിനായി നൽകിയ പേര്. 26 പ്രധാന പേരുകളുടെ ഉത്ഭവം.",
+    "howBountiesWork": "വിവർത്തന ബൗണ്ടികൾ എങ്ങനെ പ്രവർത്തിക്കുന്നു",
+    "step1Title": "ബൗണ്ടി ക്ലെയിം ചെയ്യുക",
+    "step1Body": "Help Wanted ബോർഡിൽ നിന്ന് ബൗണ്ടി തുറക്കുക.",
+    "step2Title": "വിവർത്തനം ചെയ്ത് സമർപ്പിക്കുക",
+    "step2Body": "ആവശ്യമായ സ്ട്രിങ്ങുകൾ വിവർത്തനം ചെയ്ത് Bounty Poster ഉപയോഗിച്ച് സമർപ്പിക്കുക.",
+    "step3Title": "Marks നേടൂ",
+    "step3Body": "സ്വീകരിക്കപ്പെട്ടാൽ Marks ലഭിക്കും. IP Ledger ൽ രേഖപ്പെടുത്തും.",
+    "hide": "മറയ്ക്കുക",
+    "why": "എന്തുകൊണ്ട്?",
+    "subtitle": "\"കൂട്ടുകാരന്‍ എന്ന് പറഞ്ഞ് അകത്ത് കടക്കൂ.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "ഭാഷ മാറ്റുക",
+    "selectLanguage": "ഭാഷ തിരഞ്ഞെടുക്കുക",
+    "quickEnglish": "ഇംഗ്ലീഷ്",
+    "tip": "Durin's Door ൽ വ്യത്യസ്ത ഭാഷ പാസ്‌വേഡ് ഉപയോഗിക്കുക!"
+  }
+}

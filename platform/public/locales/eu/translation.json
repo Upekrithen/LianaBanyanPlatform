@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.864Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Esazu lagun eta sartu.",
+    "description": "Liana Banyan hizkuntza guztientzako irekia eraikia dago. Hizkuntza irekiak itzulpen sari bat du.",
+    "languages": "hizkuntzak",
+    "openBounties": "sari irekiak",
+    "marksAwarded": "Marks emanda (parte-hartze tokenak)",
+    "provisional": "Behin-behineko:",
+    "provisionalNotice": "Hizkuntzak zerrenda eta Marks tasak behin-behinekoak dira. Marks parte-hartze tokenak dira, ez akzioak.",
+    "bountyOpen": "Saria irekita",
+    "claimed": "Eskatuta",
+    "complete": "Osatuta",
+    "translationBountyTitle": "Itzulpen Saria",
+    "bountyDescription": "Itzuli Liana Banyan {{language}} hizkuntzara. Irabazi {{marks}} Marks.",
+    "scopeWelcome": "Ongi etorri / Mamuen Mundua pantailak",
+    "scopeCueCards": "Oinarrizko Pista Karta multzoa",
+    "scopeNavigation": "Nabigazio etiketak eta errore-mezuak",
+    "scopeWildfire": "Wildfire Beacon Run: Aurkitu lana",
+    "claimBounty": "Eskatu Itzulpen Sari hau",
+    "baseLanguage": "Oinarrizko hizkuntza -- ez da saririk behar.",
+    "claimedBy": "@{{handle}}-k eskatu du -- martxan.",
+    "marksProvisional": "{{marks}} Marks (behin-behineko)",
+    "speakFounderTitle": "Sortzailearen Ahotsa: Zergatik Hitz Hauek",
+    "speakFounderDesc": "Plataforma honetan hitz bakoitzak arrazoi bat du. 26 izen garrantzitsuenen jatorria.",
+    "howBountiesWork": "Nola Funtzionatzen Duten Itzulpen Sariak",
+    "step1Title": "Eskatu Saria",
+    "step1Body": "Ireki Itzulpen Sari bat Help Wanted-tik.",
+    "step2Title": "Itzuli eta Bidali",
+    "step2Body": "Itzuli beharrezko kate guztiak. Bidali Bounty Poster bidez.",
+    "step3Title": "Irabazi Marks",
+    "step3Body": "Onarpena jasotakoan, Marks jasoko dituzu eta IP Ledger-en erregistratuko zara.",
+    "hide": "ezkutatu",
+    "why": "zergatik?",
+    "subtitle": "\"Esazu adiskide, eta sartu.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Aldatu hizkuntza",
+    "selectLanguage": "Aukeratu hizkuntza",
+    "quickEnglish": "Ingelesa",
+    "tip": "Erabili hizkuntza desberdinetako pasahitzak Durinen Atean esperientzia bakarrak desblokeatzeko!"
+  }
+}

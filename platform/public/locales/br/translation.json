@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.894Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Lavar mignon ha mont e-barzh.",
+    "description": "Liana Banyan zo savet a-benn bezañ digor evit pep yezh. Pep yezh digor en deus ur priz troidigezhel.",
+    "languages": "yezhoù",
+    "openBounties": "prizioù digor",
+    "marksAwarded": "Marks roet (tokenn kemer-perzh)",
+    "provisional": "Da vare:",
+    "provisionalNotice": "Roll ar yezhoù hag ar prisioù Marks a zo da vare. Marks a zo tokenn kemer-perzh, ket aksionoù.",
+    "bountyOpen": "Priz digor",
+    "claimed": "Goulennet",
+    "complete": "Graet",
+    "translationBountyTitle": "Priz Troidigezhel",
+    "bountyDescription": "Treiñ Liana Banyan e {{language}}. Kraouiñ {{marks}} Marks.",
+    "scopeWelcome": "Skrinioù Degemer / Bed an Anaon",
+    "scopeCueCards": "Strollad kartenn skoazell diazez",
+    "scopeNavigation": "Tikedennoù levataet ha kemennadurioù fazi",
+    "scopeWildfire": "Wildfire Beacon Run: Kavout labour",
+    "claimBounty": "Goulenn ar Priz Troidigezhel-mañ",
+    "baseLanguage": "Yezh diazez -- n'eus priz ebet azgouledet.",
+    "claimedBy": "@{{handle}} en deus goulennet -- oc'h kenderc'hel.",
+    "marksProvisional": "{{marks}} Marks (da vare)",
+    "speakFounderTitle": "Mouezh ar Groueur: Perak ar Gerioù-mañ",
+    "speakFounderDesc": "Pep termen war ar bladform-mañ a zo anvet gant un abeg. Tarzh 26 anv pouezusañ.",
+    "howBountiesWork": "Penaos ez a Prizioù Troidigezhel",
+    "step1Title": "Goulenn ar Priz",
+    "step1Body": "Digeriñ ur Priz Troidigezhel deus ar vord Help Wanted.",
+    "step2Title": "Treiñ ha Kas",
+    "step2Body": "Treiñ an holl linestoù azgouledet. Kas dre Bounty Poster.",
+    "step3Title": "Kraouiñ Marks",
+    "step3Body": "Goude bezañ asantet, resevit Marks ha reolennet e IP Ledger.",
+    "hide": "kuzhat",
+    "why": "perak?",
+    "subtitle": "\"Lavar mignon, ha deu e-barzh.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Cheñch yezh",
+    "selectLanguage": "Dibab yezh",
+    "quickEnglish": "Saozneg",
+    "tip": "Implijit ger-tremen yezhoù disheñvel e Dor Durin evit digorañ emglevioù unan ha nep!"
+  }
+}

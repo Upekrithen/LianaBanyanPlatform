@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.811Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "និយាយថា មិត្ត ហើយចូល។",
+    "description": "Liana Banyan ត្រូវបានបង្កើតឡើងដើម្បីបើកចំហសម្រាប់រាល់ភាសា។ ភាសានីមួយៗមានរង្វាន់បកប្រែមួយ។",
+    "languages": "ភាសា",
+    "openBounties": "រង្វាន់ដែលបើក",
+    "marksAwarded": "Marks ត្រូវបានប្រគល់ (ថូខឹនចូលរួម)",
+    "provisional": "បណ្តោះអាសន្ន:",
+    "provisionalNotice": "បញ្ជីភាសា និងអត្រា Marks គឺបណ្តោះអាសន្ន។ Marks គឺជាថូខឹនចូលរួម មិនមែនភាគហ៊ុនទេ។",
+    "bountyOpen": "រង្វាន់បើក",
+    "claimed": "ត្រូវបានទាមទារ",
+    "complete": "បានបញ្ចប់",
+    "translationBountyTitle": "រង្វាន់ការបកប្រែ",
+    "bountyDescription": "បកប្រែ Liana Banyan ទៅ {{language}}។ ទទួល {{marks}} Marks។",
+    "scopeWelcome": "អេក្រង់ស្វាគមន៍ / ពិភពវិញ្ញាណ",
+    "scopeCueCards": "សំណុំកាតណែនាំស្នូល",
+    "scopeNavigation": "លេបផ្លូវ និងសារកំហុស",
+    "scopeWildfire": "Wildfire Beacon Run: រកការងារ",
+    "claimBounty": "ទាមទាររង្វាន់ការបកប្រែនេះ",
+    "baseLanguage": "ភាសាមូលដ្ឋាន -- មិនត្រូវការរង្វាន់ទេ។",
+    "claimedBy": "@{{handle}} ទាមទារ -- កំពុងដំណើរការ។",
+    "marksProvisional": "{{marks}} Marks (បណ្តោះអាសន្ន)",
+    "speakFounderTitle": "សំឡេងស្ថាបនិក: ហេតុអ្វីបានជាពាក្យទាំងនេះ",
+    "speakFounderDesc": "គ្រប់ពាក្យនៅលើវេទិកានេះសុទ្ធតែត្រូវបានដាក់ឈ្មោះដោយមានហេតុផល។ ប្រភពនៃឈ្មោះ 26 ដ៏សំខាន់ជាងគេ។",
+    "howBountiesWork": "រង្វាន់ការបកប្រែដំណើរការដូចម្ដេច",
+    "step1Title": "ទាមទាររង្វាន់",
+    "step1Body": "បើករង្វាន់ការបកប្រែពីក្ដារ Help Wanted។",
+    "step2Title": "បកប្រែ ហើយដាក់ស្នើ",
+    "step2Body": "បកប្រែ string ទាំងអស់ដែលត្រូវការ។ ដាក់ស្នើតាម Bounty Poster។",
+    "step3Title": "ទទួល Marks",
+    "step3Body": "បន្ទាប់ពីទទួលយក អ្នកទទួល Marks ហើយត្រូវបានកត់ត្រានៅ IP Ledger។",
+    "hide": "លាក់",
+    "why": "ហេតុអ្វី?",
+    "subtitle": "\"និយាយថា មិត្ត ហើយចូល។\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "ប្តូរភាសា",
+    "selectLanguage": "ជ្រើសភាសា",
+    "quickEnglish": "ភាសាអង់គ្លេស",
+    "tip": "ប្រើពាក្យសម្ងាត់ភាសាផ្សេងៗនៅទ្វារ Durin ដើម្បីដោះសោបទពិសោធន៍តែមួយគត់!"
+  }
+}

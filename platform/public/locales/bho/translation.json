@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.817Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "दोस्त कहो अउर अंदर जाव।",
+    "description": "Liana Banyan हर भाषा खातिर खुला बनावल बा। हर भाषा खातिर एगो अनुवाद इनाम बा।",
+    "languages": "भाषा",
+    "openBounties": "खुला इनाम",
+    "marksAwarded": "Marks दिहल गइल (भागीदारी टोकन)",
+    "provisional": "अस्थाई:",
+    "provisionalNotice": "भाषा के लिस्ट आ Marks दर अस्थाई बा। Marks भागीदारी टोकन बा, शेयर ना।",
+    "bountyOpen": "इनाम खुला बा",
+    "claimed": "दावा कइल गइल",
+    "complete": "पूरा",
+    "translationBountyTitle": "अनुवाद इनाम",
+    "bountyDescription": "Liana Banyan के {{language}} में अनुवाद करीं। {{marks}} Marks कमाईं।",
+    "scopeWelcome": "स्वागत / भूत दुनिया स्क्रीन",
+    "scopeCueCards": "मुख्य क्यू कार्ड सेट",
+    "scopeNavigation": "नेविगेशन लेबल आ गलती संदेश",
+    "scopeWildfire": "Wildfire Beacon Run: नौकरी पाईं",
+    "claimBounty": "इ अनुवाद इनाम दावा करीं",
+    "baseLanguage": "मूल भाषा -- कउनो इनाम के जरूरत नइखे।",
+    "claimedBy": "@{{handle}} द्वारा दावा -- चालू बा।",
+    "marksProvisional": "{{marks}} Marks (अस्थाई)",
+    "speakFounderTitle": "संस्थापक के आवाज: ई शब्द काहे",
+    "speakFounderDesc": "इ प्लेटफार्म पर हर शब्द के नाम कारण से रखल बा। 26 महत्वपूर्ण नाम के मूल।",
+    "howBountiesWork": "अनुवाद इनाम कइसे काम करेला",
+    "step1Title": "इनाम दावा करीं",
+    "step1Body": "Help Wanted बोर्ड से अनुवाद इनाम खोलीं।",
+    "step2Title": "अनुवाद करीं आ जमा करीं",
+    "step2Body": "सब जरूरी स्ट्रिंग के अनुवाद करीं। Bounty Poster से जमा करीं।",
+    "step3Title": "Marks कमाईं",
+    "step3Body": "स्वीकार होला पर Marks मिली। IP Ledger में दर्ज होयीं।",
+    "hide": "लुकाईं",
+    "why": "काहे?",
+    "subtitle": "\"दोस्त कहो अउर अंदर जाव।\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "भाषा बदलीं",
+    "selectLanguage": "भाषा चुनीं",
+    "quickEnglish": "अंग्रेजी",
+    "tip": "Durin's Door पर अलग-अलग भाषा के पासवर्ड इस्तेमाल करीं!"
+  }
+}

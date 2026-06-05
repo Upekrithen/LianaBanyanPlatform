@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.869Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Nispa amigo, yaykuy.",
+    "description": "Liana Banyan sapa simipi kicharisqa rurasqa. Sapa simi uj traduccion riwariywan.",
+    "languages": "simikuna",
+    "openBounties": "kicharisqa riwariy",
+    "marksAwarded": "Marks qusqa (llankay tokenkunam)",
+    "provisional": "Wasipim:",
+    "provisionalNotice": "Simi lista Marks preciokunawan wasipim. Marks llankay tokenkuna, manachus acciónkuna.",
+    "bountyOpen": "Riwariy kicharisqa",
+    "claimed": "Mañasqa",
+    "complete": "Tukusqa",
+    "translationBountyTitle": "Traduccion Riwariy",
+    "bountyDescription": "Liana Banyan {{language}} simiman tikray. {{marks}} Marks taripaykuspayki.",
+    "scopeWelcome": "Allinllachu / Supay Pacha pantalla",
+    "scopeCueCards": "Principal Kard Yuyaykuna",
+    "scopeNavigation": "Llankay siñalkuna rikuriy",
+    "scopeWildfire": "Wildfire Beacon Run: Llankayniyta taripay",
+    "claimBounty": "Kay Traduccion Riwariy mañakuy",
+    "baseLanguage": "Mama simi -- mana riwariy",
+    "claimedBy": "@{{handle}} mañasqa -- apaykachakuchkan.",
+    "marksProvisional": "{{marks}} Marks (wasipim)",
+    "speakFounderTitle": "Rurakuq Simy: Imanaqtintam Kay Simikunas",
+    "speakFounderDesc": "Kay plataformapin tukuy simikunam imaymanapi suticharisqa. Waranqa 26 sutikuna.",
+    "howBountiesWork": "Imaynatam Traduccion Riwariy Ruray",
+    "step1Title": "Riwariy mañakuy",
+    "step1Body": "Help Wanted lapitam Traduccion Riwariy kichariy.",
+    "step2Title": "Tikray haywaykuy",
+    "step2Body": "Tukuy string tikray. Bounty Poster ruway.",
+    "step3Title": "Marks taripaykuy",
+    "step3Body": "Chaskinaspayki Marks chaskiyta IP Ledger rikuchiy.",
+    "hide": "pakay",
+    "why": "imanaqtim?",
+    "subtitle": "\"Niy masiy, yaykuy.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Simi tikray",
+    "selectLanguage": "Simi akllay",
+    "quickEnglish": "Ingles",
+    "tip": "Durin Punkupi sapa simi gaveluwan kamayqa yakuspas!"
+  }
+}

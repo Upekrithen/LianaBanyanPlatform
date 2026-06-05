@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.858Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Bua mohumagadi, o tsene.",
+    "description": "Liana Banyan e agile go bula go puo nngwe le nngwe. Puo nngwe le nngwe e na le moputso o mongwe wa phetolelo.",
+    "languages": "dipuo",
+    "openBounties": "meputso e bulegile",
+    "marksAwarded": "Marks e neelwa (ditokene tsa go tshwara karolo)",
+    "provisional": "Ka selekanyo:",
+    "provisionalNotice": "Lenaane la dipuo le ditekelo tsa Marks ke tsa selekanyo. Marks ke ditokene tsa karolo, eseng dikaelo.",
+    "bountyOpen": "Moputso o bulegile",
+    "claimed": "Go kgopilwe",
+    "complete": "Go phethilwe",
+    "translationBountyTitle": "Moputso wa Phetolelo",
+    "bountyDescription": "Fetola Liana Banyan go {{language}}. Bona {{marks}} Marks.",
+    "scopeWelcome": "Dikarata tsa Amogela / Lefatshe la Mewa",
+    "scopeCueCards": "Sete ya Karata ya Maele",
+    "scopeNavigation": "Ditlhomeso tsa tsela le melaetsa ya mathata",
+    "scopeWildfire": "Wildfire Beacon Run: Bona Tiro",
+    "claimBounty": "Kopa Moputso ono wa Phetolelo",
+    "baseLanguage": "Puo ya motheo -- ga go moputso o o hlokegang.",
+    "claimedBy": "@{{handle}} o kgopile -- e tswela pele.",
+    "marksProvisional": "{{marks}} Marks (selekanyo)",
+    "speakFounderTitle": "Lentswe la Mothei: Ke Goreng Mafoko Ano",
+    "speakFounderDesc": "Lentsu lefe lefe mono le bitsiwa ka lebaka. Motheo wa maina 26 a botlhokwa.",
+    "howBountiesWork": "Meputso ya Phetolelo e Dira Jang",
+    "step1Title": "Kopa Moputso",
+    "step1Body": "Bula Moputso wa Phetolelo go tswa Help Wanted.",
+    "step2Title": "Fetola le Romela",
+    "step2Body": "Fetola distring tsotlhe tse di hlokegang. Romela ka Bounty Poster.",
+    "step3Title": "Bona Marks",
+    "step3Body": "Morago ga go amogela, o bona Marks e kwadisiwa mo IP Ledger.",
+    "hide": "fitlha",
+    "why": "goreng?",
+    "subtitle": "\"Bua ga mogakolodi, o tsene.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Fetola puo",
+    "selectLanguage": "Kgethola puo",
+    "quickEnglish": "Sekgoa",
+    "tip": "Dirisa diphasewete tsa dipuo tse di farologaneng kwa Kgoro ya Durin go bula maitemogelo a a ikgethileng!"
+  }
+}

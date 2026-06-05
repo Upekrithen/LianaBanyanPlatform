@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.864Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "Ghid habib u idħol.",
+    "description": "Liana Banyan inbniet biex tkun miftuha ghal kull lingwa. Kull lingwa miftuha ghandha premju ta' traduzzjoni wiehed.",
+    "languages": "lingwi",
+    "openBounties": "premjijiet miftuhin",
+    "marksAwarded": "Marks moghtija (tokens ta' parteċipazzjoni)",
+    "provisional": "Provviżorjament:",
+    "provisionalNotice": "Il-lista tal-lingwi u r-rati tal-Marks huma provviżorji. Il-Marks huma tokens ta' parteċipazzjoni, mhux azzjonijiet.",
+    "bountyOpen": "Premju miftuh",
+    "claimed": "Mitlub",
+    "complete": "Lest",
+    "translationBountyTitle": "Premju tat-Traduzzjoni",
+    "bountyDescription": "Ittraduċi Liana Banyan ghal {{language}}. Aqla {{marks}} Marks.",
+    "scopeWelcome": "Skrinijiet ta' Merhba / Dinja tal-Ispirtu",
+    "scopeCueCards": "Sett ta' Karti ta' Suġġeriment Bażiku",
+    "scopeNavigation": "Tikketti ta' navigazzjoni u messaġġi ta' żball",
+    "scopeWildfire": "Wildfire Beacon Run: Sib Xogħol",
+    "claimBounty": "Itlob dan il-Premju tat-Traduzzjoni",
+    "baseLanguage": "Lingwa bażika -- l-ebda premju meħtieġ.",
+    "claimedBy": "@{{handle}} talab -- qed jkompli.",
+    "marksProvisional": "{{marks}} Marks (provviżorjament)",
+    "speakFounderTitle": "Leħen il-Fundatur: Ghala Dawn il-Kliem",
+    "speakFounderDesc": "Kull terminu fuq din il-pjattaforma huma msemmija għal raġuni. L-oriġini ta' 26 ismijiet importanti.",
+    "howBountiesWork": "Kif Jaħdmu l-Premjijiet tat-Traduzzjoni",
+    "step1Title": "Itlob il-Premju",
+    "step1Body": "Iftah Premju tat-Traduzzjoni mil-bord Help Wanted.",
+    "step2Title": "Ittraduċi u Ibghat",
+    "step2Body": "Ittraduċi s-sensiela kollha meħtieġa. Ibghat permezz ta' Bounty Poster.",
+    "step3Title": "Aqla Marks",
+    "step3Body": "Wara l-aċċettazzjoni, tirċievi Marks u tiddaħħal fil-IP Ledger.",
+    "hide": "ahbi",
+    "why": "ghala?",
+    "subtitle": "\"Qul habib, u idħol.\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "Ibdel il-lingwa",
+    "selectLanguage": "Agħżel il-lingwa",
+    "quickEnglish": "Ingliż",
+    "tip": "Uża passwords ta' lingwi differenti fil-Bieb ta' Durin biex tiftah esperjenzi uniċi!"
+  }
+}

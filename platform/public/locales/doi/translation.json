@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "source": "machine-draft",
+    "human-reviewed": false,
+    "bounty-open": true,
+    "generatedAt": "2026-06-04T00:18:10.873Z",
+    "note": "Machine-seeded Wave 13-14. Real translated strings in native script. Human review required before ratification."
+  },
+  "speakFriend": {
+    "title": "दोस्त बोलो, ते अंदर आओ।",
+    "description": "Liana Banyan हर भाषा लई खुल्ली बनाई गई है। हर भाषा दा इक अनुवाद इनाम है।",
+    "languages": "भाषाएँ",
+    "openBounties": "खुल्ले इनाम",
+    "marksAwarded": "Marks दित्ते (भागीदारी टोकन)",
+    "provisional": "अस्थाई:",
+    "provisionalNotice": "भाषाएँ दी लिस्ट ते Marks दर अस्थाई न। Marks भागीदारी टोकन न, शेयर नईं।",
+    "bountyOpen": "इनाम खुल्ला है",
+    "claimed": "दावा कित्ता",
+    "complete": "पूरा",
+    "translationBountyTitle": "अनुवाद इनाम",
+    "bountyDescription": "Liana Banyan कनू {{language}} च अनुवाद करो। {{marks}} Marks कमाओ।",
+    "scopeWelcome": "स्वागत / भूत दुनिया स्क्रीन",
+    "scopeCueCards": "मुख्य क्यू कार्ड सेट",
+    "scopeNavigation": "नेविगेशन लेबल ते गलती संदेश",
+    "scopeWildfire": "Wildfire Beacon Run: नौकरी पाओ",
+    "claimBounty": "इ अनुवाद इनाम दा दावा करो",
+    "baseLanguage": "मूल भाषा -- कोई इनाम दी लोड़ नईं।",
+    "claimedBy": "@{{handle}} ने दावा कित्ता -- जारी है।",
+    "marksProvisional": "{{marks}} Marks (अस्थाई)",
+    "speakFounderTitle": "संस्थापक दी आवाज़: इ शब्द किआलई",
+    "speakFounderDesc": "इस प्लेटफार्म पर हर शब्द कारण दे नाल नामित। 26 मुख्य नामें दा मूल।",
+    "howBountiesWork": "अनुवाद इनाम किस तरां काम करदे न",
+    "step1Title": "इनाम दावा करो",
+    "step1Body": "Help Wanted बोर्ड तों अनुवाद इनाम खोलो।",
+    "step2Title": "अनुवाद करो ते जमा करो",
+    "step2Body": "सब जरूरी स्ट्रिंग दा अनुवाद करो। Bounty Poster नाल जमा करो।",
+    "step3Title": "Marks कमाओ",
+    "step3Body": "कबूलने पर Marks मिलंगे। IP Ledger च दर्ज होवोगे।",
+    "hide": "लुकाओ",
+    "why": "किआलई?",
+    "subtitle": "\"दोस्त कहो ते अंदर आओ।\""
+  },
+  "languageSwitcher": {
+    "changeLanguage": "भाषा बदलो",
+    "selectLanguage": "भाषा चुनो",
+    "quickEnglish": "अंग्रेजी",
+    "tip": "Durin's Door पर वखरी-वखरी भाषाएँ दे पासवर्ड वरतो!"
+  }
+}
