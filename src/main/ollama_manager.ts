@@ -16,7 +16,7 @@ import {
 const OLLAMA_API_BASE = 'http://localhost:11434';
 const DEFAULT_MODEL = FLOOR_MODEL;
 const HEALTH_CHECK_INTERVAL_MS = 30_000;
-const STARTUP_TIMEOUT_MS = 15_000;
+const STARTUP_TIMEOUT_MS = 30_000;
 
 export interface OllamaStatus {
   running: boolean;
@@ -159,7 +159,7 @@ export class OllamaManager {
       env: {
         ...process.env,
         OLLAMA_HOST: '0.0.0.0:11434',
-        OLLAMA_ORIGINS: 'http://localhost:5173,http://localhost:3000',
+        OLLAMA_ORIGINS: 'http://localhost:5173,http://localhost:3000,app://.',
       },
     });
 

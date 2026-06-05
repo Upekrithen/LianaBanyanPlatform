@@ -52,10 +52,15 @@ const SALTFIGHTER_TEXT =
   'Free to use. Better to join. Share and Save.';
 
 const SAMPLE_PROMPTS = [
+  'What is the name of a famous elephant?',
   'What can you help me with?',
   'Write a short grocery list for tacos.',
   'Explain what makes this AI private.',
 ];
+
+const AUTO_TEST_PROMPT = 'What is the name of a famous elephant?';
+
+type OptionChoiceState = 'pending' | 'borrowing' | 'borrow-result' | 'custom-folder';
 
 function fmtBytes(b: number): string {
   if (b >= 1_073_741_824) return `${(b / 1_073_741_824).toFixed(1)} GB`;
@@ -94,10 +99,24 @@ export function Bp067FirstRunSpine({ onComplete }: Bp067FirstRunSpineProps) {
   const [answer, setAnswer] = useState<string | null>(null);
   const [asking, setAsking] = useState(false);
   const [askError, setAskError] = useState<string | null>(null);
+  const [autoAnswerShown, setAutoAnswerShown] = useState(false);
   const askInputRef = useRef<HTMLInputElement | null>(null);
+  const autoAskedRef = useRef(false);
 
   // upgrades phase
   const [showUpgrades, setShowUpgrades] = useState(false);
+
+  // install error options panel
+  const [optionChoiceState, setOptionChoiceState] = useState<OptionChoiceState>('pending');
+  const [borrowResult, setBorrowResult] = useState<{
+    ok: boolean;
+    disclosure?: string;
+    error?: string;
+    cost_transport_usd?: number;
+    cost_compute_usd_approx?: number;
+    node_count?: number;
+  } | null>(null);
+  const [customModelPath, setCustomModelPath] = useState<string | null>(null);
 
   // ── Phase 0: transparent install ──────────────────────────────────────────
   useEffect(() => {
@@ -177,14 +196,18 @@ export function Bp067FirstRunSpine({ onComplete }: Bp067FirstRunSpineProps) {
       .finally(() => setModelsLoading(false));
   }, [phase]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // ── try-now: autofocus + refresh stats ────────────────────────────────────
+  // ── try-now: autofocus + refresh stats + auto-elephant test ──────────────
   useEffect(() => {
-    if (phase === 'try-now') {
-      askInputRef.current?.focus();
-      void window.amplify?.watcher?.getStats?.()
-        .then((s) => setWatcherStats(s as WatcherStats | null))
-        .catch(() => {});
+    if (phase !== 'try-now') return;
+    void window.amplify?.watcher?.getStats?.()
+      .then((s) => setWatcherStats(s as WatcherStats | null))
+      .catch(() => {});
+    if (!autoAskedRef.current) {
+      autoAskedRef.current = true;
+      setQuestion(AUTO_TEST_PROMPT);
+      void handleAskPrompt(AUTO_TEST_PROMPT);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase]);
 
   const finishSpine = useCallback(() => {
@@ -235,6 +258,27 @@ export function Bp067FirstRunSpine({ onComplete }: Bp067FirstRunSpineProps) {
     finally { cleanup?.(); }
   };
 
+  // Auto-ask variant: takes a prompt directly, shows answer inline without advancing phase
+  const handleAskPrompt = async (prompt: string) => {
+    if (!prompt || asking) return;
+    setAsking(true);
+    setAskError(null);
+    try {
+      const result = await window.amplify?.askFloorModel?.(prompt);
+      if (result?.ok && result.text) {
+        setAnswer(result.text);
+        setAutoAnswerShown(true);
+      } else {
+        setAskError(result?.error ?? 'Could not get an answer. Try again in a moment.');
+      }
+    } catch {
+      setAskError('Something went wrong. Try again in a moment.');
+    } finally {
+      setAsking(false);
+      askInputRef.current?.focus();
+    }
+  };
+
   const handleAsk = async () => {
     const q = question.trim();
     if (!q || asking) return;
@@ -244,6 +288,7 @@ export function Bp067FirstRunSpine({ onComplete }: Bp067FirstRunSpineProps) {
       const result = await window.amplify?.askFloorModel?.(q);
       if (result?.ok && result.text) {
         setAnswer(result.text);
+        setAutoAnswerShown(false);
         setShowUpgrades(true);
         setPhase('upgrades');
       } else {
@@ -301,14 +346,104 @@ export function Bp067FirstRunSpine({ onComplete }: Bp067FirstRunSpineProps) {
           </div>
           {installError && (
             <div style={{ marginTop: 20, padding: 14, background: 'rgba(239,68,68,0.1)', borderRadius: 8, color: '#fca5a5', fontSize: 12 }}>
-              {installError}
-              <div style={{ marginTop: 10 }}>
+              <div style={{ marginBottom: 14, lineHeight: 1.6 }}>{installError}</div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: '#e2e8f0', marginBottom: 12 }}>How would you like to continue?</div>
+
+              {/* Option A: Retry local */}
+              <div style={{ marginBottom: 10, padding: '12px 14px', background: 'rgba(15,23,42,0.5)', border: '1px solid rgba(100,116,139,0.25)', borderRadius: 8 }}>
+                <div style={{ fontWeight: 700, color: '#6ee7b7', fontSize: 12, marginBottom: 4 }}>Option A -- Use bundled local AI (works offline)</div>
+                <div style={{ color: '#94a3b8', fontSize: 11, marginBottom: 10, lineHeight: 1.5 }}>
+                  Retry the local Ollama engine setup. Private, free, no internet required.
+                </div>
                 <button
                   type="button"
-                  onClick={() => { setInstallError(null); setInstallLines([]); void window.amplify?.setupPrivateAI?.(); }}
-                  style={{ padding: '6px 14px', background: 'rgba(239,68,68,0.15)', border: '1px solid rgba(239,68,68,0.3)', borderRadius: 6, color: '#fca5a5', cursor: 'pointer' }}
+                  onClick={() => {
+                    setInstallError(null);
+                    setInstallLines([]);
+                    setOptionChoiceState('pending');
+                    void window.amplify?.setupPrivateAI?.();
+                  }}
+                  style={{ padding: '6px 16px', background: 'rgba(110,231,183,0.12)', border: '1px solid rgba(110,231,183,0.3)', borderRadius: 6, color: '#6ee7b7', cursor: 'pointer', fontSize: 12, fontWeight: 600 }}
                 >
-                  Retry
+                  Retry local AI setup
+                </button>
+              </div>
+
+              {/* Option B: Borrow a frontier node */}
+              <div style={{ marginBottom: 10, padding: '12px 14px', background: 'rgba(15,23,42,0.5)', border: '1px solid rgba(100,116,139,0.25)', borderRadius: 8 }}>
+                <div style={{ fontWeight: 700, color: '#60a5fa', fontSize: 12, marginBottom: 4 }}>Option B -- Borrow a trusted friend&apos;s node on the mesh</div>
+                <div style={{ color: '#94a3b8', fontSize: 11, marginBottom: 10, lineHeight: 1.5 }}>
+                  Use a Frontier node shared by a community member. Small transport fee may apply.
+                </div>
+                {optionChoiceState === 'borrowing' && (
+                  <div style={{ color: '#60a5fa', fontSize: 11, marginBottom: 8 }}>Contacting the mesh...</div>
+                )}
+                {optionChoiceState === 'borrow-result' && borrowResult && (
+                  <div style={{ marginBottom: 10, padding: '10px 12px', background: borrowResult.ok ? 'rgba(59,130,246,0.1)' : 'rgba(239,68,68,0.1)', border: `1px solid ${borrowResult.ok ? 'rgba(59,130,246,0.3)' : 'rgba(239,68,68,0.3)'}`, borderRadius: 6, fontSize: 11, color: borrowResult.ok ? '#93c5fd' : '#fca5a5', lineHeight: 1.6 }}>
+                    {borrowResult.ok ? (
+                      <>
+                        <div style={{ fontWeight: 700, marginBottom: 4 }}>Connected to {borrowResult.node_count ?? 1} node{(borrowResult.node_count ?? 1) !== 1 ? 's' : ''}</div>
+                        {borrowResult.disclosure && <div>{borrowResult.disclosure}</div>}
+                        {borrowResult.cost_transport_usd != null && (
+                          <div style={{ marginTop: 4, color: '#64748b' }}>Transport cost: ~${borrowResult.cost_transport_usd.toFixed(4)}</div>
+                        )}
+                      </>
+                    ) : (
+                      <div>{borrowResult.error ?? 'Could not reach a frontier node. Try again later.'}</div>
+                    )}
+                  </div>
+                )}
+                {optionChoiceState !== 'borrowing' && (
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      setOptionChoiceState('borrowing');
+                      setBorrowResult(null);
+                      try {
+                        const r = await window.amplify?.lbRequestFrontierBorrow?.();
+                        setBorrowResult(r ?? { ok: false, error: 'No response from mesh.' });
+                      } catch {
+                        setBorrowResult({ ok: false, error: 'Could not reach the mesh.' });
+                      } finally {
+                        setOptionChoiceState('borrow-result');
+                      }
+                    }}
+                    style={{ padding: '6px 16px', background: 'rgba(59,130,246,0.12)', border: '1px solid rgba(59,130,246,0.3)', borderRadius: 6, color: '#60a5fa', cursor: 'pointer', fontSize: 12, fontWeight: 600 }}
+                  >
+                    {optionChoiceState === 'borrow-result' ? 'Try again' : 'Request a frontier node'}
+                  </button>
+                )}
+              </div>
+
+              {/* Option C: Custom model folder */}
+              <div style={{ padding: '12px 14px', background: 'rgba(15,23,42,0.5)', border: '1px solid rgba(100,116,139,0.25)', borderRadius: 8 }}>
+                <div style={{ fontWeight: 700, color: '#a78bfa', fontSize: 12, marginBottom: 4 }}>Option C -- Choose a different AI model folder</div>
+                <div style={{ color: '#94a3b8', fontSize: 11, marginBottom: 10, lineHeight: 1.5 }}>
+                  Point to a folder where you have Ollama models already downloaded.
+                </div>
+                {customModelPath && (
+                  <div style={{ marginBottom: 10, padding: '8px 10px', background: 'rgba(167,139,250,0.08)', border: '1px solid rgba(167,139,250,0.25)', borderRadius: 6, fontSize: 11, color: '#c4b5fd', lineHeight: 1.6, wordBreak: 'break-all' }}>
+                    <div style={{ fontWeight: 700, marginBottom: 2 }}>Folder selected:</div>
+                    <div>{customModelPath}</div>
+                    <div style={{ marginTop: 6, color: '#64748b' }}>
+                      Set OLLAMA_MODELS to this path and restart to use it.
+                    </div>
+                  </div>
+                )}
+                <button
+                  type="button"
+                  onClick={async () => {
+                    setOptionChoiceState('custom-folder');
+                    try {
+                      const result = await window.amplify?.watcher?.openFolderDialog?.();
+                      if (result && !result.canceled && result.filePaths.length > 0) {
+                        setCustomModelPath(result.filePaths[0]);
+                      }
+                    } catch { /* dialog unavailable */ }
+                  }}
+                  style={{ padding: '6px 16px', background: 'rgba(167,139,250,0.12)', border: '1px solid rgba(167,139,250,0.3)', borderRadius: 6, color: '#a78bfa', cursor: 'pointer', fontSize: 12, fontWeight: 600 }}
+                >
+                  {customModelPath ? 'Choose different folder' : 'Browse for model folder'}
                 </button>
               </div>
             </div>
@@ -513,10 +648,10 @@ export function Bp067FirstRunSpine({ onComplete }: Bp067FirstRunSpineProps) {
                 {!isPulling && (
                   <button
                     type="button"
-                    onClick={() => void handlePullModel('gemma2:2b')}
+                    onClick={() => void handlePullModel('qwen2.5:0.5b')}
                     style={{ padding: '8px 16px', background: 'rgba(110,231,183,0.12)', border: '1px solid rgba(110,231,183,0.3)', borderRadius: 6, color: '#6ee7b7', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}
                   >
-                    Download default AI (gemma2:2b, ~1.7 GB)
+                    Download default AI (qwen2.5:0.5b, ~400 MB)
                   </button>
                 )}
               </div>
@@ -593,8 +728,31 @@ export function Bp067FirstRunSpine({ onComplete }: Bp067FirstRunSpineProps) {
               </div>
             )}
 
+            {/* Auto-test result: shown as soon as the elephant answer comes back */}
+            {asking && !autoAnswerShown && (
+              <div style={{ marginBottom: 20, padding: '14px 16px', background: 'rgba(6,78,59,0.12)', border: '1px solid rgba(110,231,183,0.2)', borderRadius: 8 }}>
+                <div style={{ fontSize: 12, color: '#6ee7b7', fontWeight: 600, marginBottom: 6 }}>Running a quick test...</div>
+                <div style={{ fontSize: 11, color: '#475569' }}>Asking: &ldquo;{AUTO_TEST_PROMPT}&rdquo;</div>
+              </div>
+            )}
+
+            {autoAnswerShown && answer && (
+              <div style={{ marginBottom: 20, padding: '14px 16px', background: 'rgba(6,78,59,0.18)', border: '1px solid rgba(110,231,183,0.4)', borderRadius: 8 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+                  <span style={{ fontSize: 16, color: '#4ade80' }}>+</span>
+                  <span style={{ fontSize: 13, fontWeight: 800, color: '#4ade80' }}>Your AI works! Here is what it said:</span>
+                </div>
+                <div style={{ fontSize: 12, color: '#64748b', marginBottom: 8, fontStyle: 'italic' }}>
+                  Q: &ldquo;{AUTO_TEST_PROMPT}&rdquo;
+                </div>
+                <div style={{ fontSize: 14, color: '#e2e8f0', lineHeight: 1.6, maxHeight: 100, overflow: 'auto' }}>
+                  {answer.slice(0, 400)}{answer.length > 400 ? '...' : ''}
+                </div>
+              </div>
+            )}
+
             <label htmlFor="bp067-ask" style={{ display: 'block', fontSize: 14, fontWeight: 600, color: '#e2e8f0', marginBottom: 10 }}>
-              Ask me anything:
+              {autoAnswerShown ? 'Ask your own question:' : 'Ask me anything:'}
             </label>
             <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
               <input
@@ -602,8 +760,9 @@ export function Bp067FirstRunSpine({ onComplete }: Bp067FirstRunSpineProps) {
                 ref={askInputRef}
                 value={question}
                 onChange={(e) => setQuestion(e.target.value)}
+                onFocus={() => { if (question === AUTO_TEST_PROMPT) setQuestion(''); }}
                 onKeyDown={(e) => { if (e.key === 'Enter') void handleAsk(); }}
-                placeholder="Try: What can you help me with?"
+                placeholder={autoAnswerShown ? 'Ask me anything...' : 'Try: What can you help me with?'}
                 disabled={asking}
                 style={{ flex: 1, padding: '12px 14px', background: '#111827', border: '1px solid rgba(110,231,183,0.3)', borderRadius: 8, color: '#e2e8f0', fontSize: 14, outline: 'none' }}
               />

@@ -16,7 +16,7 @@ import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, readdirSync, statS
 import { homedir } from 'os';
 import { join } from 'path';
 
-const FLOOR = 'gemma2:2b';
+const FLOOR = 'qwen2.5:0.5b';
 const DEST = join(process.cwd(), 'resources', 'ollama', 'bundled');
 const OLLAMA_MODELS = join(homedir(), '.ollama', 'models');
 

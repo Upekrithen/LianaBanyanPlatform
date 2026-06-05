@@ -2,10 +2,15 @@
 // Founder-locked: default = Gemma (Google), not Meta/Llama.
 
 /** Shipped default tiny floor model (Ollama tag). */
-export const FLOOR_MODEL = 'gemma2:2b';
+export const FLOOR_MODEL = 'qwen2.5:0.5b';
 
 /** Tags treated as satisfying the floor-model requirement. */
 export const FLOOR_MODEL_ALIASES = [
+  'qwen2.5:0.5b',
+  'qwen2.5:0.5b-instruct',
+  'qwen2.5:0.5b-instruct-q4_0',
+  'qwen2.5:1.5b',
+  'qwen2.5:1.5b-instruct',
   'gemma2:2b',
   'gemma2:2b-instruct',
   'gemma2:2b-instruct-q4_0',
@@ -21,22 +26,22 @@ export const UPGRADE_MODELS = {
 /** Benchmark options for Founder final pick (Yoke return). */
 export const BENCHMARK_OPTIONS = [
   {
+    id: 'qwen2.5:0.5b',
+    sizeGB: 0.4,
+    speedNote: '~1-2s first token on typical laptop CPU',
+    qualityNote: 'Alibaba Qwen2.5 0.5B -- tiny, fast, bundled installer ~700MB. Answers short Q&A.',
+  },
+  {
+    id: 'qwen2.5:1.5b',
+    sizeGB: 1.0,
+    speedNote: '~2-3s first token',
+    qualityNote: 'Better factual recall than 0.5b -- installer ~1.1GB',
+  },
+  {
     id: 'gemma2:2b',
     sizeGB: 1.6,
-    speedNote: '~2–4s first token on typical laptop CPU',
-    qualityNote: 'Short Q&A, greetings, simple how-to — adequate for family-install proof',
-  },
-  {
-    id: 'gemma2:2b-instruct-q4_0',
-    sizeGB: 1.4,
-    speedNote: '~2–3s first token · slightly smaller quant',
-    qualityNote: 'Similar to gemma2:2b · marginally faster load',
-  },
-  {
-    id: 'phi3:mini',
-    sizeGB: 2.3,
-    speedNote: '~3–5s first token',
-    qualityNote: 'Microsoft Phi-3 · non-Meta alternative floor candidate',
+    speedNote: '~2-4s first token on typical laptop CPU',
+    qualityNote: 'Original floor model -- strong Q&A quality but installer ~2GB',
   },
 ] as const;
 
