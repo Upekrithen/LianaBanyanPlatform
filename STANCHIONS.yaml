@@ -1,0 +1,58 @@
+# STANCHIONS.yaml - Load-bearing Founder-favorite artifact protection manifest
+# BP075 - Established per Founder direct: "we need an empirical STANCHION on that
+# so it always survives. It was my mostest bestest favorite."
+# Format: one entry per stanchion, each with id + protected files + fingerprints
+
+version: 1
+stanchions:
+  - id: stanchion_heoho_landing_5_signature_favorite_bp075
+    description: HEOHO Landing 5-signature canonical favorite (BP075 reconstructed)
+    canon_eblet_path: .claude/state/eblets/CANON/canon_heoho_landing_canonical_full_5_signature_quotes_above_yvaine_shine_youtube_full_page_glow_founder_voice_shine_golden_keyhole_speak_friend_and_enter_bp075.eblet.md
+    founder_ratify_quote: "we need an empirical STANCHION on that so it always survives. It was my mostest bestest favorite. I hate losing what is already done."
+    established_at: "2026-06-05T21:00:00Z"
+    stanchion_status: partial_f6_pending
+    f6_card_size_note: "Card size ratify pending Founder pick. Follow-up wave will update tarball + visual snapshots with F6 dimensions."
+    protected_files:
+      - path: platform/src/pages/HEOHOLanding.tsx
+        sha256: 96F52DB46E0D7250D59B8898E8963607179B63B8F6DDADA93B4BFA7F8618CA32
+      - path: platform/src/components/museum/HEOHOCardFront.tsx
+        sha256: C1EC70CC233044C2E81F77D9E2B8B423BC13553D79025E3DB0C425D49B03511E
+      - path: platform/src/components/museum/RotatingQuotes.tsx
+        sha256: 77F4BEF611E6ADB8CCE083FEFC58DC393DAE617FA16FF14E48E15FB8B5C62413
+      - path: platform/src/components/museum/XRayPanel.tsx
+        sha256: 3018CE3D904CEE83BBB676771A08C4C19919A018C1E91B560516787B587D045A
+      - path: platform/src/components/museum/MuseumShell.tsx
+        sha256: AB6E71BBAD508508A79BC52CAC5D1DF4E9BE6A23848ED8BAAA39F39D4D8DB017
+      - path: platform/src/components/museum/XRayContext.tsx
+        sha256: 00100F0382E2E2819FCA4A2BB3915F78E64470BE2570597510760D311B319699
+      - path: platform/src/components/museum/xrayAnnotations.ts
+        sha256: A84642FD2F2BDE02BC1FD6FE574696D595DFB93D10ADB76F010E5A8C204D026F
+      - path: platform/src/MuseumApp.tsx
+        sha256: 2F0103236C57D122BE072979F4CCBD4378DBB76CD1E7CF83A0141D5A1E0F1F99
+      - path: platform/src/routes/public.tsx
+        sha256: E8F975BF7F163349A52157A28A4B6480B7B603258FC2EDD07ECE5CC0CA0C42AC
+      - path: platform/public/audio/founder_voice_shine.m4a
+        sha256: 08ec2292a0f65212fb2e884be1813d0b7d3f496fed7d842db58597957db2d5b4
+    snapshot_tarball:
+      path: Asteroid-ProofVault/STANCHION_heoho_landing_5_signature_favorite_bp075_SOURCE_60555ca.tar.gz
+      sha256: 15D2D91369432740F0162D20641DD158472EBD6D168292E7C759118ED596B700
+    commit_sha: 60555cab3825cd82bae12dcc2aba0dbb707ae00a
+    visual_snapshots:
+      - path: Asteroid-ProofVault/STANCHION_heoho_landing_xray_off.png
+        sha256: 233490e26341607e67e66718d7624efa07738e7f6c9447fc6e85a89fff2532da
+        note: "museum.lianabanyan.com — initial load, X-Ray Goggles OFF, quotes above card visible"
+      - path: Asteroid-ProofVault/STANCHION_heoho_landing_xray_on.png
+        sha256: 7954dbc667f18c9fa81a8599b9b72e21e99f2278a3e32833c254d92ee5ae63c7
+        note: "museum.lianabanyan.com — X-Ray Goggles ON (cyan annotation overlay visible)"
+      - path: Asteroid-ProofVault/STANCHION_heoho_landing_golden_keyhole.png
+        sha256: b7f56854363c113fac25059142074d0de659962f733624b307420124ffde8e76
+        note: "F4 — golden keyhole O persists in 'Help Ourselves' heading after SHINE sequence"
+      - path: Asteroid-ProofVault/STANCHION_heoho_landing_speak_friend_open.png
+        sha256: 89b94cc956086b779d33a79e6e9c6e9af512282f353ea0e4c031777868883864
+        note: "F5 — Speak Friend, and Enter input open (placeholder text confirmed)"
+      - path: Asteroid-ProofVault/STANCHION_heoho_landing_quotes_flik.png
+        sha256: af83fdf89986ffba202b56aaf75f780fae4c355ce75232a1253a193e360c3714
+        note: "Sig1 — Flik quote: 'Pretend this is a Seed.' — Flik, A Bug's Life (1998)"
+      - path: Asteroid-ProofVault/STANCHION_heoho_landing_quotes_dot.png
+        sha256: df6a216829a8c4b85f5101c42e125590f292a07b2ed941c6a0663748b03ef46c
+        note: "Sig1 — Dot quote: 'Pretend this is a Seed.' — Dot, A Bug's Life (Pixar, 1998)"
