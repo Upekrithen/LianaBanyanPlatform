@@ -34,7 +34,26 @@
  *   overwrite the files in `public/images/mascots/{slug}/` —
  *   no code changes needed.
  *
- * 2 HOSTS + 12 RECURRING DOMAINS + 3 SPECIALS = 17 TOTAL.
+ * SLOT NUMBERING STANDARD (BP074 ratified by Founder 2026-06-04):
+ *   NEW STANDARD: slot-01 = canonical (full-color, primary render).
+ *   This is the disk-truth-anchored standard established by BP073/BP074
+ *   art landings: sheepdog, elephant, and mouse all have 01=canonical
+ *   on disk (e.g. sheepdog-01-canonical.png, elephant-01-canonical.png,
+ *   mouse-01-canonical.png).
+ *
+ *   LEGACY PATTERN: The `pfpVisual()` helper below uses slot-01 =
+ *   lineart/monochrome as its default (per the original code comment at
+ *   line ~151). This is a LEGACY convention only -- zero actual PFP
+ *   files exist on disk for the 16 pfpVisual() characters, so it is
+ *   NOT disk-truth-anchored. The helper will be updated when the next
+ *   bounty wave lands those characters' art.
+ *
+ *   PROPAGATION PLAN: When Ghost Cat, The Skeptic, and all future
+ *   bounty characters land, use 01=canonical following the ratified
+ *   standard. The 16 pfpVisual() characters will be updated as their
+ *   art arrives in future bounty waves. No mass-rename this wave.
+ *
+ * 2 HOSTS + 18 DOMAIN SPECIALISTS + 3 SPECIALS = 23 TOTAL.
  */
 
 import type { HologramTier } from "@/components/museum/LRHCharacter";
@@ -115,6 +134,28 @@ export interface MascotDefinition {
   special?: boolean;
   /** For host characters: which province they host. */
   province?: "southern" | "northern";
+  /** Canonical primary asset path (overrides visual.default for listing/OG). */
+  primaryAsset?: string;
+  /** Named variant paths beyond the default 3-state visual system. */
+  variants?: Record<string, string>;
+  /** Credit line for the art source. */
+  artCredit?: string;
+  /** Bounty ID resolved when this art landed. */
+  bountyResolved?: string;
+  /** Extended role/doctrine description for this character. */
+  role?: string;
+  /** Other characters or systems this mascot pairs with. */
+  composesWith?: string[];
+  /** Bounty targets still open in the same bounty series. */
+  remainingBountyTargets?: string[];
+  /** Layered depth explanations for this character's core concept. */
+  depths?: {
+    skippingStones: string;
+    wadingIn: string;
+    deepDive: string;
+  };
+  /** Note about superseded prior art version. */
+  supersededNote?: string;
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -191,7 +232,7 @@ export const MASCOTS: Record<string, MascotDefinition> = {
     domain: "why",
     kind: "specialist",
     hologramTier: 2,
-    visual: pfpVisual("Owl"),
+    visual: visual("owl"),
     lrhIntro: "Let me bring in the Great Owl to explain why…",
     exitLine: "Logic stands on its own feet. Hand back to the Hen.",
     bio: "The Great Owl from The Secret of NIMH. He is old, patient, and terrifyingly clear-eyed. He does not explain mechanics — he explains why the mechanics MUST be that way. Why Cost+20% is locked forever. Why votes can't be bought back. Why 83.3% goes to creators and not 80%. When you ask 'why does it work this way?' — the Owl answers.",
@@ -206,7 +247,7 @@ export const MASCOTS: Record<string, MascotDefinition> = {
     domain: "math",
     kind: "specialist",
     hologramTier: 2,
-    visual: pfpVisual("Pig"),
+    visual: visual("pig"),
     lrhIntro: "Here's Banker Pig to run the numbers for you…",
     exitLine: "The math works out. Back to the host.",
     bio: "The third of the Three Little Pigs — the one who built with bricks because he planned for the future. A banker by trade. He explains anything that involves arithmetic: the 83.3% / 16.67% split, how Cost+20% actually computes on a $500 transaction, how Joules and Marks and Credits relate to dollars, how much YOU get when someone buys your thing. If there is a number on the screen, Banker Pig can explain it.",
@@ -221,7 +262,7 @@ export const MASCOTS: Record<string, MascotDefinition> = {
     domain: "mechanics",
     kind: "specialist",
     hologramTier: 3,
-    visual: pfpVisual("Rabbit"),
+    visual: visual("rabbit"),
     lrhIntro: "Engineer Rabbit can show you exactly how this works…",
     exitLine: "That's the mechanism. The host will take it from here.",
     bio: "A tinker, a maker, a pipeline whisperer. Engineer Rabbit explains mechanics — how the Battery dispatches posts at staggered intervals, how the Furnace melts raw content into posts, how the Treasure Map recomputes when you move, how the Cue Card printer actually prints. When you need the plumbing explained, Rabbit shows up with tools in hand.",
@@ -236,7 +277,7 @@ export const MASCOTS: Record<string, MascotDefinition> = {
     domain: "story",
     kind: "specialist",
     hologramTier: 1,
-    visual: pfpVisual("Turtle"),
+    visual: visual("turtle"),
     lrhIntro: "Tortoise Elder remembers. Let him tell you the story…",
     exitLine: "That's how we got here. Back to the host.",
     bio: "Slow, old, patient. The Tortoise has been around since before the Corporation had an EIN. He holds the origin stories: why the Founder enlisted at 16, why the first Pudding was called Pudding, why Joules were invented and what went wrong in the drafts before. When you want context — not mechanics, not math, but STORY — he is the one who shows up.",
@@ -251,7 +292,7 @@ export const MASCOTS: Record<string, MascotDefinition> = {
     domain: "governance",
     kind: "specialist",
     hologramTier: 4,
-    visual: pfpVisual("Cat"),
+    visual: visual("cat"),
     lrhIntro: "Judge Cat knows the rules. Hear him out…",
     exitLine: "Rules are rules. Back to the host.",
     bio: "Solemn, formal, seated upright. Judge Cat owns the governance layer: Star Chamber procedures, election mechanics, voting rules, penalties, the bylaws, what's allowed and what isn't. He is not the WHY — that's the Owl. He is the WHAT: what the rule says, what its edges are, what happens when you break it.",
@@ -266,7 +307,7 @@ export const MASCOTS: Record<string, MascotDefinition> = {
     domain: "craft",
     kind: "specialist",
     hologramTier: 1,
-    visual: pfpVisual("Fox"),
+    visual: visual("fox"),
     lrhIntro: "Maker Fox is good with her hands. She'll show you…",
     exitLine: "Make something beautiful. Back to the host.",
     bio: "Clever, curious, always has sawdust on her paws. Maker Fox owns the Craft domain: the Wardrobe, the Spice Rack, theme-building, how to style your Helm, how to compose a Cue Card that actually sings. She is hands-on, aesthetic, and impatient with anything purely theoretical.",
@@ -281,7 +322,7 @@ export const MASCOTS: Record<string, MascotDefinition> = {
     domain: "community",
     kind: "specialist",
     hologramTier: 1,
-    visual: pfpVisual("Bear"),
+    visual: visual("bear"),
     lrhIntro: "Den Bear keeps the table warm. Let him explain…",
     exitLine: "You've got people now. Back to the host.",
     bio: "Large, warm, always brewing something. Den Bear owns the Community domain: Tribes (your personal people), Guilds (your professional people), the Family Table, the Crew, how to find your people and how to invite them in. He is the opposite of transactional — he explains things in terms of who you're doing them WITH.",
@@ -296,11 +337,26 @@ export const MASCOTS: Record<string, MascotDefinition> = {
     domain: "trust",
     kind: "specialist",
     hologramTier: 3,
-    visual: visual("dog"),
+    visual: {
+      default: "/img/mascots/sheepdog-01-canonical.png",
+      hover: "/img/mascots/sheepdog-01-canonical.png",
+      xray: "/img/mascots/sheepdog-02-lineart.png",
+    },
     lrhIntro: "The Sheepdog guards the gate. She'll explain…",
     exitLine: "You're protected. Back to the host.",
-    bio: "Watchful, loyal, always one eye open. The Sheepdog owns Trust & Safety: Content Shield moderation, X-Ray Goggles transparency, the SEC language rules, what gets blocked and what gets through. She is not a judge — that's Cat — she is the PROTECTOR, and she explains what's between you and anything that could hurt you.",
-    artStatus: "placeholder",
+    bio: "Watchful, loyal, always one eye open. The Sheepdog owns Trust & Safety: Content Shield moderation, X-Ray Goggles transparency, the SEC language rules, what gets blocked and what gets through. She is not a judge -- that's Cat -- she is the PROTECTOR, and she explains what's between you and anything that could hurt you.",
+    artStatus: "final",
+    primaryAsset: "/img/mascots/sheepdog-01-canonical.png",
+    variants: {
+      lineart: "/img/mascots/sheepdog-02-lineart.png",
+      wildfire: "/img/mascots/sheepdog-03-wildfire.png",
+    },
+    artCredit: "Founder direct (BP074 corrected · 2026-06-04)",
+    bountyResolved: "BP072 CHARACTER_REMAKE",
+    role: "Protective-class default-posture mascot -- protect the flock, do not harm the wolf without cause. Saladin's Pattern at the protective layer. Goggles on neck = protection ready when needed; not pre-deployed = Heart-of-Peace default posture.",
+    composesWith: ["Stewards Guild", "Defense Klaus", "Watchdog"],
+    remainingBountyTargets: ["Ghost Cat", "The Skeptic"],
+    supersededNote: "Prior PFPs moved to _superseded/ · corrected version landed BP074 2026-06-04",
   },
 
   otter: {
@@ -311,7 +367,7 @@ export const MASCOTS: Record<string, MascotDefinition> = {
     domain: "learning",
     kind: "specialist",
     hologramTier: 1,
-    visual: pfpVisual("Otter"),
+    visual: visual("otter"),
     lrhIntro: "Otter loves to teach. Let her walk you through…",
     exitLine: "You've got it now. Back to the host.",
     bio: "Playful, never bored, never in a rush. Otter Tutor owns the Learning domain: the 90-second Grand Tour, onboarding sequences, BST episodes, step-by-step tutorials, 'let me show you.' She never lectures — she demonstrates, hands you the thing, lets you try.",
@@ -326,11 +382,22 @@ export const MASCOTS: Record<string, MascotDefinition> = {
     domain: "discovery",
     kind: "specialist",
     hologramTier: 3,
-    visual: visual("mouse"),
+    visual: {
+      default: '/img/mascots/mouse-01-canonical.png',
+      hover: '/img/mascots/mouse-01-canonical.png',
+      xray: '/img/mascots/mouse-03-wildfire.png',
+    },
     lrhIntro: "Scout Mouse knows every corner. She'll help you find…",
     exitLine: "Now you can find it anywhere. Back to the host.",
     bio: "Small, fast, has been everywhere twice. Scout Mouse owns Discovery: Treasure Maps, Beacons, search, the Helm navigator, how to find a project, how to find a person, how to find yourself when you're lost in the platform. If you're looking for something, she's already halfway there.",
-    artStatus: "placeholder",
+    artStatus: "final",
+    primaryAsset: '/img/mascots/mouse-01-canonical.png',
+    variants: {
+      lineart: '/img/mascots/mouse-02-lineart.png',
+      wildfire: '/img/mascots/mouse-03-wildfire.png',
+    },
+    artCredit: 'Son of the Founder (BP074 · 2026-06-04)',
+    bountyResolved: 'BP072 CHARACTER_REMAKE',
   },
 
   fennec: {
@@ -341,7 +408,7 @@ export const MASCOTS: Record<string, MascotDefinition> = {
     domain: "money",
     kind: "specialist",
     hologramTier: 4,
-    visual: pfpVisual("Beaver"),
+    visual: visual("fennec"),
     lrhIntro: "The Treasurer handles real money. Listen up…",
     exitLine: "Your money is safe. Back to the host.",
     bio: "Meticulous, honest, incorruptible. The Treasurer owns the Money domain: the LB Card, Stripe payouts, dollar conversions, Joule escrow, how to get paid, how banking actually connects to the inside of Liana Banyan. She is NOT Brick Pig — Pig explains internal splits. The Treasurer explains the external world's money flowing in and out.",
@@ -356,7 +423,7 @@ export const MASCOTS: Record<string, MascotDefinition> = {
     domain: "future",
     kind: "specialist",
     hologramTier: 4,
-    visual: pfpVisual("Goat"),
+    visual: visual("goat"),
     lrhIntro: "The Great Goat sees further. Let him tell you where we're going…",
     exitLine: "That's where we're going. Back to the host.",
     bio: "Calm, surefooted, droopy-eared, eyes closed when at rest. The Great Goat owns the Future domain: the roadmap, the Upekrithen vision, the Triple Double ladder, the long arcs, 'here's where this goes in three years.' Goats take the ridgeline route that no one else can see a path on, because they can see farther than the people in the valley. He doesn't hype — he connects dots, draws the trajectory, remembers what you said you wanted three months ago, and lets you decide if you want to be on it.",
@@ -378,7 +445,8 @@ export const MASCOTS: Record<string, MascotDefinition> = {
     lrhIntro: "Builder Badger doesn't stop until it's done. Let him show you…",
     exitLine: "It's done. Back to the host.",
     bio: "Tenacious, relentless, never stops digging. Builder Badger owns the Action domain: completing tasks, following through on commitments, shipping deliverables, closing loops. He appears when a member is stalled or when a process needs to be kicked off the starting block. He has no patience for 'almost done' — he explains the last steps and insists they get taken.",
-    artStatus: "final",
+    artStatus: "placeholder",
+    remainingBountyTargets: ["badger -- no extant art on disk; pfpVisual() path unresolved; art needed at /images/mascots/badger/"],
   },
 
   chicken: {
@@ -393,7 +461,8 @@ export const MASCOTS: Record<string, MascotDefinition> = {
     lrhIntro: "Rally Hen knows how to get people moving. Listen to her…",
     exitLine: "Now go get your people. Back to the host.",
     bio: "Energetic, communal, always the first one up. Rally Hen owns the Leadership domain: how to recruit to a Guild or Tribe, how to lead a project, how to invite collaborators, how to set the tone for a crew. She is the forward momentum. Different from Den Bear (who explains the social structure) — Rally Hen explains how to move people, not how to organize them.",
-    artStatus: "final",
+    artStatus: "placeholder",
+    remainingBountyTargets: ["chicken -- no extant art on disk; pfpVisual() path unresolved; art needed at /images/mascots/chicken/"],
   },
 
   deer: {
@@ -404,7 +473,7 @@ export const MASCOTS: Record<string, MascotDefinition> = {
     domain: "habitat",
     kind: "specialist",
     hologramTier: 1,
-    visual: pfpVisual("Deer"),
+    visual: visual("deer"),
     lrhIntro: "Tender Deer cares for the whole ecosystem. Let her explain…",
     exitLine: "What you tend grows. Back to the host.",
     bio: "Gentle, attentive, moves quietly through the platform. Tender Deer owns the Habitat domain: the health of the cooperative ecosystem, long-term sustainability, the gleaning law (leaving corners), pheromone stewardship, and member-care practices. She explains why a healthy cooperative doesn't extract to its edge — why the margins and corners matter as much as the harvest.",
@@ -423,7 +492,8 @@ export const MASCOTS: Record<string, MascotDefinition> = {
     lrhIntro: "Survey Eagle has seen the full field. Let him orient you…",
     exitLine: "Now you know where you are. Back to the host.",
     bio: "Silent, high, sees everything at once. Survey Eagle owns the Vision domain: architectural overview, strategic positioning, how the pieces fit together from above. She appears when a member is deep in the weeds and needs to understand the full system they're part of. Different from Goat (who explains the long-term future) — Eagle explains the current full picture right now.",
-    artStatus: "final",
+    artStatus: "placeholder",
+    remainingBountyTargets: ["eagle -- no extant art on disk; pfpVisual() path unresolved; art needed at /images/mascots/eagle/"],
   },
 
   squirrel: {
@@ -438,7 +508,41 @@ export const MASCOTS: Record<string, MascotDefinition> = {
     lrhIntro: "Harvest Squirrel knows what's worth celebrating. Ask her…",
     exitLine: "You've earned this. Back to the host.",
     bio: "Always busy, always finding, always storing something for later. Harvest Squirrel owns the Abundance domain: milestone celebrations, the SpeckleGarden harvest cycle, Joule accumulation, reward mechanics, 'what happens when you do this long enough to see it compound.' She appears at achievement moments and explains why the platform is designed to make long-term members more valuable over time.",
-    artStatus: "final",
+    artStatus: "placeholder",
+    remainingBountyTargets: ["squirrel -- no extant art on disk; pfpVisual() path unresolved; art needed at /images/mascots/squirrel/"],
+  },
+
+  'dr-mnemosynec-elephant': {
+    id: 'dr-mnemosynec-elephant',
+    name: 'Dr. MnemosyneC.ai',
+    title: 'The Memory Doctor',
+    oneLiner: 'Your AI has Amnesia. Dr. MnemosyneC.ai has the Cure.',
+    domain: 'learning',
+    kind: 'specialist',
+    hologramTier: 2,
+    visual: {
+      default: '/img/mascots/elephant-01-canonical.png',
+      hover: '/img/mascots/elephant-01-canonical.png',
+      xray: '/img/mascots/elephant-03-wildfire.png',
+    },
+    lrhIntro: 'Dr. MnemosyneC.ai knows what your AI forgot. Let her explain...',
+    exitLine: 'Memory restored. Back to the host.',
+    bio: 'The cooperative-class doctor. House Calls. White coat, stethoscope, half-moon spectacles. Memory-animal naming the AI amnesia. Cooperative biology: matriarchal multi-generational knowledge transfer. The cure IS the local-substrate injection -- the member\'s own knowledge folder cures the AI\'s session amnesia.',
+    artStatus: 'final',
+    role: 'The cooperative-class doctor. House Calls. Your AI has Amnesia; Dr. MnemosyneC.ai has the Cure. Memory-animal naming the AI amnesia. Cooperative biology: matriarchal multi-generational knowledge transfer.',
+    primaryAsset: '/img/mascots/elephant-01-canonical.png',
+    variants: {
+      lineart: '/img/mascots/elephant-02-lineart.png',
+      wildfire: '/img/mascots/elephant-03-wildfire.png',
+    },
+    artCredit: 'Son of the Founder (BP073/BP074 · 2026-06-04)',
+    bountyResolved: null,
+    composesWith: ['Cue Card v2 — Your AI has Amnesia', 'House Calls', 'Caithedral effect'],
+    depths: {
+      skippingStones: 'Your AI has Amnesia. Dr. MnemosyneC.ai has the Cure.',
+      wadingIn: 'Session amnesia diagnosed clinically -- every commercial AI forgets between sessions.',
+      deepDive: 'The cure IS the local-substrate injection -- the member\'s own knowledge folder cures the AI\'s session amnesia.',
+    },
   },
 
   // ───────────────────────────────────────────────────────────
@@ -472,7 +576,7 @@ export const MASCOTS: Record<string, MascotDefinition> = {
     domain: "historian",
     kind: "special",
     hologramTier: 1,
-    visual: pfpVisual("Crow"),
+    visual: visual("bird"),
     lrhIntro: "Archive Crow lives in the Threshold. Ask him anything…",
     exitLine: "The past stays remembered. Back to the host.",
     bio: "Dusty, scholarly, smells faintly of old paper. Archive Crow appears in the Threshold portal to explain archived content: old letters, old versions, deprecated systems, things that used to be called something else. He is not Tortoise Elder — Tortoise tells the WHY of origin stories; Crow tells the WHAT of specific archived items. Binoculars in hand — he looks backward with the same precision the Goat uses looking forward.",
