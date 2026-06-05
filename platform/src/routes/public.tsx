@@ -1,8 +1,11 @@
-import { lazy } from "react";
+import { lazy, Suspense } from "react";
 import { Route, Navigate } from "react-router-dom";
 import { ExplorerRoute } from "@/components/ProtectedRoute";
 import { LazyPage } from "./LazyPage";
 import Index from "@/pages/Index";
+import { XRayProvider } from "@/components/museum/XRayContext";
+
+const HEOHOLanding = lazy(() => import("@/pages/HEOHOLanding"));
 
 const Auth = lazy(() => import("@/pages/Auth"));
 const TikTokCallback = lazy(() => import("@/pages/TikTokCallback"));
@@ -75,8 +78,14 @@ function HomepageGateway() {
   if (typeof window !== "undefined" && window.location.hostname === "frame.lianabanyan.com") {
     return <Navigate to="/demo" replace />;
   }
-  // Canonical root landing (BP074-W3 Founder ratify): Deck Card / WelcomeV2 for all visitors
-  return <Navigate to="/welcome" replace />;
+  // Canonical root landing (BP075 Founder ratify): HEOHO Cue Deck Card -- quotes top, NO Mission One
+  return (
+    <XRayProvider>
+      <Suspense fallback={null}>
+        <HEOHOLanding />
+      </Suspense>
+    </XRayProvider>
+  );
 }
 
 export const publicRoutes = (
