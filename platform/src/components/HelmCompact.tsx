@@ -118,7 +118,7 @@ export function HelmCompact() {
           <button
             onClick={() => setExpanded(true)}
             className="w-12 h-12 rounded-full bg-card border-2 border-primary/30 shadow-lg flex items-center justify-center hover:scale-110 transition-transform"
-            title="Open Helm"
+            title="The Helm"
           >
             <Compass className="w-6 h-6 text-primary" />
           </button>

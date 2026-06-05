@@ -20,6 +20,7 @@
  */
 
 import { useState, useEffect, useMemo } from "react";
+import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import {
@@ -43,8 +44,16 @@ const DOOR_NAMES: Record<string, string> = {
   nl: "dutch",      pl: "polish",    sv: "swedish",    he: "hebrew",
 };
 
+/**
+ * Routes where the language picker is hidden.
+ * /proofs is a Pinned Proof / evidence surface -- the widget is contextually
+ * irrelevant there and conflicts visually with the LRH host icon (BP074-W3).
+ */
+const HIDDEN_ROUTES = ["/proofs"];
+
 export function LanguageSwitcher() {
   const { t } = useTranslation();
+  const location = useLocation();
   const [currentCode, setCurrentCode] = useState<string>("en");
   const [showPageTools, setShowPageTools] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -99,6 +108,12 @@ export function LanguageSwitcher() {
   const isNotEnglish = currentCode !== "en";
 
   if (!showPageTools) return null;
+
+  // Option A (BP074-W3): hide on Pinned Proof / evidence surfaces.
+  const isHiddenRoute = HIDDEN_ROUTES.some(
+    (r) => location.pathname === r || location.pathname.startsWith(r + "/"),
+  );
+  if (isHiddenRoute) return null;
 
   return (
     // BOTTOM CLEARANCE: must clear LRH edge. See BP047 recurrence-class fix. Do NOT reduce bottom offset.

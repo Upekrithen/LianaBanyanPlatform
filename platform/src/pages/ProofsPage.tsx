@@ -42,6 +42,7 @@
  */
 
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -55,10 +56,17 @@ import {
   Code2,
   GitBranch,
   Clock,
+  Globe,
+  Rocket,
+  ShoppingBag,
+  Layers,
+  Landmark,
+  BookOpen,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SoundBarrierChart } from "@/components/proofs/SoundBarrierChart";
 import { MarathonRetrospectiveCarousel } from "@/components/proofs/MarathonRetrospectiveChart";
+import { ProofsNavPills } from "@/components/proofs/ProofsNavPills";
 import { getHarnessResults } from "@/lib/benchmark/loadHarnessResults";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -331,7 +339,7 @@ interface ProofRecord {
 const PROOF_RECORDS: ProofRecord[] = [
   {
     uuid: "b90073d3",
-    name: "Cathedral Proof Alpha",
+    name: "Caithedral Proof Alpha",
     model: "Claude Opus",
     runType: "cold",
     confirmedAt: "2026-05-31",
@@ -345,7 +353,7 @@ const PROOF_RECORDS: ProofRecord[] = [
   },
   {
     uuid: "405808f5",
-    name: "Cathedral Proof Beta",
+    name: "Caithedral Proof Beta",
     model: "Claude Opus",
     runType: "hot",
     confirmedAt: "2026-05-31",
@@ -359,7 +367,7 @@ const PROOF_RECORDS: ProofRecord[] = [
   },
   {
     uuid: "dbfc78c6",
-    name: "Cathedral Proof Gamma",
+    name: "Caithedral Proof Gamma",
     model: "Claude Haiku",
     runType: "hot",
     confirmedAt: "2026-05-31",
@@ -373,7 +381,7 @@ const PROOF_RECORDS: ProofRecord[] = [
   },
   {
     uuid: "5f4b9e84",
-    name: "Cathedral Proof Delta",
+    name: "Caithedral Proof Delta",
     model: "Conductor (auto)",
     runType: "hot",
     confirmedAt: "2026-05-31",
@@ -962,9 +970,13 @@ const PROGRAM_30x30_RECORDS: ProgramProofRecord[] = [
 //   3. Click-to-expand chart dialog
 // =========================================================================
 
-/** URL-encoded violet hex tile SVG, matching the body hex-bg pattern from index.css */
+/** URL-encoded violet hex tile SVG -- light mode: violet-600 #7c3aed at 6% opacity on the div */
 const SB_HEX_BG =
   "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%237c3aed' fill-opacity='1'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E";
+
+/** URL-encoded violet hex tile SVG -- dark mode: violet-300 #c4b5fd at 12% opacity on the div */
+const SB_HEX_BG_DARK =
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23c4b5fd' fill-opacity='1'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E";
 
 function SoundBarrierPinnedCard() {
   const harnessResults = getHarnessResults();
@@ -980,13 +992,21 @@ function SoundBarrierPinnedCard() {
         className="border-2 border-violet-500 bg-gradient-to-br from-violet-50 to-indigo-50 mb-6 shadow-md relative overflow-hidden"
         data-xray-id="sound-barrier-pinned-proof-gamma"
       >
-        {/* (1) Hex background overlay -- violet hex tile at low opacity */}
+        {/* (1) Hex background overlay -- theme-aware: light uses violet-600 at 6%, dark uses violet-300 at 12% */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 z-0"
+          className="pointer-events-none absolute inset-0 z-0 dark:hidden"
           style={{
             backgroundImage: `url("${SB_HEX_BG}")`,
             opacity: 0.06,
+          }}
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-0 hidden dark:block"
+          style={{
+            backgroundImage: `url("${SB_HEX_BG_DARK}")`,
+            opacity: 0.12,
           }}
         />
 
@@ -1319,6 +1339,57 @@ export default function ProofsPage() {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* SEG-MARKET-PORTAL-BAR (BP074-W3 Wave-2B): market/portal button row */}
+      <nav className="border-b border-violet-900/40 bg-slate-950/80 backdrop-blur-sm">
+        <div className="max-w-5xl mx-auto px-4 py-2 flex flex-wrap gap-1.5 items-center">
+          <Link
+            to="/explore"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-violet-300 hover:text-white hover:bg-violet-700/40 border border-violet-800/40 hover:border-violet-600/60 transition-all whitespace-nowrap"
+          >
+            <Globe className="w-3.5 h-3.5" />
+            Explore
+          </Link>
+          <Link
+            to="/portal"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-indigo-300 hover:text-white hover:bg-indigo-700/40 border border-indigo-800/40 hover:border-indigo-600/60 transition-all whitespace-nowrap"
+          >
+            <Rocket className="w-3.5 h-3.5" />
+            Portal Gateway
+          </Link>
+          <Link
+            to="/marketplace"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-emerald-300 hover:text-white hover:bg-emerald-700/40 border border-emerald-800/40 hover:border-emerald-600/60 transition-all whitespace-nowrap"
+          >
+            <ShoppingBag className="w-3.5 h-3.5" />
+            Marketplace
+          </Link>
+          <Link
+            to="/projects"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-violet-300 hover:text-white hover:bg-violet-700/40 border border-violet-800/40 hover:border-violet-600/60 transition-all whitespace-nowrap"
+          >
+            <Layers className="w-3.5 h-3.5" />
+            Projects
+          </Link>
+          <Link
+            to="/museum"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-indigo-300 hover:text-white hover:bg-indigo-700/40 border border-indigo-800/40 hover:border-indigo-600/60 transition-all whitespace-nowrap"
+          >
+            <Landmark className="w-3.5 h-3.5" />
+            Museum
+          </Link>
+          <Link
+            to="/how-it-all-works"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-emerald-300 hover:text-white hover:bg-emerald-700/40 border border-emerald-800/40 hover:border-emerald-600/60 transition-all whitespace-nowrap"
+          >
+            <BookOpen className="w-3.5 h-3.5" />
+            Library
+          </Link>
+        </div>
+      </nav>
+
+      {/* SEG-PROOFS-NAV: sticky ToC pills -- BP074-W3 Wave-2B */}
+      <ProofsNavPills />
+
       {/* Hero -- S28-S30: updated stats to 23/23 proofs, 2044/2044 tests */}
       <div className="border-b bg-gradient-to-br from-slate-900 to-slate-800">
         <div className="max-w-5xl mx-auto px-4 py-14">
@@ -1369,7 +1440,7 @@ export default function ProofsPage() {
       </div>
 
       {/* Substrace Theorem statement */}
-      <div className="bg-emerald-50 border-b border-emerald-200">
+      <div id="substrace-theorem" className="bg-emerald-50 border-b border-emerald-200">
         <div className="max-w-5xl mx-auto px-4 py-6">
           <h2 className="text-sm font-semibold text-emerald-700 uppercase tracking-wide mb-2">
             The Substrace Theorem (formal statement)
@@ -1388,6 +1459,7 @@ export default function ProofsPage() {
 
         {/* W30 FINAL: Wife Test -- 30/30 Waves Complete -- full-width banner */}
         <Card
+          id="w30-final"
           className="border-2 border-emerald-500 bg-gradient-to-br from-emerald-50 to-teal-50 mb-6 shadow-md"
           data-xray-id="marathon-pinned-proof-w30"
         >
@@ -1445,10 +1517,13 @@ export default function ProofsPage() {
         </Card>
 
         {/* γ-W26-A SOUND BARRIER -- BP074-W3 polished card (hex bg + flip + expand) */}
-        <SoundBarrierPinnedCard />
+        <div id="sound-barrier">
+          <SoundBarrierPinnedCard />
+        </div>
 
         {/* BP074 Marathon Retrospective -- Sound Barrier proved */}
         <Card
+          id="bp074-marathon"
           className="border-2 border-violet-700 bg-gradient-to-br from-violet-50 to-indigo-50 mb-6 shadow-md"
           data-xray-id="marathon-retrospective-pinned-proof-bp074"
         >
@@ -1684,7 +1759,7 @@ export default function ProofsPage() {
         </div>
 
         {/* All verification runs -- 2-col grid */}
-        <div>
+        <div id="verification-runs">
           <div className="flex items-center gap-2 mb-4">
             <FileText className="h-4 w-4 text-slate-500" />
             <h2 className="text-sm font-semibold text-slate-600 uppercase tracking-wide">
@@ -1825,7 +1900,7 @@ export default function ProofsPage() {
         </div>
 
         {/* 30x30 Program Proofs -- all phases */}
-        <div className="mt-12">
+        <div id="program-30x30" className="mt-12">
           <div className="flex items-center gap-2 mb-2">
             <Trophy className="h-4 w-4 text-amber-600" />
             <h2 className="text-sm font-semibold text-amber-700 uppercase tracking-wide">
@@ -1984,10 +2059,12 @@ export default function ProofsPage() {
         </div>
 
         {/* S22-S24: Build History Timeline */}
-        <BuildHistoryTimeline />
+        <div id="build-history">
+          <BuildHistoryTimeline />
+        </div>
 
         {/* How verification works */}
-        <div className="mt-12 border-t pt-10">
+        <div id="how-it-works" className="mt-12 border-t pt-10">
           <h2 className="text-xl font-bold mb-2">How Verification Works</h2>
           <p className="text-muted-foreground text-sm mb-6">
             Any member can independently verify the Caithedral Effect. The verification

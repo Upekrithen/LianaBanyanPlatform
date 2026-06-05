@@ -120,7 +120,7 @@ export function HelmAtFrame() {
           onMouseEnter={e => ((e.currentTarget as HTMLButtonElement).style.background = 'rgba(200,169,81,0.22)')}
           onMouseLeave={e => ((e.currentTarget as HTMLButtonElement).style.background = 'rgba(200,169,81,0.12)')}
         >
-          Open Helm <ChevronRight size={12} />
+          Your Helm <ChevronRight size={12} />
         </button>
       </div>
 
