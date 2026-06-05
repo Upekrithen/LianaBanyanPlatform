@@ -139,7 +139,7 @@ export const dashboardRoutes = (
     <Route path="/medallions" element={<ProtectedRoute><LazyPage><MedallionViewer /></LazyPage></ProtectedRoute>} />
     <Route path="/withdraw" element={<PaidMemberRoute><LazyPage><Withdraw /></LazyPage></PaidMemberRoute>} />
     <Route path="/membership" element={<LazyPage><MembershipPage /></LazyPage>} />
-    <Route path="/membership-success" element={<ProtectedRoute><LazyPage><MembershipSuccess /></LazyPage></ProtectedRoute>} />
+    <Route path="/membership-success" element={<LazyPage><MembershipSuccess /></LazyPage>} />
     <Route path="/membership/confirm" element={<LazyPage><MembershipConfirm /></LazyPage>} />
     <Route path="/calendar" element={<ProtectedRoute><LazyPage><CalendarPage /></LazyPage></ProtectedRoute>} />
     <Route path="/adapt" element={<ProtectedRoute><LazyPage><AdaptScoreV2Page /></LazyPage></ProtectedRoute>} />

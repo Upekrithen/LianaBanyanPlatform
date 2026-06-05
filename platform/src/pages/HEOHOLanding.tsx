@@ -21,11 +21,12 @@
  * Hostname routing: museum.lianabanyan.com -> portalDetector 'museum' -> MuseumApp -> /
  */
 import { useState, useEffect, useRef, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Volume2, VolumeX } from "lucide-react";
 import { MuseumShell } from "@/components/museum/MuseumShell";
 import { HEOHOCardFront } from "@/components/museum/HEOHOCardFront";
-import { RotatingQuotes, QUOTES } from "@/components/museum/RotatingQuotes";
+import { QUOTES } from "@/components/museum/RotatingQuotes";
 import { TourBanner } from "@/components/wildfire/TourBanner";
 import { useXRay } from "@/components/museum/XRayContext";
 
@@ -148,36 +149,11 @@ function XRayGogglesElement() {
   );
 }
 
-/** Stats bar: canon numbers above the deck card */
-function CanonStatsBar() {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: -6 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.15 }}
-      style={{
-        textAlign: "center",
-        marginBottom: "1.25rem",
-        fontFamily: "'JetBrains Mono', monospace",
-        fontSize: "0.58rem",
-        letterSpacing: "0.14em",
-        textTransform: "uppercase",
-        lineHeight: 2,
-      }}
-    >
-      <span style={{ color: "rgba(250,245,235,0.3)" }}>The private AI cooperative</span>
-      <br />
-      <span style={{ color: "#d69e2e" }}>2,270 members</span>
-      <span style={{ color: "rgba(250,245,235,0.2)", margin: "0 0.5rem" }}>&middot;</span>
-      <span style={{ color: "#38a169" }}>83.3% Caithedral Effect</span>
-      <span style={{ color: "rgba(250,245,235,0.2)", margin: "0 0.5rem" }}>&middot;</span>
-      <span style={{ color: "rgba(250,245,235,0.3)" }}>Cost+20%</span>
-    </motion.div>
-  );
-}
 
 const HEOHOLanding = () => {
-  // Quote rotation state — fully controls RotatingQuotes (lifted to page level)
+  const navigate = useNavigate();
+
+  // Silent quote rotation state — drives F3 Yvaine glow cycle
   const [quoteIndex, setQuoteIndex] = useState(0);
   const [paused, setPaused] = useState(false);
 
@@ -251,24 +227,6 @@ const HEOHOLanding = () => {
     };
   }, [fullPageGlowFiring, muted, prefersReducedMotion]);
 
-  // Prev/next handlers — reset shineClicked so fresh timer starts if returning to Yvaine
-  const handlePrev = useCallback(() => {
-    setQuoteIndex((prev) => (prev - 1 + QUOTES.length) % QUOTES.length);
-  }, []);
-
-  const handleNext = useCallback(() => {
-    setQuoteIndex((prev) => (prev + 1) % QUOTES.length);
-  }, []);
-
-  // Called when SHINE link clicked — cancels the 10s glow timer
-  const handleShineClick = useCallback(() => {
-    setShineClicked(true);
-    if (glowTimerRef.current) {
-      clearTimeout(glowTimerRef.current);
-      glowTimerRef.current = null;
-    }
-  }, []);
-
   // HEOHOCardFront callbacks: pause/resume rotation during SHINE sequence
   const handleYvaineSequence = useCallback((p: boolean) => {
     setPaused(p);
@@ -294,32 +252,100 @@ const HEOHOLanding = () => {
       )}
 
       <div
-        className="min-h-screen flex flex-col items-center justify-center px-4 py-6 pb-24"
-        style={{ maxWidth: "min(92vw, 560px)", margin: "0 auto" }}
+        className="flex flex-col items-center justify-center px-4"
+        style={{ maxWidth: "min(92vw, 560px)", height: "100svh", margin: "0 auto" }}
       >
-        {/* Canon stats */}
-        <CanonStatsBar />
+        {/* Deck card — constrained to fit viewport without scrolling */}
+        <div
+          style={{
+            flex: "1 1 0",
+            minHeight: 0,
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <div
+            style={{
+              width: "100%",
+              aspectRatio: "5/7",
+              maxHeight: "calc(100svh - 110px)",
+            }}
+          >
+            <HEOHOCardFront
+              isYvaine={yvaineActive}
+              onYvaineSequence={handleYvaineSequence}
+              onAdvanceQuote={handleAdvanceQuote}
+            />
+          </div>
+        </div>
 
-        {/* Sig1: Rotating quotes — page-level, ABOVE the card */}
-        <RotatingQuotes
-          quoteIndex={quoteIndex}
-          onPrev={handlePrev}
-          onNext={handleNext}
-          onShineClick={handleShineClick}
-          muted={muted}
-        />
-
-        {/* Sig2/4/5: Big deck card — HEOHO hero, 5:7 aspect ratio */}
-        <HEOHOCardFront
-          isYvaine={yvaineActive}
-          onYvaineSequence={handleYvaineSequence}
-          onAdvanceQuote={handleAdvanceQuote}
-        />
+        {/* Watch + Enter CTAs */}
+        <div
+          className="flex items-center justify-center gap-4"
+          style={{ marginTop: "0.5rem", marginBottom: "0.25rem" }}
+        >
+          <button
+            onClick={() => navigate("/watch")}
+            style={{
+              background: "none",
+              border: "1px solid rgba(250,245,235,0.15)",
+              borderRadius: "999px",
+              cursor: "pointer",
+              padding: "0.3rem 1rem",
+              color: "rgba(250,245,235,0.4)",
+              fontFamily: "'JetBrains Mono', monospace",
+              fontSize: "0.6rem",
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              transition: "color 0.2s, border-color 0.2s",
+            }}
+          >
+            Watch
+          </button>
+          <button
+            onClick={() => navigate("/enter")}
+            style={{
+              background: "none",
+              border: "1px solid rgba(250,245,235,0.15)",
+              borderRadius: "999px",
+              cursor: "pointer",
+              padding: "0.3rem 1rem",
+              color: "rgba(250,245,235,0.4)",
+              fontFamily: "'JetBrains Mono', monospace",
+              fontSize: "0.6rem",
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              transition: "color 0.2s, border-color 0.2s",
+            }}
+          >
+            Enter
+          </button>
+          <button
+            onClick={() => navigate("/auth")}
+            style={{
+              background: "none",
+              border: "1px solid rgba(250,245,235,0.15)",
+              borderRadius: "999px",
+              cursor: "pointer",
+              padding: "0.3rem 1rem",
+              color: "rgba(250,245,235,0.4)",
+              fontFamily: "'JetBrains Mono', monospace",
+              fontSize: "0.6rem",
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              transition: "color 0.2s, border-color 0.2s",
+            }}
+          >
+            Join -- $5/yr
+          </button>
+        </div>
 
         {/* X-ray goggles + mute toggle */}
         <div
           className="flex items-center justify-center gap-2"
-          style={{ marginTop: "1.25rem" }}
+          style={{ marginBottom: "0.5rem" }}
         >
           <XRayGogglesElement />
           <button

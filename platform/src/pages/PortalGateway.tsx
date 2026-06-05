@@ -5,8 +5,9 @@
  * Verb-first CTAs. Explanations live in X-Ray Goggles only.
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
 import {
   Gamepad2, Printer, Rocket, Landmark, ArrowRight, Sprout,
   ShoppingBag, Users, Scroll, Building2, Heart, Search,
@@ -19,7 +20,14 @@ type PaymentChoice = 'lb-card' | 'existing-bank' | null;
 
 export default function PortalGateway() {
   const navigate = useNavigate();
+  const { user, loading } = useAuth();
   const [earnFlipped, setEarnFlipped] = useState(false);
+
+  useEffect(() => {
+    if (!loading && !user) {
+      navigate('/auth', { replace: true });
+    }
+  }, [user, loading, navigate]);
   const [paymentChoice, setPaymentChoice] = useState<PaymentChoice>(null);
 
   const handleEarnClick = () => {
