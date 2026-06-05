@@ -1,10 +1,20 @@
 /**
  * HEOHOCardFront — The Museum's hero card FRONT face.
  *
- * Rotating quotes, Yvaine SHINE sequence, HEOHO title with keyhole,
+ * Yvaine SHINE visual sequence, HEOHO title with Durin's Door keyhole,
  * "Speak Friend" input, Enter/Watch buttons.
  * Ornate corner art with Frame Lock keyholes.
  * X-Ray thermal scan effects on card body.
+ *
+ * BP075: Quotes lifted to RotatingQuotes component above the card.
+ * Props carry Yvaine sequence signals in/out to HEOHOLanding:
+ *   - isYvaine: triggers the SHINE visual sequence
+ *   - onYvaineSequence: pause/resume the RotatingQuotes timer
+ *   - onAdvanceQuote: advance to next quote at t4
+ *
+ * BP075 fixes:
+ *   F4 — keyholeColor persists GOLD when keyholeActive (not only on hover)
+ *   F5 — input placeholder changed to "Speak Friend, and Enter"
  *
  * All back-face content has been extracted to submarine door pages:
  *   /enter, /watch, /why-no-ads, /why-no-vc, /mirror, /yvaine
@@ -14,31 +24,6 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useXRay } from "./XRayContext";
 import { motion, AnimatePresence } from "framer-motion";
-
-const QUOTES: Array<{ text: string; author: string; isYvaine?: boolean }> = [
-  { text: "If you aren't ashamed of version 1 of your website, you launched too late.", author: "Reid Hoffman, LinkedIn Co-Founder" },
-  { text: "The time to hesitate is through.", author: "The Doors, 'Light My Fire'" },
-  { text: "In the darkest moments, when all seems lost, remember what my Great-Aunt Yvaine, Queen of Stormhold, said: 'What do stars do? {SHINE}.'", author: "The Founder, Liana Banyan", isYvaine: true },
-  { text: "I am guided by a force much greater than luck.", author: "Lucas, Empire Records (1995)" },
-  { text: "Money won't create success, the freedom to make it will.", author: "Nelson Mandela" },
-  { text: "If the river route changes, the crocodile is obliged to follow.", author: "Burkinabé proverb (West Africa)" },
-  { text: "Where does all that money come from, anyway?", author: "The Founder, Liana Banyan" },
-  { text: "As you grow older, you will discover that you have two hands, one for helping yourself, the other for helping others.", author: "Audrey Hepburn" },
-  { text: "If you want to go fast, go alone. If you want to go far, go together.", author: "West African proverb (Burkina Faso)" },
-  { text: "Pretend this is a seed.", author: "Flick, A Bug's Life (1998)" },
-  { text: "Find the Will to Act, and the Courage to Believe.", author: "The Founder to himself, Liana Banyan" },
-  { text: "No man is an island.", author: "Jon Bon Jov... John Donne" },
-  { text: "Alone we can do so little; together we can do so much.", author: "Helen Keller" },
-  { text: "You're gonna rattle the stars, you are. I hope I'm there to see it.", author: "Long John Silver, Treasure Planet (2002)" },
-  { text: "Where are your scars? Was nothing worth fighting for?", author: "The Grim Reaper" },
-  { text: "The secret of our success is that we never, never give up.", author: "Wilma Mankiller" },
-  { text: "Believe you can, and you're halfway there.", author: "Theodore Roosevelt" },
-  { text: "Sometimes the best way to solve your own problems is to help someone else.", author: "Uncle Iroh, Avatar: The Last Airbender" },
-  { text: "You can get everything in life you want if you will just help enough other people get what they want.", author: "Zig Ziglar" },
-  { text: "Let us put our minds together and see what life we can make for our children.", author: "Sitting Bull" },
-  { text: "I will not offer that which costs me nothing.", author: "King David" },
-  { text: "It ain't about how hard you hit; it's about how hard you can get hit and keep moving forward.", author: "Rocky Balboa" },
-];
 
 const FRIEND_WORDS: Record<string, string> = {
   friend: "English", amigo: "Español", ami: "Français", freund: "Deutsch",
@@ -56,13 +41,24 @@ const cardBg = "#0a1628";
 
 type ShinePhase = "idle" | "darkening" | "glowing" | "whiteout" | "starfall" | "keyhole-linger" | "done";
 
-export function HEOHOCardFront() {
+interface HEOHOCardFrontProps {
+  /** Whether the Yvaine quote is currently active in RotatingQuotes */
+  isYvaine?: boolean;
+  /** Called to pause/resume the RotatingQuotes timer during SHINE sequence */
+  onYvaineSequence?: (paused: boolean) => void;
+  /** Called at t4 to advance RotatingQuotes to the next quote */
+  onAdvanceQuote?: () => void;
+}
+
+export function HEOHOCardFront({
+  isYvaine = false,
+  onYvaineSequence,
+  onAdvanceQuote,
+}: HEOHOCardFrontProps) {
   const navigate = useNavigate();
   const { xrayOn } = useXRay();
-  const [quoteIndex, setQuoteIndex] = useState(0);
-  const [paused, setPaused] = useState(false);
 
-  // Yvaine sequence
+  // Yvaine SHINE visual sequence state
   const [shinePhase, setShinePhase] = useState<ShinePhase>("idle");
   const [shineGlow, setShineGlow] = useState(0);
   const [fadeToBlack, setFadeToBlack] = useState(0);
@@ -71,42 +67,50 @@ export function HEOHOCardFront() {
   const [keyholeVisible, setKeyholeVisible] = useState(false);
   const [keyholeHovered, setKeyholeHovered] = useState(false);
   const [keyholeActive, setKeyholeActive] = useState(false);
+
+  // Durin's Door state
   const [friendInput, setFriendInput] = useState(false);
   const [friendText, setFriendText] = useState("");
   const [friendMatch, setFriendMatch] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
   const timerRef = useRef<ReturnType<typeof setTimeout>[]>([]);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const shineTriggeredRef = useRef(false);
 
   const clearTimers = useCallback(() => {
     timerRef.current.forEach(clearTimeout);
     timerRef.current = [];
   }, []);
 
+  const resetShine = useCallback(() => {
+    shineTriggeredRef.current = false;
+    setShinePhase("idle");
+    setShineGlow(0);
+    setFadeToBlack(0);
+    setWhiteout(0);
+    setStars([]);
+  }, []);
+
   // X-Ray aware colors
   const accentColor = xrayOn ? "#22d3ee" : "#38a169";
   const accentColorFaded = xrayOn ? "rgba(34,211,238,0.5)" : "rgba(250, 245, 235, 0.5)";
 
-  // Quote rotation
+  // Reset SHINE visual state when rotating away from Yvaine quote
   useEffect(() => {
-    if (paused) return;
-    const timer = setInterval(() => {
-      setQuoteIndex((prev) => (prev + 1) % QUOTES.length);
-    }, 8000);
-    return () => clearInterval(timer);
-  }, [paused]);
+    if (!isYvaine) {
+      resetShine();
+      clearTimers();
+    }
+  }, [isYvaine, resetShine, clearTimers]);
 
-  // Yvaine SHINE sequence
-  const shineTriggeredRef = useRef(false);
-
+  // Yvaine SHINE sequence — triggered when isYvaine prop becomes true
   useEffect(() => {
-    const quote = QUOTES[quoteIndex];
-    if (!quote?.isYvaine) return;
+    if (!isYvaine) return;
     if (shineTriggeredRef.current) return;
     shineTriggeredRef.current = true;
 
-    setPaused(true);
+    onYvaineSequence?.(true); // pause RotatingQuotes timer
+
     let glowInterval: ReturnType<typeof setInterval>;
 
     const t0 = setTimeout(() => {
@@ -147,9 +151,14 @@ export function HEOHOCardFront() {
 
     const t2 = setTimeout(() => {
       setShinePhase("starfall");
-      setStars(Array.from({ length: 20 }, (_, i) => ({
-        id: i, x: Math.random() * 100, y: Math.random() * 30 - 10, delay: Math.random() * 1.5,
-      })));
+      setStars(
+        Array.from({ length: 20 }, (_, i) => ({
+          id: i,
+          x: Math.random() * 100,
+          y: Math.random() * 30 - 10,
+          delay: Math.random() * 1.5,
+        }))
+      );
       const fStart = Date.now();
       const fInterval = setInterval(() => {
         const e = 1 - (Date.now() - fStart) / 1500;
@@ -159,22 +168,30 @@ export function HEOHOCardFront() {
       timerRef.current.push(fInterval as unknown as ReturnType<typeof setTimeout>);
     }, 9500);
 
-    const t3 = setTimeout(() => { setShinePhase("keyhole-linger"); setKeyholeVisible(true); }, 11500);
+    const t3 = setTimeout(() => {
+      setShinePhase("keyhole-linger");
+      setKeyholeVisible(true);
+    }, 11500);
 
     const t4 = setTimeout(() => {
       setShinePhase("done");
       setKeyholeActive(true);
       setStars([]);
-      setQuoteIndex((prev) => (prev + 1) % QUOTES.length);
-      setPaused(false);
+      onAdvanceQuote?.();          // advance RotatingQuotes to next quote
+      onYvaineSequence?.(false);   // resume RotatingQuotes timer
     }, 13000);
 
     return () => {
       if (glowInterval) clearInterval(glowInterval);
-      clearTimeout(t0); clearTimeout(t0b); clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4);
+      clearTimeout(t0);
+      clearTimeout(t0b);
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+      clearTimeout(t4);
       clearTimers();
     };
-  }, [quoteIndex, clearTimers]);
+  }, [isYvaine, onYvaineSequence, onAdvanceQuote, clearTimers]);
 
   // Friend word check → navigate to /mirror
   useEffect(() => {
@@ -192,96 +209,23 @@ export function HEOHOCardFront() {
     if (friendInput && inputRef.current) inputRef.current.focus();
   }, [friendInput]);
 
-  // Pause + reset audio when quote rotates away from Yvaine
-  useEffect(() => {
-    if (!QUOTES[quoteIndex]?.isYvaine) {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
-      }
-      setIsPlaying(false);
-    }
-  }, [quoteIndex]);
-
-  const quote = QUOTES[quoteIndex];
   const isDarkening = fadeToBlack > 0;
-  const fadedOpacity = Math.max(0.75 - fadeToBlack * 0.75, 0);
-  const keyPhraseOpacity = Math.max(0.75, 1 - fadeToBlack * 0.1);
-
-  const renderQuoteText = () => {
-    if (!quote?.isYvaine) return <>&ldquo;{quote.text}&rdquo;</>;
-    const beforeKey = quote.text.split("'What do stars do?")[0];
-    const afterShine = quote.text.split("{SHINE}")[1];
-    return (
-      <>
-        <span style={{ opacity: isDarkening ? fadedOpacity : 0.75, transition: "opacity 0.1s ease" }}>
-          &ldquo;{beforeKey}&lsquo;
-        </span>
-        <span style={{ opacity: keyPhraseOpacity, transition: "opacity 0.1s ease" }}>
-          What do stars do?{" "}
-          <span
-            onClick={(e) => { e.stopPropagation(); navigate("/yvaine"); }}
-            style={{
-              color: `rgba(255,255,255,${0.75 + shineGlow * 0.25})`,
-              textShadow: shineGlow > 0 ? `0 0 ${8 + shineGlow * 40}px rgba(255,255,255,${shineGlow}), 0 0 ${20 + shineGlow * 80}px rgba(255,255,255,${shineGlow * 0.6})` : "none",
-              fontWeight: 700,
-              cursor: "pointer",
-            }}
-          >SHINE</span>
-          .{" "}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              if (!audioRef.current) return;
-              if (isPlaying) {
-                audioRef.current.pause();
-                setIsPlaying(false);
-              } else {
-                audioRef.current.play();
-                setIsPlaying(true);
-              }
-            }}
-            aria-label={isPlaying ? "Pause audio" : "Play audio"}
-            style={{
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              color: "rgba(255,255,255,0.5)",
-              fontSize: "0.65rem",
-              padding: "0 0.15rem",
-              verticalAlign: "middle",
-              lineHeight: 1,
-              display: "inline",
-            }}
-          >
-            {isPlaying ? "⏸" : "▶"}
-          </button>
-        </span>
-        <span style={{ opacity: isDarkening ? fadedOpacity : 0.75, transition: "opacity 0.1s ease" }}>
-          &rsquo;{afterShine}&rdquo;
-        </span>
-      </>
-    );
-  };
-
   const keyholeShown = keyholeVisible || keyholeActive;
   const isLingerPhase = shinePhase === "keyhole-linger";
-  const keyholeColor = keyholeHovered ? "#d69e2e" : isLingerPhase ? "rgba(255,255,255,0.9)" : "#0a1628";
 
-  const resetShine = () => {
-    shineTriggeredRef.current = false;
-    setShinePhase("idle"); setShineGlow(0); setFadeToBlack(0); setWhiteout(0); setStars([]);
-  };
+  // F4: keyhole persists GOLD after keyholeActive=true (not only on hover)
+  const keyholeColor =
+    keyholeHovered || keyholeActive
+      ? "#d69e2e"
+      : isLingerPhase
+      ? "rgba(255,255,255,0.9)"
+      : "#0a1628";
+
+  // shineGlow retained for future inline use if needed
+  void shineGlow;
 
   return (
     <div className="w-full max-w-sm mx-auto" data-heoho-card>
-      {/* Hidden audio — Yvaine SHINE quote */}
-      <audio
-        ref={audioRef}
-        src="/audio/WhatDoStarsDOShine.m4a"
-        preload="auto"
-        onEnded={() => setIsPlaying(false)}
-      />
       <motion.div
         className="rounded-2xl overflow-hidden relative"
         initial={{ opacity: 0, scale: 0.97 }}
@@ -322,14 +266,26 @@ export function HEOHOCardFront() {
         )}
 
         {/* Whiteout overlay */}
-        <div className="absolute inset-0 pointer-events-none rounded-2xl z-20" style={{ background: "#fff", opacity: whiteout * 0.85 }} />
+        <div
+          className="absolute inset-0 pointer-events-none rounded-2xl z-20"
+          style={{ background: "#fff", opacity: whiteout * 0.85 }}
+        />
 
         {/* Falling stars */}
         {stars.length > 0 && (
           <div className="absolute inset-0 pointer-events-none z-30 overflow-hidden rounded-2xl">
             {stars.map((s) => (
-              <motion.div key={s.id} className="absolute"
-                style={{ left: `${s.x}%`, top: `${s.y}%`, width: "2px", height: "12px", background: "linear-gradient(to bottom, rgba(255,255,255,0.9), transparent)", borderRadius: "1px" }}
+              <motion.div
+                key={s.id}
+                className="absolute"
+                style={{
+                  left: `${s.x}%`,
+                  top: `${s.y}%`,
+                  width: "2px",
+                  height: "12px",
+                  background: "linear-gradient(to bottom, rgba(255,255,255,0.9), transparent)",
+                  borderRadius: "1px",
+                }}
                 initial={{ opacity: 0, y: 0 }}
                 animate={{ opacity: [0, 1, 0.8, 0], y: [0, 150, 300, 500] }}
                 transition={{ duration: 2, delay: s.delay, ease: "easeIn" }}
@@ -338,77 +294,135 @@ export function HEOHOCardFront() {
           </div>
         )}
 
-        <div className="relative z-10 flex flex-col items-center text-center px-6 pt-5 pb-5" style={{ aspectRatio: "5/7" }}>
-          {/* Rotating quotes */}
-          <div className="w-full mb-3 flex items-center justify-center gap-3" style={{ height: "90px" }}>
-            <button
-              onClick={(e) => { e.stopPropagation(); resetShine(); setQuoteIndex((prev) => (prev - 1 + QUOTES.length) % QUOTES.length); }}
-              className="text-white/40 hover:text-white/70 transition-colors shrink-0 text-xl"
-              aria-label="Previous quote"
-            >‹</button>
-            <div className="flex-1 min-w-0 flex items-center justify-center">
-              <AnimatePresence mode="wait">
-                <motion.div key={quoteIndex} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.5 }}>
-                  <p className="italic" style={{ fontFamily: "'Crimson Pro', Georgia, serif", fontSize: "clamp(0.8rem, 2vw, 0.95rem)", lineHeight: 1.5, color: "rgba(255,255,255,0.75)", textWrap: "balance" as any }}>
-                    {renderQuoteText()}
-                  </p>
-                  <p className="mt-1.5 text-xs text-white/40" style={{ opacity: isDarkening ? fadedOpacity / 0.75 : 1, transition: "opacity 0.1s ease" }}>— {quote.author}</p>
-                </motion.div>
-              </AnimatePresence>
-            </div>
-            <button
-              onClick={(e) => { e.stopPropagation(); resetShine(); setQuoteIndex((prev) => (prev + 1) % QUOTES.length); }}
-              className="text-white/40 hover:text-white/70 transition-colors shrink-0 text-xl"
-              aria-label="Next quote"
-            >›</button>
-          </div>
-
-          {/* Below-quote content fades during Yvaine */}
-          <div className="flex-1 flex flex-col items-center" style={{ opacity: isDarkening ? Math.max(1 - fadeToBlack, 0) : 1, transition: "opacity 0.1s ease" }}>
-
+        <div
+          className="relative z-10 flex flex-col items-center text-center px-6 pt-5 pb-5"
+          style={{ aspectRatio: "5/7" }}
+        >
+          {/* Card body fades during Yvaine darkening */}
+          <div
+            className="flex-1 flex flex-col items-center"
+            style={{
+              opacity: isDarkening ? Math.max(1 - fadeToBlack, 0) : 1,
+              transition: "opacity 0.1s ease",
+            }}
+          >
             {/* NO ADS · COOPERATIVE COMMERCE · NO V.C. */}
             {!friendInput && (
               <>
-                <div className="flex items-center justify-center gap-2 flex-wrap"
-                  style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "clamp(0.55rem, 2vw, 0.7rem)", letterSpacing: "0.15em", textTransform: "uppercase" }}>
+                <div
+                  className="flex items-center justify-center gap-2 flex-wrap"
+                  style={{
+                    fontFamily: "'JetBrains Mono', monospace",
+                    fontSize: "clamp(0.55rem, 2vw, 0.7rem)",
+                    letterSpacing: "0.15em",
+                    textTransform: "uppercase",
+                  }}
+                >
                   <span
                     onClick={(e) => { e.stopPropagation(); navigate("/why-no-ads"); }}
                     style={{ color: accentColorFaded, cursor: "pointer", transition: "color 0.2s" }}
                     onMouseOver={(e) => (e.currentTarget.style.color = "#faf5eb")}
                     onMouseOut={(e) => (e.currentTarget.style.color = accentColorFaded)}
-                  >No Ads</span>
+                  >
+                    No Ads
+                  </span>
                   <span style={{ color: "rgba(250, 245, 235, 0.25)" }}>&middot;</span>
-                  <span style={{ color: "#d69e2e", transition: "color 0.5s ease" }}>COOPERATIVE COMMERCE</span>
+                  <span style={{ color: "#d69e2e", transition: "color 0.5s ease" }}>
+                    COOPERATIVE COMMERCE
+                  </span>
                   <span style={{ color: "rgba(250, 245, 235, 0.25)" }}>&middot;</span>
                   <span
                     onClick={(e) => { e.stopPropagation(); navigate("/why-no-vc"); }}
                     style={{ color: accentColorFaded, cursor: "pointer", transition: "color 0.2s" }}
                     onMouseOver={(e) => (e.currentTarget.style.color = "#faf5eb")}
                     onMouseOut={(e) => (e.currentTarget.style.color = accentColorFaded)}
-                  >No V.C.</span>
+                  >
+                    No V.C.
+                  </span>
                 </div>
                 <div className="flex-1" />
               </>
             )}
 
-            {/* HELP EACH OTHER HELP OURSELVES */}
-            <h1 style={{ fontFamily: "'Crimson Pro', Georgia, serif", fontSize: "clamp(1.6rem, 7vw, 2.6rem)", fontWeight: 700, lineHeight: 1.1, marginBottom: "0.5rem", position: "relative" }}>
+            {/* HELP EACH OTHER / HELP OURSELVES */}
+            <h1
+              style={{
+                fontFamily: "'Crimson Pro', Georgia, serif",
+                fontSize: "clamp(1.6rem, 7vw, 2.6rem)",
+                fontWeight: 700,
+                lineHeight: 1.1,
+                marginBottom: "0.5rem",
+                position: "relative",
+              }}
+            >
               <span style={{ color: "#faf5eb", display: "block" }}>Help Each Other</span>
 
-              {/* Speak Friend input */}
+              {/* Speak Friend input — F5: placeholder "Speak Friend, and Enter" */}
               <AnimatePresence>
                 {friendInput && (
-                  <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.3 }} className="overflow-hidden" onClick={(e) => e.stopPropagation()}>
-                    <div className="my-3 mx-auto p-3 rounded-xl" style={{ background: "rgba(20, 18, 30, 0.98)", border: "1px solid rgba(139, 92, 246, 0.5)", maxWidth: "280px" }}>
-                      <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.7rem", color: "rgba(250,245,235,0.7)", letterSpacing: "0.05em", marginBottom: "0.5rem", fontStyle: "normal", fontWeight: 400 }}>
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="overflow-hidden"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <div
+                      className="my-3 mx-auto p-3 rounded-xl"
+                      style={{
+                        background: "rgba(20, 18, 30, 0.98)",
+                        border: "1px solid rgba(139, 92, 246, 0.5)",
+                        maxWidth: "280px",
+                      }}
+                    >
+                      <p
+                        style={{
+                          fontFamily: "'JetBrains Mono', monospace",
+                          fontSize: "0.7rem",
+                          color: "rgba(250,245,235,0.7)",
+                          letterSpacing: "0.05em",
+                          marginBottom: "0.5rem",
+                          fontStyle: "normal",
+                          fontWeight: 400,
+                        }}
+                      >
                         Speak "Friend" in Your Language
                       </p>
-                      <input ref={inputRef} type="text" value={friendText} onChange={(e) => setFriendText(e.target.value)}
-                        placeholder="friend, ami, 朋友, mellon..."
-                        style={{ width: "100%", background: "rgba(139, 92, 246, 0.15)", border: "1px solid rgba(139, 92, 246, 0.4)", borderRadius: "0.5rem", padding: "0.5rem 0.75rem", color: "#faf5eb", fontSize: "0.85rem", fontFamily: "inherit", fontStyle: "normal", fontWeight: 400, outline: "none" }}
+                      <input
+                        ref={inputRef}
+                        type="text"
+                        value={friendText}
+                        onChange={(e) => setFriendText(e.target.value)}
+                        placeholder="Speak Friend, and Enter"
+                        style={{
+                          width: "100%",
+                          background: "rgba(139, 92, 246, 0.15)",
+                          border: "1px solid rgba(139, 92, 246, 0.4)",
+                          borderRadius: "0.5rem",
+                          padding: "0.5rem 0.75rem",
+                          color: "#faf5eb",
+                          fontSize: "0.85rem",
+                          fontFamily: "inherit",
+                          fontStyle: "normal",
+                          fontWeight: 400,
+                          outline: "none",
+                        }}
                       />
                       {friendMatch && (
-                        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "0.65rem", color: accentColor, marginTop: "0.4rem", fontStyle: "normal", fontWeight: 400, transition: "color 0.5s ease" }}>
+                        <motion.p
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          style={{
+                            fontFamily: "'JetBrains Mono', monospace",
+                            fontSize: "0.65rem",
+                            color: accentColor,
+                            marginTop: "0.4rem",
+                            fontStyle: "normal",
+                            fontWeight: 400,
+                            transition: "color 0.5s ease",
+                          }}
+                        >
                           ✓ {friendMatch} — welcome, friend.
                         </motion.p>
                       )}
@@ -417,40 +431,96 @@ export function HEOHOCardFront() {
                 )}
               </AnimatePresence>
 
-              {/* Help Ourselves with keyhole */}
+              {/* Help Ourselves with Durin's Door keyhole in the O */}
               <span style={{ color: accentColor, display: "block", transition: "color 0.5s ease" }}>
                 Help{" "}
                 <span style={{ position: "relative", display: "inline" }}>
-                  <span style={{ position: "relative", display: "inline-block", cursor: keyholeShown ? "pointer" : "default" }}
-                    onClick={(e) => { if (!keyholeShown) return; e.stopPropagation(); setFriendInput(true); }}
+                  <span
+                    style={{
+                      position: "relative",
+                      display: "inline-block",
+                      cursor: keyholeShown ? "pointer" : "default",
+                    }}
+                    onClick={(e) => {
+                      if (!keyholeShown) return;
+                      e.stopPropagation();
+                      setFriendInput(true);
+                    }}
                     onMouseEnter={() => keyholeShown && setKeyholeHovered(true)}
                     onMouseLeave={() => setKeyholeHovered(false)}
                     title={keyholeShown ? "Speak Friend and Enter" : undefined}
                   >
-                    <span style={{ position: "relative", display: "inline-block", isolation: "isolate", ...(keyholeShown ? { WebkitTextStroke: "2px #0a1628", paintOrder: "stroke fill" } : {}) }}>
+                    <span
+                      style={{
+                        position: "relative",
+                        display: "inline-block",
+                        isolation: "isolate",
+                        ...(keyholeShown
+                          ? { WebkitTextStroke: "2px #0a1628", paintOrder: "stroke fill" }
+                          : {}),
+                      }}
+                    >
                       O
                       {keyholeShown && (
-                        <svg viewBox="0 0 100 100" aria-hidden="true" style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", pointerEvents: "none", zIndex: -1 }}>
+                        <svg
+                          viewBox="0 0 100 100"
+                          aria-hidden="true"
+                          style={{
+                            position: "absolute",
+                            top: 0,
+                            left: 0,
+                            width: "100%",
+                            height: "100%",
+                            pointerEvents: "none",
+                            zIndex: -1,
+                          }}
+                        >
                           <ellipse cx="50" cy="50" rx="36" ry="38" fill="#0a1628" />
-                          <circle cx="50.5" cy="50" r="8" fill={keyholeColor} style={{ transition: "fill 0.4s ease" }} />
-                          <polygon points="46.75,55 41.5,73 59.5,73 54.25,55" fill={keyholeColor} style={{ transition: "fill 0.4s ease" }} />
+                          <circle
+                            cx="50.5"
+                            cy="50"
+                            r="8"
+                            fill={keyholeColor}
+                            style={{ transition: "fill 0.4s ease" }}
+                          />
+                          <polygon
+                            points="46.75,55 41.5,73 59.5,73 54.25,55"
+                            fill={keyholeColor}
+                            style={{ transition: "fill 0.4s ease" }}
+                          />
                         </svg>
                       )}
                     </span>
                   </span>
                   urselves
                 </span>
-                {/* Star beam lingers over keyhole O */}
+                {/* Star beam lingers over keyhole O during keyhole-linger phase */}
                 {isLingerPhase && (
-                  <motion.div className="absolute" style={{ left: "41%", top: "5px", width: "3px", height: "140px", background: "linear-gradient(to bottom, transparent, rgba(255,255,255,0.9), rgba(214,158,46,0.6), transparent)", transform: "translateX(-50%)", pointerEvents: "none" }}
-                    initial={{ opacity: 0 }} animate={{ opacity: [0, 1, 1, 0] }} transition={{ duration: 2.5, times: [0, 0.2, 0.7, 1] }}
+                  <motion.div
+                    className="absolute"
+                    style={{
+                      left: "41%",
+                      top: "5px",
+                      width: "3px",
+                      height: "140px",
+                      background:
+                        "linear-gradient(to bottom, transparent, rgba(255,255,255,0.9), rgba(214,158,46,0.6), transparent)",
+                      transform: "translateX(-50%)",
+                      pointerEvents: "none",
+                    }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: [0, 1, 1, 0] }}
+                    transition={{ duration: 2.5, times: [0, 0.2, 0.7, 1] }}
                   />
                 )}
               </span>
             </h1>
 
             {/* LIANA BANYAN */}
-            <div className="text-xs tracking-[0.3em] uppercase mt-3" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+            <div
+              className="text-xs tracking-[0.3em] uppercase mt-3"
+              style={{ fontFamily: "'JetBrains Mono', monospace" }}
+            >
               <span style={{ color: "#faf5eb" }}>Liana </span>
               <span style={{ color: accentColor, transition: "color 0.5s ease" }}>Banyan</span>
             </div>
@@ -459,16 +529,43 @@ export function HEOHOCardFront() {
             {!friendInput && (
               <>
                 <div className="flex-1" />
-                <p style={{ fontSize: "clamp(0.85rem, 2.2vw, 1rem)", color: "#faf5eb", fontWeight: 600, lineHeight: 1.7 }}>
+                <p
+                  style={{
+                    fontSize: "clamp(0.85rem, 2.2vw, 1rem)",
+                    color: "#faf5eb",
+                    fontWeight: 600,
+                    lineHeight: 1.7,
+                  }}
+                >
                   Own your Work. Member-Governed.
                 </p>
-                <p style={{ fontSize: "clamp(0.75rem, 1.8vw, 0.9rem)", color: "rgba(250, 245, 235, 0.6)", lineHeight: 1.7, marginTop: "0.25rem" }}>
+                <p
+                  style={{
+                    fontSize: "clamp(0.75rem, 1.8vw, 0.9rem)",
+                    color: "rgba(250, 245, 235, 0.6)",
+                    lineHeight: 1.7,
+                    marginTop: "0.25rem",
+                  }}
+                >
                   A working platform, not a brochure.
                 </p>
-                <p style={{ fontSize: "clamp(0.75rem, 1.8vw, 0.9rem)", color: "rgba(250, 245, 235, 0.6)", lineHeight: 1.7, marginTop: "0.5rem" }}>
+                <p
+                  style={{
+                    fontSize: "clamp(0.75rem, 1.8vw, 0.9rem)",
+                    color: "rgba(250, 245, 235, 0.6)",
+                    lineHeight: 1.7,
+                    marginTop: "0.5rem",
+                  }}
+                >
                   Your ideas/services/products
                 </p>
-                <p style={{ fontSize: "clamp(0.75rem, 1.8vw, 0.9rem)", color: "rgba(250, 245, 235, 0.6)", lineHeight: 1.7 }}>
+                <p
+                  style={{
+                    fontSize: "clamp(0.75rem, 1.8vw, 0.9rem)",
+                    color: "rgba(250, 245, 235, 0.6)",
+                    lineHeight: 1.7,
+                  }}
+                >
                   Preorder-Funded &amp; Made by Members
                 </p>
                 <div className="flex-1" />
@@ -553,106 +650,25 @@ function OrnateCornerArt({ xrayOn }: { xrayOn: boolean }) {
               transition: "opacity 0.5s ease",
             }}
           >
-            {/* Iron bracket L-shape */}
-            <path
-              d="M4 4 L4 32 Q4 36, 8 38 L16 40"
-              fill="none"
-              stroke={strokeColor}
-              strokeWidth="2"
-              strokeLinecap="round"
-              style={{ transition: "stroke 0.5s ease" }}
-            />
-            <path
-              d="M4 4 L32 4 Q36 4, 38 8 L40 16"
-              fill="none"
-              stroke={strokeColor}
-              strokeWidth="2"
-              strokeLinecap="round"
-              style={{ transition: "stroke 0.5s ease" }}
-            />
-
-            {/* Inner filigree curves */}
-            <path
-              d="M8 8 C8 8, 8 20, 14 26 C18 30, 24 32, 34 34"
-              fill="none"
-              stroke={strokeColorFaint}
-              strokeWidth="1.2"
-              strokeLinecap="round"
-              style={{ transition: "stroke 0.5s ease" }}
-            />
-            <path
-              d="M8 8 C8 8, 20 8, 26 14 C30 18, 32 24, 34 34"
-              fill="none"
-              stroke={strokeColorFaint}
-              strokeWidth="1.2"
-              strokeLinecap="round"
-              style={{ transition: "stroke 0.5s ease" }}
-            />
-
-            {/* Decorative scroll curves */}
-            <path
-              d="M6 18 Q10 22, 16 20 Q20 18, 18 14"
-              fill="none"
-              stroke={strokeColorFaint}
-              strokeWidth="0.8"
-              strokeLinecap="round"
-              style={{ transition: "stroke 0.5s ease" }}
-            />
-            <path
-              d="M18 6 Q22 10, 20 16 Q18 20, 14 18"
-              fill="none"
-              stroke={strokeColorFaint}
-              strokeWidth="0.8"
-              strokeLinecap="round"
-              style={{ transition: "stroke 0.5s ease" }}
-            />
-
-            {/* Decorative dots along bracket */}
+            <path d="M4 4 L4 32 Q4 36, 8 38 L16 40" fill="none" stroke={strokeColor} strokeWidth="2" strokeLinecap="round" style={{ transition: "stroke 0.5s ease" }} />
+            <path d="M4 4 L32 4 Q36 4, 38 8 L40 16" fill="none" stroke={strokeColor} strokeWidth="2" strokeLinecap="round" style={{ transition: "stroke 0.5s ease" }} />
+            <path d="M8 8 C8 8, 8 20, 14 26 C18 30, 24 32, 34 34" fill="none" stroke={strokeColorFaint} strokeWidth="1.2" strokeLinecap="round" style={{ transition: "stroke 0.5s ease" }} />
+            <path d="M8 8 C8 8, 20 8, 26 14 C30 18, 32 24, 34 34" fill="none" stroke={strokeColorFaint} strokeWidth="1.2" strokeLinecap="round" style={{ transition: "stroke 0.5s ease" }} />
+            <path d="M6 18 Q10 22, 16 20 Q20 18, 18 14" fill="none" stroke={strokeColorFaint} strokeWidth="0.8" strokeLinecap="round" style={{ transition: "stroke 0.5s ease" }} />
+            <path d="M18 6 Q22 10, 20 16 Q18 20, 14 18" fill="none" stroke={strokeColorFaint} strokeWidth="0.8" strokeLinecap="round" style={{ transition: "stroke 0.5s ease" }} />
             <circle cx="4" cy="4" r="2" fill={dotColor} style={{ transition: "fill 0.5s ease" }} />
             <circle cx="4" cy="18" r="1.2" fill={dotColor} style={{ transition: "fill 0.5s ease" }} />
             <circle cx="18" cy="4" r="1.2" fill={dotColor} style={{ transition: "fill 0.5s ease" }} />
             <circle cx="12" cy="12" r="1" fill={dotColor} style={{ transition: "fill 0.5s ease" }} />
-
-            {/* LB monogram */}
-            <text
-              x="14"
-              y="24"
-              fill={monoColor}
-              fontSize="10"
-              fontFamily="'Crimson Pro', Georgia, serif"
-              fontWeight="700"
-              style={{ transition: "fill 0.5s ease" }}
-            >
-              LB
-            </text>
-
-            {/* Keyhole shape at junction */}
+            <text x="14" y="24" fill={monoColor} fontSize="10" fontFamily="'Crimson Pro', Georgia, serif" fontWeight="700" style={{ transition: "fill 0.5s ease" }}>LB</text>
             {c.shape === "circle" && (
-              <circle
-                cx="34" cy="34" r="4"
-                fill={keyholeFill}
-                stroke={keyholeStroke}
-                strokeWidth="1.2"
-                style={{ transition: "all 0.5s ease" }}
-              />
+              <circle cx="34" cy="34" r="4" fill={keyholeFill} stroke={keyholeStroke} strokeWidth="1.2" style={{ transition: "all 0.5s ease" }} />
             )}
             {c.shape === "square" && (
-              <rect
-                x="30" y="30" width="8" height="8" rx="1"
-                fill={keyholeFill}
-                stroke={keyholeStroke}
-                strokeWidth="1.2"
-                style={{ transition: "all 0.5s ease" }}
-              />
+              <rect x="30" y="30" width="8" height="8" rx="1" fill={keyholeFill} stroke={keyholeStroke} strokeWidth="1.2" style={{ transition: "all 0.5s ease" }} />
             )}
             {c.shape === "triangle" && (
-              <polygon
-                points="34,28 28,38 40,38"
-                fill={keyholeFill}
-                stroke={keyholeStroke}
-                strokeWidth="1.2"
-                style={{ transition: "all 0.5s ease" }}
-              />
+              <polygon points="34,28 28,38 40,38" fill={keyholeFill} stroke={keyholeStroke} strokeWidth="1.2" style={{ transition: "all 0.5s ease" }} />
             )}
           </svg>
         </div>

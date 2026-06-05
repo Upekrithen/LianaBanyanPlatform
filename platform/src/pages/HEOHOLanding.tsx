@@ -2,21 +2,30 @@
  * HEOHOLanding — museum.lianabanyan.com HEOHO variant.
  * BM30 Scope 5: HEOHO landing for the museum Firebase hosting target.
  *
- * Components (per spec):
- *   - Quotes above the card: rotating founder + community quotes (inside HEOHOCardFront)
+ * Components (render order):
+ *   - Canon stats bar: "THE PRIVATE AI COOPERATIVE" + 2,270 MEMBERS / 83.3% CAITHEDRAL EFFECT / COST+20%
+ *   - Quotes above the card: <RotatingQuotes /> page-level component above HEOHOCardFront
  *   - Big deck card: HEOHOCardFront — HEOHO hero card, 5:7 aspect ratio
- *   - Durin's Door: "Speak Friend" input (inside HEOHOCardFront, activated via keyhole O)
  *   - X-ray goggles: inline CSS goggles element with "Suppressing Mana 85%" ripple on hover
- *     (no Denken image assets found; CSS-only fallback per spec)
- *   - Canon stats bar: 2,270 members / 83.3% Caithedral Effect
  *   - NO red Mission One box
+ *
+ * BP075 5-signature canonical favorite:
+ *   Sig1: RotatingQuotes above card (23 quotes incl. Flik+Dot pair)
+ *   Sig2: Yvaine SHINE → navigate("/yvaine") (YouTube embed)
+ *   Sig3: Full-page glow if SHINE not clicked within 10s of Yvaine quote appearing
+ *   Sig4: Golden keyhole persists after SHINE sequence (keyholeActive=true)
+ *   Sig5: Speak Friend, and Enter — input placeholder (mellon/friend/etc. still valid)
+ *
+ * F6 (card size): PENDING Founder ratify — follow-up wave.
  *
  * Hostname routing: museum.lianabanyan.com -> portalDetector 'museum' -> MuseumApp -> /
  */
-import { useState } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
+import { Volume2, VolumeX } from "lucide-react";
 import { MuseumShell } from "@/components/museum/MuseumShell";
 import { HEOHOCardFront } from "@/components/museum/HEOHOCardFront";
+import { RotatingQuotes, QUOTES } from "@/components/museum/RotatingQuotes";
 import { TourBanner } from "@/components/wildfire/TourBanner";
 import { useXRay } from "@/components/museum/XRayContext";
 
@@ -38,7 +47,6 @@ function XRayGogglesElement() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5, delay: 0.8 }}
-      style={{ marginTop: "1.25rem" }}
     >
       <button
         onClick={toggleXray}
@@ -89,53 +97,31 @@ function XRayGogglesElement() {
           aria-hidden="true"
           style={{ flexShrink: 0 }}
         >
-          {/* Left lens */}
           <rect
-            x="1"
-            y="1"
-            width="12"
-            height="12"
-            rx="3.5"
-            fill={lensColor}
-            stroke={strokeColor}
-            strokeWidth="1.5"
+            x="1" y="1" width="12" height="12" rx="3.5"
+            fill={lensColor} stroke={strokeColor} strokeWidth="1.5"
             style={{ transition: "fill 0.3s ease, stroke 0.3s ease" }}
           />
-          {/* Right lens */}
           <rect
-            x="19"
-            y="1"
-            width="12"
-            height="12"
-            rx="3.5"
-            fill={lensColor}
-            stroke={strokeColor}
-            strokeWidth="1.5"
+            x="19" y="1" width="12" height="12" rx="3.5"
+            fill={lensColor} stroke={strokeColor} strokeWidth="1.5"
             style={{ transition: "fill 0.3s ease, stroke 0.3s ease" }}
           />
-          {/* Bridge */}
           <line
-            x1="13"
-            y1="7"
-            x2="19"
-            y2="7"
-            stroke={strokeColor}
-            strokeWidth="1.5"
+            x1="13" y1="7" x2="19" y2="7"
+            stroke={strokeColor} strokeWidth="1.5"
             style={{ transition: "stroke 0.3s ease" }}
           />
-          {/* Blue glowing irises when X-ray ON */}
           {xrayOn && (
             <>
               <circle cx="7" cy="7" r="3" fill="rgba(34,211,238,0.75)" />
               <circle cx="25" cy="7" r="3" fill="rgba(34,211,238,0.75)" />
-              {/* Highlight specks */}
               <circle cx="8.5" cy="5.5" r="0.8" fill="rgba(255,255,255,0.6)" />
               <circle cx="26.5" cy="5.5" r="0.8" fill="rgba(255,255,255,0.6)" />
             </>
           )}
         </svg>
 
-        {/* Label */}
         <span
           style={{
             fontFamily: "'JetBrains Mono', monospace",
@@ -191,8 +177,122 @@ function CanonStatsBar() {
 }
 
 const HEOHOLanding = () => {
+  // Quote rotation state — fully controls RotatingQuotes (lifted to page level)
+  const [quoteIndex, setQuoteIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+
+  // F3: Full-page glow if SHINE not clicked within 10s of Yvaine quote appearing
+  const [shineClicked, setShineClicked] = useState(false);
+  const [fullPageGlowFiring, setFullPageGlowFiring] = useState(false);
+  const [muted, setMuted] = useState(false);
+
+  const glowTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Evaluate prefers-reduced-motion once at mount
+  const prefersReducedMotion = useRef(
+    typeof window !== "undefined"
+      ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      : false
+  ).current;
+
+  // Derived: is the Yvaine quote currently active?
+  const yvaineActive = QUOTES[quoteIndex]?.isYvaine ?? false;
+
+  // 8s auto-rotate timer — paused during SHINE sequence
+  useEffect(() => {
+    if (paused) return;
+    const timer = setInterval(() => {
+      setQuoteIndex((prev) => (prev + 1) % QUOTES.length);
+    }, 8000);
+    return () => clearInterval(timer);
+  }, [paused]);
+
+  // Reset shineClicked when Yvaine quote deactivates (so re-visiting triggers fresh timer)
+  useEffect(() => {
+    if (!yvaineActive) {
+      setShineClicked(false);
+    }
+  }, [yvaineActive]);
+
+  // F3: 10s glow timer — fires if Yvaine active and SHINE not clicked
+  useEffect(() => {
+    if (!yvaineActive || shineClicked || prefersReducedMotion) {
+      if (glowTimerRef.current) {
+        clearTimeout(glowTimerRef.current);
+        glowTimerRef.current = null;
+      }
+      return;
+    }
+    glowTimerRef.current = setTimeout(() => {
+      setFullPageGlowFiring(true);
+    }, 10000);
+    return () => {
+      if (glowTimerRef.current) {
+        clearTimeout(glowTimerRef.current);
+        glowTimerRef.current = null;
+      }
+    };
+  }, [yvaineActive, shineClicked, prefersReducedMotion]);
+
+  // F3: Play founder voice audio when glow fires (canonical path: founder_voice_shine.m4a)
+  useEffect(() => {
+    if (!fullPageGlowFiring || muted || prefersReducedMotion) return;
+    const audio = new Audio("/audio/founder_voice_shine.m4a");
+    audio.play().catch(() => {
+      // Autoplay blocked — play on next user interaction
+      const playOnce = () => {
+        audio.play().catch(() => {});
+        document.removeEventListener("pointerdown", playOnce);
+      };
+      document.addEventListener("pointerdown", playOnce, { once: true });
+    });
+    return () => {
+      audio.pause();
+    };
+  }, [fullPageGlowFiring, muted, prefersReducedMotion]);
+
+  // Prev/next handlers — reset shineClicked so fresh timer starts if returning to Yvaine
+  const handlePrev = useCallback(() => {
+    setQuoteIndex((prev) => (prev - 1 + QUOTES.length) % QUOTES.length);
+  }, []);
+
+  const handleNext = useCallback(() => {
+    setQuoteIndex((prev) => (prev + 1) % QUOTES.length);
+  }, []);
+
+  // Called when SHINE link clicked — cancels the 10s glow timer
+  const handleShineClick = useCallback(() => {
+    setShineClicked(true);
+    if (glowTimerRef.current) {
+      clearTimeout(glowTimerRef.current);
+      glowTimerRef.current = null;
+    }
+  }, []);
+
+  // HEOHOCardFront callbacks: pause/resume rotation during SHINE sequence
+  const handleYvaineSequence = useCallback((p: boolean) => {
+    setPaused(p);
+  }, []);
+
+  // HEOHOCardFront t4 callback: advance quote after sequence
+  const handleAdvanceQuote = useCallback(() => {
+    setQuoteIndex((prev) => (prev + 1) % QUOTES.length);
+  }, []);
+
   return (
     <MuseumShell>
+      {/* F3: Full-page whiteout glow overlay — fires if SHINE not clicked within 10s */}
+      {fullPageGlowFiring && (
+        <motion.div
+          className="fixed inset-0 pointer-events-none z-[100]"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: [0, 1, 1, 0] }}
+          transition={{ duration: 5, times: [0, 0.4, 0.4, 1], ease: "easeInOut" }}
+          onAnimationComplete={() => setFullPageGlowFiring(false)}
+          style={{ background: "white" }}
+        />
+      )}
+
       <div
         className="min-h-screen flex flex-col items-center justify-center px-4 py-6 pb-24"
         style={{ maxWidth: "28rem", margin: "0 auto" }}
@@ -200,11 +300,46 @@ const HEOHOLanding = () => {
         {/* Canon stats */}
         <CanonStatsBar />
 
-        {/* Big deck card: quotes (inside) + HEOHO title + Durin's Door (Speak Friend) */}
-        <HEOHOCardFront />
+        {/* Sig1: Rotating quotes — page-level, ABOVE the card */}
+        <RotatingQuotes
+          quoteIndex={quoteIndex}
+          onPrev={handlePrev}
+          onNext={handleNext}
+          onShineClick={handleShineClick}
+          muted={muted}
+        />
 
-        {/* X-ray goggles element: CSS-only (no Denken image assets; "Suppressing Mana 85%" ripple) */}
-        <XRayGogglesElement />
+        {/* Sig2/4/5: Big deck card — HEOHO hero, 5:7 aspect ratio */}
+        <HEOHOCardFront
+          isYvaine={yvaineActive}
+          onYvaineSequence={handleYvaineSequence}
+          onAdvanceQuote={handleAdvanceQuote}
+        />
+
+        {/* X-ray goggles + mute toggle */}
+        <div
+          className="flex items-center justify-center gap-2"
+          style={{ marginTop: "1.25rem" }}
+        >
+          <XRayGogglesElement />
+          <button
+            onClick={() => setMuted((m) => !m)}
+            aria-label={muted ? "Unmute audio" : "Mute audio"}
+            title={muted ? "Unmute" : "Mute"}
+            style={{
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              color: muted ? "rgba(250,245,235,0.2)" : "rgba(250,245,235,0.35)",
+              padding: "0.4rem",
+              transition: "color 0.2s",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            {muted ? <VolumeX size={14} /> : <Volume2 size={14} />}
+          </button>
+        </div>
       </div>
       <TourBanner />
     </MuseumShell>
