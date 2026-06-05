@@ -71,7 +71,7 @@ const ONBOARDING_PATH: OnboardingStep[] = [
     id: 2,
     label: "Install Mnemosyne (unTech)",
     description:
-      "Download Mnemosyne v0.1.25 -- your family's private AI assistant. One installer, runs on your hardware, no cloud required.",
+      "Download Mnemosyne v0.1.26 -- your family's private AI assistant. One installer, runs on your hardware, no cloud required.",
     link: { label: "unTech Onboarding", href: "/untech-onboarding" },
     status: "done",
   },
