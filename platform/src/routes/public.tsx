@@ -49,6 +49,27 @@ const MiniTour = lazy(() => import("@/pages/MiniTour"));
 const TestFrameDemo = lazy(() => import("@/pages/TestFrameDemo"));
 const MedallionPage = lazy(() => import("@/pages/MedallionPage"));
 const MnemosyneDownloadPage = lazy(() => import("@/components/MnemosyneDownload"));
+const HowItAllWorksPage = lazy(() => import("@/pages/HowItAllWorksPage"));
+const BusinessPlanPage = lazy(() => import("@/pages/BusinessPlanPage"));
+const SpeakFriendPage = lazy(() => import("@/pages/SpeakFriendPage"));
+const ProofsPage = lazy(() => import("@/pages/ProofsPage"));
+const BountyPosterPage = lazy(() => import("@/pages/BountyPosterPage"));
+const CharacterRemakePostersPage = lazy(() =>
+  import("@/components/bounties/CharacterRemakePosters").then((m) => ({
+    default: m.CharacterRemakePostersPage,
+  }))
+);
+// Wave 28 (BP073) -- Museum frozen snapshot
+const MuseumPage = lazy(() => import("@/pages/MuseumPage"));
+// BP074 -- Founder story page
+const FounderStory = lazy(() => import("@/pages/museum/FounderStory"));
+
+// BP072 Wave 3 routes
+const ProgressReport1Page = lazy(() => import("@/pages/ProgressReport1Page"));
+const AnthologyPage = lazy(() => import("@/pages/AnthologyPage"));
+const UnTechOnboardingPage = lazy(() => import("@/pages/UnTechOnboardingPage"));
+const FrontierBorrowPage = lazy(() => import("@/pages/FrontierBorrowPage"));
+const OverlayGalleryPage = lazy(() => import("@/pages/OverlayGalleryPage"));
 
 function HomepageGateway() {
   const { user, loading } = useAuth();
@@ -142,5 +163,42 @@ export const publicRoutes = (
     {/* KniPr012: Mnemosyne download landing page */}
     <Route path="/mnemosyne" element={<LazyPage><MnemosyneDownloadPage /></LazyPage>} />
     <Route path="/download/mnemosyne" element={<LazyPage><MnemosyneDownloadPage /></LazyPage>} />
+
+    {/* BLACK_MAMBA_WAVE_2 / BP072 -- Scope 23-30 new routes */}
+    {/* Scope 23 Renderer 1: How It All Works -- corpus explainer browser */}
+    <Route path="/how-it-all-works" element={<LazyPage><HowItAllWorksPage /></LazyPage>} />
+    <Route path="/subsystem/:id" element={<LazyPage><HowItAllWorksPage /></LazyPage>} />
+    {/* Scope 25: Business Plan */}
+    <Route path="/business-plan" element={<LazyPage><BusinessPlanPage /></LazyPage>} />
+    {/* Scope 26: Bounty Poster Generator */}
+    <Route path="/bounty-poster-generator" element={<LazyPage><BountyPosterPage /></LazyPage>} />
+    {/* Scope 27: Speak Friend language hub */}
+    <Route path="/speak-friend" element={<LazyPage><SpeakFriendPage /></LazyPage>} />
+    <Route path="/speak-friend/" element={<LazyPage><SpeakFriendPage /></LazyPage>} />
+    {/* Scope 28: Verification proofs */}
+    <Route path="/proofs" element={<LazyPage><ProofsPage /></LazyPage>} />
+    <Route path="/proofs/" element={<LazyPage><ProofsPage /></LazyPage>} />
+    {/* Scope 29: Character remake bounties (staged) */}
+    <Route path="/character-remake-bounties" element={<LazyPage><CharacterRemakePostersPage /></LazyPage>} />
+
+    {/* BP072 Wave 3 routes */}
+    {/* Scope 5: Progress Report 1 */}
+    <Route path="/progress/1" element={<LazyPage><ProgressReport1Page /></LazyPage>} />
+    {/* Scope 9: Anthology of Persistent Effort */}
+    <Route path="/anthology" element={<LazyPage><AnthologyPage /></LazyPage>} />
+    {/* Scope 15: unTech onboarding */}
+    <Route path="/untech-onboarding" element={<LazyPage><UnTechOnboardingPage /></LazyPage>} />
+    <Route path="/get-started/untech" element={<LazyPage><UnTechOnboardingPage /></LazyPage>} />
+    {/* Scope 22: Frontier borrow */}
+    <Route path="/frontier/borrow" element={<LazyPage><FrontierBorrowPage /></LazyPage>} />
+    {/* Scope 26: Overlay gallery */}
+    <Route path="/overlay-gallery" element={<LazyPage><OverlayGalleryPage /></LazyPage>} />
+
+    {/* Wave 28 (BP073) -- Museum frozen snapshot / platform history */}
+    <Route path="/museum" element={<LazyPage><MuseumPage /></LazyPage>} />
+    <Route path="/history" element={<LazyPage><MuseumPage /></LazyPage>} />
+    <Route path="/rope-of-history" element={<LazyPage><MuseumPage /></LazyPage>} />
+    {/* BP074 -- Founder story */}
+    <Route path="/founder" element={<LazyPage><FounderStory /></LazyPage>} />
   </>
 );
