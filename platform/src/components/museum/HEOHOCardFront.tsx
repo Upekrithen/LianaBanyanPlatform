@@ -225,7 +225,7 @@ export function HEOHOCardFront({
   void shineGlow;
 
   return (
-    <div className="w-full max-w-sm mx-auto" data-heoho-card>
+    <div className="w-full mx-auto" data-heoho-card>
       <motion.div
         className="rounded-2xl overflow-hidden relative"
         initial={{ opacity: 0, scale: 0.97 }}

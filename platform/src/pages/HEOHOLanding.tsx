@@ -16,7 +16,7 @@
  *   Sig4: Golden keyhole persists after SHINE sequence (keyholeActive=true)
  *   Sig5: Speak Friend, and Enter — input placeholder (mellon/friend/etc. still valid)
  *
- * F6 (card size): PENDING Founder ratify — follow-up wave.
+ * F6 (card size): APPLIED -- 560px max-width (+46%, Founder ratify Option 2 BP075).
  *
  * Hostname routing: museum.lianabanyan.com -> portalDetector 'museum' -> MuseumApp -> /
  */
@@ -295,7 +295,7 @@ const HEOHOLanding = () => {
 
       <div
         className="min-h-screen flex flex-col items-center justify-center px-4 py-6 pb-24"
-        style={{ maxWidth: "28rem", margin: "0 auto" }}
+        style={{ maxWidth: "min(92vw, 560px)", margin: "0 auto" }}
       >
         {/* Canon stats */}
         <CanonStatsBar />
