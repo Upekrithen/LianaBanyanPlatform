@@ -66,6 +66,9 @@ const MuseumPage = lazy(() => import("@/pages/MuseumPage"));
 // BP074 -- Founder story page
 const FounderStory = lazy(() => import("@/pages/museum/FounderStory"));
 
+// SEG-10 -- Temporary Founder fable review surface (no auth gate)
+const FablesPreview = lazy(() => import("@/pages/FablesPreview"));
+
 // BP072 Wave 3 routes
 const ProgressReport1Page = lazy(() => import("@/pages/ProgressReport1Page"));
 const AnthologyPage = lazy(() => import("@/pages/AnthologyPage"));
@@ -200,5 +203,8 @@ export const publicRoutes = (
     <Route path="/rope-of-history" element={<LazyPage><MuseumPage /></LazyPage>} />
     {/* BP074 -- Founder story */}
     <Route path="/founder" element={<LazyPage><FounderStory /></LazyPage>} />
+
+    {/* SEG-10 -- Fable preview surface (temporary Founder review, no auth gate) */}
+    <Route path="/fables-preview" element={<LazyPage><FablesPreview /></LazyPage>} />
   </>
 );

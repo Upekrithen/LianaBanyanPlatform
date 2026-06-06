@@ -21,11 +21,10 @@
  * Hostname routing: museum.lianabanyan.com -> portalDetector 'museum' -> MuseumApp -> /
  */
 import { useState, useEffect, useRef, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Volume2, VolumeX } from "lucide-react";
 import { MuseumShell } from "@/components/museum/MuseumShell";
-import { HEOHOCardFront } from "@/components/museum/HEOHOCardFront";
+import { HEOHOFlipCard } from "@/components/museum/HEOHOFlipCard";
 import { QUOTES } from "@/components/museum/RotatingQuotes";
 import { TourBanner } from "@/components/wildfire/TourBanner";
 import { useXRay } from "@/components/museum/XRayContext";
@@ -152,6 +151,7 @@ function XRayGogglesElement() {
 
 const HEOHOLanding = () => {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   // Silent quote rotation state — drives F3 Yvaine glow cycle
   const [quoteIndex, setQuoteIndex] = useState(0);
@@ -160,8 +160,6 @@ const HEOHOLanding = () => {
   // F3: Full-page glow if SHINE not clicked within 10s of Yvaine quote appearing
   const [shineClicked, setShineClicked] = useState(false);
   const [fullPageGlowFiring, setFullPageGlowFiring] = useState(false);
-  const [muted, setMuted] = useState(false);
-
   const glowTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Evaluate prefers-reduced-motion once at mount
@@ -190,13 +188,14 @@ const HEOHOLanding = () => {
     }
   }, [yvaineActive]);
 
-  // F3: 10s glow timer — fires if Yvaine active and SHINE not clicked
+  // F3: 10s glow timer — scoped to "/" only; inert on every other route
   useEffect(() => {
-    if (!yvaineActive || shineClicked || prefersReducedMotion) {
+    if (pathname !== "/" || !yvaineActive || shineClicked || prefersReducedMotion) {
       if (glowTimerRef.current) {
         clearTimeout(glowTimerRef.current);
         glowTimerRef.current = null;
       }
+      if (pathname !== "/") setFullPageGlowFiring(false);
       return;
     }
     glowTimerRef.current = setTimeout(() => {
@@ -208,39 +207,27 @@ const HEOHOLanding = () => {
         glowTimerRef.current = null;
       }
     };
-  }, [yvaineActive, shineClicked, prefersReducedMotion]);
-
-  // F3: Play founder voice audio when glow fires (canonical path: founder_voice_shine.m4a)
-  useEffect(() => {
-    if (!fullPageGlowFiring || muted || prefersReducedMotion) return;
-    const audio = new Audio("/audio/founder_voice_shine.m4a");
-    audio.play().catch(() => {
-      // Autoplay blocked — play on next user interaction
-      const playOnce = () => {
-        audio.play().catch(() => {});
-        document.removeEventListener("pointerdown", playOnce);
-      };
-      document.addEventListener("pointerdown", playOnce, { once: true });
-    });
-    return () => {
-      audio.pause();
-    };
-  }, [fullPageGlowFiring, muted, prefersReducedMotion]);
+  }, [pathname, yvaineActive, shineClicked, prefersReducedMotion]);
 
   // HEOHOCardFront callbacks: pause/resume rotation during SHINE sequence
   const handleYvaineSequence = useCallback((p: boolean) => {
     setPaused(p);
   }, []);
 
-  // HEOHOCardFront t4 callback: advance quote after sequence
+  // HEOHOCardFront t4 callback: advance quote after sequence (also used as onNext for RotatingQuotes)
   const handleAdvanceQuote = useCallback(() => {
     setQuoteIndex((prev) => (prev + 1) % QUOTES.length);
   }, []);
 
+  // RotatingQuotes onPrev: step back one quote
+  const handlePrev = useCallback(() => {
+    setQuoteIndex((prev) => (prev - 1 + QUOTES.length) % QUOTES.length);
+  }, []);
+
   return (
-    <MuseumShell>
-      {/* F3: Full-page whiteout glow overlay — fires if SHINE not clicked within 10s */}
-      {fullPageGlowFiring && (
+    <MuseumShell hideLRHGuide>
+      {/* F3: Full-page whiteout glow overlay — "/" only; never mounts on other routes */}
+      {pathname === "/" && fullPageGlowFiring && (
         <motion.div
           className="fixed inset-0 pointer-events-none z-[100]"
           initial={{ opacity: 0 }}
@@ -273,10 +260,13 @@ const HEOHOLanding = () => {
               maxHeight: "calc(100svh - 110px)",
             }}
           >
-            <HEOHOCardFront
+            <HEOHOFlipCard
               isYvaine={yvaineActive}
               onYvaineSequence={handleYvaineSequence}
               onAdvanceQuote={handleAdvanceQuote}
+              quoteIndex={quoteIndex}
+              onPrev={handlePrev}
+              onShineClick={() => setShineClicked(true)}
             />
           </div>
         </div>
@@ -342,29 +332,12 @@ const HEOHOLanding = () => {
           </button>
         </div>
 
-        {/* X-ray goggles + mute toggle */}
+        {/* X-ray goggles */}
         <div
           className="flex items-center justify-center gap-2"
           style={{ marginBottom: "0.5rem" }}
         >
           <XRayGogglesElement />
-          <button
-            onClick={() => setMuted((m) => !m)}
-            aria-label={muted ? "Unmute audio" : "Mute audio"}
-            title={muted ? "Unmute" : "Mute"}
-            style={{
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              color: muted ? "rgba(250,245,235,0.2)" : "rgba(250,245,235,0.35)",
-              padding: "0.4rem",
-              transition: "color 0.2s",
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            {muted ? <VolumeX size={14} /> : <Volume2 size={14} />}
-          </button>
         </div>
       </div>
       <TourBanner />

@@ -24,6 +24,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useXRay } from "./XRayContext";
 import { motion, AnimatePresence } from "framer-motion";
+import { RotatingQuotes } from "./RotatingQuotes";
 
 const FRIEND_WORDS: Record<string, string> = {
   friend: "English", amigo: "Español", ami: "Français", freund: "Deutsch",
@@ -48,12 +49,28 @@ interface HEOHOCardFrontProps {
   onYvaineSequence?: (paused: boolean) => void;
   /** Called at t4 to advance RotatingQuotes to the next quote */
   onAdvanceQuote?: () => void;
+  /** Current quote index — controlled by HEOHOLanding (Path A: display inside card face) */
+  quoteIndex?: number;
+  /** Called when user clicks previous chevron */
+  onPrev?: () => void;
+  /** Called when SHINE link is clicked (propagated to parent for F3 glow cancellation) */
+  onShineClick?: () => void;
+  /** Whether audio is globally muted */
+  muted?: boolean;
+  /** Called when Watch button is clicked. When provided, the card flip handles the action
+   *  instead of navigating to /watch. */
+  onWatch?: () => void;
 }
 
 export function HEOHOCardFront({
   isYvaine = false,
   onYvaineSequence,
   onAdvanceQuote,
+  quoteIndex = 0,
+  onPrev,
+  onShineClick,
+  muted = false,
+  onWatch,
 }: HEOHOCardFrontProps) {
   const navigate = useNavigate();
   const { xrayOn } = useXRay();
@@ -525,6 +542,17 @@ export function HEOHOCardFront({
               <span style={{ color: accentColor, transition: "color 0.5s ease" }}>Banyan</span>
             </div>
 
+            {/* Rotating quote — Path A canonical: inside card face */}
+            {!friendInput && (
+              <RotatingQuotes
+                quoteIndex={quoteIndex}
+                onPrev={onPrev ?? (() => {})}
+                onNext={onAdvanceQuote ?? (() => {})}
+                onShineClick={onShineClick}
+                muted={muted}
+              />
+            )}
+
             {/* Taglines + buttons */}
             {!friendInput && (
               <>
@@ -578,7 +606,7 @@ export function HEOHOCardFront({
                     Enter
                   </button>
                   <button
-                    onClick={(e) => { e.stopPropagation(); navigate("/watch"); }}
+                    onClick={(e) => { e.stopPropagation(); if (onWatch) { onWatch(); } else { navigate("/watch"); } }}
                     className="py-2.5 px-6 rounded-lg text-sm font-medium transition-colors border"
                     style={{ borderColor: "rgba(250,245,235,0.3)", color: "rgba(250,245,235,0.7)" }}
                   >

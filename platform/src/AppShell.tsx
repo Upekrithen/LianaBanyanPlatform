@@ -76,6 +76,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const isLanding = location.pathname === '/';
   const FOCUS_ROUTES = ['/membership', '/membership/confirm', '/ghost', '/explore', '/free-explore'];
   const isFocusRoute = FOCUS_ROUTES.some(r => location.pathname === r || location.pathname.startsWith(r + '/'));
+  const HIDDEN_ROUTES = ['/', '/founder', '/proofs', '/welcome', '/pathways'];
+  const isBannerHidden = HIDDEN_ROUTES.some(r => location.pathname === r || location.pathname.startsWith(r + '/'));
   const showChrome = !!user && !isLanding && !isFocusRoute;
 
   return (
@@ -103,7 +105,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             {showChrome && <AppSidebar />}
             <div className="flex-1 flex flex-col min-w-0">
               {!isLanding && <CrossPortalNav />}
-              <BetaBanner />
+              {!isBannerHidden && <BetaBanner />}
               {showChrome && (
                 <div className="flex items-center gap-3 px-4 py-2 border-b bg-background/80 backdrop-blur-sm">
                   <SidebarTrigger className="shrink-0" />
