@@ -1,851 +1,530 @@
-// Bp067FirstRunSpine.tsx -- BP067 v0.1.25 one-spine first-run (WAVE-24 extended)
-// Sequence: transparent install -> SaltFighter cover -> value ->
-//           choose memory folder -> meet your AI -> try it now -> upgrades
-// Canon: Asteroid-ProofVault/BP067_v0124_INSTALL_ONBOARDING_SPEC.md
+// Bp067FirstRunSpine.tsx -- BP075 v0.1.26 minimal professional first-run
+// Steps: welcome -> try-it -> success (or options on error/timeout) -> [optional: folder] -> app
+// Preserved: askFloorModel elephant test, 3-option fallback, LS_BP067_FIRST_RUN_COMPLETE gate
+// Removed: scroll-crawl animation, Founder voice audio, HEOHO blocking step, forced folder step
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { UPGRADE_MODELS } from '../../shared/floor-model';
 
 export const LS_BP067_FIRST_RUN_COMPLETE = 'mnemosyne-bp067-first-run-complete';
 export const LS_SALTFIGHTER_SKIP = 'mnemosyne-saltfighter-skip';
 
-type SpinePhase =
-  | 'install'
-  | 'cover'
-  | 'value'
-  | 'folder'
-  | 'meet-ai'
-  | 'try-now'
-  | 'upgrades';
+const AUTO_TEST_PROMPT = 'What is the name of a famous elephant?';
+const TRY_IT_TIMEOUT_MS = 30_000;
 
-interface EngineSetupProgress {
-  step: string;
-  message: string;
-  detail?: string;
-  percentComplete?: number;
-}
+type Step = 'welcome' | 'try-it' | 'success' | 'options' | 'folder';
+type OptionState = 'idle' | 'retrying' | 'retry-ok' | 'retry-err' | 'borrowing' | 'borrow-result';
 
-interface ModelPullProgress {
-  status: 'pulling' | 'verifying' | 'complete' | 'error';
-  bytesDownloaded?: number;
-  totalBytes?: number;
-  percentComplete?: number;
+interface BorrowResult {
+  ok: boolean;
+  disclosure?: string;
   error?: string;
+  cost_transport_usd?: number;
+  node_count?: number;
 }
 
-interface WatcherStats {
-  foldersWatched: number;
-  ebletsMinted: number;
-  lastEventAt: string | null;
-  errors: string[];
-}
-
-interface Bp067FirstRunSpineProps {
+export interface Bp067FirstRunSpineProps {
   onComplete: () => void;
 }
 
-const SALTFIGHTER_TEXT =
-  'Greetings, SaltFighter!\n\n' +
-  'Your AI remembers you.\n' +
-  'Your questions stay on your computer.\n' +
-  'Private. Free. Yours.\n\n' +
-  'Free to use. Better to join. Share and Save.';
-
-const SAMPLE_PROMPTS = [
-  'What is the name of a famous elephant?',
-  'What can you help me with?',
-  'Write a short grocery list for tacos.',
-  'Explain what makes this AI private.',
-];
-
-const AUTO_TEST_PROMPT = 'What is the name of a famous elephant?';
-
-type OptionChoiceState = 'pending' | 'borrowing' | 'borrow-result' | 'custom-folder';
-
-function fmtBytes(b: number): string {
-  if (b >= 1_073_741_824) return `${(b / 1_073_741_824).toFixed(1)} GB`;
-  if (b >= 1_048_576) return `${(b / 1_048_576).toFixed(0)} MB`;
-  return `${(b / 1024).toFixed(0)} KB`;
+function commitFirstRunDone(onComplete: () => void): void {
+  try {
+    localStorage.setItem(LS_BP067_FIRST_RUN_COMPLETE, 'true');
+  } catch { /* ignore storage errors */ }
+  void window.amplify?.markBp067FirstRunComplete?.();
+  onComplete();
 }
 
-export function Bp067FirstRunSpine({ onComplete }: Bp067FirstRunSpineProps) {
-  const [phase, setPhase] = useState<SpinePhase>('install');
+// Inline green check SVG -- no external icon dep
+function CheckIcon(): React.ReactElement {
+  return (
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+      <circle cx="16" cy="16" r="15" fill="rgba(74,222,128,0.15)" stroke="#4ade80" strokeWidth="1.5" />
+      <path d="M9 16.5l5 5 9-9" stroke="#4ade80" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
 
-  // install phase
-  const [installLines, setInstallLines] = useState<EngineSetupProgress[]>([]);
-  const [installError, setInstallError] = useState<string | null>(null);
-  const [installDone, setInstallDone] = useState(false);
+// Shared CSS injected once per mount
+const KEYFRAMES = `@keyframes mnemo-spin { to { transform: rotate(360deg); } }`;
 
-  // cover phase
-  const [doNotShowAgain, setDoNotShowAgain] = useState(false);
-  const crawlRef = useRef<HTMLDivElement | null>(null);
-  const autoAdvanceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const doNotShowAgainRef = useRef(false);
+export function Bp067FirstRunSpine({ onComplete }: Bp067FirstRunSpineProps): React.ReactElement | null {
+  const [step, setStep] = useState<Step>('welcome');
+  const [visible, setVisible] = useState(true);
 
-  // folder phase
+  // try-it state
+  const [aiResponse, setAiResponse] = useState<string | null>(null);
+  const [asking, setAsking] = useState(false);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // options state
+  const [optionState, setOptionState] = useState<OptionState>('idle');
+  const [borrowResult, setBorrowResult] = useState<BorrowResult | null>(null);
+  const [customModelPath, setCustomModelPath] = useState<string | null>(null);
+  const [retryError, setRetryError] = useState<string | null>(null);
+
+  // folder state
   const [folderPicked, setFolderPicked] = useState<string | null>(null);
   const [pickingFolder, setPickingFolder] = useState(false);
-  const [watcherStats, setWatcherStats] = useState<WatcherStats | null>(null);
 
-  // meet-ai phase
-  const [availableModels, setAvailableModels] = useState<string[]>([]);
-  const [selectedModel, setSelectedModel] = useState<string>('');
-  const [modelsLoading, setModelsLoading] = useState(false);
-  const [modelPull, setModelPull] = useState<ModelPullProgress | null>(null);
-  const [modelPullName, setModelPullName] = useState<string | null>(null);
+  // 200ms fade transition between steps
+  const goTo = useCallback((next: Step): void => {
+    setVisible(false);
+    setTimeout(() => {
+      setStep(next);
+      setVisible(true);
+    }, 200);
+  }, []);
 
-  // try-now phase
-  const [question, setQuestion] = useState('');
-  const [answer, setAnswer] = useState<string | null>(null);
-  const [asking, setAsking] = useState(false);
-  const [askError, setAskError] = useState<string | null>(null);
-  const [autoAnswerShown, setAutoAnswerShown] = useState(false);
-  const askInputRef = useRef<HTMLInputElement | null>(null);
-  const autoAskedRef = useRef(false);
-
-  // upgrades phase
-  const [showUpgrades, setShowUpgrades] = useState(false);
-
-  // install error options panel
-  const [optionChoiceState, setOptionChoiceState] = useState<OptionChoiceState>('pending');
-  const [borrowResult, setBorrowResult] = useState<{
-    ok: boolean;
-    disclosure?: string;
-    error?: string;
-    cost_transport_usd?: number;
-    cost_compute_usd_approx?: number;
-    node_count?: number;
-  } | null>(null);
-  const [customModelPath, setCustomModelPath] = useState<string | null>(null);
-
-  // ── Phase 0: transparent install ──────────────────────────────────────────
+  // Auto-fire elephant test when entering try-it
   useEffect(() => {
-    if (phase !== 'install') return;
-    let cleanupProgress: (() => void) | undefined;
-    const run = async () => {
-      cleanupProgress = window.amplify?.onEngineSetupProgress?.((p: EngineSetupProgress) => {
-        setInstallLines((prev) => {
-          const last = prev[prev.length - 1];
-          if (last?.message === p.message) return prev;
-          return [...prev, p];
-        });
-        if (p.step === 'ready') setInstallDone(true);
-        if (p.step === 'error') setInstallError(p.detail ?? p.message);
-      });
-      const result = await window.amplify?.setupPrivateAI?.();
-      if (!result?.ok) {
-        setInstallError(result?.error ?? 'Setup failed');
-        return;
+    if (step !== 'try-it') return;
+    let cancelled = false;
+    setAsking(true);
+    setAiResponse(null);
+
+    timeoutRef.current = setTimeout(() => {
+      if (!cancelled) {
+        setAsking(false);
+        goTo('options');
       }
-      setInstallDone(true);
-      setTimeout(() => setPhase('cover'), 600);
-    };
-    void run();
-    return () => cleanupProgress?.();
-  }, [phase]);
+    }, TRY_IT_TIMEOUT_MS);
 
-  // ── SaltFighter cover: scroll crawl ───────────────────────────────────────
-  useEffect(() => {
-    if (phase !== 'cover') return;
-    try {
-      const audio = new Audio('greetings_saltfighter.m4a');
-      audio.volume = 0.7;
-      audio.play().catch(() => {});
-    } catch { /* audio optional */ }
-    if (crawlRef.current) {
-      const el = crawlRef.current;
-      let frame = 0;
-      const animate = () => {
-        el.scrollTop += 0.4;
-        frame = requestAnimationFrame(animate);
-      };
-      frame = requestAnimationFrame(animate);
-      return () => cancelAnimationFrame(frame);
-    }
-    return undefined;
-  }, [phase]);
-
-  // ── SaltFighter cover: auto-advance 8s ────────────────────────────────────
-  useEffect(() => {
-    if (phase !== 'cover') return;
-    autoAdvanceRef.current = setTimeout(() => {
-      if (doNotShowAgainRef.current) {
-        finishSpine();
-      } else {
-        setPhase('value');
-      }
-    }, 8000);
-    return () => {
-      if (autoAdvanceRef.current) clearTimeout(autoAdvanceRef.current);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [phase]);
-
-  // ── meet-ai: load model list on entry ────────────────────────────────────
-  useEffect(() => {
-    if (phase !== 'meet-ai') return;
-    setModelsLoading(true);
-    void window.amplify?.listOllamaModels?.()
-      .then((models: string[]) => {
-        setAvailableModels(models ?? []);
-        if (models && models.length > 0 && !selectedModel) {
-          setSelectedModel(models[0]);
+    void (async (): Promise<void> => {
+      try {
+        const result = await window.amplify?.askFloorModel?.(AUTO_TEST_PROMPT);
+        if (cancelled) return;
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        if (result?.ok && result.text) {
+          setAiResponse(result.text);
+          setAsking(false);
+          goTo('success');
+        } else {
+          setAsking(false);
+          goTo('options');
         }
-      })
-      .catch(() => {})
-      .finally(() => setModelsLoading(false));
-  }, [phase]); // eslint-disable-line react-hooks/exhaustive-deps
+      } catch {
+        if (cancelled) return;
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        setAsking(false);
+        goTo('options');
+      }
+    })();
 
-  // ── try-now: autofocus + refresh stats + auto-elephant test ──────────────
-  useEffect(() => {
-    if (phase !== 'try-now') return;
-    void window.amplify?.watcher?.getStats?.()
-      .then((s) => setWatcherStats(s as WatcherStats | null))
-      .catch(() => {});
-    if (!autoAskedRef.current) {
-      autoAskedRef.current = true;
-      setQuestion(AUTO_TEST_PROMPT);
-      void handleAskPrompt(AUTO_TEST_PROMPT);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [phase]);
+    return (): void => {
+      cancelled = true;
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, [step, goTo]);
 
-  const finishSpine = useCallback(() => {
-    try {
-      localStorage.setItem(LS_BP067_FIRST_RUN_COMPLETE, 'true');
-      if (doNotShowAgainRef.current) localStorage.setItem(LS_SALTFIGHTER_SKIP, 'true');
-    } catch { /* ignore */ }
-    void window.amplify?.markBp067FirstRunComplete?.();
-    onComplete();
+  const handleFinish = useCallback((): void => {
+    commitFirstRunDone(onComplete);
   }, [onComplete]);
 
-  const handleSkipCover = () => {
-    if (autoAdvanceRef.current) clearTimeout(autoAdvanceRef.current);
-    if (doNotShowAgainRef.current) {
-      finishSpine();
-    } else {
-      setPhase('value');
-    }
-  };
-
-  const handlePickFolder = async () => {
+  const handlePickFolder = async (): Promise<void> => {
     setPickingFolder(true);
     try {
       const result = await window.amplify?.watcher?.openFolderDialog?.();
       if (result && !result.canceled && result.filePaths.length > 0) {
         setFolderPicked(result.filePaths[0]);
-        await window.amplify?.watcher?.addFolder?.(result.filePaths[0]).catch(() => {});
+        void window.amplify?.watcher?.addFolder?.(result.filePaths[0]).catch((): void => {});
       }
     } catch { /* dialog unavailable */ }
     finally { setPickingFolder(false); }
   };
 
-  const handlePullModel = async (modelName: string) => {
-    setModelPullName(modelName);
-    setModelPull({ status: 'pulling', percentComplete: 0 });
-    const cleanup = window.amplify?.onOllamaPullProgress?.((p: ModelPullProgress) => {
-      setModelPull(p);
-      if (p.status === 'complete') {
-        setAvailableModels((prev) =>
-          prev.includes(modelName) ? prev : [...prev, modelName],
-        );
-        setSelectedModel(modelName);
-      }
-    });
+  const handleRetrySetup = async (): Promise<void> => {
+    setOptionState('retrying');
+    setRetryError(null);
     try {
-      await window.amplify?.pullDefaultModel?.();
-    } catch { /* handled by progress events */ }
-    finally { cleanup?.(); }
-  };
-
-  // Auto-ask variant: takes a prompt directly, shows answer inline without advancing phase
-  const handleAskPrompt = async (prompt: string) => {
-    if (!prompt || asking) return;
-    setAsking(true);
-    setAskError(null);
-    try {
-      const result = await window.amplify?.askFloorModel?.(prompt);
-      if (result?.ok && result.text) {
-        setAnswer(result.text);
-        setAutoAnswerShown(true);
+      const result = await window.amplify?.setupPrivateAI?.();
+      if (result?.ok) {
+        setOptionState('retry-ok');
+        setTimeout(() => goTo('try-it'), 800);
       } else {
-        setAskError(result?.error ?? 'Could not get an answer. Try again in a moment.');
+        setRetryError(result?.error ?? 'Setup failed.');
+        setOptionState('retry-err');
       }
     } catch {
-      setAskError('Something went wrong. Try again in a moment.');
-    } finally {
-      setAsking(false);
-      askInputRef.current?.focus();
+      setRetryError('Could not start setup.');
+      setOptionState('retry-err');
     }
   };
 
-  const handleAsk = async () => {
-    const q = question.trim();
-    if (!q || asking) return;
-    setAsking(true);
-    setAskError(null);
+  const handleBorrow = async (): Promise<void> => {
+    setOptionState('borrowing');
+    setBorrowResult(null);
     try {
-      const result = await window.amplify?.askFloorModel?.(q);
-      if (result?.ok && result.text) {
-        setAnswer(result.text);
-        setAutoAnswerShown(false);
-        setShowUpgrades(true);
-        setPhase('upgrades');
-      } else {
-        setAskError(result?.error ?? 'Could not get an answer. Try again in a moment.');
-      }
+      const r = await window.amplify?.lbRequestFrontierBorrow?.();
+      setBorrowResult(r ?? { ok: false, error: 'No response from mesh.' });
     } catch {
-      setAskError('Something went wrong. Try again in a moment.');
+      setBorrowResult({ ok: false, error: 'Could not reach the mesh.' });
     } finally {
-      setAsking(false);
+      setOptionState('borrow-result');
     }
   };
+
+  // ── Shared style constants ─────────────────────────────────────────────────
 
   const overlay: React.CSSProperties = {
     position: 'fixed',
     inset: 0,
     zIndex: 9600,
-    background: '#0a0f1a',
     display: 'flex',
-    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    background: '#0d1117',
     fontFamily: 'system-ui, -apple-system, sans-serif',
-    overflow: 'hidden',
+    opacity: visible ? 1 : 0,
+    transition: 'opacity 200ms ease',
   };
 
-  // ── Install screen ───────────────────────────────────────────────────────
-  if (phase === 'install') {
+  const card: React.CSSProperties = {
+    width: '100%',
+    maxWidth: 480,
+    padding: '40px 36px',
+    background: '#111827',
+    border: '1px solid rgba(100,116,139,0.2)',
+    borderRadius: 12,
+    margin: '0 16px',
+  };
+
+  const brandLine: React.CSSProperties = {
+    fontSize: 13,
+    fontWeight: 700,
+    color: '#6ee7b7',
+    letterSpacing: '0.08em',
+    textTransform: 'uppercase',
+    marginBottom: 28,
+  };
+
+  const heading: React.CSSProperties = {
+    fontSize: 22,
+    fontWeight: 800,
+    color: '#e2e8f0',
+    lineHeight: 1.25,
+    margin: '0 0 10px',
+  };
+
+  const body: React.CSSProperties = {
+    fontSize: 14,
+    color: '#64748b',
+    lineHeight: 1.7,
+    margin: '0 0 28px',
+  };
+
+  const primaryBtn: React.CSSProperties = {
+    display: 'block',
+    width: '100%',
+    padding: '13px 20px',
+    background: 'rgba(110,231,183,0.13)',
+    border: '1px solid rgba(110,231,183,0.4)',
+    borderRadius: 8,
+    color: '#6ee7b7',
+    fontSize: 14,
+    fontWeight: 700,
+    cursor: 'pointer',
+    textAlign: 'center',
+    marginBottom: 12,
+  };
+
+  const ghostBtn: React.CSSProperties = {
+    display: 'block',
+    width: '100%',
+    textAlign: 'center',
+    background: 'none',
+    border: 'none',
+    color: '#475569',
+    fontSize: 12,
+    cursor: 'pointer',
+    padding: '6px 0',
+  };
+
+  const footNote: React.CSSProperties = {
+    fontSize: 11,
+    color: '#334155',
+    marginTop: 20,
+    lineHeight: 1.6,
+    textAlign: 'center',
+  };
+
+  const spinner: React.CSSProperties = {
+    width: 22,
+    height: 22,
+    border: '2px solid rgba(110,231,183,0.2)',
+    borderTopColor: '#6ee7b7',
+    borderRadius: '50%',
+    animation: 'mnemo-spin 0.8s linear infinite',
+    display: 'inline-block',
+  };
+
+  const optionCard: React.CSSProperties = {
+    marginBottom: 10,
+    padding: '12px 14px',
+    background: 'rgba(15,23,42,0.5)',
+    border: '1px solid rgba(100,116,139,0.2)',
+    borderRadius: 8,
+  };
+
+  // ── Step 1: Welcome ──────────────────────────────────────────────────────────
+
+  if (step === 'welcome') {
+    return (
+      <>
+        <style>{KEYFRAMES}</style>
+        <div style={overlay}>
+          <div style={card}>
+            <div style={brandLine}>MnemosyneC</div>
+            <h1 style={heading}>Your private AI. Lives on your computer. $0 to ask anything.</h1>
+            <p style={body}>
+              MnemosyneC runs a small AI model entirely on your machine.
+              Nothing leaves your computer. No subscription, no cloud dependency.
+            </p>
+            <button type="button" style={primaryBtn} onClick={(): void => goTo('try-it')}>
+              {"Let's try it"}
+            </button>
+            <button type="button" style={ghostBtn} onClick={handleFinish}>
+              Skip first-run
+            </button>
+            <p style={footNote}>
+              MnemosyneC will start a small AI on your computer. Takes a few seconds.
+            </p>
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  // ── Step 2: Try it (auto elephant test fires in useEffect) ─────────────────
+
+  if (step === 'try-it') {
+    return (
+      <>
+        <style>{KEYFRAMES}</style>
+        <div style={overlay}>
+          <div style={{ ...card, textAlign: 'center' }}>
+            <div style={brandLine}>MnemosyneC</div>
+            <div style={{ marginBottom: 20 }}>
+              <span style={spinner} />
+            </div>
+            <h2 style={{ ...heading, fontSize: 18 }}>
+              {asking ? 'Asking your AI a quick question.' : 'Connecting...'}
+            </h2>
+            <p style={{ ...body, fontSize: 12 }}>
+              &ldquo;{AUTO_TEST_PROMPT}&rdquo;
+            </p>
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  // ── Step 3: Success ──────────────────────────────────────────────────────────
+
+  if (step === 'success') {
     return (
       <div style={overlay}>
-        <div style={{ flex: 1, padding: '48px 56px', maxWidth: 560, margin: '0 auto', width: '100%' }}>
-          <h1 style={{ fontSize: 20, fontWeight: 800, color: '#e2e8f0', marginBottom: 8 }}>
-            Setting up your private AI engine
-          </h1>
-          <p style={{ fontSize: 13, color: '#94a3b8', lineHeight: 1.7, marginBottom: 28 }}>
-            MnemosyneC runs on Ollama, a free, open-source AI engine that runs entirely on your computer.
-            Your questions and files never leave your machine. Free, forever.
-          </p>
-          <div style={{ fontSize: 12, color: '#64748b', lineHeight: 2.2, fontFamily: 'monospace' }}>
-            {installLines.map((line, i) => (
-              <div
-                key={i}
-                style={{
-                  color:
-                    line.step === 'error'
-                      ? '#f87171'
-                      : line.step === 'ready'
-                      ? '#4ade80'
-                      : '#94a3b8',
-                }}
-              >
-                {line.message}
-              </div>
-            ))}
-            {!installDone && !installError && (
-              <div style={{ color: '#475569' }}>Almost ready...</div>
-            )}
+        <div style={card}>
+          <div style={{ marginBottom: 16 }}>
+            <CheckIcon />
           </div>
-          {installError && (
-            <div style={{ marginTop: 20, padding: 14, background: 'rgba(239,68,68,0.1)', borderRadius: 8, color: '#fca5a5', fontSize: 12 }}>
-              <div style={{ marginBottom: 14, lineHeight: 1.6 }}>{installError}</div>
-              <div style={{ fontSize: 13, fontWeight: 700, color: '#e2e8f0', marginBottom: 12 }}>How would you like to continue?</div>
+          <h2 style={{ ...heading, fontSize: 20, marginBottom: 16 }}>Your AI works.</h2>
+          {aiResponse && (
+            <blockquote style={{
+              borderLeft: '3px solid rgba(110,231,183,0.4)',
+              margin: '0 0 24px',
+              padding: '10px 14px',
+              background: 'rgba(6,78,59,0.12)',
+              borderRadius: '0 6px 6px 0',
+              fontSize: 13,
+              color: '#cbd5e1',
+              lineHeight: 1.7,
+              maxHeight: 140,
+              overflowY: 'auto',
+            }}>
+              {aiResponse.slice(0, 600)}{aiResponse.length > 600 ? '...' : ''}
+            </blockquote>
+          )}
+          <button type="button" style={primaryBtn} onClick={handleFinish}>
+            Ask it anything
+          </button>
+          <button type="button" style={ghostBtn} onClick={(): void => goTo('folder')}>
+            {'Optional: Add a folder to your AI\u2019s memory'}
+          </button>
+        </div>
+      </div>
+    );
+  }
 
-              {/* Option A: Retry local */}
-              <div style={{ marginBottom: 10, padding: '12px 14px', background: 'rgba(15,23,42,0.5)', border: '1px solid rgba(100,116,139,0.25)', borderRadius: 8 }}>
-                <div style={{ fontWeight: 700, color: '#6ee7b7', fontSize: 12, marginBottom: 4 }}>Option A -- Use bundled local AI (works offline)</div>
-                <div style={{ color: '#94a3b8', fontSize: 11, marginBottom: 10, lineHeight: 1.5 }}>
-                  Retry the local Ollama engine setup. Private, free, no internet required.
+  // ── Step 4: Options (shown on error or timeout) ─────────────────────────────
+
+  if (step === 'options') {
+    return (
+      <>
+        <style>{KEYFRAMES}</style>
+        <div style={overlay}>
+          <div style={{ ...card, maxWidth: 500 }}>
+            <div style={brandLine}>MnemosyneC</div>
+            <h2 style={{ ...heading, fontSize: 18, marginBottom: 8 }}>{"Let's try a different way."}</h2>
+            <p style={{ ...body, fontSize: 12, marginBottom: 20 }}>
+              The AI did not respond. Choose how to continue.
+            </p>
+
+            {/* Option A -- Use bundled AI */}
+            <div style={{ ...optionCard, border: '1px solid rgba(110,231,183,0.22)', background: 'rgba(6,78,59,0.1)' }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: '#6ee7b7', marginBottom: 4 }}>
+                A -- Use the bundled AI
+              </div>
+              <div style={{ fontSize: 11, color: '#94a3b8', marginBottom: 10, lineHeight: 1.5 }}>
+                Retry local Ollama engine setup. Private, free, works offline.
+              </div>
+              {optionState === 'retrying' && (
+                <div style={{ fontSize: 11, color: '#6ee7b7', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={spinner} />
+                  Setting up...
                 </div>
+              )}
+              {optionState === 'retry-ok' && (
+                <div style={{ fontSize: 11, color: '#4ade80', marginBottom: 8 }}>Setup succeeded. Retrying test...</div>
+              )}
+              {retryError && (
+                <div style={{ fontSize: 11, color: '#f87171', marginBottom: 8 }}>{retryError}</div>
+              )}
+              {optionState !== 'retrying' && optionState !== 'retry-ok' && (
                 <button
                   type="button"
-                  onClick={() => {
-                    setInstallError(null);
-                    setInstallLines([]);
-                    setOptionChoiceState('pending');
-                    void window.amplify?.setupPrivateAI?.();
-                  }}
-                  style={{ padding: '6px 16px', background: 'rgba(110,231,183,0.12)', border: '1px solid rgba(110,231,183,0.3)', borderRadius: 6, color: '#6ee7b7', cursor: 'pointer', fontSize: 12, fontWeight: 600 }}
+                  onClick={(): void => { void handleRetrySetup(); }}
+                  style={{ padding: '6px 14px', background: 'rgba(110,231,183,0.12)', border: '1px solid rgba(110,231,183,0.3)', borderRadius: 6, color: '#6ee7b7', cursor: 'pointer', fontSize: 11, fontWeight: 600 }}
                 >
-                  Retry local AI setup
+                  {optionState === 'retry-err' ? 'Try again' : 'Start bundled AI'}
                 </button>
-              </div>
+              )}
+            </div>
 
-              {/* Option B: Borrow a frontier node */}
-              <div style={{ marginBottom: 10, padding: '12px 14px', background: 'rgba(15,23,42,0.5)', border: '1px solid rgba(100,116,139,0.25)', borderRadius: 8 }}>
-                <div style={{ fontWeight: 700, color: '#60a5fa', fontSize: 12, marginBottom: 4 }}>Option B -- Borrow a trusted friend&apos;s node on the mesh</div>
-                <div style={{ color: '#94a3b8', fontSize: 11, marginBottom: 10, lineHeight: 1.5 }}>
-                  Use a Frontier node shared by a community member. Small transport fee may apply.
-                </div>
-                {optionChoiceState === 'borrowing' && (
-                  <div style={{ color: '#60a5fa', fontSize: 11, marginBottom: 8 }}>Contacting the mesh...</div>
-                )}
-                {optionChoiceState === 'borrow-result' && borrowResult && (
-                  <div style={{ marginBottom: 10, padding: '10px 12px', background: borrowResult.ok ? 'rgba(59,130,246,0.1)' : 'rgba(239,68,68,0.1)', border: `1px solid ${borrowResult.ok ? 'rgba(59,130,246,0.3)' : 'rgba(239,68,68,0.3)'}`, borderRadius: 6, fontSize: 11, color: borrowResult.ok ? '#93c5fd' : '#fca5a5', lineHeight: 1.6 }}>
-                    {borrowResult.ok ? (
-                      <>
-                        <div style={{ fontWeight: 700, marginBottom: 4 }}>Connected to {borrowResult.node_count ?? 1} node{(borrowResult.node_count ?? 1) !== 1 ? 's' : ''}</div>
-                        {borrowResult.disclosure && <div>{borrowResult.disclosure}</div>}
-                        {borrowResult.cost_transport_usd != null && (
-                          <div style={{ marginTop: 4, color: '#64748b' }}>Transport cost: ~${borrowResult.cost_transport_usd.toFixed(4)}</div>
-                        )}
-                      </>
-                    ) : (
-                      <div>{borrowResult.error ?? 'Could not reach a frontier node. Try again later.'}</div>
-                    )}
-                  </div>
-                )}
-                {optionChoiceState !== 'borrowing' && (
-                  <button
-                    type="button"
-                    onClick={async () => {
-                      setOptionChoiceState('borrowing');
-                      setBorrowResult(null);
-                      try {
-                        const r = await window.amplify?.lbRequestFrontierBorrow?.();
-                        setBorrowResult(r ?? { ok: false, error: 'No response from mesh.' });
-                      } catch {
-                        setBorrowResult({ ok: false, error: 'Could not reach the mesh.' });
-                      } finally {
-                        setOptionChoiceState('borrow-result');
-                      }
-                    }}
-                    style={{ padding: '6px 16px', background: 'rgba(59,130,246,0.12)', border: '1px solid rgba(59,130,246,0.3)', borderRadius: 6, color: '#60a5fa', cursor: 'pointer', fontSize: 12, fontWeight: 600 }}
-                  >
-                    {optionChoiceState === 'borrow-result' ? 'Try again' : 'Request a frontier node'}
-                  </button>
-                )}
+            {/* Option B -- Borrow a frontier node */}
+            <div style={optionCard}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: '#60a5fa', marginBottom: 4 }}>
+                {"B -- Borrow a trusted friend\u2019s node"}
               </div>
-
-              {/* Option C: Custom model folder */}
-              <div style={{ padding: '12px 14px', background: 'rgba(15,23,42,0.5)', border: '1px solid rgba(100,116,139,0.25)', borderRadius: 8 }}>
-                <div style={{ fontWeight: 700, color: '#a78bfa', fontSize: 12, marginBottom: 4 }}>Option C -- Choose a different AI model folder</div>
-                <div style={{ color: '#94a3b8', fontSize: 11, marginBottom: 10, lineHeight: 1.5 }}>
-                  Point to a folder where you have Ollama models already downloaded.
+              <div style={{ fontSize: 11, color: '#94a3b8', marginBottom: 10, lineHeight: 1.5 }}>
+                Use a Frontier node shared by a community member. Small transport fee may apply.
+              </div>
+              {optionState === 'borrowing' && (
+                <div style={{ fontSize: 11, color: '#60a5fa', marginBottom: 8 }}>Contacting the mesh...</div>
+              )}
+              {optionState === 'borrow-result' && borrowResult && (
+                <div style={{
+                  marginBottom: 8, padding: '8px 10px',
+                  background: borrowResult.ok ? 'rgba(59,130,246,0.1)' : 'rgba(239,68,68,0.08)',
+                  border: `1px solid ${borrowResult.ok ? 'rgba(59,130,246,0.3)' : 'rgba(239,68,68,0.25)'}`,
+                  borderRadius: 6, fontSize: 11,
+                  color: borrowResult.ok ? '#93c5fd' : '#fca5a5',
+                  lineHeight: 1.6,
+                }}>
+                  {borrowResult.ok
+                    ? `Connected to ${borrowResult.node_count ?? 1} node${(borrowResult.node_count ?? 1) !== 1 ? 's' : ''}. ${borrowResult.disclosure ?? ''}`
+                    : (borrowResult.error ?? 'Could not reach a frontier node.')}
                 </div>
-                {customModelPath && (
-                  <div style={{ marginBottom: 10, padding: '8px 10px', background: 'rgba(167,139,250,0.08)', border: '1px solid rgba(167,139,250,0.25)', borderRadius: 6, fontSize: 11, color: '#c4b5fd', lineHeight: 1.6, wordBreak: 'break-all' }}>
-                    <div style={{ fontWeight: 700, marginBottom: 2 }}>Folder selected:</div>
-                    <div>{customModelPath}</div>
-                    <div style={{ marginTop: 6, color: '#64748b' }}>
-                      Set OLLAMA_MODELS to this path and restart to use it.
-                    </div>
-                  </div>
-                )}
+              )}
+              {optionState !== 'borrowing' && (
                 <button
                   type="button"
-                  onClick={async () => {
-                    setOptionChoiceState('custom-folder');
+                  onClick={(): void => { void handleBorrow(); }}
+                  style={{ padding: '6px 14px', background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.3)', borderRadius: 6, color: '#60a5fa', cursor: 'pointer', fontSize: 11, fontWeight: 600 }}
+                >
+                  {optionState === 'borrow-result' ? 'Try again' : 'Request a frontier node'}
+                </button>
+              )}
+            </div>
+
+            {/* Option C -- Choose a different AI folder */}
+            <div style={{ ...optionCard, marginBottom: 16 }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: '#a78bfa', marginBottom: 4 }}>
+                C -- Choose a different AI folder
+              </div>
+              <div style={{ fontSize: 11, color: '#94a3b8', marginBottom: 10, lineHeight: 1.5 }}>
+                Point to a folder where you have Ollama models already downloaded.
+              </div>
+              {customModelPath && (
+                <div style={{ marginBottom: 8, padding: '6px 10px', background: 'rgba(167,139,250,0.08)', border: '1px solid rgba(167,139,250,0.2)', borderRadius: 6, fontSize: 10, color: '#c4b5fd', wordBreak: 'break-all' }}>
+                  {customModelPath}
+                </div>
+              )}
+              <button
+                type="button"
+                onClick={(): void => {
+                  void (async (): Promise<void> => {
                     try {
                       const result = await window.amplify?.watcher?.openFolderDialog?.();
                       if (result && !result.canceled && result.filePaths.length > 0) {
                         setCustomModelPath(result.filePaths[0]);
                       }
                     } catch { /* dialog unavailable */ }
-                  }}
-                  style={{ padding: '6px 16px', background: 'rgba(167,139,250,0.12)', border: '1px solid rgba(167,139,250,0.3)', borderRadius: 6, color: '#a78bfa', cursor: 'pointer', fontSize: 12, fontWeight: 600 }}
-                >
-                  {customModelPath ? 'Choose different folder' : 'Browse for model folder'}
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  }
-
-  // ── SaltFighter cover ────────────────────────────────────────────────────
-  if (phase === 'cover') {
-    return (
-      <div style={{ ...overlay, background: '#000' }}>
-        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 50% 40%, rgba(30,60,120,0.5) 0%, #000 70%)' }} />
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '40px 60px', position: 'relative' }}>
-          <div
-            ref={crawlRef}
-            style={{ width: '100%', maxWidth: 600, height: 320, overflow: 'hidden', maskImage: 'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)' }}
-          >
-            <p style={{ fontSize: 17, fontWeight: 500, color: '#6ee7b7', textAlign: 'center', lineHeight: 2, whiteSpace: 'pre-line', marginBottom: 200 }}>
-              {SALTFIGHTER_TEXT}
-            </p>
-          </div>
-        </div>
-        <div style={{ padding: '12px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid rgba(110,231,183,0.15)', background: 'rgba(0,0,0,0.8)' }}>
-          <span style={{ fontSize: 10, color: '#334155' }}>Welcome -- MnemosyneC</span>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer', fontSize: 11, color: '#475569' }}>
-              <input
-                type="checkbox"
-                checked={doNotShowAgain}
-                onChange={(e) => {
-                  doNotShowAgainRef.current = e.target.checked;
-                  setDoNotShowAgain(e.target.checked);
+                  })();
                 }}
-                style={{ accentColor: '#6ee7b7', width: 16, height: 16, cursor: 'pointer' }}
-              />
-              Don&apos;t show again
-            </label>
-            <button
-              type="button"
-              onClick={handleSkipCover}
-              style={{ padding: '8px 20px', background: 'transparent', border: '1px solid rgba(100,116,139,0.3)', borderRadius: 6, color: '#94a3b8', fontSize: 12, cursor: 'pointer' }}
-            >
-              Skip -- open the app
-            </button>
-            <button
-              type="button"
-              onClick={() => { if (autoAdvanceRef.current) clearTimeout(autoAdvanceRef.current); setPhase('value'); }}
-              style={{ padding: '8px 24px', background: 'rgba(110,231,183,0.12)', border: '1px solid rgba(110,231,183,0.4)', borderRadius: 6, color: '#6ee7b7', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}
-            >
-              Continue
+                style={{ padding: '6px 14px', background: 'rgba(167,139,250,0.1)', border: '1px solid rgba(167,139,250,0.3)', borderRadius: 6, color: '#a78bfa', cursor: 'pointer', fontSize: 11, fontWeight: 600 }}
+              >
+                {customModelPath ? 'Choose different folder' : 'Browse for model folder'}
+              </button>
+            </div>
+
+            <button type="button" style={ghostBtn} onClick={handleFinish}>
+              Continue without AI for now
             </button>
           </div>
         </div>
-      </div>
+      </>
     );
   }
 
-  // ── Value screen ─────────────────────────────────────────────────────────
-  if (phase === 'value') {
-    return (
-      <div style={overlay}>
-        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 48 }}>
-          <div style={{ maxWidth: 480, textAlign: 'center' }}>
-            <div style={{ fontSize: 28, fontWeight: 800, color: '#e2e8f0', lineHeight: 1.25, marginBottom: 16 }}>
-              An AI that&apos;s yours.
-            </div>
-            <div style={{ fontSize: 18, color: '#94a3b8', lineHeight: 1.6, marginBottom: 32 }}>
-              Private. Free. Remembers your stuff.
-            </div>
-            <button
-              type="button"
-              onClick={() => setPhase('folder')}
-              style={{ padding: '14px 32px', background: 'rgba(110,231,183,0.15)', border: '1px solid rgba(110,231,183,0.4)', borderRadius: 8, color: '#6ee7b7', fontSize: 15, fontWeight: 700, cursor: 'pointer' }}
-            >
-              Get started
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  // ── Optional Step 5: Folder picker (reached from success tertiary link) ──────
 
-  // ── Choose your memory folder ────────────────────────────────────────────
-  if (phase === 'folder') {
+  if (step === 'folder') {
     return (
-      <div style={overlay}>
-        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 48 }}>
-          <div style={{ maxWidth: 520, width: '100%' }}>
-            <div style={{ fontSize: 22, fontWeight: 800, color: '#e2e8f0', marginBottom: 8 }}>
-              Choose your memory folder
-            </div>
-            <p style={{ fontSize: 14, color: '#94a3b8', lineHeight: 1.7, marginBottom: 8 }}>
-              Point me at a folder and I&apos;ll remember everything in it -- recipes, notes, documents.
-            </p>
-            <p style={{ fontSize: 12, color: '#475569', lineHeight: 1.6, marginBottom: 24 }}>
-              Stays private on your computer. Optional -- you can always add folders later in Settings.
+      <>
+        <style>{KEYFRAMES}</style>
+        <div style={overlay}>
+          <div style={card}>
+            <div style={brandLine}>MnemosyneC</div>
+            <h2 style={{ ...heading, fontSize: 18, marginBottom: 8 }}>
+              {"Add a folder to your AI\u2019s memory."}
+            </h2>
+            <p style={{ ...body, fontSize: 13, marginBottom: 20 }}>
+              Pick any folder and your AI will remember everything in it -- notes, documents, projects.
+              Stays private on your computer. You can add more in Settings.
             </p>
             {folderPicked ? (
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 12px', background: 'rgba(6,78,59,0.15)', border: '1px solid rgba(110,231,183,0.3)', borderRadius: 6, fontSize: 12, color: '#6ee7b7', marginBottom: 16 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 20, padding: '10px 12px', background: 'rgba(6,78,59,0.15)', border: '1px solid rgba(110,231,183,0.3)', borderRadius: 6, fontSize: 12, color: '#6ee7b7' }}>
                 <span>+</span>
-                <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{folderPicked}</span>
-                <span style={{ color: '#4ade80', fontSize: 10, flexShrink: 0 }}>watching</span>
+                <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  {folderPicked}
+                </span>
+                <button
+                  type="button"
+                  onClick={(): void => setFolderPicked(null)}
+                  style={{ background: 'none', border: 'none', color: '#475569', cursor: 'pointer', fontSize: 14, padding: 0 }}
+                >
+                  {'×'}
+                </button>
               </div>
             ) : (
               <button
                 type="button"
-                onClick={() => void handlePickFolder()}
+                onClick={(): void => { void handlePickFolder(); }}
                 disabled={pickingFolder}
-                style={{ width: '100%', padding: 14, marginBottom: 16, background: 'rgba(59,130,246,0.08)', border: '1px dashed rgba(59,130,246,0.35)', borderRadius: 8, color: '#60a5fa', fontWeight: 600, cursor: 'pointer', fontSize: 14 }}
+                style={{ display: 'block', width: '100%', padding: '12px 14px', marginBottom: 20, background: 'rgba(59,130,246,0.07)', border: '1px dashed rgba(59,130,246,0.35)', borderRadius: 8, color: '#60a5fa', fontSize: 13, fontWeight: 600, cursor: pickingFolder ? 'not-allowed' : 'pointer', textAlign: 'center' }}
               >
                 {pickingFolder ? 'Opening...' : 'Choose a folder'}
               </button>
             )}
-            <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
-              <button
-                type="button"
-                onClick={() => setPhase('meet-ai')}
-                style={{ padding: '10px 18px', background: 'none', border: '1px solid rgba(100,116,139,0.25)', borderRadius: 6, color: '#64748b', cursor: 'pointer', fontSize: 13 }}
-              >
-                Not now
-              </button>
-              <button
-                type="button"
-                onClick={() => setPhase('meet-ai')}
-                style={{ padding: '10px 24px', background: 'rgba(110,231,183,0.12)', border: '1px solid rgba(110,231,183,0.35)', borderRadius: 6, color: '#6ee7b7', fontWeight: 600, cursor: 'pointer', fontSize: 13 }}
-              >
-                {folderPicked ? 'Next: Meet your AI' : 'Skip for now'}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // ── Meet your AI ─────────────────────────────────────────────────────────
-  if (phase === 'meet-ai') {
-    const pullPct = modelPull?.percentComplete ?? 0;
-    const isPulling = modelPull?.status === 'pulling' || modelPull?.status === 'verifying';
-
-    return (
-      <div style={overlay}>
-        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 48 }}>
-          <div style={{ maxWidth: 520, width: '100%' }}>
-            <div style={{ fontSize: 22, fontWeight: 800, color: '#e2e8f0', marginBottom: 8 }}>
-              Meet your AI
-            </div>
-            <p style={{ fontSize: 14, color: '#94a3b8', lineHeight: 1.7, marginBottom: 24 }}>
-              Your AI runs entirely on your computer -- no cloud, no data sharing, no subscription fees.
-            </p>
-
-            {/* Cost display */}
-            <div style={{ display: 'flex', gap: 10, marginBottom: 24 }}>
-              <div style={{ flex: 1, padding: '12px 14px', background: 'rgba(6,78,59,0.15)', border: '1px solid rgba(110,231,183,0.2)', borderRadius: 8, textAlign: 'center' }}>
-                <div style={{ fontSize: 20, fontWeight: 800, color: '#4ade80' }}>$0</div>
-                <div style={{ fontSize: 11, color: '#64748b', marginTop: 2 }}>compute cost</div>
-              </div>
-              <div style={{ flex: 1, padding: '12px 14px', background: 'rgba(15,23,42,0.6)', border: '1px solid rgba(100,116,139,0.2)', borderRadius: 8, textAlign: 'center' }}>
-                <div style={{ fontSize: 20, fontWeight: 800, color: '#94a3b8' }}>local</div>
-                <div style={{ fontSize: 11, color: '#64748b', marginTop: 2 }}>runs on your machine</div>
-              </div>
-            </div>
-
-            {/* Current model */}
-            {modelsLoading ? (
-              <div style={{ fontSize: 12, color: '#475569', marginBottom: 20 }}>Loading available models...</div>
-            ) : availableModels.length > 0 ? (
-              <div style={{ marginBottom: 20 }}>
-                <div style={{ fontSize: 12, color: '#64748b', marginBottom: 8 }}>Currently thinking with:</div>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                  {availableModels.map((m) => (
-                    <button
-                      key={m}
-                      type="button"
-                      onClick={() => setSelectedModel(m)}
-                      style={{
-                        padding: '6px 12px',
-                        borderRadius: 6,
-                        fontSize: 12,
-                        fontWeight: selectedModel === m ? 700 : 400,
-                        cursor: 'pointer',
-                        background: selectedModel === m ? 'rgba(110,231,183,0.15)' : 'rgba(15,23,42,0.6)',
-                        border: selectedModel === m ? '1px solid rgba(110,231,183,0.5)' : '1px solid rgba(100,116,139,0.25)',
-                        color: selectedModel === m ? '#6ee7b7' : '#94a3b8',
-                      }}
-                    >
-                      {m}
-                    </button>
-                  ))}
-                </div>
-                {selectedModel && (
-                  <div style={{ marginTop: 8, fontSize: 11, color: '#475569' }}>
-                    Currently thinking with: <span style={{ color: '#6ee7b7', fontWeight: 600 }}>{selectedModel}</span>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div style={{ marginBottom: 20 }}>
-                <div style={{ fontSize: 12, color: '#64748b', marginBottom: 10 }}>No models downloaded yet.</div>
-                {!isPulling && (
-                  <button
-                    type="button"
-                    onClick={() => void handlePullModel('qwen2.5:0.5b')}
-                    style={{ padding: '8px 16px', background: 'rgba(110,231,183,0.12)', border: '1px solid rgba(110,231,183,0.3)', borderRadius: 6, color: '#6ee7b7', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}
-                  >
-                    Download default AI (qwen2.5:0.5b, ~400 MB)
-                  </button>
-                )}
-              </div>
-            )}
-
-            {/* Pull progress */}
-            {isPulling && modelPullName && (
-              <div style={{ marginBottom: 20 }}>
-                <div style={{ fontSize: 11, color: '#64748b', marginBottom: 6 }}>
-                  Downloading {modelPullName}... {pullPct}%
-                  {modelPull?.bytesDownloaded && modelPull?.totalBytes
-                    ? ` (${fmtBytes(modelPull.bytesDownloaded)} / ${fmtBytes(modelPull.totalBytes)})`
-                    : ''}
-                </div>
-                <div style={{ height: 6, background: 'rgba(100,116,139,0.2)', borderRadius: 3, overflow: 'hidden' }}>
-                  <div
-                    style={{ height: '100%', width: `${pullPct}%`, background: '#6ee7b7', borderRadius: 3, transition: 'width 0.3s ease' }}
-                  />
-                </div>
-              </div>
-            )}
-            {modelPull?.status === 'error' && (
-              <div style={{ marginBottom: 16, fontSize: 12, color: '#f87171' }}>
-                Download failed: {modelPull.error}
-              </div>
-            )}
-
-            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <button
-                type="button"
-                onClick={() => setPhase('try-now')}
-                disabled={isPulling}
-                style={{ padding: '10px 24px', background: 'rgba(110,231,183,0.15)', border: '1px solid rgba(110,231,183,0.4)', borderRadius: 6, color: '#6ee7b7', fontWeight: 700, cursor: isPulling ? 'wait' : 'pointer', opacity: isPulling ? 0.6 : 1, fontSize: 13 }}
-              >
-                {availableModels.length > 0 ? 'Try it now' : 'Skip for now'}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // ── Try it now (first inference with memory context) ─────────────────────
-  if (phase === 'try-now') {
-    return (
-      <div style={overlay}>
-        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 48 }}>
-          <div style={{ maxWidth: 520, width: '100%' }}>
-            <div style={{ fontSize: 22, fontWeight: 800, color: '#e2e8f0', marginBottom: 8 }}>
-              Try it now
-            </div>
-
-            {/* Memory indicator */}
-            {watcherStats && watcherStats.ebletsMinted > 0 ? (
-              <div style={{ marginBottom: 16, padding: '8px 12px', background: 'rgba(6,78,59,0.15)', border: '1px solid rgba(110,231,183,0.2)', borderRadius: 6, fontSize: 12, color: '#6ee7b7', display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span>+</span>
-                Your memory: <strong>{watcherStats.ebletsMinted.toLocaleString()}</strong> file{watcherStats.ebletsMinted !== 1 ? 's' : ''} remembered
-              </div>
-            ) : folderPicked ? (
-              <div style={{ marginBottom: 16, padding: '8px 12px', background: 'rgba(15,23,42,0.4)', border: '1px solid rgba(100,116,139,0.2)', borderRadius: 6, fontSize: 12, color: '#475569', display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span>...</span>
-                Indexing your memory folder
-              </div>
-            ) : (
-              <p style={{ fontSize: 13, color: '#64748b', lineHeight: 1.7, marginBottom: 16 }}>
-                Ask me anything -- no memory folder yet, but you can always add one in Settings.
-              </p>
-            )}
-
-            {selectedModel && (
-              <div style={{ marginBottom: 16, fontSize: 11, color: '#475569' }}>
-                Thinking with: <span style={{ color: '#94a3b8' }}>{selectedModel}</span> -- $0 compute cost
-              </div>
-            )}
-
-            {/* Auto-test result: shown as soon as the elephant answer comes back */}
-            {asking && !autoAnswerShown && (
-              <div style={{ marginBottom: 20, padding: '14px 16px', background: 'rgba(6,78,59,0.12)', border: '1px solid rgba(110,231,183,0.2)', borderRadius: 8 }}>
-                <div style={{ fontSize: 12, color: '#6ee7b7', fontWeight: 600, marginBottom: 6 }}>Running a quick test...</div>
-                <div style={{ fontSize: 11, color: '#475569' }}>Asking: &ldquo;{AUTO_TEST_PROMPT}&rdquo;</div>
-              </div>
-            )}
-
-            {autoAnswerShown && answer && (
-              <div style={{ marginBottom: 20, padding: '14px 16px', background: 'rgba(6,78,59,0.18)', border: '1px solid rgba(110,231,183,0.4)', borderRadius: 8 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-                  <span style={{ fontSize: 16, color: '#4ade80' }}>+</span>
-                  <span style={{ fontSize: 13, fontWeight: 800, color: '#4ade80' }}>Your AI works! Here is what it said:</span>
-                </div>
-                <div style={{ fontSize: 12, color: '#64748b', marginBottom: 8, fontStyle: 'italic' }}>
-                  Q: &ldquo;{AUTO_TEST_PROMPT}&rdquo;
-                </div>
-                <div style={{ fontSize: 14, color: '#e2e8f0', lineHeight: 1.6, maxHeight: 100, overflow: 'auto' }}>
-                  {answer.slice(0, 400)}{answer.length > 400 ? '...' : ''}
-                </div>
-              </div>
-            )}
-
-            <label htmlFor="bp067-ask" style={{ display: 'block', fontSize: 14, fontWeight: 600, color: '#e2e8f0', marginBottom: 10 }}>
-              {autoAnswerShown ? 'Ask your own question:' : 'Ask me anything:'}
-            </label>
-            <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
-              <input
-                id="bp067-ask"
-                ref={askInputRef}
-                value={question}
-                onChange={(e) => setQuestion(e.target.value)}
-                onFocus={() => { if (question === AUTO_TEST_PROMPT) setQuestion(''); }}
-                onKeyDown={(e) => { if (e.key === 'Enter') void handleAsk(); }}
-                placeholder={autoAnswerShown ? 'Ask me anything...' : 'Try: What can you help me with?'}
-                disabled={asking}
-                style={{ flex: 1, padding: '12px 14px', background: '#111827', border: '1px solid rgba(110,231,183,0.3)', borderRadius: 8, color: '#e2e8f0', fontSize: 14, outline: 'none' }}
-              />
-              <button
-                type="button"
-                onClick={() => void handleAsk()}
-                disabled={asking || !question.trim()}
-                style={{ padding: '12px 20px', background: 'rgba(110,231,183,0.15)', border: '1px solid rgba(110,231,183,0.4)', borderRadius: 8, color: '#6ee7b7', fontWeight: 700, cursor: asking ? 'wait' : 'pointer', opacity: asking || !question.trim() ? 0.6 : 1, whiteSpace: 'nowrap' }}
-              >
-                {asking ? '...' : 'Ask'}
-              </button>
-            </div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 16 }}>
-              {SAMPLE_PROMPTS.map((p) => (
-                <button
-                  key={p}
-                  type="button"
-                  onClick={() => setQuestion(p)}
-                  style={{ fontSize: 10, padding: '4px 10px', background: 'rgba(100,116,139,0.15)', border: '1px solid rgba(100,116,139,0.25)', borderRadius: 12, color: '#94a3b8', cursor: 'pointer' }}
-                >
-                  {p}
-                </button>
-              ))}
-            </div>
-            {askError && <div style={{ fontSize: 12, color: '#f87171', marginTop: 8 }}>{askError}</div>}
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 8 }}>
-              <button
-                type="button"
-                onClick={() => { setShowUpgrades(true); setPhase('upgrades'); }}
-                style={{ padding: '8px 16px', background: 'none', border: 'none', color: '#475569', fontSize: 12, cursor: 'pointer' }}
-              >
-                Skip -- open the app
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // ── Optional upgrades ────────────────────────────────────────────────────
-  if (phase === 'upgrades' && showUpgrades) {
-    return (
-      <div style={overlay}>
-        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 48 }}>
-          <div style={{ maxWidth: 480, textAlign: 'center' }}>
-            {answer && (
-              <div style={{ marginBottom: 24, padding: 16, background: 'rgba(6,78,59,0.15)', border: '1px solid rgba(110,231,183,0.25)', borderRadius: 8, fontSize: 13, color: '#cbd5e1', lineHeight: 1.6, maxHeight: 120, overflow: 'auto', textAlign: 'left' }}>
-                {answer.slice(0, 500)}{answer.length > 500 ? '...' : ''}
-              </div>
-            )}
-            <div style={{ fontSize: 16, fontWeight: 700, color: '#e2e8f0', marginBottom: 8 }}>
-              {answer ? 'Now that you see it works -- want it even smarter?' : 'Want an even smarter AI?'}
-            </div>
-            <p style={{ fontSize: 12, color: '#64748b', marginBottom: 24, lineHeight: 1.6 }}>
-              Optional. Your current AI works great. Upgrade anytime in Settings.
-            </p>
-            <div style={{ display: 'flex', gap: 10, justifyContent: 'center', marginBottom: 24 }}>
-              <button
-                type="button"
-                style={{ padding: '10px 16px', background: 'rgba(100,116,139,0.1)', border: '1px solid rgba(100,116,139,0.25)', borderRadius: 8, color: '#94a3b8', fontSize: 12, cursor: 'default' }}
-                title="Available in Settings -- AI"
-              >
-                {UPGRADE_MODELS.good.label}
-              </button>
-              <button
-                type="button"
-                style={{ padding: '10px 16px', background: 'rgba(100,116,139,0.1)', border: '1px solid rgba(100,116,139,0.25)', borderRadius: 8, color: '#94a3b8', fontSize: 12, cursor: 'default' }}
-                title="Available in Settings -- AI"
-              >
-                {UPGRADE_MODELS.great.label}
-              </button>
-            </div>
-            <button
-              type="button"
-              onClick={finishSpine}
-              style={{ padding: '12px 28px', background: 'rgba(110,231,183,0.15)', border: '1px solid rgba(110,231,183,0.4)', borderRadius: 8, color: '#6ee7b7', fontWeight: 700, cursor: 'pointer' }}
-            >
-              Open MnemosyneC
+            <button type="button" style={primaryBtn} onClick={handleFinish}>
+              {folderPicked ? 'Done -- open the app' : 'Open the app'}
+            </button>
+            <button type="button" style={ghostBtn} onClick={handleFinish}>
+              Skip for now
             </button>
           </div>
         </div>
-      </div>
+      </>
     );
   }
 
