@@ -4,7 +4,7 @@
  * K358 / B086
  */
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useWildfireRun } from "@/contexts/WildfireRunContext";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -20,8 +20,10 @@ import { Flame, X, Sparkles, ArrowRight } from "lucide-react";
 export function TourModeOverlay() {
   const { isTourMode, endTour, tourPagesVisited, showTourCompletion, dismissTourCompletion } = useWildfireRun();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   if (!isTourMode) return null;
+  if (pathname === '/') return null;
 
   return (
     <>

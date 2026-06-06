@@ -6,12 +6,15 @@
  */
 import { motion } from "framer-motion";
 import { useArchipelagoTourSafe } from "@/contexts/ArchipelagoTourContext";
+import { useLocation } from "react-router-dom";
 import { Flame, X } from "lucide-react";
 
 export function TourBanner() {
   const { isTourActive, endTour, flippedIslands } = useArchipelagoTourSafe();
+  const { pathname } = useLocation();
 
   if (!isTourActive) return null;
+  if (pathname === '/') return null;
 
   return (
     <motion.div

@@ -327,13 +327,6 @@ export function RotatingQuotes({
         </motion.div>
       </AnimatePresence>
 
-      {/* Hidden audio element for Yvaine quote */}
-      <audio
-        ref={audioRef}
-        src="/audio/WhatDoStarsDOShine.m4a"
-        onEnded={() => setIsPlaying(false)}
-      />
-
       {/* Progress dots */}
       <div className="flex gap-1.5 mt-3">
         {QUOTES.map((_, i) => (

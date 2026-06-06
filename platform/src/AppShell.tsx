@@ -66,8 +66,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         .then(({ data }: { data: unknown }) => {
           if (!data) setShowTutorial(true);
         });
-    } else {
-      setShowTutorial(true);
     }
   }, [user, location.pathname]);
 

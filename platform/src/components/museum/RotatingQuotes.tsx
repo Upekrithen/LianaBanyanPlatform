@@ -193,14 +193,6 @@ export function RotatingQuotes({
 
   return (
     <>
-      {/* Yvaine audio — original file; plays on demand via ▶/⏸ button */}
-      <audio
-        ref={audioRef}
-        src="/audio/WhatDoStarsDOShine.m4a"
-        preload="auto"
-        onEnded={() => setIsPlaying(false)}
-      />
-
       <div className="w-full" style={{ maxWidth: "28rem", margin: "0 auto 1rem" }}>
         <div
           className="flex items-center justify-center gap-3"
