@@ -2,26 +2,20 @@
  * HEOHOFlipCard — Cue Deck Card flip container.
  *
  * Front face: HEOHOCardFront (quotes, HEOHO title, Enter / Watch buttons, Yvaine sequence)
- * Back face: FableFlipbook (26-frame LRH Fable drawn by the Founder's son, /fabled/hen*.png)
+ * Back face: WatchFable (canonical LRH Fable -- Founder pick, BP075)
  *
  * Flip behavior:
  *   - Clicking the card body (anywhere without a stopPropagation handler) flips front -> back.
- *   - Clicking the Watch button on the front: flips AND auto-plays the Fable.
+ *   - Clicking the Watch button on the front: flips to back (WatchFable auto-advances).
  *   - Clicking "Flip Back" on the back header: returns to front.
  *   - Clicks inside the back face do NOT bubble to the flip container (navigation within
- *     the Fable flipbook is preserved).
+ *     WatchFable is preserved).
  *
- * BP075 restore: wires the card flip that was removed when submarine doors were extracted
- * in commit 417c67e (Apr 9 2026). No wrapper added; HEOHOCardFront is the canonical front.
- *
- * NOTE: No MP4 / YouTube video files for the LRH Fable were found on disk.
- * The canonical on-disk fable is the 26-image FableFlipbook (hen1-26.png).
- * If a YouTube URL or video file for the son's fable exists, wire it here by replacing
- * the <FableFlipbook> back face with a <YouTube> or <video> embed.
+ * BP075: WatchFable replaces FableFlipbook as the canonical card-back fable (Founder directive).
  */
 import { useState, useCallback } from "react";
 import { HEOHOCardFront } from "./HEOHOCardFront";
-import { FableFlipbook } from "@/components/FableFlipbook";
+import WatchFable from "@/pages/museum/WatchFable";
 
 interface HEOHOFlipCardProps {
   /** Passed through to HEOHOCardFront — true when the Yvaine quote is active */
@@ -50,11 +44,9 @@ export function HEOHOFlipCard({
   muted,
 }: HEOHOFlipCardProps) {
   const [isFlipped, setIsFlipped] = useState(false);
-  const [fableAutoPlay, setFableAutoPlay] = useState(false);
 
-  // Watch button on front: flip to back AND auto-play
+  // Watch button on front: flip to back (WatchFable auto-advances on its own)
   const handleWatch = useCallback(() => {
-    setFableAutoPlay(true);
     setIsFlipped(true);
   }, []);
 
@@ -62,7 +54,6 @@ export function HEOHOFlipCard({
   const handleFlipBack = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
     setIsFlipped(false);
-    setFableAutoPlay(false);
   }, []);
 
   // Clicking the card body (front face only) flips to back — no auto-play
@@ -173,11 +164,7 @@ export function HEOHOFlipCard({
 
           {/* Fable content */}
           <div style={{ flex: 1, minHeight: 0, overflowY: "auto", padding: "0.5rem 0.25rem 0.25rem" }}>
-            <FableFlipbook
-              autoPlay={fableAutoPlay}
-              compact={true}
-              className="w-full"
-            />
+            <WatchFable inline />
           </div>
 
           {/* Spacer for bottom breathing room */}

@@ -1,12 +1,20 @@
 /**
  * WatchFable — LRH Fable slideshow (submarine door #2).
  * Route: /watch, /watch/:slide
+ *
+ * When inline={true} (card-back use), DeckCardShell is skipped and URL sync
+ * is suppressed; the fable content renders directly into the parent container.
  */
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { DeckCardShell } from "@/components/museum/DeckCardShell";
 import { DoorCard } from "@/components/museum/DoorCard";
 import { motion, AnimatePresence } from "framer-motion";
+
+interface WatchFableProps {
+  /** When true, skip DeckCardShell and URL sync (for card-back inline use). */
+  inline?: boolean;
+}
 
 const FABLE_SLIDES = [
   "The Little Red Hen\nfound some seeds.",
@@ -41,7 +49,7 @@ const FABLE_SLIDES = [
   "...",
 ];
 
-const WatchFable = () => {
+const WatchFable = ({ inline = false }: WatchFableProps) => {
   const navigate = useNavigate();
   const { slide: slideParam } = useParams();
   const initialSlide = slideParam ? Math.min(Math.max(0, parseInt(slideParam, 10) - 1), FABLE_SLIDES.length - 1) : 0;
@@ -64,107 +72,114 @@ const WatchFable = () => {
     return () => clearInterval(timer);
   }, [fableEnded]);
 
-  // Sync URL with slide
+  // Sync URL with slide (suppressed in inline/card-back mode)
   useEffect(() => {
+    if (inline) return;
     const path = fableSlide === 0 ? "/watch" : `/watch/${fableSlide + 1}`;
     window.history.replaceState(null, "", path);
-  }, [fableSlide]);
+  }, [fableSlide, inline]);
 
-  return (
-    <DeckCardShell>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        className="flex-1 flex flex-col"
-      >
-        {!fableEnded ? (
-          <div className="flex-1 flex flex-col items-center justify-center text-center">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={fableSlide}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.4 }}
-                className="flex flex-col items-center"
-              >
-                <div className="rounded-lg overflow-hidden mb-3 bg-white/95" style={{ maxWidth: "200px" }}>
-                  <img
-                    src={`/fable/${fableSlide + 1}.png`}
-                    alt={`Fable scene ${fableSlide + 1}`}
-                    className="w-full h-auto"
-                    style={{ display: "block" }}
-                  />
-                </div>
-                <p
-                  style={{
-                    fontFamily: "'Crimson Pro', Georgia, serif",
-                    fontSize: "clamp(0.85rem, 2.2vw, 1rem)",
-                    color: "#faf5eb",
-                    lineHeight: 1.6,
-                    whiteSpace: "pre-line",
-                    maxWidth: "280px",
-                    textWrap: "balance" as any,
-                  }}
-                >
-                  {FABLE_SLIDES[fableSlide]}
-                </p>
-              </motion.div>
-            </AnimatePresence>
-
-            {/* Progress bar */}
-            <div className="w-full max-w-[200px] h-1 rounded-full bg-slate-800 mt-4 overflow-hidden">
-              <motion.div
-                className="h-full rounded-full bg-emerald-500/60"
-                animate={{ width: `${((fableSlide + 1) / FABLE_SLIDES.length) * 100}%` }}
-                transition={{ duration: 0.3 }}
-              />
-            </div>
-            <p className="text-[10px] text-slate-600 mt-1.5">{fableSlide + 1} / {FABLE_SLIDES.length}</p>
-
-            {/* Navigation */}
-            <div className="flex gap-4 mt-3">
-              <button
-                onClick={() => setFableSlide(Math.max(0, fableSlide - 1))}
-                className={`text-xs text-slate-500 hover:text-slate-300 ${fableSlide === 0 ? "invisible" : ""}`}
-              >
-                ← Prev
-              </button>
-              <button
-                onClick={() => {
-                  if (fableSlide >= FABLE_SLIDES.length - 1) setFableEnded(true);
-                  else setFableSlide(fableSlide + 1);
+  const content = (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="flex-1 flex flex-col"
+    >
+      {!fableEnded ? (
+        <div className="flex-1 flex flex-col items-center justify-center text-center">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={fableSlide}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.4 }}
+              className="flex flex-col items-center"
+            >
+              <div className="rounded-lg overflow-hidden mb-3 bg-white/95" style={{ maxWidth: "200px" }}>
+                <img
+                  src={`/fable/${fableSlide + 1}.png`}
+                  alt={`Fable scene ${fableSlide + 1}`}
+                  className="w-full h-auto"
+                  style={{ display: "block" }}
+                />
+              </div>
+              <p
+                style={{
+                  fontFamily: "'Crimson Pro', Georgia, serif",
+                  fontSize: "clamp(0.85rem, 2.2vw, 1rem)",
+                  color: "#faf5eb",
+                  lineHeight: 1.6,
+                  whiteSpace: "pre-line",
+                  maxWidth: "280px",
+                  textWrap: "balance" as any,
                 }}
-                className="text-xs text-emerald-400 hover:text-emerald-300"
               >
-                Next →
+                {FABLE_SLIDES[fableSlide]}
+              </p>
+            </motion.div>
+          </AnimatePresence>
+
+          {/* Progress bar */}
+          <div className="w-full max-w-[200px] h-1 rounded-full bg-slate-800 mt-4 overflow-hidden">
+            <motion.div
+              className="h-full rounded-full bg-emerald-500/60"
+              animate={{ width: `${((fableSlide + 1) / FABLE_SLIDES.length) * 100}%` }}
+              transition={{ duration: 0.3 }}
+            />
+          </div>
+          <p className="text-[10px] text-slate-600 mt-1.5">{fableSlide + 1} / {FABLE_SLIDES.length}</p>
+
+          {/* Navigation */}
+          <div className="flex gap-4 mt-3">
+            <button
+              onClick={() => setFableSlide(Math.max(0, fableSlide - 1))}
+              className={`text-xs text-slate-500 hover:text-slate-300 ${fableSlide === 0 ? "invisible" : ""}`}
+            >
+              ← Prev
+            </button>
+            <button
+              onClick={() => {
+                if (fableSlide >= FABLE_SLIDES.length - 1) setFableEnded(true);
+                else setFableSlide(fableSlide + 1);
+              }}
+              className="text-xs text-emerald-400 hover:text-emerald-300"
+            >
+              Next →
+            </button>
+          </div>
+        </div>
+      ) : (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex-1 flex flex-col justify-center"
+        >
+          <div className="w-full">
+            <div className="flex flex-col gap-2.5 mb-4">
+              <DoorCard icon="🔍" title="What is this?" subtitle="See what we built" to="/explore" accentColor="#10b981" />
+              <DoorCard icon="🔨" title="I want to build" subtitle="Start making money" to="/build" accentColor="#3b82f6" delay={0.06} />
+              <DoorCard icon="🤝" title="I'm ready" subtitle="Join for $5/year" to="/join" accentColor="#f59e0b" delay={0.12} />
+            </div>
+            <div className="flex items-center justify-center gap-4 text-sm">
+              <button onClick={() => navigate(-1)} className="text-slate-500 hover:text-slate-300 transition-colors">
+                ← Back
+              </button>
+              <button onClick={() => navigate("/explore")} className="text-slate-500 hover:text-slate-300 transition-colors">
+                Not sure? Just explore →
               </button>
             </div>
           </div>
-        ) : (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex-1 flex flex-col justify-center"
-          >
-            <div className="w-full">
-              <div className="flex flex-col gap-2.5 mb-4">
-                <DoorCard icon="🔍" title="What is this?" subtitle="See what we built" to="/explore" accentColor="#10b981" />
-                <DoorCard icon="🔨" title="I want to build" subtitle="Start making money" to="/build" accentColor="#3b82f6" delay={0.06} />
-                <DoorCard icon="🤝" title="I'm ready" subtitle="Join for $5/year" to="/join" accentColor="#f59e0b" delay={0.12} />
-              </div>
-              <div className="flex items-center justify-center gap-4 text-sm">
-                <button onClick={() => navigate(-1)} className="text-slate-500 hover:text-slate-300 transition-colors">
-                  ← Back
-                </button>
-                <button onClick={() => navigate("/explore")} className="text-slate-500 hover:text-slate-300 transition-colors">
-                  Not sure? Just explore →
-                </button>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </motion.div>
+        </motion.div>
+      )}
+    </motion.div>
+  );
+
+  if (inline) return content;
+
+  return (
+    <DeckCardShell>
+      {content}
     </DeckCardShell>
   );
 };
