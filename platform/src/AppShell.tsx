@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useDiscoveryTracker } from "@/hooks/useDiscoveryTracker";
@@ -19,19 +19,16 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import BetaBanner from "@/components/BetaBanner";
 import { CrossPortalNav } from "@/components/CrossPortalNav";
 import { BanyanWordmark } from "@/components/BanyanWordmark";
-import { FeedbackTutorialOverlay } from "@/components/tour/FeedbackTutorialOverlay";
 import { MarksMilestonePopup } from "@/components/marks/MarksMilestonePopup";
 import { useMarksMilestone } from "@/hooks/useMarksMilestone";
 import { useRtlDirection } from "@/hooks/useRtlDirection";
 import { useLocaleRouting } from "@/hooks/useLocaleRouting";
-import { supabase } from "@/integrations/supabase/client";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
   const location = useLocation();
   const { trackPageVisit, isGhost } = useGhostSession();
-  const [showTutorial, setShowTutorial] = useState(false);
   const isMobile = useIsMobile();
   const marks = useMarksMilestone();
   useDiscoveryTracker();
@@ -48,26 +45,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       trackPageVisit(location.pathname);
     }
   }, [isGhost, location.pathname, trackPageVisit]);
-
-  useEffect(() => {
-    if (location.pathname !== '/') return;
-    // Skip tutorial on mobile landing — CrossPortalNav + tutorial crowd the viewport (B053)
-    if (isMobile) return;
-    const dismissed = localStorage.getItem('feedback_tutorial_dismissed');
-    if (dismissed === 'true') return;
-
-    if (user) {
-      supabase
-        .from('user_preferences' as never)
-        .select('value')
-        .eq('user_id', user.id)
-        .eq('key', 'feedback_tutorial_dismissed')
-        .single()
-        .then(({ data }: { data: unknown }) => {
-          if (!data) setShowTutorial(true);
-        });
-    }
-  }, [user, location.pathname]);
 
   useRtlDirection();
 
@@ -132,9 +109,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <HelmCompact />
         <PWAInstallPrompt />
         <LanguageSwitcher />
-        {showTutorial && (
-          <FeedbackTutorialOverlay onDismiss={() => setShowTutorial(false)} />
-        )}
         {marks.showMilestone && (
           <MarksMilestonePopup
             open={marks.showMilestone}

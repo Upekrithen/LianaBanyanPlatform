@@ -10,7 +10,7 @@
  * Fully controlled by parent (HEOHOLanding manages quoteIndex + timer).
  * Internal: audio play/pause state for Yvaine quote ▶/⏸ button.
  */
-import { useState, useEffect, useRef } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -104,8 +104,6 @@ interface RotatingQuotesProps {
   onNext: () => void;
   /** Called when SHINE link is clicked (for F3 glow cancellation) */
   onShineClick?: () => void;
-  /** Whether audio is globally muted */
-  muted?: boolean;
 }
 
 export function RotatingQuotes({
@@ -113,20 +111,8 @@ export function RotatingQuotes({
   onPrev,
   onNext,
   onShineClick,
-  muted = false,
 }: RotatingQuotesProps) {
   const navigate = useNavigate();
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-
-  // Pause and reset audio when rotating away from Yvaine
-  useEffect(() => {
-    if (!QUOTES[quoteIndex]?.isYvaine && audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-      setIsPlaying(false);
-    }
-  }, [quoteIndex]);
 
   const quote = QUOTES[quoteIndex];
 
@@ -159,34 +145,6 @@ export function RotatingQuotes({
         <span style={{ opacity: 0.75 }}>
           &rsquo;{afterShine}&rdquo;
         </span>
-        {" "}
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            if (!audioRef.current || muted) return;
-            if (isPlaying) {
-              audioRef.current.pause();
-              setIsPlaying(false);
-            } else {
-              audioRef.current.play().catch(() => {});
-              setIsPlaying(true);
-            }
-          }}
-          aria-label={isPlaying ? "Pause Yvaine audio" : "Play Yvaine audio"}
-          style={{
-            background: "none",
-            border: "none",
-            cursor: "pointer",
-            color: "rgba(255,255,255,0.5)",
-            fontSize: "0.65rem",
-            padding: "0 0.15rem",
-            verticalAlign: "middle",
-            lineHeight: 1,
-            display: "inline",
-          }}
-        >
-          {isPlaying ? "⏸" : "▶"}
-        </button>
       </>
     );
   };
