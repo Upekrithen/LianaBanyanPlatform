@@ -1,0 +1,5 @@
+S11 DONE
+run_bp076_phase2_drt.py sha256: 4bdf7341312953c5b13c8dda2ae56c8b7bc267fcae7c376419598249b34b4e14
+dry-run: PASS (8 conditions x 5 questions x 0 exceptions in ~2s)
+conditions confirmed: baseline_no_substrate, baseline_r10v3_substrate_only, drt_wikipedia_only, drt_wikipedia_plus_wikidata, drt_science_stack, drt_all_specialists, drt_all_specialists_verifier_on, drt_all_specialists_verifier_off
+ts: 2026-06-08T05:06:29+00:00
