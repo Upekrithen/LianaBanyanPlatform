@@ -56,6 +56,8 @@ export function CrossPortalNav() {
   const currentPortal = PORTALS.find(p => p.key === current);
   const CurrentIcon = currentPortal?.icon ?? ShoppingBag;
 
+  if (pathname === '/welcome') return null;
+
   if (isMobile) {
     return (
       <div ref={drawerRef} className="relative z-[200]">

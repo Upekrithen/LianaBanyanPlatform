@@ -32,7 +32,7 @@ export default function WelcomeV2Page() {
               secondaryCTA={{ label: "Browse as a guest", href: "/ghost-browse" }}
               joinCTA={{ label: "Join Liana Banyan \u2014 $5/year. Be the first one on your block.", href: "/join" }}
               proofStrip={[
-                "6 starting pathways",
+                "7 starting pathways",
                 "$5/year membership",
                 "See before you join",
                 "No demographic intake",

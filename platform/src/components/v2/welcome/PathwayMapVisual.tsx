@@ -5,6 +5,7 @@ const PATHWAYS = [
   { name: "Local Business", slug: "local-business", description: "Launch and grow main-street operations." },
   { name: "Guild", slug: "guild", description: "Coordinate with craft and trade peers." },
   { name: "Tribe", slug: "tribe", description: "Form mission-aligned teams and circles." },
+  { name: "Broadcast", slug: "broadcast", description: "Connect your channels and earn from your audience through cooperative commerce, not ads." },
 ];
 
 export function PathwayMapVisual() {
@@ -20,7 +21,7 @@ export function PathwayMapVisual() {
         {PATHWAYS.map((pathway) => (
           <a
             key={pathway.name}
-            href={`/cold-start/${pathway.slug}`}
+            href={`/start/cold-start/${pathway.slug}`}
             className="group rounded-xl border bg-card p-4 transition-colors hover:bg-muted/40"
           >
             <p className="text-base font-semibold">{pathway.name}</p>

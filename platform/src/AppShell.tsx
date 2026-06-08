@@ -49,7 +49,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   useRtlDirection();
 
   const isLanding = location.pathname === '/';
-  const FOCUS_ROUTES = ['/membership', '/membership/confirm', '/ghost', '/explore', '/free-explore'];
+  const FOCUS_ROUTES = ['/membership', '/membership/confirm', '/ghost', '/explore', '/free-explore', '/welcome'];
   const isFocusRoute = FOCUS_ROUTES.some(r => location.pathname === r || location.pathname.startsWith(r + '/'));
   const HIDDEN_ROUTES = ['/', '/founder', '/proofs', '/welcome', '/pathways'];
   const isBannerHidden = HIDDEN_ROUTES.some(r => location.pathname === r || location.pathname.startsWith(r + '/'));
