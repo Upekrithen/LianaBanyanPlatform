@@ -44,20 +44,24 @@ jobs:
       - name: Build Cephas (G1)
         run: hugo --gc --minify
 
-      # G2 — sitemap.xml generated and non-empty
+      # G2 -- sitemap.xml generated and non-empty
+      # Hugo 0.128+ generates a sitemap index (sitemapindex) with <sitemap> elements
+      # pointing to per-section sitemap files. Count both <url> and <sitemap> entries.
       - name: Verify sitemap.xml (G2)
         run: |
           if [ ! -f public/sitemap.xml ]; then
             echo "ERROR: sitemap.xml not found in public/"
             exit 1
           fi
-          PAGE_COUNT=$(grep -c "<url>" public/sitemap.xml || true)
-          echo "sitemap.xml contains $PAGE_COUNT <url> entries"
-          if [ "$PAGE_COUNT" -lt 10 ]; then
-            echo "ERROR: sitemap has fewer than 10 pages ($PAGE_COUNT) — check Hugo build"
+          URL_COUNT=$(grep -c "<url>" public/sitemap.xml || true)
+          SITEMAP_COUNT=$(grep -c "<sitemap>" public/sitemap.xml || true)
+          TOTAL=$((URL_COUNT + SITEMAP_COUNT))
+          echo "sitemap.xml: $URL_COUNT <url> entries, $SITEMAP_COUNT <sitemap> entries, $TOTAL total"
+          if [ "$TOTAL" -lt 2 ]; then
+            echo "ERROR: sitemap appears empty (total=$TOTAL) -- check Hugo build"
             exit 1
           fi
-          echo "G2 PASS: sitemap.xml valid with $PAGE_COUNT pages"
+          echo "G2 PASS: sitemap.xml valid (total=$TOTAL)"
 
       # G3 — RSS feed (index.xml) present and well-formed
       - name: Verify RSS index.xml (G3)
