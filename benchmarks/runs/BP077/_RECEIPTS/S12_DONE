@@ -1,0 +1,12 @@
+S12 DONE
+conditions: baseline_no_substrate vs drt_wikipedia_only
+n: 50
+model: gemma4:12b
+baseline_accuracy: 38.0%
+drt_accuracy: 38.0%
+delta: 0pp
+signal: WEAK
+wall_clock: ~289min (00:48:56Z to 05:37:46Z UTC 2026-06-08)
+dispatch_estimated: 30min -- actual 289min (9.6x overrun on this hardware)
+s13_gate: BLOCKED
+ts: 2026-06-08T05:37:46Z
