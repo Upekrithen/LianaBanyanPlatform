@@ -433,12 +433,17 @@ export function MnemosyneTabView({
 
   return (
     <>
-    {/* BP067 Phase 1B — SaltFighter first-run (shown before main app on first launch) */}
+    {/* BP067 v0.1.24 — one-spine first-run (Bp067FirstRunSpine) shown before main app on first launch */}
     {!bp067Complete && (
       <Bp067FirstRunSpine
         onComplete={() => {
           setBp067Complete(true);
           setActiveTab('frame');
+        }}
+        onAskOnboard={() => {
+          setBp067Complete(true);
+          setActiveTab('frame');
+          setShowOnboardAsk(true);
         }}
       />
     )}

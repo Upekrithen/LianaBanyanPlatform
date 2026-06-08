@@ -24,6 +24,10 @@ interface BorrowResult {
 
 export interface Bp067FirstRunSpineProps {
   onComplete: () => void;
+  /** Called instead of plain onComplete when the user clicks "Ask it anything" on Step 3 success.
+   *  Parent (MnemosyneTabView) uses this to fire setShowOnboardAsk(true) so the 3-option join
+   *  funnel becomes reachable immediately after the AI proof moment. */
+  onAskOnboard?: () => void;
 }
 
 function commitFirstRunDone(onComplete: () => void): void {
@@ -47,7 +51,7 @@ function CheckIcon(): React.ReactElement {
 // Shared CSS injected once per mount
 const KEYFRAMES = `@keyframes mnemo-spin { to { transform: rotate(360deg); } }`;
 
-export function Bp067FirstRunSpine({ onComplete }: Bp067FirstRunSpineProps): React.ReactElement | null {
+export function Bp067FirstRunSpine({ onComplete, onAskOnboard }: Bp067FirstRunSpineProps): React.ReactElement | null {
   const [step, setStep] = useState<Step>('welcome');
   const [visible, setVisible] = useState(true);
 
@@ -119,6 +123,13 @@ export function Bp067FirstRunSpine({ onComplete }: Bp067FirstRunSpineProps): Rea
   const handleFinish = useCallback((): void => {
     commitFirstRunDone(onComplete);
   }, [onComplete]);
+
+  // Step 3 "Ask it anything" -- completes first-run AND fires the 3-option join funnel modal.
+  // Uses onAskOnboard if provided (wired by MnemosyneTabView to setShowOnboardAsk(true));
+  // falls back to plain onComplete for backward compatibility.
+  const handleAskOnboard = useCallback((): void => {
+    commitFirstRunDone(onAskOnboard ?? onComplete);
+  }, [onComplete, onAskOnboard]);
 
   const handlePickFolder = async (): Promise<void> => {
     setPickingFolder(true);
@@ -344,7 +355,7 @@ export function Bp067FirstRunSpine({ onComplete }: Bp067FirstRunSpineProps): Rea
               {aiResponse.slice(0, 600)}{aiResponse.length > 600 ? '...' : ''}
             </blockquote>
           )}
-          <button type="button" style={primaryBtn} onClick={handleFinish}>
+          <button type="button" style={primaryBtn} onClick={handleAskOnboard}>
             Ask it anything
           </button>
           <button type="button" style={ghostBtn} onClick={(): void => goTo('folder')}>
