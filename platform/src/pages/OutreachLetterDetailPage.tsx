@@ -11,6 +11,7 @@ import { useOutreachLetter } from "@/hooks/useOutreachLetters";
 import { OutreachLetterCard } from "@/components/outreach/OutreachLetterCard";
 import { OutreachLetterVotePanel } from "@/components/outreach/OutreachLetterVotePanel";
 import { OutreachSixDegreesPanel } from "@/components/outreach/OutreachSixDegreesPanel";
+import { LetterCreditStakePanel } from "@/components/outreach/LetterCreditStakePanel";
 import { ArrowLeft, Shield, ScrollText } from "lucide-react";
 
 export default function OutreachLetterDetailPage() {
@@ -101,7 +102,6 @@ export default function OutreachLetterDetailPage() {
         )}
 
         {/* Governance voting panel — shown on proposed/scheduled */}
-        {/* Governance voting panel — shown on proposed/scheduled */}
         {canVote && (
           <OutreachLetterVotePanel
             letterId={letter.letter_id}
@@ -109,6 +109,16 @@ export default function OutreachLetterDetailPage() {
             verdict={verdict}
             onVote={castVote}
           />
+        )}
+
+        {/* BP077 Scope 11 — Credit-staking panel (Pedestal 5K/20K mechanism) */}
+        {canAmplify && (
+          <div className="mt-4">
+            <LetterCreditStakePanel
+              letterId={letter.letter_id}
+              slug={letter.slug}
+            />
+          </div>
         )}
 
         {/* Innovation references */}

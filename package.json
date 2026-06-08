@@ -24,7 +24,8 @@
     "prepare:all": "npm run prepare:ollama-binary && npm run prepare:floor-model",
     "publish:win": "npm run build && electron-builder --win --publish always",
     "publish:mac": "npm run build && electron-builder --mac --publish always",
-    "publish:linux": "npm run build && electron-builder --linux --publish always"
+    "publish:linux": "npm run build && electron-builder --linux --publish always",
+    "sync:letters": "node scripts/sync-letters-full.mjs"
   },
   "keywords": [
     "mnemosyne",
@@ -44,6 +45,7 @@
     "@peculiar/asn1-schema": "^2.7.0",
     "@peculiar/asn1-tsp": "^2.7.0",
     "@peculiar/asn1-x509": "^2.7.0",
+    "@supabase/supabase-js": "^2.107.0",
     "allotment": "^1.20.5",
     "caithedral-core": "file:caithedral-core",
     "electron-updater": "^6.1.7",
@@ -112,6 +114,10 @@
         "filter": [
           "**/*"
         ]
+      },
+      {
+        "from": "src/main/data/r10v3_substrate.txt",
+        "to": "r10v3_substrate.txt"
       }
     ],
     "publish": {

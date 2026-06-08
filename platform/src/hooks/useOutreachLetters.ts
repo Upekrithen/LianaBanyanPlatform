@@ -3,10 +3,13 @@
  * ================================================================
  * K412 / B099 — The Glass Door Phase 2
  * Innovation #2262 The Glass Door
+ *
+ * BP077 Scope 11 — Credit-staking hooks added (useLetterStakes).
  */
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { LEDGER_SECTIONS, createLedgerEntryId } from "@/lib/discourse/ledgerSections";
 
 export interface OutreachLetter {
   letter_id: string;
@@ -31,6 +34,10 @@ export interface OutreachLetter {
   vote_threshold_veto_pct: number;
   created_at: string;
   updated_at: string;
+  // BP077 Scope 11 — credit-staking columns (added by migration 20260608000001)
+  credit_stake_total: number;
+  credit_funder_count: number;
+  went_public_via_credits_at: string | null;
 }
 
 export interface OutreachVote {
@@ -207,4 +214,118 @@ export function useOutreachLetter(slug: string) {
   };
 
   return { letter, votes, verdict, responses, loading, castVote, flagSixDegrees };
+}
+
+// ── BP077 Scope 11: Credit-Staking ─────────────────────────────────────────
+
+export interface LetterStake {
+  id: string;
+  letter_id: string;
+  member_id: string;
+  amount: number;
+  contribution_type: "initial" | "additional";
+  member_total_after: number;
+  ledger_entry_id: string;
+  created_at: string;
+}
+
+export interface LetterStakeResult {
+  success: boolean;
+  member_total_after: number;
+  letter_total: number;
+  funder_count: number;
+  went_public: boolean;
+}
+
+/**
+ * useLetterStakes — fetch credit-stake state for an outreach letter.
+ *
+ * Exposes:
+ *   stakeTotal     — letter's credit_stake_total
+ *   funderCount    — letter's credit_funder_count
+ *   memberTotal    — this member's cumulative stake for the letter
+ *   wentPublicAt   — went_public_via_credits_at (null until threshold met)
+ *   stakeCredits   — atomic stake action → calls process_letter_stake_atomic RPC
+ */
+export function useLetterStakes(letterId: string) {
+  const [stakeTotal, setStakeTotal] = useState<number>(0);
+  const [funderCount, setFunderCount] = useState<number>(0);
+  const [memberTotal, setMemberTotal] = useState<number>(0);
+  const [wentPublicAt, setWentPublicAt] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const load = useCallback(async () => {
+    if (!letterId) return;
+    setLoading(true);
+
+    // Fetch letter-level staking totals
+    const { data: letterData } = await (supabase
+      .from("outreach_letters" as never)
+      .select("credit_stake_total, credit_funder_count, went_public_via_credits_at") as any)
+      .eq("letter_id", letterId)
+      .single();
+
+    if (letterData) {
+      setStakeTotal(letterData.credit_stake_total ?? 0);
+      setFunderCount(letterData.credit_funder_count ?? 0);
+      setWentPublicAt(letterData.went_public_via_credits_at ?? null);
+    }
+
+    // Fetch this member's own stake total
+    const session = await supabase.auth.getSession();
+    const memberId = session.data.session?.user?.id;
+
+    if (memberId) {
+      const { data: memberStakes } = await (supabase
+        .from("outreach_letter_stakes" as never)
+        .select("amount") as any)
+        .eq("letter_id", letterId)
+        .eq("member_id", memberId);
+
+      if (memberStakes) {
+        const total = (memberStakes as { amount: number }[]).reduce(
+          (sum, s) => sum + Number(s.amount),
+          0,
+        );
+        setMemberTotal(total);
+      }
+    }
+
+    setLoading(false);
+  }, [letterId]);
+
+  useEffect(() => {
+    load();
+  }, [load]);
+
+  const stakeCredits = async (amount: number): Promise<LetterStakeResult> => {
+    const session = await supabase.auth.getSession();
+    const memberId = session.data.session?.user?.id;
+    if (!memberId) throw new Error("Not authenticated");
+
+    const ledgerEntryId = createLedgerEntryId(LEDGER_SECTIONS.PEDESTAL_FUNDING);
+
+    const { data, error } = await (supabase as any).rpc("process_letter_stake_atomic", {
+      p_letter_id: letterId,
+      p_member_id: memberId,
+      p_amount: amount,
+      p_ledger_entry_id: ledgerEntryId,
+    });
+
+    if (error) throw new Error(error.message ?? "Stake RPC failed");
+
+    const result = data as LetterStakeResult;
+
+    // Optimistically update local state from RPC result
+    setStakeTotal(result.letter_total);
+    setFunderCount(result.funder_count);
+    setMemberTotal(result.member_total_after);
+    if (result.went_public) {
+      setWentPublicAt(new Date().toISOString());
+    }
+
+    return result;
+  };
+
+  return { stakeTotal, funderCount, memberTotal, wentPublicAt, loading, stakeCredits };
 }

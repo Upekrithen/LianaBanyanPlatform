@@ -81,6 +81,9 @@ export type LedgerEntryType =
   // Section 3: Pedestal Funding
   | "pedestal_contribution"
   | "pedestal_status_change"
+  // Section 3 (extension): Outreach Letter Credit-Staking (BP077)
+  | "letter_credit_stake"
+  | "letter_went_public_via_credits"
   // Section 4: Phase Registry
   | "phase_created"
   | "phase_validated"
@@ -191,6 +194,30 @@ export interface PedestalFundingLedgerEntry extends LedgerEntry {
   newStatus?: PedestalStatus;
   /** Whether this contribution pushed the Pedestal to Public */
   triggeredPublicStatus?: boolean;
+}
+
+// ── Section 3 Extension: Outreach Letter Credit-Staking (BP077) ───────────
+
+/**
+ * Ledger entry for a member staking Credits on an outreach letter.
+ * Uses the same PEDESTAL_FUNDING section as Pedestal contributions —
+ * the mechanism is identical (5K/20K threshold, 4-funder minimum).
+ */
+export interface LetterCreditStakeLedgerEntry extends LedgerEntry {
+  sectionId: typeof LEDGER_SECTIONS.PEDESTAL_FUNDING;
+  entryType: "letter_credit_stake" | "letter_went_public_via_credits";
+  /** Which outreach letter this stake is for */
+  letterId: string;
+  /** Credits staked in this transaction */
+  amount: number;
+  /** Member's running total for this letter after this stake */
+  memberTotalAfter: number;
+  /** Letter's credit_stake_total after this stake */
+  letterTotalAfter: number;
+  /** Number of unique funders after this stake */
+  funderCount: number;
+  /** Whether this stake pushed the letter to community-elevated status */
+  wentPublic?: boolean;
 }
 
 // ── Section 4: Phase MimicTrunk Registry ───────────────────────────────────
@@ -314,6 +341,7 @@ export type AnyLedgerEntry =
   | CoverageMinutesLedgerEntry
   | DonationViewLedgerEntry
   | PedestalFundingLedgerEntry
+  | LetterCreditStakeLedgerEntry
   | PhaseRegistryLedgerEntry
   | SourceValidationLedgerEntry
   | RoundTableSessionLedgerEntry
@@ -468,8 +496,13 @@ export function getSectionForEntryType(
   if (entryType === "donation_record_viewed") {
     return LEDGER_SECTIONS.DONATION_VIEWS;
   }
-  // Pedestal Funding
-  if (["pedestal_contribution", "pedestal_status_change"].includes(entryType)) {
+  // Pedestal Funding (includes BP077 letter credit-staking)
+  if ([
+    "pedestal_contribution",
+    "pedestal_status_change",
+    "letter_credit_stake",
+    "letter_went_public_via_credits",
+  ].includes(entryType)) {
     return LEDGER_SECTIONS.PEDESTAL_FUNDING;
   }
   // Phase Registry
