@@ -1,0 +1,283 @@
+﻿{
+  "verdict": "RED",
+  "verdict_text": "RED: Staggered Swarm REGRESSED Q9 control (was passing, now failing). Swarm introduces a side-effect that breaks previously passing questions. Do NOT scale. Surface to Bishop for structural diagnosis.",
+  "q20_results": [
+    {
+      "pipeline": "Monolith bp076",
+      "bmv": 98.5,
+      "concordance": "CONCORDANT",
+      "latency": 12.2,
+      "tier": "N/A",
+      "active_count_peak": "N/A",
+      "all_pass": true
+    },
+    {
+      "pipeline": "Pre-stagger Giants (T1)",
+      "bmv": 78.7,
+      "concordance": "CONCORDANT",
+      "latency": 28.9,
+      "tier": 1,
+      "active_count_peak": "N/A",
+      "all_pass": false
+    },
+    {
+      "pipeline": "Staggered Swarm bio_historical",
+      "bmv": 78.5,
+      "concordance": "CONCORDANT",
+      "latency": 41.0,
+      "tier": 2,
+      "active_count_peak": 3,
+      "all_pass": false,
+      "operator_count": 10,
+      "new_eblets": 6
+    }
+  ],
+  "q33_results": [
+    {
+      "pipeline": "Monolith bp076",
+      "bmv": 69.2,
+      "concordance": "CONCORDANT",
+      "latency": 27.3,
+      "tier": "N/A",
+      "active_count_peak": "N/A",
+      "all_pass": false
+    },
+    {
+      "pipeline": "Pre-stagger Giants (T1)",
+      "bmv": 48.0,
+      "concordance": "CONCORDANT",
+      "latency": 27.8,
+      "tier": 1,
+      "active_count_peak": "N/A",
+      "all_pass": false
+    },
+    {
+      "pipeline": "Staggered Swarm mathematical",
+      "bmv": 48.4,
+      "concordance": "CONCORDANT",
+      "latency": 31.6,
+      "tier": 2,
+      "active_count_peak": 2,
+      "all_pass": false,
+      "operator_count": 5,
+      "new_eblets": 3
+    }
+  ],
+  "q9_results": [
+    {
+      "pipeline": "Staggered Swarm bio_historical",
+      "bmv": 83.6,
+      "concordance": "CONCORDANT",
+      "latency": 39.9,
+      "tier": 2,
+      "active_count_peak": 2,
+      "all_pass": false,
+      "operator_count": 10,
+      "new_eblets": 9
+    }
+  ],
+  "phase7_reference": {
+    "Q20": {
+      "bmv": 86.3,
+      "concordance": "CONCORDANT",
+      "all_pass": false,
+      "notes": "gate3_bmv_fail (86.3 < 90)"
+    },
+    "Q33": {
+      "bmv": 74.2,
+      "concordance": "DISCORDANT",
+      "all_pass": false,
+      "notes": "gate2_conc_fail + gate3_bmv_fail; domain=mathematical NOT bio_historical"
+    },
+    "Q9": {
+      "bmv": 96.5,
+      "concordance": "CONCORDANT",
+      "all_pass": true,
+      "notes": "control, was passing"
+    }
+  },
+  "swarm20_timeline": [
+    {
+      "upstream": "wikipedia_en",
+      "dispatch_t": 0.0,
+      "return_t": 0.0003757476806640625,
+      "domain": "bio_historical",
+      "tier": 2
+    },
+    {
+      "upstream": "wikidata",
+      "dispatch_t": 1.5,
+      "return_t": 9.001449346542358,
+      "domain": "bio_historical",
+      "tier": 2
+    },
+    {
+      "upstream": "wikipedia_de",
+      "dispatch_t": 3.0,
+      "return_t": 4.501000642776489,
+      "domain": "bio_historical",
+      "tier": 2
+    },
+    {
+      "upstream": "wikipedia_fr",
+      "dispatch_t": 4.5,
+      "return_t": 6.001171112060547,
+      "domain": "bio_historical",
+      "tier": 2
+    },
+    {
+      "upstream": "wikipedia_es",
+      "dispatch_t": 6.0,
+      "return_t": 7.501333951950073,
+      "domain": "bio_historical",
+      "tier": 2
+    },
+    {
+      "upstream": "openalex_author",
+      "dispatch_t": 7.5,
+      "return_t": 9.001454830169678,
+      "domain": "bio_historical",
+      "tier": 2
+    },
+    {
+      "upstream": "openalex_deep",
+      "dispatch_t": 9.0,
+      "return_t": 10.50192904472351,
+      "domain": "bio_historical",
+      "tier": 2
+    },
+    {
+      "upstream": "pubmed",
+      "dispatch_t": 10.5,
+      "return_t": 12.002266645431519,
+      "domain": "bio_historical",
+      "tier": 2
+    },
+    {
+      "upstream": "arxiv",
+      "dispatch_t": 12.0,
+      "return_t": 13.5,
+      "domain": "bio_historical",
+      "tier": 2
+    },
+    {
+      "upstream": "wikipedia_discovery",
+      "dispatch_t": 13.5,
+      "return_t": 13.6,
+      "domain": "bio_historical",
+      "tier": 2
+    }
+  ],
+  "swarm33_timeline": [
+    {
+      "upstream": "wikipedia_en",
+      "dispatch_t": 0.0,
+      "return_t": 0.000308990478515625,
+      "domain": "mathematical",
+      "tier": 2
+    },
+    {
+      "upstream": "wolfram",
+      "dispatch_t": 1.5,
+      "return_t": 3.0009939670562744,
+      "domain": "mathematical",
+      "tier": 2
+    },
+    {
+      "upstream": "openalex_math",
+      "dispatch_t": 3.0,
+      "return_t": 4.501286745071411,
+      "domain": "mathematical",
+      "tier": 2
+    },
+    {
+      "upstream": "wikipedia_de",
+      "dispatch_t": 4.5,
+      "return_t": 6.0,
+      "domain": "mathematical",
+      "tier": 2
+    },
+    {
+      "upstream": "wikipedia_fr",
+      "dispatch_t": 6.0,
+      "return_t": 6.2,
+      "domain": "mathematical",
+      "tier": 2
+    }
+  ],
+  "swarm9_timeline": [
+    {
+      "upstream": "wikipedia_en",
+      "dispatch_t": 0.0,
+      "return_t": 0.0003161430358886719,
+      "domain": "bio_historical",
+      "tier": 2
+    },
+    {
+      "upstream": "wikidata",
+      "dispatch_t": 1.5,
+      "return_t": 3.0011301040649414,
+      "domain": "bio_historical",
+      "tier": 2
+    },
+    {
+      "upstream": "wikipedia_de",
+      "dispatch_t": 3.0,
+      "return_t": 4.501222133636475,
+      "domain": "bio_historical",
+      "tier": 2
+    },
+    {
+      "upstream": "wikipedia_fr",
+      "dispatch_t": 4.5,
+      "return_t": 6.001678228378296,
+      "domain": "bio_historical",
+      "tier": 2
+    },
+    {
+      "upstream": "wikipedia_es",
+      "dispatch_t": 6.0,
+      "return_t": 7.5022430419921875,
+      "domain": "bio_historical",
+      "tier": 2
+    },
+    {
+      "upstream": "openalex_author",
+      "dispatch_t": 7.5,
+      "return_t": 9.002780199050903,
+      "domain": "bio_historical",
+      "tier": 2
+    },
+    {
+      "upstream": "openalex_deep",
+      "dispatch_t": 9.0,
+      "return_t": 10.502897024154663,
+      "domain": "bio_historical",
+      "tier": 2
+    },
+    {
+      "upstream": "pubmed",
+      "dispatch_t": 10.5,
+      "return_t": 12.003297567367554,
+      "domain": "bio_historical",
+      "tier": 2
+    },
+    {
+      "upstream": "arxiv",
+      "dispatch_t": 12.0,
+      "return_t": 13.5,
+      "domain": "bio_historical",
+      "tier": 2
+    },
+    {
+      "upstream": "wikipedia_discovery",
+      "dispatch_t": 13.5,
+      "return_t": 13.6,
+      "domain": "bio_historical",
+      "tier": 2
+    }
+  ],
+  "token_cost_note": "Operators are HTTP-only, $0 incremental LLM cost. Same synthesis pass.",
+  "truth_always_note": "Q33 is domain=mathematical (not bio_historical). Phase 7 close JSONL confirms domain='mathematical'. Per-domain isolation: mathematical swarm uses mathematical Operator roster.",
+  "ts": "20260607T140606"
+}

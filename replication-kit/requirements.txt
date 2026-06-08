@@ -1,0 +1,27 @@
+# BP077 Staggered Swarm Benchmark -- Requirements
+# Date: 2026-06-07
+#
+# This benchmark uses Python standard library only (no external pip packages).
+# All HTTP calls use urllib.request to connect to a local Ollama endpoint.
+#
+# Runtime requirements:
+#   Python >= 3.11       (required for sys.stdout.reconfigure + modern typing)
+#   Ollama >= 0.3.0      (local model inference server -- see https://ollama.com)
+#
+# Model (tested configuration):
+#   ollama pull gemma2:12b        (primary test model -- BP077 baseline)
+#   ollama pull llama3.1:8b       (secondary model -- optional)
+#
+# No pip install required. Standard library only:
+#   argparse, json, os, sys, time, datetime, pathlib, re, queue,
+#   threading, concurrent.futures, typing, urllib.request, urllib.error,
+#   urllib.parse, math
+#
+# To verify Python version:
+#   python --version
+#
+# To verify Ollama is running:
+#   curl http://localhost:11434/api/tags
+#
+# Ollama endpoint default: http://localhost:11434
+# Override via environment variable if needed (see truth_single_bp076.py).

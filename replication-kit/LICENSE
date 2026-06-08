@@ -1,0 +1,45 @@
+Server Side Public License (SSPL), Version 1
+
+Copyright (C) 2026 Liana Banyan Corporation. All Rights Reserved.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the Server Side Public License, version 1, as
+published by MongoDB, Inc.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+Server Side Public License for more details.
+
+You should have received a copy of the Server Side Public License
+along with this program. If not, see
+<http://www.mongodb.com/licensing/server-side-public-license>.
+
+SSPL-1.0 canonical text: https://www.mongodb.com/licensing/server-side-public-license
+
+---
+
+## Tributary Use Pledge, §6
+
+In addition to the SSPL, any use of this work in a service offered
+to the public (whether as SaaS, API, hosted platform, or otherwise)
+that competes with, replicates, or commercially exploits the Liana
+Banyan Platform's substrate-benchmark methodology or the Staggered
+Swarm pipeline requires:
+
+1. Full open-sourcing of your competing service stack under SSPL.
+2. Attribution to Liana Banyan Corporation in any published results,
+   papers, or derivative benchmarks.
+3. A canonical citation to the original release:
+   Liana Banyan Corporation. (2026). Substrate benchmark:
+   per-domain Staggered Swarm methodology. bp077-substrate-proof-v1.
+   https://github.com/Upekrithen/LianaBanyanPlatform/releases/tag/bp077-substrate-proof-v1
+
+Internal research, academic reproduction, and non-commercial benchmarking
+are permitted under standard SSPL terms without the §6 trigger.
+
+"Designed-to-be-Copied" -- the kit ships with the intent that anyone
+can reproduce the results. Reproduction is encouraged. Commercial
+exploitation without open-sourcing your stack is not.
+
+-- Liana Banyan Corporation, 2026-06-07

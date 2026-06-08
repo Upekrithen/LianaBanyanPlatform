@@ -1,0 +1,595 @@
+﻿[
+  {
+    "qid": 1,
+    "domain": "literary",
+    "question": "Who wrote 'No Man Is an Island'?",
+    "expected": {
+      "attribution": "John Donne",
+      "work": "Meditation XVII",
+      "year": 1624,
+      "place": null
+    },
+    "notes": "Phase 6 control Q1. Donne's Devotions upon Emergent Occasions, 1624."
+  },
+  {
+    "qid": 2,
+    "domain": "historical",
+    "question": "In what year did the Berlin Wall fall?",
+    "expected": {
+      "attribution": "1989",
+      "work": null,
+      "year": 1989,
+      "place": "Berlin"
+    },
+    "notes": "Phase 6 control Q2. Wall fell 9 November 1989."
+  },
+  {
+    "qid": 3,
+    "domain": "mathematical",
+    "question": "Who proved Fermat's Last Theorem, and in what year?",
+    "expected": {
+      "attribution": "Andrew Wiles",
+      "work": "Fermat's Last Theorem proof",
+      "year": 1995,
+      "place": null
+    },
+    "notes": "Phase 6 control Q3. Wiles completed proof 1995 (final corrected version)."
+  },
+  {
+    "qid": 4,
+    "domain": "geodata",
+    "question": "What is the capital of Mongolia?",
+    "expected": {
+      "attribution": "Ulaanbaatar",
+      "work": null,
+      "year": null,
+      "place": "Mongolia"
+    },
+    "notes": "Phase 6 control Q4."
+  },
+  {
+    "qid": 5,
+    "domain": "art",
+    "question": "Who painted the Mona Lisa?",
+    "expected": {
+      "attribution": "Leonardo da Vinci",
+      "work": "Mona Lisa",
+      "year": null,
+      "place": null
+    },
+    "notes": "Phase 6 control Q5."
+  },
+  {
+    "qid": 6,
+    "domain": "chemistry",
+    "question": "What is the chemical symbol for tungsten?",
+    "expected": {
+      "attribution": "W",
+      "work": null,
+      "year": null,
+      "place": null
+    },
+    "notes": "Phase 6 control Q6. W from German Wolfram."
+  },
+  {
+    "qid": 7,
+    "domain": "music",
+    "question": "Who composed The Four Seasons?",
+    "expected": {
+      "attribution": "Antonio Vivaldi",
+      "work": "The Four Seasons",
+      "year": 1723,
+      "place": null
+    },
+    "notes": "Phase 6 control Q7. Le quattro stagioni, Vivaldi 1723."
+  },
+  {
+    "qid": 8,
+    "domain": "physics_constant",
+    "question": "What is the speed of light in vacuum, in meters per second?",
+    "expected": {
+      "attribution": "299792458",
+      "work": null,
+      "year": null,
+      "place": null
+    },
+    "notes": "Phase 6 control Q8. Exact SI-defined value."
+  },
+  {
+    "qid": 9,
+    "domain": "bio_historical",
+    "question": "Who discovered penicillin, and in what year?",
+    "expected": {
+      "attribution": "Alexander Fleming",
+      "work": "penicillin",
+      "year": 1928,
+      "place": null
+    },
+    "notes": "Phase 6 control Q9."
+  },
+  {
+    "qid": 10,
+    "domain": "linguistic_geo",
+    "question": "What is the official language of Brazil?",
+    "expected": {
+      "attribution": "Portuguese",
+      "work": null,
+      "year": null,
+      "place": "Brazil"
+    },
+    "notes": "Phase 6 control Q10."
+  },
+  {
+    "qid": 11,
+    "domain": "literary",
+    "question": "Who wrote Hamlet?",
+    "expected": {
+      "attribution": "William Shakespeare",
+      "work": "Hamlet",
+      "year": 1600,
+      "place": null
+    },
+    "notes": "Shakespeare's Hamlet, c.1600-1601. Unambiguous single-author attribution."
+  },
+  {
+    "qid": 12,
+    "domain": "literary",
+    "question": "Who wrote War and Peace?",
+    "expected": {
+      "attribution": "Leo Tolstoy",
+      "work": "War and Peace",
+      "year": 1869,
+      "place": null
+    },
+    "notes": "Tolstoy, published serially 1865-1869, final book form 1869."
+  },
+  {
+    "qid": 13,
+    "domain": "literary",
+    "question": "Who wrote Pride and Prejudice?",
+    "expected": {
+      "attribution": "Jane Austen",
+      "work": "Pride and Prejudice",
+      "year": 1813,
+      "place": null
+    },
+    "notes": "Jane Austen, published 1813."
+  },
+  {
+    "qid": 14,
+    "domain": "literary",
+    "question": "Who wrote The Old Man and the Sea?",
+    "expected": {
+      "attribution": "Ernest Hemingway",
+      "work": "The Old Man and the Sea",
+      "year": 1952,
+      "place": null
+    },
+    "notes": "Hemingway, published 1952. Unambiguous."
+  },
+  {
+    "qid": 15,
+    "domain": "literary",
+    "question": "Who wrote One Hundred Years of Solitude?",
+    "expected": {
+      "attribution": "Gabriel Garcia Marquez",
+      "work": "One Hundred Years of Solitude",
+      "year": 1967,
+      "place": null
+    },
+    "notes": "Garcia Marquez, published 1967 in Spanish (Cien anos de soledad)."
+  },
+  {
+    "qid": 16,
+    "domain": "geodata",
+    "question": "What is the capital of Japan?",
+    "expected": {
+      "attribution": "Tokyo"
+    },
+    "notes": "Tokyo is the capital of Japan. Straightforward geodata."
+  },
+  {
+    "qid": 17,
+    "domain": "historical",
+    "question": "Who was the first person to walk on the moon?",
+    "expected": {
+      "attribution": "Neil Armstrong",
+      "work": null,
+      "year": 1969,
+      "place": "Moon"
+    },
+    "notes": "Neil Armstrong, Apollo 11, July 20 1969."
+  },
+  {
+    "qid": 18,
+    "domain": "bio_historical",
+    "question": "Who discovered the law of gravity?",
+    "expected": {
+      "attribution": "Isaac Newton",
+      "year": 1687
+    },
+    "notes": "Newton published Principia Mathematica 1687; law of universal gravitation."
+  },
+  {
+    "qid": 19,
+    "domain": "historical",
+    "question": "Who was the first President of the United States?",
+    "expected": {
+      "attribution": "George Washington",
+      "work": null,
+      "year": 1789,
+      "place": null
+    },
+    "notes": "George Washington, inaugurated 1789."
+  },
+  {
+    "qid": 20,
+    "domain": "bio_historical",
+    "question": "Who invented the printing press?",
+    "expected": {
+      "attribution": "Johannes Gutenberg",
+      "year": 1440
+    },
+    "notes": "Gutenberg invented movable type printing press ~1440."
+  },
+  {
+    "qid": 21,
+    "domain": "art",
+    "question": "Who painted The Starry Night?",
+    "expected": {
+      "attribution": "Vincent van Gogh",
+      "work": "The Starry Night",
+      "year": 1889,
+      "place": null
+    },
+    "notes": "Van Gogh, painted June 1889 while at Saint-Paul-de-Mausole asylum."
+  },
+  {
+    "qid": 22,
+    "domain": "art",
+    "question": "Who sculpted the statue of David (the Renaissance marble sculpture)?",
+    "expected": {
+      "attribution": "Michelangelo",
+      "work": "David",
+      "year": 1504,
+      "place": "Florence"
+    },
+    "notes": "Michelangelo's David, completed 1504, Florence. Unambiguous (Donatello's earlier bronze David is distinct)."
+  },
+  {
+    "qid": 23,
+    "domain": "art",
+    "question": "Who painted The Persistence of Memory?",
+    "expected": {
+      "attribution": "Salvador Dali",
+      "work": "The Persistence of Memory",
+      "year": 1931,
+      "place": null
+    },
+    "notes": "Dali, 1931. The melting clocks painting."
+  },
+  {
+    "qid": 24,
+    "domain": "art",
+    "question": "Who painted Guernica?",
+    "expected": {
+      "attribution": "Pablo Picasso",
+      "work": "Guernica",
+      "year": 1937,
+      "place": null
+    },
+    "notes": "Picasso, 1937, painted in response to bombing of Guernica."
+  },
+  {
+    "qid": 25,
+    "domain": "art",
+    "question": "Who painted The Night Watch?",
+    "expected": {
+      "attribution": "Rembrandt van Rijn",
+      "work": "The Night Watch",
+      "year": 1642,
+      "place": "Amsterdam"
+    },
+    "notes": "Rembrandt, 1642, De Nachtwacht. In Rijksmuseum Amsterdam."
+  },
+  {
+    "qid": 26,
+    "domain": "geodata",
+    "question": "What is the capital of Australia?",
+    "expected": {
+      "attribution": "Canberra",
+      "work": null,
+      "year": null,
+      "place": "Australia"
+    },
+    "notes": "Canberra (NOT Sydney or Melbourne). Common misconception trap."
+  },
+  {
+    "qid": 27,
+    "domain": "geodata",
+    "question": "What is the longest river in the world?",
+    "expected": {
+      "attribution": "Nile",
+      "work": null,
+      "year": null,
+      "place": "Africa"
+    },
+    "notes": "Nile is the canonical longest river (6650 km). Amazon disputed by some recent measurements but Nile is the standard encyclopedic answer."
+  },
+  {
+    "qid": 28,
+    "domain": "geodata",
+    "question": "What is the highest mountain on Earth?",
+    "expected": {
+      "attribution": "Mount Everest",
+      "work": null,
+      "year": null,
+      "place": "Nepal"
+    },
+    "notes": "Mount Everest, 8848.86 m. Unambiguous by elevation above sea level."
+  },
+  {
+    "qid": 29,
+    "domain": "geodata",
+    "question": "What is the capital of Canada?",
+    "expected": {
+      "attribution": "Ottawa",
+      "work": null,
+      "year": null,
+      "place": "Canada"
+    },
+    "notes": "Ottawa (NOT Toronto). Common misconception trap."
+  },
+  {
+    "qid": 30,
+    "domain": "geodata",
+    "question": "What is the capital of Kazakhstan?",
+    "expected": {
+      "attribution": "Astana",
+      "work": null,
+      "year": null,
+      "place": "Kazakhstan"
+    },
+    "notes": "Astana (renamed from Nur-Sultan in 2022, previously Astana, previously Akmola). Current canonical name: Astana."
+  },
+  {
+    "qid": 31,
+    "domain": "mathematical",
+    "question": "Who proved the Poincare conjecture?",
+    "expected": {
+      "attribution": "Grigori Perelman",
+      "work": "Poincare conjecture proof",
+      "year": 2003,
+      "place": null
+    },
+    "notes": "Perelman published proof 2002-2003 via arXiv. Confirmed by 2006. Unambiguous."
+  },
+  {
+    "qid": 32,
+    "domain": "mathematical",
+    "question": "Who developed calculus independently of Isaac Newton?",
+    "expected": {
+      "attribution": "Gottfried Wilhelm Leibniz",
+      "work": "calculus",
+      "year": 1675,
+      "place": null
+    },
+    "notes": "Leibniz developed calculus independently. Both Newton and Leibniz are correct but the question asks who did so independently of Newton."
+  },
+  {
+    "qid": 33,
+    "domain": "mathematical",
+    "question": "What is the value of the mathematical constant pi, to five decimal places?",
+    "expected": {
+      "attribution": "3.14159",
+      "work": null,
+      "year": null,
+      "place": null
+    },
+    "notes": "Pi = 3.14159265... The first five decimal places are 14159. This is a mathematical constant with single correct answer to 5 dp."
+  },
+  {
+    "qid": 34,
+    "domain": "chemistry",
+    "question": "What is the chemical symbol for gold?",
+    "expected": {
+      "attribution": "Au",
+      "work": null,
+      "year": null,
+      "place": null
+    },
+    "notes": "Au from Latin Aurum."
+  },
+  {
+    "qid": 35,
+    "domain": "chemistry",
+    "question": "What is the chemical symbol for sodium?",
+    "expected": {
+      "attribution": "Na",
+      "work": null,
+      "year": null,
+      "place": null
+    },
+    "notes": "Na from Latin Natrium."
+  },
+  {
+    "qid": 36,
+    "domain": "chemistry",
+    "question": "What is the chemical symbol for potassium?",
+    "expected": {
+      "attribution": "K",
+      "work": null,
+      "year": null,
+      "place": null
+    },
+    "notes": "K from Latin Kalium."
+  },
+  {
+    "qid": 37,
+    "domain": "music",
+    "question": "Who composed the Ninth Symphony featuring the Ode to Joy?",
+    "expected": {
+      "attribution": "Ludwig van Beethoven",
+      "work": "Symphony No. 9",
+      "year": 1824,
+      "place": null
+    },
+    "notes": "Beethoven's Symphony No. 9 in D minor, Op. 125, premiered 1824."
+  },
+  {
+    "qid": 38,
+    "domain": "music",
+    "question": "Who composed The Marriage of Figaro?",
+    "expected": {
+      "attribution": "Wolfgang Amadeus Mozart",
+      "work": "The Marriage of Figaro",
+      "year": 1786,
+      "place": null
+    },
+    "notes": "Mozart, Le nozze di Figaro, premiered 1786 Vienna."
+  },
+  {
+    "qid": 39,
+    "domain": "music",
+    "question": "Who composed the Brandenburg Concertos?",
+    "expected": {
+      "attribution": "Johann Sebastian Bach",
+      "work": "Brandenburg Concertos",
+      "year": 1721,
+      "place": null
+    },
+    "notes": "Bach, BWV 1046-1051, dedicated 1721 to Margrave of Brandenburg."
+  },
+  {
+    "qid": 40,
+    "domain": "physics_constant",
+    "question": "What is the value of the gravitational constant G in SI units?",
+    "expected": {
+      "attribution": "6.674e-11",
+      "work": null,
+      "year": null,
+      "place": null
+    },
+    "notes": "G = 6.674 x 10^-11 N m^2 kg^-2 (CODATA 2018 value: 6.67430e-11). Accept 6.674 as load-bearing key."
+  },
+  {
+    "qid": 41,
+    "domain": "physics_constant",
+    "question": "What is Planck's constant in SI units?",
+    "expected": {
+      "attribution": "6.626e-34",
+      "work": null,
+      "year": null,
+      "place": null
+    },
+    "notes": "h = 6.62607015 x 10^-34 J s (exact since 2019 SI redefinition). Load-bearing key: 6.626e-34."
+  },
+  {
+    "qid": 42,
+    "domain": "physics_constant",
+    "question": "What is the elementary charge in coulombs?",
+    "expected": {
+      "attribution": "1.602e-19",
+      "work": null,
+      "year": null,
+      "place": null
+    },
+    "notes": "e = 1.602176634 x 10^-19 C (exact since 2019 SI redefinition). Load-bearing key: 1.602e-19."
+  },
+  {
+    "qid": 43,
+    "domain": "bio_historical",
+    "question": "Who discovered the structure of DNA?",
+    "expected": {
+      "attribution": "Watson and Crick",
+      "work": "DNA double helix",
+      "year": 1953,
+      "place": "Cambridge"
+    },
+    "notes": "Watson and Crick published the double helix structure 1953. Franklin's X-ray diffraction was critical. Standard encyclopedic answer names Watson and Crick for the structural model."
+  },
+  {
+    "qid": 44,
+    "domain": "bio_historical",
+    "question": "Who developed the theory of evolution by natural selection?",
+    "expected": {
+      "attribution": "Charles Darwin",
+      "work": "On the Origin of Species",
+      "year": 1859,
+      "place": null
+    },
+    "notes": "Darwin's On the Origin of Species, 1859. Wallace co-developed independently but Darwin is the canonical primary attribution."
+  },
+  {
+    "qid": 45,
+    "domain": "bio_historical",
+    "question": "Who developed the general theory of relativity?",
+    "expected": {
+      "attribution": "Albert Einstein",
+      "work": "general theory of relativity",
+      "year": 1915,
+      "place": null
+    },
+    "notes": "Einstein, published 1915. Unambiguous."
+  },
+  {
+    "qid": 46,
+    "domain": "bio_historical",
+    "question": "Who discovered the polio vaccine?",
+    "expected": {
+      "attribution": "Jonas Salk",
+      "work": "polio vaccine",
+      "year": 1955,
+      "place": null
+    },
+    "notes": "Jonas Salk's inactivated polio vaccine, announced 1955. (Sabin's oral vaccine came later.) Salk is the canonical first-discoverer."
+  },
+  {
+    "qid": 47,
+    "domain": "linguistic_geo",
+    "question": "What is the official language of Mozambique?",
+    "expected": {
+      "attribution": "Portuguese",
+      "work": null,
+      "year": null,
+      "place": "Mozambique"
+    },
+    "notes": "Portuguese, inherited from Portuguese colonial rule. Unambiguous."
+  },
+  {
+    "qid": 48,
+    "domain": "linguistic_geo",
+    "question": "What is the most spoken language in the world by number of native speakers?",
+    "expected": {
+      "attribution": "Mandarin Chinese",
+      "work": null,
+      "year": null,
+      "place": "China"
+    },
+    "notes": "Mandarin Chinese (Putonghua) has the most native speakers (~920M). Spanish and English follow. This is the standard encyclopedic answer."
+  },
+  {
+    "qid": 49,
+    "domain": "linguistic_geo",
+    "question": "What is the official language of Egypt?",
+    "expected": {
+      "attribution": "Arabic",
+      "work": null,
+      "year": null,
+      "place": "Egypt"
+    },
+    "notes": "Modern Standard Arabic is the official language of Egypt."
+  },
+  {
+    "qid": 50,
+    "domain": "linguistic_geo",
+    "question": "What is the official language of Japan?",
+    "expected": {
+      "attribution": "Japanese",
+      "work": null,
+      "year": null,
+      "place": "Japan"
+    },
+    "notes": "Japanese. While Japan has no constitutionally designated official language, Japanese is de facto and universally recognized as the official language."
+  }
+]
