@@ -11,7 +11,7 @@
     "dev:main": "tsc -p tsconfig.main.json && electron .",
     "build": "node scripts/unicode-check.mjs && npm run build:caithedral-core && npm run build:renderer && npm run build:main",
     "build:renderer": "vite build --config vite.renderer.config.ts",
-    "build:caithedral-core": "npm --prefix caithedral-core run build:main && xcopy /E /I /Y caithedral-core\\dist node_modules\\caithedral-core\\dist",
+    "build:caithedral-core": "npm --prefix caithedral-core run build:main && powershell -NoProfile -Command \"Get-ChildItem -Path 'caithedral-core/dist' -Recurse -File | ForEach-Object { $src=$_.FullName; $dst=$src.Replace('caithedral-core\\dist','node_modules\\caithedral-core\\dist'); $null=New-Item -ItemType Directory -Path (Split-Path $dst) -Force -EA SilentlyContinue; try { Copy-Item -Path $src -Destination $dst -Force -EA Stop } catch { Write-Warning \"Skipped locked: $dst\" } }; exit 0\"",
     "build:main": "tsc -p tsconfig.main.json",
     "build:hugo": "node scripts/copy-hugo-bundle.mjs",
     "catacombs:build": "node scripts/catacombs-indexer.mjs",
