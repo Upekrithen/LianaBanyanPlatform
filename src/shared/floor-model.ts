@@ -1,8 +1,9 @@
-// BP067 v0.1.24 — bundled floor model constants (shared main + renderer)
+// BP067 v0.1.24 -- bundled floor model constants (shared main + renderer)
 // Founder-locked: default = Gemma (Google), not Meta/Llama.
+// BP076 Drift 1 resolution (Founder direct): LITE SKU floor model updated to gemma2:2b.
 
-/** Shipped default tiny floor model (Ollama tag). */
-export const FLOOR_MODEL = 'qwen2.5:0.5b';
+/** Shipped default LITE floor model (Ollama tag). Updated to gemma2:2b per BP076 Drift 1. */
+export const FLOOR_MODEL = 'gemma2:2b';
 
 /** Tags treated as satisfying the floor-model requirement. */
 export const FLOOR_MODEL_ALIASES = [

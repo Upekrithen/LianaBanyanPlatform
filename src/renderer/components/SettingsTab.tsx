@@ -1,8 +1,9 @@
-// SettingsTab — Mnemosyne CAI Amplifier Settings
-// Tab 4 (always visible) — BP047 W1
-// Sections: Update · Appearance · AI Model Assignment · Substrate · Developer Mode · My Contribution
+// SettingsTab -- Mnemosyne CAI Amplifier Settings
+// Tab 4 (always visible) -- BP047 W1
+// Sections: Update - Appearance - AI Model Assignment - Mnem Retrieval (Mnem-DRT) - Substrate - Developer Mode - My Contribution
 // Auto-updater is top-priority item (Founder direct)
-// KniPr034: My Contribution panel added — read-only scaffold, data binding next wave
+// KniPr034: My Contribution panel added -- read-only scaffold, data binding next wave
+// BP077 v0.1.27: Mnem-DRT panel added (MnemosyneC Mnem-as-interface)
 
 import React, { useState, useEffect } from 'react';
 import type { AuthState } from '../amplify.d';
@@ -883,6 +884,267 @@ const cbStyles = {
   },
 };
 
+// ─── BP077 Mnem-DRT Settings ──────────────────────────────────────────────────
+
+type Sku = 'nano' | 'core' | 'lite' | 'full';
+type EbletQuota = '10mb' | '100mb' | '1gb' | 'unlimited';
+
+interface MnemDrtSettings {
+  sku: Sku;
+  mnem_drt_enabled: boolean;
+  mnem_drt_specialists: {
+    wikipedia: boolean;
+    wikidata: boolean;
+    arxiv: boolean;
+    wolfram: boolean;
+  };
+  filtration_pipeline_enabled: boolean;
+  eblet_store_quota: EbletQuota;
+  federation_exchange_enabled: boolean;
+}
+
+const DEFAULT_MNEM_DRT: MnemDrtSettings = {
+  sku: 'core',
+  mnem_drt_enabled: false,
+  mnem_drt_specialists: { wikipedia: false, wikidata: false, arxiv: false, wolfram: false },
+  filtration_pipeline_enabled: false,
+  eblet_store_quota: '100mb',
+  federation_exchange_enabled: false,
+};
+
+const EBLET_QUOTA_OPTIONS: Array<{ id: EbletQuota; label: string }> = [
+  { id: '10mb',      label: '10 MB'     },
+  { id: '100mb',     label: '100 MB'    },
+  { id: '1gb',       label: '1 GB'      },
+  { id: 'unlimited', label: 'Unlimited' },
+];
+
+function loadMnemDrt(): MnemDrtSettings {
+  try {
+    const raw = localStorage.getItem('mnemo_mnem_drt');
+    if (raw) return { ...DEFAULT_MNEM_DRT, ...JSON.parse(raw) };
+  } catch { /* fall through */ }
+  return { ...DEFAULT_MNEM_DRT };
+}
+
+function saveMnemDrt(s: MnemDrtSettings): void {
+  localStorage.setItem('mnemo_mnem_drt', JSON.stringify(s));
+}
+
+async function persistMnemDrtToBackend(s: MnemDrtSettings): Promise<void> {
+  try {
+    await (window as any).amplify?.saveAiDispatchSettings?.({
+      sku: s.sku,
+      mnem_drt_enabled: s.mnem_drt_enabled,
+      mnem_drt_specialists: s.mnem_drt_specialists,
+      filtration_pipeline_enabled: s.filtration_pipeline_enabled,
+      eblet_store_quota: s.eblet_store_quota,
+      federation_exchange_enabled: s.federation_exchange_enabled,
+    });
+  } catch {
+    // IPC channel may not be wired yet -- local storage is source of truth for now
+  }
+}
+
+function MnemDrtPanel() {
+  const [drt, setDrt] = useState<MnemDrtSettings>(loadMnemDrt);
+
+  function update(patch: Partial<MnemDrtSettings>) {
+    const next = { ...drt, ...patch };
+    setDrt(next);
+    saveMnemDrt(next);
+    void persistMnemDrtToBackend(next);
+  }
+
+  function updateSpecialist(key: keyof MnemDrtSettings['mnem_drt_specialists'], val: boolean) {
+    update({ mnem_drt_specialists: { ...drt.mnem_drt_specialists, [key]: val } });
+  }
+
+  const isNano = drt.sku === 'nano';
+  const isFull = drt.sku === 'full';
+  const s = styles;
+
+  return (
+    <section style={s.section}>
+      <div style={s.sectionHeader}>🧠 Mnem Retrieval (Mnem-DRT)</div>
+
+      {/* SKU selector */}
+      <div style={s.card}>
+        <div style={s.label}>Install type (SKU)</div>
+        <div style={s.toggleRow}>
+          {(['nano', 'core', 'lite', 'full'] as Sku[]).map((sku) => (
+            <button
+              key={sku}
+              onClick={() => update({ sku })}
+              style={{ ...s.chip, ...(drt.sku === sku ? s.chipActive : {}) }}
+              title={
+                sku === 'nano' ? 'BYO Ollama -- minimal Mnem' :
+                sku === 'core' ? 'Bundled Ollama -- opt-in Mnem-DRT' :
+                sku === 'lite' ? 'Bundled Ollama + gemma2:2b -- opt-in Mnem-DRT' :
+                'Full suite -- Mnem-DRT always on'
+              }
+            >
+              {sku.toUpperCase()}
+            </button>
+          ))}
+        </div>
+        {isNano && (
+          <div style={{ fontSize: 9, color: '#94a3b8', marginTop: 6, lineHeight: 1.6 }}>
+            NANO: minimal Mnem posture. r10v3 substrate is still injected on every query.
+            Upgrade to CORE or LITE to enable Mnem-DRT retrieval.
+          </div>
+        )}
+        {isFull && (
+          <div style={{ fontSize: 9, color: '#6ee7b7', marginTop: 6, lineHeight: 1.6 }}>
+            FULL: Mnem-DRT is always on. Wikipedia specialist enabled by default.
+          </div>
+        )}
+      </div>
+
+      {/* Master Mnem-DRT toggle (hidden for NANO; always-on display for FULL) */}
+      {!isNano && (
+        <div style={s.card}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 10 }}>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: 11, fontWeight: 600, color: '#e2e8f0', marginBottom: 3 }}>
+                Enable Mnem retrieval for this session
+              </div>
+              <div style={{ fontSize: 9, color: '#64748b', lineHeight: 1.6 }}>
+                When on, MnemosyneC queries its substrate before every AI answer.
+                {isFull ? ' Always active for FULL SKU.' : ' Opt-in for CORE and LITE.'}
+              </div>
+            </div>
+            <button
+              onClick={() => !isFull && update({ mnem_drt_enabled: !drt.mnem_drt_enabled })}
+              disabled={isFull}
+              style={{
+                ...s.chip,
+                minWidth: 38,
+                ...(isFull || drt.mnem_drt_enabled
+                  ? { ...s.chipActive, color: '#6ee7b7', borderColor: 'rgba(110,231,183,0.4)' }
+                  : {}),
+                opacity: isFull ? 0.75 : 1,
+              }}
+            >
+              {isFull || drt.mnem_drt_enabled ? 'ON' : 'OFF'}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Source specialists (shown when Mnem-DRT is active and not NANO) */}
+      {!isNano && (isFull || drt.mnem_drt_enabled) && (
+        <div style={s.card}>
+          <div style={s.label}>Source specialists</div>
+          {([
+            { key: 'wikipedia' as const, label: 'Wikipedia',     note: ''                       },
+            { key: 'wikidata'  as const, label: 'Wikidata',      note: ''                       },
+            { key: 'arxiv'     as const, label: 'arXiv',         note: ''                       },
+            { key: 'wolfram'   as const, label: 'Wolfram Alpha', note: '(requires API key)'     },
+          ]).map(({ key, label, note }) => (
+            <label key={key} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6, cursor: 'pointer' }}>
+              <input
+                type="checkbox"
+                checked={isFull && key === 'wikipedia' ? true : drt.mnem_drt_specialists[key]}
+                disabled={isFull && key === 'wikipedia'}
+                onChange={(e) => updateSpecialist(key, e.target.checked)}
+                style={{ width: 13, height: 13, accentColor: '#6ee7b7', cursor: 'pointer' } as React.CSSProperties}
+              />
+              <span style={{ fontSize: 10, color: '#94a3b8' }}>
+                {label}{note ? <span style={{ fontSize: 9, color: '#475569', marginLeft: 4 }}>{note}</span> : null}
+              </span>
+            </label>
+          ))}
+          <div style={{ fontSize: 9, color: '#334155', marginTop: 4, fontStyle: 'italic' as const }}>
+            W1 scope: specialist network calls are stubs -- full bridge lands in Week 1 build.
+          </div>
+        </div>
+      )}
+
+      {/* Filtration Pipeline toggle */}
+      {!isNano && (
+        <div style={s.card}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 10 }}>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: 11, fontWeight: 600, color: '#e2e8f0', marginBottom: 3 }}>
+                Filtration Pipeline
+              </div>
+              <div style={{ fontSize: 9, color: '#64748b', lineHeight: 1.6 }}>
+                Recommended on for best results. May slow first query by 2-5 seconds.
+                {isFull ? ' Always active for FULL SKU.' : ''}
+              </div>
+            </div>
+            <button
+              onClick={() => !isFull && update({ filtration_pipeline_enabled: !drt.filtration_pipeline_enabled })}
+              disabled={isFull}
+              style={{
+                ...s.chip,
+                minWidth: 38,
+                ...(isFull || drt.filtration_pipeline_enabled
+                  ? { ...s.chipActive, color: '#6ee7b7', borderColor: 'rgba(110,231,183,0.4)' }
+                  : {}),
+                opacity: isFull ? 0.75 : 1,
+              }}
+            >
+              {isFull || drt.filtration_pipeline_enabled ? 'ON' : 'OFF'}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Eblet store quota */}
+      <div style={s.card}>
+        <div style={s.label}>Eblet store quota</div>
+        <div style={s.toggleRow}>
+          {EBLET_QUOTA_OPTIONS.map((q) => (
+            <button
+              key={q.id}
+              onClick={() => update({ eblet_store_quota: q.id })}
+              style={{ ...s.chip, ...(drt.eblet_store_quota === q.id ? s.chipActive : {}) }}
+            >
+              {q.label}
+            </button>
+          ))}
+        </div>
+        <div style={{ fontSize: 9, color: '#475569', marginTop: 4, lineHeight: 1.5 }}>
+          Maximum local disk space for your sovereign eblet knowledge base.
+        </div>
+      </div>
+
+      {/* Federation eblet exchange */}
+      <div style={s.card}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 10 }}>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: 11, fontWeight: 600, color: '#e2e8f0', marginBottom: 3 }}>
+              Federation eblet exchange
+            </div>
+            <div style={{ fontSize: 9, color: '#64748b', lineHeight: 1.6 }}>
+              Share substrate with trusted peers (opt-in). Your data leaves your computer
+              only to peers you explicitly add. Default off across all SKUs.
+            </div>
+          </div>
+          <button
+            onClick={() => update({ federation_exchange_enabled: !drt.federation_exchange_enabled })}
+            style={{
+              ...s.chip,
+              minWidth: 38,
+              ...(drt.federation_exchange_enabled
+                ? { ...s.chipActive, color: '#6ee7b7', borderColor: 'rgba(110,231,183,0.4)' }
+                : {}),
+            }}
+          >
+            {drt.federation_exchange_enabled ? 'ON' : 'OFF'}
+          </button>
+        </div>
+      </div>
+
+      <div style={{ fontSize: 9, color: '#334155', marginTop: 4, fontStyle: 'italic' as const, lineHeight: 1.5 }}>
+        r10v3 substrate is injected on every query for all SKUs -- no configuration needed.
+      </div>
+    </section>
+  );
+}
+
 const MODEL_OPTIONS: Array<{ id: ModelAssignment; label: string; desc: string }> = [
   { id: 'ollama_local', label: 'Ollama (local)',      desc: 'Free · runs on your hardware · no API key needed' },
   { id: 'anthropic_cloud', label: 'Anthropic (cloud)', desc: 'Claude family · requires API key' },
@@ -1112,6 +1374,9 @@ export function SettingsTab({ authState, onDevModeToggle, devEnabled = false }: 
           </div>
         ))}
       </section>
+
+      {/* ── Section 3b: MNEM RETRIEVAL (Mnem-DRT) -- BP077 v0.1.27 ─────── */}
+      <MnemDrtPanel />
 
       {/* ── Section 4: SUBSTRATE MODE ────────────────────────────────────── */}
       <section style={s.section}>
