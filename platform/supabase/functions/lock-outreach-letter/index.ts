@@ -97,6 +97,66 @@ Deno.serve(async (req) => {
 
     console.log(`[lock-outreach-letter] ${user.email} transitioned ${letter_id} → ${target_state}`);
 
+    // BP077 Scope 3 -- Pedestal Forum seeding on draft → locked transition
+    // Creates a paper_pedestal_forum_additions anchor row so the Pedestal Forum
+    // surface is immediately available for member Decree-Composition additions.
+    // Graceful degrade: failure here does NOT block the publish -- logged only.
+    if (target_state === "locked") {
+      await (async () => {
+        try {
+          // Fetch letter data for the pedestal anchor
+          const { data: letter, error: letterErr } = await serviceSupabase
+            .from("outreach_letters")
+            .select("slug, recipient_name, substantive_summary, what_we_are_asking, wave_label")
+            .eq("letter_id", letter_id)
+            .single();
+
+          if (letterErr || !letter) {
+            console.warn("[lock-outreach-letter] Pedestal seed: could not fetch letter", letterErr?.message);
+            return;
+          }
+
+          // Guard: skip if a pedestal row already exists for this letter's slug
+          const { count } = await serviceSupabase
+            .from("paper_pedestal_forum_additions")
+            .select("id", { count: "exact", head: true })
+            .eq("paper_id", letter.slug);
+
+          if (count && count > 0) {
+            console.log(`[lock-outreach-letter] Pedestal already seeded for ${letter.slug} -- skipping`);
+            return;
+          }
+
+          const pedestalTitle = letter.recipient_name
+            ? `Letter to ${letter.recipient_name}${letter.wave_label ? ` (${letter.wave_label})` : ""}`
+            : "Open Outreach Letter";
+
+          const pedestalBody = (letter.substantive_summary || letter.what_we_are_asking || "")
+            .trim()
+            .slice(0, 2000) || "Founder open-outreach letter published to the Glass Door.";
+
+          const { error: insertErr } = await serviceSupabase
+            .from("paper_pedestal_forum_additions")
+            .insert({
+              paper_id: letter.slug,
+              member_user_id: user.id,
+              author_display_name: "Founder",
+              addition_class: "extending",
+              title: pedestalTitle,
+              body: pedestalBody,
+            });
+
+          if (insertErr) {
+            console.warn("[lock-outreach-letter] Pedestal seed insert failed (non-blocking):", insertErr.message);
+          } else {
+            console.log(`[lock-outreach-letter] Pedestal seeded for ${letter.slug} at ${new Date().toISOString()}`);
+          }
+        } catch (pedestalErr) {
+          console.warn("[lock-outreach-letter] Pedestal seed error (non-blocking):", String(pedestalErr));
+        }
+      })();
+    }
+
     return new Response(
       JSON.stringify({ ok: true, letter: data }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } },

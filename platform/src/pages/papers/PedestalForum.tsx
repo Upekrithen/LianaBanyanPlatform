@@ -230,19 +230,13 @@ export default function PedestalForum() {
     loadAdditions();
   }
 
-  if (!paper) {
-    return (
-      <PortalPageLayout maxWidth="xl" xrayId="pedestal-forum-404">
-        <div className="space-y-4 py-12 text-center">
-          <AlertCircle className="w-8 h-8 mx-auto text-muted-foreground" />
-          <p className="text-muted-foreground">Paper not found: <code className="text-xs">{paperId}</code></p>
-          <Button variant="outline" asChild>
-            <Link to="/papers">Browse All Papers</Link>
-          </Button>
-        </div>
-      </PortalPageLayout>
-    );
-  }
+  // BP077 Scope 3: letter slugs (outreach letters) are not in PAPERS registry.
+  // Treat unknown IDs as open-outreach letter pedestals with a generic header.
+  const isLetterPedestal = !paper && !!paperId;
+  const effectivePaper = paper ?? {
+    title: `Open Outreach Letter -- ${paperId}`,
+    subtitle: "Glass Door letter published to the Pedestal Forum for Decree-Composition additions",
+  };
 
   return (
     <PortalPageLayout maxWidth="xl" xrayId="pedestal-forum">
@@ -254,13 +248,20 @@ export default function PedestalForum() {
             <ScrollText className="w-5 h-5 text-muted-foreground" />
             <Badge variant="outline" className="text-xs">Pedestal Forum</Badge>
           </div>
-          <h1 className="text-2xl font-bold leading-tight">{paper.title}</h1>
-          {paper.subtitle && (
-            <p className="text-base text-muted-foreground italic">{paper.subtitle}</p>
+          <h1 className="text-2xl font-bold leading-tight">{effectivePaper.title}</h1>
+          {effectivePaper.subtitle && (
+            <p className="text-base text-muted-foreground italic">{effectivePaper.subtitle}</p>
           )}
-          <p className="text-sm text-muted-foreground">
-            Paper #{paperId} of the 12-Paper Save-the-World Series
-          </p>
+          {!isLetterPedestal && (
+            <p className="text-sm text-muted-foreground">
+              Paper #{paperId} of the 12-Paper Save-the-World Series
+            </p>
+          )}
+          {isLetterPedestal && (
+            <p className="text-sm text-muted-foreground">
+              Open Outreach Letter · Glass Door · Pedestal Forum
+            </p>
+          )}
         </div>
 
         {/* ── Section 11 — Collaboration via Pedestal Forum (canonical) ────── */}
@@ -436,10 +437,14 @@ export default function PedestalForum() {
           ))}
         </div>
 
-        {/* ── Back to paper index ───────────────────────────────────────────── */}
+        {/* ── Back link (context-aware: letter vs paper) ───────────────────── */}
         <div className="pt-4 border-t border-border">
           <Button variant="ghost" size="sm" asChild>
-            <Link to="/papers">← All Papers</Link>
+            {isLetterPedestal ? (
+              <Link to={`/outreach/${paperId}`}>← Back to Letter</Link>
+            ) : (
+              <Link to="/papers">← All Papers</Link>
+            )}
           </Button>
         </div>
 

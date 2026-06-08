@@ -11,7 +11,7 @@ import { useOutreachLetter } from "@/hooks/useOutreachLetters";
 import { OutreachLetterCard } from "@/components/outreach/OutreachLetterCard";
 import { OutreachLetterVotePanel } from "@/components/outreach/OutreachLetterVotePanel";
 import { OutreachSixDegreesPanel } from "@/components/outreach/OutreachSixDegreesPanel";
-import { ArrowLeft, Shield } from "lucide-react";
+import { ArrowLeft, Shield, ScrollText } from "lucide-react";
 
 export default function OutreachLetterDetailPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -78,6 +78,25 @@ export default function OutreachLetterDetailPage() {
               onAmplify={castVote}
               onSixDegreesFlag={flagSixDegrees}
             />
+          </div>
+        )}
+
+        {/* BP077 Scope 3 — Pedestal Forum link: Decree-Composition additions for this letter */}
+        {canAmplify && (
+          <div className="mb-4">
+            <Link
+              to={`/papers/${letter.slug}/pedestal-forum`}
+              className="inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all"
+              style={{
+                background: "rgba(255,255,255,0.03)",
+                border: "1px solid rgba(255,255,255,0.07)",
+                color: "#94a3b8",
+              }}
+            >
+              <ScrollText className="w-4 h-4" />
+              <span>Pedestal Forum</span>
+              <span className="text-xs opacity-60">-- compose a Decree-Composition addition</span>
+            </Link>
           </div>
         )}
 
