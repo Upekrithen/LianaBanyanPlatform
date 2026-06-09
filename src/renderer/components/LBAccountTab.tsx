@@ -266,12 +266,56 @@ export function LBAccountTab() {
     <div style={s.root}>
       {/* Header */}
       <div>
-        <h2 style={s.heading}>LB Account</h2>
+        <h2 style={s.heading}>$ LB Account</h2>
         <p style={{ ...s.sub, marginTop: 6 }}>
           Link your Liana Banyan cooperative account to this device. Enables
           Frontier node registration, shared-substrate credits, and Crewman attribution.
         </p>
       </div>
+
+      {/* SEG-UX-5: $5/year membership entry point (persistent, top of page) */}
+      {!accountState.linked && (
+        <div style={{
+          background: 'rgba(110,231,183,0.06)',
+          border: '1px solid rgba(110,231,183,0.25)',
+          borderRadius: 10,
+          padding: '14px 18px',
+          display: 'flex',
+          flexDirection: 'column' as const,
+          gap: 10,
+        }}>
+          <div>
+            <div style={{ fontSize: 13, fontWeight: 700, color: '#6ee7b7', marginBottom: 4 }}>
+              Join the cooperative -- $5/year
+            </div>
+            <div style={{ fontSize: 11, color: '#64748b', lineHeight: 1.6 }}>
+              Unlock Helm, Federation Stage 6, Banyan Metric sharing, and Crewman attribution.
+              Free to use Mnemosyne. Better to join.
+            </div>
+          </div>
+          <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' as const }}>
+            <button
+              style={s.btnPrimary}
+              onClick={() => {
+                void (async () => {
+                  try {
+                    const result = await (window as any).amplify?.membership?.createCheckout?.(false);
+                    const url = result?.url;
+                    (window as any).amplify?.openExternal?.(url ?? 'https://lianabanyan.com/join');
+                  } catch {
+                    (window as any).amplify?.openExternal?.('https://lianabanyan.com/join');
+                  }
+                })();
+              }}
+            >
+              Join -- $5/year
+            </button>
+            <span style={{ fontSize: 10, color: '#334155' }}>
+              Using free? No account required.
+            </span>
+          </div>
+        </div>
+      )}
 
       {/* ── Linked State ── */}
       {accountState.linked ? (

@@ -3,66 +3,78 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Download Mnemosyne v0.1.16 — mnemosynec.ai</title>
-  <meta name="description" content="Download Mnemosyne v0.1.16 — your cooperative AI memory layer. Local, private, yours.">
+  <title>Download MnemosyneC v0.1.30 -- mnemosynec.ai</title>
+  <meta name="description" content="Download MnemosyneC v0.1.30 -- your cooperative AI memory layer. Local, private, yours.">
   <style>
-    :root{--accent:#6366f1;--bg:#0f0f23;--card:#1a1a3e;--text:#e2e8f0;--muted:rgba(255,255,255,0.5)}
+    :root{--accent:#6ee7b7;--bg:#0a0f1a;--card:#111827;--text:#e2e8f0;--muted:rgba(255,255,255,0.45);--border:rgba(110,231,183,0.2)}
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem}
     .container{max-width:680px;width:100%}
-    .badge{background:var(--accent);color:#fff;padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:600;display:inline-block;margin-bottom:1.2rem}
-    h1{font-size:2.8rem;font-weight:800;background:linear-gradient(135deg,#6366f1,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.5rem}
-    .tagline{font-size:1.1rem;color:var(--muted);margin-bottom:2rem}
-    .platform-section{background:var(--card);border-radius:12px;padding:1.5rem;margin-bottom:1rem;border:1px solid rgba(255,255,255,0.08)}
-    .platform-label{font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.75rem}
+    .badge{background:rgba(110,231,183,0.15);color:var(--accent);border:1px solid var(--border);padding:4px 14px;border-radius:20px;font-size:.8rem;font-weight:700;display:inline-block;margin-bottom:1.2rem;letter-spacing:.04em}
+    h1{font-size:2.4rem;font-weight:800;color:var(--accent);margin-bottom:.5rem}
+    .tagline{font-size:1.05rem;color:var(--muted);margin-bottom:.6rem}
+    .free-note{font-size:.9rem;color:#4ade80;font-weight:600;margin-bottom:2rem}
+    .platform-section{background:var(--card);border-radius:10px;padding:1.4rem;margin-bottom:.9rem;border:1px solid rgba(100,116,139,0.15)}
+    .platform-label{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.7rem}
     .btn-row{display:flex;flex-wrap:wrap;gap:.5rem}
-    .btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:600;font-size:.9rem;transition:opacity .15s}
-    .btn-primary{background:var(--accent);color:#fff}
-    .btn-secondary{background:rgba(255,255,255,0.08);color:var(--text)}
-    .btn:hover{opacity:.8}
-    .meta{color:var(--muted);font-size:.85rem;margin-top:1.5rem}
+    .btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:7px;text-decoration:none;font-weight:600;font-size:.88rem;transition:opacity .15s;border:1px solid transparent}
+    .btn-primary{background:rgba(110,231,183,0.14);color:var(--accent);border-color:var(--border)}
+    .btn-secondary{background:rgba(255,255,255,0.05);color:var(--muted);border-color:rgba(100,116,139,0.2)}
+    .btn:hover{opacity:.75}
+    .mac-note{font-size:.78rem;color:var(--muted);margin-top:.5rem;font-style:italic}
+    .sha-block{margin-top:1.4rem;background:rgba(15,23,42,0.7);border:1px solid rgba(100,116,139,0.15);border-radius:8px;padding:10px 14px}
+    .sha-label{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:4px}
+    .sha-value{font-family:monospace;font-size:.75rem;color:#64748b;word-break:break-all}
+    .meta{color:var(--muted);font-size:.82rem;margin-top:1.2rem}
     .meta a{color:var(--accent);text-decoration:none}
-    footer{margin-top:2.5rem;color:var(--muted);font-size:.8rem;line-height:1.8}
+    .full-box{margin-top:1.5rem;background:rgba(110,231,183,0.05);border:1px solid rgba(110,231,183,0.2);border-radius:10px;padding:1.2rem}
+    .full-box summary{cursor:pointer;font-size:.9rem;font-weight:600;color:var(--accent);list-style:none}
+    .full-box summary::-webkit-details-marker{display:none}
+    .full-box p{font-size:.85rem;color:#94a3b8;margin-top:.7rem;line-height:1.6}
+    footer{margin-top:2rem;color:var(--muted);font-size:.78rem;line-height:1.8}
     footer a{color:inherit}
   </style>
 </head>
 <body>
 <div class="container">
-  <div class="badge">v0.1.16</div>
-  <h1>Mnemosyne</h1>
-  <p class="tagline">Your cooperative AI memory layer — local, private, yours.</p>
+  <div class="badge">v0.1.30</div>
+  <h1>MnemosyneC</h1>
+  <p class="tagline">Your cooperative AI memory layer -- local, private, yours.</p>
+  <p class="free-note">Free to use. Better to join. FULL AI upgrade: free download.</p>
 
   <div class="platform-section">
-    <div class="platform-label">🪟 Windows</div>
+    <div class="platform-label">Windows</div>
     <div class="btn-row">
-      <a class="btn btn-primary" href="https://github.com/LianaBanyanCorporation/amplify-computer/releases/download/v0.1.16/Mnemosyne-Setup-0.1.16.exe">⬇ Installer (.exe)</a>
-      <a class="btn btn-secondary" href="https://github.com/LianaBanyanCorporation/amplify-computer/releases/download/v0.1.16/Mnemosyne-0.1.16.msi">⬇ MSI Package</a>
+      <a class="btn btn-primary" href="https://github.com/LianaBanyanCorporation/amplify-computer/releases/download/v0.1.30/MnemosyneC-Setup-0.1.30.exe">Installer (.exe)</a>
+      <a class="btn btn-secondary" href="https://github.com/LianaBanyanCorporation/amplify-computer/releases/download/v0.1.30/Mnemosyne-Portable-0.1.30.exe">Portable (.exe)</a>
     </div>
   </div>
 
   <div class="platform-section">
-    <div class="platform-label">🍎 macOS</div>
+    <div class="platform-label">macOS</div>
     <div class="btn-row">
-      <a class="btn btn-primary" href="https://github.com/LianaBanyanCorporation/amplify-computer/releases/download/v0.1.16/Mnemosyne-0.1.16-mac.dmg">⬇ Intel (.dmg)</a>
-      <a class="btn btn-secondary" href="https://github.com/LianaBanyanCorporation/amplify-computer/releases/download/v0.1.16/Mnemosyne-0.1.16-mac-arm64.dmg">⬇ Apple Silicon</a>
+      <span class="btn btn-secondary" style="cursor:default;opacity:.5">No signed Mac build yet</span>
     </div>
+    <p class="mac-note">Mac build requires a community member with Apple Developer ID. See <a href="https://lianabanyan.com/download/" style="color:var(--accent)">bounty page</a>.</p>
   </div>
 
-  <div class="platform-section">
-    <div class="platform-label">🐧 Linux</div>
-    <div class="btn-row">
-      <a class="btn btn-primary" href="https://github.com/LianaBanyanCorporation/amplify-computer/releases/download/v0.1.16/Mnemosyne-0.1.16.AppImage">⬇ AppImage</a>
-      <a class="btn btn-secondary" href="https://github.com/LianaBanyanCorporation/amplify-computer/releases/download/v0.1.16/Mnemosyne-0.1.16.deb">⬇ .deb</a>
-    </div>
+  <details class="full-box">
+    <summary>What is FULL AI? (free upgrade inside the app)</summary>
+    <p>FULL is the in-app upgrade to Gemma 4 12B, a FREE flagship open model. Bigger download, better performance, still free. After installing MnemosyneC, open the app and click <strong>Get FULL AI Free</strong> in the titlebar -- no browser, no account needed. The download runs locally on your machine.</p>
+  </details>
+
+  <div class="sha-block">
+    <div class="sha-label">SHA-256 (MnemosyneC-Setup-0.1.30.exe)</div>
+    <div class="sha-value">64D853DC56995DAD93673FF3ED019FED5E271DCA9AC31A88C9A951597C7CD7BE</div>
   </div>
 
   <p class="meta">
-    Version 0.1.16 · Released 2026-05-26 ·
-    <a href="https://github.com/LianaBanyanCorporation/amplify-computer/releases/tag/v0.1.16">Release notes ↗</a>
+    Version 0.1.30 &middot; Released 2026-06-09 &middot;
+    <a href="https://github.com/LianaBanyanCorporation/amplify-computer/releases/tag/v0.1.30">Release notes</a>
   </p>
 
   <footer>
-    Mnemosyne is part of the <a href="https://lianabanyan.com">Liana Banyan</a> cooperative platform.<br>
+    MnemosyneC is part of the <a href="https://lianabanyan.com">Liana Banyan</a> cooperative platform.<br>
     We Are Those Workers / Builders / Creators.<br>
     <strong>Free to use. Better to join. Share and Save.</strong>
   </footer>

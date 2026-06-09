@@ -6,7 +6,7 @@
 // BP077 v0.1.27: Mnem-DRT panel added (MnemosyneC Mnem-as-interface)
 // BP078: SkuUpgradePanel wired into AI Tier section
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import type { AuthState } from '../amplify.d';
 import { LocFaqModal } from './LocFaqPanel';
 import { SkuUpgradePanel } from './SkuUpgradePanel';
@@ -15,6 +15,9 @@ interface SettingsTabProps {
   authState: AuthState | null;
   onDevModeToggle?: (enabled: boolean) => void;
   devEnabled?: boolean;
+  // SEG-UX-2: scroll-to-anchor target from pill modal "Open AI Tier in Settings"
+  scrollTo?: string | null;
+  onScrollConsumed?: () => void;
 }
 
 type Theme = 'dark' | 'light' | 'system';
@@ -970,6 +973,11 @@ function MnemDrtPanel() {
     <section style={s.section}>
       <div style={s.sectionHeader}>🧠 Mnem Retrieval (Mnem-DRT)</div>
 
+      {/* SEG-UX-3: disambiguation sentence -- Mnem-DRT install type, not AI model tier */}
+      <div style={{ fontSize: 9, color: '#475569', marginBottom: 6, lineHeight: 1.5 }}>
+        Mnem-DRT retrieval install type. Sets corpus depth and specialist count.
+      </div>
+
       {/* SKU selector */}
       <div style={s.card}>
         <div style={s.label}>Install type (SKU)</div>
@@ -1165,10 +1173,60 @@ const MODE_OPTIONS: Array<{ id: SubstrateMode; label: string; desc: string }> = 
   { id: 'fallback',  label: '❄️ Fallback',   desc: 'Substrate-only · no AI required · Stage 2 mode · always offline-capable' },
 ];
 
-export function SettingsTab({ authState, onDevModeToggle, devEnabled = false }: SettingsTabProps) {
+export function SettingsTab({
+  authState,
+  onDevModeToggle,
+  devEnabled = false,
+  scrollTo,
+  onScrollConsumed,
+}: SettingsTabProps) {
   const isMember = authState?.status === 'member' || authState?.status === 'trial_active';
   const isFounder = (authState as any)?.member?.is_founder === true;
   const [showLocFaq, setShowLocFaq] = useState(false);
+
+  // SEG-UX-3: current SKU tier for persistent tier text row
+  const [currentSkuTier, setCurrentSkuTier] = useState<string | null>(null);
+
+  // SEG-UX-4: settings quick-jump search
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchOpen, setSearchOpen] = useState(false);
+
+  // Section refs for scroll-to-anchor
+  const sectionRefs = useRef<Map<string, HTMLElement>>(new Map());
+
+  // SEG-UX-3: load current SKU tier on mount + subscribe to upgrade completion
+  useEffect(() => {
+    let cancelled = false;
+    void (async () => {
+      try {
+        const result =
+          (await (window as any).amplify?.sku?.currentTier?.()) ?? { tier: 'nano' };
+        if (!cancelled) setCurrentSkuTier(result.tier);
+      } catch {
+        if (!cancelled) setCurrentSkuTier('nano');
+      }
+    })();
+
+    // SEG-UX-7: refresh tier text after upgrade completes (handles upgrade from pill modal)
+    const unsubComplete = (window as any).amplify?.sku?.onPullComplete?.(() => {
+      if (!cancelled) setCurrentSkuTier('full');
+    }) ?? (() => {});
+
+    return () => {
+      cancelled = true;
+      unsubComplete();
+    };
+  }, []);
+
+  // SEG-UX-2: scroll to target section when prop changes
+  useEffect(() => {
+    if (!scrollTo) return;
+    const el = sectionRefs.current.get(scrollTo);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    onScrollConsumed?.();
+  }, [scrollTo, onScrollConsumed]);
 
   const [updateStatus, setUpdateStatus] = useState<UpdateStatus>({
     checking: false,
@@ -1250,13 +1308,120 @@ export function SettingsTab({ authState, onDevModeToggle, devEnabled = false }: 
 
   const s = styles;
 
+  // SEG-UX-4: section header search data
+  const SECTION_HEADERS = [
+    { key: 'update',      label: 'Mnemosyne Update',          keywords: ['update', 'version', 'download', 'install'] },
+    { key: 'appearance',  label: 'Appearance',                 keywords: ['appearance', 'theme', 'dark', 'light'] },
+    { key: 'ai-model',    label: 'AI Model Assignment',        keywords: ['ai model', 'ollama', 'bishop', 'knight', 'pawn', 'rook'] },
+    { key: 'mnem-drt',    label: 'Mnem Retrieval (Mnem-DRT)',  keywords: ['mnem', 'drt', 'retrieval', 'specialist', 'wikipedia', 'wikidata', 'arxiv', 'wolfram'] },
+    { key: 'ai-tier',     label: 'AI Tier',                    keywords: ['ai tier', 'gemma', 'model', 'full', 'nano', 'upgrade', 'sku'] },
+    { key: 'substrate',   label: 'Substrate Mode',             keywords: ['substrate', 'mode', 'burst', 'normal', 'fallback'] },
+    { key: 'developer',   label: 'Developer Mode',             keywords: ['developer', 'dev mode', 'devmode'] },
+    { key: 'research',    label: 'Research Participation',     keywords: ['chronos', 'research', 'consent'] },
+    { key: 'contribution', label: 'My Contribution',           keywords: ['contribution', 'marks', 'stamps'] },
+    { key: 'grand-projects', label: 'Grand Projects',          keywords: ['grand projects', 'project'] },
+    { key: 'substrate-folders', label: 'Substrate Folders',   keywords: ['folders', 'index', 'watcher'] },
+  ];
+
+  const searchResults = searchQuery.trim().length > 0
+    ? SECTION_HEADERS.filter((sec) => {
+        const q = searchQuery.toLowerCase();
+        return (
+          sec.label.toLowerCase().includes(q) ||
+          sec.keywords.some((k) => k.includes(q))
+        );
+      })
+    : [];
+
+  function scrollToSection(key: string) {
+    const el = sectionRefs.current.get(key);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setSearchQuery('');
+    setSearchOpen(false);
+  }
+
+  function setSectionRef(key: string) {
+    return (el: HTMLElement | null) => {
+      if (el) sectionRefs.current.set(key, el);
+    };
+  }
+
   return (
     <div style={s.container}>
 
+      {/* SEG-UX-4: Settings quick-jump search box */}
+      <div style={{ position: 'relative', marginBottom: 12 }}>
+        <input
+          type="search"
+          placeholder="Search settings... (e.g. AI Tier, Gemma, retrieval)"
+          value={searchQuery}
+          onChange={(e) => { setSearchQuery(e.target.value); setSearchOpen(true); }}
+          onFocus={() => setSearchOpen(true)}
+          onBlur={() => setTimeout(() => setSearchOpen(false), 150)}
+          role="combobox"
+          aria-expanded={searchOpen && searchResults.length > 0}
+          aria-autocomplete="list"
+          aria-controls="settings-search-results"
+          aria-label="Search settings sections"
+          style={{
+            width: '100%',
+            padding: '7px 12px',
+            background: 'rgba(15,23,42,0.7)',
+            border: '1px solid rgba(100,116,139,0.25)',
+            borderRadius: 7,
+            color: '#e2e8f0',
+            fontSize: 11,
+            outline: 'none',
+            boxSizing: 'border-box',
+            fontFamily: 'inherit',
+          }}
+        />
+        {searchOpen && searchResults.length > 0 && (
+          <ul
+            id="settings-search-results"
+            role="listbox"
+            aria-label="Search results"
+            style={{
+              position: 'absolute',
+              top: '100%',
+              left: 0,
+              right: 0,
+              background: '#111827',
+              border: '1px solid rgba(100,116,139,0.25)',
+              borderRadius: '0 0 7px 7px',
+              zIndex: 100,
+              margin: 0,
+              padding: '4px 0',
+              listStyle: 'none',
+              boxShadow: '0 8px 20px rgba(0,0,0,0.4)',
+            }}
+          >
+            {searchResults.map((sec) => (
+              <li
+                key={sec.key}
+                role="option"
+                aria-selected={false}
+                onMouseDown={() => scrollToSection(sec.key)}
+                style={{
+                  padding: '7px 14px',
+                  cursor: 'pointer',
+                  fontSize: 11,
+                  color: '#94a3b8',
+                }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = 'rgba(110,231,183,0.07)'; (e.currentTarget as HTMLElement).style.color = '#6ee7b7'; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = 'none'; (e.currentTarget as HTMLElement).style.color = '#94a3b8'; }}
+              >
+                {sec.label}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
       {/* ── Section 1: MNEMOSYNE UPDATE ─────────────────────────────────── */}
-      {/* G.2 KniPr011: state machine — NO_UPDATE→hidden; AVAILABLE→active; DOWNLOADING→progress; DOWNLOADED→"Restart to update" */}
-      <section style={s.section}>
-        <div style={s.sectionHeader}>⬆️ Mnemosyne™ Update</div>
+      {/* G.2 KniPr011: state machine -- NO_UPDATE→hidden; AVAILABLE→active; DOWNLOADING→progress; DOWNLOADED→"Restart to update" */}
+      <section ref={setSectionRef('update') as React.RefCallback<HTMLElement>} style={s.section} id="settings-section-update">
+        <div style={s.sectionHeader}>Mnemosyne Update</div>
         <div style={s.card}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 }}>
             <div>
@@ -1326,8 +1491,8 @@ export function SettingsTab({ authState, onDevModeToggle, devEnabled = false }: 
       </section>
 
       {/* ── Section 2: APPEARANCE ────────────────────────────────────────── */}
-      <section style={s.section}>
-        <div style={s.sectionHeader}>🎨 Appearance</div>
+      <section ref={setSectionRef('appearance') as React.RefCallback<HTMLElement>} style={s.section} id="settings-section-appearance">
+        <div style={s.sectionHeader}>Appearance</div>
         <div style={s.card}>
           <div style={s.label}>Theme</div>
           <div style={s.toggleRow}>
@@ -1348,8 +1513,8 @@ export function SettingsTab({ authState, onDevModeToggle, devEnabled = false }: 
       </section>
 
       {/* ── Section 3: AI MODEL ASSIGNMENT ──────────────────────────────── */}
-      <section style={s.section}>
-        <div style={s.sectionHeader}>🤖 AI Model Assignment</div>
+      <section ref={setSectionRef('ai-model') as React.RefCallback<HTMLElement>} style={s.section} id="settings-section-ai-model">
+        <div style={s.sectionHeader}>AI Model Assignment</div>
         <div style={s.note}>
           FREE AI: Ollama (onboard by default) — no cloud account, no API key, no cost
         </div>
@@ -1378,20 +1543,51 @@ export function SettingsTab({ authState, onDevModeToggle, devEnabled = false }: 
       </section>
 
       {/* ── Section 3b: MNEM RETRIEVAL (Mnem-DRT) -- BP077 v0.1.27 ─────── */}
-      <MnemDrtPanel />
+      <div
+        ref={setSectionRef('mnem-drt') as React.RefCallback<HTMLDivElement>}
+        id="settings-section-mnem-drt"
+      >
+        <MnemDrtPanel />
+      </div>
 
       {/* ── Section 3c: AI TIER (BP078) ──────────────────────────────────── */}
-      <section style={s.section}>
-        <div style={s.sectionHeader}>🧩 AI Tier</div>
-        <div style={{ fontSize: 10, color: '#64748b', marginBottom: 8, lineHeight: 1.5 }}>
-          Upgrade your local model for higher capability.
+      <section
+        ref={setSectionRef('ai-tier') as React.RefCallback<HTMLElement>}
+        style={s.section}
+        id="settings-section-ai-tier"
+      >
+        <div style={s.sectionHeader}>AI Tier</div>
+        {/* SEG-UX-3: disambiguation sentence above SkuUpgradePanel SKU selector */}
+        <div style={{ fontSize: 10, color: '#475569', marginBottom: 6, lineHeight: 1.5 }}>
+          AI model tier. Sets the local model used for answers.
         </div>
+        {/* SEG-UX-3: persistent current-tier text -- visible to ALL users (NANO and FULL) */}
+        {currentSkuTier && (
+          <p style={{
+            fontSize: 11,
+            fontWeight: 600,
+            color: currentSkuTier === 'full' ? '#4ade80' : '#94a3b8',
+            margin: '0 0 10px',
+            padding: '6px 10px',
+            background: currentSkuTier === 'full'
+              ? 'rgba(74,222,128,0.07)'
+              : 'rgba(100,116,139,0.07)',
+            border: currentSkuTier === 'full'
+              ? '1px solid rgba(74,222,128,0.2)'
+              : '1px solid rgba(100,116,139,0.15)',
+            borderRadius: 6,
+          }}>
+            Current AI tier: {currentSkuTier === 'full'
+              ? 'FULL (Gemma 4 12B)'
+              : currentSkuTier.toUpperCase()}
+          </p>
+        )}
         <SkuUpgradePanel analytics={undefined} />
       </section>
 
       {/* ── Section 4: SUBSTRATE MODE ────────────────────────────────────── */}
-      <section style={s.section}>
-        <div style={s.sectionHeader}>⚙️ Substrate Mode</div>
+      <section ref={setSectionRef('substrate') as React.RefCallback<HTMLElement>} style={s.section} id="settings-section-substrate">
+        <div style={s.sectionHeader}>Substrate Mode</div>
         <div style={s.card}>
           <div style={s.toggleRow}>
             {MODE_OPTIONS.map((m) => (
@@ -1427,8 +1623,8 @@ export function SettingsTab({ authState, onDevModeToggle, devEnabled = false }: 
 
       {/* ── Section 5: DEVELOPER MODE ────────────────────────────────────── */}
       {(isMember || isFounder) && (
-        <section style={s.section}>
-          <div style={s.sectionHeader}>🔧 Developer Mode</div>
+        <section ref={setSectionRef('developer') as React.RefCallback<HTMLElement>} style={s.section} id="settings-section-developer">
+          <div style={s.sectionHeader}>Developer Mode</div>
           <div style={s.card}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div>

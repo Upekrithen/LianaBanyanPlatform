@@ -319,8 +319,22 @@ export function FirstStepsView({
             disabled={!intent}
             onClick={() => { void handleOpenPath(); }}
           >
-            Open my path
+            Open my path -- Join $5/year
           </button>
+
+          {/* SEG-UX-5: "Use free" path -- explicit no-payment supported option */}
+          <div style={{ marginTop: 16, paddingTop: 12, borderTop: '1px solid rgba(100,116,139,0.1)' }}>
+            <button
+              type="button"
+              style={ghostBtn}
+              onClick={() => onRoutePath('need_help')}
+            >
+              Use free forever -- no account needed
+            </button>
+            <div style={{ fontSize: 10, color: '#334155', textAlign: 'center' as const, marginTop: 4 }}>
+              All local AI features work without an account. Join later anytime from $ LB Account.
+            </div>
+          </div>
         </div>
       </div>
     );
