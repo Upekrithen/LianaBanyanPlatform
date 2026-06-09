@@ -909,6 +909,26 @@ contextBridge.exposeInMainWorld('amplify', {
     areopagus_query: (query: string) =>
       ipcRenderer.invoke('caithedral:areopagus_query', query),
   },
+
+  // ─── SKU (BP078 Scope 6.5) ───────────────────────────────────────────────────
+  sku: {
+    checkModel: (modelName: string) => ipcRenderer.invoke('sku-check-model', modelName),
+    upgradeTo: (tier: 'core' | 'lite' | 'full') => ipcRenderer.invoke('sku-upgrade-to', tier),
+    cancelUpgrade: () => ipcRenderer.invoke('sku-cancel-upgrade'),
+    currentTier: () => ipcRenderer.invoke('sku-current-tier'),
+    onPullProgress: (cb: (data: ModelPullProgress) => void) => {
+      ipcRenderer.on('sku-pull-progress', (_event, data: ModelPullProgress) => cb(data));
+      return () => ipcRenderer.removeAllListeners('sku-pull-progress');
+    },
+    onPullComplete: (cb: () => void) => {
+      ipcRenderer.on('sku-pull-complete', () => cb());
+      return () => ipcRenderer.removeAllListeners('sku-pull-complete');
+    },
+    onPullError: (cb: (err: string) => void) => {
+      ipcRenderer.on('sku-pull-error', (_event, err: string) => cb(err));
+      return () => ipcRenderer.removeAllListeners('sku-pull-error');
+    },
+  },
 });
 
 // ─── Global type extension ────────────────────────────────────────────────────
@@ -1152,6 +1172,16 @@ declare global {
         p2pStart: (peerId: string, displayName: string) => Promise<{ ok: boolean; active: boolean }>;
         p2pStop: () => Promise<{ ok: boolean }>;
         p2pPeers: () => Promise<{ peers: unknown[]; active: boolean }>;
+      };
+      // SKU (BP078 Scope 6.5)
+      sku: {
+        checkModel: (modelName: string) => Promise<{ exists: boolean; modelName: string }>;
+        upgradeTo: (tier: 'core' | 'lite' | 'full') => Promise<{ ok: boolean; error?: string }>;
+        cancelUpgrade: () => Promise<{ ok: boolean }>;
+        currentTier: () => Promise<{ tier: 'nano' | 'core' | 'lite' | 'full' }>;
+        onPullProgress: (cb: (data: ModelPullProgress) => void) => () => void;
+        onPullComplete: (cb: () => void) => () => void;
+        onPullError: (cb: (err: string) => void) => () => void;
       };
     };
   }

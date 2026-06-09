@@ -32,7 +32,7 @@ On first run, MnemosyneC sets up a local AI engine (Caithedral™ Core + Ollama)
 
 **Step 3 — Ask it something**
 
-Works completely offline after setup. Open MnemosyneC, type your question, get an answer — no internet required, no API key, no account. The bundled Gemma 2B model is always available at zero marginal cost.
+Works completely offline after setup. Open MnemosyneC, type your question, get an answer — no internet required, no API key, no account. The bundled qwen2.5:0.5b model is always available at zero marginal cost.
 
 **Step 4 — Connect to the mesh**
 
@@ -104,7 +104,7 @@ Member benefits (better AI, mesh access, cooperative track record, Marks earning
 <details>
 <summary>What AI model does it use?</summary>
 
-**Gemma 2B (bundled by default).** Runs entirely local via Ollama. You can switch to other Ollama-compatible models in Settings → AI Engine. Cloud models (GPT, Claude, Gemini) can also be configured if you supply your own API key — they run at cost+20% through the cooperative when routed via the mesh.
+**qwen2.5:0.5b (bundled by default).** Runs entirely local via Ollama. You can switch to other Ollama-compatible models in Settings → AI Engine -- including upgrading to gemma4:12b (FULL) from within the app. Cloud models (GPT, Claude, Gemini) can also be configured if you supply your own API key — they run at cost+20% through the cooperative when routed via the mesh.
 
 </details>
 

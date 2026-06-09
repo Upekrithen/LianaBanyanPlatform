@@ -112,6 +112,14 @@ export interface TelemetrySummary {
   all_time_queries: number;
 }
 
+// BP078 Scope 6.5 — SKU pull progress
+export interface SkuPullProgress {
+  downloaded: number;   // bytes downloaded
+  total: number;        // total bytes (0 if unknown)
+  speed?: string;       // e.g. "12.3 MB/s"
+  status?: string;      // raw ollama status line
+}
+
 export interface FederationPeer {
   address: string;
   port: number;
@@ -288,6 +296,16 @@ declare global {
       lbSetBorrowOptIn?: (enabled: boolean) => Promise<{ ok: boolean }>;
       lbRequestFrontierBorrow?: () => Promise<{ ok: boolean; error?: string; cost_transport_usd?: number; cost_compute_usd_approx?: number; node_count?: number; disclosure?: string }>;
 
+      // BP078 Scope 6.5 — SKU upgrade IPC
+      sku: {
+        checkModel: (modelName: string) => Promise<{ exists: boolean; modelName: string }>;
+        upgradeTo: (tier: 'core' | 'lite' | 'full') => Promise<{ ok: boolean; error?: string }>;
+        cancelUpgrade: () => Promise<{ ok: boolean }>;
+        currentTier: () => Promise<{ tier: 'nano' | 'core' | 'lite' | 'full' }>;
+        onPullProgress: (cb: (data: ModelPullProgress) => void) => () => void;
+        onPullComplete: (cb: () => void) => () => void;
+        onPullError: (cb: (err: string) => void) => () => void;
+      };
       // BP060 Application 002 Step 1 — Caithedral Tools
       caithedralTools?: {
         soccerball_emit: (pearls: string[], bindings?: Record<string, string>) => Promise<{ ok: boolean; sid?: string; error?: string }>;

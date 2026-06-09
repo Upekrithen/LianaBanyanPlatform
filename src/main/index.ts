@@ -22,7 +22,7 @@ import {
   dialog,
 } from 'electron';
 import { join } from 'path';
-import { existsSync, mkdirSync, readFileSync } from 'fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { spawn } from 'child_process';
 import { tmpdir, homedir } from 'os';
 import { OllamaManager } from './ollama_manager';
@@ -1077,6 +1077,8 @@ function openHearthConjunctionWindow(): void {
 }
 
 // ─── IPC Handlers ────────────────────────────────────────────────────────────
+
+let skuPullProc: ReturnType<typeof spawn> | null = null;
 
 function registerIPCHandlers(): void {
   // SAGA 07+13 BP046B utility + first-install bonus
@@ -2347,6 +2349,117 @@ function registerIPCHandlers(): void {
         }
       });
     });
+  });
+
+  // ─── SKU IPC handlers (BP078 Scope 6.5) ──────────────────────────────────────
+
+  ipcMain.handle('sku-check-model', async (_event, modelName: string) => {
+    try {
+      const modelsDir = join(homedir(), '.ollama', 'models', 'manifests',
+        'registry.ollama.ai', 'library');
+      const [name, tag = 'latest'] = modelName.split(':');
+      const manifestPath = join(modelsDir, name, tag);
+      const fallbackPath = join(homedir(), '.ollama', 'models', 'manifests',
+        'registry.ollama.ai', name, tag);
+      const exists = existsSync(manifestPath) || existsSync(fallbackPath);
+      return { exists, modelName };
+    } catch {
+      return { exists: false, modelName };
+    }
+  });
+
+  ipcMain.handle('sku-upgrade-to', async (event, tier: string) => {
+    const modelMap: Record<string, string> = {
+      full: 'gemma4:12b',
+      lite: 'gemma4:12b',
+      core: 'gemma4:12b',
+    };
+    const modelName = modelMap[tier];
+    if (!modelName) return { ok: false, error: 'Unknown tier' };
+
+    if (skuPullProc) {
+      try { skuPullProc.kill('SIGKILL'); } catch { /* ignore */ }
+      skuPullProc = null;
+    }
+
+    const ollamaExe = join(__dirname, '..', '..', 'resources', 'ollama', 'ollama.exe');
+    const ollamaCmd = existsSync(ollamaExe) ? ollamaExe : 'ollama';
+
+    skuPullProc = spawn(ollamaCmd, ['pull', modelName], {
+      env: { ...process.env, OLLAMA_MODELS: join(homedir(), '.ollama', 'models') },
+    });
+
+    skuPullProc.stdout?.on('data', (chunk: Buffer) => {
+      const line = chunk.toString().trim();
+      if (!line) return;
+      const progressMatch = line.match(/(\d+)%.*?(\d+(?:\.\d+)?)\s*(MB|GB)\s*\/\s*(\d+(?:\.\d+)?)\s*(MB|GB)/i);
+      let downloaded = 0;
+      let total = 0;
+      let speed: string | undefined;
+      if (progressMatch) {
+        const dlVal = parseFloat(progressMatch[2]);
+        const dlUnit = progressMatch[3].toUpperCase();
+        const totVal = parseFloat(progressMatch[4]);
+        const totUnit = progressMatch[5].toUpperCase();
+        downloaded = dlUnit === 'GB' ? dlVal * 1_073_741_824 : dlVal * 1_048_576;
+        total = totUnit === 'GB' ? totVal * 1_073_741_824 : totVal * 1_048_576;
+        const speedMatch = line.match(/(\d+(?:\.\d+)?)\s*(MB|GB)\/s/i);
+        if (speedMatch) speed = `${speedMatch[1]} ${speedMatch[2]}/s`;
+      }
+      event.sender.send('sku-pull-progress', {
+        downloaded,
+        total,
+        speed,
+        status: line,
+      });
+    });
+
+    skuPullProc.stderr?.on('data', (chunk: Buffer) => {
+      const line = chunk.toString().trim();
+      if (line) {
+        event.sender.send('sku-pull-progress', { downloaded: 0, total: 0, status: line });
+      }
+    });
+
+    skuPullProc.on('close', (code) => {
+      skuPullProc = null;
+      if (code === 0) {
+        try {
+          const cfgPath = join(app.getPath('userData'), 'sku_tier.json');
+          writeFileSync(cfgPath, JSON.stringify({ tier, model: modelName }), 'utf-8');
+        } catch { /* non-fatal */ }
+        event.sender.send('sku-pull-complete');
+      } else {
+        event.sender.send('sku-pull-error', `Pull exited with code ${code ?? 'unknown'}`);
+      }
+    });
+
+    skuPullProc.on('error', (err) => {
+      skuPullProc = null;
+      event.sender.send('sku-pull-error', err.message);
+    });
+
+    return { ok: true };
+  });
+
+  ipcMain.handle('sku-cancel-upgrade', async () => {
+    if (skuPullProc) {
+      try { skuPullProc.kill('SIGKILL'); } catch { /* ignore */ }
+      skuPullProc = null;
+    }
+    return { ok: true };
+  });
+
+  ipcMain.handle('sku-current-tier', async () => {
+    try {
+      const cfgPath = join(app.getPath('userData'), 'sku_tier.json');
+      if (existsSync(cfgPath)) {
+        const raw = readFileSync(cfgPath, 'utf-8');
+        const parsed = JSON.parse(raw) as { tier?: string };
+        if (parsed.tier) return { tier: parsed.tier };
+      }
+    } catch { /* fallback to nano */ }
+    return { tier: 'nano' };
   });
 }
 

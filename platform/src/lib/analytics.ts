@@ -55,7 +55,9 @@ export type AnalyticsEventType =
   | "gauntlet_mode_selected"
   | "gauntlet_live_results_viewed"
   | "membership_intent_selected"
-  | "membership_path_routed";
+  | "membership_path_routed"
+  // SKU upgrade (BP078 Scope 6.5)
+  | "feather_earned";
 
 export interface AnalyticsEvent {
   event_type: AnalyticsEventType;
