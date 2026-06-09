@@ -32,6 +32,14 @@ export interface ModelPullProgress {
   error?: string;
 }
 
+// BP078 Scope 6.5 -- SKU pull progress
+export interface SkuPullProgress {
+  downloaded: number;   // bytes downloaded
+  total: number;        // total bytes (0 if unknown)
+  speed?: string;       // e.g. "12.3 MB/s"
+  status?: string;      // raw ollama status line
+}
+
 export interface EngineSetupProgress {
   step: string;
   message: string;
@@ -869,9 +877,20 @@ contextBridge.exposeInMainWorld('amplify', {
 
   // ── BP067 Phase 1A — $5 Membership Checkout ───────────────────────────────
   membership: {
-    createCheckout: (autoRenew: boolean): Promise<{ ok: boolean; error?: string; fallbackUrl?: string }> =>
+    createCheckout: (autoRenew: boolean): Promise<{ ok: boolean; url?: string; error?: string; fallbackUrl?: string }> =>
       ipcRenderer.invoke('membership:create-checkout', autoRenew),
+    verifyStatus: (): Promise<{ ok: boolean; membership_active: boolean; error?: string }> =>
+      ipcRenderer.invoke('membership-verify-status'),
   },
+
+  // ── runMeshTest (BP078 Scope 1) ──────────────────────────────────────────────
+  runMeshTest: (payload?: { testId?: string; timeoutMs?: number }): Promise<{
+    success: boolean;
+    grading?: { accuracy: number; hash_verified: number; p50_latency_ms: number; p95_latency_ms?: number; total_questions: number };
+    error?: 'MISSING_API_KEY' | 'TIMEOUT' | 'PYTHON_ERROR' | 'MISSING_PYTHON_RUNTIME' | 'NO_PEER';
+    static_fallback?: boolean;
+  }> =>
+    ipcRenderer.invoke('run-mesh-test', payload),
 
   // ── Caithedral Tools (BP060 Application 002 Step 1) ─────────────────────
   caithedralTools: {
@@ -898,6 +917,30 @@ contextBridge.exposeInMainWorld('amplify', {
     areopagus_query: (query: string) =>
       ipcRenderer.invoke('caithedral:areopagus_query', query),
   },
+
+  // ─── SKU (BP078 Scope 6.5) ───────────────────────────────────────────────────
+  sku: {
+    checkModel: (modelName: string) => ipcRenderer.invoke('sku-check-model', modelName),
+    upgradeTo: (tier: 'core' | 'lite' | 'full') => ipcRenderer.invoke('sku-upgrade-to', tier),
+    cancelUpgrade: () => ipcRenderer.invoke('sku-cancel-upgrade'),
+    currentTier: () => ipcRenderer.invoke('sku-current-tier'),
+    onPullProgress: (cb: (data: SkuPullProgress) => void) => {
+      ipcRenderer.on('sku-pull-progress', (_event, data: SkuPullProgress) => cb(data));
+      return () => ipcRenderer.removeAllListeners('sku-pull-progress');
+    },
+    onPullComplete: (cb: () => void) => {
+      ipcRenderer.on('sku-pull-complete', () => cb());
+      return () => ipcRenderer.removeAllListeners('sku-pull-complete');
+    },
+    onPullError: (cb: (err: string) => void) => {
+      ipcRenderer.on('sku-pull-error', (_event, err: string) => cb(err));
+      return () => ipcRenderer.removeAllListeners('sku-pull-error');
+    },
+  },
+
+  // ── Black Crow Feather earn (BP078) ───────────────────────────────────────
+  earnBlackCrowFeather: (payload: { userId: string; reason: string; metadata?: Record<string, unknown> }) =>
+    ipcRenderer.invoke('feather:earn-black', payload),
 });
 
 // ─── Global type extension ────────────────────────────────────────────────────
@@ -1096,8 +1139,16 @@ declare global {
       lbOptInSetDecision?: (decision: 'never' | 'pending' | 'linked') => Promise<{ ok: boolean }>;
       // BP067 Phase 1A — $5 membership checkout
       membership?: {
-        createCheckout: (autoRenew: boolean) => Promise<{ ok: boolean; error?: string; fallbackUrl?: string }>;
+        createCheckout: (autoRenew: boolean) => Promise<{ ok: boolean; url?: string; error?: string; fallbackUrl?: string }>;
+        verifyStatus: () => Promise<{ ok: boolean; membership_active: boolean; error?: string }>;
       };
+      // runMeshTest (BP078 Scope 1)
+      runMeshTest?: (payload?: { testId?: string; timeoutMs?: number }) => Promise<{
+        success: boolean;
+        grading?: { accuracy: number; hash_verified: number; p50_latency_ms: number; p95_latency_ms?: number; total_questions: number };
+        error?: 'MISSING_API_KEY' | 'TIMEOUT' | 'PYTHON_ERROR' | 'MISSING_PYTHON_RUNTIME' | 'NO_PEER';
+        static_fallback?: boolean;
+      }>;
       // Caithedral Tools IPC (BP060 Application 002 Step 1)
       caithedralTools?: {
         soccerball_emit: (pearls: string[], bindings?: Record<string, string>) => Promise<{ ok: boolean; sid?: string; error?: string }>;
@@ -1134,6 +1185,18 @@ declare global {
         p2pStop: () => Promise<{ ok: boolean }>;
         p2pPeers: () => Promise<{ peers: unknown[]; active: boolean }>;
       };
+      // SKU (BP078 Scope 6.5)
+      sku: {
+        checkModel: (modelName: string) => Promise<{ exists: boolean; modelName: string }>;
+        upgradeTo: (tier: 'core' | 'lite' | 'full') => Promise<{ ok: boolean; error?: string }>;
+        cancelUpgrade: () => Promise<{ ok: boolean }>;
+        currentTier: () => Promise<{ tier: 'nano' | 'core' | 'lite' | 'full' }>;
+        onPullProgress: (cb: (data: SkuPullProgress) => void) => () => void;
+        onPullComplete: (cb: () => void) => () => void;
+        onPullError: (cb: (err: string) => void) => () => void;
+      };
+      // Black Crow Feather earn (BP078)
+      earnBlackCrowFeather?: (payload: { userId: string; reason: string; metadata?: Record<string, unknown> }) => Promise<{ ok: boolean; featherId?: string; alreadyIssued?: boolean; error?: string }>;
     };
   }
 }

@@ -1,9 +1,11 @@
 // Bp067FirstRunSpine.tsx -- BP075 v0.1.26 minimal professional first-run
-// Steps: welcome -> try-it -> success (or options on error/timeout) -> [optional: folder] -> app
+// Steps: welcome -> try-it -> success -> gauntlet (mesh proof + results closer) -> first_steps (intent capture) -> app
 // Preserved: askFloorModel elephant test, 3-option fallback, LS_BP067_FIRST_RUN_COMPLETE gate
 // Removed: scroll-crawl animation, Founder voice audio, HEOHO blocking step, forced folder step
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { GauntletProofStep } from './GauntletProofStep';
+import { FirstStepsView } from './FirstStepsView';
 
 export const LS_BP067_FIRST_RUN_COMPLETE = 'mnemosyne-bp067-first-run-complete';
 export const LS_SALTFIGHTER_SKIP = 'mnemosyne-saltfighter-skip';
@@ -11,7 +13,7 @@ export const LS_SALTFIGHTER_SKIP = 'mnemosyne-saltfighter-skip';
 const AUTO_TEST_PROMPT = 'What is the name of a famous elephant?';
 const TRY_IT_TIMEOUT_MS = 30_000;
 
-type Step = 'welcome' | 'try-it' | 'success' | 'options' | 'folder';
+type Step = 'welcome' | 'try-it' | 'success' | 'gauntlet' | 'first_steps' | 'options' | 'folder';
 type OptionState = 'idle' | 'retrying' | 'retry-ok' | 'retry-err' | 'borrowing' | 'borrow-result';
 
 interface BorrowResult {
@@ -338,11 +340,11 @@ export function Bp067FirstRunSpine({ onComplete, onAskOnboard }: Bp067FirstRunSp
           <div style={{ marginBottom: 16 }}>
             <CheckIcon />
           </div>
-          <h2 style={{ ...heading, fontSize: 20, marginBottom: 16 }}>Your AI works.</h2>
+          <h2 style={{ ...heading, fontSize: 20, marginBottom: 10 }}>Your AI works.</h2>
           {aiResponse && (
             <blockquote style={{
               borderLeft: '3px solid rgba(110,231,183,0.4)',
-              margin: '0 0 24px',
+              margin: '0 0 18px',
               padding: '10px 14px',
               background: 'rgba(6,78,59,0.12)',
               borderRadius: '0 6px 6px 0',
@@ -355,14 +357,45 @@ export function Bp067FirstRunSpine({ onComplete, onAskOnboard }: Bp067FirstRunSp
               {aiResponse.slice(0, 600)}{aiResponse.length > 600 ? '...' : ''}
             </blockquote>
           )}
-          <button type="button" style={primaryBtn} onClick={handleAskOnboard}>
-            Ask it anything
+          <p style={{ ...body, fontSize: 13, marginBottom: 20 }}>
+            Run a quick live check on included test data or your own folder and see what this install actually saves in speed, cost, and reach.
+          </p>
+          <button type="button" style={primaryBtn} onClick={(): void => goTo('gauntlet')}>
+            See your proof
           </button>
-          <button type="button" style={ghostBtn} onClick={(): void => goTo('folder')}>
-            {'Optional: Add a folder to your AI\u2019s memory'}
+          <button type="button" style={ghostBtn} onClick={handleAskOnboard}>
+            Ask it anything
           </button>
         </div>
       </div>
+    );
+  }
+
+  // ── Step 3b: Gauntlet mesh proof (Founder binding 2 -- optional, always skippable) ────
+
+  if (step === 'gauntlet') {
+    return (
+      <GauntletProofStep
+        audience="new_user"
+        fromFirstRun={true}
+        onOpenModeSelect={() => {}}
+        onOpenFrame={handleAskOnboard}
+        onRunProof={() => {}}
+        onJoin={(): void => { goTo('first_steps'); }}
+        onKeepUsing={handleAskOnboard}
+      />
+    );
+  }
+
+  // ── Step 3c: Intent capture + $5 checkout (FirstStepsView) ───────────────────
+
+  if (step === 'first_steps') {
+    return (
+      <FirstStepsView
+        onSelectIntent={() => {}}
+        onCheckout={() => {}}
+        onRoutePath={handleAskOnboard}
+      />
     );
   }
 

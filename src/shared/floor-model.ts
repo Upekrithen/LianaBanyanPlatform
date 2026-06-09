@@ -1,12 +1,14 @@
 // BP067 v0.1.24 -- bundled floor model constants (shared main + renderer)
 // Founder-locked: default = Gemma (Google), not Meta/Llama.
-// BP076 Drift 1 resolution (Founder direct): LITE SKU floor model updated to gemma2:2b.
+// BP078 NANO SKU: floor model corrected to qwen2.5:0.5b (NANO bundled installer).
 
-/** Shipped default LITE floor model (Ollama tag). Updated to gemma2:2b per BP076 Drift 1. */
-export const FLOOR_MODEL = 'gemma2:2b';
+/** Shipped default NANO SKU floor model (Ollama tag). Corrected to qwen2.5:0.5b per BP078 build fix. */
+export const FLOOR_MODEL = 'qwen2.5:0.5b';
 
 /** Tags treated as satisfying the floor-model requirement. */
 export const FLOOR_MODEL_ALIASES = [
+  'gemma4:12b',
+  'gemma4:12b-instruct',
   'qwen2.5:0.5b',
   'qwen2.5:0.5b-instruct',
   'qwen2.5:0.5b-instruct-q4_0',
@@ -18,7 +20,7 @@ export const FLOOR_MODEL_ALIASES = [
   'gemma:2b',
 ] as const;
 
-/** Optional upgrades — offered only AFTER first answer (Section 1). */
+/** Optional upgrades -- offered only AFTER first answer (Section 1). */
 export const UPGRADE_MODELS = {
   good: { id: 'gemma2:9b', label: 'Good (~2 GB)', sizeGB: 2 },
   great: { id: 'llama3.1:8b-instruct-q4_K_M', label: 'Great (~5 GB)', sizeGB: 5 },

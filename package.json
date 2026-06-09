@@ -148,7 +148,7 @@
       "verifyUpdateCodeSignature": false
     },
     "nsis": {
-      "artifactName": "MnemosyneC-Setup-${version}.${ext}",
+      "artifactName": "MnemosyneC-Setup-${version}-full.${ext}",
       "oneClick": false,
       "perMachine": false,
       "allowElevation": true,
@@ -162,7 +162,7 @@
       "runAfterFinish": true
     },
     "portable": {
-      "artifactName": "Mnemosyne-Portable-${version}.${ext}"
+      "artifactName": "Mnemosyne-Portable-${version}-full.${ext}"
     },
     "mac": {
       "target": [

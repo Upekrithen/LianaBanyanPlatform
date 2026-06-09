@@ -112,6 +112,14 @@ export interface TelemetrySummary {
   all_time_queries: number;
 }
 
+// BP078 Scope 6.5 — SKU pull progress
+export interface SkuPullProgress {
+  downloaded: number;   // bytes downloaded
+  total: number;        // total bytes (0 if unknown)
+  speed?: string;       // e.g. "12.3 MB/s"
+  status?: string;      // raw ollama status line
+}
+
 export interface FederationPeer {
   address: string;
   port: number;
@@ -265,8 +273,16 @@ declare global {
       getTelemetrySummary?: () => Promise<TelemetrySummary>;
       // BP067 Phase 1A — $5 Membership Checkout
       membership?: {
-        createCheckout: (autoRenew: boolean) => Promise<{ ok: boolean; error?: string; fallbackUrl?: string }>;
+        createCheckout: (autoRenew: boolean) => Promise<{ ok: boolean; url?: string; error?: string; fallbackUrl?: string }>;
+        verifyStatus: () => Promise<{ ok: boolean; membership_active: boolean; error?: string }>;
       };
+      // runMeshTest (BP078 Scope 1)
+      runMeshTest?: (payload?: { testId?: string; timeoutMs?: number }) => Promise<{
+        success: boolean;
+        grading?: { accuracy: number; hash_verified: number; p50_latency_ms: number; p95_latency_ms?: number; total_questions: number };
+        error?: 'MISSING_API_KEY' | 'TIMEOUT' | 'PYTHON_ERROR' | 'MISSING_PYTHON_RUNTIME' | 'NO_PEER';
+        static_fallback?: boolean;
+      }>;
       // BP065 — LB Account + Frontier Node (Part A/B)
       lbStartAuth?: (email: string) => Promise<{ ok: boolean; error?: string }>;
       lbGetSession?: () => Promise<{ linked: boolean; user_id?: string; email?: string; peer_id?: string; linked_at?: string; crewman_number?: number }>;
@@ -280,6 +296,18 @@ declare global {
       lbSetBorrowOptIn?: (enabled: boolean) => Promise<{ ok: boolean }>;
       lbRequestFrontierBorrow?: () => Promise<{ ok: boolean; error?: string; cost_transport_usd?: number; cost_compute_usd_approx?: number; node_count?: number; disclosure?: string }>;
 
+      // BP078 Scope 6.5 — SKU upgrade IPC
+      sku: {
+        checkModel: (modelName: string) => Promise<{ exists: boolean; modelName: string }>;
+        upgradeTo: (tier: 'core' | 'lite' | 'full') => Promise<{ ok: boolean; error?: string }>;
+        cancelUpgrade: () => Promise<{ ok: boolean }>;
+        currentTier: () => Promise<{ tier: 'nano' | 'core' | 'lite' | 'full' }>;
+        onPullProgress: (cb: (data: SkuPullProgress) => void) => () => void;
+        onPullComplete: (cb: () => void) => () => void;
+        onPullError: (cb: (err: string) => void) => () => void;
+      };
+      // BP078 — Black Crow Feather earn IPC
+      earnBlackCrowFeather?: (payload: { userId: string; reason: string; metadata?: Record<string, unknown> }) => Promise<{ ok: boolean; featherId?: string; alreadyIssued?: boolean; error?: string }>;
       // BP060 Application 002 Step 1 — Caithedral Tools
       caithedralTools?: {
         soccerball_emit: (pearls: string[], bindings?: Record<string, string>) => Promise<{ ok: boolean; sid?: string; error?: string }>;

@@ -1000,7 +1000,6 @@ body { background: #0a1628; background-image: url("data:image/svg+xml,%3Csvg xml
     <div class="mn-pinned-proofs__track" role="list">
 
 
-
       <div class="mn-proof-card mn-proof-card--pinned" role="listitem">
         <div class="mn-proof-card__label">BP071 &middot; Storm Test</div>
         <div class="mn-proof-card__title">Three Failures at Once &mdash; Nothing Lost</div>
@@ -1008,7 +1007,6 @@ body { background: #0a1628; background-image: url("data:image/svg+xml,%3Csvg xml
         <div class="mn-proof-card__result">&#10003; Zero work lost</div>
         <div class="mn-proof-card__stamp">Receipt: Asteroid-ProofVault/BP071_CLOSE_STAMP.md</div>
       </div>
-
 
 
       <div class="mn-proof-card mn-proof-card--pinned" role="listitem">
@@ -1033,8 +1031,8 @@ body { background: #0a1628; background-image: url("data:image/svg+xml,%3Csvg xml
 
 
       <div class="mn-proof-card mn-proof-card--img" role="listitem">
-        <img class="mn-proof-card__img" src="/img/proofs/deck/deck-cathedral-alone.png" alt="Cathedral-Alone mode — MnemosyneC v0.1.22 Fallback substrate-cache-only, offline-capable" loading="lazy">
-        <div class="mn-proof-card__caption"><strong>Architecture &middot; Cathedral-Alone &middot; v0.1.22</strong>MnemosyneC Fallback mode: substrate cache only, zero cost, offline-capable. Works when no LLM API is reachable.</div>
+        <img class="mn-proof-card__img" src="/img/proofs/deck/deck-cathedral-alone.png" alt="Caithedral-Alone mode — MnemosyneC v0.1.22 Fallback substrate-cache-only, offline-capable" loading="lazy">
+        <div class="mn-proof-card__caption"><strong>Architecture &middot; Caithedral-Alone &middot; v0.1.22</strong>MnemosyneC Fallback mode: substrate cache only, zero cost, offline-capable. Works when no LLM API is reachable.</div>
       </div>
 
     </div>
@@ -1097,15 +1095,38 @@ body { background: #0a1628; background-image: url("data:image/svg+xml,%3Csvg xml
 
   <section class="mn-v2-download-section" aria-labelledby="mn-v2-dl-heading">
     <h2 id="mn-v2-dl-heading" style="color:#d69e2e; font-size:1.2rem; margin:0 0 1.2rem; text-align:center;">Download MnemosyneC &mdash; Free, Forever</h2>
-    <a class="mn-v2-dl-btn"
-       href="https://github.com/liana-banyan/mnemosynec-releases/releases/download/v0.1.26/MnemosyneC-Setup-0.1.26.exe"
-       download="MnemosyneC-Setup-0.1.26.exe"
-       aria-label="Download MnemosyneC installer for Windows v0.1.26">
-      &#8595;&nbsp; Download for Windows &mdash; v0.1.26 (&sim;453&nbsp;MB, bundled AI)
-    </a>
-    <p style="text-align:center; font-size:0.78rem; color:rgba(250,245,235,0.45); margin:0.5rem 0 0; font-family:monospace;">
-      SHA&#8209;256: CCCF978AAFFB5648B9C4B162549FA93D2FFA231AB4A86379BBF89F90F2482B16
-    </p>
+
+    <div style="display:flex; flex-wrap:wrap; gap:1.2rem; justify-content:center; align-items:flex-start;">
+
+
+      <div style="display:flex; flex-direction:column; align-items:center; max-width:340px;">
+        <a class="mn-v2-dl-btn"
+           href="https://github.com/liana-banyan/mnemosynec-releases/releases/download/v0.1.27/MnemosyneC-Setup-0.1.27.exe"
+           download="MnemosyneC-Setup-0.1.27.exe"
+           aria-label="Download MnemosyneC NANO installer for Windows v0.1.27">
+          &#8595;&nbsp; Download NANO &mdash; v0.1.27
+        </a>
+        <p style="text-align:center; font-size:0.78rem; color:rgba(250,245,235,0.6); margin:0.5rem 0 0.25rem; font-style:italic;">Floor model included. 476 MB. Quick install. Bring your own larger model via Ollama if you have one.</p>
+        <p style="text-align:center; font-size:0.72rem; color:rgba(250,245,235,0.38); margin:0; font-family:monospace; word-break:break-all;">
+          SHA&#8209;256: 58A9FFC7470EDFFC0039EA6F9B16492377D21245FF78E8F13283929F40407217
+        </p>
+      </div>
+
+
+      <div style="display:flex; flex-direction:column; align-items:center; max-width:340px;">
+        <a class="mn-v2-dl-btn" style="background:#2b6cb0; border-color:#2b6cb0 !important; box-shadow:0 6px 24px rgba(43,108,176,0.35);"
+           href="https://storage.googleapis.com/lianabanyan-releases/v0.1.27-full/Mnemosyne-Portable-0.1.27-full.exe"
+           download="Mnemosyne-Portable-0.1.27-full.exe"
+           aria-label="Download MnemosyneC FULL installer for Windows v0.1.27-full">
+          &#8595;&nbsp; Download FULL &mdash; v0.1.27-full
+        </a>
+        <p style="text-align:center; font-size:0.78rem; color:rgba(250,245,235,0.6); margin:0.5rem 0 0.25rem; font-style:italic;">Gemma 4 12B bundled, ready to run. 8.53 GB. Ollama v0.30.7 included. No setup required.</p>
+        <p style="text-align:center; font-size:0.72rem; color:rgba(250,245,235,0.38); margin:0; font-family:monospace; word-break:break-all;">
+          SHA&#8209;256: 3E5B9F9EE409A554DAA06E13F14464916D0D1D14AB1197CF60E80276B878DE45
+        </p>
+      </div>
+
+    </div>
 
 
     <div class="mn-v2-bounty-row" aria-label="Community build bounties for macOS and Linux">
@@ -1147,7 +1168,7 @@ body { background: #0a1628; background-image: url("data:image/svg+xml,%3Csvg xml
       </ol>
     </div>
 
-    <p class="mn-v2-strapline">Version 0.1.26 &nbsp;&middot;&nbsp; Free Forever &nbsp;&middot;&nbsp; No account required &nbsp;&middot;&nbsp; All data stays on your computer</p>
+    <p class="mn-v2-strapline">Version 0.1.27 &nbsp;&middot;&nbsp; Free Forever &nbsp;&middot;&nbsp; No account required &nbsp;&middot;&nbsp; All data stays on your computer</p>
   </section>
 
   <hr class="mn-v2-divider" />
@@ -1157,19 +1178,23 @@ body { background: #0a1628; background-image: url("data:image/svg+xml,%3Csvg xml
     <summary>&#9654;&nbsp; For Technical Users &amp; Developers &nbsp;&mdash; patents, SHA&#8209;256, Gauntlet, licensing, substrate detail</summary>
     <div class="mn-v2-chip-body">
 
-      <h3>Binary Integrity &middot; v0.1.26 &middot; SHA&#8209;256 Checksums &amp; Signing</h3>
+      <h3>Binary Integrity &middot; v0.1.27 &middot; SHA&#8209;256 Checksums &amp; Signing</h3>
       <table>
+        <thead>
+          <tr><th>Field</th><th>NANO (gemma2:2b)</th><th>FULL (gemma4:12b)</th></tr>
+        </thead>
         <tbody>
-          <tr><td><strong>Filename</strong></td><td>MnemosyneC-Setup-0.1.26.exe</td></tr>
-          <tr><td><strong>Build hash</strong></td><td>v0.1.26</td></tr>
-          <tr><td><strong>File size</strong></td><td>&sim;453 MB (includes bundled qwen2.5:0.5b model)</td></tr>
-          <tr><td><strong>SHA&#8209;256</strong></td><td><code>CCCF978AAFFB5648B9C4B162549FA93D2FFA231AB4A86379BBF89F90F2482B16</code></td></tr>
-          <tr><td><strong>Signing</strong></td><td>DigiCert RFC 3161 &middot; .tsr sidecar pending publication &mdash; see Release Notes</td></tr>
-          <tr><td><strong>Telemetry</strong></td><td>None without explicit opt&#8209;in</td></tr>
+          <tr><td><strong>Filename</strong></td><td>MnemosyneC-Setup-0.1.27.exe</td><td>Mnemosyne-Portable-0.1.27-full.exe</td></tr>
+          <tr><td><strong>Build hash</strong></td><td>v0.1.27+d8088c6</td><td>v0.1.27-full · commit 5ccabff</td></tr>
+          <tr><td><strong>File size</strong></td><td>&sim;0.44 GB / 454 MB</td><td>&sim;8.53 GB</td></tr>
+          <tr><td><strong>SHA&#8209;256</strong></td><td><code>58A9FFC7470EDFFC0039EA6F9B16492377D21245FF78E8F13283929F40407217</code></td><td><code>3E5B9F9EE409A554DAA06E13F14464916D0D1D14AB1197CF60E80276B878DE45</code></td></tr>
+          <tr><td><strong>Signing</strong></td><td>DigiCert RFC 3161 &middot; .tsr sidecar pending publication &mdash; see Release Notes</td><td>DigiCert RFC 3161 &middot; .tsr sidecar pending publication</td></tr>
+          <tr><td><strong>Hosting</strong></td><td>GitHub Releases (v0.1.27)</td><td>Google Cloud Storage &mdash; gs://lianabanyan-releases/v0.1.27-full/</td></tr>
+          <tr><td><strong>Telemetry</strong></td><td colspan="2">None without explicit opt&#8209;in</td></tr>
         </tbody>
       </table>
       <p><strong>Verify via PowerShell:</strong></p>
-      <pre><code>Get-FileHash "MnemosyneC-Setup-0.1.26.exe" -Algorithm SHA256</code></pre>
+      <pre><code>Get-FileHash "MnemosyneC-Setup-0.1.27.exe" -Algorithm SHA256</code></pre>
 
       <h3>USPTO Patents &middot; Cooperative Defensive Patent Pledge #2260</h3>
       <p>MnemosyneC is covered by 21 USPTO Provisional Patent filings (sole inventor &middot; Conductor-Class doctrine &middot; <em>Thaler v. Vidal</em>). The full patent portfolio is pledged under Cooperative Defensive Patent Pledge #2260. What that means: cooperatives can use, improve, and deploy MnemosyneC without fear of enclosure. The pledge is irrevocable. No future board, no acquirer, no successor entity can weaponize these patents against cooperative-class users.</p>
@@ -1179,14 +1204,14 @@ body { background: #0a1628; background-image: url("data:image/svg+xml,%3Csvg xml
       <a href="https://github.com/LianaBanyan" target="_blank" rel="noopener">View source on GitHub &rarr;</a></p>
 
       <h3>The Gauntlet &middot; Six&#8209;Stage Verification</h3>
-      <p>The Caithedral&trade; Inspector inside MnemosyneC&rsquo;s Developer Tab runs a six-stage testing framework verifying substrate integrity &mdash; Drekaskip wave coherence, Novacula density, AutoBaton coordination, Cathedral-Alone mode, and Banyan Metric scoring &mdash; across every build. You can run it yourself, without an LLM, to verify the substrate functions correctly on your machine.</p>
+      <p>The Caithedral&trade; Inspector inside MnemosyneC&rsquo;s Developer Tab runs a six-stage testing framework verifying substrate integrity &mdash; Drekaskip wave coherence, Novacula density, AutoBaton coordination, Caithedral-Alone mode, and Banyan Metric scoring &mdash; across every build. You can run it yourself, without an LLM, to verify the substrate functions correctly on your machine.</p>
 
       <h3>Substrate Architecture (brief)</h3>
       <p>MnemosyneC ships with a 16-component cooperative substrate including: Eblet&trade; ROM-class permanence layer &middot; Wrasse sub-millisecond pre-injection (0.059ms mean) &middot; Pheromone event-class signaling &middot; Caithedral&trade; Inspector &middot; Hearth (on-device Ollama fallback) &middot; Drekaskip wave generator. Full detail: <a href="/banyan-almanac/issue-005/">Banyan Almanac Issue 005 &rarr;</a></p>
 
       <h3>Download on GitHub</h3>
       <p>
-        <a href="https://github.com/liana-banyan/mnemosynec-releases/releases/tag/v0.1.26" target="_blank" rel="noopener">View Release v0.1.26 on GitHub &rarr;</a>
+        <a href="https://github.com/liana-banyan/mnemosynec-releases/releases/tag/v0.1.27" target="_blank" rel="noopener">View Release v0.1.27 on GitHub &rarr;</a>
         &nbsp;&middot;&nbsp;
         <a href="/changelog/">Release changelog &rarr;</a>
         &nbsp;&middot;&nbsp;
