@@ -20,15 +20,15 @@
         {
           "source": "/download/**",
           "headers": [
-            {"key": "X-LB-Version", "value": "v0.1.25"},
-            {"key": "X-LB-Build-Hash", "value": "v0.1.25+4d2d19f"},
+            {"key": "X-LB-Version", "value": "v0.1.27"},
+            {"key": "X-LB-Build-Hash", "value": "v0.1.27+d8088c6"},
             {"key": "X-LB-Phase", "value": "alpha"}
           ]
         },
         {
           "source": "/changelog/**",
           "headers": [
-            {"key": "X-LB-Version", "value": "v0.1.25"},
+            {"key": "X-LB-Version", "value": "v0.1.27"},
             {"key": "Cache-Control", "value": "max-age=1800"}
           ]
         }
@@ -76,15 +76,15 @@
         {
           "source": "/download/**",
           "headers": [
-            {"key": "X-LB-Version", "value": "v0.1.25"},
-            {"key": "X-LB-Build-Hash", "value": "v0.1.25+4d2d19f"},
+            {"key": "X-LB-Version", "value": "v0.1.27"},
+            {"key": "X-LB-Build-Hash", "value": "v0.1.27+d8088c6"},
             {"key": "X-LB-Phase", "value": "alpha"}
           ]
         },
         {
           "source": "/changelog/**",
           "headers": [
-            {"key": "X-LB-Version", "value": "v0.1.25"},
+            {"key": "X-LB-Version", "value": "v0.1.27"},
             {"key": "Cache-Control", "value": "max-age=1800"}
           ]
         }

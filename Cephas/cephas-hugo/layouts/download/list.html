@@ -907,35 +907,38 @@ body { background: #0a1628; background-image: url("data:image/svg+xml,%3Csvg xml
        ═══════════════════════════════════════════════ -->
   <section class="mn-v2-download-section" aria-labelledby="mn-v2-dl-heading">
     <h2 id="mn-v2-dl-heading" style="color:#d69e2e; font-size:1.2rem; margin:0 0 1.2rem; text-align:center;">Download MnemosyneC &mdash; Free, Forever</h2>
-    <!-- SKU: NANO (gemma2:2b bundled, 0.44 GB) -->
-    <a class="mn-v2-dl-btn"
-       href="https://github.com/liana-banyan/mnemosynec-releases/releases/download/v0.1.27/MnemosyneC-Setup-0.1.27.exe"
-       download="MnemosyneC-Setup-0.1.27.exe"
-       aria-label="Download MnemosyneC NANO installer for Windows v0.1.27">
-      &#8595;&nbsp; Download for Windows &mdash; v0.1.27 NANO (&sim;0.44&nbsp;GB, gemma2:2b bundled)
-    </a>
-    <p style="text-align:center; font-size:0.78rem; color:rgba(250,245,235,0.45); margin:0.5rem 0 0; font-family:monospace;">
-      SHA&#8209;256: 58A9FFC7470EDFFC0039EA6F9B16492377D21245FF78E8F13283929F40407217
-    </p>
+    <!-- SKU buttons: NANO + FULL side by side on wider screens, stacked on mobile -->
+    <div style="display:flex; flex-wrap:wrap; gap:1.2rem; justify-content:center; align-items:flex-start;">
 
-    <!-- SKU: FULL (gemma4:12b bundled, 8.53 GB) — HOSTING PENDING -->
-    <!-- The v0.1.27-full release exists at GitHub (tag v0.1.27-full, commit 5ccabff) but the -->
-    <!-- 8.53 GB portable artifact exceeded GitHub's 2 GB per-asset cap (HTTP 422 on upload). -->
-    <!-- Uncomment and set href once hosted on R2 / B2 / S3 / Cephas self-host. -->
-    <!-- SHA-256: 3E5B9F9EE409A554DAA06E13F14464916D0D1D14AB1197CF60E80276B878DE45 -->
-    <!--
-    <div style="margin-top:1.2rem;">
-      <a class="mn-v2-dl-btn" style="background:#2b6cb0; border-color:#2b6cb0 !important; box-shadow:0 6px 24px rgba(43,108,176,0.35);"
-         href="FULL_HOSTING_URL_TBD"
-         download="Mnemosyne-Portable-0.1.27-full.exe"
-         aria-label="Download MnemosyneC FULL installer for Windows v0.1.27-full">
-        &#8595;&nbsp; Download for Windows &mdash; v0.1.27 FULL (&sim;8.53&nbsp;GB, gemma4:12b bundled, Ollama v0.30.7)
-      </a>
-      <p style="text-align:center; font-size:0.78rem; color:rgba(250,245,235,0.45); margin:0.5rem 0 0; font-family:monospace;">
-        SHA&#8209;256: 3E5B9F9EE409A554DAA06E13F14464916D0D1D14AB1197CF60E80276B878DE45
-      </p>
+      <!-- SKU: NANO (gemma2:2b bundled, 0.44 GB) -->
+      <div style="display:flex; flex-direction:column; align-items:center; max-width:340px;">
+        <a class="mn-v2-dl-btn"
+           href="https://github.com/liana-banyan/mnemosynec-releases/releases/download/v0.1.27/MnemosyneC-Setup-0.1.27.exe"
+           download="MnemosyneC-Setup-0.1.27.exe"
+           aria-label="Download MnemosyneC NANO installer for Windows v0.1.27">
+          &#8595;&nbsp; Download NANO &mdash; v0.1.27
+        </a>
+        <p style="text-align:center; font-size:0.78rem; color:rgba(250,245,235,0.6); margin:0.5rem 0 0.25rem; font-style:italic;">Floor model included. 476 MB. Quick install. Bring your own larger model via Ollama if you have one.</p>
+        <p style="text-align:center; font-size:0.72rem; color:rgba(250,245,235,0.38); margin:0; font-family:monospace; word-break:break-all;">
+          SHA&#8209;256: 58A9FFC7470EDFFC0039EA6F9B16492377D21245FF78E8F13283929F40407217
+        </p>
+      </div>
+
+      <!-- SKU: FULL (gemma4:12b bundled, 8.53 GB) — hosted on GCS -->
+      <div style="display:flex; flex-direction:column; align-items:center; max-width:340px;">
+        <a class="mn-v2-dl-btn" style="background:#2b6cb0; border-color:#2b6cb0 !important; box-shadow:0 6px 24px rgba(43,108,176,0.35);"
+           href="https://storage.googleapis.com/lianabanyan-releases/v0.1.27-full/Mnemosyne-Portable-0.1.27-full.exe"
+           download="Mnemosyne-Portable-0.1.27-full.exe"
+           aria-label="Download MnemosyneC FULL installer for Windows v0.1.27-full">
+          &#8595;&nbsp; Download FULL &mdash; v0.1.27-full
+        </a>
+        <p style="text-align:center; font-size:0.78rem; color:rgba(250,245,235,0.6); margin:0.5rem 0 0.25rem; font-style:italic;">Gemma 4 12B bundled, ready to run. 8.53 GB. Ollama v0.30.7 included. No setup required.</p>
+        <p style="text-align:center; font-size:0.72rem; color:rgba(250,245,235,0.38); margin:0; font-family:monospace; word-break:break-all;">
+          SHA&#8209;256: 3E5B9F9EE409A554DAA06E13F14464916D0D1D14AB1197CF60E80276B878DE45
+        </p>
+      </div>
+
     </div>
-    -->
 
     <!-- ── Mac + Linux Bounty Posters ── -->
     <div class="mn-v2-bounty-row" aria-label="Community build bounties for macOS and Linux">
@@ -1000,7 +1003,7 @@ body { background: #0a1628; background-image: url("data:image/svg+xml,%3Csvg xml
           <tr><td><strong>File size</strong></td><td>&sim;0.44 GB / 454 MB</td><td>&sim;8.53 GB</td></tr>
           <tr><td><strong>SHA&#8209;256</strong></td><td><code>58A9FFC7470EDFFC0039EA6F9B16492377D21245FF78E8F13283929F40407217</code></td><td><code>3E5B9F9EE409A554DAA06E13F14464916D0D1D14AB1197CF60E80276B878DE45</code></td></tr>
           <tr><td><strong>Signing</strong></td><td>DigiCert RFC 3161 &middot; .tsr sidecar pending publication &mdash; see Release Notes</td><td>DigiCert RFC 3161 &middot; .tsr sidecar pending publication</td></tr>
-          <tr><td><strong>Hosting</strong></td><td>GitHub Releases (v0.1.27)</td><td>Pending &mdash; exceeds GitHub 2 GB cap; host decision required</td></tr>
+          <tr><td><strong>Hosting</strong></td><td>GitHub Releases (v0.1.27)</td><td>Google Cloud Storage &mdash; gs://lianabanyan-releases/v0.1.27-full/</td></tr>
           <tr><td><strong>Telemetry</strong></td><td colspan="2">None without explicit opt&#8209;in</td></tr>
         </tbody>
       </table>
