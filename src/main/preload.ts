@@ -869,9 +869,20 @@ contextBridge.exposeInMainWorld('amplify', {
 
   // ── BP067 Phase 1A — $5 Membership Checkout ───────────────────────────────
   membership: {
-    createCheckout: (autoRenew: boolean): Promise<{ ok: boolean; error?: string; fallbackUrl?: string }> =>
+    createCheckout: (autoRenew: boolean): Promise<{ ok: boolean; url?: string; error?: string; fallbackUrl?: string }> =>
       ipcRenderer.invoke('membership:create-checkout', autoRenew),
+    verifyStatus: (): Promise<{ ok: boolean; membership_active: boolean; error?: string }> =>
+      ipcRenderer.invoke('membership-verify-status'),
   },
+
+  // ── runMeshTest (BP078 Scope 1) ──────────────────────────────────────────────
+  runMeshTest: (payload?: { testId?: string; timeoutMs?: number }): Promise<{
+    success: boolean;
+    grading?: { accuracy: number; hash_verified: number; p50_latency_ms: number; p95_latency_ms?: number; total_questions: number };
+    error?: 'MISSING_API_KEY' | 'TIMEOUT' | 'PYTHON_ERROR' | 'MISSING_PYTHON_RUNTIME' | 'NO_PEER';
+    static_fallback?: boolean;
+  }> =>
+    ipcRenderer.invoke('run-mesh-test', payload),
 
   // ── Caithedral Tools (BP060 Application 002 Step 1) ─────────────────────
   caithedralTools: {
@@ -1096,8 +1107,16 @@ declare global {
       lbOptInSetDecision?: (decision: 'never' | 'pending' | 'linked') => Promise<{ ok: boolean }>;
       // BP067 Phase 1A — $5 membership checkout
       membership?: {
-        createCheckout: (autoRenew: boolean) => Promise<{ ok: boolean; error?: string; fallbackUrl?: string }>;
+        createCheckout: (autoRenew: boolean) => Promise<{ ok: boolean; url?: string; error?: string; fallbackUrl?: string }>;
+        verifyStatus: () => Promise<{ ok: boolean; membership_active: boolean; error?: string }>;
       };
+      // runMeshTest (BP078 Scope 1)
+      runMeshTest?: (payload?: { testId?: string; timeoutMs?: number }) => Promise<{
+        success: boolean;
+        grading?: { accuracy: number; hash_verified: number; p50_latency_ms: number; p95_latency_ms?: number; total_questions: number };
+        error?: 'MISSING_API_KEY' | 'TIMEOUT' | 'PYTHON_ERROR' | 'MISSING_PYTHON_RUNTIME' | 'NO_PEER';
+        static_fallback?: boolean;
+      }>;
       // Caithedral Tools IPC (BP060 Application 002 Step 1)
       caithedralTools?: {
         soccerball_emit: (pearls: string[], bindings?: Record<string, string>) => Promise<{ ok: boolean; sid?: string; error?: string }>;

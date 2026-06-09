@@ -265,8 +265,16 @@ declare global {
       getTelemetrySummary?: () => Promise<TelemetrySummary>;
       // BP067 Phase 1A — $5 Membership Checkout
       membership?: {
-        createCheckout: (autoRenew: boolean) => Promise<{ ok: boolean; error?: string; fallbackUrl?: string }>;
+        createCheckout: (autoRenew: boolean) => Promise<{ ok: boolean; url?: string; error?: string; fallbackUrl?: string }>;
+        verifyStatus: () => Promise<{ ok: boolean; membership_active: boolean; error?: string }>;
       };
+      // runMeshTest (BP078 Scope 1)
+      runMeshTest?: (payload?: { testId?: string; timeoutMs?: number }) => Promise<{
+        success: boolean;
+        grading?: { accuracy: number; hash_verified: number; p50_latency_ms: number; p95_latency_ms?: number; total_questions: number };
+        error?: 'MISSING_API_KEY' | 'TIMEOUT' | 'PYTHON_ERROR' | 'MISSING_PYTHON_RUNTIME' | 'NO_PEER';
+        static_fallback?: boolean;
+      }>;
       // BP065 — LB Account + Frontier Node (Part A/B)
       lbStartAuth?: (email: string) => Promise<{ ok: boolean; error?: string }>;
       lbGetSession?: () => Promise<{ linked: boolean; user_id?: string; email?: string; peer_id?: string; linked_at?: string; crewman_number?: number }>;

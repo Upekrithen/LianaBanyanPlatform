@@ -22,8 +22,9 @@ import {
   dialog,
 } from 'electron';
 import { join } from 'path';
-import { existsSync } from 'fs';
-import { homedir } from 'os';
+import { existsSync, mkdirSync, readFileSync } from 'fs';
+import { spawn } from 'child_process';
+import { tmpdir, homedir } from 'os';
 import { OllamaManager } from './ollama_manager';
 import { SubstrateAPIServer, API_PORT } from './substrate_api';
 import { FederationClient } from './federation_client';
@@ -2205,6 +2206,147 @@ function registerIPCHandlers(): void {
       console.error('[membership] create-checkout exception:', err);
       return { ok: false, error: String(err) };
     }
+  });
+
+  // ── membership.verifyStatus (BP078 Scope 2) ──────────────────────────────────
+  ipcMain.handle('membership-verify-status', async () => {
+    const supabaseUrl = process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_ANON_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+    if (!supabaseUrl || !supabaseKey) {
+      return { ok: false, membership_active: false, error: 'not_configured' };
+    }
+
+    try {
+      const resp = await globalThis.fetch(`${supabaseUrl}/functions/v1/verify-membership-payment`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${supabaseKey}`,
+          'apikey': supabaseKey,
+        },
+        body: JSON.stringify({}),
+      });
+
+      if (!resp.ok) {
+        const errText = await resp.text();
+        console.error('[membership] verify-status failed:', resp.status, errText.slice(0, 200));
+        return { ok: false, membership_active: false, error: `verify_error_${resp.status}` };
+      }
+
+      const json = await resp.json() as { is_member?: boolean; error?: string };
+      return { ok: true, membership_active: json.is_member === true };
+    } catch (err) {
+      console.error('[membership] verify-status exception:', err);
+      return { ok: false, membership_active: false, error: String(err) };
+    }
+  });
+
+  // ── runMeshTest (BP078 Scope 1) ───────────────────────────────────────────────
+  ipcMain.handle('run-mesh-test', async (_event, payload?: { testId?: string; timeoutMs?: number }) => {
+    const timeoutMs = payload?.timeoutMs ?? 45000;
+
+    // MISSING_API_KEY guard -- read from env (env_loader populates on startup)
+    const apiKey = process.env.ANTHROPIC_API_KEY;
+    if (!apiKey) {
+      return { success: false, error: 'MISSING_API_KEY', static_fallback: true };
+    }
+
+    // Resolve script path relative to project root (sandbox mode: dev/internal only)
+    const scriptPath = join(__dirname, '..', '..', 'librarian-mcp', 'r10_cross_vendor', 'run_mesh_test.py');
+    if (!existsSync(scriptPath)) {
+      console.warn('[run-mesh-test] script not found at', scriptPath);
+      return { success: false, error: 'PYTHON_ERROR', static_fallback: true };
+    }
+
+    // Unique temp output dir per invocation
+    const outDir = join(tmpdir(), `mnemo_mesh_test_${Date.now()}`);
+    try { mkdirSync(outDir, { recursive: true }); } catch { /* ignore */ }
+
+    return new Promise((resolve) => {
+      let settled = false;
+      let timedOut = false;
+      const stdout: string[] = [];
+      const stderr: string[] = [];
+
+      const proc = spawn('python', [scriptPath, '--condition', 'alone', '--bank', 'A', '--step', '1', '--out', outDir], {
+        env: { ...process.env, ANTHROPIC_API_KEY: apiKey },
+        cwd: join(__dirname, '..', '..', 'librarian-mcp', 'r10_cross_vendor'),
+      });
+
+      const timer = setTimeout(() => {
+        if (!settled) {
+          timedOut = true;
+          settled = true;
+          try { proc.kill('SIGKILL'); } catch { /* ignore */ }
+          resolve({ success: false, error: 'TIMEOUT', static_fallback: true });
+        }
+      }, timeoutMs);
+
+      proc.stdout.on('data', (d: Buffer) => stdout.push(d.toString()));
+      proc.stderr.on('data', (d: Buffer) => stderr.push(d.toString()));
+
+      proc.on('error', (err: NodeJS.ErrnoException) => {
+        if (!settled) {
+          settled = true;
+          clearTimeout(timer);
+          if (err.code === 'ENOENT') {
+            resolve({ success: false, error: 'MISSING_PYTHON_RUNTIME', static_fallback: true });
+          } else {
+            console.error('[run-mesh-test] spawn error:', err);
+            resolve({ success: false, error: 'PYTHON_ERROR', static_fallback: true });
+          }
+        }
+      });
+
+      proc.on('close', (code: number | null) => {
+        if (settled || timedOut) return;
+        settled = true;
+        clearTimeout(timer);
+
+        const combinedOut = stdout.join('');
+        if (combinedOut.includes('no peer found') || combinedOut.includes('NO_PEER')) {
+          resolve({ success: false, error: 'NO_PEER', static_fallback: true });
+          return;
+        }
+
+        if (code !== 0) {
+          console.error('[run-mesh-test] python exited with code', code, stderr.join('').slice(0, 400));
+          resolve({ success: false, error: 'PYTHON_ERROR', static_fallback: true });
+          return;
+        }
+
+        // Parse summary.json written by the script
+        const summaryPath = join(outDir, 'summary.json');
+        try {
+          const raw = readFileSync(summaryPath, 'utf8');
+          const summary = JSON.parse(raw) as {
+            accuracy_pct?: number;
+            fetch_latency_p50_ms?: number;
+            fetch_latency_p95_ms?: number;
+            total_questions?: number;
+            mesh_fetch_count?: number;
+            hash_verify_pass_rate?: number;
+          };
+          const hashVerifiedCount = Math.round(
+            (summary.hash_verify_pass_rate ?? 0) * (summary.mesh_fetch_count ?? 0),
+          );
+          resolve({
+            success: true,
+            grading: {
+              accuracy: (summary.accuracy_pct ?? 0) / 100,
+              hash_verified: hashVerifiedCount,
+              p50_latency_ms: summary.fetch_latency_p50_ms ?? 0,
+              p95_latency_ms: summary.fetch_latency_p95_ms ?? undefined,
+              total_questions: summary.total_questions ?? 0,
+            },
+          });
+        } catch (parseErr) {
+          console.error('[run-mesh-test] failed to parse summary.json:', parseErr);
+          resolve({ success: false, error: 'PYTHON_ERROR', static_fallback: true });
+        }
+      });
+    });
   });
 }
 
