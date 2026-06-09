@@ -48,7 +48,14 @@ export type AnalyticsEventType =
   // Commerce
   | "product_viewed"
   | "vote_cast"
-  | "wave_selected";
+  | "wave_selected"
+  // Proof + join flow (BP078)
+  | "proof_handoff_clicked"
+  | "proof_handoff_skipped"
+  | "gauntlet_mode_selected"
+  | "gauntlet_live_results_viewed"
+  | "membership_intent_selected"
+  | "membership_path_routed";
 
 export interface AnalyticsEvent {
   event_type: AnalyticsEventType;

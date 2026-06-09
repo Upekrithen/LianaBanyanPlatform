@@ -151,9 +151,17 @@ export interface UniformInitiativeShellProps {
   launchMessage?: string;
   /** PortalPageLayout maxWidth (default: xl) */
   maxWidth?: "sm" | "md" | "lg" | "xl" | "full";
+  /** Intent tag from member profile -- shows matched-interest banner when present */
+  intentTag?: 'need_help' | 'want_to_help' | 'make_money';
   /** The initiative-specific page content */
   children: React.ReactNode;
 }
+
+const INTENT_LABELS: Record<'need_help' | 'want_to_help' | 'make_money', string> = {
+  need_help: 'I need help',
+  want_to_help: 'I want to help',
+  make_money: 'I want to make money',
+};
 
 export function UniformInitiativeShell({
   slug,
@@ -167,6 +175,7 @@ export function UniformInitiativeShell({
   launchConditions,
   launchMessage,
   maxWidth = "xl",
+  intentTag,
   children,
 }: UniformInitiativeShellProps) {
   const cueCard = getCueCard(slug);
@@ -177,6 +186,12 @@ export function UniformInitiativeShell({
 
   const crown = (
     <>
+      {intentTag && (
+        <div className="flex items-center gap-2 mb-4 px-3 py-2 rounded-lg bg-primary/5 border border-primary/20 text-xs text-muted-foreground">
+          <span className="text-primary font-medium">Opened for: {INTENT_LABELS[intentTag]}.</span>
+          <span>You can change your path anytime.</span>
+        </div>
+      )}
       <InitiativeHero
         emoji={resolvedEmoji}
         name={resolvedName}

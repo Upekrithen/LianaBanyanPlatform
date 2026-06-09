@@ -1,24 +1,33 @@
 // CheckoutSuccessStep.tsx -- BP078 Scope 5
-// First-run spine Step 5: $5 cooperative membership checkout.
-// Pre-checkout: Join button opens Stripe via IPC. Post-checkout: verify button confirms membership.
-// Founder binding 1 honored: uses openExternal + auth relay URL pattern (no custom JWT).
-// Founder binding: explicit "I have completed checkout" button (cooperative transparency principle).
+// Proof closer + join bridge component (Pawn Section 3 + Section 7 drop-in props).
+// Truth-Always gate: live metric copy renders ONLY if metrics.live === true AND
+// banyanMetric + p50LatencyMs + sourcesCount are all present. Otherwise fallback copy.
+// Pawn hard wiring rule #2: this is NOT a generic payment confirmation.
 
-import React, { useState, useCallback } from 'react';
+import React, { useEffect } from 'react';
+
+// ─── Types (Pawn Section 7 drop-in) ──────────────────────────────────────────
+
+export type GauntletMode = 'included' | 'own_data' | 'manual';
 
 export interface CheckoutSuccessStepProps {
-  onMembershipVerified: () => void;
-  onSkip: () => void;
+  runId: string;
+  mode: GauntletMode;
+  metrics: {
+    live: boolean;
+    banyanMetric?: number;
+    p50LatencyMs?: number;
+    sourcesCount?: number;
+    stageCount?: number;
+  };
+  onJoin: () => void;
+  onKeepUsing: () => void;
+  analytics?: {
+    track: (event: string, payload?: Record<string, unknown>) => void;
+  };
 }
 
-const RELAY_KEY = '_lb_auth';
-
-function buildAuthRelayUrl(targetUrl: string): string {
-  // Auth tokens are held in main process; not exposed to renderer (R16).
-  // The web side's consumeAuthRelay() runs at boot and handles tokens embedded by
-  // the buildAuthRelayUrl on the platform side. For now, open the plain URL.
-  return targetUrl;
-}
+// ─── Styles ───────────────────────────────────────────────────────────────────
 
 const overlay: React.CSSProperties = {
   position: 'fixed',
@@ -26,217 +35,216 @@ const overlay: React.CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  background: 'rgba(2,6,23,0.9)',
-  zIndex: 9999,
+  background: '#0d1117',
+  zIndex: 9600,
   padding: 16,
+  fontFamily: 'system-ui, -apple-system, sans-serif',
 };
 
 const card: React.CSSProperties = {
-  background: 'rgba(15,23,42,0.97)',
-  border: '1px solid rgba(110,231,183,0.22)',
-  borderRadius: 14,
-  padding: '28px 24px 22px',
-  maxWidth: 440,
+  background: '#111827',
+  border: '1px solid rgba(110,231,183,0.2)',
+  borderRadius: 12,
+  padding: '36px 32px 28px',
+  maxWidth: 480,
   width: '100%',
   display: 'flex',
   flexDirection: 'column',
-  gap: 16,
+  gap: 0,
   boxShadow: '0 24px 60px rgba(0,0,0,0.5)',
-  fontFamily: "'Inter', system-ui, sans-serif",
 };
 
-const heading: React.CSSProperties = {
-  margin: 0,
-  fontSize: 18,
+const brandLine: React.CSSProperties = {
+  fontSize: 12,
   fontWeight: 700,
-  color: '#f1f5f9',
-  lineHeight: 1.3,
+  color: '#6ee7b7',
+  letterSpacing: '0.08em',
+  textTransform: 'uppercase' as const,
+  marginBottom: 20,
 };
 
-const sub: React.CSSProperties = {
-  margin: 0,
-  fontSize: 13,
+const headingStyle: React.CSSProperties = {
+  margin: '0 0 10px',
+  fontSize: 20,
+  fontWeight: 800,
+  color: '#e2e8f0',
+  lineHeight: 1.25,
+};
+
+const bodyStyle: React.CSSProperties = {
+  margin: '0 0 14px',
+  fontSize: 14,
   color: '#94a3b8',
+  lineHeight: 1.7,
+};
+
+const bridgeStyle: React.CSSProperties = {
+  margin: '0 0 20px',
+  fontSize: 13,
+  color: '#64748b',
   lineHeight: 1.6,
 };
 
-const primaryBtn = (disabled: boolean): React.CSSProperties => ({
-  padding: '12px 20px',
-  background: disabled ? 'rgba(110,231,183,0.04)' : 'rgba(110,231,183,0.12)',
+const interstitialLabel: React.CSSProperties = {
+  fontSize: 11,
+  fontWeight: 700,
+  color: '#475569',
+  letterSpacing: '0.06em',
+  textTransform: 'uppercase' as const,
+  margin: '0 0 14px',
+};
+
+const primaryBtn: React.CSSProperties = {
+  display: 'block',
+  width: '100%',
+  padding: '13px 20px',
+  background: 'rgba(110,231,183,0.13)',
   border: '1px solid rgba(110,231,183,0.4)',
   borderRadius: 8,
-  color: disabled ? '#475569' : '#6ee7b7',
+  color: '#6ee7b7',
   fontSize: 14,
   fontWeight: 700,
-  cursor: disabled ? 'not-allowed' : 'pointer',
-  opacity: disabled ? 0.6 : 1,
+  cursor: 'pointer',
   textAlign: 'center' as const,
+  marginBottom: 10,
   fontFamily: 'inherit',
-  width: '100%',
-});
+};
+
+const microcopyStyle: React.CSSProperties = {
+  fontSize: 11,
+  color: '#334155',
+  textAlign: 'center' as const,
+  lineHeight: 1.5,
+  margin: '0 0 12px',
+};
 
 const ghostBtn: React.CSSProperties = {
   display: 'block',
+  width: '100%',
   textAlign: 'center' as const,
-  fontSize: 12,
-  color: '#475569',
-  cursor: 'pointer',
-  padding: '4px 0',
   background: 'none',
   border: 'none',
-  textDecoration: 'underline',
+  color: '#475569',
+  fontSize: 12,
+  cursor: 'pointer',
+  padding: '5px 0',
   fontFamily: 'inherit',
 };
 
-const errorBox: React.CSSProperties = {
-  fontSize: 12,
-  color: '#f87171',
-  background: 'rgba(248,113,113,0.08)',
-  border: '1px solid rgba(248,113,113,0.2)',
-  borderRadius: 6,
-  padding: '8px 12px',
+const metricRow: React.CSSProperties = {
+  display: 'flex',
+  gap: 10,
+  marginBottom: 20,
 };
 
-export function CheckoutSuccessStep({ onMembershipVerified, onSkip }: CheckoutSuccessStepProps): React.ReactElement {
-  const [autoRenew, setAutoRenew] = useState(false);
-  const [checkoutOpened, setCheckoutOpened] = useState(false);
-  const [checkingMembership, setCheckingMembership] = useState(false);
-  const [openingCheckout, setOpeningCheckout] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+const metricCell: React.CSSProperties = {
+  flex: 1,
+  background: 'rgba(6,78,59,0.12)',
+  border: '1px solid rgba(110,231,183,0.2)',
+  borderRadius: 8,
+  padding: '12px 12px 10px',
+  textAlign: 'center' as const,
+};
 
-  const handleJoin = useCallback(async () => {
-    setOpeningCheckout(true);
-    setError(null);
-    try {
-      const result = await window.amplify?.membership?.createCheckout(autoRenew);
-      if (result?.ok) {
-        const url = (result as { ok: boolean; url?: string }).url;
-        if (url) {
-          window.amplify?.openExternal?.(url);
-          setCheckoutOpened(true);
-        } else {
-          // Fallback: no URL returned
-          window.amplify?.openExternal?.('https://lianabanyan.com/join');
-          setCheckoutOpened(true);
-        }
-      } else if (result?.fallbackUrl) {
-        window.amplify?.openExternal?.(result.fallbackUrl);
-        setCheckoutOpened(true);
-      } else {
-        setError(result?.error ?? 'Could not open checkout. Please try again.');
-      }
-    } catch {
-      window.amplify?.openExternal?.('https://lianabanyan.com/join');
-      setCheckoutOpened(true);
-    } finally {
-      setOpeningCheckout(false);
-    }
-  }, [autoRenew]);
+const metricValue: React.CSSProperties = {
+  fontSize: 20,
+  fontWeight: 700,
+  color: '#6ee7b7',
+  lineHeight: 1.2,
+};
 
-  const handleVerify = useCallback(async () => {
-    setCheckingMembership(true);
-    setError(null);
-    try {
-      const result = await window.amplify?.membership?.verifyStatus?.();
-      if (result?.membership_active === true) {
-        // Auth relay: open welcome page for seamless web handoff (Founder binding 1)
-        const welcomeUrl = buildAuthRelayUrl('https://lianabanyan.com/welcome');
-        window.amplify?.openExternal?.(welcomeUrl);
-        onMembershipVerified();
-      } else {
-        setError("We don't see your membership yet. Please wait a moment and try again.");
-      }
-    } catch {
-      setError('Verification failed. Please check your connection and try again.');
-    } finally {
-      setCheckingMembership(false);
-    }
-  }, [onMembershipVerified]);
+const metricLabel: React.CSSProperties = {
+  fontSize: 10,
+  color: '#64748b',
+  marginTop: 3,
+  lineHeight: 1.4,
+};
 
-  const handleRetryCheckout = useCallback(() => {
-    setCheckoutOpened(false);
-    setError(null);
+// ─── Component ────────────────────────────────────────────────────────────────
+
+export function CheckoutSuccessStep({
+  runId,
+  mode,
+  metrics,
+  onJoin,
+  onKeepUsing,
+  analytics,
+}: CheckoutSuccessStepProps): React.ReactElement {
+  const liveGate =
+    metrics.live === true &&
+    metrics.banyanMetric !== undefined &&
+    metrics.p50LatencyMs !== undefined &&
+    metrics.sourcesCount !== undefined;
+
+  useEffect(() => {
+    analytics?.track('gauntlet_live_results_viewed', {
+      source: 'gauntlet_results',
+      run_id: runId,
+      metrics_live: metrics.live,
+      banyan_metric: metrics.banyanMetric,
+      p50_latency_ms: metrics.p50LatencyMs,
+      sources_count: metrics.sourcesCount,
+      stage_count: metrics.stageCount,
+      mode,
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <div style={overlay}>
       <div style={card}>
-        <div>
-          <h2 style={heading}>
-            {checkoutOpened ? 'Complete your membership' : 'Join the Cooperative'}
-          </h2>
-          <p style={{ ...sub, marginTop: 8 }}>
-            {checkoutOpened
-              ? 'Finish the checkout in your browser, then click the button below to verify your membership.'
-              : 'Free to use. Better to join. $5/year as a founding member-owner.'}
-          </p>
-        </div>
+        <div style={brandLine}>MnemosyneC</div>
 
-        {!checkoutOpened ? (
+        {liveGate ? (
           <>
-            <label style={{ display: 'flex', alignItems: 'flex-start', gap: 10, cursor: 'pointer' }}>
-              <input
-                type="checkbox"
-                checked={autoRenew}
-                onChange={(e) => setAutoRenew(e.target.checked)}
-                style={{ accentColor: '#6ee7b7', marginTop: 2, flexShrink: 0 }}
-              />
-              <span style={{ fontSize: 12, color: '#94a3b8', lineHeight: 1.5 }}>
-                <strong style={{ color: '#e2e8f0' }}>Auto-renew each year</strong>
-                {' '}-- keep your founding-member stake without having to rejoin.
-              </span>
-            </label>
-
-            {error && <div style={errorBox}>{error}</div>}
-
-            <button
-              type="button"
-              style={primaryBtn(openingCheckout)}
-              disabled={openingCheckout}
-              onClick={handleJoin}
-            >
-              {openingCheckout
-                ? 'Opening checkout...'
-                : `Join Cooperative ($5${autoRenew ? '/year, auto-renews' : ', one-time'}) >`}
-            </button>
-
-            <div style={{ fontSize: 10, color: '#334155', textAlign: 'center', lineHeight: 1.5 }}>
-              Secure checkout via Stripe · Cancel or change anytime
+            <h2 style={headingStyle}>{"Here's what this run just proved"}</h2>
+            <p style={bodyStyle}>
+              {`This run measured a Banyan Metric of ${metrics.banyanMetric!.toFixed(1)}, median response time of ${metrics.p50LatencyMs} ms, and ${metrics.sourcesCount} live sources in play.`}
+            </p>
+            <div style={metricRow}>
+              <div style={metricCell}>
+                <div style={metricValue}>{metrics.banyanMetric!.toFixed(1)}</div>
+                <div style={metricLabel}>Banyan Metric</div>
+              </div>
+              <div style={metricCell}>
+                <div style={metricValue}>{metrics.p50LatencyMs}ms</div>
+                <div style={metricLabel}>p50 latency</div>
+              </div>
+              <div style={metricCell}>
+                <div style={metricValue}>{metrics.sourcesCount}</div>
+                <div style={metricLabel}>live sources</div>
+              </div>
             </div>
+            <p style={bridgeStyle}>
+              If you want this to extend beyond your own machine into shared mesh capacity, member tools, and cooperative pathways, join Liana Banyan for $5/year.
+            </p>
           </>
         ) : (
           <>
-            <div style={{
-              background: 'rgba(6,78,59,0.15)',
-              border: '1px solid rgba(110,231,183,0.2)',
-              borderRadius: 8,
-              padding: '12px 14px',
-              fontSize: 12,
-              color: '#6ee7b7',
-              lineHeight: 1.6,
-            }}>
-              Checkout opened in your browser. Complete the payment, then click below.
-            </div>
-
-            {error && <div style={errorBox}>{error}</div>}
-
-            <button
-              type="button"
-              style={primaryBtn(checkingMembership)}
-              disabled={checkingMembership}
-              onClick={handleVerify}
-            >
-              {checkingMembership ? 'Verifying...' : 'I have completed checkout'}
-            </button>
-
-            <button type="button" style={ghostBtn} onClick={handleRetryCheckout}>
-              Need to open checkout again?
-            </button>
+            <h2 style={headingStyle}>Your private run is working</h2>
+            <p style={bodyStyle}>
+              {"You've confirmed the local path. Next, connect this install to the member layer that extends it into shared tools and Federation."}
+            </p>
+            <p style={bridgeStyle}>
+              Join Liana Banyan for $5/year to open Helm, Federation, and your first cooperative path.
+            </p>
           </>
         )}
 
-        <button type="button" style={ghostBtn} onClick={onSkip}>
-          Skip for now
+        <p style={interstitialLabel}>
+          Next step -- Keep this private and local, or turn it into shared capacity.
+        </p>
+
+        <button type="button" style={primaryBtn} onClick={onJoin}>
+          Join for $5/year
+        </button>
+
+        <p style={microcopyStyle}>
+          $5/year. Cancel anytime. Opens Federation, Helm member tools, and your first cooperative path.
+        </p>
+
+        <button type="button" style={ghostBtn} onClick={onKeepUsing}>
+          Keep using MnemosyneC
         </button>
       </div>
     </div>
