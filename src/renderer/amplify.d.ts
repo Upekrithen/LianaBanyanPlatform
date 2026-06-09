@@ -306,6 +306,8 @@ declare global {
         onPullComplete: (cb: () => void) => () => void;
         onPullError: (cb: (err: string) => void) => () => void;
       };
+      // BP078 — Black Crow Feather earn IPC
+      earnBlackCrowFeather?: (payload: { userId: string; reason: string; metadata?: Record<string, unknown> }) => Promise<{ ok: boolean; featherId?: string; alreadyIssued?: boolean; error?: string }>;
       // BP060 Application 002 Step 1 — Caithedral Tools
       caithedralTools?: {
         soccerball_emit: (pearls: string[], bindings?: Record<string, string>) => Promise<{ ok: boolean; sid?: string; error?: string }>;

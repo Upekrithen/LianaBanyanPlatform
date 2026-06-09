@@ -2461,6 +2461,67 @@ function registerIPCHandlers(): void {
     } catch { /* fallback to nano */ }
     return { tier: 'nano' };
   });
+
+  // ── Black Crow Feather earn (BP078) ───────────────────────────────────────
+  // Durably records a black_crow feather in the Supabase crow_feathers table.
+  // Uses service role key to bypass RLS. Idempotent: one black_crow feather
+  // per user with badge_class = 'full_sku_upgrade'.
+  ipcMain.handle('feather:earn-black', async (
+    _event,
+    payload: { userId: string; reason: string; metadata?: Record<string, unknown> },
+  ) => {
+    const supabaseUrl = (process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || '').replace(/\/$/, '');
+    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+    if (!supabaseUrl || !serviceRoleKey) {
+      console.warn('[feather:earn-black] Supabase credentials not present, skipping durable feather record.');
+      return { ok: false, error: 'no-credentials' };
+    }
+    const { userId, reason, metadata = {} } = payload;
+    const restBase = `${supabaseUrl}/rest/v1/crow_feathers`;
+    const authHeaders: Record<string, string> = {
+      'apikey': serviceRoleKey,
+      'Authorization': `Bearer ${serviceRoleKey}`,
+      'Content-Type': 'application/json',
+    };
+    try {
+      // Idempotency check: look for an existing black_crow feather for this user.
+      const checkUrl = `${restBase}?user_id=eq.${encodeURIComponent(userId)}&category=eq.black_crow&metadata->>badge_class=eq.full_sku_upgrade&select=id&limit=1`;
+      const checkResp = await fetch(checkUrl, { method: 'GET', headers: authHeaders });
+      if (checkResp.ok) {
+        const existing = await checkResp.json() as Array<{ id: string }>;
+        if (existing.length > 0) {
+          return { ok: true, alreadyIssued: true, featherId: existing[0].id };
+        }
+      }
+      // Insert new record.
+      const insertResp = await fetch(restBase, {
+        method: 'POST',
+        headers: { ...authHeaders, 'Prefer': 'return=representation' },
+        body: JSON.stringify({
+          user_id: userId,
+          category: 'black_crow',
+          record_value: 1,
+          metadata: {
+            honor_badge: true,
+            badge_class: 'full_sku_upgrade',
+            reason,
+            ...metadata,
+          },
+        }),
+      });
+      if (!insertResp.ok) {
+        const errText = await insertResp.text();
+        console.error('[feather:earn-black] Insert failed:', insertResp.status, errText);
+        return { ok: false, error: `insert-failed-${insertResp.status}` };
+      }
+      const inserted = await insertResp.json() as Array<{ id: string }>;
+      const featherId = inserted[0]?.id ?? '';
+      return { ok: true, featherId };
+    } catch (err) {
+      console.error('[feather:earn-black] Unexpected error:', err);
+      return { ok: false, error: (err as Error).message };
+    }
+  });
 }
 
 // ─── App Lifecycle ────────────────────────────────────────────────────────────

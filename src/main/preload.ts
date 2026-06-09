@@ -929,6 +929,10 @@ contextBridge.exposeInMainWorld('amplify', {
       return () => ipcRenderer.removeAllListeners('sku-pull-error');
     },
   },
+
+  // ── Black Crow Feather earn (BP078) ───────────────────────────────────────
+  earnBlackCrowFeather: (payload: { userId: string; reason: string; metadata?: Record<string, unknown> }) =>
+    ipcRenderer.invoke('feather:earn-black', payload),
 });
 
 // ─── Global type extension ────────────────────────────────────────────────────
@@ -1183,6 +1187,8 @@ declare global {
         onPullComplete: (cb: () => void) => () => void;
         onPullError: (cb: (err: string) => void) => () => void;
       };
+      // Black Crow Feather earn (BP078)
+      earnBlackCrowFeather?: (payload: { userId: string; reason: string; metadata?: Record<string, unknown> }) => Promise<{ ok: boolean; featherId?: string; alreadyIssued?: boolean; error?: string }>;
     };
   }
 }

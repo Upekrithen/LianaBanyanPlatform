@@ -387,6 +387,16 @@ export function SkuUpgradePanel({
       setCurrentTier('full');
       setPhase('complete');
       analytics?.track('feather_earned', { color: 'black', reason: 'full_sku_upgrade_completed' });
+      // Durably record the black crow feather in Supabase crow_feathers table.
+      void (async (): Promise<void> => {
+        try {
+          const session = await window.amplify.lbGetSession?.();
+          const userId = session?.user_id ?? '';
+          await window.amplify.earnBlackCrowFeather?.({ userId, reason: 'full_sku_upgrade_completed' });
+        } catch {
+          // Non-fatal: analytics track already fired; feather record failure is logged in main process.
+        }
+      })();
       onUpgradeComplete?.();
     }) ?? ((): void => {});
 
