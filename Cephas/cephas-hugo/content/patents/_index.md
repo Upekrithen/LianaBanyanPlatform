@@ -43,6 +43,14 @@ wrasseTriggers:
 | #1752–#1754 | 3 | SMS + recent additions (pending migration) |
 | **Total** | **1,754** | |
 
+## Incentive to Hire: The Enterprise Carrot
+
+The Cooperative Defensive Patent Pledge (#2260) protects the commons from being closed by a third party. It is not a moat for us. For AI companies that want Apache 2.0 access and clean IP provenance, the Upekrithen fork path provides it.
+
+That path carries the **Incentive to Hire**: enterprises that hire Liana Banyan cooperative members to operate MnemosyneC receive a discount credit on their license cost. Each hire pays for itself, roughly twice over. They are not required to hire from us. They are paid to.
+
+[See the full Incentive to Hire mechanism &rarr;](/incentive-to-hire/)
+
 ## Key Resources
 
 - [BEHEMOTH REBORN — Portfolio Valuation](/patents/behemoth-reborn/) — $630,000 declared (Cost + 20%). Full sensitivity analysis.

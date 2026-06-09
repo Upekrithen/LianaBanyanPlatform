@@ -177,6 +177,20 @@ A quick reference for the vocabulary Liana Banyan uses that you will not find in
 
 ---
 
+---
+
+## Big AI Company Reading This?
+
+If you are evaluating MnemosyneC for enterprise or fleet deployment, the license includes an **Incentive to Hire** that makes it worth looking at twice.
+
+Every cooperative member you hire to operate MnemosyneC pays for itself, roughly twice over. You are not required to hire from the cooperative. You are paid to. Each hire generates a discount credit. The discount is doubled as an estimate. Net-save by hiring from us. Job-creation, by price.
+
+The Apache 2.0 path (Upekrithen fork) is available for clean enterprise integration. The hiring covenant travels with that license.
+
+[Full Incentive to Hire mechanism &rarr;](/incentive-to-hire/)
+
+---
+
 *Not charity. A way out. Everyone gets their shot.*
 
 *SSPL Free Forever · Pledge #2260 · BP071 · MnemosyneC*

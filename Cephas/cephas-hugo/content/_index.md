@@ -57,6 +57,14 @@ Mnemosyne reads your Documents folder *(only the folders you mark as Substrated)
 <p style="margin:0.8rem 0 0;font-size:0.88rem;color:rgba(255,255,255,0.6);">Marks represent participation in the cooperative, not equity or ownership shares. Membership is $5/year.</p>
 </div>
 
+<div style="background:rgba(59,130,246,0.07);border:1px solid rgba(59,130,246,0.3);border-radius:10px;padding:1.1rem 1.4rem;margin:0 0 1.4rem;">
+<strong style="color:#60a5fa;display:block;margin-bottom:0.5rem;">Big AI Company? See the Incentive to Hire.</strong>
+
+When a large AI company installs MnemosyneC, the license carries an <strong>Incentive to Hire</strong>: every Liana Banyan cooperative member they hire to operate it pays for itself, roughly twice over. They are not required to hire from us. They are paid to. Each hire creates the discount. The discount is doubled as an estimate. Net-save by hiring from the cooperative. <strong>Job-creation, by price.</strong>
+
+<a href="/incentive-to-hire/" style="color:#60a5fa;">Read the full Incentive to Hire mechanism &rarr;</a>
+</div>
+
 These are businesses that hire people. Twenty-three cooperative-class projects, each built to stand on its own and to compose with the others. Starred items are LIVE or SHIPPED. The rest are scaffolded and queued.
 
 ### Sweet 16 Initiatives

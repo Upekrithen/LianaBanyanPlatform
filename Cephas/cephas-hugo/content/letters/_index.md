@@ -68,3 +68,7 @@ Legal counsel and advisory outreach.
 **Total: 94 letters** -- and growing.
 
 Every letter here is public. Transparency is not a marketing strategy -- it is a structural commitment. If the math does not work, you will see it. If the vision is flawed, you will read it. We publish our outreach because we believe the work speaks for itself.
+
+---
+
+**If you represent a large AI company:** the license for MnemosyneC includes an [Incentive to Hire](/incentive-to-hire/) that makes deployment cheaper the more cooperative members you employ. Net-save by hiring from us. Job-creation, by price.
