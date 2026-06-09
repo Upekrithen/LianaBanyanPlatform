@@ -1,10 +1,11 @@
 // Bp067FirstRunSpine.tsx -- BP075 v0.1.26 minimal professional first-run
-// Steps: welcome -> try-it -> success -> gauntlet (mesh proof) -> [optional: folder] -> app
+// Steps: welcome -> try-it -> success -> gauntlet (mesh proof) -> checkout ($5 CTA) -> app
 // Preserved: askFloorModel elephant test, 3-option fallback, LS_BP067_FIRST_RUN_COMPLETE gate
 // Removed: scroll-crawl animation, Founder voice audio, HEOHO blocking step, forced folder step
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { GauntletProofStep } from './GauntletProofStep';
+import { CheckoutSuccessStep } from './CheckoutSuccessStep';
 
 export const LS_BP067_FIRST_RUN_COMPLETE = 'mnemosyne-bp067-first-run-complete';
 export const LS_SALTFIGHTER_SKIP = 'mnemosyne-saltfighter-skip';
@@ -12,7 +13,7 @@ export const LS_SALTFIGHTER_SKIP = 'mnemosyne-saltfighter-skip';
 const AUTO_TEST_PROMPT = 'What is the name of a famous elephant?';
 const TRY_IT_TIMEOUT_MS = 30_000;
 
-type Step = 'welcome' | 'try-it' | 'success' | 'gauntlet' | 'options' | 'folder';
+type Step = 'welcome' | 'try-it' | 'success' | 'gauntlet' | 'checkout' | 'options' | 'folder';
 type OptionState = 'idle' | 'retrying' | 'retry-ok' | 'retry-err' | 'borrowing' | 'borrow-result';
 
 interface BorrowResult {
@@ -372,6 +373,21 @@ export function Bp067FirstRunSpine({ onComplete, onAskOnboard }: Bp067FirstRunSp
   if (step === 'gauntlet') {
     return (
       <GauntletProofStep
+        onSkip={(): void => {
+          goTo('checkout');
+        }}
+      />
+    );
+  }
+
+  // ── Step 3c: $5 Membership CTA (CheckoutSuccessStep) ─────────────────────────
+
+  if (step === 'checkout') {
+    return (
+      <CheckoutSuccessStep
+        onMembershipVerified={(): void => {
+          handleAskOnboard();
+        }}
         onSkip={(): void => {
           handleAskOnboard();
         }}
