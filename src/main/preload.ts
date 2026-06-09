@@ -32,6 +32,14 @@ export interface ModelPullProgress {
   error?: string;
 }
 
+// BP078 Scope 6.5 -- SKU pull progress
+export interface SkuPullProgress {
+  downloaded: number;   // bytes downloaded
+  total: number;        // total bytes (0 if unknown)
+  speed?: string;       // e.g. "12.3 MB/s"
+  status?: string;      // raw ollama status line
+}
+
 export interface EngineSetupProgress {
   step: string;
   message: string;
@@ -916,8 +924,8 @@ contextBridge.exposeInMainWorld('amplify', {
     upgradeTo: (tier: 'core' | 'lite' | 'full') => ipcRenderer.invoke('sku-upgrade-to', tier),
     cancelUpgrade: () => ipcRenderer.invoke('sku-cancel-upgrade'),
     currentTier: () => ipcRenderer.invoke('sku-current-tier'),
-    onPullProgress: (cb: (data: ModelPullProgress) => void) => {
-      ipcRenderer.on('sku-pull-progress', (_event, data: ModelPullProgress) => cb(data));
+    onPullProgress: (cb: (data: SkuPullProgress) => void) => {
+      ipcRenderer.on('sku-pull-progress', (_event, data: SkuPullProgress) => cb(data));
       return () => ipcRenderer.removeAllListeners('sku-pull-progress');
     },
     onPullComplete: (cb: () => void) => {
@@ -1183,7 +1191,7 @@ declare global {
         upgradeTo: (tier: 'core' | 'lite' | 'full') => Promise<{ ok: boolean; error?: string }>;
         cancelUpgrade: () => Promise<{ ok: boolean }>;
         currentTier: () => Promise<{ tier: 'nano' | 'core' | 'lite' | 'full' }>;
-        onPullProgress: (cb: (data: ModelPullProgress) => void) => () => void;
+        onPullProgress: (cb: (data: SkuPullProgress) => void) => () => void;
         onPullComplete: (cb: () => void) => () => void;
         onPullError: (cb: (err: string) => void) => () => void;
       };

@@ -1,13 +1,15 @@
 // SettingsTab -- Mnemosyne CAI Amplifier Settings
 // Tab 4 (always visible) -- BP047 W1
-// Sections: Update - Appearance - AI Model Assignment - Mnem Retrieval (Mnem-DRT) - Substrate - Developer Mode - My Contribution
+// Sections: Update - Appearance - AI Model Assignment - Mnem Retrieval (Mnem-DRT) - AI Tier - Substrate - Developer Mode - My Contribution
 // Auto-updater is top-priority item (Founder direct)
 // KniPr034: My Contribution panel added -- read-only scaffold, data binding next wave
 // BP077 v0.1.27: Mnem-DRT panel added (MnemosyneC Mnem-as-interface)
+// BP078: SkuUpgradePanel wired into AI Tier section
 
 import React, { useState, useEffect } from 'react';
 import type { AuthState } from '../amplify.d';
 import { LocFaqModal } from './LocFaqPanel';
+import { SkuUpgradePanel } from './SkuUpgradePanel';
 
 interface SettingsTabProps {
   authState: AuthState | null;
@@ -1377,6 +1379,15 @@ export function SettingsTab({ authState, onDevModeToggle, devEnabled = false }: 
 
       {/* ── Section 3b: MNEM RETRIEVAL (Mnem-DRT) -- BP077 v0.1.27 ─────── */}
       <MnemDrtPanel />
+
+      {/* ── Section 3c: AI TIER (BP078) ──────────────────────────────────── */}
+      <section style={s.section}>
+        <div style={s.sectionHeader}>🧩 AI Tier</div>
+        <div style={{ fontSize: 10, color: '#64748b', marginBottom: 8, lineHeight: 1.5 }}>
+          Upgrade your local model for higher capability.
+        </div>
+        <SkuUpgradePanel analytics={undefined} />
+      </section>
 
       {/* ── Section 4: SUBSTRATE MODE ────────────────────────────────────── */}
       <section style={s.section}>

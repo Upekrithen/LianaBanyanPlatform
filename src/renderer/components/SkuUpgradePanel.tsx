@@ -547,47 +547,64 @@ export function SkuUpgradePanel({
             borderRadius: 10,
             padding: '16px 14px 12px',
           }}>
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 8,
-              marginBottom: 10,
-            }}>
-              <span style={S.spinnerStyle} />
-              <span style={{ fontSize: 13, fontWeight: 700, color: '#e2e8f0' }}>
-                Downloading gemma4:12b
-              </span>
-            </div>
-
-            {/* Progress bar */}
-            <div style={S.progressTrack}>
+            {/* Model-exists fast path: skip download bar, show activation copy */}
+            {modelExists && (progress === null || progress.total === 0) ? (
               <div style={{
-                height: '100%',
-                width: unknownTotal ? '0%' : `${pct}%`,
-                background: '#6ee7b7',
-                borderRadius: 3,
-                transition: 'width 0.4s ease',
-              }} />
-            </div>
-
-            {/* GB + percent */}
-            <div style={S.progressRow}>
-              <span>{downloadedLabel} / {unknownTotal ? '?' : totalLabel}</span>
-              <span>{unknownTotal ? '...' : `${pct}%`}</span>
-            </div>
-
-            {/* Speed */}
-            {progress?.speed && (
-              <div style={{ fontSize: 11, color: '#475569', marginBottom: 3 }}>
-                {progress.speed}
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+                marginBottom: 10,
+              }}>
+                <span style={S.spinnerStyle} />
+                <span style={{ fontSize: 13, fontWeight: 700, color: '#e2e8f0' }}>
+                  Using your existing gemma4:12b
+                </span>
               </div>
-            )}
+            ) : (
+              <>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  marginBottom: 10,
+                }}>
+                  <span style={S.spinnerStyle} />
+                  <span style={{ fontSize: 13, fontWeight: 700, color: '#e2e8f0' }}>
+                    Downloading gemma4:12b
+                  </span>
+                </div>
 
-            {/* Raw ollama status */}
-            {progress?.status && (
-              <div style={{ fontSize: 10, color: '#334155', marginBottom: 8, lineHeight: 1.5 }}>
-                {progress.status}
-              </div>
+                {/* Progress bar */}
+                <div style={S.progressTrack}>
+                  <div style={{
+                    height: '100%',
+                    width: unknownTotal ? '0%' : `${pct}%`,
+                    background: '#6ee7b7',
+                    borderRadius: 3,
+                    transition: 'width 0.4s ease',
+                  }} />
+                </div>
+
+                {/* GB + percent */}
+                <div style={S.progressRow}>
+                  <span>{downloadedLabel} / {unknownTotal ? '?' : totalLabel}</span>
+                  <span>{unknownTotal ? '...' : `${pct}%`}</span>
+                </div>
+
+                {/* Speed */}
+                {progress?.speed && (
+                  <div style={{ fontSize: 11, color: '#475569', marginBottom: 3 }}>
+                    {progress.speed}
+                  </div>
+                )}
+
+                {/* Raw ollama status */}
+                {progress?.status && (
+                  <div style={{ fontSize: 10, color: '#334155', marginBottom: 8, lineHeight: 1.5 }}>
+                    {progress.status}
+                  </div>
+                )}
+              </>
             )}
 
             <button type="button" style={S.cancelBtn} onClick={handleCancel}>

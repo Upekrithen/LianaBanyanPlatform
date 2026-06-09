@@ -302,7 +302,7 @@ declare global {
         upgradeTo: (tier: 'core' | 'lite' | 'full') => Promise<{ ok: boolean; error?: string }>;
         cancelUpgrade: () => Promise<{ ok: boolean }>;
         currentTier: () => Promise<{ tier: 'nano' | 'core' | 'lite' | 'full' }>;
-        onPullProgress: (cb: (data: ModelPullProgress) => void) => () => void;
+        onPullProgress: (cb: (data: SkuPullProgress) => void) => () => void;
         onPullComplete: (cb: () => void) => () => void;
         onPullError: (cb: (err: string) => void) => () => void;
       };
