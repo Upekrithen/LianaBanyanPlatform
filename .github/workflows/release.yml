@@ -61,6 +61,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Assert floor model
+        run: node scripts/assert-floor-model.mjs
+
       - name: TypeScript main
         run: npm exec tsc -- --noEmit -p tsconfig.main.json
 
