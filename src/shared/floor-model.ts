@@ -1,9 +1,9 @@
 // BP067 v0.1.24 -- bundled floor model constants (shared main + renderer)
 // Founder-locked: default = Gemma (Google), not Meta/Llama.
-// BP078 FULL SKU: floor model updated to gemma4:12b per Founder direct.
+// BP078 NANO SKU: floor model corrected to qwen2.5:0.5b (NANO bundled installer).
 
-/** Shipped default FULL SKU floor model (Ollama tag). Updated to gemma4:12b per BP078 Founder direct. */
-export const FLOOR_MODEL = 'gemma4:12b';
+/** Shipped default NANO SKU floor model (Ollama tag). Corrected to qwen2.5:0.5b per BP078 build fix. */
+export const FLOOR_MODEL = 'qwen2.5:0.5b';
 
 /** Tags treated as satisfying the floor-model requirement. */
 export const FLOOR_MODEL_ALIASES = [
