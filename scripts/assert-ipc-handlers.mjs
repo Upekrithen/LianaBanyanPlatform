@@ -15,6 +15,7 @@ const root = resolve(__dirname, '..');
 const distMainDir = resolve(root, 'dist', 'main');
 const distIndexPath = resolve(distMainDir, 'index.js');
 const preloadPath = resolve(root, 'src', 'main', 'preload.ts');
+const srcMainIndexPath = resolve(root, 'src', 'main', 'index.ts');
 
 // Recursively collect all .js files under dist/main/
 function collectJsFiles(dir) {
@@ -33,13 +34,33 @@ function collectJsFiles(dir) {
   return results;
 }
 
-let distJsCombined, preloadTs;
+// Files that contain ipcRenderer calls (not ipcMain registrations) and must not
+// contribute to handler detection.
+function isHandlerArtifact(filePath) {
+  const base = filePath.replace(/\\/g, '/').split('/').pop();
+  return /preload/i.test(base) || /webview/i.test(base);
+}
+
+let distJsCombined, distIndexJs, preloadTs;
 try {
-  // Verify index.js exists as a sanity check
-  statSync(distIndexPath);
+  // FIX 3: Build freshness check -- compare mtime of dist/main/index.js vs src/main/index.ts
+  const distIndexStat = statSync(distIndexPath);
+  try {
+    const srcMainStat = statSync(srcMainIndexPath);
+    if (distIndexStat.mtimeMs < srcMainStat.mtimeMs) {
+      console.warn('\n[assert-ipc-handlers] WARNING: dist/main/index.js may be stale (older than src/main/index.ts). Run npm run build:main before packaging.\n');
+    }
+  } catch { /* src/main/index.ts not readable -- skip freshness check */ }
+
+  // Read dist/main/index.js directly for the SKU hard check (FIX 2)
+  distIndexJs = readFileSync(distIndexPath, 'utf-8');
+
   const jsFiles = collectJsFiles(distMainDir);
-  // Concatenate all dist/main JS for handler lookup
-  distJsCombined = jsFiles.map(f => { try { return readFileSync(f, 'utf-8'); } catch { return ''; } }).join('\n');
+  // Exclude preload.js / *preload*.js / *webview*.js -- these contain ipcRenderer
+  // calls, not ipcMain registrations, and would produce false-positive matches.
+  const handlerFiles = jsFiles.filter(f => !isHandlerArtifact(f));
+  // Concatenate non-preload dist/main JS for handler lookup
+  distJsCombined = handlerFiles.map(f => { try { return readFileSync(f, 'utf-8'); } catch { return ''; } }).join('\n');
 } catch (e) {
   console.error(`[assert-ipc-handlers] FATAL: cannot read dist/main/ -- ${e.message}`);
   console.error('  Run `npm run build` before packaging.');
@@ -52,7 +73,8 @@ try {
   process.exit(1);
 }
 
-// Extract all channel names from ipcRenderer.invoke('...') calls in preload
+// Channels discovered from source preload.ts.
+// Handler verification uses compiled dist/main (excluding preload artifacts).
 const invokeRe = /ipcRenderer\.invoke\(\s*['"`]([^'"`]+)['"`]/g;
 const channels = new Set();
 let m;
@@ -70,20 +92,17 @@ const results = [];
 let anyFail = false;
 
 for (const ch of [...channels].sort()) {
-  // Check for ipcMain.handle('ch') or ipcMain.on('ch') in dist
-  // Two-tier check:
-  // 1. Direct registration: .handle('channel') or .on('channel') with a literal string
-  // 2. Constant-based registration: channel string appears in dist (as a constant value)
-  //    coupled with an ipcMain.handle(CONST, ...) call in the same file set.
-  //    Heuristic: if the channel string appears anywhere in dist JS, it is considered covered.
-  //    This handles patterns like: IPC.ADD_FOLDER = 'watcher:add-folder' + ipcMain.handle(IPC.ADD_FOLDER, ...)
+  // Tier-1 only: literal ipcMain.handle('channel') or ipcMain.on('channel') in
+  // non-preload dist/main JS. Tier-2 (string-present heuristic) has been removed
+  // because it caused every preload channel to trivially pass via the preload bundle
+  // itself, masking absent handlers.
   const escapedCh = ch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const directRe = new RegExp(`\\.(?:handle|on)\\(\\s*['"\`]${escapedCh}['"\`]`);
-  const stringPresentRe = new RegExp(`['"\`]${escapedCh}['"\`]`);
-  // Found if: direct literal handle/on registration, OR channel string present AND ipcMain.handle appears in dist
-  const found = directRe.test(distJsCombined) ||
-    (stringPresentRe.test(distJsCombined) && /ipcMain\.handle\(/.test(distJsCombined));
-  if (!found) anyFail = true;
+  const found = directRe.test(distJsCombined);
+  if (!found) {
+    anyFail = true;
+    console.error(`[assert-ipc-handlers] FAIL: no ipcMain.handle/on registration found for '${ch}' in dist/main (excluding preload)`);
+  }
   results.push({ channel: ch, status: found ? 'PASS' : 'FAIL' });
 }
 
@@ -112,4 +131,29 @@ if (anyFail) {
 }
 
 console.log('[assert-ipc-handlers] PASS: all renderer IPC channels have registered handlers.\n');
+
+// FIX 2: Hard check for SKU handler presence in dist/main/index.js specifically.
+// These four channels are P0 -- their absence caused the v0.1.30 shipping incident.
+// This block greps dist/main/index.js (not the combined set) for literal
+// ipcMain.handle('sku-...') registrations and fails if any are missing.
+const SKU_CHANNELS = ['sku-check-model', 'sku-upgrade-to', 'sku-cancel-upgrade', 'sku-current-tier'];
+let skuAnyFail = false;
+console.log('[assert-ipc-handlers] SKU Hard Check (dist/main/index.js only):');
+for (const ch of SKU_CHANNELS) {
+  const escapedCh = ch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const skuRe = new RegExp(`ipcMain\\.handle\\(\\s*['"\`]${escapedCh}['"\`]`);
+  const found = skuRe.test(distIndexJs);
+  if (found) {
+    console.log(`  [SKU HARD CHECK] PASS  '${ch}' found in dist/main/index.js`);
+  } else {
+    console.error(`  [SKU HARD CHECK] FAIL  '${ch}' is ABSENT from dist/main/index.js -- ipcMain.handle('${ch}') not found`);
+    skuAnyFail = true;
+  }
+}
+if (skuAnyFail) {
+  console.error('\n[assert-ipc-handlers] SKU HARD CHECK FAILED: one or more SKU channels are missing from dist/main/index.js.');
+  console.error('  This is a P0 condition. Rebuild with `npm run build:main` before packaging.\n');
+  process.exit(1);
+}
+console.log('[assert-ipc-handlers] SKU Hard Check PASSED: all 4 SKU channels present in dist/main/index.js.\n');
 process.exit(0);

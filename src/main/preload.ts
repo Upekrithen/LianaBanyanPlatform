@@ -743,10 +743,6 @@ contextBridge.exposeInMainWorld('amplify', {
   showOverlay: (): void =>
     ipcRenderer.send('show-overlay'),
 
-  /** Get full telemetry summary (session + today + week + month + daily breakdown) */
-  getTelemetrySummary: (): Promise<unknown> =>
-    ipcRenderer.invoke('get-telemetry-summary'),
-
   // ── Chronos Research Consent (KniPr038) ──────────────────────────────────
 
   /** Write a sha256-signed consent Eblet to ~/.amplify/consent/ */

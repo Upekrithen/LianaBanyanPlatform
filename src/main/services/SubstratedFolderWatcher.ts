@@ -293,23 +293,23 @@ export class SubstratedFolderWatcher {
  * TODO v0.1.10: wire into src/main/index.ts registerKitchenTableIpc pattern
  */
 export function registerWatcherIpc(watcher: SubstratedFolderWatcher): void {
-  ipcMain.handle(IPC_WATCHER.ADD_FOLDER, (_event, folderPath: string) => {
+  ipcMain.handle('watcher:add-folder', (_event, folderPath: string) => {
     return watcher.addFolder(folderPath);
   });
 
-  ipcMain.handle(IPC_WATCHER.REMOVE_FOLDER, (_event, folderId: string) => {
+  ipcMain.handle('watcher:remove-folder', (_event, folderId: string) => {
     return watcher.removeFolder(folderId);
   });
 
-  ipcMain.handle(IPC_WATCHER.LIST_FOLDERS, () => {
+  ipcMain.handle('watcher:list-folders', () => {
     return watcher.listFolders();
   });
 
-  ipcMain.handle(IPC_WATCHER.GET_STATS, () => {
+  ipcMain.handle('watcher:get-stats', () => {
     return watcher.getStats();
   });
 
-  ipcMain.handle(IPC_WATCHER.GET_EBLETS, () => {
+  ipcMain.handle('watcher:get-eblets', () => {
     return watcher.getEbletLog();
   });
 }

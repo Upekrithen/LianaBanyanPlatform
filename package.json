@@ -1,6 +1,6 @@
 {
   "name": "amplify-computer",
-  "version": "0.1.30",
+  "version": "0.1.31",
   "description": "Mnemosyne — Memory, powered by CAI · local inference + cooperative substrate OS overlay (SSPL · Pledge #2260)",
   "homepage": "https://lianabanyan.com",
   "private": true,
@@ -22,7 +22,7 @@
     "prepare:floor-model": "node scripts/prepare-floor-model.mjs",
     "prepare:ollama-binary": "node scripts/download-ollama-binary.mjs",
     "prepare:all": "npm run prepare:ollama-binary && npm run prepare:floor-model",
-    "publish:win": "npm run build && electron-builder --win --publish always",
+    "publish:win": "npm run build && node scripts/assert-ipc-handlers.mjs && electron-builder --win --publish always",
     "publish:mac": "npm run build && electron-builder --mac --publish always",
     "publish:linux": "npm run build && electron-builder --linux --publish always",
     "sync:letters": "node scripts/sync-letters-full.mjs"
