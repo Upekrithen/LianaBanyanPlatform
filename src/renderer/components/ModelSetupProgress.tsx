@@ -345,67 +345,63 @@ export function ModelSetupProgress({
         </div>
       )}
 
-      {/* Phase 3: granular 5-element progress UI */}
-      {phase === 3 && (
+      {/* Phase 2: granular 5-element progress UI (download in progress) */}
+      {phase === 2 && (
         <>
-          {/* Element 1: Sub-step indicator */}
-          <div style={S.spinnerText}>
-            {!ollamaPhase && 'Connecting...'}
-            {ollamaPhase === 'manifest' && 'Step 1 of 5: Connecting to model server'}
-            {ollamaPhase === 'downloading' &&
-              `Step 2 of 5: Downloading model${layerIndex && layerCount ? ` (layer ${layerIndex} of ${layerCount})` : ''}`}
-            {ollamaPhase === 'verifying' && 'Step 3 of 5: Verifying integrity'}
-            {ollamaPhase === 'writing' && 'Step 4 of 5: Finalizing'}
-            {(ollamaPhase === 'success' || ollamaPhase === 'complete') && 'Step 5 of 5: Complete'}
-          </div>
+          {/* Heartbeat fallback: cycling dots when no IPC events have arrived yet */}
+          {heartbeat && (
+            <div style={S.spinnerRow}>
+              <div style={S.spinner} />
+              <span style={S.heartbeatText}>
+                Downloading {displayModelLabel}{displayDots}
+              </span>
+            </div>
+          )}
 
-          {/* Element 2: Progress bar (only when total > 0 and in downloading phase) */}
-          {ollamaPhase === 'downloading' && total > 0 && (
+          {/* Element 1: Sub-step indicator */}
+          {!heartbeat && (
+            <div style={S.spinnerText}>
+              {!ollamaPhase && 'Connecting...'}
+              {ollamaPhase === 'manifest' && 'Step 1 of 5: Connecting to model server'}
+              {ollamaPhase === 'downloading' &&
+                `Step 2 of 5: Downloading model${layerIndex && layerCount ? ` (layer ${layerIndex} of ${layerCount})` : ''}`}
+              {ollamaPhase === 'verifying' && 'Step 3 of 5: Verifying integrity'}
+              {ollamaPhase === 'writing' && 'Step 4 of 5: Finalizing'}
+              {(ollamaPhase === 'success' || ollamaPhase === 'complete') && 'Step 5 of 5: Complete'}
+            </div>
+          )}
+
+          {/* Element 2: Progress bar (only when downloading with total > 0) */}
+          {!heartbeat && ollamaPhase === 'downloading' && total > 0 && (
             <div style={S.barTrack}>
               <div style={S.barFill(pct)} />
             </div>
           )}
 
           {/* Element 3 + 4: Bytes counter + ETA (only when downloading with total > 0) */}
-          {ollamaPhase === 'downloading' && total > 0 && (
+          {!heartbeat && ollamaPhase === 'downloading' && total > 0 && (
             <div style={S.barLabel}>
               {formatBytes(downloaded)} of {formatBytes(total)} —{' '}
               {calculateETA(downloaded, total, throughputSamplesRef.current, lastEventTimeRef.current)}
             </div>
           )}
 
-          {/* Spinner for non-downloading phases */}
-          {(!ollamaPhase || ollamaPhase === 'manifest' || ollamaPhase === 'verifying' || ollamaPhase === 'writing') && (
+          {/* Spinner for non-downloading phases (manifest, verifying, writing, or no phase yet) */}
+          {!heartbeat && (!ollamaPhase || ollamaPhase === 'manifest' || ollamaPhase === 'verifying' || ollamaPhase === 'writing') && (
             <div style={S.spinnerRow}>
               <div style={S.spinner} />
-              <span style={S.spinnerText}>Finalizing your setup...</span>
+              <span style={S.spinnerText}>Connecting to model repository...</span>
             </div>
           )}
         </>
       )}
 
-      {/* Phase 2: heartbeat fallback (cycling dots) */}
-      {phase === 2 && heartbeat && (
+      {/* Phase 3: brief finalizing spinner (1.4s transition to onComplete) */}
+      {phase === 3 && (
         <div style={S.spinnerRow}>
           <div style={S.spinner} />
-          <span style={S.heartbeatText}>
-            Downloading {displayModelLabel}{displayDots}
-          </span>
+          <span style={S.spinnerText}>Finalizing your setup...</span>
         </div>
-      )}
-
-      {/* Phase 2: real progress bar with GB stats */}
-      {phase === 2 && !heartbeat && (
-        <>
-          <div style={S.barTrack}>
-            <div style={S.barFill(pct)} />
-          </div>
-          <div style={S.barLabel}>
-            {total > 0
-              ? `${formatBytes(downloaded)} of ${formatBytes(total)} downloaded (${pct}%) -- estimated ${estimateTime(total - downloaded)} remaining`
-              : 'Connecting to model repository...'}
-          </div>
-        </>
       )}
     </div>
   );

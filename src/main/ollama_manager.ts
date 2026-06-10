@@ -304,6 +304,8 @@ export class OllamaManager {
     if (!(await this.isReachable())) {
       emit('starting_engine', 'Starting your private AI engine…');
       await this.init();
+    } else {
+      this.status.source = 'pre-installed';
     }
 
     if (!(await this.isReachable())) {
