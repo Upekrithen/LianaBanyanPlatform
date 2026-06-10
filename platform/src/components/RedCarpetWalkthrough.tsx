@@ -553,10 +553,14 @@ function renderSection(key: SectionKey) {
 
 interface RedCarpetWalkthroughProps {
   recipient: Recipient;
+  cardData?: Record<string, unknown> | null; // B.3: Optional dynamic card data
 }
 
-export function RedCarpetWalkthrough({ recipient }: RedCarpetWalkthroughProps) {
+export function RedCarpetWalkthrough({ recipient, cardData }: RedCarpetWalkthroughProps) {
   const sections = CATEGORY_SECTIONS[recipient.category] || ["founder_direct_line"];
+
+  // B.3: Use dynamic card data if available, otherwise use static recipient data
+  const displayData = cardData || {};
 
   return (
     <div className="space-y-0">

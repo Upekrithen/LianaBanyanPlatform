@@ -19,12 +19,12 @@ import { supabase } from '@/integrations/supabase/client';
 // ============================================================================
 
 export interface ShareClick {
-  shareId: string;
-  templateId: string;
-  sharerId: string;
-  clickerId?: string;
-  clickerGhostId?: string;
-  platform: 'tiktok' | 'facebook' | 'twitter' | 'linkedin' | 'direct' | 'other';
+  cueCardId: string; // FK to leviathan_cue_cards.id
+  clickToken?: string; // unique token for this click
+  anonymousSessionId?: string;
+  ipCountry?: string;
+  userAgentClass?: 'mobile' | 'desktop' | 'bot';
+  platform?: 'tiktok' | 'facebook' | 'twitter' | 'linkedin' | 'direct' | 'other';
 }
 
 export interface FrameLockProgress {
@@ -83,37 +83,55 @@ export function parseShareId(shareId: string): { userPrefix: string; templatePre
 /**
  * Record a click on a shared Cue Card
  * This is called when someone visits a shared link (via RedCarpet routing)
+ * Wave A schema: cue_card_share_clicks(cue_card_id, click_token, anonymous_session_id, etc.)
  */
 export async function recordClick(click: ShareClick): Promise<ClickResult> {
   try {
-    // Use the database function for atomic processing
-    const { data, error } = await supabase.rpc('process_cue_card_click', {
-      p_share_id: click.shareId,
-      p_template_id: click.templateId,
-      p_sharer_id: click.sharerId,
-      p_clicker_id: click.clickerId || null,
-      p_clicker_ghost_id: click.clickerGhostId || null,
-      p_platform: click.platform
-    });
+    // Generate a unique click token if not provided
+    const clickToken = click.clickToken || generateClickToken();
+
+    // Insert the click record
+    const { data, error } = await supabase
+      .from('cue_card_share_clicks')
+      .insert({
+        cue_card_id: click.cueCardId,
+        click_token: clickToken,
+        anonymous_session_id: click.anonymousSessionId || null,
+        ip_country: click.ipCountry || null,
+        user_agent_class: click.userAgentClass || null,
+        clicked_at: new Date().toISOString(),
+        converted: false
+      })
+      .select('id')
+      .single();
 
     if (error) {
       console.error('Error recording click:', error);
       return { success: false, error: error.message };
     }
 
-    const result = data as ClickResult;
+    // Count total clicks for this cue card
+    const { count } = await supabase
+      .from('cue_card_share_clicks')
+      .select('*', { count: 'exact', head: true })
+      .eq('cue_card_id', click.cueCardId);
 
-    // If fully unlocked, award Candle Burst reward
-    if (result.isFullyUnlocked) {
-      await awardCandleBurstReward(click.sharerId, 'social_unlock', click.templateId);
-      result.rewardEarned = true;
-    }
-
-    return result;
+    return {
+      success: true,
+      clickId: data.id,
+      totalClicks: count || 1
+    };
   } catch (err) {
     console.error('Error in recordClick:', err);
     return { success: false, error: 'Failed to record click' };
   }
+}
+
+/**
+ * Generate a unique click token
+ */
+function generateClickToken(): string {
+  return `click_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 }
 
 /**
@@ -124,7 +142,7 @@ export function recordGhostClick(click: ShareClick): void {
 
   // Check for duplicate
   const isDuplicate = ghostClicks.some((c: ShareClick) =>
-    c.shareId === click.shareId && c.clickerGhostId === click.clickerGhostId
+    c.cueCardId === click.cueCardId && c.anonymousSessionId === click.anonymousSessionId
   );
 
   if (!isDuplicate) {
@@ -207,14 +225,14 @@ export function updateGhostFrameLockProgress(deckCardId: string, clicks: number,
 // ============================================================================
 
 /**
- * Get total clicks for a user on a specific Cue Card template
+ * Get total clicks for a specific Cue Card
+ * Wave A schema: no direct sharer_id or template_id on clicks table
  */
-export async function getClickCount(sharerId: string, templateId: string): Promise<number> {
+export async function getClickCount(cueCardId: string): Promise<number> {
   const { count, error } = await supabase
     .from('cue_card_share_clicks')
     .select('*', { count: 'exact', head: true })
-    .eq('sharer_id', sharerId)
-    .eq('template_id', templateId);
+    .eq('cue_card_id', cueCardId);
 
   if (error) {
     console.error('Error getting click count:', error);
@@ -225,20 +243,33 @@ export async function getClickCount(sharerId: string, templateId: string): Promi
 }
 
 /**
- * Get click counts for all Cue Cards a user has shared
+ * Get click counts for all Cue Cards created by a user
+ * Wave A schema: must join through leviathan_cue_cards to find user's cards
  */
-export async function getAllClickCounts(sharerId: string): Promise<Record<string, number>> {
-  const { data, error } = await supabase
+export async function getAllClickCounts(creatorUserId: string): Promise<Record<string, number>> {
+  // First get all cue cards created by this user
+  const { data: cueCards, error: cardsError } = await supabase
+    .from('leviathan_cue_cards')
+    .select('id')
+    .eq('creator_user_id', creatorUserId);
+
+  if (cardsError || !cueCards) return {};
+
+  const cueCardIds = cueCards.map(card => card.id);
+  if (cueCardIds.length === 0) return {};
+
+  // Get clicks for all those cards
+  const { data: clicks, error: clicksError } = await supabase
     .from('cue_card_share_clicks')
-    .select('template_id')
-    .eq('sharer_id', sharerId);
+    .select('cue_card_id')
+    .in('cue_card_id', cueCardIds);
 
-  if (error || !data) return {};
+  if (clicksError || !clicks) return {};
 
-  // Count clicks per template
+  // Count clicks per card
   const counts: Record<string, number> = {};
-  data.forEach(click => {
-    counts[click.template_id] = (counts[click.template_id] || 0) + 1;
+  clicks.forEach(click => {
+    counts[click.cue_card_id] = (counts[click.cue_card_id] || 0) + 1;
   });
 
   return counts;

@@ -240,7 +240,7 @@ function HeraldBanner({ herald }: { herald: HeraldInfo }) {
 // ---------------------------------------------------------
 
 function ContextualContentDisplay({ context }: { context: RedCarpetContext }) {
-  const { displayMode, heraldName, projects, categorySlug, isOwnProject, trustScore } = context;
+  const { displayMode, creatorName, destinationUrl, trustScore } = context;
 
   return (
     <FadeInSection>
@@ -254,15 +254,15 @@ function ContextualContentDisplay({ context }: { context: RedCarpetContext }) {
               </div>
               <div className="flex-1">
                 <p className="text-sm text-primary font-medium mb-1">
-                  {isOwnProject ? 'Shared by' : 'Promoted by'}
+                  Shared by
                 </p>
                 <h3 className="text-2xl font-bold text-foreground">
-                  {heraldName}
+                  {creatorName}
                 </h3>
                 <p className="text-muted-foreground mt-1">
-                  {displayMode === 'single_project' && 'Showing you a specific project'}
-                  {displayMode === 'project_chooser' && `Showing you ${projects.length} projects to explore`}
-                  {displayMode === 'category_browse' && `Showing you ${categorySlug} projects`}
+                  {displayMode === 'onboard' && 'Showing you an onboarding experience'}
+                  {displayMode === 'storefront' && 'Showing you their storefront'}
+                  {displayMode === 'walkthrough' && 'Showing you a walkthrough'}
                   {displayMode === 'portfolio' && 'Showing you their full portfolio'}
                 </p>
               </div>
@@ -277,69 +277,16 @@ function ContextualContentDisplay({ context }: { context: RedCarpetContext }) {
             </CardContent>
           </Card>
 
-          {/* Project display based on mode */}
-          {displayMode === 'single_project' && projects.length > 0 && (
-            <Card>
-              <CardContent className="p-6">
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center">
-                    <Sparkles className="w-6 h-6 text-primary" />
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="text-xl font-bold text-foreground">{projects[0].name}</h4>
-                    {projects[0].description && (
-                      <p className="text-muted-foreground mt-2">{projects[0].description}</p>
-                    )}
-                    <Button className="mt-4" asChild>
-                      <a href={`/projects/${projects[0].id}`}>
-                        View Project <ArrowRight className="w-4 h-4 ml-2" />
-                      </a>
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {displayMode === 'project_chooser' && projects.length > 0 && (
-            <div className="space-y-4">
-              <h4 className="text-lg font-semibold text-foreground">
-                {heraldName} wants to show you these projects:
-              </h4>
-              <div className="grid gap-4 md:grid-cols-2">
-                {projects.map((project) => (
-                  <Card key={project.id} className="hover:border-primary/30 transition-colors cursor-pointer">
-                    <CardContent className="p-4">
-                      <h5 className="font-semibold text-foreground">{project.name}</h5>
-                      {project.description && (
-                        <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
-                          {project.description}
-                        </p>
-                      )}
-                      <Button variant="link" className="mt-2 p-0 h-auto" asChild>
-                        <a href={`/projects/${project.id}`}>
-                          Learn more <ArrowRight className="w-3 h-3 ml-1" />
-                        </a>
-                      </Button>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {displayMode === 'category_browse' && categorySlug && (
+          {/* Wave A schema: simplified destination model — just show the destination URL */}
+          {destinationUrl && (
             <Card>
               <CardContent className="p-6 text-center">
                 <h4 className="text-xl font-bold text-foreground mb-2">
-                  Explore {categorySlug.charAt(0).toUpperCase() + categorySlug.slice(1)} Projects
+                  {creatorName} wants you to see this:
                 </h4>
-                <p className="text-muted-foreground mb-4">
-                  {heraldName} is supporting projects in this category
-                </p>
-                <Button asChild>
-                  <a href={`/initiatives?category=${categorySlug}`}>
-                    Browse Category <ArrowRight className="w-4 h-4 ml-2" />
+                <Button asChild className="mt-4">
+                  <a href={destinationUrl} target="_blank" rel="noopener noreferrer">
+                    Visit Destination <ExternalLink className="w-4 h-4 ml-2" />
                   </a>
                 </Button>
               </CardContent>
@@ -573,6 +520,9 @@ export default function RedCarpet() {
   const [devCode, setDevCode] = useState<string | null>(null); // dev only
   const [domainMatched, setDomainMatched] = useState(false);
 
+  // B.3: Dynamic card data for RedCarpetWalkthrough
+  const [dynamicCardData, setDynamicCardData] = useState<Record<string, unknown> | null>(null);
+
   // --- SILENT PAGE VIEW LOGGER ---
   const logPageView = async (mode: EntryMode, recipientData?: Recipient | null, extra?: Record<string, string | null>) => {
     try {
@@ -681,9 +631,26 @@ export default function RedCarpet() {
 
     // Default: email entry mode
     setEntryMode("email");
+
+    // B.3: Load dynamic card data if cardId is present
+    const cardIdParam = searchParams.get("cardId");
+    if (cardIdParam) {
+      (async () => {
+        const { data, error } = await supabase
+          .from('leviathan_cue_cards')
+          .select('*')
+          .eq('id', cardIdParam)
+          .single();
+
+        if (data && !error) {
+          setDynamicCardData(data.payload as Record<string, unknown>);
+        }
+      })();
+    }
   }, [slug, searchParams]);
 
   // --- PROCESS CUE CARD CLICK ---
+  // Wave A schema: recordClick now expects cueCardId instead of shareId/templateId/sharerId
   const processCueCardClick = async (
     shareId: string,
     templateId: string,
@@ -691,18 +658,29 @@ export default function RedCarpet() {
     platform: string
   ) => {
     try {
+      // TODO: Wave A schema change — need to map (shareId, templateId, sharerId) to cueCardId
+      // For now, look up the cue card by template_id and creator_user_id
+      const { data: cueCard } = await supabase
+        .from('leviathan_cue_cards')
+        .select('id')
+        .eq('creator_user_id', sharerId)
+        .eq('template_id', templateId)
+        .single();
+
+      if (!cueCard) {
+        console.error('Cue card not found for template/creator');
+        loadHeraldInfo(sharerId);
+        return;
+      }
+
       // Get current user (if logged in) or generate ghost ID
       const { data: { user } } = await supabase.auth.getUser();
-      const clickerId = user?.id || null;
-      const clickerGhostId = !user ? `ghost_${Date.now()}_${Math.random().toString(36).slice(2)}` : null;
+      const anonymousSessionId = !user ? `ghost_${Date.now()}_${Math.random().toString(36).slice(2)}` : undefined;
 
       // Record the click
       const result = await recordClick({
-        shareId,
-        templateId,
-        sharerId,
-        clickerId: clickerId || undefined,
-        clickerGhostId: clickerGhostId || undefined,
+        cueCardId: cueCard.id,
+        anonymousSessionId,
         platform: platform as any
       });
 
@@ -775,33 +753,22 @@ export default function RedCarpet() {
   };
 
   // --- LOAD CONTEXTUAL CONTENT (Innovation #1355-#1362) ---
+  // Wave A schema: resolveRedCarpetContext now takes shortToken instead of heraldId+contextId
   const loadContextualContent = async (heraldId: string, contextId: string) => {
     try {
-      const context = await resolveRedCarpetContext(heraldId, contextId);
+      // TODO: Wave A schema change — need to map (heraldId, contextId) to shortToken
+      // For now, treat contextId as potentially a shortToken
+      const context = await resolveRedCarpetContext(contextId);
 
       if (context) {
         setContextualContent(context);
         setHeraldInfo({
-          memberName: context.heraldName,
+          memberName: context.creatorName,
           memberSince: "Member", // Could fetch actual date if needed
         });
 
-        // Record promotion attribution if not own project
-        if (!context.isOwnProject && context.destination?.project_ids?.length) {
-          const { data: { user } } = await supabase.auth.getUser();
-          for (const projectId of context.destination.project_ids) {
-            await recordPromotionClick(
-              heraldId,
-              projectId,
-              contextId,
-              {
-                clickerId: user?.id,
-                clickerGhostId: !user ? `ghost_${Date.now()}` : undefined,
-                clickSource: 'qr_scan',
-              }
-            );
-          }
-        }
+        // TODO: Wave A schema doesn't have project_ids on destinations
+        // Promotion attribution needs to be implemented differently
       } else {
         // Fallback to regular herald info
         loadHeraldInfo(heraldId);
@@ -1313,7 +1280,7 @@ export default function RedCarpet() {
 
           {/* --- PERSONALIZED WALKTHROUGH SECTIONS (DD-7) --- */}
           {recipient && (
-            <RedCarpetWalkthrough recipient={recipient} />
+            <RedCarpetWalkthrough recipient={recipient} cardData={dynamicCardData} />
           )}
 
           {/* --- THE LITTLE RED HEN (Press/Red Carpet Metaphor) --- */}

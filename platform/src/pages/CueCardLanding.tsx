@@ -9,9 +9,10 @@
  * 4. Tracks referral source for Credit rewards
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
+import { supabase } from '@/integrations/supabase/client';
 import {
   ArrowRight, Share2, QrCode, Calendar, Gift,
   Building2, Key, Stamp, Sparkles, ExternalLink, Palette, CheckCircle,
@@ -23,6 +24,7 @@ import { OPEN_WATER_CUE_CARDS } from '@/data/openWaterCueCards';
 import { TreasureKeyIndicator } from '@/components/TreasureKeyIndicator';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSeamlessOnboard } from '@/components/SeamlessOnboardDialog';
+import { Button } from '@/components/ui/button';
 
 interface CueCardData {
   id: string;
@@ -404,6 +406,15 @@ function GateBountyCard({ bounty }: { bounty: GateArtworkBounty }) {
 export default function CueCardLanding() {
   const { cardId } = useParams<{ cardId: string }>();
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const { openOnboard } = useSeamlessOnboard();
+  const [dynamicCard, setDynamicCard] = useState<{
+    id: string;
+    payload: Record<string, unknown>;
+    creator_user_id: string;
+    creator_display_name?: string;
+  } | null>(null);
+  const [loading, setLoading] = useState(false);
 
   // Check if this is a gate bounty card
   const gateBounty = cardId ? getGateBountyById(cardId) : null;
@@ -411,8 +422,144 @@ export default function CueCardLanding() {
     return <GateBountyCard bounty={gateBounty} />;
   }
 
-  const card = cardId ? CUE_CARDS[cardId] : null;
+  // Try to load dynamic card from database if cardId is a UUID
+  useEffect(() => {
+    if (!cardId) return;
 
+    // Check if cardId looks like a UUID (basic check)
+    const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (uuidPattern.test(cardId)) {
+      setLoading(true);
+      (async () => {
+        const { data, error } = await supabase
+          .from('leviathan_cue_cards')
+          .select('*')
+          .eq('id', cardId)
+          .single();
+
+        if (data && !error) {
+          // Fetch creator display name
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('display_name')
+            .eq('id', data.creator_user_id)
+            .single();
+
+          setDynamicCard({
+            ...data,
+            creator_display_name: profile?.display_name || 'A Liana Banyan Member',
+          });
+        }
+        setLoading(false);
+      })();
+    }
+  }, [cardId]);
+
+  // Static card from CUE_CARDS object (fallback)
+  const card = cardId && !dynamicCard ? CUE_CARDS[cardId] : null;
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+        <div className="animate-pulse text-white/60">Loading...</div>
+      </div>
+    );
+  }
+
+  // Render dynamic card if loaded
+  if (dynamicCard) {
+    const payload = dynamicCard.payload as {
+      business_name?: string;
+      owner_name?: string;
+      hook_copy?: string;
+      cover_image_url?: string;
+      contact_phone?: string;
+    };
+
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
+        <div className="max-w-4xl mx-auto px-6 py-20">
+          {/* Dynamic Card Display */}
+          <motion.div
+            initial={{ y: 30, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            className="relative p-8 rounded-3xl bg-gradient-to-br from-primary/20 to-purple-500/10 border border-primary/30 mb-8"
+          >
+            {payload.cover_image_url && (
+              <img
+                src={payload.cover_image_url}
+                alt={payload.business_name || 'Business'}
+                className="w-full h-64 object-cover rounded-2xl mb-6"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).style.display = 'none';
+                }}
+              />
+            )}
+
+            <div className="flex items-start gap-6 mb-6">
+              <div>
+                <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
+                  {payload.business_name || 'Local Business'}
+                </h1>
+                <p className="text-lg text-white/60">by {payload.owner_name || 'Business Owner'}</p>
+                <p className="text-sm text-white/50 mt-2">Shared by {dynamicCard.creator_display_name}</p>
+              </div>
+            </div>
+
+            {payload.hook_copy && (
+              <p className="text-xl text-white/80 leading-relaxed mb-8">
+                {payload.hook_copy}
+              </p>
+            )}
+
+            {payload.contact_phone && (
+              <p className="text-white/60 mb-6">📞 {payload.contact_phone}</p>
+            )}
+
+            <div className="flex flex-wrap gap-4">
+              <Button
+                onClick={() => {
+                  if (!user) {
+                    openOnboard({
+                      reason: "join and support this business",
+                      actionLabel: "Join Now",
+                      membershipIncluded: true,
+                    });
+                  } else {
+                    navigate('/membership');
+                  }
+                }}
+                className="px-6 py-3 rounded-xl bg-primary hover:bg-primary/90 text-white font-semibold flex items-center gap-2"
+              >
+                Join & Support
+                <ArrowRight className="w-4 h-4" />
+              </Button>
+            </div>
+          </motion.div>
+
+          {/* Platform overview */}
+          <motion.div
+            initial={{ y: 30, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="p-6 rounded-2xl bg-white/5 border border-white/10"
+          >
+            <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+              <Globe className="w-5 h-5 text-primary" />
+              What is Liana Banyan?
+            </h2>
+            <p className="text-white/60 mb-5 leading-relaxed">
+              A cooperative-style platform where creators keep 83.3% of everything they earn. One membership ($5/year),
+              same terms as the Founder. Build a business, launch a product, join a project — your call.
+            </p>
+          </motion.div>
+        </div>
+      </div>
+    );
+  }
+
+  // Render static card or not found
   if (!card) {
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center">

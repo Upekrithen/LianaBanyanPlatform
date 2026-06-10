@@ -5,6 +5,8 @@ import { LazyPage } from "./LazyPage";
 
 const FoodNodeCueCard = lazy(() => import("@/pages/FoodNodeCueCard"));
 const LocalBusinessNodeCueCard = lazy(() => import("@/pages/LocalBusinessNodeCueCard"));
+const FoodCueCardBuilderPage = lazy(() => import("@/pages/FoodCueCardBuilderPage"));
+const LocalBusinessCueCardBuilderPage = lazy(() => import("@/pages/LocalBusinessCueCardBuilderPage"));
 const CueCardShare = lazy(() => import("@/pages/CueCardShare"));
 const CueCardShareLanding = lazy(() => import("@/pages/CueCardShareLanding"));
 const CueCardLanding = lazy(() => import("@/pages/CueCardLanding"));
@@ -14,6 +16,7 @@ const RedCarpet = lazy(() => import("@/pages/RedCarpet"));
 const RedCarpetLandingV2Page = lazy(() => import("@/pages/RedCarpetLandingV2Page"));
 const TribeNodeCueCard = lazy(() => import("@/pages/TribeNodeCueCard"));
 const ServiceNodeCueCard = lazy(() => import("@/pages/ServiceNodeCueCard"));
+const MyAttributionsPage = lazy(() => import("@/pages/MyAttributionsPage"));
 
 export const redCarpetRoutes = (
   <>
@@ -25,6 +28,10 @@ export const redCarpetRoutes = (
     <Route path="/cue-card/share/:cardId" element={<ProtectedRoute><LazyPage><CueCardShare /></LazyPage></ProtectedRoute>} />
     <Route path="/cue-card/generate/:nodeType" element={<ProtectedRoute><LazyPage><CueCardGeneratorV2 /></LazyPage></ProtectedRoute>} />
 
+    {/* Cue Card Builders — Wave A builder pages for Red Carpet */}
+    <Route path="/cue-card/food-node/build" element={<ProtectedRoute><LazyPage><FoodCueCardBuilderPage /></LazyPage></ProtectedRoute>} />
+    <Route path="/cue-card/local-business/build" element={<ProtectedRoute><LazyPage><LocalBusinessCueCardBuilderPage /></LazyPage></ProtectedRoute>} />
+
     {/* Cue Card Landing Pages — Public access for card viewing */}
     <Route path="/cue-card/landing/:shareToken" element={<LazyPage><CueCardShareLanding /></LazyPage>} />
     <Route path="/cue-card/welcome/:cardId" element={<LazyPage><CueCardLanding /></LazyPage>} />
@@ -33,5 +40,6 @@ export const redCarpetRoutes = (
     <Route path="/red-carpet" element={<ExplorerRoute><LazyPage><RedCarpet /></LazyPage></ExplorerRoute>} />
     <Route path="/red-carpet/creator" element={<ProtectedRoute><LazyPage><CreatorRedCarpet /></LazyPage></ProtectedRoute>} />
     <Route path="/red-carpet/landing/:token" element={<LazyPage><RedCarpetLandingV2Page /></LazyPage>} />
+    <Route path="/red-carpet/my-credits" element={<ProtectedRoute><LazyPage><MyAttributionsPage /></LazyPage></ProtectedRoute>} />
   </>
 );

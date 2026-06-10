@@ -2,46 +2,61 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
-  ArrowRight, Users, Rocket, Ghost, UserPlus, Sparkles,
-  ShieldCheck, Package, Award, Globe
+  ArrowRight, Users, Sparkles, ShieldCheck, Award, Globe
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useCanonicalStats } from '@/hooks/useCanonicalStats';
 import { useAuth } from '@/contexts/AuthContext';
-import { CueCardInterestSignal } from '@/components/CueCardInterestSignal';
 
-interface ShareRecord {
+interface CueCard {
   id: string;
-  short_code: string;
-  recipient_name: string | null;
-  personal_message: string | null;
-  call_to_action: string;
-  campaign_id: string | null;
-  creator_id: string;
-  featured_project_id: string | null;
-  campaign_title?: string;
-  campaign_craft_type?: string;
+  creator_user_id: string;
+  node_type: string;
+  template_id: string;
+  payload: Record<string, unknown>;
+  short_token: string;
+  qr_code_url: string | null;
+  created_at: string;
   creator_display_name?: string;
 }
 
+// Helper functions for click tracking
+const getOrCreateAnonSessionId = (): string => {
+  let sessionId = localStorage.getItem('lb_anon_session');
+  if (!sessionId) {
+    sessionId = crypto.randomUUID();
+    localStorage.setItem('lb_anon_session', sessionId);
+  }
+  return sessionId;
+};
+
+const detectUAClass = (): string => {
+  const ua = navigator.userAgent.toLowerCase();
+  if (ua.includes('bot') || ua.includes('crawler')) return 'bot';
+  if (ua.includes('mobile')) return 'mobile';
+  return 'desktop';
+};
+
 export default function CueCardShareLanding() {
-  const { shortCode } = useParams<{ shortCode: string }>();
+  const { shareToken } = useParams<{ shareToken: string }>();
   const navigate = useNavigate();
   const stats = useCanonicalStats();
   const { user } = useAuth();
-  const [share, setShare] = useState<ShareRecord | null>(null);
+  const [card, setCard] = useState<CueCard | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [clickToken, setClickToken] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!shortCode) return;
+    if (!shareToken) return;
 
     (async () => {
+      // Fetch cue card by short_token
       const { data, error } = await supabase
-        .from('cue_card_shares' as never)
+        .from('leviathan_cue_cards')
         .select('*')
-        .eq('short_code', shortCode)
-        .single() as { data: ShareRecord | null; error: unknown };
+        .eq('short_token', shareToken)
+        .single();
 
       if (error || !data) {
         setNotFound(true);
@@ -49,43 +64,42 @@ export default function CueCardShareLanding() {
         return;
       }
 
-      // Increment view counter (fire-and-forget)
-      supabase
-        .from('cue_card_shares' as never)
-        .update({ views: (data as any).views + 1 } as never)
-        .eq('id', data.id)
-        .then();
-
-      // Fetch campaign title if linked
-      if (data.campaign_id) {
-        const { data: campaign } = await supabase
-          .from('cue_card_campaigns' as never)
-          .select('title, craft_type')
-          .eq('id', data.campaign_id)
-          .single() as { data: { title: string; craft_type: string } | null };
-        if (campaign) {
-          data.campaign_title = campaign.title;
-          data.campaign_craft_type = campaign.craft_type;
-        }
-      }
-
       // Fetch creator display name
       const { data: profile } = await supabase
-        .from('member_profiles' as never)
+        .from('profiles')
         .select('display_name')
-        .eq('id', data.creator_id)
-        .single() as { data: { display_name: string } | null };
-      if (profile) {
-        data.creator_display_name = profile.display_name;
+        .eq('id', data.creator_user_id)
+        .single();
+
+      const cardData = {
+        ...data,
+        creator_display_name: profile?.display_name || 'A Liana Banyan Member',
+      };
+
+      // Record click
+      try {
+        const { data: clickData } = await supabase.rpc('record_cue_card_click', {
+          p_card_id: data.id,
+          p_anon_session_id: getOrCreateAnonSessionId(),
+          p_ip_country: '', // Could use a geolocation service
+          p_ua_class: detectUAClass(),
+        });
+
+        if (clickData) {
+          setClickToken(clickData as string);
+          sessionStorage.setItem('cue_card_click_token', clickData as string);
+        }
+      } catch (err) {
+        console.error('Failed to record click:', err);
       }
 
-      // Persist short code in sessionStorage for attribution tracking
-      sessionStorage.setItem('cue_card_source', shortCode);
+      // Persist share token for attribution
+      sessionStorage.setItem('cue_card_source', shareToken);
 
-      setShare(data);
+      setCard(cardData);
       setLoading(false);
     })();
-  }, [shortCode]);
+  }, [shareToken]);
 
   if (loading) {
     return (
@@ -95,7 +109,7 @@ export default function CueCardShareLanding() {
     );
   }
 
-  if (notFound || !share) {
+  if (notFound || !card) {
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center">
         <div className="text-center">
@@ -109,116 +123,81 @@ export default function CueCardShareLanding() {
     );
   }
 
-  const greeting = share.recipient_name
-    ? `Hey ${share.recipient_name}!`
-    : 'Hey there!';
-  const senderLabel = share.creator_display_name || 'Someone';
+  const payload = card.payload as {
+    business_name?: string;
+    owner_name?: string;
+    hook_copy?: string;
+    cover_image_url?: string;
+    contact_phone?: string;
+  };
+  const senderLabel = card.creator_display_name || 'A Liana Banyan Member';
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
       <div className="max-w-3xl mx-auto px-6 py-16">
 
-        {/* Personal greeting card */}
+        {/* Cue Card Display */}
         <motion.div
           initial={{ y: 30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           className="p-8 rounded-3xl bg-gradient-to-br from-primary/20 to-purple-500/10 border border-primary/30 mb-8"
         >
-          <div className="text-3xl md:text-4xl font-bold text-white mb-1">{greeting}</div>
-          <div className="text-white/50 mb-6">{senderLabel} sent you this.</div>
+          <div className="text-sm text-white/50 mb-4">{senderLabel} invited you to join Liana Banyan</div>
 
-          {share.personal_message && (
-            <div className="p-5 rounded-2xl bg-white/5 border border-white/10 mb-6 relative">
-              <div className="absolute -top-3 left-4 px-2 bg-slate-900 text-white/40 text-xs">Personal Note</div>
+          {payload.cover_image_url && (
+            <img
+              src={payload.cover_image_url}
+              alt={payload.business_name || 'Business'}
+              className="w-full h-64 object-cover rounded-2xl mb-6"
+              onError={(e) => {
+                (e.target as HTMLImageElement).style.display = 'none';
+              }}
+            />
+          )}
+
+          <div className="text-3xl md:text-4xl font-bold text-white mb-2">
+            {payload.business_name || 'Local Business'}
+          </div>
+          <div className="text-xl text-white/70 mb-4">
+            by {payload.owner_name || 'Business Owner'}
+          </div>
+
+          {payload.hook_copy && (
+            <div className="p-5 rounded-2xl bg-white/5 border border-white/10 mb-6">
               <p className="text-lg text-white/80 italic leading-relaxed">
-                "{share.personal_message}"
+                "{payload.hook_copy}"
               </p>
             </div>
           )}
 
-          {share.campaign_title && (
-            <div className="p-4 rounded-xl bg-white/5 border border-white/10 mb-6 flex items-center gap-4">
-              <div className="p-2.5 rounded-lg bg-primary/20">
-                <Package className="w-6 h-6 text-primary" />
-              </div>
-              <div>
-                <div className="font-semibold text-white">{share.campaign_title}</div>
-                <div className="text-sm text-white/50">{share.campaign_craft_type}</div>
-              </div>
+          {payload.contact_phone && (
+            <div className="text-white/60">
+              📞 {payload.contact_phone}
             </div>
           )}
         </motion.div>
 
-        {share.creator_id !== user?.id && (
-          <motion.div
-            initial={{ y: 24, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.1 }}
-            className="mb-8"
-          >
-            <CueCardInterestSignal memberId={share.creator_id} />
-          </motion.div>
-        )}
-
-        {/* Journey fork */}
+        {/* Call to Action */}
         <motion.div
           initial={{ y: 30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.15 }}
           className="space-y-4 mb-10"
         >
-          <h2 className="text-xl font-semibold text-white mb-2">What would you like to do?</h2>
+          <h2 className="text-xl font-semibold text-white mb-2">Ready to learn more?</h2>
 
-          {share.campaign_id && (
-            <button
-              onClick={() => navigate(`/cue-cards/campaigns/${share.campaign_id}`)}
-              className="w-full p-5 rounded-2xl bg-white/5 border border-white/10 hover:border-primary/50 transition-all flex items-center gap-4 text-left group"
-            >
-              <div className="p-3 rounded-xl bg-primary/20 text-primary"><Users className="w-6 h-6" /></div>
-              <div className="flex-1">
-                <div className="font-semibold text-white group-hover:text-primary transition-colors">
-                  Join {senderLabel}'s Project
-                </div>
-                <div className="text-sm text-white/50">See what they're building and get involved</div>
+          <button
+            onClick={() => navigate(`/red-carpet?cardId=${card.id}&token=${shareToken}`)}
+            className="w-full p-5 rounded-2xl bg-primary/20 border border-primary/30 hover:border-primary/50 transition-all flex items-center gap-4 text-left group"
+          >
+            <div className="p-3 rounded-xl bg-primary/30 text-primary"><Sparkles className="w-6 h-6" /></div>
+            <div className="flex-1">
+              <div className="font-semibold text-white group-hover:text-primary transition-colors">
+                Walk through this with me
               </div>
-              <ArrowRight className="w-5 h-5 text-white/30 group-hover:text-primary transition-colors" />
-            </button>
-          )}
-
-          <button
-            onClick={() => navigate('/cue-cards/campaigns')}
-            className="w-full p-5 rounded-2xl bg-white/5 border border-white/10 hover:border-emerald-500/50 transition-all flex items-center gap-4 text-left group"
-          >
-            <div className="p-3 rounded-xl bg-emerald-500/20 text-emerald-400"><Rocket className="w-6 h-6" /></div>
-            <div className="flex-1">
-              <div className="font-semibold text-white group-hover:text-emerald-400 transition-colors">Start Your Own Project</div>
-              <div className="text-sm text-white/50">Browse Turn-Key campaigns and launch something new</div>
+              <div className="text-sm text-white/50">See how {payload.business_name} can thrive on Liana Banyan</div>
             </div>
-            <ArrowRight className="w-5 h-5 text-white/30 group-hover:text-emerald-400 transition-colors" />
-          </button>
-
-          <button
-            onClick={() => navigate('/')}
-            className="w-full p-5 rounded-2xl bg-white/5 border border-white/10 hover:border-violet-500/50 transition-all flex items-center gap-4 text-left group"
-          >
-            <div className="p-3 rounded-xl bg-violet-500/20 text-violet-400"><Ghost className="w-6 h-6" /></div>
-            <div className="flex-1">
-              <div className="font-semibold text-white group-hover:text-violet-400 transition-colors">Explore First</div>
-              <div className="text-sm text-white/50">Browse freely as a guest — no signup required</div>
-            </div>
-            <ArrowRight className="w-5 h-5 text-white/30 group-hover:text-violet-400 transition-colors" />
-          </button>
-
-          <button
-            onClick={() => navigate('/membership')}
-            className="w-full p-5 rounded-2xl bg-white/5 border border-white/10 hover:border-amber-500/50 transition-all flex items-center gap-4 text-left group"
-          >
-            <div className="p-3 rounded-xl bg-amber-500/20 text-amber-400"><UserPlus className="w-6 h-6" /></div>
-            <div className="flex-1">
-              <div className="font-semibold text-white group-hover:text-amber-400 transition-colors">Sign Up — $5/year</div>
-              <div className="text-sm text-white/50">Full membership access to the cooperative</div>
-            </div>
-            <ArrowRight className="w-5 h-5 text-white/30 group-hover:text-amber-400 transition-colors" />
+            <ArrowRight className="w-5 h-5 text-white/30 group-hover:text-primary transition-colors" />
           </button>
         </motion.div>
 
