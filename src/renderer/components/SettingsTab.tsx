@@ -1,15 +1,16 @@
 // SettingsTab -- Mnemosyne CAI Amplifier Settings
 // Tab 4 (always visible) -- BP047 W1
-// Sections: Update - Appearance - AI Model Assignment - Mnem Retrieval (Mnem-DRT) - AI Tier - Substrate - Developer Mode - My Contribution
-// Auto-updater is top-priority item (Founder direct)
+// SEG-R-2/3/4/5/6/7/12: restructured -- new top-level cards, AI Power Tier, Memory Depth Tier, Advanced collapsible
+// Order: App Version | AI Capability | Cooperative Membership | AI Power Tier (+ model assign) | Memory Depth Tier | Advanced | Appearance | Substrate | Developer | Research | Contribution | Folders | Grand Projects
 // KniPr034: My Contribution panel added -- read-only scaffold, data binding next wave
 // BP077 v0.1.27: Mnem-DRT panel added (MnemosyneC Mnem-as-interface)
-// BP078: SkuUpgradePanel wired into AI Tier section
+// BP078: SkuUpgradePanel wired into AI Power Tier section
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import type { AuthState } from '../amplify.d';
 import { LocFaqModal } from './LocFaqPanel';
 import { SkuUpgradePanel } from './SkuUpgradePanel';
+import { useLifecycleStage } from '../hooks/useLifecycleStage';
 
 interface SettingsTabProps {
   authState: AuthState | null;
@@ -169,7 +170,7 @@ function ChronosResearchPanel() {
               Chronos Research
             </div>
             <div style={cs.desc}>
-              Chronos Research lets your Mnemosyne help everyone — anonymously. You keep control. The cooperative gets smarter.{' '}
+              Chronos Research lets your MnemosyneC help everyone — anonymously. You keep control. The cooperative gets smarter.{' '}
               <button onClick={() => setShowModal(true)} style={{ ...cs.learnMoreBtn, display: 'inline' }}>
                 [Learn more]
               </button>
@@ -971,9 +972,9 @@ function MnemDrtPanel() {
 
   return (
     <section style={s.section}>
-      <div style={s.sectionHeader}>🧠 Mnem Retrieval (Mnem-DRT)</div>
+      <div style={s.sectionHeader}>🧠 Memory Depth Tier</div>
 
-      {/* SEG-UX-3: disambiguation sentence -- Mnem-DRT install type, not AI model tier */}
+      {/* Disambiguation: Mnem-DRT install type, not AI model tier */}
       <div style={{ fontSize: 9, color: '#475569', marginBottom: 6, lineHeight: 1.5 }}>
         Mnem-DRT retrieval install type. Sets corpus depth and specialist count.
       </div>
@@ -1191,8 +1192,16 @@ export function SettingsTab({
   const [searchQuery, setSearchQuery] = useState('');
   const [searchOpen, setSearchOpen] = useState(false);
 
-  // SEG-Q-13 BP078: diagnostic log path display
+  // SEG-R-5: Advanced collapsible -- resets to collapsed on every reload
+  const [advancedOpen, setAdvancedOpen] = useState(false);
+
+  // SEG-S-1: lifecycle stage hook (foundation for welcome tour, onboarding gates)
+  const { resetToWelcome } = useLifecycleStage();
+
+  // SEG-Q-13 BP078 / SEG-R-13: diagnostic state
   const [diagLogPath, setDiagLogPath] = React.useState<string | null>(null);
+  const [diagRunning, setDiagRunning] = React.useState(false);
+  const [diagError, setDiagError] = React.useState<string | null>(null);
 
   // Section refs for scroll-to-anchor
   const sectionRefs = useRef<Map<string, HTMLElement>>(new Map());
@@ -1311,20 +1320,22 @@ export function SettingsTab({
 
   const s = styles;
 
-  // SEG-UX-4: section header search data
+  // Section header search data (SEG-R-4, SEG-R-6 renames applied)
   const SECTION_HEADERS = [
-    { key: 'update',      label: 'MnemosyneC Update',         keywords: ['update', 'version', 'download', 'install'] },
-    { key: 'appearance',  label: 'Appearance',                 keywords: ['appearance', 'theme', 'dark', 'light'] },
-    { key: 'ai-model',    label: 'AI Model Assignment',        keywords: ['ai model', 'ollama', 'bishop', 'knight', 'pawn', 'rook'] },
-    { key: 'mnem-drt',    label: 'Mnem Retrieval (Mnem-DRT)',  keywords: ['mnem', 'drt', 'retrieval', 'specialist', 'wikipedia', 'wikidata', 'arxiv', 'wolfram'] },
-    { key: 'ai-tier',     label: 'AI Tier',                    keywords: ['ai tier', 'gemma', 'model', 'full', 'nano', 'upgrade', 'sku'] },
-    { key: 'substrate',   label: 'Substrate Mode',             keywords: ['substrate', 'mode', 'burst', 'normal', 'fallback'] },
-    { key: 'developer',   label: 'Developer Mode',             keywords: ['developer', 'dev mode', 'devmode'] },
-    { key: 'for-techies', label: 'For Techies',                keywords: ['devtools', 'developer tools', 'debugging', 'remote-debugging', 'techies', 'inspect'] },
-    { key: 'research',    label: 'Research Participation',     keywords: ['chronos', 'research', 'consent'] },
-    { key: 'contribution', label: 'My Contribution',           keywords: ['contribution', 'marks', 'stamps'] },
-    { key: 'grand-projects', label: 'Grand Projects',          keywords: ['grand projects', 'project'] },
-    { key: 'substrate-folders', label: 'Substrate Folders',   keywords: ['folders', 'index', 'watcher'] },
+    { key: 'update',         label: 'App Version',            keywords: ['update', 'version', 'download', 'install', 'app version'] },
+    { key: 'ai-capability',  label: 'AI Capability',          keywords: ['ai capability', 'activate full', 'upgrade', 'tier'] },
+    { key: 'membership',     label: 'Cooperative Membership', keywords: ['membership', 'cooperative', '$5', 'mirror clause', 'incentive'] },
+    { key: 'ai-tier',        label: 'AI Power Tier',          keywords: ['ai power tier', 'ai tier', 'gemma', 'model', 'full', 'nano', 'upgrade', 'sku'] },
+    { key: 'ai-model',       label: 'AI Model Assignment',    keywords: ['ai model', 'ollama', 'bishop', 'knight', 'pawn', 'rook', 'orchestrator', 'builder', 'researcher', 'primary assistant'] },
+    { key: 'mnem-drt',       label: 'Memory Depth Tier',      keywords: ['mnem', 'drt', 'retrieval', 'specialist', 'wikipedia', 'wikidata', 'arxiv', 'wolfram', 'memory depth'] },
+    { key: 'advanced',       label: 'Advanced',               keywords: ['devtools', 'developer tools', 'debugging', 'remote-debugging', 'advanced', 'inspect', 'diagnostic'] },
+    { key: 'appearance',     label: 'Appearance',             keywords: ['appearance', 'theme', 'dark', 'light'] },
+    { key: 'substrate',      label: 'Substrate Mode',         keywords: ['substrate', 'mode', 'burst', 'normal', 'fallback'] },
+    { key: 'developer',      label: 'Developer Mode',         keywords: ['developer', 'dev mode', 'devmode'] },
+    { key: 'research',       label: 'Research Participation', keywords: ['chronos', 'research', 'consent'] },
+    { key: 'contribution',   label: 'My Contribution',        keywords: ['contribution', 'marks', 'stamps'] },
+    { key: 'grand-projects', label: 'Grand Projects',         keywords: ['grand projects', 'project'] },
+    { key: 'substrate-folders', label: 'Substrate Folders',  keywords: ['folders', 'index', 'watcher'] },
   ];
 
   const searchResults = searchQuery.trim().length > 0
@@ -1357,7 +1368,7 @@ export function SettingsTab({
       <div style={{ position: 'relative', marginBottom: 12 }}>
         <input
           type="search"
-          placeholder="Search settings... (e.g. AI Tier, Gemma, retrieval)"
+          placeholder="Search settings... (e.g. AI Power Tier, retrieval)"
           value={searchQuery}
           onChange={(e) => { setSearchQuery(e.target.value); setSearchOpen(true); }}
           onFocus={() => setSearchOpen(true)}
@@ -1422,15 +1433,28 @@ export function SettingsTab({
         )}
       </div>
 
-      {/* ── Section 1: MNEMOSYNE UPDATE ─────────────────────────────────── */}
-      {/* G.2 KniPr011: state machine -- NO_UPDATE→hidden; AVAILABLE→active; DOWNLOADING→progress; DOWNLOADED→"Restart to update" */}
+      {/* Disambiguator -- shown once above the three goal cards (SEG-R-2) */}
+      <div style={{
+        fontSize: 9,
+        color: '#475569',
+        marginBottom: 10,
+        lineHeight: 1.6,
+        padding: '5px 10px',
+        background: 'rgba(100,116,139,0.05)',
+        borderRadius: 6,
+        border: '1px solid rgba(100,116,139,0.1)',
+      }}>
+        App updates change software. AI upgrades add model capability. Membership supports cooperative benefits.
+      </div>
+
+      {/* Card 1: App Version (SEG-R-2) -- G.2 KniPr011 state machine preserved */}
       <section ref={setSectionRef('update') as React.RefCallback<HTMLElement>} style={s.section} id="settings-section-update">
-        <div style={s.sectionHeader}>MnemosyneC Update</div>
+        <div style={s.sectionHeader}>App Version</div>
         <div style={s.card}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 }}>
             <div>
-              <div style={s.label}>Current strain</div>
-              <div style={s.value}>{updateStatus.currentVersion || liveUpdateState?.version || '—'}</div>
+              <div style={s.label}>Current version</div>
+              <div style={s.value}>{updateStatus.currentVersion || liveUpdateState?.version || '\u2014'}</div>
             </div>
             {liveUpdateState?.status === 'available' && liveUpdateState.version && (
               <div>
@@ -1438,22 +1462,21 @@ export function SettingsTab({
                 <div style={{ ...s.value, color: '#6ee7b7' }}>{liveUpdateState.version}</div>
               </div>
             )}
-            {/* Install button — only visible when there is meaningful state to act on */}
             {(!liveUpdateState || liveUpdateState.status === 'idle' || liveUpdateState.status === 'not-available' || liveUpdateState.status === 'error') && (
               <button
                 onClick={handleCheckForUpdate}
                 disabled={updateStatus.checking}
                 style={{ ...s.btn, opacity: updateStatus.checking ? 0.6 : 1 }}
               >
-                {updateStatus.checking ? 'Checking…' : 'Check for update'}
+                {updateStatus.checking ? 'Checking...' : 'Check for Updates'}
               </button>
             )}
             {liveUpdateState?.status === 'checking' && (
-              <button disabled style={{ ...s.btn, opacity: 0.5 }}>Checking…</button>
+              <button disabled style={{ ...s.btn, opacity: 0.5 }}>Checking...</button>
             )}
             {liveUpdateState?.status === 'downloading' && (
               <div style={{ fontSize: 10, color: '#6ee7b7' }}>
-                Downloading… {liveUpdateState.downloadProgress ?? 0}%
+                Downloading... {liveUpdateState.downloadProgress ?? 0}%
               </div>
             )}
             {liveUpdateState?.status === 'downloaded' && (
@@ -1461,12 +1484,10 @@ export function SettingsTab({
                 onClick={() => window.amplify?.installUpdate?.()}
                 style={{ ...s.btn, background: 'rgba(34,197,94,0.15)', borderColor: 'rgba(34,197,94,0.4)', color: '#22c55e', fontWeight: 700 }}
               >
-                Restart to update →
+                Restart to update
               </button>
             )}
           </div>
-
-          {/* Progress bar for downloading state */}
           {liveUpdateState?.status === 'downloading' && (
             <div style={{ marginTop: 8, height: 4, background: 'rgba(100,116,139,0.2)', borderRadius: 2, overflow: 'hidden' }}>
               <div style={{
@@ -1478,94 +1499,95 @@ export function SettingsTab({
               }} />
             </div>
           )}
-
           {liveUpdateState?.status === 'not-available' && (
-            <div style={s.successMsg}>✓ You're on the latest strain</div>
+            <div style={s.successMsg}>You are on the latest version</div>
           )}
           {(!liveUpdateState || liveUpdateState.status === 'idle') && updateStatus.upToDate === true && (
-            <div style={s.successMsg}>✓ You're on the latest strain</div>
+            <div style={s.successMsg}>You are on the latest version</div>
           )}
           {updateStatus.error && (
             <div style={{ fontSize: 10, color: '#f87171', marginTop: 6 }}>{updateStatus.error}</div>
           )}
-
-          {/* 1D-FIX: Auto-install on quit toggle */}
           <AutoInstallToggle />
         </div>
       </section>
 
-      {/* ── Section 2: APPEARANCE ────────────────────────────────────────── */}
-      <section ref={setSectionRef('appearance') as React.RefCallback<HTMLElement>} style={s.section} id="settings-section-appearance">
-        <div style={s.sectionHeader}>Appearance</div>
-        <div style={s.card}>
-          <div style={s.label}>Theme</div>
-          <div style={s.toggleRow}>
-            {THEME_OPTIONS.map((t) => (
-              <button
-                key={t.id}
-                onClick={() => handleThemeChange(t.id)}
-                style={{
-                  ...s.chip,
-                  ...(theme === t.id ? s.chipActive : {}),
-                }}
-              >
-                {t.icon} {t.label}
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Section 3: AI MODEL ASSIGNMENT ──────────────────────────────── */}
-      <section ref={setSectionRef('ai-model') as React.RefCallback<HTMLElement>} style={s.section} id="settings-section-ai-model">
-        <div style={s.sectionHeader}>AI Model Assignment</div>
-        <div style={s.note}>
-          FREE AI: Ollama (onboard by default) — no cloud account, no API key, no cost
-        </div>
-        {(['bishop', 'knight', 'pawn', 'rook'] as const).map((piece) => (
-          <div key={piece} style={{ ...s.card, marginBottom: 6 }}>
-            <div style={s.label}>
-              {piece === 'bishop' ? '✍️ Bishop' : piece === 'knight' ? '♞ Knight' : piece === 'pawn' ? '♟ Pawn' : '♜ Rook'}
-            </div>
-            <div style={s.toggleRow}>
-              {MODEL_OPTIONS.map((m) => (
-                <button
-                  key={m.id}
-                  onClick={() => handleModelChange(piece, m.id)}
-                  style={{
-                    ...s.chip,
-                    ...(pieceModels[piece] === m.id ? s.chipActive : {}),
-                  }}
-                  title={m.desc}
-                >
-                  {m.label}
-                </button>
-              ))}
-            </div>
-          </div>
-        ))}
-      </section>
-
-      {/* ── Section 3b: MNEM RETRIEVAL (Mnem-DRT) -- BP077 v0.1.27 ─────── */}
-      <div
-        ref={setSectionRef('mnem-drt') as React.RefCallback<HTMLDivElement>}
-        id="settings-section-mnem-drt"
+      {/* Card 2: AI Capability (SEG-R-2) */}
+      <section
+        ref={setSectionRef('ai-capability') as React.RefCallback<HTMLElement>}
+        style={s.section}
+        id="settings-section-ai-capability"
       >
-        <MnemDrtPanel />
-      </div>
+        <div style={s.sectionHeader}>AI Capability</div>
+        <div style={s.card}>
+          {currentSkuTier && (
+            <div style={{ marginBottom: 8 }}>
+              <div style={s.label}>Current AI Power Tier</div>
+              <div style={{
+                fontSize: 13,
+                fontWeight: 700,
+                color: currentSkuTier === 'full' ? '#4ade80' : '#94a3b8',
+                marginTop: 2,
+              }}>
+                {currentSkuTier.toUpperCase()}
+                {currentSkuTier === 'full' && (
+                  <span style={{ fontSize: 10, fontWeight: 400, marginLeft: 6, color: '#6ee7b7' }}>
+                    Gemma 4 12B
+                  </span>
+                )}
+              </div>
+            </div>
+          )}
+          <div style={{ fontSize: 10, color: '#64748b', marginBottom: 10, lineHeight: 1.5 }}>
+            Upgrade to FULL for maximum reasoning power
+          </div>
+          <button
+            disabled={currentSkuTier === 'full'}
+            onClick={() => {
+              const el = sectionRefs.current.get('ai-tier');
+              if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }}
+            style={{
+              ...s.btn,
+              background: currentSkuTier === 'full' ? 'rgba(74,222,128,0.08)' : 'rgba(110,231,183,0.1)',
+              borderColor: currentSkuTier === 'full' ? 'rgba(74,222,128,0.3)' : 'rgba(110,231,183,0.3)',
+              color: currentSkuTier === 'full' ? '#4ade80' : '#6ee7b7',
+              opacity: currentSkuTier === 'full' ? 0.7 : 1,
+            }}
+          >
+            {currentSkuTier === 'full' ? 'FULL active' : 'Activate FULL'}
+          </button>
+          {/* TODO: wire Activate FULL to activation flow when built */}
+        </div>
+      </section>
 
-      {/* ── Section 3c: AI TIER (BP078) ──────────────────────────────────── */}
+      {/* Card 3: Cooperative Membership (SEG-R-2) */}
+      <section style={s.section} id="settings-section-membership">
+        <div style={s.sectionHeader}>Cooperative Membership</div>
+        <div style={s.card}>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 6 }}>
+            <span style={{ fontSize: 18, fontWeight: 700, color: '#6ee7b7' }}>$5</span>
+            <span style={{ fontSize: 10, color: '#64748b' }}>/year</span>
+          </div>
+          <div style={{ fontSize: 10, color: '#94a3b8', marginBottom: 6, lineHeight: 1.5 }}>
+            Mirror Clause + Incentive to Hire benefits
+          </div>
+          <div style={{ fontSize: 9, color: '#64748b', lineHeight: 1.5 }}>
+            Earn and spend within the cooperative
+          </div>
+        </div>
+      </section>
+
+      {/* AI Power Tier -- includes model assignment (SEG-R-4, SEG-R-3, SEG-R-5) */}
       <section
         ref={setSectionRef('ai-tier') as React.RefCallback<HTMLElement>}
         style={s.section}
         id="settings-section-ai-tier"
       >
-        <div style={s.sectionHeader}>AI Tier</div>
-        {/* SEG-UX-3: disambiguation sentence above SkuUpgradePanel SKU selector */}
+        <div style={s.sectionHeader}>AI Power Tier</div>
         <div style={{ fontSize: 10, color: '#475569', marginBottom: 6, lineHeight: 1.5 }}>
           AI model tier. Sets the local model used for answers.
         </div>
-        {/* SEG-UX-3: persistent current-tier text -- visible to ALL users (NANO and FULL) */}
         {currentSkuTier && (
           <p style={{
             fontSize: 11,
@@ -1587,12 +1609,263 @@ export function SettingsTab({
           </p>
         )}
         <SkuUpgradePanel analytics={undefined} />
+
+        {/* AI Model Assignment subsection (SEG-R-3) */}
+        <div style={{ ...s.sectionHeader, marginTop: 14, marginBottom: 6 }}>AI Model Assignment</div>
+        <div style={s.note}>
+          FREE AI: Ollama (onboard by default) -- no cloud account, no API key, no cost
+        </div>
+        <div ref={setSectionRef('ai-model') as React.RefCallback<HTMLDivElement>} id="settings-section-ai-model">
+          {([
+            {
+              piece: 'pawn' as keyof PieceModels,
+              functional: 'Primary Assistant',
+              canon: 'Pawn',
+              job: 'Handles everyday chat and quick questions.',
+              recommended: true,
+            },
+            {
+              piece: 'bishop' as keyof PieceModels,
+              functional: 'Orchestrator',
+              canon: 'Bishop',
+              job: 'Foreman -- plans the work and manages agents.',
+              recommended: false,
+            },
+            {
+              piece: 'knight' as keyof PieceModels,
+              functional: 'Builder',
+              canon: 'Knight',
+              job: 'Writes code and ships releases.',
+              recommended: false,
+            },
+            {
+              piece: 'rook' as keyof PieceModels,
+              functional: 'Researcher',
+              canon: 'Rook',
+              job: 'Deep architecture reviews. Currently paused.',
+              recommended: false,
+            },
+          ]).map(({ piece, functional, canon, job, recommended }) => (
+            <div key={piece} style={{ ...s.card, marginBottom: 6, position: 'relative' as const }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+                <div style={{ ...s.label, marginBottom: 0 }} title={job}>
+                  {functional} ({canon})
+                </div>
+                {recommended && (
+                  <span style={{
+                    fontSize: 8,
+                    fontWeight: 700,
+                    color: '#6ee7b7',
+                    background: 'rgba(110,231,183,0.12)',
+                    border: '1px solid rgba(110,231,183,0.3)',
+                    borderRadius: 4,
+                    padding: '1px 5px',
+                    letterSpacing: '0.03em',
+                  }}>
+                    Recommended
+                  </span>
+                )}
+              </div>
+              <div style={{ fontSize: 9, color: '#475569', marginBottom: 6, lineHeight: 1.4 }}>{job}</div>
+              <div style={s.toggleRow}>
+                {MODEL_OPTIONS.map((m) => (
+                  <button
+                    key={m.id}
+                    onClick={() => handleModelChange(piece, m.id)}
+                    style={{
+                      ...s.chip,
+                      ...(pieceModels[piece] === m.id ? s.chipActive : {}),
+                    }}
+                    title={m.desc}
+                  >
+                    {m.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
       </section>
 
-      {/* ── Section 3b: AUTO-PREPARE FULL UPGRADE (SEG-Q-4 BP078) ─────────── */}
+      {/* Memory Depth Tier (SEG-R-4, SEG-R-5) */}
+      <div
+        ref={setSectionRef('mnem-drt') as React.RefCallback<HTMLDivElement>}
+        id="settings-section-mnem-drt"
+      >
+        <MnemDrtPanel />
+      </div>
+
+      {/* Advanced collapsible -- collapsed by default (SEG-R-5, SEG-R-6, SEG-R-7) */}
+      <section style={s.section} id="settings-section-advanced">
+        <button
+          onClick={() => setAdvancedOpen((o) => !o)}
+          aria-expanded={advancedOpen}
+          aria-controls="advanced-panel-content"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 6,
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            padding: '0 0 6px',
+            width: '100%',
+            textAlign: 'left' as const,
+          }}
+        >
+          <span style={{ ...s.sectionHeader, marginBottom: 0 }}>Advanced</span>
+          <span style={{ fontSize: 10, color: '#475569', marginLeft: 'auto' }}>
+            {advancedOpen ? '\u25b2' : '\u25bc'}
+          </span>
+        </button>
+        {advancedOpen && (
+          <div id="advanced-panel-content">
+            <div style={s.card}>
+              <div style={{ marginBottom: 12 }}>
+                <div style={s.label}>Developer Tools</div>
+                <div style={{ fontSize: 9, color: '#475569', marginTop: 2, marginBottom: 8 }}>
+                  Open the Chromium DevTools panel for this window. Keyboard shortcut: Ctrl+Shift+D (may conflict on some machines). Right-click the window title bar and choose &quot;Toggle Developer Tools&quot;. Power-user path: launch with <code style={{ fontSize: 9, color: '#94a3b8', fontFamily: 'monospace' }}>--remote-debugging-port=9222</code> and connect via Chrome at <code style={{ fontSize: 9, color: '#94a3b8', fontFamily: 'monospace' }}>chrome://inspect</code>.
+                </div>
+                <button
+                  onClick={() => window.amplify?.toggleDevTools?.()}
+                  style={{
+                    ...s.btn,
+                    background: 'rgba(148,163,184,0.08)',
+                    borderColor: 'rgba(148,163,184,0.25)',
+                    color: '#94a3b8',
+                  }}
+                >
+                  Toggle DevTools
+                </button>
+              </div>
+              <div style={{ marginTop: 12, borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: 12 }}>
+                <div style={s.label}>Diagnostic Log</div>
+                <div style={{ fontSize: 9, color: '#475569', marginTop: 2, marginBottom: 8 }}>
+                  Runs a probe of app state (Ollama, SKU tier, disk, windows) and writes a log file to your userData folder. Share with Bishop or Knight for debugging. No DevTools required.
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' as const }}>
+                  <button
+                    disabled={diagRunning}
+                    onClick={async () => {
+                      setDiagRunning(true);
+                      setDiagError(null);
+                      setDiagLogPath(null);
+                      try {
+                        const result = await window.amplify?.runDiagnostic?.();
+                        if (result?.ok) {
+                          setDiagLogPath(result.logPath);
+                        } else {
+                          setDiagError('Diagnostic returned no result. Check main process log.');
+                        }
+                      } catch (err) {
+                        setDiagError(err instanceof Error ? err.message : String(err));
+                      } finally {
+                        setDiagRunning(false);
+                      }
+                    }}
+                    style={{
+                      ...s.btn,
+                      background: diagRunning ? 'rgba(148,163,184,0.04)' : 'rgba(148,163,184,0.08)',
+                      borderColor: 'rgba(148,163,184,0.25)',
+                      color: diagRunning ? '#475569' : '#94a3b8',
+                      cursor: diagRunning ? 'not-allowed' : 'pointer',
+                      opacity: diagRunning ? 0.6 : 1,
+                    }}
+                  >
+                    {diagRunning ? 'Running diagnostic...' : 'Run Diagnostic'}
+                  </button>
+                  {diagError && (
+                    <button
+                      onClick={() => {
+                        setDiagError(null);
+                        setDiagLogPath(null);
+                      }}
+                      style={{
+                        ...s.btn,
+                        background: 'rgba(239,68,68,0.08)',
+                        borderColor: 'rgba(239,68,68,0.3)',
+                        color: '#f87171',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      Retry
+                    </button>
+                  )}
+                </div>
+                {diagLogPath && (
+                  <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column' as const, gap: 4 }}>
+                    <div style={{ fontSize: 9, color: '#6ee7b7' }}>
+                      Log saved to: {diagLogPath}
+                    </div>
+                    <button
+                      onClick={() => window.amplify?.openDiagFolder?.(diagLogPath)}
+                      style={{
+                        ...s.btn,
+                        alignSelf: 'flex-start',
+                        background: 'rgba(110,231,183,0.08)',
+                        borderColor: 'rgba(110,231,183,0.25)',
+                        color: '#6ee7b7',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      Open log folder
+                    </button>
+                  </div>
+                )}
+                {diagError && !diagRunning && (
+                  <div style={{ marginTop: 6, fontSize: 9, color: '#f87171' }}>
+                    Error: {diagError}
+                  </div>
+                )}
+              </div>
+              <div style={{ marginTop: 12, borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: 12 }}>
+                <div style={s.label}>Welcome Tour</div>
+                <div style={{ fontSize: 9, color: '#475569', marginTop: 2, marginBottom: 8 }}>
+                  Returns to the welcome screen. Your AI settings and memory are preserved.
+                </div>
+                <button
+                  onClick={resetToWelcome}
+                  style={{
+                    ...s.btn,
+                    background: 'rgba(248,113,113,0.08)',
+                    borderColor: 'rgba(248,113,113,0.25)',
+                    color: '#f87171',
+                  }}
+                >
+                  Reset to Welcome Tour
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </section>
+
+      {/* Appearance */}
+      <section ref={setSectionRef('appearance') as React.RefCallback<HTMLElement>} style={s.section} id="settings-section-appearance">
+        <div style={s.sectionHeader}>Appearance</div>
+        <div style={s.card}>
+          <div style={s.label}>Theme</div>
+          <div style={s.toggleRow}>
+            {THEME_OPTIONS.map((t) => (
+              <button
+                key={t.id}
+                onClick={() => handleThemeChange(t.id)}
+                style={{
+                  ...s.chip,
+                  ...(theme === t.id ? s.chipActive : {}),
+                }}
+              >
+                {t.icon} {t.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Auto-Prepare FULL Upgrade */}
       <AutoPreparePullPanel />
 
-      {/* ── Section 4: SUBSTRATE MODE ────────────────────────────────────── */}
+      {/* Substrate Mode */}
       <section ref={setSectionRef('substrate') as React.RefCallback<HTMLElement>} style={s.section} id="settings-section-substrate">
         <div style={s.sectionHeader}>Substrate Mode</div>
         <div style={s.card}>
@@ -1637,7 +1910,7 @@ export function SettingsTab({
               <div>
                 <div style={s.label}>Cooperative Defensive Patent Pledge #2260</div>
                 <div style={{ fontSize: 9, color: '#475569', marginTop: 2 }}>
-                  {devEnabled ? 'Developer mode active · submit variants · fork strains · SEG controls' : 'Requires membership + Pledge #2260 agreement'}
+                  {devEnabled ? 'Developer mode active -- submit variants -- fork strains -- SEG controls' : 'Requires membership + Pledge #2260 agreement'}
                 </div>
               </div>
               <button
@@ -1654,73 +1927,18 @@ export function SettingsTab({
         </section>
       )}
 
-      {/* ── Section 6: RESEARCH PARTICIPATION (KniPr038) ─────────────────── */}
+      {/* Research Participation */}
       <ChronosResearchPanel />
 
-      {/* ── Section 5b: FOR TECHIES (SEG-Q-3 BP078) ─────────────────────── */}
-      <section style={s.section} id="settings-section-for-techies">
-        <div style={s.sectionHeader}>🔧 For Techies</div>
-        <div style={s.card}>
-          <div style={{ marginBottom: 12 }}>
-            <div style={s.label}>Developer Tools</div>
-            <div style={{ fontSize: 9, color: '#475569', marginTop: 2, marginBottom: 8 }}>
-              Open the Chromium DevTools panel for this window. Keyboard shortcut: Ctrl+Shift+D (may conflict on some machines). You can also right-click the window title bar and choose &quot;Toggle Developer Tools&quot;. Power-user path: launch with <code style={{ fontSize: 9, color: '#94a3b8', fontFamily: 'monospace' }}>--remote-debugging-port=9222</code> and connect via Chrome at <code style={{ fontSize: 9, color: '#94a3b8', fontFamily: 'monospace' }}>chrome://inspect</code>.
-            </div>
-            <button
-              onClick={() => window.amplify?.toggleDevTools?.()}
-              style={{
-                ...s.btn,
-                background: 'rgba(148,163,184,0.08)',
-                borderColor: 'rgba(148,163,184,0.25)',
-                color: '#94a3b8',
-              }}
-            >
-              Toggle DevTools
-            </button>
-          </div>
-          <div style={{ marginTop: 12, borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: 12 }}>
-            <div style={s.label}>Diagnostic Log</div>
-            <div style={{ fontSize: 9, color: '#475569', marginTop: 2, marginBottom: 8 }}>
-              Runs a probe of app state (Ollama, SKU tier, disk, windows) and writes a log file to your userData folder. Share with Bishop or Knight for debugging. No DevTools required.
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' as const }}>
-              <button
-                onClick={async () => {
-                  try {
-                    const result = await window.amplify?.runDiagnostic?.();
-                    if (result?.ok) {
-                      setDiagLogPath(result.logPath);
-                    }
-                  } catch { /* non-fatal */ }
-                }}
-                style={{
-                  ...s.btn,
-                  background: 'rgba(148,163,184,0.08)',
-                  borderColor: 'rgba(148,163,184,0.25)',
-                  color: '#94a3b8',
-                }}
-              >
-                Run Diagnostic
-              </button>
-              {diagLogPath && (
-                <div style={{ fontSize: 9, color: '#6ee7b7', wordBreak: 'break-all' as const }}>
-                  Written: {diagLogPath}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Section 7: MY CONTRIBUTION ───────────────────────────────────── */}
+      {/* My Contribution */}
       <MyContributionPanel />
 
-      {/* ── Section 8a: MANAGED FOLDERS (Phase 2D) ───────────────────────── */}
+      {/* Managed Folders */}
       <FolderManagerPanel />
 
-      {/* ── Section 8: GRAND PROJECTS (KniPr022) ────────────────────────── */}
-      <section style={s.section}>
-        <div style={s.sectionHeader}>🏛️ Grand Projects</div>
+      {/* Grand Projects */}
+      <section ref={setSectionRef('grand-projects') as React.RefCallback<HTMLElement>} style={s.section} id="settings-section-grand-projects">
+        <div style={s.sectionHeader}>Grand Projects</div>
         <div style={s.card}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 }}>
             <div style={{ flex: 1 }}>
@@ -1728,7 +1946,7 @@ export function SettingsTab({
                 Library of Congress Grand Project
               </div>
               <div style={{ fontSize: 9, color: '#64748b', lineHeight: 1.5 }}>
-                10,000-node cooperative network · digitizing human knowledge · free forever
+                10,000-node cooperative network -- digitizing human knowledge -- free forever
               </div>
             </div>
             <button
@@ -1741,7 +1959,7 @@ export function SettingsTab({
                 whiteSpace: 'nowrap' as const,
               }}
             >
-              Library of Congress FAQ →
+              Library of Congress FAQ
             </button>
           </div>
         </div>
