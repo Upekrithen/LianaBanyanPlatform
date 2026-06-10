@@ -1,11 +1,26 @@
 #!/usr/bin/env node
 // assert-preload-sandbox.mjs
-// SEG-FIX-2 BP078: Build-time guardrail that fails dist:win if the compiled
-// preload.js contains require() calls. require('electron') in a sandboxed
-// preload silently prevents window.amplify from being set (4-version P0 root cause).
+// BP079 bedrock correction -- SEG-FIX-1 (v0.1.32) had wrong premise that
+// require() is forbidden in Electron 31 sandboxed preloads -- empirically
+// refuted 2026-06-10 via SEG-ESM-TEST CDP probe. The compiled preload.js MUST
+// contain require("electron") because tsc compiles:
+//   import { contextBridge, ipcRenderer } from 'electron'
+// into:
+//   const electron_1 = require("electron");
+// which is the correct and required acquisition pattern.
+//
+// This guard now catches the ACTUAL broken pattern introduced by SEG-FIX-1:
+//   declare const ipcRenderer: Electron.IpcRenderer
+// which is a TypeScript type-only declaration that emits ZERO JavaScript.
+// The compiled preload.js then references ipcRenderer without ever acquiring
+// it from require('electron'), causing silent ReferenceError at boot and
+// window.amplify never being registered (root cause: 5-version P0 v0.1.32-v0.1.37).
+//
+// Canon: canon_electron_31_sandboxed_preload_must_use_require_electron_not_declare_const_bp078_bp079_correction
+// Pearl: pearl_8b0c6fb05fd9f38a
 // Run after build:main, before electron-builder.
 
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, writeFileSync, unlinkSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -19,30 +34,47 @@ if (!existsSync(preloadPath)) {
 }
 
 const src = readFileSync(preloadPath, 'utf8');
-const lines = src.split('\n');
 
-const requireHits = [];
-for (let i = 0; i < lines.length; i++) {
-  if (/require\s*\(/.test(lines[i])) {
-    requireHits.push({ line: i + 1, content: lines[i].trim().slice(0, 120) });
-  }
-}
+// -----------------------------------------------------------------------
+// CHECK 1: ipcRenderer / contextBridge referenced but never acquired
+// -----------------------------------------------------------------------
+// The broken pattern (SEG-FIX-1 / declare const) emits references to
+// ipcRenderer and contextBridge in compiled output but includes NO
+// require("electron") acquisition. Any file that references these symbols
+// MUST acquire them from require('electron').
 
-if (requireHits.length > 0) {
-  console.error('[assert-preload-sandbox] FAIL: preload.js contains require() calls.');
-  console.error('  These are FORBIDDEN in sandbox:true preloads and will silently');
-  console.error('  prevent window.amplify from being set (root cause: BP078 P0).');
+// Strip single-line comments so comment text cannot spoof the acquisition check.
+// (e.g. a comment saying "must use require('electron')" must not satisfy the guard)
+const srcNoLineComments = src.replace(/\/\/.*/g, '');
+
+const referencesIpcRenderer = /\bipcRenderer\b/.test(src);
+const referencesContextBridge = /\bcontextBridge\b/.test(src);
+// Acquisition must appear as code, not in a comment -- check against stripped source.
+// Also require it to be a variable assignment (const/var/let X = require("electron"))
+// to distinguish from dynamic calls like someObj.require().
+const acquiresElectron = /(?:const|var|let)\s+\w+\s*=\s*require\s*\(\s*['"]electron['"]\s*\)/.test(srcNoLineComments);
+
+if ((referencesIpcRenderer || referencesContextBridge) && !acquiresElectron) {
+  console.error('[assert-preload-sandbox] FAIL: preload.js references ipcRenderer/contextBridge');
+  console.error('  but never acquires them from require("electron").');
   console.error('');
-  for (const hit of requireHits) {
-    console.error(`  Line ${hit.line}: ${hit.content}`);
-  }
+  console.error('  This is the SEG-FIX-1 (v0.1.32) footprint -- the "declare const" pattern');
+  console.error('  that compiles to zero JS and produces silent ReferenceError at runtime,');
+  console.error('  leaving window.amplify undefined for 5 consecutive releases.');
   console.error('');
-  console.error('  Fix: ensure src/main/preload.ts uses declare const for electron');
-  console.error('  globals instead of import { ... } from \'electron\'.');
+  console.error('  Fix: ensure src/main/preload.ts uses:');
+  console.error('    import { contextBridge, ipcRenderer } from \'electron\'');
+  console.error('  (NOT "declare const ipcRenderer: Electron.IpcRenderer")');
+  console.error('');
+  console.error('  Canon: canon_electron_31_sandboxed_preload_must_use_require_electron');
+  console.error('         _not_declare_const_bp078_bp079_correction (pearl_8b0c6fb05fd9f38a)');
   process.exit(1);
 }
 
-// Also check __dirname (indicates non-sandbox-safe Node.js path APIs)
+// -----------------------------------------------------------------------
+// CHECK 2: __dirname in preload (non-sandbox-safe Node.js global)
+// -----------------------------------------------------------------------
+const lines = src.split('\n');
 const dirnameHits = [];
 for (let i = 0; i < lines.length; i++) {
   if (/__dirname/.test(lines[i])) {
@@ -59,5 +91,14 @@ if (dirnameHits.length > 0) {
   process.exit(1);
 }
 
+// -----------------------------------------------------------------------
+// PASS
+// -----------------------------------------------------------------------
+const acquiredSymbol = referencesIpcRenderer || referencesContextBridge
+  ? 'electron bridge acquired via require("electron") -- OK'
+  : 'no ipcRenderer/contextBridge references (bare preload -- OK)';
+
 console.log('[assert-preload-sandbox] OK: preload.js is sandbox-safe.');
-console.log(`  Checked ${lines.length} lines. Zero require() or __dirname occurrences.`);
+console.log(`  Checked ${lines.length} lines.`);
+console.log(`  ${acquiredSymbol}`);
+console.log('  Zero __dirname occurrences.');
