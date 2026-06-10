@@ -698,6 +698,17 @@ function createOverlayWindow(): void {
   });
   overlayWindow.webContents.once('did-finish-load', () => {
     applyLBFrameClickthrough(true);
+    // SEG-FIX-3 BP078: Runtime preload smoke test. Catches future sandbox-preload
+    // regressions immediately at window creation, not when Founder clicks a button.
+    overlayWindow?.webContents.executeJavaScript('typeof window.amplify').then((t) => {
+      if (t === 'undefined') {
+        console.error('[preload-smoke] FAIL overlayWindow: window.amplify is undefined — preload bridge did not load');
+      } else {
+        console.log('[preload-smoke] OK overlayWindow: window.amplify is', t);
+      }
+    }).catch((e) => {
+      console.error('[preload-smoke] overlayWindow probe threw:', e?.message ?? e);
+    });
     // renderer_guard: probe after 8s grace — log empty-root failures to health log.
     const win = overlayWindow;
     if (win) {
@@ -960,6 +971,16 @@ function openDashboard(opts?: { focus?: boolean }): void {
   // Bug #2 v0.1.10: keep versioned title after any reload/navigation
   dashboardWindow.webContents.on('did-finish-load', () => {
     dashboardWindow?.setTitle(`Mnemosyne v${app.getVersion()}`);
+    // SEG-FIX-3 BP078: Runtime preload smoke test.
+    dashboardWindow?.webContents.executeJavaScript('typeof window.amplify').then((t) => {
+      if (t === 'undefined') {
+        console.error('[preload-smoke] FAIL dashboardWindow: window.amplify is undefined — preload bridge did not load');
+      } else {
+        console.log('[preload-smoke] OK dashboardWindow: window.amplify is', t);
+      }
+    }).catch((e) => {
+      console.error('[preload-smoke] dashboardWindow probe threw:', e?.message ?? e);
+    });
   });
 
   dashboardWindow.loadURL(
@@ -1057,6 +1078,19 @@ function openHearthConjunctionWindow(): void {
 
   hearthConjunctionWindow.once('ready-to-show', () => {
     hearthConjunctionWindow?.show();
+  });
+
+  // SEG-FIX-3 BP078: Runtime preload smoke test for hearthConjunctionWindow.
+  hearthConjunctionWindow.webContents.once('did-finish-load', () => {
+    hearthConjunctionWindow?.webContents.executeJavaScript('typeof window.amplify').then((t) => {
+      if (t === 'undefined') {
+        console.error('[preload-smoke] FAIL hearthConjunctionWindow: window.amplify is undefined — preload bridge did not load');
+      } else {
+        console.log('[preload-smoke] OK hearthConjunctionWindow: window.amplify is', t);
+      }
+    }).catch((e) => {
+      console.error('[preload-smoke] hearthConjunctionWindow probe threw:', e?.message ?? e);
+    });
   });
 
   hearthConjunctionWindow.loadURL(

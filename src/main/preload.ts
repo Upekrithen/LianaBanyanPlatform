@@ -2,7 +2,13 @@
 // B37 Phase 1-3 — Exposes safe IPC bridge to renderer via contextBridge
 // Phase 3 additions: substrate query/write, federation status, force-mode
 
-import { contextBridge, ipcRenderer } from 'electron';
+// SEG-FIX-1 BP078: Do NOT import from 'electron'. TypeScript module:CommonJS compiles
+// that import to require('electron'), which is FORBIDDEN in sandbox:true context.
+// The require() throws silently at line 6 -- contextBridge.exposeInMainWorld never
+// runs -- window.amplify stays permanently undefined. Root cause of 4-version P0.
+// Electron injects contextBridge and ipcRenderer as globals in sandboxed preloads.
+declare const contextBridge: Electron.ContextBridge;
+declare const ipcRenderer: Electron.IpcRenderer;
 
 // Main-process watchdog (Bushel 58) — respond even if renderer React tree is wedged
 ipcRenderer.on('watchdog-ping', () => {
