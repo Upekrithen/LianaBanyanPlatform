@@ -1,7 +1,7 @@
-// WelcomeView.tsx -- SEG-S-3/4/5/6/9 BP078 v0.1.35
+// WelcomeView.tsx -- SEG-S-3/4/5/6/9 + SEG-U-3 BP078 v0.1.36
 // SEG-S-3: Updated hero/subline/bullets copy
 // SEG-S-4: Mascot graphic with graceful fallback
-// SEG-S-5: BenchmarkProofChart embedded
+// SEG-U-3: ProofAccordion replaces inline BenchmarkProofChart
 // SEG-S-6: Two doorway cards wired to lifecycle stage B
 // SEG-S-9: Mesh checkbox with localStorage persistence
 

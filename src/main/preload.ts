@@ -964,6 +964,29 @@ contextBridge.exposeInMainWorld('amplify', {
   // SEG-Q-13 BP078: Run Diagnostic
   runDiagnostic: (): Promise<{ ok: boolean; logPath: string; content: string }> =>
     ipcRenderer.invoke('diagnostic:run'),
+
+  // SEG-R-13: Open the folder containing a diagnostic log file
+  openDiagFolder: (folderPath: string): Promise<void> =>
+    ipcRenderer.invoke('diagnostic:open-folder', folderPath),
+
+  // SEG-U-7 BP078: mesh-test-complete -- fired when a results file is detected on disk
+  onMeshTestComplete: (cb: (metrics: {
+    hot_accuracy_pct: number;
+    cold_accuracy_pct: number;
+    delta_pp: number;
+    fast_cheap_good: string;
+    svgPath?: string;
+  }) => void): (() => void) => {
+    const handler = (_event: Electron.IpcRendererEvent, metrics: {
+      hot_accuracy_pct: number;
+      cold_accuracy_pct: number;
+      delta_pp: number;
+      fast_cheap_good: string;
+      svgPath?: string;
+    }) => cb(metrics);
+    ipcRenderer.on('mesh-test-complete', handler);
+    return () => ipcRenderer.removeListener('mesh-test-complete', handler);
+  },
 });
 
 // ─── Global type extension ────────────────────────────────────────────────────
@@ -1226,6 +1249,14 @@ declare global {
       getAutoPrepare: () => Promise<{ enabled: boolean; modelReady: boolean; pulling: boolean }>;
       setAutoPrepare: (enabled: boolean) => void;
       onAutoPrepareReady: (cb: () => void) => () => void;
+      // SEG-U-7 BP078: mesh-test-complete push event
+      onMeshTestComplete?: (cb: (metrics: {
+        hot_accuracy_pct: number;
+        cold_accuracy_pct: number;
+        delta_pp: number;
+        fast_cheap_good: string;
+        svgPath?: string;
+      }) => void) => () => void;
     };
   }
 }

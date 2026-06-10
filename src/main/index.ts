@@ -23,7 +23,7 @@ import {
   Notification,
 } from 'electron';
 import { join } from 'path';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync, watch as fsWatch, readdirSync } from 'fs';
 import { spawn } from 'child_process';
 import { tmpdir, homedir } from 'os';
 import { OllamaManager } from './ollama_manager';
@@ -2994,6 +2994,125 @@ function registerIPCHandlers(): void {
   });
 }
 
+// --- Mesh Results Watcher (SEG-U-7 BP078) ------------------------------------
+// Parses a mesh results JSON and returns typed metrics, or null on failure.
+function parseMeshResultsFile(filePath: string): {
+  hot_accuracy_pct: number;
+  cold_accuracy_pct: number;
+  delta_pp: number;
+  fast_cheap_good: string;
+  svgPath?: string;
+} | null {
+  try {
+    const raw = readFileSync(filePath, 'utf8');
+    const data = JSON.parse(raw) as Record<string, unknown>;
+
+    const hot = typeof data.hot_accuracy_pct === 'number' ? data.hot_accuracy_pct
+      : typeof data.hot_accuracy === 'number' ? data.hot_accuracy * 100
+      : null;
+    const cold = typeof data.cold_accuracy_pct === 'number' ? data.cold_accuracy_pct
+      : typeof data.cold_accuracy === 'number' ? data.cold_accuracy * 100
+      : null;
+
+    if (hot === null || cold === null) return null;
+
+    const delta = typeof data.delta_pp === 'number' ? data.delta_pp : hot - cold;
+    const fcg = typeof data.fast_cheap_good === 'string' ? data.fast_cheap_good
+      : typeof data.fast_cheap_good === 'number' ? String(data.fast_cheap_good)
+      : '';
+
+    return { hot_accuracy_pct: hot, cold_accuracy_pct: cold, delta_pp: delta, fast_cheap_good: fcg };
+  } catch {
+    return null;
+  }
+}
+
+// Scan a directory for files matching a glob-like prefix/suffix pattern.
+function findMatchingFile(dir: string, prefix: string, suffix: string): string | null {
+  try {
+    const files = readdirSync(dir);
+    const match = files.find((f) => f.startsWith(prefix) && f.endsWith(suffix));
+    return match ? join(dir, match) : null;
+  } catch {
+    return null;
+  }
+}
+
+// Emit mesh-test-complete to all live windows that have a webContents.
+function emitMeshComplete(metrics: {
+  hot_accuracy_pct: number;
+  cold_accuracy_pct: number;
+  delta_pp: number;
+  fast_cheap_good: string;
+  svgPath?: string;
+}): void {
+  [overlayWindow, dashboardWindow].forEach((win) => {
+    if (win && !win.isDestroyed()) {
+      win.webContents.send('mesh-test-complete', metrics);
+    }
+  });
+}
+
+function setupMeshResultsWatcher(): void {
+  const bishopDropDir = join(__dirname, '..', '..', 'BISHOP_DROPZONE', '00_FOUNDER_REVIEW');
+  const localResultsDir = join(homedir(), '.mnemosynec', 'test-data', 'mmlu-pro', 'results');
+
+  // Check-and-emit helper; also looks for a companion SVG.
+  function checkAndEmit(dir: string, prefix: string, suffix: string): void {
+    const filePath = findMatchingFile(dir, prefix, suffix);
+    if (!filePath || !existsSync(filePath)) return;
+
+    const metrics = parseMeshResultsFile(filePath);
+    if (!metrics) return;
+
+    const svgMatch = findMatchingFile(dir, 'MESH_TEST_BIG_NUMBERS_', '.svg');
+    if (svgMatch) metrics.svgPath = svgMatch;
+
+    emitMeshComplete(metrics);
+  }
+
+  function checkAndEmitShard(dir: string): void {
+    const filePath = join(dir, 'shard_M1_results.json');
+    if (!existsSync(filePath)) return;
+
+    const metrics = parseMeshResultsFile(filePath);
+    if (!metrics) return;
+
+    emitMeshComplete(metrics);
+  }
+
+  // Startup scan -- fire immediately if files already present.
+  checkAndEmit(bishopDropDir, 'MESH_TEST_RESULTS_v0135_', '.json');
+  checkAndEmitShard(localResultsDir);
+
+  // Watch BISHOP_DROPZONE dir for new results files (fs.watch; chokidar would be more robust).
+  if (existsSync(bishopDropDir)) {
+    try {
+      fsWatch(bishopDropDir, { persistent: false }, (_eventType, filename) => {
+        if (!filename) return;
+        if (filename.startsWith('MESH_TEST_RESULTS_v0135_') && filename.endsWith('.json')) {
+          checkAndEmit(bishopDropDir, 'MESH_TEST_RESULTS_v0135_', '.json');
+        }
+      });
+    } catch (e) {
+      console.warn('[mesh-watcher] Could not watch', bishopDropDir, e);
+    }
+  }
+
+  // Watch local results dir for shard_M1_results.json.
+  if (existsSync(localResultsDir)) {
+    try {
+      fsWatch(localResultsDir, { persistent: false }, (_eventType, filename) => {
+        if (filename === 'shard_M1_results.json') {
+          checkAndEmitShard(localResultsDir);
+        }
+      });
+    } catch (e) {
+      console.warn('[mesh-watcher] Could not watch', localResultsDir, e);
+    }
+  }
+}
+
 // --- App Lifecycle ------------------------------------------------------------
 
 app.on('will-quit', () => {
@@ -3270,6 +3389,11 @@ app.whenReady().then(async () => {
   // SEG-Q-4 BP078: auto-prepare FULL upgrade on launch (if enabled)
   runAutoPrepareIfNeeded();
   scheduleAutoPrepareIdle();
+
+  // SEG-U-7 BP078: mesh-test-complete file watcher
+  // Watches two locations for mesh results JSON; sends IPC to renderer on detection.
+  // Uses fs.watch (chokidar would be more robust but is not in this project's dependencies).
+  setupMeshResultsWatcher();
 
   app.on('activate', () => {
     // SAGA-1 BP055: macOS dock click ? open Dashboard (not overlay).

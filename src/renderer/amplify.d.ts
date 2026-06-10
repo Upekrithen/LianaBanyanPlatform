@@ -312,6 +312,16 @@ declare global {
       toggleDevTools?: () => void;
       // SEG-Q-13 BP078 — Run Diagnostic
       runDiagnostic?: () => Promise<{ ok: boolean; logPath: string; content: string }>;
+      // SEG-R-13 — Open folder containing a diagnostic log file
+      openDiagFolder?: (folderPath: string) => Promise<void>;
+      // SEG-U-7 BP078 — mesh-test-complete push event
+      onMeshTestComplete?: (cb: (metrics: {
+        hot_accuracy_pct: number;
+        cold_accuracy_pct: number;
+        delta_pp: number;
+        fast_cheap_good: string;
+        svgPath?: string;
+      }) => void) => () => void;
       // BP060 Application 002 Step 1 — Caithedral Tools
       caithedralTools?: {
         soccerball_emit: (pearls: string[], bindings?: Record<string, string>) => Promise<{ ok: boolean; sid?: string; error?: string }>;
