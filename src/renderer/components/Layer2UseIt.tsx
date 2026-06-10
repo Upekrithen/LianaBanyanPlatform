@@ -10,6 +10,7 @@ import { ModelSetupProgress } from './ModelSetupProgress';
 
 export interface Layer2UseItProps {
   onBack: () => void;
+  onDone?: () => void;
 }
 
 type ScreenMode = 'picking' | 'confirming';
@@ -137,7 +138,7 @@ function extractPullModelName(selection: string): string {
   return '';
 }
 
-export function Layer2UseIt({ onBack }: Layer2UseItProps): React.ReactElement {
+export function Layer2UseIt({ onBack, onDone }: Layer2UseItProps): React.ReactElement {
   const { advanceTo } = useLifecycleStage();
   const [screenMode, setScreenMode] = useState<ScreenMode>('picking');
   const [chosenModel, setChosenModel] = useState<string>('');
@@ -180,8 +181,9 @@ export function Layer2UseIt({ onBack }: Layer2UseItProps): React.ReactElement {
 
   // Called by ModelSetupProgress when all phases complete
   const handleSetupComplete = useCallback((): void => {
-    advanceTo('C');
-  }, [advanceTo]);
+    advanceTo('D');
+    onDone?.();
+  }, [advanceTo, onDone]);
 
   // Called by ModelSetupProgress on error -- stay on confirming screen but show error inline
   const handleSetupError = useCallback((err: string): void => {

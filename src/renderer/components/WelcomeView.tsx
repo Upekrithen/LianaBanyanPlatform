@@ -20,7 +20,7 @@ export interface WelcomeViewProps {
   onComplete: () => void;
 }
 
-export function WelcomeView({ onComplete: _onComplete }: WelcomeViewProps): React.ReactElement {
+export function WelcomeView({ onComplete }: WelcomeViewProps): React.ReactElement {
   const { advanceTo } = useLifecycleStage();
 
   // SEG-S-6: doorway selection state
@@ -57,7 +57,7 @@ export function WelcomeView({ onComplete: _onComplete }: WelcomeViewProps): Reac
   // ── Layer 2 direct renders (SEG-S-7/8) ─────────────────────────────────────
   // Layer2 components own their full-screen overlay; return them directly.
   if (doorwayChosen === 'use-it') {
-    return <Layer2UseIt onBack={(): void => setDoorwayChosen(null)} />;
+    return <Layer2UseIt onBack={(): void => setDoorwayChosen(null)} onDone={onComplete} />;
   }
   if (doorwayChosen === 'prove-it') {
     return <Layer2ProveIt onBack={(): void => setDoorwayChosen(null)} />;

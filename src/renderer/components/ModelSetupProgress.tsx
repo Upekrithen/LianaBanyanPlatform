@@ -165,6 +165,10 @@ export function ModelSetupProgress({
   const heartbeatTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const dotIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  // Stable ref for onComplete — prevents useEffect re-run when parent re-renders
+  const onCompleteRef = useRef(onComplete);
+  useEffect(() => { onCompleteRef.current = onComplete; }, [onComplete]);
+
   // Throughput tracking for ETA (rolling 5s window)
   const throughputSamplesRef = useRef<Array<{ timestamp: number; bytes: number }>>([]);
   const lastEventTimeRef = useRef<number>(Date.now());
@@ -205,7 +209,7 @@ export function ModelSetupProgress({
       if (!modelName) {
         if (cancelledRef.current) return;
         setPhase(3);
-        setTimeout(() => { if (!cancelledRef.current) onComplete(); }, 1200);
+        setTimeout(() => { if (!cancelledRef.current) onCompleteRef.current(); }, 1200);
         return;
       }
 
@@ -228,7 +232,7 @@ export function ModelSetupProgress({
       // Fast path: model already present -- skip pull, no progress bar
       if (checkResult.hasModel) {
         setPhase(3);
-        setTimeout(() => { if (!cancelledRef.current) onComplete(); }, 1200);
+        setTimeout(() => { if (!cancelledRef.current) onCompleteRef.current(); }, 1200);
         return;
       }
 
@@ -301,7 +305,7 @@ export function ModelSetupProgress({
       setPhase(3);
       // Brief spinner to signal completion before calling onComplete
       setTimeout(() => {
-        if (!cancelledRef.current) onComplete();
+        if (!cancelledRef.current) onCompleteRef.current();
       }, 1400);
     };
 
@@ -312,7 +316,7 @@ export function ModelSetupProgress({
       clearTimers();
       unsubProgress?.();
     };
-  }, [modelName, fail, onComplete, startHeartbeat, stopHeartbeat]);
+  }, [modelName, fail, startHeartbeat, stopHeartbeat]);
 
   if (errorMsg) {
     return (
