@@ -149,24 +149,36 @@ export function ModelSetupProgress({
     let unsubProgress: (() => void) | null = null;
 
     const run = async () => {
-      // ---- Phase 1: Check Ollama ----
+      // ---- Phase 1: Live pre-flight -- check Ollama reachability + model presence ----
+      // SEG-V-1: uses 127.0.0.1 (not localhost) to avoid Windows IPv6 resolution mismatch.
       setPhase(1);
-      try {
-        const status = await window.amplify.getOllamaStatus();
+
+      // No-AI path: skip pull entirely, jump to Phase 3
+      if (!modelName) {
         if (cancelledRef.current) return;
-        if (!status.running) {
-          fail('Ollama is not running. Install Ollama from ollama.com, then try again.');
-          return;
-        }
+        setPhase(3);
+        setTimeout(() => { if (!cancelledRef.current) onComplete(); }, 1200);
+        return;
+      }
+
+      let checkResult: { reachable: boolean; hasModel: boolean; models: string[] };
+      try {
+        checkResult = await window.amplify.checkOllamaAndModel(modelName);
       } catch {
         if (cancelledRef.current) return;
         fail('Could not reach the local AI engine. Please try again.');
         return;
       }
 
-      // No-AI path: skip pull entirely, jump to Phase 3
-      if (!modelName) {
-        if (cancelledRef.current) return;
+      if (cancelledRef.current) return;
+
+      if (!checkResult.reachable) {
+        fail('Could not reach the local AI engine. Check that Ollama is running (ollama.com) and try again.');
+        return;
+      }
+
+      // Fast path: model already present -- skip pull, no progress bar
+      if (checkResult.hasModel) {
         setPhase(3);
         setTimeout(() => { if (!cancelledRef.current) onComplete(); }, 1200);
         return;

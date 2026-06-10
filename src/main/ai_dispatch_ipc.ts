@@ -11,7 +11,7 @@ import { app } from 'electron';
 import { FLOOR_MODEL } from '../shared/floor-model';
 import { queryEbletStore } from './mnem_eblet_store';
 
-const OLLAMA_API_BASE = 'http://localhost:11434';
+const OLLAMA_API_BASE = 'http://127.0.0.1:11434';
 
 type Sku = 'nano' | 'core' | 'lite' | 'full';
 

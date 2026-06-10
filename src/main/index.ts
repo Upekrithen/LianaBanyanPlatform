@@ -1524,6 +1524,27 @@ function registerIPCHandlers(): void {
     }
   });
 
+  // SEG-V-1: live pre-flight check -- 3-branch logic for Ollama + model presence
+  // Shared utility reused by ModelSetupProgress (SEG-V-1) and Layer2ProveIt model selector (SEG-V-4).
+  safeHandle('check-ollama-and-model', async (_event, { modelName }: { modelName: string }) => {
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 3000);
+      const res = await fetch('http://127.0.0.1:11434/api/tags', {
+        signal: controller.signal,
+      }).finally(() => clearTimeout(timeout));
+      if (!res.ok) return { reachable: false, hasModel: false, models: [] as string[] };
+      const data = await res.json() as { models: Array<{ name: string }> };
+      const models: string[] = data.models?.map((m) => m.name) ?? [];
+      const hasModel = models.some(
+        (m) => m === modelName || m.startsWith(modelName.split(':')[0])
+      );
+      return { reachable: true, hasModel, models };
+    } catch {
+      return { reachable: false, hasModel: false, models: [] as string[] };
+    }
+  });
+
   // BP067 v0.1.24 ? transparent install + bundled Gemma floor
   safeHandle('setup-private-ai', async () => {
     if (!ollamaManager) return { ok: false, error: 'Ollama manager not initialized' };

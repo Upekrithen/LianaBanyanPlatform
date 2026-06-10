@@ -129,7 +129,7 @@ export function SkuUpgradeModal({
                 flex: 1,
               }}
             >
-              FULL is the in-app upgrade to Gemma 4 12B, a FREE flagship open model. Bigger
+              FULL is the in-app upgrade to Google's Gemma 4 12B, a FREE flagship open model. Bigger
               download, better performance, still free.
             </h2>
             <button

@@ -1,9 +1,9 @@
-// Layer2ProveIt.tsx -- SEG-S-8 BP078 v0.1.35
+// Layer2ProveIt.tsx -- SEG-S-8 BP078 v0.1.37
 // Layer 2 surface for "Proof That It Works" doorway.
-// 4 benchmark choices; choice 2 uses folder picker via window.amplify.pantheonPickFolder().
-// Advances to Stage C on selection; Stage C benchmark runner deferred to v0.1.36.
+// SEG-V-3: All 5 flip cards updated with plain-language backs + links.
+// SEG-V-4: Model selector screen added before MMLU-Pro benchmark (choices 3 and 4).
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { WelcomeCueCard } from './WelcomeCueCard';
 import { useLifecycleStage } from '../hooks/useLifecycleStage';
 
@@ -11,7 +11,10 @@ export interface Layer2ProveItProps {
   onBack: () => void;
 }
 
-type ScreenMode = 'picking' | 'confirming';
+type ScreenMode = 'picking' | 'model-selector' | 'pulling-gemma' | 'confirming';
+
+const GEMMA_MODEL = 'gemma4:12b';
+const FLOOR_MODEL_LABEL = 'qwen2.5:0.5b';
 
 // Shared style tokens matching WelcomeView dark theme
 const S = {
@@ -233,6 +236,89 @@ const S = {
     marginTop: 8,
     letterSpacing: '0.05em',
   },
+  // SEG-V-4: model selector styles
+  modelSelectorHeading: {
+    fontSize: 15,
+    fontWeight: 800 as const,
+    color: '#e2e8f0',
+    margin: '0 0 6px',
+  },
+  modelSelectorSub: {
+    fontSize: 12,
+    color: '#64748b',
+    marginBottom: 20,
+    lineHeight: 1.5,
+  },
+  radioCard: {
+    display: 'flex',
+    alignItems: 'flex-start',
+    gap: 12,
+    padding: '12px 14px',
+    borderRadius: 9,
+    border: '1px solid rgba(100, 116, 139, 0.25)',
+    background: '#111827',
+    cursor: 'pointer',
+    marginBottom: 8,
+    transition: 'border-color 0.15s',
+  },
+  radioCardSelected: {
+    borderColor: 'rgba(110, 231, 183, 0.55)',
+    background: 'rgba(6, 78, 59, 0.08)',
+  },
+  radioLabel: {
+    fontSize: 13,
+    color: '#e2e8f0',
+    lineHeight: 1.4,
+  },
+  radioSub: {
+    fontSize: 11,
+    color: '#475569',
+    marginTop: 2,
+    lineHeight: 1.4,
+  },
+  proceedBtn: {
+    marginTop: 14,
+    width: '100%',
+    padding: '10px 0',
+    background: 'rgba(6, 78, 59, 0.25)',
+    border: '1px solid rgba(110, 231, 183, 0.45)',
+    borderRadius: 8,
+    color: '#6ee7b7',
+    fontSize: 13,
+    fontWeight: 600 as const,
+    cursor: 'pointer',
+    transition: 'background 0.15s',
+  },
+  pullBox: {
+    padding: '14px 16px',
+    background: 'rgba(6, 78, 59, 0.06)',
+    border: '1px solid rgba(110, 231, 183, 0.2)',
+    borderRadius: 9,
+    marginTop: 10,
+  },
+  pullBarTrack: {
+    height: 8,
+    background: 'rgba(100,116,139,0.15)',
+    borderRadius: 4,
+    overflow: 'hidden' as const,
+    marginBottom: 6,
+  },
+  customModelRow: {
+    marginTop: 8,
+    display: 'flex',
+    flexDirection: 'column' as const,
+    gap: 6,
+  },
+  customInput: {
+    padding: '7px 10px',
+    background: '#1e293b',
+    border: '1px solid rgba(100, 116, 139, 0.35)',
+    borderRadius: 7,
+    color: '#e2e8f0',
+    fontSize: 12,
+    width: '100%',
+    boxSizing: 'border-box' as const,
+  },
 };
 
 export function Layer2ProveIt({ onBack }: Layer2ProveItProps): React.ReactElement {
@@ -242,6 +328,15 @@ export function Layer2ProveIt({ onBack }: Layer2ProveItProps): React.ReactElemen
   const [pickedFolder, setPickedFolder] = useState<string | null>(null);
   const [folderPickPending, setFolderPickPending] = useState(false);
   const [flippedCards, setFlippedCards] = useState<Set<number>>(new Set());
+
+  // SEG-V-4: model selector state
+  const [modelChoice, setModelChoice] = useState<'gemma' | 'floor' | 'custom'>('gemma');
+  const [customModelName, setCustomModelName] = useState('');
+  const [availableModels, setAvailableModels] = useState<string[]>([]);
+  const [gemmaPresent, setGemmaPresent] = useState(false);
+  const [pullPct, setPullPct] = useState(0);
+  const [pullError, setPullError] = useState<string | null>(null);
+  const [selectorDataset, setSelectorDataset] = useState<'standard' | 'diamond'>('standard');
 
   const handleFlipCard = useCallback((idx: number): void => {
     setFlippedCards((prev) => {
@@ -256,6 +351,65 @@ export function Layer2ProveIt({ onBack }: Layer2ProveItProps): React.ReactElemen
     setScreenMode('confirming');
   }, [advanceTo]);
 
+  // SEG-V-4: open model selector for MMLU-Pro choices
+  const handleMmluChoice = useCallback((dataset: 'standard' | 'diamond'): void => {
+    setSelectorDataset(dataset);
+    setPullError(null);
+    setPullPct(0);
+    setScreenMode('model-selector');
+  }, []);
+
+  // Load available models when model selector opens
+  useEffect(() => {
+    if (screenMode !== 'model-selector') return;
+    window.amplify.checkOllamaAndModel(GEMMA_MODEL)
+      .then((result) => {
+        setGemmaPresent(result.hasModel);
+        setAvailableModels(result.models);
+        setModelChoice(result.hasModel ? 'gemma' : 'gemma');
+      })
+      .catch(() => {
+        setGemmaPresent(false);
+        setAvailableModels([]);
+      });
+  }, [screenMode]);
+
+  const handleProceedWithModel = useCallback(async (): Promise<void> => {
+    if (modelChoice === 'gemma') {
+      if (gemmaPresent) {
+        // Fast path -- model already present, no pull needed
+        advanceTo('C');
+        setScreenMode('confirming');
+        return;
+      }
+      // Need to pull gemma4:12b
+      setPullError(null);
+      setPullPct(0);
+      setScreenMode('pulling-gemma');
+      const unsubProgress = window.amplify.onOllamaPullProgress((progress) => {
+        if (progress.percentComplete !== undefined) setPullPct(progress.percentComplete);
+      });
+      try {
+        const result = await window.amplify.pullNamedModel(GEMMA_MODEL);
+        unsubProgress();
+        if (!result.success && !result.alreadyInstalled) {
+          setPullError(result.error ?? 'Download failed. Please check your connection.');
+          setScreenMode('model-selector');
+          return;
+        }
+        advanceTo('C');
+        setScreenMode('confirming');
+      } catch (err) {
+        unsubProgress();
+        setPullError(String(err));
+        setScreenMode('model-selector');
+      }
+    } else {
+      advanceTo('C');
+      setScreenMode('confirming');
+    }
+  }, [modelChoice, gemmaPresent, advanceTo]);
+
   const handleChoice2Click = useCallback((): void => {
     setFolderPanelOpen((prev) => !prev);
   }, []);
@@ -263,7 +417,6 @@ export function Layer2ProveIt({ onBack }: Layer2ProveItProps): React.ReactElemen
   const handlePickFolder = useCallback(async (): Promise<void> => {
     setFolderPickPending(true);
     try {
-      // Uses watcher.openFolderDialog -- the Electron native folder picker bridge.
       const result = await window.amplify.watcher?.openFolderDialog();
       if (result && !result.canceled && result.filePaths.length > 0) {
         setPickedFolder(result.filePaths[0]);
@@ -297,6 +450,168 @@ export function Layer2ProveIt({ onBack }: Layer2ProveItProps): React.ReactElemen
           </div>
           <button type="button" style={S.backLink} onClick={handleBackFromPlaceholder}>
             {'< back to choices'}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Pulling Gemma placeholder ──────────────────────────────────────────────
+  if (screenMode === 'pulling-gemma') {
+    return (
+      <div style={S.overlay}>
+        <div style={S.card}>
+          <div style={S.brandLine}>Proof That It Works</div>
+          <h2 style={S.heading}>Downloading Google's Gemma 4 12B...</h2>
+          <div style={S.pullBox}>
+            <div style={S.pullBarTrack}>
+              <div style={{
+                height: '100%',
+                width: `${pullPct}%`,
+                background: 'linear-gradient(90deg, #6ee7b7, #34d399)',
+                borderRadius: 4,
+                transition: 'width 0.4s ease',
+                minWidth: pullPct > 0 ? 8 : 0,
+              }} />
+            </div>
+            <div style={{ fontSize: 11, color: '#64748b', marginTop: 4 }}>
+              {pullPct > 0 ? `${pullPct}% downloaded` : 'Connecting to model repository...'}
+            </div>
+          </div>
+          <div style={{ fontSize: 11, color: '#475569', marginTop: 10, lineHeight: 1.5 }}>
+            Google's Gemma 4 12B is 7.5 GB. This is a one-time download. The benchmark will start automatically when complete.
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Model selector screen (SEG-V-4) ──────────────────────────────────────
+  if (screenMode === 'model-selector') {
+    const datasetLabel = selectorDataset === 'diamond' ? 'MMLU-Pro Diamond' : 'MMLU-Pro Standard';
+    return (
+      <div style={S.overlay}>
+        <div style={S.card}>
+          <button type="button" style={S.backBtn} onClick={() => setScreenMode('picking')}>
+            {'< back'}
+          </button>
+          <div style={S.brandLine}>Proof That It Works</div>
+          <h2 style={S.modelSelectorHeading}>Which AI should run this test?</h2>
+          <p style={S.modelSelectorSub}>
+            Running: {datasetLabel}. Best results require Google's Gemma 4 12B.
+          </p>
+
+          {/* Option 1: Gemma 4 12B */}
+          <div
+            style={{ ...S.radioCard, ...(modelChoice === 'gemma' ? S.radioCardSelected : {}) }}
+            onClick={() => setModelChoice('gemma')}
+            role="radio"
+            aria-checked={modelChoice === 'gemma'}
+            tabIndex={0}
+            onKeyDown={(e) => e.key === 'Enter' && setModelChoice('gemma')}
+          >
+            <input
+              type="radio"
+              readOnly
+              checked={modelChoice === 'gemma'}
+              style={{ marginTop: 3, flexShrink: 0, accentColor: '#6ee7b7' }}
+            />
+            <div>
+              <div style={S.radioLabel}>
+                Use Google's Gemma 4 12B (best results
+                {gemmaPresent ? ' -- already installed' : ' -- requires a one-time download'})
+              </div>
+              {!gemmaPresent && (
+                <div style={S.radioSub}>7.5 GB one-time download. Download starts automatically.</div>
+              )}
+            </div>
+          </div>
+
+          {/* Option 2: Floor model */}
+          <div
+            style={{ ...S.radioCard, ...(modelChoice === 'floor' ? S.radioCardSelected : {}) }}
+            onClick={() => setModelChoice('floor')}
+            role="radio"
+            aria-checked={modelChoice === 'floor'}
+            tabIndex={0}
+            onKeyDown={(e) => e.key === 'Enter' && setModelChoice('floor')}
+          >
+            <input
+              type="radio"
+              readOnly
+              checked={modelChoice === 'floor'}
+              style={{ marginTop: 3, flexShrink: 0, accentColor: '#6ee7b7' }}
+            />
+            <div>
+              <div style={S.radioLabel}>
+                Use my current model ({FLOOR_MODEL_LABEL}) -- faster but lower accuracy
+              </div>
+              <div style={S.radioSub}>No download required. Results will be less accurate.</div>
+            </div>
+          </div>
+
+          {/* Option 3: Custom model */}
+          <div
+            style={{ ...S.radioCard, ...(modelChoice === 'custom' ? S.radioCardSelected : {}) }}
+            onClick={() => setModelChoice('custom')}
+            role="radio"
+            aria-checked={modelChoice === 'custom'}
+            tabIndex={0}
+            onKeyDown={(e) => e.key === 'Enter' && setModelChoice('custom')}
+          >
+            <input
+              type="radio"
+              readOnly
+              checked={modelChoice === 'custom'}
+              style={{ marginTop: 3, flexShrink: 0, accentColor: '#6ee7b7' }}
+            />
+            <div style={{ flex: 1 }}>
+              <div style={S.radioLabel}>Use a specific model</div>
+              <div style={S.radioSub}>Choose from installed models or enter a name.</div>
+            </div>
+          </div>
+
+          {modelChoice === 'custom' && (
+            <div style={S.customModelRow}>
+              {availableModels.length > 0 && (
+                <select
+                  style={{ ...S.customInput, cursor: 'pointer' }}
+                  value={customModelName}
+                  onChange={(e) => setCustomModelName(e.target.value)}
+                >
+                  <option value="">-- select installed model --</option>
+                  {availableModels.map((m) => (
+                    <option key={m} value={m}>{m}</option>
+                  ))}
+                </select>
+              )}
+              <input
+                type="text"
+                style={S.customInput}
+                placeholder="Or enter model name (e.g. llama3.2:3b)"
+                value={customModelName}
+                onChange={(e) => setCustomModelName(e.target.value)}
+              />
+            </div>
+          )}
+
+          {pullError && (
+            <div style={{ marginTop: 10, fontSize: 11, color: '#f87171', lineHeight: 1.5 }}>
+              {pullError}
+            </div>
+          )}
+
+          <button
+            type="button"
+            style={{
+              ...S.proceedBtn,
+              opacity: (modelChoice === 'custom' && !customModelName) ? 0.45 : 1,
+              cursor: (modelChoice === 'custom' && !customModelName) ? 'default' : 'pointer',
+            }}
+            disabled={modelChoice === 'custom' && !customModelName}
+            onClick={handleProceedWithModel}
+          >
+            {modelChoice === 'gemma' && !gemmaPresent ? 'Download and start test' : 'Start test'}
           </button>
         </div>
       </div>
@@ -372,14 +687,22 @@ export function Layer2ProveIt({ onBack }: Layer2ProveItProps): React.ReactElemen
               </div>
               <div style={{ ...S.flipFaceBase, ...S.flipBack }}>
                 <div style={S.flipBackText}>
-                  75-question benchmark testing AI memory retrieval. Same model, with and without MnemosyneC substrate context. BP064 -- 2026.
+                  The Eyewitness test is a memory benchmark we designed ourselves. We ask the AI a question, then deliberately feed it conflicting information, then ask again. Without our substrate the AI changes its answer under pressure. With our substrate it holds the verified answer because the substrate is the source of truth, not the AI's in-context guess.
                 </div>
-                <div style={S.flipDataset}>Internal LB benchmark</div>
+                <a
+                  href="https://mnemosynec.ai/how-it-works/#eyewitness"
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{ fontSize: 8, color: '#6ee7b7', marginTop: 5, textDecoration: 'none' }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  For full explanation and more proof click here
+                </a>
               </div>
             </div>
           </div>
 
-          {/* Card B: 4-Model Star Chamber BP067 */}
+          {/* Card B: Banyan Metric HOT/COLD */}
           <div
             style={S.flipOuter}
             onClick={() => handleFlipCard(1)}
@@ -388,7 +711,7 @@ export function Layer2ProveIt({ onBack }: Layer2ProveItProps): React.ReactElemen
             role="button"
             tabIndex={0}
             onKeyDown={(e) => e.key === 'Enter' && handleFlipCard(1)}
-            aria-label="Star Chamber benchmark details"
+            aria-label="Banyan Metric HOT vs COLD details"
           >
             <div
               style={{
@@ -405,19 +728,27 @@ export function Layer2ProveIt({ onBack }: Layer2ProveItProps): React.ReactElemen
                 <div style={{ fontSize: 9, color: '#64748b', letterSpacing: '0.06em', marginBottom: 4 }}>
                   HOT vs COLD
                 </div>
-                <div style={S.flipCardLabel}>4-Model Star Chamber</div>
+                <div style={S.flipCardLabel}>Banyan Metric</div>
                 <div style={S.flipHint}>hover to flip</div>
               </div>
               <div style={{ ...S.flipFaceBase, ...S.flipBack }}>
                 <div style={S.flipBackText}>
-                  Four AI models tested against the same 75-question benchmark. MnemosyneC substrate context consistently lifts accuracy to ~94%. BP067 -- 2026.
+                  We tested AI memory recall on 75 facts. With our substrate active, the AI answered correctly 94.8 percent of the time. Without the substrate, only 8.7 percent. The substrate provides the context that lets the AI remember what it would otherwise forget.
                 </div>
-                <div style={S.flipDataset}>Internal LB benchmark</div>
+                <a
+                  href="https://mnemosynec.ai/how-it-works/#banyan-metric"
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{ fontSize: 8, color: '#6ee7b7', marginTop: 5, textDecoration: 'none' }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  For full explanation and more proof click here
+                </a>
               </div>
             </div>
           </div>
 
-          {/* Card C: BP074 Sound Barrier -- Perfect Agreement */}
+          {/* Card C: 4-Model Star Chamber BP067 */}
           <div
             style={S.flipOuter}
             onClick={() => handleFlipCard(2)}
@@ -426,7 +757,7 @@ export function Layer2ProveIt({ onBack }: Layer2ProveItProps): React.ReactElemen
             role="button"
             tabIndex={0}
             onKeyDown={(e) => e.key === 'Enter' && handleFlipCard(2)}
-            aria-label="Sound Barrier perfect agreement details"
+            aria-label="Star Chamber benchmark details"
           >
             <div
               style={{
@@ -439,20 +770,31 @@ export function Layer2ProveIt({ onBack }: Layer2ProveItProps): React.ReactElemen
               }}
             >
               <div style={{ ...S.flipFaceBase, ...S.flipFront }}>
-                <div style={{ fontSize: '1.5rem', marginBottom: 2 }}>&#x1F3C6;</div>
-                <div style={{ ...S.flipStatLg, color: '#fbbf24' }}>Kappa 1.000</div>
-                <div style={S.flipCardLabel}>Perfect Agreement</div>
+                <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#a78bfa', marginBottom: 4 }}>4 Judges</div>
+                <div style={{ fontSize: 9, color: '#64748b', letterSpacing: '0.06em', marginBottom: 4 }}>
+                  ALL AGREE
+                </div>
+                <div style={S.flipCardLabel}>Star Chamber BP067</div>
                 <div style={S.flipHint}>hover to flip</div>
               </div>
               <div style={{ ...S.flipFaceBase, ...S.flipBack }}>
                 <div style={S.flipBackText}>
-                  Perfect agreement between AI and human judgment across 75 benchmark questions. Kappa 1.000 is the theoretical maximum. BP074 -- 2026.
+                  Star Chamber is our four-judge adversarial benchmark. Four separate AI models (Oracle, Morpheus, Red Queen, and Judge Dredd) are each asked to score the same answer independently. We report only the cases where all four agreed. If they disagree, the result is thrown out. Agreement across four hostile judges is harder to fake than agreement from one.
                 </div>
+                <a
+                  href="https://mnemosynec.ai/how-it-works/#star-chamber"
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{ fontSize: 8, color: '#6ee7b7', marginTop: 5, textDecoration: 'none' }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  For full explanation and more proof click here
+                </a>
               </div>
             </div>
           </div>
 
-          {/* Card D: MMLU-Pro Mesh Benchmark (placeholder -- results pending) */}
+          {/* Card D: BP074 Sound Barrier -- Kappa 1.000 Trophy */}
           <div
             style={S.flipOuter}
             onClick={() => handleFlipCard(3)}
@@ -461,7 +803,7 @@ export function Layer2ProveIt({ onBack }: Layer2ProveItProps): React.ReactElemen
             role="button"
             tabIndex={0}
             onKeyDown={(e) => e.key === 'Enter' && handleFlipCard(3)}
-            aria-label="MMLU-Pro Mesh Benchmark details"
+            aria-label="Sound Barrier perfect agreement details"
           >
             <div
               style={{
@@ -473,17 +815,70 @@ export function Layer2ProveIt({ onBack }: Layer2ProveItProps): React.ReactElemen
                 transform: flippedCards.has(3) ? 'rotateY(180deg)' : 'rotateY(0deg)',
               }}
             >
-              <div style={{ ...S.flipFaceBase, ...S.flipFront, background: '#0d1117' }}>
-                <div style={{ ...S.flipStatLg, color: '#475569', fontSize: '0.95rem' }}>
-                  Results Pending
-                </div>
-                <div style={S.flipCardLabel}>Three-Node Mesh Test</div>
+              <div style={{ ...S.flipFaceBase, ...S.flipFront }}>
+                <div style={{ fontSize: '1.5rem', marginBottom: 2 }}>&#x1F3C6;</div>
+                <div style={{ ...S.flipStatLg, color: '#fbbf24' }}>Kappa 1.000</div>
+                <div style={S.flipCardLabel}>Perfect Agreement</div>
                 <div style={S.flipHint}>hover to flip</div>
               </div>
               <div style={{ ...S.flipFaceBase, ...S.flipBack }}>
                 <div style={S.flipBackText}>
-                  Three machines running Gemma 4 12B in parallel across 12,000+ questions. Results populate automatically after the mesh test completes.
+                  Cohen's Kappa measures how much two judges agree when scoring the same answers. A score of 1.000 means 100 percent agreement -- neither judge ever disagreed with the other. We ran 75 questions and our system matched the canonical correct answer every single time. Reproducibility: PROVED.
                 </div>
+                <a
+                  href="https://mnemosynec.ai/how-it-works/#sound-barrier"
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{ fontSize: 8, color: '#6ee7b7', marginTop: 5, textDecoration: 'none' }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  For full explanation and more proof click here
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Card E: MMLU-Pro placeholder (Google's Gemma 4 12B benchmark) */}
+          <div
+            style={S.flipOuter}
+            onClick={() => handleFlipCard(4)}
+            onMouseEnter={() => handleFlipCard(4)}
+            onMouseLeave={() => handleFlipCard(4)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => e.key === 'Enter' && handleFlipCard(4)}
+            aria-label="MMLU-Pro Gemma 4 12B Benchmark details"
+          >
+            <div
+              style={{
+                position: 'relative',
+                width: '100%',
+                height: '100%',
+                transformStyle: 'preserve-3d',
+                transition: 'transform 300ms ease',
+                transform: flippedCards.has(4) ? 'rotateY(180deg)' : 'rotateY(0deg)',
+              }}
+            >
+              <div style={{ ...S.flipFaceBase, ...S.flipFront, background: '#0d1117' }}>
+                <div style={{ ...S.flipStatLg, color: '#475569', fontSize: '0.95rem' }}>
+                  Results Pending
+                </div>
+                <div style={S.flipCardLabel}>MMLU-Pro Mesh Test</div>
+                <div style={S.flipHint}>hover to flip</div>
+              </div>
+              <div style={{ ...S.flipFaceBase, ...S.flipBack }}>
+                <div style={S.flipBackText}>
+                  MMLU-Pro (Multitask Massive Language Understanding Pro) is a standard benchmark used by Google, OpenAI, and others to measure how well an AI handles college-level questions across 14 subject areas. Higher is better. We ran this benchmark against Google's Gemma 4 12B using our substrate to show real-world improvement.
+                </div>
+                <a
+                  href="https://mnemosynec.ai/how-it-works/#mmlu-pro"
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{ fontSize: 8, color: '#6ee7b7', marginTop: 5, textDecoration: 'none' }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  For full explanation and more proof click here
+                </a>
               </div>
             </div>
           </div>
@@ -533,22 +928,22 @@ export function Layer2ProveIt({ onBack }: Layer2ProveItProps): React.ReactElemen
             </div>
           )}
 
-          {/* Choice 3 */}
+          {/* Choice 3 -- SEG-V-4: opens model selector before running */}
           <WelcomeCueCard
             label="Google benchmark set, standard."
-            body="(MMLU-Pro)"
+            body="(MMLU-Pro) -- choose which AI runs it"
             size="choice"
             variant="green"
-            onClick={handleSimpleChoice}
+            onClick={() => handleMmluChoice('standard')}
           />
 
-          {/* Choice 4 */}
+          {/* Choice 4 -- SEG-V-4: opens model selector before running */}
           <WelcomeCueCard
             label="Google benchmark set, difficult."
-            body="(MMLU-Pro Diamond)"
+            body="(MMLU-Pro Diamond) -- choose which AI runs it"
             size="choice"
             variant="green"
-            onClick={handleSimpleChoice}
+            onClick={() => handleMmluChoice('diamond')}
           />
         </div>
       </div>

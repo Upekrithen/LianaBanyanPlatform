@@ -249,7 +249,7 @@ export function ProofAccordion(): React.ReactElement {
       </AccordionItem>
 
       <AccordionItem
-        title="Gemma 4 12B MMLU-Pro Benchmark"
+        title="Google's Gemma 4 12B MMLU-Pro Benchmark"
         isOpen={open[1]}
         onToggle={(): void => toggle(1)}
       >

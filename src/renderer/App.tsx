@@ -4,6 +4,11 @@
 // MV-HELM-CROWN-AMB SAGA 6 BP045 W1 — Role-gated routes added
 // MV-J SAGA 4 BP045 W1 — Federation tab route added
 // SAGA 07 BP046B — MnemosyneTabView replaces AMPLIFYDashboard as default dashboard
+// SEG-R-1 BP067 — First-run gate: view=dashboard -> MnemosyneTabView -> Bp067FirstRunSpine
+//   WelcomeView (Amnesia headline + two-doorway cascade) is the first spine step.
+//   localStorage keys: 'mnemosynec_onboarding_complete' (WelcomeView done)
+//                      'mnemosyne-bp067-first-run-complete' (full spine done)
+//   Settings remain reachable via gear icon (SettingsTab inside MnemosyneTabView).
 
 import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { FrameModeIndicator } from './components/FrameModeIndicator';

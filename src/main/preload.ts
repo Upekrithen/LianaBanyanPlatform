@@ -283,6 +283,10 @@ contextBridge.exposeInMainWorld('amplify', {
   pullNamedModel: (modelName: string): Promise<{ success: boolean; alreadyInstalled?: boolean; error?: string }> =>
     ipcRenderer.invoke('pull-named-model', { modelName }),
 
+  // SEG-V-1: live 3-branch pre-flight -- reachable? + model present? (reused by SEG-V-4)
+  checkOllamaAndModel: (modelName: string): Promise<{ reachable: boolean; hasModel: boolean; models: string[] }> =>
+    ipcRenderer.invoke('check-ollama-and-model', { modelName }),
+
   // BP067 v0.1.24 — transparent install + floor model
   setupPrivateAI: (): Promise<{ ok: boolean; error?: string }> =>
     ipcRenderer.invoke('setup-private-ai'),
@@ -1013,6 +1017,7 @@ declare global {
       checkDiskSpace: () => Promise<{ ok: boolean; requiredGB: number }>;
       onOllamaPullProgress: (cb: (progress: ModelPullProgress) => void) => () => void;
       pullNamedModel: (modelName: string) => Promise<{ success: boolean; alreadyInstalled?: boolean; error?: string }>;
+      checkOllamaAndModel: (modelName: string) => Promise<{ reachable: boolean; hasModel: boolean; models: string[] }>;
       setupPrivateAI: () => Promise<{ ok: boolean; error?: string }>;
       markBp067FirstRunComplete: () => Promise<{ ok: boolean }>;
       askFloorModel: (prompt: string) => Promise<{ ok: boolean; text?: string; error?: string }>;

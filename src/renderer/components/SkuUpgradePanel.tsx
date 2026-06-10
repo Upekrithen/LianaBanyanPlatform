@@ -72,7 +72,7 @@ const SKU_TIERS: SkuTierDef[] = [
     tagline: 'Flagship AI, private and local.',
     model: 'gemma4:12b',
     modelSize: '~7 GB download',
-    features: ['Gemma 4 12B model', 'Mnem-DRT enabled', 'All 10 specialists', 'Full substrate depth'],
+    features: ["Google's Gemma 4 12B model", 'Mnem-DRT enabled', 'All 10 specialists', 'Full substrate depth'],
     downloadSize: '~7 GB',
   },
 ];
@@ -738,7 +738,7 @@ export function SkuUpgradePanel({
                 FULL activated.
               </div>
               <div style={{ fontSize: 12, color: '#94a3b8' }}>
-                Gemma 4 12B is now your AI.
+                Google's Gemma 4 12B is now your AI.
               </div>
             </div>
           </div>

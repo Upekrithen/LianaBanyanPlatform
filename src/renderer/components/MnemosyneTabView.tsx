@@ -858,7 +858,7 @@ export function MnemosyneTabView({
                   type="button"
                   onClick={() => { setUpdateStatusLine(null); setShowUpgradeModal(true); }}
                   aria-label="Open FREE FULL AI upgrade options"
-                  title="Upgrade to FULL -- Gemma 4 12B, free download."
+                  title="Upgrade to FULL -- Google's Gemma 4 12B, free download."
                   style={{
                     padding: '5px 12px',
                     background: 'rgba(110,231,183,0.13)',

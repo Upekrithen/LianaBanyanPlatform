@@ -92,12 +92,12 @@ const results = [];
 let anyFail = false;
 
 for (const ch of [...channels].sort()) {
-  // Tier-1 only: literal ipcMain.handle('channel') or ipcMain.on('channel') in
-  // non-preload dist/main JS. Tier-2 (string-present heuristic) has been removed
-  // because it caused every preload channel to trivially pass via the preload bundle
-  // itself, masking absent handlers.
+  // Tier-1: literal ipcMain.handle/ipcMain.on or safeHandle wrapper in non-preload dist/main JS.
+  // safeHandle is the main-process-only wrapper around ipcMain.handle used in index.ts to guard
+  // against duplicate registrations. It is NOT present in preload artifacts (which use ipcRenderer),
+  // so matching it does not re-introduce the false-positive Tier-2 problem.
   const escapedCh = ch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const directRe = new RegExp(`\\.(?:handle|on)\\(\\s*['"\`]${escapedCh}['"\`]`);
+  const directRe = new RegExp(`(?:\\.(?:handle|on)|\\bsafeHandle)\\(\\s*['"\`]${escapedCh}['"\`]`);
   const found = directRe.test(distJsCombined);
   if (!found) {
     anyFail = true;
@@ -125,8 +125,8 @@ const failed = results.filter(r => r.status !== 'PASS').length;
 console.log(`\n  ${passed} passed, ${failed} failed out of ${results.length} channels.\n`);
 
 if (anyFail) {
-  console.error('[assert-ipc-handlers] FAIL: one or more renderer channels have no main-process handler in dist.');
-  console.error('  Either rebuild with `npm run build` or register the missing handlers in src/main/index.ts.\n');
+    console.error('[assert-ipc-handlers] FAIL: one or more renderer channels have no main-process handler in dist.');
+  console.error('  Either rebuild with `npm run build` or register the missing handlers (ipcMain.handle or safeHandle) in src/main/index.ts.\n');
   process.exit(1);
 }
 
@@ -135,13 +135,13 @@ console.log('[assert-ipc-handlers] PASS: all renderer IPC channels have register
 // FIX 2: Hard check for SKU handler presence in dist/main/index.js specifically.
 // These four channels are P0 -- their absence caused the v0.1.30 shipping incident.
 // This block greps dist/main/index.js (not the combined set) for literal
-// ipcMain.handle('sku-...') registrations and fails if any are missing.
+// ipcMain.handle or safeHandle registrations and fails if any are missing.
 const SKU_CHANNELS = ['sku-check-model', 'sku-upgrade-to', 'sku-cancel-upgrade', 'sku-current-tier'];
 let skuAnyFail = false;
 console.log('[assert-ipc-handlers] SKU Hard Check (dist/main/index.js only):');
 for (const ch of SKU_CHANNELS) {
   const escapedCh = ch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const skuRe = new RegExp(`ipcMain\\.handle\\(\\s*['"\`]${escapedCh}['"\`]`);
+  const skuRe = new RegExp(`(?:ipcMain\\.handle|\\bsafeHandle)\\(\\s*['"\`]${escapedCh}['"\`]`);
   const found = skuRe.test(distIndexJs);
   if (found) {
     console.log(`  [SKU HARD CHECK] PASS  '${ch}' found in dist/main/index.js`);

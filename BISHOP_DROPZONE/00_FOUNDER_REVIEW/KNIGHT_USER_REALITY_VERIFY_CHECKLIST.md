@@ -234,6 +234,47 @@ A yoke-return that omits the user-reality line entirely, or that says "verified"
 
 ---
 
+## 7. CHEAPEST-ACCEPTABLE-SCREENSHOT RULE (BP078 AMENDMENT -- 2026-06-10)
+
+**Binding amendment:** `feedback-ux-seg-screenshot-mandatory-bp078` is updated per Founder micro-yoke unblock.
+
+### The amended rule
+
+Not every SEG requires a packaged-build screenshot. Use the cheapest acceptable form. Max 10 minutes per SEG on screenshot capture. If capture is failing, switch paths immediately.
+
+| SEG type | Cheapest acceptable screenshot form |
+|---|---|
+| Layout / copy / styling change | Dev-mode browser screenshot SUFFICES |
+| UX flow (menus, cards, text) | Dev-mode browser screenshot SUFFICES |
+| IPC behavior (context isolation, sandbox) | Packaged-build verify REQUIRED -- flag in yoke return as 'awaiting Founder packaged-install verify' |
+| Runtime-only bug (model pull, engine reach) | Packaged-build verify REQUIRED for final sign-off; source-verify + note Founder will verify |
+
+### Dev-mode screenshot path
+
+1. Run `npm run dev` in the app root.
+2. Renderer loads in a Chromium DevTools window.
+3. Navigate to the relevant screen.
+4. Screenshot the renderer window using Chromium's built-in screenshot or OS screenshot.
+5. This is SUFFICIENT for all layout/copy/UX SEGs.
+6. Do NOT spend 30+ minutes trying to wrestle Electron + PowerShell focus-capture for a packaged-build screenshot when dev-mode is available.
+
+### IPC / runtime SEG path
+
+1. Apply the source fix.
+2. Take a dev-mode screenshot showing the UI as it would appear (or confirm the logic in source).
+3. In yoke return: state "IPC behavior -- awaiting Founder packaged-install verify on target machine."
+4. Founder verifies the packaged install and reports result.
+
+### The cap
+
+If screenshot capture is failing after 10 minutes for a given SEG:
+- Stop the current capture approach.
+- Switch to the next cheapest form.
+- Note "capture path switched" in yoke return.
+- Do not hold up the wave for a screenshot method that is not working.
+
+---
+
 ## ENFORCEMENT
 
 This document is in effect for all Knight agents working on LianaBanyanPlatform as of v0.1.30.

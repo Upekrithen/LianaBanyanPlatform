@@ -1532,7 +1532,7 @@ export function SettingsTab({
                 {currentSkuTier.toUpperCase()}
                 {currentSkuTier === 'full' && (
                   <span style={{ fontSize: 10, fontWeight: 400, marginLeft: 6, color: '#6ee7b7' }}>
-                    Gemma 4 12B
+                    Google's Gemma 4 12B
                   </span>
                 )}
               </div>
@@ -1604,7 +1604,7 @@ export function SettingsTab({
             borderRadius: 6,
           }}>
             Current AI tier: {currentSkuTier === 'full'
-              ? 'FULL (Gemma 4 12B)'
+              ? "FULL (Google's Gemma 4 12B)"
               : currentSkuTier.toUpperCase()}
           </p>
         )}
@@ -2202,12 +2202,12 @@ function AutoPreparePullPanel() {
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
           <div style={{ flex: 1 }}>
             <div style={styles.label}>
-              Download Gemma 4 12B in background
+              Download Google's Gemma 4 12B in background
               {modelReady && <span style={{ marginLeft: 8, color: '#4ade80', fontWeight: 700, fontSize: 10 }}>READY</span>}
               {pulling && !modelReady && <span style={{ marginLeft: 8, color: '#fbbf24', fontWeight: 700, fontSize: 10 }}>Pulling...</span>}
             </div>
             <div style={{ fontSize: 9, color: '#475569', marginTop: 2, lineHeight: 1.5 }}>
-              When ON, MnemosyneC silently pulls the Gemma 4 12B model on launch and every 30 min
+              When ON, MnemosyneC silently pulls the Google's Gemma 4 12B model on launch and every 30 min
               while idle. When the download completes, you will receive a notification asking to
               activate. You must click Activate to switch to FULL tier. Nothing activates automatically.
             </div>
@@ -2225,7 +2225,7 @@ function AutoPreparePullPanel() {
         </div>
         {modelReady && (
           <div style={{ marginTop: 8, fontSize: 10, color: '#4ade80', fontWeight: 600 }}>
-            Gemma 4 12B is ready on this machine. Open AI Tier above to activate it.
+            Google's Gemma 4 12B is ready on this machine. Open AI Tier above to activate it.
           </div>
         )}
       </div>

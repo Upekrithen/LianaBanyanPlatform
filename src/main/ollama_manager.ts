@@ -13,7 +13,7 @@ import {
   isFloorModel,
 } from '../shared/floor-model';
 
-const OLLAMA_API_BASE = 'http://localhost:11434';
+const OLLAMA_API_BASE = 'http://127.0.0.1:11434';
 const DEFAULT_MODEL = FLOOR_MODEL;
 const HEALTH_CHECK_INTERVAL_MS = 30_000;
 const STARTUP_TIMEOUT_MS = 30_000;

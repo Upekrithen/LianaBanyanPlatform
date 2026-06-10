@@ -249,9 +249,9 @@ export function Layer2UseIt({ onBack }: Layer2UseItProps): React.ReactElement {
             onClick={(): void => enterSetup(CHOICE2_MODEL)}
           />
 
-          {/* Choice 3: Heavy-duty local AI via Gemma 4 12B */}
+          {/* Choice 3: Heavy-duty local AI via Google's Gemma 4 12B */}
           <WelcomeCueCard
-            label="Free heavy-duty AI, stronger local model using Gemma 4 12B."
+            label="Free heavy-duty AI, stronger local model using Google's Gemma 4 12B."
             size="choice"
             variant="blue"
             onClick={(): void => enterSetup(CHOICE3_MODEL)}
