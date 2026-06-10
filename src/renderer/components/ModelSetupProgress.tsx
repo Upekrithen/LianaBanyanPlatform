@@ -55,8 +55,8 @@ const S = {
   spinner: {
     width: 20,
     height: 20,
-    border: '2px solid rgba(96,165,250,0.2)',
-    borderTopColor: '#60a5fa',
+    border: '2px solid rgba(110,231,183,0.2)',
+    borderTopColor: '#6ee7b7',
     borderRadius: '50%',
     flexShrink: 0,
     animation: 'lb-seg-spin 0.8s linear infinite',
@@ -67,15 +67,14 @@ const S = {
   },
   barTrack: {
     height: 8,
-    background: 'rgba(30, 64, 175, 0.18)',
-    border: '1px solid rgba(96, 165, 250, 0.18)',
+    background: 'rgba(100,116,139,0.15)',
     borderRadius: 4,
     overflow: 'hidden' as const,
   },
   barFill: (pct: number) => ({
     height: '100%',
     width: `${pct}%`,
-    background: 'linear-gradient(90deg, #1d4ed8, #60a5fa)',
+    background: 'linear-gradient(90deg, #6ee7b7, #34d399)',
     borderRadius: 4,
     transition: 'width 0.4s ease',
     minWidth: pct > 0 ? 8 : 0,

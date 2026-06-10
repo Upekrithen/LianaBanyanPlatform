@@ -99,14 +99,6 @@ export function WelcomeView({ onComplete: _onComplete }: WelcomeViewProps): Reac
     marginBottom: 20,
   };
 
-  const heading: React.CSSProperties = {
-    fontSize: 20,
-    fontWeight: 800,
-    color: '#e2e8f0',
-    lineHeight: 1.3,
-    margin: '0 0 10px',
-  };
-
   const subline: React.CSSProperties = {
     fontSize: 13,
     color: '#64748b',
@@ -229,8 +221,8 @@ export function WelcomeView({ onComplete: _onComplete }: WelcomeViewProps): Reac
           />
         </div>
 
-        {/* SEG-S-5: Benchmark chart */}
-        <BenchmarkProofChart />
+        {/* SEG-U-3: ProofAccordion (replaced inline BenchmarkProofChart) */}
+        <ProofAccordion />
 
         {/* SEG-S-6: Doorway cards */}
         <div style={sectionLabel}>Where do you want to start?</div>
