@@ -1,9 +1,9 @@
-// AMPLIFY Computer — Electron Main Process
-// B37 Phase 1-3 — BP025 / Bushel 37
+// AMPLIFY Computer ? Electron Main Process
+// B37 Phase 1-3 ? BP025 / Bushel 37
 // Phase 3 additions: connectivity polling, auto-mode transitions, substrate/federation IPC
 // BP038 addition: env_loader MUST be the first import so its side-effects populate
 // process.env (ANTHROPIC_API_KEY, etc.) before any consumer module reads them at load.
-// Implements Blood Rule R16 (R-NO-API-KEY-EXPOSURE) — values never logged.
+// Implements Blood Rule R16 (R-NO-API-KEY-EXPOSURE) ? values never logged.
 
 import './env_loader';
 import { probeSubstrateApiPort } from './port_guard';
@@ -42,17 +42,17 @@ import {
   runSpecExtractSmoke,
 } from './hearth_app_builder/orchestrator';
 import { uninstallApp } from './hearth_app_builder/install_runner';
-// B83 — Hearth Conjunction Window
+// B83 ? Hearth Conjunction Window
 import { conjunctionRouter } from './hearth/conjunction/conjunction_router';
 import { buildSubstrateContext } from './hearth/embedded_browser/substrate_context_builder';
 import { querySagaState, recordWaveDispatch, recordWaveComplete } from './hearth/drekaskip_status/drekaskip_bridge';
 import { pollWatchdogStatus, getSubjectHistory } from './hearth/active_substrate/watchdog_bridge';
 import { toggleMonitor, getMetrics, getAllMonitorStates } from './hearth/active_substrate/scribe_monitor';
-// BP037 — On-Deck Master-of-Ceremonies
+// BP037 ? On-Deck Master-of-Ceremonies
 import { listOnDeck } from './on_deck/on_deck_bridge';
 // Adaptive Concurrency Carrier (Layer 2+4)
 import { getCapInfo, probeConcurrencyCap, setCapOverride } from './concurrency_probe';
-// SAGA 4 BP041 — In Conjunction Agent Panel
+// SAGA 4 BP041 ? In Conjunction Agent Panel
 import {
   probeAgent,
   setApiKey,
@@ -70,14 +70,14 @@ import {
 // Register custom OAuth scheme before app ready (Electron requirement)
 registerCustomScheme();
 
-// BP052 v0.1.8 — Kitchen Table™ IPC store
+// BP052 v0.1.8 ? Kitchen Table? IPC store
 import { registerKitchenTableIpc } from './kitchen_table/kitchen_table_store';
 
-// BP060 Application 002 Step 1 — Caithedral Tools IPC
+// BP060 Application 002 Step 1 ? Caithedral Tools IPC
 import { registerCaithedralToolsIPC, setMeshPointerAdvanceHook, dag_soccerball_emit_reexport } from './caithedral_tools_ipc';
 import { setDagEmitMeshHook, setFetchSidFromPeerHook } from './substrate_api';
 
-// MESH-6 — shared protocol payload types
+// MESH-6 ? shared protocol payload types
 import {
   FedMsg,
   SidFetchRequestPayload,
@@ -85,32 +85,32 @@ import {
   PointerAdvancePayload,
 } from '../shared/federation-protocol';
 
-// MESH-6 — dag soccerball lookup (canonical exports-map path; tsconfig paths resolves types)
+// MESH-6 ? dag soccerball lookup (canonical exports-map path; tsconfig paths resolves types)
 import {
   dag_soccerball_lookup as _dagLookup,
   type DagNode,
 } from 'caithedral-core/tools/dag_soccerball';
 
-// BP060 Application 002 Steps 3+4 — Bridge IPC (UI-7 live Yoke wire)
+// BP060 Application 002 Steps 3+4 ? Bridge IPC (UI-7 live Yoke wire)
 import { registerBridgeIPC } from './bridge_ipc';
 
-// BP060 Application 002 Steps 3+4 — AI Dispatch IPC (UI-8 backend)
+// BP060 Application 002 Steps 3+4 ? AI Dispatch IPC (UI-8 backend)
 import { registerAiDispatchIPC } from './ai_dispatch_ipc';
 
-// SAGA-? v0.1.10 — SubstratedFolderWatcher™
+// SAGA-? v0.1.10 ? SubstratedFolderWatcher?
 import { SubstratedFolderWatcher, registerWatcherIpc } from './services/SubstratedFolderWatcher';
 
-// BP067 Correction 2 — Folder?DAG bridge
+// BP067 Correction 2 ? Folder?DAG bridge
 import { setDagBridgeMeshHook, getDagEmitCount } from './dag_bridge';
 
-// SAGA 10 BP045 W1 — mnemosyne:// + mnemo:// deep-link handler
+// SAGA 10 BP045 W1 ? mnemosyne:// + mnemo:// deep-link handler
 import { registerDeepLinkProtocol, handleStartupDeepLink } from './deep-link-handler';
 import type { DeepLinkPayload } from './deep-link-handler';
 
-// BP072 — Paired-Frame Mutual-Aid Layer
+// BP072 ? Paired-Frame Mutual-Aid Layer
 import { PairedFrameManager } from './federation/paired-frame-manager';
 
-// BP065 Part A — LB Account authentication + device linking
+// BP065 Part A ? LB Account authentication + device linking
 import {
   startLBAuthFlow,
   completeLBAuth,
@@ -124,7 +124,7 @@ import {
 // (used for smoke-launch + two-instance tests without full packaging)
 const IS_DEV = process.env.MNEMOSYNE_PROD_LAUNCH !== '1' &&
   (process.env.NODE_ENV === 'development' || !app.isPackaged);
-// Use explicit 127.0.0.1 (IPv4) — avoids Windows ::1 vs 127.0.0.1 split-brain
+// Use explicit 127.0.0.1 (IPv4) ? avoids Windows ::1 vs 127.0.0.1 split-brain
 // where Vite binds to ::1 but Chromium connects to 127.0.0.1.
 const VITE_DEV_URL = 'http://127.0.0.1:5173';
 const RENDERER_URL = IS_DEV
@@ -163,7 +163,7 @@ const CONNECTIVITY_POLL_MS = 30_000;
 const SUBSTRATE_ROOT_MAIN = process.env.LB_SUBSTRATE_ROOT ?? join(homedir(), '.lb_substrate');
 const TIERS_FILE = join(SUBSTRATE_ROOT_MAIN, 'in_conjunction_tiers.json');
 
-// BP048 v0.1.7 — wife-install first-run + LOCAL-HANDSHAKE prefs (~/.mnemosyne/)
+// BP048 v0.1.7 ? wife-install first-run + LOCAL-HANDSHAKE prefs (~/.mnemosyne/)
 const MNEMOSYNE_HOME = join(homedir(), '.mnemosyne');
 const FIRST_RUN_FLAG = join(MNEMOSYNE_HOME, 'first_run.flag');
 const LAN_HANDSHAKE_PREFS = join(MNEMOSYNE_HOME, 'lan_handshake.json');
@@ -341,13 +341,13 @@ async function _fetchSidViaTCP(
             if (!hash_verified) {
               console.error(`[MESH-6] SID hash mismatch: expected=${dag_id} got=${recomputed}`);
               socket.destroy();
-              resolve({ ok: false, hash_verified: false, error: 'SID hash mismatch — rejected' });
+              resolve({ ok: false, hash_verified: false, error: 'SID hash mismatch ? rejected' });
               return;
             }
             socket.destroy();
             resolve({ ok: true, node: payload.node as DagNode, hash_verified: true });
           }
-        } catch { /* malformed — continue */ }
+        } catch { /* malformed ? continue */ }
       }
     });
     socket.on('error', (err: Error) => resolve({ ok: false, hash_verified: false, error: err.message }));
@@ -382,7 +382,7 @@ async function _fetchSidViaRelay(
       const hash_verified = recomputed === dag_id;
       if (!hash_verified) {
         console.error(`[MESH-6] relay SID hash mismatch: expected=${dag_id} got=${recomputed}`);
-        resolve({ ok: false, hash_verified: false, error: 'SID hash mismatch — rejected' });
+        resolve({ ok: false, hash_verified: false, error: 'SID hash mismatch ? rejected' });
         return;
       }
       resolve({ ok: true, node: payload.node as DagNode, hash_verified: true });
@@ -574,7 +574,7 @@ function startOverlayWatchdog(win: BrowserWindow): void {
     win.webContents.send('watchdog-ping');
     setTimeout(() => {
       if (!rendererResponsive && !win.isDestroyed()) {
-        console.warn('[watchdog] renderer unresponsive — force reload');
+        console.warn('[watchdog] renderer unresponsive ? force reload');
         win.webContents.reload();
       }
     }, 5000);
@@ -682,7 +682,7 @@ function createOverlayWindow(): void {
     },
   });
 
-  // Inject CSP on every response — strips unsafe-eval, eliminates Electron security warning.
+  // Inject CSP on every response ? strips unsafe-eval, eliminates Electron security warning.
   overlayWindow.webContents.session.webRequest.onHeadersReceived((details, callback) => {
     callback({
       responseHeaders: {
@@ -703,29 +703,29 @@ function createOverlayWindow(): void {
     // regressions immediately at window creation, not when Founder clicks a button.
     overlayWindow?.webContents.executeJavaScript('typeof window.amplify').then((t) => {
       if (t === 'undefined') {
-        console.error('[preload-smoke] FAIL overlayWindow: window.amplify is undefined — preload bridge did not load');
+        console.error('[preload-smoke] FAIL overlayWindow: window.amplify is undefined ? preload bridge did not load');
       } else {
         console.log('[preload-smoke] OK overlayWindow: window.amplify is', t);
       }
     }).catch((e) => {
       console.error('[preload-smoke] overlayWindow probe threw:', e?.message ?? e);
     });
-    // renderer_guard: probe after 8s grace — log empty-root failures to health log.
+    // renderer_guard: probe after 8s grace ? log empty-root failures to health log.
     const win = overlayWindow;
     if (win) {
       probeRendererHealth(win, RENDERER_URL, 8000).then((result) => {
         if (!result.ok) {
-          tray?.setToolTip(`MnemosyneC — ? renderer boot failed (root empty)`);
+          tray?.setToolTip(`MnemosyneC ? ? renderer boot failed (root empty)`);
         }
       }).catch(() => { /* probe errors never crash the app */ });
     }
   });
   overlayWindow.loadURL(RENDERER_URL);
 
-  // BP041 — DevTools auto-open opt-out per Founder direct (non-technical members
+  // BP041 ? DevTools auto-open opt-out per Founder direct (non-technical members
   // running `npm run dev` should not see DevTools by default). Set MNEMOSYNE_DEVTOOLS=1
   // in env to re-enable, OR press Ctrl+Shift+I at any time to open manually,
-  // OR press Ctrl+Shift+D for the developer menu (commit 1b0fdc7 §6).
+  // OR press Ctrl+Shift+D for the developer menu (commit 1b0fdc7 ?6).
   if (IS_DEV && process.env.MNEMOSYNE_DEVTOOLS === '1') {
     overlayWindow.webContents.openDevTools({ mode: 'detach' });
   }
@@ -776,9 +776,9 @@ function updateTrayTooltip(updateStatus?: UpdateState['status']): void {
   if (!tray || tray.isDestroyed()) return;
   const version = app.getVersion();
   if (updateStatus === 'downloaded') {
-    tray.setToolTip(`MnemosyneC v${version} — Update ready to install`);
+    tray.setToolTip(`MnemosyneC v${version} ? Update ready to install`);
   } else if (updateStatus === 'available' || updateStatus === 'downloading') {
-    tray.setToolTip(`MnemosyneC v${version} — Update available`);
+    tray.setToolTip(`MnemosyneC v${version} ? Update available`);
   } else {
     tray.setToolTip(`MnemosyneC v${version}`);
   }
@@ -798,7 +798,7 @@ function rebuildTrayMenu(mode: FrameMode = currentMode): void {
 
   const contextMenu = Menu.buildFromTemplate([
     {
-      label: `MnemosyneC — ${modeLabel[mode]}${forcedLabel}`,
+      label: `MnemosyneC ? ${modeLabel[mode]}${forcedLabel}`,
       enabled: false,
     },
     { type: 'separator' },
@@ -848,7 +848,7 @@ function rebuildTrayMenu(mode: FrameMode = currentMode): void {
     },
     { type: 'separator' },
     {
-      label: 'Check for Updates…',
+      label: 'Check for Updates?',
       click: () => autoUpdater?.checkNow(),
     },
     {
@@ -901,7 +901,7 @@ function openMoneyPennyWindow(): void {
     minHeight: MONEY_PENNY_MIN_HEIGHT,
     maxWidth: Math.floor(workArea.width * 0.9),
     maxHeight: Math.floor(workArea.height * 0.9),
-    title: 'MoneyPenny — MnemosyneC CAI Amplifier',
+    title: 'MoneyPenny ? MnemosyneC CAI Amplifier',
     icon: join(__dirname, '../../assets/app-icon.ico'),
     show: false,
     webPreferences: {
@@ -939,7 +939,7 @@ function openDashboard(opts?: { focus?: boolean }): void {
     return;
   }
 
-  // SAGA 07 BP046B — expanded for 6-tab MnemosyneTabView
+  // SAGA 07 BP046B ? expanded for 6-tab MnemosyneTabView
   dashboardWindow = new BrowserWindow({
     width: 680,
     height: 780,
@@ -977,7 +977,7 @@ function openDashboard(opts?: { focus?: boolean }): void {
     // SEG-FIX-3 BP078: Runtime preload smoke test.
     dashboardWindow?.webContents.executeJavaScript('typeof window.amplify').then((t) => {
       if (t === 'undefined') {
-        console.error('[preload-smoke] FAIL dashboardWindow: window.amplify is undefined — preload bridge did not load');
+        console.error('[preload-smoke] FAIL dashboardWindow: window.amplify is undefined ? preload bridge did not load');
       } else {
         console.log('[preload-smoke] OK dashboardWindow: window.amplify is', t);
       }
@@ -1035,7 +1035,7 @@ function setupLanHandshakeDiscovery(): void {
       type: 'question',
       title: 'MnemosyneC on your network',
       message: `Found another MnemosyneC on your network: ${hostname}`,
-      detail: 'Would you like to connect to it? (LOCAL-HANDSHAKE · same house LAN)',
+      detail: 'Would you like to connect to it? (LOCAL-HANDSHAKE ? same house LAN)',
       buttons: ['Yes, connect', 'Not Now', 'Never Ask Again'],
       defaultId: 0,
       cancelId: 1,
@@ -1074,7 +1074,7 @@ function openHearthConjunctionWindow(): void {
     height: HEARTH_H,
   });
 
-  // Webview preload path — compiled from src/main/hearth/embedded_browser/webview_preload.ts
+  // Webview preload path ? compiled from src/main/hearth/embedded_browser/webview_preload.ts
   const webviewPreloadPath = join(__dirname, 'hearth', 'embedded_browser', 'webview_preload.js');
 
   hearthConjunctionWindow = new BrowserWindow({
@@ -1082,7 +1082,7 @@ function openHearthConjunctionWindow(): void {
     height: bounds.height,
     x: bounds.x,
     y: bounds.y,
-    title: 'MnemosyneC — Memory, powered by CAI',
+    title: 'MnemosyneC ? Memory, powered by CAI',
     icon: join(__dirname, '../../assets/app-icon.ico'),
     minWidth: 1280,
     minHeight: 800,
@@ -1103,7 +1103,7 @@ function openHearthConjunctionWindow(): void {
   hearthConjunctionWindow.webContents.once('did-finish-load', () => {
     hearthConjunctionWindow?.webContents.executeJavaScript('typeof window.amplify').then((t) => {
       if (t === 'undefined') {
-        console.error('[preload-smoke] FAIL hearthConjunctionWindow: window.amplify is undefined — preload bridge did not load');
+        console.error('[preload-smoke] FAIL hearthConjunctionWindow: window.amplify is undefined ? preload bridge did not load');
       } else {
         console.log('[preload-smoke] OK hearthConjunctionWindow: window.amplify is', t);
       }
@@ -1197,7 +1197,7 @@ function runAutoPrepareIfNeeded(): void {
     autoPrepareProc = null;
     if (code === 0) {
       const notif = new Notification({
-        title: 'MnemosyneC — Gemma 4 12B is ready',
+        title: 'MnemosyneC ? Gemma 4 12B is ready',
         body: 'Full AI model downloaded. Click to activate.',
         silent: false,
       });
@@ -1236,7 +1236,7 @@ function registerIPCHandlers(): void {
   // rather than crashing the app silently.
   const safeHandle = (channel: string, handler: Parameters<typeof ipcMain.handle>[1]): void => {
     try {
-      safeHandle(channel, handler);
+      ipcMain.handle(channel, handler);
     } catch (e) {
       console.error(`[IPC] Duplicate registration attempt for ${channel}:`, e);
     }
@@ -1380,7 +1380,17 @@ function registerIPCHandlers(): void {
     const content = results.join('\n');
     writeFileSync(logPath, content, 'utf-8');
 
+    console.log(`[diagnostic] log written to ${logPath}`);
     return { ok: true, logPath, content };
+  });
+
+  // SEG-R-13: Open the folder that contains a diagnostic log file
+  safeHandle('diagnostic:open-folder', async (_event, folderPath: string) => {
+    try {
+      await shell.showItemInFolder(folderPath);
+    } catch (e) {
+      console.error('[diagnostic] open-folder failed:', e);
+    }
   });
 
   // -- BP065 Onboarding Prefs (v0.1.23) -------------------------------------
@@ -1404,7 +1414,7 @@ function registerIPCHandlers(): void {
         electronShell.writeShortcutLink(
           path.join(desktopPath, 'MnemosyneC.lnk'),
           'create',
-          { target: exePath, name: 'MnemosyneC', description: 'MnemosyneC — private AI memory' },
+          { target: exePath, name: 'MnemosyneC', description: 'MnemosyneC ? private AI memory' },
         );
         results.desktopShortcut = true;
       } catch (err) {
@@ -1496,7 +1506,7 @@ function registerIPCHandlers(): void {
     }
   });
 
-  // BP067 v0.1.24 — transparent install + bundled Gemma floor
+  // BP067 v0.1.24 ? transparent install + bundled Gemma floor
   safeHandle('setup-private-ai', async () => {
     if (!ollamaManager) return { ok: false, error: 'Ollama manager not initialized' };
     const sendProgress = (p: import('./ollama_manager').EngineSetupProgress) => {
@@ -1526,7 +1536,7 @@ function registerIPCHandlers(): void {
     return ollamaManager?.listModels() ?? [];
   });
 
-  // KniPr012 — check if Ollama binary is installed (distinct from daemon running)
+  // KniPr012 ? check if Ollama binary is installed (distinct from daemon running)
   safeHandle('check-ollama', async () => {
     const { execSync } = require('child_process');
     try {
@@ -1701,7 +1711,7 @@ function registerIPCHandlers(): void {
 
   ipcMain.on('open-hearth-conjunction', () => openHearthConjunctionWindow());
 
-  // BP041 SAGA 3 — Watch View toggle
+  // BP041 SAGA 3 ? Watch View toggle
   // hideToWatchView: hides the conjunction window while keeping the overlay + substrate alive.
   // The FrameModeIndicator overlay remains visible (it's a separate transparent window).
   // Member restores by clicking the OverlayTag or pressing Ctrl+Shift+M (global shortcut below).
@@ -1737,7 +1747,7 @@ function registerIPCHandlers(): void {
     (_event, { mode }: { mode: import('./hearth/conjunction/types').ConjunctionMode }) => {
       const state = conjunctionRouter.getState();
       void state; // state is available; update override via internal path
-      conjunctionRouter.selectMode(mode); // temporary — proper override wired below
+      conjunctionRouter.selectMode(mode); // temporary ? proper override wired below
       return { ok: true };
     },
   );
@@ -1789,7 +1799,7 @@ function registerIPCHandlers(): void {
     },
   );
 
-  // -- Scribe Monitor — BP041 SAGA 2 ----------------------------------------
+  // -- Scribe Monitor ? BP041 SAGA 2 ----------------------------------------
 
   safeHandle(
     'scribe-toggle-monitor',
@@ -1822,7 +1832,7 @@ function registerIPCHandlers(): void {
     },
   );
 
-  // -- In Conjunction Agent Panel — SAGA 4 BP041 ----------------------------
+  // -- In Conjunction Agent Panel ? SAGA 4 BP041 ----------------------------
 
   safeHandle(
     'agent-probe',
@@ -1834,7 +1844,7 @@ function registerIPCHandlers(): void {
   safeHandle(
     'agent-set-api-key',
     (_event, { agentId, keyValue }: { agentId: string; keyValue: string }) => {
-      // R16: key value must never be logged — handler passes directly to setApiKey
+      // R16: key value must never be logged ? handler passes directly to setApiKey
       return agentSetApiKeyHandler(agentId, keyValue);
     },
   );
@@ -1862,12 +1872,12 @@ function registerIPCHandlers(): void {
     return agentGetPluginRegistryHandler();
   });
 
-  // Webview preload path — renderer needs this to wire the <webview> preload attribute
+  // Webview preload path ? renderer needs this to wire the <webview> preload attribute
   ipcMain.on('get-webview-preload-path', (event) => {
     event.returnValue = join(__dirname, 'hearth', 'embedded_browser', 'webview_preload.js');
   });
 
-  // -- Adaptive Concurrency Carrier — Layer 4 (hot-tune panel) -------------
+  // -- Adaptive Concurrency Carrier ? Layer 4 (hot-tune panel) -------------
 
   safeHandle('concurrency-get-cap', () => {
     return getCapInfo();
@@ -1889,7 +1899,7 @@ function registerIPCHandlers(): void {
     return listOnDeck();
   });
 
-  // -- Pantheon — Pixie Dust Mining (BP041 SAGA 1) ---------------------------
+  // -- Pantheon ? Pixie Dust Mining (BP041 SAGA 1) ---------------------------
 
   safeHandle('pantheon-pick-folder', async () => {
     const result = await dialog.showOpenDialog({
@@ -1964,7 +1974,7 @@ function registerIPCHandlers(): void {
     return getActiveSessions();
   });
 
-  // -- Phoebe™ Idea Storage IPC (C.17 · BP055) -----------------------------
+  // -- Phoebe? Idea Storage IPC (C.17 ? BP055) -----------------------------
   const _phoebeIdeas: Array<{ id: string; title: string; content: string; timestamp: string }> = [];
   safeHandle('save-idea', async (_event, idea: { title: string; content: string; timestamp: string }) => {
     const id = `idea_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
@@ -1975,7 +1985,7 @@ function registerIPCHandlers(): void {
     return { ok: true, ideas: [..._phoebeIdeas].reverse() };
   });
 
-  // -- Pearl-decode IPC (Tier G · v0.1.16 · BP057 W5c) ---------------------
+  // -- Pearl-decode IPC (Tier G ? v0.1.16 ? BP057 W5c) ---------------------
   safeHandle('decode-pearl', async (_event, pearlId: string) => {
     try {
       const fs = await import('fs');
@@ -2008,7 +2018,7 @@ function registerIPCHandlers(): void {
       return {
         ok: true,
         pearl,
-        content: `# ${pearl.canonical_ref}\n\n**Pearl ID:** ${pearl.pearl_id}\n**Class:** ${pearl.class}\n**Cathedral:** ${pearl.cathedral}\n**Wave:** ${pearl.wave}\n\n*Eblet source not found on local substrate — canonical_ref: ${pearl.canonical_ref}*`,
+        content: `# ${pearl.canonical_ref}\n\n**Pearl ID:** ${pearl.pearl_id}\n**Class:** ${pearl.class}\n**Cathedral:** ${pearl.cathedral}\n**Wave:** ${pearl.wave}\n\n*Eblet source not found on local substrate ? canonical_ref: ${pearl.canonical_ref}*`,
       };
     } catch (e) {
       return { ok: false, error: String(e) };
@@ -2018,16 +2028,16 @@ function registerIPCHandlers(): void {
   // -- Caithedral Tools IPC (BP060 Application 002 Step 1) -----------------
   registerCaithedralToolsIPC();
 
-  // -- Bridge IPC (BP060 Application 002 Steps 3+4 · UI-7 live Yoke wire) --
+  // -- Bridge IPC (BP060 Application 002 Steps 3+4 ? UI-7 live Yoke wire) --
   registerBridgeIPC();
 
-  // -- AI Dispatch IPC (BP060 Application 002 Steps 3+4 · UI-8 backend) ----
+  // -- AI Dispatch IPC (BP060 Application 002 Steps 3+4 ? UI-8 backend) ----
   registerAiDispatchIPC();
 
-  // -- Kitchen Table™ + Atlas™ + P2P (BP052 v0.1.8) ------------------------
+  // -- Kitchen Table? + Atlas? + P2P (BP052 v0.1.8) ------------------------
   registerKitchenTableIpc(ipcMain);
 
-  // -- LB Account + Frontier Node IPC (BP065 Part A/B · SEG-C2a/B2b) ---------
+  // -- LB Account + Frontier Node IPC (BP065 Part A/B ? SEG-C2a/B2b) ---------
 
   safeHandle('lb:start-auth', async (_event, { email }: { email: string }) => {
     return startLBAuthFlow(email);
@@ -2087,7 +2097,7 @@ function registerIPCHandlers(): void {
           body: JSON.stringify({ peer_id: peerId }),
         });
       } catch {
-        // Heartbeat errors are non-fatal — logged silently
+        // Heartbeat errors are non-fatal ? logged silently
       }
     }, FRONTIER_HEARTBEAT_MS);
   }
@@ -2207,7 +2217,7 @@ function registerIPCHandlers(): void {
     return { ok: true };
   });
 
-  // -- SubstratedFolderWatcher™ (SAGA-? v0.1.10) ----------------------------
+  // -- SubstratedFolderWatcher? (SAGA-? v0.1.10) ----------------------------
   if (folderWatcher) registerWatcherIpc(folderWatcher);
 
   safeHandle('watcher:open-folder-dialog', async () => {
@@ -2277,7 +2287,7 @@ function registerIPCHandlers(): void {
     ownPeerId: peerDiscovery ? (() => { const { getStablePeerId: gsp } = require('./federation/peer-discovery'); return gsp(); })() : '',
   }));
 
-  // -- BP072 — Paired-Frame Mutual-Aid IPC ----------------------------------
+  // -- BP072 ? Paired-Frame Mutual-Aid IPC ----------------------------------
 
   safeHandle('paired-frame:get-status', () => {
     return pairedFrameManager?.getStatus() ?? {
@@ -2454,7 +2464,7 @@ function registerIPCHandlers(): void {
     return { ok: true, ebletPath: filePath };
   });
 
-  // BP067 Phase 1A — $5 membership checkout IPC
+  // BP067 Phase 1A ? $5 membership checkout IPC
   // Calls Supabase edge function create-membership-checkout ? returns Stripe Checkout URL
   // Renderer then calls shell.openExternal with the returned URL (never exposed here)
   safeHandle('membership:create-checkout', async (_event, autoRenew: boolean) => {
@@ -2462,7 +2472,7 @@ function registerIPCHandlers(): void {
     const supabaseKey = process.env.SUPABASE_ANON_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
     if (!supabaseUrl || !supabaseKey) {
-      console.warn('[membership] Supabase URL/key not configured — falling back to web join page');
+      console.warn('[membership] Supabase URL/key not configured ? falling back to web join page');
       return { ok: false, error: 'not_configured', fallbackUrl: 'https://lianabanyan.com/join' };
     }
 
@@ -2530,8 +2540,182 @@ function registerIPCHandlers(): void {
     }
   });
 
-  // -- runMeshTest (BP078 Scope 1) -----------------------------------------------
-  safeHandle('run-mesh-test', async (_event, payload?: { testId?: string; timeoutMs?: number }) => {
+  // -- runMeshTest (BP078 Scope 1; extended SEG-T-4 for COLD-vs-HOT multi-node) -------
+  safeHandle('run-mesh-test', async (_event, payload?: {
+    testId?: string;
+    timeoutMs?: number;
+    dataset?: 'standard' | 'diamond';
+    nodes?: string[];
+  }) => {
+    // SEG-T-4 branch: if nodes param present, run COLD-vs-HOT MMLU-Pro mesh test
+    if (payload && Array.isArray((payload as { nodes?: string[] }).nodes)) {
+      const { dataset = 'standard', nodes } = payload as { dataset?: 'standard' | 'diamond'; nodes: string[] };
+
+      // Determine local node identifier (M1 = localhost/127.0.0.1)
+      const localNode = 'M1';
+      const shardDir = join(homedir(), '.mnemosynec', 'test-data', 'mmlu-pro', 'shards');
+      const shardPath = join(shardDir, `shard_${localNode}.json`);
+      const resultsDir = join(homedir(), '.mnemosynec', 'test-data', 'mmlu-pro', 'results');
+
+      if (!existsSync(shardPath)) {
+        return {
+          success: false,
+          error: 'SHARD_NOT_FOUND',
+          detail: `Run scripts/mesh_shard.py first. Expected: ${shardPath}`,
+        };
+      }
+
+      let shard: { node: string; ip: string; questions: Array<Record<string, unknown>> };
+      try {
+        shard = JSON.parse(readFileSync(shardPath, 'utf8')) as typeof shard;
+      } catch (e) {
+        return { success: false, error: 'SHARD_PARSE_ERROR', detail: String(e) };
+      }
+
+      const questions = shard.questions ?? [];
+      const total = questions.length;
+      const results: Array<{
+        question_id: string;
+        gold_answer: string;
+        cold_response: string;
+        hot_response: string;
+        cold_correct: boolean;
+        hot_correct: boolean;
+        latency_cold_ms: number;
+        latency_hot_ms: number;
+      }> = [];
+
+      const ollamaBase = 'http://localhost:11434';
+      const model = dataset === 'diamond' ? 'gemma4:12b' : 'gemma4:12b';
+
+      /** Build prompt string from a question record. */
+      function buildPrompt(q: Record<string, unknown>): string {
+        const text = String(q.question ?? '');
+        const options = Array.isArray(q.options) ? (q.options as string[]) : [];
+        if (options.length === 0) return text;
+        const lines = options.map((opt, i) => `  ${String.fromCharCode(65 + i)}. ${opt}`).join('\n');
+        return `${text}\n\nOptions:\n${lines}\n\nAnswer with the letter only.`;
+      }
+
+      /** Check if response matches gold answer letter. */
+      function isCorrect(response: string, gold: string): boolean {
+        if (!gold || !response) return false;
+        const g = gold.trim().toUpperCase();
+        const r = response.trim().toUpperCase();
+        if (r.startsWith(g)) return true;
+        if (r.includes(`ANSWER: ${g}`) || r.includes(`(${g})`)) return true;
+        return false;
+      }
+
+      /** POST to Ollama /api/generate. Returns [responseText, latencyMs]. */
+      async function ollamaGenerate(prompt: string): Promise<[string, number]> {
+        const t0 = Date.now();
+        try {
+          const resp = await fetch(`${ollamaBase}/api/generate`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ model, prompt, stream: false }),
+          });
+          const data = await resp.json() as { response?: string };
+          return [data.response ?? '', Date.now() - t0];
+        } catch (e) {
+          return [`ERROR:${String(e)}`, Date.now() - t0];
+        }
+      }
+
+      /** Query local substrate for HOT context. Returns context string or empty. */
+      async function substrateQuery(query: string): Promise<string> {
+        try {
+          const resp = await fetch(`http://127.0.0.1:${_SUBSTRATE_PORT}/substrate/query`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query }),
+          });
+          const data = await resp.json() as { hit?: boolean; answer?: string; text?: string };
+          if (data.hit) return data.answer ?? data.text ?? '';
+          return '';
+        } catch {
+          // TODO: substrate unreachable -- HOT context falls back to empty string
+          return '';
+        }
+      }
+
+      /** Emit progress heartbeat via /dag/emit. Non-fatal. */
+      async function emitProgress(done: number): Promise<void> {
+        try {
+          await fetch(`http://127.0.0.1:${_SUBSTRATE_PORT}/dag/emit`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              pearls: [`mesh_test:${localNode}:progress:${done}/${total}`],
+              bindings: { event_type: 'mesh_test_progress', node: localNode, dataset },
+            }),
+          });
+        } catch { /* non-fatal */ }
+      }
+
+      let lastEmitTime = Date.now();
+
+      for (let idx = 0; idx < questions.length; idx++) {
+        const q = questions[idx];
+        const questionId = String(q.question_id ?? idx);
+        const gold = String(q.answer ?? '').trim().toUpperCase();
+        const promptBase = buildPrompt(q);
+
+        // COLD: no substrate context
+        const [coldResp, latencyCold] = await ollamaGenerate(promptBase);
+        const coldCorrect = isCorrect(coldResp, gold);
+
+        // HOT: prepend substrate context if available
+        const ctx = await substrateQuery(promptBase);
+        const hotPrompt = ctx ? `Context from substrate:\n${ctx}\n\n${promptBase}` : promptBase;
+        const [hotResp, latencyHot] = await ollamaGenerate(hotPrompt);
+        const hotCorrect = isCorrect(hotResp, gold);
+
+        results.push({
+          question_id: questionId,
+          gold_answer: gold,
+          cold_response: coldResp,
+          hot_response: hotResp,
+          cold_correct: coldCorrect,
+          hot_correct: hotCorrect,
+          latency_cold_ms: latencyCold,
+          latency_hot_ms: latencyHot,
+        });
+
+        const done = idx + 1;
+        const now = Date.now();
+        if (done % 100 === 0 || (now - lastEmitTime) >= 60_000) {
+          await emitProgress(done);
+          lastEmitTime = now;
+        }
+      }
+
+      // Write results JSON
+      try { mkdirSync(resultsDir, { recursive: true }); } catch { /* ignore */ }
+      const resultsPath = join(resultsDir, `shard_${localNode}_results.json`);
+      const coldCount = results.filter((r) => r.cold_correct).length;
+      const hotCount = results.filter((r) => r.hot_correct).length;
+      const summary = {
+        node: localNode,
+        dataset,
+        nodes,
+        total_questions: total,
+        cold_correct: coldCount,
+        hot_correct: hotCount,
+        cold_accuracy: total > 0 ? coldCount / total : 0,
+        hot_accuracy: total > 0 ? hotCount / total : 0,
+        delta_accuracy: total > 0 ? (hotCount - coldCount) / total : 0,
+      };
+      writeFileSync(resultsPath, JSON.stringify({ summary, results }, null, 2), 'utf8');
+
+      // Final progress emit
+      await emitProgress(total);
+
+      return { success: true, summary, results_path: resultsPath };
+    }
+
+    // -- Legacy single-machine path (BP078 Scope 1 original) ------------------
     const timeoutMs = payload?.timeoutMs ?? 45000;
 
     // MISSING_API_KEY guard -- read from env (env_loader populates on startup)
@@ -2817,12 +3001,12 @@ app.on('will-quit', () => {
 });
 
 app.whenReady().then(async () => {
-  // BP038 Frame-boilerplate — pre-bind port guard (singleton reuse pattern).
+  // BP038 Frame-boilerplate ? pre-bind port guard (singleton reuse pattern).
   // If another AMPLIFY is already on API_PORT, exit cleanly instead of EADDRINUSE crash.
   const probe = await probeSubstrateApiPort(API_PORT);
   if (probe.occupied) {
     if (probe.holder === 'another_amplify') {
-      console.warn(`[LB Frame] another AMPLIFY is already running on :${API_PORT} — this duplicate instance will exit cleanly (singleton reuse). Close the existing instance first if you intended to restart.`);
+      console.warn(`[LB Frame] another AMPLIFY is already running on :${API_PORT} ? this duplicate instance will exit cleanly (singleton reuse). Close the existing instance first if you intended to restart.`);
     } else {
       console.error(`[LB Frame] :${API_PORT} is held by an unknown service. AMPLIFY cannot bind. Free the port or set SUBSTRATE_API_PORT to an alternate.`);
     }
@@ -2843,7 +3027,7 @@ app.whenReady().then(async () => {
   ollamaManager = new OllamaManager();
   await ollamaManager.init();
 
-  // SAGA 4 — In Conjunction Agent Panel: load persisted keys + plugins at startup
+  // SAGA 4 ? In Conjunction Agent Panel: load persisted keys + plugins at startup
   loadPersistedApiKeys();
   ensurePluginDir();
   const { errors: pluginErrors } = loadPlugins();
@@ -2878,11 +3062,11 @@ app.whenReady().then(async () => {
   federationClient?.setInboundHook((msg) => pairedFrameManager?.handleInbound(msg as FedMsg));
   // Log assist-mode state changes
   pairedFrameManager.on('assist-mode-entered', (partnerId) => {
-    console.log(`[BP072] ASSIST_MODE ENTERED for partner=${partnerId} — healthy frame now serving`);
+    console.log(`[BP072] ASSIST_MODE ENTERED for partner=${partnerId} ? healthy frame now serving`);
     _broadcastMeshStateChanged();
   });
   pairedFrameManager.on('assist-mode-exited', (partnerId) => {
-    console.log(`[BP072] ASSIST_MODE EXITED — partner=${partnerId ?? 'none'} back online`);
+    console.log(`[BP072] ASSIST_MODE EXITED ? partner=${partnerId ?? 'none'} back online`);
     _broadcastMeshStateChanged();
   });
 
@@ -2939,19 +3123,19 @@ app.whenReady().then(async () => {
     }
   });
 
-  // §6 BP041 — Hide Electron menu bar by default (non-technical member protection).
+  // ?6 BP041 ? Hide Electron menu bar by default (non-technical member protection).
   // Ctrl+Shift+D toggles developer menu on/off at runtime.
   Menu.setApplicationMenu(null);
 
-  // SAGA-? v0.1.10 — SubstratedFolderWatcher™ singleton (must be after app.ready for getPath)
+  // SAGA-? v0.1.10 ? SubstratedFolderWatcher? singleton (must be after app.ready for getPath)
   folderWatcher = new SubstratedFolderWatcher();
 
-  // Create tray only — overlay is opt-in (tray ? Show Overlay, or Burst Mode).
+  // Create tray only ? overlay is opt-in (tray ? Show Overlay, or Burst Mode).
   // SAGA-1 BP055: Dashboard is the default boot surface; overlay never auto-creates.
   createTray();
   registerIPCHandlers();
 
-  // SAGA 10 BP045 W1 — Register mnemosyne:// + mnemo:// deep-link protocols (BP065)
+  // SAGA 10 BP045 W1 ? Register mnemosyne:// + mnemo:// deep-link protocols (BP065)
   registerDeepLinkProtocol(
     () => dashboardWindow ?? hearthConjunctionWindow ?? overlayWindow ?? null,
     (payload: DeepLinkPayload) => {
@@ -2963,7 +3147,7 @@ app.whenReady().then(async () => {
           token: payload.token,
         });
       } else if (payload.type === 'focus-tab') {
-        // BP067 Phase 3B — mnemo://focus/<tab_id> ? navigate to tab
+        // BP067 Phase 3B ? mnemo://focus/<tab_id> ? navigate to tab
         console.log('[deep-link] focus-tab received:', payload.tabId);
         openDashboard({ focus: true });
         const win = dashboardWindow;
@@ -2971,7 +3155,7 @@ app.whenReady().then(async () => {
           win.webContents.send('navigate:focus-tab', { tabId: payload.tabId });
         }
       } else if (payload.type === 'lb-auth-callback') {
-        // BP065 Part A — Complete the LB Account magic-link auth flow
+        // BP065 Part A ? Complete the LB Account magic-link auth flow
         console.log('[deep-link] lb-auth-callback received');
         void (async () => {
           const result = await completeLBAuth(
@@ -3014,7 +3198,7 @@ app.whenReady().then(async () => {
     dashboardWindow?.hide();
   });
 
-  // BP041 SAGA 3 — Ctrl+Shift+M: toggle between Configure View and Watch View.
+  // BP041 SAGA 3 ? Ctrl+Shift+M: toggle between Configure View and Watch View.
   // Watch View = conjunction window hidden; overlay border + OverlayTag visible.
   // Configure View = conjunction window shown + focused.
   const okWatchToggle = globalShortcut.register('CommandOrControl+Shift+M', () => {
@@ -3033,7 +3217,7 @@ app.whenReady().then(async () => {
     console.warn('[index] Ctrl+Shift+M shortcut registration failed (already registered by another app)');
   }
 
-  // §6 — Dev menu toggle: Ctrl+Shift+D shows/hides the Electron application menu
+  // ?6 ? Dev menu toggle: Ctrl+Shift+D shows/hides the Electron application menu
   let devMenuVisible = false;
   const okDevMenu = globalShortcut.register('CommandOrControl+Shift+D', () => {
     devMenuVisible = !devMenuVisible;
@@ -3062,7 +3246,7 @@ app.whenReady().then(async () => {
     );
   }
   if (!okDevMenu) {
-    console.warn('[Frame] Ctrl+Shift+D dev-menu toggle unavailable — another app may own the accelerator');
+    console.warn('[Frame] Ctrl+Shift+D dev-menu toggle unavailable ? another app may own the accelerator');
   }
 
   // Register auth IPC handlers (after windows are created)
