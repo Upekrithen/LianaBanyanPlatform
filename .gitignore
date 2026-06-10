@@ -32,3 +32,7 @@ Thumbs.db
 *.ntvs*
 *.njsproj
 *.sln
+
+# MMLU-Pro and mesh benchmark data cache
+.mnemosynec/
+~/.mnemosynec/
