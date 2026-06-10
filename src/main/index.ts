@@ -1,9 +1,9 @@
-﻿// AMPLIFY Computer — Electron Main Process
-// B37 Phase 1-3 — BP025 / Bushel 37
+// AMPLIFY Computer � Electron Main Process
+// B37 Phase 1-3 � BP025 / Bushel 37
 // Phase 3 additions: connectivity polling, auto-mode transitions, substrate/federation IPC
 // BP038 addition: env_loader MUST be the first import so its side-effects populate
 // process.env (ANTHROPIC_API_KEY, etc.) before any consumer module reads them at load.
-// Implements Blood Rule R16 (R-NO-API-KEY-EXPOSURE) — values never logged.
+// Implements Blood Rule R16 (R-NO-API-KEY-EXPOSURE) � values never logged.
 
 import './env_loader';
 import { probeSubstrateApiPort } from './port_guard';
@@ -42,17 +42,17 @@ import {
   runSpecExtractSmoke,
 } from './hearth_app_builder/orchestrator';
 import { uninstallApp } from './hearth_app_builder/install_runner';
-// B83 — Hearth Conjunction Window
+// B83 � Hearth Conjunction Window
 import { conjunctionRouter } from './hearth/conjunction/conjunction_router';
 import { buildSubstrateContext } from './hearth/embedded_browser/substrate_context_builder';
 import { querySagaState, recordWaveDispatch, recordWaveComplete } from './hearth/drekaskip_status/drekaskip_bridge';
 import { pollWatchdogStatus, getSubjectHistory } from './hearth/active_substrate/watchdog_bridge';
 import { toggleMonitor, getMetrics, getAllMonitorStates } from './hearth/active_substrate/scribe_monitor';
-// BP037 — On-Deck Master-of-Ceremonies
+// BP037 � On-Deck Master-of-Ceremonies
 import { listOnDeck } from './on_deck/on_deck_bridge';
 // Adaptive Concurrency Carrier (Layer 2+4)
 import { getCapInfo, probeConcurrencyCap, setCapOverride } from './concurrency_probe';
-// SAGA 4 BP041 — In Conjunction Agent Panel
+// SAGA 4 BP041 � In Conjunction Agent Panel
 import {
   probeAgent,
   setApiKey,
@@ -70,14 +70,14 @@ import {
 // Register custom OAuth scheme before app ready (Electron requirement)
 registerCustomScheme();
 
-// BP052 v0.1.8 — Kitchen Table™ IPC store
+// BP052 v0.1.8 � Kitchen Table� IPC store
 import { registerKitchenTableIpc } from './kitchen_table/kitchen_table_store';
 
-// BP060 Application 002 Step 1 — Caithedral Tools IPC
+// BP060 Application 002 Step 1 � Caithedral Tools IPC
 import { registerCaithedralToolsIPC, setMeshPointerAdvanceHook, dag_soccerball_emit_reexport } from './caithedral_tools_ipc';
 import { setDagEmitMeshHook, setFetchSidFromPeerHook } from './substrate_api';
 
-// MESH-6 — shared protocol payload types
+// MESH-6 � shared protocol payload types
 import {
   FedMsg,
   SidFetchRequestPayload,
@@ -85,32 +85,32 @@ import {
   PointerAdvancePayload,
 } from '../shared/federation-protocol';
 
-// MESH-6 — dag soccerball lookup (canonical exports-map path; tsconfig paths resolves types)
+// MESH-6 � dag soccerball lookup (canonical exports-map path; tsconfig paths resolves types)
 import {
   dag_soccerball_lookup as _dagLookup,
   type DagNode,
 } from 'caithedral-core/tools/dag_soccerball';
 
-// BP060 Application 002 Steps 3+4 — Bridge IPC (UI-7 live Yoke wire)
+// BP060 Application 002 Steps 3+4 � Bridge IPC (UI-7 live Yoke wire)
 import { registerBridgeIPC } from './bridge_ipc';
 
-// BP060 Application 002 Steps 3+4 — AI Dispatch IPC (UI-8 backend)
+// BP060 Application 002 Steps 3+4 � AI Dispatch IPC (UI-8 backend)
 import { registerAiDispatchIPC } from './ai_dispatch_ipc';
 
-// SAGA-γ v0.1.10 — SubstratedFolderWatcher™
+// SAGA-? v0.1.10 � SubstratedFolderWatcher�
 import { SubstratedFolderWatcher, registerWatcherIpc } from './services/SubstratedFolderWatcher';
 
-// BP067 Correction 2 — Folder→DAG bridge
+// BP067 Correction 2 � Folder?DAG bridge
 import { setDagBridgeMeshHook, getDagEmitCount } from './dag_bridge';
 
-// SAGA 10 BP045 W1 — mnemosyne:// + mnemo:// deep-link handler
+// SAGA 10 BP045 W1 � mnemosyne:// + mnemo:// deep-link handler
 import { registerDeepLinkProtocol, handleStartupDeepLink } from './deep-link-handler';
 import type { DeepLinkPayload } from './deep-link-handler';
 
-// BP072 — Paired-Frame Mutual-Aid Layer
+// BP072 � Paired-Frame Mutual-Aid Layer
 import { PairedFrameManager } from './federation/paired-frame-manager';
 
-// BP065 Part A — LB Account authentication + device linking
+// BP065 Part A � LB Account authentication + device linking
 import {
   startLBAuthFlow,
   completeLBAuth,
@@ -118,20 +118,20 @@ import {
   revokeDevice as lbRevokeDevice,
 } from './lb_auth';
 
-// ─── Constants ──────────────────────────────────────────────────────────────
+// --- Constants --------------------------------------------------------------
 
 // MNEMOSYNE_PROD_LAUNCH=1 forces loadFile of built renderer even from source tree
 // (used for smoke-launch + two-instance tests without full packaging)
 const IS_DEV = process.env.MNEMOSYNE_PROD_LAUNCH !== '1' &&
   (process.env.NODE_ENV === 'development' || !app.isPackaged);
-// Use explicit 127.0.0.1 (IPv4) — avoids Windows ::1 vs 127.0.0.1 split-brain
+// Use explicit 127.0.0.1 (IPv4) � avoids Windows ::1 vs 127.0.0.1 split-brain
 // where Vite binds to ::1 but Chromium connects to 127.0.0.1.
 const VITE_DEV_URL = 'http://127.0.0.1:5173';
 const RENDERER_URL = IS_DEV
   ? VITE_DEV_URL
   : `file://${join(__dirname, '../renderer/index.html')}`;
 
-// ─── CSP ─────────────────────────────────────────────────────────────────────
+// --- CSP ---------------------------------------------------------------------
 // Strict prod / minimal dev relaxation (HMR style + module loading only).
 // NO unsafe-eval in either environment.
 const _SUBSTRATE_PORT = Number(process.env.SUBSTRATE_PORT ?? 11480);
@@ -158,12 +158,12 @@ const ACTIVE_CSP = IS_DEV ? CSP_DEV : CSP_PROD;
 // Connectivity polling interval (30s)
 const CONNECTIVITY_POLL_MS = 30_000;
 
-// ─── SAGA 4: Tier persistence + agent IPC handlers ───────────────────────────
+// --- SAGA 4: Tier persistence + agent IPC handlers ---------------------------
 
 const SUBSTRATE_ROOT_MAIN = process.env.LB_SUBSTRATE_ROOT ?? join(homedir(), '.lb_substrate');
 const TIERS_FILE = join(SUBSTRATE_ROOT_MAIN, 'in_conjunction_tiers.json');
 
-// BP048 v0.1.7 — wife-install first-run + LOCAL-HANDSHAKE prefs (~/.mnemosyne/)
+// BP048 v0.1.7 � wife-install first-run + LOCAL-HANDSHAKE prefs (~/.mnemosyne/)
 const MNEMOSYNE_HOME = join(homedir(), '.mnemosyne');
 const FIRST_RUN_FLAG = join(MNEMOSYNE_HOME, 'first_run.flag');
 const LAN_HANDSHAKE_PREFS = join(MNEMOSYNE_HOME, 'lan_handshake.json');
@@ -254,7 +254,7 @@ function agentGetPluginRegistryHandler() {
   return getPluginRegistry();
 }
 
-// ─── State ──────────────────────────────────────────────────────────────────
+// --- State ------------------------------------------------------------------
 
 let overlayWindow: BrowserWindow | null = null;
 let dashboardWindow: BrowserWindow | null = null;
@@ -272,13 +272,13 @@ let relayClient: RelayClient | null = null;
 let connectivityTimer: ReturnType<typeof setInterval> | null = null;
 let pairedFrameManager: PairedFrameManager | null = null;
 
-// ─── MESH-6: in-flight relay fetch listeners ──────────────────────────────────
+// --- MESH-6: in-flight relay fetch listeners ----------------------------------
 const meshFetchListeners = new Map<string, (payload: SidFetchResponsePayload) => void>();
 let watchdogOverlayInterval: NodeJS.Timeout | null = null;
 let rendererResponsive = true;
 let displayMetricsListenerAttached = false;
 
-// ─── MESH-6 helpers ───────────────────────────────────────────────────────────
+// --- MESH-6 helpers -----------------------------------------------------------
 
 function _recomputeDagId(
   node: { pearls: string[]; bindings: Record<string, string>; faces: Record<string, string> },
@@ -341,13 +341,13 @@ async function _fetchSidViaTCP(
             if (!hash_verified) {
               console.error(`[MESH-6] SID hash mismatch: expected=${dag_id} got=${recomputed}`);
               socket.destroy();
-              resolve({ ok: false, hash_verified: false, error: 'SID hash mismatch — rejected' });
+              resolve({ ok: false, hash_verified: false, error: 'SID hash mismatch � rejected' });
               return;
             }
             socket.destroy();
             resolve({ ok: true, node: payload.node as DagNode, hash_verified: true });
           }
-        } catch { /* malformed — continue */ }
+        } catch { /* malformed � continue */ }
       }
     });
     socket.on('error', (err: Error) => resolve({ ok: false, hash_verified: false, error: err.message }));
@@ -382,7 +382,7 @@ async function _fetchSidViaRelay(
       const hash_verified = recomputed === dag_id;
       if (!hash_verified) {
         console.error(`[MESH-6] relay SID hash mismatch: expected=${dag_id} got=${recomputed}`);
-        resolve({ ok: false, hash_verified: false, error: 'SID hash mismatch — rejected' });
+        resolve({ ok: false, hash_verified: false, error: 'SID hash mismatch � rejected' });
         return;
       }
       resolve({ ok: true, node: payload.node as DagNode, hash_verified: true });
@@ -421,7 +421,7 @@ function _handleInboundMeshMsg(msg: FedMsg): void {
   if (msg.type === 'pointer_advance') {
     const payload = msg.payload as PointerAdvancePayload;
     if (payload.new_dag_id) {
-      console.log(`[MESH-6] pointer_advance received: ${payload.old_dag_id} → ${payload.new_dag_id} from ${payload.emitter_peer_id}`);
+      console.log(`[MESH-6] pointer_advance received: ${payload.old_dag_id} ? ${payload.new_dag_id} from ${payload.emitter_peer_id}`);
       _autoFetchOnPointerAdvance(payload).catch((e) =>
         console.warn('[MESH-6] auto-fetch on pointer_advance failed:', e),
       );
@@ -493,7 +493,7 @@ function _emitPointerAdvanceToPeers(newDagId: string): void {
   }
 }
 
-// ─── Monitor-safe bounds (multi-display; prevents off-screen window trap) ─────
+// --- Monitor-safe bounds (multi-display; prevents off-screen window trap) -----
 
 function getSafeBounds(bounds: Electron.Rectangle): Electron.Rectangle {
   const displays = screen.getAllDisplays();
@@ -574,15 +574,15 @@ function startOverlayWatchdog(win: BrowserWindow): void {
     win.webContents.send('watchdog-ping');
     setTimeout(() => {
       if (!rendererResponsive && !win.isDestroyed()) {
-        console.warn('[watchdog] renderer unresponsive — force reload');
+        console.warn('[watchdog] renderer unresponsive � force reload');
         win.webContents.reload();
       }
     }, 5000);
   }, 8000);
 }
 
-// ─── LB overlay pointer policy (Electron) ────────────────────────────────────
-// Preload exposes setClickthrough(true) ⇒ ignore mouse ⇒ transparent hits forward to OS.
+// --- LB overlay pointer policy (Electron) ------------------------------------
+// Preload exposes setClickthrough(true) ? ignore mouse ? transparent hits forward to OS.
 
 function applyLBFrameClickthrough(enabled: boolean): void {
   if (!overlayWindow || overlayWindow.isDestroyed()) return;
@@ -596,7 +596,7 @@ function applyLBFrameClickthrough(enabled: boolean): void {
   }
 }
 
-// ─── Frame Mode ──────────────────────────────────────────────────────────────
+// --- Frame Mode --------------------------------------------------------------
 
 type FrameMode = 'ai_burst' | 'normal' | 'fallback';
 let currentMode: FrameMode = 'normal';
@@ -630,7 +630,7 @@ function detectMode(context: {
   return 'ai_burst';
 }
 
-// ─── Connectivity Polling ─────────────────────────────────────────────────────
+// --- Connectivity Polling -----------------------------------------------------
 
 async function runConnectivityPoll(): Promise<void> {
   const aiAvailable = (await ollamaManager?.isReachable()) ?? false;
@@ -649,13 +649,13 @@ async function runConnectivityPoll(): Promise<void> {
     });
 
     if (detected !== currentMode) {
-      console.log(`[Mode] Auto-transition: ${currentMode} → ${detected} (ai=${aiAvailable} online=${online} peers=${peerCount})`);
+      console.log(`[Mode] Auto-transition: ${currentMode} ? ${detected} (ai=${aiAvailable} online=${online} peers=${peerCount})`);
       setMode(detected);
     }
   }
 }
 
-// ─── Overlay Window ──────────────────────────────────────────────────────────
+// --- Overlay Window ----------------------------------------------------------
 
 function createOverlayWindow(): void {
   const { width, height } = screen.getPrimaryDisplay().workAreaSize;
@@ -682,7 +682,7 @@ function createOverlayWindow(): void {
     },
   });
 
-  // Inject CSP on every response — strips unsafe-eval, eliminates Electron security warning.
+  // Inject CSP on every response � strips unsafe-eval, eliminates Electron security warning.
   overlayWindow.webContents.session.webRequest.onHeadersReceived((details, callback) => {
     callback({
       responseHeaders: {
@@ -703,29 +703,29 @@ function createOverlayWindow(): void {
     // regressions immediately at window creation, not when Founder clicks a button.
     overlayWindow?.webContents.executeJavaScript('typeof window.amplify').then((t) => {
       if (t === 'undefined') {
-        console.error('[preload-smoke] FAIL overlayWindow: window.amplify is undefined — preload bridge did not load');
+        console.error('[preload-smoke] FAIL overlayWindow: window.amplify is undefined � preload bridge did not load');
       } else {
         console.log('[preload-smoke] OK overlayWindow: window.amplify is', t);
       }
     }).catch((e) => {
       console.error('[preload-smoke] overlayWindow probe threw:', e?.message ?? e);
     });
-    // renderer_guard: probe after 8s grace — log empty-root failures to health log.
+    // renderer_guard: probe after 8s grace � log empty-root failures to health log.
     const win = overlayWindow;
     if (win) {
       probeRendererHealth(win, RENDERER_URL, 8000).then((result) => {
         if (!result.ok) {
-          tray?.setToolTip(`MnemosyneC — ⚠ renderer boot failed (root empty)`);
+          tray?.setToolTip(`MnemosyneC � ? renderer boot failed (root empty)`);
         }
       }).catch(() => { /* probe errors never crash the app */ });
     }
   });
   overlayWindow.loadURL(RENDERER_URL);
 
-  // BP041 — DevTools auto-open opt-out per Founder direct (non-technical members
+  // BP041 � DevTools auto-open opt-out per Founder direct (non-technical members
   // running `npm run dev` should not see DevTools by default). Set MNEMOSYNE_DEVTOOLS=1
   // in env to re-enable, OR press Ctrl+Shift+I at any time to open manually,
-  // OR press Ctrl+Shift+D for the developer menu (commit 1b0fdc7 §6).
+  // OR press Ctrl+Shift+D for the developer menu (commit 1b0fdc7 �6).
   if (IS_DEV && process.env.MNEMOSYNE_DEVTOOLS === '1') {
     overlayWindow.webContents.openDevTools({ mode: 'detach' });
   }
@@ -752,7 +752,7 @@ function createOverlayWindow(): void {
   startOverlayWatchdog(overlayWindow);
 }
 
-// ─── System Tray ─────────────────────────────────────────────────────────────
+// --- System Tray -------------------------------------------------------------
 
 function createTray(): void {
   const iconPath = join(__dirname, '../../assets/tray-icon.png');
@@ -776,9 +776,9 @@ function updateTrayTooltip(updateStatus?: UpdateState['status']): void {
   if (!tray || tray.isDestroyed()) return;
   const version = app.getVersion();
   if (updateStatus === 'downloaded') {
-    tray.setToolTip(`MnemosyneC v${version} — Update ready to install`);
+    tray.setToolTip(`MnemosyneC v${version} � Update ready to install`);
   } else if (updateStatus === 'available' || updateStatus === 'downloading') {
-    tray.setToolTip(`MnemosyneC v${version} — Update available`);
+    tray.setToolTip(`MnemosyneC v${version} � Update available`);
   } else {
     tray.setToolTip(`MnemosyneC v${version}`);
   }
@@ -788,9 +788,9 @@ function rebuildTrayMenu(mode: FrameMode = currentMode): void {
   if (!tray) return;
 
   const modeLabel: Record<FrameMode, string> = {
-    ai_burst: '🔥 AI Burst',
-    normal: '🌿 Normal',
-    fallback: '🌑 Fallback',
+    ai_burst: '?? AI Burst',
+    normal: '?? Normal',
+    fallback: '?? Fallback',
   };
 
   const forcedMode = substrateServer?.getForcedMode();
@@ -798,12 +798,12 @@ function rebuildTrayMenu(mode: FrameMode = currentMode): void {
 
   const contextMenu = Menu.buildFromTemplate([
     {
-      label: `MnemosyneC — ${modeLabel[mode]}${forcedLabel}`,
+      label: `MnemosyneC � ${modeLabel[mode]}${forcedLabel}`,
       enabled: false,
     },
     { type: 'separator' },
     {
-      label: '🔥 AI Burst Mode',
+      label: '?? AI Burst Mode',
       type: 'radio',
       checked: mode === 'ai_burst',
       click: () => {
@@ -814,13 +814,13 @@ function rebuildTrayMenu(mode: FrameMode = currentMode): void {
       },
     },
     {
-      label: '🌿 Normal Mode',
+      label: '?? Normal Mode',
       type: 'radio',
       checked: mode === 'normal',
       click: () => setMode('normal'),
     },
     {
-      label: '🌑 Fallback Mode',
+      label: '?? Fallback Mode',
       type: 'radio',
       checked: mode === 'fallback',
       click: () => setMode('fallback'),
@@ -839,7 +839,7 @@ function rebuildTrayMenu(mode: FrameMode = currentMode): void {
       click: () => openDashboard(),
     },
     {
-      label: 'Ↄ Open the Bridge',
+      label: '? Open the Bridge',
       click: () => openHearthConjunctionWindow(),
     },
     {
@@ -848,7 +848,7 @@ function rebuildTrayMenu(mode: FrameMode = currentMode): void {
     },
     { type: 'separator' },
     {
-      label: 'Check for Updates…',
+      label: 'Check for Updates�',
       click: () => autoUpdater?.checkNow(),
     },
     {
@@ -881,7 +881,7 @@ function rebuildTrayMenu(mode: FrameMode = currentMode): void {
   tray.setContextMenu(contextMenu);
 }
 
-// ─── Dashboard Window ─────────────────────────────────────────────────────────
+// --- Dashboard Window ---------------------------------------------------------
 
 function openMoneyPennyWindow(): void {
   if (moneyPennyWindow && !moneyPennyWindow.isDestroyed()) {
@@ -901,7 +901,7 @@ function openMoneyPennyWindow(): void {
     minHeight: MONEY_PENNY_MIN_HEIGHT,
     maxWidth: Math.floor(workArea.width * 0.9),
     maxHeight: Math.floor(workArea.height * 0.9),
-    title: 'MoneyPenny — MnemosyneC CAI Amplifier',
+    title: 'MoneyPenny � MnemosyneC CAI Amplifier',
     icon: join(__dirname, '../../assets/app-icon.ico'),
     show: false,
     webPreferences: {
@@ -939,7 +939,7 @@ function openDashboard(opts?: { focus?: boolean }): void {
     return;
   }
 
-  // SAGA 07 BP046B — expanded for 6-tab MnemosyneTabView
+  // SAGA 07 BP046B � expanded for 6-tab MnemosyneTabView
   dashboardWindow = new BrowserWindow({
     width: 680,
     height: 780,
@@ -977,7 +977,7 @@ function openDashboard(opts?: { focus?: boolean }): void {
     // SEG-FIX-3 BP078: Runtime preload smoke test.
     dashboardWindow?.webContents.executeJavaScript('typeof window.amplify').then((t) => {
       if (t === 'undefined') {
-        console.error('[preload-smoke] FAIL dashboardWindow: window.amplify is undefined — preload bridge did not load');
+        console.error('[preload-smoke] FAIL dashboardWindow: window.amplify is undefined � preload bridge did not load');
       } else {
         console.log('[preload-smoke] OK dashboardWindow: window.amplify is', t);
       }
@@ -1035,7 +1035,7 @@ function setupLanHandshakeDiscovery(): void {
       type: 'question',
       title: 'MnemosyneC on your network',
       message: `Found another MnemosyneC on your network: ${hostname}`,
-      detail: 'Would you like to connect to it? (LOCAL-HANDSHAKE · same house LAN)',
+      detail: 'Would you like to connect to it? (LOCAL-HANDSHAKE � same house LAN)',
       buttons: ['Yes, connect', 'Not Now', 'Never Ask Again'],
       defaultId: 0,
       cancelId: 1,
@@ -1056,7 +1056,7 @@ function setupLanHandshakeDiscovery(): void {
   });
 }
 
-// ─── Hearth Conjunction Window (B83) ─────────────────────────────────────────
+// --- Hearth Conjunction Window (B83) -----------------------------------------
 
 function openHearthConjunctionWindow(): void {
   if (hearthConjunctionWindow && !hearthConjunctionWindow.isDestroyed()) {
@@ -1074,7 +1074,7 @@ function openHearthConjunctionWindow(): void {
     height: HEARTH_H,
   });
 
-  // Webview preload path — compiled from src/main/hearth/embedded_browser/webview_preload.ts
+  // Webview preload path � compiled from src/main/hearth/embedded_browser/webview_preload.ts
   const webviewPreloadPath = join(__dirname, 'hearth', 'embedded_browser', 'webview_preload.js');
 
   hearthConjunctionWindow = new BrowserWindow({
@@ -1082,7 +1082,7 @@ function openHearthConjunctionWindow(): void {
     height: bounds.height,
     x: bounds.x,
     y: bounds.y,
-    title: 'MnemosyneC — Memory, powered by CAI',
+    title: 'MnemosyneC � Memory, powered by CAI',
     icon: join(__dirname, '../../assets/app-icon.ico'),
     minWidth: 1280,
     minHeight: 800,
@@ -1103,7 +1103,7 @@ function openHearthConjunctionWindow(): void {
   hearthConjunctionWindow.webContents.once('did-finish-load', () => {
     hearthConjunctionWindow?.webContents.executeJavaScript('typeof window.amplify').then((t) => {
       if (t === 'undefined') {
-        console.error('[preload-smoke] FAIL hearthConjunctionWindow: window.amplify is undefined — preload bridge did not load');
+        console.error('[preload-smoke] FAIL hearthConjunctionWindow: window.amplify is undefined � preload bridge did not load');
       } else {
         console.log('[preload-smoke] OK hearthConjunctionWindow: window.amplify is', t);
       }
@@ -1143,11 +1143,11 @@ function openHearthConjunctionWindow(): void {
   if (authManager) authManager.registerWindow(hearthConjunctionWindow);
 }
 
-// ─── IPC Handlers ────────────────────────────────────────────────────────────
+// --- IPC Handlers ------------------------------------------------------------
 
 let skuPullProc: ReturnType<typeof spawn> | null = null;
 
-// ─── SEG-Q-4 BP078: Auto-prepare FULL upgrade in background ──────────────────
+// --- SEG-Q-4 BP078: Auto-prepare FULL upgrade in background ------------------
 
 let autoPrepareProc: ReturnType<typeof spawn> | null = null;
 let autoPrepareIdleTimer: NodeJS.Timeout | null = null;
@@ -1197,7 +1197,7 @@ function runAutoPrepareIfNeeded(): void {
     autoPrepareProc = null;
     if (code === 0) {
       const notif = new Notification({
-        title: 'MnemosyneC — Gemma 4 12B is ready',
+        title: 'MnemosyneC � Gemma 4 12B is ready',
         body: 'Full AI model downloaded. Click to activate.',
         silent: false,
       });
@@ -1231,6 +1231,17 @@ function scheduleAutoPrepareIdle(): void {
 }
 
 function registerIPCHandlers(): void {
+  // Guard against duplicate handle registrations -- ipcMain.handle throws on dups.
+  // safeHandle wraps every call so accidental future duplicates fail loudly (console.error)
+  // rather than crashing the app silently.
+  const safeHandle = (channel: string, handler: Parameters<typeof ipcMain.handle>[1]): void => {
+    try {
+      safeHandle(channel, handler);
+    } catch (e) {
+      console.error(`[IPC] Duplicate registration attempt for ${channel}:`, e);
+    }
+  };
+
   // SAGA 07+13 BP046B utility + first-install bonus
 
   ipcMain.on('open-external', (_event: Electron.IpcMainEvent, { url }: { url: string }) => {
@@ -1260,7 +1271,7 @@ function registerIPCHandlers(): void {
   });
 
   // SEG-Q-4 BP078: Auto-prepare FULL upgrade IPC
-  ipcMain.handle('auto-prepare:get', () => ({
+  safeHandle('auto-prepare:get', () => ({
     enabled: getAutoPrepareEnabled(),
     modelReady: isGemma4Ready(),
     pulling: autoPrepareProc !== null,
@@ -1278,7 +1289,7 @@ function registerIPCHandlers(): void {
   });
 
   // SEG-Q-13 BP078: Run Diagnostic -- writes probe results to userData log file
-  ipcMain.handle('diagnostic:run', async () => {
+  safeHandle('diagnostic:run', async () => {
     const results: string[] = [];
     const ts = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
     const logPath = join(app.getPath('userData'), `diagnostic-${ts}.log`);
@@ -1372,10 +1383,10 @@ function registerIPCHandlers(): void {
     return { ok: true, logPath, content };
   });
 
-  // ── BP065 Onboarding Prefs (v0.1.23) ─────────────────────────────────────
+  // -- BP065 Onboarding Prefs (v0.1.23) -------------------------------------
   // Applies setup screen preferences: desktop shortcut, startup item, optional API key.
   // All fields are best-effort; failures are non-fatal (onboarding is optional).
-  ipcMain.handle('onboarding:apply-prefs', async (_event, prefs: {
+  safeHandle('onboarding:apply-prefs', async (_event, prefs: {
     displayName?: string;
     addDesktopShortcut?: boolean;
     addStartupItem?: boolean;
@@ -1393,7 +1404,7 @@ function registerIPCHandlers(): void {
         electronShell.writeShortcutLink(
           path.join(desktopPath, 'MnemosyneC.lnk'),
           'create',
-          { target: exePath, name: 'MnemosyneC', description: 'MnemosyneC — private AI memory' },
+          { target: exePath, name: 'MnemosyneC', description: 'MnemosyneC � private AI memory' },
         );
         results.desktopShortcut = true;
       } catch (err) {
@@ -1439,8 +1450,8 @@ function registerIPCHandlers(): void {
     }
   });
 
-  // ── Mode ──────────────────────────────────────────────────────────────────
-  ipcMain.handle('get-frame-mode', () => ({
+  // -- Mode ------------------------------------------------------------------
+  safeHandle('get-frame-mode', () => ({
     mode: currentMode,
     forced_mode: substrateServer?.getForcedMode() ?? null,
   }));
@@ -1450,7 +1461,7 @@ function registerIPCHandlers(): void {
   });
 
   // Force or clear mode override (persists through auto-detect cycles)
-  ipcMain.handle('force-frame-mode', (_event, { mode }: { mode: FrameMode | null }) => {
+  safeHandle('force-frame-mode', (_event, { mode }: { mode: FrameMode | null }) => {
     substrateServer?.setForcedMode(mode);
     if (mode !== null) setMode(mode);
     else runConnectivityPoll();
@@ -1458,17 +1469,17 @@ function registerIPCHandlers(): void {
     return { ok: true, forced_mode: substrateServer?.getForcedMode() ?? null };
   });
 
-  // ── Overlay ───────────────────────────────────────────────────────────────
+  // -- Overlay ---------------------------------------------------------------
   ipcMain.on('set-clickthrough', (_event, { enabled }: { enabled: boolean }) => {
     applyLBFrameClickthrough(enabled);
   });
 
-  // ── Ollama ────────────────────────────────────────────────────────────────
-  ipcMain.handle('get-ollama-status', async () => {
+  // -- Ollama ----------------------------------------------------------------
+  safeHandle('get-ollama-status', async () => {
     return ollamaManager?.getStatus() ?? { running: false, model: null, source: 'none' };
   });
 
-  ipcMain.handle('pull-default-model', async () => {
+  safeHandle('pull-default-model', async () => {
     if (!ollamaManager) return { success: false, error: 'Ollama manager not initialized' };
     const reachable = await ollamaManager.isReachable();
     if (!reachable) return { success: false, error: 'Ollama not running' };
@@ -1485,8 +1496,8 @@ function registerIPCHandlers(): void {
     }
   });
 
-  // BP067 v0.1.24 — transparent install + bundled Gemma floor
-  ipcMain.handle('setup-private-ai', async () => {
+  // BP067 v0.1.24 � transparent install + bundled Gemma floor
+  safeHandle('setup-private-ai', async () => {
     if (!ollamaManager) return { ok: false, error: 'Ollama manager not initialized' };
     const sendProgress = (p: import('./ollama_manager').EngineSetupProgress) => {
       overlayWindow?.webContents.send('engine-setup-progress', p);
@@ -1501,22 +1512,22 @@ function registerIPCHandlers(): void {
     );
   });
 
-  ipcMain.handle('mark-bp067-first-run-complete', () => {
+  safeHandle('mark-bp067-first-run-complete', () => {
     markFirstRunComplete();
     return { ok: true };
   });
 
-  ipcMain.handle('ask-floor-model', async (_event, { prompt }: { prompt: string }) => {
+  safeHandle('ask-floor-model', async (_event, { prompt }: { prompt: string }) => {
     if (!ollamaManager) return { ok: false, error: 'Ollama manager not initialized' };
     return ollamaManager.askFloorModel(prompt);
   });
 
-  ipcMain.handle('list-ollama-models', async () => {
+  safeHandle('list-ollama-models', async () => {
     return ollamaManager?.listModels() ?? [];
   });
 
-  // KniPr012 — check if Ollama binary is installed (distinct from daemon running)
-  ipcMain.handle('check-ollama', async () => {
+  // KniPr012 � check if Ollama binary is installed (distinct from daemon running)
+  safeHandle('check-ollama', async () => {
     const { execSync } = require('child_process');
     try {
       const out = execSync('ollama --version', { timeout: 3000 }).toString();
@@ -1526,16 +1537,16 @@ function registerIPCHandlers(): void {
     }
   });
 
-  ipcMain.handle('check-disk-space', async () => {
+  safeHandle('check-disk-space', async () => {
     const ok = (await ollamaManager?.checkDiskSpace(6)) ?? true;
     return { ok, requiredGB: 6 };
   });
 
-  // ── Substrate ─────────────────────────────────────────────────────────────
+  // -- Substrate -------------------------------------------------------------
 
   // Route a query through the three-mode substrate router
   // Degraded mode (trial expired): allow substrate read, but block Ollama/cloud escalation
-  ipcMain.handle(
+  safeHandle(
     'substrate-query',
     async (_event, { query, model }: { query: string; model?: string }) => {
       if (!substrateServer) return { hit: false, routing: 'miss', latency_ms: 0 };
@@ -1556,7 +1567,7 @@ function registerIPCHandlers(): void {
 
   // Write a record to the local substrate index + queue federation sync
   // Blocked entirely in degraded mode
-  ipcMain.handle(
+  safeHandle(
     'substrate-write',
     async (_event, { text, source, keywords }: { text: string; source?: string; keywords?: string[] }) => {
       if (authManager?.isDegraded()) {
@@ -1575,8 +1586,8 @@ function registerIPCHandlers(): void {
     },
   );
 
-  // ── Federation ────────────────────────────────────────────────────────────
-  ipcMain.handle('get-federation-status', () => {
+  // -- Federation ------------------------------------------------------------
+  safeHandle('get-federation-status', () => {
     return federationClient?.getStatus() ?? {
       online: false,
       peerCount: 0,
@@ -1587,13 +1598,13 @@ function registerIPCHandlers(): void {
     };
   });
 
-  ipcMain.handle('set-member-token', (_event, { token }: { token: string | null }) => {
+  safeHandle('set-member-token', (_event, { token }: { token: string | null }) => {
     federationClient?.setMemberToken(token);
     return { ok: true };
   });
 
-  // ── AMPLIFY Telemetry ─────────────────────────────────────────────────────
-  ipcMain.handle('get-amplify-snapshot', async () => {
+  // -- AMPLIFY Telemetry -----------------------------------------------------
+  safeHandle('get-amplify-snapshot', async () => {
     return substrateServer?.getAMPLIFYSnapshot() ?? {
       total_queries: 0,
       substrate_hits: 0,
@@ -1604,12 +1615,12 @@ function registerIPCHandlers(): void {
   });
 
   // Full historical summary (today / week / month / daily breakdown / all-time)
-  ipcMain.handle('get-amplify-summary', () => {
+  safeHandle('get-amplify-summary', () => {
     return substrateServer?.getTelemetryStore().getSummary() ?? null;
   });
 
-  // ── Auto-Update ───────────────────────────────────────────────────────────
-  ipcMain.handle('get-update-state', () => autoUpdater?.getState() ?? { status: 'idle' });
+  // -- Auto-Update -----------------------------------------------------------
+  safeHandle('get-update-state', () => autoUpdater?.getState() ?? { status: 'idle' });
   ipcMain.on('check-for-updates', () => autoUpdater?.checkNow());
   ipcMain.on('install-update', () => autoUpdater?.installNow());
 
@@ -1617,8 +1628,8 @@ function registerIPCHandlers(): void {
     rendererResponsive = true;
   });
 
-  // ── App Version (MV-VERSION-DISPLAY BP044) ────────────────────────────────
-  ipcMain.handle('get-app-version', () => {
+  // -- App Version (MV-VERSION-DISPLAY BP044) --------------------------------
+  safeHandle('get-app-version', () => {
     const version = app.getVersion();
     let buildHash = process.env.BUILD_HASH ?? '';
     if (!buildHash) {
@@ -1632,20 +1643,20 @@ function registerIPCHandlers(): void {
     return { version, buildHash };
   });
 
-  // ── MoneyPenny Mobile ─────────────────────────────────────────────────────
-  ipcMain.handle('get-moneypenny-url', () => ({
+  // -- MoneyPenny Mobile -----------------------------------------------------
+  safeHandle('get-moneypenny-url', () => ({
     url: getMoneyPennyURL(API_PORT),
     ips: getLocalIPs(),
     port: API_PORT,
   }));
 
-  // ── Dashboard ─────────────────────────────────────────────────────────────
+  // -- Dashboard -------------------------------------------------------------
   ipcMain.on('open-dashboard', () => openDashboard());
 
-  // ── Hearth App Builder (B69) ──────────────────────────────────────────────
+  // -- Hearth App Builder (B69) ----------------------------------------------
 
   // Route hearth_app_build_request from Substrate-DM (intent class: hearth_app_build_request)
-  ipcMain.handle(
+  safeHandle(
     'hearth-build',
     async (_event, { request, memberId }: { request: string; memberId?: string }) => {
       const wins = [overlayWindow, dashboardWindow];
@@ -1653,7 +1664,7 @@ function registerIPCHandlers(): void {
     },
   );
 
-  ipcMain.handle(
+  safeHandle(
     'hearth-install',
     async (
       _event,
@@ -1670,38 +1681,38 @@ function registerIPCHandlers(): void {
     },
   );
 
-  ipcMain.handle('hearth-library-query', (_event, { memberId }: { memberId?: string } = {}) => {
+  safeHandle('hearth-library-query', (_event, { memberId }: { memberId?: string } = {}) => {
     return getHearthLibrary(memberId);
   });
 
-  ipcMain.handle('hearth-uninstall', async (_event, { uuid }: { uuid: string }) => {
+  safeHandle('hearth-uninstall', async (_event, { uuid }: { uuid: string }) => {
     return uninstallApp(uuid);
   });
 
-  ipcMain.handle('hearth-healthz', async () => {
+  safeHandle('hearth-healthz', async () => {
     return getHearthHealthz();
   });
 
-  ipcMain.handle('hearth-spec-extract-smoke', async () => {
+  safeHandle('hearth-spec-extract-smoke', async () => {
     return runSpecExtractSmoke();
   });
 
-  // ── Hearth Conjunction Window (B83) ─────────────────────────────────────────
+  // -- Hearth Conjunction Window (B83) -----------------------------------------
 
   ipcMain.on('open-hearth-conjunction', () => openHearthConjunctionWindow());
 
-  // BP041 SAGA 3 — Watch View toggle
+  // BP041 SAGA 3 � Watch View toggle
   // hideToWatchView: hides the conjunction window while keeping the overlay + substrate alive.
   // The FrameModeIndicator overlay remains visible (it's a separate transparent window).
   // Member restores by clicking the OverlayTag or pressing Ctrl+Shift+M (global shortcut below).
-  ipcMain.handle('hide-to-watch-view', () => {
+  safeHandle('hide-to-watch-view', () => {
     if (hearthConjunctionWindow && !hearthConjunctionWindow.isDestroyed()) {
       hearthConjunctionWindow.hide();
     }
     return { ok: true };
   });
 
-  ipcMain.handle('show-hearth-conjunction', () => {
+  safeHandle('show-hearth-conjunction', () => {
     if (hearthConjunctionWindow && !hearthConjunctionWindow.isDestroyed()) {
       hearthConjunctionWindow.show();
       hearthConjunctionWindow.focus();
@@ -1711,27 +1722,27 @@ function registerIPCHandlers(): void {
     return { ok: true };
   });
 
-  ipcMain.handle('conjunction-get-state', () => conjunctionRouter.getState());
+  safeHandle('conjunction-get-state', () => conjunctionRouter.getState());
 
-  ipcMain.handle('conjunction-get-availability', () => conjunctionRouter.getAvailability());
+  safeHandle('conjunction-get-availability', () => conjunctionRouter.getAvailability());
 
-  ipcMain.handle(
+  safeHandle(
     'conjunction-select',
     (_event, { mode }: { mode: import('./hearth/conjunction/types').ConjunctionMode }) =>
       conjunctionRouter.selectMode(mode),
   );
 
-  ipcMain.handle(
+  safeHandle(
     'conjunction-set-override',
     (_event, { mode }: { mode: import('./hearth/conjunction/types').ConjunctionMode }) => {
       const state = conjunctionRouter.getState();
       void state; // state is available; update override via internal path
-      conjunctionRouter.selectMode(mode); // temporary — proper override wired below
+      conjunctionRouter.selectMode(mode); // temporary � proper override wired below
       return { ok: true };
     },
   );
 
-  ipcMain.handle(
+  safeHandle(
     'conjunction-dispatch',
     async (
       _event,
@@ -1755,39 +1766,39 @@ function registerIPCHandlers(): void {
     },
   );
 
-  ipcMain.handle('conjunction-get-substrate-context', async () => {
+  safeHandle('conjunction-get-substrate-context', async () => {
     return buildSubstrateContext();
   });
 
-  // ── Drekaskip bridge (B83c) ───────────────────────────────────────────────
+  // -- Drekaskip bridge (B83c) -----------------------------------------------
 
-  ipcMain.handle('drekaskip-query', async () => {
+  safeHandle('drekaskip-query', async () => {
     return querySagaState();
   });
 
-  // ── Watchdog bridge (B83d) ────────────────────────────────────────────────
+  // -- Watchdog bridge (B83d) ------------------------------------------------
 
-  ipcMain.handle('watchdog-status', async () => {
+  safeHandle('watchdog-status', async () => {
     return pollWatchdogStatus();
   });
 
-  ipcMain.handle(
+  safeHandle(
     'watchdog-history',
     async (_event, { subject, window_hours }: { subject: string; window_hours?: number }) => {
       return getSubjectHistory(subject, window_hours);
     },
   );
 
-  // ── Scribe Monitor — BP041 SAGA 2 ────────────────────────────────────────
+  // -- Scribe Monitor � BP041 SAGA 2 ----------------------------------------
 
-  ipcMain.handle(
+  safeHandle(
     'scribe-toggle-monitor',
     (_event, { scribeId, on }: { scribeId: string; on: boolean }) => {
       return toggleMonitor(scribeId, on);
     },
   );
 
-  ipcMain.handle(
+  safeHandle(
     'scribe-get-metrics',
     (_event, { scribeIds }: { scribeIds: string[] }) => {
       if (!scribeIds || scribeIds.length === 0) {
@@ -1811,76 +1822,76 @@ function registerIPCHandlers(): void {
     },
   );
 
-  // ── In Conjunction Agent Panel — SAGA 4 BP041 ────────────────────────────
+  // -- In Conjunction Agent Panel � SAGA 4 BP041 ----------------------------
 
-  ipcMain.handle(
+  safeHandle(
     'agent-probe',
     async (_event, { agentId, force, modelId }: { agentId: string; force?: boolean; modelId?: string }) => {
       return agentProbeHandler(agentId, { force, modelId });
     },
   );
 
-  ipcMain.handle(
+  safeHandle(
     'agent-set-api-key',
     (_event, { agentId, keyValue }: { agentId: string; keyValue: string }) => {
-      // R16: key value must never be logged — handler passes directly to setApiKey
+      // R16: key value must never be logged � handler passes directly to setApiKey
       return agentSetApiKeyHandler(agentId, keyValue);
     },
   );
 
-  ipcMain.handle('agent-get-api-key-status', () => {
+  safeHandle('agent-get-api-key-status', () => {
     return agentGetApiKeyStatusHandler();
   });
 
-  ipcMain.handle('agent-get-tier-choices', () => {
+  safeHandle('agent-get-tier-choices', () => {
     return agentGetTierChoicesHandler();
   });
 
-  ipcMain.handle(
+  safeHandle(
     'agent-set-tier-choice',
     (_event, { agentId, tierId }: { agentId: string; tierId: string }) => {
       return agentSetTierChoiceHandler(agentId, tierId);
     },
   );
 
-  ipcMain.handle('agent-get-plugins', () => {
+  safeHandle('agent-get-plugins', () => {
     return agentGetPluginsHandler();
   });
 
-  ipcMain.handle('agent-get-plugin-registry', () => {
+  safeHandle('agent-get-plugin-registry', () => {
     return agentGetPluginRegistryHandler();
   });
 
-  // Webview preload path — renderer needs this to wire the <webview> preload attribute
+  // Webview preload path � renderer needs this to wire the <webview> preload attribute
   ipcMain.on('get-webview-preload-path', (event) => {
     event.returnValue = join(__dirname, 'hearth', 'embedded_browser', 'webview_preload.js');
   });
 
-  // ── Adaptive Concurrency Carrier — Layer 4 (hot-tune panel) ─────────────
+  // -- Adaptive Concurrency Carrier � Layer 4 (hot-tune panel) -------------
 
-  ipcMain.handle('concurrency-get-cap', () => {
+  safeHandle('concurrency-get-cap', () => {
     return getCapInfo();
   });
 
-  ipcMain.handle('concurrency-probe-now', async () => {
+  safeHandle('concurrency-probe-now', async () => {
     const entry = await probeConcurrencyCap();
     return { cap: entry.cap, probed_at: entry.probed_at, tier: entry.account_tier_hint };
   });
 
-  ipcMain.handle('concurrency-set-override', (_event, { n }: { n: number | null }) => {
+  safeHandle('concurrency-set-override', (_event, { n }: { n: number | null }) => {
     setCapOverride(n);
     return { ok: true, effective_cap: n };
   });
 
-  // ── On-Deck Master-of-Ceremonies (BP037) ──────────────────────────────────
+  // -- On-Deck Master-of-Ceremonies (BP037) ----------------------------------
 
-  ipcMain.handle('on-deck-list', () => {
+  safeHandle('on-deck-list', () => {
     return listOnDeck();
   });
 
-  // ── Pantheon — Pixie Dust Mining (BP041 SAGA 1) ───────────────────────────
+  // -- Pantheon � Pixie Dust Mining (BP041 SAGA 1) ---------------------------
 
-  ipcMain.handle('pantheon-pick-folder', async () => {
+  safeHandle('pantheon-pick-folder', async () => {
     const result = await dialog.showOpenDialog({
       title: 'Choose a folder for Pixie Dust Mining',
       properties: ['openDirectory'],
@@ -1889,12 +1900,12 @@ function registerIPCHandlers(): void {
     return result.canceled || result.filePaths.length === 0 ? null : result.filePaths[0];
   });
 
-  ipcMain.handle('pantheon-get-prefs', (_event, { memberId }: { memberId: string }) => {
+  safeHandle('pantheon-get-prefs', (_event, { memberId }: { memberId: string }) => {
     const { getFolderPrefs } = require('./pantheon/folder_prefs') as typeof import('./pantheon/folder_prefs');
     return getFolderPrefs(memberId);
   });
 
-  ipcMain.handle('pantheon-set-pref', (_event, args: {
+  safeHandle('pantheon-set-pref', (_event, args: {
     memberId: string;
     folderPath: string;
     pixelated: boolean;
@@ -1905,13 +1916,13 @@ function registerIPCHandlers(): void {
     return setFolderPref(args.memberId, args.folderPath, args.pixelated, args.federationShared, args.subfolderOverrides);
   });
 
-  ipcMain.handle('pantheon-remove-pref', (_event, { memberId, folderPath }: { memberId: string; folderPath: string }) => {
+  safeHandle('pantheon-remove-pref', (_event, { memberId, folderPath }: { memberId: string; folderPath: string }) => {
     const { removeFolderPref } = require('./pantheon/folder_prefs') as typeof import('./pantheon/folder_prefs');
     removeFolderPref(memberId, folderPath);
     return { ok: true };
   });
 
-  ipcMain.handle('pantheon-dispatch', async (_event, {
+  safeHandle('pantheon-dispatch', async (_event, {
     memberId,
     folderPath,
     sharingScope,
@@ -1929,7 +1940,7 @@ function registerIPCHandlers(): void {
     );
   });
 
-  ipcMain.handle('pantheon-list-tablets', (_event, { memberId, grade, persona }: {
+  safeHandle('pantheon-list-tablets', (_event, { memberId, grade, persona }: {
     memberId: string;
     grade?: 'iron' | 'stone';
     persona?: string;
@@ -1938,34 +1949,34 @@ function registerIPCHandlers(): void {
     return listTablets(memberId, { grade, persona: persona as import('./pantheon/types').PersonaId | undefined });
   });
 
-  ipcMain.handle('pantheon-count-tablets', (_event, { memberId }: { memberId: string }) => {
+  safeHandle('pantheon-count-tablets', (_event, { memberId }: { memberId: string }) => {
     const { countTablets } = require('./pantheon/tablet_store') as typeof import('./pantheon/tablet_store');
     return countTablets(memberId);
   });
 
-  ipcMain.handle('pantheon-wipe', (_event, { memberId }: { memberId: string }) => {
+  safeHandle('pantheon-wipe', (_event, { memberId }: { memberId: string }) => {
     const { wipeTablets } = require('./pantheon/tablet_store') as typeof import('./pantheon/tablet_store');
     return wipeTablets(memberId);
   });
 
-  ipcMain.handle('pantheon-active-sessions', () => {
+  safeHandle('pantheon-active-sessions', () => {
     const { getActiveSessions } = require('./pantheon/orchestrator') as typeof import('./pantheon/orchestrator');
     return getActiveSessions();
   });
 
-  // ── Phoebe™ Idea Storage IPC (C.17 · BP055) ─────────────────────────────
+  // -- Phoebe� Idea Storage IPC (C.17 � BP055) -----------------------------
   const _phoebeIdeas: Array<{ id: string; title: string; content: string; timestamp: string }> = [];
-  ipcMain.handle('save-idea', async (_event, idea: { title: string; content: string; timestamp: string }) => {
+  safeHandle('save-idea', async (_event, idea: { title: string; content: string; timestamp: string }) => {
     const id = `idea_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
     _phoebeIdeas.push({ id, ...idea });
     return { ok: true, id };
   });
-  ipcMain.handle('get-ideas', async () => {
+  safeHandle('get-ideas', async () => {
     return { ok: true, ideas: [..._phoebeIdeas].reverse() };
   });
 
-  // ── Pearl-decode IPC (Tier G · v0.1.16 · BP057 W5c) ─────────────────────
-  ipcMain.handle('decode-pearl', async (_event, pearlId: string) => {
+  // -- Pearl-decode IPC (Tier G � v0.1.16 � BP057 W5c) ---------------------
+  safeHandle('decode-pearl', async (_event, pearlId: string) => {
     try {
       const fs = await import('fs');
       const path = await import('path');
@@ -1997,32 +2008,32 @@ function registerIPCHandlers(): void {
       return {
         ok: true,
         pearl,
-        content: `# ${pearl.canonical_ref}\n\n**Pearl ID:** ${pearl.pearl_id}\n**Class:** ${pearl.class}\n**Cathedral:** ${pearl.cathedral}\n**Wave:** ${pearl.wave}\n\n*Eblet source not found on local substrate — canonical_ref: ${pearl.canonical_ref}*`,
+        content: `# ${pearl.canonical_ref}\n\n**Pearl ID:** ${pearl.pearl_id}\n**Class:** ${pearl.class}\n**Cathedral:** ${pearl.cathedral}\n**Wave:** ${pearl.wave}\n\n*Eblet source not found on local substrate � canonical_ref: ${pearl.canonical_ref}*`,
       };
     } catch (e) {
       return { ok: false, error: String(e) };
     }
   });
 
-  // ── Caithedral Tools IPC (BP060 Application 002 Step 1) ─────────────────
+  // -- Caithedral Tools IPC (BP060 Application 002 Step 1) -----------------
   registerCaithedralToolsIPC();
 
-  // ── Bridge IPC (BP060 Application 002 Steps 3+4 · UI-7 live Yoke wire) ──
+  // -- Bridge IPC (BP060 Application 002 Steps 3+4 � UI-7 live Yoke wire) --
   registerBridgeIPC();
 
-  // ── AI Dispatch IPC (BP060 Application 002 Steps 3+4 · UI-8 backend) ────
+  // -- AI Dispatch IPC (BP060 Application 002 Steps 3+4 � UI-8 backend) ----
   registerAiDispatchIPC();
 
-  // ── Kitchen Table™ + Atlas™ + P2P (BP052 v0.1.8) ────────────────────────
+  // -- Kitchen Table� + Atlas� + P2P (BP052 v0.1.8) ------------------------
   registerKitchenTableIpc(ipcMain);
 
-  // ── LB Account + Frontier Node IPC (BP065 Part A/B · SEG-C2a/B2b) ─────────
+  // -- LB Account + Frontier Node IPC (BP065 Part A/B � SEG-C2a/B2b) ---------
 
-  ipcMain.handle('lb:start-auth', async (_event, { email }: { email: string }) => {
+  safeHandle('lb:start-auth', async (_event, { email }: { email: string }) => {
     return startLBAuthFlow(email);
   });
 
-  ipcMain.handle('lb:get-session', async () => {
+  safeHandle('lb:get-session', async () => {
     const session = getLBSession();
     if (!session) return { linked: false };
     return {
@@ -2035,7 +2046,7 @@ function registerIPCHandlers(): void {
     };
   });
 
-  ipcMain.handle('lb:link-device', async (_event, { access_token, refresh_token, email }: { access_token: string; refresh_token: string; email: string }) => {
+  safeHandle('lb:link-device', async (_event, { access_token, refresh_token, email }: { access_token: string; refresh_token: string; email: string }) => {
     const result = await completeLBAuth(access_token, refresh_token, email);
     if (result.ok && result.session) {
       // Broadcast lb:auth-complete to all windows
@@ -2054,7 +2065,7 @@ function registerIPCHandlers(): void {
     return { ok: result.ok, error: result.error };
   });
 
-  ipcMain.handle('lb:revoke-device', async () => {
+  safeHandle('lb:revoke-device', async () => {
     return lbRevokeDevice();
   });
 
@@ -2076,7 +2087,7 @@ function registerIPCHandlers(): void {
           body: JSON.stringify({ peer_id: peerId }),
         });
       } catch {
-        // Heartbeat errors are non-fatal — logged silently
+        // Heartbeat errors are non-fatal � logged silently
       }
     }, FRONTIER_HEARTBEAT_MS);
   }
@@ -2091,7 +2102,7 @@ function registerIPCHandlers(): void {
   // Frontier node status stored in-memory (supplement with safeStorage if needed in future)
   let _frontierNodeId: string | null = null;
 
-  ipcMain.handle('lb:register-frontier-node', async () => {
+  safeHandle('lb:register-frontier-node', async () => {
     const session = getLBSession();
     if (!session) return { ok: false, error: 'LB Account not linked. Link first.' };
     const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || '';
@@ -2116,7 +2127,7 @@ function registerIPCHandlers(): void {
     }
   });
 
-  ipcMain.handle('lb:withdraw-frontier-node', async () => {
+  safeHandle('lb:withdraw-frontier-node', async () => {
     stopFrontierHeartbeat();
     const session = getLBSession();
     if (!session) { _frontierNodeId = null; return { ok: true }; }
@@ -2139,29 +2150,29 @@ function registerIPCHandlers(): void {
     return { ok: true };
   });
 
-  ipcMain.handle('lb:get-frontier-status', async () => {
+  safeHandle('lb:get-frontier-status', async () => {
     return {
       registered: _frontierNodeId !== null,
       frontier_node_id: _frontierNodeId ?? undefined,
     };
   });
 
-  // ── Frontier Borrow (WAVE-24) ──────────────────────────────────────────────
+  // -- Frontier Borrow (WAVE-24) ----------------------------------------------
   // "Your computer is busy -- borrow a trusted node."
   // Opt-in only. Returns a borrow ticket with cost disclosure.
   const _borrowOptIn = { enabled: false, trustList: [] as string[] };
 
-  ipcMain.handle('lb:get-borrow-status', () => ({
+  safeHandle('lb:get-borrow-status', () => ({
     borrow_opt_in: _borrowOptIn.enabled,
     trust_list: _borrowOptIn.trustList,
   }));
 
-  ipcMain.handle('lb:set-borrow-opt-in', (_event, { enabled }: { enabled: boolean }) => {
+  safeHandle('lb:set-borrow-opt-in', (_event, { enabled }: { enabled: boolean }) => {
     _borrowOptIn.enabled = enabled;
     return { ok: true };
   });
 
-  ipcMain.handle('lb:request-frontier-borrow', async () => {
+  safeHandle('lb:request-frontier-borrow', async () => {
     if (!_borrowOptIn.enabled) {
       return { ok: false, error: 'Borrow opt-in not enabled. Toggle it on first.' };
     }
@@ -2183,33 +2194,33 @@ function registerIPCHandlers(): void {
   // Opt-In Strike Tracker IPC stubs (renderer primarily uses localStorage; IPC for cross-window sync)
   const _optInStore = { strikes: 0, lastShown: null as number | null, decision: 'pending' as string };
 
-  ipcMain.handle('lb:opt-in-get-state', () => ({ ..._optInStore }));
+  safeHandle('lb:opt-in-get-state', () => ({ ..._optInStore }));
 
-  ipcMain.handle('lb:opt-in-record-strike', () => {
+  safeHandle('lb:opt-in-record-strike', () => {
     _optInStore.strikes = Math.min(_optInStore.strikes + 1, 3);
     _optInStore.lastShown = Date.now();
     return { ok: true };
   });
 
-  ipcMain.handle('lb:opt-in-set-decision', (_event, { decision }: { decision: string }) => {
+  safeHandle('lb:opt-in-set-decision', (_event, { decision }: { decision: string }) => {
     _optInStore.decision = decision;
     return { ok: true };
   });
 
-  // ── SubstratedFolderWatcher™ (SAGA-γ v0.1.10) ────────────────────────────
+  // -- SubstratedFolderWatcher� (SAGA-? v0.1.10) ----------------------------
   if (folderWatcher) registerWatcherIpc(folderWatcher);
 
-  ipcMain.handle('watcher:open-folder-dialog', async () => {
+  safeHandle('watcher:open-folder-dialog', async () => {
     return dialog.showOpenDialog({ properties: ['openDirectory'] });
   });
 
-  // ── DAG Bridge status (BP067 Correction 2) ────────────────────────────────
-  ipcMain.handle('dag:emit-status', () => {
+  // -- DAG Bridge status (BP067 Correction 2) --------------------------------
+  safeHandle('dag:emit-status', () => {
     return { emitted: getDagEmitCount() };
   });
 
-  // ── Trail Eblet Reader (KniPr035) ─────────────────────────────────────────
-  ipcMain.handle('trail-eblet:list', async () => {
+  // -- Trail Eblet Reader (KniPr035) -----------------------------------------
+  safeHandle('trail-eblet:list', async () => {
     const fs = require('fs') as typeof import('fs');
     const path = require('path') as typeof import('path');
     const os = require('os') as typeof import('os');
@@ -2221,7 +2232,7 @@ function registerIPCHandlers(): void {
     return { files, dir: trailsDir };
   });
 
-  ipcMain.handle('trail-eblet:read', async (_event, { filePath }: { filePath: string }) => {
+  safeHandle('trail-eblet:read', async (_event, { filePath }: { filePath: string }) => {
     const fs = require('fs') as typeof import('fs');
     if (!fs.existsSync(filePath)) return { ok: false, error: 'File not found' };
     try {
@@ -2232,7 +2243,7 @@ function registerIPCHandlers(): void {
     }
   });
 
-  ipcMain.handle('trail-eblet:list-screenshots', async (_event, { ebletPath }: { ebletPath: string }) => {
+  safeHandle('trail-eblet:list-screenshots', async (_event, { ebletPath }: { ebletPath: string }) => {
     const fs = require('fs') as typeof import('fs');
     const path = require('path') as typeof import('path');
     const screenshotsDir = path.join(path.dirname(ebletPath), 'screenshots');
@@ -2242,7 +2253,7 @@ function registerIPCHandlers(): void {
     return { files, dir: screenshotsDir };
   });
 
-  ipcMain.handle('trail-eblet:read-screenshot', async (_event, { filePath }: { filePath: string }) => {
+  safeHandle('trail-eblet:read-screenshot', async (_event, { filePath }: { filePath: string }) => {
     const fs = require('fs') as typeof import('fs');
     const path = require('path') as typeof import('path');
     if (!fs.existsSync(filePath)) return { ok: false };
@@ -2259,16 +2270,16 @@ function registerIPCHandlers(): void {
     }
   });
 
-  // ── MV-CN Peer Mesh (SAGA 3 BP045 W1) ─────────────────────────────────────
-  ipcMain.handle('get-mesh-state', () => ({
+  // -- MV-CN Peer Mesh (SAGA 3 BP045 W1) -------------------------------------
+  safeHandle('get-mesh-state', () => ({
     peers: peerDiscovery?.getAllPeers() ?? [],
     relayConnected: relayClient?.isConnected() ?? false,
     ownPeerId: peerDiscovery ? (() => { const { getStablePeerId: gsp } = require('./federation/peer-discovery'); return gsp(); })() : '',
   }));
 
-  // ── BP072 — Paired-Frame Mutual-Aid IPC ──────────────────────────────────
+  // -- BP072 � Paired-Frame Mutual-Aid IPC ----------------------------------
 
-  ipcMain.handle('paired-frame:get-status', () => {
+  safeHandle('paired-frame:get-status', () => {
     return pairedFrameManager?.getStatus() ?? {
       paired: false,
       pairedPeerId: null,
@@ -2280,32 +2291,32 @@ function registerIPCHandlers(): void {
     };
   });
 
-  ipcMain.handle('paired-frame:request-pairing', (_ev, { peerId, displayName }: { peerId: string; displayName?: string }) => {
+  safeHandle('paired-frame:request-pairing', (_ev, { peerId, displayName }: { peerId: string; displayName?: string }) => {
     if (!pairedFrameManager) return { ok: false, error: 'PairedFrameManager not initialized' };
     pairedFrameManager.requestPairing(peerId, displayName);
     return { ok: true };
   });
 
-  ipcMain.handle('paired-frame:accept-pairing', (_ev, { peerId, displayName }: { peerId: string; displayName?: string }) => {
+  safeHandle('paired-frame:accept-pairing', (_ev, { peerId, displayName }: { peerId: string; displayName?: string }) => {
     if (!pairedFrameManager) return { ok: false, error: 'PairedFrameManager not initialized' };
     pairedFrameManager.acceptPairing(peerId, displayName);
     return { ok: true };
   });
 
-  ipcMain.handle('paired-frame:reject-pairing', (_ev, { peerId, reason }: { peerId: string; reason?: string }) => {
+  safeHandle('paired-frame:reject-pairing', (_ev, { peerId, reason }: { peerId: string; reason?: string }) => {
     if (!pairedFrameManager) return { ok: false, error: 'PairedFrameManager not initialized' };
     pairedFrameManager.rejectPairing(peerId, reason);
     return { ok: true };
   });
 
-  ipcMain.handle('paired-frame:unpair', (_ev, { reason }: { reason?: string } = {}) => {
+  safeHandle('paired-frame:unpair', (_ev, { reason }: { reason?: string } = {}) => {
     if (!pairedFrameManager) return { ok: false, error: 'PairedFrameManager not initialized' };
     pairedFrameManager.unpair(reason);
     return { ok: true };
   });
 
-  // ── MESH-6: SID-targeted peer fetch ────────────────────────────────────────
-  ipcMain.handle(
+  // -- MESH-6: SID-targeted peer fetch ----------------------------------------
+  safeHandle(
     'federation:fetch-sid',
     async (
       _ev,
@@ -2333,8 +2344,8 @@ function registerIPCHandlers(): void {
     },
   );
 
-  // ── MESH-6: Federation invite/accept/leave ──────────────────────────────────
-  ipcMain.handle('federation:generate-invite', (): { token: string; expiresAt: string } => {
+  // -- MESH-6: Federation invite/accept/leave ----------------------------------
+  safeHandle('federation:generate-invite', (): { token: string; expiresAt: string } => {
     const { randomBytes } = require('crypto') as typeof import('crypto');
     const nonce = randomBytes(16).toString('hex');
     const expiresAt = new Date(Date.now() + 86_400_000).toISOString();
@@ -2343,7 +2354,7 @@ function registerIPCHandlers(): void {
     return { token, expiresAt };
   });
 
-  ipcMain.handle(
+  safeHandle(
     'federation:accept-invite',
     async (_ev, token: string): Promise<{ success: boolean; peerName?: string; error?: string }> => {
       try {
@@ -2387,7 +2398,7 @@ function registerIPCHandlers(): void {
     },
   );
 
-  ipcMain.handle('federation:leave-peer', (_ev, peerId: string): { ok: boolean } => {
+  safeHandle('federation:leave-peer', (_ev, peerId: string): { ok: boolean } => {
     if (peerDiscovery) {
       peerDiscovery.removeWANPeer(peerId);
       peerDiscovery.removeLANPeer(peerId);
@@ -2395,9 +2406,9 @@ function registerIPCHandlers(): void {
     return { ok: true };
   });
 
-  // ── Chronos Research Consent (KniPr038) ──────────────────────────────────
+  // -- Chronos Research Consent (KniPr038) ----------------------------------
 
-  ipcMain.handle('write-chronos-consent', async (_event, consentPayload: object) => {
+  safeHandle('write-chronos-consent', async (_event, consentPayload: object) => {
     const fsp = require('path') as typeof import('path');
     const fs = require('fs') as typeof import('fs');
     const crypto = require('crypto') as typeof import('crypto');
@@ -2422,7 +2433,7 @@ function registerIPCHandlers(): void {
     return { ok: true, ebletPath: filePath };
   });
 
-  ipcMain.handle('revoke-chronos-consent', async (_event, _payload?: object) => {
+  safeHandle('revoke-chronos-consent', async (_event, _payload?: object) => {
     const fsp = require('path') as typeof import('path');
     const fs = require('fs') as typeof import('fs');
     const crypto = require('crypto') as typeof import('crypto');
@@ -2443,15 +2454,15 @@ function registerIPCHandlers(): void {
     return { ok: true, ebletPath: filePath };
   });
 
-  // BP067 Phase 1A — $5 membership checkout IPC
-  // Calls Supabase edge function create-membership-checkout → returns Stripe Checkout URL
+  // BP067 Phase 1A � $5 membership checkout IPC
+  // Calls Supabase edge function create-membership-checkout ? returns Stripe Checkout URL
   // Renderer then calls shell.openExternal with the returned URL (never exposed here)
-  ipcMain.handle('membership:create-checkout', async (_event, autoRenew: boolean) => {
+  safeHandle('membership:create-checkout', async (_event, autoRenew: boolean) => {
     const supabaseUrl = process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseKey = process.env.SUPABASE_ANON_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
     if (!supabaseUrl || !supabaseKey) {
-      console.warn('[membership] Supabase URL/key not configured — falling back to web join page');
+      console.warn('[membership] Supabase URL/key not configured � falling back to web join page');
       return { ok: false, error: 'not_configured', fallbackUrl: 'https://lianabanyan.com/join' };
     }
 
@@ -2485,8 +2496,8 @@ function registerIPCHandlers(): void {
     }
   });
 
-  // ── membership.verifyStatus (BP078 Scope 2) ──────────────────────────────────
-  ipcMain.handle('membership-verify-status', async () => {
+  // -- membership.verifyStatus (BP078 Scope 2) ----------------------------------
+  safeHandle('membership-verify-status', async () => {
     const supabaseUrl = process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseKey = process.env.SUPABASE_ANON_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
@@ -2519,8 +2530,8 @@ function registerIPCHandlers(): void {
     }
   });
 
-  // ── runMeshTest (BP078 Scope 1) ───────────────────────────────────────────────
-  ipcMain.handle('run-mesh-test', async (_event, payload?: { testId?: string; timeoutMs?: number }) => {
+  // -- runMeshTest (BP078 Scope 1) -----------------------------------------------
+  safeHandle('run-mesh-test', async (_event, payload?: { testId?: string; timeoutMs?: number }) => {
     const timeoutMs = payload?.timeoutMs ?? 45000;
 
     // MISSING_API_KEY guard -- read from env (env_loader populates on startup)
@@ -2626,9 +2637,9 @@ function registerIPCHandlers(): void {
     });
   });
 
-  // ─── SKU IPC handlers (BP078 Scope 6.5) ──────────────────────────────────────
+  // --- SKU IPC handlers (BP078 Scope 6.5) --------------------------------------
 
-  ipcMain.handle('sku-check-model', async (_event, modelName: string) => {
+  safeHandle('sku-check-model', async (_event, modelName: string) => {
     try {
       const modelsDir = join(homedir(), '.ollama', 'models', 'manifests',
         'registry.ollama.ai', 'library');
@@ -2643,7 +2654,7 @@ function registerIPCHandlers(): void {
     }
   });
 
-  ipcMain.handle('sku-upgrade-to', async (event, tier: string) => {
+  safeHandle('sku-upgrade-to', async (event, tier: string) => {
     const modelMap: Record<string, string> = {
       full: 'gemma4:12b',
       lite: 'gemma4:12b',
@@ -2717,7 +2728,7 @@ function registerIPCHandlers(): void {
     return { ok: true };
   });
 
-  ipcMain.handle('sku-cancel-upgrade', async () => {
+  safeHandle('sku-cancel-upgrade', async () => {
     if (skuPullProc) {
       try { skuPullProc.kill('SIGKILL'); } catch { /* ignore */ }
       skuPullProc = null;
@@ -2725,7 +2736,7 @@ function registerIPCHandlers(): void {
     return { ok: true };
   });
 
-  ipcMain.handle('sku-current-tier', async () => {
+  safeHandle('sku-current-tier', async () => {
     try {
       const cfgPath = join(app.getPath('userData'), 'sku_tier.json');
       if (existsSync(cfgPath)) {
@@ -2737,11 +2748,11 @@ function registerIPCHandlers(): void {
     return { tier: 'nano' };
   });
 
-  // ── Black Crow Feather earn (BP078) ───────────────────────────────────────
+  // -- Black Crow Feather earn (BP078) ---------------------------------------
   // Durably records a black_crow feather in the Supabase crow_feathers table.
   // Uses service role key to bypass RLS. Idempotent: one black_crow feather
   // per user with badge_class = 'full_sku_upgrade'.
-  ipcMain.handle('feather:earn-black', async (
+  safeHandle('feather:earn-black', async (
     _event,
     payload: { userId: string; reason: string; metadata?: Record<string, unknown> },
   ) => {
@@ -2799,19 +2810,19 @@ function registerIPCHandlers(): void {
   });
 }
 
-// ─── App Lifecycle ────────────────────────────────────────────────────────────
+// --- App Lifecycle ------------------------------------------------------------
 
 app.on('will-quit', () => {
   globalShortcut.unregisterAll();
 });
 
 app.whenReady().then(async () => {
-  // BP038 Frame-boilerplate — pre-bind port guard (singleton reuse pattern).
+  // BP038 Frame-boilerplate � pre-bind port guard (singleton reuse pattern).
   // If another AMPLIFY is already on API_PORT, exit cleanly instead of EADDRINUSE crash.
   const probe = await probeSubstrateApiPort(API_PORT);
   if (probe.occupied) {
     if (probe.holder === 'another_amplify') {
-      console.warn(`[LB Frame] another AMPLIFY is already running on :${API_PORT} — this duplicate instance will exit cleanly (singleton reuse). Close the existing instance first if you intended to restart.`);
+      console.warn(`[LB Frame] another AMPLIFY is already running on :${API_PORT} � this duplicate instance will exit cleanly (singleton reuse). Close the existing instance first if you intended to restart.`);
     } else {
       console.error(`[LB Frame] :${API_PORT} is held by an unknown service. AMPLIFY cannot bind. Free the port or set SUBSTRATE_API_PORT to an alternate.`);
     }
@@ -2832,7 +2843,7 @@ app.whenReady().then(async () => {
   ollamaManager = new OllamaManager();
   await ollamaManager.init();
 
-  // SAGA 4 — In Conjunction Agent Panel: load persisted keys + plugins at startup
+  // SAGA 4 � In Conjunction Agent Panel: load persisted keys + plugins at startup
   loadPersistedApiKeys();
   ensurePluginDir();
   const { errors: pluginErrors } = loadPlugins();
@@ -2867,18 +2878,18 @@ app.whenReady().then(async () => {
   federationClient?.setInboundHook((msg) => pairedFrameManager?.handleInbound(msg as FedMsg));
   // Log assist-mode state changes
   pairedFrameManager.on('assist-mode-entered', (partnerId) => {
-    console.log(`[BP072] ASSIST_MODE ENTERED for partner=${partnerId} — healthy frame now serving`);
+    console.log(`[BP072] ASSIST_MODE ENTERED for partner=${partnerId} � healthy frame now serving`);
     _broadcastMeshStateChanged();
   });
   pairedFrameManager.on('assist-mode-exited', (partnerId) => {
-    console.log(`[BP072] ASSIST_MODE EXITED — partner=${partnerId ?? 'none'} back online`);
+    console.log(`[BP072] ASSIST_MODE EXITED � partner=${partnerId ?? 'none'} back online`);
     _broadcastMeshStateChanged();
   });
 
   // MESH-6: Wire pointer-advance hook from caithedral tools IPC
   setMeshPointerAdvanceHook(_emitPointerAdvanceToPeers);
 
-  // BP067 Correction 2: Wire folder→DAG bridge mesh hook
+  // BP067 Correction 2: Wire folder?DAG bridge mesh hook
   setDagBridgeMeshHook(_emitPointerAdvanceToPeers);
 
   // MESH-6 Option-B: Wire HTTP /dag/emit endpoint to the same pointer_advance broadcast
@@ -2928,19 +2939,19 @@ app.whenReady().then(async () => {
     }
   });
 
-  // §6 BP041 — Hide Electron menu bar by default (non-technical member protection).
+  // �6 BP041 � Hide Electron menu bar by default (non-technical member protection).
   // Ctrl+Shift+D toggles developer menu on/off at runtime.
   Menu.setApplicationMenu(null);
 
-  // SAGA-γ v0.1.10 — SubstratedFolderWatcher™ singleton (must be after app.ready for getPath)
+  // SAGA-? v0.1.10 � SubstratedFolderWatcher� singleton (must be after app.ready for getPath)
   folderWatcher = new SubstratedFolderWatcher();
 
-  // Create tray only — overlay is opt-in (tray → Show Overlay, or Burst Mode).
+  // Create tray only � overlay is opt-in (tray ? Show Overlay, or Burst Mode).
   // SAGA-1 BP055: Dashboard is the default boot surface; overlay never auto-creates.
   createTray();
   registerIPCHandlers();
 
-  // SAGA 10 BP045 W1 — Register mnemosyne:// + mnemo:// deep-link protocols (BP065)
+  // SAGA 10 BP045 W1 � Register mnemosyne:// + mnemo:// deep-link protocols (BP065)
   registerDeepLinkProtocol(
     () => dashboardWindow ?? hearthConjunctionWindow ?? overlayWindow ?? null,
     (payload: DeepLinkPayload) => {
@@ -2952,7 +2963,7 @@ app.whenReady().then(async () => {
           token: payload.token,
         });
       } else if (payload.type === 'focus-tab') {
-        // BP067 Phase 3B — mnemo://focus/<tab_id> → navigate to tab
+        // BP067 Phase 3B � mnemo://focus/<tab_id> ? navigate to tab
         console.log('[deep-link] focus-tab received:', payload.tabId);
         openDashboard({ focus: true });
         const win = dashboardWindow;
@@ -2960,7 +2971,7 @@ app.whenReady().then(async () => {
           win.webContents.send('navigate:focus-tab', { tabId: payload.tabId });
         }
       } else if (payload.type === 'lb-auth-callback') {
-        // BP065 Part A — Complete the LB Account magic-link auth flow
+        // BP065 Part A � Complete the LB Account magic-link auth flow
         console.log('[deep-link] lb-auth-callback received');
         void (async () => {
           const result = await completeLBAuth(
@@ -2988,7 +2999,7 @@ app.whenReady().then(async () => {
   handleStartupDeepLink(process.argv, () => hearthConjunctionWindow ?? overlayWindow ?? null);
 
   // SAGA-1 BP055: Dashboard is now the default boot surface on every launch.
-  // Overlay only appears via tray right-click → Show Overlay / Burst Mode (opt-in).
+  // Overlay only appears via tray right-click ? Show Overlay / Burst Mode (opt-in).
   // MNEMOSYNE_NO_AUTO_OPEN=1 skips auto-open (CI / headless environments).
   if (process.env.MNEMOSYNE_NO_AUTO_OPEN !== '1') {
     openDashboard({ focus: true });
@@ -3003,7 +3014,7 @@ app.whenReady().then(async () => {
     dashboardWindow?.hide();
   });
 
-  // BP041 SAGA 3 — Ctrl+Shift+M: toggle between Configure View and Watch View.
+  // BP041 SAGA 3 � Ctrl+Shift+M: toggle between Configure View and Watch View.
   // Watch View = conjunction window hidden; overlay border + OverlayTag visible.
   // Configure View = conjunction window shown + focused.
   const okWatchToggle = globalShortcut.register('CommandOrControl+Shift+M', () => {
@@ -3012,9 +3023,9 @@ app.whenReady().then(async () => {
       return;
     }
     if (hearthConjunctionWindow.isVisible()) {
-      hearthConjunctionWindow.hide();  // → Watch View
+      hearthConjunctionWindow.hide();  // ? Watch View
     } else {
-      hearthConjunctionWindow.show();  // → Configure View
+      hearthConjunctionWindow.show();  // ? Configure View
       hearthConjunctionWindow.focus();
     }
   });
@@ -3022,7 +3033,7 @@ app.whenReady().then(async () => {
     console.warn('[index] Ctrl+Shift+M shortcut registration failed (already registered by another app)');
   }
 
-  // §6 — Dev menu toggle: Ctrl+Shift+D shows/hides the Electron application menu
+  // �6 � Dev menu toggle: Ctrl+Shift+D shows/hides the Electron application menu
   let devMenuVisible = false;
   const okDevMenu = globalShortcut.register('CommandOrControl+Shift+D', () => {
     devMenuVisible = !devMenuVisible;
@@ -3051,7 +3062,7 @@ app.whenReady().then(async () => {
     );
   }
   if (!okDevMenu) {
-    console.warn('[Frame] Ctrl+Shift+D dev-menu toggle unavailable — another app may own the accelerator');
+    console.warn('[Frame] Ctrl+Shift+D dev-menu toggle unavailable � another app may own the accelerator');
   }
 
   // Register auth IPC handlers (after windows are created)
@@ -3069,7 +3080,7 @@ app.whenReady().then(async () => {
   });
   setMode(mode, false);
 
-  // Start periodic connectivity polling → auto mode transitions
+  // Start periodic connectivity polling ? auto mode transitions
   connectivityTimer = setInterval(runConnectivityPoll, CONNECTIVITY_POLL_MS);
 
   // SEG-Q-4 BP078: auto-prepare FULL upgrade on launch (if enabled)
@@ -3077,7 +3088,7 @@ app.whenReady().then(async () => {
   scheduleAutoPrepareIdle();
 
   app.on('activate', () => {
-    // SAGA-1 BP055: macOS dock click → open Dashboard (not overlay).
+    // SAGA-1 BP055: macOS dock click ? open Dashboard (not overlay).
     openDashboard({ focus: true });
   });
 });

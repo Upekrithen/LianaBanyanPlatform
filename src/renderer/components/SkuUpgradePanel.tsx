@@ -327,9 +327,13 @@ export function SkuUpgradePanel({
   const [progress, setProgress] = useState<SkuPullProgress | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
+  const [stallWarning, setStallWarning] = useState(false);
+
   const upgradeActiveRef = useRef(false);
   // Holds cleanup callbacks for IPC listeners registered during upgrade
   const listenerCleanupRef = useRef<(() => void) | null>(null);
+  // Tracks when the last sku-pull-progress event arrived (ms epoch)
+  const lastProgressTimeRef = useRef<number>(0);
 
   // ── On mount: load tier + model state ─────────────────────────────────────
 
@@ -374,11 +378,14 @@ export function SkuUpgradePanel({
     setPhase('upgrading');
     setProgress(null);
     setErrorMsg(null);
+    setStallWarning(false);
+    lastProgressTimeRef.current = Date.now();
 
     // Clean up any previous listeners
     listenerCleanupRef.current?.();
 
     const unsubProgress = window.amplify.sku?.onPullProgress((data: SkuPullProgress): void => {
+      lastProgressTimeRef.current = Date.now();
       setProgress(data);
     }) ?? ((): void => {});
 
@@ -439,6 +446,90 @@ export function SkuUpgradePanel({
     upgradeActiveRef.current = false;
     startUpgrade();
   }, [startUpgrade]);
+
+  // ── Activate FULL (model already present -- skip download UI) ─────────────
+  // Calls sku-upgrade-to directly; expects near-instant tier write, no pull.
+
+  const activateFull = useCallback((): void => {
+    if (upgradeActiveRef.current) return;
+    upgradeActiveRef.current = true;
+
+    setPhase('upgrading');
+    setProgress(null);
+    setErrorMsg(null);
+    setStallWarning(false);
+
+    // Register complete/error listeners so the pull-complete event (fired by
+    // main when it detects the model already exists) is handled correctly.
+    listenerCleanupRef.current?.();
+
+    const unsubComplete = window.amplify.sku?.onPullComplete((): void => {
+      upgradeActiveRef.current = false;
+      setCurrentTier('full');
+      setPhase('complete');
+      analytics?.track('feather_earned', { color: 'black', reason: 'full_sku_activate_existing' });
+      void (async (): Promise<void> => {
+        try {
+          const session = await window.amplify.lbGetSession?.();
+          const userId = session?.user_id ?? '';
+          await window.amplify.earnBlackCrowFeather?.({ userId, reason: 'full_sku_activate_existing' });
+        } catch { /* Non-fatal */ }
+      })();
+      onUpgradeComplete?.();
+    }) ?? ((): void => {});
+
+    const unsubError = window.amplify.sku?.onPullError((err: string): void => {
+      upgradeActiveRef.current = false;
+      setErrorMsg(err || 'Activation failed. Try again.');
+      setPhase('error');
+    }) ?? ((): void => {});
+
+    listenerCleanupRef.current = (): void => {
+      unsubComplete();
+      unsubError();
+    };
+
+    void window.amplify.sku?.upgradeTo('full').catch((err: unknown): void => {
+      upgradeActiveRef.current = false;
+      setErrorMsg(err instanceof Error ? err.message : 'Could not activate FULL.');
+      setPhase('error');
+    });
+  }, [analytics, onUpgradeComplete]);
+
+  // ── 30s stall watchdog ────────────────────────────────────────────────────
+  // If downloading and no progress event arrives for >30s, re-check model.
+  // If it now exists, treat as success. Otherwise surface a non-fatal warning.
+
+  useEffect(() => {
+    if (phase !== 'upgrading' || modelExists) return;
+
+    const STALL_MS = 30_000;
+    const id = setInterval((): void => {
+      const elapsed = Date.now() - lastProgressTimeRef.current;
+      if (elapsed < STALL_MS) return;
+
+      void (async (): Promise<void> => {
+        try {
+          const result = await (window.amplify.sku?.checkModel('gemma4:12b') ?? Promise.resolve({ exists: false, modelName: 'gemma4:12b' }));
+          if (result.exists) {
+            // Model finished in background -- treat as success
+            clearInterval(id);
+            listenerCleanupRef.current?.();
+            listenerCleanupRef.current = null;
+            upgradeActiveRef.current = false;
+            setModelExists(true);
+            setCurrentTier('full');
+            setPhase('complete');
+            onUpgradeComplete?.();
+          } else {
+            setStallWarning(true);
+          }
+        } catch { /* Non-fatal -- leave warning off */ }
+      })();
+    }, 5_000);
+
+    return (): void => { clearInterval(id); };
+  }, [phase, modelExists, onUpgradeComplete]);
 
   // ── Progress values ───────────────────────────────────────────────────────
 
@@ -512,7 +603,8 @@ export function SkuUpgradePanel({
                     </div>
                   ))}
                 </div>
-                <div style={S.modelSizeLabel}>{tier.modelSize}</div>
+                {/* Hide download size when model already exists locally */}
+                {!modelExists && <div style={S.modelSizeLabel}>{tier.modelSize}</div>}
 
                 {/* Upgrade / Activate button -- only if not already FULL and not mid-upgrade */}
                 {!fullIsActive && phase === 'ready' && (
@@ -520,9 +612,9 @@ export function SkuUpgradePanel({
                     <button
                       type="button"
                       style={S.activateBtn}
-                      onClick={startUpgrade}
+                      onClick={activateFull}
                     >
-                      gemma4:12b detected -- activate FULL
+                      Activate FULL
                     </button>
                   ) : (
                     <button
@@ -607,6 +699,27 @@ export function SkuUpgradePanel({
               </>
             )}
 
+            {stallWarning && (
+              <div style={{
+                marginBottom: 8,
+                padding: '8px 10px',
+                background: 'rgba(245,158,11,0.08)',
+                border: '1px solid rgba(245,158,11,0.25)',
+                borderRadius: 7,
+                fontSize: 11,
+                color: '#fcd34d',
+                lineHeight: 1.6,
+              }}>
+                Download may have stalled.
+                <button
+                  type="button"
+                  style={{ ...S.retryBtn, marginTop: 6 }}
+                  onClick={handleRetry}
+                >
+                  Retry
+                </button>
+              </div>
+            )}
             <button type="button" style={S.cancelBtn} onClick={handleCancel}>
               Cancel
             </button>

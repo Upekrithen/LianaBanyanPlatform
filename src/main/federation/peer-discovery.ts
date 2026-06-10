@@ -205,16 +205,20 @@ let _cachedPeerId: string | null = null;
 
 export function getStablePeerId(): string {
   if (_cachedPeerId) return _cachedPeerId;
-  // Derive stable ID from machine ID hash (no PII)
+  // Derive stable ID from machine ID hash (no PII).
+  // Uses Get-CimInstance instead of the deprecated wmic command (removed in Windows 11 24H2+).
   try {
     const { execSync } = require('child_process') as typeof import('child_process');
-    const raw = execSync('wmic csproduct get uuid', { encoding: 'utf8', timeout: 3000 });
-    const uuid = raw.split('\n').find((l) => l.trim().match(/^[0-9A-F-]{36}$/i))?.trim();
-    if (uuid) {
+    const raw = execSync(
+      'powershell -NoProfile -Command "(Get-CimInstance -ClassName Win32_ComputerSystemProduct).UUID"',
+      { encoding: 'utf8', timeout: 5000 },
+    );
+    const uuid = raw.trim();
+    if (uuid && /^[0-9A-F-]{36}$/i.test(uuid)) {
       _cachedPeerId = createHash('sha256').update(`mnemosyne:${uuid}`).digest('hex').slice(0, 16);
       return _cachedPeerId;
     }
-  } catch { /* fallback */ }
+  } catch { /* fallback to random ID */ }
   _cachedPeerId = randomUUID().replace(/-/g, '').slice(0, 16);
   return _cachedPeerId;
 }

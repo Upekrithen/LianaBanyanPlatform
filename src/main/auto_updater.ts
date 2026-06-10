@@ -120,6 +120,13 @@ export class AutoUpdateManager {
   // ─── Private ─────────────────────────────────────────────────────────────
 
   private _configureUpdater(): void {
+    // Canonical release-channel feed URL: https://mnemosynec.ai/download/
+    // This is set at build time via the `publish` block in package.json (provider: generic).
+    // There is NO runtime setFeedURL call -- electron-updater reads the baked-in URL from
+    // the app-update.yml embedded in the asar. Do NOT add a setFeedURL override here;
+    // doing so would require keeping two URLs in sync. If the release URL ever changes,
+    // update package.json `build.publish.url` (single source of truth) and rebuild.
+    //
     // BP067 Phase 1D — SAFE TIER: notify + one-click apply, NOT silent auto-install.
     // DO NOT change autoDownload to true on an unsigned binary (malware vector risk:
     // compromised feed/DNS → unsigned exe executes with no OS warning).
@@ -206,7 +213,8 @@ export class AutoUpdateManager {
   }
 
   private _registerIPCHandlers(): void {
-    ipcMain.handle('get-update-state', () => this.getState());
+    // 'get-update-state' handle lives in registerIPCHandlers (index.ts) -- canonical site.
+    // DO NOT add a second ipcMain.handle here; electron-updater would throw on duplicate.
 
     ipcMain.on('check-for-updates', () => {
       this.checkNow().catch(() => {});
