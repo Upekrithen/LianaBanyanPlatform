@@ -1277,6 +1277,101 @@ function registerIPCHandlers(): void {
     }
   });
 
+  // SEG-Q-13 BP078: Run Diagnostic -- writes probe results to userData log file
+  ipcMain.handle('diagnostic:run', async () => {
+    const results: string[] = [];
+    const ts = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+    const logPath = join(app.getPath('userData'), `diagnostic-${ts}.log`);
+
+    results.push(`=== MnemosyneC Diagnostic ===`);
+    results.push(`Timestamp: ${new Date().toISOString()}`);
+    results.push(`App version: ${app.getVersion()}`);
+    results.push(`Platform: ${process.platform} ${process.arch}`);
+    results.push(`Electron: ${process.versions.electron}`);
+    results.push(`Node: ${process.versions.node}`);
+    results.push(`userData: ${app.getPath('userData')}`);
+    results.push(``);
+
+    // Ollama status
+    try {
+      const ollamaStatus = ollamaManager ? ollamaManager.getStatus() : { running: false, model: null };
+      results.push(`Ollama running: ${ollamaStatus.running}`);
+      results.push(`Ollama model: ${ollamaStatus.model ?? 'none'}`);
+    } catch (e) {
+      results.push(`Ollama status error: ${(e as Error).message}`);
+    }
+    results.push(``);
+
+    // SKU tier
+    try {
+      const skuPath = join(app.getPath('userData'), 'sku_tier.json');
+      if (existsSync(skuPath)) {
+        const sku = JSON.parse(readFileSync(skuPath, 'utf-8'));
+        results.push(`SKU tier: ${JSON.stringify(sku)}`);
+      } else {
+        results.push(`SKU tier: none (sku_tier.json not found)`);
+      }
+    } catch (e) {
+      results.push(`SKU tier error: ${(e as Error).message}`);
+    }
+
+    // Gemma4:12b manifest check
+    try {
+      const manifestPath = join(homedir(), '.ollama', 'models', 'manifests', 'registry.ollama.ai', 'library', 'gemma4', '12b');
+      results.push(`gemma4:12b manifest exists: ${existsSync(manifestPath)}`);
+    } catch (e) {
+      results.push(`gemma4:12b check error: ${(e as Error).message}`);
+    }
+    results.push(``);
+
+    // Windows: available disk space
+    try {
+      const diskOk = await ollamaManager?.checkDiskSpace(6) ?? true;
+      results.push(`Disk space ok (need 6GB): ${diskOk}`);
+    } catch (e) {
+      results.push(`Disk space check error: ${(e as Error).message}`);
+    }
+
+    // Substrate file
+    try {
+      const subPath = join(app.getPath('userData'), '..', '..', 'resources', 'r10v3_substrate.txt');
+      const subPath2 = join(__dirname, '..', '..', 'resources', 'r10v3_substrate.txt');
+      results.push(`substrate (resources): ${existsSync(subPath)}`);
+      results.push(`substrate (dist-relative): ${existsSync(subPath2)}`);
+    } catch (e) {
+      results.push(`substrate check error: ${(e as Error).message}`);
+    }
+    results.push(``);
+
+    // Auto-prepare state
+    try {
+      const apPath = join(app.getPath('userData'), 'auto_prepare_full.json');
+      if (existsSync(apPath)) {
+        const ap = JSON.parse(readFileSync(apPath, 'utf-8'));
+        results.push(`Auto-prepare enabled: ${ap.enabled}`);
+      } else {
+        results.push(`Auto-prepare: not configured (OFF)`);
+      }
+    } catch (e) {
+      results.push(`Auto-prepare check error: ${(e as Error).message}`);
+    }
+
+    // Open windows
+    results.push(``);
+    results.push(`Open windows: ${BrowserWindow.getAllWindows().length}`);
+    BrowserWindow.getAllWindows().forEach((w, i) => {
+      results.push(`  [${i}] title="${w.getTitle()}" destroyed=${w.isDestroyed()}`);
+    });
+
+    results.push(``);
+    results.push(`=== END DIAGNOSTIC ===`);
+
+    const content = results.join('\n');
+    writeFileSync(logPath, content, 'utf-8');
+
+    return { ok: true, logPath, content };
+  });
+
   // ── BP065 Onboarding Prefs (v0.1.23) ─────────────────────────────────────
   // Applies setup screen preferences: desktop shortcut, startup item, optional API key.
   // All fields are best-effort; failures are non-fatal (onboarding is optional).

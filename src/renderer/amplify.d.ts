@@ -310,6 +310,8 @@ declare global {
       earnBlackCrowFeather?: (payload: { userId: string; reason: string; metadata?: Record<string, unknown> }) => Promise<{ ok: boolean; featherId?: string; alreadyIssued?: boolean; error?: string }>;
       // SEG-Q-3 BP078 — DevTools toggle (For Techies fallback path)
       toggleDevTools?: () => void;
+      // SEG-Q-13 BP078 — Run Diagnostic
+      runDiagnostic?: () => Promise<{ ok: boolean; logPath: string; content: string }>;
       // BP060 Application 002 Step 1 — Caithedral Tools
       caithedralTools?: {
         soccerball_emit: (pearls: string[], bindings?: Record<string, string>) => Promise<{ ok: boolean; sid?: string; error?: string }>;

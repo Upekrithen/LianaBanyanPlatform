@@ -1191,6 +1191,9 @@ export function SettingsTab({
   const [searchQuery, setSearchQuery] = useState('');
   const [searchOpen, setSearchOpen] = useState(false);
 
+  // SEG-Q-13 BP078: diagnostic log path display
+  const [diagLogPath, setDiagLogPath] = React.useState<string | null>(null);
+
   // Section refs for scroll-to-anchor
   const sectionRefs = useRef<Map<string, HTMLElement>>(new Map());
 
@@ -1674,6 +1677,37 @@ export function SettingsTab({
             >
               Toggle DevTools
             </button>
+          </div>
+          <div style={{ marginTop: 12, borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: 12 }}>
+            <div style={s.label}>Diagnostic Log</div>
+            <div style={{ fontSize: 9, color: '#475569', marginTop: 2, marginBottom: 8 }}>
+              Runs a probe of app state (Ollama, SKU tier, disk, windows) and writes a log file to your userData folder. Share with Bishop or Knight for debugging. No DevTools required.
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' as const }}>
+              <button
+                onClick={async () => {
+                  try {
+                    const result = await window.amplify?.runDiagnostic?.();
+                    if (result?.ok) {
+                      setDiagLogPath(result.logPath);
+                    }
+                  } catch { /* non-fatal */ }
+                }}
+                style={{
+                  ...s.btn,
+                  background: 'rgba(148,163,184,0.08)',
+                  borderColor: 'rgba(148,163,184,0.25)',
+                  color: '#94a3b8',
+                }}
+              >
+                Run Diagnostic
+              </button>
+              {diagLogPath && (
+                <div style={{ fontSize: 9, color: '#6ee7b7', wordBreak: 'break-all' as const }}>
+                  Written: {diagLogPath}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </section>

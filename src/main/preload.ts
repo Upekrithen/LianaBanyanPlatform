@@ -960,6 +960,10 @@ contextBridge.exposeInMainWorld('amplify', {
     ipcRenderer.on('auto-prepare:model-ready', handler);
     return () => ipcRenderer.removeListener('auto-prepare:model-ready', handler);
   },
+
+  // SEG-Q-13 BP078: Run Diagnostic
+  runDiagnostic: (): Promise<{ ok: boolean; logPath: string; content: string }> =>
+    ipcRenderer.invoke('diagnostic:run'),
 });
 
 // ─── Global type extension ────────────────────────────────────────────────────
