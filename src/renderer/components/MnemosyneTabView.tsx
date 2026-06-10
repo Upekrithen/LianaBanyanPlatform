@@ -751,6 +751,15 @@ export function MnemosyneTabView({
           {/* Title bar */}
           <div style={styles.titleBar}>
             <div style={styles.brand}>
+              {/* SEG-U-5: elephant icon left of wordmark, 36px */}
+              <img
+                src="icons/mnemosynec-mark.png"
+                alt="MnemosyneC"
+                style={{ height: 36, width: 'auto', objectFit: 'contain', verticalAlign: 'middle', marginRight: 8 }}
+                onError={(e: React.SyntheticEvent<HTMLImageElement>): void => {
+                  (e.target as HTMLImageElement).style.display = 'none';
+                }}
+              />
               <div>
                 <div
                   style={styles.brandName}

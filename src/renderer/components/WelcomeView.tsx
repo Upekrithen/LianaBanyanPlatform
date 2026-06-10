@@ -7,7 +7,7 @@
 
 import React, { useState, useCallback, useEffect } from 'react';
 import { WelcomeCueCard } from './WelcomeCueCard';
-import { BenchmarkProofChart } from './BenchmarkProofChart';
+import { ProofAccordion } from './ProofAccordion';
 import { useLifecycleStage } from '../hooks/useLifecycleStage';
 // SEG-S-7/8: Layer2 surfaces (both landed this session).
 import { Layer2UseIt } from './Layer2UseIt';
@@ -40,12 +40,7 @@ export function WelcomeView({ onComplete: _onComplete }: WelcomeViewProps): Reac
     } catch { /* storage unavailable */ }
   }, [meshEnabled]);
 
-  // SEG-S-4: development warning for missing mascot asset
-  useEffect(() => {
-    if (typeof process !== 'undefined' && process.env && process.env.NODE_ENV !== 'production') {
-      console.warn('mnemosynec-mark.png: place asset at src/renderer/public/icons/mnemosynec-mark.png');
-    }
-  }, []);
+  // SEG-U-5: asset confirmed present -- dev warning removed
 
   // SEG-S-6: doorway click advances lifecycle to stage B
   const [visible, setVisible] = useState(true);
@@ -222,33 +217,16 @@ export function WelcomeView({ onComplete: _onComplete }: WelcomeViewProps): Reac
           </li>
         </ul>
 
-        {/* SEG-S-4: Mascot graphic with graceful fallback */}
+        {/* SEG-U-5: elephant mascot -- asset confirmed present, 80px */}
         <div style={{ marginBottom: 20 }}>
           <img
             src="icons/mnemosynec-mark.png"
             alt="MnemosyneC mascot"
-            style={{ height: 160, width: 'auto', display: 'block', margin: '0 auto' }}
+            style={{ height: 80, width: 'auto', objectFit: 'contain', display: 'block', margin: '0 auto' }}
             onError={(e: React.SyntheticEvent<HTMLImageElement>): void => {
               (e.target as HTMLImageElement).style.display = 'none';
-              const sibling = (e.target as HTMLImageElement).nextElementSibling as HTMLElement | null;
-              if (sibling) { sibling.style.display = 'flex'; }
             }}
           />
-          {/* Mascot pending div: hidden by default, revealed by onError above */}
-          <div
-            className="mascot-pending"
-            style={{
-              display: 'none',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: 60,
-              color: '#475569',
-              fontSize: 13,
-              fontStyle: 'italic',
-            }}
-          >
-            Mascot pending
-          </div>
         </div>
 
         {/* SEG-S-5: Benchmark chart */}
