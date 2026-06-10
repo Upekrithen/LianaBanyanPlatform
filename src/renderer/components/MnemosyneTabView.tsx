@@ -553,7 +553,7 @@ export function MnemosyneTabView({
     return (
       <WelcomeView
         onComplete={() => {
-          advanceTo('D');
+          advanceTo('D'); // TODO v0.1.36: replace with Stage C trigger; direct D advance is bridge for v0.1.35
           setBp067Complete(true);
         }}
       />
