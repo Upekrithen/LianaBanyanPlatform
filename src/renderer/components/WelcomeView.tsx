@@ -190,8 +190,9 @@ export function WelcomeView({ onComplete: _onComplete }: WelcomeViewProps): Reac
       <div style={card}>
         <div style={brandLine}>MnemosyneC</div>
 
-        {/* SEG-S-3: Hero copy */}
-        <h1 style={heading}>Dr. MnemosyneC has the cure</h1>
+        {/* SEG-U-1: Two-line hero */}
+        <h1 style={{ fontSize: '2rem', fontWeight: 700, color: '#e2e8f0', lineHeight: 1.25, margin: '0 0 6px', textAlign: 'center' }}>Your AI has Amnesia.</h1>
+        <h2 style={{ fontSize: '1.6rem', fontWeight: 600, color: '#94a3b8', lineHeight: 1.25, margin: '0 0 14px', textAlign: 'center' }}>Dr. MnemosyneC has the Cure.</h2>
 
         {/* SEG-S-3: Subline */}
         <p style={subline}>
@@ -256,20 +257,21 @@ export function WelcomeView({ onComplete: _onComplete }: WelcomeViewProps): Reac
         {/* SEG-S-6: Doorway cards */}
         <div style={sectionLabel}>Where do you want to start?</div>
 
+        {/* SEG-U-2: Prove It first, then Just Use It */}
         <div style={cardRow}>
-          <WelcomeCueCard
-            label="Just use it"
-            body="Start with the AI that fits your computer."
-            size="doorway"
-            variant="blue"
-            onClick={(): void => handleDoorwayClick('use-it')}
-          />
           <WelcomeCueCard
             label="Prove it with a test"
             body="See benchmark results before you decide."
             size="doorway"
             variant="green"
             onClick={(): void => handleDoorwayClick('prove-it')}
+          />
+          <WelcomeCueCard
+            label="Just use it"
+            body="Start with the AI that fits your computer."
+            size="doorway"
+            variant="blue"
+            onClick={(): void => handleDoorwayClick('use-it')}
           />
         </div>
 
