@@ -1,8 +1,8 @@
-version: 0.1.37
+version: 0.1.38
 files:
-  - url: https://github.com/liana-banyan/mnemosynec-releases/releases/download/v0.1.37/MnemosyneC-Setup-0.1.37.exe
-    sha512: QQ5xDJ3sBa9EIyUBQ7DplopmNi1D3+qRsnqQ6l1tbWIK7/NLgiZuaehvLflUmANUEUj4OkQKtwF7jreCWAzTeA==
-    size: 478225887
-path: MnemosyneC-Setup-0.1.37.exe
-sha512: QQ5xDJ3sBa9EIyUBQ7DplopmNi1D3+qRsnqQ6l1tbWIK7/NLgiZuaehvLflUmANUEUj4OkQKtwF7jreCWAzTeA==
-releaseDate: '2026-06-10T06:48:28.405Z'
+  - url: https://github.com/liana-banyan/mnemosynec-releases/releases/download/v0.1.38/MnemosyneC-Setup-0.1.38.exe
+    sha512: LQzT/bkIO4fnltQ3mIMSJVSvzWakjVltOfCXX28eFWNI5tbrDxEKHmOOtaRYAwG9e46l7tUuxcmKsiNTJXuAEg==
+    size: 478225841
+path: MnemosyneC-Setup-0.1.38.exe
+sha512: LQzT/bkIO4fnltQ3mIMSJVSvzWakjVltOfCXX28eFWNI5tbrDxEKHmOOtaRYAwG9e46l7tUuxcmKsiNTJXuAEg==
+releaseDate: '2026-06-10T16:26:37.000Z'

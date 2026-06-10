@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Portal Transparency — Harper Guild K533 Tests on Cephas - Liana Banyan Knowledge Center</title><link>https://cephas.lianabanyan.com/portal-transparency/</link><description>Recent content in Portal Transparency — Harper Guild K533 Tests on Cephas - Liana Banyan Knowledge Center</description><generator>Hugo -- 0.152.2</generator><language>en-us</language><copyright>Ã¢â€Â¬Ã¢Å’Â 2026 Liana Banyan Corporation. All rights reserved.</copyright><lastBuildDate>Tue, 12 May 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://cephas.lianabanyan.com/portal-transparency/index.xml" rel="self" type="application/rss+xml"/><item><title>K533 Test #10 — Packet Briefing Case Verification</title><link>https://cephas.lianabanyan.com/portal-transparency/k533-test-10-packet-briefing-case/</link><pubDate>Tue, 12 May 2026 00:00:00 +0000</pubDate><guid>https://cephas.lianabanyan.com/portal-transparency/k533-test-10-packet-briefing-case/</guid><description>&lt;h1 id="k533-test-10--packet-briefing-case-verification"&gt;K533 Test #10 — Packet Briefing Case Verification&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;Claim:&lt;/strong&gt; Data returned through the Portal is delivered as a Packet Briefing Case — a signed bundle
+with embedded Python scribe. The scribe requires IP Ledger touchback to unlock. Every subsequent
+re-open is also logged. Metadata watermarks enable tracing if data appears in unauthorized locations.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Founder direct:&lt;/strong&gt; &lt;em&gt;&amp;ldquo;The data will be encoded with metadata so that we can track it to any
+unauthorized use, with packet briefing cases that have a python scribe that requires touching back to
+the IP ledger in order to unlock so that EVERY USE is logged.&amp;rdquo;&lt;/em&gt; — BP041&lt;/p&gt;</description></item><item><title>K533 Test #11 — Triple-Stamp Access Flow Verification</title><link>https://cephas.lianabanyan.com/portal-transparency/k533-test-11-triple-stamp/</link><pubDate>Tue, 12 May 2026 00:00:00 +0000</pubDate><guid>https://cephas.lianabanyan.com/portal-transparency/k533-test-11-triple-stamp/</guid><description>&lt;h1 id="k533-test-11--triple-stamp-access-flow-verification"&gt;K533 Test #11 — Triple-Stamp Access Flow Verification&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;Claim:&lt;/strong&gt; Every Portal access requires THREE cryptographically-verified stamps stacked + ledger-recorded.
+Missing or expired any stamp → Portal refuses. Every stamp issuance + verification + use is ledger-recorded.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Founder direct:&lt;/strong&gt; &lt;em&gt;&amp;ldquo;If a law enforcement wants to see something, they log in with a personal brand stamp,
+then apply the agency brand stamp that gives them access, then the warrant or judge order or whatnot&amp;hellip;
+all automated except for the signing it legally, AND the harper who monitors.&amp;rdquo;&lt;/em&gt; — BP041&lt;/p&gt;</description></item><item><title>K533 Test #12 — Harper Guild Rule Disclosure Verification</title><link>https://cephas.lianabanyan.com/portal-transparency/k533-test-12-harper-rule-disclosure/</link><pubDate>Tue, 12 May 2026 00:00:00 +0000</pubDate><guid>https://cephas.lianabanyan.com/portal-transparency/k533-test-12-harper-rule-disclosure/</guid><description>&lt;h1 id="k533-test-12--harper-guild-disclosure-rule-verification"&gt;K533 Test #12 — Harper Guild Disclosure Rule Verification&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;Claim:&lt;/strong&gt; Portal access information is private by default. Harper Guild rules (HG-101 through HG-301)
+govern when and whether external disclosure occurs. Members can browse their own Portal exposure and
+verify the rule-base is published, versioned, and AGPL-forkable.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Founder direct:&lt;/strong&gt; &lt;em&gt;&amp;ldquo;Yes, some things are private. So, we have rules — the Harper Guild decides.&amp;rdquo;&lt;/em&gt; — BP041&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="privacy-by-default--rule-based-disclosure"&gt;Privacy-by-Default + Rule-Based Disclosure&lt;/h2&gt;
+&lt;p&gt;The substrate logs everything internally (Federal Body Cam doctrine; tamper-evidence intact always).
+But what&amp;rsquo;s publicly disclosed depends on which Harper Guild rule applies:&lt;/p&gt;</description></item><item><title>K533 Test #9 — Portal Usage Logs Verification</title><link>https://cephas.lianabanyan.com/portal-transparency/k533-test-09-portal-usage/</link><pubDate>Tue, 12 May 2026 00:00:00 +0000</pubDate><guid>https://cephas.lianabanyan.com/portal-transparency/k533-test-09-portal-usage/</guid><description>&lt;h1 id="k533-test-9--portal-usage-logs-verification"&gt;K533 Test #9 — Portal Usage Logs Verification&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;Claim:&lt;/strong&gt; Every Law Enforcement Portal access is Brand-Stamped, append-only IP-Ledger logged,
+and visible to the affected member (when not under a court-ordered seal).&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Pre-conditions:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Mnemosyne installed and running (AMPLIFY substrate-api on &lt;code&gt;:11480&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;Member has their cooperative-substrate member_id&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="test-steps"&gt;Test Steps&lt;/h2&gt;
+&lt;h3 id="step-1--query-the-ip-ledger-for-portal_search-entries"&gt;Step 1 — Query the IP Ledger for portal_search entries&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"&gt;&lt;code class="language-powershell" data-lang="powershell"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;&lt;span style="color:#75715e"&gt;# Check IP Ledger stats (total entries, portal_search count)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;Invoke-WebRequest -Uri &lt;span style="color:#e6db74"&gt;&amp;#39;http://127.0.0.1:11480/yoke/ip_ledger/stats&amp;#39;&lt;/span&gt; -UseBasicParsing |
+&lt;/span&gt;&lt;/span&gt;&lt;span style="display:flex;"&gt;&lt;span&gt; Select-Object -ExpandProperty Content | ConvertFrom-Json
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Expected:&lt;/strong&gt;&lt;/p&gt;</description></item></channel></rss>
