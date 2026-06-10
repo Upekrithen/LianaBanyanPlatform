@@ -1,6 +1,8 @@
 // MnemosyneTabView -- SAGA 07 BP046B · updated BP067 Phase 2
 // BP078 SEG-UX-1/2/5/6: dynamic tab overflow, titlebar pill, ThreeOptionAsk removed,
 // Check-for-Update SKU integration.
+// BP078 SEG-S-2: migration for pre-v0.1.35 users (lifecycle_stage default 'A').
+// BP078 SEG-S-10: tab bar + settings gear gated at stages A/B/C.
 // 16-tab Mnemosyne application shell:
 //   Tab 1  · Frame          -- Transparent Outlining Window status + controls (daily driver)
 //   Tab 2  · Helm           -- LB platform interface + Beacons side-shelves (membership gate)
@@ -37,7 +39,6 @@ import { AtlasView } from '../kitchen_table/AtlasView';
 import { KitchenTableView } from '../kitchen_table/KitchenTableView';
 import { PearlGalleryTab } from './PearlGalleryTab';
 // BP060 Application 002 Step 1 -- Substrate UI surfaces
-import { ShirleyTempleToggles } from './ShirleyTempleToggles';
 import { SubstrateTab } from './SubstrateTab';
 // BP060 v3 UI-7 + UI-8
 import { UnifiedSubstrateConsole } from './UnifiedSubstrateConsole';
@@ -50,7 +51,11 @@ import { shouldShowPrompt, recordStrike, setDecision } from '../lib/opt_in_strik
 // BP067 Phase 1A -- $5 join flow
 import { FirstStepsView } from './FirstStepsView';
 // BP067 v0.1.24 -- one-spine first-run (supersedes SaltFighterFirstRun + OnboardingWizard)
+// SEG-R-1: WelcomeView is now first spine step; LS_ONBOARDING_COMPLETE is the WelcomeView gate.
 import { Bp067FirstRunSpine, LS_BP067_FIRST_RUN_COMPLETE } from './Bp067FirstRunSpine';
+import { WelcomeView, LS_ONBOARDING_COMPLETE } from './WelcomeView';
+// BP078 SEG-S-2/10: lifecycle stage hook
+import { useLifecycleStage, LS_STAGE_KEY } from '../hooks/useLifecycleStage';
 // BP067 Phase 2B/2C -- Battery Dispatch + Broadcast Schedule
 import { BatteryDispatchTab } from './BatteryDispatchTab';
 import { BroadcastScheduleTab } from './BroadcastScheduleTab';
@@ -63,6 +68,19 @@ const LS_ACTIVE_TAB = 'mnemo_active_tab';
 const LS_FOR_TECHIES = 'mnemo_for_techies_unlocked';
 const LS_WIND_UNLOCKED = 'mnem_wind_unlocked';
 const LS_WIND_TIER = 'mnem_wind_tier';
+
+// ─── BP078 SEG-S-2: pre-v0.1.35 migration ────────────────────────────────────
+// Runs once at module load time (before useLifecycleStage lazy init reads localStorage).
+// Any user without a lifecycle_stage key is placed at stage A so WelcomeView is shown.
+// Does NOT clear bp067 flags -- those remain valid for other purposes.
+function migrateLegacyFlags(): void {
+  const hasStage = localStorage.getItem(LS_STAGE_KEY);
+  if (!hasStage) {
+    localStorage.setItem(LS_STAGE_KEY, 'A');
+  }
+  // If stage is already set (B, C, D, E, F), respect it -- do not regress.
+}
+migrateLegacyFlags();
 
 // ─── Tab priority order (SEG-UX-1) ───────────────────────────────────────────
 // Frame must never be hidden. AI must be in top 3. FAQ must be in top 4.
@@ -108,7 +126,7 @@ const TABS: TabDef[] = [
   { id: 'frame',     label: 'Frame',     icon: '🪟', tooltip: 'Tab 1 · Frame -- Transparent Outlining Window (your daily driver)' },
   { id: 'helm',      label: 'Helm',      icon: '🧭', tooltip: 'Tab 2 · Helm -- LB platform · Beacons · cooperative peer-mesh' },
   { id: 'gauntlet',  label: 'Gauntlet',  icon: '⚔️', tooltip: 'Tab 3 · Gauntlet -- 6-stage testing framework · stage selection · Pioneer Bonus' },
-  { id: 'settings',  label: 'Settings',  icon: '⚙️', tooltip: 'Tab 4 · Settings -- update Mnemosyne · AI model assignment · appearance · preferences' },
+  { id: 'settings',  label: 'Settings',  icon: '⚙️', tooltip: 'Tab 4 · Settings -- update MnemosyneC · AI model assignment · appearance · preferences' },
   { id: 'faq',       label: 'FAQ',       icon: '❓',  tooltip: 'Tab 5 · FAQ -- common questions · tl;dr answers' },
   { id: 'developer', label: 'Developer', icon: '',   iconElement: <CaiSymbol size={13} color="#f59e0b" aria-label="CAI" />, tooltip: 'Tab 6 · Developer Mode -- Caithedral · Eblet · Pheromone · Banyan Metric · SEG controls' },
   { id: 'atlas',         label: 'Atlas',         icon: '📅', tooltip: 'Tab 7 · Atlas -- Calendar · Events · Multi-person scheduling · P2P sync' },
@@ -140,6 +158,9 @@ export function MnemosyneTabView({
   onClose,
   authState,
 }: MnemosyneTabViewProps) {
+  // SEG-S-2/10: lifecycle stage -- must be called before all other hooks
+  const { stage, advanceTo } = useLifecycleStage();
+
   const isMember = authState?.status === 'member' || authState?.status === 'trial_active';
   const isFounder = (authState as any)?.member?.is_founder === true;
   const displayName = (authState as any)?.member?.display_name as string | undefined;
@@ -153,8 +174,11 @@ export function MnemosyneTabView({
   const [showFirstSteps, setShowFirstSteps] = useState(false);
 
   // BP067 v0.1.24 -- one-spine first-run complete gate
+  // SEG-R-1: also check LS_ONBOARDING_COMPLETE (WelcomeView two-doorway gate) --
+  // if either key is set, skip the entire spine (user has seen the welcome screen).
   const [bp067Complete, setBp067Complete] = useState(() =>
-    localStorage.getItem(LS_BP067_FIRST_RUN_COMPLETE) === 'true'
+    localStorage.getItem(LS_BP067_FIRST_RUN_COMPLETE) === 'true' ||
+    localStorage.getItem(LS_ONBOARDING_COMPLETE) === 'true'
   );
 
   const [forTechies, setForTechies] = useState(() =>
@@ -521,6 +545,21 @@ export function MnemosyneTabView({
   const showBridgeBanner = bp067Complete && (isMember || isFounder);
   const showModeChip = bp067Complete && (isMember || isFounder);
 
+  // ─── SEG-S-10: stages A/B/C -- no tab bar, no settings gear ─────────────────
+  // WelcomeView is the only surface rendered. Stage C surface is deferred to v0.1.36.
+  // This early return is placed after ALL hooks so React hook rules are satisfied.
+  const isPreRecruited = ['A', 'B', 'C'].includes(stage);
+  if (isPreRecruited) {
+    return (
+      <WelcomeView
+        onComplete={() => {
+          advanceTo('D');
+          setBp067Complete(true);
+        }}
+      />
+    );
+  }
+
   // ─── More dropdown keyboard handling ─────────────────────────────────────
 
   function handleMoreButtonKeyDown(e: React.KeyboardEvent) {
@@ -716,10 +755,10 @@ export function MnemosyneTabView({
                 <div
                   style={styles.brandName}
                   onClick={handleBrandTripleClick}
-                  title={windUnlocked ? 'Mnemosyne -- Ambience active' : 'Mnemosyne'}
-                  aria-label="Mnemosyne"
+                  title={windUnlocked ? 'MnemosyneC -- Ambience active' : 'MnemosyneC'}
+                  aria-label="MnemosyneC"
                 >
-                  Mnemosyne
+                  MnemosyneC
                 </div>
                 <div style={{ ...styles.brandSub, display: 'flex', alignItems: 'center', gap: 4 }}>
                   <CaiSymbol size={12} color="#6ee7b7" aria-label="CAI" />
@@ -832,7 +871,7 @@ export function MnemosyneTabView({
               <button
                 type="button"
                 onClick={handleCheckForUpdates}
-                title="Check for updates to Mnemosyne"
+                title="Check for updates to MnemosyneC"
                 style={{
                   padding: '5px 10px',
                   background: 'rgba(110,231,183,0.1)',
@@ -886,15 +925,14 @@ export function MnemosyneTabView({
                 style={styles.closeBtn}
                 onClick={onClose}
                 title="Close"
-                aria-label="Close Mnemosyne"
+                aria-label="Close MnemosyneC"
               >
                 x
               </button>
             </div>
           </div>
 
-          {/* UI-2 · Shirley Temple Policy toggles */}
-          <ShirleyTempleToggles />
+          {/* SEG-R-12: Shirley Temple Policy toggles removed from UI; both default ON in localStorage */}
 
           {/* BP067 Phase 2D -- Organic N=3 folder prompt */}
           {showFolderPrompt && (
@@ -960,7 +998,7 @@ export function MnemosyneTabView({
             </div>
           )}
 
-          {/* BP067: For Techies disclosure -- reveals Gauntlet tab */}
+          {/* BP067: Advanced disclosure -- reveals Gauntlet tab (SEG-R-6) */}
           {bp067Complete && !forTechies && (
             <div style={{ padding: '4px 16px 0', flexShrink: 0 }}>
               <button
@@ -980,7 +1018,7 @@ export function MnemosyneTabView({
                   padding: 0,
                 }}
               >
-                For Techies
+                Advanced
               </button>
             </div>
           )}
@@ -990,7 +1028,7 @@ export function MnemosyneTabView({
             ref={tabBarRef}
             style={styles.tabBar}
             role="tablist"
-            aria-label="Mnemosyne navigation"
+            aria-label="MnemosyneC navigation"
           >
             {/* Priority tabs visible in the bar */}
             {barTabIds.map((tabId) => {
@@ -1097,6 +1135,7 @@ export function MnemosyneTabView({
             <div style={{ flex: 1 }} />
 
             {/* Gear icon -- Settings (fixed at far right, never in More) */}
+            {/* Settings gear hidden at stages A/B/C per BP078 Staged Launch Plan. Reappears at stage D (v0.1.37). */}
             <button
               role="tab"
               id="tab-settings"
