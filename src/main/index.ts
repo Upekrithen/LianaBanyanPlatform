@@ -20,6 +20,7 @@ import {
   shell,
   globalShortcut,
   dialog,
+  Notification,
 } from 'electron';
 import { join } from 'path';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
@@ -714,7 +715,7 @@ function createOverlayWindow(): void {
     if (win) {
       probeRendererHealth(win, RENDERER_URL, 8000).then((result) => {
         if (!result.ok) {
-          tray?.setToolTip(`Mnemosyne — ⚠ renderer boot failed (root empty)`);
+          tray?.setToolTip(`MnemosyneC — ⚠ renderer boot failed (root empty)`);
         }
       }).catch(() => { /* probe errors never crash the app */ });
     }
@@ -764,7 +765,7 @@ function createTray(): void {
 
   tray = new Tray(icon);
   // KniPr026: versioned initial tooltip; updated by updateTrayTooltip() on update events.
-  tray.setToolTip(`Mnemosyne v${app.getVersion()}`);
+  tray.setToolTip(`MnemosyneC v${app.getVersion()}`);
   // Single left-click opens Dashboard (right-click still shows context menu)
   tray.on('click', () => openDashboard());
   rebuildTrayMenu();
@@ -775,11 +776,11 @@ function updateTrayTooltip(updateStatus?: UpdateState['status']): void {
   if (!tray || tray.isDestroyed()) return;
   const version = app.getVersion();
   if (updateStatus === 'downloaded') {
-    tray.setToolTip(`Mnemosyne v${version} — Update ready to install`);
+    tray.setToolTip(`MnemosyneC v${version} — Update ready to install`);
   } else if (updateStatus === 'available' || updateStatus === 'downloading') {
-    tray.setToolTip(`Mnemosyne v${version} — Update available`);
+    tray.setToolTip(`MnemosyneC v${version} — Update available`);
   } else {
-    tray.setToolTip(`Mnemosyne v${version}`);
+    tray.setToolTip(`MnemosyneC v${version}`);
   }
 }
 
@@ -797,7 +798,7 @@ function rebuildTrayMenu(mode: FrameMode = currentMode): void {
 
   const contextMenu = Menu.buildFromTemplate([
     {
-      label: `Mnemosyne — ${modeLabel[mode]}${forcedLabel}`,
+      label: `MnemosyneC — ${modeLabel[mode]}${forcedLabel}`,
       enabled: false,
     },
     { type: 'separator' },
@@ -834,7 +835,7 @@ function rebuildTrayMenu(mode: FrameMode = currentMode): void {
     },
     { type: 'separator' },
     {
-      label: 'Mnemosyne Dashboard',
+      label: 'MnemosyneC Dashboard',
       click: () => openDashboard(),
     },
     {
@@ -872,7 +873,7 @@ function rebuildTrayMenu(mode: FrameMode = currentMode): void {
     },
     { type: 'separator' },
     {
-      label: 'Quit Mnemosyne',
+      label: 'Quit MnemosyneC',
       click: () => app.quit(),
     },
   ]);
@@ -900,7 +901,8 @@ function openMoneyPennyWindow(): void {
     minHeight: MONEY_PENNY_MIN_HEIGHT,
     maxWidth: Math.floor(workArea.width * 0.9),
     maxHeight: Math.floor(workArea.height * 0.9),
-    title: 'MoneyPenny — Mnemosyne CAI Amplifier',
+    title: 'MoneyPenny — MnemosyneC CAI Amplifier',
+    icon: join(__dirname, '../../assets/app-icon.ico'),
     show: false,
     webPreferences: {
       contextIsolation: true,
@@ -943,7 +945,8 @@ function openDashboard(opts?: { focus?: boolean }): void {
     height: 780,
     minWidth: 560,
     minHeight: 600,
-    title: `Mnemosyne v${app.getVersion()}`,
+    title: `MnemosyneC v${app.getVersion()}`,
+    icon: join(__dirname, '../../assets/app-icon.ico'),
     show: false,
     webPreferences: {
       preload: join(__dirname, 'preload.js'),
@@ -970,7 +973,7 @@ function openDashboard(opts?: { focus?: boolean }): void {
 
   // Bug #2 v0.1.10: keep versioned title after any reload/navigation
   dashboardWindow.webContents.on('did-finish-load', () => {
-    dashboardWindow?.setTitle(`Mnemosyne v${app.getVersion()}`);
+    dashboardWindow?.setTitle(`MnemosyneC v${app.getVersion()}`);
     // SEG-FIX-3 BP078: Runtime preload smoke test.
     dashboardWindow?.webContents.executeJavaScript('typeof window.amplify').then((t) => {
       if (t === 'undefined') {
@@ -991,6 +994,21 @@ function openDashboard(opts?: { focus?: boolean }): void {
 
   dashboardWindow.on('closed', () => {
     dashboardWindow = null;
+  });
+
+  // SEG-Q-3 BP078: right-click on Windows title bar shows "Toggle Developer Tools"
+  dashboardWindow.on('system-context-menu', (event, _point) => {
+    event.preventDefault();
+    const menu = Menu.buildFromTemplate([
+      { label: 'Toggle Developer Tools', click: () => dashboardWindow?.webContents.toggleDevTools() },
+      { type: 'separator' },
+      { label: 'Reload', click: () => dashboardWindow?.webContents.reload() },
+      { type: 'separator' },
+      { label: 'Minimize', click: () => dashboardWindow?.minimize() },
+      { label: 'Maximize / Restore', click: () => dashboardWindow?.isMaximized() ? dashboardWindow?.unmaximize() : dashboardWindow?.maximize() },
+      { label: 'Close', click: () => dashboardWindow?.close() },
+    ]);
+    menu.popup({ window: dashboardWindow ?? undefined });
   });
 
   if (autoUpdater) autoUpdater.registerWindow(dashboardWindow);
@@ -1015,8 +1033,8 @@ function setupLanHandshakeDiscovery(): void {
 
     void dialog.showMessageBox({
       type: 'question',
-      title: 'Mnemosyne on your network',
-      message: `Found another Mnemosyne on your network: ${hostname}`,
+      title: 'MnemosyneC on your network',
+      message: `Found another MnemosyneC on your network: ${hostname}`,
       detail: 'Would you like to connect to it? (LOCAL-HANDSHAKE · same house LAN)',
       buttons: ['Yes, connect', 'Not Now', 'Never Ask Again'],
       defaultId: 0,
@@ -1064,7 +1082,8 @@ function openHearthConjunctionWindow(): void {
     height: bounds.height,
     x: bounds.x,
     y: bounds.y,
-    title: 'Mnemosyne — Memory, powered by CAI',
+    title: 'MnemosyneC — Memory, powered by CAI',
+    icon: join(__dirname, '../../assets/app-icon.ico'),
     minWidth: 1280,
     minHeight: 800,
     show: false,
@@ -1103,6 +1122,20 @@ function openHearthConjunctionWindow(): void {
     hearthConjunctionWindow = null;
   });
 
+  // SEG-Q-3 BP078: right-click on Windows title bar shows "Toggle Developer Tools"
+  hearthConjunctionWindow.on('system-context-menu', (event, _point) => {
+    event.preventDefault();
+    const menu = Menu.buildFromTemplate([
+      { label: 'Toggle Developer Tools', click: () => hearthConjunctionWindow?.webContents.toggleDevTools() },
+      { type: 'separator' },
+      { label: 'Reload', click: () => hearthConjunctionWindow?.webContents.reload() },
+      { type: 'separator' },
+      { label: 'Minimize', click: () => hearthConjunctionWindow?.minimize() },
+      { label: 'Close', click: () => hearthConjunctionWindow?.close() },
+    ]);
+    menu.popup({ window: hearthConjunctionWindow ?? undefined });
+  });
+
   // Store webview preload path for IPC response
   ;(hearthConjunctionWindow as unknown as { _webviewPreloadPath: string })._webviewPreloadPath = webviewPreloadPath;
 
@@ -1113,6 +1146,89 @@ function openHearthConjunctionWindow(): void {
 // ─── IPC Handlers ────────────────────────────────────────────────────────────
 
 let skuPullProc: ReturnType<typeof spawn> | null = null;
+
+// ─── SEG-Q-4 BP078: Auto-prepare FULL upgrade in background ──────────────────
+
+let autoPrepareProc: ReturnType<typeof spawn> | null = null;
+let autoPrepareIdleTimer: NodeJS.Timeout | null = null;
+const AUTO_PREPARE_MODEL = 'gemma4:12b';
+const AUTO_PREPARE_IDLE_MS = 30 * 60 * 1000; // 30 min
+
+function getAutoPrepareEnabled(): boolean {
+  try {
+    const cfgPath = join(app.getPath('userData'), 'auto_prepare_full.json');
+    if (!existsSync(cfgPath)) return false;
+    const data = JSON.parse(readFileSync(cfgPath, 'utf-8'));
+    return data.enabled === true;
+  } catch { return false; }
+}
+
+function setAutoPrepareEnabled(enabled: boolean): void {
+  try {
+    const cfgPath = join(app.getPath('userData'), 'auto_prepare_full.json');
+    writeFileSync(cfgPath, JSON.stringify({ enabled }), 'utf-8');
+  } catch { /* non-fatal */ }
+}
+
+function isGemma4Ready(): boolean {
+  try {
+    const manifestPath = join(homedir(), '.ollama', 'models', 'manifests',
+      'registry.ollama.ai', 'library', 'gemma4', '12b');
+    const fallbackPath = join(homedir(), '.ollama', 'models', 'manifests',
+      'registry.ollama.ai', 'gemma4', '12b');
+    return existsSync(manifestPath) || existsSync(fallbackPath);
+  } catch { return false; }
+}
+
+function runAutoPrepareIfNeeded(): void {
+  if (!getAutoPrepareEnabled()) return;
+  if (autoPrepareProc) return;
+  if (isGemma4Ready()) return;
+
+  const ollamaExe = join(__dirname, '..', '..', 'resources', 'ollama', 'ollama.exe');
+  const ollamaCmd = existsSync(ollamaExe) ? ollamaExe : 'ollama';
+
+  autoPrepareProc = spawn(ollamaCmd, ['pull', AUTO_PREPARE_MODEL], {
+    env: { ...process.env, OLLAMA_MODELS: join(homedir(), '.ollama', 'models') },
+    detached: false,
+  });
+
+  autoPrepareProc.on('close', (code) => {
+    autoPrepareProc = null;
+    if (code === 0) {
+      const notif = new Notification({
+        title: 'MnemosyneC — Gemma 4 12B is ready',
+        body: 'Full AI model downloaded. Click to activate.',
+        silent: false,
+      });
+      notif.on('click', () => {
+        try {
+          writeFileSync(
+            join(app.getPath('userData'), 'sku_tier.json'),
+            JSON.stringify({ tier: 'full', model: AUTO_PREPARE_MODEL }),
+            'utf-8',
+          );
+        } catch { /* non-fatal */ }
+        openDashboard({ focus: true });
+        dashboardWindow?.webContents.send('auto-prepare:model-activated');
+      });
+      notif.show();
+      BrowserWindow.getAllWindows().forEach((w) => {
+        if (!w.isDestroyed()) w.webContents.send('auto-prepare:model-ready');
+      });
+    }
+  });
+
+  autoPrepareProc.on('error', () => { autoPrepareProc = null; });
+}
+
+function scheduleAutoPrepareIdle(): void {
+  if (autoPrepareIdleTimer) clearTimeout(autoPrepareIdleTimer);
+  autoPrepareIdleTimer = setTimeout(() => {
+    runAutoPrepareIfNeeded();
+    scheduleAutoPrepareIdle();
+  }, AUTO_PREPARE_IDLE_MS);
+}
 
 function registerIPCHandlers(): void {
   // SAGA 07+13 BP046B utility + first-install bonus
@@ -1129,6 +1245,36 @@ function registerIPCHandlers(): void {
     if (!overlayWindow) createOverlayWindow();
     overlayWindow?.setOpacity(1.0);
     overlayWindow?.showInactive();
+  });
+
+  // SEG-Q-3 BP078: DevTools toggle via renderer button (fallback when Ctrl+Shift+D conflicts)
+  ipcMain.on('devtools:toggle', (event) => {
+    const win = BrowserWindow.fromWebContents(event.sender);
+    if (win && !win.isDestroyed()) {
+      if (win.webContents.isDevToolsOpened()) {
+        win.webContents.closeDevTools();
+      } else {
+        win.webContents.openDevTools({ mode: 'detach' });
+      }
+    }
+  });
+
+  // SEG-Q-4 BP078: Auto-prepare FULL upgrade IPC
+  ipcMain.handle('auto-prepare:get', () => ({
+    enabled: getAutoPrepareEnabled(),
+    modelReady: isGemma4Ready(),
+    pulling: autoPrepareProc !== null,
+  }));
+
+  ipcMain.on('auto-prepare:set', (_event, enabled: boolean) => {
+    setAutoPrepareEnabled(enabled);
+    if (enabled) {
+      runAutoPrepareIfNeeded();
+      scheduleAutoPrepareIdle();
+    } else {
+      if (autoPrepareIdleTimer) { clearTimeout(autoPrepareIdleTimer); autoPrepareIdleTimer = null; }
+      if (autoPrepareProc) { try { autoPrepareProc.kill('SIGKILL'); } catch { /* ignore */ } autoPrepareProc = null; }
+    }
   });
 
   // ── BP065 Onboarding Prefs (v0.1.23) ─────────────────────────────────────
@@ -1863,7 +2009,7 @@ function registerIPCHandlers(): void {
       const resp = await fetch(regUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}`, apikey: anonKey },
-        body: JSON.stringify({ peer_id: peerId, app_version: app.getVersion(), node_label: `Mnemosyne ${app.getVersion()}` }),
+        body: JSON.stringify({ peer_id: peerId, app_version: app.getVersion(), node_label: `MnemosyneC ${app.getVersion()}` }),
       });
       const data = await resp.json() as { registered?: boolean; frontier_node_id?: string; error?: string };
       if (!resp.ok) return { ok: false, error: data.error ?? `Register failed (${resp.status})` };
@@ -2792,7 +2938,7 @@ app.whenReady().then(async () => {
           { label: 'Force Reload', role: 'forceReload' },
           { label: 'Toggle DevTools', role: 'toggleDevTools' },
           { type: 'separator' },
-          { label: 'Quit Mnemosyne', click: () => app.quit() },
+          { label: 'Quit MnemosyneC', click: () => app.quit() },
         ]},
       ]);
       Menu.setApplicationMenu(devMenu);
@@ -2830,6 +2976,10 @@ app.whenReady().then(async () => {
 
   // Start periodic connectivity polling → auto mode transitions
   connectivityTimer = setInterval(runConnectivityPoll, CONNECTIVITY_POLL_MS);
+
+  // SEG-Q-4 BP078: auto-prepare FULL upgrade on launch (if enabled)
+  runAutoPrepareIfNeeded();
+  scheduleAutoPrepareIdle();
 
   app.on('activate', () => {
     // SAGA-1 BP055: macOS dock click → open Dashboard (not overlay).

@@ -1,7 +1,7 @@
 {
   "name": "amplify-computer",
-  "version": "0.1.32",
-  "description": "Mnemosyne — Memory, powered by CAI · local inference + cooperative substrate OS overlay (SSPL · Pledge #2260)",
+  "version": "0.1.33",
+  "description": "MnemosyneC — Memory, powered by CAI · local inference + cooperative substrate OS overlay (SSPL · Pledge #2260)",
   "homepage": "https://lianabanyan.com",
   "private": true,
   "main": "dist/main/index.js",
@@ -162,7 +162,7 @@
       "runAfterFinish": true
     },
     "portable": {
-      "artifactName": "Mnemosyne-Portable-${version}.${ext}"
+      "artifactName": "MnemosyneC-Portable-${version}.${ext}"
     },
     "mac": {
       "target": [
@@ -190,7 +190,7 @@
       "identity": null
     },
     "dmg": {
-      "title": "Mnemosyne ${version}",
+      "title": "MnemosyneC ${version}",
       "window": {
         "width": 540,
         "height": 380
@@ -233,8 +233,8 @@
       ],
       "category": "Office",
       "maintainer": "Liana Banyan Corporation <support@lianabanyan.com>",
-      "synopsis": "Mnemosyne — Memory, powered by CAI · local inference + cooperative substrate OS overlay",
-      "description": "Mnemosyne runs CAI — local AI inference via Ollama, cooperative substrate index, HELM VIEW workspace, IP Attribution Ledger, and Battery Dispatch Universal Remote. AGPL Free Forever. No Ads. No Strings. Members pay $5/year."
+      "synopsis": "MnemosyneC — Memory, powered by CAI · local inference + cooperative substrate OS overlay",
+      "description": "MnemosyneC runs CAI — local AI inference via Ollama, cooperative substrate index, HELM VIEW workspace, IP Attribution Ledger, and Battery Dispatch Universal Remote. AGPL Free Forever. No Ads. No Strings. Members pay $5/year."
     },
     "deb": {
       "packageCategory": "utils",

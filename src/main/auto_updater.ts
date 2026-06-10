@@ -181,7 +181,7 @@ export class AutoUpdateManager {
         downloadProgress: 100,
       });
       this._showSystemNotification(
-        'Mnemosyne ready to update',
+        'MnemosyneC ready to update',
         `v${info.version} downloaded — restart to apply`,
       );
     });

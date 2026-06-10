@@ -241,3 +241,38 @@ This document is in effect for all Knight agents working on LianaBanyanPlatform 
 Any yoke-return claiming PASS on an IPC or UX fix that does not include the sign-off format defined in Section 5 is non-compliant and must be returned for re-verification before the Founder acts on it.
 
 The pattern described in Section 1 caused three P0 regressions. It will not recur.
+
+---
+
+## 6. v0.1.33 DEVTOOLS ACCESS PATHS (SEG-Q-3 · BP078)
+
+Three documented paths to open Chromium DevTools in MnemosyneC v0.1.33+:
+
+### Path 1 -- Settings button (NEW in v0.1.33)
+1. Open the MnemosyneC Dashboard window.
+2. Click the gear icon (Settings) or navigate to Settings.
+3. Scroll to the "For Techies" section.
+4. Click "Toggle DevTools". The Chromium DevTools panel opens detached.
+5. This path always works regardless of keyboard shortcut conflicts.
+
+### Path 2 -- Title bar right-click (NEW in v0.1.33)
+1. Right-click anywhere on the MnemosyneC window title bar (the top border area with the title text).
+2. A context menu appears with "Toggle Developer Tools" as the first item.
+3. Click it. DevTools opens detached.
+4. Works on both the Dashboard window and the Hearth Conjunction ("Bridge") window.
+5. Note: this replaces the default Windows system context menu for MnemosyneC title bars.
+
+### Path 3 -- Keyboard shortcut (pre-existing)
+- `Ctrl+Shift+D` toggles the developer application menu, which contains "Toggle DevTools".
+- Known issue: conflicts with some Windows global shortcuts on certain machines.
+- If this path fails, use Path 1 or Path 2 above.
+
+### Path 4 -- Remote debugging (power-user)
+Launch MnemosyneC with the remote debugging port flag:
+```
+"MnemosyneC.exe" --remote-debugging-port=9222
+```
+Then open Chrome or Edge and navigate to `chrome://inspect` (or `edge://inspect`).
+Click "Configure..." and add `localhost:9222`.
+All MnemosyneC windows will appear under "Remote Target".
+This path is recommended when you need to attach external profiling tools or run automated tests against the running app.

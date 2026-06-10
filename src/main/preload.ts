@@ -943,6 +943,23 @@ contextBridge.exposeInMainWorld('amplify', {
   // ── Black Crow Feather earn (BP078) ───────────────────────────────────────
   earnBlackCrowFeather: (payload: { userId: string; reason: string; metadata?: Record<string, unknown> }) =>
     ipcRenderer.invoke('feather:earn-black', payload),
+
+  // ── SEG-Q-3 BP078: DevTools toggle (fallback path for Ctrl+Shift+D conflicts) ──
+  toggleDevTools: (): void =>
+    ipcRenderer.send('devtools:toggle'),
+
+  // ── SEG-Q-4 BP078: Auto-prepare FULL upgrade ──────────────────────────────
+  getAutoPrepare: (): Promise<{ enabled: boolean; modelReady: boolean; pulling: boolean }> =>
+    ipcRenderer.invoke('auto-prepare:get'),
+
+  setAutoPrepare: (enabled: boolean): void =>
+    ipcRenderer.send('auto-prepare:set', enabled),
+
+  onAutoPrepareReady: (cb: () => void): (() => void) => {
+    const handler = () => cb();
+    ipcRenderer.on('auto-prepare:model-ready', handler);
+    return () => ipcRenderer.removeListener('auto-prepare:model-ready', handler);
+  },
 });
 
 // ─── Global type extension ────────────────────────────────────────────────────
@@ -1199,6 +1216,12 @@ declare global {
       };
       // Black Crow Feather earn (BP078)
       earnBlackCrowFeather?: (payload: { userId: string; reason: string; metadata?: Record<string, unknown> }) => Promise<{ ok: boolean; featherId?: string; alreadyIssued?: boolean; error?: string }>;
+      // SEG-Q-3 BP078: DevTools toggle
+      toggleDevTools: () => void;
+      // SEG-Q-4 BP078: Auto-prepare FULL upgrade
+      getAutoPrepare: () => Promise<{ enabled: boolean; modelReady: boolean; pulling: boolean }>;
+      setAutoPrepare: (enabled: boolean) => void;
+      onAutoPrepareReady: (cb: () => void) => () => void;
     };
   }
 }

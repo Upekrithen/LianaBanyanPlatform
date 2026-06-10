@@ -1310,13 +1310,14 @@ export function SettingsTab({
 
   // SEG-UX-4: section header search data
   const SECTION_HEADERS = [
-    { key: 'update',      label: 'Mnemosyne Update',          keywords: ['update', 'version', 'download', 'install'] },
+    { key: 'update',      label: 'MnemosyneC Update',         keywords: ['update', 'version', 'download', 'install'] },
     { key: 'appearance',  label: 'Appearance',                 keywords: ['appearance', 'theme', 'dark', 'light'] },
     { key: 'ai-model',    label: 'AI Model Assignment',        keywords: ['ai model', 'ollama', 'bishop', 'knight', 'pawn', 'rook'] },
     { key: 'mnem-drt',    label: 'Mnem Retrieval (Mnem-DRT)',  keywords: ['mnem', 'drt', 'retrieval', 'specialist', 'wikipedia', 'wikidata', 'arxiv', 'wolfram'] },
     { key: 'ai-tier',     label: 'AI Tier',                    keywords: ['ai tier', 'gemma', 'model', 'full', 'nano', 'upgrade', 'sku'] },
     { key: 'substrate',   label: 'Substrate Mode',             keywords: ['substrate', 'mode', 'burst', 'normal', 'fallback'] },
     { key: 'developer',   label: 'Developer Mode',             keywords: ['developer', 'dev mode', 'devmode'] },
+    { key: 'for-techies', label: 'For Techies',                keywords: ['devtools', 'developer tools', 'debugging', 'remote-debugging', 'techies', 'inspect'] },
     { key: 'research',    label: 'Research Participation',     keywords: ['chronos', 'research', 'consent'] },
     { key: 'contribution', label: 'My Contribution',           keywords: ['contribution', 'marks', 'stamps'] },
     { key: 'grand-projects', label: 'Grand Projects',          keywords: ['grand projects', 'project'] },
@@ -1421,7 +1422,7 @@ export function SettingsTab({
       {/* ── Section 1: MNEMOSYNE UPDATE ─────────────────────────────────── */}
       {/* G.2 KniPr011: state machine -- NO_UPDATE→hidden; AVAILABLE→active; DOWNLOADING→progress; DOWNLOADED→"Restart to update" */}
       <section ref={setSectionRef('update') as React.RefCallback<HTMLElement>} style={s.section} id="settings-section-update">
-        <div style={s.sectionHeader}>Mnemosyne Update</div>
+        <div style={s.sectionHeader}>MnemosyneC Update</div>
         <div style={s.card}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 }}>
             <div>
@@ -1585,6 +1586,9 @@ export function SettingsTab({
         <SkuUpgradePanel analytics={undefined} />
       </section>
 
+      {/* ── Section 3b: AUTO-PREPARE FULL UPGRADE (SEG-Q-4 BP078) ─────────── */}
+      <AutoPreparePullPanel />
+
       {/* ── Section 4: SUBSTRATE MODE ────────────────────────────────────── */}
       <section ref={setSectionRef('substrate') as React.RefCallback<HTMLElement>} style={s.section} id="settings-section-substrate">
         <div style={s.sectionHeader}>Substrate Mode</div>
@@ -1649,6 +1653,30 @@ export function SettingsTab({
 
       {/* ── Section 6: RESEARCH PARTICIPATION (KniPr038) ─────────────────── */}
       <ChronosResearchPanel />
+
+      {/* ── Section 5b: FOR TECHIES (SEG-Q-3 BP078) ─────────────────────── */}
+      <section style={s.section} id="settings-section-for-techies">
+        <div style={s.sectionHeader}>🔧 For Techies</div>
+        <div style={s.card}>
+          <div style={{ marginBottom: 12 }}>
+            <div style={s.label}>Developer Tools</div>
+            <div style={{ fontSize: 9, color: '#475569', marginTop: 2, marginBottom: 8 }}>
+              Open the Chromium DevTools panel for this window. Keyboard shortcut: Ctrl+Shift+D (may conflict on some machines). You can also right-click the window title bar and choose &quot;Toggle Developer Tools&quot;. Power-user path: launch with <code style={{ fontSize: 9, color: '#94a3b8', fontFamily: 'monospace' }}>--remote-debugging-port=9222</code> and connect via Chrome at <code style={{ fontSize: 9, color: '#94a3b8', fontFamily: 'monospace' }}>chrome://inspect</code>.
+            </div>
+            <button
+              onClick={() => window.amplify?.toggleDevTools?.()}
+              style={{
+                ...s.btn,
+                background: 'rgba(148,163,184,0.08)',
+                borderColor: 'rgba(148,163,184,0.25)',
+                color: '#94a3b8',
+              }}
+            >
+              Toggle DevTools
+            </button>
+          </div>
+        </div>
+      </section>
 
       {/* ── Section 7: MY CONTRIBUTION ───────────────────────────────────── */}
       <MyContributionPanel />
@@ -1886,3 +1914,69 @@ const styles = {
     fontWeight: 600,
   },
 };
+
+// ─── SEG-Q-4 BP078: Auto-Prepare FULL Upgrade Panel ──────────────────────────
+
+function AutoPreparePullPanel() {
+  const [enabled, setEnabled] = React.useState(false);
+  const [modelReady, setModelReady] = React.useState(false);
+  const [pulling, setPulling] = React.useState(false);
+
+  React.useEffect(() => {
+    (async () => {
+      try {
+        const s = await window.amplify?.getAutoPrepare?.();
+        if (s) { setEnabled(s.enabled); setModelReady(s.modelReady); setPulling(s.pulling); }
+      } catch { /* not available */ }
+    })();
+    const unsub = window.amplify?.onAutoPrepareReady?.(() => {
+      setModelReady(true);
+      setPulling(false);
+    });
+    return () => unsub?.();
+  }, []);
+
+  function toggle() {
+    const next = !enabled;
+    setEnabled(next);
+    window.amplify?.setAutoPrepare?.(next);
+    if (next && !modelReady) setPulling(true);
+  }
+
+  return (
+    <section style={styles.section} id="settings-section-auto-prepare">
+      <div style={styles.sectionHeader}>Auto-Prepare FULL Upgrade</div>
+      <div style={styles.card}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
+          <div style={{ flex: 1 }}>
+            <div style={styles.label}>
+              Download Gemma 4 12B in background
+              {modelReady && <span style={{ marginLeft: 8, color: '#4ade80', fontWeight: 700, fontSize: 10 }}>READY</span>}
+              {pulling && !modelReady && <span style={{ marginLeft: 8, color: '#fbbf24', fontWeight: 700, fontSize: 10 }}>Pulling...</span>}
+            </div>
+            <div style={{ fontSize: 9, color: '#475569', marginTop: 2, lineHeight: 1.5 }}>
+              When ON, MnemosyneC silently pulls the Gemma 4 12B model on launch and every 30 min
+              while idle. When the download completes, you will receive a notification asking to
+              activate. You must click Activate to switch to FULL tier. Nothing activates automatically.
+            </div>
+          </div>
+          <button
+            onClick={toggle}
+            style={{
+              ...styles.chip,
+              flexShrink: 0,
+              ...(enabled ? { ...styles.chipActive, color: '#4ade80', borderColor: 'rgba(74,222,128,0.4)' } : {}),
+            }}
+          >
+            {enabled ? 'ON' : 'OFF'}
+          </button>
+        </div>
+        {modelReady && (
+          <div style={{ marginTop: 8, fontSize: 10, color: '#4ade80', fontWeight: 600 }}>
+            Gemma 4 12B is ready on this machine. Open AI Tier above to activate it.
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
