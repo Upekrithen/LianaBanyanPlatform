@@ -9,31 +9,15 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { WelcomeCueCard } from './WelcomeCueCard';
 import { BenchmarkProofChart } from './BenchmarkProofChart';
 import { useLifecycleStage } from '../hooks/useLifecycleStage';
-// SEG-S-7 component (landed). SEG-S-8 (Layer2ProveIt) pending.
+// SEG-S-7/8: Layer2 surfaces (both landed this session).
 import { Layer2UseIt } from './Layer2UseIt';
+import { Layer2ProveIt } from './Layer2ProveIt';
 
 export const LS_ONBOARDING_COMPLETE = 'mnemosynec_onboarding_complete';
 const MESH_KEY = 'mnemosynec_mesh_enabled';
 
 export interface WelcomeViewProps {
   onComplete: () => void;
-}
-
-// Placeholder used until SEG-S-8 lands Layer2ProveIt.
-function Layer2ProveItPlaceholder(): React.ReactElement {
-  return (
-    <div style={{
-      padding: '24px',
-      background: 'rgba(100, 116, 139, 0.08)',
-      borderRadius: 8,
-      textAlign: 'center',
-      color: '#475569',
-      fontSize: 13,
-      border: '1px solid rgba(100, 116, 139, 0.15)',
-    }}>
-      Layer 2 loading...
-    </div>
-  );
 }
 
 export function WelcomeView({ onComplete: _onComplete }: WelcomeViewProps): React.ReactElement {
@@ -74,6 +58,15 @@ export function WelcomeView({ onComplete: _onComplete }: WelcomeViewProps): Reac
       setVisible(true);
     }, 180);
   }, [advanceTo]);
+
+  // ── Layer 2 direct renders (SEG-S-7/8) ─────────────────────────────────────
+  // Layer2 components own their full-screen overlay; return them directly.
+  if (doorwayChosen === 'use-it') {
+    return <Layer2UseIt onBack={(): void => setDoorwayChosen(null)} />;
+  }
+  if (doorwayChosen === 'prove-it') {
+    return <Layer2ProveIt onBack={(): void => setDoorwayChosen(null)} />;
+  }
 
   // ── Shared styles ──────────────────────────────────────────────────────────
 
@@ -168,19 +161,7 @@ export function WelcomeView({ onComplete: _onComplete }: WelcomeViewProps): Reac
     gap: 8,
   };
 
-  const backBtn: React.CSSProperties = {
-    background: 'none',
-    border: 'none',
-    color: '#475569',
-    fontSize: 11,
-    cursor: 'pointer',
-    padding: '0 0 16px',
-    display: 'flex',
-    alignItems: 'center',
-    gap: 4,
-  };
-
-  // SEG-S-9: Mesh checkbox (visible in both Stage A and Stage B)
+  // SEG-S-9: Mesh checkbox (Stage A)
   const meshCheckbox = (
     <label style={{
       display: 'flex',
@@ -201,42 +182,6 @@ export function WelcomeView({ onComplete: _onComplete }: WelcomeViewProps): Reac
       <span>Uses connected cooperative memory sources when available. You stay in control.</span>
     </label>
   );
-
-  // ── Stage B: doorway chosen -- show mesh checkbox + Layer2 placeholder ────
-
-  if (doorwayChosen !== null) {
-    return (
-      <div style={overlay}>
-        <div style={card}>
-          <button
-            type="button"
-            style={backBtn}
-            onClick={(): void => {
-              setVisible(false);
-              setTimeout(() => { setDoorwayChosen(null); setVisible(true); }, 180);
-            }}
-          >
-            {'< back'}
-          </button>
-
-          {/* SEG-S-9: Mesh checkbox visible in Stage B above Layer2 content */}
-          {meshCheckbox}
-
-          <div style={{ marginTop: 20 }}>
-            {/* SEG-S-8 will replace Layer2ProveItPlaceholder when it lands. */}
-            {doorwayChosen === 'use-it' ? (
-              <Layer2UseIt onBack={(): void => {
-                setVisible(false);
-                setTimeout(() => { setDoorwayChosen(null); setVisible(true); }, 180);
-              }} />
-            ) : (
-              <Layer2ProveItPlaceholder />
-            )}
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   // ── Stage A: main welcome screen ───────────────────────────────────────────
 
