@@ -151,3 +151,17 @@ Founder or QA must perform manually:
 | autoUpdater downloads from mnemosynec.ai instead of GitHub | `files[].url` in latest.yml is relative | Patch to absolute GitHub URL (Step 3) |
 | GitHub asset 404 | Release not published or wrong tag | Check release is public at github.com/liana-banyan/mnemosynec-releases |
 | CDN serving stale latest.yml | Firebase CDN cache | Wait a few minutes or add cache-busting header to firebase.json |
+
+---
+
+## Post-deploy verification (mandatory)
+
+After every release deploy to mnemosynec.ai/download/:
+
+```powershell
+$r = Invoke-WebRequest -Uri "https://mnemosynec.ai/download/" -UseBasicParsing
+$r.Content | Select-String -Pattern "Download MnemosyneC v"
+```
+
+The output must show the current release version in the button text.
+If the version is not present in the live page, the release is not complete.
