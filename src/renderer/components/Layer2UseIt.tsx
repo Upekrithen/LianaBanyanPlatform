@@ -1,11 +1,12 @@
-// Layer2UseIt.tsx -- SEG-S-7 BP078 v0.1.35
+// Layer2UseIt.tsx -- SEG-U-6 BP078 v0.1.36
 // Layer 2 surface for "Just Use It" doorway.
 // 4 AI mode choices; choice 4 shows Ollama model dropdown + cloud provider entries.
-// Advances to Stage C on selection; Stage C full experience deferred to v0.1.36.
+// Static placeholder replaced with animated ModelSetupProgress (SEG-U-6).
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { WelcomeCueCard } from './WelcomeCueCard';
 import { useLifecycleStage } from '../hooks/useLifecycleStage';
+import { ModelSetupProgress } from './ModelSetupProgress';
 
 export interface Layer2UseItProps {
   onBack: () => void;
@@ -126,13 +127,25 @@ const S = {
   },
 };
 
+// Ollama model tags for the built-in choices
+const CHOICE2_MODEL = 'mistral'; // lightweight / fast
+const CHOICE3_MODEL = 'gemma4:12b'; // heavy-duty
+
+function extractPullModelName(selection: string): string {
+  // "Ollama: modelname" -> "modelname"; cloud provider -> '' (no local pull needed)
+  if (selection.startsWith('Ollama: ')) return selection.slice(8);
+  return '';
+}
+
 export function Layer2UseIt({ onBack }: Layer2UseItProps): React.ReactElement {
   const { advanceTo } = useLifecycleStage();
   const [screenMode, setScreenMode] = useState<ScreenMode>('picking');
+  const [chosenModel, setChosenModel] = useState<string>('');
   const [choice4Open, setChoice4Open] = useState(false);
   const [models, setModels] = useState<string[]>([]);
   const [modelsLoading, setModelsLoading] = useState(false);
   const [selectedModel, setSelectedModel] = useState<string>('');
+  const [setupError, setSetupError] = useState<string | null>(null);
 
   // Fetch Ollama models when choice 4 is expanded
   useEffect(() => {
@@ -144,24 +157,41 @@ export function Layer2UseIt({ onBack }: Layer2UseItProps): React.ReactElement {
       .finally(() => setModelsLoading(false));
   }, [choice4Open]);
 
-  const handleSimpleChoice = useCallback((): void => {
-    advanceTo('C');
+  const enterSetup = useCallback((modelTag: string): void => {
+    setChosenModel(modelTag);
+    setSetupError(null);
     setScreenMode('confirming');
-  }, [advanceTo]);
+  }, []);
 
+  // Choice 1: No AI -- skip model pull entirely
+  const handleNoAiChoice = useCallback((): void => {
+    enterSetup('');
+  }, [enterSetup]);
+
+  // Choices 2 and 3: specific Ollama models
   const handleChoice4Click = useCallback((): void => {
     setChoice4Open((prev) => !prev);
   }, []);
 
   const handleModelConfirm = useCallback((): void => {
     if (!selectedModel) return;
-    advanceTo('C');
-    setScreenMode('confirming');
-  }, [advanceTo, selectedModel]);
+    enterSetup(extractPullModelName(selectedModel));
+  }, [enterSetup, selectedModel]);
 
-  const handleBackFromPlaceholder = useCallback((): void => {
+  // Called by ModelSetupProgress when all phases complete
+  const handleSetupComplete = useCallback((): void => {
+    advanceTo('C');
+  }, [advanceTo]);
+
+  // Called by ModelSetupProgress on error -- stay on confirming screen but show error inline
+  const handleSetupError = useCallback((err: string): void => {
+    setSetupError(err);
+  }, []);
+
+  const handleBackFromSetup = useCallback((): void => {
     setScreenMode('picking');
     setChoice4Open(false);
+    setSetupError(null);
   }, []);
 
   // Build dropdown options: local Ollama models + cloud providers
@@ -170,18 +200,22 @@ export function Layer2UseIt({ onBack }: Layer2UseItProps): React.ReactElement {
     ...CLOUD_PROVIDERS.map((p) => `${p} (API key required)`),
   ];
 
-  // ── Confirming placeholder ──────────────────────────────────────────────────
+  // ── Confirming: live animated setup (no static text) ───────────────────────
   if (screenMode === 'confirming') {
     return (
       <div style={S.overlay}>
         <div style={S.card}>
           <div style={S.brandLine}>Just Use It</div>
-          <div style={S.placeholderBox}>
-            Your AI is being set up. Full chat experience coming in the next update.
-          </div>
-          <button type="button" style={S.backLink} onClick={handleBackFromPlaceholder}>
-            {'< back to choices'}
-          </button>
+          <ModelSetupProgress
+            modelName={chosenModel}
+            onComplete={handleSetupComplete}
+            onError={handleSetupError}
+          />
+          {setupError && (
+            <button type="button" style={{ ...S.backLink, marginTop: 16 }} onClick={handleBackFromSetup}>
+              {'< back to choices'}
+            </button>
+          )}
         </div>
       </div>
     );
@@ -199,28 +233,28 @@ export function Layer2UseIt({ onBack }: Layer2UseItProps): React.ReactElement {
         <h2 style={S.heading}>How do you want to use AI?</h2>
 
         <div style={S.cardStack}>
-          {/* Choice 1 */}
+          {/* Choice 1: No AI -- no local model pull */}
           <WelcomeCueCard
             label="No AI, search and organize with your own computer only."
             size="choice"
             variant="neutral"
-            onClick={handleSimpleChoice}
+            onClick={handleNoAiChoice}
           />
 
-          {/* Choice 2 */}
+          {/* Choice 2: Lightweight local AI via Mistral */}
           <WelcomeCueCard
             label="Free lightweight AI, fast local helper using Ollama plus Mistral."
             size="choice"
             variant="blue"
-            onClick={handleSimpleChoice}
+            onClick={(): void => enterSetup(CHOICE2_MODEL)}
           />
 
-          {/* Choice 3 */}
+          {/* Choice 3: Heavy-duty local AI via Gemma 4 12B */}
           <WelcomeCueCard
             label="Free heavy-duty AI, stronger local model using Gemma 4 12B."
             size="choice"
             variant="blue"
-            onClick={handleSimpleChoice}
+            onClick={(): void => enterSetup(CHOICE3_MODEL)}
           />
 
           {/* Choice 4 */}

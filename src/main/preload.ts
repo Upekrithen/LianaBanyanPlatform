@@ -279,6 +279,10 @@ contextBridge.exposeInMainWorld('amplify', {
     return () => ipcRenderer.removeListener('ollama-pull-progress', handler);
   },
 
+  // SEG-U-6: pull a specific named model with streaming progress events
+  pullNamedModel: (modelName: string): Promise<{ success: boolean; alreadyInstalled?: boolean; error?: string }> =>
+    ipcRenderer.invoke('pull-named-model', { modelName }),
+
   // BP067 v0.1.24 — transparent install + floor model
   setupPrivateAI: (): Promise<{ ok: boolean; error?: string }> =>
     ipcRenderer.invoke('setup-private-ai'),
@@ -1008,6 +1012,7 @@ declare global {
       listOllamaModels: () => Promise<string[]>;
       checkDiskSpace: () => Promise<{ ok: boolean; requiredGB: number }>;
       onOllamaPullProgress: (cb: (progress: ModelPullProgress) => void) => () => void;
+      pullNamedModel: (modelName: string) => Promise<{ success: boolean; alreadyInstalled?: boolean; error?: string }>;
       setupPrivateAI: () => Promise<{ ok: boolean; error?: string }>;
       markBp067FirstRunComplete: () => Promise<{ ok: boolean }>;
       askFloorModel: (prompt: string) => Promise<{ ok: boolean; text?: string; error?: string }>;

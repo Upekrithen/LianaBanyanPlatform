@@ -1506,6 +1506,24 @@ function registerIPCHandlers(): void {
     }
   });
 
+  // SEG-U-6: pull a user-named model with streaming progress
+  safeHandle('pull-named-model', async (_event, { modelName }: { modelName: string }) => {
+    if (!ollamaManager) return { success: false, error: 'Ollama manager not initialized' };
+    const reachable = await ollamaManager.isReachable();
+    if (!reachable) return { success: false, error: 'Ollama not running' };
+    const hasModel = await ollamaManager.hasModel(modelName);
+    if (hasModel) return { success: true, alreadyInstalled: true };
+    try {
+      await ollamaManager.pullModel(modelName, (progress) => {
+        overlayWindow?.webContents.send('ollama-pull-progress', progress);
+        dashboardWindow?.webContents.send('ollama-pull-progress', progress);
+      });
+      return { success: true };
+    } catch (err) {
+      return { success: false, error: String(err) };
+    }
+  });
+
   // BP067 v0.1.24 ? transparent install + bundled Gemma floor
   safeHandle('setup-private-ai', async () => {
     if (!ollamaManager) return { ok: false, error: 'Ollama manager not initialized' };

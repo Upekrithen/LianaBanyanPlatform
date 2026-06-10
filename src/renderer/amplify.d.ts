@@ -179,6 +179,7 @@ declare global {
       listOllamaModels: () => Promise<string[]>;
       checkDiskSpace: () => Promise<{ ok: boolean; requiredGB: number }>;
       onOllamaPullProgress: (cb: (progress: ModelPullProgress) => void) => () => void;
+      pullNamedModel: (modelName: string) => Promise<{ success: boolean; alreadyInstalled?: boolean; error?: string }>;
       setupPrivateAI: () => Promise<{ ok: boolean; error?: string }>;
       markBp067FirstRunComplete: () => Promise<{ ok: boolean }>;
       askFloorModel: (prompt: string) => Promise<{ ok: boolean; text?: string; error?: string }>;
