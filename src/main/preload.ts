@@ -30,11 +30,18 @@ export interface OllamaStatus {
 }
 
 export interface ModelPullProgress {
-  status: 'pulling' | 'verifying' | 'complete' | 'error';
-  bytesDownloaded?: number;
-  totalBytes?: number;
+  status: string;
+  phase: 'manifest' | 'downloading' | 'verifying' | 'writing' | 'success' | 'error';
+  completed?: number;
+  total?: number;
+  layerIndex?: number;
+  layerCount?: number;
+  digest?: string;
   percentComplete?: number;
   error?: string;
+  // Legacy fields (kept for backward compatibility)
+  bytesDownloaded?: number;
+  totalBytes?: number;
 }
 
 // BP078 Scope 6.5 -- SKU pull progress

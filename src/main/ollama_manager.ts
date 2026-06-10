@@ -27,11 +27,18 @@ export interface OllamaStatus {
 }
 
 export interface ModelPullProgress {
-  status: 'pulling' | 'verifying' | 'complete' | 'error';
-  bytesDownloaded?: number;
-  totalBytes?: number;
+  status: string;
+  phase: 'manifest' | 'downloading' | 'verifying' | 'writing' | 'success' | 'error';
+  completed?: number;
+  total?: number;
+  layerIndex?: number;
+  layerCount?: number;
+  digest?: string;
   percentComplete?: number;
   error?: string;
+  // Legacy fields (kept for backward compatibility)
+  bytesDownloaded?: number;
+  totalBytes?: number;
 }
 
 /** BP067 — transparent install progress (real steps, plain language). */
@@ -341,7 +348,15 @@ export class OllamaManager {
   ): Promise<void> {
     const cb = progressCb ?? this.onProgress;
 
-    cb?.({ status: 'pulling', percentComplete: 0 });
+    // Track layer progress
+    const layerDigests = new Set<string>();
+    const layerProgress = new Map<string, { completed: number; total: number }>();
+
+    cb?.({
+      status: 'pulling manifest',
+      phase: 'manifest',
+      percentComplete: 0,
+    });
 
     const res = await fetch(`${OLLAMA_API_BASE}/api/pull`, {
       method: 'POST',
@@ -350,7 +365,11 @@ export class OllamaManager {
     });
 
     if (!res.ok || !res.body) {
-      cb?.({ status: 'error', error: `Pull request failed: ${res.statusText}` });
+      cb?.({
+        status: 'error',
+        phase: 'error',
+        error: `Pull request failed: ${res.statusText}`,
+      });
       throw new Error(`Ollama pull failed: ${res.statusText}`);
     }
 
@@ -369,23 +388,66 @@ export class OllamaManager {
             status: string;
             completed?: number;
             total?: number;
+            digest?: string;
           };
 
-          if (event.total && event.completed) {
+          // Determine phase from status
+          let phase: ModelPullProgress['phase'] = 'downloading';
+          if (event.status.includes('pulling manifest')) {
+            phase = 'manifest';
+          } else if (event.status.includes('verifying')) {
+            phase = 'verifying';
+          } else if (event.status.includes('writing manifest')) {
+            phase = 'writing';
+          } else if (event.status === 'success') {
+            phase = 'success';
+          } else if (event.status.includes('downloading') || event.status.includes('pulling')) {
+            phase = 'downloading';
+          }
+
+          // Track layers by digest
+          if (event.digest && event.total) {
+            layerDigests.add(event.digest);
+            layerProgress.set(event.digest, {
+              completed: event.completed ?? 0,
+              total: event.total,
+            });
+          }
+
+          // Build progress payload
+          const progress: ModelPullProgress = {
+            status: event.status,
+            phase,
+          };
+
+          if (event.total && event.completed !== undefined) {
             const pct = Math.round((event.completed / event.total) * 100);
+            progress.completed = event.completed;
+            progress.total = event.total;
+            progress.bytesDownloaded = event.completed;
+            progress.totalBytes = event.total;
+            progress.percentComplete = pct;
+
+            if (event.digest) {
+              progress.digest = event.digest;
+              // Calculate layer index (1-based)
+              const layerArray = Array.from(layerDigests);
+              progress.layerIndex = layerArray.indexOf(event.digest) + 1;
+              progress.layerCount = layerDigests.size;
+            }
+
             if (pct !== lastPercent) {
               lastPercent = pct;
-              cb?.({
-                status: 'pulling',
-                bytesDownloaded: event.completed,
-                totalBytes: event.total,
-                percentComplete: pct,
-              });
+              cb?.(progress);
             }
-          } else if (event.status === 'verifying sha256 digest') {
-            cb?.({ status: 'verifying', percentComplete: 99 });
-          } else if (event.status === 'success') {
-            cb?.({ status: 'complete', percentComplete: 100 });
+          } else if (phase === 'verifying') {
+            progress.percentComplete = 99;
+            cb?.(progress);
+          } else if (phase === 'success') {
+            progress.percentComplete = 100;
+            cb?.(progress);
+          } else if (phase === 'manifest' || phase === 'writing') {
+            cb?.(progress);
           }
         } catch {
           // Non-JSON line — ignore

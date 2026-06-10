@@ -34,6 +34,45 @@ function estimateTime(remainingBytes: number): string {
   return `~${mins} minute${mins !== 1 ? 's' : ''}`;
 }
 
+// Phase 3 ETA calculation using rolling-average throughput
+function calculateETA(
+  completed: number,
+  total: number,
+  samples: Array<{ timestamp: number; bytes: number }>,
+  lastEventTime: number
+): string {
+  if (total === 0 || completed === 0) return 'Calculating...';
+  if (samples.length < 2) return 'Calculating...';
+
+  const now = Date.now();
+  // Stalled check: no new event for 30s while in downloading phase
+  if (now - lastEventTime > 30000) return 'Resuming...';
+
+  // Purge samples older than 5s
+  const fiveSecondsAgo = now - 5000;
+  const recentSamples = samples.filter((s) => s.timestamp >= fiveSecondsAgo);
+  if (recentSamples.length < 2) return 'Calculating...';
+
+  const oldest = recentSamples[0];
+  const newest = recentSamples[recentSamples.length - 1];
+  const timeDelta = newest.timestamp - oldest.timestamp;
+  const bytesDelta = newest.bytes - oldest.bytes;
+
+  if (timeDelta === 0 || bytesDelta <= 0) return 'Calculating...';
+
+  const bytesPerMs = bytesDelta / timeDelta;
+  const remainingBytes = total - completed;
+  const etaMs = remainingBytes / bytesPerMs;
+  const etaSeconds = Math.ceil(etaMs / 1000);
+
+  if (etaSeconds < 60) return '< 1 minute remaining';
+  const minutes = Math.floor(etaSeconds / 60);
+  if (minutes < 60) return `~${minutes} minute${minutes !== 1 ? 's' : ''} remaining`;
+  const hours = Math.floor(minutes / 60);
+  const mins = minutes % 60;
+  return `~${hours} hour${hours !== 1 ? 's' : ''} ${mins} minute${mins !== 1 ? 's' : ''} remaining`;
+}
+
 const S = {
   wrap: {
     display: 'flex',
@@ -116,10 +155,19 @@ export function ModelSetupProgress({
   const [dotIdx, setDotIdx] = useState(0);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
+  // Phase 3 granular progress state
+  const [ollamaPhase, setOllamaPhase] = useState<string | null>(null);
+  const [layerIndex, setLayerIndex] = useState<number | null>(null);
+  const [layerCount, setLayerCount] = useState<number | null>(null);
+
   // refs prevent stale closure captures in async logic
   const cancelledRef = useRef(false);
   const heartbeatTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const dotIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Throughput tracking for ETA (rolling 5s window)
+  const throughputSamplesRef = useRef<Array<{ timestamp: number; bytes: number }>>([]);
+  const lastEventTimeRef = useRef<number>(Date.now());
 
   const clearTimers = () => {
     if (heartbeatTimerRef.current) { clearTimeout(heartbeatTimerRef.current); heartbeatTimerRef.current = null; }
@@ -209,6 +257,23 @@ export function ModelSetupProgress({
         if (progress.percentComplete !== undefined) setPct(progress.percentComplete);
         if (progress.bytesDownloaded !== undefined) setDownloaded(progress.bytesDownloaded);
         if (progress.totalBytes !== undefined) setTotal(progress.totalBytes);
+
+        // Phase 3 granular progress fields
+        if (progress.phase) setOllamaPhase(progress.phase);
+        if (progress.layerIndex !== undefined) setLayerIndex(progress.layerIndex);
+        if (progress.layerCount !== undefined) setLayerCount(progress.layerCount);
+
+        // Throughput tracking for ETA
+        const completed = progress.completed ?? progress.bytesDownloaded ?? 0;
+        if (completed > 0) {
+          const now = Date.now();
+          throughputSamplesRef.current.push({ timestamp: now, bytes: completed });
+          lastEventTimeRef.current = now;
+          // Keep only last 100 samples (plenty for 5s window)
+          if (throughputSamplesRef.current.length > 100) {
+            throughputSamplesRef.current = throughputSamplesRef.current.slice(-100);
+          }
+        }
       });
 
       // Invoke pull -- this resolves when the pull is complete
@@ -272,14 +337,51 @@ export function ModelSetupProgress({
         {phase === 3 && 'Step 3 of 3: Setting up FULL tier...'}
       </div>
 
-      {/* Phase 1 and 3: animated spinner */}
-      {(phase === 1 || phase === 3) && (
+      {/* Phase 1: animated spinner */}
+      {phase === 1 && (
         <div style={S.spinnerRow}>
           <div style={S.spinner} />
-          <span style={S.spinnerText}>
-            {phase === 1 ? 'Checking local AI engine...' : 'Finalizing your setup...'}
-          </span>
+          <span style={S.spinnerText}>Checking local AI engine...</span>
         </div>
+      )}
+
+      {/* Phase 3: granular 5-element progress UI */}
+      {phase === 3 && (
+        <>
+          {/* Element 1: Sub-step indicator */}
+          <div style={S.spinnerText}>
+            {!ollamaPhase && 'Connecting...'}
+            {ollamaPhase === 'manifest' && 'Step 1 of 5: Connecting to model server'}
+            {ollamaPhase === 'downloading' &&
+              `Step 2 of 5: Downloading model${layerIndex && layerCount ? ` (layer ${layerIndex} of ${layerCount})` : ''}`}
+            {ollamaPhase === 'verifying' && 'Step 3 of 5: Verifying integrity'}
+            {ollamaPhase === 'writing' && 'Step 4 of 5: Finalizing'}
+            {(ollamaPhase === 'success' || ollamaPhase === 'complete') && 'Step 5 of 5: Complete'}
+          </div>
+
+          {/* Element 2: Progress bar (only when total > 0 and in downloading phase) */}
+          {ollamaPhase === 'downloading' && total > 0 && (
+            <div style={S.barTrack}>
+              <div style={S.barFill(pct)} />
+            </div>
+          )}
+
+          {/* Element 3 + 4: Bytes counter + ETA (only when downloading with total > 0) */}
+          {ollamaPhase === 'downloading' && total > 0 && (
+            <div style={S.barLabel}>
+              {formatBytes(downloaded)} of {formatBytes(total)} —{' '}
+              {calculateETA(downloaded, total, throughputSamplesRef.current, lastEventTimeRef.current)}
+            </div>
+          )}
+
+          {/* Spinner for non-downloading phases */}
+          {(!ollamaPhase || ollamaPhase === 'manifest' || ollamaPhase === 'verifying' || ollamaPhase === 'writing') && (
+            <div style={S.spinnerRow}>
+              <div style={S.spinner} />
+              <span style={S.spinnerText}>Finalizing your setup...</span>
+            </div>
+          )}
+        </>
       )}
 
       {/* Phase 2: heartbeat fallback (cycling dots) */}
