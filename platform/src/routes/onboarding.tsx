@@ -58,12 +58,17 @@ export const onboardingRoutes = (
     <Route path="/creators" element={<ExplorerRoute><LazyPage><CreatorShowcasePage /></LazyPage></ExplorerRoute>} />
     <Route path="/creators/:creatorId" element={<ExplorerRoute><LazyPage><CreatorProfilePage /></LazyPage></ExplorerRoute>} />
     <Route path="/onboarding/status" element={<ProtectedRoute><LazyPage><OnboardingStatusPage /></LazyPage></ProtectedRoute>} />
-    <Route path="/RedCarpet" element={<RedCarpetErrorBoundary><LazyPage><RedCarpet /></LazyPage></RedCarpetErrorBoundary>} />
+    {/* BP079: Red Carpet routes moved to redCarpet.tsx (11 routes under commerce portal group)
+        Legacy routes below are commented out to avoid conflicts with the new Wave A implementation.
+        The new redCarpet.tsx provides: /red-carpet (landing), /red-carpet/:slug (content),
+        /rc/:grantToken (grant activation), /red-carpet/dashboard, /red-carpet/cue-cards/* (manager + detail + share),
+        /cue-card/:shortToken (public), /cue-cards/:cardId/analytics, plus /redcarpet redirects. */}
+    {/* <Route path="/RedCarpet" element={<RedCarpetErrorBoundary><LazyPage><RedCarpet /></LazyPage></RedCarpetErrorBoundary>} />
     <Route path="/RedCarpet/:slug" element={<RedCarpetErrorBoundary><LazyPage><RedCarpet /></LazyPage></RedCarpetErrorBoundary>} />
     <Route path="/red-carpet" element={<LazyPage><RedCarpetLandingV2Page /></LazyPage>} />
     <Route path="/red-carpet/:slug" element={<RedCarpetErrorBoundary><LazyPage><RedCarpet /></LazyPage></RedCarpetErrorBoundary>} />
     <Route path="/redcarpet" element={<RedCarpetErrorBoundary><LazyPage><RedCarpet /></LazyPage></RedCarpetErrorBoundary>} />
-    <Route path="/redcarpet/:slug" element={<RedCarpetErrorBoundary><LazyPage><RedCarpet /></LazyPage></RedCarpetErrorBoundary>} />
+    <Route path="/redcarpet/:slug" element={<RedCarpetErrorBoundary><LazyPage><RedCarpet /></LazyPage></RedCarpetErrorBoundary>} /> */}
     <Route path="/launch" element={<LazyPage><LaunchHub /></LazyPage>} />
     <Route path="/launch/run-a-node" element={<LazyPage><RunANode /></LazyPage>} />
     <Route path="/start" element={<LazyPage><WhatDoYouWantFlow /></LazyPage>} />

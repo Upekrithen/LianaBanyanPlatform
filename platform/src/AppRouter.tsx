@@ -16,6 +16,7 @@ import {
   adminRoutes,
   captainRoutes,
   defenseRoutes,
+  redCarpetRoutes,
   miscRoutes,
 } from "./routes";
 
@@ -49,6 +50,7 @@ export function AppRouter() {
         {g("admin") && adminRoutes}
         {g("captain") && captainRoutes}
         {g("defense") && defenseRoutes}
+        {g("commerce") && redCarpetRoutes}
 
         {/* Misc (404, redirects, legal) — always last */}
         {miscRoutes}

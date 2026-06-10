@@ -11,6 +11,7 @@ export { toolsRoutes } from "./tools";
 export { adminRoutes } from "./admin";
 export { captainRoutes } from "./captain";
 export { defenseRoutes } from "./defense";
+export { redCarpetRoutes } from "./redCarpet";
 export { miscRoutes } from "./misc";
 
 export { PortalGate } from "./PortalGate";

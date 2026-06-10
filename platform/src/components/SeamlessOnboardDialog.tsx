@@ -67,6 +67,18 @@ export interface OnboardConfig {
   additionalLabel?: string;
   /** Called after successful signup/login — your action proceeds */
   onComplete?: () => void;
+  /** Red Carpet grant token (marks grant as used) */
+  grantToken?: string;
+  /** Cue card click token (for conversion tracking) */
+  clickToken?: string;
+  /** Introducer/referrer user ID (creates referral record) */
+  introducer_user_id?: string;
+  /** Business card ID (for attribution) */
+  cardId?: string;
+  /** Node type (food, local-business, etc.) */
+  nodeType?: string;
+  /** Called after successful auth with userId and introducerId */
+  onAuthSuccess?: (userId: string, introducerId: string | null) => void;
 }
 
 interface SeamlessOnboardContextType {
@@ -136,6 +148,79 @@ function SeamlessOnboardDialogInner({
 
   const totalAmount = (config.membershipIncluded ? 5 : 0) + (config.additionalAmount || 0);
 
+  // Helper: execute post-auth writes (referral tracking, onboarding path, etc.)
+  const executePostAuthWrites = async (userId: string) => {
+    let referralRowId: string | null = null;
+
+    // Write 1: Mark Red Carpet grant as used (if grantToken provided)
+    if (config.grantToken) {
+      try {
+        await supabase.rpc('mark_red_carpet_grant_used', { p_grant_token: config.grantToken });
+      } catch (error) {
+        console.error('Failed to mark grant as used:', error);
+        // Non-blocking: auth succeeded, attribution write failed
+      }
+    }
+
+    // Write 2: Insert mc_onboarding_paths row
+    try {
+      await supabase.from('mc_onboarding_paths').upsert({
+        user_id: userId,
+        current_step: 1,
+        path_variant: 'standard',
+        started_at: new Date().toISOString(),
+        last_activity: new Date().toISOString(),
+      }, { onConflict: 'user_id' });
+    } catch (error) {
+      console.error('Failed to record onboarding path:', error);
+      // Non-blocking
+    }
+
+    // Write 4: Create creator_referrals record (if introducer_user_id provided)
+    // (Execute before Write 3 so we have referralRowId)
+    if (config.introducer_user_id) {
+      try {
+        const { data: referralRow, error } = await supabase.from('creator_referrals').insert({
+          referrer_id: config.introducer_user_id,
+          introducer_user_id: config.introducer_user_id,
+          referred_handle: email || '',
+          referred_platform: 'email',
+          cue_card_sent_at: new Date().toISOString(),
+          referred_user_id: userId,
+          business_node_type: config.nodeType || null,
+          business_card_id: config.cardId || null,
+          first_seen_at: new Date().toISOString(),
+        }).select('id').single();
+
+        if (!error && referralRow) {
+          referralRowId = referralRow.id;
+        }
+      } catch (error) {
+        console.error('Failed to create referral record:', error);
+        // Non-blocking
+      }
+    }
+
+    // Write 3: Mark cue_card_share_clicks as converted (if both grantToken AND clickToken)
+    if (config.grantToken && config.clickToken && referralRowId) {
+      try {
+        await supabase
+          .from('cue_card_share_clicks')
+          .update({
+            converted: true,
+            conversion_event_id: referralRowId,
+          })
+          .eq('click_token', config.clickToken);
+      } catch (error) {
+        console.error('Failed to mark share click as converted:', error);
+        // Non-blocking
+      }
+    }
+
+    // Fire onAuthSuccess callback if provided
+    config.onAuthSuccess?.(userId, config.introducer_user_id || null);
+  };
+
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -155,7 +240,7 @@ function SeamlessOnboardDialogInner({
 
     setLoading(true);
 
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -170,6 +255,12 @@ function SeamlessOnboardDialogInner({
       toast.error(error.message || "Sign up failed. Please try again.");
     } else {
       toast.success("Account created! Check your email to verify.");
+
+      // Execute post-auth writes (referral tracking, onboarding path, etc.)
+      if (data.user) {
+        await executePostAuthWrites(data.user.id);
+      }
+
       setStep("ready");
     }
   };
@@ -189,7 +280,7 @@ function SeamlessOnboardDialogInner({
 
     setLoading(true);
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
     setLoading(false);
 
@@ -197,6 +288,12 @@ function SeamlessOnboardDialogInner({
       toast.error(error.message || "Sign in failed. Please check your credentials.");
     } else {
       toast.success("Signed in!");
+
+      // Execute post-auth writes (referral tracking, onboarding path, etc.)
+      if (data.user) {
+        await executePostAuthWrites(data.user.id);
+      }
+
       setStep("ready");
     }
   };

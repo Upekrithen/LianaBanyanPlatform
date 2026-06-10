@@ -76,19 +76,25 @@ async function handleCheckoutCompleted(
   const userId = meta.user_id;
   const inviteCode = meta.invite_code ?? "";
   const sessionId = session.id as string;
+  // BP079: Red Carpet introducer tracking
+  const introducer_user_id = meta.introducer_user_id || null;
 
   log(`Processing membership activation for user ${userId}`);
 
   // T6: Update payment record to completed
-  await adminClient
+  const { data: paymentData } = await adminClient
     .from("membership_payments")
     .update({
       status: "completed",
       stripe_payment_intent: (session.payment_intent as string) || null,
       completed_at: new Date().toISOString(),
+      introducer_user_id: introducer_user_id,
     })
-    .eq("stripe_session_id", sessionId);
+    .eq("stripe_session_id", sessionId)
+    .select("id")
+    .single();
 
+  const paymentRowId = paymentData?.id;
   log("Payment record updated (T6)");
 
   // T7a: Activate membership in member_profiles
@@ -119,6 +125,20 @@ async function handleCheckoutCompleted(
     );
 
   log("user_credits updated (T7b)");
+
+  // BP079: Red Carpet attribution tracking — if introducer_user_id is present, create attribution
+  if (introducer_user_id && paymentRowId) {
+    log(`Recording attribution for introducer ${introducer_user_id}`);
+    await adminClient.from("promotion_attributions").insert({
+      introducer_user_id: introducer_user_id,
+      attributed_amount_cents: 500, // $5 membership payment → 500 credits (1:1 USD to cents)
+      currency_class: "credits",
+      attribution_event: "first_payment",
+      source_payment_id: paymentRowId,
+      vesting_unlock_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30-day vesting
+    });
+    log("Attribution recorded for introducer");
+  }
 
   // Stage Marks for manual Founder approval (auto-gate off by default)
   await adminClient

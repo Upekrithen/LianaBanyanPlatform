@@ -36,6 +36,7 @@ Deno.serve(async (req) => {
     let inviteCode = "";
     let isRenewal = false;
     let autoRenew = false;
+    let introducer_user_id = "";
     if (req.method === "POST") {
       try {
         const body = await req.json();
@@ -43,6 +44,8 @@ Deno.serve(async (req) => {
         isRenewal = body.isRenewal || false;
         // BP065 PART 0: auto-renew opt-in (default unchecked — no dark-pattern pre-check)
         autoRenew = body.autoRenew === true;
+        // BP079: Red Carpet introducer tracking
+        introducer_user_id = body.introducer_user_id || "";
       } catch { /* no body is ok */ }
     }
 
@@ -108,6 +111,7 @@ Deno.serve(async (req) => {
       "metadata[type]": "membership",
       "metadata[is_renewal]": isRenewal ? "true" : "false",
       "metadata[auto_renew]": autoRenew ? "true" : "false",
+      "metadata[introducer_user_id]": introducer_user_id || "",
     };
 
     if (inviteCode) {
@@ -149,6 +153,7 @@ Deno.serve(async (req) => {
       stripe_session_id: stripeData.id,
       status: "pending",
       is_renewal: isRenewal,
+      introducer_user_id: introducer_user_id || null,
     });
 
     log("Pending payment recorded");
