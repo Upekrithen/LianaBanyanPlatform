@@ -19,7 +19,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
-import QRCode from 'qrcode.react';
+import { QRCodeSVG } from 'qrcode.react';
 import { ArrowLeft, Copy, Share2, Loader2 } from 'lucide-react';
 
 interface CueCardBuilderProps {
@@ -448,7 +448,7 @@ export function CueCardBuilder({ nodeType, nodeTypeName }: CueCardBuilderProps) 
 
                   {/* QR Code */}
                   <div className="flex justify-center p-4 bg-white rounded-lg">
-                    <QRCode value={shareUrl} size={200} level="H" />
+                    <QRCodeSVG value={shareUrl} size={200} level="H" />
                   </div>
                   <p className="text-xs text-center text-muted-foreground">
                     Scan QR code to open card
