@@ -7,7 +7,14 @@
 // The SEG-FIX-1 change (declare const) was incorrect for Electron 31 -- it caused
 // ReferenceError: ipcRenderer is not defined at line 8 (confirmed via CDP runtime probe,
 // root cause of 5-version P0 across v0.1.32-v0.1.37). Reverted to correct require pattern.
+// SEG-V0150-P0-DIAGNOSE-BRIDGE: tsc with "module": "CommonJS" compiles the import form to
+// require('electron') at runtime -- both forms are equivalent. assert-preload-sandbox.mjs
+// confirms acquisition is present in compiled output. import form is canonical per BP079.
 import { contextBridge, ipcRenderer } from 'electron';
+
+// SEG-V0150-P0-DIAGNOSE-BRIDGE: sentinel exposed early — renderer reads window.__preloadLoaded
+// to confirm preload executed before the main amplify bridge is wired up.
+try { contextBridge.exposeInMainWorld('__preloadLoaded', true); } catch (_e) { /* noop if duplicate */ }
 
 // Main-process watchdog (Bushel 58) — respond even if renderer React tree is wedged
 ipcRenderer.on('watchdog-ping', () => {
@@ -1017,6 +1024,11 @@ contextBridge.exposeInMainWorld('amplify', {
     return () => ipcRenderer.removeListener('lean-install-error', handler);
   },
 
+  // SEG-V0150-P0-FIX-BRIDGE-OR-FALLBACK: skip-path — writes sku_tier.json directly,
+  // bypasses the full lean-install flow (for users who already have Ollama + model).
+  writeSkuTierSkip: (): Promise<{ ok: boolean; error?: string }> =>
+    ipcRenderer.invoke('write-sku-tier-skip'),
+
   // SEG-U-7 BP078: mesh-test-complete -- fired when a results file is detected on disk
   onMeshTestComplete: (cb: (metrics: {
     hot_accuracy_pct: number;
@@ -1314,6 +1326,10 @@ declare global {
       onLeanInstallStatus?: (cb: (data: { step: string; message: string }) => void) => () => void;
       onLeanInstallProgress?: (cb: (data: { bytesDownloaded: number; totalBytes: number; percentComplete: number; speedLabel: string; eta_s: number }) => void) => () => void;
       onLeanInstallError?: (cb: (data: { message: string; retryable: boolean }) => void) => () => void;
+      // SEG-V0150-P0-FIX-BRIDGE-OR-FALLBACK: skip-path
+      writeSkuTierSkip?: () => Promise<{ ok: boolean; error?: string }>;
     };
+    // SEG-V0150-P0-DIAGNOSE-BRIDGE: sentinel — set by preload before main bridge wires up
+    __preloadLoaded?: boolean;
   }
 }

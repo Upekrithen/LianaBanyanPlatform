@@ -3226,6 +3226,22 @@ function registerIPCHandlers(): void {
     return { skuExists: existsSync(skuPath) };
   });
 
+  // SEG-V0150-P0-FIX-BRIDGE-OR-FALLBACK: skip-path — user already has Ollama + model,
+  // or IPC fallback timed out. Writes sku_tier.json to unblock first-install gate.
+  safeHandle('write-sku-tier-skip', async () => {
+    try {
+      writeFileSync(
+        join(app.getPath('userData'), 'sku_tier.json'),
+        JSON.stringify({ tier: 'full', model: 'gemma4:12b', source: 'user_skip' }),
+      );
+      return { ok: true };
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      console.warn('[write-sku-tier-skip] Failed:', message);
+      return { ok: false, error: message };
+    }
+  });
+
   // -- Black Crow Feather earn (BP078) ---------------------------------------
   // Durably records a black_crow feather in the Supabase crow_feathers table.
   // Uses service role key to bypass RLS. Idempotent: one black_crow feather

@@ -326,13 +326,15 @@ declare global {
         svgPath?: string;
       }) => void) => () => void;
       // SEG-V0149-P0-INSTALL-FLOW — Lean install IPC
-      leanInstallStart?: () => void;
+      leanInstallStart?: () => Promise<{ ok: boolean; waitingForInstall?: boolean; error?: string }>;
       onLeanInstallStatus?: (cb: (data: { step: string; message: string }) => void) => () => void;
       onLeanInstallProgress?: (cb: (data: {
         bytesDownloaded: number; totalBytes: number; percentComplete: number;
         speedLabel: string; eta_s: number;
       }) => void) => () => void;
       onLeanInstallError?: (cb: (data: { message: string; retryable: boolean }) => void) => () => void;
+      // SEG-V0150-P0-FIX-BRIDGE-OR-FALLBACK: skip-path
+      writeSkuTierSkip?: () => Promise<{ ok: boolean; error?: string }>;
       // BP060 Application 002 Step 1 — Caithedral Tools
       caithedralTools?: {
         soccerball_emit: (pearls: string[], bindings?: Record<string, string>) => Promise<{ ok: boolean; sid?: string; error?: string }>;
@@ -348,6 +350,8 @@ declare global {
         areopagus_query: (query: string) => Promise<{ ok: boolean; matches?: Array<{ sid: string; pearls: string[]; score: number }>; query?: string; searched_at?: number; error?: string }>;
       };
     };
+    // SEG-V0150-P0-DIAGNOSE-BRIDGE: sentinel — set by preload before main bridge wires up
+    __preloadLoaded?: boolean;
   }
 }
 

@@ -1,10 +1,14 @@
-// LeanWelcomeView.tsx — SEG-V0149-P0-LEAN-WELCOME
+// LeanWelcomeView.tsx — SEG-V0150-P0-LEAN-WELCOME
 // Lean, two-screen welcome: Screen 1 = download CTA; Screen 2 = benchmark proof.
 // Benchmark data sourced from:
 //   librarian-mcp/r10_cross_vendor/results/CADRE_BENCHMARK_RESULTS_BP067.md
 //   Big-4 Baseline section, lines 26-33 (BP063 · 2026-05-30 · kappa=0.936)
+//
+// SEG-V0150-P0-DIAGNOSE-BRIDGE: bridge probe at mount (console, readable via DevTools / diagnostic)
+// SEG-V0150-P0-FIX-BRIDGE-OR-FALLBACK: immediate button feedback + 5s fallback + Skip path
+// SEG-V0150-P0-PROACTIVE: adaptive CTA based on Ollama + gemma4:12b probe at mount
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 interface Props {
   onComplete: () => void;
@@ -18,8 +22,24 @@ const BENCHMARK_ROWS = [
   { model: 'Llama-single (8b, free)', cold: '6.0%',  hot: '78.0%', lift: '+72.0pp' },
 ] as const;
 
+// Adaptive CTA states — Off-the-Street test: button text describes what happens on click.
+type OllamaProbeState = 'probing' | 'ready' | 'has_ollama_no_model' | 'no_ollama';
+
+function ctaLabelFor(probeState: OllamaProbeState, ctaActive: boolean): string {
+  if (ctaActive) return 'Starting…';
+  switch (probeState) {
+    case 'probing':            return 'Checking your system…';
+    case 'ready':              return 'Start using MnemosyneC';
+    case 'has_ollama_no_model': return 'Download your AI model (2 min)';
+    case 'no_ollama':
+    default:                   return 'Set up your AI engine (2 min)';
+  }
+}
+
 export function LeanWelcomeView({ onComplete }: Props): React.ReactElement {
   const [screen, setScreen] = useState<1 | 2>(1);
+
+  // Install progress state
   const [installStep, setInstallStep] = useState<string | null>(null);
   const [installMessage, setInstallMessage] = useState<string>('');
   const [installProgress, setInstallProgress] = useState<{
@@ -28,20 +48,114 @@ export function LeanWelcomeView({ onComplete }: Props): React.ReactElement {
   } | null>(null);
   const [installError, setInstallError] = useState<{ message: string; retryable: boolean } | null>(null);
 
+  // SEG-V0150-P0-FIX-BRIDGE-OR-FALLBACK: visible feedback + 5s fallback
+  const [ctaActive, setCtaActive] = useState(false);
+  const [showFallback, setShowFallback] = useState(false);
+  const statusReceivedRef = useRef(false);
+  const fallbackTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // SEG-V0150-P0-PROACTIVE: adaptive CTA based on Ollama probe
+  const [ollamaProbe, setOllamaProbe] = useState<OllamaProbeState>('probing');
+
+  // ── Mount: Ollama probe (parallel to event subscription) ──────────────────
   useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch('http://localhost:11434/api/tags', { signal: AbortSignal.timeout(3000) });
+        if (res.ok) {
+          const data = await res.json() as { models?: Array<{ name: string }> };
+          const models = (data.models ?? []).map((m: { name: string }) => m.name);
+          const hasGemma = models.some((m: string) => m === 'gemma4:12b' || m.startsWith('gemma4:12b:'));
+          setOllamaProbe(hasGemma ? 'ready' : 'has_ollama_no_model');
+        } else {
+          setOllamaProbe('no_ollama');
+        }
+      } catch {
+        setOllamaProbe('no_ollama');
+      }
+    })();
+  }, []);
+
+  // ── Mount: event subscriptions + SEG-V0150-P0-DIAGNOSE-BRIDGE probe ───────
+  useEffect(() => {
+    // Bridge probe diagnostic — readable via DevTools console or runDiagnostic log
+    const w = window as Window & { __preloadLoaded?: boolean };
+    console.log(
+      '[BRIDGE-PROBE] typeof window.amplify =', typeof window.amplify,
+      '\n[BRIDGE-PROBE] typeof window.amplify?.leanInstallStart =', typeof window.amplify?.leanInstallStart,
+      '\n[BRIDGE-PROBE] typeof window.amplify?.onLeanInstallStatus =', typeof window.amplify?.onLeanInstallStatus,
+      '\n[BRIDGE-PROBE] window.__preloadLoaded =', w.__preloadLoaded ?? false,
+    );
+
     const unsub1 = window.amplify?.onLeanInstallStatus?.((data: { step: string; message: string }) => {
+      statusReceivedRef.current = true;
+      if (fallbackTimerRef.current) { clearTimeout(fallbackTimerRef.current); fallbackTimerRef.current = null; }
+      setShowFallback(false);
       setInstallStep(data.step);
       setInstallMessage(data.message);
-      if (data.step === 'done') onComplete();
+      if (data.step === 'done') {
+        setCtaActive(false);
+        onComplete();
+      }
     });
+
     const unsub2 = window.amplify?.onLeanInstallProgress?.((data: typeof installProgress) => {
       setInstallProgress(data);
     });
+
     const unsub3 = window.amplify?.onLeanInstallError?.((data: { message: string; retryable: boolean }) => {
       setInstallError(data);
+      setCtaActive(false);
+      if (fallbackTimerRef.current) { clearTimeout(fallbackTimerRef.current); fallbackTimerRef.current = null; }
     });
-    return () => { unsub1?.(); unsub2?.(); unsub3?.(); };
+
+    return () => {
+      unsub1?.();
+      unsub2?.();
+      unsub3?.();
+      if (fallbackTimerRef.current) clearTimeout(fallbackTimerRef.current);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // ── CTA click handler ──────────────────────────────────────────────────────
+
+  const handleCta = async () => {
+    if (ctaActive || ollamaProbe === 'probing') return;
+
+    // "ready" state: Ollama + model already present — skip install, go directly
+    if (ollamaProbe === 'ready') {
+      const res = await window.amplify?.writeSkuTierSkip?.();
+      if (res?.ok !== false) {
+        onComplete();
+      } else {
+        setInstallError({ message: 'Could not write setup file. Try restarting the app.', retryable: false });
+      }
+      return;
+    }
+
+    setInstallError(null);
+    setShowFallback(false);
+    statusReceivedRef.current = false;
+    setCtaActive(true);
+
+    // 5-second fallback — if IPC never emits a status event
+    fallbackTimerRef.current = setTimeout(() => {
+      if (!statusReceivedRef.current) {
+        setShowFallback(true);
+        setCtaActive(false);
+      }
+    }, 5000);
+
+    window.amplify?.leanInstallStart?.();
+  };
+
+  // ── Skip handler (fallback path + "I have Ollama" affordance) ─────────────
+
+  const handleSkip = async () => {
+    await window.amplify?.writeSkuTierSkip?.();
+    onComplete();
+  };
 
   // ── Shared styles ──────────────────────────────────────────────────────────
 
@@ -103,17 +217,18 @@ export function LeanWelcomeView({ onComplete }: Props): React.ReactElement {
     display: 'block',
     width: '100%',
     padding: '14px 20px',
-    background: '#22c55e',
+    background: ctaActive || ollamaProbe === 'probing' ? '#16803a' : '#22c55e',
     color: '#fff',
     border: 'none',
     borderRadius: 8,
     fontSize: 15,
     fontWeight: 700,
-    cursor: 'pointer',
+    cursor: ctaActive || ollamaProbe === 'probing' ? 'not-allowed' : 'pointer',
     textAlign: 'center',
     marginBottom: 10,
     fontFamily: 'system-ui, -apple-system, sans-serif',
     transition: 'background 150ms ease',
+    opacity: ctaActive || ollamaProbe === 'probing' ? 0.75 : 1,
   };
 
   const tagline: React.CSSProperties = {
@@ -161,6 +276,83 @@ export function LeanWelcomeView({ onComplete }: Props): React.ReactElement {
         </div>
       ))}
     </div>
+  );
+
+  // ── Shared: install progress + fallback UI ─────────────────────────────────
+
+  const installStatusBlock = (
+    <>
+      {installStep && installStep !== 'done' && (
+        <div style={{ marginTop: 12, fontSize: '0.82rem', color: '#aaa', textAlign: 'center' }}>
+          {installMessage}
+          {installStep === 'pulling_model' && installProgress && (
+            <div style={{ marginTop: 8 }}>
+              <div style={{ background: '#1e2a1e', borderRadius: 4, height: 8, overflow: 'hidden' }}>
+                <div style={{
+                  background: '#22c55e', height: '100%', borderRadius: 4,
+                  width: `${installProgress.percentComplete.toFixed(1)}%`,
+                  transition: 'width 0.5s ease'
+                }} />
+              </div>
+              <div style={{ marginTop: 4, color: '#888', fontSize: '0.75rem' }}>
+                {(installProgress.bytesDownloaded / 1e9).toFixed(2)} GB / {(installProgress.totalBytes / 1e9).toFixed(2)} GB
+                · {installProgress.speedLabel}
+                {installProgress.eta_s > 0 && ` · ~${Math.round(installProgress.eta_s / 60)}m left`}
+              </div>
+            </div>
+          )}
+          {installStep === 'waiting_ollama' && (
+            <button
+              style={{ marginTop: 8, padding: '6px 16px', background: '#2a3a2a', border: '1px solid #3d7a3d',
+                borderRadius: 6, color: '#7dff7d', cursor: 'pointer', fontSize: '0.82rem' }}
+              onClick={handleCta}
+            >
+              Resume after installing Ollama
+            </button>
+          )}
+        </div>
+      )}
+
+      {/* SEG-V0150-P0-FIX-BRIDGE-OR-FALLBACK: 5-second fallback UI */}
+      {showFallback && (
+        <div style={{
+          marginTop: 12, padding: '12px 14px', background: 'rgba(251,191,36,0.07)',
+          border: '1px solid rgba(251,191,36,0.25)', borderRadius: 8,
+          fontSize: '0.82rem', color: '#fbbf24', textAlign: 'center',
+        }}>
+          Setup is taking longer than expected.
+          <div style={{ marginTop: 8, display: 'flex', gap: 8, justifyContent: 'center' }}>
+            <button
+              style={{ padding: '6px 14px', background: '#1a2a1a', border: '1px solid #3d7a3d',
+                borderRadius: 6, color: '#6ee7b7', cursor: 'pointer', fontSize: '0.8rem' }}
+              onClick={handleCta}
+            >
+              Try again
+            </button>
+            <button
+              style={{ padding: '6px 14px', background: 'rgba(100,116,139,0.15)', border: '1px solid rgba(100,116,139,0.3)',
+                borderRadius: 6, color: '#94a3b8', cursor: 'pointer', fontSize: '0.8rem' }}
+              onClick={handleSkip}
+            >
+              Skip — I have Ollama already
+            </button>
+          </div>
+        </div>
+      )}
+
+      {installError && (
+        <div style={{ marginTop: 8, fontSize: '0.78rem', color: '#f87171', textAlign: 'center' }}>
+          {installError.message}
+          {installError.retryable && (
+            <button style={{ marginLeft: 8, color: '#f87171', background: 'none', border: 'none',
+              cursor: 'pointer', textDecoration: 'underline' }}
+              onClick={() => { setInstallError(null); void handleCta(); }}>
+              Retry
+            </button>
+          )}
+        </div>
+      )}
+    </>
   );
 
   // ── Screen 1: Download CTA ─────────────────────────────────────────────────
@@ -231,61 +423,26 @@ export function LeanWelcomeView({ onComplete }: Props): React.ReactElement {
           {/* 3-step explainer */}
           {stepCards}
 
-          {/* Download CTA */}
+          {/* SEG-V0150-P0-PROACTIVE: Adaptive CTA */}
           <button
             type="button"
             style={ctaButton}
-            onClick={() => {
-              setInstallError(null);
-              window.amplify?.leanInstallStart?.();
+            disabled={ctaActive || ollamaProbe === 'probing'}
+            onClick={() => { void handleCta(); }}
+            onMouseEnter={(e) => {
+              if (!ctaActive && ollamaProbe !== 'probing')
+                (e.currentTarget as HTMLButtonElement).style.background = '#16a34a';
             }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = '#16a34a'; }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = '#22c55e'; }}
+            onMouseLeave={(e) => {
+              if (!ctaActive && ollamaProbe !== 'probing')
+                (e.currentTarget as HTMLButtonElement).style.background = '#22c55e';
+            }}
           >
-            Download MnemosyneC v0.1.49 for Windows
+            {ctaLabelFor(ollamaProbe, ctaActive)}
           </button>
-          {installStep && installStep !== 'done' && (
-            <div style={{ marginTop: 12, fontSize: '0.82rem', color: '#aaa', textAlign: 'center' }}>
-              {installMessage}
-              {installStep === 'pulling_model' && installProgress && (
-                <div style={{ marginTop: 8 }}>
-                  <div style={{ background: '#1e2a1e', borderRadius: 4, height: 8, overflow: 'hidden' }}>
-                    <div style={{
-                      background: '#22c55e', height: '100%', borderRadius: 4,
-                      width: `${installProgress.percentComplete.toFixed(1)}%`,
-                      transition: 'width 0.5s ease'
-                    }} />
-                  </div>
-                  <div style={{ marginTop: 4, color: '#888', fontSize: '0.75rem' }}>
-                    {(installProgress.bytesDownloaded / 1e9).toFixed(2)} GB / {(installProgress.totalBytes / 1e9).toFixed(2)} GB
-                    · {installProgress.speedLabel}
-                    {installProgress.eta_s > 0 && ` · ~${Math.round(installProgress.eta_s / 60)}m left`}
-                  </div>
-                </div>
-              )}
-              {installStep === 'waiting_ollama' && (
-                <button
-                  style={{ marginTop: 8, padding: '6px 16px', background: '#2a3a2a', border: '1px solid #3d7a3d',
-                    borderRadius: 6, color: '#7dff7d', cursor: 'pointer', fontSize: '0.82rem' }}
-                  onClick={() => window.amplify?.leanInstallStart?.()}
-                >
-                  Resume after installing Ollama
-                </button>
-              )}
-            </div>
-          )}
-          {installError && (
-            <div style={{ marginTop: 8, fontSize: '0.78rem', color: '#f87171', textAlign: 'center' }}>
-              {installError.message}
-              {installError.retryable && (
-                <button style={{ marginLeft: 8, color: '#f87171', background: 'none', border: 'none',
-                  cursor: 'pointer', textDecoration: 'underline' }}
-                  onClick={() => { setInstallError(null); window.amplify?.leanInstallStart?.(); }}>
-                  Retry
-                </button>
-              )}
-            </div>
-          )}
+
+          {installStatusBlock}
+
           <p style={tagline}>Free forever · No ads · No strings · Data stays on your computer</p>
 
           {/* Proof ghost link */}
@@ -418,61 +575,26 @@ export function LeanWelcomeView({ onComplete }: Props): React.ReactElement {
           </p>
         </div>
 
-        {/* CTA repeat */}
+        {/* CTA repeat — same adaptive logic */}
         <button
           type="button"
           style={ctaButton}
-          onClick={() => {
-            setInstallError(null);
-            window.amplify?.leanInstallStart?.();
+          disabled={ctaActive || ollamaProbe === 'probing'}
+          onClick={() => { void handleCta(); }}
+          onMouseEnter={(e) => {
+            if (!ctaActive && ollamaProbe !== 'probing')
+              (e.currentTarget as HTMLButtonElement).style.background = '#16a34a';
           }}
-          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = '#16a34a'; }}
-          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = '#22c55e'; }}
+          onMouseLeave={(e) => {
+            if (!ctaActive && ollamaProbe !== 'probing')
+              (e.currentTarget as HTMLButtonElement).style.background = '#22c55e';
+          }}
         >
-          Download MnemosyneC v0.1.49 for Windows
+          {ctaLabelFor(ollamaProbe, ctaActive)}
         </button>
-        {installStep && installStep !== 'done' && (
-          <div style={{ marginTop: 12, fontSize: '0.82rem', color: '#aaa', textAlign: 'center' }}>
-            {installMessage}
-            {installStep === 'pulling_model' && installProgress && (
-              <div style={{ marginTop: 8 }}>
-                <div style={{ background: '#1e2a1e', borderRadius: 4, height: 8, overflow: 'hidden' }}>
-                  <div style={{
-                    background: '#22c55e', height: '100%', borderRadius: 4,
-                    width: `${installProgress.percentComplete.toFixed(1)}%`,
-                    transition: 'width 0.5s ease'
-                  }} />
-                </div>
-                <div style={{ marginTop: 4, color: '#888', fontSize: '0.75rem' }}>
-                  {(installProgress.bytesDownloaded / 1e9).toFixed(2)} GB / {(installProgress.totalBytes / 1e9).toFixed(2)} GB
-                  · {installProgress.speedLabel}
-                  {installProgress.eta_s > 0 && ` · ~${Math.round(installProgress.eta_s / 60)}m left`}
-                </div>
-              </div>
-            )}
-            {installStep === 'waiting_ollama' && (
-              <button
-                style={{ marginTop: 8, padding: '6px 16px', background: '#2a3a2a', border: '1px solid #3d7a3d',
-                  borderRadius: 6, color: '#7dff7d', cursor: 'pointer', fontSize: '0.82rem' }}
-                onClick={() => window.amplify?.leanInstallStart?.()}
-              >
-                Resume after installing Ollama
-              </button>
-            )}
-          </div>
-        )}
-        {installError && (
-          <div style={{ marginTop: 8, fontSize: '0.78rem', color: '#f87171', textAlign: 'center' }}>
-            {installError.message}
-            {installError.retryable && (
-              <button style={{ marginLeft: 8, color: '#f87171', background: 'none', border: 'none',
-                cursor: 'pointer', textDecoration: 'underline' }}
-                onClick={() => { setInstallError(null); window.amplify?.leanInstallStart?.(); }}>
-                Retry
-              </button>
-            )}
-          </div>
-        )}
+
+        {installStatusBlock}
+
         <p style={tagline}>Free forever · No ads · No strings · Data stays on your computer</p>
 
       </div>
