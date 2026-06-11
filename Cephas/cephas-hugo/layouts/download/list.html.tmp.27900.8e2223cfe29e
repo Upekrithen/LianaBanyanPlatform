@@ -1,0 +1,1401 @@
+{{- define "main" }}
+
+<style>
+/* ════════════════════════════════════════════════════════════
+   DOWNLOAD PAGE v3 — Pawn 7-change rewrite · SEG-CEPHAS-V0145-PAWN-REWRITE
+   v0.1.45 · 2026-06-10
+   ════════════════════════════════════════════════════════════ */
+
+/* Override PaperMod container */
+.main { max-width:100% !important; padding:0 !important; margin:0 !important; overflow-x:hidden !important; }
+html, body { overflow-x:hidden !important; max-width:100% !important; background:#0a1628 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.06'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat; }
+.mn-page { background: transparent !important; }
+
+header.header { background: transparent !important; border: none !important; box-shadow: none !important; padding: 0.6rem 0 0 !important; }
+#menu { display: none !important; }
+.logo img { display: none !important; }
+.lang-switch { display: none !important; }
+.mn-v2-hero { padding-top: 1rem !important; }
+
+/* ── Base page shell ── */
+.mn-page {
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  background: #0a1628;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.06'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: repeat;
+  color: #faf5eb;
+  width: 100%;
+  min-height: 100vh;
+  padding: 0 0 4rem;
+  line-height: 1.7;
+}
+.mn-page a { color: #d69e2e; text-decoration: none; border-bottom: 1px solid rgba(214,158,46,0.35); }
+.mn-page a:hover { border-bottom-color: #d69e2e; }
+
+/* ── Content wrapper ── */
+.mn-v2-wrap {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 1.2rem;
+}
+
+/* ═══════════════════════════════
+   HERO — two-column layout (Pawn #3)
+   ═══════════════════════════════ */
+.mn-v2-hero {
+  padding: 3rem 0 2rem;
+}
+.mn-v2-hero-card {
+  background: linear-gradient(135deg, rgba(10,22,40,0.97) 0%, rgba(5,14,30,0.99) 100%);
+  border: 1px solid rgba(214,158,46,0.35);
+  border-radius: 14px;
+  padding: 2.4rem 2rem 2rem;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(214,158,46,0.12);
+  position: relative;
+  overflow: hidden;
+}
+.mn-v2-hero-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(214,158,46,0.6), transparent);
+}
+/* Two-column hero grid */
+.mn-hero-grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1.8rem;
+  align-items: center;
+}
+.mn-hero-grid__text { min-width: 0; }
+.mn-hero-grid__mascot {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+.mn-hero-grid__mascot img {
+  width: 220px;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+}
+.mn-hero-grid__mascot-caption {
+  font-size: 0.68rem;
+  color: rgba(250,245,235,0.4);
+  text-align: center;
+  font-style: italic;
+  line-height: 1.4;
+  max-width: 180px;
+}
+@media (max-width: 600px) {
+  .mn-hero-grid {
+    grid-template-columns: 1fr;
+  }
+  .mn-hero-grid__mascot {
+    order: -1;
+    margin-bottom: 0.5rem;
+  }
+  .mn-hero-grid__mascot img {
+    width: 110px;
+  }
+}
+.mn-v2-hero-card h1 {
+  color: #faf5eb;
+  font-size: clamp(1.5rem, 4vw, 2.1rem);
+  font-weight: 800;
+  line-height: 1.2;
+  margin: 0 0 0.9rem;
+  letter-spacing: -0.02em;
+}
+.mn-hero-pronunciation {
+  font-size: 0.8rem;
+  color: rgba(250,245,235,0.45);
+  font-style: italic;
+  margin: 0 0 1rem;
+}
+.mn-v2-hero-card p {
+  color: rgba(250,245,235,0.82);
+  font-size: clamp(0.92rem, 2.2vw, 1.05rem);
+  margin: 0 0 1rem;
+  line-height: 1.75;
+}
+.mn-v2-hero-card ul.mn-hero-bullets {
+  color: rgba(250,245,235,0.82);
+  font-size: clamp(0.9rem, 2vw, 1rem);
+  margin: 0 0 1.3rem;
+  padding-left: 1.3rem;
+  line-height: 1.65;
+}
+.mn-v2-hero-card ul.mn-hero-bullets li { margin-bottom: 0.3rem; }
+.mn-v2-hero-tagline {
+  margin-top: 1.2rem !important;
+  font-size: 0.88rem !important;
+  color: rgba(250,245,235,0.55) !important;
+  letter-spacing: 0.03em;
+}
+
+/* ── First session explainer (Pawn #6) ── */
+.mn-first-session {
+  background: rgba(56,161,105,0.07);
+  border: 1px solid rgba(56,161,105,0.28);
+  border-radius: 10px;
+  padding: 1rem 1.3rem 0.9rem;
+  margin: 1.2rem 0 0;
+}
+.mn-first-session__label {
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #38a169;
+  font-weight: 700;
+  margin: 0 0 0.4rem;
+}
+.mn-first-session__steps {
+  display: flex;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+}
+.mn-first-session__step {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 140px;
+  font-size: 0.88rem;
+  color: rgba(250,245,235,0.82);
+  line-height: 1.5;
+}
+.mn-first-session__num {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(56,161,105,0.25);
+  border: 1px solid rgba(56,161,105,0.5);
+  color: #38a169;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0.1rem;
+}
+
+/* ═══════════════════════════════
+   BENCHMARK CHART
+   ═══════════════════════════════ */
+.mn-v2-chart-section {
+  margin: 2rem 0;
+  padding: 1.8rem;
+  background: rgba(5,11,20,0.7);
+  border: 1px solid rgba(214,158,46,0.18);
+  border-radius: 12px;
+}
+.mn-v2-chart-section h2 {
+  color: #d69e2e;
+  font-size: clamp(1.1rem, 3vw, 1.45rem);
+  margin: 0 0 0.3rem;
+  font-weight: 700;
+}
+.mn-v2-chart-subtitle {
+  color: rgba(250,245,235,0.55);
+  font-size: 0.82rem;
+  margin: 0 0 0.6rem;
+  font-style: italic;
+}
+/* Pawn #4 — benchmark clarifying sentence */
+.mn-benchmark-clarify {
+  background: rgba(214,158,46,0.06);
+  border-left: 3px solid rgba(214,158,46,0.4);
+  padding: 0.6rem 0.9rem;
+  margin: 0 0 1.4rem;
+  font-size: 0.82rem;
+  color: rgba(250,245,235,0.72);
+  line-height: 1.65;
+  border-radius: 0 6px 6px 0;
+}
+.mn-v2-chart-legend {
+  display: flex;
+  gap: 1.4rem;
+  margin: 0 0 1.2rem;
+  font-size: 0.8rem;
+}
+.mn-v2-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: rgba(250,245,235,0.7);
+}
+.mn-v2-legend-dot {
+  width: 12px; height: 12px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.mn-v2-legend-dot--cold { background: rgba(160,174,192,0.55); }
+.mn-v2-legend-dot--hot  { background: #38a169; }
+
+.mn-v2-bar-group { margin-bottom: 1.4rem; }
+.mn-v2-bar-group:last-child { margin-bottom: 0; }
+.mn-v2-model-name {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: rgba(250,245,235,0.9);
+  margin-bottom: 0.35rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.mn-v2-model-free-badge {
+  background: rgba(56,161,105,0.2);
+  color: #38a169;
+  border: 1px solid rgba(56,161,105,0.4);
+  border-radius: 4px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.1rem 0.4rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.mn-v2-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-bottom: 0.25rem;
+}
+.mn-v2-bar-row:last-child { margin-bottom: 0; }
+.mn-v2-bar-cond {
+  font-size: 0.68rem;
+  color: rgba(250,245,235,0.45);
+  width: 56px;
+  flex-shrink: 0;
+  text-align: right;
+  letter-spacing: 0.03em;
+}
+.mn-v2-bar-track {
+  flex: 1;
+  background: rgba(255,255,255,0.05);
+  border-radius: 4px;
+  height: 22px;
+  overflow: hidden;
+  position: relative;
+}
+.mn-v2-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+  min-width: 32px;
+  box-sizing: border-box;
+  transition: width 0.4s ease;
+}
+.mn-v2-bar-fill--cold {
+  background: rgba(160,174,192,0.5);
+  color: rgba(255,255,255,0.7);
+}
+.mn-v2-bar-fill--hot {
+  background: linear-gradient(90deg, #2d7d52, #38a169);
+  color: #fff;
+}
+.mn-v2-chart-note {
+  margin-top: 1.2rem;
+  font-size: 0.76rem;
+  color: rgba(250,245,235,0.45);
+  line-height: 1.6;
+  border-top: 1px solid rgba(214,158,46,0.1);
+  padding-top: 0.8rem;
+}
+.mn-v2-chart-note strong { color: rgba(250,245,235,0.7); }
+
+/* ═══════════════════════════════
+   DOWNLOAD SECTION
+   ═══════════════════════════════ */
+.mn-v2-download-section {
+  margin: 2rem 0;
+  text-align: center;
+}
+.mn-v2-dl-btn {
+  display: inline-block;
+  background: #38a169;
+  color: #fff !important;
+  border: 2px solid #38a169 !important;
+  border-bottom: 2px solid #38a169 !important;
+  border-radius: 12px;
+  padding: 1rem 2.2rem;
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  font-weight: 800;
+  text-decoration: none !important;
+  box-shadow: 0 6px 24px rgba(56,161,105,0.35);
+  letter-spacing: 0.01em;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+.mn-v2-dl-btn:hover {
+  background: #2f8a59 !important;
+  border-color: #2f8a59 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 32px rgba(56,161,105,0.5);
+}
+
+/* ── SKU plain-language labels (Pawn #5) ── */
+.mn-sku-grid {
+  display: flex;
+  gap: 0.8rem;
+  max-width: 560px;
+  margin: 1.1rem auto 0;
+  flex-wrap: wrap;
+  text-align: left;
+}
+.mn-sku-card {
+  flex: 1;
+  min-width: 200px;
+  background: rgba(10,22,40,0.7);
+  border: 1px solid rgba(214,158,46,0.22);
+  border-radius: 10px;
+  padding: 1rem 1.1rem;
+}
+.mn-sku-card--active {
+  border-color: rgba(56,161,105,0.5);
+  background: rgba(56,161,105,0.06);
+}
+.mn-sku-card__badge {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin: 0 0 0.3rem;
+}
+.mn-sku-card--active .mn-sku-card__badge { color: #38a169; }
+.mn-sku-card__badge--full { color: #d69e2e; }
+.mn-sku-card__name {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: #faf5eb;
+  margin: 0 0 0.3rem;
+  line-height: 1.3;
+}
+.mn-sku-card__desc {
+  font-size: 0.82rem;
+  color: rgba(250,245,235,0.68);
+  line-height: 1.55;
+  margin: 0;
+}
+.mn-sku-card__tech {
+  margin-top: 0.5rem;
+  font-size: 0.72rem;
+  color: rgba(250,245,235,0.38);
+  font-family: 'JetBrains Mono', Consolas, monospace;
+}
+
+.mn-v2-install-steps {
+  background: rgba(56,161,105,0.07);
+  border: 1px solid rgba(56,161,105,0.28);
+  border-radius: 10px;
+  padding: 1.1rem 1.4rem 1rem;
+  margin: 1.5rem auto 0.6rem;
+  max-width: 560px;
+  text-align: left;
+}
+.mn-v2-install-steps__title {
+  color: #38a169;
+  font-weight: 700;
+  font-size: 0.92rem;
+  margin: 0 0 0.45rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+/* Pawn #2 — SmartScreen mascot alongside heading */
+.mn-smartscreen-mascot {
+  width: 90px;
+  height: auto;
+  float: right;
+  margin: 0 0 0.8rem 1rem;
+  border-radius: 6px;
+}
+.mn-v2-install-steps__note {
+  color: rgba(250,245,235,0.82);
+  font-size: 0.88rem;
+  margin: 0 0 0.7rem;
+  line-height: 1.65;
+}
+.mn-v2-install-steps__list {
+  margin: 0;
+  padding-left: 1.4rem;
+  color: rgba(250,245,235,0.82);
+  font-size: 0.88rem;
+  line-height: 1.7;
+}
+.mn-v2-install-steps__list li { margin-bottom: 0.15rem; }
+.mn-v2-strapline {
+  margin: 0.9rem 0 0;
+  font-size: 0.78rem;
+  color: rgba(250,245,235,0.45);
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+
+/* ═══════════════════════════════
+   PROGRESSIVE DISCLOSURE CHIPS
+   ═══════════════════════════════ */
+.mn-v2-chips {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  margin: 2rem 0;
+}
+.mn-v2-chip {
+  border: 1px solid rgba(214,158,46,0.25);
+  border-radius: 10px;
+  background: rgba(10,22,40,0.6);
+  overflow: hidden;
+}
+.mn-v2-chip > summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 0.9rem 1.1rem;
+  color: #d69e2e;
+  font-size: 0.95rem;
+  font-weight: 600;
+  user-select: none;
+  letter-spacing: 0.01em;
+  transition: background 0.15s;
+}
+.mn-v2-chip > summary:hover { background: rgba(214,158,46,0.07); }
+.mn-v2-chip[open] > summary { background: rgba(214,158,46,0.09); border-bottom: 1px solid rgba(214,158,46,0.18); }
+.mn-v2-chip > summary::-webkit-details-marker { display: none; }
+.mn-v2-chip-body {
+  padding: 1.2rem 1.4rem;
+  color: rgba(250,245,235,0.8);
+  font-size: 0.9rem;
+  line-height: 1.75;
+}
+.mn-v2-chip-body h3 {
+  color: #d69e2e;
+  font-size: 0.95rem;
+  margin: 1.2rem 0 0.4rem;
+}
+.mn-v2-chip-body h3:first-child { margin-top: 0; }
+.mn-v2-chip-body p { margin: 0.4rem 0 0.8rem; }
+.mn-v2-chip-body ul, .mn-v2-chip-body ol {
+  padding-left: 1.4rem;
+  margin: 0.4rem 0 0.8rem;
+}
+.mn-v2-chip-body li { margin-bottom: 0.3rem; }
+.mn-v2-chip-body code {
+  font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+  font-size: 0.82em;
+  background: rgba(255,255,255,0.07);
+  border-radius: 3px;
+  padding: 0.1em 0.35em;
+  color: rgba(250,245,235,0.9);
+}
+.mn-v2-chip-body pre {
+  background: rgba(5,11,20,0.8);
+  border: 1px solid rgba(214,158,46,0.18);
+  border-radius: 6px;
+  padding: 0.8rem 1rem;
+  overflow-x: auto;
+  font-size: 0.8rem;
+  margin: 0.6rem 0;
+}
+.mn-v2-chip-body table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  margin: 0.6rem 0;
+}
+.mn-v2-chip-body th {
+  color: #d69e2e;
+  font-size: 0.72rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  text-align: left;
+  padding: 0.5rem 0.7rem;
+  border-bottom: 1px solid rgba(214,158,46,0.2);
+}
+.mn-v2-chip-body td {
+  padding: 0.45rem 0.7rem;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  vertical-align: top;
+}
+
+/* ── AI Cost Gauge (barrel) ── */
+.mn-v2-gauge-wrap {
+  display: flex;
+  align-items: flex-end;
+  gap: 1.4rem;
+  margin: 1rem 0 1.2rem;
+  flex-wrap: wrap;
+}
+.mn-v2-barrel { flex-shrink: 0; }
+.mn-v2-gauge-desc {
+  flex: 1;
+  min-width: 200px;
+  font-size: 0.88rem;
+  color: rgba(250,245,235,0.78);
+  line-height: 1.7;
+}
+.mn-v2-gauge-desc strong { color: #38a169; }
+.mn-v2-cost-dim {
+  border-left: 3px solid rgba(214,158,46,0.3);
+  padding: 0.5rem 0 0.5rem 1rem;
+  margin: 1rem 0;
+}
+.mn-v2-cost-dim-title {
+  font-weight: 700;
+  color: #d69e2e;
+  font-size: 0.88rem;
+  margin-bottom: 0.35rem;
+}
+.mn-v2-cost-dim p {
+  margin: 0 !important;
+  font-size: 0.88rem;
+  color: rgba(250,245,235,0.75);
+}
+.mn-v2-chip--technical > summary {
+  font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+  font-size: 0.88rem;
+  letter-spacing: 0.02em;
+}
+.mn-v2-chip--founder > summary { color: rgba(250,245,235,0.75); }
+.mn-v2-chip--founder { border-color: rgba(250,245,235,0.1); }
+.mn-v2-divider {
+  border: none;
+  border-top: 1px solid rgba(214,158,46,0.12);
+  margin: 1.8rem 0;
+}
+
+/* ── Bounty poster cards ── */
+.mn-v2-bounty-row {
+  display: flex;
+  gap: 1rem;
+  margin: 1.4rem auto 0;
+  max-width: 560px;
+  flex-wrap: wrap;
+}
+.mn-v2-bounty-card {
+  flex: 1;
+  min-width: 220px;
+  background: rgba(5,11,20,0.85);
+  border: 1px dashed rgba(214,158,46,0.5);
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  text-align: left;
+}
+.mn-v2-bounty-card__wanted {
+  color: #d69e2e;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin: 0 0 0.3rem;
+}
+.mn-v2-bounty-card__title {
+  color: #faf5eb;
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin: 0 0 0.45rem;
+  line-height: 1.35;
+}
+.mn-v2-bounty-card__body {
+  color: rgba(250,245,235,0.68);
+  font-size: 0.82rem;
+  line-height: 1.55;
+  margin: 0 0 0.6rem;
+}
+.mn-v2-bounty-card__cta {
+  display: inline-block;
+  background: rgba(214,158,46,0.12);
+  color: #d69e2e !important;
+  border: 1px solid rgba(214,158,46,0.4) !important;
+  border-bottom: 1px solid rgba(214,158,46,0.4) !important;
+  border-radius: 6px;
+  padding: 0.3rem 0.8rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-decoration: none !important;
+  letter-spacing: 0.03em;
+}
+.mn-v2-bounty-note {
+  margin: 0.7rem auto 0;
+  max-width: 560px;
+  font-size: 0.76rem;
+  color: rgba(250,245,235,0.4);
+  text-align: center;
+  font-style: italic;
+}
+
+/* ── Commons section ── */
+.mn-v2-commons-section {
+  margin: 2rem 0;
+  padding: 1.8rem;
+  background: rgba(5,11,20,0.7);
+  border: 1px solid rgba(214,158,46,0.22);
+  border-radius: 12px;
+}
+.mn-v2-commons-section h2 {
+  color: #d69e2e;
+  font-size: clamp(1.05rem, 3vw, 1.35rem);
+  margin: 0 0 1rem;
+  font-weight: 700;
+}
+.mn-v2-commons-section p {
+  color: rgba(250,245,235,0.82);
+  font-size: 0.92rem;
+  line-height: 1.78;
+  margin: 0 0 0.9rem;
+}
+.mn-v2-commons-section p:last-child { margin-bottom: 0; }
+.mn-v2-commons-section strong { color: #faf5eb; }
+.mn-v2-commons-em {
+  display: block;
+  border-left: 3px solid rgba(214,158,46,0.5);
+  padding: 0.5rem 0 0.5rem 1rem;
+  margin: 1rem 0;
+  color: rgba(214,158,46,0.9) !important;
+  font-style: italic;
+  font-size: 0.95rem !important;
+}
+.mn-v2-commons-ledger {
+  background: rgba(10,22,40,0.7);
+  border: 1px solid rgba(214,158,46,0.18);
+  border-radius: 8px;
+  padding: 0.9rem 1.1rem;
+  margin: 0.8rem 0;
+  font-size: 0.86rem;
+  color: rgba(250,245,235,0.78);
+  line-height: 1.7;
+}
+.mn-v2-commons-ledger strong { color: #d69e2e; }
+
+/* ── Dark header ── */
+body { background: #0a1628; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.06'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); background-repeat: repeat; }
+.header { background: rgba(8,18,34,0.96) !important; border-bottom: 1px solid rgba(214,158,46,0.15) !important; }
+.header a, .header button, .logo a, .nav a, #menu a { color: rgba(250,245,235,0.85) !important; }
+#menu .active { border-bottom-color: rgba(214,158,46,0.7) !important; }
+#menu a { font-size: 13px !important; }
+#menu li + li { margin-inline-start: 10px !important; }
+.logo a { font-size: 18px !important; }
+.logo a img { height: 32px !important; }
+
+/* ── Prove-It pill ── */
+.prove-it-pill {
+  display: inline-block;
+  padding: 0.42rem 1.1rem;
+  border-radius: 9999px;
+  background: #c9a84c;
+  color: #0f1117 !important;
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  white-space: nowrap;
+  border-bottom: none !important;
+  flex-shrink: 0;
+  line-height: 1.4;
+}
+.prove-it-pill:hover { opacity: 0.85; border-bottom: none !important; }
+
+/* ── Pinned-Proof Carousel ── */
+.mn-pinned-proofs {
+  margin: 0 0 2rem;
+  padding: 1.5rem 1.8rem 1.2rem;
+  background: rgba(5,11,20,0.75);
+  border: 1px solid rgba(214,158,46,0.22);
+  border-radius: 12px;
+}
+.mn-pinned-proofs__header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  margin: 0 0 0.9rem;
+  flex-wrap: wrap;
+}
+.mn-pinned-proofs__title {
+  color: #d69e2e;
+  font-size: clamp(0.95rem, 2.5vw, 1.2rem);
+  font-weight: 700;
+  margin: 0;
+}
+.mn-pinned-proofs__subtitle {
+  color: rgba(250,245,235,0.45);
+  font-size: 0.75rem;
+  font-style: italic;
+}
+.mn-pinned-proofs__track {
+  display: flex;
+  gap: 0.85rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 0.6rem;
+  -webkit-overflow-scrolling: touch;
+}
+.mn-pinned-proofs__track::-webkit-scrollbar { height: 4px; }
+.mn-pinned-proofs__track::-webkit-scrollbar-thumb { background: rgba(214,158,46,0.25); border-radius: 2px; }
+.mn-proof-card {
+  flex: 0 0 250px;
+  background: rgba(10,22,40,0.85);
+  border: 1px solid rgba(214,158,46,0.18);
+  border-radius: 10px;
+  padding: 1rem 1.1rem;
+  scroll-snap-align: start;
+  line-height: 1.55;
+  position: relative;
+}
+.mn-proof-card--pinned::after {
+  content: '&#128204;';
+  position: absolute;
+  top: 0.55rem;
+  right: 0.7rem;
+  font-size: 0.7rem;
+  opacity: 0.55;
+}
+.mn-proof-card__label {
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #d69e2e;
+  font-weight: 700;
+  margin: 0 0 0.35rem;
+}
+.mn-proof-card__title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #faf5eb;
+  margin: 0 0 0.45rem;
+  line-height: 1.35;
+}
+.mn-proof-card__body {
+  font-size: 0.78rem;
+  color: rgba(250,245,235,0.68);
+  margin: 0 0 0.5rem;
+  line-height: 1.55;
+}
+.mn-proof-card__stamp {
+  font-size: 0.68rem;
+  color: rgba(214,158,46,0.55);
+  font-style: italic;
+  border-top: 1px solid rgba(214,158,46,0.1);
+  padding-top: 0.35rem;
+  margin-top: 0.35rem;
+}
+.mn-proof-card__result {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #3ddc84;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.mn-proof-card--img {
+  padding: 0;
+  overflow: hidden;
+}
+.mn-proof-card--img .mn-proof-card__img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+  background: #0a1628;
+}
+.mn-proof-card--img .mn-proof-card__caption {
+  padding: 0.6rem 0.85rem 0.75rem;
+  font-size: 0.72rem;
+  color: rgba(250,245,235,0.72);
+  line-height: 1.45;
+  border-top: 1px solid rgba(214,158,46,0.12);
+}
+.mn-proof-card--img .mn-proof-card__caption strong {
+  display: block;
+  color: #d69e2e;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.2rem;
+}
+@media (max-width: 520px) {
+  .mn-proof-card { flex: 0 0 210px; }
+  .mn-pinned-proofs { padding: 1.2rem 1rem 0.9rem; }
+  .mn-proof-card--img .mn-proof-card__img { height: 180px; }
+}
+</style>
+
+<div class="mn-page">
+<div class="mn-v2-wrap">
+
+  <!-- ═══════════════════════════════════════════════
+       HERO — diagnostic headline + two-column grid (Pawn #3)
+       ═══════════════════════════════════════════════ -->
+  <section class="mn-v2-hero" aria-label="MnemosyneC hero">
+    <div class="mn-v2-hero-card">
+      <div class="mn-hero-grid">
+
+        <!-- Left column: headline + bullets + CTA -->
+        <div class="mn-hero-grid__text">
+          <h1>Your AI has Amnesia. Dr.&nbsp;MnemosyneC has the Cure.</h1>
+          <p class="mn-hero-pronunciation">Mnemosyne (neh-MOZ-uh-nee) is the Greek goddess of memory.</p>
+          <p>Every time you start a new session, your AI forgets everything. Your projects, your preferences, your past conversations, gone. Dr.&nbsp;MnemosyneC gives your AI a permanent, private memory that actually stays.</p>
+          <ul class="mn-hero-bullets">
+            <li>Works alongside ChatGPT, Claude, Gemini, or any AI you already use.</li>
+            <li>All your data stays on your own computer. No cloud. No account required.</li>
+            <li>Free to use. A $5/year membership unlocks the full cooperative.</li>
+          </ul>
+
+          <!-- Download CTA above fold -->
+          <div style="text-align:center; margin:1.4rem 0 0.5rem;">
+            <a class="mn-v2-dl-btn"
+               href="https://github.com/Upekrithen/LianaBanyanPlatform/releases/download/v{{ .Site.Data.version.version }}/MnemosyneC-Setup-{{ .Site.Data.version.version }}.exe"
+               download="MnemosyneC-Setup-{{ .Site.Data.version.version }}.exe"
+               aria-label="Download MnemosyneC {{ .Site.Data.version.version }} for Windows">
+              &#8595;&nbsp; Download MnemosyneC v{{ .Site.Data.version.version }} for Windows
+            </a>
+          </div>
+          <p class="mn-v2-hero-tagline">Free forever &nbsp;&middot;&nbsp; No ads &nbsp;&middot;&nbsp; No strings &nbsp;&middot;&nbsp; Data stays on your computer</p>
+        </div>
+
+        <!-- Right column: Dr. MnemosyneC mascot -->
+        <div class="mn-hero-grid__mascot" aria-hidden="true">
+          <img src="/img/mascots/dr-mnemosynec.png"
+               alt="Dr. MnemosyneC, the gray elephant mascot in a white coat with stethoscope and half-moon spectacles"
+               width="220" height="220"
+               loading="eager">
+          <p class="mn-hero-grid__mascot-caption">Dr.&nbsp;MnemosyneC<br>Memory specialist</p>
+        </div>
+
+      </div><!-- /mn-hero-grid -->
+
+      <!-- What your first session looks like (Pawn #6, reworded SEG-CEPHAS-REWORD-FOOTER) -->
+      <div class="mn-first-session" role="note" aria-label="What your first session looks like">
+        <h3 style="font-size:1rem; font-weight:700; color:#38a169; margin:0 0 0.7rem; letter-spacing:0.01em;">What your first session looks like</h3>
+        <ol style="margin:0 0 0.7rem; padding-left:1.4rem; color:rgba(250,245,235,0.82); font-size:0.9rem; line-height:1.7;">
+          <li style="margin-bottom:0.4rem;"><strong>Tell it something.</strong> &ldquo;I&rsquo;m working on a report about water treatment costs in rural areas.&rdquo;</li>
+          <li><strong>Come back three days later.</strong> Start a fresh session. Ask about it. It remembers.</li>
+        </ol>
+        <p style="margin:0 0 0.5rem; font-size:0.9rem; color:rgba(250,245,235,0.82); line-height:1.7;">No copy-paste. No re-explaining. Pick up exactly where you left off, every time.</p>
+        <p style="margin:0; font-size:0.9rem; color:rgba(250,245,235,0.82); line-height:1.7;"><strong>Free.</strong> Or pair MnemosyneC with a paid AI like Claude or GPT for faster, bigger answers. Either way, the substrate carries the memory, so your paid AI bill stays smaller too.</p>
+      </div>
+
+    </div><!-- /mn-v2-hero-card -->
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       BENCHMARK CHART + clarifying sentence (Pawn #4)
+       ═══════════════════════════════════════════════ -->
+  <section class="mn-v2-chart-section" aria-labelledby="mn-v2-chart-title">
+    <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem; margin:0 0 0.3rem;">
+      <h2 id="mn-v2-chart-title" style="margin:0;">Does it actually work?</h2>
+      <a href="https://github.com/liana-banyan/lb-reproducibility-pack#quick-start"
+         class="prove-it-pill" target="_blank" rel="noopener">PROVE IT YOURSELF</a>
+    </div>
+    <p class="mn-v2-chart-subtitle">75 questions &middot; 4 AI vendors &middot; real test run 2026-05-30. No tricks.</p>
+
+    <!-- Pawn #4 clarifying sentence -->
+    <div class="mn-benchmark-clarify" role="note">
+      These 75 questions test recall of information that was manually stored in the substrate by a human, then asked again in a fresh session where the model had no access to its own context history. Without the substrate, the model forgot everything. With it, the model found the stored answer.
+    </div>
+
+    <div class="mn-v2-chart-legend" aria-hidden="true">
+      <span class="mn-v2-legend-item">
+        <span class="mn-v2-legend-dot mn-v2-legend-dot--cold"></span>
+        Without MnemosyneC substrate
+      </span>
+      <span class="mn-v2-legend-item">
+        <span class="mn-v2-legend-dot mn-v2-legend-dot--hot"></span>
+        With MnemosyneC substrate
+      </span>
+    </div>
+
+    <!-- Claude Opus 4.8 -->
+    <div class="mn-v2-bar-group" role="group" aria-label="Claude Opus 4.8 results">
+      <div class="mn-v2-model-name">Claude Opus 4.8</div>
+      <div class="mn-v2-bar-row">
+        <span class="mn-v2-bar-cond">Without</span>
+        <div class="mn-v2-bar-track" role="meter" aria-valuenow="6" aria-valuemin="0" aria-valuemax="100" aria-label="6% accuracy without substrate">
+          <div class="mn-v2-bar-fill mn-v2-bar-fill--cold" style="width:6%">6%</div>
+        </div>
+      </div>
+      <div class="mn-v2-bar-row">
+        <span class="mn-v2-bar-cond">With</span>
+        <div class="mn-v2-bar-track" role="meter" aria-valuenow="89.3" aria-valuemin="0" aria-valuemax="100" aria-label="89.3% accuracy with substrate">
+          <div class="mn-v2-bar-fill mn-v2-bar-fill--hot" style="width:89.3%">89.3%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GPT-5.5 -->
+    <div class="mn-v2-bar-group" role="group" aria-label="GPT-5.5 results">
+      <div class="mn-v2-model-name">GPT&#8209;5.5</div>
+      <div class="mn-v2-bar-row">
+        <span class="mn-v2-bar-cond">Without</span>
+        <div class="mn-v2-bar-track" role="meter" aria-valuenow="19.3" aria-valuemin="0" aria-valuemax="100" aria-label="19.3% accuracy without substrate">
+          <div class="mn-v2-bar-fill mn-v2-bar-fill--cold" style="width:19.3%">19.3%</div>
+        </div>
+      </div>
+      <div class="mn-v2-bar-row">
+        <span class="mn-v2-bar-cond">With</span>
+        <div class="mn-v2-bar-track" role="meter" aria-valuenow="93.3" aria-valuemin="0" aria-valuemax="100" aria-label="93.3% accuracy with substrate">
+          <div class="mn-v2-bar-fill mn-v2-bar-fill--hot" style="width:93.3%">93.3%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Llama 3.1 8b (free) -->
+    <div class="mn-v2-bar-group" role="group" aria-label="Llama 3.1 8b results">
+      <div class="mn-v2-model-name">
+        Llama&nbsp;3.1&nbsp;8b (Ollama)
+        <span class="mn-v2-model-free-badge">Local &middot; Free</span>
+      </div>
+      <div class="mn-v2-bar-row">
+        <span class="mn-v2-bar-cond">Without</span>
+        <div class="mn-v2-bar-track" role="meter" aria-valuenow="6" aria-valuemin="0" aria-valuemax="100" aria-label="6% accuracy without substrate">
+          <div class="mn-v2-bar-fill mn-v2-bar-fill--cold" style="width:6%">6%</div>
+        </div>
+      </div>
+      <div class="mn-v2-bar-row">
+        <span class="mn-v2-bar-cond">With</span>
+        <div class="mn-v2-bar-track" role="meter" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100" aria-label="78% accuracy with substrate">
+          <div class="mn-v2-bar-fill mn-v2-bar-fill--hot" style="width:78%">78.0%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gemini 3.5 Flash -->
+    <div class="mn-v2-bar-group" role="group" aria-label="Gemini 3.5 Flash results">
+      <div class="mn-v2-model-name">Gemini 3.5 Flash</div>
+      <div class="mn-v2-bar-row">
+        <span class="mn-v2-bar-cond">Without</span>
+        <div class="mn-v2-bar-track" role="meter" aria-valuenow="8" aria-valuemin="0" aria-valuemax="100" aria-label="8% accuracy without substrate">
+          <div class="mn-v2-bar-fill mn-v2-bar-fill--cold" style="width:8%">8%</div>
+        </div>
+      </div>
+      <div class="mn-v2-bar-row">
+        <span class="mn-v2-bar-cond">With</span>
+        <div class="mn-v2-bar-track" role="meter" aria-valuenow="90.7" aria-valuemin="0" aria-valuemax="100" aria-label="90.7% accuracy with substrate">
+          <div class="mn-v2-bar-fill mn-v2-bar-fill--hot" style="width:90.7%">90.7%</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="mn-v2-chart-note">
+      <strong>The Banyan Metric</strong> measures recall of substrate-stored information. "Without" = model alone, cold start. "With" = same model after MnemosyneC substrate context injected. The substrate does the knowledge-recall work; the model reads and answers.
+      <br>The <strong>free local model</strong> (Ollama, $0 inference cost) lifted from 6% to 78% entirely because of the shared substrate. <a href="/proofs/" style="font-size:0.88em;">Full proofs &rarr;</a>
+    </p>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       PINNED-PROOF CAROUSEL
+       ═══════════════════════════════════════════════ -->
+  <section class="mn-pinned-proofs" aria-label="Pinned proof receipts">
+    <div class="mn-pinned-proofs__header">
+      <h3 class="mn-pinned-proofs__title">&#128204;&nbsp; Pinned proofs</h3>
+      <span class="mn-pinned-proofs__subtitle">Plain receipts. Caveats stated aloud. No hype.</span>
+    </div>
+    <div class="mn-pinned-proofs__track" role="list">
+
+      <div class="mn-proof-card mn-proof-card--pinned" role="listitem">
+        <div class="mn-proof-card__label">Storm test</div>
+        <div class="mn-proof-card__title">Three failures at once. Nothing lost.</div>
+        <div class="mn-proof-card__body">A routine update wiped connectors. A hook-script deletion blocked every prompt. The AI service returned overload errors. Three simultaneous infrastructure failures. The substrate held.</div>
+        <div class="mn-proof-card__result">&#10003; Zero work lost</div>
+        <div class="mn-proof-card__stamp">Receipt: BP071 close stamp</div>
+      </div>
+
+      <div class="mn-proof-card mn-proof-card--pinned" role="listitem">
+        <div class="mn-proof-card__label">Mesh proof</div>
+        <div class="mn-proof-card__title">A node answered for data it did not hold.</div>
+        <div class="mn-proof-card__body">Machine A had never seen the data. Machine B held it. Connected on local network, Machine A answered 20 of 20 correctly, hash-verified. Median response: 16.6&nbsp;ms.</div>
+        <div class="mn-proof-card__result">&#10003; 20/20 &middot; 16.6 ms p50</div>
+        <div class="mn-proof-card__stamp">Receipt: Asteroid-ProofVault/MESH_6_RECEIPT_BP063.md</div>
+      </div>
+
+      <div class="mn-proof-card mn-proof-card--pinned mn-proof-card--img" role="listitem">
+        <img class="mn-proof-card__img" src="/img/proofs/deck/deck-benchmark-r10.png" alt="Benchmark R10 chart, BP063, 2026-05-30" loading="lazy">
+        <div class="mn-proof-card__caption"><strong>BP063 &middot; R10 Harness &middot; 2026-05-30</strong>Benchmark R10, 4-model cold/hot. Claude 6%&rarr;89%, GPT 19%&rarr;91%, Llama 6%&rarr;78%, Gemini 8%&rarr;91%. Real run.</div>
+      </div>
+
+      <div class="mn-proof-card mn-proof-card--pinned mn-proof-card--img" role="listitem">
+        <img class="mn-proof-card__img" src="/img/proofs/deck/deck-immutability.png" alt="Immutability proof screenshot" loading="lazy">
+        <div class="mn-proof-card__caption"><strong>Architecture &middot; Immutability</strong>FS-WATCHER live terminal: sha256-addressed eblet writes. Re-running a write skips (idempotent_sha256_match). Nothing can be silently overwritten.</div>
+      </div>
+
+      <div class="mn-proof-card mn-proof-card--img" role="listitem">
+        <img class="mn-proof-card__img" src="/img/proofs/deck/deck-cathedral-alone.png" alt="Caithedral-Alone mode screenshot, v0.1.22" loading="lazy">
+        <div class="mn-proof-card__caption"><strong>Architecture &middot; Caithedral-Alone &middot; v0.1.22</strong>Fallback mode: substrate cache only, zero cost, offline-capable. Works when no LLM API is reachable.</div>
+      </div>
+
+    </div>
+    <p style="margin:0.7rem 0 0; font-size:0.75rem; color:rgba(250,245,235,0.38); text-align:right;">
+      &#8592; scroll for more &nbsp;&middot;&nbsp; <a href="/proofs/" style="color:rgba(214,158,46,0.55); font-size:0.75rem;">All proofs &rarr;</a>
+    </p>
+  </section>
+
+  <!-- ===== PICK SIX GRAPHIC ===== -->
+  <section class="mn-v2-pick-six" aria-label="Good Fast Cheap Private Free Yours" style="margin:0 0 2rem;">
+    <div class="mn-v2-wrap">
+<div class="pick-six" style="max-width:760px;margin:0 auto;background:#11243a;border:1px solid #21527e;border-radius:14px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.35);">
+  <div class="pick-six-title" style="padding:26px 28px 18px;text-align:center;background:linear-gradient(180deg,#143456 0%,#11243a 100%);border-bottom:1px solid #21527e;">
+    <div style="font-size:30px;font-weight:800;color:#ffffff;letter-spacing:.5px;line-height:1.15;">Good. Fast. Cheap.</div>
+    <div style="font-size:20px;font-weight:600;color:#7fd1ff;margin-top:6px;">MnemosyneC gives you all&nbsp;six.</div>
+    <div style="font-size:16px;font-style:italic;color:#bcd6ee;margin-top:10px;">Can't we all just get along?</div>
+  </div>
+  <table style="width:100%;border-collapse:collapse;font-size:15px;color:#e7f0fa;">
+    <tbody>
+      <tr style="border-top:1px solid #1c3f63;">
+        <td style="padding:16px 20px;line-height:1.5;"><strong style="color:#ffffff;">Good</strong> &mdash; Every AI we tested got smarter on a shared memory: <strong>+72 to +83 points of accuracy</strong> across four model families. A free, local model jumped from <strong>6% to 78%.</strong></td>
+        <td style="padding:16px 22px;text-align:right;font-size:22px;color:#3ddc84;white-space:nowrap;">&#10004;</td>
+      </tr>
+      <tr style="border-top:1px solid #1c3f63;">
+        <td style="padding:16px 20px;line-height:1.5;"><strong style="color:#ffffff;">Fast</strong> &mdash; Answers resolve against <em>your own</em> memory in milliseconds. A hash-verified mesh measured <strong>16.6&nbsp;ms</strong> median instead of a metered round-trip to someone else&rsquo;s server.</td>
+        <td style="padding:16px 22px;text-align:right;font-size:22px;color:#3ddc84;white-space:nowrap;">&#10004;</td>
+      </tr>
+      <tr style="border-top:1px solid #1c3f63;">
+        <td style="padding:16px 20px;line-height:1.5;"><strong style="color:#ffffff;">Cheap</strong> &mdash; That free local model answers at <strong>$0 a call.</strong> Everything else runs at <strong>cost plus 20%</strong>, on hardware you already own. No new data center.</td>
+        <td style="padding:16px 22px;text-align:right;font-size:22px;color:#3ddc84;white-space:nowrap;">&#10004;</td>
+      </tr>
+      <tr style="border-top:1px solid #1c3f63;">
+        <td style="padding:16px 20px;line-height:1.5;"><strong style="color:#ffffff;">Private</strong> &mdash; Runs <strong>entirely on your machine.</strong> No account, no upload, no telemetry, no phone&#8209;home.</td>
+        <td style="padding:16px 22px;text-align:right;font-size:22px;color:#3ddc84;white-space:nowrap;">&#10004;</td>
+      </tr>
+      <tr style="border-top:1px solid #1c3f63;">
+        <td style="padding:16px 20px;line-height:1.5;"><strong style="color:#ffffff;">Free</strong> &mdash; <strong>SSPL Free Forever</strong>, Pledge&nbsp;#2260. No ads. No strings. No subscription.<br><span style="color:rgba(214,158,46,0.8);font-size:0.88em;">Patent-pending, 21 provisional filings, pledged to the member commons, never sold for extraction.</span></td>
+        <td style="padding:16px 22px;text-align:right;font-size:22px;color:#3ddc84;white-space:nowrap;">&#10004;</td>
+      </tr>
+      <tr style="border-top:1px solid #1c3f63;border-bottom:1px solid #1c3f63;">
+        <td style="padding:16px 20px;line-height:1.5;"><strong style="color:#ffffff;">Yours</strong> &mdash; <strong>Storm-proof immutability.</strong> Three infrastructure failures hit at once. The substrate held. Every fact is sha256-stamped, content-addressed, append-only. Nothing can be overwritten. Uninstall anytime; your originals are untouched and independently verifiable.</td>
+        <td style="padding:16px 22px;text-align:right;font-size:22px;color:#3ddc84;white-space:nowrap;">&#10004;</td>
+      </tr>
+    </tbody>
+  </table>
+  <div style="padding:12px 20px;text-align:center;font-size:12px;color:#86a6c6;background:#0e1f33;">
+    Every figure is reproducible &mdash; <a href="/prove-it/" style="color:#7fd1ff;text-decoration:none;">Prove It</a> &middot; <a href="/run-your-own-cabinet/" style="color:#7fd1ff;text-decoration:none;">Run your own cabinet</a>
+  </div>
+</div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       DOWNLOAD SECTION + SKU plain-language labels (Pawn #5)
+       + SmartScreen reframe + Dr. MnemosyneC (Pawn #1 + #2)
+       ═══════════════════════════════════════════════ -->
+  <section class="mn-v2-download-section" aria-labelledby="mn-v2-dl-heading">
+    <h2 id="mn-v2-dl-heading" style="color:#d69e2e; font-size:1.2rem; margin:0 0 1.2rem; text-align:center;">Download MnemosyneC v{{ .Site.Data.version.version }} &mdash; free, forever</h2>
+
+    <!-- Plain-language SKU cards (Pawn #5) -->
+    <div class="mn-sku-grid" role="list">
+      <div class="mn-sku-card mn-sku-card--active" role="listitem">
+        <p class="mn-sku-card__badge mn-sku-card__badge--active">&#9660; Download now</p>
+        <p class="mn-sku-card__name">Starter version</p>
+        <p class="mn-sku-card__desc">456 MB &middot; installs quickly, works immediately. A small built-in AI model is included so you can use it right away with no extra setup.</p>
+        <p class="mn-sku-card__tech">qwen2.5:0.5b bundled</p>
+      </div>
+      <div class="mn-sku-card" role="listitem">
+        <p class="mn-sku-card__badge mn-sku-card__badge--full">In-app upgrade</p>
+        <p class="mn-sku-card__name">Full version</p>
+        <p class="mn-sku-card__desc">Upgrade to the full version inside the app anytime, free. Bigger download, noticeably better results, same privacy guarantee.</p>
+        <p class="mn-sku-card__tech">Gemma 4 12B via Ollama (~7 GB pulled in-app)</p>
+      </div>
+    </div>
+
+    <div style="display:flex; flex-direction:column; align-items:center; max-width:400px; margin:1.4rem auto 0;">
+      <a class="mn-v2-dl-btn"
+         href="https://github.com/Upekrithen/LianaBanyanPlatform/releases/download/v{{ .Site.Data.version.version }}/MnemosyneC-Setup-{{ .Site.Data.version.version }}.exe"
+         download="MnemosyneC-Setup-{{ .Site.Data.version.version }}.exe"
+         aria-label="Download MnemosyneC starter version for Windows, v{{ .Site.Data.version.version }}">
+        &#8595;&nbsp; Download MnemosyneC v{{ .Site.Data.version.version }} for Windows
+      </a>
+    </div>
+
+    <!-- Bounty posters -->
+    <div class="mn-v2-bounty-row" aria-label="Community build bounties">
+      <div class="mn-v2-bounty-card">
+        <p class="mn-v2-bounty-card__wanted">&#9888; Wanted</p>
+        <p class="mn-v2-bounty-card__title">Mac build of MnemosyneC</p>
+        <p class="mn-v2-bounty-card__body">Build targets are configured (dmg + zip, x64/arm64). Be the builder who ships it. Earn Marks.</p>
+        <a class="mn-v2-bounty-card__cta" href="/bounties/">View Mac bounty &rarr;</a>
+      </div>
+      <div class="mn-v2-bounty-card">
+        <p class="mn-v2-bounty-card__wanted">&#9888; Wanted</p>
+        <p class="mn-v2-bounty-card__title">Linux build of MnemosyneC</p>
+        <p class="mn-v2-bounty-card__body">deb/rpm/AppImage targets ready. Be the builder who ships it. Earn Marks.</p>
+        <a class="mn-v2-bounty-card__cta" href="/bounties/">View Linux bounty &rarr;</a>
+      </div>
+    </div>
+    <div class="mn-v2-bounty-row" style="margin-top:0.6rem;">
+      <div class="mn-v2-bounty-card" style="min-width:unset; max-width:560px; margin:0 auto; flex:unset; width:100%;">
+        <p class="mn-v2-bounty-card__wanted">&#127916; Wanted</p>
+        <p class="mn-v2-bounty-card__title">YouTube video: how to use MnemosyneC</p>
+        <p class="mn-v2-bounty-card__body">Record a clear walkthrough: install, first launch, offline query, mesh connection. Show real results. Post publicly. Earn Marks and Founding-Contributor credit.</p>
+        <a class="mn-v2-bounty-card__cta" href="/bounties/">Claim this bounty &rarr;</a>
+      </div>
+    </div>
+    <p class="mn-v2-bounty-note">Windows ships now. Mac and Linux community builds coming.</p>
+
+    <!-- SmartScreen steps with Dr. MnemosyneC mascot (Pawn #1 + #2) -->
+    <div class="mn-v2-install-steps">
+      <p class="mn-v2-install-steps__title">
+        <img src="/img/mascots/dr-mnemosynec.png"
+             alt="Dr. MnemosyneC"
+             class="mn-smartscreen-mascot"
+             width="90" height="90"
+             loading="lazy">
+        One quick thing before you run the installer
+      </p>
+      <p class="mn-v2-install-steps__note">When Windows sees new software for the first time, it shows a caution screen. This happens with all new programs, including ours. It does not mean there is a problem. When you see it, click <strong>More info</strong> and then <strong>Run anyway</strong> to continue. The installer is safe.</p>
+      <ol class="mn-v2-install-steps__list">
+        <li>Click the download button above and save the file. (Large file: the bundled AI model is included.)</li>
+        <li>Open the downloaded file. When the Windows caution screen appears, click <strong>More info</strong>.</li>
+        <li>Click <strong>Run anyway</strong>.</li>
+        <li>Follow the installer prompts.</li>
+        <li>Done. Find MnemosyneC in your Start menu.</li>
+      </ol>
+    </div>
+
+    <p class="mn-v2-strapline">Version {{ .Site.Data.version.version }} &nbsp;&middot;&nbsp; Free forever &nbsp;&middot;&nbsp; No account required &nbsp;&middot;&nbsp; All data stays on your computer</p>
+  </section>
+
+  <hr class="mn-v2-divider" />
+
+  <!-- ═══════════════════════════════════════════════
+       TECHNICAL METHODOLOGY (all internal notation here)
+       ═══════════════════════════════════════════════ -->
+  <details class="mn-v2-chip mn-v2-chip--technical" id="mn-technical">
+    <summary>&#9654;&nbsp; Technical methodology &mdash; SHA&#8209;256, Gauntlet, patents, substrate, licensing</summary>
+    <div class="mn-v2-chip-body">
+
+      <h3>Binary integrity &middot; v{{ .Site.Data.version.version }} &middot; SHA&#8209;256 checksums and signing</h3>
+      <table>
+        <thead>
+          <tr><th>Field</th><th>Starter (qwen2.5:0.5b bundled)</th><th>Full (in-app upgrade)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Filename</strong></td><td>MnemosyneC-Setup-{{ .Site.Data.version.version }}.exe</td><td>No separate file &mdash; upgrade in-app via Settings</td></tr>
+          <tr><td><strong>File size</strong></td><td>456 MB</td><td>~7 GB pulled via Ollama in-app</td></tr>
+          <tr><td><strong>SHA&#8209;256</strong></td><td><code>See GitHub release page for verified hash</code></td><td>N/A &mdash; verified by Ollama registry</td></tr>
+          <tr><td><strong>Signing</strong></td><td>DigiCert RFC 3161 &middot; .tsr sidecar &mdash; see Release Notes</td><td>N/A</td></tr>
+          <tr><td><strong>Hosting</strong></td><td>GitHub Releases (v{{ .Site.Data.version.version }})</td><td>Ollama registry (pulled in-app)</td></tr>
+          <tr><td><strong>Telemetry</strong></td><td colspan="2">None without explicit opt&#8209;in</td></tr>
+        </tbody>
+      </table>
+      <p><strong>Verify via PowerShell:</strong></p>
+      <pre><code>Get-FileHash "MnemosyneC-Setup-{{ .Site.Data.version.version }}.exe" -Algorithm SHA256</code></pre>
+
+      <h3>Benchmark methodology (BP063 R10 Harness)</h3>
+      <p>75 factual questions about a single individual (the Liana Banyan Founder) were run through 4 vendors (Anthropic, OpenAI, Ollama local, Google) in both cold (no substrate) and hot (with MnemosyneC substrate) conditions. All questions test recall of manually-ingested substrate-stored information, not general knowledge or training data. Inter-rater agreement between the primary grader and a spot-check grader: 0.865&ndash;1.000 (strong to perfect, Cohen's kappa). The full reproducibility pack is at <a href="https://github.com/liana-banyan/lb-reproducibility-pack">github.com/liana-banyan/lb-reproducibility-pack</a>.</p>
+
+      <h3>USPTO patents &middot; Cooperative Defensive Patent Pledge #2260</h3>
+      <p>MnemosyneC is covered by 21 USPTO Provisional Patent filings (sole inventor, Conductor-Class doctrine, <em>Thaler v. Vidal</em>). The full patent portfolio is pledged under Cooperative Defensive Patent Pledge #2260. What that means: cooperatives can use, improve, and deploy MnemosyneC without fear of enclosure. The pledge is irrevocable. No future board, acquirer, or successor entity can weaponize these patents against cooperative-class users.</p>
+
+      <h3>SSPL v1 license</h3>
+      <p>Run it. Modify it. Self-host it. If you offer MnemosyneC as a networked service to others, you must share your modifications under SSPL v1. This is the cooperative commons lock. It prevents enclosure from re-entering through the side door.
+      <a href="https://github.com/LianaBanyan" target="_blank" rel="noopener">View source on GitHub &rarr;</a></p>
+
+      <h3>The Gauntlet &middot; six-stage verification</h3>
+      <p>The Caithedral&#8482; Inspector inside MnemosyneC's Developer Tab runs a six-stage testing framework verifying substrate integrity across every build. You can run it yourself, without an LLM, to verify the substrate functions correctly on your machine.</p>
+
+      <h3>Substrate architecture (brief)</h3>
+      <p>MnemosyneC ships with a 16-component cooperative substrate including: Eblet&#8482; ROM-class permanence layer, Wrasse sub-millisecond pre-injection (0.059ms mean), Pheromone event-class signaling, Caithedral&#8482; Inspector, Hearth (on-device Ollama fallback), Drekaskip wave generator. Full detail: <a href="/banyan-almanac/issue-005/">Banyan Almanac Issue 005 &rarr;</a></p>
+
+      <h3>Download on GitHub</h3>
+      <p>
+        <a href="https://github.com/Upekrithen/LianaBanyanPlatform/releases/tag/v{{ .Site.Data.version.version }}" target="_blank" rel="noopener">View Release v{{ .Site.Data.version.version }} on GitHub &rarr;</a>
+        &nbsp;&middot;&nbsp;
+        <a href="/changelog/">Release changelog &rarr;</a>
+        &nbsp;&middot;&nbsp;
+        <a href="/run-your-own-cabinet/">K533 Reproducibility Pack &rarr;</a>
+      </p>
+    </div>
+  </details>
+
+  <!-- ═══════════════════════════════════════════════
+       LEARN MORE CHIPS (cooperative, cost, big picture)
+       ═══════════════════════════════════════════════ -->
+  <div class="mn-v2-chips" aria-label="Learn more topics">
+
+    <!-- CHIP: Proof -->
+    <details class="mn-v2-chip">
+      <summary>&#9658;&nbsp; The numbers behind the chart</summary>
+      <div class="mn-v2-chip-body">
+        <p>The benchmark is real data, not marketing copy. BP063 R10 Harness ran 75 factual questions through 4 vendors in both cold (no substrate) and hot (with MnemosyneC substrate) conditions. Inter-rater agreement between the primary grader and a spot-check grader: 0.865&ndash;1.000 (strong to perfect). The delta is a real signal, not grader noise.</p>
+        <p>In addition, the Cooperative Architecture benchmarks show 30&ndash;60x wall-clock speedup and approximately 100x token-cost reduction on real workloads (Founder-run, timestamped git commit chains, session logs). Every figure has a traceable receipt.</p>
+        <ul>
+          <li><a href="/proofs/">Proofs and empirical receipts &rarr;</a></li>
+          <li><a href="/prove-it/">Technical Prove It test (component-by-component) &rarr;</a></li>
+          <li><a href="/run-your-own-cabinet/">K533 Reproducibility Pack (run it yourself) &rarr;</a></li>
+        </ul>
+        <p style="font-size:0.8rem; color:rgba(250,245,235,0.45); font-style:italic;">Truth-Always discipline: all empirical claims are sourced to timestamped session receipts. Numbers are never estimated; they are measured or they do not appear.</p>
+      </div>
+    </details>
+
+    <!-- CHIP: Designed to Be Copied -->
+    <details class="mn-v2-chip">
+      <summary>&#9658;&nbsp; Designed to be copied and improved</summary>
+      <div class="mn-v2-chip-body">
+        <h3>A defensive moat that gets stronger the more we file</h3>
+        <p>Every provisional patent filed is <strong>priority-dated prior art</strong>, a date-stamped stake in the ground that prevents anyone from coming in afterward and fencing the commons. The more we file, the wider the protected territory. The moat does not protect us from users; it protects users from enclosure.</p>
+        <p>The whole architecture is <strong>built to be copied and forked</strong>: SSPL + Pledge&nbsp;#2260. Run it. Self-host it. Improve it. The license is designed to let you build on it without fear and to prevent anyone from quietly re-privatizing the substrate underneath you.</p>
+        <p class="mn-v2-commons-em">We patent so no one can fence it, then give it away so everyone can build on it, deterrence and invitation in one.</p>
+        <h3>One ledger. One path.</h3>
+        <div class="mn-v2-commons-ledger">
+          <strong>How patents flow:</strong> lone inventor &rarr; Upekrithen, LLC &rarr; irrevocably pledged to Liana Banyan Corporation and the cooperative commons.<br>
+          There is <strong>one ledger</strong> and <strong>one path</strong>. Every filing enters the commons and stays there.
+        </div>
+        <h3>The one way to sponsor a patent into the commons</h3>
+        <p>There is exactly one way to "acquire" a patent: <strong>sponsor it for $5,000 through Upekrithen, LLC</strong>, structured as an <strong>irrevocable donation into the commons</strong>, Founding-Sponsor recognition plus Defensive Patent Pledge&nbsp;#2260. This is not ownership and not extraction rights.</p>
+        <p>You can fund a patent <em>into</em> the commons. You cannot buy one <em>out</em>. Every sponsorship makes the commons <strong>stronger, never smaller</strong>.</p>
+        <p style="font-size:0.8rem;color:rgba(250,245,235,0.45);font-style:italic;">Truth-Always: we do not say "never for sale." We say "never sold for extraction." The one acquisition path is a donation into the commons, not extraction out. The distinction is the whole point.</p>
+      </div>
+    </details>
+
+    <!-- CHIP: What does AI cost? -->
+    <details class="mn-v2-chip">
+      <summary>&#9658;&nbsp; What does AI actually cost?</summary>
+      <div class="mn-v2-chip-body">
+        <p style="color:#d69e2e; font-weight:700; margin-bottom:1rem;">Three dimensions most people never see at once.</p>
+
+        <div class="mn-v2-cost-dim">
+          <p class="mn-v2-cost-dim-title">1 &middot; What it costs you &mdash; savings made visible</p>
+          <div class="mn-v2-gauge-wrap">
+            <div class="mn-v2-barrel" aria-label="Usage gauge: 78% of queries served free from local substrate">
+              <svg width="64" height="100" viewBox="0 0 64 100" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+                <rect x="8" y="10" width="48" height="76" rx="6" fill="rgba(10,22,40,0.9)" stroke="rgba(214,158,46,0.5)" stroke-width="1.5"/>
+                <clipPath id="barrel-clip"><rect x="8" y="10" width="48" height="76" rx="6"/></clipPath>
+                <rect x="8" y="26.72" width="48" height="59.28" clip-path="url(#barrel-clip)" fill="rgba(56,161,105,0.35)"/>
+                <line x1="8" y1="32" x2="15" y2="32" stroke="rgba(214,158,46,0.4)" stroke-width="1"/>
+                <line x1="8" y1="48" x2="15" y2="48" stroke="rgba(214,158,46,0.4)" stroke-width="1"/>
+                <line x1="8" y1="64" x2="15" y2="64" stroke="rgba(214,158,46,0.4)" stroke-width="1"/>
+                <line x1="8" y1="80" x2="15" y2="80" stroke="rgba(214,158,46,0.4)" stroke-width="1"/>
+                <line x1="20" y1="10" x2="20" y2="86" stroke="rgba(214,158,46,0.15)" stroke-width="1"/>
+                <line x1="32" y1="10" x2="32" y2="86" stroke="rgba(214,158,46,0.15)" stroke-width="1"/>
+                <line x1="44" y1="10" x2="44" y2="86" stroke="rgba(214,158,46,0.15)" stroke-width="1"/>
+                <rect x="8" y="10" width="48" height="8" rx="2" fill="rgba(214,158,46,0.15)" stroke="rgba(214,158,46,0.35)" stroke-width="1"/>
+                <rect x="8" y="78" width="48" height="8" rx="2" fill="rgba(214,158,46,0.15)" stroke="rgba(214,158,46,0.35)" stroke-width="1"/>
+                <text x="32" y="62" text-anchor="middle" font-size="12" font-weight="700" fill="#38a169" font-family="system-ui,sans-serif">78%</text>
+                <text x="32" y="74" text-anchor="middle" font-size="7.5" fill="rgba(250,245,235,0.5)" font-family="system-ui,sans-serif">FREE</text>
+              </svg>
+            </div>
+            <div class="mn-v2-gauge-desc">
+              <p>In the benchmark, a <strong>free local model</strong> answered 78 out of 100 questions correctly at <strong>$0.00</strong> because the MnemosyneC substrate did the knowledge-recall work.</p>
+              <p>Think of the barrel as your AI query budget. Every query answered from the cooperative substrate stays <strong>full</strong> for free. Only queries that go past the substrate cost anything.</p>
+            </div>
+          </div>
+          <p>Your current AI subscriptions hide their cost from you. You pay a flat fee and never see which queries burned expensive compute vs. which ones could have been answered from memory. MnemosyneC makes the savings visible, daily.</p>
+        </div>
+
+        <div class="mn-v2-cost-dim">
+          <p class="mn-v2-cost-dim-title">2 &middot; What it costs to develop &mdash; the Substrace Theorem</p>
+          <p>Building with AI today means re-explaining everything from scratch every session. The AI forgets. You pay to remind it. You pay again next session, and the session after that. This is the hidden subscription tax: not the monthly fee, but the cost of the forgetting.</p>
+          <p>The Substrace Theorem states: when a shared substrate holds the context, any model at any endpoint, even a free local one, can reconstruct the same state from the same inputs. The cost of re-derivation approaches zero. MnemosyneC is the implementation of that theorem.</p>
+        </div>
+
+        <div class="mn-v2-cost-dim">
+          <p class="mn-v2-cost-dim-title">3 &middot; What it costs in resources &mdash; DECENT, no new data centers</p>
+          <p>Every query routed through the cooperative substrate instead of a centralized cloud model is a query that doesn&rsquo;t require a new GPU farm. The cooperative substrate runs on your own computer, hardware you already own. When enough members share a substrate, the mesh of existing machines <em>is</em> the data center.</p>
+          <p>This is the 2nd Second Industrial Revolution framing: decentralize intelligence the same way 3D printers decentralized manufacturing. Your own librarian. Your own fab shop. No new buildings required.</p>
+        </div>
+      </div>
+    </details>
+
+    <!-- CHIP: 2nd Second Industrial Revolution -->
+    <details class="mn-v2-chip">
+      <summary>&#9658;&nbsp; The 2nd Second Industrial Revolution</summary>
+      <div class="mn-v2-chip-body">
+        <p>"The First and Second Industrial Revolutions centralized production: big factories, one-size-fits-all. The 2nd Second Industrial Revolution de-centralizes it: 3D printers and local tools let any town make its own things. Your AI librarian does the same for knowledge. Your own library. Your own tool. Run it yourself. Every town its own fab shop, and its own librarian."</p>
+        <p>MnemosyneC is a node in that revolution. Every install is a library that belongs to its owner. Every member who contributes to the shared substrate is depositing knowledge into a commons that lifts <em>everyone's</em> accuracy, regardless of model vendor, regardless of subscription tier.</p>
+        <p>The platform keeps cost plus 20%. Workers, Builders, and Creators keep 83.3% of every transaction. Membership: $5/year. No venture capital. No ads. 50-year sunset clause: at year 50, the corporation dissolves and the cooperative commons inherits everything.</p>
+        <a href="/why-join/">Why join the cooperative &rarr;</a>
+      </div>
+    </details>
+
+    <!-- CHIP: Library of Congress Project -->
+    <details class="mn-v2-chip">
+      <summary>&#9658;&nbsp; The Library of Congress Project</summary>
+      <div class="mn-v2-chip-body">
+        <p>The Library of Congress holds records of approximately 49 million items: 17 million books and other print materials, 12 million photographs, 5 million maps, 3 million recordings. Most of it sits behind professional barriers, access requires a researcher's credential, a library card, a subscription, or a plane ticket to Washington, D.C.</p>
+        <p>The Library of Congress Project is Liana Banyan's first Grand Project: Eblet the public domain LOC catalog and make it freely searchable by any member through the cooperative substrate, in record time, at record low cost, with record accuracy. No new buildings. No new data centers. No extraction. Proof to the People.</p>
+        <p>The network target is 10,000 working nodes. The founding circle is open now.</p>
+        <a href="/loc-project/">Learn more about the LOC Project &rarr;</a>
+      </div>
+    </details>
+
+  </div><!-- /mn-v2-chips -->
+
+  <!-- ═══════════════════════════════════════════════
+       BOUNTY POSTERS
+       ═══════════════════════════════════════════════ -->
+  <section aria-labelledby="mn-v2-bounty-heading" style="margin:2rem 0;">
+    <h2 id="mn-v2-bounty-heading" style="color:#d69e2e;font-size:1.15rem;margin:0 0 1.2rem;letter-spacing:0.01em;">Bounty posters: open slots</h2>
+    <p style="font-size:0.85rem;color:rgba(250,245,235,0.5);margin:0 0 1.4rem;font-style:italic;">Founder fills rewards. Community fills the work. Earn Marks for making it happen.</p>
+
+    <div style="background:#1a2e1a;border:2px solid #3d7a3d;border-radius:10px;padding:1.4rem 1.6rem;margin:0 0 1rem;">
+      <p style="font-size:1.05rem;font-weight:800;color:#7dff7d;margin:0 0 0.5rem;">&#127810; Wanted: YouTube tutorial</p>
+      <p style="color:#c8e6c8;margin:0 0 0.8rem;line-height:1.65;">"How to Use MnemosyneC" &mdash; a quality walkthrough showing install to first query. Must show: install, first launch, offline query, and mesh connection. Published to YouTube.</p>
+      <p style="color:#a0c8a0;font-size:0.82rem;margin:0;"><strong>Earn:</strong> Marks for a quality tutorial &nbsp;&middot;&nbsp; <strong>Apply:</strong> <a href="/bounties/" style="color:#7dff7d;">bounties page</a></p>
+    </div>
+
+    <div style="background:#1e2533;border:2px solid #3d5a8e;border-radius:10px;padding:1.4rem 1.6rem;margin:0 0 1rem;">
+      <p style="font-size:1.05rem;font-weight:800;color:#7fd1ff;margin:0 0 0.5rem;">&#127822; Wanted: macOS port and signing</p>
+      <p style="color:#bcd6ee;margin:0 0 0.8rem;line-height:1.65;">We have <strong>no signed Mac build.</strong> A macOS release requires: Apple Developer ID, Mac hardware, willingness to maintain the build pipeline. This is real infrastructure work, compensated with Marks.</p>
+      <p style="color:#86a6c6;font-size:0.82rem;margin:0;"><strong>Earn:</strong> Marks (significant) &nbsp;&middot;&nbsp; <strong>Apply:</strong> <a href="/bounties/" style="color:#7fd1ff;">bounties page</a> &nbsp;&middot;&nbsp; <em>No macOS download button will appear until a signed, notarized build exists.</em></p>
+    </div>
+
+    <div style="background:#2a1e10;border:2px solid #7a5a1a;border-radius:10px;padding:1.4rem 1.6rem;margin:0 0 1rem;">
+      <p style="font-size:1.05rem;font-weight:800;color:#ffd27d;margin:0 0 0.5rem;">&#128039; Wanted: Linux AppImage tester</p>
+      <p style="color:#e8d4a8;margin:0 0 0.8rem;line-height:1.65;">Help validate a Linux AppImage build of MnemosyneC. Requires: a Linux machine (Ubuntu 22.04+ or Fedora 38+ preferred), willingness to run install-to-first-query flow and report results.</p>
+      <p style="color:#c4a870;font-size:0.82rem;margin:0;"><strong>Earn:</strong> Marks for verified test reports &nbsp;&middot;&nbsp; <strong>Apply:</strong> <a href="/bounties/" style="color:#ffd27d;">bounties page</a></p>
+    </div>
+  </section>
+
+  <hr class="mn-v2-divider" />
+
+  <!-- ═══════════════════════════════════════════════
+       FOUNDER SPEAK GLOSSARY
+       ═══════════════════════════════════════════════ -->
+  <details class="mn-v2-chip" id="founder-speak">
+    <summary>&#9658;&nbsp; Glossary: terms you may not recognize</summary>
+    <div class="mn-v2-chip-body">
+      <p>A quick reference for the vocabulary used here that you will not find in a standard dictionary.</p>
+      <table>
+        <thead>
+          <tr><th>Term</th><th>What it means</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Eblet</strong></td><td>A single immutable record in the cooperative substrate. Every fact, file, or event is an Eblet, sha256-stamped and append-only.</td></tr>
+          <tr><td><strong>Socceri</strong></td><td>Your member address inside the cooperative. Your identity on the network, portable and self-sovereign.</td></tr>
+          <tr><td><strong>Yoke</strong></td><td>The structured message-passing protocol between cooperative AI agents. A Yoke Return is a formal reply that closes a task loop.</td></tr>
+          <tr><td><strong>Coffee</strong></td><td>An informal cooperative gathering, in-person or remote, where members connect and build relationships. The smallest unit of community.</td></tr>
+          <tr><td><strong>Banyan Metric</strong></td><td>The composite score for cooperative AI quality: accuracy, trust-calibration, and cooperative-class behavior measured together.</td></tr>
+          <tr><td><strong>Caithedral Effect</strong></td><td>The phenomenon where each member's substrate contribution improves every other member's AI accuracy. The cooperative knowledge commons compounds.</td></tr>
+          <tr><td><strong>Marks</strong></td><td>The cooperative's participation record. Marks track work performed on unfunded projects and serve as contingent accounts payable, not equity or investment shares.</td></tr>
+          <tr><td><strong>Substrace</strong></td><td>The theorem stating that when a shared substrate holds context, any model at any endpoint can reconstruct the same state from the same inputs. The cost of re-derivation approaches zero.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </details>
+
+  <hr class="mn-v2-divider" />
+
+  <!-- ═══════════════════════════════════════════════
+       WHO MADE THIS (below fold, cooperative manifesto)
+       ═══════════════════════════════════════════════ -->
+  <details class="mn-v2-chip mn-v2-chip--founder">
+    <summary>&#9658;&nbsp; Who made this, and why it is not a faceless corporation</summary>
+    <div class="mn-v2-chip-body">
+      <p>There is no team of forty. There is no go-to-market deck, no Series B, and no venture capital waiting in the wings. There is one person who has spent the last two decades circling a single question: why does technology always end up extracting from the very people who use it?</p>
+      <p>In his own words: "I can't do everything, but I can do something. And this is what I'm doing." He built the tools he needed, only to realize the framework underneath them was far more valuable than the applications on top, so he documented it all and filed twenty-one provisional patents. Then he made a decision that breaks every rule of modern tech. Rather than sell it to the highest bidder, he is giving it to the users.</p>
+      <p>The legal entity, Liana Banyan Corporation, is built with a fifty-year sunset clause hardcoded into its bylaws. At year fifty, the corporation dissolves. "The Liana," the cooperative commons, the technological substrate, the patents, and the member network, inherits everything. This isn't a marketing promise; it is a structural commitment.</p>
+      <p>The ethos is simple: be who you needed. Build the bridge behind you. Half a century from now, the corporation will dissipate into the cooperative we are growing today. The founder doesn't want to be famous. He just wants the engine to work, for all mankind, exactly as it was designed to from the start.</p>
+      <p style="color:rgba(250,245,235,0.55); font-size:0.85rem; font-style:italic; margin-top:1.2rem;">Not left or right. A more effective team.</p>
+    </div>
+  </details>
+
+</div><!-- /mn-v2-wrap -->
+</div><!-- /mn-page -->
+
+{{- end }}
