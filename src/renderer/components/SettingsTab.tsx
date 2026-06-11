@@ -11,6 +11,7 @@ import type { AuthState } from '../amplify.d';
 import { LocFaqModal } from './LocFaqPanel';
 import { SkuUpgradePanel } from './SkuUpgradePanel';
 import { useLifecycleStage } from '../hooks/useLifecycleStage';
+import { ShareMnemosyneC } from './ShareMnemosyneC';
 
 interface SettingsTabProps {
   authState: AuthState | null;
@@ -1192,6 +1193,7 @@ export function SettingsTab({
   const isMember = authState?.status === 'member' || authState?.status === 'trial_active';
   const isFounder = (authState as any)?.member?.is_founder === true;
   const [showLocFaq, setShowLocFaq] = useState(false);
+  const [showShare, setShowShare] = useState(false);
 
   // SEG-UX-3: current SKU tier for persistent tier text row
   const [currentSkuTier, setCurrentSkuTier] = useState<string | null>(null);
@@ -1908,7 +1910,36 @@ export function SettingsTab({
             </span>
           </div>
         </div>
+
+        {/* SEG-V0145-2: Share MnemosyneC referral */}
+        <div style={{ ...s.card, marginTop: 6 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 }}>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: 11, fontWeight: 600, color: '#e2e8f0', marginBottom: 2 }}>
+                Share MnemosyneC
+              </div>
+              <div style={{ fontSize: 9, color: '#475569', lineHeight: 1.5 }}>
+                Send a download link with your referral ID. You may earn cooperative credit.
+              </div>
+            </div>
+            <button
+              onClick={() => setShowShare(true)}
+              style={{
+                ...s.btn,
+                background: 'rgba(110,231,183,0.08)',
+                borderColor: 'rgba(110,231,183,0.25)',
+                color: '#6ee7b7',
+                whiteSpace: 'nowrap' as const,
+                flexShrink: 0,
+              }}
+            >
+              Share →
+            </button>
+          </div>
+        </div>
       </section>
+
+      {showShare && <ShareMnemosyneC onClose={() => setShowShare(false)} />}
 
       {/* Auto-Prepare FULL Upgrade */}
       <AutoPreparePullPanel />

@@ -12,6 +12,8 @@ import { useLifecycleStage } from '../hooks/useLifecycleStage';
 // SEG-S-7/8: Layer2 surfaces (both landed this session).
 import { Layer2UseIt } from './Layer2UseIt';
 import { Layer2ProveIt } from './Layer2ProveIt';
+// SEG-V0145-2: Share modal
+import { ShareMnemosyneC } from './ShareMnemosyneC';
 
 export const LS_ONBOARDING_COMPLETE = 'mnemosynec_onboarding_complete';
 const MESH_KEY = 'mnemosynec_mesh_enabled';
@@ -25,6 +27,9 @@ export function WelcomeView({ onComplete }: WelcomeViewProps): React.ReactElemen
 
   // SEG-S-6: doorway selection state
   const [doorwayChosen, setDoorwayChosen] = useState<'use-it' | 'prove-it' | null>(null);
+
+  // SEG-V0145-2: share modal
+  const [showShare, setShowShare] = useState(false);
 
   // SEG-S-9: mesh checkbox
   const [meshEnabled, setMeshEnabled] = useState<boolean>(() => {
@@ -251,7 +256,48 @@ export function WelcomeView({ onComplete }: WelcomeViewProps): React.ReactElemen
 
         {/* SEG-S-9: Mesh checkbox visible in Stage A */}
         {meshCheckbox}
+
+        {/* SEG-V0145-2: Share footer link */}
+        <div style={{
+          display: 'flex',
+          justifyContent: 'flex-end',
+          marginTop: 16,
+          paddingTop: 12,
+          borderTop: '1px solid rgba(100, 116, 139, 0.12)',
+        }}>
+          <button
+            type="button"
+            onClick={() => setShowShare(true)}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: '#475569',
+              fontSize: 11,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 5,
+              padding: '2px 0',
+              fontFamily: 'system-ui, -apple-system, sans-serif',
+            }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = '#6ee7b7'; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = '#475569'; }}
+          >
+            {/* Share arrow icon */}
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <circle cx="12" cy="3" r="2" stroke="currentColor" strokeWidth="1.5" />
+              <circle cx="12" cy="13" r="2" stroke="currentColor" strokeWidth="1.5" />
+              <circle cx="3"  cy="8" r="2" stroke="currentColor" strokeWidth="1.5" />
+              <line x1="5" y1="7" x2="10" y2="4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+              <line x1="5" y1="9" x2="10" y2="12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+            Share MnemosyneC
+          </button>
+        </div>
       </div>
+
+      {/* SEG-V0145-2: Share modal */}
+      {showShare && <ShareMnemosyneC onClose={() => setShowShare(false)} />}
     </div>
   );
 }
