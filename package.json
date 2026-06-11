@@ -1,6 +1,6 @@
 {
   "name": "amplify-computer",
-  "version": "0.1.46",
+  "version": "0.1.47",
   "description": "MnemosyneC — Memory, powered by CAI · local inference + cooperative substrate OS overlay (SSPL · Pledge #2260)",
   "homepage": "https://lianabanyan.com",
   "private": true,
@@ -16,7 +16,7 @@
     "build:hugo": "node scripts/copy-hugo-bundle.mjs",
     "catacombs:build": "node scripts/catacombs-indexer.mjs",
     "dist": "node scripts/assert-floor-model.mjs && npm run prepare:ollama-binary && npm run build && electron-builder",
-    "dist:win": "node scripts/assert-floor-model.mjs && node scripts/assert-preload-source-no-declare-const.mjs && npm run prepare:ollama-binary && npm run build && node scripts/assert-ipc-handlers.mjs && node scripts/assert-preload-sandbox.mjs && electron-builder --win",
+    "dist:win": "node scripts/assert-floor-model.mjs && node scripts/assert-preload-source-no-declare-const.mjs && npm run prepare:ollama-binary && npm run build && node scripts/assert-ipc-handlers.mjs && node scripts/assert-preload-sandbox.mjs && electron-builder --win && node scripts/assert-bundled-ollama-in-installer.mjs",
     "dist:mac": "npm run build && electron-builder --mac",
     "dist:linux": "npm run build && electron-builder --linux",
     "prepare:floor-model": "node scripts/prepare-floor-model.mjs",
@@ -243,6 +243,7 @@
     "rpm": {
       "packageCategory": "Applications/Internet"
     },
+    "afterPack": "scripts/after-pack.mjs",
     "afterSign": "scripts/notarize.cjs"
   }
 }

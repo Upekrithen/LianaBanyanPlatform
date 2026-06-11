@@ -17,6 +17,7 @@ const OLLAMA_API_BASE = 'http://127.0.0.1:11434';
 const DEFAULT_MODEL = FLOOR_MODEL;
 const HEALTH_CHECK_INTERVAL_MS = 30_000;
 const STARTUP_TIMEOUT_MS = 30_000;
+const HEARTBEAT_INTERVAL_MS = 2_000;
 
 export interface OllamaStatus {
   running: boolean;
@@ -58,23 +59,43 @@ export interface EngineSetupProgress {
   percentComplete?: number;
 }
 
+/** SEG-V0147-FIX-1: Status update event payload for IPC heartbeat. */
+export interface OllamaStatusUpdate {
+  branch: 'PRE_INSTALLED_RUNNING' | 'PRE_INSTALLED_SPAWN' | 'BUNDLED_SPAWN' | 'NONE';
+  message: string;
+  elapsedMs?: number;
+}
+
 export class OllamaManager {
   private process: ChildProcess | null = null;
   private status: OllamaStatus = { running: false, model: null, source: 'none' };
   private healthTimer: ReturnType<typeof setInterval> | null = null;
   private onProgress?: (progress: ModelPullProgress) => void;
+  /** SEG-V0147-FIX-1: callback for IPC status updates to renderer */
+  private onStatusUpdate?: (update: OllamaStatusUpdate) => void;
 
   setProgressCallback(cb: (progress: ModelPullProgress) => void): void {
     this.onProgress = cb;
   }
 
+  /** SEG-V0147-FIX-1: Register IPC status callback (called by index.ts after init). */
+  setStatusUpdateCallback(cb: (update: OllamaStatusUpdate) => void): void {
+    this.onStatusUpdate = cb;
+  }
+
+  private _emitStatus(branch: OllamaStatusUpdate['branch'], message: string, elapsedMs?: number): void {
+    console.log(`[Ollama] branch=${branch} ${message}${elapsedMs !== undefined ? ` (${(elapsedMs / 1000).toFixed(1)}s elapsed)` : ''}`);
+    this.onStatusUpdate?.({ branch, message, elapsedMs });
+  }
+
   async init(): Promise<void> {
     // 1. Check if Ollama is already running (most common case — user has it installed)
+    this._emitStatus('PRE_INSTALLED_RUNNING', 'Trying pre-installed Ollama on port 11434…');
     const alreadyRunning = await this.isReachable();
     if (alreadyRunning) {
       const version = await this._getVersion();
       this.status = { running: true, model: DEFAULT_MODEL, source: 'pre-installed', version };
-      console.log(`[Ollama] Pre-installed Ollama detected (${version})`);
+      this._emitStatus('PRE_INSTALLED_RUNNING', `Pre-installed Ollama detected (${version}) — connecting…`);
       this._startHealthMonitor();
       return;
     }
@@ -82,30 +103,35 @@ export class OllamaManager {
     // 2. Try to start pre-installed Ollama binary
     const preInstalled = this._findPreInstalledBinary();
     if (preInstalled) {
-      await this._spawnOllama(preInstalled);
-      if (await this._waitForStartup()) {
+      this._emitStatus('PRE_INSTALLED_SPAWN', `Starting pre-installed Ollama from ${preInstalled}…`);
+      await this._spawnOllama(preInstalled, 'PRE_INSTALLED_SPAWN');
+      if (await this._waitForStartup('PRE_INSTALLED_SPAWN')) {
         const version = await this._getVersion();
         this.status = { running: true, model: null, source: 'pre-installed', version };
-        console.log(`[Ollama] Started pre-installed Ollama from ${preInstalled}`);
+        this._emitStatus('PRE_INSTALLED_SPAWN', `Ollama port 11434 ready (pre-installed ${version})`);
         this._startHealthMonitor();
         return;
       }
+      this._emitStatus('PRE_INSTALLED_SPAWN', 'Pre-installed Ollama did not start — falling back to bundled…');
     }
 
-    // 3. Try bundled binary (Phase 2: bundled with AMPLIFY Computer installer)
+    // 3. Try bundled binary (Phase 2: bundled with MnemosyneC installer)
     const bundledBinary = this._findBundledBinary();
     if (bundledBinary) {
-      await this._spawnOllama(bundledBinary);
-      if (await this._waitForStartup()) {
+      this._emitStatus('BUNDLED_SPAWN', `Bundled Ollama spawned — waiting for port 11434… (${bundledBinary})`);
+      await this._spawnOllama(bundledBinary, 'BUNDLED_SPAWN');
+      if (await this._waitForStartup('BUNDLED_SPAWN')) {
         const version = await this._getVersion();
         this.status = { running: true, model: null, source: 'bundled', version };
-        console.log(`[Ollama] Started bundled Ollama from ${bundledBinary}`);
+        this._emitStatus('BUNDLED_SPAWN', `Ollama port 11434 ready (bundled ${version})`);
         this._startHealthMonitor();
         return;
       }
+      this._emitStatus('BUNDLED_SPAWN', 'Ollama init failed: bundled binary did not respond on port 11434');
     }
 
     // 4. Ollama not available — record not-running state
+    this._emitStatus('NONE', 'Ollama init failed: no working Ollama found. Local inference disabled.');
     console.warn('[Ollama] Not available. Local inference disabled until Ollama is installed.');
     this.status = { running: false, model: null, source: 'none' };
   }
@@ -159,24 +185,41 @@ export class OllamaManager {
     return candidates.find((p) => existsSync(p)) ?? null;
   }
 
-  private async _spawnOllama(binary: string): Promise<void> {
+  /** SEG-V0147-FIX-2: spawn with correct OLLAMA_HOST (localhost only) and explicit OLLAMA_MODELS path. */
+  private async _spawnOllama(binary: string, branch: OllamaStatusUpdate['branch']): Promise<void> {
+    // SEG-V0147-FIX-2: OLLAMA_MODELS must point to the bundled model store, NOT ~/.ollama/models.
+    // This prevents the bundled Ollama from accidentally reading the user's pre-installed model store
+    // and failing silently when running from a packaged build without those models.
+    const resourcesOllamaPath = this._resourcesOllamaPath();
+    const bundledModelsPath = join(resourcesOllamaPath, 'bundled', 'models');
+
     this.process = spawn(binary, ['serve'], {
       detached: false,
       stdio: ['ignore', 'pipe', 'pipe'],
       env: {
         ...process.env,
-        OLLAMA_HOST: '0.0.0.0:11434',
+        // SEG-V0147-FIX-2: bind to localhost only (was 0.0.0.0 — exposed on all interfaces)
+        OLLAMA_HOST: '127.0.0.1:11434',
         OLLAMA_ORIGINS: 'http://localhost:5173,http://localhost:3000,app://.',
+        // SEG-V0147-FIX-2: explicit model path so bundled Ollama uses bundled models
+        OLLAMA_MODELS: bundledModelsPath,
       },
     });
 
     this.process.stdout?.on('data', (d: Buffer) => {
-      console.log(`[Ollama stdout] ${d.toString().trim()}`);
+      const msg = d.toString().trim();
+      if (msg) {
+        console.log(`[Ollama stdout] ${msg}`);
+        this._emitStatus(branch, msg);
+      }
     });
 
     this.process.stderr?.on('data', (d: Buffer) => {
       const msg = d.toString().trim();
-      if (msg) console.warn(`[Ollama stderr] ${msg}`);
+      if (msg) {
+        console.warn(`[Ollama stderr] ${msg}`);
+        this._emitStatus(branch, msg);
+      }
     });
 
     this.process.on('exit', (code, signal) => {
@@ -186,17 +229,26 @@ export class OllamaManager {
     });
   }
 
-  private _waitForStartup(): Promise<boolean> {
+  /** SEG-V0147-FIX-1: heartbeat every 2s while waiting for port 11434 — never silent >3s. */
+  private _waitForStartup(branch: OllamaStatusUpdate['branch']): Promise<boolean> {
     return new Promise((resolve) => {
-      const deadline = Date.now() + STARTUP_TIMEOUT_MS;
+      const startTime = Date.now();
+      const deadline = startTime + STARTUP_TIMEOUT_MS;
+
       const poll = async () => {
         if (await this.isReachable()) {
           resolve(true);
           return;
         }
-        if (Date.now() > deadline) {
+        const now = Date.now();
+        if (now > deadline) {
           resolve(false);
           return;
+        }
+        const elapsedMs = now - startTime;
+        // Heartbeat: emit IPC status every HEARTBEAT_INTERVAL_MS so UI never goes silent
+        if (elapsedMs > 0 && elapsedMs % HEARTBEAT_INTERVAL_MS < 600) {
+          this._emitStatus(branch, `Waiting for Ollama…`, elapsedMs);
         }
         setTimeout(poll, 500);
       };

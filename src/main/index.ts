@@ -536,14 +536,17 @@ function clampMoneyPennyBounds(bounds?: Partial<Electron.Rectangle>): Electron.R
     width: bounds?.width ?? 1,
     height: bounds?.height ?? 1,
   }).workArea;
+  // SEG-V0147-FIX-3: use 90% max width/height, 75% defaults to match computeScreenSafeBounds()
   const maxWidth = Math.floor(workArea.width * 0.9);
   const maxHeight = Math.floor(workArea.height * 0.9);
   const defaultWidth = Math.max(MONEY_PENNY_MIN_WIDTH, Math.min(maxWidth, Math.floor(workArea.width * 0.3)));
-  const defaultHeight = Math.max(MONEY_PENNY_MIN_HEIGHT, Math.min(maxHeight, Math.floor(workArea.height * 0.6)));
+  const defaultHeight = Math.max(MONEY_PENNY_MIN_HEIGHT, Math.min(maxHeight, Math.floor(workArea.height * 0.75)));
   const width = Math.max(MONEY_PENNY_MIN_WIDTH, Math.min(maxWidth, Math.floor(bounds?.width ?? defaultWidth)));
   const height = Math.max(MONEY_PENNY_MIN_HEIGHT, Math.min(maxHeight, Math.floor(bounds?.height ?? defaultHeight)));
   const x = Math.max(workArea.x, Math.min(workArea.x + workArea.width - width, Math.floor(bounds?.x ?? workArea.x + (workArea.width - width) / 2)));
-  const y = Math.max(workArea.y, Math.min(workArea.y + workArea.height - height, Math.floor(bounds?.y ?? workArea.y + (workArea.height - height) / 2)));
+  // SEG-V0147-FIX-3: y must be >= 12.5% from top — never allow title bar into dead zone
+  const minY = workArea.y + Math.floor(workArea.height * 0.125);
+  const y = Math.max(minY, Math.min(workArea.y + workArea.height - height, Math.floor(bounds?.y ?? minY)));
   return getSafeBounds({ x, y, width, height });
 }
 
@@ -551,6 +554,8 @@ function loadMoneyPennyBounds(): Electron.Rectangle {
   if (!existsSync(MONEY_PENNY_BOUNDS_FILE)) return clampMoneyPennyBounds();
   try {
     const parsed = JSON.parse(require('fs').readFileSync(MONEY_PENNY_BOUNDS_FILE, 'utf-8')) as Partial<Electron.Rectangle>;
+    // SEG-V0147-FIX-3: stale-bounds guard — discard if y is in dead zone
+    if (isStaleBounds(parsed)) return clampMoneyPennyBounds();
     return clampMoneyPennyBounds(parsed);
   } catch {
     return clampMoneyPennyBounds();
@@ -566,30 +571,49 @@ function saveMoneyPennyBounds(bounds: Electron.Rectangle): void {
   }
 }
 
-// SEG-V0146-CRIT-3: Dashboard bounds helpers (screen-aware sizing + persistence)
-function computeDashboardDefaults(): Electron.Rectangle {
-  const primary = screen.getPrimaryDisplay();
-  const { width: workWidth, height: workHeight } = primary.workAreaSize;
-  const { x: workX, y: workY } = primary.workArea;
-  const defaultW = Math.min(680, workWidth - 100);
-  const defaultH = Math.min(780, workHeight - 80);
+/**
+ * SEG-V0147-FIX-3: Canonical screen-safe bounds for all BrowserWindows.
+ * 75% height / 90% width / 12.5% top offset — ensures title bar is always visible
+ * including on monitors with hardware dead zones at the top edge.
+ */
+function computeScreenSafeBounds(): Electron.Rectangle {
+  const { workArea } = screen.getPrimaryDisplay();
   return {
-    width: Math.max(DASHBOARD_MIN_WIDTH, defaultW),
-    height: Math.max(DASHBOARD_MIN_HEIGHT, defaultH),
-    x: workX + Math.floor((workWidth - defaultW) / 2),
-    y: workY + Math.max(40, Math.floor((workHeight - defaultH) / 2)),
+    height: Math.floor(workArea.height * 0.75),
+    width:  Math.floor(workArea.width  * 0.90),
+    y:      workArea.y + Math.floor(workArea.height * 0.125),
+    x:      workArea.x + Math.floor(workArea.width  * 0.05),
+  };
+}
+
+/** SEG-V0147-FIX-3: Stale-bounds guard threshold — 10% from top of workArea. */
+function isStaleBounds(bounds: Partial<Electron.Rectangle>): boolean {
+  if (bounds.y === undefined) return false;
+  const { workArea } = screen.getPrimaryDisplay();
+  return bounds.y < workArea.y + Math.floor(workArea.height * 0.10);
+}
+
+// SEG-V0147-FIX-3: Dashboard bounds helpers (screen-aware sizing + persistence)
+function computeDashboardDefaults(): Electron.Rectangle {
+  const safe = computeScreenSafeBounds();
+  return {
+    width:  Math.max(DASHBOARD_MIN_WIDTH, safe.width),
+    height: Math.max(DASHBOARD_MIN_HEIGHT, safe.height),
+    x:      safe.x,
+    y:      safe.y,
   };
 }
 
 function clampDashboardBounds(saved: Partial<Electron.Rectangle>): Electron.Rectangle {
-  const primary = screen.getPrimaryDisplay();
-  const { width: workWidth, height: workHeight } = primary.workAreaSize;
-  const { x: workX, y: workY } = primary.workArea;
+  const { workArea } = screen.getPrimaryDisplay();
+  const safe = computeScreenSafeBounds();
   const defaults = computeDashboardDefaults();
-  const w = Math.max(DASHBOARD_MIN_WIDTH, Math.min(workWidth - 40, saved.width ?? defaults.width));
-  const h = Math.max(DASHBOARD_MIN_HEIGHT, Math.min(workHeight - 60, saved.height ?? defaults.height));
-  const x = Math.max(workX, Math.min(workX + workWidth - w, saved.x ?? defaults.x));
-  const y = Math.max(workY + 40, Math.min(workY + workHeight - h, saved.y ?? defaults.y));
+  const w = Math.max(DASHBOARD_MIN_WIDTH, Math.min(workArea.width - 40, saved.width ?? defaults.width));
+  const h = Math.max(DASHBOARD_MIN_HEIGHT, Math.min(workArea.height - 40, saved.height ?? defaults.height));
+  const x = Math.max(workArea.x, Math.min(workArea.x + workArea.width - w, saved.x ?? defaults.x));
+  // SEG-V0147-FIX-3: y must be >= 12.5% from top — never allow title bar into dead zone
+  const minY = workArea.y + Math.floor(workArea.height * 0.125);
+  const y = Math.max(minY, Math.min(workArea.y + workArea.height - h, saved.y ?? safe.y));
   return getSafeBounds({ x, y, width: w, height: h });
 }
 
@@ -597,6 +621,8 @@ function loadDashboardBounds(): Electron.Rectangle {
   if (!existsSync(DASHBOARD_BOUNDS_FILE)) return computeDashboardDefaults();
   try {
     const parsed = JSON.parse(readFileSync(DASHBOARD_BOUNDS_FILE, 'utf-8')) as Partial<Electron.Rectangle>;
+    // SEG-V0147-FIX-3: stale-bounds guard — discard saved position if y is in dead zone
+    if (isStaleBounds(parsed)) return computeDashboardDefaults();
     return clampDashboardBounds(parsed);
   } catch {
     return computeDashboardDefaults();
@@ -610,30 +636,30 @@ function saveDashboardBounds(bounds: Electron.Rectangle): void {
   } catch {}
 }
 
-// SEG-V0146-CRIT-3: Hearth Conjunction bounds helpers
+// SEG-V0147-FIX-3: Hearth Conjunction bounds helpers
 function computeHearthDefaults(): Electron.Rectangle {
-  const primary = screen.getPrimaryDisplay();
-  const { width: workWidth, height: workHeight } = primary.workAreaSize;
-  const { x: workX, y: workY } = primary.workArea;
-  const defaultW = Math.min(1600, workWidth - 40);
-  const defaultH = Math.min(1000, workHeight - 60);
+  const safe = computeScreenSafeBounds();
+  const { workArea } = screen.getPrimaryDisplay();
+  const defaultW = Math.min(Math.max(HEARTH_MIN_WIDTH, safe.width), workArea.width - 40);
+  const defaultH = Math.min(Math.max(HEARTH_MIN_HEIGHT, safe.height), workArea.height - 40);
   return {
-    width: Math.max(HEARTH_MIN_WIDTH, defaultW),
-    height: Math.max(HEARTH_MIN_HEIGHT, defaultH),
-    x: workX + Math.floor((workWidth - defaultW) / 2),
-    y: workY + Math.max(40, Math.floor((workHeight - defaultH) / 2)),
+    width:  defaultW,
+    height: defaultH,
+    x:      safe.x,
+    y:      safe.y,
   };
 }
 
 function clampHearthBounds(saved: Partial<Electron.Rectangle>): Electron.Rectangle {
-  const primary = screen.getPrimaryDisplay();
-  const { width: workWidth, height: workHeight } = primary.workAreaSize;
-  const { x: workX, y: workY } = primary.workArea;
+  const { workArea } = screen.getPrimaryDisplay();
+  const safe = computeScreenSafeBounds();
   const defaults = computeHearthDefaults();
-  const w = Math.max(HEARTH_MIN_WIDTH, Math.min(workWidth, saved.width ?? defaults.width));
-  const h = Math.max(HEARTH_MIN_HEIGHT, Math.min(workHeight - 60, saved.height ?? defaults.height));
-  const x = Math.max(workX, Math.min(workX + workWidth - w, saved.x ?? defaults.x));
-  const y = Math.max(workY + 40, Math.min(workY + workHeight - h, saved.y ?? defaults.y));
+  const w = Math.max(HEARTH_MIN_WIDTH, Math.min(workArea.width - 40, saved.width ?? defaults.width));
+  const h = Math.max(HEARTH_MIN_HEIGHT, Math.min(workArea.height - 40, saved.height ?? defaults.height));
+  const x = Math.max(workArea.x, Math.min(workArea.x + workArea.width - w, saved.x ?? defaults.x));
+  // SEG-V0147-FIX-3: y must be >= 12.5% from top — never allow title bar into dead zone
+  const minY = workArea.y + Math.floor(workArea.height * 0.125);
+  const y = Math.max(minY, Math.min(workArea.y + workArea.height - h, saved.y ?? safe.y));
   return getSafeBounds({ x, y, width: w, height: h });
 }
 
@@ -641,6 +667,8 @@ function loadHearthBounds(): Electron.Rectangle {
   if (!existsSync(HEARTH_BOUNDS_FILE)) return computeHearthDefaults();
   try {
     const parsed = JSON.parse(readFileSync(HEARTH_BOUNDS_FILE, 'utf-8')) as Partial<Electron.Rectangle>;
+    // SEG-V0147-FIX-3: stale-bounds guard — discard if y is in dead zone
+    if (isStaleBounds(parsed)) return computeHearthDefaults();
     return clampHearthBounds(parsed);
   } catch {
     return computeHearthDefaults();
