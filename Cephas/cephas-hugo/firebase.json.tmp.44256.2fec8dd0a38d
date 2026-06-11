@@ -1,0 +1,94 @@
+{
+  "hosting": [
+    {
+      "target": "cephas",
+      "public": "public",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "headers": [
+        {
+          "source": "**/*.html",
+          "headers": [{"key": "Cache-Control", "value": "max-age=300"}]
+        },
+        {
+          "source": "**/*.css",
+          "headers": [{"key": "Cache-Control", "value": "max-age=86400"}]
+        },
+        {
+          "source": "**/*.js",
+          "headers": [{"key": "Cache-Control", "value": "max-age=86400"}]
+        },
+        {
+          "source": "/download/**",
+          "headers": [
+            {"key": "X-LB-Version", "value": "v0.1.27"},
+            {"key": "X-LB-Build-Hash", "value": "v0.1.27+d8088c6"},
+            {"key": "X-LB-Phase", "value": "alpha"}
+          ]
+        },
+        {
+          "source": "/changelog/**",
+          "headers": [
+            {"key": "X-LB-Version", "value": "v0.1.27"},
+            {"key": "Cache-Control", "value": "max-age=1800"}
+          ]
+        }
+      ]
+    },
+    {
+      "target": "museum",
+      "public": "public",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "headers": [
+        {
+          "source": "**/*.html",
+          "headers": [{"key": "Cache-Control", "value": "max-age=300"}]
+        },
+        {
+          "source": "**/*.css",
+          "headers": [{"key": "Cache-Control", "value": "max-age=86400"}]
+        },
+        {
+          "source": "**/*.js",
+          "headers": [{"key": "Cache-Control", "value": "max-age=86400"}]
+        }
+      ]
+    },
+    {
+      "target": "mnemosyne",
+      "public": "public",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "redirects": [
+        { "source": "/", "destination": "/download/", "type": 301 }
+      ],
+      "headers": [
+        {
+          "source": "**/*.html",
+          "headers": [{"key": "Cache-Control", "value": "max-age=300"}]
+        },
+        {
+          "source": "**/*.css",
+          "headers": [{"key": "Cache-Control", "value": "max-age=86400"}]
+        },
+        {
+          "source": "**/*.js",
+          "headers": [{"key": "Cache-Control", "value": "max-age=86400"}]
+        },
+        {
+          "source": "/download/**",
+          "headers": [
+            {"key": "X-LB-Version", "value": "v0.1.25"},
+            {"key": "X-LB-Build-Hash", "value": "v0.1.25+4d2d19f"},
+            {"key": "X-LB-Phase", "value": "alpha"}
+          ]
+        },
+        {
+          "source": "/changelog/**",
+          "headers": [
+            {"key": "X-LB-Version", "value": "v0.1.25"},
+            {"key": "Cache-Control", "value": "max-age=1800"}
+          ]
+        }
+      ]
+    }
+  ]
+}
