@@ -1,6 +1,6 @@
 {
   "name": "mnemosynec",
-  "version": "0.1.49",
+  "version": "0.1.50",
   "description": "MnemosyneC — Memory, powered by CAI · local inference + cooperative substrate OS overlay (SSPL · Pledge #2260)",
   "homepage": "https://lianabanyan.com",
   "private": true,
