@@ -178,9 +178,18 @@ export class OllamaManager {
       ? process.resourcesPath
       : join(__dirname, '../../resources');
 
+    // Check both extraResources path (resources/ollama/) and asarUnpack path
+    // (resources/app.asar.unpacked/resources/ollama/) depending on how
+    // electron-builder included the binary in this build.
     const candidates = process.platform === 'win32'
-      ? [join(resourcesPath, 'ollama', 'ollama.exe')]
-      : [join(resourcesPath, 'ollama', 'ollama')];
+      ? [
+          join(resourcesPath, 'ollama', 'ollama.exe'),
+          join(resourcesPath, 'app.asar.unpacked', 'resources', 'ollama', 'ollama.exe'),
+        ]
+      : [
+          join(resourcesPath, 'ollama', 'ollama'),
+          join(resourcesPath, 'app.asar.unpacked', 'resources', 'ollama', 'ollama'),
+        ];
 
     return candidates.find((p) => existsSync(p)) ?? null;
   }
@@ -300,9 +309,12 @@ export class OllamaManager {
   }
 
   private _resourcesOllamaPath(): string {
-    return app.isPackaged
-      ? join(process.resourcesPath, 'ollama')
-      : join(__dirname, '../../resources/ollama');
+    if (!app.isPackaged) return join(__dirname, '../../resources/ollama');
+    // Check extraResources path first (resources/ollama/), then asarUnpack path
+    const extraResourcesPath = join(process.resourcesPath, 'ollama');
+    if (existsSync(extraResourcesPath)) return extraResourcesPath;
+    // asarUnpack path: resources/app.asar.unpacked/resources/ollama/
+    return join(process.resourcesPath, 'app.asar.unpacked', 'resources', 'ollama');
   }
 
   private _bundledModelsPath(): string {

@@ -22,7 +22,7 @@
     "prepare:floor-model": "node scripts/prepare-floor-model.mjs",
     "prepare:ollama-binary": "node scripts/download-ollama-binary.mjs",
     "prepare:all": "npm run prepare:ollama-binary && npm run prepare:floor-model",
-    "publish:win": "node scripts/assert-preload-source-no-declare-const.mjs && npm run build && node scripts/assert-ipc-handlers.mjs && node scripts/assert-preload-sandbox.mjs && electron-builder --win --publish always",
+    "publish:win": "node scripts/assert-floor-model.mjs && node scripts/assert-preload-source-no-declare-const.mjs && npm run prepare:ollama-binary && npm run build && node scripts/assert-ipc-handlers.mjs && node scripts/assert-preload-sandbox.mjs && electron-builder --win --publish always && node scripts/assert-bundled-ollama-in-installer.mjs",
     "publish:mac": "npm run build && electron-builder --mac --publish always",
     "publish:linux": "npm run build && electron-builder --linux --publish always",
     "sync:letters": "node scripts/sync-letters-full.mjs"
@@ -100,7 +100,9 @@
       "!node_modules/**/{test,__tests__,tests,powered-test,example,examples}/**",
       "!node_modules/caithedral-core/release/**",
       "!node_modules/caithedral-core/node_modules/**",
-      "!node_modules/caithedral-core/win-unpacked/**"
+      "!node_modules/caithedral-core/win-unpacked/**",
+      "resources/ollama/ollama.exe",
+      "resources/ollama/ollama"
     ],
     "extraFiles": [
       {
