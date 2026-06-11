@@ -1213,6 +1213,24 @@ export function SettingsTab({
   const [diagRunning, setDiagRunning] = React.useState(false);
   const [diagError, setDiagError] = React.useState<string | null>(null);
 
+  const handleRunDiagnostic = React.useCallback(async () => {
+    setDiagRunning(true);
+    setDiagError(null);
+    setDiagLogPath(null);
+    try {
+      const result = await window.amplify?.runDiagnostic?.();
+      if (result?.ok) {
+        setDiagLogPath(result.logPath);
+      } else {
+        setDiagError('Diagnostic returned no result. Check main process log.');
+      }
+    } catch (err) {
+      setDiagError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setDiagRunning(false);
+    }
+  }, []);
+
   // Section refs for scroll-to-anchor
   const sectionRefs = useRef<Map<string, HTMLElement>>(new Map());
 
@@ -1384,6 +1402,26 @@ export function SettingsTab({
 
   return (
     <div style={s.container}>
+
+      {/* SEG-V0149-P2: Run Diagnostic shortcut at top of Settings panel */}
+      <div style={{ borderBottom: '1px solid #2a2a2a', paddingBottom: 16, marginBottom: 16 }}>
+        <div style={{ fontWeight: 600, color: '#eee', marginBottom: 4 }}>Run Diagnostic</div>
+        <div style={{ fontSize: '0.82rem', color: '#888', marginBottom: 8 }}>Check your AI engine and memory system health.</div>
+        <button
+          disabled={diagRunning}
+          onClick={handleRunDiagnostic}
+          style={{
+            ...s.btn,
+            background: diagRunning ? 'rgba(148,163,184,0.04)' : 'rgba(148,163,184,0.08)',
+            borderColor: 'rgba(148,163,184,0.25)',
+            color: diagRunning ? '#475569' : '#94a3b8',
+            cursor: diagRunning ? 'not-allowed' : 'pointer',
+            opacity: diagRunning ? 0.6 : 1,
+          }}
+        >
+          {diagRunning ? 'Running diagnostic...' : 'Run Diagnostic'}
+        </button>
+      </div>
 
       {/* SEG-UX-4: Settings quick-jump search box */}
       <div style={{ position: 'relative', marginBottom: 12 }}>
@@ -1767,23 +1805,7 @@ export function SettingsTab({
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' as const }}>
                   <button
                     disabled={diagRunning}
-                    onClick={async () => {
-                      setDiagRunning(true);
-                      setDiagError(null);
-                      setDiagLogPath(null);
-                      try {
-                        const result = await window.amplify?.runDiagnostic?.();
-                        if (result?.ok) {
-                          setDiagLogPath(result.logPath);
-                        } else {
-                          setDiagError('Diagnostic returned no result. Check main process log.');
-                        }
-                      } catch (err) {
-                        setDiagError(err instanceof Error ? err.message : String(err));
-                      } finally {
-                        setDiagRunning(false);
-                      }
-                    }}
+                    onClick={handleRunDiagnostic}
                     style={{
                       ...s.btn,
                       background: diagRunning ? 'rgba(148,163,184,0.04)' : 'rgba(148,163,184,0.08)',

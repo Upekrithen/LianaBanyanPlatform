@@ -56,6 +56,8 @@ import { FirstStepsView } from './FirstStepsView';
 // SEG-R-1: WelcomeView is now first spine step; LS_ONBOARDING_COMPLETE is the WelcomeView gate.
 import { Bp067FirstRunSpine, LS_BP067_FIRST_RUN_COMPLETE } from './Bp067FirstRunSpine';
 import { WelcomeView, LS_ONBOARDING_COMPLETE } from './WelcomeView';
+// SEG-V0149-P1: first-install gate
+import { LeanWelcomeView } from './LeanWelcomeView';
 // BP078 SEG-S-2/10: lifecycle stage hook
 import { useLifecycleStage, LS_STAGE_KEY } from '../hooks/useLifecycleStage';
 // BP067 Phase 2B/2C -- Battery Dispatch + Broadcast Schedule
@@ -553,10 +555,54 @@ export function MnemosyneTabView({
     setActiveTab('settings');
   }, []);
 
+  // ─── SEG-V0149-P1: first-install LeanWelcome gate ────────────────────────────
+  // null = IPC check in-flight; true = show LeanWelcomeView; false = show WelcomeView
+  const [showLean, setShowLean] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    if (!['A', 'B', 'C'].includes(stage)) return; // only relevant for pre-recruited stages
+    if (localStorage.getItem(LS_ONBOARDING_COMPLETE) === 'true') {
+      setShowLean(false);
+      return;
+    }
+    let cancelled = false;
+    void (async () => {
+      try {
+        const result = await window.amplify?.sku?.onboardingCheck?.() ?? { skuExists: true };
+        if (!cancelled) setShowLean(!result.skuExists);
+      } catch {
+        if (!cancelled) setShowLean(false);
+      }
+    })();
+    return () => { cancelled = true; };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stage]);
+
   // ─── SEG-S-10: stages A/B/C -- no tab bar, no settings gear ─────────────────
   // WelcomeView is the only surface rendered. Stage C surface is deferred to v0.1.36.
   const isPreRecruited = ['A', 'B', 'C'].includes(stage);
   if (isPreRecruited) {
+    // Loading: wait for IPC check before committing to either view
+    if (showLean === null) {
+      return (
+        <div style={{
+          background: '#0a0f1a', height: '100vh',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }} />
+      );
+    }
+    // First install: sku_tier.json absent AND onboarding not complete
+    if (showLean) {
+      return (
+        <LeanWelcomeView
+          onComplete={() => {
+            localStorage.setItem(LS_ONBOARDING_COMPLETE, 'true');
+            setShowLean(false);
+          }}
+        />
+      );
+    }
+    // Returning user or sku_tier.json present: existing WelcomeView (unchanged)
     return (
       <WelcomeView
         onComplete={() => {
@@ -1029,7 +1075,7 @@ export function MnemosyneTabView({
                   padding: 0,
                 }}
               >
-                Advanced
+                ⚔️ Gauntlet
               </button>
             </div>
           )}

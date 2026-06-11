@@ -304,6 +304,7 @@ declare global {
         upgradeTo: (tier: 'core' | 'lite' | 'full') => Promise<{ ok: boolean; error?: string }>;
         cancelUpgrade: () => Promise<{ ok: boolean }>;
         currentTier: () => Promise<{ tier: 'nano' | 'core' | 'lite' | 'full' }>;
+        onboardingCheck: () => Promise<{ skuExists: boolean }>;
         onPullProgress: (cb: (data: SkuPullProgress) => void) => () => void;
         onPullComplete: (cb: () => void) => () => void;
         onPullError: (cb: (err: string) => void) => () => void;
@@ -324,6 +325,14 @@ declare global {
         fast_cheap_good: string;
         svgPath?: string;
       }) => void) => () => void;
+      // SEG-V0149-P0-INSTALL-FLOW — Lean install IPC
+      leanInstallStart?: () => void;
+      onLeanInstallStatus?: (cb: (data: { step: string; message: string }) => void) => () => void;
+      onLeanInstallProgress?: (cb: (data: {
+        bytesDownloaded: number; totalBytes: number; percentComplete: number;
+        speedLabel: string; eta_s: number;
+      }) => void) => () => void;
+      onLeanInstallError?: (cb: (data: { message: string; retryable: boolean }) => void) => () => void;
       // BP060 Application 002 Step 1 — Caithedral Tools
       caithedralTools?: {
         soccerball_emit: (pearls: string[], bindings?: Record<string, string>) => Promise<{ ok: boolean; sid?: string; error?: string }>;

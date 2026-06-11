@@ -1335,11 +1335,11 @@ function openHearthConjunctionWindow(): void {
 
 // --- IPC Handlers ------------------------------------------------------------
 
-let skuPullProc: ReturnType<typeof spawn> | null = null;
+let skuPullRunning = false;
 
 // --- SEG-Q-4 BP078: Auto-prepare FULL upgrade in background ------------------
 
-let autoPrepareProc: ReturnType<typeof spawn> | null = null;
+let autoPrepareRunning = false;
 let autoPrepareIdleTimer: NodeJS.Timeout | null = null;
 const AUTO_PREPARE_MODEL = 'gemma4:12b';
 const AUTO_PREPARE_IDLE_MS = 30 * 60 * 1000; // 30 min
@@ -1372,44 +1372,37 @@ function isGemma4Ready(): boolean {
 
 function runAutoPrepareIfNeeded(): void {
   if (!getAutoPrepareEnabled()) return;
-  if (autoPrepareProc) return;
+  if (autoPrepareRunning) return;
   if (isGemma4Ready()) return;
+  if (!ollamaManager) return;
 
-  const ollamaExe = join(__dirname, '..', '..', 'resources', 'ollama', 'ollama.exe');
-  const ollamaCmd = existsSync(ollamaExe) ? ollamaExe : 'ollama';
+  autoPrepareRunning = true;
 
-  autoPrepareProc = spawn(ollamaCmd, ['pull', AUTO_PREPARE_MODEL], {
-    env: { ...process.env, OLLAMA_MODELS: join(homedir(), '.ollama', 'models') },
-    detached: false,
+  ollamaManager.pullModel(AUTO_PREPARE_MODEL).then(() => {
+    autoPrepareRunning = false;
+    const notif = new Notification({
+      title: 'MnemosyneC ? Gemma 4 12B is ready',
+      body: 'Full AI model downloaded. Click to activate.',
+      silent: false,
+    });
+    notif.on('click', () => {
+      try {
+        writeFileSync(
+          join(app.getPath('userData'), 'sku_tier.json'),
+          JSON.stringify({ tier: 'full', model: AUTO_PREPARE_MODEL }),
+          'utf-8',
+        );
+      } catch { /* non-fatal */ }
+      openDashboard({ focus: true });
+      dashboardWindow?.webContents.send('auto-prepare:model-activated');
+    });
+    notif.show();
+    BrowserWindow.getAllWindows().forEach((w) => {
+      if (!w.isDestroyed()) w.webContents.send('auto-prepare:model-ready');
+    });
+  }).catch(() => {
+    autoPrepareRunning = false;
   });
-
-  autoPrepareProc.on('close', (code) => {
-    autoPrepareProc = null;
-    if (code === 0) {
-      const notif = new Notification({
-        title: 'MnemosyneC ? Gemma 4 12B is ready',
-        body: 'Full AI model downloaded. Click to activate.',
-        silent: false,
-      });
-      notif.on('click', () => {
-        try {
-          writeFileSync(
-            join(app.getPath('userData'), 'sku_tier.json'),
-            JSON.stringify({ tier: 'full', model: AUTO_PREPARE_MODEL }),
-            'utf-8',
-          );
-        } catch { /* non-fatal */ }
-        openDashboard({ focus: true });
-        dashboardWindow?.webContents.send('auto-prepare:model-activated');
-      });
-      notif.show();
-      BrowserWindow.getAllWindows().forEach((w) => {
-        if (!w.isDestroyed()) w.webContents.send('auto-prepare:model-ready');
-      });
-    }
-  });
-
-  autoPrepareProc.on('error', () => { autoPrepareProc = null; });
 }
 
 function scheduleAutoPrepareIdle(): void {
@@ -1472,7 +1465,7 @@ function registerIPCHandlers(): void {
   safeHandle('auto-prepare:get', () => ({
     enabled: getAutoPrepareEnabled(),
     modelReady: isGemma4Ready(),
-    pulling: autoPrepareProc !== null,
+    pulling: autoPrepareRunning,
   }));
 
   ipcMain.on('auto-prepare:set', (_event, enabled: boolean) => {
@@ -1482,7 +1475,7 @@ function registerIPCHandlers(): void {
       scheduleAutoPrepareIdle();
     } else {
       if (autoPrepareIdleTimer) { clearTimeout(autoPrepareIdleTimer); autoPrepareIdleTimer = null; }
-      if (autoPrepareProc) { try { autoPrepareProc.kill('SIGKILL'); } catch { /* ignore */ } autoPrepareProc = null; }
+      autoPrepareRunning = false;
     }
   });
 
@@ -1527,7 +1520,7 @@ function registerIPCHandlers(): void {
         const sku = JSON.parse(readFileSync(skuPath, 'utf-8'));
         results.push(`SKU tier: ${JSON.stringify(sku)}`);
       } else {
-        results.push(`SKU tier: none (sku_tier.json not found)`);
+        results.push(`SKU tier: not yet set (fresh install)`);
       }
     } catch (e) {
       results.push(`SKU tier error: ${(e as Error).message}`);
@@ -1775,6 +1768,90 @@ function registerIPCHandlers(): void {
   safeHandle('mark-bp067-first-run-complete', () => {
     markFirstRunComplete();
     return { ok: true };
+  });
+
+  // SEG-V0149-P0: lean-install-start — guided full-tier AI installation
+  // Uses ollamaManager exclusively — zero new spawn() calls.
+  safeHandle('lean-install-start', async (event) => {
+    if (!ollamaManager) {
+      event.sender.send('lean-install-error', { message: 'Ollama manager not initialized', retryable: false });
+      return { ok: false };
+    }
+
+    const emitStatus = (step: string, message: string) => {
+      event.sender.send('lean-install-status', { step, message });
+    };
+    const emitProgress = (bytesDownloaded: number, totalBytes: number, speedLabel: string, eta_s: number) => {
+      const percentComplete = totalBytes > 0 ? Math.round((bytesDownloaded / totalBytes) * 100) : 0;
+      event.sender.send('lean-install-progress', { bytesDownloaded, totalBytes, percentComplete, speedLabel, eta_s });
+    };
+    const emitError = (message: string, retryable: boolean) => {
+      event.sender.send('lean-install-error', { message, retryable });
+    };
+
+    try {
+      // Step 1: Check if Ollama daemon is already running
+      const status = ollamaManager.getStatus();
+      if (status.running) {
+        emitStatus('ollama_ready', 'Found your local AI engine. Setting up...');
+      } else {
+        // Step 2: Attempt to start Ollama (handles pre-installed → bundled → NONE internally)
+        emitStatus('starting_engine', 'Starting your AI engine...');
+        await ollamaManager.init();
+        const statusAfterInit = ollamaManager.getStatus();
+        if (!statusAfterInit.running) {
+          // Neither pre-installed nor bundled found — send user to download page
+          shell.openExternal('https://ollama.com/download/windows');
+          emitStatus('waiting_ollama', 'Install Ollama, then click Resume.');
+          return { ok: false, waitingForInstall: true };
+        }
+        emitStatus('ollama_ready', 'Found your local AI engine. Setting up...');
+      }
+
+      // Step 3: Check if full-tier model is already available
+      const MODEL = 'gemma4:12b';
+      const hasModel = await ollamaManager.hasModel(MODEL);
+      if (hasModel) {
+        emitStatus('model_ready', 'Full AI model already on your machine.');
+      } else {
+        emitStatus('pulling_model', `Downloading full AI model (${MODEL})...`);
+
+        let lastBytes = 0;
+        let lastTs = Date.now();
+
+        await ollamaManager.pullModel(MODEL, (progress) => {
+          const bytesDownloaded = progress.bytesDownloaded ?? progress.completed ?? 0;
+          const totalBytes = progress.totalBytes ?? progress.total ?? 0;
+          const now = Date.now();
+          const elapsedSec = (now - lastTs) / 1000;
+          const bytesDelta = bytesDownloaded - lastBytes;
+
+          if (elapsedSec >= 1 && bytesDelta > 0) {
+            const bytesPerSec = bytesDelta / elapsedSec;
+            const remaining = totalBytes > bytesDownloaded ? totalBytes - bytesDownloaded : 0;
+            const eta_s = bytesPerSec > 0 ? Math.round(remaining / bytesPerSec) : 0;
+            const speedLabel = bytesPerSec >= 1_000_000
+              ? `${(bytesPerSec / 1_000_000).toFixed(1)} MB/s`
+              : `${(bytesPerSec / 1_000).toFixed(0)} KB/s`;
+            lastBytes = bytesDownloaded;
+            lastTs = now;
+            emitProgress(bytesDownloaded, totalBytes, speedLabel, eta_s);
+          }
+        });
+      }
+
+      // Step 4: Write SKU tier file and signal completion
+      writeFileSync(
+        join(app.getPath('userData'), 'sku_tier.json'),
+        JSON.stringify({ tier: 'full', model: 'gemma4:12b' }),
+      );
+      emitStatus('done', 'Your AI is ready.');
+      return { ok: true };
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      emitError(message, true);
+      return { ok: false, error: message };
+    }
   });
 
   safeHandle('ask-floor-model', async (_event, { prompt }: { prompt: string }) => {
@@ -3097,65 +3174,29 @@ function registerIPCHandlers(): void {
     const modelName = modelMap[tier];
     if (!modelName) return { ok: false, error: 'Unknown tier' };
 
-    if (skuPullProc) {
-      try { skuPullProc.kill('SIGKILL'); } catch { /* ignore */ }
-      skuPullProc = null;
-    }
+    skuPullRunning = false;
 
-    const ollamaExe = join(__dirname, '..', '..', 'resources', 'ollama', 'ollama.exe');
-    const ollamaCmd = existsSync(ollamaExe) ? ollamaExe : 'ollama';
+    if (!ollamaManager) return { ok: false, error: 'Ollama not initialized' };
 
-    skuPullProc = spawn(ollamaCmd, ['pull', modelName], {
-      env: { ...process.env, OLLAMA_MODELS: join(homedir(), '.ollama', 'models') },
-    });
+    skuPullRunning = true;
 
-    skuPullProc.stdout?.on('data', (chunk: Buffer) => {
-      const line = chunk.toString().trim();
-      if (!line) return;
-      const progressMatch = line.match(/(\d+)%.*?(\d+(?:\.\d+)?)\s*(MB|GB)\s*\/\s*(\d+(?:\.\d+)?)\s*(MB|GB)/i);
-      let downloaded = 0;
-      let total = 0;
-      let speed: string | undefined;
-      if (progressMatch) {
-        const dlVal = parseFloat(progressMatch[2]);
-        const dlUnit = progressMatch[3].toUpperCase();
-        const totVal = parseFloat(progressMatch[4]);
-        const totUnit = progressMatch[5].toUpperCase();
-        downloaded = dlUnit === 'GB' ? dlVal * 1_073_741_824 : dlVal * 1_048_576;
-        total = totUnit === 'GB' ? totVal * 1_073_741_824 : totVal * 1_048_576;
-        const speedMatch = line.match(/(\d+(?:\.\d+)?)\s*(MB|GB)\/s/i);
-        if (speedMatch) speed = `${speedMatch[1]} ${speedMatch[2]}/s`;
-      }
+    ollamaManager.pullModel(modelName, (progress) => {
       event.sender.send('sku-pull-progress', {
-        downloaded,
-        total,
-        speed,
-        status: line,
+        downloaded: progress.bytesDownloaded ?? progress.completed ?? 0,
+        total: progress.totalBytes ?? progress.total ?? 0,
+        status: progress.status,
       });
-    });
-
-    skuPullProc.stderr?.on('data', (chunk: Buffer) => {
-      const line = chunk.toString().trim();
-      if (line) {
-        event.sender.send('sku-pull-progress', { downloaded: 0, total: 0, status: line });
-      }
-    });
-
-    skuPullProc.on('close', (code) => {
-      skuPullProc = null;
-      if (code === 0) {
-        try {
-          const cfgPath = join(app.getPath('userData'), 'sku_tier.json');
+    }).then(() => {
+      skuPullRunning = false;
+      try {
+        const cfgPath = join(app.getPath('userData'), 'sku_tier.json');
           writeFileSync(cfgPath, JSON.stringify({ tier, model: modelName }), 'utf-8');
-        } catch { /* non-fatal */ }
-        event.sender.send('sku-pull-complete');
-      } else {
-        event.sender.send('sku-pull-error', `Pull exited with code ${code ?? 'unknown'}`);
-      }
-    });
-
-    skuPullProc.on('error', (err) => {
-      skuPullProc = null;
+        } catch (err) {
+          console.warn('[SKU] Failed to write sku_tier.json:', err);
+        }
+      event.sender.send('sku-pull-complete');
+    }).catch((err: Error) => {
+      skuPullRunning = false;
       event.sender.send('sku-pull-error', err.message);
     });
 
@@ -3163,10 +3204,7 @@ function registerIPCHandlers(): void {
   });
 
   safeHandle('sku-cancel-upgrade', async () => {
-    if (skuPullProc) {
-      try { skuPullProc.kill('SIGKILL'); } catch { /* ignore */ }
-      skuPullProc = null;
-    }
+    skuPullRunning = false;
     return { ok: true };
   });
 
@@ -3180,6 +3218,12 @@ function registerIPCHandlers(): void {
       }
     } catch { /* fallback to nano */ }
     return { tier: 'nano' };
+  });
+
+  // SEG-V0149-P1: first-install gate — check sku_tier.json presence without leaking tier value
+  safeHandle('onboarding-check', async () => {
+    const skuPath = join(app.getPath('userData'), 'sku_tier.json');
+    return { skuExists: existsSync(skuPath) };
   });
 
   // -- Black Crow Feather earn (BP078) ---------------------------------------

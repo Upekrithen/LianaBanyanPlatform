@@ -946,6 +946,7 @@ contextBridge.exposeInMainWorld('amplify', {
     upgradeTo: (tier: 'core' | 'lite' | 'full') => ipcRenderer.invoke('sku-upgrade-to', tier),
     cancelUpgrade: () => ipcRenderer.invoke('sku-cancel-upgrade'),
     currentTier: () => ipcRenderer.invoke('sku-current-tier'),
+    onboardingCheck: () => ipcRenderer.invoke('onboarding-check'),
     onPullProgress: (cb: (data: SkuPullProgress) => void) => {
       ipcRenderer.on('sku-pull-progress', (_event, data: SkuPullProgress) => cb(data));
       return () => ipcRenderer.removeAllListeners('sku-pull-progress');
@@ -992,6 +993,29 @@ contextBridge.exposeInMainWorld('amplify', {
   // SEG-R-13: Open the folder containing a diagnostic log file
   openDiagFolder: (folderPath: string): Promise<void> =>
     ipcRenderer.invoke('diagnostic:open-folder', folderPath),
+
+  // ── SEG-V0149-P0: lean-install-start + progress events ───────────────────────
+
+  leanInstallStart: (): Promise<{ ok: boolean; waitingForInstall?: boolean; error?: string }> =>
+    ipcRenderer.invoke('lean-install-start'),
+
+  onLeanInstallStatus: (cb: (data: { step: string; message: string }) => void): (() => void) => {
+    const handler = (_event: Electron.IpcRendererEvent, data: { step: string; message: string }) => cb(data);
+    ipcRenderer.on('lean-install-status', handler);
+    return () => ipcRenderer.removeListener('lean-install-status', handler);
+  },
+
+  onLeanInstallProgress: (cb: (data: { bytesDownloaded: number; totalBytes: number; percentComplete: number; speedLabel: string; eta_s: number }) => void): (() => void) => {
+    const handler = (_event: Electron.IpcRendererEvent, data: { bytesDownloaded: number; totalBytes: number; percentComplete: number; speedLabel: string; eta_s: number }) => cb(data);
+    ipcRenderer.on('lean-install-progress', handler);
+    return () => ipcRenderer.removeListener('lean-install-progress', handler);
+  },
+
+  onLeanInstallError: (cb: (data: { message: string; retryable: boolean }) => void): (() => void) => {
+    const handler = (_event: Electron.IpcRendererEvent, data: { message: string; retryable: boolean }) => cb(data);
+    ipcRenderer.on('lean-install-error', handler);
+    return () => ipcRenderer.removeListener('lean-install-error', handler);
+  },
 
   // SEG-U-7 BP078: mesh-test-complete -- fired when a results file is detected on disk
   onMeshTestComplete: (cb: (metrics: {
@@ -1285,6 +1309,11 @@ declare global {
         fast_cheap_good: string;
         svgPath?: string;
       }) => void) => () => void;
+      // SEG-V0149-P0: lean-install-start + streaming events
+      leanInstallStart?: () => Promise<{ ok: boolean; waitingForInstall?: boolean; error?: string }>;
+      onLeanInstallStatus?: (cb: (data: { step: string; message: string }) => void) => () => void;
+      onLeanInstallProgress?: (cb: (data: { bytesDownloaded: number; totalBytes: number; percentComplete: number; speedLabel: string; eta_s: number }) => void) => () => void;
+      onLeanInstallError?: (cb: (data: { message: string; retryable: boolean }) => void) => () => void;
     };
   }
 }
