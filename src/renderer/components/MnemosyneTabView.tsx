@@ -545,14 +545,20 @@ export function MnemosyneTabView({
   const showBridgeBanner = bp067Complete && (isMember || isFounder);
   const showModeChip = bp067Complete && (isMember || isFounder);
 
+  // Navigate to settings and optionally scroll to a section -- declared before early return (Rules of Hooks)
+  const navigateToSettings = useCallback((scrollTarget?: string) => {
+    if (scrollTarget) setSettingsScrollTo(scrollTarget);
+    setActiveTab('settings');
+  }, []);
+
   // ─── SEG-S-10: stages A/B/C -- no tab bar, no settings gear ─────────────────
   // WelcomeView is the only surface rendered. Stage C surface is deferred to v0.1.36.
-  // This early return is placed after ALL hooks so React hook rules are satisfied.
   const isPreRecruited = ['A', 'B', 'C'].includes(stage);
   if (isPreRecruited) {
     return (
       <WelcomeView
         onComplete={() => {
+          localStorage.setItem(LS_ONBOARDING_COMPLETE, 'true');
           advanceTo('D'); // TODO v0.1.36: replace with Stage C trigger; direct D advance is bridge for v0.1.35
           setBp067Complete(true);
         }}
@@ -604,12 +610,6 @@ export function MnemosyneTabView({
     setScheduledMealTitle(recipeName);
     setActiveTab('atlas');
   };
-
-  // Navigate to settings and optionally scroll to a section
-  const navigateToSettings = useCallback((scrollTarget?: string) => {
-    if (scrollTarget) setSettingsScrollTo(scrollTarget);
-    setActiveTab('settings');
-  }, []);
 
   const styles = {
     shell: {
