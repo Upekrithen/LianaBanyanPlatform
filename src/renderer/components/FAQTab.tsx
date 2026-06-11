@@ -4,10 +4,12 @@
 // STARTER SET — 7 seed entries — surface to Founder for ratification/trimming
 
 import React, { useState } from 'react';
+import { NotCentsGlyph } from './NotCentsGlyph';
 
 interface FaqEntry {
   id: string;
   question: string;
+  questionNode?: React.ReactNode;
   tldr: string;
   full: string;
 }
@@ -54,6 +56,13 @@ const FAQ_ENTRIES: FaqEntry[] = [
     question: 'What does "any hardware, any network, any AI, or NONE AT ALL" mean?',
     tldr: 'MnemosyneC works without a GPU, without internet, without any AI model. Stage 2 proves it.',
     full: 'This is the core empirical claim. MnemosyneC\'s substrate (the Cathedral) runs the same on:\n• Any hardware — laptop, desktop, server, low-spec machine. No GPU required.\n• Any network — fast fiber, slow WiFi, cellular, air-gapped. Stage 2 is fully offline.\n• Any AI — Ollama local, Anthropic cloud, OpenAI, any compatible endpoint.\n• NONE AT ALL — Stage 2 (Cathedral Alone) produces measurable results with zero AI involvement.\nThe Gauntlet exists specifically to prove these claims on your hardware, not in a lab.',
+  },
+  {
+    id: 'notcents',
+    question: 'NotCents',
+    questionNode: <><NotCentsGlyph /> NotCents</>,
+    tldr: 'Founder\'s name for the three cooperative currencies — Credits, Marks, and Joules — held in cooperative-class pouches. Not USD.',
+    full: 'NotCents is Founder\'s name for the three cooperative currencies — Credits, Marks, and Joules — held together in cooperative-class pouches per the substrate wallet model. Not USD. Composes with the three-currency-NEVER-fiat canon: substitution makes prior work more valuable; you get paid through actual hiring and payment, not currency conversion.',
   },
 ];
 
@@ -118,7 +127,7 @@ export function FAQTab() {
               >
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: 11, fontWeight: 600, color: '#e2e8f0', lineHeight: 1.4 }}>
-                    {entry.question}
+                    {entry.questionNode ?? entry.question}
                   </div>
                   {!isOpen && (
                     <div style={{ fontSize: 10, color: '#64748b', marginTop: 3, lineHeight: 1.5 }}>
