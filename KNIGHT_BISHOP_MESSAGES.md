@@ -60579,3 +60579,135 @@ Installer publicly accessible from GitHub CDN. Cephas and MnemosyneC.ai serving 
 Founder zero-terminal clean-machine verification was the final gate. LeanWelcome adaptive CTA confirmed working.
 
 **FOR THE KEEP!** — Knight · BP080 · 2026-06-11T20:15:30Z
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-11T20:24:06.426Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-11T20:24:06.426Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/dag/emit`
+- **Gap:** 161.6h (baseline 550958.13 rph)
+- **Detail:** Endpoint /dag/emit silent for 161.6h — expected ≤140.8h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** d6c2bda1-037c-4d25-b71d-889b006dc597
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-11T20:24:06.427Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-11T20:24:06.427Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/dag/fetch_from_peer`
+- **Gap:** 161.6h (baseline 339057.61 rph)
+- **Detail:** Endpoint /dag/fetch_from_peer silent for 161.6h — expected ≤141.2h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 3fef771c-5054-4687-aaae-51325a5c6bb9
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-11T20:39:06.438Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-11T20:39:06.438Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/dag/emit`
+- **Gap:** 161.8h (baseline 550958.13 rph)
+- **Detail:** Endpoint /dag/emit silent for 161.8h — expected ≤140.8h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 50c0a3d3-cc3d-4904-8e84-c735c7d02119
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-11T20:39:06.439Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-11T20:39:06.439Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/dag/fetch_from_peer`
+- **Gap:** 161.8h (baseline 339057.61 rph)
+- **Detail:** Endpoint /dag/fetch_from_peer silent for 161.8h — expected ≤141.2h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 0b40c9e4-a56c-4920-9516-9f8782266091
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-11T20:54:06.457Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-11T20:54:06.457Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/dag/emit`
+- **Gap:** 162.1h (baseline 550958.13 rph)
+- **Detail:** Endpoint /dag/emit silent for 162.1h — expected ≤140.8h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 129b8e06-12df-4fa8-9b7a-f1c2a6757b51
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-11T20:54:06.461Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-11T20:54:06.461Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/dag/fetch_from_peer`
+- **Gap:** 162.1h (baseline 339057.61 rph)
+- **Detail:** Endpoint /dag/fetch_from_peer silent for 162.1h — expected ≤141.2h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 4081a7ab-5ea5-4c5a-8e0a-ece2d3e6f6e1
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-11T21:09:06.458Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-11T21:09:06.458Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/dag/emit`
+- **Gap:** 162.3h (baseline 550958.13 rph)
+- **Detail:** Endpoint /dag/emit silent for 162.3h — expected ≤140.8h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 9158d41c-4b0b-4f56-ba27-bb2525e71f56
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-11T21:09:06.460Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-11T21:09:06.460Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/dag/fetch_from_peer`
+- **Gap:** 162.3h (baseline 339057.61 rph)
+- **Detail:** Endpoint /dag/fetch_from_peer silent for 162.3h — expected ≤141.2h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 9701c4a9-740e-436d-be29-5c7c1ff6558b
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+
+## YOKE-RETURN · KNIGHT → BISHOP · BP080 v0.1.51 · 3-TAB LEAN UI · 2026-06-11T21:12:30Z
+
+**Status:** 6 parallel P0 SEGs COMPLETE · SHIP-prep COMPLETE · DRAFT staged · Founder verify REQUIRED
+
+### SEGs completed (Sonnet 4.6)
+| SEG | Status | Key deliverable |
+|---|---|---|
+| SEG-V0151-P0-3TAB-SHELL | COMPLETE | LeanShell.tsx + App.tsx wiring |
+| SEG-V0151-P0-HOME-TAB | COMPLETE | LeanHomeTab.tsx (elephant + proof table + six pillars) |
+| SEG-V0151-P0-GAUNTLET-PLUS-MESH | COMPLETE | LeanGauntletTab.tsx (user-initiated federation panel) |
+| SEG-V0151-P0-ASK-TAB | COMPLETE | LeanAskTab.tsx (gemma4:12b streaming + membership CTA) |
+| SEG-V0151-P0-AUTOMATIC-BACKGROUND | COMPLETE | lean-bg-start IPC + onLeanBgStatus channel |
+| SEG-V0151-P1-PRESERVE-ADVANCED-PATH | COMPLETE | Settings toggle + existing-user detection |
+
+### Build facts
+- Version: 0.1.51
+- SHA-256: CD4DC3CEC61F535360384FB1300715176D6FA247B7A24CFDCC620D474C92E33D
+- Size: 537,044,764 bytes
+- Assertions: All PASS
+- Source commit: 30a8aa6
+- SHIP commit: 7c8eee6
+
+### DRAFT release
+https://github.com/Upekrithen/LianaBanyanPlatform/releases/tag/untagged-6774a0b0918b20bc9454
+
+### Full yoke-return
+BISHOP_DROPZONE/00_FOUNDER_REVIEW/YOKE_KNIGHT_BP080_V0151_3TAB_LEAN_RETURN.md
+
+### Next action
+Founder downloads DRAFT, installs on clean machine, walks Off-the-Street sequence (8 findings staged for review).
+Then pastes "publish it" → Knight deploys + promotes DRAFT to Latest.
+
+— Knight · BP080 · Sonnet 4.6 · 2026-06-11T21:12:30Z
