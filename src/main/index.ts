@@ -521,6 +521,14 @@ const MONEY_PENNY_BOUNDS_FILE = join(SUBSTRATE_ROOT_MAIN, 'moneypenny_window_bou
 const MONEY_PENNY_MIN_WIDTH = 320;
 const MONEY_PENNY_MIN_HEIGHT = 480;
 
+// SEG-V0146-CRIT-3: Dashboard + Hearth Conjunction window bounds persistence
+const DASHBOARD_BOUNDS_FILE = join(SUBSTRATE_ROOT_MAIN, 'dashboard_window_bounds.json');
+const DASHBOARD_MIN_WIDTH = 560;
+const DASHBOARD_MIN_HEIGHT = 600;
+const HEARTH_BOUNDS_FILE = join(SUBSTRATE_ROOT_MAIN, 'hearth_window_bounds.json');
+const HEARTH_MIN_WIDTH = 1280;
+const HEARTH_MIN_HEIGHT = 800;
+
 function clampMoneyPennyBounds(bounds?: Partial<Electron.Rectangle>): Electron.Rectangle {
   const workArea = screen.getDisplayMatching({
     x: bounds?.x ?? screen.getPrimaryDisplay().workArea.x,
@@ -556,6 +564,94 @@ function saveMoneyPennyBounds(bounds: Electron.Rectangle): void {
   } catch {
     // Non-fatal: window sizing should never block MoneyPenny.
   }
+}
+
+// SEG-V0146-CRIT-3: Dashboard bounds helpers (screen-aware sizing + persistence)
+function computeDashboardDefaults(): Electron.Rectangle {
+  const primary = screen.getPrimaryDisplay();
+  const { width: workWidth, height: workHeight } = primary.workAreaSize;
+  const { x: workX, y: workY } = primary.workArea;
+  const defaultW = Math.min(680, workWidth - 100);
+  const defaultH = Math.min(780, workHeight - 80);
+  return {
+    width: Math.max(DASHBOARD_MIN_WIDTH, defaultW),
+    height: Math.max(DASHBOARD_MIN_HEIGHT, defaultH),
+    x: workX + Math.floor((workWidth - defaultW) / 2),
+    y: workY + Math.max(40, Math.floor((workHeight - defaultH) / 2)),
+  };
+}
+
+function clampDashboardBounds(saved: Partial<Electron.Rectangle>): Electron.Rectangle {
+  const primary = screen.getPrimaryDisplay();
+  const { width: workWidth, height: workHeight } = primary.workAreaSize;
+  const { x: workX, y: workY } = primary.workArea;
+  const defaults = computeDashboardDefaults();
+  const w = Math.max(DASHBOARD_MIN_WIDTH, Math.min(workWidth - 40, saved.width ?? defaults.width));
+  const h = Math.max(DASHBOARD_MIN_HEIGHT, Math.min(workHeight - 60, saved.height ?? defaults.height));
+  const x = Math.max(workX, Math.min(workX + workWidth - w, saved.x ?? defaults.x));
+  const y = Math.max(workY + 40, Math.min(workY + workHeight - h, saved.y ?? defaults.y));
+  return getSafeBounds({ x, y, width: w, height: h });
+}
+
+function loadDashboardBounds(): Electron.Rectangle {
+  if (!existsSync(DASHBOARD_BOUNDS_FILE)) return computeDashboardDefaults();
+  try {
+    const parsed = JSON.parse(readFileSync(DASHBOARD_BOUNDS_FILE, 'utf-8')) as Partial<Electron.Rectangle>;
+    return clampDashboardBounds(parsed);
+  } catch {
+    return computeDashboardDefaults();
+  }
+}
+
+function saveDashboardBounds(bounds: Electron.Rectangle): void {
+  try {
+    mkdirSync(SUBSTRATE_ROOT_MAIN, { recursive: true });
+    writeFileSync(DASHBOARD_BOUNDS_FILE, JSON.stringify(bounds, null, 2), 'utf-8');
+  } catch {}
+}
+
+// SEG-V0146-CRIT-3: Hearth Conjunction bounds helpers
+function computeHearthDefaults(): Electron.Rectangle {
+  const primary = screen.getPrimaryDisplay();
+  const { width: workWidth, height: workHeight } = primary.workAreaSize;
+  const { x: workX, y: workY } = primary.workArea;
+  const defaultW = Math.min(1600, workWidth - 40);
+  const defaultH = Math.min(1000, workHeight - 60);
+  return {
+    width: Math.max(HEARTH_MIN_WIDTH, defaultW),
+    height: Math.max(HEARTH_MIN_HEIGHT, defaultH),
+    x: workX + Math.floor((workWidth - defaultW) / 2),
+    y: workY + Math.max(40, Math.floor((workHeight - defaultH) / 2)),
+  };
+}
+
+function clampHearthBounds(saved: Partial<Electron.Rectangle>): Electron.Rectangle {
+  const primary = screen.getPrimaryDisplay();
+  const { width: workWidth, height: workHeight } = primary.workAreaSize;
+  const { x: workX, y: workY } = primary.workArea;
+  const defaults = computeHearthDefaults();
+  const w = Math.max(HEARTH_MIN_WIDTH, Math.min(workWidth, saved.width ?? defaults.width));
+  const h = Math.max(HEARTH_MIN_HEIGHT, Math.min(workHeight - 60, saved.height ?? defaults.height));
+  const x = Math.max(workX, Math.min(workX + workWidth - w, saved.x ?? defaults.x));
+  const y = Math.max(workY + 40, Math.min(workY + workHeight - h, saved.y ?? defaults.y));
+  return getSafeBounds({ x, y, width: w, height: h });
+}
+
+function loadHearthBounds(): Electron.Rectangle {
+  if (!existsSync(HEARTH_BOUNDS_FILE)) return computeHearthDefaults();
+  try {
+    const parsed = JSON.parse(readFileSync(HEARTH_BOUNDS_FILE, 'utf-8')) as Partial<Electron.Rectangle>;
+    return clampHearthBounds(parsed);
+  } catch {
+    return computeHearthDefaults();
+  }
+}
+
+function saveHearthBounds(bounds: Electron.Rectangle): void {
+  try {
+    mkdirSync(SUBSTRATE_ROOT_MAIN, { recursive: true });
+    writeFileSync(HEARTH_BOUNDS_FILE, JSON.stringify(bounds, null, 2), 'utf-8');
+  } catch {}
 }
 
 function stopOverlayWatchdog(): void {
@@ -942,11 +1038,15 @@ function openDashboard(opts?: { focus?: boolean }): void {
   }
 
   // SAGA 07 BP046B ? expanded for 6-tab MnemosyneTabView
+  // SEG-V0146-CRIT-3: screen-aware sizing + persistence (fixes title bar off-screen on small monitors)
+  const dashBounds = loadDashboardBounds();
   dashboardWindow = new BrowserWindow({
-    width: 680,
-    height: 780,
-    minWidth: 560,
-    minHeight: 600,
+    width: dashBounds.width,
+    height: dashBounds.height,
+    x: dashBounds.x,
+    y: dashBounds.y,
+    minWidth: DASHBOARD_MIN_WIDTH,
+    minHeight: DASHBOARD_MIN_HEIGHT,
     title: `MnemosyneC v${app.getVersion()}`,
     icon: join(__dirname, '../../assets/app-icon.ico'),
     show: false,
@@ -958,20 +1058,20 @@ function openDashboard(opts?: { focus?: boolean }): void {
     },
   });
 
-  const dashW = 680;
-  const dashH = 780;
-  const primary = screen.getPrimaryDisplay().workArea;
-  const dashBounds = getSafeBounds({
-    x: primary.x + Math.floor((primary.width - dashW) / 2),
-    y: primary.y + Math.floor((primary.height - dashH) / 2),
-    width: dashW,
-    height: dashH,
-  });
-  dashboardWindow.setBounds(dashBounds);
-
   dashboardWindow.once('ready-to-show', () => {
     dashboardWindow?.show();
     if (opts?.focus !== false) dashboardWindow?.focus();
+  });
+
+  dashboardWindow.on('resize', () => {
+    if (dashboardWindow && !dashboardWindow.isDestroyed()) {
+      saveDashboardBounds(dashboardWindow.getBounds());
+    }
+  });
+  dashboardWindow.on('move', () => {
+    if (dashboardWindow && !dashboardWindow.isDestroyed()) {
+      saveDashboardBounds(dashboardWindow.getBounds());
+    }
   });
 
   // Bug #2 v0.1.10: keep versioned title after any reload/navigation
@@ -1067,15 +1167,8 @@ function openHearthConjunctionWindow(): void {
     return;
   }
 
-  const HEARTH_W = 1600;
-  const HEARTH_H = 1000;
-  const primary = screen.getPrimaryDisplay().workArea;
-  const bounds = getSafeBounds({
-    x: primary.x + Math.floor((primary.width - HEARTH_W) / 2),
-    y: primary.y + Math.floor((primary.height - HEARTH_H) / 2),
-    width: HEARTH_W,
-    height: HEARTH_H,
-  });
+  // SEG-V0146-CRIT-3: screen-aware sizing + persistence for Hearth Conjunction window
+  const bounds = loadHearthBounds();
 
   // Webview preload path ? compiled from src/main/hearth/embedded_browser/webview_preload.ts
   const webviewPreloadPath = join(__dirname, 'hearth', 'embedded_browser', 'webview_preload.js');
@@ -1087,8 +1180,8 @@ function openHearthConjunctionWindow(): void {
     y: bounds.y,
     title: 'MnemosyneC ? Memory, powered by CAI',
     icon: join(__dirname, '../../assets/app-icon.ico'),
-    minWidth: 1280,
-    minHeight: 800,
+    minWidth: HEARTH_MIN_WIDTH,
+    minHeight: HEARTH_MIN_HEIGHT,
     show: false,
     webPreferences: {
       preload: join(__dirname, 'preload.js'),
@@ -1101,6 +1194,17 @@ function openHearthConjunctionWindow(): void {
 
   hearthConjunctionWindow.once('ready-to-show', () => {
     hearthConjunctionWindow?.show();
+  });
+
+  hearthConjunctionWindow.on('resize', () => {
+    if (hearthConjunctionWindow && !hearthConjunctionWindow.isDestroyed()) {
+      saveHearthBounds(hearthConjunctionWindow.getBounds());
+    }
+  });
+  hearthConjunctionWindow.on('move', () => {
+    if (hearthConjunctionWindow && !hearthConjunctionWindow.isDestroyed()) {
+      saveHearthBounds(hearthConjunctionWindow.getBounds());
+    }
   });
 
   // SEG-FIX-3 BP078: Runtime preload smoke test for hearthConjunctionWindow.

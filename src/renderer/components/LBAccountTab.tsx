@@ -176,6 +176,10 @@ export function LBAccountTab() {
     try {
       const session = await window.amplify.lbGetSession();
       setAccountState(session);
+      // SEG-V0146-CRIT-2: persist user_id for ShareMnemosyneC ref= URLs (survives app restarts)
+      if (session.linked && session.user_id) {
+        try { localStorage.setItem('mnemo_lb_user_id', session.user_id); } catch {}
+      }
       if (session.linked) {
         const frontier = await window.amplify.lbGetFrontierStatus?.();
         if (frontier) setFrontierState(frontier);
@@ -192,6 +196,10 @@ export function LBAccountTab() {
     const cleanup = window.amplify?.onLbAuthComplete?.((session: { user_id: string; email: string; peer_id: string; crewman_number?: number }) => {
       setAccountState({ linked: true, ...session });
       setLinkPhase('idle');
+      // SEG-V0146-CRIT-2: persist user_id so ShareMnemosyneC.tsx can build ref= URLs
+      if (session.user_id) {
+        try { localStorage.setItem('mnemo_lb_user_id', session.user_id); } catch {}
+      }
     });
 
     return cleanup ?? undefined;
