@@ -310,4 +310,9 @@ Resize + move event listeners call `save*Bounds()` to persist user-adjusted dime
 - `4ae10c4` — Cephas real SHA hashes
 - `55ba9cb` — Cephas submodule pointer bump
 
-**HARD GATE STATUS: 🔴 HOLD — Install v0.1.46 on M2 or M3, confirm AI responds without "Could not reach local AI engine". Reply GREEN to release.**
+**HARD GATE STATUS: 🟢 GREEN — Founder confirmed. Release published. Cephas deployed. 2026-06-11T03:58Z**
+
+**GitHub Release:** https://github.com/Upekrithen/LianaBanyanPlatform/releases/tag/v0.1.46
+**Cephas:** https://cephas.lianabanyan.com/download/ — live with v0.1.46 SHA-256 and download link.
+
+SEG-V0146 COMPLETE.
