@@ -2221,6 +2221,7 @@ export class SubstrateAPIServer {
             res.end(JSON.stringify({ ok: false, error: 'nodeId required' }));
             return;
           }
+          np.last_seen = Math.floor(Date.now() / 1000);
           this.meshProgressStore.set(np.nodeId, np);
           this._onMeshProgressUpdate?.();
           res.end(JSON.stringify({ ok: true }));

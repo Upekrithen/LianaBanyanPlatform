@@ -3,7 +3,7 @@
 // Handles: pre-installed Ollama detection, bundled binary fallback, model management
 
 import { spawn, ChildProcess, execSync } from 'child_process';
-import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync } from 'fs';
+import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'fs';
 import { homedir } from 'os';
 import { join } from 'path';
 import { app } from 'electron';
@@ -607,6 +607,16 @@ export class OllamaManager {
         const raw = readFileSync(skuPath, 'utf-8');
         const sku = JSON.parse(raw) as { tier?: string };
         tier = sku.tier ?? 'floor';
+      } else {
+        const manifestPath = join(homedir(), '.ollama', 'models', 'manifests',
+          'registry.ollama.ai', 'library', 'gemma4', '12b');
+        if (existsSync(manifestPath)) {
+          tier = 'full';
+          try {
+            writeFileSync(skuPath, JSON.stringify({ tier: 'full', model: 'gemma4:12b' }), 'utf-8');
+            console.log('[Ollama/SKU] Back-filled sku_tier.json from manifest presence');
+          } catch { /* non-fatal */ }
+        }
       }
     } catch { /* non-fatal */ }
 
