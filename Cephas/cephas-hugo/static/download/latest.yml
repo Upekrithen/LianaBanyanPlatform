@@ -1,8 +1,8 @@
 version: 0.1.46
 files:
-  - url: https://github.com/Upekrithen/LianaBanyanPlatform/releases/download/v0.1.46/MnemosyneC-Setup-0.1.46.exe
-    sha512: PLACEHOLDER_SHA512_PENDING_OLLAMA_CLEAN_MACHINE_VERIFY
-    size: 0
+  - url: MnemosyneC-Setup-0.1.46.exe
+    sha512: D8BlnAXnfo8HN+D75R3Z0JUuJ8SvDW9ZAmlBD8u9h0UeDXWtTRWug/oLtXyKrUE6oN+YACp5EwC0JahLFqeYxQ==
+    size: 478246725
 path: MnemosyneC-Setup-0.1.46.exe
-sha512: PLACEHOLDER_SHA512_PENDING_OLLAMA_CLEAN_MACHINE_VERIFY
-releaseDate: '2026-06-11T00:00:00.000Z'
+sha512: D8BlnAXnfo8HN+D75R3Z0JUuJ8SvDW9ZAmlBD8u9h0UeDXWtTRWug/oLtXyKrUE6oN+YACp5EwC0JahLFqeYxQ==
+releaseDate: '2026-06-11T03:25:19.206Z'
