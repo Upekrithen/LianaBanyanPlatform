@@ -11,6 +11,7 @@
 //   Registered   — node info + last heartbeat + "Leave the Frontier" button
 
 import React, { useState, useEffect, useCallback } from 'react';
+import { NotCentsGlyph } from './NotCentsGlyph';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -266,7 +267,7 @@ export function LBAccountTab() {
     <div style={s.root}>
       {/* Header */}
       <div>
-        <h2 style={s.heading}>$ LB Account</h2>
+        <h2 style={s.heading}><NotCentsGlyph /> LB Account</h2>
         <p style={{ ...s.sub, marginTop: 6 }}>
           Link your Liana Banyan cooperative account to this device. Enables
           Frontier node registration, shared-substrate credits, and Crewman attribution.

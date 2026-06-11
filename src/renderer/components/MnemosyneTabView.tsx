@@ -46,6 +46,8 @@ import { MultiAISelector } from './MultiAISelector';
 import { CaithedralCoreTab } from './CaithedralCoreTab';
 // BP065 -- Tier-2 Part A (LB Account) + 3-strikes opt-in
 import { LBAccountTab } from './LBAccountTab';
+// SEG-V0145-1 — NotCents glyph on LB Account identity surfaces
+import { NotCentsGlyph } from './NotCentsGlyph';
 import { OptInPrompt } from './OptInPrompt';
 import { shouldShowPrompt, recordStrike, setDecision } from '../lib/opt_in_strike_tracker';
 // BP067 Phase 1A -- $5 join flow
@@ -136,7 +138,7 @@ const TABS: TabDef[] = [
   { id: 'console',      label: 'Console',         icon: '🖥', tooltip: 'Tab 11 · Unified Substrate Console -- Bridge view + Dashboard view · Ctrl+Tab to switch (UI-7)' },
   { id: 'ai-selector',  label: 'AI',              icon: '🤖', tooltip: 'Tab 12 · Multi-AI Selector -- Quick-pick · Court presets · Default Ollama doctrine (UI-8)' },
   { id: 'caithedral-core', label: 'Caithedral Core', icon: '🏛', tooltip: 'Tab 13 · Caithedral Core -- SSPL open-source substrate · Designed to Be Copied · Banyan Metric · MoneyPenny · Substrated Folders · CPU-only inference' },
-  { id: 'lb-account',        label: '$ LB Account',      icon: '$',  tooltip: 'Tab 14 · $ LB Account -- Link your Liana Banyan cooperative account · Join the Frontier mesh · Crewman attribution' },
+  { id: 'lb-account',        label: 'LB Account',        icon: '',   iconElement: <NotCentsGlyph size="13px" />, tooltip: 'Tab 14 · ₵ LB Account -- Link your Liana Banyan cooperative account · Join the Frontier mesh · Crewman attribution' },
   { id: 'battery-dispatch',  label: 'Battery',           icon: '⚡', tooltip: 'Tab 15 · Battery Dispatch -- Cooperative time/energy dispatch · Reserve vs Spend' },
   { id: 'broadcast-schedule', label: 'Broadcast',        icon: '📡', tooltip: 'Tab 16 · Broadcast Schedule -- Cooperative content/announcement scheduler · Pending vs Sent' },
 ];
