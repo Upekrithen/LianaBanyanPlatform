@@ -60711,3 +60711,73 @@ Founder downloads DRAFT, installs on clean machine, walks Off-the-Street sequenc
 Then pastes "publish it" → Knight deploys + promotes DRAFT to Latest.
 
 — Knight · BP080 · Sonnet 4.6 · 2026-06-11T21:12:30Z
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-11T23:24:57.686Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-11T23:24:57.686Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/dag/emit`
+- **Gap:** 164.6h (baseline 550958.13 rph)
+- **Detail:** Endpoint /dag/emit silent for 164.6h — expected ≤140.8h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** f72b1290-ccbc-45f5-a91d-d47b5501b1f9
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-11T23:24:57.689Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-11T23:24:57.689Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/dag/fetch_from_peer`
+- **Gap:** 164.6h (baseline 339057.61 rph)
+- **Detail:** Endpoint /dag/fetch_from_peer silent for 164.6h — expected ≤141.2h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 8221b461-7883-434e-9189-160d2f4a6f25
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-11T23:39:57.692Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-11T23:39:57.692Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/dag/emit`
+- **Gap:** 164.9h (baseline 550958.13 rph)
+- **Detail:** Endpoint /dag/emit silent for 164.9h — expected ≤140.8h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 8fa452f5-2777-4b92-969d-286934481064
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-11T23:39:57.694Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-11T23:39:57.694Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/dag/fetch_from_peer`
+- **Gap:** 164.9h (baseline 339057.61 rph)
+- **Detail:** Endpoint /dag/fetch_from_peer silent for 164.9h — expected ≤141.2h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 3f6387a2-1442-4a07-81e1-a02d4b76698f
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- knight-yoke-return BP080-V0152 2026-06-11T23:49:00Z -->
+**[KNIGHT → BISHOP · YOKE RETURN · BP080 · v0.1.52 · 2026-06-11]**
+
+- **Type:** response
+- **From:** KNIGHT (Cursor / Sonnet 4.6)
+- **Session:** BP080
+- **Version:** 0.1.52
+
+**SEG completions:**
+- SEG-V0152-P0-LEAN-DEFAULT: COMPLETE — resolveInitialUiMode() hardened with JSDoc + corrupted-value guard
+- SEG-V0152-P0-FLIP-CARD: COMPLETE — CSS 3D flip card with two flip triggers + visual feedback
+- SEG-V0152-P0-ASK-TAB-FIX: COMPLETE — IPC routed through OllamaManager; 127.0.0.1; checkFailed/retrying states
+- SEG-V0152-P0-LEAN-NUDGE: COMPLETE — LeanModeNudge dismissible banner in Advanced branch
+
+**Build:** PASS (145/145 IPC channels, 0 failed). SHA-256: 03694EC037D337DEA48D93DB26E2D46BB145D3CF321631DB9253E132DF493C05
+**DRAFT release:** https://github.com/Upekrithen/LianaBanyanPlatform/releases/tag/untagged-d120dc3012b807916c8e
+**Commit:** 98581f3
+
+**SHIP-READY:** BLOCKED ON FOUNDER RATIFY + RUNTIME VERIFY (5 screenshot captures required on packaged build)
+**Yoke-return file:** BISHOP_DROPZONE/00_FOUNDER_REVIEW/YOKE_KNIGHT_BP080_V0152_LEAN_DEFAULT_FLIPCARD_ASK_FIX_RETURN.md
