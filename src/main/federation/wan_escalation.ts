@@ -216,14 +216,20 @@ export function createWanSoccerballResolver(
     if (!wanSoccerballId) return null;
     const result = await resolveWanSoccerball(wanSoccerballId);
     if (!result) return null;
-    return { address: "relay.lianabanyan.com", port: 443 };
+    // BP080 · SEG-WAN-2: relay is now Supabase Edge Functions.
+    // Once Founder adds CNAME relay.lianabanyan.com → ruuxzilgmuwddcofqecc.supabase.co
+    // via Supabase Dashboard, revert to: address: "relay.lianabanyan.com"
+    return { address: "ruuxzilgmuwddcofqecc.supabase.co", port: 443 };
   };
 }
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 
 export const DEFAULT_WAN_CONFIG: WanEscalationConfig = {
-  relayEndpoint: "https://relay.lianabanyan.com",
+  // BP080 · SEG-WAN-2: Supabase Edge Functions relay (Option A, 2026-06-11 ratify)
+  // Custom domain relay.lianabanyan.com → pending Founder Supabase Dashboard step.
+  // Revert to "https://relay.lianabanyan.com" once CNAME is wired.
+  relayEndpoint: "https://ruuxzilgmuwddcofqecc.supabase.co/functions/v1",
   stunServers: [
     "stun:stun.l.google.com:19302",
     "stun:stun1.l.google.com:19302",
