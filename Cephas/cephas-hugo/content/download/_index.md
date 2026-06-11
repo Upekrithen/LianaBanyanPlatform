@@ -22,7 +22,7 @@ tldr: "Everything you need to get started with MnemosyneC, the offline-first coo
 
 **Step 1 — Download and install**
 
-[→ Download MnemosyneC for Windows](https://github.com/Upekrithen/LianaBanyanPlatform/releases/tag/v0.1.44) *(Mac build: see bounty below — we need a Mac builder)*
+[→ Download MnemosyneC for Windows](https://github.com/Upekrithen/LianaBanyanPlatform/releases/download/v0.1.44/MnemosyneC-Setup-0.1.44.exe) *(Mac build: see bounty below — we need a Mac builder)*
 
 **Latest release:** v0.1.44 — UI scale (1.15×) + title bar icon fix
 **SHA-256:** `77896E0730851DB8D1AF974DC893E6013FE96A2F26143DEF430C03DB2C87C5EB`
