@@ -393,6 +393,12 @@ contextBridge.exposeInMainWorld('amplify', {
     return () => ipcRenderer.removeListener('relay-state-changed', handler);
   },
 
+  onWanStatusUpdate: (cb: (payload: { status: string; ts: string }) => void): (() => void) => {
+    const handler = (_event: Electron.IpcRendererEvent, payload: { status: string; ts: string }) => cb(payload);
+    ipcRenderer.on('wan-status-update', handler);
+    return () => ipcRenderer.removeListener('wan-status-update', handler);
+  },
+
   onMeshStateChanged: (cb: (state: unknown) => void): (() => void) => {
     const handler = (_event: Electron.IpcRendererEvent, state: unknown) => cb(state);
     ipcRenderer.on('mesh-state-changed', handler);

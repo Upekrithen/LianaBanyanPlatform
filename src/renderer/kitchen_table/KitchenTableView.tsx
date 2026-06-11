@@ -5,6 +5,7 @@
 import React, { useState } from 'react';
 import { RecipesView } from './RecipesView';
 import { P2PDiscoveryPanel } from './P2PDiscoveryPanel';
+import { WanStatusBar } from '../components/WanStatusBar';
 import { TrailEbletViewer } from './TrailEbletViewer';
 import { BountyBrowser } from './BountyBrowser';
 
@@ -88,6 +89,7 @@ export function KitchenTableView({ onScheduleMeal }: { onScheduleMeal?: (recipeN
                 Network
               </div>
               <div style={{ padding: '0 10px 10px', flex: 1, overflowY: 'auto' }}>
+                <WanStatusBar />
                 <P2PDiscoveryPanel />
               </div>
             </div>

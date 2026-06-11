@@ -110,6 +110,13 @@ import type { DeepLinkPayload } from './deep-link-handler';
 // BP072 ? Paired-Frame Mutual-Aid Layer
 import { PairedFrameManager } from './federation/paired-frame-manager';
 
+// SEG-WAN-2: WAN soccerball relay wiring
+import {
+  setWanSoccerballHook,
+  setWanStatusEmitter,
+  createWanSoccerballResolver,
+} from './federation/wan_escalation';
+
 // BP065 Part A ? LB Account authentication + device linking
 import {
   startLBAuthFlow,
@@ -3380,6 +3387,19 @@ app.whenReady().then(async () => {
 
   // MESH-6 Option-B: Wire HTTP /dag/emit endpoint to the same pointer_advance broadcast
   setDagEmitMeshHook(_emitPointerAdvanceToPeers);
+
+  // SEG-WAN-2: Wire WAN soccerball hook + status emitter
+  setWanSoccerballHook(createWanSoccerballResolver(async (_peerId: string) => {
+    // TODO: wire to wan-lookup-by-email when session has LB auth
+    return null;
+  }));
+  setWanStatusEmitter((status: string) => {
+    for (const win of BrowserWindow.getAllWindows()) {
+      if (!win.isDestroyed()) {
+        win.webContents.send('wan-status-update', { status, ts: new Date().toISOString() });
+      }
+    }
+  });
 
   // MESH-6 Option-B: Wire HTTP /dag/fetch_from_peer to _fetchSidViaTCP
   setFetchSidFromPeerHook(async (address, port, dag_id) => {

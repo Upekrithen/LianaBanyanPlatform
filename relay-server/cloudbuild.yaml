@@ -1,0 +1,14 @@
+# Cloud Build — build and push WAN relay image to GCR
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - -t
+      - gcr.io/lianabanyan-403dc/wan-relay:latest
+      - .
+
+images:
+  - gcr.io/lianabanyan-403dc/wan-relay:latest
+
+options:
+  logging: CLOUD_LOGGING_ONLY
