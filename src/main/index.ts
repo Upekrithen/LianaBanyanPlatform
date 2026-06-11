@@ -23,7 +23,7 @@ import {
   Notification,
 } from 'electron';
 import { join } from 'path';
-import { existsSync, mkdirSync, readFileSync, writeFileSync, watch as fsWatch, readdirSync } from 'fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync, watch as fsWatch, readdirSync, cpSync } from 'fs';
 import { spawn } from 'child_process';
 import { tmpdir, homedir } from 'os';
 import { OllamaManager } from './ollama_manager';
@@ -164,6 +164,50 @@ const ACTIVE_CSP = IS_DEV ? CSP_DEV : CSP_PROD;
 
 // Connectivity polling interval (30s)
 const CONNECTIVITY_POLL_MS = 30_000;
+
+// --- SEG-V0148: diagnostic capture vars (set after ollamaManager.init()) -----
+
+let _capturedOllamaBranch: string = 'UNKNOWN';
+let _capturedOllamaPath: string | null = null;
+let _capturedActiveModel: string = 'unknown';
+let _capturedTargetModel: string = 'unknown';
+
+/**
+ * SEG-V0148-P1-RENAME-USERDATA: first-launch migration when package name changed
+ * from "amplify-computer" → "mnemosynec". Copies (does not move) the old userData
+ * directory to the new path so existing user settings/model state are preserved.
+ */
+function migrateUserDataIfNeeded(): void {
+  if (process.platform !== 'win32') return;
+  const appData = process.env.APPDATA;
+  if (!appData) return;
+  const oldPath = join(appData, 'amplify-computer');
+  const newPath = app.getPath('userData');
+  if (!existsSync(oldPath) || existsSync(newPath)) return;
+
+  const migrationStart = Date.now();
+  console.log(`[userData migration] Starting: ${oldPath} → ${newPath}`);
+  try {
+    cpSync(oldPath, newPath, { recursive: true });
+    const elapsed = Date.now() - migrationStart;
+    let fileCount = 0;
+    try {
+      const countFiles = (dir: string): number => {
+        let n = 0;
+        for (const e of readdirSync(dir, { withFileTypes: true })) {
+          n += e.isDirectory() ? countFiles(join(dir, e.name)) : 1;
+        }
+        return n;
+      };
+      fileCount = countFiles(newPath);
+    } catch { /* non-fatal */ }
+    console.log(
+      `[userData migration] userData migration: copied ${oldPath} → ${newPath} (${fileCount} files, ${elapsed}ms)`,
+    );
+  } catch (e) {
+    console.error('[userData migration] Migration failed:', String(e));
+  }
+}
 
 // --- SAGA 4: Tier persistence + agent IPC handlers ---------------------------
 
@@ -904,15 +948,18 @@ function createTray(): void {
 }
 
 // KniPr026: refresh tray tooltip to reflect the current auto-update state.
+// SEG-V0148-P0-GLANCE: also appends mesh progress suffix when a run is active.
 function updateTrayTooltip(updateStatus?: UpdateState['status']): void {
   if (!tray || tray.isDestroyed()) return;
   const version = app.getVersion();
+  const meshSuffix = substrateServer?.getMeshProgressSuffix() ?? null;
+  const mesh = meshSuffix ? ` · ${meshSuffix}` : '';
   if (updateStatus === 'downloaded') {
-    tray.setToolTip(`MnemosyneC v${version} ? Update ready to install`);
+    tray.setToolTip(`MnemosyneC v${version} · Update ready to install${mesh}`);
   } else if (updateStatus === 'available' || updateStatus === 'downloading') {
-    tray.setToolTip(`MnemosyneC v${version} ? Update available`);
+    tray.setToolTip(`MnemosyneC v${version} · Update available${mesh}`);
   } else {
-    tray.setToolTip(`MnemosyneC v${version}`);
+    tray.setToolTip(`MnemosyneC v${version}${mesh}`);
   }
 }
 
@@ -1454,13 +1501,22 @@ function registerIPCHandlers(): void {
     results.push(`userData: ${app.getPath('userData')}`);
     results.push(``);
 
-    // Ollama status
+    // Ollama status + SEG-V0148-P2 enrichment
     try {
       const ollamaStatus = ollamaManager ? ollamaManager.getStatus() : { running: false, model: null };
       results.push(`Ollama running: ${ollamaStatus.running}`);
       results.push(`Ollama model: ${ollamaStatus.model ?? 'none'}`);
+      results.push(`ollamaPath=${_capturedOllamaPath ?? 'null'}`);
+      results.push(`branch=${_capturedOllamaBranch}`);
     } catch (e) {
       results.push(`Ollama status error: ${(e as Error).message}`);
+    }
+    results.push(``);
+
+    // SEG-V0148-P0-SKU-MODEL: active vs target model
+    results.push(`activeModel=${_capturedActiveModel} targetModel=${_capturedTargetModel}`);
+    if (_capturedActiveModel !== _capturedTargetModel) {
+      results.push(`  *** MISMATCH — full-tier model not served — mesh test NOT comparable to published benchmarks ***`);
     }
     results.push(``);
 
@@ -1494,10 +1550,14 @@ function registerIPCHandlers(): void {
       results.push(`Disk space check error: ${(e as Error).message}`);
     }
 
-    // Substrate file
+    // SEG-V0148-P1-SUBSTRATE-PATHS: fix probes to use process.resourcesPath on packaged installs
     try {
-      const subPath = join(app.getPath('userData'), '..', '..', 'resources', 'r10v3_substrate.txt');
-      const subPath2 = join(__dirname, '..', '..', 'resources', 'r10v3_substrate.txt');
+      const subPath = app.isPackaged
+        ? join(process.resourcesPath, 'r10v3_substrate.txt')
+        : join(app.getPath('userData'), '..', '..', 'resources', 'r10v3_substrate.txt');
+      const subPath2 = app.isPackaged
+        ? join(process.resourcesPath, 'r10v3_substrate.txt')
+        : join(__dirname, '..', '..', 'resources', 'r10v3_substrate.txt');
       results.push(`substrate (resources): ${existsSync(subPath)}`);
       results.push(`substrate (dist-relative): ${existsSync(subPath2)}`);
     } catch (e) {
@@ -3323,9 +3383,15 @@ app.whenReady().then(async () => {
     return;
   }
 
+  // SEG-V0148-P1-RENAME-USERDATA: migrate amplify-computer → mnemosynec on first launch after rename
+  migrateUserDataIfNeeded();
+
   // Initialize substrate API server (Phase 3: full implementation)
   substrateServer = new SubstrateAPIServer();
   await substrateServer.start();
+
+  // SEG-V0148-P0-GLANCE: wire mesh progress update to tray tooltip refresh
+  substrateServer.setMeshProgressUpdateHook(() => updateTrayTooltip());
 
   // Initialize federation client (uses the substrate index from the API server)
   federationClient = new FederationClient(substrateServer.getIndex());
@@ -3334,7 +3400,32 @@ app.whenReady().then(async () => {
 
   // Initialize Ollama manager
   ollamaManager = new OllamaManager();
+  // SEG-V0147-FIX-1 / SEG-V0148-P2: wire IPC heartbeat callback BEFORE init() so renderer
+  // never goes silent >3s, and so _capturedOllamaBranch is updated for the diagnostic log.
+  ollamaManager.setStatusUpdateCallback((update) => {
+    _capturedOllamaBranch = update.branch;
+    BrowserWindow.getAllWindows().forEach((w) => {
+      if (!w.isDestroyed()) w.webContents.send('ollama-status-update', update);
+    });
+  });
   await ollamaManager.init();
+
+  // SEG-V0148-P2: capture resolved path + branch after init() completes
+  _capturedOllamaPath = ollamaManager.getResolvedBinaryPath();
+  _capturedOllamaBranch = ollamaManager.getResolvedBranch();
+
+  // SEG-V0148-P0-SKU-MODEL: promote to full-tier model if sku_tier.json says 'full'
+  {
+    const skuPromo = await ollamaManager.resolveActiveModel();
+    _capturedActiveModel = skuPromo.activeModel;
+    _capturedTargetModel = skuPromo.targetModel;
+    if (skuPromo.mismatch) {
+      console.warn(
+        `[SKU] Full tier active but targetModel=${skuPromo.targetModel} not in ollama list — ` +
+        `mesh test results will NOT be comparable to published benchmarks.`,
+      );
+    }
+  }
 
   // SAGA 4 ? In Conjunction Agent Panel: load persisted keys + plugins at startup
   loadPersistedApiKeys();

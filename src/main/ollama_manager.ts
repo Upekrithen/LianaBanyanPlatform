@@ -3,7 +3,7 @@
 // Handles: pre-installed Ollama detection, bundled binary fallback, model management
 
 import { spawn, ChildProcess, execSync } from 'child_process';
-import { cpSync, existsSync, mkdirSync, readdirSync } from 'fs';
+import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync } from 'fs';
 import { homedir } from 'os';
 import { join } from 'path';
 import { app } from 'electron';
@@ -25,6 +25,10 @@ export interface OllamaStatus {
   version?: string;
   pid?: number;
   source: 'pre-installed' | 'bundled' | 'none';
+  /** SEG-V0148-P2: resolved Ollama binary path (null for PRE_INSTALLED_RUNNING). */
+  resolvedBinaryPath?: string | null;
+  /** SEG-V0148-P2: which init() branch was taken. */
+  resolvedBranch?: 'PRE_INSTALLED_RUNNING' | 'PRE_INSTALLED_SPAWN' | 'BUNDLED_SPAWN' | 'NONE';
 }
 
 export interface ModelPullProgress {
@@ -64,6 +68,8 @@ export interface OllamaStatusUpdate {
   branch: 'PRE_INSTALLED_RUNNING' | 'PRE_INSTALLED_SPAWN' | 'BUNDLED_SPAWN' | 'NONE';
   message: string;
   elapsedMs?: number;
+  /** SEG-V0147-FIX-4: true when exit code 0xC0000135 (STATUS_DLL_NOT_FOUND) detected — VC++ runtime missing. */
+  vcredistRequired?: boolean;
 }
 
 export class OllamaManager {
@@ -73,6 +79,9 @@ export class OllamaManager {
   private onProgress?: (progress: ModelPullProgress) => void;
   /** SEG-V0147-FIX-1: callback for IPC status updates to renderer */
   private onStatusUpdate?: (update: OllamaStatusUpdate) => void;
+  /** SEG-V0148-P2: resolved binary path and branch from last init() */
+  private _resolvedBinaryPath: string | null = null;
+  private _resolvedBranch: OllamaStatusUpdate['branch'] = 'NONE';
 
   setProgressCallback(cb: (progress: ModelPullProgress) => void): void {
     this.onProgress = cb;
@@ -94,7 +103,9 @@ export class OllamaManager {
     const alreadyRunning = await this.isReachable();
     if (alreadyRunning) {
       const version = await this._getVersion();
-      this.status = { running: true, model: DEFAULT_MODEL, source: 'pre-installed', version };
+      this._resolvedBranch = 'PRE_INSTALLED_RUNNING';
+      this._resolvedBinaryPath = null;
+      this.status = { running: true, model: DEFAULT_MODEL, source: 'pre-installed', version, resolvedBranch: 'PRE_INSTALLED_RUNNING', resolvedBinaryPath: null };
       this._emitStatus('PRE_INSTALLED_RUNNING', `Pre-installed Ollama detected (${version}) — connecting…`);
       this._startHealthMonitor();
       return;
@@ -107,7 +118,9 @@ export class OllamaManager {
       await this._spawnOllama(preInstalled, 'PRE_INSTALLED_SPAWN');
       if (await this._waitForStartup('PRE_INSTALLED_SPAWN')) {
         const version = await this._getVersion();
-        this.status = { running: true, model: null, source: 'pre-installed', version };
+        this._resolvedBranch = 'PRE_INSTALLED_SPAWN';
+        this._resolvedBinaryPath = preInstalled;
+        this.status = { running: true, model: null, source: 'pre-installed', version, resolvedBranch: 'PRE_INSTALLED_SPAWN', resolvedBinaryPath: preInstalled };
         this._emitStatus('PRE_INSTALLED_SPAWN', `Ollama port 11434 ready (pre-installed ${version})`);
         this._startHealthMonitor();
         return;
@@ -122,7 +135,9 @@ export class OllamaManager {
       await this._spawnOllama(bundledBinary, 'BUNDLED_SPAWN');
       if (await this._waitForStartup('BUNDLED_SPAWN')) {
         const version = await this._getVersion();
-        this.status = { running: true, model: null, source: 'bundled', version };
+        this._resolvedBranch = 'BUNDLED_SPAWN';
+        this._resolvedBinaryPath = bundledBinary;
+        this.status = { running: true, model: null, source: 'bundled', version, resolvedBranch: 'BUNDLED_SPAWN', resolvedBinaryPath: bundledBinary };
         this._emitStatus('BUNDLED_SPAWN', `Ollama port 11434 ready (bundled ${version})`);
         this._startHealthMonitor();
         return;
@@ -133,7 +148,9 @@ export class OllamaManager {
     // 4. Ollama not available — record not-running state
     this._emitStatus('NONE', 'Ollama init failed: no working Ollama found. Local inference disabled.');
     console.warn('[Ollama] Not available. Local inference disabled until Ollama is installed.');
-    this.status = { running: false, model: null, source: 'none' };
+    this._resolvedBranch = 'NONE';
+    this._resolvedBinaryPath = null;
+    this.status = { running: false, model: null, source: 'none', resolvedBranch: 'NONE', resolvedBinaryPath: null };
   }
 
   private _findPreInstalledBinary(): string | null {
@@ -235,6 +252,20 @@ export class OllamaManager {
       console.warn(`[Ollama] Process exited (code=${code} signal=${signal})`);
       this.status.running = false;
       this.process = null;
+
+      // SEG-V0147-FIX-4: 0xC0000135 = STATUS_DLL_NOT_FOUND — VC++ 2019 x64 runtime missing.
+      // Node reports this as either the unsigned NTSTATUS (3221225781) or signed 32-bit (-1073741515).
+      const DLL_NOT_FOUND_UNSIGNED = 0xc0000135; // 3221225781
+      const DLL_NOT_FOUND_SIGNED   = -1073741515;
+      if (code === DLL_NOT_FOUND_UNSIGNED || code === DLL_NOT_FOUND_SIGNED) {
+        const vcMsg =
+          'Ollama failed to start — VC++ 2019 x64 runtime may be missing. ' +
+          'Reinstall MnemosyneC to repair (the installer includes vc_redist.x64.exe), ' +
+          'or run vc_redist.x64.exe from the install directory: ' +
+          '%LOCALAPPDATA%\\Programs\\MnemosyneC\\resources\\vcredist\\vc_redist.x64.exe';
+        console.error(`[Ollama] ${vcMsg}`);
+        this.onStatusUpdate?.({ branch, message: vcMsg, vcredistRequired: true });
+      }
     });
   }
 
@@ -545,6 +576,72 @@ export class OllamaManager {
 
   getStatus(): OllamaStatus {
     return { ...this.status };
+  }
+
+  /** SEG-V0148-P2: path of the Ollama binary that was spawned (null if pre-installed was already running). */
+  getResolvedBinaryPath(): string | null {
+    return this._resolvedBinaryPath;
+  }
+
+  /** SEG-V0148-P2: which init() branch was taken. */
+  getResolvedBranch(): OllamaStatusUpdate['branch'] {
+    return this._resolvedBranch;
+  }
+
+  /**
+   * SEG-V0148-P0-SKU-MODEL: Promote to the full-tier model if SKU says 'full' and model is available.
+   * Emits diagnostic log lines: activeModel=<x> targetModel=<y>.
+   * MISMATCH line is visually distinct so future regressions are immediately identifiable.
+   */
+  async resolveActiveModel(): Promise<{
+    activeModel: string;
+    targetModel: string;
+    promoted: boolean;
+    mismatch: boolean;
+  }> {
+    const FULL_TIER_MODEL = 'gemma4:12b';
+    let tier = 'floor';
+    try {
+      const skuPath = join(app.getPath('userData'), 'sku_tier.json');
+      if (existsSync(skuPath)) {
+        const raw = readFileSync(skuPath, 'utf-8');
+        const sku = JSON.parse(raw) as { tier?: string };
+        tier = sku.tier ?? 'floor';
+      }
+    } catch { /* non-fatal */ }
+
+    const targetModel = tier === 'full' ? FULL_TIER_MODEL : DEFAULT_MODEL;
+
+    if (tier === 'full') {
+      const models = await this.listModels();
+      const hasFullModel = models.some(
+        (m) => m === FULL_TIER_MODEL || m.startsWith('gemma4:12b'),
+      );
+      if (hasFullModel) {
+        this.status.model = FULL_TIER_MODEL;
+        console.log(
+          `[Ollama/SKU] ✓ MATCH  activeModel=${FULL_TIER_MODEL} targetModel=${FULL_TIER_MODEL}`,
+        );
+        return { activeModel: FULL_TIER_MODEL, targetModel: FULL_TIER_MODEL, promoted: true, mismatch: false };
+      } else {
+        const activeModel = this.status.model ?? DEFAULT_MODEL;
+        console.warn(
+          `[Ollama/SKU] ⚠ MISMATCH  activeModel=${activeModel} targetModel=${FULL_TIER_MODEL}` +
+          ` ← full-tier model not in ollama list — verify model installation`,
+        );
+        this.onStatusUpdate?.({
+          branch: this._resolvedBranch,
+          message:
+            `Full-tier model ${FULL_TIER_MODEL} not found on disk. ` +
+            `Serving floor model instead. Check model installation.`,
+        });
+        return { activeModel, targetModel: FULL_TIER_MODEL, promoted: false, mismatch: true };
+      }
+    }
+
+    const activeModel = this.status.model ?? DEFAULT_MODEL;
+    console.log(`[Ollama/SKU] activeModel=${activeModel} targetModel=${targetModel}`);
+    return { activeModel, targetModel, promoted: false, mismatch: false };
   }
 
   /** BP067 — direct floor-model answer for first-run instant payoff (bypasses Normal-mode substrate-only path). */

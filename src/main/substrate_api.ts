@@ -47,7 +47,7 @@
 import { createServer, IncomingMessage, ServerResponse } from 'http';
 import { mkdirSync, existsSync, appendFileSync, readFileSync, writeFileSync, watch } from 'fs';
 import { resolve, dirname } from 'path';
-import { homedir } from 'os';
+import { homedir, networkInterfaces } from 'os';
 import { randomUUID, createHash } from 'crypto';
 import {
   logGatewayRequest as passiveSurveillanceLog,
@@ -184,6 +184,35 @@ function contentHash(payload: unknown): string {
   return createHash('sha256').update(JSON.stringify(payload)).digest('hex').slice(0, 32);
 }
 
+// ─── Mesh Glance (SEG-V0148-P0-GLANCE) ────────────────────────────────────────
+
+export interface NodeProgress {
+  nodeId: string;
+  label: string;
+  pct: number;
+  eta_s: number;
+  cold_accuracy: number;
+  hot_accuracy: number;
+  last_seen: number;
+  total_rounds: number;
+  rounds_done: number;
+}
+
+/** Returns the first non-loopback IPv4 address on the LAN, or 127.0.0.1 as fallback. */
+function getFirstLanIp(): string {
+  for (const iface of Object.values(networkInterfaces())) {
+    for (const info of iface ?? []) {
+      if (info.family === 'IPv4' && !info.internal) return info.address;
+    }
+  }
+  return '127.0.0.1';
+}
+
+/** Simple HTML-escape for template strings. */
+function esc(s: string): string {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
 // ─── Substrate API Server ─────────────────────────────────────────────────────
 
 export class SubstrateAPIServer {
@@ -195,6 +224,10 @@ export class SubstrateAPIServer {
   private degradedMode = false;
   private yokeSseClients = new Set<ServerResponse>();
   private inboxWatchInstalled = false;
+  /** SEG-V0148-P0-GLANCE: per-node mesh test progress store */
+  private meshProgressStore = new Map<string, NodeProgress>();
+  /** SEG-V0148-P0-GLANCE: hook called on every progress/update POST (wired to tray tooltip updater) */
+  private _onMeshProgressUpdate?: () => void;
 
   constructor() {
     this.index = new SubstrateLocalIndex();
@@ -232,6 +265,28 @@ export class SubstrateAPIServer {
 
   setDegradedMode(degraded: boolean): void {
     this.degradedMode = degraded;
+  }
+
+  /** SEG-V0148-P0-GLANCE: wire tray tooltip hook; called on every /mesh/progress/update POST. */
+  setMeshProgressUpdateHook(fn: () => void): void {
+    this._onMeshProgressUpdate = fn;
+  }
+
+  /** SEG-V0148-P0-GLANCE: returns "Mesh: 47% (ETA 2h 14m)" when a run is active, null otherwise. */
+  getMeshProgressSuffix(): string | null {
+    if (this.meshProgressStore.size === 0) return null;
+    const now = Math.floor(Date.now() / 1000);
+    const nodes = Array.from(this.meshProgressStore.values());
+    const runActive = nodes.some((n) => now - n.last_seen < 30 * 60);
+    if (!runActive) return null;
+    const globalPct = nodes.reduce((s, n) => s + n.pct, 0) / nodes.length;
+    const globalEta_s = nodes.reduce((s, n) => s + n.eta_s, 0) / nodes.length;
+    const etaStr = globalEta_s > 0 ? (() => {
+      const h = Math.floor(globalEta_s / 3600);
+      const m = Math.floor((globalEta_s % 3600) / 60);
+      return h > 0 ? `${h}h ${m}m` : m > 0 ? `${m}m` : `${Math.round(globalEta_s)}s`;
+    })() : 'finishing';
+    return `Mesh: ${Math.round(globalPct)}% (ETA ${etaStr})`;
   }
 
   async start(): Promise<void> {
@@ -2150,8 +2205,146 @@ export class SubstrateAPIServer {
       return;
     }
 
+    // ── SEG-V0148-P0-GLANCE: POST /mesh/progress/update — localhost-only ──────
+    if (req.method === 'POST' && url === '/mesh/progress/update') {
+      const remoteAddr = req.socket.remoteAddress ?? '';
+      if (remoteAddr !== '127.0.0.1' && remoteAddr !== '::1' && remoteAddr !== '::ffff:127.0.0.1') {
+        res.statusCode = 403;
+        res.end(JSON.stringify({ ok: false, error: 'localhost only' }));
+        return;
+      }
+      this._readBody(req, (body) => {
+        try {
+          const np = JSON.parse(body) as NodeProgress;
+          if (!np.nodeId) {
+            res.statusCode = 400;
+            res.end(JSON.stringify({ ok: false, error: 'nodeId required' }));
+            return;
+          }
+          this.meshProgressStore.set(np.nodeId, np);
+          this._onMeshProgressUpdate?.();
+          res.end(JSON.stringify({ ok: true }));
+        } catch (e) {
+          res.statusCode = 400;
+          res.end(JSON.stringify({ ok: false, error: String(e) }));
+        }
+      });
+      return;
+    }
+
+    // ── SEG-V0148-P0-GLANCE: GET /mesh/progress — LAN-visible JSON ───────────
+    if (req.method === 'GET' && url === '/mesh/progress') {
+      const now = Math.floor(Date.now() / 1000);
+      const nodes = Array.from(this.meshProgressStore.values());
+      const runActive = nodes.some((n) => now - n.last_seen < 30 * 60);
+      const globalPct = nodes.length > 0
+        ? nodes.reduce((s, n) => s + n.pct, 0) / nodes.length
+        : 0;
+      const globalEta_s = nodes.length > 0
+        ? nodes.reduce((s, n) => s + n.eta_s, 0) / nodes.length
+        : 0;
+      res.end(JSON.stringify({ nodes, runActive, globalPct, globalEta_s }));
+      return;
+    }
+
+    // ── SEG-V0148-P0-GLANCE: GET /mesh/progress.html — LAN-visible glance page ─
+    if (req.method === 'GET' && url === '/mesh/progress.html') {
+      res.setHeader('Content-Type', 'text/html; charset=utf-8');
+      res.setHeader('Cache-Control', 'no-cache');
+      res.removeHeader('Content-Type');
+      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+      res.end(this._buildMeshProgressHtml());
+      return;
+    }
+
     res.statusCode = 404;
     res.end(JSON.stringify({ error: 'Not found' }));
+  }
+
+  /** SEG-V0148-P0-GLANCE: build the inline HTML glance page. */
+  private _buildMeshProgressHtml(): string {
+    const now = Math.floor(Date.now() / 1000);
+    const nodes = Array.from(this.meshProgressStore.values());
+    const runActive = nodes.some((n) => now - n.last_seen < 30 * 60);
+    const globalPct = nodes.length > 0
+      ? nodes.reduce((s, n) => s + n.pct, 0) / nodes.length
+      : 0;
+    const globalEta_s = nodes.length > 0
+      ? nodes.reduce((s, n) => s + n.eta_s, 0) / nodes.length
+      : 0;
+    const localIp = getFirstLanIp();
+
+    const fmt = (s: number): string => {
+      if (s <= 0) return 'done';
+      const h = Math.floor(s / 3600);
+      const m = Math.floor((s % 3600) / 60);
+      if (h > 0) return `${h}h ${m}m`;
+      if (m > 0) return `${m}m`;
+      return `${Math.round(s)}s`;
+    };
+
+    const relTime = (ts: number): string => {
+      const d = now - ts;
+      if (d < 60) return `${d}s ago`;
+      if (d < 3600) return `${Math.floor(d / 60)}m ago`;
+      return `${Math.floor(d / 3600)}h ago`;
+    };
+
+    const nodesHtml = nodes.length === 0
+      ? `<div class="no-data">No active nodes — waiting for mesh test to start.</div>`
+      : nodes.map((n) => {
+        const stale = (now - n.last_seen) > 240;
+        const coldPct = (n.cold_accuracy * 100).toFixed(1);
+        const hotPct = (n.hot_accuracy * 100).toFixed(1);
+        const lift = ((n.hot_accuracy - n.cold_accuracy) * 100);
+        const liftStr = (lift >= 0 ? '+' : '') + lift.toFixed(1) + '%';
+        return `<div class="node">
+  <div class="nh"><span class="nl">${esc(n.label)}</span>${stale ? ' <span class="stale">STALE</span>' : ''}<span class="ls"> · ${relTime(n.last_seen)}</span></div>
+  <div class="bar-track"><div class="bar-fill${stale ? ' s' : ''}" style="width:${Math.min(100, n.pct).toFixed(1)}%"></div></div>
+  <div class="ns">${n.rounds_done}/${n.total_rounds} rounds · ${n.pct.toFixed(0)}%</div>
+  <div class="acc">COLD ${coldPct}% · HOT ${hotPct}% · Lift ${liftStr}</div>
+  ${n.eta_s > 0 ? `<div class="eta">ETA ~${fmt(n.eta_s)}</div>` : ''}
+</div>`;
+      }).join('');
+
+    return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="refresh" content="30">
+<title>MnemosyneC · Mesh Test</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#111;color:#eee;font-family:system-ui,sans-serif;padding:14px;max-width:520px}
+h1{font-size:1.05rem;margin-bottom:12px;color:#aaf}
+.global{background:#1a1a1a;border:1px solid #333;border-radius:8px;padding:10px;margin-bottom:14px}
+.gl{font-size:.82rem;color:#aaa;margin-bottom:4px}
+.bar-track{background:#333;border-radius:5px;height:17px;overflow:hidden;margin:4px 0}
+.bar-fill{background:#3d3;height:100%;border-radius:5px}
+.bar-fill.s{background:#a44}
+.node{background:#1c1c1c;border:1px solid #2a2a2a;border-radius:8px;padding:10px;margin-bottom:10px}
+.nh{font-weight:600;font-size:.9rem;margin-bottom:4px}
+.nl{}
+.stale{color:#f44;font-weight:bold}
+.ls{color:#555;font-size:.75rem}
+.ns{color:#888;font-size:.78rem;margin:2px 0}
+.acc{font-size:.78rem;color:#7c7;margin:3px 0}
+.eta{font-size:.78rem;color:#aa8;margin-top:3px}
+.no-data{color:#555;padding:20px 0;text-align:center;font-size:.9rem}
+.footer{margin-top:14px;font-size:.7rem;color:#444;border-top:1px solid #222;padding-top:8px;word-break:break-all}
+</style>
+</head>
+<body>
+<h1>MnemosyneC · Mesh Test</h1>
+<div class="global">
+  <div class="gl">Global · ${globalPct.toFixed(0)}%${runActive ? ` · ETA ~${fmt(globalEta_s)}` : ' · idle'}</div>
+  <div class="bar-track"><div class="bar-fill" style="width:${Math.min(100, globalPct).toFixed(1)}%"></div></div>
+</div>
+${nodesHtml}
+<div class="footer">Auto-refreshes every 30s · MnemosyneC mesh test · http://${esc(localIp)}:${API_PORT}/mesh/progress.html</div>
+</body>
+</html>`;
   }
 
   // ─── Telemetry ────────────────────────────────────────────────────────────

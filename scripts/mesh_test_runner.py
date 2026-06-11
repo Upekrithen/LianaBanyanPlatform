@@ -25,6 +25,7 @@ import hashlib
 OLLAMA_BASE = "http://localhost:11434"
 SUBSTRATE_URL = "http://127.0.0.1:11480/substrate/query"
 MESH_EMIT_URL = "http://127.0.0.1:11480/dag/emit"
+MESH_PROGRESS_URL = "http://127.0.0.1:11480/mesh/progress/update"
 PROGRESS_BATCH = 100  # emit progress every N questions
 
 
@@ -78,8 +79,24 @@ def substrate_query(query_text: str, timeout: int = 10) -> str:
         return ""
 
 
-def emit_progress(node: str, done: int, total: int):
-    """Emit progress heartbeat via /dag/emit."""
+def _post_mesh_progress(node_progress: dict, timeout_s: float = 1.0) -> None:
+    """Non-fatal — mesh test continues even if the progress endpoint is unreachable."""
+    try:
+        body = json.dumps(node_progress).encode()
+        req = urllib.request.Request(
+            MESH_PROGRESS_URL,
+            data=body,
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        with urllib.request.urlopen(req, timeout=timeout_s):
+            pass
+    except Exception:
+        pass  # non-fatal
+
+
+def emit_progress(node: str, done: int, total: int, node_progress: dict | None = None):
+    """Emit progress heartbeat via /dag/emit. Also posts to mesh glance endpoint if node_progress provided."""
     body = json.dumps({
         "pearls": [f"mesh_test:{node}:progress:{done}/{total}"],
         "bindings": {"event_type": "mesh_test_progress", "node": node},
@@ -94,6 +111,9 @@ def emit_progress(node: str, done: int, total: int):
         urllib.request.urlopen(req, timeout=5)
     except Exception:
         pass  # Non-fatal: progress emit failure does not halt the run
+
+    if node_progress is not None:
+        _post_mesh_progress(node_progress)
 
 
 def build_question_prompt(q: dict) -> str:
@@ -134,7 +154,8 @@ def run_shard(shard_path: str, node: str, model: str) -> dict:
     questions = shard.get("questions", [])
     total = len(questions)
     results = []
-    last_emit_time = time.time()
+    run_start = time.time()
+    last_emit_time = run_start
 
     print(f"[{node}] Running {total} questions with model={model}")
     print(f"[{node}] COLD-vs-HOT  substrate={SUBSTRATE_URL}")
@@ -174,10 +195,23 @@ def run_shard(shard_path: str, node: str, model: str) -> dict:
         now = time.time()
         # Emit progress every PROGRESS_BATCH questions or every 60 seconds
         if done % PROGRESS_BATCH == 0 or (now - last_emit_time) >= 60:
-            emit_progress(node, done, total)
-            last_emit_time = now
             cold_acc = sum(1 for r in results if r["cold_correct"]) / done
             hot_acc = sum(1 for r in results if r["hot_correct"]) / done
+            elapsed = now - run_start
+            rate = done / elapsed if elapsed > 0 else 1.0
+            eta_s = max(0, int((total - done) / rate))
+            emit_progress(node, done, total, node_progress={
+                "nodeId": node,
+                "label": node,
+                "pct": round(done / total * 100.0, 1) if total > 0 else 0.0,
+                "eta_s": eta_s,
+                "cold_accuracy": cold_acc,
+                "hot_accuracy": hot_acc,
+                "last_seen": int(now),
+                "total_rounds": total,
+                "rounds_done": done,
+            })
+            last_emit_time = now
             print(f"[{node}] {done}/{total}  cold_acc={cold_acc:.3f}  hot_acc={hot_acc:.3f}")
 
     cold_correct_count = sum(1 for r in results if r["cold_correct"])
@@ -195,11 +229,30 @@ def run_shard(shard_path: str, node: str, model: str) -> dict:
     return {"results": results, "summary": summary}
 
 
+# Results directories per dataset
+RESULTS_DIRS = {
+    "mmlu-pro":         "~/.mnemosynec/test-data/mmlu-pro/results/",
+    "mmlu-pro-diamond": "~/.mnemosynec/test-data/mmlu-pro/results-diamond/",
+    "gpqa-diamond":     "~/.mnemosynec/test-data/gpqa-diamond/results/",
+}
+
+
 def main():
     parser = argparse.ArgumentParser(description="Mesh COLD-vs-HOT test runner")
     parser.add_argument("--shard", required=True, help="Path to shard_MN.json")
     parser.add_argument("--node", default="M1", help="Node identifier (M1, M2, M3)")
     parser.add_argument("--model", default="gemma4:12b", help="Ollama model name")
+    parser.add_argument(
+        "--dataset",
+        default="mmlu-pro",
+        choices=list(RESULTS_DIRS.keys()),
+        help=(
+            "Dataset being tested: mmlu-pro (default), mmlu-pro-diamond, or gpqa-diamond. "
+            "Controls results output directory. Does not affect question loading -- "
+            "questions come from the shard file. Use mesh_shard.py --dataset to generate "
+            "the correct shard for each dataset."
+        ),
+    )
     args = parser.parse_args()
 
     if not os.path.exists(args.shard):
@@ -210,8 +263,8 @@ def main():
     results = out["results"]
     summary = out["summary"]
 
-    # Write results JSON
-    results_dir = os.path.expanduser("~/.mnemosynec/test-data/mmlu-pro/results/")
+    # Write results JSON -- dataset-specific subdirectory
+    results_dir = os.path.expanduser(RESULTS_DIRS[args.dataset])
     os.makedirs(results_dir, exist_ok=True)
     results_path = os.path.join(results_dir, f"shard_{args.node}_results.json")
     with open(results_path, "w") as f:
