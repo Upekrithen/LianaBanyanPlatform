@@ -58,7 +58,7 @@ async function streamOllama(
 ): Promise<void> {
   let resp: Response;
   try {
-    resp = await fetch('http://localhost:11434/api/generate', {
+    resp = await fetch('http://127.0.0.1:11434/api/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ model: MODEL, prompt, stream: true }),
@@ -177,21 +177,36 @@ function MembershipBanner() {
 
 // ─── LeanAskTab ──────────────────────────────────────────────────────────────
 
-export function LeanAskTab() {
+interface LeanAskTabProps {
+  onSwitchToHome?: () => void;
+}
+
+export function LeanAskTab({ onSwitchToHome }: LeanAskTabProps) {
   const [messages, setMessages] = useState<ChatMessage[]>(loadHistory);
   const [input, setInput] = useState('');
   const [thinking, setThinking] = useState(false);
   const [modelMissing, setModelMissing] = useState(false);
+  const [checkFailed, setCheckFailed] = useState(false);
+  const [retrying, setRetrying] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Check if model is available
-  useEffect(() => {
-    window.amplify?.checkOllamaAndModel?.(MODEL).then((res) => {
-      setModelMissing(!res.reachable || !res.hasModel);
-    }).catch(() => setModelMissing(true));
+  const runCheck = useCallback(async () => {
+    setRetrying(true);
+    try {
+      const res = await window.amplify?.checkOllamaAndModel?.(MODEL);
+      if (!res) { setCheckFailed(true); setModelMissing(false); }
+      else if (!res.reachable) { setCheckFailed(true); setModelMissing(false); }
+      else { setCheckFailed(false); setModelMissing(!res.hasModel); }
+    } catch {
+      setCheckFailed(true);
+    } finally {
+      setRetrying(false);
+    }
   }, []);
+
+  useEffect(() => { runCheck(); }, [runCheck]);
 
   // Scroll to bottom on new messages
   useEffect(() => {
@@ -284,8 +299,8 @@ export function LeanAskTab() {
         </p>
       </div>
 
-      {/* Model-missing banner */}
-      {modelMissing && (
+      {/* Model-missing banner (Ollama reachable but model not yet ready) */}
+      {modelMissing && !checkFailed && (
         <div style={{
           margin: '8px 16px 0',
           background: '#1c1200',
@@ -295,17 +310,83 @@ export function LeanAskTab() {
           fontSize: 12,
           color: '#fbbf24',
           flexShrink: 0,
+          display: 'flex',
+          alignItems: 'center',
+          gap: 8,
         }}>
-          Your AI model is still downloading. You can ask questions once it's ready — usually 2–5 minutes.
-          <div style={{ marginTop: 4, height: 4, background: '#3d2e00', borderRadius: 2, overflow: 'hidden' }}>
-            <div style={{
-              height: '100%',
-              width: '40%',
-              background: 'linear-gradient(90deg, #f59e0b, #fbbf24)',
-              borderRadius: 2,
-              animation: 'pulse 1.5s ease-in-out infinite',
-            }} />
-          </div>
+          <span style={{ flex: 1 }}>Your AI model is still setting up. Usually 2–5 minutes.</span>
+          <button
+            onClick={runCheck}
+            disabled={retrying}
+            style={{
+              background: 'none',
+              border: '1px solid #f59e0b',
+              borderRadius: 4,
+              color: '#fbbf24',
+              fontSize: 11,
+              padding: '2px 8px',
+              cursor: retrying ? 'wait' : 'pointer',
+              outline: 'none',
+              fontFamily: 'system-ui, sans-serif',
+            }}
+          >
+            {retrying ? '…' : 'Retry ↺'}
+          </button>
+        </div>
+      )}
+
+      {/* Check-failed banner (Ollama not reachable) */}
+      {checkFailed && (
+        <div style={{
+          margin: '8px 16px 0',
+          background: '#1a0a0a',
+          border: '1px solid #4a1515',
+          borderRadius: 6,
+          padding: '8px 12px',
+          fontSize: 12,
+          color: '#f87171',
+          flexShrink: 0,
+          display: 'flex',
+          alignItems: 'center',
+          gap: 8,
+          flexWrap: 'wrap',
+        }}>
+          <span style={{ flex: 1 }}>Could not reach your local AI. Is Ollama running?</span>
+          <button
+            onClick={runCheck}
+            disabled={retrying}
+            style={{
+              background: 'none',
+              border: '1px solid #ef4444',
+              borderRadius: 4,
+              color: '#f87171',
+              fontSize: 11,
+              padding: '2px 8px',
+              cursor: retrying ? 'wait' : 'pointer',
+              outline: 'none',
+              fontFamily: 'system-ui, sans-serif',
+            }}
+          >
+            {retrying ? '…' : 'Retry ↺'}
+          </button>
+          {onSwitchToHome && (
+            <button
+              onClick={onSwitchToHome}
+              style={{
+                background: 'none',
+                border: '1px solid #334155',
+                borderRadius: 4,
+                color: '#94a3b8',
+                fontSize: 11,
+                padding: '2px 8px',
+                cursor: 'pointer',
+                outline: 'none',
+                fontFamily: 'system-ui, sans-serif',
+              }}
+            >
+              Open Home tab →
+            </button>
+          )}
         </div>
       )}
 
@@ -315,7 +396,7 @@ export function LeanAskTab() {
         overflowY: 'auto',
         padding: '12px 16px',
       }}>
-        {messages.length === 0 && !modelMissing && (
+        {messages.length === 0 && !modelMissing && !checkFailed && (
           <div style={{
             textAlign: 'center',
             color: '#475569',

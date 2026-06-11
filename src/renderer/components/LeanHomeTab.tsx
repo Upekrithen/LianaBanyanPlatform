@@ -151,52 +151,174 @@ const s = {
     transition: 'opacity 0.15s',
     fontFamily: 'system-ui, sans-serif',
   },
-  pillarsCard: {
-    background: '#0d1117',
-    border: '1px solid #1e2a38',
-    borderRadius: 10,
-    padding: '20px 20px 12px',
-    marginBottom: 32,
-  },
-  pillarsTitle: {
-    fontSize: 17,
-    fontWeight: 700,
-    color: '#f0fdf4',
-    marginBottom: 4,
-  },
-  pillarsSub: {
-    fontSize: 13,
-    color: '#94a3b8',
-    marginBottom: 16,
-  },
-  pillarRow: {
-    display: 'flex',
-    gap: 10,
-    padding: '8px 0',
-    borderTop: '1px solid #1a2332',
-    alignItems: 'flex-start',
-  },
-  pillarLabel: {
-    fontSize: 12,
-    fontWeight: 700,
-    color: '#6ee7b7',
-    width: 54,
-    flexShrink: 0,
-    paddingTop: 2,
-  },
-  pillarDetail: {
-    fontSize: 12,
-    color: '#94a3b8',
-    lineHeight: 1.55,
-  },
-  proveIt: {
-    fontSize: 11,
-    color: '#6ee7b7',
-    textAlign: 'center' as const,
-    padding: '8px 0 4px',
-    opacity: 0.7,
-  },
 };
+
+// ─── SixPillarsFlipCard ───────────────────────────────────────────────────────
+
+const CARD_HEIGHT = 520;
+
+function SixPillarsFlipCard() {
+  const [flipped, setFlipped] = useState(false);
+  const [frontFlipActive, setFrontFlipActive] = useState(false);
+  const [backFlipActive, setBackFlipActive] = useState(false);
+  const [proveActive, setProveActive] = useState(false);
+
+  const faceBase: React.CSSProperties = {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    backfaceVisibility: 'hidden',
+    WebkitBackfaceVisibility: 'hidden',
+    borderRadius: 10,
+    boxSizing: 'border-box',
+    overflowY: 'auto',
+  };
+
+  const flipBtnStyle = (active: boolean): React.CSSProperties => ({
+    position: 'absolute',
+    bottom: 12,
+    right: 12,
+    background: 'none',
+    border: 'none',
+    cursor: 'pointer',
+    fontSize: 16,
+    color: '#6ee7b7',
+    padding: '4px 6px',
+    borderRadius: 4,
+    lineHeight: 1,
+    fontFamily: 'system-ui, sans-serif',
+    outline: 'none',
+    opacity: active ? 0.4 : 0.75,
+    transform: active ? 'scale(0.88)' : 'scale(1)',
+    transition: 'opacity 0.12s, transform 0.12s',
+  });
+
+  return (
+    <div
+      style={{
+        perspective: '800px',
+        height: CARD_HEIGHT,
+        marginBottom: 32,
+        position: 'relative',
+      }}
+    >
+      <div
+        style={{
+          position: 'relative',
+          width: '100%',
+          height: '100%',
+          transformStyle: 'preserve-3d',
+          transition: 'transform 0.45s ease',
+          transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
+        }}
+      >
+        {/* ── Front face ── */}
+        <div
+          style={{
+            ...faceBase,
+            background: '#0d1117',
+            border: '1px solid #1e2a38',
+            padding: '20px 20px 12px',
+          }}
+        >
+          <p style={s.pillarsTitle}>Good. Fast. Cheap.</p>
+          <p style={s.pillarsSub}>MnemosyneC gives you all six. Can't we all just get along?</p>
+          {SIX_PILLARS.map((p) => (
+            <div key={p.label} style={s.pillarRow}>
+              <span style={s.pillarLabel}>{p.label}</span>
+              <span style={s.pillarDetail}>{p.detail}</span>
+            </div>
+          ))}
+          <div style={{ textAlign: 'center', padding: '8px 0 4px' }}>
+            <button
+              style={{
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                fontSize: 11,
+                color: '#6ee7b7',
+                textDecoration: 'underline',
+                padding: 0,
+                fontFamily: 'system-ui, sans-serif',
+                outline: 'none',
+                opacity: proveActive ? 0.45 : 0.7,
+                transform: proveActive ? 'scale(0.97)' : 'scale(1)',
+                transition: 'opacity 0.12s, transform 0.12s',
+              }}
+              onClick={() => setFlipped(true)}
+              onMouseDown={() => setProveActive(true)}
+              onMouseUp={() => setProveActive(false)}
+              onMouseLeave={() => setProveActive(false)}
+            >
+              Every figure is reproducible — Prove It · Run your own cabinet
+            </button>
+          </div>
+          <button
+            style={flipBtnStyle(frontFlipActive)}
+            aria-label="Flip card"
+            onClick={() => setFlipped(true)}
+            onMouseDown={() => setFrontFlipActive(true)}
+            onMouseUp={() => setFrontFlipActive(false)}
+            onMouseLeave={() => setFrontFlipActive(false)}
+          >
+            ↻
+          </button>
+        </div>
+
+        {/* ── Back face ── */}
+        <div
+          style={{
+            ...faceBase,
+            background: '#0a0f1a',
+            border: '1px solid #6ee7b7',
+            padding: '20px 20px 16px',
+            transform: 'rotateY(180deg)',
+          }}
+        >
+          <p style={{ fontSize: 13, fontWeight: 700, color: '#6ee7b7', margin: '0 0 12px', lineHeight: 1.4 }}>
+            Prove It — How to verify every figure yourself
+          </p>
+          <div style={{ fontSize: 12, color: '#94a3b8', lineHeight: 1.6 }}>
+            <p style={{ margin: '0 0 10px' }}>
+              <span style={{ color: '#6ee7b7' }}>✓ Benchmark data:</span>{' '}
+              CADRE_BENCHMARK_RESULTS_BP067.md<br />
+              75 questions · 4 vendors · 2026-05-30<br />
+              Cohen's kappa 0.936 (grader agreement)<br />
+              Hash-verified — all 20/20 mesh rounds matched
+            </p>
+            <p style={{ margin: '0 0 10px' }}>
+              <span style={{ color: '#6ee7b7' }}>✓ Run your own cabinet:</span><br />
+              1. Install MnemosyneC (free)<br />
+              2. Open Gauntlet tab → Run Test<br />
+              3. Results appear live — your machine, your numbers
+            </p>
+            <p style={{ margin: '0 0 10px' }}>
+              <span style={{ color: '#6ee7b7' }}>✓ Source:</span>{' '}
+              Asteroid-ProofVault/BP067_MARATHON_COMPLETION_RECEIPT.md<br />
+              pearl_241641f4 · SID 3ed52d5f
+            </p>
+            <p style={{ margin: 0 }}>
+              All figures are sha256-stamped, content-addressed, append-only.<br />
+              Nothing can be overwritten. Independently verifiable.
+            </p>
+          </div>
+          <button
+            style={flipBtnStyle(backFlipActive)}
+            aria-label="Flip card back"
+            onClick={() => setFlipped(false)}
+            onMouseDown={() => setBackFlipActive(true)}
+            onMouseUp={() => setBackFlipActive(false)}
+            onMouseLeave={() => setBackFlipActive(false)}
+          >
+            ↻
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
@@ -272,18 +394,8 @@ export function LeanHomeTab({ onSwitchTab }: LeanHomeTabProps) {
         </p>
       </div>
 
-      {/* ── Six Pillars card ────────────────────────────────────────────── */}
-      <div style={s.pillarsCard}>
-        <p style={s.pillarsTitle}>Good. Fast. Cheap.</p>
-        <p style={s.pillarsSub}>MnemosyneC gives you all six. Can't we all just get along?</p>
-        {SIX_PILLARS.map((p) => (
-          <div key={p.label} style={s.pillarRow}>
-            <span style={s.pillarLabel}>{p.label}</span>
-            <span style={s.pillarDetail}>{p.detail}</span>
-          </div>
-        ))}
-        <p style={s.proveIt}>Every figure is reproducible — Prove It · Run your own cabinet</p>
-      </div>
+      {/* ── Six Pillars flip card ─────────────────────────────────────────── */}
+      <SixPillarsFlipCard />
     </div>
   );
 }

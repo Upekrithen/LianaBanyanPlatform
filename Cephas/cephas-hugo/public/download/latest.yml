@@ -1,8 +1,8 @@
-version: 0.1.51
+version: 0.1.52
 files:
-  - url: MnemosyneC-Setup-0.1.51.exe
-    sha512: sy21bUh4yw97uL0At62aYWe62LoJdHr8Y34CjbvjH15eLr/gI9KpvoFYDaRIiL+zEieKG0hSYbV6aH/v/iRePA==
-    size: 537044764
-path: MnemosyneC-Setup-0.1.51.exe
-sha512: sy21bUh4yw97uL0At62aYWe62LoJdHr8Y34CjbvjH15eLr/gI9KpvoFYDaRIiL+zEieKG0hSYbV6aH/v/iRePA==
-releaseDate: '2026-06-11T21:07:26.372Z'
+  - url: MnemosyneC-Setup-0.1.52.exe
+    sha512: SWKjH5JyFF9bEbqvEAUDnvX90lzvBABo0bp1Gs1+mtYz/WGjXKeM+ifECgV97fKlMYdl8OOH3UhmDrYdXREI8w==
+    size: 537047252
+path: MnemosyneC-Setup-0.1.52.exe
+sha512: SWKjH5JyFF9bEbqvEAUDnvX90lzvBABo0bp1Gs1+mtYz/WGjXKeM+ifECgV97fKlMYdl8OOH3UhmDrYdXREI8w==
+releaseDate: '2026-06-11T23:48:53.925Z'

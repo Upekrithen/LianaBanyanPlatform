@@ -32,13 +32,104 @@ export interface LeanShellProps {
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
+/**
+ * Resolves the initial UI mode for a user session.
+ *
+ * Resolution priority (highest to lowest):
+ *  1. `mnemoUiMode = 'lean' | 'advanced'`  → returns that value (explicit user choice)
+ *  2. Any other stored value for `mnemoUiMode` → cleared from localStorage, falls to step 3
+ *  3. `mnemosynec_onboarding_complete` set  → `'advanced'` (existing user)
+ *  4. No flags at all                       → `'lean'` (new user LEAN DEFAULT)
+ *
+ * In cases 3–4, the resolved mode is written back to `mnemoUiMode` for fast
+ * reads on subsequent renders.
+ *
+ * SEG-V0152-P0-LEAN-DEFAULT verified: clean VM, no localStorage → opens to LEAN 3-tab UI.
+ */
 function resolveInitialUiMode(): UiMode {
-  const stored = localStorage.getItem(LS_UI_MODE) as UiMode | null;
+  const stored = localStorage.getItem(LS_UI_MODE);
   if (stored === 'lean' || stored === 'advanced') return stored;
+  // Guard: stored is non-null but not a recognised mode value — corrupted or legacy string.
+  // Explicitly remove it so the new/existing-user fallback logic applies cleanly.
+  if (stored !== null) {
+    localStorage.removeItem(LS_UI_MODE);
+  }
   const isExistingUser = !!localStorage.getItem(LS_ONBOARDING_COMPLETE);
   const mode: UiMode = isExistingUser ? 'advanced' : 'lean';
   localStorage.setItem(LS_UI_MODE, mode);
   return mode;
+}
+
+const LS_LEAN_NUDGE_DISMISSED = 'lean_nudge_dismissed';
+
+// ─── LeanModeNudge ────────────────────────────────────────────────────────────
+
+function LeanModeNudge({ onSwitch }: { onSwitch: () => void }) {
+  const [dismissed, setDismissed] = useState(
+    () => localStorage.getItem(LS_LEAN_NUDGE_DISMISSED) === '1'
+  );
+  const [switching, setSwitching] = useState(false);
+
+  if (dismissed) return null;
+
+  const handleSwitch = () => {
+    setSwitching(true);
+    setTimeout(() => onSwitch(), 200);
+  };
+
+  const handleDismiss = () => {
+    localStorage.setItem(LS_LEAN_NUDGE_DISMISSED, '1');
+    setDismissed(true);
+  };
+
+  return (
+    <div style={{
+      height: 32,
+      background: '#0a1628',
+      borderBottom: '1px solid #1e3a5c',
+      display: 'flex',
+      alignItems: 'center',
+      paddingLeft: 12,
+      paddingRight: 8,
+      flexShrink: 0,
+      gap: 8,
+    }}>
+      <button
+        onClick={handleSwitch}
+        disabled={switching}
+        style={{
+          background: 'none',
+          border: 'none',
+          color: switching ? '#94a3b8' : '#6ee7b7',
+          fontSize: 12,
+          cursor: switching ? 'default' : 'pointer',
+          fontFamily: 'system-ui, sans-serif',
+          padding: 0,
+          textDecoration: 'underline',
+          outline: 'none',
+        }}
+      >
+        {switching ? 'Switching…' : '✨ Try the new simpler view (Lean Mode) →'}
+      </button>
+      <div style={{ flex: 1 }} />
+      <button
+        onClick={handleDismiss}
+        title="Dismiss"
+        style={{
+          background: 'none',
+          border: 'none',
+          color: '#475569',
+          fontSize: 14,
+          cursor: 'pointer',
+          padding: '0 4px',
+          outline: 'none',
+          lineHeight: 1,
+        }}
+      >
+        ✕
+      </button>
+    </div>
+  );
 }
 
 // ─── Tab bar ─────────────────────────────────────────────────────────────────
@@ -224,15 +315,26 @@ export function LeanShell({ currentMode, onModeChange, onClose, authState }: Lea
     setUiMode('advanced');
   }, []);
 
+  const switchToLean = useCallback(() => {
+    localStorage.setItem(LS_UI_MODE, 'lean');
+    window.dispatchEvent(new StorageEvent('storage', { key: LS_UI_MODE, newValue: 'lean', storageArea: localStorage }));
+    setUiMode('lean');
+  }, []);
+
   // Pass-through to full MnemosyneTabView for advanced users
   if (uiMode === 'advanced') {
     return (
-      <MnemosyneTabView
-        currentMode={currentMode}
-        onModeChange={onModeChange}
-        onClose={onClose}
-        authState={authState}
-      />
+      <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
+        <LeanModeNudge onSwitch={switchToLean} />
+        <div style={{ flex: 1, overflow: 'hidden' }}>
+          <MnemosyneTabView
+            currentMode={currentMode}
+            onModeChange={onModeChange}
+            onClose={onClose}
+            authState={authState}
+          />
+        </div>
+      </div>
     );
   }
 
@@ -262,7 +364,7 @@ export function LeanShell({ currentMode, onModeChange, onClose, authState }: Lea
           <LeanGauntletTab authState={authState} />
         )}
         {activeTab === 'ask' && (
-          <LeanAskTab />
+          <LeanAskTab onSwitchToHome={() => setActiveTab('home')} />
         )}
       </div>
     </div>

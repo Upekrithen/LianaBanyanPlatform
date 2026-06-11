@@ -1728,18 +1728,14 @@ function registerIPCHandlers(): void {
     }
   });
 
-  // SEG-V-1: live pre-flight check -- 3-branch logic for Ollama + model presence
+  // SEG-V-1: live pre-flight check -- routes through OllamaManager as single source of truth.
   // Shared utility reused by ModelSetupProgress (SEG-V-1) and Layer2ProveIt model selector (SEG-V-4).
   safeHandle('check-ollama-and-model', async (_event, { modelName }: { modelName: string }) => {
     try {
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 3000);
-      const res = await fetch('http://127.0.0.1:11434/api/tags', {
-        signal: controller.signal,
-      }).finally(() => clearTimeout(timeout));
-      if (!res.ok) return { reachable: false, hasModel: false, models: [] as string[] };
-      const data = await res.json() as { models: Array<{ name: string }> };
-      const models: string[] = data.models?.map((m) => m.name) ?? [];
+      if (!ollamaManager) return { reachable: false, hasModel: false, models: [] as string[] };
+      const reachable = await ollamaManager.isReachable();
+      if (!reachable) return { reachable: false, hasModel: false, models: [] as string[] };
+      const models = await ollamaManager.listModels();
       const hasModel = models.some(
         (m) => m === modelName || m.startsWith(modelName.split(':')[0])
       );
