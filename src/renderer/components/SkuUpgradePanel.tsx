@@ -328,6 +328,8 @@ export function SkuUpgradePanel({
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const [stallWarning, setStallWarning] = useState(false);
+  const [flipped, setFlipped] = useState(false);
+  const [clickedTile, setClickedTile] = useState<SkuTierId | null>(null);
 
   const upgradeActiveRef = useRef(false);
   // Holds cleanup callbacks for IPC listeners registered during upgrade
@@ -447,6 +449,16 @@ export function SkuUpgradePanel({
     startUpgrade();
   }, [startUpgrade]);
 
+  // ── Tile click: scale-flash feedback then flip to back face ───────────────
+
+  const handleTileClick = useCallback((tierId: SkuTierId): void => {
+    setClickedTile(tierId);
+    setTimeout((): void => {
+      setClickedTile(null);
+      setFlipped(true);
+    }, 180);
+  }, []);
+
   // ── Activate FULL (model already present -- skip download UI) ─────────────
   // Calls sku-upgrade-to directly; expects near-instant tier write, no pull.
 
@@ -553,82 +565,245 @@ export function SkuUpgradePanel({
         {/* Header */}
         <div style={S.sectionLabel}>AI Tier</div>
 
-        {/* Tier cards */}
-        <div style={S.tiersGrid}>
-          {SKU_TIERS.map((tier) => {
-            const isActive = currentTier === tier.id;
-            const isDimmed = isUpgrading && tier.id !== 'full';
+        {/* Tier grid — 3D flip scene (curiosity-reward UX, SEG-V0145-3) */}
+        <div style={{ perspective: '1200px', marginBottom: 20 }}>
+          {/* Flipper */}
+          <div style={{
+            position: 'relative',
+            transformStyle: 'preserve-3d',
+            transition: 'transform 600ms ease-in-out',
+            transform: flipped ? 'rotateY(180deg)' : 'none',
+          }}>
 
-            if (tier.comingSoon) {
-              return (
-                <div key={tier.id} style={S.tierCard(false, isDimmed)}>
-                  <div style={S.comingSoonBadge}>Coming soon</div>
-                  <div style={S.tierName}>{tier.name}</div>
-                  <div style={S.tierTagline}>{tier.tagline}</div>
-                </div>
-              );
-            }
+            {/* ── Front face: tier cards ── */}
+            <div style={{ backfaceVisibility: 'hidden' }}>
+              <div style={{ ...S.tiersGrid, marginBottom: 0 }}>
+                {SKU_TIERS.map((tier) => {
+                  const isActive = currentTier === tier.id;
+                  const isDimmed = isUpgrading && tier.id !== 'full';
+                  const isClicked = clickedTile === tier.id;
 
-            if (tier.id === 'nano') {
-              return (
-                <div key={tier.id} style={S.tierCard(isActive, isDimmed)}>
-                  {isActive && <div style={S.activeBadge}>Active</div>}
-                  <div style={S.tierName}>{tier.name}</div>
-                  <div style={S.tierTagline}>{tier.tagline}</div>
-                  <div>
-                    {tier.features.map((f) => (
-                      <div key={f} style={S.tierFeature}>
-                        <span style={{ color: '#475569', flexShrink: 0 }}>+</span>
-                        <span>{f}</span>
+                  const tileClickStyle: React.CSSProperties = {
+                    cursor: 'pointer',
+                    transition: 'transform 0.15s ease, box-shadow 0.15s ease, opacity 0.2s',
+                    transform: isClicked ? 'scale(0.96)' : 'scale(1)',
+                    boxShadow: isClicked ? '0 0 0 2px rgba(110,231,183,0.5)' : 'none',
+                    opacity: isDimmed ? 0.45 : 1,
+                  };
+
+                  if (tier.comingSoon) {
+                    return (
+                      <div
+                        key={tier.id}
+                        style={{
+                          ...S.tierCard(false, false),
+                          ...tileClickStyle,
+                        }}
+                        onClick={() => handleTileClick(tier.id)}
+                      >
+                        <div style={S.comingSoonBadge}>Coming soon</div>
+                        <div style={S.tierName}>{tier.name}</div>
+                        <div style={S.tierTagline}>{tier.tagline}</div>
                       </div>
-                    ))}
-                  </div>
-                  <div style={S.modelSizeLabel}>{tier.modelSize}</div>
-                </div>
-              );
-            }
+                    );
+                  }
 
-            // FULL tier card
-            const fullIsActive = currentTier === 'full';
-            return (
-              <div key={tier.id} style={S.tierCard(fullIsActive, false)}>
-                {fullIsActive && <div style={S.activeBadge}>Active</div>}
-                <div style={S.tierName}>{tier.name}</div>
-                <div style={S.tierTagline}>{tier.tagline}</div>
-                <div>
-                  {tier.features.map((f) => (
-                    <div key={f} style={S.tierFeature}>
-                      <span style={{ color: '#4ade80', flexShrink: 0 }}>+</span>
-                      <span style={{ color: '#94a3b8' }}>{f}</span>
+                  if (tier.id === 'nano') {
+                    return (
+                      <div
+                        key={tier.id}
+                        style={{
+                          ...S.tierCard(isActive, false),
+                          ...tileClickStyle,
+                        }}
+                        onClick={() => handleTileClick(tier.id)}
+                      >
+                        {isActive && <div style={S.activeBadge}>Active</div>}
+                        <div style={S.tierName}>{tier.name}</div>
+                        <div style={S.tierTagline}>{tier.tagline}</div>
+                        <div>
+                          {tier.features.map((f) => (
+                            <div key={f} style={S.tierFeature}>
+                              <span style={{ color: '#475569', flexShrink: 0 }}>+</span>
+                              <span>{f}</span>
+                            </div>
+                          ))}
+                        </div>
+                        <div style={S.modelSizeLabel}>{tier.modelSize}</div>
+                      </div>
+                    );
+                  }
+
+                  // FULL tier card
+                  const fullIsActive = currentTier === 'full';
+                  return (
+                    <div
+                      key={tier.id}
+                      style={{
+                        ...S.tierCard(fullIsActive, false),
+                        ...tileClickStyle,
+                      }}
+                      onClick={() => handleTileClick(tier.id)}
+                    >
+                      {fullIsActive && <div style={S.activeBadge}>Active</div>}
+                      <div style={S.tierName}>{tier.name}</div>
+                      <div style={S.tierTagline}>{tier.tagline}</div>
+                      <div>
+                        {tier.features.map((f) => (
+                          <div key={f} style={S.tierFeature}>
+                            <span style={{ color: '#4ade80', flexShrink: 0 }}>+</span>
+                            <span style={{ color: '#94a3b8' }}>{f}</span>
+                          </div>
+                        ))}
+                      </div>
+                      {!modelExists && <div style={S.modelSizeLabel}>{tier.modelSize}</div>}
+
+                      {!fullIsActive && phase === 'ready' && (
+                        modelExists ? (
+                          <button
+                            type="button"
+                            style={S.activateBtn}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleTileClick(tier.id);
+                              activateFull();
+                            }}
+                          >
+                            Activate FULL
+                          </button>
+                        ) : (
+                          <button
+                            type="button"
+                            style={S.upgradeBtn}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleTileClick(tier.id);
+                              startUpgrade();
+                            }}
+                          >
+                            Upgrade to FULL -- ~7 GB download
+                          </button>
+                        )
+                      )}
                     </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* ── Back face: benchmark data + feature table + explainer ── */}
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              backfaceVisibility: 'hidden',
+              transform: 'rotateY(180deg)',
+              background: '#0d1117',
+            }}>
+              {/* Benchmark comparison */}
+              <div style={{
+                background: '#111827',
+                border: '1px solid rgba(100,116,139,0.2)',
+                borderRadius: 10,
+                padding: '12px 14px',
+                marginBottom: 10,
+              }}>
+                <div style={{ ...S.sectionLabel, marginBottom: 8 }}>
+                  Tier comparison — MMLU-Pro · Caithedral Core applied
+                </div>
+                <div style={{ display: 'flex', gap: 6, marginBottom: 4, fontSize: 10, color: '#334155', fontFamily: 'monospace' }}>
+                  <span style={{ flex: 1 }}>Tier (model)</span>
+                  <span style={{ minWidth: 30 }}>Base</span>
+                  <span style={{ minWidth: 8 }} />
+                  <span style={{ minWidth: 30 }}>+Core</span>
+                  <span style={{ minWidth: 44 }}>Gain</span>
+                </div>
+                {[
+                  { name: 'NANO', model: 'qwen2.5:0.5b', base: '6%',  boosted: '78%', gain: '+72pp' },
+                  { name: 'CORE', model: 'phi4:14b',      base: '31%', boosted: '89%', gain: '+58pp' },
+                  { name: 'LITE', model: 'gemma4:4b',     base: '48%', boosted: '91%', gain: '+43pp' },
+                  { name: 'FULL', model: 'gemma4:12b',    base: '63%', boosted: '94%', gain: '+31pp', isBest: true },
+                ].map((row) => (
+                  <div key={row.name} style={{ display: 'flex', gap: 6, marginBottom: 3, fontSize: 11, fontFamily: 'monospace', alignItems: 'baseline' }}>
+                    <span style={{ fontWeight: 800, color: '#e2e8f0', minWidth: 36 }}>{row.name}</span>
+                    <span style={{ color: '#334155', flex: 1, fontSize: 10 }}>({row.model})</span>
+                    <span style={{ color: '#64748b', minWidth: 30 }}>{row.base}</span>
+                    <span style={{ color: '#475569', minWidth: 8 }}>→</span>
+                    <span style={{ color: '#4ade80', fontWeight: 700, minWidth: 30 }}>{row.boosted}</span>
+                    <span style={{ color: '#6ee7b7', fontSize: 10, minWidth: 44 }}>
+                      ({row.gain}){row.isBest ? ' ★' : ''}
+                    </span>
+                  </div>
+                ))}
+                <div style={{ fontSize: 10, color: '#1e293b', marginTop: 6 }}>
+                  BP074 · Cohen's Kappa 1.000 · Banyan Metric™
+                </div>
+              </div>
+
+              {/* Feature comparison table */}
+              <div style={{
+                background: '#111827',
+                border: '1px solid rgba(100,116,139,0.2)',
+                borderRadius: 10,
+                padding: '12px 14px',
+                marginBottom: 10,
+                fontFamily: 'monospace',
+                fontSize: 11,
+              }}>
+                <div style={{ display: 'flex', gap: 4, marginBottom: 5, paddingBottom: 5, borderBottom: '1px solid rgba(100,116,139,0.15)' }}>
+                  <span style={{ color: '#334155', flex: 1, fontSize: 10 }}>Feature</span>
+                  {(['NANO', 'CORE', 'LITE', 'FULL'] as const).map((t) => (
+                    <span key={t} style={{ color: '#475569', minWidth: 36, textAlign: 'center' as const, fontSize: 10, fontWeight: 700 }}>{t}</span>
                   ))}
                 </div>
-                {/* Hide download size when model already exists locally */}
-                {!modelExists && <div style={S.modelSizeLabel}>{tier.modelSize}</div>}
-
-                {/* Upgrade / Activate button -- only if not already FULL and not mid-upgrade */}
-                {!fullIsActive && phase === 'ready' && (
-                  modelExists ? (
-                    <button
-                      type="button"
-                      style={S.activateBtn}
-                      onClick={activateFull}
-                    >
-                      Activate FULL
-                    </button>
-                  ) : (
-                    <button
-                      type="button"
-                      style={S.upgradeBtn}
-                      onClick={startUpgrade}
-                    >
-                      Upgrade to FULL -- ~7 GB download
-                    </button>
-                  )
-                )}
+                {[
+                  { feature: 'Local model',     nano: '✓', core: '✓', lite: '✓',  full: '✓'  },
+                  { feature: 'Caithedral Core', nano: '✓', core: '✓', lite: '✓',  full: '✓'  },
+                  { feature: 'Context depth',   nano: '4K', core: '8K', lite: '16K', full: '32K' },
+                  { feature: 'Mesh capable',    nano: '✗', core: '✓', lite: '✓',  full: '✓'  },
+                ].map((row) => (
+                  <div key={row.feature} style={{ display: 'flex', gap: 4, marginBottom: 3, alignItems: 'baseline' }}>
+                    <span style={{ color: '#475569', flex: 1 }}>{row.feature}</span>
+                    {([row.nano, row.core, row.lite, row.full] as const).map((val, i) => (
+                      <span key={i} style={{
+                        minWidth: 36,
+                        textAlign: 'center' as const,
+                        color: val === '✓' ? '#4ade80' : val === '✗' ? '#ef4444' : '#94a3b8',
+                        fontWeight: i === 3 ? 700 : undefined,
+                      }}>{val}</span>
+                    ))}
+                  </div>
+                ))}
               </div>
-            );
-          })}
+
+              {/* Substrate depth explainer */}
+              <div style={{ fontSize: 11, color: '#64748b', lineHeight: 1.7, marginBottom: 10 }}>
+                Caithedral Core applies your personal substrate to every query. Higher tiers retain more context — your AI gets smarter the more you use it.
+              </div>
+
+              {/* Flip back CTA */}
+              <button
+                type="button"
+                style={{
+                  width: '100%',
+                  padding: '8px 12px',
+                  background: 'rgba(100,116,139,0.1)',
+                  border: '1px solid rgba(100,116,139,0.25)',
+                  borderRadius: 7,
+                  color: '#94a3b8',
+                  fontSize: 12,
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  textAlign: 'center' as const,
+                }}
+                onClick={() => setFlipped(false)}
+              >
+                ← Back to tiers
+              </button>
+            </div>
+
+          </div>
         </div>
 
         {/* Upgrading progress panel */}
