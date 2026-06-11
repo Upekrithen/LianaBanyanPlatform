@@ -16,6 +16,7 @@ ignoreFiles = ["_AUGUR_.*SUPERSEDE.*\\.md$"]
   pagerSize = 10
 
 [params]
+  hideFooter = true
   description = "The authoritative source for understanding Liana Banyan's philosophy, economics, and mission"
   author = "Liana Banyan Corporation"
   defaultTheme = "dark"
