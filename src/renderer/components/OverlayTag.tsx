@@ -85,7 +85,7 @@ export const OverlayTag: React.FC<OverlayTagProps> = ({
       }}
     >
       <NotCentsGlyph size="0.95em" alt="" style={{ color: accentColor }} />
-      <span style={{ color: accentColor }}>Mnemosyne™</span>
+      <span style={{ color: accentColor }}>MnemosyneC™</span>
       <span style={{ fontSize: 10, opacity: 0.5, marginLeft: 2 }}>⌨ M</span>
     </button>
   );

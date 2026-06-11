@@ -120,7 +120,7 @@ export function UpdateToast() {
         }}
         role="status"
         aria-live="polite"
-        aria-label={`Downloading Mnemosyne update: ${pct}%`}
+        aria-label={`Downloading MnemosyneC update: ${pct}%`}
       >
         <div
           style={{
@@ -170,7 +170,7 @@ export function UpdateToast() {
           minWidth: 230,
         }}
         role="alertdialog"
-        aria-label={`Mnemosyne v${updateState.version ?? ''} ready to install`}
+        aria-label={`MnemosyneC v${updateState.version ?? ''} ready to install`}
         onMouseEnter={() => window.amplify?.setClickthrough?.(false)}
         onMouseLeave={() => window.amplify?.setClickthrough?.(true)}
       >

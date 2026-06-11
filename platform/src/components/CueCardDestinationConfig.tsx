@@ -3,14 +3,16 @@
  * ==================================
  * Innovation #1361: Hofund Destination Configurator
  *
- * UI to bind Cue Card templates to specific destination sets.
+ * TODO BP079 Wave A: This component needs rewrite for new schema
+ * Wave A schema has simplified destination model:
+ * - destination_type: 'onboard' | 'storefront' | 'walkthrough'
+ * - destination_url: string (just a URL, no project binding)
+ * - No project_ids, category_slug, is_own_project fields
  *
- * Options:
- * - My Full Portfolio (default)
- * - Single Project → [pick one]
- * - Multiple Projects → [pick several]
- * - Category → [Food | Health | Manufacturing | etc.]
- * - Plus checkbox: "This is NOT my project (earn promotion credit)"
+ * The createDestination function signature changed to:
+ * createDestination(cueCardId, destinationType, destinationUrl, options)
+ *
+ * This UI will need to be redesigned to match the new model.
  */
 
 import React, { useState, useEffect } from 'react';

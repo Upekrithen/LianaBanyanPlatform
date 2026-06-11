@@ -1,4 +1,4 @@
-// Stub barrel — components not yet built
+// Stub barrel ï¿½ components not yet built
 export function CategoryRail() { return null; }
 export function CephasFilters() { return null; }
 export function CephasPublication() { return null; }

@@ -115,7 +115,7 @@ CREATE POLICY "Subscribers view own food subscriptions"
   USING (auth.uid() = subscriber_user_id);
 
 -- Food business owners can view subscriptions to their business
--- (via entity_memberships.user_id join)
+-- (via entity_memberships.primary_contact_user_id join)
 CREATE POLICY "Food business owners view their subs"
   ON public.food_node_subscriptions
   FOR SELECT
@@ -123,7 +123,7 @@ CREATE POLICY "Food business owners view their subs"
     EXISTS (
       SELECT 1 FROM public.entity_memberships
       WHERE entity_memberships.id = food_node_subscriptions.food_business_entity_id
-      AND entity_memberships.user_id = auth.uid()
+      AND entity_memberships.primary_contact_user_id = auth.uid()
     )
   );
 

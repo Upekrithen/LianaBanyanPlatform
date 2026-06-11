@@ -1,11 +1,13 @@
 // Bp067FirstRunSpine.tsx -- BP075 v0.1.26 minimal professional first-run
-// Steps: welcome -> try-it -> success -> gauntlet (mesh proof + results closer) -> first_steps (intent capture) -> app
+// SEG-R-1: WelcomeView (Amnesia headline + two-doorway cascade) is now step 'welcome'.
+// Steps: welcome (WelcomeView) -> try-it -> success -> gauntlet -> first_steps -> app
 // Preserved: askFloorModel elephant test, 3-option fallback, LS_BP067_FIRST_RUN_COMPLETE gate
 // Removed: scroll-crawl animation, Founder voice audio, HEOHO blocking step, forced folder step
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { GauntletProofStep } from './GauntletProofStep';
 import { FirstStepsView } from './FirstStepsView';
+import { WelcomeView, LS_ONBOARDING_COMPLETE } from './WelcomeView';
 
 export const LS_BP067_FIRST_RUN_COMPLETE = 'mnemosyne-bp067-first-run-complete';
 export const LS_SALTFIGHTER_SKIP = 'mnemosyne-saltfighter-skip';
@@ -35,6 +37,7 @@ export interface Bp067FirstRunSpineProps {
 function commitFirstRunDone(onComplete: () => void): void {
   try {
     localStorage.setItem(LS_BP067_FIRST_RUN_COMPLETE, 'true');
+    localStorage.setItem(LS_ONBOARDING_COMPLETE, 'true');
   } catch { /* ignore storage errors */ }
   void window.amplify?.markBp067FirstRunComplete?.();
   onComplete();
@@ -278,32 +281,11 @@ export function Bp067FirstRunSpine({ onComplete, onAskOnboard }: Bp067FirstRunSp
     borderRadius: 8,
   };
 
-  // ── Step 1: Welcome ──────────────────────────────────────────────────────────
+  // ── Step 1: Welcome (SEG-R-1 -- WelcomeView Amnesia headline + two-doorway cascade) ──
 
   if (step === 'welcome') {
     return (
-      <>
-        <style>{KEYFRAMES}</style>
-        <div style={overlay}>
-          <div style={card}>
-            <div style={brandLine}>MnemosyneC</div>
-            <h1 style={heading}>Your private AI. Lives on your computer. $0 to ask anything.</h1>
-            <p style={body}>
-              MnemosyneC runs a small AI model entirely on your machine.
-              Nothing leaves your computer. No subscription, no cloud dependency.
-            </p>
-            <button type="button" style={primaryBtn} onClick={(): void => goTo('try-it')}>
-              {"Let's try it"}
-            </button>
-            <button type="button" style={ghostBtn} onClick={handleFinish}>
-              Skip first-run
-            </button>
-            <p style={footNote}>
-              MnemosyneC will start a small AI on your computer. Takes a few seconds.
-            </p>
-          </div>
-        </div>
-      </>
+      <WelcomeView onComplete={handleFinish} />
     );
   }
 

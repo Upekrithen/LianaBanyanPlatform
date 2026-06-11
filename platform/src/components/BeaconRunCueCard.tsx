@@ -39,6 +39,8 @@ import {
   Flame,
 } from "lucide-react";
 import { toast } from "sonner";
+// TODO BP079 Wave A: getClickCount signature changed from (userId, templateId) to (cueCardId)
+// This component needs updating to query cue_card_id first, then get clicks
 import { generateShareId, getClickCount } from "@/lib/cueCardClickTracking";
 import { useAuth } from "@/contexts/AuthContext";
 import { useQuery } from "@tanstack/react-query";

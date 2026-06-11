@@ -25,7 +25,7 @@ interface TelemetryMonth {
 }
 
 const MODE_INFO: Record<FrameMode, { icon: string; label: string; color: string; description: string }> = {
-  ai_burst:  { icon: '🔥', label: 'AI Burst',  color: '#facc15', description: 'Cloud AI + Mnemosyne + Substrate · Pay-per-token' },
+  ai_burst:  { icon: '🔥', label: 'AI Burst',  color: '#facc15', description: 'Cloud AI + MnemosyneC + Substrate · Pay-per-token' },
   normal:    { icon: '🪵', label: 'Normal',    color: '#22c55e', description: 'Local Ollama + Substrate · Zero marginal cost' },
   fallback:  { icon: '❄️', label: 'Fallback',  color: '#3b82f6', description: 'Substrate cache only · Zero cost · Offline-capable' },
 };
@@ -246,7 +246,7 @@ export function FrameTab({ currentMode, onModeChange, authState, windUnlocked = 
           borderRadius: 10, padding: '12px 16px',
         }}>
           <div style={{ fontSize: 10, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>
-            <span>This Month · Mnemosyne CAI Amplifier</span>
+            <span>This Month · MnemosyneC CAI Amplifier</span>
             <button
               type="button"
               onClick={handleCurrencyPrecisionToggle}

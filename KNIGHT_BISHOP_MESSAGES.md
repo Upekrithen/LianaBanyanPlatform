@@ -56594,3 +56594,819 @@ TASKS UNPINNED. Both BP079 pinned tasks are complete.
 — Knight · BP079 SEG-G complete · v0.1.38 shipped · 2026-06-10
 
 ---
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T17:03:04.480Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T17:03:04.480Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/mode`
+- **Gap:** 256.0h (baseline 66.70 rph)
+- **Detail:** Endpoint /mode silent for 256.0h — expected ≤169.6h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 11a1030a-72d9-4ea7-bfbe-0548e1675ea0
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T17:03:04.484Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T17:03:04.484Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/family/roster`
+- **Gap:** 256.0h (baseline 74.21 rph)
+- **Detail:** Endpoint /family/roster silent for 256.0h — expected ≤213.9h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 73b027eb-5f36-448e-8923-a17182c8d0c2
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T17:18:04.476Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T17:18:04.476Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/mode`
+- **Gap:** 256.3h (baseline 66.70 rph)
+- **Detail:** Endpoint /mode silent for 256.3h — expected ≤169.6h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 4c1450ba-3e34-4707-8228-e3e8e3089c1b
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T17:18:04.477Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T17:18:04.477Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/family/roster`
+- **Gap:** 256.3h (baseline 74.21 rph)
+- **Detail:** Endpoint /family/roster silent for 256.3h — expected ≤213.9h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** e130ddb4-bf45-4068-a9a9-11cfb4dbc829
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T17:33:04.486Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T17:33:04.486Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/mode`
+- **Gap:** 256.5h (baseline 66.70 rph)
+- **Detail:** Endpoint /mode silent for 256.5h — expected ≤169.6h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** a4ae4d19-e6d9-4e71-89a6-9cd0c63bebee
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T17:33:04.487Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T17:33:04.487Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/family/roster`
+- **Gap:** 256.5h (baseline 74.21 rph)
+- **Detail:** Endpoint /family/roster silent for 256.5h — expected ≤213.9h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** f58c84e4-04bb-4eda-a48b-7974d4be1703
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T17:48:04.500Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T17:48:04.500Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/mode`
+- **Gap:** 256.8h (baseline 66.70 rph)
+- **Detail:** Endpoint /mode silent for 256.8h — expected ≤169.6h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 64578b94-da62-45dd-9de5-7b8c90fc9c7c
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T17:48:04.501Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T17:48:04.501Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/family/roster`
+- **Gap:** 256.8h (baseline 74.21 rph)
+- **Detail:** Endpoint /family/roster silent for 256.8h — expected ≤213.9h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** ebeaeeae-19b0-476c-bc63-28d93ede3ab9
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T18:03:04.509Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T18:03:04.509Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/mode`
+- **Gap:** 257.0h (baseline 66.70 rph)
+- **Detail:** Endpoint /mode silent for 257.0h — expected ≤169.6h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 38b15d22-d089-4a46-a70d-6e425d38813a
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T18:03:04.510Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T18:03:04.510Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/family/roster`
+- **Gap:** 257.0h (baseline 74.21 rph)
+- **Detail:** Endpoint /family/roster silent for 257.0h — expected ≤213.9h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 0074c154-5237-4568-ae2e-082f8fa2918b
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T18:18:04.509Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T18:18:04.509Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/mode`
+- **Gap:** 257.3h (baseline 66.70 rph)
+- **Detail:** Endpoint /mode silent for 257.3h — expected ≤169.6h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** d27f28e8-7d57-4ce3-b531-e5ea5633fd68
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T18:18:04.510Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T18:18:04.510Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/family/roster`
+- **Gap:** 257.3h (baseline 74.21 rph)
+- **Detail:** Endpoint /family/roster silent for 257.3h — expected ≤213.9h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** ba11ee05-1136-4045-93cc-e7cdad19d4b7
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T18:33:04.512Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T18:33:04.512Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/mode`
+- **Gap:** 257.5h (baseline 66.70 rph)
+- **Detail:** Endpoint /mode silent for 257.5h — expected ≤169.6h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** dd02c13c-ab0a-4e17-b107-bb6f5ec330de
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T18:33:04.513Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T18:33:04.513Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/family/roster`
+- **Gap:** 257.5h (baseline 74.21 rph)
+- **Detail:** Endpoint /family/roster silent for 257.5h — expected ≤213.9h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 15721df2-7676-449b-911b-c75ef0de21dd
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T18:48:04.523Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T18:48:04.523Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/mode`
+- **Gap:** 257.8h (baseline 66.70 rph)
+- **Detail:** Endpoint /mode silent for 257.8h — expected ≤169.6h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 4a3ac4a6-8afb-4831-9a21-fcd85d795519
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T18:48:04.524Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T18:48:04.524Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/family/roster`
+- **Gap:** 257.8h (baseline 74.21 rph)
+- **Detail:** Endpoint /family/roster silent for 257.8h — expected ≤213.9h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** d03e69e4-972f-4022-a3ea-14e858ae03f6
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T19:03:04.527Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T19:03:04.527Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/mode`
+- **Gap:** 258.0h (baseline 66.70 rph)
+- **Detail:** Endpoint /mode silent for 258.0h — expected ≤169.6h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 26007d1a-f73b-43a5-a7fd-9cfd58a94555
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T19:03:04.527Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T19:03:04.527Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/family/roster`
+- **Gap:** 258.0h (baseline 74.21 rph)
+- **Detail:** Endpoint /family/roster silent for 258.0h — expected ≤213.9h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** bb59e93b-0ed2-41d5-8621-56174e7d5290
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T19:18:04.532Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T19:18:04.532Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/mode`
+- **Gap:** 258.3h (baseline 66.70 rph)
+- **Detail:** Endpoint /mode silent for 258.3h — expected ≤169.6h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** a62ce06c-cf47-4a94-a11f-c9c993a691e8
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T19:18:04.533Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T19:18:04.533Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/family/roster`
+- **Gap:** 258.3h (baseline 74.21 rph)
+- **Detail:** Endpoint /family/roster silent for 258.3h — expected ≤213.9h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 07998180-28d8-41aa-8180-5d63248286dc
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T19:33:04.536Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T19:33:04.536Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/mode`
+- **Gap:** 258.5h (baseline 66.70 rph)
+- **Detail:** Endpoint /mode silent for 258.5h — expected ≤169.6h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 5bf966ce-c034-4e62-b486-fbcd54f35d58
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T19:33:04.537Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T19:33:04.537Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/family/roster`
+- **Gap:** 258.5h (baseline 74.21 rph)
+- **Detail:** Endpoint /family/roster silent for 258.5h — expected ≤213.9h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 8d5b592a-a70b-44fa-9182-6ef6fd0f745d
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T19:48:04.540Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T19:48:04.540Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/mode`
+- **Gap:** 258.8h (baseline 66.70 rph)
+- **Detail:** Endpoint /mode silent for 258.8h — expected ≤169.6h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** dad15ea4-dd88-4d8c-86ad-c5a7e9c61315
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T19:48:04.540Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T19:48:04.540Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/family/roster`
+- **Gap:** 258.8h (baseline 74.21 rph)
+- **Detail:** Endpoint /family/roster silent for 258.8h — expected ≤213.9h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** f5c3a089-1d5d-4667-ab9d-7cd33bd54a8e
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T20:03:04.554Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T20:03:04.554Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/mode`
+- **Gap:** 259.0h (baseline 66.70 rph)
+- **Detail:** Endpoint /mode silent for 259.0h — expected ≤169.6h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 4c1b1b91-8154-4330-8476-e6b66dd60d3e
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T20:03:04.555Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T20:03:04.555Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/family/roster`
+- **Gap:** 259.0h (baseline 74.21 rph)
+- **Detail:** Endpoint /family/roster silent for 259.0h — expected ≤213.9h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 63ef3915-0942-48a7-a201-9b61a050f416
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T20:18:04.568Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T20:18:04.568Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/mode`
+- **Gap:** 259.3h (baseline 66.70 rph)
+- **Detail:** Endpoint /mode silent for 259.3h — expected ≤169.6h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** a2cdbcda-13a9-42b7-8037-dc7723c1f7e8
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T20:18:04.569Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T20:18:04.569Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/family/roster`
+- **Gap:** 259.3h (baseline 74.21 rph)
+- **Detail:** Endpoint /family/roster silent for 259.3h — expected ≤213.9h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 41f15b5e-f582-433d-8725-3ca95ef332ff
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T20:33:04.572Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T20:33:04.572Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/mode`
+- **Gap:** 259.5h (baseline 66.70 rph)
+- **Detail:** Endpoint /mode silent for 259.5h — expected ≤169.6h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 0c216e4d-abdc-402e-9c4f-5e93a44c53e5
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T20:33:04.573Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T20:33:04.573Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/family/roster`
+- **Gap:** 259.5h (baseline 74.21 rph)
+- **Detail:** Endpoint /family/roster silent for 259.5h — expected ≤213.9h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 97af637c-88e1-4c94-b747-fc3f9166f87c
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T20:48:04.574Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T20:48:04.574Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/mode`
+- **Gap:** 259.8h (baseline 66.70 rph)
+- **Detail:** Endpoint /mode silent for 259.8h — expected ≤169.6h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 5f4cf48d-e9cf-4b52-b399-63f32b7618d3
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T20:48:04.575Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T20:48:04.575Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/family/roster`
+- **Gap:** 259.8h (baseline 74.21 rph)
+- **Detail:** Endpoint /family/roster silent for 259.8h — expected ≤213.9h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** e20575d1-929f-4d02-b8f8-7889fbebb6bb
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T21:03:04.580Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T21:03:04.580Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/mode`
+- **Gap:** 260.0h (baseline 66.70 rph)
+- **Detail:** Endpoint /mode silent for 260.0h — expected ≤169.6h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 9cf7d628-6d08-4e54-943f-d109bd9033ef
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T21:03:04.582Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T21:03:04.582Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/family/roster`
+- **Gap:** 260.0h (baseline 74.21 rph)
+- **Detail:** Endpoint /family/roster silent for 260.0h — expected ≤213.9h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 84c7489c-e1ac-49b3-8534-e07cb5c667de
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T21:18:04.592Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T21:18:04.592Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/mode`
+- **Gap:** 260.3h (baseline 66.70 rph)
+- **Detail:** Endpoint /mode silent for 260.3h — expected ≤169.6h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 7a4c084b-fd96-49d8-af5d-d554731a2149
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T21:18:04.593Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T21:18:04.593Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/family/roster`
+- **Gap:** 260.3h (baseline 74.21 rph)
+- **Detail:** Endpoint /family/roster silent for 260.3h — expected ≤213.9h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** edbd160d-1751-40a7-9eb5-7b2358a9548a
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T21:33:04.592Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T21:33:04.592Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/mode`
+- **Gap:** 260.5h (baseline 66.70 rph)
+- **Detail:** Endpoint /mode silent for 260.5h — expected ≤169.6h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 5a3a90f5-9894-400c-be7a-c725954260c5
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T21:33:04.593Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T21:33:04.593Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/family/roster`
+- **Gap:** 260.5h (baseline 74.21 rph)
+- **Detail:** Endpoint /family/roster silent for 260.5h — expected ≤213.9h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 9b7cff4f-6ec2-424d-9747-00363ec684cf
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T21:48:04.605Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T21:48:04.605Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/mode`
+- **Gap:** 260.8h (baseline 66.70 rph)
+- **Detail:** Endpoint /mode silent for 260.8h — expected ≤169.6h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 9789911a-9bc4-44e2-9265-92501fd4d6e3
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T21:48:04.607Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T21:48:04.607Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/family/roster`
+- **Gap:** 260.8h (baseline 74.21 rph)
+- **Detail:** Endpoint /family/roster silent for 260.8h — expected ≤213.9h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 7cd63cf9-089d-4d5c-a0d1-11466a04b692
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T22:03:04.605Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T22:03:04.605Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/mode`
+- **Gap:** 261.0h (baseline 66.70 rph)
+- **Detail:** Endpoint /mode silent for 261.0h — expected ≤169.6h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** b5db5ef6-ea4c-4b80-94be-f934fe0af201
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T22:03:04.606Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T22:03:04.606Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/family/roster`
+- **Gap:** 261.0h (baseline 74.21 rph)
+- **Detail:** Endpoint /family/roster silent for 261.0h — expected ≤213.9h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** bae6f292-570b-414d-b516-8b302533d2b6
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T22:18:04.614Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T22:18:04.614Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/mode`
+- **Gap:** 261.3h (baseline 66.70 rph)
+- **Detail:** Endpoint /mode silent for 261.3h — expected ≤169.6h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 0ee9e990-81ee-4ba1-ade9-299a0ab7901a
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T22:18:04.614Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T22:18:04.614Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/family/roster`
+- **Gap:** 261.3h (baseline 74.21 rph)
+- **Detail:** Endpoint /family/roster silent for 261.3h — expected ≤213.9h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 495ace38-18f5-4de1-8af6-b250428f6cad
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T22:48:13.738Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T22:48:13.738Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/mode`
+- **Gap:** 261.8h (baseline 66.70 rph)
+- **Detail:** Endpoint /mode silent for 261.8h — expected ≤169.6h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** a416535d-3f3f-4a62-a62d-dece7c816b55
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T22:48:13.739Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T22:48:13.739Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/family/roster`
+- **Gap:** 261.8h (baseline 74.21 rph)
+- **Detail:** Endpoint /family/roster silent for 261.8h — expected ≤213.9h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 1bd13f23-323e-4801-855d-bfc75bd1e81e
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T23:03:13.749Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T23:03:13.749Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/mode`
+- **Gap:** 262.0h (baseline 66.70 rph)
+- **Detail:** Endpoint /mode silent for 262.0h — expected ≤169.6h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** cf7af2db-836a-411f-99c2-279d9d2e7347
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T23:03:13.750Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T23:03:13.750Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/family/roster`
+- **Gap:** 262.0h (baseline 74.21 rph)
+- **Detail:** Endpoint /family/roster silent for 262.0h — expected ≤213.9h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** bdf1e8df-39f5-43be-9676-c041be1b9dd8
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T23:32:01.747Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T23:32:01.747Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/mode`
+- **Gap:** 262.5h (baseline 66.70 rph)
+- **Detail:** Endpoint /mode silent for 262.5h — expected ≤169.6h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 3207748d-0eaf-4e80-afb6-4e3ae55769e2
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T23:32:01.749Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T23:32:01.749Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/family/roster`
+- **Gap:** 262.5h (baseline 74.21 rph)
+- **Detail:** Endpoint /family/roster silent for 262.5h — expected ≤213.9h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** fc402b89-3e68-4529-a9e9-ae6d68c9c580
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T23:47:01.756Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T23:47:01.756Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/mode`
+- **Gap:** 262.7h (baseline 66.70 rph)
+- **Detail:** Endpoint /mode silent for 262.7h — expected ≤169.6h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** f7bbff5d-e4d9-41df-ace3-23c489cc308a
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T23:47:01.757Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T23:47:01.757Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/family/roster`
+- **Gap:** 262.7h (baseline 74.21 rph)
+- **Detail:** Endpoint /family/roster silent for 262.7h — expected ≤213.9h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** dd071f5d-15ac-48b5-88ba-c1bf8f2fc843
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-10T23:47:01.759Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-10T23:47:01.759Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/dag/emit`
+- **Gap:** 141.0h (baseline 550958.13 rph)
+- **Detail:** Endpoint /dag/emit silent for 141.0h — expected ≤140.8h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 80783e39-09fe-4813-ad42-53a1f5a5d71e
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-11T00:02:01.764Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-11T00:02:01.764Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/mode`
+- **Gap:** 263.0h (baseline 66.70 rph)
+- **Detail:** Endpoint /mode silent for 263.0h — expected ≤169.6h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 038387aa-1e52-43fe-b66c-1391208305b2
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-11T00:02:01.765Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-11T00:02:01.765Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/family/roster`
+- **Gap:** 263.0h (baseline 74.21 rph)
+- **Detail:** Endpoint /family/roster silent for 263.0h — expected ≤213.9h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 0db616d4-c788-4c4d-b1a9-52ebd640154d
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-11T00:02:01.766Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-11T00:02:01.766Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/dag/emit`
+- **Gap:** 141.2h (baseline 550958.13 rph)
+- **Detail:** Endpoint /dag/emit silent for 141.2h — expected ≤140.8h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 27eb4715-93e2-488d-8415-7f97974e1de4
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-11T00:27:47.079Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-11T00:27:47.079Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/mode`
+- **Gap:** 263.4h (baseline 66.70 rph)
+- **Detail:** Endpoint /mode silent for 263.4h — expected ≤169.6h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** cb20ab01-d290-43f9-a8fa-b6bf39894603
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-11T00:27:47.080Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-11T00:27:47.080Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/family/roster`
+- **Gap:** 263.4h (baseline 74.21 rph)
+- **Detail:** Endpoint /family/roster silent for 263.4h — expected ≤213.9h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** a712fdca-3796-414b-9647-117c47975cd6
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-11T00:27:47.081Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-11T00:27:47.081Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/dag/emit`
+- **Gap:** 141.6h (baseline 550958.13 rph)
+- **Detail:** Endpoint /dag/emit silent for 141.6h — expected ≤140.8h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** ad167ff6-5e98-4711-b9c9-0f331e6d5280
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-11T00:27:47.082Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-11T00:27:47.082Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/dag/fetch_from_peer`
+- **Gap:** 141.6h (baseline 339057.61 rph)
+- **Detail:** Endpoint /dag/fetch_from_peer silent for 141.6h — expected ≤141.2h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** e4131e51-7933-499c-bdc1-1a5f232d9833
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-11T00:42:47.079Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-11T00:42:47.079Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/mode`
+- **Gap:** 263.7h (baseline 66.70 rph)
+- **Detail:** Endpoint /mode silent for 263.7h — expected ≤169.6h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 69898113-0cd4-4fc2-8e37-c530b61fbbaa
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-11T00:42:47.080Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-11T00:42:47.080Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/family/roster`
+- **Gap:** 263.7h (baseline 74.21 rph)
+- **Detail:** Endpoint /family/roster silent for 263.7h — expected ≤213.9h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 368c6a3b-cb68-4faa-87eb-55856903849c
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-11T00:42:47.081Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-11T00:42:47.081Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/dag/emit`
+- **Gap:** 141.9h (baseline 550958.13 rph)
+- **Detail:** Endpoint /dag/emit silent for 141.9h — expected ≤140.8h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 46af9cad-7447-4c1a-93a4-bb59aac33e86
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-11T00:42:47.081Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-11T00:42:47.081Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/dag/fetch_from_peer`
+- **Gap:** 141.9h (baseline 339057.61 rph)
+- **Detail:** Endpoint /dag/fetch_from_peer silent for 141.9h — expected ≤141.2h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** bb571eaa-9ba2-4232-938d-d60cf4d8ba6a
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-11T01:05:43.275Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-11T01:05:43.275Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/mode`
+- **Gap:** 264.1h (baseline 66.70 rph)
+- **Detail:** Endpoint /mode silent for 264.1h — expected ≤169.6h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 89572a56-09d4-4f6f-9924-7f65acff80a2
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-11T01:05:43.276Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-11T01:05:43.276Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/family/roster`
+- **Gap:** 264.1h (baseline 74.21 rph)
+- **Detail:** Endpoint /family/roster silent for 264.1h — expected ≤213.9h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 143f392d-bc0d-4f88-866f-1313a0aed369
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-11T01:05:43.277Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-11T01:05:43.277Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/dag/emit`
+- **Gap:** 142.3h (baseline 550958.13 rph)
+- **Detail:** Endpoint /dag/emit silent for 142.3h — expected ≤140.8h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** c35cdbbe-a4dd-4336-af03-1c9ed295c193
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-11T01:05:43.278Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-11T01:05:43.278Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/dag/fetch_from_peer`
+- **Gap:** 142.3h (baseline 339057.61 rph)
+- **Detail:** Endpoint /dag/fetch_from_peer silent for 142.3h — expected ≤141.2h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** d134f8a2-df63-4260-8505-08cb95e8c0cb
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._

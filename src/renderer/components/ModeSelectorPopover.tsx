@@ -120,7 +120,7 @@ export const ModeSelectorPopover: React.FC<ModeSelectorPopoverProps> = ({
       ref={popoverRef}
       role="dialog"
       aria-modal="true"
-      aria-label="Choose Mnemosyne substrate mode"
+      aria-label="Choose MnemosyneC substrate mode"
       style={styles.overlay}
     >
       <div style={styles.popover}>

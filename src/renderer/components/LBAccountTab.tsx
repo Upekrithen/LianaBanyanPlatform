@@ -290,7 +290,7 @@ export function LBAccountTab() {
             </div>
             <div style={{ fontSize: 11, color: '#64748b', lineHeight: 1.6 }}>
               Unlock Helm, Federation Stage 6, Banyan Metric sharing, and Crewman attribution.
-              Free to use Mnemosyne. Better to join.
+              Free to use MnemosyneC. Better to join.
             </div>
           </div>
           <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' as const }}>
@@ -614,7 +614,7 @@ function FrontierSection({
           </p>
           <p style={{ ...s.sub, fontSize: 10, color: '#475569' }}>
             ⚠ This makes your device visible in the cooperative mesh. Withdraw anytime. Reinstalling
-            Mnemosyne creates a new peer ID — the old node will be orphaned until you withdraw it.
+            MnemosyneC creates a new peer ID — the old node will be orphaned until you withdraw it.
           </p>
           {error && <div style={s.error}>⚠ {error}</div>}
           <button style={s.btnFrontier} onClick={onJoin} disabled={busy}>

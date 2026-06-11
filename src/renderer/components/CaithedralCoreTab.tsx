@@ -212,7 +212,7 @@ function UnavailableNotice() {
       <div style={{ fontWeight: 600, marginBottom: 4 }}>Caithedral tools available in Keystone I+</div>
       <div style={{ color: P.muted, fontSize: 11 }}>
         The <code style={{ color: P.accent }}>window.amplify.caithedral</code> bridge is not yet wired in this build.
-        Update Mnemosyne to Keystone I to enable live Banyan Metric™, MoneyPenny™, Substrate, and Substrated Folders.
+        Update MnemosyneC to Keystone I to enable live Banyan Metric™, MoneyPenny™, Substrate, and Substrated Folders.
       </div>
     </div>
   );

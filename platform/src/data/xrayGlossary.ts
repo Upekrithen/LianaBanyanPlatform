@@ -1,5 +1,5 @@
 /**
- * X-RAY GLOSSARY — Explanations for every annotated element
+ * X-RAY GLOSSARY ï¿½ Explanations for every annotated element
  * ==========================================================
  * Maps data-xray-id values to brief explanations + learn-more links.
  * When X-Ray Goggles are on, hovering any element shows its explanation.
@@ -13,7 +13,7 @@ export interface XRayGlossaryEntry {
   explanation: string;
   /** How this connects to other platform systems */
   connectedTo?: string;
-  /** Why this exists — the reasoning */
+  /** Why this exists ï¿½ the reasoning */
   why?: string;
   /** URL for "Learn more" link (opens in new tab) */
   learnMoreUrl?: string;
@@ -420,71 +420,71 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
   ),
   // --- LANDING / HERO ---
   "main-card": {
-    explanation: "The main hero card. HEOHO — Help Each Other Help Ourselves. This is the first thing visitors see.",
+    explanation: "The main hero card. HEOHO ï¿½ Help Each Other Help Ourselves. This is the first thing visitors see.",
     connectedTo: "Leads to Ghost World (explore freely) or Real World (join for $5/year). Feeds into the Welcome Fable for first-time visitors.",
-    why: "Every visitor should immediately understand what this platform is about — interdependence, not charity. The hero sets the tone for everything that follows.",
+    why: "Every visitor should immediately understand what this platform is about ï¿½ interdependence, not charity. The hero sets the tone for everything that follows.",
     learnMoreUrl: "/cephas/about",
     learnMoreLabel: "About Liana Banyan",
     elbowGreaseLevel: 1,
   },
   "hero-card": {
     explanation: "The flip card shows two sides of the platform story. Click or tap to flip between them.",
-    connectedTo: "The two sides represent the dual nature of the platform — what you give and what you receive. Ties to the C+20 reciprocity model.",
-    why: "Showing both sides in one card communicates that participation is a two-way street — not donation, not extraction.",
+    connectedTo: "The two sides represent the dual nature of the platform ï¿½ what you give and what you receive. Ties to the C+20 reciprocity model.",
+    why: "Showing both sides in one card communicates that participation is a two-way street ï¿½ not donation, not extraction.",
     elbowGreaseLevel: 1,
   },
   "hero-section": {
-    explanation: "The main hero card. HEOHO — Help Each Other Help Ourselves. This is the first thing visitors see.",
+    explanation: "The main hero card. HEOHO ï¿½ Help Each Other Help Ourselves. This is the first thing visitors see.",
     connectedTo: "Leads to Ghost World (explore freely) or Real World (join for $5/year). Feeds into the Welcome Fable for first-time visitors.",
-    why: "Every visitor should immediately understand what this platform is about — interdependence, not charity. The hero sets the tone for everything that follows.",
+    why: "Every visitor should immediately understand what this platform is about ï¿½ interdependence, not charity. The hero sets the tone for everything that follows.",
     learnMoreUrl: "/cephas/about",
     learnMoreLabel: "About Liana Banyan",
     elbowGreaseLevel: 1,
   },
   "hero-flip-card": {
     explanation: "The flip card shows two sides of the platform story. Click or tap to flip between them.",
-    connectedTo: "The two sides represent the dual nature of the platform — what you give and what you receive. Ties to the C+20 reciprocity model.",
-    why: "Showing both sides in one card communicates that participation is a two-way street — not donation, not extraction.",
+    connectedTo: "The two sides represent the dual nature of the platform ï¿½ what you give and what you receive. Ties to the C+20 reciprocity model.",
+    why: "Showing both sides in one card communicates that participation is a two-way street ï¿½ not donation, not extraction.",
     elbowGreaseLevel: 1,
   },
   "rotating-quotes": {
-    explanation: "Rotating testimonial quotes from members and supporters. Real voices showing real impact — auto-cycles every few seconds.",
+    explanation: "Rotating testimonial quotes from members and supporters. Real voices showing real impact ï¿½ auto-cycles every few seconds.",
     connectedTo: "Feeds from Success Stories and member testimonials. Each quote links to the member's public profile or story if they've opted in.",
     why: "Social proof from real people beats any marketing copy. Seeing someone like you succeed makes the possibility real.",
     elbowGreaseLevel: 1,
   },
   "cooperative-commerce-header": {
-    explanation: "The 'Cooperative Commerce' header — this platform is a worker-owned cooperative, not a corporation extracting value. Cost+20% pricing, member-governed.",
+    explanation: "The 'Cooperative Commerce' header ï¿½ this platform is a worker-owned cooperative, not a corporation extracting value. Cost+20% pricing, member-governed.",
     connectedTo: "Ties directly to the C+20 economic model, Fly on the Wall transparency ledger, and the 16 initiatives funded by the 20% margin.",
-    why: "Naming what we are up front. Not 'social enterprise' or 'marketplace' — cooperative commerce. The words matter because the structure matters.",
+    why: "Naming what we are up front. Not 'social enterprise' or 'marketplace' ï¿½ cooperative commerce. The words matter because the structure matters.",
     learnMoreUrl: "/cephas/under-the-hood/economic-model",
     learnMoreLabel: "Economic Model",
     elbowGreaseLevel: 1,
   },
   "heoho-headline": {
-    explanation: "Help Each Other, Help Ourselves — the foundational principle. Interdependence, not collectivism. Each person maintains individual agency.",
+    explanation: "Help Each Other, Help Ourselves ï¿½ the foundational principle. Interdependence, not collectivism. Each person maintains individual agency.",
     connectedTo: "This philosophy powers every system: Cost+20% pricing, Marks from differential, BandWagon earned authority, and the Three-Currency economy.",
-    why: "Interdependence preserves individual agency while creating collective benefit. Collectivism subordinates the individual — we don't do that. (1 Corinthians 12:21-26)",
+    why: "Interdependence preserves individual agency while creating collective benefit. Collectivism subordinates the individual ï¿½ we don't do that. (1 Corinthians 12:21-26)",
     learnMoreUrl: "/cephas/under-the-hood/heoho",
     learnMoreLabel: "The HEOHO Philosophy",
     elbowGreaseLevel: 1,
   },
   "heoho-title": {
-    explanation: "Help Each Other, Help Ourselves — the foundational principle. Interdependence, not collectivism. Each person maintains individual agency.",
+    explanation: "Help Each Other, Help Ourselves ï¿½ the foundational principle. Interdependence, not collectivism. Each person maintains individual agency.",
     connectedTo: "This philosophy powers every system: Cost+20% pricing, Marks from differential, BandWagon earned authority, and the Three-Currency economy.",
-    why: "Interdependence preserves individual agency while creating collective benefit. Collectivism subordinates the individual — we don't do that. (1 Corinthians 12:21-26)",
+    why: "Interdependence preserves individual agency while creating collective benefit. Collectivism subordinates the individual ï¿½ we don't do that. (1 Corinthians 12:21-26)",
     learnMoreUrl: "/cephas/under-the-hood/heoho",
     learnMoreLabel: "The HEOHO Philosophy",
     elbowGreaseLevel: 1,
   },
   "enter-watch-buttons": {
-    explanation: "ENTER takes you into the platform. WATCH plays the Welcome Fable — a short animated story about why this exists and how it works.",
+    explanation: "ENTER takes you into the platform. WATCH plays the Welcome Fable ï¿½ a short animated story about why this exists and how it works.",
     connectedTo: "ENTER leads to Ghost World (explore freely) or the onboarding flow. WATCH triggers the Welcome Fable cinematic experience.",
     why: "Two clear paths: jump in or learn first. No one should feel forced to commit before understanding what they're joining.",
     elbowGreaseLevel: 1,
   },
   "durins-door": {
-    explanation: "Durin's Door — the hidden keyhole in the 'O' of Ourselves. Enter the password to unlock special access (Hofund system).",
+    explanation: "Durin's Door ï¿½ the hidden keyhole in the 'O' of Ourselves. Enter the password to unlock special access (Hofund system).",
     connectedTo: "Part of the Hofund security system. Links to Crown Letter delegation chains and special-access areas.",
     why: "Some things should be discovered, not advertised. The hidden door rewards curious explorers and provides secure access to privileged features.",
     elbowGreaseLevel: 3,
@@ -492,7 +492,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
 
   // --- WELCOME GATE / FABLE ---
   "welcomegate-fable": {
-    explanation: "The Welcome Fable — a short animated story that introduces the platform's purpose. Plays once for first-time visitors.",
+    explanation: "The Welcome Fable ï¿½ a short animated story that introduces the platform's purpose. Plays once for first-time visitors.",
     learnMoreUrl: "/cephas/about/origin-story",
     learnMoreLabel: "The Origin Story",
     elbowGreaseLevel: 2,
@@ -504,13 +504,13 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
 
   // --- NAVIGATION & STRUCTURE ---
   "crows-nest": {
-    explanation: "The Crow's Nest — a discovery flyover of the entire platform. Peek at any feature before diving in. Three depth levels: Glimpse, Peek, Tell Me More.",
+    explanation: "The Crow's Nest ï¿½ a discovery flyover of the entire platform. Peek at any feature before diving in. Three depth levels: Glimpse, Peek, Tell Me More.",
     learnMoreUrl: "/cephas/under-the-hood/crows-nest",
     learnMoreLabel: "Crow's Nest Guide",
     elbowGreaseLevel: 1,
   },
   "patent-portfolio": {
-    explanation: "The patent portfolio ticker. Shows the estimated value of the cooperative's IP holdings — 60% of Founder patents go to the platform.",
+    explanation: "The patent portfolio ticker. Shows the estimated value of the cooperative's IP holdings ï¿½ 60% of Founder patents go to the platform.",
     learnMoreUrl: "/cephas/under-the-hood/ip-portfolio",
     learnMoreLabel: "IP Portfolio Details",
     elbowGreaseLevel: 1,
@@ -522,7 +522,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
 
   // --- CURRENCY SYSTEM ---
   "credits-display": {
-    explanation: "Credits — purchased with fiat ($1 = 1 Credit). Universal use, closed-loop (no cash-out). The everyday spending currency.",
+    explanation: "Credits ï¿½ purchased with fiat ($1 = 1 Credit). Universal use, closed-loop (no cash-out). The everyday spending currency.",
     connectedTo: "Used to buy goods in the Mall, back Production Runs, purchase Cue Card decks, and pay for services. Feeds into Bounty payouts and Lark rewards.",
     why: "Closed-loop prevents extraction. Your dollar stays in the ecosystem working for everyone, not flowing out to outside owners. 1 Credit = 1 Mark = 1 Joule in value.",
     learnMoreUrl: "/cephas/under-the-hood/three-currencies",
@@ -531,18 +531,18 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
     elbowGreaseLevel: 2,
   },
   "marks-display": {
-    explanation: "Marks — effort-debt currency earned through participation. Restricted to essentials (food, medical). Cleared by contributing to the cooperative.",
+    explanation: "Marks ï¿½ effort-debt currency earned through participation. Restricted to essentials (food, medical). Cleared by contributing to the cooperative.",
     connectedTo: "Earned from Bounties, Larks, and participation. Used for BandWagon project backing (earn SAA), Pledged Mark Voting, and Steward escrow. Backed Marks fund projects.",
-    why: "Marks emerge from differential ONLY — never granted as gifts. This ensures every Mark represents real contribution. When you earn Marks, you've actually done something.",
+    why: "Marks emerge from differential ONLY ï¿½ never granted as gifts. This ensures every Mark represents real contribution. When you earn Marks, you've actually done something.",
     learnMoreUrl: "/cephas/under-the-hood/three-currencies",
     learnMoreLabel: "How Marks Work",
     faqAnchorId: "how-marks-work",
     elbowGreaseLevel: 2,
   },
   "joules-display": {
-    explanation: "Joules — surplus storage with 'forever stamp' mechanic. Locks your exchange rate at purchase time. LB owns the Joules; you earn authority to direct them.",
-    connectedTo: "Earned through Production Run backing (5x Pre-Mint multiplier). Powers governance weight and Service Allocation Authority. Not ownership — earned direction authority.",
-    why: "The 'forever stamp' protects early supporters. If you buy Joules at today's rate, that rate is locked forever — like buying a stamp before the price goes up.",
+    explanation: "Joules ï¿½ surplus storage with 'forever stamp' mechanic. Locks your exchange rate at purchase time. LB owns the Joules; you earn authority to direct them.",
+    connectedTo: "Earned through Production Run backing (5x Pre-Mint multiplier). Powers governance weight and Service Allocation Authority. Not ownership ï¿½ earned direction authority.",
+    why: "The 'forever stamp' protects early supporters. If you buy Joules at today's rate, that rate is locked forever ï¿½ like buying a stamp before the price goes up.",
     learnMoreUrl: "/cephas/under-the-hood/three-currencies",
     learnMoreLabel: "Joules Explained",
     faqAnchorId: "joules-forever-stamp",
@@ -551,7 +551,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
 
   // --- BABYLON CANDLES ---
   "babylon-candle": {
-    explanation: "Babylon Candles — one-use invitation tokens that transport someone directly into the platform. Like a teleportation spell from Stardust. Give one to someone you want to invite.",
+    explanation: "Babylon Candles ï¿½ one-use invitation tokens that transport someone directly into the platform. Like a teleportation spell from Stardust. Give one to someone you want to invite.",
     connectedTo: "Feeds the TasteMaker Trust Chain (attribution daisy chain, max 5 links). Your candle recipient becomes part of your referral network, earning you Pioneer-tier referral Marks.",
     why: "Personal invitation > mass marketing. When YOU give someone a candle, they arrive knowing someone real brought them here. That trust compounds through the attribution chain.",
     learnMoreUrl: "/cephas/under-the-hood/babylon-candles",
@@ -571,7 +571,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
 
   // --- CUE CARDS ---
   "cue-card": {
-    explanation: "Cue Cards — shareable recruitment cards included with your $5/year membership. Each card is both a benefit communication and a recruitment tool with your attribution code.",
+    explanation: "Cue Cards ï¿½ shareable recruitment cards included with your $5/year membership. Each card is both a benefit communication and a recruitment tool with your attribution code.",
     learnMoreUrl: "/cephas/under-the-hood/cue-cards",
     learnMoreLabel: "Cue Card System",
     faqAnchorId: "cue-cards",
@@ -580,7 +580,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
 
   // --- INITIATIVES ---
   "lets-make-dinner": {
-    explanation: "Let's Make Dinner — run a kitchen node. Cook meals for your community using pre-sold capacity. Church kitchens, food trucks, or home kitchens during off-hours.",
+    explanation: "Let's Make Dinner ï¿½ run a kitchen node. Cook meals for your community using pre-sold capacity. Church kitchens, food trucks, or home kitchens during off-hours.",
     connectedTo: "Uses Cold Start Recipe Cards for launch strategy. Captains get Naval Rank progression. Feeds Success Stories and the live ticker. Grocery nodes supply ingredients.",
     why: "Pre-sold capacity = zero startup risk. The 50% rule means you only cook what's already paid for. Every kitchen that sits empty 5 days a week is a wasted resource.",
     learnMoreUrl: "/initiatives/lets-make-dinner",
@@ -588,7 +588,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
     elbowGreaseLevel: 7,
   },
   "lets-get-groceries": {
-    explanation: "Let's Get Groceries — aggregate buying power. Run a distribution hub that coordinates bulk purchasing and delivers groceries at volume-discount prices.",
+    explanation: "Let's Get Groceries ï¿½ aggregate buying power. Run a distribution hub that coordinates bulk purchasing and delivers groceries at volume-discount prices.",
     connectedTo: "Supplies ingredients to Kitchen Nodes. Uses Cold Start 'Grocery Run' strategy. Volume = savings that compound across households. Feeds into Success Ticker.",
     why: "You're going to the store this week anyway. Start by picking up groceries for one neighbor. Then five. Then the whole block. Aggregation creates savings no individual can access alone.",
     learnMoreUrl: "/initiatives/lets-get-groceries",
@@ -596,13 +596,13 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
     elbowGreaseLevel: 7,
   },
   "lets-go-shopping": {
-    explanation: "Let's Go Shopping — curate local retail. Connect platform creators with local buyers through pop-ups, storefronts, or online showcases.",
+    explanation: "Let's Go Shopping ï¿½ curate local retail. Connect platform creators with local buyers through pop-ups, storefronts, or online showcases.",
     learnMoreUrl: "/initiatives/lets-go-shopping",
     learnMoreLabel: "Explore Let's Go Shopping",
     elbowGreaseLevel: 7,
   },
   "defense-klaus": {
-    explanation: "Defense Klaus — community safety net. Passive abuse detection, Community Alert Network, and emergency support systems. The submarine blast door for families in crisis.",
+    explanation: "Defense Klaus ï¿½ community safety net. Passive abuse detection, Community Alert Network, and emergency support systems. The submarine blast door for families in crisis.",
     learnMoreUrl: "/initiatives/defense-klaus",
     learnMoreLabel: "Defense Klaus System",
     elbowGreaseLevel: 7,
@@ -610,7 +610,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
 
   // --- BANDWAGON ---
   "bandwagon": {
-    explanation: "BandWagon — back projects with Marks. If the project succeeds, you earn increased Service Allocation Authority. This is contribution impact — earned authority to allocate cooperative resources.",
+    explanation: "BandWagon ï¿½ back projects with Marks. If the project succeeds, you earn increased Service Allocation Authority. This is contribution impact ï¿½ earned authority to allocate cooperative resources.",
     connectedTo: "Drives Production Runs (Fantasy Draft). Feeds TasteMaker Trust Chain and Taste Ranger progression (Scout ? Luminary). Powers Backed Marks and Business Swoop mechanics.",
     why: "This is NOT a speculative return. This is earned authority to allocate cooperative resources based on demonstrated judgment. Your track record of picking winners = your allocation budget.",
     learnMoreUrl: "/cephas/under-the-hood/bandwagon",
@@ -621,14 +621,14 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
   "bandwagon-card": {
     explanation: "BandWagon backing card. Shows project status, backers, and your potential SAA increase if the project succeeds.",
     connectedTo: "First 100 backers share influence proportionally (First-100 Rule). Links to Fantasy League prediction accuracy ? unlocks real Backed Marks allocation.",
-    why: "Positive-only QA — promotes, doesn't ding. Absence of backing is sufficient signal. No downvotes needed when attention is the currency.",
+    why: "Positive-only QA ï¿½ promotes, doesn't ding. Absence of backing is sufficient signal. No downvotes needed when attention is the currency.",
     learnMoreUrl: "/cephas/under-the-hood/bandwagon",
     elbowGreaseLevel: 2,
   },
 
   // --- PRODUCTION RUNS ---
   "production-run": {
-    explanation: "Production Run — a maker's product needs 500 pre-orders to trigger manufacturing. Zero risk (only produce what's pre-sold). First 100 backers get multiplier bonuses.",
+    explanation: "Production Run ï¿½ a maker's product needs 500 pre-orders to trigger manufacturing. Zero risk (only produce what's pre-sold). First 100 backers get multiplier bonuses.",
     connectedTo: "Feeds BandWagon (back runs ? earn SAA), Success Stories (completed runs become shareable), and the live Success Ticker. Makers earn XP through production labor formula.",
     why: "500 pre-orders means the maker has guaranteed revenue before producing a single unit. No speculative manufacturing. All pre-orders paid in full before production begins.",
     learnMoreUrl: "/production-runs",
@@ -637,16 +637,16 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
     elbowGreaseLevel: 7,
   },
   "production-run-draft": {
-    explanation: "The Draft Board — Fantasy Football-style picking of production runs to back. Filter by trending, almost-funded, HexIsle-compatible, or new proposals.",
+    explanation: "The Draft Board ï¿½ Fantasy Football-style picking of production runs to back. Filter by trending, almost-funded, HexIsle-compatible, or new proposals.",
     connectedTo: "Your draft picks appear alongside the live Success Ticker so you can compare your picks with platform-wide results. Ties to TasteMaker progression and referral chains.",
-    why: "Like Fantasy Football — you pick the projects you believe in, watch them fund and ship, and your track record builds your reputation. Prediction accuracy ? real allocation authority.",
+    why: "Like Fantasy Football ï¿½ you pick the projects you believe in, watch them fund and ship, and your track record builds your reputation. Prediction accuracy ? real allocation authority.",
     learnMoreUrl: "/production-runs",
     elbowGreaseLevel: 2,
   },
 
   // --- COLD START ---
   "cold-start-cards": {
-    explanation: "Cold Start Recipe Cards — step-by-step playbooks for launching your node or project. Pick a strategy, follow the steps, scale when ready.",
+    explanation: "Cold Start Recipe Cards ï¿½ step-by-step playbooks for launching your node or project. Pick a strategy, follow the steps, scale when ready.",
     learnMoreUrl: "/cephas/under-the-hood/cold-start",
     learnMoreLabel: "Cold Start Strategies",
     elbowGreaseLevel: 7,
@@ -654,7 +654,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
 
   // --- STEWARDS ---
   "steward-card": {
-    explanation: "Steward system — project managers who pledge their own Marks (skin in the game). Pledged Marks are escrowed per-project. Released on success, absorbed on failure.",
+    explanation: "Steward system ï¿½ project managers who pledge their own Marks (skin in the game). Pledged Marks are escrowed per-project. Released on success, absorbed on failure.",
     learnMoreUrl: "/cephas/under-the-hood/stewards",
     learnMoreLabel: "Steward System",
     faqAnchorId: "stewards",
@@ -663,7 +663,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
 
   // --- GHOST WORLD ---
   "ghost-world": {
-    explanation: "Ghost World — the pre-member experience. Browse freely, no account needed. Find Golden Keys, explore, build your ghost profile. Everything carries over when you join.",
+    explanation: "Ghost World ï¿½ the pre-member experience. Browse freely, no account needed. Find Golden Keys, explore, build your ghost profile. Everything carries over when you join.",
     learnMoreUrl: "/ghost",
     learnMoreLabel: "Enter Ghost World",
     faqAnchorId: "ghost-world",
@@ -674,14 +674,14 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
     elbowGreaseLevel: 1,
   },
   "golden-keys": {
-    explanation: "Golden Keys — hidden puzzles scattered across Cephas articles. Find them to unlock rewards and prove your exploration depth.",
+    explanation: "Golden Keys ï¿½ hidden puzzles scattered across Cephas articles. Find them to unlock rewards and prove your exploration depth.",
     faqAnchorId: "golden-keys",
     elbowGreaseLevel: 3,
   },
 
   // --- XP & REPUTATION ---
   "xp-score": {
-    explanation: "XP Score — multiplicative accomplishment metric. XP = Accomplishment Score × Bounty Points. Aggregate and cumulative — never decreases.",
+    explanation: "XP Score ï¿½ multiplicative accomplishment metric. XP = Accomplishment Score ï¿½ Bounty Points. Aggregate and cumulative ï¿½ never decreases.",
     learnMoreUrl: "/cephas/under-the-hood/xp-system",
     learnMoreLabel: "XP Score System",
     faqAnchorId: "xp-score",
@@ -690,7 +690,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
 
   // --- COVERAGE MINUTES ---
   "coverage-minutes": {
-    explanation: "Coverage Minutes / The Muffled Rule — speaking time is gated by listening time. 3-minute chunks, 180-minute cap, 90-day expiry. Earn the right to speak by listening first.",
+    explanation: "Coverage Minutes / The Muffled Rule ï¿½ speaking time is gated by listening time. 3-minute chunks, 180-minute cap, 90-day expiry. Earn the right to speak by listening first.",
     learnMoreUrl: "/cephas/under-the-hood/muffled-rule",
     learnMoreLabel: "The Muffled Rule",
     faqAnchorId: "coverage-minutes",
@@ -699,7 +699,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
 
   // --- SPONSOR ---
   "plant-a-seed": {
-    explanation: "Plant a Seed — every $5 sponsors one membership. That person gets a year of access, credits to start, and a real shot at building something. You see their milestone progress.",
+    explanation: "Plant a Seed ï¿½ every $5 sponsors one membership. That person gets a year of access, credits to start, and a real shot at building something. You see their milestone progress.",
     learnMoreUrl: "/sponsor",
     learnMoreLabel: "Sponsor Portal",
     elbowGreaseLevel: 2,
@@ -712,7 +712,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
 
   // --- HEXISLE ---
   "hexisle": {
-    explanation: "HexIsle / Tereno — the hexagonal terrain board game system. 60mm tiles with water table integration, compliant mechanisms, and the definitive 27-piece stack.",
+    explanation: "HexIsle / Tereno ï¿½ the hexagonal terrain board game system. 60mm tiles with water table integration, compliant mechanisms, and the definitive 27-piece stack.",
     learnMoreUrl: "https://hexisle.web.app",
     learnMoreLabel: "HexIsle Portal",
     elbowGreaseLevel: 4,
@@ -720,14 +720,14 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
 
   // --- LEGAL / TRANSPARENCY ---
   "fly-on-the-wall": {
-    explanation: "Fly on the Wall — the public ledger. Real bank transactions proving the system works. Complete transparency. Test-Net By Design.",
+    explanation: "Fly on the Wall ï¿½ the public ledger. Real bank transactions proving the system works. Complete transparency. Test-Net By Design.",
     learnMoreUrl: "/fly-on-the-wall",
     learnMoreLabel: "View Public Ledger",
     faqAnchorId: "fly-on-the-wall",
     elbowGreaseLevel: 1,
   },
   "cost-plus-20": {
-    explanation: "Cost + 20% — the platform's pricing model. Sellers set prices. Market discovery. 20% floor ensures sustainability without extraction. Creator keeps 83.3%.",
+    explanation: "Cost + 20% ï¿½ the platform's pricing model. Sellers set prices. Market discovery. 20% floor ensures sustainability without extraction. Creator keeps 83.3%.",
     learnMoreUrl: "/cephas/under-the-hood/economic-model",
     learnMoreLabel: "Economic Model",
     faqAnchorId: "cost-plus-20",
@@ -736,19 +736,19 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
 
   // --- BOUNTIES / LARKS ---
   "bounty-board": {
-    explanation: "Bounty Board — tasks posted by the platform or members. Complete a bounty to earn Credits and XP. STAMP verification required.",
+    explanation: "Bounty Board ï¿½ tasks posted by the platform or members. Complete a bounty to earn Credits and XP. STAMP verification required.",
     learnMoreUrl: "/bounties",
     learnMoreLabel: "View Bounties",
     elbowGreaseLevel: 3,
   },
   "lark-submission": {
-    explanation: "Lark — your feedback, idea, or bug report for any platform component. Accepted Larks earn Credits + Marks. Every contribution is tracked on the IP ledger.",
+    explanation: "Lark ï¿½ your feedback, idea, or bug report for any platform component. Accepted Larks earn Credits + Marks. Every contribution is tracked on the IP ledger.",
     elbowGreaseLevel: 2,
   },
 
   // --- SUCCESS STORIES ---
   "success-stories": {
-    explanation: "Success Stories — real results from real members. Shared because they chose to. Anonymizable: 'Member 458 in Chicago sold 2,300 units this week.'",
+    explanation: "Success Stories ï¿½ real results from real members. Shared because they chose to. Anonymizable: 'Member 458 in Chicago sold 2,300 units this week.'",
     elbowGreaseLevel: 1,
   },
   "success-ticker": {
@@ -758,7 +758,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
 
   // --- GUILDS ---
   "guild-hub": {
-    explanation: "Guild Hub — professional communities organized by skill and initiative. Join a guild to access training, mentorship, and crew formation.",
+    explanation: "Guild Hub ï¿½ professional communities organized by skill and initiative. Join a guild to access training, mentorship, and crew formation.",
     learnMoreUrl: "/guilds",
     learnMoreLabel: "Browse Guilds",
     faqAnchorId: "guilds",
@@ -767,15 +767,15 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
 
   // --- FOOTER ---
   "platform-footer": {
-    explanation: "Platform footer — links to legal, community, and platform tools. 2,473 patent claims, {{innovationCount}} innovations. Service sponsorship, not securities.",
+    explanation: "Platform footer ï¿½ links to legal, community, and platform tools. 2,473 patent claims, {{innovationCount}} innovations. Service sponsorship, not securities.",
     elbowGreaseLevel: 1,
   },
 
   // --- SIX DEGREES ---
   "six-degrees": {
-    explanation: "Six Degrees of Separation — the universal connection engine. Bounty campaigns that leverage social networks to reach anyone: outreach (Crown Letters), medical (rare specialist access), and opportunity (job/mentorship connections).",
+    explanation: "Six Degrees of Separation ï¿½ the universal connection engine. Bounty campaigns that leverage social networks to reach anyone: outreach (Crown Letters), medical (rare specialist access), and opportunity (job/mentorship connections).",
     connectedTo: "Feeds into Herald referral chains, Babylon Candles, and the TasteMaker Trust Chain. Each referral hop is tracked and rewarded. Backer campaigns fund the bounties.",
-    why: "You already know someone who knows someone. Six Degrees turns that latent social capital into directed action — finding a transplant surgeon, reaching a celebrity for a Crown Letter, or connecting a veteran to a job.",
+    why: "You already know someone who knows someone. Six Degrees turns that latent social capital into directed action ï¿½ finding a transplant surgeon, reaching a celebrity for a Crown Letter, or connecting a veteran to a job.",
     learnMoreUrl: "/six-degrees",
     learnMoreLabel: "Six Degrees Engine",
     faqAnchorId: "six-degrees",
@@ -784,9 +784,9 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
 
   // --- CHALK OUTLINE ONBOARDING ---
   "chalk-outline-onboarding": {
-    explanation: "Chalk Outline Onboarding — project creation as a coloring book. New creators see a translucent overlay with dashed chalk outlines for every field. Fill in a section and it solidifies. Lock completed sections, preview your live page, and launch when ready.",
+    explanation: "Chalk Outline Onboarding ï¿½ project creation as a coloring book. New creators see a translucent overlay with dashed chalk outlines for every field. Fill in a section and it solidifies. Lock completed sections, preview your live page, and launch when ready.",
     connectedTo: "Powers the /create route and Creator Invite system. Drafted data persists to Supabase project_drafts. On launch, creates a live products entry. Ties into the CREATOR_INVITE_FIELDS template for invited creators.",
-    why: "Nobody likes blank forms. The chalk outline shows exactly what the finished page looks like — you just color it in. Reduces creator friction from 'what do I do?' to 'fill this in.' Progress bar and lock/unlock give a sense of momentum.",
+    why: "Nobody likes blank forms. The chalk outline shows exactly what the finished page looks like ï¿½ you just color it in. Reduces creator friction from 'what do I do?' to 'fill this in.' Progress bar and lock/unlock give a sense of momentum.",
     learnMoreUrl: "/create",
     learnMoreLabel: "Try It Now",
     faqAnchorId: "chalk-outline",
@@ -795,7 +795,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
 
   // --- DOUBLE-DIPPING & STACKING ---
   "double-dipping-stacking": {
-    explanation: "Double-Dipping and Stacking — reward layers that intentionally compound. Like an ice cream cone: each scoop is a separate reward, and they stack. Herald referral bonus + BandWagon SAA increase + Production Run early-backer multiplier + Guild XP = four scoops from one action.",
+    explanation: "Double-Dipping and Stacking ï¿½ reward layers that intentionally compound. Like an ice cream cone: each scoop is a separate reward, and they stack. Herald referral bonus + BandWagon SAA increase + Production Run early-backer multiplier + Guild XP = four scoops from one action.",
     connectedTo: "Ties into Credits, Marks, Joules, XP, SAA, Herald rewards, BandWagon, and Production Run backing. Every system is designed to create at least two reward pathways per action.",
     why: "Traditional platforms penalize 'double-dipping.' We encourage it. If one action genuinely serves multiple community goals, why wouldn't we reward all of them? The ice cream cone model: each scoop costs us nothing extra because the value was already created.",
     faqAnchorId: "double-dipping",
@@ -804,9 +804,9 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
 
   // --- STAR CHAMBER ---
   "star-chamber": {
-    explanation: "Star Chamber — multi-AI governance verification. Seven specialized AI agents (Knight, Bishop, Rook, Pawn, Queen, King, Jester) evaluate platform decisions. 5 of 7 must agree before any system-level action proceeds. Dissenting opinions are recorded and published.",
+    explanation: "Star Chamber ï¿½ multi-AI governance verification. Seven specialized AI agents (Knight, Bishop, Rook, Pawn, Queen, King, Jester) evaluate platform decisions. 5 of 7 must agree before any system-level action proceeds. Dissenting opinions are recorded and published.",
     connectedTo: "Feeds into Fly on the Wall transparency ledger. Each Star Chamber ruling is timestamped and publicly auditable. Connects to the STAMP verification system for bounty/quality assurance.",
-    why: "No single AI — and no single human — should have unchecked authority over community decisions. Seven diverse agents with different optimization functions (legal, technical, ethical, financial, creative, strategic, adversarial) catch blind spots that any one perspective would miss.",
+    why: "No single AI ï¿½ and no single human ï¿½ should have unchecked authority over community decisions. Seven diverse agents with different optimization functions (legal, technical, ethical, financial, creative, strategic, adversarial) catch blind spots that any one perspective would miss.",
     learnMoreUrl: "/cephas/under-the-hood/star-chamber",
     learnMoreLabel: "Star Chamber Governance",
     faqAnchorId: "star-chamber",
@@ -815,17 +815,17 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
 
   // --- LIFECOMPASS ---
   "life-compass": {
-    explanation: "LifeCompass — personal goal tracking integrated into the platform. Set milestones (financial, educational, health, career), track progress, and receive personality-matched recommendations for initiatives, guilds, and bounties that align with your stated goals.",
+    explanation: "LifeCompass ï¿½ personal goal tracking integrated into the platform. Set milestones (financial, educational, health, career), track progress, and receive personality-matched recommendations for initiatives, guilds, and bounties that align with your stated goals.",
     connectedTo: "Connects to Guild recommendations, Bounty matching, Initiative suggestions, and the XP system. Your LifeCompass goals influence which Cold Start Recipe Cards are suggested and which Production Runs appear in your feed.",
-    why: "A cooperative that doesn't help you reach your personal goals isn't cooperating. LifeCompass ensures every platform interaction moves you toward something you actually want — not just what the algorithm thinks will keep you scrolling.",
+    why: "A cooperative that doesn't help you reach your personal goals isn't cooperating. LifeCompass ensures every platform interaction moves you toward something you actually want ï¿½ not just what the algorithm thinks will keep you scrolling.",
     elbowGreaseLevel: 2,
   },
 
   // --- WHY NO ADS / WHY NO VC ---
   "why-no-ads-vc": {
-    explanation: "Why No Ads and Why No V.C. — two philosophy pages explaining the platform's funding model. No external advertising (growth is word-of-mouth via Heralds). No venture capital (funded by patents and grit, 100% member-owned). Every dollar that would go to Big Tech or backers goes to the community instead.",
+    explanation: "Why No Ads and Why No V.C. ï¿½ two philosophy pages explaining the platform's funding model. No external advertising (growth is word-of-mouth via Heralds). No venture capital (funded by patents and grit, 100% member-owned). Every dollar that would go to Big Tech or backers goes to the community instead.",
     connectedTo: "Ties to the Herald system (referral bonuses replace ad spend), the patent portfolio ({{provisionalApps}} provisionals with {{innovationCount}} innovations replace VC runway), and the Joules system (early supporters get forever-stamp rates instead of dilution).",
-    why: "If you take ad money, users become the product. If you take VC money, the exit becomes the product. We took neither, so the cooperative stays the product — owned by and for its members.",
+    why: "If you take ad money, users become the product. If you take VC money, the exit becomes the product. We took neither, so the cooperative stays the product ï¿½ owned by and for its members.",
     learnMoreUrl: "/why-no-ads",
     learnMoreLabel: "Why No Ads?",
     faqAnchorId: "no-ads",
@@ -834,7 +834,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
 
   // --- HEXISLE PIECES (27 canonical components) ---
   "hexisle-swan-neck": {
-    explanation: "Swan Neck — inter-Hexel dual-channel hydraulic connector. Routes water between adjacent Hexels through two opposing flow channels.",
+    explanation: "Swan Neck ï¿½ inter-Hexel dual-channel hydraulic connector. Routes water between adjacent Hexels through two opposing flow channels.",
     connectedTo: "Layer 0 (inter-Hexel). Connects to Channel Lock on each Hexel. Part of the hydraulic power chain from the Water Table.",
     why: "Without a connector between tiles, the hydraulic system stops at the tile boundary. The Swan Neck is the plumbing between rooms.",
     faqAnchorId: "hexisle-swan-neck",
@@ -845,7 +845,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
     elbowGreaseLevel: 4,
   },
   "hexisle-snap-cap-connector": {
-    explanation: "Snap-Cap Connector — waterproof snap-fit coupling between Hexels. Mates with the Swan Neck for tool-free assembly.",
+    explanation: "Snap-Cap Connector ï¿½ waterproof snap-fit coupling between Hexels. Mates with the Swan Neck for tool-free assembly.",
     connectedTo: "Layer 0 (inter-Hexel). Pairs with Swan Neck. Part of the weatherproof seal system.",
     faqAnchorId: "hexisle-snap-cap-connector",
     piggybackUrl: "/hexisle/downloads#submit",
@@ -853,7 +853,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
     elbowGreaseLevel: 4,
   },
   "hexisle-channel-lock": {
-    explanation: "Channel Lock — foundation piece. 60mm diameter, 9mm tall, three grooves channel water inflow from Swan Neck upward into the Hollow Log.",
+    explanation: "Channel Lock ï¿½ foundation piece. 60mm diameter, 9mm tall, three grooves channel water inflow from Swan Neck upward into the Hollow Log.",
     connectedTo: "Layer 1 (base). Receives water from Swan Neck, feeds Hollow Log. The floor of every Hexel.",
     faqAnchorId: "hexisle-channel-lock",
     piggybackUrl: "/hexisle/downloads#submit",
@@ -861,7 +861,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
     elbowGreaseLevel: 4,
   },
   "hexisle-hollow-log": {
-    explanation: "Hollow Log — central fluid column, 15.5mm diameter. The main highway for water flowing up through the Hexel.",
+    explanation: "Hollow Log ï¿½ central fluid column, 15.5mm diameter. The main highway for water flowing up through the Hexel.",
     connectedTo: "Layer 2 (column). Sits inside Channel Lock, feeds Golden Lotus above. Carries the 2.17 psi water from the Water Table.",
     faqAnchorId: "hexisle-hollow-log",
     piggybackUrl: "/hexisle/downloads#submit",
@@ -869,7 +869,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
     elbowGreaseLevel: 4,
   },
   "hexisle-clamshell": {
-    explanation: "Clamshell — two-part (SnapCap/SnapBottom) waterproof housing for the Golden Lotus and Rotor. Snap-fit, no adhesive.",
+    explanation: "Clamshell ï¿½ two-part (SnapCap/SnapBottom) waterproof housing for the Golden Lotus and Rotor. Snap-fit, no adhesive.",
     connectedTo: "Layers 3+5 (clamshell). Encloses the actuator and rotor. Waterproofing layer between fluid mechanics and gear train.",
     faqAnchorId: "hexisle-clamshell",
     piggybackUrl: "/hexisle/downloads#submit",
@@ -877,16 +877,16 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
     elbowGreaseLevel: 4,
   },
   "hexisle-golden-lotus": {
-    explanation: "Golden Lotus — 6 Tesla-valve cups with Rooster Teeth. Converts alternating-current water flow into unidirectional rotation. The heart of every Hexel.",
+    explanation: "Golden Lotus ï¿½ 6 Tesla-valve cups with Rooster Teeth. Converts alternating-current water flow into unidirectional rotation. The heart of every Hexel.",
     connectedTo: "Layer 4 (actuator). Receives fluid from Hollow Log, drives Rotor. Named for its lotus-petal Tesla valve geometry.",
-    why: "Traditional valves use moving parts that wear out. Tesla valves have NO moving parts — the geometry itself forces one-way flow. Six cups means six pulses per cycle.",
+    why: "Traditional valves use moving parts that wear out. Tesla valves have NO moving parts ï¿½ the geometry itself forces one-way flow. Six cups means six pulses per cycle.",
     faqAnchorId: "hexisle-golden-lotus",
     piggybackUrl: "/hexisle/downloads#submit",
     innovationNumber: 1537,
     elbowGreaseLevel: 4,
   },
   "hexisle-rooster-teeth": {
-    explanation: "Rooster Teeth — flow-directing ratchet teeth inside the Golden Lotus. Convert bidirectional AC water pulses into unidirectional rotation.",
+    explanation: "Rooster Teeth ï¿½ flow-directing ratchet teeth inside the Golden Lotus. Convert bidirectional AC water pulses into unidirectional rotation.",
     connectedTo: "Layer 4 (sub-component of Golden Lotus). Part of the AC-to-DC flow conversion chain.",
     faqAnchorId: "hexisle-rooster-teeth",
     piggybackUrl: "/hexisle/downloads#submit",
@@ -894,7 +894,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
     elbowGreaseLevel: 4,
   },
   "hexisle-rotor": {
-    explanation: "Rotor — 18 closed cavities, full 12mm height. Permanently attached to Ouralis after printing. Spins with the converted water flow.",
+    explanation: "Rotor ï¿½ 18 closed cavities, full 12mm height. Permanently attached to Ouralis after printing. Spins with the converted water flow.",
     connectedTo: "Layer 6 (rotor). Driven by Golden Lotus, drives Ouralis gear. Permanently bonded post-print.",
     faqAnchorId: "hexisle-rotor",
     piggybackUrl: "/hexisle/downloads#submit",
@@ -902,31 +902,31 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
     elbowGreaseLevel: 4,
   },
   "hexisle-ouralis": {
-    explanation: "Ouralis — 20-tooth dual-level gear with 3 cam slopes for tide simulation. The primary gear connecting water power to mechanical action.",
-    connectedTo: "Layer 7 (primary gear). Driven by Rotor, drives 3× PGears at 6.67:1 speed ratio. The cam slopes create the ocean tide rhythm.",
+    explanation: "Ouralis ï¿½ 20-tooth dual-level gear with 3 cam slopes for tide simulation. The primary gear connecting water power to mechanical action.",
+    connectedTo: "Layer 7 (primary gear). Driven by Rotor, drives 3ï¿½ PGears at 6.67:1 speed ratio. The cam slopes create the ocean tide rhythm.",
     faqAnchorId: "hexisle-ouralis",
     piggybackUrl: "/hexisle/downloads#submit",
     innovationNumber: 1537,
     elbowGreaseLevel: 4,
   },
   "hexisle-pgear": {
-    explanation: "PGear — three peripheral gears at Hexel vertices. Mushroom-head shafts with NeedleValve center. 20:3 gear ratio = 6.67× Ouralis speed.",
-    connectedTo: "Layer 8 (PGear shafts). Driven by Ouralis, drives Main Gear at 12× Ouralis speed. Three per Hexel at the vertices.",
+    explanation: "PGear ï¿½ three peripheral gears at Hexel vertices. Mushroom-head shafts with NeedleValve center. 20:3 gear ratio = 6.67ï¿½ Ouralis speed.",
+    connectedTo: "Layer 8 (PGear shafts). Driven by Ouralis, drives Main Gear at 12ï¿½ Ouralis speed. Three per Hexel at the vertices.",
     faqAnchorId: "hexisle-pgear",
     piggybackUrl: "/hexisle/downloads#submit",
     innovationNumber: 1537,
     elbowGreaseLevel: 4,
   },
   "hexisle-needle-valve": {
-    explanation: "Needle Valve — precision flow control at PGear center. Fine-tunes water flow through each peripheral gear shaft.",
-    connectedTo: "Layer 8 (sub-component of PGear). Allows per-vertex flow tuning — different Hexels can run at different speeds.",
+    explanation: "Needle Valve ï¿½ precision flow control at PGear center. Fine-tunes water flow through each peripheral gear shaft.",
+    connectedTo: "Layer 8 (sub-component of PGear). Allows per-vertex flow tuning ï¿½ different Hexels can run at different speeds.",
     faqAnchorId: "hexisle-needle-valve",
     piggybackUrl: "/hexisle/downloads#submit",
     innovationNumber: 1537,
     elbowGreaseLevel: 4,
   },
   "hexisle-sawtooth-coral": {
-    explanation: "Sawtooth Coral — ship keel engagement piece with slanted sides at 6 different angles. Enables terrain-based ship movement mechanics.",
+    explanation: "Sawtooth Coral ï¿½ ship keel engagement piece with slanted sides at 6 different angles. Enables terrain-based ship movement mechanics.",
     connectedTo: "Layer 9 (terrain gear). Engages with ship keels for movement. Six angles = six hex directions.",
     faqAnchorId: "hexisle-sawtooth-coral",
     piggybackUrl: "/hexisle/downloads#submit",
@@ -934,7 +934,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
     elbowGreaseLevel: 4,
   },
   "hexisle-timing-belt": {
-    explanation: "Timing Belt — hidden countdown mechanism below the Sawtooth mushroom. Configurable: 3 notches = trap trigger, 6 notches = portal event.",
+    explanation: "Timing Belt ï¿½ hidden countdown mechanism below the Sawtooth mushroom. Configurable: 3 notches = trap trigger, 6 notches = portal event.",
     connectedTo: "Layer 9 (optional). Counts gear revolutions ? triggers events. The game clock hidden inside terrain.",
     faqAnchorId: "hexisle-timing-belt",
     piggybackUrl: "/hexisle/downloads#submit",
@@ -942,7 +942,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
     elbowGreaseLevel: 4,
   },
   "hexisle-main-gear": {
-    explanation: "Main Gear — driven by 3× PGears at 12× Ouralis speed. The high-speed output that powers wave generators and trap mechanisms.",
+    explanation: "Main Gear ï¿½ driven by 3ï¿½ PGears at 12ï¿½ Ouralis speed. The high-speed output that powers wave generators and trap mechanisms.",
     connectedTo: "Layer 10 (output gear). Final mechanical output. Drives Football cam, wave generator, or trap mechanisms depending on Hexel configuration.",
     faqAnchorId: "hexisle-main-gear",
     piggybackUrl: "/hexisle/downloads#submit",
@@ -950,7 +950,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
     elbowGreaseLevel: 4,
   },
   "hexisle-cradle": {
-    explanation: "Cradle — dynamic platform that goes UP AND DOWN. Flips like SlottedTop. Trap trigger = Cradle flip. Football wave gen rides inside.",
+    explanation: "Cradle ï¿½ dynamic platform that goes UP AND DOWN. Flips like SlottedTop. Trap trigger = Cradle flip. Football wave gen rides inside.",
     connectedTo: "Layer 11 (dynamic). The moving part that creates waves or triggers traps. Carries the Football cam follower.",
     faqAnchorId: "hexisle-cradle",
     piggybackUrl: "/hexisle/downloads#submit",
@@ -958,7 +958,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
     elbowGreaseLevel: 4,
   },
   "hexisle-football": {
-    explanation: "Football — cam follower for variable-amplitude wave generation. Rides inside the Cradle. Oval shape converts rotation to oscillation.",
+    explanation: "Football ï¿½ cam follower for variable-amplitude wave generation. Rides inside the Cradle. Oval shape converts rotation to oscillation.",
     connectedTo: "Layer 11 (sub-component). Creates the ocean waves by converting Main Gear rotation into up-down Cradle motion.",
     faqAnchorId: "hexisle-football",
     piggybackUrl: "/hexisle/downloads#submit",
@@ -966,7 +966,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
     elbowGreaseLevel: 4,
   },
   "hexisle-capstone": {
-    explanation: "Capstone — static terrain surface. The top visual layer that players see. Sits above the Cradle for land-type Hexels.",
+    explanation: "Capstone ï¿½ static terrain surface. The top visual layer that players see. Sits above the Cradle for land-type Hexels.",
     connectedTo: "Layer 12 (surface). The 'ground' that game pieces stand on. Swappable for different biome types.",
     faqAnchorId: "hexisle-capstone",
     piggybackUrl: "/hexisle/downloads#submit",
@@ -974,7 +974,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
     elbowGreaseLevel: 4,
   },
   "hexisle-capwave": {
-    explanation: "Capwave — moving water surface. Oscillates with the Cradle to create visible wave motion. The ocean equivalent of the Capstone.",
+    explanation: "Capwave ï¿½ moving water surface. Oscillates with the Cradle to create visible wave motion. The ocean equivalent of the Capstone.",
     connectedTo: "Layer 12 (surface). Moves with Cradle motion ? visible waves. Ships ride on the Capwave surface.",
     faqAnchorId: "hexisle-capwave",
     piggybackUrl: "/hexisle/downloads#submit",
@@ -982,7 +982,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
     elbowGreaseLevel: 4,
   },
   "hexisle-slotted-top": {
-    explanation: "SlottedTop — terrain piece with Flying Buttress slots. Accepts buildings, fenceposts, and character bases. The 'soil' layer of the Hexel.",
+    explanation: "SlottedTop ï¿½ terrain piece with Flying Buttress slots. Accepts buildings, fenceposts, and character bases. The 'soil' layer of the Hexel.",
     connectedTo: "Layer 11 (terrain). Sits on Cradle. SlottedTop + FlyingButtress = the building foundation system.",
     faqAnchorId: "hexisle-slotted-top",
     piggybackUrl: "/hexisle/downloads#submit",
@@ -990,7 +990,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
     elbowGreaseLevel: 4,
   },
   "hexisle-gorgon": {
-    explanation: "Gorgon — decorative crown piece. Sits atop the Hexel stack as a visual accent. Named for its Medusa-like radial geometry.",
+    explanation: "Gorgon ï¿½ decorative crown piece. Sits atop the Hexel stack as a visual accent. Named for its Medusa-like radial geometry.",
     connectedTo: "Layer 12 (decoration). Optional aesthetic piece. Different Gorgon designs per biome.",
     faqAnchorId: "hexisle-gorgon",
     piggybackUrl: "/hexisle/downloads#submit",
@@ -998,7 +998,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
     elbowGreaseLevel: 4,
   },
   "hexisle-roots": {
-    explanation: "Roots — player-controlled pneumatic direction system. Redirects air piston output to choose which plant grows. One-way ball valves.",
+    explanation: "Roots ï¿½ player-controlled pneumatic direction system. Redirects air piston output to choose which plant grows. One-way ball valves.",
     connectedTo: "Pneumatic branch. Player decision point: choose which direction to grow plants ? different game outcomes.",
     faqAnchorId: "hexisle-roots",
     piggybackUrl: "/hexisle/downloads#submit",
@@ -1006,7 +1006,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
     elbowGreaseLevel: 4,
   },
   "hexisle-telescoping-plant": {
-    explanation: "Telescoping Plant — ratchet segments that extend upward when pneumatically pumped. Grow plants by 'watering' them with air pressure.",
+    explanation: "Telescoping Plant ï¿½ ratchet segments that extend upward when pneumatically pumped. Grow plants by 'watering' them with air pressure.",
     connectedTo: "Pneumatic branch. Driven by Roots direction choice. Extends in discrete segments ? bloom sequence ? Flying Flower launch.",
     faqAnchorId: "hexisle-telescoping-plant",
     piggybackUrl: "/hexisle/downloads#submit",
@@ -1014,7 +1014,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
     elbowGreaseLevel: 4,
   },
   "hexisle-nue-wall": {
-    explanation: "Nue Wall — defensive terrain wall piece. Slots into the Hexel edge for castle, cliff, or barrier terrain configurations.",
+    explanation: "Nue Wall ï¿½ defensive terrain wall piece. Slots into the Hexel edge for castle, cliff, or barrier terrain configurations.",
     connectedTo: "Layer 11 (terrain modifier). Creates elevation changes and defensive positions. Named after the Japanese chimera.",
     faqAnchorId: "hexisle-nue-wall",
     piggybackUrl: "/hexisle/downloads#submit",
@@ -1022,7 +1022,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
     elbowGreaseLevel: 4,
   },
   "hexisle-ring-of-power": {
-    explanation: "Ring of Power — magnetic influence zone ring. Defines the area of effect for character abilities and terrain triggers.",
+    explanation: "Ring of Power ï¿½ magnetic influence zone ring. Defines the area of effect for character abilities and terrain triggers.",
     connectedTo: "Layer 10 (interaction). Characters within the Ring trigger Hexel events. Magnetic coupling to character base magnets.",
     faqAnchorId: "hexisle-ring-of-power",
     piggybackUrl: "/hexisle/downloads#submit",
@@ -1030,7 +1030,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
     elbowGreaseLevel: 4,
   },
   "hexisle-one-way-valve": {
-    explanation: "One-Way Valve — ball valve preventing backflow in the pneumatic system. Ensures air pressure builds in one direction only.",
+    explanation: "One-Way Valve ï¿½ ball valve preventing backflow in the pneumatic system. Ensures air pressure builds in one direction only.",
     connectedTo: "Pneumatic branch. Prevents air from flowing backward when players pump the character's air piston.",
     faqAnchorId: "hexisle-one-way-valve",
     piggybackUrl: "/hexisle/downloads#submit",
@@ -1038,7 +1038,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
     elbowGreaseLevel: 4,
   },
   "hexisle-tripod-vertices-anchor": {
-    explanation: "Tripod Vertices Anchor — three-point mounting system at Hexel vertices. Locks pieces in place across the three PGear shaft positions.",
+    explanation: "Tripod Vertices Anchor ï¿½ three-point mounting system at Hexel vertices. Locks pieces in place across the three PGear shaft positions.",
     connectedTo: "Layer 8 (structural). Provides rigid mounting for PGear shafts and terrain pieces. Three-point = stable on any surface.",
     faqAnchorId: "hexisle-tripod-vertices-anchor",
     piggybackUrl: "/hexisle/downloads#submit",
@@ -1046,7 +1046,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
     elbowGreaseLevel: 4,
   },
   "hexisle-snap-base": {
-    explanation: "Snap Base — quick-connect base for character figures and buildings. Snaps into SlottedTop without tools. The 'parking spot' for game pieces.",
+    explanation: "Snap Base ï¿½ quick-connect base for character figures and buildings. Snaps into SlottedTop without tools. The 'parking spot' for game pieces.",
     connectedTo: "Layer 11 (mounting). Characters and buildings attach here. Magnetic alignment + snap-fit = no fumbling during gameplay.",
     faqAnchorId: "hexisle-snap-base",
     piggybackUrl: "/hexisle/downloads#submit",
@@ -1055,10 +1055,10 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
   },
 
   // ---------------------------------------------------------------
-  // MISSION ONE PAGE — B087
+  // MISSION ONE PAGE ï¿½ B087
   // ---------------------------------------------------------------
   "mission-one-page": {
-    explanation: "Mission ONE: the cooperative's charitable food program. Bishop Myriel's principle — set another place at the table, no questions asked.",
+    explanation: "Mission ONE: the cooperative's charitable food program. Bishop Myriel's principle ï¿½ set another place at the table, no questions asked.",
     connectedTo: "Links to Gleaner's Corner (3.3% fund), subscription flow, and Missions Two (Housing) and Three (Transportation).",
     why: "The first mission frames the cooperative as a community that feeds its members with dignity, not charity.",
     elbowGreaseLevel: 2,
@@ -1070,7 +1070,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
     elbowGreaseLevel: 1,
   },
   "mission-one-bishop-frame": {
-    explanation: "Narrative frame from Les Misérables: Bishop Myriel set a place for anyone at his table. No separate dining room. Just another place.",
+    explanation: "Narrative frame from Les Misï¿½rables: Bishop Myriel set a place for anyone at his table. No separate dining room. Just another place.",
     connectedTo: "Philosophical anchor for the entire program. Hospitality, not handout.",
     why: "Narrative framing establishes dignity-first cooperative identity.",
     elbowGreaseLevel: 1,
@@ -1088,7 +1088,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
     elbowGreaseLevel: 2,
   },
   "mission-one-next-missions": {
-    explanation: "Forward look: Mission TWO is Cooperative Housing. Mission THREE is Cooperative Transportation (Rideshare Routes — the Hood Uber fix).",
+    explanation: "Forward look: Mission TWO is Cooperative Housing. Mission THREE is Cooperative Transportation (Rideshare Routes ï¿½ the Hood Uber fix).",
     connectedTo: "Links to /housing and /rideshare. Shows Mission ONE is first of three core initiatives.",
     why: "The cooperative doesn't stop at the dinner table. Food ? Housing ? Transportation.",
     elbowGreaseLevel: 1,
@@ -1101,7 +1101,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
   },
 
   // ---------------------------------------------------------------
-  // GLEANER'S CORNER PAGE — B087
+  // GLEANER'S CORNER PAGE ï¿½ B087
   // ---------------------------------------------------------------
   "gleaners-corner-page": {
     explanation: "Transparency hub: 3.3% of every transaction flows here. Members see where the charitable fund goes and direct it.",
@@ -1110,7 +1110,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
     elbowGreaseLevel: 2,
   },
   "gleaners-corner-hero": {
-    explanation: "Gleaner's Corner header. The 3.3% is built into Cost+20% — it's not a fee on top. The creator still keeps 83.3%.",
+    explanation: "Gleaner's Corner header. The 3.3% is built into Cost+20% ï¿½ it's not a fee on top. The creator still keeps 83.3%.",
     connectedTo: "Frames the page as a transparency tool for the network's charitable giving.",
     why: "Members should immediately understand this is their collective fund.",
     elbowGreaseLevel: 1,
@@ -1129,7 +1129,7 @@ export const XRAY_GLOSSARY: Record<string, XRayGlossaryEntry> = {
   },
 
   // ---------------------------------------------------------------
-  // SUBSYSTEM EXPLAINER CORPUS — 22 subsystems (BLACK_MAMBA_WAVE_2 / BP072)
+  // SUBSYSTEM EXPLAINER CORPUS ï¿½ 22 subsystems (BLACK_MAMBA_WAVE_2 / BP072)
   // ---------------------------------------------------------------
 
   "subsystem-ingest-pipeline": {

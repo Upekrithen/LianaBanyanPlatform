@@ -123,7 +123,7 @@ function MainPhase({
           </div>
           <div style={{ fontSize: 11, color: '#64748b', marginTop: 4, lineHeight: 1.6 }}>
             Linking your Liana Banyan account lets your device join the Frontier — a cooperative mesh
-            where members share substrate and multiply what Mnemosyne knows. Free to use. Better together.
+            where members share substrate and multiply what MnemosyneC knows. Free to use. Better together.
           </div>
           {/* Little Red Hen narration — join context */}
           <div style={{ fontSize: 10, color: '#475569', marginTop: 6, fontStyle: 'italic' }}>
@@ -281,7 +281,7 @@ function TellMeWherePhase({ onNavigate, onClose }: { onNavigate: () => void; onC
         Where to find this later
       </div>
       <div style={{ fontSize: 11, color: '#94a3b8', lineHeight: 1.6 }}>
-        In Mnemosyne, look for the{' '}
+        In MnemosyneC, look for the{' '}
         <strong style={{ color: '#fbbf24' }}>LB Account</strong>{' '}
         tab in the tab bar at the top.
         <br /><br />

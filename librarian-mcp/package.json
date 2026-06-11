@@ -26,7 +26,9 @@
     "pheromone:build": "node scripts/pheromone-bloodhound.mjs",
     "pheromone:bloodhound": "node scripts/pheromone-bloodhound.mjs",
     "watchdog": "tsc && node dist/watchdog/daemon.js",
-    "watchdog:raw": "node dist/watchdog/daemon.js"
+    "watchdog:raw": "node dist/watchdog/daemon.js",
+    "mcp:http": "node scripts/mnemosynec-mcp-http.mjs --force",
+    "mcp:stdio": "node scripts/mnemosynec-mcp-stdio.mjs"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",

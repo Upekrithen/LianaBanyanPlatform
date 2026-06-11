@@ -128,7 +128,7 @@ export const DashboardCornerAffordance: React.FC = () => {
         type="button"
         onClick={toggleMenu}
         title={open ? 'Close menu' : 'Open menu'}
-        aria-label="Mnemosyne quick actions"
+        aria-label="MnemosyneC quick actions"
         aria-expanded={open}
         aria-haspopup="menu"
         style={pillStyle}
@@ -141,7 +141,7 @@ export const DashboardCornerAffordance: React.FC = () => {
       </button>
 
       {open && (
-        <div role="menu" aria-label="Mnemosyne actions" style={popoverStyle}>
+        <div role="menu" aria-label="MnemosyneC actions" style={popoverStyle}>
           <div
             role="menuitem"
             tabIndex={0}

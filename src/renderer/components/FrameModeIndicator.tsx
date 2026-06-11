@@ -48,7 +48,7 @@ const MODE_META: Record<FrameMode, {
   ai_burst: {
     icon: '🔥',
     label: 'AI Burst',
-    tooltip: 'AI Burst mode — Cloud AI + Mnemosyne + Substrate. Pay-per-token.',
+    tooltip: 'AI Burst mode — Cloud AI + MnemosyneC + Substrate. Pay-per-token.',
     color: '#facc15',
   },
   normal: {
