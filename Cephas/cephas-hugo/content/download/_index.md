@@ -22,10 +22,10 @@ tldr: "Everything you need to get started with MnemosyneC, the offline-first coo
 
 **Step 1 — Download and install**
 
-[→ Download MnemosyneC for Windows](https://github.com/Upekrithen/LianaBanyanPlatform/releases/download/v0.1.48/MnemosyneC-Setup-0.1.48.exe) *(Mac build: see bounty below — we need a Mac builder)*
+[→ Download MnemosyneC for Windows](https://github.com/Upekrithen/LianaBanyanPlatform/releases/download/v0.1.49/MnemosyneC-Setup-0.1.49.exe) *(Mac build: see bounty below — we need a Mac builder)*
 
-**Latest release:** v0.1.48 — Mesh Glance page + gemma4:12b SKU promotion + STALE fix + userData rename
-**SHA-256:** `DC0D9677C1D7E912BD4B8A2A522D6092DC1E5B3417B480C6C35C7BBC198CF6F7`
+**Latest release:** v0.1.49 — Lean Install Experience: two-screen welcome + gemma4:12b install + spawn consolidation
+**SHA-256:** `12C367834A7F3FE3F299963442871A3BFF94926C338F4DFF26C480E713B8EFB4`
 
 MnemosyneC currently ships signed Windows builds. A macOS build requires a community member with a Mac + Apple Developer ID. [See the Mac bounty poster &darr;](#bounty-posters) — earn Marks for making it happen.
 
