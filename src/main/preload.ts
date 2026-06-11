@@ -962,6 +962,10 @@ contextBridge.exposeInMainWorld('amplify', {
   toggleDevTools: (): void =>
     ipcRenderer.send('devtools:toggle'),
 
+  // ── SEG-V0144-UI-1: Interface zoom — applies to all active BrowserWindows ──
+  setZoomFactor: (factor: number): void =>
+    ipcRenderer.send('set-zoom-factor', factor),
+
   // ── SEG-Q-4 BP078: Auto-prepare FULL upgrade ──────────────────────────────
   getAutoPrepare: (): Promise<{ enabled: boolean; modelReady: boolean; pulling: boolean }> =>
     ipcRenderer.invoke('auto-prepare:get'),
@@ -1261,6 +1265,8 @@ declare global {
       earnBlackCrowFeather?: (payload: { userId: string; reason: string; metadata?: Record<string, unknown> }) => Promise<{ ok: boolean; featherId?: string; alreadyIssued?: boolean; error?: string }>;
       // SEG-Q-3 BP078: DevTools toggle
       toggleDevTools: () => void;
+      // SEG-V0144-UI-1: Interface zoom
+      setZoomFactor: (factor: number) => void;
       // SEG-Q-4 BP078: Auto-prepare FULL upgrade
       getAutoPrepare: () => Promise<{ enabled: boolean; modelReady: boolean; pulling: boolean }>;
       setAutoPrepare: (enabled: boolean) => void;

@@ -1168,6 +1168,14 @@ const THEME_OPTIONS: Array<{ id: Theme; label: string; icon: string }> = [
   { id: 'system', label: 'System', icon: '💻' },
 ];
 
+const ZOOM_OPTIONS: Array<{ value: number; label: string }> = [
+  { value: 1.0,  label: '100%' },
+  { value: 1.1,  label: '110%' },
+  { value: 1.15, label: '115% (default)' },
+  { value: 1.2,  label: '120%' },
+  { value: 1.25, label: '125%' },
+];
+
 const MODE_OPTIONS: Array<{ id: SubstrateMode; label: string; desc: string }> = [
   { id: 'ai_burst',  label: '🔥 AI Burst',  desc: 'Claude AI for enhanced analysis · free API key from console.anthropic.com · pay-per-token' },
   { id: 'normal',    label: '🪵 Normal',     desc: 'Balanced · Ollama local AI · recommended for most tasks · zero marginal cost' },
@@ -1269,6 +1277,11 @@ export function SettingsTab({
     (localStorage.getItem('mnemo_theme') as Theme | null) ?? 'dark'
   );
 
+  const [zoomFactor, setZoomFactor] = useState<number>(() => {
+    const stored = localStorage.getItem('ui.zoomFactor');
+    return stored ? parseFloat(stored) : 1.15;
+  });
+
   const [substrateMode, setSubstrateMode] = useState<SubstrateMode>(() =>
     (localStorage.getItem('mnemo_default_mode') as SubstrateMode | null) ?? 'normal'
   );
@@ -1307,6 +1320,12 @@ export function SettingsTab({
     localStorage.setItem('mnemo_theme', t);
   }
 
+  function handleZoomChange(factor: number) {
+    setZoomFactor(factor);
+    localStorage.setItem('ui.zoomFactor', String(factor));
+    window.amplify?.setZoomFactor?.(factor);
+  }
+
   function handleModeChange(m: SubstrateMode) {
     setSubstrateMode(m);
     localStorage.setItem('mnemo_default_mode', m);
@@ -1329,7 +1348,7 @@ export function SettingsTab({
     { key: 'ai-model',       label: 'AI Model Assignment',    keywords: ['ai model', 'ollama', 'bishop', 'knight', 'pawn', 'rook', 'orchestrator', 'builder', 'researcher', 'primary assistant'] },
     { key: 'mnem-drt',       label: 'Memory Depth Tier',      keywords: ['mnem', 'drt', 'retrieval', 'specialist', 'wikipedia', 'wikidata', 'arxiv', 'wolfram', 'memory depth'] },
     { key: 'advanced',       label: 'Advanced',               keywords: ['devtools', 'developer tools', 'debugging', 'remote-debugging', 'advanced', 'inspect', 'diagnostic'] },
-    { key: 'appearance',     label: 'Appearance',             keywords: ['appearance', 'theme', 'dark', 'light'] },
+    { key: 'appearance',     label: 'Appearance',             keywords: ['appearance', 'theme', 'dark', 'light', 'zoom', 'interface zoom', 'scale'] },
     { key: 'substrate',      label: 'Substrate Mode',         keywords: ['substrate', 'mode', 'burst', 'normal', 'fallback'] },
     { key: 'developer',      label: 'Developer Mode',         keywords: ['developer', 'dev mode', 'devmode'] },
     { key: 'research',       label: 'Research Participation', keywords: ['chronos', 'research', 'consent'] },
@@ -1858,6 +1877,35 @@ export function SettingsTab({
                 {t.icon} {t.label}
               </button>
             ))}
+          </div>
+        </div>
+        <div style={{ ...s.card, marginTop: 6 }}>
+          <div style={s.label}>Interface Zoom</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <select
+              value={zoomFactor}
+              onChange={(e) => handleZoomChange(parseFloat(e.target.value))}
+              style={{
+                background: 'rgba(15,23,42,0.8)',
+                border: '1px solid rgba(100,116,139,0.25)',
+                borderRadius: 6,
+                color: '#e2e8f0',
+                fontSize: 11,
+                padding: '4px 8px',
+                cursor: 'pointer',
+                outline: 'none',
+                fontFamily: 'inherit',
+              }}
+            >
+              {ZOOM_OPTIONS.map((z) => (
+                <option key={z.value} value={z.value}>
+                  {z.label}
+                </option>
+              ))}
+            </select>
+            <span style={{ fontSize: 9, color: '#475569' }}>
+              Applied to all windows immediately
+            </span>
           </div>
         </div>
       </section>

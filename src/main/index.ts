@@ -679,6 +679,7 @@ function createOverlayWindow(): void {
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: true,
+      zoomFactor: 1.15,
     },
   });
 
@@ -908,6 +909,7 @@ function openMoneyPennyWindow(): void {
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: true,
+      zoomFactor: 1.15,
     },
   });
 
@@ -952,6 +954,7 @@ function openDashboard(opts?: { focus?: boolean }): void {
       preload: join(__dirname, 'preload.js'),
       contextIsolation: true,
       nodeIntegration: false,
+      zoomFactor: 1.15,
     },
   });
 
@@ -1092,6 +1095,7 @@ function openHearthConjunctionWindow(): void {
       contextIsolation: true,
       nodeIntegration: false,
       webviewTag: true, // B83b: enable <webview> for EmbeddedChrome
+      zoomFactor: 1.15,
     },
   });
 
@@ -1268,6 +1272,14 @@ function registerIPCHandlers(): void {
         win.webContents.openDevTools({ mode: 'detach' });
       }
     }
+  });
+
+  // SEG-V0144-UI-1: Apply zoom factor to all active BrowserWindows
+  ipcMain.on('set-zoom-factor', (_event, factor: number) => {
+    if (typeof factor !== 'number' || factor < 0.5 || factor > 3.0) return;
+    BrowserWindow.getAllWindows().forEach((w) => {
+      if (!w.isDestroyed()) w.webContents.setZoomFactor(factor);
+    });
   });
 
   // SEG-Q-4 BP078: Auto-prepare FULL upgrade IPC
