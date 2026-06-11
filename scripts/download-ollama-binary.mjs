@@ -17,7 +17,7 @@
  *   This script downloads the zip, extracts ollama.exe, and cleans up.
  */
 import { createWriteStream, existsSync, mkdirSync, statSync, chmodSync, unlinkSync, readdirSync, copyFileSync } from 'fs';
-import { join } from 'path';
+import { join, dirname } from 'path';
 import { get } from 'https';
 import { tmpdir } from 'os';
 import { execSync } from 'child_process';
@@ -163,7 +163,7 @@ async function downloadAndExtractWin32() {
   console.log(`[download-ollama-binary] Copied ollama.exe (${(exeSize / 1_048_576).toFixed(1)} MB) → ${DEST_PATH}`);
 
   // Also copy any DLLs from the same directory as ollama.exe (GPU runtime libs)
-  const exeDir = require('path').dirname(exeSrc);
+  const exeDir = dirname(exeSrc);
   const dlls = readdirSync(exeDir).filter((f) => f.toLowerCase().endsWith('.dll'));
   for (const dll of dlls) {
     const src = join(exeDir, dll);
