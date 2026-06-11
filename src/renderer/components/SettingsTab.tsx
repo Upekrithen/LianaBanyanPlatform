@@ -1506,6 +1506,38 @@ export function SettingsTab({
         App updates change software. AI upgrades add model capability. Membership supports cooperative benefits.
       </div>
 
+      {/* SEG-V0151-P1: UI Mode toggle — lean ↔ advanced */}
+      <section style={s.section}>
+        <div style={s.sectionHeader}>Interface Mode</div>
+        <div style={s.card}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div>
+              <div style={s.label}>Advanced mode (shows all tabs)</div>
+              <div style={{ fontSize: 11, color: '#475569', marginTop: 2 }}>
+                Switch between the simplified 3-tab view and the full multi-tab shell.
+              </div>
+            </div>
+            <button
+              onClick={() => {
+                const current = localStorage.getItem('mnemoUiMode') ?? 'lean';
+                const next = current === 'advanced' ? 'lean' : 'advanced';
+                localStorage.setItem('mnemoUiMode', next);
+                // Trigger storage event for LeanShell cross-window sync
+                window.dispatchEvent(new StorageEvent('storage', { key: 'mnemoUiMode', newValue: next, storageArea: localStorage }));
+              }}
+              style={{
+                ...s.btn,
+                background: localStorage.getItem('mnemoUiMode') === 'advanced' ? '#10b981' : '#1e2a38',
+                color: '#fff',
+                minWidth: 64,
+              }}
+            >
+              {localStorage.getItem('mnemoUiMode') === 'advanced' ? 'ON' : 'OFF'}
+            </button>
+          </div>
+        </div>
+      </section>
+
       {/* Card 1: App Version (SEG-R-2) -- G.2 KniPr011 state machine preserved */}
       <section ref={setSectionRef('update') as React.RefCallback<HTMLElement>} style={s.section} id="settings-section-update">
         <div style={s.sectionHeader}>App Version</div>

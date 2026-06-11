@@ -3242,6 +3242,63 @@ function registerIPCHandlers(): void {
     }
   });
 
+  // SEG-V0151-P0-AUTOMATIC-BACKGROUND: lean-bg-start — silent background setup
+  // Fires from LeanShell on first lean-mode launch. Reuses lean-install-start logic
+  // but emits 'lean-bg-status' events for LeanShell thin status bar.
+  safeHandle('lean-bg-start', async (event) => {
+    if (!ollamaManager) {
+      event.sender.send('lean-bg-status', { type: 'setup-status', msg: 'AI manager not ready.' });
+      return { ok: false };
+    }
+
+    const emit = (type: string, msg: string, pct?: number) => {
+      event.sender.send('lean-bg-status', { type, msg, ...(pct != null ? { pct } : {}) });
+    };
+
+    try {
+      // Step 1: Check Ollama reachability
+      const reachable = await ollamaManager.isReachable();
+      if (!reachable) {
+        emit('setup-status', 'Starting your AI engine…');
+        await ollamaManager.init();
+        if (!(await ollamaManager.isReachable())) {
+          shell.openExternal('https://ollama.com/download/windows');
+          emit('setup-status', 'Visit ollama.com to install Ollama, then relaunch MnemosyneC.');
+          return { ok: false };
+        }
+      }
+
+      // Step 2: Check and pull gemma4:12b
+      const MODEL = 'gemma4:12b';
+      const hasModel = await ollamaManager.hasModel(MODEL);
+      if (hasModel) {
+        emit('setup-status', 'ready');
+        return { ok: true };
+      }
+
+      emit('setup-status', 'Downloading your AI model…');
+      let lastBytes = 0, lastTs = Date.now();
+      await ollamaManager.pullModel(MODEL, (progress) => {
+        const bytes = progress.bytesDownloaded ?? progress.completed ?? 0;
+        const total = progress.totalBytes ?? progress.total ?? 0;
+        const now = Date.now();
+        const elapsedSec = (now - lastTs) / 1000;
+        if (elapsedSec >= 1 && bytes > lastBytes) {
+          const pct = total > 0 ? Math.round((bytes / total) * 100) : 0;
+          emit('setup-progress', `Downloading your AI model… ${pct}%`, pct);
+          lastBytes = bytes; lastTs = now;
+        }
+      });
+      emit('setup-status', 'ready');
+      return { ok: true };
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      console.warn('[lean-bg-start] Error:', msg);
+      emit('setup-status', '');
+      return { ok: false, error: msg };
+    }
+  });
+
   // -- Black Crow Feather earn (BP078) ---------------------------------------
   // Durably records a black_crow feather in the Supabase crow_feathers table.
   // Uses service role key to bypass RLS. Idempotent: one black_crow feather

@@ -1029,6 +1029,13 @@ contextBridge.exposeInMainWorld('amplify', {
   writeSkuTierSkip: (): Promise<{ ok: boolean; error?: string }> =>
     ipcRenderer.invoke('write-sku-tier-skip'),
 
+  // SEG-V0151-P0-AUTOMATIC-BACKGROUND: lean background setup status events
+  onLeanBgStatus: (cb: (payload: { type: string; msg: string; pct?: number }) => void): (() => void) => {
+    const handler = (_event: Electron.IpcRendererEvent, payload: { type: string; msg: string; pct?: number }) => cb(payload);
+    ipcRenderer.on('lean-bg-status', handler);
+    return () => ipcRenderer.removeListener('lean-bg-status', handler);
+  },
+
   // SEG-U-7 BP078: mesh-test-complete -- fired when a results file is detected on disk
   onMeshTestComplete: (cb: (metrics: {
     hot_accuracy_pct: number;
@@ -1328,6 +1335,8 @@ declare global {
       onLeanInstallError?: (cb: (data: { message: string; retryable: boolean }) => void) => () => void;
       // SEG-V0150-P0-FIX-BRIDGE-OR-FALLBACK: skip-path
       writeSkuTierSkip?: () => Promise<{ ok: boolean; error?: string }>;
+      // SEG-V0151-P0-AUTOMATIC-BACKGROUND: lean-bg-status events from main
+      onLeanBgStatus?: (cb: (payload: { type: string; msg: string; pct?: number }) => void) => () => void;
     };
     // SEG-V0150-P0-DIAGNOSE-BRIDGE: sentinel — set by preload before main bridge wires up
     __preloadLoaded?: boolean;

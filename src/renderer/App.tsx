@@ -15,6 +15,7 @@ import { FrameModeIndicator } from './components/FrameModeIndicator';
 import { DashboardCornerAffordance } from './components/DashboardCornerAffordance';
 import { UpdateToast } from './components/UpdateToast';
 import { MnemosyneTabView } from './components/MnemosyneTabView';
+import { LeanShell } from './components/LeanShell';
 import { AMPLIFYDashboard } from './components/AMPLIFYDashboard';
 import { ModelPullDialog } from './components/ModelPullDialog';
 import { AuthGate } from './components/AuthGate';
@@ -170,11 +171,11 @@ export default function App() {
   const showTrialBanner =
     authState?.status === 'trial_active' || authState?.status === 'trial_expired';
 
-  // SAGA 07 BP046B — Dashboard now renders the 4-tab MnemosyneTabView
+  // SEG-V0151-P0-3TAB-SHELL: LeanShell wraps MnemosyneTabView — decides lean vs advanced internally.
   if (view === 'dashboard') {
     return (
-      <ErrorBoundary label="Mnemosyne Tab View">
-        <MnemosyneTabView
+      <ErrorBoundary label="Lean Shell / Mnemosyne Tab View">
+        <LeanShell
           currentMode={mode}
           onModeChange={handleModeChange}
           onClose={() => window.close()}

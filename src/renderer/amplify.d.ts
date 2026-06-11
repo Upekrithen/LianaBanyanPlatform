@@ -335,6 +335,17 @@ declare global {
       onLeanInstallError?: (cb: (data: { message: string; retryable: boolean }) => void) => () => void;
       // SEG-V0150-P0-FIX-BRIDGE-OR-FALLBACK: skip-path
       writeSkuTierSkip?: () => Promise<{ ok: boolean; error?: string }>;
+      // SEG-V0151-P0-AUTOMATIC-BACKGROUND: lean background status events
+      onLeanBgStatus?: (cb: (payload: { type: string; msg: string; pct?: number }) => void) => () => void;
+      // MV-CN Peer Mesh (SAGA 3 BP045 W1) — mesh state
+      getMeshState?: () => Promise<{ peers: unknown[]; relayConnected: boolean; ownPeerId: string }>;
+      onMeshStateChanged?: (cb: (state: unknown) => void) => () => void;
+      onRelayStateChanged?: (cb: (state: { relayConnected: boolean }) => void) => () => void;
+      onWanStatusUpdate?: (cb: (payload: { status: string; ts: string }) => void) => () => void;
+      // MESH-6: Federation invite/accept/leave
+      federationGenerateInvite?: () => Promise<{ token: string; expiresAt: string }>;
+      federationAcceptInvite?: (token: string) => Promise<{ success: boolean; peerName?: string; error?: string }>;
+      federationLeavePeer?: (peerId: string) => Promise<{ ok: boolean }>;
       // BP060 Application 002 Step 1 — Caithedral Tools
       caithedralTools?: {
         soccerball_emit: (pearls: string[], bindings?: Record<string, string>) => Promise<{ ok: boolean; sid?: string; error?: string }>;
