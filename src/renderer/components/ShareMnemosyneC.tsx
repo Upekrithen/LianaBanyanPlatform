@@ -1,9 +1,9 @@
 // ShareMnemosyneC.tsx — SEG-V0145-2 BP079
-// Share modal: referral URL + clipboard copy.
-// No qrcode.react in package.json — Truth-Always gap noted at bottom.
+// Share modal: referral URL + clipboard copy + QR code.
 // Closes on backdrop click or Escape key.
 
 import React, { useState, useEffect, useCallback } from 'react';
+import { QRCodeCanvas } from 'qrcode.react';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -130,19 +130,11 @@ export function ShareMnemosyneC({ onClose }: ShareMnemosyneCProps): React.ReactE
           </div>
         )}
 
-        {/* QR code — Truth-Always gap */}
+        {/* QR code */}
         <div style={qrGap}>
           <div style={qrGapLabel}>QR Code</div>
-          <div style={qrGapBody}>
-            <code style={qrUrl}>{shareUrl}</code>
-            <div style={qrGapNote}>
-              QR image not rendered — <code>qrcode.react</code> is not installed.
-              Scan or type the URL above, or run{' '}
-              <code style={{ fontFamily: 'monospace', fontSize: 9 }}>
-                npm install qrcode.react
-              </code>{' '}
-              and wire to this modal (Truth-Always gap: QR_LIBRARY_MISSING).
-            </div>
+          <div style={{ display: 'flex', justifyContent: 'center', padding: '12px 0' }}>
+            <QRCodeCanvas value={shareUrl} size={160} bgColor="#1a1a2e" fgColor="#e2e8f0" />
           </div>
         </div>
 
