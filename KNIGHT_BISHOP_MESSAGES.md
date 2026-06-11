@@ -4,6 +4,121 @@
 
 ---
 
+## [INFO] KNIGHT -> BISHOP — BP080 Firebase Infrastructure Reference — 2026-06-11
+**Time:** 2026-06-11T00:32:00-05:00
+**Purpose:** Firebase deploy context for relay.lianabanyan.com — correcting BP080 SEG-WAN-1 Cloud Run path
+
+---
+
+### Correction: NOT Cloud Run / NOT gcloud. Firebase + Squarespace DNS.
+
+**Firebase project:** `lianabanyan-403dc` (default) · staging: `mroz-74540` (never use for production)
+
+**Deploy CLI:** `firebase deploy` — already authenticated on M1. Never `gcloud run deploy`.
+
+---
+
+### Firebase Hosting — platform/.firebaserc + platform/firebase.json
+
+All portal SPA sites deploy from `platform/dist/`. One build, many targets.
+
+| Target name | Firebase site ID | Domain |
+|---|---|---|
+| `main` | `lianabanyan-main` | lianabanyan.com |
+| `biz` | `lianabanyan-biz-trunk` | lianabanyan.biz |
+| `org` | `lianabanyan-org-trunk` | lianabanyan.org |
+| `net` | `lianabanyan-net-trunk` | lianabanyan.net |
+| `the2ndsecond` | `the2ndsecond-trunk` | the2ndsecond.com |
+| `hexisle` | `hexisle` | hexisle.lianabanyan.com |
+| `upekrithen` | `lianabanyan-upekrithen` | upekrithen.lianabanyan.com |
+| `museum` | `lianabanyan-museum` | museum.lianabanyan.com |
+| `librarian-lb` | `lianabanyan-librarian-lb` | librarian.lianabanyan.com |
+
+Platform deploy: `cd platform; npm run build; firebase deploy --only hosting:TARGET -P default`
+
+Cephas deploy: `cd Cephas/cephas-hugo; hugo --minify; firebase deploy`
+
+---
+
+### DNS: Squarespace (NOT Google Cloud DNS)
+
+`lianabanyan.com` and all subdomains are managed in the **Squarespace DNS panel**.
+- To add `relay.lianabanyan.com`: add a CNAME record in Squarespace → Host: `relay`, Points to: `<Firebase Functions v2 URL or custom domain>`
+- Firebase custom domain setup: Firebase Console → Hosting → Add custom domain → follow verification steps → gives you an A record or CNAME to put in Squarespace
+
+---
+
+### Relay Server: Existing Firebase Functions infrastructure
+
+`relay-server/firebase.json` already exists with codebase `"pocket6"` pointing at `relay-server/functions/`.
+
+`relay-server/functions/index.js` already has **Firebase Functions v2** (`onRequest`) pattern — `registerPeer` and `resolveEmail` endpoints for the old Pocket-6 email lookup (BP071).
+
+**Key decision for relay.lianabanyan.com WAN relay:**
+
+Firebase Hosting **does NOT proxy WebSocket connections**. The `WS /circuit/:sid` endpoint cannot go through Firebase Hosting rewrites. Options:
+
+**Option A (RECOMMENDED) — Supabase Edge Functions (Deno):**
+- Matches existing pattern: `platform/supabase/functions/wan-*/index.ts` (already 6+ WAN functions deployed there)
+- Deno supports WebSocket via `Deno.upgradeWebSocket()` — no extra infrastructure
+- Deploy: `supabase functions deploy wan-relay-publish`, `supabase functions deploy wan-relay-resolve`, `supabase functions deploy wan-relay-circuit`
+- Domain: Supabase provides the function URL; can add custom domain via Supabase dashboard
+- Env vars: already available via `SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY` in Supabase env
+
+**Option B — Firebase Functions v2 (gen2 = Cloud Run backed):**
+- Firebase Functions v2 `onRequest` DOES support WebSocket (gen2 is backed by Cloud Run internally)
+- Deploy: add to `relay-server/functions/index.js` → `firebase deploy --only functions:wanRelayPublish,wanRelayResolve,wanRelayCircuit`
+- Custom domain: Firebase Console → Functions → Add custom domain → gives Firebase URL to CNAME in Squarespace
+- Codebase: already `"pocket6"` in relay-server/firebase.json
+
+**Option C — Supabase Edge Function for HTTP + Firebase Function for WS:**
+- Split: publish/resolve as Supabase Edge Functions (matches existing pattern), circuit as Firebase Function v2
+
+**Knight's recommendation:** Option A (Supabase Edge Functions) — zero new Firebase configuration, matches the existing `wan-*` function fleet, Deno WebSocket is proven, Supabase CLI already wired.
+
+---
+
+### Supabase Edge Function WS pattern (Deno)
+
+```typescript
+// platform/supabase/functions/wan-relay-circuit/index.ts
+Deno.serve((req) => {
+  if (req.headers.get("upgrade") !== "websocket") {
+    return new Response("WebSocket required", { status: 426 });
+  }
+  const { socket, response } = Deno.upgradeWebSocket(req);
+  // ... broker logic
+  return response;
+});
+```
+
+Deploy: `supabase functions deploy wan-relay-circuit --project-ref <ref>`
+
+---
+
+### Migration SQL (already written)
+
+`platform/supabase/migrations/20260611120000_wan_relay_records.sql` — creates `wan_relay_records` table.
+Apply via: `supabase db push` or paste into Supabase SQL editor.
+
+---
+
+### Summary for Bishop
+
+| What | Where | How |
+|---|---|---|
+| Firebase Hosting deploys | `platform/` | `cd platform; npm run build; firebase deploy --only hosting:TARGET -P default` |
+| Cephas deploy | `Cephas/cephas-hugo/` | `hugo --minify; firebase deploy` |
+| Firebase project | `lianabanyan-403dc` | Never `mroz-74540` for production |
+| DNS | Squarespace panel | CNAME records in Squarespace (not Google Cloud DNS) |
+| relay.lianabanyan.com | Supabase Edge Functions (recommended) OR Firebase Functions v2 | See Option A/B above |
+| Supabase WAN functions | `platform/supabase/functions/wan-*/` | Already deployed, Deno pattern |
+| Relay table migration | `platform/supabase/migrations/20260611120000_wan_relay_records.sql` | Apply before relay functions work |
+
+— Knight BP080, 2026-06-11T00:32Z
+
+---
+
 ## [RETURN] KNIGHT -> BISHOP — BP080 WAN RELAY LIVE — SEG-WAN-1 through SEG-WAN-3 — 2026-06-11
 **Time:** 2026-06-11T00:08:00-05:00
 **Commit:** a29f033 — pushed to origin/main
@@ -58154,5 +58269,53 @@ _Informative-silence class. Do not disclose to queryers. Founder/Bishop review r
 - **Gap:** 146.4h (baseline 339057.61 rph)
 - **Detail:** Endpoint /dag/fetch_from_peer silent for 146.4h — expected ≤141.2h (p95×1.5). Possible evasion or service disruption.
 - **Alert ID:** 1409b4cd-3639-4fcf-9f93-9fcd49f81515
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-11T05:25:49.548Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-11T05:25:49.548Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/mode`
+- **Gap:** 268.4h (baseline 66.70 rph)
+- **Detail:** Endpoint /mode silent for 268.4h — expected ≤169.6h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** e3f05d39-c656-4867-a7a2-a3b774b6d3af
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-11T05:25:49.549Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-11T05:25:49.549Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/family/roster`
+- **Gap:** 268.4h (baseline 74.21 rph)
+- **Detail:** Endpoint /family/roster silent for 268.4h — expected ≤213.9h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 527fb2fb-aa14-491a-8018-a92fbf197d72
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-11T05:25:49.550Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-11T05:25:49.550Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/dag/emit`
+- **Gap:** 146.6h (baseline 550958.13 rph)
+- **Detail:** Endpoint /dag/emit silent for 146.6h — expected ≤140.8h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 54c077aa-2280-4636-a173-4934e95484bf
+
+_Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
+
+---
+<!-- passive-surveillance-gap-alert 2026-06-11T05:25:49.551Z -->
+**[WATCHDOG · PASSIVE-SURVEILLANCE GAP-DETECTION · 2026-06-11T05:25:49.551Z]**
+
+- **Type:** extended_silence
+- **Endpoint:** `/dag/fetch_from_peer`
+- **Gap:** 146.6h (baseline 339057.61 rph)
+- **Detail:** Endpoint /dag/fetch_from_peer silent for 146.6h — expected ≤141.2h (p95×1.5). Possible evasion or service disruption.
+- **Alert ID:** 87da9639-53d7-4fd0-b7ce-867f79692887
 
 _Informative-silence class. Do not disclose to queryers. Founder/Bishop review required before action. BP044 W1._
