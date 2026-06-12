@@ -91,7 +91,7 @@ function LeanFederationPanel() {
         setShowEmailForm(false);
         setConnectEmail('');
       } else {
-        setConnectStatus(result?.error ?? 'Connection failed. Check the Email ID and try again.');
+        setConnectStatus(result?.error ?? 'Connection failed. Check the Invite Token and try again.');
       }
     } catch (e) {
       setConnectStatus('Connection error. Please try again.');
@@ -247,7 +247,7 @@ function LeanFederationPanel() {
                 outline: 'none',
               }}
             >
-              Connect via Email ID
+              Connect via Invite Token
             </button>
           </div>
 
@@ -255,12 +255,12 @@ function LeanFederationPanel() {
           {showEmailForm && (
             <div style={{ marginTop: 10, display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap' as const }}>
               <span style={{ fontSize: 11, color: '#64748b', minWidth: 200 }}>
-                Enter the MnemosyneC Email ID of the other machine:
+                Paste the Invite Token from the other machine:
               </span>
               <input
                 value={connectEmail}
                 onChange={(e) => setConnectEmail(e.target.value)}
-                placeholder="peer@example.com"
+                placeholder="mnemo-invite-…"
                 onKeyDown={(e) => e.key === 'Enter' && handleEmailConnect()}
                 style={{
                   background: '#111827',

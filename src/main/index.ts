@@ -3666,12 +3666,18 @@ app.whenReady().then(async () => {
     () => dashboardWindow ?? hearthConjunctionWindow ?? overlayWindow ?? null,
     (payload: DeepLinkPayload) => {
       if (payload.type === 'accept-invite') {
-        console.log('[deep-link] accept-invite received for slug:', payload.slug);
-        const win = hearthConjunctionWindow ?? overlayWindow;
-        win?.webContents.send('federation:accept-invite', {
-          slug: payload.slug,
-          token: payload.token,
-        });
+        console.log('[deep-link] accept-invite received for slug:', payload.slug, 'token prefix:', payload.token.slice(0, 12));
+        // SEG-V0153A: open dashboard (default boot surface) and route to Accept tab
+        openDashboard({ focus: true });
+        const wins = [dashboardWindow, hearthConjunctionWindow, overlayWindow];
+        for (const win of wins) {
+          if (win && !win.isDestroyed()) {
+            win.webContents.send('federation:deep-link-accept', {
+              slug: payload.slug,
+              token: payload.token,
+            });
+          }
+        }
       } else if (payload.type === 'focus-tab') {
         // BP067 Phase 3B ? mnemo://focus/<tab_id> ? navigate to tab
         console.log('[deep-link] focus-tab received:', payload.tabId);

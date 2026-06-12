@@ -65,8 +65,17 @@ export function parseDeepLink(url: string): DeepLinkPayload | null {
     // Supabase redirects to: mnemo://auth/callback#access_token=X&refresh_token=Y&...
     // or as query params: mnemo://auth/callback?access_token=X&...
     if (proto === `${MNEMO_PROTOCOL}:`) {
-      const host = parsed.hostname; // 'auth' | 'focus'
+      const host = parsed.hostname; // 'accept' | 'auth' | 'focus'
       const pathname = parsed.pathname;
+
+      // SEG-V0153A — mnemo://accept?token=<token> — email invite deep-link
+      if (host === 'accept') {
+        const token = parsed.searchParams.get('token');
+        if (token) {
+          return { type: 'accept-invite', slug: '', token };
+        }
+        return null;
+      }
 
       // BP067 Phase 3B — mnemo://focus/<tab_id> → per-install focus-tab navigation
       if (host === 'focus') {

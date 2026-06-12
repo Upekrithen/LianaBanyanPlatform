@@ -746,6 +746,13 @@ contextBridge.exposeInMainWorld('amplify', {
     return () => ipcRenderer.removeListener('navigate:focus-tab', handler);
   },
 
+  // ── SEG-V0153A — mnemo://accept?token=<token> deep-link accept-invite push ─
+  onFederationDeepLinkAccept: (cb: (data: { token: string; slug: string }) => void): (() => void) => {
+    const handler = (_event: Electron.IpcRendererEvent, data: { token: string; slug: string }) => cb(data);
+    ipcRenderer.on('federation:deep-link-accept', handler);
+    return () => ipcRenderer.removeListener('federation:deep-link-accept', handler);
+  },
+
   // ── SAGA 13 BP046B — 5-Marks first-install bonus ─────────────────────────
   /** Credit 5 marks on first install + first Stage 1 Gauntlet completion. One-per-account. */
   creditFirstInstallMarks: (): void =>
@@ -1204,6 +1211,8 @@ declare global {
       };
       // BP067 Phase 3B — focus-tab deep-link event
       onNavigateFocusTab?: (cb: (tabId: string) => void) => () => void;
+      // SEG-V0153A — mnemo://accept?token=<token> deep-link accept-invite push
+      onFederationDeepLinkAccept?: (cb: (data: { token: string; slug: string }) => void) => () => void;
       // SAGA 13 BP046B
       creditFirstInstallMarks: () => void;
       // SAGA 07 BP046B utilities

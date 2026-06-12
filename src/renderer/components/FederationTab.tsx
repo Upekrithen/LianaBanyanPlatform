@@ -10,6 +10,7 @@
 
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import type { MnemosynePeer } from '../../shared/federation-protocol';
+import { PeerCueCard } from './PeerCueCard';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -125,10 +126,16 @@ function MeshVisualizer({ peers, ownId }: { peers: MnemosynePeer[]; ownId: strin
 }
 
 // ─── Peer Roster ──────────────────────────────────────────────────────────────
+// Renders peers as a flex-wrap card grid using PeerCueCard.
+// ⚠ TRUTH-ALWAYS (SEG-V0153A): handleConnectPeer uses federationAcceptInvite as a
+//   stopgap because no `federation:connect-peer` IPC handler exists. A dedicated
+//   handler calling connectToPeerWithEscalation() must be added to src/main/index.ts
+//   and exposed via preload.ts before this button has full connect semantics.
 
-function PeerRoster({ peers, onLeave }: {
+function PeerRoster({ peers, onLeave, onConnect }: {
   peers: MnemosynePeer[];
   onLeave: (peerId: string) => void;
+  onConnect: (peerId: string) => void;
 }) {
   if (peers.length === 0) {
     return (
@@ -147,153 +154,485 @@ function PeerRoster({ peers, onLeave }: {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-      {peers.map((p) => {
-        const pubShort = p.peerId.slice(0, 8) + '…' + p.peerId.slice(-4);
-        const lastSyncAgo = Math.round((Date.now() - new Date(p.lastSeen).getTime()) / 1000);
-        const lastSyncLabel = lastSyncAgo < 60
-          ? `${lastSyncAgo}s ago`
-          : lastSyncAgo < 3600
-          ? `${Math.round(lastSyncAgo / 60)}m ago`
-          : `${Math.round(lastSyncAgo / 3600)}h ago`;
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, padding: 8 }}>
+      {peers.map((peer) => (
+        <PeerCueCard
+          key={peer.peerId}
+          peer={peer}
+          onConnect={onConnect}
+        />
+      ))}
+    </div>
+  );
+}
 
-        return (
-          <div key={p.peerId} style={s.peerRow}>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 12, fontWeight: 600, color: C.text }}>
-                {p.displayName ?? `Peer ${p.peerId.slice(0, 6)}`}
-              </div>
-              <div style={{ fontSize: 10, color: C.muted, marginTop: 2 }}>
-                <span style={{ fontFamily: 'monospace' }}>{pubShort}</span>
-                {' · '}
-                {p.transport === 'lan' ? '🔵 LAN' : '🌐 WAN'}
-                {' · '}last seen {lastSyncLabel}
-              </div>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span style={{
-                fontSize: 9, fontWeight: 700, padding: '2px 6px', borderRadius: 8,
-                background: p.phase === 'synced' ? '#16301b' : '#1c1a30',
-                color: p.phase === 'synced' ? C.green : C.purple,
-                border: `1px solid ${p.phase === 'synced' ? C.green + '44' : C.purple + '44'}`,
-                textTransform: 'uppercase',
-                letterSpacing: '0.04em',
-              }}>
-                {p.phase}
-              </span>
-              <button
-                onClick={() => onLeave(p.peerId)}
-                style={s.leaveBtn}
-                title="Leave mesh with this peer"
-              >
-                Leave
-              </button>
-            </div>
+// ─── Invite Cue Card Preview ──────────────────────────────────────────────────
+// SEG-V0153A-P0-INVITE-FORM: stacked pair (FRONT=brand/identity, BACK=action).
+// NOT a CSS 3D flip — vertically stacked display in-app alongside the form.
+
+function InviteCueCardPreview({
+  displayName,
+  recipientName,
+}: {
+  displayName: string;
+  recipientName: string;
+}) {
+  const CARD_W = 280;
+  const CARD_H = 160;
+  const recipientLabel = recipientName.trim()
+    ? `${recipientName.trim()}'s MnemosyneC network`
+    : 'Your MnemosyneC network';
+  const isHandleStyle = displayName.startsWith('@') || displayName.includes('#');
+
+  return (
+    <div style={{ marginTop: 8 }}>
+      <div style={{
+        fontSize: 9, color: '#475569', marginBottom: 6,
+        textTransform: 'uppercase', letterSpacing: '0.07em',
+      }}>
+        Your Invite Card Preview
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+
+        {/* FRONT face — brand/identity */}
+        <div style={{
+          width: CARD_W, height: CARD_H,
+          background: '#0a0f1a',
+          border: '1px solid #6ee7b7',
+          borderRadius: 10,
+          padding: '12px 14px',
+          boxSizing: 'border-box',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          flexShrink: 0,
+        }}>
+          <div style={{ fontSize: 18, lineHeight: 1 }}>🧠</div>
+          <div style={{
+            textAlign: 'center',
+            fontSize: 15,
+            fontWeight: 700,
+            color: isHandleStyle ? '#6ee7b7' : '#e2e8f0',
+          }}>
+            {displayName}
           </div>
-        );
-      })}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+            <div style={{
+              fontSize: 9, color: '#475569',
+              letterSpacing: '0.06em', textTransform: 'uppercase',
+            }}>
+              FounderDenken
+            </div>
+            <div style={{
+              width: 16, height: 16, background: '#1a2235',
+              borderRadius: 3, border: '1px solid #1e2d45',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 7, color: '#475569',
+            }}>QR</div>
+          </div>
+        </div>
+
+        {/* BACK face — action */}
+        <div style={{
+          width: CARD_W, height: CARD_H,
+          background: '#0a0f1a',
+          border: '1px solid #22c55e',
+          borderRadius: 10,
+          padding: '12px 14px',
+          boxSizing: 'border-box',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          flexShrink: 0,
+        }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: '#6ee7b7', letterSpacing: '0.08em' }}>
+            MnemosyneC
+          </div>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ fontSize: 12, color: '#e2e8f0', marginBottom: 8 }}>
+              {recipientLabel}
+            </div>
+            <div style={{
+              width: 16, height: 16, background: '#1a2235',
+              borderRadius: 3, border: '1px solid #1e2d45',
+              display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 7, color: '#475569',
+            }}>QR</div>
+          </div>
+          <div style={{ fontSize: 11, color: '#94a3b8', textAlign: 'center' }}>
+            Scan to accept ↑
+          </div>
+        </div>
+
+      </div>
     </div>
   );
 }
 
 // ─── Invite Flow ──────────────────────────────────────────────────────────────
+// SEG-V0153A-P0-INVITE-FORM
+//
+// Truth-Always flags:
+//   [T1] window.amplify.getProfile does NOT exist in preload.ts.
+//        displayName is sourced from getAuthState().member?.display_name (FederationTab state).
+//        Falls back to "Your Name" if absent.
+//   [T2] window.amplify.openExternal IS confirmed in preload.ts (ipcRenderer.send — fire-and-forget,
+//        no Promise return). 3s timeout used to transition to success state.
+//   [T3] Sent invites history (Part C): P1-DEFERRED — not implemented in this version.
+//        Shape: localStorage key 'mnemosynec.sent_invites', capped 20 entries.
 
-export function InviteFlow() {
-  const [token, setToken] = useState<InviteToken | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [copied, setCopied] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+export function InviteFlow({ displayName }: { displayName?: string }) {
+  const resolvedDisplayName = displayName?.trim() || 'Your Name';
 
-  const generate = async () => {
-    setLoading(true);
-    setError(null);
+  // — Primary form state —
+  const [recipientName, setRecipientName] = useState('');
+  const [recipientEmail, setRecipientEmail] = useState('');
+  const [personalNote, setPersonalNote] = useState('');
+  const [sendStatus, setSendStatus] = useState<
+    'idle' | 'validating' | 'generating' | 'opening' | 'success' | 'error'
+  >('idle');
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const [sentToken, setSentToken] = useState<string | null>(null);
+  const [sendError, setSendError] = useState<string | null>(null);
+  const [tokenCopied, setTokenCopied] = useState(false);
+  const openTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // — Legacy manual token state (collapsible fallback) —
+  const [legacyToken, setLegacyToken] = useState<InviteToken | null>(null);
+  const [legacyLoading, setLegacyLoading] = useState(false);
+  const [legacyCopied, setLegacyCopied] = useState(false);
+  const [legacyError, setLegacyError] = useState<string | null>(null);
+
+  const isBusy =
+    sendStatus === 'validating' ||
+    sendStatus === 'generating' ||
+    sendStatus === 'opening';
+
+  const handleSend = async () => {
+    if (isBusy) return;
+
+    // Step 1 — immediate feedback on every click
+    setSendStatus('validating');
+    setEmailError(null);
+    setSendError(null);
+
+    // Step 2 — validate email
+    if (!/.+@.+\..+/.test(recipientEmail.trim())) {
+      setEmailError('Please enter a valid email address.');
+      setSendStatus('idle');
+      return;
+    }
+
+    // Step 3 — generate token
+    setSendStatus('generating');
+    let inviteToken: string;
+    let expiresAt: string;
     try {
       const result = await (window as any).amplify?.federationGenerateInvite?.();
       if (result?.token) {
-        setToken({ token: result.token, expiresAt: result.expiresAt });
+        inviteToken = result.token;
+        expiresAt = result.expiresAt;
       } else {
-        setToken({
+        inviteToken = `mnemo-invite-${crypto.randomUUID?.() ?? Date.now()}`;
+        expiresAt = new Date(Date.now() + 86400000).toISOString();
+      }
+    } catch (e) {
+      setSendStatus('error');
+      setSendError('Failed to generate invite token: ' + String(e));
+      return;
+    }
+
+    // Steps 4–5 — compose accept link + mailto body
+    const acceptLink = `mnemo://accept?token=${inviteToken}`;
+    const note = personalNote.trim();
+    const body =
+      (note ? note + '\n\n' : '') +
+      "I'd like to share context with you via MnemosyneC.\n\n" +
+      `Click to accept:\n${acceptLink}\n\n` +
+      `Or paste this token in MnemosyneC → Federation → Accept tab:\n${inviteToken}\n\n` +
+      `This invite expires: ${new Date(expiresAt).toLocaleString()}\n\n` +
+      'Get MnemosyneC: https://mnemosynec.ai';
+
+    const mailtoUrl =
+      'mailto:' + encodeURIComponent(recipientEmail.trim()) +
+      '?subject=' + encodeURIComponent("You're invited to join my MnemosyneC mesh") +
+      '&body=' + encodeURIComponent(body);
+
+    // Step 6 — fire openExternal ([T2] fire-and-forget, no await)
+    setSendStatus('opening');
+    setSentToken(inviteToken);
+    (window as any).amplify?.openExternal?.(mailtoUrl);
+
+    // Step 7 — 3s timeout then show success (openExternal has no return value)
+    if (openTimeoutRef.current) clearTimeout(openTimeoutRef.current);
+    openTimeoutRef.current = setTimeout(() => {
+      setSendStatus('success');
+    }, 3000);
+  };
+
+  const copyFallbackToken = async () => {
+    if (!sentToken) return;
+    try {
+      await navigator.clipboard.writeText(sentToken);
+      setTokenCopied(true);
+      setTimeout(() => setTokenCopied(false), 2000);
+    } catch { /* ignore */ }
+  };
+
+  const resetForm = () => {
+    if (openTimeoutRef.current) clearTimeout(openTimeoutRef.current);
+    setSendStatus('idle');
+    setEmailError(null);
+    setSendError(null);
+    setSentToken(null);
+    setTokenCopied(false);
+    setRecipientName('');
+    setRecipientEmail('');
+    setPersonalNote('');
+  };
+
+  const sendButtonLabel = (): string => {
+    switch (sendStatus) {
+      case 'validating': return '⏳ Validating…';
+      case 'generating': return '🔑 Generating…';
+      case 'opening':    return '📧 Opening email client…';
+      default:           return '✉️ Send Invite Card';
+    }
+  };
+
+  // — Legacy handlers —
+  const legacyGenerate = async () => {
+    setLegacyLoading(true);
+    setLegacyError(null);
+    try {
+      const result = await (window as any).amplify?.federationGenerateInvite?.();
+      if (result?.token) {
+        setLegacyToken({ token: result.token, expiresAt: result.expiresAt });
+      } else {
+        setLegacyToken({
           token: `mnemo-invite-${crypto.randomUUID?.() ?? Date.now()}`,
           expiresAt: new Date(Date.now() + 86400000).toISOString(),
         });
       }
     } catch (e) {
-      setError(String(e));
+      setLegacyError(String(e));
     } finally {
-      setLoading(false);
+      setLegacyLoading(false);
     }
   };
 
-  const copyToken = async () => {
-    if (!token) return;
+  const legacyCopy = async () => {
+    if (!legacyToken) return;
     try {
-      await navigator.clipboard.writeText(token.token);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      await navigator.clipboard.writeText(legacyToken.token);
+      setLegacyCopied(true);
+      setTimeout(() => setLegacyCopied(false), 2000);
     } catch {
-      setError('Could not copy to clipboard.');
+      setLegacyError('Could not copy to clipboard.');
     }
   };
 
-  const expiresLabel = token
-    ? new Date(token.expiresAt).toLocaleString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+  const legacyExpiresLabel = legacyToken
+    ? new Date(legacyToken.expiresAt).toLocaleString(undefined, {
+        month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit',
+      })
     : '';
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-      <div style={{ fontSize: 11, color: C.muted, lineHeight: 1.6 }}>
-        Generate a signed invite token (valid 24 hours). Share it with one peer — only
-        they can use it. The token is cryptographically bound to your peer identity.
-      </div>
 
-      {error && (
-        <div style={{ fontSize: 10, color: C.red, padding: '6px 10px', background: '#1c0808', borderRadius: 6 }}>
-          {error}
+      {sendStatus === 'success' ? (
+        /* ── Success state ── */
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div style={{
+            fontSize: 12, color: C.green, padding: '10px 14px',
+            background: '#0a1f0e', borderRadius: 8,
+            border: `1px solid ${C.green}44`, lineHeight: 1.6,
+          }}>
+            ✓ Invite opened in your email client. Check your drafts.
+          </div>
+          {sentToken && (
+            <div style={s.tokenBox}>
+              <div style={{ fontSize: 10, color: C.muted, marginBottom: 6 }}>
+                Fallback token — paste in Accept tab if email client didn't open
+              </div>
+              <div style={{
+                fontFamily: 'monospace', fontSize: 10, color: C.accent,
+                wordBreak: 'break-all', lineHeight: 1.5,
+                background: '#070d1a', padding: '6px 10px', borderRadius: 6,
+                border: `1px solid ${C.border}`,
+              }}>
+                {sentToken}
+              </div>
+              <button
+                onClick={() => void copyFallbackToken()}
+                style={{ ...s.ghostBtn, marginTop: 6, fontSize: 10 }}
+              >
+                {tokenCopied ? '✓ Copied!' : '📋 Copy token'}
+              </button>
+            </div>
+          )}
+          <button onClick={resetForm} style={s.ghostBtn}>
+            Send another invite
+          </button>
+        </div>
+      ) : (
+        /* ── Form state ── */
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div style={{ fontSize: 11, color: C.muted, lineHeight: 1.6 }}>
+            Send a signed invite — valid 24 hours, single-use. Opens your mail client.
+          </div>
+
+          {/* Recipient name */}
+          <input
+            type="text"
+            value={recipientName}
+            onChange={(e) => setRecipientName(e.target.value)}
+            placeholder="Their name"
+            disabled={isBusy}
+            style={s.input}
+          />
+
+          {/* Email */}
+          <div>
+            <input
+              type="email"
+              value={recipientEmail}
+              onChange={(e) => { setRecipientEmail(e.target.value); setEmailError(null); }}
+              placeholder="their@email.com"
+              disabled={isBusy}
+              style={{
+                ...s.input,
+                borderColor: emailError ? C.red : undefined,
+              }}
+            />
+            {emailError && (
+              <div style={{ fontSize: 10, color: C.red, marginTop: 4 }}>{emailError}</div>
+            )}
+          </div>
+
+          {/* Personal note */}
+          <div>
+            <textarea
+              value={personalNote}
+              onChange={(e) => setPersonalNote(e.target.value.slice(0, 280))}
+              placeholder="Why you're inviting them… (optional)"
+              rows={3}
+              disabled={isBusy}
+              style={{ ...s.input, resize: 'vertical', fontFamily: 'inherit', fontSize: 11 }}
+            />
+            {personalNote.length > 220 && (
+              <div style={{
+                fontSize: 9, textAlign: 'right', marginTop: 2,
+                color: personalNote.length >= 280 ? C.red : C.muted,
+              }}>
+                {personalNote.length}/280
+              </div>
+            )}
+          </div>
+
+          {sendError && (
+            <div style={{ fontSize: 10, color: C.red, padding: '6px 10px', background: '#1c0808', borderRadius: 6 }}>
+              {sendError}
+            </div>
+          )}
+
+          {/* Primary send button — big green */}
+          <button
+            onClick={() => void handleSend()}
+            disabled={isBusy}
+            style={{
+              ...s.primaryBtn,
+              background: '#0e2a1a',
+              border: `1px solid ${C.green}`,
+              color: C.green,
+              opacity: isBusy ? 0.7 : 1,
+            }}
+          >
+            {sendButtonLabel()}
+          </button>
+
+          {/* Stacked invite card preview — live updates as user types recipient name */}
+          <InviteCueCardPreview
+            displayName={resolvedDisplayName}
+            recipientName={recipientName}
+          />
         </div>
       )}
 
-      {!token ? (
-        <button onClick={() => void generate()} disabled={loading} style={s.primaryBtn}>
-          {loading ? '⏳ Generating…' : '🔑 Generate Invite Token'}
-        </button>
-      ) : (
-        <>
-          <div style={s.tokenBox}>
-            <div style={{ fontSize: 10, color: C.muted, marginBottom: 6 }}>
-              Invite token · expires {expiresLabel}
+      {/* Legacy generate — collapsible secondary section */}
+      <details style={{ marginTop: 4 }}>
+        <summary style={{
+          fontSize: 10, color: C.muted, cursor: 'pointer',
+          userSelect: 'none', padding: '4px 0', listStyle: 'none',
+        }}>
+          ▸ Generate token manually (copy-paste fallback)
+        </summary>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 10 }}>
+          {legacyError && (
+            <div style={{ fontSize: 10, color: C.red, padding: '6px 10px', background: '#1c0808', borderRadius: 6 }}>
+              {legacyError}
             </div>
-            <div style={{
-              fontFamily: 'monospace', fontSize: 11, color: C.accent,
-              wordBreak: 'break-all', lineHeight: 1.5,
-              background: '#070d1a', padding: '8px 10px', borderRadius: 6,
-              border: `1px solid ${C.border}`,
-            }}>
-              {token.token}
-            </div>
-          </div>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <button onClick={() => void copyToken()} style={s.primaryBtn}>
-              {copied ? '✓ Copied!' : '📋 Copy Token'}
+          )}
+          {!legacyToken ? (
+            <button onClick={() => void legacyGenerate()} disabled={legacyLoading} style={s.primaryBtn}>
+              {legacyLoading ? '⏳ Generating…' : '🔑 Generate Invite Token'}
             </button>
-            <button onClick={() => { setToken(null); setCopied(false); }} style={s.ghostBtn}>
-              Regenerate
-            </button>
-          </div>
-          <div style={{ fontSize: 10, color: C.muted }}>
-            ⚠️ Single-use. Do not share publicly. Expires in 24 hours.
-          </div>
-        </>
-      )}
+          ) : (
+            <>
+              <div style={s.tokenBox}>
+                <div style={{ fontSize: 10, color: C.muted, marginBottom: 6 }}>
+                  Invite token · expires {legacyExpiresLabel}
+                </div>
+                <div style={{
+                  fontFamily: 'monospace', fontSize: 11, color: C.accent,
+                  wordBreak: 'break-all', lineHeight: 1.5,
+                  background: '#070d1a', padding: '8px 10px', borderRadius: 6,
+                  border: `1px solid ${C.border}`,
+                }}>
+                  {legacyToken.token}
+                </div>
+              </div>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <button onClick={() => void legacyCopy()} style={s.primaryBtn}>
+                  {legacyCopied ? '✓ Copied!' : '📋 Copy Token'}
+                </button>
+                <button
+                  onClick={() => { setLegacyToken(null); setLegacyCopied(false); }}
+                  style={s.ghostBtn}
+                >
+                  Regenerate
+                </button>
+              </div>
+              <div style={{ fontSize: 10, color: C.muted }}>
+                ⚠️ Single-use. Do not share publicly. Expires in 24 hours.
+              </div>
+            </>
+          )}
+        </div>
+      </details>
+
     </div>
   );
 }
 
 // ─── Accept Flow ──────────────────────────────────────────────────────────────
 
-function AcceptFlow() {
-  const [tokenInput, setTokenInput] = useState('');
+function AcceptFlow({ initialToken }: { initialToken?: string }) {
+  const [tokenInput, setTokenInput] = useState(initialToken ?? '');
   const [status, setStatus] = useState<'idle' | 'verifying' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
+  const [deepLinkBanner, setDeepLinkBanner] = useState(!!initialToken);
+
+  // SEG-V0153A: when a new initialToken arrives (deep-link), pre-populate input + show banner
+  useEffect(() => {
+    if (initialToken) {
+      setTokenInput(initialToken);
+      setStatus('idle');
+      setMessage('');
+      setDeepLinkBanner(true);
+    }
+  }, [initialToken]);
 
   const verify = async () => {
     const t = tokenInput.trim();
@@ -321,10 +660,16 @@ function AcceptFlow() {
     setTokenInput('');
     setStatus('idle');
     setMessage('');
+    setDeepLinkBanner(false);
   };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      {deepLinkBanner && status !== 'success' && (
+        <div style={{ fontSize: 11, color: C.accent, padding: '8px 12px', background: '#0d1f38', borderRadius: 8, border: `1px solid ${C.accent}55` }}>
+          🔗 Token received! Click <strong>Verify &amp; Join Mesh</strong> to connect.
+        </div>
+      )}
       <div style={{ fontSize: 11, color: C.muted, lineHeight: 1.6 }}>
         Paste an invite token from a peer. Mnemosyne will verify the signature and
         initiate the mesh handshake.
@@ -384,6 +729,19 @@ export function FederationTab() {
   });
   const [activeTab, setActiveTab] = useState<TabId>('mesh');
   const [loading, setLoading] = useState(true);
+  const [displayName, setDisplayName] = useState<string | undefined>(undefined);
+  // SEG-V0153A: deep-link token from mnemo://accept?token=<token>
+  const [deepLinkToken, setDeepLinkToken] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    void (async () => {
+      try {
+        const authState = await (window as any).amplify?.getAuthState?.();
+        const name: string | undefined = authState?.member?.display_name;
+        if (name) setDisplayName(name);
+      } catch { /* non-fatal */ }
+    })();
+  }, []);
 
   const loadMesh = useCallback(async () => {
     try {
@@ -407,12 +765,33 @@ export function FederationTab() {
     };
   }, [loadMesh]);
 
+  // SEG-V0153A: listen for mnemo://accept?token=<token> deep-link from main process
+  useEffect(() => {
+    const cleanup = (window as any).amplify?.onFederationDeepLinkAccept?.(
+      (data: { token: string; slug: string }) => {
+        setDeepLinkToken(data.token);
+        setActiveTab('accept');
+      },
+    );
+    return () => cleanup?.();
+  }, []);
+
   const handleLeave = async (peerId: string) => {
     if (!confirm('Leave mesh with this peer? They will still exist in their own mesh.')) return;
     try {
       await (window as any).amplify?.federationLeavePeer?.(peerId);
       await loadMesh();
     } catch { /* ignore */ }
+  };
+
+  // ⚠ TRUTH-ALWAYS (SEG-V0153A): No `federation:connect-peer` IPC handler exists.
+  // Using federationAcceptInvite as a STOPGAP. A dedicated IPC handler wiring
+  // connectToPeerWithEscalation() is needed in src/main/index.ts + preload.ts.
+  const handleConnectPeer = async (peerId: string) => {
+    try {
+      await (window as any).amplify?.federationAcceptInvite?.(peerId);
+      await loadMesh();
+    } catch { /* ignore — visual feedback is handled by PeerCueCard's local state */ }
   };
 
   const TABS: Array<{ id: TabId; label: string }> = [
@@ -471,11 +850,15 @@ export function FederationTab() {
         ) : activeTab === 'mesh' ? (
           <MeshVisualizer peers={meshState.peers} ownId={meshState.ownPeerId} />
         ) : activeTab === 'roster' ? (
-          <PeerRoster peers={meshState.peers} onLeave={(id) => void handleLeave(id)} />
+          <PeerRoster
+            peers={meshState.peers}
+            onLeave={(id) => void handleLeave(id)}
+            onConnect={(id) => void handleConnectPeer(id)}
+          />
         ) : activeTab === 'invite' ? (
-          <InviteFlow />
+          <InviteFlow displayName={displayName} />
         ) : (
-          <AcceptFlow />
+          <AcceptFlow initialToken={deepLinkToken} />
         )}
       </div>
 
