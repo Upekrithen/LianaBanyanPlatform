@@ -3482,6 +3482,121 @@ function registerIPCHandlers(): void {
     const entries = loadAllEntries();
     return entries.find(x => x.claim === 'genesis:user:000001') ?? null;
   });
+
+  // ── BP080 Full 22-Entry Genesis Mint (Founder-ratified 2026-06-11) ────────
+  safeHandle('ip-ledger:genesis-mint-full', async () => {
+    // IDEMPOTENCY CHECK — Federal Body Cam — never double-write
+    const existing = loadAllEntries().find(e => e.claim === 'genesis:user:000001');
+    if (existing) {
+      return {
+        success: false,
+        error: 'Genesis entry already exists — no duplicate write. ledger_id: ' + existing.ledger_id,
+        genesis_ledger_id: existing.ledger_id,
+        filing_ledger_ids: [],
+        all_22_entries: [existing],
+      };
+    }
+
+    const stablePeerId = getStablePeerId();
+    const supabaseUserId = 'member_000001';
+
+    // STEP 1: Mint genesis user entry FIRST
+    const genesisEntry = registerClaim({
+      registered_by: 'member_000001',
+      claim: 'genesis:user:000001',
+      claim_body: JSON.stringify({
+        display_name: 'FounderDenken',
+        email: 'Founder@LianaBanyan.com',
+        role: 'founder',
+        cooperative: 'MnemosyneC',
+        founding_date: '2026-06-11',
+        supabase_user_id: supabaseUserId,
+        stable_peer_id: stablePeerId,
+        provisional_filings_count: 21,
+        filing_dockets: ['LB-PROV-001','LB-PROV-002','LB-PROV-003','LB-PROV-004','LB-PROV-005','LB-PROV-006','LB-PROV-007','LB-PROV-008','LB-PROV-009','LB-PROV-010','LB-PROV-011','LB-PROV-012','LB-PROV-013','LB-PROV-014','LB-PROV-015','LB-PROV-016','LB-PROV-017','LB-PROV-018','LB-PROV-019','LB-PROV-020','LB-PROV-021'],
+        ratify_quote: 'MINT IT — display_name: FounderDenken — 2026-06-11',
+        ratify_session: 'BP080',
+        member_id_note: 'supabase_user_id is the immutable anchor; display_name and email are mutable proxies — supersede-chain tracks changes per Federal Body Cam doctrine',
+      }),
+      evidence: [
+        'Asteroid-ProofVault/03_PATENT_BAGS/PROV_21_FILING_CHECKLIST_BP067.md',
+        'MEMORY.md — BP070 CLOSE-STAMP canonical filing count 21',
+        'Founder explicit ratify 2026-06-11 BP080 — MINT IT display_name FounderDenken',
+      ],
+      category: 'provisional',
+    });
+
+    // STEP 2: Mint 21 per-filing entries with actual USPTO app numbers
+    const PROV_FILINGS: Array<{ docket: string; app_number: string; filing_date: string; title: string; conf?: string; filing_fee?: string; entity_status?: string }> = [
+      { docket: 'LB-PROV-001', app_number: '63/925,672', filing_date: '2025-11-26', title: 'see-patent-receipt' },
+      { docket: 'LB-PROV-002', app_number: '63/927,674', filing_date: '2025-11-30', title: 'see-patent-receipt' },
+      { docket: 'LB-PROV-003', app_number: '63/938,216', filing_date: '2025-12-10', title: 'see-patent-receipt' },
+      { docket: 'LB-PROV-004', app_number: '63/967,200', filing_date: '2026-01-23', title: 'see-patent-receipt' },
+      { docket: 'LB-PROV-005', app_number: '63/969,601', filing_date: '2026-01-28', title: 'see-patent-receipt' },
+      { docket: 'LB-PROV-006', app_number: '63/989,913', filing_date: '2026-02-24', title: 'see-patent-receipt' },
+      { docket: 'LB-PROV-007', app_number: '64/006,010', filing_date: '2026-03-15', title: 'see-patent-receipt' },
+      { docket: 'LB-PROV-008', app_number: '64/009,803', filing_date: '2026-03-18', title: 'see-patent-receipt' },
+      { docket: 'LB-PROV-009', app_number: '64/017,140', filing_date: '2026-03-25', title: 'see-patent-receipt' },
+      { docket: 'LB-PROV-010', app_number: '64/017,457', filing_date: 'see-patent-receipt', title: 'see-patent-receipt' },
+      { docket: 'LB-PROV-011', app_number: '64/025,635', filing_date: 'see-patent-receipt', title: 'see-patent-receipt' },
+      { docket: 'LB-PROV-012', app_number: '64/031,531', filing_date: 'see-patent-receipt', title: '93 innovations #2131–#2224 — Context/Beacon/Distribution/Temporal/Trust/UX clusters (B077–B087)' },
+      { docket: 'LB-PROV-013', app_number: '64/036,646', filing_date: '2026-04-12', title: 'Romulator / ROM+Emulator+HAL9000 genesis strain of Mnemosyne' },
+      { docket: 'LB-PROV-014', app_number: '64/052,602', filing_date: '2026-04-29', title: 'Cooperative-Platform AI Memory Infrastructure with Discipline-Enforcement Federation' },
+      { docket: 'LB-PROV-015', app_number: '64/052,618', filing_date: '2026-04-29', title: 'Cooperative-Platform AI Memory Infrastructure — Agent-Spawn Boundary Pre-Injection, Lossless Vendor-Layer Tablet Capture, Corpus-Alias Registry-Keyword-Extension, Substrate Discipline Primitives' },
+      { docket: 'LB-PROV-016', app_number: '64/060,080', filing_date: '2026-05-07', title: 'Method and System for Cooperative-AI-Substrate Platform with Multi-Organism Federation and Substrate-Routed Memory Expansion' },
+      { docket: 'LB-PROV-017', app_number: '64/060,093', filing_date: '2026-05-07', title: 'Save-the-World 12-Paper Series + HexIsle Wave 4 + Cooperative Manufacturing Sovereignty + Substrate-IS-the-Primitive' },
+      { docket: 'LB-PROV-018', app_number: '64/062,332', filing_date: '2026-05-11', title: 'BP036 substrate canon — PGP/Edition/Aviator + SEG-Cascade + Aircraft Carrier + Excalibur + TCP/IP 4-Tuple substrate-layer' },
+      { docket: 'LB-PROV-019', app_number: '64/062,334', filing_date: '2026-05-11', title: 'HexIsle 2D Isometric World Operational Interface + Substrate kernel extensions + Sonnet S7/S8/S1 clusters' },
+      { docket: 'LB-PROV-020', app_number: '64/073,890', filing_date: '2026-05-25', title: 'Substrace Theorem + Pheromone Trail + Wrasse-Quartermaster + MENUS + Hard Candy Stitchpunk + Pearl Registry + Cephas + SEG-Cascade + Employ-the-World backbone' },
+      { docket: 'LB-PROV-021', app_number: '64/079,336', filing_date: '2026-06-01', title: 'Cooperative AI Substrate Systems: Roll Architecture Peer-Mesh Ratification, Pearl-Class Transmission, Wrasse-Quartermaster Context Pre-Injection, Anti-Hype Empirical Honesty Framework, Caithedral Cathedral Architecture, MENUS-Helm Cooperative Inventory Layer, Hard Candy Stitchpunk Configuration Sharing, Mnemosyne P2P Cold-Storage Capsule Protocol, Employ the World Cooperative-Economy Backbone, Computation-Knowledge Separation via Speckle/Hex-Soccerball/Peanut-Roll/Mass-Crystal Substrate Primitives, AI Tuner Role-Class, and Human-Substrate Anecdote-Corpus Method for Multi-Agent Cooperative Platform Orchestration', conf: '6635', filing_fee: '$65', entity_status: 'micro_entity' },
+    ];
+
+    const filingEntries: ReturnType<typeof registerClaim>[] = [];
+    for (const f of PROV_FILINGS) {
+      const body: Record<string, string> = {
+        docket: f.docket,
+        app_number: f.app_number,
+        filing_date: f.filing_date,
+        title: f.title,
+        filed_by: 'Jonathan Ray Jones',
+        address: '9627 Krier Ct, Converse TX 78109',
+        cooperative: 'MnemosyneC',
+        genesis_ledger_id_ref: genesisEntry.ledger_id,
+      };
+      if (f.conf) body['conf'] = f.conf;
+      if (f.filing_fee) body['filing_fee'] = f.filing_fee;
+      if (f.entity_status) body['entity_status'] = f.entity_status;
+      const entry = registerClaim({
+        registered_by: 'member_000001',
+        claim: `patent:provisional:${f.docket}`,
+        claim_body: JSON.stringify(body),
+        evidence: [
+          'Asteroid-ProofVault/03_PATENT_BAGS/ — folder-verified app number',
+          'Founder explicit ratify 2026-06-11 BP080',
+        ],
+        category: 'provisional',
+      });
+      filingEntries.push(entry);
+    }
+
+    // STEP 3: Generate vCard QR PNG
+    let vcardQrPath: string | null = null;
+    let vcardQrError: string | null = null;
+    try {
+      vcardQrPath = await generateFounderVcardQr(genesisEntry.ledger_id);
+    } catch (e) {
+      vcardQrError = String(e);
+    }
+
+    return {
+      success: true,
+      genesis_ledger_id: genesisEntry.ledger_id,
+      filing_ledger_ids: filingEntries.map(e => e.ledger_id),
+      all_22_entries: [genesisEntry, ...filingEntries],
+      vcard_qr_path: vcardQrPath,
+      vcard_qr_error: vcardQrError,
+    };
+  });
 }
 
 // --- Mesh Results Watcher (SEG-U-7 BP078) ------------------------------------
@@ -3547,6 +3662,26 @@ function emitMeshComplete(metrics: {
 // STAGED — NOT called from app startup. Triggered only via ip-ledger:execute-genesis-mint
 // IPC after Founder confirms the payload in GENESIS_MINT_DRAFT_PAYLOAD_BP080.md.
 // Federal Body Cam doctrine: once written, the entry cannot be deleted — only superseded.
+
+/** Generate vCard QR PNG for the Founder at resources/founder-vcard.png. */
+async function generateFounderVcardQr(genesisLedgerId: string): Promise<string> {
+  const QRCode = await import('qrcode');
+  const qr = (QRCode.default ?? QRCode) as typeof import('qrcode');
+  const vcard = [
+    'BEGIN:VCARD',
+    'VERSION:3.0',
+    'FN:FounderDenken',
+    'ORG:MnemosyneC Cooperative',
+    'EMAIL:Founder@LianaBanyan.com',
+    'URL:https://mnemosynec.ai',
+    `NOTE:User 000001 · MnemosyneC Cooperative Founder · 21 provisional filings · genesis:user:000001 · genesis_ledger_id: ${genesisLedgerId}`,
+    'END:VCARD',
+  ].join('\n');
+  const outputPath = join(__dirname, '..', '..', 'resources', 'founder-vcard.png');
+  await qr.toFile(outputPath, vcard, { width: 300, margin: 2 });
+  return outputPath;
+}
+
 async function mintGenesisIfAbsent(): Promise<void> {
   try {
     const entries = loadAllEntries();

@@ -261,3 +261,5 @@ cd "C:\Users\Administrator\Documents\LianaBanyanPlatform\platform"; npm run buil
 ---
 
 *FOR THE KEEP. 🌊⚓🪙 Đ — Updated BP060 W2 Ω′ · Knight-K1 · 2026-05-28*
+
+- [User 000001 Genesis Mint (BP080 2026-06-11)](Asteroid-ProofVault/BP080_GENESIS_MINT_RECEIPT_USER_000001.md) — genesis_ledger_id: ipl_89a9f31427f526aa · 21 provisional filing entries · FounderDenken · Founder@LianaBanyan.com · Federal Body Cam permanent write.

@@ -1050,6 +1050,7 @@ contextBridge.exposeInMainWorld('amplify', {
   ipLedgerGetGenesis: () => ipcRenderer.invoke('ip-ledger:get-genesis'),
   ipLedgerFounderVcardQr: () => ipcRenderer.invoke('ip-ledger:founder-vcard-qr'),
   ipLedgerExecuteGenesisMint: () => ipcRenderer.invoke('ip-ledger:execute-genesis-mint'),
+  ipLedgerGenesisMintFull: () => ipcRenderer.invoke('ip-ledger:genesis-mint-full'),
 
   // SEG-U-7 BP078: mesh-test-complete -- fired when a results file is detected on disk
   onMeshTestComplete: (cb: (metrics: {
@@ -1359,6 +1360,7 @@ declare global {
       ipLedgerGetGenesis?: () => Promise<unknown>;
       ipLedgerFounderVcardQr?: () => Promise<{ dataUrl: string; vcard: string } | { error: string } | null>;
       ipLedgerExecuteGenesisMint?: () => Promise<unknown>;
+      ipLedgerGenesisMintFull?: () => Promise<unknown>;
     };
     // SEG-V0150-P0-DIAGNOSE-BRIDGE: sentinel — set by preload before main bridge wires up
     __preloadLoaded?: boolean;
