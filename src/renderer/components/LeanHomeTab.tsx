@@ -151,6 +151,34 @@ const s = {
     transition: 'opacity 0.15s',
     fontFamily: 'system-ui, sans-serif',
   },
+  pillarsTitle: {
+    fontSize: 17,
+    fontWeight: 700,
+    marginBottom: 4,
+  },
+  pillarsSub: {
+    fontSize: 13,
+    color: '#94a3b8',
+    marginBottom: 16,
+  },
+  pillarRow: {
+    display: 'flex',
+    gap: 10,
+    alignItems: 'flex-start' as const,
+  },
+  pillarLabel: {
+    fontSize: 12,
+    fontWeight: 700,
+    color: '#6ee7b7',
+    width: 54,
+    flexShrink: 0,
+    paddingTop: 2,
+  },
+  pillarDetail: {
+    fontSize: 12,
+    color: '#94a3b8',
+    lineHeight: 1.55,
+  },
 };
 
 // ─── SixPillarsFlipCard ───────────────────────────────────────────────────────
