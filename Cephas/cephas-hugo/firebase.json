@@ -21,7 +21,7 @@
           "source": "/download/**",
           "headers": [
             {"key": "X-LB-Version", "value": "v0.1.52"},
-            {"key": "X-LB-Build-Hash", "value": "v0.1.52+03694ec"},
+            {"key": "X-LB-Build-Hash", "value": "v0.1.52+79f1b33"},
             {"key": "X-LB-Phase", "value": "alpha"}
           ]
         },
@@ -77,7 +77,7 @@
           "source": "/download/**",
           "headers": [
             {"key": "X-LB-Version", "value": "v0.1.52"},
-            {"key": "X-LB-Build-Hash", "value": "v0.1.52+03694ec"},
+            {"key": "X-LB-Build-Hash", "value": "v0.1.52+79f1b33"},
             {"key": "X-LB-Phase", "value": "alpha"}
           ]
         },
