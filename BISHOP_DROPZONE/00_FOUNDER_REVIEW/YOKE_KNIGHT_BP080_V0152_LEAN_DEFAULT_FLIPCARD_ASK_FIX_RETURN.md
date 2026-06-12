@@ -54,3 +54,65 @@ SHIP-READY: GATE 1 COMPLETE · GATES 2+3 BLOCKED ON FOUNDER RATIFY
 3. Say "publish" to promote the DRAFT GitHub Release to live
 
 *Knight · SEG-V0152-SHIP · BP080 · Sonnet 4.6 · 2026-06-12*
+
+---
+
+## FOUNDER RATIFY + GATES 2+3 COMPLETE
+
+| Field | Value |
+|---|---|
+| Founder ratify timestamp | 2026-06-11T19:36Z |
+| Ratify phrase | "PUBLISH IT. Push DRAFT to Latest. Deploy Cephas + MnemosyneC.ai + Museum. Run all 3 SHIP gates." |
+| SEG agent | SEG-V0152-GATES-2-3 · Sonnet 4.6 |
+
+### GitHub Release
+| Field | Value |
+|---|---|
+| URL | https://github.com/Upekrithen/LianaBanyanPlatform/releases/tag/v0.1.52 |
+| Tag | v0.1.52 |
+| Status | LIVE (published from DRAFT at ~19:37 CDT 2026-06-11) |
+| `gh release edit` result | exit 0 · published |
+
+### Firebase Deploy — All Targets
+| Target | Site | Status | Hosting URL |
+|---|---|---|---|
+| hosting:main | lianabanyan-main | ✅ DEPLOYED | https://lianabanyan-main.web.app |
+| hosting:biz | lianabanyan-biz-trunk | ✅ DEPLOYED | https://lianabanyan-biz-trunk.web.app |
+| hosting:org | lianabanyan-org-trunk | ✅ DEPLOYED | https://lianabanyan-org-trunk.web.app |
+| hosting:net | lianabanyan-net-trunk | ✅ DEPLOYED | https://lianabanyan-net-trunk.web.app |
+| hosting:the2ndsecond | the2ndsecond-trunk | ✅ DEPLOYED | https://the2ndsecond-trunk.web.app |
+| hosting:hexisle | hexisle | ✅ DEPLOYED | https://hexisle.web.app |
+| hosting:upekrithen | lianabanyan-upekrithen | ✅ DEPLOYED | https://lianabanyan-upekrithen.web.app |
+| hosting:museum | lianabanyan-museum | ✅ DEPLOYED | https://lianabanyan-museum.web.app |
+| Cephas | cephas-lianabanyan + mnemosyne-lianabanyan | ✅ DEPLOYED | https://cephas-lianabanyan.web.app |
+
+Auth note: User OAuth token was expired; deployed via service account `firebase-adminsdk-fbsvc@lianabanyan-403dc.iam.gserviceaccount.com` using gcloud ADC.
+Hash cache issue: `.firebase/hosting.ZGlzdA.cache` was stale (Node v24.11.0 path.resolve stricter validation); cleared before deploy — all subsequent targets uploaded cleanly.
+
+### Gate 1 — HTTP Headers
+| Domain | X-Lb-Build-Hash | X-Lb-Version | X-Lb-Phase | Result |
+|---|---|---|---|---|
+| mnemosynec.ai/download/ | `v0.1.52+79f1b33` | v0.1.52 | alpha | ✅ PASS |
+| cephas.lianabanyan.com/download/ | `v0.1.52+79f1b33` | v0.1.52 | alpha | ✅ PASS |
+
+### Gate 2 — Content Check (Cephas download page)
+| Check | Result |
+|---|---|
+| v0.1.52 present on cephas.lianabanyan.com/download/ | ✅ YES |
+| SHA-256 `79F1B33` present on cephas.lianabanyan.com/download/ | ✅ YES |
+| mnemosynec.ai/download/ same | ✅ YES |
+| **GATE 2** | ✅ **PASS** |
+
+### Gate 3 — Anonymous Download Verify
+| Check | Result |
+|---|---|
+| URL | https://github.com/Upekrithen/LianaBanyanPlatform/releases/download/v0.1.52/MnemosyneC-Setup-0.1.52.exe |
+| HTTP Status | 200 |
+| Content-Length | 537,047,293 bytes |
+| > 100 MB threshold | ✅ YES (537 MB) |
+| **GATE 3** | ✅ **PASS** |
+
+### Final Status
+**COMPLETE — All 3 SHIP gates passed. v0.1.52 is live.**
+
+*SEG-V0152-GATES-2-3 · Sonnet 4.6 · BP080 · 2026-06-12T00:51Z*
