@@ -270,16 +270,19 @@ function InviteCueCardPreview({
 }
 
 // ─── Invite Flow ──────────────────────────────────────────────────────────────
-// SEG-V0153A-P0-INVITE-FORM
+// SEG-V0153A-P0-INVITE-FORM + SEG-V0153A-INVITE-FORM-ENHANCE
 //
 // Truth-Always flags:
 //   [T1] window.amplify.getProfile does NOT exist in preload.ts.
-//        displayName is sourced from getAuthState().member?.display_name (FederationTab state).
-//        Falls back to "Your Name" if absent.
+//        displayName is sourced from getAuthState().member?.display_name (FederationTab state),
+//        passed as prop to InviteFlow. Falls back to "Your Name" for resolvedDisplayName,
+//        and to "you" for the Sign-this-card checkbox label.
 //   [T2] window.amplify.openExternal IS confirmed in preload.ts (ipcRenderer.send — fire-and-forget,
 //        no Promise return). 3s timeout used to transition to success state.
 //   [T3] Sent invites history (Part C): P1-DEFERRED — not implemented in this version.
 //        Shape: localStorage key 'mnemosynec.sent_invites', capped 20 entries.
+//   [T4] Cooldown IPC shape: SEG-P1-REJECTION-COOLDOWN may not have landed yet.
+//        Both old shape { token, expiresAt } and new shape { ok, ... } are handled gracefully.
 
 export function InviteFlow({ displayName }: { displayName?: string }) {
   const resolvedDisplayName = displayName?.trim() || 'Your Name';
@@ -297,6 +300,13 @@ export function InviteFlow({ displayName }: { displayName?: string }) {
   const [tokenCopied, setTokenCopied] = useState(false);
   const openTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // — Cooldown state —
+  const [cooldownActive, setCooldownActive] = useState(false);
+  const [cooldownSeconds, setCooldownSeconds] = useState(0);
+
+  // — Sign card state —
+  const [signCard, setSignCard] = useState(true);
+
   // — Legacy manual token state (collapsible fallback) —
   const [legacyToken, setLegacyToken] = useState<InviteToken | null>(null);
   const [legacyLoading, setLegacyLoading] = useState(false);
@@ -307,6 +317,22 @@ export function InviteFlow({ displayName }: { displayName?: string }) {
     sendStatus === 'validating' ||
     sendStatus === 'generating' ||
     sendStatus === 'opening';
+
+  // Live countdown — ticks every 60 s; clears cooldown when ≤ 60 s remain
+  useEffect(() => {
+    if (!cooldownActive || cooldownSeconds <= 0) return;
+    const interval = setInterval(() => {
+      setCooldownSeconds(s => {
+        if (s <= 60) {
+          setCooldownActive(false);
+          clearInterval(interval);
+          return 0;
+        }
+        return s - 60;
+      });
+    }, 60000);
+    return () => clearInterval(interval);
+  }, [cooldownActive, cooldownSeconds]);
 
   const handleSend = async () => {
     if (isBusy) return;
@@ -328,7 +354,15 @@ export function InviteFlow({ displayName }: { displayName?: string }) {
     let inviteToken: string;
     let expiresAt: string;
     try {
-      const result = await (window as any).amplify?.federationGenerateInvite?.();
+      const rawResult = await (window as any).amplify?.federationGenerateInvite?.();
+      // Support both old shape { token, expiresAt } and new shape { ok, token, expiresAt } | { ok: false, error, wait_seconds }
+      const result = rawResult && 'ok' in rawResult ? rawResult : { ok: true, ...rawResult };
+      if (!result.ok && result.error === 'cooldown') {
+        setCooldownSeconds(result.wait_seconds ?? 3600);
+        setCooldownActive(true);
+        setSendStatus('idle');
+        return;
+      }
       if (result?.token) {
         inviteToken = result.token;
         expiresAt = result.expiresAt;
@@ -345,17 +379,26 @@ export function InviteFlow({ displayName }: { displayName?: string }) {
     // Steps 4–5 — compose accept link + mailto body
     const acceptLink = `mnemo://accept?token=${inviteToken}`;
     const note = personalNote.trim();
+    const fromLine = signCard ? `From: ${resolvedDisplayName}\n` : '';
+    const noteBlock = signCard && note ? `\n${note}\n` : '';
     const body =
-      (note ? note + '\n\n' : '') +
+      fromLine +
+      noteBlock +
+      (fromLine || noteBlock ? '\n' : '') +
       "I'd like to share context with you via MnemosyneC.\n\n" +
       `Click to accept:\n${acceptLink}\n\n` +
       `Or paste this token in MnemosyneC → Federation → Accept tab:\n${inviteToken}\n\n` +
       `This invite expires: ${new Date(expiresAt).toLocaleString()}\n\n` +
       'Get MnemosyneC: https://mnemosynec.ai';
 
+    const subjectRecipient = recipientName.trim();
     const mailtoUrl =
       'mailto:' + encodeURIComponent(recipientEmail.trim()) +
-      '?subject=' + encodeURIComponent("You're invited to join my MnemosyneC mesh") +
+      '?subject=' + encodeURIComponent(
+        subjectRecipient
+          ? `${subjectRecipient}, you're invited to join MnemosyneC`
+          : "You're invited to join MnemosyneC"
+      ) +
       '&body=' + encodeURIComponent(body);
 
     // Step 6 — fire openExternal ([T2] fire-and-forget, no await)
@@ -479,84 +522,122 @@ export function InviteFlow({ displayName }: { displayName?: string }) {
       ) : (
         /* ── Form state ── */
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          <div style={{ fontSize: 11, color: C.muted, lineHeight: 1.6 }}>
-            Send a signed invite — valid 24 hours, single-use. Opens your mail client.
-          </div>
-
-          {/* Recipient name */}
-          <input
-            type="text"
-            value={recipientName}
-            onChange={(e) => setRecipientName(e.target.value)}
-            placeholder="Their name"
-            disabled={isBusy}
-            style={s.input}
-          />
-
-          {/* Email */}
-          <div>
-            <input
-              type="email"
-              value={recipientEmail}
-              onChange={(e) => { setRecipientEmail(e.target.value); setEmailError(null); }}
-              placeholder="their@email.com"
-              disabled={isBusy}
-              style={{
-                ...s.input,
-                borderColor: emailError ? C.red : undefined,
-              }}
-            />
-            {emailError && (
-              <div style={{ fontSize: 10, color: C.red, marginTop: 4 }}>{emailError}</div>
-            )}
-          </div>
-
-          {/* Personal note */}
-          <div>
-            <textarea
-              value={personalNote}
-              onChange={(e) => setPersonalNote(e.target.value.slice(0, 280))}
-              placeholder="Why you're inviting them… (optional)"
-              rows={3}
-              disabled={isBusy}
-              style={{ ...s.input, resize: 'vertical', fontFamily: 'inherit', fontSize: 11 }}
-            />
-            {personalNote.length > 220 && (
-              <div style={{
-                fontSize: 9, textAlign: 'right', marginTop: 2,
-                color: personalNote.length >= 280 ? C.red : C.muted,
-              }}>
-                {personalNote.length}/280
+          {cooldownActive ? (
+            /* ── Cooldown banner — replaces form fields ── */
+            <div style={{
+              background: '#1a1200',
+              border: '1px solid #d97706',
+              borderRadius: 8,
+              padding: '12px 16px',
+              color: '#d97706',
+              fontSize: 13,
+            }}>
+              ⏳ You can send your next invite in {Math.ceil(cooldownSeconds / 60)} minute{Math.ceil(cooldownSeconds / 60) !== 1 ? 's' : ''}.
+              <div style={{ fontSize: 11, color: '#92400e', marginTop: 4 }}>
+                Invite responsibly — senders who get rejected too often enter a cooldown period.
               </div>
-            )}
-          </div>
-
-          {sendError && (
-            <div style={{ fontSize: 10, color: C.red, padding: '6px 10px', background: '#1c0808', borderRadius: 6 }}>
-              {sendError}
             </div>
+          ) : (
+            <>
+              <div style={{ fontSize: 11, color: C.muted, lineHeight: 1.6 }}>
+                Send a signed invite — valid 24 hours, single-use. Opens your mail client.
+              </div>
+
+              {/* Recipient name */}
+              <div>
+                <input
+                  type="text"
+                  value={recipientName}
+                  onChange={(e) => setRecipientName(e.target.value)}
+                  placeholder="Their name"
+                  disabled={isBusy}
+                  maxLength={60}
+                  style={s.input}
+                />
+                {recipientName.length > 40 && (
+                  <div style={{ fontSize: 9, textAlign: 'right', marginTop: 2, color: C.muted }}>
+                    {recipientName.length}/60
+                  </div>
+                )}
+              </div>
+
+              {/* Email */}
+              <div>
+                <input
+                  type="email"
+                  value={recipientEmail}
+                  onChange={(e) => { setRecipientEmail(e.target.value); setEmailError(null); }}
+                  placeholder="their@email.com"
+                  disabled={isBusy}
+                  style={{
+                    ...s.input,
+                    borderColor: emailError ? C.red : undefined,
+                  }}
+                />
+                {emailError && (
+                  <div style={{ fontSize: 10, color: C.red, marginTop: 4 }}>{emailError}</div>
+                )}
+              </div>
+
+              {/* Personal note */}
+              <div>
+                <textarea
+                  value={personalNote}
+                  onChange={(e) => setPersonalNote(e.target.value.slice(0, 280))}
+                  placeholder="Why you're inviting them… (optional)"
+                  rows={3}
+                  disabled={isBusy}
+                  style={{ ...s.input, resize: 'vertical', fontFamily: 'inherit', fontSize: 11 }}
+                />
+                {personalNote.length > 220 && (
+                  <div style={{
+                    fontSize: 9, textAlign: 'right', marginTop: 2,
+                    color: personalNote.length >= 280 ? C.red : C.muted,
+                  }}>
+                    {personalNote.length}/280
+                  </div>
+                )}
+              </div>
+
+              {sendError && (
+                <div style={{ fontSize: 10, color: C.red, padding: '6px 10px', background: '#1c0808', borderRadius: 6 }}>
+                  {sendError}
+                </div>
+              )}
+
+              {/* Sign this card checkbox */}
+              <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, color: '#94a3b8', cursor: 'pointer' }}>
+                <input
+                  type="checkbox"
+                  checked={signCard}
+                  onChange={(e) => setSignCard(e.target.checked)}
+                  style={{ cursor: 'pointer' }}
+                />
+                Sign this card as <span style={{ color: '#6ee7b7', marginLeft: 4 }}>{displayName?.trim() || 'you'}</span>
+              </label>
+
+              {/* Primary send button — big green */}
+              <button
+                onClick={() => void handleSend()}
+                disabled={isBusy}
+                style={{
+                  ...s.primaryBtn,
+                  background: '#0e2a1a',
+                  border: `1px solid ${C.green}`,
+                  color: C.green,
+                  opacity: isBusy ? 0.7 : 1,
+                }}
+              >
+                {sendButtonLabel()}
+              </button>
+
+              {/* Stacked invite card preview — live updates as user types recipient name */}
+              <InviteCueCardPreview
+                displayName={resolvedDisplayName}
+                recipientName={recipientName}
+              />
+            </>
           )}
-
-          {/* Primary send button — big green */}
-          <button
-            onClick={() => void handleSend()}
-            disabled={isBusy}
-            style={{
-              ...s.primaryBtn,
-              background: '#0e2a1a',
-              border: `1px solid ${C.green}`,
-              color: C.green,
-              opacity: isBusy ? 0.7 : 1,
-            }}
-          >
-            {sendButtonLabel()}
-          </button>
-
-          {/* Stacked invite card preview — live updates as user types recipient name */}
-          <InviteCueCardPreview
-            displayName={resolvedDisplayName}
-            recipientName={recipientName}
-          />
         </div>
       )}
 
@@ -623,6 +704,7 @@ function AcceptFlow({ initialToken }: { initialToken?: string }) {
   const [status, setStatus] = useState<'idle' | 'verifying' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
   const [deepLinkBanner, setDeepLinkBanner] = useState(!!initialToken);
+  const [rejecting, setRejecting] = useState(false);
 
   // SEG-V0153A: when a new initialToken arrives (deep-link), pre-populate input + show banner
   useEffect(() => {
@@ -661,6 +743,22 @@ function AcceptFlow({ initialToken }: { initialToken?: string }) {
     setStatus('idle');
     setMessage('');
     setDeepLinkBanner(false);
+  };
+
+  const handleRejectInvite = async () => {
+    if (rejecting || !tokenInput.trim()) return;
+    setRejecting(true);
+    void (window as any).amplify?.federationRejectInvite?.({
+      invite_token: tokenInput.trim(),
+      source: 'in_app',
+    });
+    setTimeout(() => {
+      setTokenInput('');
+      setStatus('idle');
+      setMessage('');
+      setDeepLinkBanner(false);
+      setRejecting(false);
+    }, 1500);
   };
 
   return (
@@ -713,6 +811,25 @@ function AcceptFlow({ initialToken }: { initialToken?: string }) {
           >
             {status === 'verifying' ? '⏳ Verifying…' : '🤝 Verify & Join Mesh'}
           </button>
+
+          {tokenInput.trim() && (
+            <button
+              style={{
+                marginTop: 8,
+                padding: '6px 12px',
+                background: 'transparent',
+                border: '1px solid #475569',
+                color: '#64748b',
+                borderRadius: 6,
+                cursor: 'pointer',
+                fontSize: 12,
+              }}
+              onClick={() => void handleRejectInvite()}
+              disabled={rejecting}
+            >
+              {rejecting ? 'Dismissed' : 'Not interested'}
+            </button>
+          )}
         </>
       )}
     </div>

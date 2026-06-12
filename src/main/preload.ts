@@ -388,6 +388,9 @@ contextBridge.exposeInMainWorld('amplify', {
   federationAcceptInvite: (token: string): Promise<{ success: boolean; peerName?: string; error?: string }> =>
     ipcRenderer.invoke('federation:accept-invite', token),
 
+  federationRejectInvite: (data: { invite_token: string; source: string }): Promise<{ ok: boolean; error?: string }> =>
+    ipcRenderer.invoke('federation:reject-invite', data),
+
   federationLeavePeer: (peerId: string): Promise<{ ok: boolean }> =>
     ipcRenderer.invoke('federation:leave-peer', peerId),
 
@@ -1043,6 +1046,11 @@ contextBridge.exposeInMainWorld('amplify', {
     return () => ipcRenderer.removeListener('lean-bg-status', handler);
   },
 
+  // ── BP080 Genesis Mint — IP Ledger IPC ───────────────────────────────────
+  ipLedgerGetGenesis: () => ipcRenderer.invoke('ip-ledger:get-genesis'),
+  ipLedgerFounderVcardQr: () => ipcRenderer.invoke('ip-ledger:founder-vcard-qr'),
+  ipLedgerExecuteGenesisMint: () => ipcRenderer.invoke('ip-ledger:execute-genesis-mint'),
+
   // SEG-U-7 BP078: mesh-test-complete -- fired when a results file is detected on disk
   onMeshTestComplete: (cb: (metrics: {
     hot_accuracy_pct: number;
@@ -1111,6 +1119,7 @@ declare global {
       // MESH-6: Federation invite/accept/leave + SID fetch
       federationGenerateInvite?: () => Promise<{ token: string; expiresAt: string }>;
       federationAcceptInvite?: (token: string) => Promise<{ success: boolean; peerName?: string; error?: string }>;
+      federationRejectInvite?: (data: { invite_token: string; source: string }) => Promise<{ ok: boolean; error?: string }>;
       federationLeavePeer?: (peerId: string) => Promise<{ ok: boolean }>;
       federationFetchSid?: (dag_id: string, peerId: string) => Promise<{ ok: boolean; node?: unknown; hash_verified: boolean; error?: string }>;
       // MoneyPenny
@@ -1346,6 +1355,10 @@ declare global {
       writeSkuTierSkip?: () => Promise<{ ok: boolean; error?: string }>;
       // SEG-V0151-P0-AUTOMATIC-BACKGROUND: lean-bg-status events from main
       onLeanBgStatus?: (cb: (payload: { type: string; msg: string; pct?: number }) => void) => () => void;
+      // BP080 Genesis Mint — IP Ledger IPC
+      ipLedgerGetGenesis?: () => Promise<unknown>;
+      ipLedgerFounderVcardQr?: () => Promise<{ dataUrl: string; vcard: string } | { error: string } | null>;
+      ipLedgerExecuteGenesisMint?: () => Promise<unknown>;
     };
     // SEG-V0150-P0-DIAGNOSE-BRIDGE: sentinel — set by preload before main bridge wires up
     __preloadLoaded?: boolean;

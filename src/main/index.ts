@@ -125,6 +125,9 @@ import {
   revokeDevice as lbRevokeDevice,
 } from './lb_auth';
 
+// BP080 Genesis Mint — IP Ledger read/write (main-process only; Federal Body Cam doctrine)
+import { loadAllEntries, registerClaim } from './ip_ledger/ip_ledger_store';
+
 // --- Constants --------------------------------------------------------------
 
 // MNEMOSYNE_PROD_LAUNCH=1 forces loadFile of built renderer even from source tree
@@ -2678,14 +2681,95 @@ function registerIPCHandlers(): void {
   );
 
   // -- MESH-6: Federation invite/accept/leave ----------------------------------
-  safeHandle('federation:generate-invite', (): { token: string; expiresAt: string } => {
-    const { randomBytes } = require('crypto') as typeof import('crypto');
-    const nonce = randomBytes(16).toString('hex');
-    const expiresAt = new Date(Date.now() + 86_400_000).toISOString();
-    const raw = `${getStablePeerId()}:${nonce}:${expiresAt}`;
-    const token = `mnemo-invite-${Buffer.from(raw).toString('base64url')}`;
-    return { token, expiresAt };
-  });
+  // §2 Truth-Always (SEG-V0153A): SUPABASE_URL + SUPABASE_ANON_KEY are available
+  // in the main process via process.env (pattern confirmed at lines ~2411–2413).
+  // No dedicated Supabase client — all Supabase calls use fetch() directly.
+  // sender_peer_id is getStablePeerId() (local machine ID), NOT a Supabase user_id.
+  safeHandle(
+    'federation:generate-invite',
+    async (): Promise<
+      | { ok: true; token: string; expiresAt: string }
+      | { ok: false; error: 'cooldown'; wait_seconds: number }
+    > => {
+      const peerId = getStablePeerId();
+      const supabaseUrl =
+        process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+      const anonKey =
+        process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+
+      // Cooldown gate — skip silently if Supabase not configured
+      if (supabaseUrl && anonKey) {
+        try {
+          const cooldownResp = await globalThis.fetch(
+            `${supabaseUrl.replace(/\/$/, '')}/rest/v1/member_rejection_summary` +
+              `?sender_peer_id=eq.${encodeURIComponent(peerId)}&select=cooldown_until`,
+            {
+              headers: {
+                'Authorization': `Bearer ${anonKey}`,
+                'apikey': anonKey,
+                'Accept': 'application/json',
+              },
+            },
+          );
+          if (cooldownResp.ok) {
+            const rows: Array<{ cooldown_until: string | null }> = await cooldownResp.json();
+            const cooldownUntil = rows[0]?.cooldown_until;
+            if (cooldownUntil) {
+              const waitMs = new Date(cooldownUntil).getTime() - Date.now();
+              if (waitMs > 0) {
+                return {
+                  ok: false,
+                  error: 'cooldown',
+                  wait_seconds: Math.ceil(waitMs / 1000),
+                };
+              }
+            }
+          }
+        } catch {
+          // Network error — fail open (proceed with token mint)
+        }
+      }
+
+      const { randomBytes } = require('crypto') as typeof import('crypto');
+      const nonce = randomBytes(16).toString('hex');
+      const expiresAt = new Date(Date.now() + 86_400_000).toISOString();
+      const raw = `${peerId}:${nonce}:${expiresAt}`;
+      const token = `mnemo-invite-${Buffer.from(raw).toString('base64url')}`;
+      return { ok: true, token, expiresAt };
+    },
+  );
+
+  safeHandle(
+    'federation:reject-invite',
+    async (
+      _ev,
+      { invite_token, source }: { invite_token: string; source: string },
+    ): Promise<{ ok: boolean; error?: string }> => {
+      const supabaseUrl =
+        process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+      const anonKey =
+        process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+      if (!supabaseUrl || !anonKey) {
+        return { ok: false, error: 'no_supabase_config' };
+      }
+      try {
+        const resp = await globalThis.fetch(
+          `${supabaseUrl.replace(/\/$/, '')}/functions/v1/wan-relay-reject`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${anonKey}`,
+            },
+            body: JSON.stringify({ invite_token, source }),
+          },
+        );
+        return { ok: resp.ok };
+      } catch {
+        return { ok: false, error: 'network_error' };
+      }
+    },
+  );
 
   safeHandle(
     'federation:accept-invite',
@@ -3355,6 +3439,49 @@ function registerIPCHandlers(): void {
       return { ok: false, error: (err as Error).message };
     }
   });
+
+  // ── BP080 Genesis Mint — IP Ledger IPC handlers ───────────────────────────
+
+  safeHandle('ip-ledger:get-genesis', () => {
+    try {
+      const entries = loadAllEntries();
+      return entries.find(e => e.claim === 'genesis:user:000001') ?? null;
+    } catch {
+      return null;
+    }
+  });
+
+  safeHandle('ip-ledger:founder-vcard-qr', async () => {
+    try {
+      const entries = loadAllEntries();
+      const genesis = entries.find(e => e.claim === 'genesis:user:000001');
+      if (!genesis) return null;
+      const parsed = JSON.parse(genesis.claim_body ?? '{}') as Record<string, unknown>;
+      const displayName = typeof parsed.display_name === 'string' ? parsed.display_name : 'FounderDenken';
+      const provisionalFilings = typeof parsed.provisional_filings === 'number' ? parsed.provisional_filings : 21;
+      const vcard = [
+        'BEGIN:VCARD',
+        'VERSION:3.0',
+        `FN:${displayName}`,
+        'ORG:MnemosyneC Cooperative',
+        'URL:https://mnemosynec.ai/member/000001',
+        `NOTE:User 000001 · Ledger entry: genesis:user:000001 · ${provisionalFilings} provisional filings · MnemosyneC cooperative founder`,
+        'END:VCARD',
+      ].join('\n');
+      const QRCode = await import('qrcode').catch(() => null);
+      if (!QRCode) return { error: 'qrcode_package_missing' };
+      const dataUrl = await (QRCode.default as typeof import('qrcode')).toDataURL(vcard, { width: 300, margin: 2 });
+      return { dataUrl, vcard };
+    } catch (e) {
+      return { error: String(e) };
+    }
+  });
+
+  safeHandle('ip-ledger:execute-genesis-mint', async () => {
+    await mintGenesisIfAbsent();
+    const entries = loadAllEntries();
+    return entries.find(x => x.claim === 'genesis:user:000001') ?? null;
+  });
 }
 
 // --- Mesh Results Watcher (SEG-U-7 BP078) ------------------------------------
@@ -3414,6 +3541,40 @@ function emitMeshComplete(metrics: {
       win.webContents.send('mesh-test-complete', metrics);
     }
   });
+}
+
+// ─── BP080 Genesis Mint ───────────────────────────────────────────────────────
+// STAGED — NOT called from app startup. Triggered only via ip-ledger:execute-genesis-mint
+// IPC after Founder confirms the payload in GENESIS_MINT_DRAFT_PAYLOAD_BP080.md.
+// Federal Body Cam doctrine: once written, the entry cannot be deleted — only superseded.
+async function mintGenesisIfAbsent(): Promise<void> {
+  try {
+    const entries = loadAllEntries();
+    if (entries.some(e => e.claim === 'genesis:user:000001')) return;
+    registerClaim({
+      registered_by: 'member_000001',
+      claim: 'genesis:user:000001',
+      claim_body: JSON.stringify({
+        display_name: 'FounderDenken',
+        cooperative_role: 'founder',
+        provisional_filings: 21,
+        filing_refs: [
+          'LB-PROV-001 through LB-PROV-021',
+          'USPTO App #64/079,336 (most recent, 2026-06-01)',
+        ],
+        cooperative_name: 'MnemosyneC',
+        genesis_timestamp: new Date().toISOString(),
+      }),
+      evidence: [
+        'Asteroid-ProofVault/BP070_CLOSE_STAMP.md',
+        'USPTO App #64/079,336 filed 2026-06-01',
+      ],
+      category: 'provisional',
+    });
+    console.log('[Genesis] User 000001 minted in IP Ledger');
+  } catch (e) {
+    console.error('[Genesis] Mint failed:', e);
+  }
 }
 
 function setupMeshResultsWatcher(): void {
