@@ -1,4 +1,4 @@
-{
+﻿{
   "hosting": [
     {
       "target": "cephas",
@@ -21,7 +21,7 @@
           "source": "/download/**",
           "headers": [
             {"key": "X-LB-Version", "value": "v0.1.53"},
-            {"key": "X-LB-Build-Hash", "value": "v0.1.53+fa271a3"},
+            {"key": "X-LB-Build-Hash", "value": "v0.1.53+d0c5fdb"},
             {"key": "X-LB-Phase", "value": "alpha"}
           ]
         },
@@ -77,7 +77,7 @@
           "source": "/download/**",
           "headers": [
             {"key": "X-LB-Version", "value": "v0.1.53"},
-            {"key": "X-LB-Build-Hash", "value": "v0.1.53+fa271a3"},
+            {"key": "X-LB-Build-Hash", "value": "v0.1.53+d0c5fdb"},
             {"key": "X-LB-Phase", "value": "alpha"}
           ]
         },

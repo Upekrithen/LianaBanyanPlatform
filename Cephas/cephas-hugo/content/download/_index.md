@@ -24,8 +24,8 @@ tldr: "Everything you need to get started with MnemosyneC, the offline-first coo
 
 [→ Download MnemosyneC for Windows](https://github.com/Upekrithen/LianaBanyanPlatform/releases/download/v0.1.53/MnemosyneC-Setup-0.1.53.exe) *(Mac build: see bounty below — we need a Mac builder)*
 
-**Latest release:** v0.1.53 — Peer Cue Cards · Email invite · Deep-link receive · Relabel UX
-**SHA-256:** `FA271A372609B797AA19EC07E5ED3D0FEF7DD6A46A4C3F89044BBDC817FC1C2E`
+**Latest release:** v0.1.53 — Peer Cue Cards · Email Invite · Genesis Mint · Rejection Cooldown
+**SHA-256:** `D0C5FDBD6857B1E79465FCD45828D53458DFF4B3F8C2523AFCCFE6AF2548426D`
 
 MnemosyneC currently ships signed Windows builds. A macOS build requires a community member with a Mac + Apple Developer ID. [See the Mac bounty poster &darr;](#bounty-posters) — earn Marks for making it happen.
 
