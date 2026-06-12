@@ -1,155 +1,56 @@
-# Knight Yoke Return — v0.1.52 · BP080 · 2026-06-11
-# SEG: LEAN Default · Six Pillars Flip Card · Ask Tab Fix · Existing-User Nudge
+# YOKE-RETURN · Knight → Bishop · BP080 · v0.1.52
+# 2026-06-11 / 2026-06-12 (STYLE-HOTFIX rebuild)
 
-```
 V0152-YOKE-RETURN
 ─────────────────
-SEG-V0152-P0-LEAN-DEFAULT:   COMPLETE — resolveInitialUiMode() hardened with JSDoc + explicit corrupted-value guard; logic unchanged (clean VM → LEAN default preserved).
-SEG-V0152-P0-FLIP-CARD:      COMPLETE — Static Six Pillars card replaced with CSS 3D flip card; front/back faces, two flip triggers (↻ + hyperlink), visual feedback on every click.
-SEG-V0152-P0-ASK-TAB-FIX:    COMPLETE — IPC handler routed through OllamaManager.isReachable()+listModels(); stream URL fixed to 127.0.0.1; checkFailed/retrying states with distinct banners + Retry ↺.
-SEG-V0152-P0-LEAN-NUDGE:     COMPLETE — LeanModeNudge component added to Advanced branch; switchToLean callback; dismiss sets lean_nudge_dismissed=1 permanently.
-SEG-V0152-VERIFY:             PARTIAL — Source changes complete and build succeeded (145/145 IPC channels, 0 failed). Runtime evidence (5 screenshot captures) requires Founder install-verify on packaged build.
+SEG-V0152-P0-LEAN-DEFAULT:   COMPLETE — resolveInitialUiMode() hardened; removeItem guard + 4-priority JSDoc; logic correct as-found
+SEG-V0152-P0-FLIP-CARD:      COMPLETE — SixPillarsFlipCard CSS 3D component; prior partial replaced; all copy verbatim; 5 style keys restored via STYLE-HOTFIX
+SEG-V0152-P0-ASK-TAB-FIX:    COMPLETE — all fixes already in place from prior session; OllamaManager routing + 127.0.0.1 + checkFailed UX confirmed
+SEG-V0152-P0-LEAN-NUDGE:     COMPLETE — LeanModeNudge present; switchToLean StorageEvent dispatch added (was the only gap)
+SEG-V0152-STYLE-HOTFIX:      COMPLETE — 5 dropped style keys restored from git f2fbc14 verbatim; committed 09bfad9
+SEG-V0152-VERIFY:             GREEN (after STYLE-HOTFIX) — main TS PASS, renderer 0 LeanHomeTab errors, 3 assert scripts PASS
+SEG-V0152-SHIP:               GATE 1 COMPLETE — version bumped, STYLE-HOTFIX committed, installer rebuilt, SHA-256 recorded, Cephas content updated, DRAFT release created + installer uploaded
 
-Screenshots embedded: NONE (Founder install-verify required per canon feedback_actual_runtime_verify_for_runtime_bugs_bp078)
-Runtime evidence: Build passed all IPC assertions + NSIS packaged successfully. Streamed output confirmed renderer build ✓ 38 modules transformed.
+Screenshots embedded: [PENDING — clean-VM packaged install required from Founder per canon_actual_runtime_verify_for_runtime_bugs_bp078]
+Runtime evidence: Build PASS — 145/145 IPC channels PASS, ollama.exe 33.9 MB bundled, floor model 379.4 MB bundled, vcredist 24.4 MB bundled; assert-bundled-ollama PASS.
 
-SHIP-READY: BLOCKED ON FOUNDER RATIFY + RUNTIME VERIFY
-```
-
----
+SHIP-READY: GATE 1 COMPLETE · GATES 2+3 BLOCKED ON FOUNDER RATIFY
+  Gate 2 (Cephas/Hugo deploy): awaiting Founder explicit "ship it" / "push" / "fire"
+  Gate 3 (anonymous download verify): follows Gate 2
 
 ## Build Artifacts
-
-| Artifact | Value |
+| Field | Value |
 |---|---|
-| Version | 0.1.52 |
-| Installer | `MnemosyneC-Setup-0.1.52.exe` |
-| SHA-256 | `03694EC037D337DEA48D93DB26E2D46BB145D3CF321631DB9253E132DF493C05` |
-| SHA-512 (base64) | `SWKjH5JyFF9bEbqvEAUDnvX90lzvBABo0bp1Gs1+mtYz/WGjXKeM+ifECgV97fKlMYdl8OOH3UhmDrYdXREI8w==` |
-| Size | 537,047,252 bytes |
-| Release date | 2026-06-11T23:48:53.925Z |
-| DRAFT release URL | https://github.com/Upekrithen/LianaBanyanPlatform/releases/tag/untagged-d120dc3012b807916c8e |
-| Commit | 98581f3 |
+| Installer | `release/MnemosyneC-Setup-0.1.52.exe` |
+| SHA-256 | `79F1B33FF92DE78C2D38A8960EAD9C5E415202C7BFF38358E14B45AA47AF1054` |
+| SHA-512 (base64) | `MmC+kA0Y7ifIr1qSP9cTh+0RMJ0MbOVXuhwbE8Z2xSnsfY92pKmMciMIaQvcb9AnGDvy3jkNZHTU2K/rWK0fxg==` |
+| Size | 537,047,293 bytes |
+| Release date | 2026-06-12T00:05:12.436Z |
+| GitHub DRAFT Release | https://github.com/Upekrithen/LianaBanyanPlatform/releases/tag/untagged-d120dc3012b807916c8e |
 
----
-
-## SEG Details
-
-### SEG-V0152-P0-LEAN-DEFAULT
-
-**File:** `src/renderer/components/LeanShell.tsx`
-
-Replaced the bare `resolveInitialUiMode()` function with a documented, hardened version:
-- Added JSDoc block documenting all 4 branches (lean stored / advanced stored / corrupted fallthrough / fresh install)
-- Changed `localStorage.getItem(LS_UI_MODE) as UiMode | null` to plain `string | null` (type cast moved to return site)
-- Added explicit `// Guard:` comment before the known-valid check
-- Logic is IDENTICAL — clean VM with no localStorage → 'lean'; existing user → 'advanced'
-- SEG-V0152-P0-LEAN-DEFAULT verified at source level; packaged runtime verify required
-
-### SEG-V0152-P0-FLIP-CARD
-
-**File:** `src/renderer/components/LeanHomeTab.tsx`
-
-Removed the old static `<div style={s.pillarsCard}>` block and replaced with `<SixPillarsFlipCard />`. The existing `SixPillarsFlipCard` sub-component (already authored in v0.1.51) was confirmed correct and retained. Removed duplicate function declaration that caused build collision. Removed unused style entries (`pillarsCard`, `pillarsTitle`, `pillarsSub`, `pillarRow`, `pillarLabel`, `pillarDetail`, `proveIt`) from `s` object.
-
-- Front face: Good/Fast/Cheap/Private/Free/Yours pillar rows + "Every figure is reproducible — Prove It · Run your own cabinet" as `<button>` with underline+hyperlink affordance
-- Back face: CADRE benchmark provenance, cabinet instructions, SHA-verified source citation
-- CSS 3D: `perspective: 800px`, `transformStyle: preserve-3d`, `backfaceVisibility: hidden` on both faces
-- Flip triggers: ↻ button (aria-label="Flip card") + "Every figure is reproducible" button
-- Visual feedback: opacity/scale transition on all flip-trigger clicks
-
-### SEG-V0152-P0-ASK-TAB-FIX
-
-**Files:** `src/main/index.ts` + `src/renderer/components/LeanAskTab.tsx`
-
-**index.ts change:** `check-ollama-and-model` handler now:
-```
-if (!ollamaManager) return { reachable: false, hasModel: false, models: [] }
-const reachable = await ollamaManager.isReachable()
-if (!reachable) return { reachable: false, hasModel: false, models: [] }
-const models = await ollamaManager.listModels()
-```
-Eliminated the standalone `fetch('http://127.0.0.1:11434/api/tags')` that bypassed OllamaManager entirely.
-
-**LeanAskTab.tsx changes:**
-- `streamOllama` fetch URL: `http://localhost:11434` → `http://127.0.0.1:11434`
-- New `onSwitchToHome?: () => void` prop (passed from LeanShell as `() => setActiveTab('home')`)
-- New `checkFailed` + `retrying` states
-- `runCheck` callback (useCallback + useEffect) replaces old inline useEffect
-- Two distinct banners:
-  - `modelMissing && !checkFailed` → yellow banner "Your AI model is still setting up. Usually 2–5 minutes." + Retry ↺
-  - `checkFailed` → red banner "Could not reach your local AI. Is Ollama running?" + Retry ↺ + "Open Home tab →"
-- Empty-state guard updated: `!modelMissing && !checkFailed`
-
-### SEG-V0152-P0-LEAN-NUDGE
-
-**File:** `src/renderer/components/LeanShell.tsx`
-
-- New `LS_LEAN_NUDGE_DISMISSED = 'lean_nudge_dismissed'` constant
-- New `LeanModeNudge({ onSwitch })` component:
-  - 32px tall banner, `background: '#0a1628'`, `borderBottom: '1px solid #1e3a5c'`
-  - "✨ Try the new simpler view (Lean Mode) →" button (underline, `#6ee7b7`, briefly shows "Switching…" on click)
-  - ✕ dismiss button (`color: '#475569'`) → sets `lean_nudge_dismissed=1` → banner hidden permanently
-  - `dismissed` state initialized from localStorage (persistent across renders)
-- New `switchToLean` useCallback (mirror of existing `switchToAdvanced`)
-- Advanced branch updated to wrap `MnemosyneTabView` in column flex div with `<LeanModeNudge onSwitch={switchToLean} />` above it
-- `<LeanAskTab />` updated to `<LeanAskTab onSwitchToHome={() => setActiveTab('home')} />`
-
----
-
-## Cephas / Hugo Updates
-
-| File | Change |
+## Commits (pushed to origin/main)
+| SHA | Description |
 |---|---|
-| `Cephas/cephas-hugo/static/download/latest.yml` | v0.1.52 sha512 + size |
-| `Cephas/cephas-hugo/data/version.json` | `"version": "0.1.52"` |
-| `Cephas/cephas-hugo/content/download/_index.md` | Download URL → v0.1.52; SHA-256 updated |
-| `Cephas/cephas-hugo/firebase.json` | X-LB-Version → v0.1.52; X-LB-Build-Hash → v0.1.52+03694ec (both cephas + mnemosyne targets) |
-| `Cephas/cephas-hugo/public/` | Hugo rebuilt --minify (2748ms, 1008 pages) |
+| `98581f3` | v0.1.52 — Lean default hardened, Six Pillars flip card, Ask tab fix, Existing-user nudge |
+| `acbdb16` | BP080 v0.1.52 yoke-return + KNIGHT_BISHOP_MESSAGES append (previous session) |
+| `09bfad9` | style(lean): STYLE-HOTFIX restore 5 dropped style keys to LeanHomeTab.tsx |
+| `7a2b370` | Cephas: v0.1.52 SHA-256 update (STYLE-HOTFIX rebuild) |
 
----
+## Truth-Always Flags
+- SEG-P0-FLIP-CARD had a pre-existing partial implementation (not at described state) — corrected
+- SEG-P0-LEAN-DEFAULT had a prior partial update — corrected
+- SEG-P0-ASK-TAB-FIX: all fixes were already present from prior session — no new changes required
+- STYLE-HOTFIX: 5 style keys (pillarsTitle, pillarsSub, pillarRow, pillarLabel, pillarDetail) dropped by FLIP-CARD rewrite; restored from f2fbc14 verbatim; committed 09bfad9
+- Previous yoke-return (from prior sub-session at 98581f3/acbdb16) used an earlier SHA-256 (03694EC...) built before the STYLE-HOTFIX was committed. This yoke-return supersedes it with the correct post-STYLE-HOTFIX build hash.
+- GitHub DRAFT Release asset verified: GitHub API confirms SHA-256 matches local hash
 
-## Founder Install-Verify Required (5 captures)
+## Founder Action Required
+1. Install v0.1.52 on a clean machine (no prior MnemosyneC) and confirm:
+   (a) Opens to LEAN 3-tab UI on first launch
+   (b) Six Pillars flip card animates correctly, both faces render
+   (c) Ask tab works with gemma4:12b — no "not set up" error
+   (d) Advanced mode shows nudge banner; click transitions to lean; dismiss is permanent
+2. Say "ship it" / "push" / "fire" to trigger Gates 2+3 (Cephas deploy + download verify)
+3. Say "publish" to promote the DRAFT GitHub Release to live
 
-Per canon `feedback_actual_runtime_verify_for_runtime_bugs_bp078` and `feedback_ux_seg_screenshot_mandatory_bp078` — source change alone does NOT verify runtime behavior.
-
-**(a) Fresh install LEAN default**
-- Clean machine: clear localStorage (`mnemoUiMode`, `mnemosynec_onboarding_complete`)
-- Install v0.1.52 packaged build
-- Expected: opens to LEAN 3-tab UI (Home / Gauntlet / Ask)
-- Screenshot required: LEAN shell on first launch
-
-**(b) Six Pillars flip card — both triggers**
-- Screenshot: front face with ↻ visible + "Every figure is reproducible…" as hyperlink
-- Click ↻ → screenshot: back face with Prove It detail
-- Click hyperlink on front → screenshot: same back face
-
-**(c) Ask tab with gemma4:12b running**
-- `ollama list` confirms gemma4:12b present
-- Open Ask tab → no error banner
-- Type "What is MnemosyneC?" → screenshot: streaming response visible
-
-**(d) Existing user Advanced → nudge banner**
-- `localStorage.setItem('mnemosynec_onboarding_complete', '1')`; clear `mnemoUiMode` + `lean_nudge_dismissed`
-- Relaunch → Advanced mode with nudge banner at top
-- Screenshot: nudge banner visible
-
-**(e) Nudge → lean transition + dismiss persistence**
-- Click nudge banner → screenshot: Lean mode active
-- Dismiss (✕) → relaunch → screenshot: Advanced mode with no nudge
-
----
-
-## Gates Status
-
-| Gate | Status |
-|---|---|
-| Gate 1 — Version bump + build | COMPLETE (0.1.52 installer built, 537 MB) |
-| Gate 2 — Cephas/Hugo deploy | PENDING Founder ratify |
-| Gate 3 — Anonymous download verify | PENDING Founder ratify |
-
-**DRAFT ONLY. Founder must say "ship it" / "push" / "fire" in own words before Gates 2 and 3 execute.**
-
----
-
-*Knight · BP080 · v0.1.52 · 2026-06-11 · Sonnet 4.6*
+*Knight · SEG-V0152-SHIP · BP080 · Sonnet 4.6 · 2026-06-12*
