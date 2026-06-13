@@ -8,6 +8,53 @@ composing_hints: ["mnemosyne", "cai", "caithedral", "sspl-free-forever", "how-to
 tldr: "Everything you need to get started with MnemosyneC, the offline-first cooperative AI tool. Works without internet after setup. Free forever. SSPL + Pledge #2260."
 ---
 
+# Your AI has Amnesia.
+
+## Dr. MnemosyneC has the Cure.
+
+Mnemosyne (neh-MOZ-uh-nee) is the Greek goddess of memory. **Dr. MnemosyneC inherited her Memory.**
+
+Every time you start a new session, your AI forgets everything. Your projects, your preferences, your past conversations, gone. Dr. MnemosyneC gives your AI a permanent, private memory that actually stays.
+
+<div class="cta-row">
+<a href="https://mnemosynec.ai/download/MnemosyneC-Setup-0.1.60.exe" class="cta-primary"><strong>Download for Windows v0.1.60</strong></a>
+<a href="/install/" class="cta-secondary">Install guide &rarr;</a>
+</div>
+
+<p><small><em>Mac / Linux — coming soon &middot; <a href="mailto:hello@lianabanyan.com">join waitlist &rarr;</a></em></small></p>
+
+---
+
+# MnemosyneC remembers.
+
+You use AI all day across a dozen surfaces. Each one forgets every time.
+
+**MnemosyneC remembers.** Every interaction with any AI grows your substrate. Every time you ask any AI a question, your substrate informs the answer.
+
+The substrate is YOURS. SHA256-stamped. Append-only. Federated with anyone you choose. Free to copy if you want to fork. Cost+20% if you stay. Workers, Builders, Creators keep **83.3%**. No ads. No VC.
+
+---
+
+## How We Make Sure Things Are True
+
+The substrate doesn&rsquo;t just store knowledge. It **lives**.
+
+### Pheromones decay.
+
+Every claim entering the substrate starts as a pheromone &mdash; a signal that something might be true. Pheromones have a half-life. If nothing refreshes them, they fade. Old guesses die naturally. The substrate doesn&rsquo;t accumulate noise &mdash; it lets noise wither.
+
+### Socceri triads confirm.
+
+When three independent verifications converge &mdash; three Shadow E-Giants from different perspective lenses (correctness &middot; consistency &middot; coverage) returning the same verdict &mdash; a pheromone becomes a **socceri triad confirmation**. Verified. But still subject to decay.
+
+### Stone tablets are forever.
+
+When a claim has been buoyed by enough living connection over enough time, it gets promoted to a **stone tablet** &mdash; immutable, append-only, permanent. Stone tablets are the substrate&rsquo;s load-bearing canon. They don&rsquo;t decay.
+
+[Full truth-mechanics explanation &rarr;](/#how-we-make-sure-things-are-true)
+
+---
+
 # How to Use MnemosyneC
 ## The Local AI You Actually Own
 
@@ -22,7 +69,7 @@ tldr: "Everything you need to get started with MnemosyneC, the offline-first coo
 
 **Step 1 — Download and install**
 
-[→ Download MnemosyneC for Windows](https://github.com/liana-banyan/mnemosyne/releases/download/v0.1.60/MnemosyneC-Setup-0.1.60.exe) *(Mac build: see bounty below — we need a Mac builder)*
+[→ Download MnemosyneC for Windows](https://mnemosynec.ai/download/MnemosyneC-Setup-0.1.60.exe) *(Mac build: see bounty below — we need a Mac builder)*
 
 **Latest release:** v0.1.60 — Ask cold-start heartbeat + token streaming · AbortController · differentiated errors
 **SHA-256:** `See GitHub release page for verified hash`

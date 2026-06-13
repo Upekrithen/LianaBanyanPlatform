@@ -33,7 +33,7 @@ footer.footer { display: none !important; }
 }
 
 /* ── HERO ── */
-.mn-v2-hero { padding: 3rem 0 2rem; }
+.mn-v2-hero { padding: 1rem 0 2rem; }
 .mn-v2-hero-card {
   background: linear-gradient(135deg, rgba(10,22,40,0.97) 0%, rgba(5,14,30,0.99) 100%);
   border: 1px solid rgba(214,158,46,0.35);
@@ -77,6 +77,29 @@ footer.footer { display: none !important; }
   .mn-hero-grid__mascot { order: -1; margin-bottom: 0.5rem; }
   .mn-hero-grid__mascot img { width: 110px; }
 }
+/* SEG-2: Hero top row — heading + mascot */
+.mn-hero-top-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1.8rem;
+  align-items: flex-start;
+  margin-bottom: 1.2rem;
+}
+.mn-hero-top-row__text { min-width: 0; }
+.mn-hero-top-row__mascot {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+.mn-hero-top-row__mascot img { width: 220px; height: auto; display: block; border-radius: 8px; }
+@media (max-width: 600px) {
+  .mn-hero-top-row { grid-template-columns: 1fr; }
+  .mn-hero-top-row__mascot { order: -1; margin-bottom: 0.5rem; }
+  .mn-hero-top-row__mascot img { width: 110px; }
+}
+.mn-hero-body { width: 100%; }
 .mn-v2-hero-card h1 {
   color: #faf5eb;
   font-size: clamp(1.5rem, 4vw, 2.1rem);
@@ -298,10 +321,11 @@ footer.footer { display: none !important; }
 }
 .mn-proof-accordion__body p { margin: 0 0 0.7rem; }
 .mn-proof-accordion__body p:last-child { margin-bottom: 0; }
-/* Screenshot placeholders — stacked VERTICALLY (BP081 HARD BINDING: NEVER SCROLL SIDEWAYS) */
+/* Thumbnails — horizontal wrap, NEVER scroll sideways (BP081 HARD BINDING) */
 .mn-proof-screenshots {
   display: flex;
-  flex-direction: column;  /* vertical stack always */
+  flex-direction: row;
+  flex-wrap: wrap;  /* wraps to next line on small screens — NEVER overflow-x: scroll */
   gap: 0.8rem;
   margin: 1rem 0;
 }
@@ -309,20 +333,68 @@ footer.footer { display: none !important; }
   background: rgba(10,22,40,0.8);
   border: 1px dashed rgba(214,158,46,0.3);
   border-radius: 8px;
-  padding: 1.5rem 1rem;
+  padding: 1.2rem 1rem;
   text-align: center;
   min-height: 80px;
+  min-width: 120px;
+  flex: 1 1 140px;
+  max-width: 200px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 0.4rem;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.mn-proof-screenshot-placeholder:hover {
+  border-color: rgba(214,158,46,0.6);
+  background: rgba(10,22,40,0.95);
 }
 .mn-proof-screenshot-placeholder__caption {
   font-size: 0.72rem;
   color: rgba(250,245,235,0.45);
   font-style: italic;
 }
+/* Lightbox overlay */
+.mn-lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.88);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.mn-lightbox.open {
+  display: flex;
+}
+.mn-lightbox__inner {
+  background: rgba(10,22,40,0.98);
+  border: 1px solid rgba(214,158,46,0.4);
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow: auto;
+  text-align: center;
+  position: relative;
+}
+.mn-lightbox__close {
+  position: absolute;
+  top: 0.8rem;
+  right: 1rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: rgba(250,245,235,0.6);
+  background: none;
+  border: none;
+  line-height: 1;
+}
+.mn-lightbox__close:hover { color: #faf5eb; }
+.mn-lightbox__img { max-width: 100%; height: auto; border-radius: 8px; }
+.mn-lightbox__caption { margin-top: 0.8rem; font-size: 0.82rem; color: rgba(250,245,235,0.55); font-style: italic; }
 .mn-proof-accordion__receipt {
   font-size: 0.72rem;
   color: rgba(214,158,46,0.65);
@@ -363,6 +435,93 @@ footer.footer { display: none !important; }
 .mn-substrate-card ul { padding-left:1.4rem; margin:0.5rem 0 0.9rem; }
 .mn-substrate-card li { margin-bottom:0.3rem; color:rgba(250,245,235,0.82); font-size:0.92rem; line-height:1.7; }
 
+/* SEG-5: Layer row accordions */
+.mn-layer-row {
+  border: 1px solid rgba(214,158,46,0.18);
+  border-radius: 8px;
+  background: rgba(10,22,40,0.5);
+  margin: 0 0 0.6rem;
+  overflow: hidden;
+}
+.mn-layer-row > summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 0.75rem 1rem;
+  color: rgba(250,245,235,0.85);
+  font-size: 0.92rem;
+  line-height: 1.5;
+  transition: background 0.15s;
+}
+.mn-layer-row > summary:hover { background: rgba(214,158,46,0.07); }
+.mn-layer-row[open] > summary { background: rgba(214,158,46,0.09); border-bottom: 1px solid rgba(214,158,46,0.15); }
+.mn-layer-row > summary::-webkit-details-marker { display: none; }
+.mn-layer-row__body {
+  padding: 0.9rem 1.1rem;
+  color: rgba(250,245,235,0.78);
+  font-size: 0.88rem;
+  line-height: 1.72;
+}
+
+/* SEG-7: Install card */
+.mn-install-card {
+  background: rgba(10,22,40,0.7);
+  border: 1px solid rgba(214,158,46,0.22);
+  border-radius: 12px;
+  padding: 1.8rem 2rem;
+}
+.mn-install-card__top {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1.2rem;
+}
+.mn-install-card__mascot img {
+  width: 100px;
+  height: auto;
+  border-radius: 8px;
+  display: block;
+}
+.mn-install-card__dl {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+.mn-v2-dl-btn--install {
+  width: 100%;
+  text-align: center;
+  display: block;
+}
+.mn-install-card__heading {
+  color: #d69e2e;
+  font-size: clamp(1rem, 2.8vw, 1.3rem);
+  font-weight: 700;
+  margin: 0 0 0.9rem;
+}
+.mn-install-card__body {
+  color: rgba(250,245,235,0.82);
+  font-size: 0.92rem;
+  line-height: 1.78;
+  margin: 0 0 1rem;
+}
+.mn-install-card__steps {
+  color: rgba(250,245,235,0.82);
+  font-size: 0.92rem;
+  padding-left: 1.5rem;
+  line-height: 1.75;
+  margin: 0 0 1rem;
+}
+.mn-install-card__steps li { margin-bottom: 0.4rem; }
+.mn-install-card__trust {
+  text-align: center;
+  font-size: 0.8rem;
+  color: rgba(250,245,235,0.38);
+  margin: 0;
+}
+@media (max-width: 500px) {
+  .mn-install-card__top { flex-direction: column; align-items: flex-start; }
+  .mn-install-card__mascot img { width: 70px; }
+}
+
 /* ── Footer (SEG-8) — single copyright via extend_footer.html for all pages ── */
 </style>
 
@@ -374,57 +533,60 @@ footer.footer { display: none !important; }
        ═══════════════════════════════════════════════ -->
   <section class="mn-v2-hero" aria-label="MnemosyneC hero">
     <div class="mn-v2-hero-card">
-      <div class="mn-hero-grid">
+<!-- TOP ROW: heading + mascot side-by-side -->
+<div class="mn-hero-top-row">
+  <div class="mn-hero-top-row__text">
+    <h1>Your AI has Amnesia. Dr.&nbsp;MnemosyneC has the Cure.</h1>
+    <p class="mn-hero-pronunciation">Mnemosyne (neh-MOZ-uh-nee) is the Greek goddess of memory. <strong>Dr.&nbsp;MnemosyneC inherited her Memory.</strong></p>
+  </div>
+  <div class="mn-hero-top-row__mascot" aria-hidden="true">
+    <img src="/img/mascots/dr-mnemosynec.png"
+         alt="Dr. MnemosyneC, the gray elephant mascot in a white coat with stethoscope and half-moon spectacles"
+         width="220" height="220"
+         loading="eager">
+    <p class="mn-hero-grid__mascot-caption">Dr.&nbsp;MnemosyneC<br>Memory specialist</p>
+  </div>
+</div><!-- /mn-hero-top-row -->
 
-        <!-- Left: headline + bullets + CTA -->
-        <div class="mn-hero-grid__text">
-          <h1>Your AI has Amnesia. Dr.&nbsp;MnemosyneC has the Cure.</h1>
-          <p class="mn-hero-pronunciation">Mnemosyne (neh-MOZ-uh-nee) is the Greek goddess of memory. <strong>Dr.&nbsp;MnemosyneC inherited her Memory.</strong></p>
-          <p>Every time you start a new session, your AI forgets everything. Your projects, your preferences, your past conversations, gone. Dr.&nbsp;MnemosyneC gives your AI a permanent, private memory that actually stays.</p>
+<!-- FULL-WIDTH body content -->
+<div class="mn-hero-body">
+  <p>Every time you start a new session, your AI forgets everything. Your projects, your preferences, your past conversations, gone. Dr.&nbsp;MnemosyneC gives your AI a permanent, private memory that actually stays.</p>
 
-          <!-- SEG-1: Founder-ratified bullet text verbatim -->
-          <ul class="mn-hero-bullets">
-            <li>Works alongside ChatGPT, Claude, Gemini, or any AI you already use.</li>
-            <li>All your data stays on your own computer. No cloud. No account required.</li>
-            <li>FREE (SSPL license) to use FOREVER. No Ads. No Strings.</li>
-            <li>Optionally join the Cooperative Universal Substrate for $5 a year. Not required.</li>
-          </ul>
+  <!-- SEG-1: Founder-ratified bullet text verbatim -->
+  <ul class="mn-hero-bullets">
+    <li>Works alongside ChatGPT, Claude, Gemini, or any AI you already use.</li>
+    <li>All your data stays on your own computer. No cloud. No account required.</li>
+    <li>FREE (SSPL license) to use FOREVER. No Ads. No Strings.</li>
+    <li>Optionally join the Cooperative Universal Substrate for $5 a year. Not required.</li>
+  </ul>
 
-          <!-- SEG-2: Green Download button -->
-          <div style="text-align:center; margin:1.4rem 0 0.5rem;">
-            <a class="mn-v2-dl-btn"
-               href="{{ .Site.Data.version.download_url }}"
-               download="MnemosyneC-Setup-{{ .Site.Data.version.version }}.exe"
-               aria-label="Download MnemosyneC {{ .Site.Data.version.version }} for Windows">
-              &#8595;&nbsp; Download for Windows v{{ .Site.Data.version.version }}
-            </a>
-          </div>
+  <!-- SEG-2: Green Download button -->
+  <div style="text-align:center; margin:1.4rem 0 0.2rem;">
+    <a class="mn-v2-dl-btn"
+       href="{{ .Site.Data.version.download_url }}"
+       download="MnemosyneC-Setup-{{ .Site.Data.version.version }}.exe"
+       aria-label="Download MnemosyneC {{ .Site.Data.version.version }} for Windows">
+      &#8595;&nbsp; Download for Windows v{{ .Site.Data.version.version }}
+    </a>
+  </div>
+  <p class="dl-fallback" style="font-size:0.82em; color:rgba(250,245,235,0.45); margin:0.3rem 0 0.5rem; text-align:center;">
+    Download not starting? <a href="https://github.com/liana-banyan/mnemosyne/releases/download/v{{ .Site.Data.version.version }}/MnemosyneC-Setup-{{ .Site.Data.version.version }}.exe" style="color:rgba(214,158,46,0.7);">Try the GitHub mirror &rarr;</a>
+  </p>
 
-          <!-- SEG-2: Install guide FIRST, then Six Pillars, How it works, All proofs, Community -->
-          <p class="mn-hp-nav-links">
-            <a href="/install/">Install guide</a>
-            &nbsp;&middot;&nbsp;
-            <a href="#six-pillars">Six Pillars</a>
-            &nbsp;&middot;&nbsp;
-            <a href="#how-it-works">How it works</a>
-            &nbsp;&middot;&nbsp;
-            <a href="/proofs/">All proofs</a>
-            &nbsp;&middot;&nbsp;
-            <a href="/community/">Community</a>
-          </p>
-          <p class="mn-v2-hero-tagline">Mac / Linux &mdash; <em>coming soon</em></p>
-        </div>
-
-        <!-- Right: Dr. MnemosyneC mascot -->
-        <div class="mn-hero-grid__mascot" aria-hidden="true">
-          <img src="/img/mascots/dr-mnemosynec.png"
-               alt="Dr. MnemosyneC, the gray elephant mascot in a white coat with stethoscope and half-moon spectacles"
-               width="220" height="220"
-               loading="eager">
-          <p class="mn-hero-grid__mascot-caption">Dr.&nbsp;MnemosyneC<br>Memory specialist</p>
-        </div>
-
-      </div><!-- /mn-hero-grid -->
+  <!-- SEG-2: Install guide FIRST, then Six Pillars, How it works, All proofs, Community -->
+  <p class="mn-hp-nav-links">
+    <a href="/install/">Install guide</a>
+    &nbsp;&middot;&nbsp;
+    <a href="#six-pillars">Six Pillars</a>
+    &nbsp;&middot;&nbsp;
+    <a href="#how-it-works">How it works</a>
+    &nbsp;&middot;&nbsp;
+    <a href="/proofs/">All proofs</a>
+    &nbsp;&middot;&nbsp;
+    <a href="/community/">Community</a>
+  </p>
+  <p class="mn-v2-hero-tagline">Mac / Linux - <em>coming soon</em></p>
+</div><!-- /mn-hero-body -->
 
       <!-- What your first session looks like -->
       <div class="mn-first-session" role="note" aria-label="What your first session looks like">
@@ -531,25 +693,6 @@ footer.footer { display: none !important; }
       <strong>The Banyan Metric</strong> measures recall of substrate-stored information. &ldquo;Without&rdquo; = model alone, cold start. &ldquo;With&rdquo; = same model after MnemosyneC substrate context injected.
       <br>The <strong>free local model</strong> (Ollama, $0 inference cost) lifted from 6% to 78% entirely because of the shared substrate. <a href="/proofs/" style="font-size:0.88em;">Full proofs &rarr;</a>
     </p>
-  </section>
-
-  <!-- ═══════════════════════════════════════════════
-       SEG-3: MnemosyneC remembers — THIRD (was second)
-       ═══════════════════════════════════════════════ -->
-  <section class="mn-hp-remembers" aria-label="MnemosyneC remembers" id="mnemosynec-remembers">
-    <h2>MnemosyneC remembers.</h2>
-    <p>You use AI all day across a dozen surfaces. Each one forgets every time.</p>
-    <p><strong>MnemosyneC remembers.</strong> Every interaction with any AI grows your substrate. Every time you ask any AI a question, your substrate informs the answer.</p>
-    <p>The substrate is YOURS. SHA256-stamped. Append-only. Federated with anyone you choose. Free to copy if you want to fork. Cost+20% if you stay. Workers, Builders, Creators keep <strong>83.3%</strong>. No ads. No VC.</p>
-    <p><strong>For the keep.</strong></p>
-    <div style="text-align:center; margin:1.4rem 0 0.3rem;">
-      <a class="mn-v2-dl-btn"
-         href="{{ .Site.Data.version.download_url }}"
-         download="MnemosyneC-Setup-{{ .Site.Data.version.version }}.exe">
-        &#8595;&nbsp; Download for Windows v{{ .Site.Data.version.version }}
-      </a>
-    </div>
-    <p style="text-align:center; font-size:0.82rem; color:rgba(250,245,235,0.45); margin-top:0.5rem;"><em>Mac / Linux &mdash; coming soon</em></p>
   </section>
 
   <!-- ═══════════════════════════════════════════════
@@ -704,35 +847,29 @@ footer.footer { display: none !important; }
        "The Substrate Is the Asset" + "How We Make Sure Things Are True"
        ═══════════════════════════════════════════════ -->
   <section class="mn-substrate-card" id="how-it-works" aria-labelledby="mn-substrate-title">
-    <h2 id="mn-substrate-title">HOW IT WORKS &mdash; The Substrate Is the Asset &middot; How We Make Sure Things Are True</h2>
-    <p>MnemosyneC has three layers. Each does one thing well.</p>
+    <h2 id="mn-substrate-title">HOW IT WORKS &mdash; The Substrate Persistent Memory Is the Asset &middot; How We Make Sure Things Are True &amp; Quickly &amp; Cheaply Accessed.</h2>
+    <p>MnemosyneC has three layers. Each does one thing well. Click any row to expand.</p>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Layer</th>
-          <th>Role</th>
-          <th>Component</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>Reader</strong></td>
-          <td>Answers your question</td>
-          <td>Gemma 4 12B (local, free, private)</td>
-        </tr>
-        <tr>
-          <td><strong>Verifier</strong></td>
-          <td>Adjudicates whether the answer is correct</td>
-          <td>Shadow E-Giant concordance (3+ parallel votes)</td>
-        </tr>
-        <tr>
-          <td><strong>Accumulator</strong></td>
-          <td>Stores verified knowledge for next time</td>
-          <td>Eblet store (append-only JSONL, SHA256-stamped)</td>
-        </tr>
-      </tbody>
-    </table>
+    <details class="mn-layer-row">
+      <summary><strong>Reader</strong> &mdash; Answers your question &mdash; <em>Gemma 4 12B (local, free, private)</em></summary>
+      <div class="mn-layer-row__body">
+        Gemma 4 12B is a 12-billion parameter open-source language model from Google, running locally on your machine via Ollama. No cloud account. No API key. $0/call. The Reader is interchangeable &mdash; you can swap in any compatible model. The substrate underneath is what makes the model smart.
+      </div>
+    </details>
+
+    <details class="mn-layer-row">
+      <summary><strong>Verifier</strong> &mdash; Adjudicates whether the answer is correct &mdash; <em>Shadow E-Giant concordance (3+ parallel votes)</em></summary>
+      <div class="mn-layer-row__body">
+        Shadow E-Giant concordance fires three independent local-Gemma calls in parallel &mdash; each with a different perspective lens (correctness, consistency, coverage). Two-of-three must agree before an answer is written into the substrate. Failed answers re-plow until verified, or get quarantined. The verifier is the Andon discipline that keeps the substrate clean.
+      </div>
+    </details>
+
+    <details class="mn-layer-row">
+      <summary><strong>Accumulator</strong> &mdash; Stores verified knowledge for next time &mdash; <em>Eblet store (append-only JSONL, SHA256-stamped)</em></summary>
+      <div class="mn-layer-row__body">
+        Eblets are append-only knowledge entries. Each one is SHA256-stamped at write time &mdash; content-addressable, tamper-evident. The store is a JSONL file in your user-data directory. Append-only means nothing gets overwritten. Verified-correct only &mdash; failed answers never persist. Your substrate gets cleaner over time, not noisier.
+      </div>
+    </details>
 
     <p>Use Ask in MnemosyneC. Use Claude Desktop. Use Cursor. Use ChatGPT in your browser (browser extension coming v0.2). Whichever surface you use, the <strong>substrate underneath compounds</strong>. Your knowledge grows. The model is interchangeable. The substrate is what makes any AI smarter &mdash; for you, for your work, for the keep.</p>
 
@@ -769,36 +906,49 @@ footer.footer { display: none !important; }
   <!-- ═══════════════════════════════════════════════
        Economy + Get Started + About
        ═══════════════════════════════════════════════ -->
-  <hr class="mn-v2-divider" />
+  <!-- ═══════════════════════════════════════════════
+       SEG-7: "One quick thing" card — replaces Get Started
+       Dr. MnemosyneC + Download button on right, content below
+       ═══════════════════════════════════════════════ -->
+  <section aria-label="Install instructions" style="margin:2rem 0;">
+    <div class="mn-install-card">
+      <!-- TOP ROW: mascot on left, download button on right — button does NOT exceed mascot head height -->
+      <div class="mn-install-card__top">
+        <div class="mn-install-card__mascot" aria-hidden="true">
+          <img src="/img/mascots/dr-mnemosynec.png"
+               alt="Dr. MnemosyneC"
+               width="100" height="100"
+               loading="lazy">
+        </div>
+        <div class="mn-install-card__dl">
+          <div>
+            <a class="mn-v2-dl-btn mn-v2-dl-btn--install"
+               href="{{ .Site.Data.version.download_url }}"
+               download="MnemosyneC-Setup-{{ .Site.Data.version.version }}.exe"
+               aria-label="Download MnemosyneC {{ .Site.Data.version.version }} for Windows">
+              &#8595;&nbsp; Download for Windows v{{ .Site.Data.version.version }}
+            </a>
+            <p class="dl-fallback" style="font-size:0.78em; color:rgba(250,245,235,0.4); margin:0.3rem 0 0; text-align:center;">
+              Download not starting? <a href="https://github.com/liana-banyan/mnemosyne/releases/download/v{{ .Site.Data.version.version }}/MnemosyneC-Setup-{{ .Site.Data.version.version }}.exe" style="color:rgba(214,158,46,0.65);">Try the GitHub mirror &rarr;</a>
+            </p>
+          </div>
+        </div>
+      </div>
 
-  <section aria-label="How the economy works" style="margin:2rem 0;">
-    <h2 style="color:#d69e2e; font-size:clamp(1.05rem,3vw,1.35rem); font-weight:700; margin:0 0 1rem;">How the Economy Works</h2>
-    <p style="color:rgba(250,245,235,0.82); font-size:0.92rem; line-height:1.78; margin:0 0 0.5rem;">Three currencies. Closed loop. <strong style="color:#faf5eb;">Never redeemable in fiat &mdash; ever.</strong></p>
-    <ul style="color:rgba(250,245,235,0.78); font-size:0.9rem; padding-left:1.4rem; line-height:1.75; margin:0 0 0.9rem;">
-      <li><strong style="color:#faf5eb;">Credits</strong> &mdash; purchased $1:$1, used for platform services</li>
-      <li><strong style="color:#faf5eb;">Marks</strong> &mdash; earned through work; a forward obligation; clear through participation</li>
-      <li><strong style="color:#faf5eb;">Joules</strong> &mdash; stored-value instrument; 1.2 Credits per Joule; Forever Stamp mechanic (locked at acquisition rate)</li>
-    </ul>
-    <p style="color:rgba(250,245,235,0.82); font-size:0.92rem; line-height:1.78;">Workers, Builders, Creators keep <strong style="color:#faf5eb;">83.3%</strong>. Platform takes Cost+20% &mdash; no more, no less. <strong style="color:#faf5eb;">No ads. No VC.</strong> Cooperative-class structure. Designed to be copied.</p>
-  </section>
+      <h2 class="mn-install-card__heading">One quick thing before you run the installer</h2>
 
-  <hr class="mn-v2-divider" />
+      <p class="mn-install-card__body">When Windows sees new software for the first time, it shows a caution screen. This happens with all new programs, including ours. It does not mean there is a problem. When you see it, click More info and then Run anyway to continue. The installer is safe.</p>
 
-  <section aria-label="Get started" style="margin:2rem 0;">
-    <h2 style="color:#d69e2e; font-size:clamp(1.05rem,3vw,1.35rem); font-weight:700; margin:0 0 1rem;">Get Started</h2>
-    <div style="text-align:center; margin:0 0 1rem;">
-      <a class="mn-v2-dl-btn"
-         href="{{ .Site.Data.version.download_url }}"
-         download="MnemosyneC-Setup-{{ .Site.Data.version.version }}.exe">
-        &#8595;&nbsp; Download for Windows v{{ .Site.Data.version.version }}
-      </a>
+      <ol class="mn-install-card__steps">
+        <li>Click the download button above and save the file. <em>(Large file: the bundled AI model is included.)</em></li>
+        <li>Right-click the downloaded file &rarr; Run as Administrator.</li>
+        <li>When the Windows caution screen appears, click More info.</li>
+        <li>Click Run anyway. Follow the installer prompts.</li>
+        <li>Done. Your substrate starts the moment you do.</li>
+      </ol>
+
+      <p class="mn-install-card__trust">Version {{ .Site.Data.version.version }} &middot; Free forever &middot; No account required &middot; All data stays on your computer</p>
     </div>
-    <p style="text-align:center; color:rgba(250,245,235,0.65); font-size:0.9rem; margin:0 0 0.7rem;">
-      <a href="/changelog/">Read the canon &rarr;</a>
-      &nbsp;&middot;&nbsp;
-      <a href="/join/">Join the mesh &rarr;</a>
-    </p>
-    <p style="color:rgba(250,245,235,0.78); font-size:0.9rem; line-height:1.75; text-align:center;">One-line installer. Right-click &rarr; Run as Administrator. Wait for the install dialog. Launch. Your substrate starts the moment you do.</p>
   </section>
 
   <hr class="mn-v2-divider" />
@@ -819,4 +969,38 @@ footer.footer { display: none !important; }
 
 </div><!-- /mn-v2-wrap -->
 <!-- SEG-8: Footer rendered by extend_footer.html (applies to all pages). One occurrence. &copy; entity. No mojibake. -->
+
+<!-- Lightbox overlay (SEG-4) -->
+<div class="mn-lightbox" id="mn-lightbox" role="dialog" aria-modal="true" aria-label="Screenshot preview">
+  <div class="mn-lightbox__inner">
+    <button class="mn-lightbox__close" onclick="document.getElementById('mn-lightbox').classList.remove('open')" aria-label="Close">&times;</button>
+    <div class="mn-lightbox__img">
+      <div style="padding:2rem 3rem; background:rgba(10,22,40,0.9); border:1px dashed rgba(214,158,46,0.3); border-radius:8px; color:rgba(250,245,235,0.5); font-size:0.9rem; font-style:italic;">Screenshot pending — Founder to provide</div>
+    </div>
+    <p class="mn-lightbox__caption" id="mn-lightbox-caption"></p>
+  </div>
+</div>
+<script>
+(function(){
+  var lightbox = document.getElementById('mn-lightbox');
+  if (!lightbox) return;
+  document.querySelectorAll('.mn-proof-screenshot-placeholder').forEach(function(el){
+    el.setAttribute('tabindex','0');
+    el.setAttribute('role','button');
+    function openLightbox(){
+      var cap = el.querySelector('.mn-proof-screenshot-placeholder__caption');
+      document.getElementById('mn-lightbox-caption').textContent = cap ? cap.textContent : '';
+      lightbox.classList.add('open');
+    }
+    el.addEventListener('click', openLightbox);
+    el.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openLightbox(); }});
+  });
+  lightbox.addEventListener('click', function(e){
+    if(e.target === lightbox){ lightbox.classList.remove('open'); }
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key==='Escape'){ lightbox.classList.remove('open'); }
+  });
+})();
+</script>
 </div><!-- /mn-hp-page -->

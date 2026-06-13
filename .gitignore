@@ -4,6 +4,7 @@ release/
 release-*/
 
 # Bundled binary resources (large binaries, populated by prepare scripts)
+Cephas/cephas-hugo/static/download/*.exe
 resources/ollama/ollama.exe
 resources/ollama/ollama
 resources/ollama/bundled/
