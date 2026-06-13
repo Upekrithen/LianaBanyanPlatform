@@ -166,13 +166,41 @@ footer.footer { display: none !important; }
   letter-spacing: 0.03em;
 }
 
-/* First-session explainer */
+/* First-session explainer — collapsed click-expand (v0.1.60.6 SEG-2) */
 .mn-first-session {
   background: rgba(56,161,105,0.07);
   border: 1px solid rgba(56,161,105,0.28);
   border-radius: 10px;
-  padding: 1rem 1.3rem 0.9rem;
+  padding: 0;
   margin: 1.2rem 0 0;
+  overflow: hidden;
+}
+.mn-first-session > summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 0.75rem 1.3rem;
+  color: #38a169;
+  font-size: 1rem;
+  font-weight: 700;
+  user-select: none;
+  letter-spacing: 0.01em;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background 0.15s;
+}
+.mn-first-session > summary:hover { background: rgba(56,161,105,0.1); }
+.mn-first-session[open] > summary { border-bottom: 1px solid rgba(56,161,105,0.2); }
+.mn-first-session > summary::-webkit-details-marker { display: none; }
+.mn-first-session > summary::before {
+  content: '▸';
+  font-size: 0.8rem;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+.mn-first-session[open] > summary::before { transform: rotate(90deg); }
+.mn-first-session__body {
+  padding: 0.8rem 1.3rem 0.9rem;
 }
 
 /* ── BENCHMARK CHART (Does It Actually Work?) ── */
@@ -522,6 +550,22 @@ footer.footer { display: none !important; }
   .mn-install-card__mascot img { width: 70px; }
 }
 
+/* v0.1.60.6 SEG-3: "Substrate." anchor in H1 — same color as heading, subtle hover affordance */
+.mn-hero-substrate-link {
+  color: inherit !important;
+  text-decoration: none !important;
+  border-bottom: 1px solid rgba(250,245,235,0.25) !important;
+  border-bottom-width: 1px !important;
+  cursor: pointer;
+}
+.mn-hero-substrate-link:hover {
+  border-bottom-color: rgba(250,245,235,0.7) !important;
+  color: inherit !important;
+}
+
+/* v0.1.60.6: Smooth scroll for anchor navigation */
+html { scroll-behavior: smooth; }
+
 /* ── Footer (SEG-8) — single copyright via extend_footer.html for all pages ── */
 </style>
 
@@ -536,7 +580,7 @@ footer.footer { display: none !important; }
 <!-- TOP ROW: heading + mascot side-by-side -->
 <div class="mn-hero-top-row">
   <div class="mn-hero-top-row__text">
-    <h1>Your AI has Amnesia. Dr.&nbsp;MnemosyneC has the Cure.</h1>
+    <h1>Your AI has Amnesia. Dr.&nbsp;MnemosyneC has the Cure. <a href="#how-it-works" class="mn-hero-substrate-link">Substrate.</a></h1>
     <p class="mn-hero-pronunciation">Mnemosyne (neh-MOZ-uh-nee) is the Greek goddess of memory. <strong>Dr.&nbsp;MnemosyneC inherited her Memory.</strong></p>
   </div>
   <div class="mn-hero-top-row__mascot" aria-hidden="true">
@@ -550,6 +594,20 @@ footer.footer { display: none !important; }
 
 <!-- FULL-WIDTH body content -->
 <div class="mn-hero-body">
+  <!-- v0.1.60.6 SEG-1: Download button moved UP into empty space below subtitle -->
+  <div style="text-align:center; margin:0.2rem 0 0.2rem;">
+    <a class="mn-v2-dl-btn"
+       href="{{ .Site.Data.version.download_url }}"
+       download="MnemosyneC-Setup-{{ .Site.Data.version.version }}.exe"
+       aria-label="Download MnemosyneC {{ .Site.Data.version.version }} for Windows">
+      &#8595;&nbsp; Download for Windows v{{ .Site.Data.version.version }}
+    </a>
+  </div>
+  <p class="dl-fallback" style="font-size:0.82em; color:rgba(250,245,235,0.45); margin:0.25rem 0 0.15rem; text-align:center;">
+    Download not starting? <a href="https://github.com/liana-banyan/mnemosyne/releases/download/v{{ .Site.Data.version.version }}/MnemosyneC-Setup-{{ .Site.Data.version.version }}.exe" style="color:rgba(214,158,46,0.7);">Try the GitHub mirror</a>
+  </p>
+  <p class="mn-v2-hero-tagline" style="margin-bottom:1.1rem !important;">Mac / Linux - <em>coming soon</em></p>
+
   <p>Every time you start a new session, your AI forgets everything. Your projects, your preferences, your past conversations, gone. Dr.&nbsp;MnemosyneC gives your AI a permanent, private memory that actually stays.</p>
 
   <!-- SEG-1: Founder-ratified bullet text verbatim -->
@@ -560,20 +618,7 @@ footer.footer { display: none !important; }
     <li>Optionally join the Cooperative Universal Substrate for $5 a year. Not required.</li>
   </ul>
 
-  <!-- SEG-2: Green Download button -->
-  <div style="text-align:center; margin:1.4rem 0 0.2rem;">
-    <a class="mn-v2-dl-btn"
-       href="{{ .Site.Data.version.download_url }}"
-       download="MnemosyneC-Setup-{{ .Site.Data.version.version }}.exe"
-       aria-label="Download MnemosyneC {{ .Site.Data.version.version }} for Windows">
-      &#8595;&nbsp; Download for Windows v{{ .Site.Data.version.version }}
-    </a>
-  </div>
-  <p class="dl-fallback" style="font-size:0.82em; color:rgba(250,245,235,0.45); margin:0.3rem 0 0.5rem; text-align:center;">
-    Download not starting? <a href="https://github.com/liana-banyan/mnemosyne/releases/download/v{{ .Site.Data.version.version }}/MnemosyneC-Setup-{{ .Site.Data.version.version }}.exe" style="color:rgba(214,158,46,0.7);">Try the GitHub mirror &rarr;</a>
-  </p>
-
-  <!-- SEG-2: Install guide FIRST, then Six Pillars, How it works, All proofs, Community -->
+  <!-- Nav links stay at bottom of hero card (above first-session box) -->
   <p class="mn-hp-nav-links">
     <a href="/install/">Install guide</a>
     &nbsp;&middot;&nbsp;
@@ -585,19 +630,20 @@ footer.footer { display: none !important; }
     &nbsp;&middot;&nbsp;
     <a href="/community/">Community</a>
   </p>
-  <p class="mn-v2-hero-tagline">Mac / Linux - <em>coming soon</em></p>
 </div><!-- /mn-hero-body -->
 
-      <!-- What your first session looks like -->
-      <div class="mn-first-session" role="note" aria-label="What your first session looks like">
-        <h3 style="font-size:1rem; font-weight:700; color:#38a169; margin:0 0 0.7rem;">What your first session looks like</h3>
-        <ol style="margin:0 0 0.7rem; padding-left:1.4rem; color:rgba(250,245,235,0.82); font-size:0.9rem; line-height:1.7;">
-          <li style="margin-bottom:0.4rem;"><strong>Tell it something.</strong> &ldquo;I&rsquo;m working on a report about water treatment costs in rural areas.&rdquo;</li>
-          <li><strong>Come back three days later.</strong> Start a fresh session. Ask about it. It remembers.</li>
-        </ol>
-        <p style="margin:0 0 0.5rem; font-size:0.9rem; color:rgba(250,245,235,0.82); line-height:1.7;">No copy-paste. No re-explaining. Pick up exactly where you left off, every time.</p>
-        <p style="margin:0; font-size:0.9rem; color:rgba(250,245,235,0.82); line-height:1.7;"><strong>Free.</strong> Or pair MnemosyneC with a paid AI like Claude or GPT for faster, bigger answers. Either way, the substrate carries the memory, so your paid AI bill stays smaller too.</p>
-      </div>
+      <!-- What your first session looks like (v0.1.60.6 SEG-2: collapsed click-expand) -->
+      <details class="mn-first-session" aria-label="What your first session looks like">
+        <summary>What your first session looks like</summary>
+        <div class="mn-first-session__body">
+          <ol style="margin:0 0 0.7rem; padding-left:1.4rem; color:rgba(250,245,235,0.82); font-size:0.9rem; line-height:1.7;">
+            <li style="margin-bottom:0.4rem;"><strong>Tell it something.</strong> &ldquo;I&rsquo;m working on a report about water treatment costs in rural areas.&rdquo;</li>
+            <li><strong>Come back three days later.</strong> Start a fresh session. Ask about it. It remembers.</li>
+          </ol>
+          <p style="margin:0 0 0.5rem; font-size:0.9rem; color:rgba(250,245,235,0.82); line-height:1.7;">No copy-paste. No re-explaining. Pick up exactly where you left off, every time.</p>
+          <p style="margin:0; font-size:0.9rem; color:rgba(250,245,235,0.82); line-height:1.7;"><strong>Free.</strong> Or pair MnemosyneC with a paid AI like Claude or GPT for faster, bigger answers. Either way, the substrate carries the memory, so your paid AI bill stays smaller too.</p>
+        </div>
+      </details>
 
     </div><!-- /mn-v2-hero-card -->
   </section>
@@ -929,7 +975,7 @@ footer.footer { display: none !important; }
               &#8595;&nbsp; Download for Windows v{{ .Site.Data.version.version }}
             </a>
             <p class="dl-fallback" style="font-size:0.78em; color:rgba(250,245,235,0.4); margin:0.3rem 0 0; text-align:center;">
-              Download not starting? <a href="https://github.com/liana-banyan/mnemosyne/releases/download/v{{ .Site.Data.version.version }}/MnemosyneC-Setup-{{ .Site.Data.version.version }}.exe" style="color:rgba(214,158,46,0.65);">Try the GitHub mirror &rarr;</a>
+              Download not starting? <a href="https://github.com/liana-banyan/mnemosyne/releases/download/v{{ .Site.Data.version.version }}/MnemosyneC-Setup-{{ .Site.Data.version.version }}.exe" style="color:rgba(214,158,46,0.65);">Try the GitHub mirror</a>
             </p>
           </div>
         </div>
