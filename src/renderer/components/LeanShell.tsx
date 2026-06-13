@@ -321,6 +321,27 @@ export function LeanShell({ currentMode, onModeChange, onClose, authState }: Lea
     setUiMode('lean');
   }, []);
 
+  // A-4 BP081 v0.1.59.1: Onboarding gate auto-flip
+  // If Ollama healthy + Gemma present + Test It Out run ≥1 → auto-set onboarding complete
+  useEffect(() => {
+    const unsub = window.amplify?.onOnboardingAutoFlipCheck?.((data) => {
+      if (data.ollamaHealthy && data.gemmaPresent) {
+        const testItOutRunCount = parseInt(localStorage.getItem('mnemo_test_it_out_run_count') ?? '0', 10);
+        if (testItOutRunCount >= 1) {
+          const alreadyComplete = localStorage.getItem(LS_ONBOARDING_COMPLETE) === '1';
+          if (!alreadyComplete) {
+            localStorage.setItem(LS_ONBOARDING_COMPLETE, '1');
+            console.log('[Onboarding] Auto-flip: conditions met, advanced view unlocked');
+            // Trigger re-resolution of UI mode (existing user path → advanced)
+            const resolved = resolveInitialUiMode();
+            setUiMode(resolved);
+          }
+        }
+      }
+    });
+    return () => { unsub?.(); };
+  }, []);
+
   // Pass-through to full MnemosyneTabView for advanced users
   if (uiMode === 'advanced') {
     return (

@@ -1,12 +1,16 @@
-// MnemosyneC · v0.1.51 · BP080 · 2026-06-11
-// §2 Truth-Always · §3 Sonnet 4.6 · Founder-ratified DRAFT
+// MnemosyneC · v0.1.57.1 · SEG BP081 · 2026-06-13
+// §2 Truth-Always · §3 Sonnet 4.6 · Founder-ratified
 //
 // LeanAskTab — Ask A Question tab for the 3-tab LeanShell.
 // Model: gemma4:12b — LOCAL ONLY (A1.1 hard binding, no cloud exposure).
+// SEG-1 v0.1.57: routes through ai-dispatch:query IPC (substrate HOT retrieve active).
+// v0.1.57.1 (BP081): token streaming + cold-start heartbeat.
 // Persistent history in localStorage key 'mnemo_ask_history' (max 200 msgs).
 // Membership CTA banner pinned at bottom, never dismissible.
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+// SEG-1 v0.1.57: direct Ollama fetch replaced by window.amplify.aiDispatch.query IPC.
+import { ModelPullProgress } from './ModelPullProgress';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -43,60 +47,19 @@ function saveHistory(msgs: ChatMessage[]): void {
   } catch { /* non-fatal */ }
 }
 
-// ─── Streaming chat via local Ollama ─────────────────────────────────────────
+// ─── Cold-start / warm timer text helpers ────────────────────────────────────
 
-interface StreamCallbacks {
-  onToken: (token: string) => void;
-  onDone: () => void;
-  onError: (msg: string) => void;
+function coldStartText(secs: number): string {
+  return `🧠 Gemma is loading into memory (first run, ~30–90s)... (${secs}s)`;
 }
 
-async function streamOllama(
-  prompt: string,
-  { onToken, onDone, onError }: StreamCallbacks,
-  signal: AbortSignal,
-): Promise<void> {
-  let resp: Response;
-  try {
-    resp = await fetch('http://127.0.0.1:11434/api/generate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: MODEL, prompt, stream: true }),
-      signal,
-    });
-  } catch (e) {
-    if ((e as Error).name === 'AbortError') return;
-    onError('Could not reach local AI. Make sure MnemosyneC is set up (see Home tab).');
-    return;
-  }
-
-  if (!resp.ok) {
-    onError(`AI engine error (${resp.status}). Try again or check your setup.`);
-    return;
-  }
-
-  const reader = resp.body?.getReader();
-  if (!reader) { onError('Stream unavailable.'); return; }
-  const decoder = new TextDecoder();
-
-  try {
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done || signal.aborted) break;
-      const chunk = decoder.decode(value, { stream: true });
-      for (const line of chunk.split('\n').filter(Boolean)) {
-        try {
-          const parsed = JSON.parse(line) as { response?: string; done?: boolean };
-          if (parsed.response) onToken(parsed.response);
-          if (parsed.done) { onDone(); return; }
-        } catch { /* malformed line — skip */ }
-      }
-    }
-  } finally {
-    reader.releaseLock();
-    if (!signal.aborted) onDone();
-  }
+function thinkingText(secs: number): string {
+  return `Thinking... (${secs}s)`;
 }
+
+// ─── IPC-based chat via ai-dispatch:query (SEG-1 v0.1.57) ───────────────────
+// Routes through main-process IPC → queryVerifiedEblets HOT retrieve → Ollama /api/chat.
+// Non-streaming; substrate eblet context is injected server-side before LLM call.
 
 // ─── Message bubbles ─────────────────────────────────────────────────────────
 
@@ -188,25 +151,76 @@ export function LeanAskTab({ onSwitchToHome }: LeanAskTabProps) {
   const [modelMissing, setModelMissing] = useState(false);
   const [checkFailed, setCheckFailed] = useState(false);
   const [retrying, setRetrying] = useState(false);
-  const abortRef = useRef<AbortController | null>(null);
+  // SEG-2 v0.1.56: show pull progress UI when gemma4:12b is missing
+  const [showPullProgress, setShowPullProgress] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // v0.1.57.1 (BP081): streaming state — refs only (no extra React state for per-second ticks)
+  const currentAiIdRef = useRef<string | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const unsubProgressRef = useRef<(() => void) | null>(null);
+  const unsubCompleteRef = useRef<(() => void) | null>(null);
+  const elapsedRef = useRef(0);
+  const isColdRef = useRef(false);
+  const isStreamingRef = useRef(false);
 
   const runCheck = useCallback(async () => {
     setRetrying(true);
     try {
       const res = await window.amplify?.checkOllamaAndModel?.(MODEL);
-      if (!res) { setCheckFailed(true); setModelMissing(false); }
-      else if (!res.reachable) { setCheckFailed(true); setModelMissing(false); }
-      else { setCheckFailed(false); setModelMissing(!res.hasModel); }
+      if (!res) { setCheckFailed(true); setModelMissing(false); setShowPullProgress(false); }
+      else if (!res.reachable) { setCheckFailed(true); setModelMissing(false); setShowPullProgress(false); }
+      else {
+        setCheckFailed(false);
+        const missing = !res.hasModel;
+        setModelMissing(missing);
+        // SEG-2: auto-launch pull UI when model is absent and Ollama is reachable
+        if (missing) setShowPullProgress(true);
+        else setShowPullProgress(false);
+      }
     } catch {
       setCheckFailed(true);
+      setShowPullProgress(false);
     } finally {
       setRetrying(false);
     }
   }, []);
 
   useEffect(() => { runCheck(); }, [runCheck]);
+
+  // A-3 BP081 v0.1.59.1: Prune error-class messages from history on app version change
+  useEffect(() => {
+    const unsub = window.amplify?.onAppVersionCheck?.(({ version }) => {
+      const storedVersion = localStorage.getItem('mnemo_ask_history_version');
+      if (storedVersion && storedVersion !== version) {
+        try {
+          const raw = localStorage.getItem(LS_HISTORY_KEY);
+          if (raw) {
+            const history = JSON.parse(raw) as ChatMessage[];
+            const pruned = history.filter((msg) => {
+              const text = (msg.content || '').toLowerCase();
+              return (
+                !text.includes('error') &&
+                !text.includes('failed') &&
+                !text.includes('exception') &&
+                !text.includes('timeout')
+              );
+            });
+            localStorage.setItem(LS_HISTORY_KEY, JSON.stringify(pruned));
+            if (history.length !== pruned.length) {
+              setMessages(pruned);
+              console.log(
+                `[VersionCheck] Pruned ${history.length - pruned.length} error-class messages on upgrade ${storedVersion} → ${version}`,
+              );
+            }
+          }
+        } catch { /* non-fatal */ }
+      }
+      localStorage.setItem('mnemo_ask_history_version', version);
+    });
+    return () => { unsub?.(); };
+  }, []);
 
   // Scroll to bottom on new messages
   useEffect(() => {
@@ -221,12 +235,29 @@ export function LeanAskTab({ onSwitchToHome }: LeanAskTabProps) {
     });
   }, []);
 
-  const updateLastMsg = useCallback((id: string, content: string) => {
+  // Update message content in-memory only (no localStorage write — used during streaming)
+  const updateMsgInMemory = useCallback((id: string, content: string) => {
+    setMessages((prev) => prev.map((m) => m.id === id ? { ...m, content } : m));
+  }, []);
+
+  // Update message content and persist to localStorage (used on stream complete)
+  const updateMsgAndSave = useCallback((id: string, content: string) => {
     setMessages((prev) => {
       const next = prev.map((m) => m.id === id ? { ...m, content } : m);
       saveHistory(next);
       return next;
     });
+  }, []);
+
+  // v0.1.57.1: tear down streaming subscriptions and timer
+  const clearStream = useCallback(() => {
+    if (intervalRef.current) { clearInterval(intervalRef.current); intervalRef.current = null; }
+    if (unsubProgressRef.current) { unsubProgressRef.current(); unsubProgressRef.current = null; }
+    if (unsubCompleteRef.current) { unsubCompleteRef.current(); unsubCompleteRef.current = null; }
+    elapsedRef.current = 0;
+    isColdRef.current = false;
+    isStreamingRef.current = false;
+    currentAiIdRef.current = null;
   }, []);
 
   const handleSend = useCallback(async () => {
@@ -235,45 +266,121 @@ export function LeanAskTab({ onSwitchToHome }: LeanAskTabProps) {
 
     const userMsg: ChatMessage = { id: `u-${Date.now()}`, role: 'user', content: text, ts: Date.now() };
     const aiId = `a-${Date.now() + 1}`;
-    const aiMsg: ChatMessage = { id: aiId, role: 'assistant', content: '', ts: Date.now() + 1 };
+    // v0.1.57.1: start bubble with immediate "Thinking... (0s)" — every-click feedback canon
+    const aiMsg: ChatMessage = { id: aiId, role: 'assistant', content: thinkingText(0), ts: Date.now() + 1 };
 
     setInput('');
     setThinking(true);
     appendMsg(userMsg);
     appendMsg(aiMsg);
 
-    // Build conversation prompt (simple concatenation for gemma4:12b)
+    // v0.1.57.1: initialise streaming refs for this query
+    currentAiIdRef.current = aiId;
+    elapsedRef.current = 0;
+    isColdRef.current = false;
+    isStreamingRef.current = false;
+
+    // v0.1.57.1: heartbeat counter — increments every 1s until first token arrives
+    intervalRef.current = setInterval(() => {
+      if (isStreamingRef.current) return;
+      elapsedRef.current += 1;
+      const id = currentAiIdRef.current;
+      if (!id) return;
+      const txt = isColdRef.current ? coldStartText(elapsedRef.current) : thinkingText(elapsedRef.current);
+      updateMsgInMemory(id, txt);
+    }, 1000);
+
+    // v0.1.57.1: subscribe to token progress BEFORE calling query (avoid race)
+    if (window.amplify?.aiDispatch?.onAskTokenProgress) {
+      unsubProgressRef.current = window.amplify.aiDispatch.onAskTokenProgress((data) => {
+        const id = currentAiIdRef.current;
+        if (!id) return;
+
+        if (data.coldStart) {
+          // Switch bubble to cold-start text immediately
+          isColdRef.current = true;
+          updateMsgInMemory(id, coldStartText(elapsedRef.current));
+          return;
+        }
+
+        if (data.delta) {
+          if (!isStreamingRef.current) {
+            // First token: stop heartbeat timer, enter streaming mode
+            isStreamingRef.current = true;
+            if (intervalRef.current) { clearInterval(intervalRef.current); intervalRef.current = null; }
+          }
+          // Replace bubble content with latest assembled text (streaming in place)
+          updateMsgInMemory(id, data.assembled);
+        }
+      });
+    }
+
+    // v0.1.57.1: subscribe to stream complete
+    if (window.amplify?.aiDispatch?.onAskTokenComplete) {
+      unsubCompleteRef.current = window.amplify.aiDispatch.onAskTokenComplete((data) => {
+        const id = currentAiIdRef.current;
+        if (!id) return;
+
+        // v0.1.57.1 differentiated error
+        const finalContent = data.error
+          ? `⚠ Ask threw: ${data.error}. See Diagnostic.`
+          : (data.content || '');
+
+        updateMsgAndSave(id, finalContent);
+        clearStream();
+        setThinking(false);
+        textareaRef.current?.focus();
+      });
+    }
+
+    // SEG-1 v0.1.57: route through ai-dispatch:query IPC.
+    // Main process runs queryVerifiedEblets() HOT retrieve then streams Ollama /api/chat.
     const history = [...messages, userMsg];
-    const prompt = history
+    const ipcMessages = history
       .filter((m) => m.role !== 'system')
-      .slice(-10) // last 10 messages for context
-      .map((m) => (m.role === 'user' ? `User: ${m.content}` : `Assistant: ${m.content}`))
-      .join('\n') + '\nAssistant:';
+      .slice(-10)
+      .map((m) => ({ role: m.role as string, content: m.content }));
 
-    abortRef.current = new AbortController();
-    let accumulated = '';
+    // v0.1.57.1 differentiated error: check for preload bridge before invoking
+    if (!window.amplify?.aiDispatch?.query) {
+      // v0.1.57.1 differentiated error
+      updateMsgAndSave(aiId, '⚠ Preload bridge missing — reinstall MnemosyneC.');
+      clearStream();
+      setThinking(false);
+      textareaRef.current?.focus();
+      return;
+    }
 
-    await streamOllama(
-      prompt,
-      {
-        onToken: (t) => {
-          accumulated += t;
-          updateLastMsg(aiId, accumulated);
-        },
-        onDone: () => {
-          setThinking(false);
-          abortRef.current = null;
-          textareaRef.current?.focus();
-        },
-        onError: (msg) => {
-          updateLastMsg(aiId, `⚠ ${msg}`);
-          setThinking(false);
-          abortRef.current = null;
-        },
-      },
-      abortRef.current.signal,
-    );
-  }, [input, thinking, messages, appendMsg, updateLastMsg]);
+    try {
+      const result = await window.amplify.aiDispatch.query({
+        court_member: 'lean_ask',
+        messages: ipcMessages,
+      });
+
+      if (!result?.ok) {
+        // Pre-stream error — no events will fire; handle synchronously
+        const errMsg = result?.error ?? 'Unknown error from local AI.';
+        const displayMsg = errMsg.includes('No compatible model')
+          ? '⚠ Your AI model is still setting up. Check the Home tab.'
+          // v0.1.57.1 differentiated error
+          : `⚠ Ask threw: ${errMsg}. See Diagnostic.`;
+        updateMsgAndSave(aiId, displayMsg);
+        clearStream();
+        setThinking(false);
+        textareaRef.current?.focus();
+      }
+      // If result.streaming === true: events drive the rest — do NOT call setThinking(false) here
+
+    } catch (e) {
+      const errMsg = e instanceof Error ? e.message : String(e);
+      // v0.1.57.1 differentiated error
+      updateMsgAndSave(aiId, `⚠ Ask threw: ${errMsg}. See Diagnostic.`);
+      console.warn('[LeanAskTab] aiDispatch.query threw:', e);
+      clearStream();
+      setThinking(false);
+      textareaRef.current?.focus();
+    }
+  }, [input, thinking, messages, appendMsg, updateMsgInMemory, updateMsgAndSave, clearStream]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -299,8 +406,22 @@ export function LeanAskTab({ onSwitchToHome }: LeanAskTabProps) {
         </p>
       </div>
 
-      {/* Model-missing banner (Ollama reachable but model not yet ready) */}
-      {modelMissing && !checkFailed && (
+      {/* SEG-2: Full-screen pull progress UI when gemma4:12b is missing */}
+      {modelMissing && !checkFailed && showPullProgress && (
+        <ModelPullProgress
+          onComplete={() => {
+            setShowPullProgress(false);
+            setModelMissing(false);
+            void runCheck();
+          }}
+          onSkip={() => {
+            setShowPullProgress(false);
+          }}
+        />
+      )}
+
+      {/* Model-missing banner (fallback when pull UI is dismissed / Ollama not reachable) */}
+      {modelMissing && !checkFailed && !showPullProgress && (
         <div style={{
           margin: '8px 16px 0',
           background: '#1c1200',
@@ -315,6 +436,22 @@ export function LeanAskTab({ onSwitchToHome }: LeanAskTabProps) {
           gap: 8,
         }}>
           <span style={{ flex: 1 }}>Your AI model is still setting up. Usually 2–5 minutes.</span>
+          <button
+            onClick={() => setShowPullProgress(true)}
+            style={{
+              background: 'none',
+              border: '1px solid #f59e0b',
+              borderRadius: 4,
+              color: '#fbbf24',
+              fontSize: 11,
+              padding: '2px 8px',
+              cursor: 'pointer',
+              outline: 'none',
+              fontFamily: 'system-ui, sans-serif',
+            }}
+          >
+            Download now
+          </button>
           <button
             onClick={runCheck}
             disabled={retrying}

@@ -397,6 +397,18 @@ contextBridge.exposeInMainWorld('amplify', {
   federationFetchSid: (dag_id: string, peerId: string): Promise<{ ok: boolean; node?: unknown; hash_verified: boolean; error?: string }> =>
     ipcRenderer.invoke('federation:fetch-sid', dag_id, peerId),
 
+  // SEG-5 v0.1.56 — connect to a known peer by ID (optionally via relayUrl)
+  federationConnectPeer: (peerId: string, relayUrl?: string): Promise<{ success: boolean; error?: string }> =>
+    ipcRenderer.invoke('federation:connect-peer', { peerId, relayUrl }),
+
+  // SEG-3 v0.1.55 — COMMUNITY-CONNECT first-launch seed peer handshake
+  communityConnectHandshake: (): Promise<{ success: boolean; peerName?: string; error?: string }> =>
+    ipcRenderer.invoke('community-connect-handshake'),
+
+  // SEG-5 v0.1.56 — silent email stub (infrastructure-only; no credentials wired)
+  sendSilentEmail: (args?: unknown): Promise<{ success: boolean; reason: string }> =>
+    ipcRenderer.invoke('send-silent-email', args),
+
   onRelayStateChanged: (cb: (state: { relayConnected: boolean }) => void): (() => void) => {
     const handler = (_event: Electron.IpcRendererEvent, state: { relayConnected: boolean }) => cb(state);
     ipcRenderer.on('relay-state-changed', handler);
@@ -830,6 +842,17 @@ contextBridge.exposeInMainWorld('amplify', {
       ipcRenderer.invoke('ai-dispatch:get-settings'),
     saveSettings: (settings: { local_runtime_url?: string }) =>
       ipcRenderer.invoke('ai-dispatch:save-settings', settings),
+    // v0.1.57.1: token streaming events (BP081)
+    onAskTokenProgress: (handler: (data: { delta: string; assembled: string; coldStart?: boolean }) => void): (() => void) => {
+      const h = (_evt: Electron.IpcRendererEvent, data: { delta: string; assembled: string; coldStart?: boolean }) => handler(data);
+      ipcRenderer.on('ask-token-progress', h);
+      return () => ipcRenderer.removeListener('ask-token-progress', h);
+    },
+    onAskTokenComplete: (handler: (data: { content: string; error?: string; hotHits?: number }) => void): (() => void) => {
+      const h = (_evt: Electron.IpcRendererEvent, data: { content: string; error?: string; hotHits?: number }) => handler(data);
+      ipcRenderer.on('ask-token-complete', h);
+      return () => ipcRenderer.removeListener('ask-token-complete', h);
+    },
   },
 
   // ── LB Account (BP065 Part A · SEG-C2a) ─────────────────────────────────
@@ -1052,6 +1075,39 @@ contextBridge.exposeInMainWorld('amplify', {
   ipLedgerExecuteGenesisMint: () => ipcRenderer.invoke('ip-ledger:execute-genesis-mint'),
   ipLedgerGenesisMintFull: () => ipcRenderer.invoke('ip-ledger:genesis-mint-full'),
 
+  // SEG-2 v0.1.56 — first-launch progressive auto-pull (gemma4:12b)
+  firstLaunchModelPull: {
+    check: (modelName: string): Promise<{ exists: boolean; modelName: string }> =>
+      ipcRenderer.invoke('first-launch-model-check', { modelName }),
+
+    start: (modelName: string): Promise<{ ok: boolean; alreadyInstalled?: boolean; cancelled?: boolean; error?: string }> =>
+      ipcRenderer.invoke('first-launch-model-start', { modelName }),
+
+    cancel: (): Promise<{ ok: boolean }> =>
+      ipcRenderer.invoke('first-launch-model-cancel'),
+
+    onProgress: (cb: (data: { percent: number; downloaded: number; total: number; status: string }) => void): (() => void) => {
+      const handler = (
+        _event: Electron.IpcRendererEvent,
+        data: { percent: number; downloaded: number; total: number; status: string },
+      ) => cb(data);
+      ipcRenderer.on('first-launch-model-progress', handler);
+      return () => ipcRenderer.removeListener('first-launch-model-progress', handler);
+    },
+
+    onComplete: (cb: () => void): (() => void) => {
+      const handler = () => cb();
+      ipcRenderer.on('first-launch-model-complete', handler);
+      return () => ipcRenderer.removeListener('first-launch-model-complete', handler);
+    },
+
+    onError: (cb: (err: string) => void): (() => void) => {
+      const handler = (_event: Electron.IpcRendererEvent, err: string) => cb(err);
+      ipcRenderer.on('first-launch-model-error', handler);
+      return () => ipcRenderer.removeListener('first-launch-model-error', handler);
+    },
+  },
+
   // SEG-U-7 BP078: mesh-test-complete -- fired when a results file is detected on disk
   onMeshTestComplete: (cb: (metrics: {
     hot_accuracy_pct: number;
@@ -1069,6 +1125,133 @@ contextBridge.exposeInMainWorld('amplify', {
     }) => cb(metrics);
     ipcRenderer.on('mesh-test-complete', handler);
     return () => ipcRenderer.removeListener('mesh-test-complete', handler);
+  },
+
+  // SEG-2 v0.1.57: Test It Out — substrate-warming 5-question workout
+  runTestItOut: (): Promise<{ success: boolean; score?: number; total?: number; error?: string }> =>
+    ipcRenderer.invoke('run-test-it-out'),
+
+  getTestItOutHistory: (): Promise<{ runs: Array<{ ts: number; score: number; total: number; model: string }> }> =>
+    ipcRenderer.invoke('get-test-it-out-history'),
+
+  onTestItOutProgress: (cb: (data: {
+    questionIndex: number;
+    total: number;
+    question: string;
+    modelAnswer: string;
+    correctAnswer: string;
+    isCorrect: boolean;
+  }) => void): (() => void) => {
+    const handler = (_event: Electron.IpcRendererEvent, data: {
+      questionIndex: number;
+      total: number;
+      question: string;
+      modelAnswer: string;
+      correctAnswer: string;
+      isCorrect: boolean;
+    }) => cb(data);
+    ipcRenderer.on('test-it-out-progress', handler);
+    return () => ipcRenderer.removeListener('test-it-out-progress', handler);
+  },
+
+  onTestItOutComplete: (cb: (data: {
+    score: number;
+    total: number;
+    results: Array<{
+      questionIndex: number;
+      question: string;
+      modelAnswer: string;
+      correctAnswer: string;
+      isCorrect: boolean;
+    }>;
+  }) => void): (() => void) => {
+    const handler = (_event: Electron.IpcRendererEvent, data: {
+      score: number;
+      total: number;
+      results: Array<{
+        questionIndex: number;
+        question: string;
+        modelAnswer: string;
+        correctAnswer: string;
+        isCorrect: boolean;
+      }>;
+    }) => cb(data);
+    ipcRenderer.on('test-it-out-complete', handler);
+    return () => ipcRenderer.removeListener('test-it-out-complete', handler);
+  },
+
+  // ── SEG-A2 BP081: Substrate stats dashboard ───────────────────────────────
+  getSubstrateStats: (): Promise<import('./mnem_eblet_store').SubstrateStats> =>
+    ipcRenderer.invoke('get-substrate-stats'),
+
+  // ── BP081 K-1: Membership backend (stub tier) ─────────────────────────────
+  membershipStartCheckout: (): Promise<{ success: boolean; sessionId?: string; checkoutUrl?: string; error?: string; isStub: boolean }> =>
+    ipcRenderer.invoke('membership:start-checkout'),
+
+  membershipGetStatus: (): Promise<{ tier: string; status: string; annualFeeUsd: number }> =>
+    ipcRenderer.invoke('membership:get-status'),
+
+  membershipCancel: (): Promise<{ success: boolean; reason?: string }> =>
+    ipcRenderer.invoke('membership:cancel'),
+
+  // ── BP081 K-2: MCP Substrate Bridge status ────────────────────────────────
+  mcpGetStatus: (): Promise<{
+    running: boolean;
+    port: number | null;
+    connectedClients: number;
+    recentCalls: Array<{ tool: string; ts: number; clientId: string }>;
+  }> => ipcRenderer.invoke('mcp:get-status'),
+
+  mcpGetAuthToken: (): Promise<string | null> =>
+    ipcRenderer.invoke('mcp:get-auth-token'),
+
+  // ── SEG-4 v0.1.59 — Plow the Field IPC ───────────────────────────────────
+
+  runAndonReplowLoop: (question: string, domain: string): Promise<{
+    ok: boolean;
+    verdict: 'verified' | 'rejected' | 'quarantined';
+    ebletWritten: boolean;
+    question?: string;
+    answer?: string;
+    modelAnswer?: string;
+    error?: string;
+  }> =>
+    ipcRenderer.invoke('plow:run-andon-replow', { question, domain }),
+
+  loadDomainBank: (domain: string): Promise<Array<{
+    question: string;
+    options: string[];
+    correct_answer: string;
+    source_id: string;
+    source_category: string;
+  }>> =>
+    ipcRenderer.invoke('plow:load-domain-bank', domain),
+
+  // ── SEG-5 v0.1.59 — Clipboard capture IPC ────────────────────────────────
+
+  readClipboard: (): Promise<string> =>
+    ipcRenderer.invoke('clipboard:read'),
+
+  onClipboardCaptureQA: (callback: () => void): (() => void) => {
+    const handler = () => callback();
+    ipcRenderer.on('clipboard:capture-qa', handler);
+    return () => ipcRenderer.removeListener('clipboard:capture-qa', handler);
+  },
+
+  // ── A-3 BP081 v0.1.59.1 — App version check (stale-message pruning on upgrade) ──
+
+  onAppVersionCheck: (callback: (data: { version: string }) => void): (() => void) => {
+    const handler = (_event: Electron.IpcRendererEvent, data: { version: string }) => callback(data);
+    ipcRenderer.on('app:version-check', handler);
+    return () => ipcRenderer.removeListener('app:version-check', handler);
+  },
+
+  // ── A-4 BP081 v0.1.59.1 — Onboarding auto-flip check ─────────────────────
+
+  onOnboardingAutoFlipCheck: (callback: (data: { ollamaHealthy: boolean; gemmaPresent: boolean }) => void): (() => void) => {
+    const handler = (_event: Electron.IpcRendererEvent, data: { ollamaHealthy: boolean; gemmaPresent: boolean }) => callback(data);
+    ipcRenderer.on('onboarding:auto-flip-check', handler);
+    return () => ipcRenderer.removeListener('onboarding:auto-flip-check', handler);
   },
 });
 
@@ -1123,6 +1306,12 @@ declare global {
       federationRejectInvite?: (data: { invite_token: string; source: string }) => Promise<{ ok: boolean; error?: string }>;
       federationLeavePeer?: (peerId: string) => Promise<{ ok: boolean }>;
       federationFetchSid?: (dag_id: string, peerId: string) => Promise<{ ok: boolean; node?: unknown; hash_verified: boolean; error?: string }>;
+      // SEG-5 v0.1.56 — connect-peer
+      federationConnectPeer?: (peerId: string, relayUrl?: string) => Promise<{ success: boolean; error?: string }>;
+      // SEG-5 v0.1.56 — silent email stub
+      sendSilentEmail?: (args?: unknown) => Promise<{ success: boolean; reason: string }>;
+      // SEG-3 v0.1.55 — COMMUNITY-CONNECT first-launch seed peer handshake
+      communityConnectHandshake?: () => Promise<{ success: boolean; peerName?: string; error?: string }>;
       // MoneyPenny
       getMoneyPennyUrl: () => Promise<{ url: string; ips: string[]; port: number }>;
       // Auth (Phase 7)
@@ -1249,11 +1438,14 @@ declare global {
       };
       // AI Dispatch IPC (BP060 Application 002 Steps 3+4 · UI-8)
       aiDispatch?: {
-        query: (args: { court_member: string; messages: Array<{role: string; content: string}>; model_override?: string }) => Promise<{ ok: boolean; text?: string; model?: string; provider?: string; error?: string }>;
+        query: (args: { court_member: string; messages: Array<{role: string; content: string}>; model_override?: string }) => Promise<{ ok: boolean; text?: string; model?: string; provider?: string; error?: string; streaming?: boolean }>;
         listLocalModels: () => Promise<{ ok: boolean; models: string[]; error?: string }>;
         testConnection: () => Promise<{ ok: boolean; models: string[]; url: string; error?: string }>;
         getSettings: () => Promise<{ local_runtime_url: string }>;
         saveSettings: (settings: { local_runtime_url?: string }) => Promise<{ ok: boolean }>;
+        // v0.1.57.1: token streaming events (BP081)
+        onAskTokenProgress: (handler: (data: { delta: string; assembled: string; coldStart?: boolean }) => void) => () => void;
+        onAskTokenComplete: (handler: (data: { content: string; error?: string; hotHits?: number }) => void) => () => void;
       };
       // Onboarding Prefs (BP065 v0.1.23)
       applyOnboardingPrefs?: (prefs: { displayName?: string; addDesktopShortcut?: boolean; addStartupItem?: boolean; apiKey?: string }) => Promise<{ ok: boolean; results?: Record<string, boolean> }>;
@@ -1361,6 +1553,84 @@ declare global {
       ipLedgerFounderVcardQr?: () => Promise<{ dataUrl: string; vcard: string } | { error: string } | null>;
       ipLedgerExecuteGenesisMint?: () => Promise<unknown>;
       ipLedgerGenesisMintFull?: () => Promise<unknown>;
+      // SEG-2 v0.1.56 — first-launch progressive auto-pull (gemma4:12b)
+      firstLaunchModelPull: {
+        check: (modelName: string) => Promise<{ exists: boolean; modelName: string }>;
+        start: (modelName: string) => Promise<{ ok: boolean; alreadyInstalled?: boolean; cancelled?: boolean; error?: string }>;
+        cancel: () => Promise<{ ok: boolean }>;
+        onProgress: (cb: (data: { percent: number; downloaded: number; total: number; status: string }) => void) => () => void;
+        onComplete: (cb: () => void) => () => void;
+        onError: (cb: (err: string) => void) => () => void;
+      };
+      // SEG-2 v0.1.57: Test It Out — substrate-warming 5-question workout
+      runTestItOut?: () => Promise<{ success: boolean; score?: number; total?: number; error?: string }>;
+      getTestItOutHistory?: () => Promise<{ runs: Array<{ ts: number; score: number; total: number; model: string }> }>;
+      onTestItOutProgress?: (cb: (data: {
+        questionIndex: number;
+        total: number;
+        question: string;
+        modelAnswer: string;
+        correctAnswer: string;
+        isCorrect: boolean;
+      }) => void) => () => void;
+      onTestItOutComplete?: (cb: (data: {
+        score: number;
+        total: number;
+        results: Array<{
+          questionIndex: number;
+          question: string;
+          modelAnswer: string;
+          correctAnswer: string;
+          isCorrect: boolean;
+        }>;
+      }) => void) => () => void;
+      // SEG-A2 BP081: Substrate stats dashboard
+      getSubstrateStats?: () => Promise<{
+        totalEblets: number;
+        verifiedCount: number;
+        lastWriteTimestamp: number | null;
+        topDomains: Array<{ domain: string; count: number; lastWrite: number }>;
+        recentWrites: Array<{ questionExcerpt: string; provenanceSource: string; timestamp: number }>;
+        growthTrend: Array<{ date: string; count: number }>;
+        quarantinedCount: number;
+        error?: string;
+      }>;
+      // BP081 K-1: Membership backend (stub tier)
+      membershipStartCheckout?: () => Promise<{ success: boolean; sessionId?: string; checkoutUrl?: string; error?: string; isStub: boolean }>;
+      membershipGetStatus?: () => Promise<{ tier: string; status: string; annualFeeUsd: number }>;
+      membershipCancel?: () => Promise<{ success: boolean; reason?: string }>;
+      // BP081 K-2: MCP Substrate Bridge
+      mcpGetStatus?: () => Promise<{
+        running: boolean;
+        port: number | null;
+        connectedClients: number;
+        recentCalls: Array<{ tool: string; ts: number; clientId: string }>;
+      }>;
+      mcpGetAuthToken?: () => Promise<string | null>;
+      // SEG-4 v0.1.59 — Plow the Field
+      runAndonReplowLoop?: (question: string, domain: string) => Promise<{
+        ok: boolean;
+        verdict: 'verified' | 'rejected' | 'quarantined';
+        ebletWritten: boolean;
+        question?: string;
+        answer?: string;
+        modelAnswer?: string;
+        error?: string;
+      }>;
+      loadDomainBank?: (domain: string) => Promise<Array<{
+        question: string;
+        options: string[];
+        correct_answer: string;
+        source_id: string;
+        source_category: string;
+      }>>;
+      // SEG-5 v0.1.59 — Clipboard capture
+      readClipboard?: () => Promise<string>;
+      onClipboardCaptureQA?: (callback: () => void) => () => void;
+      // A-3 BP081 v0.1.59.1 — App version check
+      onAppVersionCheck?: (callback: (data: { version: string }) => void) => () => void;
+      // A-4 BP081 v0.1.59.1 — Onboarding auto-flip check
+      onOnboardingAutoFlipCheck?: (callback: (data: { ollamaHealthy: boolean; gemmaPresent: boolean }) => void) => () => void;
     };
     // SEG-V0150-P0-DIAGNOSE-BRIDGE: sentinel — set by preload before main bridge wires up
     __preloadLoaded?: boolean;

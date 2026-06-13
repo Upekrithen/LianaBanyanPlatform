@@ -21,18 +21,20 @@ import {
   globalShortcut,
   dialog,
   Notification,
+  clipboard,
 } from 'electron';
 import { join } from 'path';
-import { existsSync, mkdirSync, readFileSync, writeFileSync, watch as fsWatch, readdirSync, cpSync } from 'fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync, appendFileSync, watch as fsWatch, readdirSync, cpSync } from 'fs';
 import { spawn } from 'child_process';
 import { tmpdir, homedir } from 'os';
-import { OllamaManager } from './ollama_manager';
+import { ollamaManager } from './ollama_manager';
 import { SubstrateAPIServer, API_PORT } from './substrate_api';
 import { FederationClient } from './federation_client';
 import { getMoneyPennyURL, getLocalIPs } from './mobile_pwa';
 import { AutoUpdateManager, type UpdateState } from './auto_updater';
 import { PeerDiscovery, getStablePeerId } from './federation/peer-discovery';
 import { RelayClient } from './federation/relay-client';
+import { performCommunityConnectHandshake } from './federation/community-connect';
 import { AuthManager, registerCustomScheme } from './auth_manager';
 import {
   runHearthBuild,
@@ -96,6 +98,9 @@ import { registerBridgeIPC } from './bridge_ipc';
 
 // BP060 Application 002 Steps 3+4 ? AI Dispatch IPC (UI-8 backend)
 import { registerAiDispatchIPC } from './ai_dispatch_ipc';
+
+// BP081 K-2 — MnemosyneC local MCP server
+import { startMcpServer, stopMcpServer, getMcpServerStatus } from './mcp_server';
 
 // SAGA-? v0.1.10 ? SubstratedFolderWatcher?
 import { SubstratedFolderWatcher, registerWatcherIpc } from './services/SubstratedFolderWatcher';
@@ -316,7 +321,6 @@ let folderWatcher: SubstratedFolderWatcher | null = null;
 let hearthConjunctionWindow: BrowserWindow | null = null;
 let moneyPennyWindow: BrowserWindow | null = null;
 let tray: Tray | null = null;
-let ollamaManager: OllamaManager | null = null;
 let substrateServer: SubstrateAPIServer | null = null;
 let federationClient: FederationClient | null = null;
 let autoUpdater: AutoUpdateManager | null = null;
@@ -811,7 +815,7 @@ function detectMode(context: {
 // --- Connectivity Polling -----------------------------------------------------
 
 async function runConnectivityPoll(): Promise<void> {
-  const aiAvailable = (await ollamaManager?.isReachable()) ?? false;
+  const aiAvailable = await ollamaManager.isReachable();
   const online = (await federationClient?.checkAndUpdateConnectivity()) ?? false;
   const peerCount = federationClient?.getStatus().peerCount ?? 0;
 
@@ -1055,6 +1059,15 @@ function rebuildTrayMenu(mode: FrameMode = currentMode): void {
     },
     { type: 'separator' },
     {
+      label: 'Send last copied as Q+A → MnemosyneC',
+      click: () => {
+        if (dashboardWindow && !dashboardWindow.isDestroyed()) {
+          dashboardWindow.webContents.send('clipboard:capture-qa');
+        }
+      },
+    },
+    { type: 'separator' },
+    {
       label: 'Quit MnemosyneC',
       click: () => app.quit(),
     },
@@ -1115,6 +1128,27 @@ function openMoneyPennyWindow(): void {
   moneyPennyWindow.loadURL(getMoneyPennyURL(API_PORT));
 }
 
+// A-4 BP081 v0.1.59.1: Onboarding gate auto-flip (Ollama healthy + Gemma present)
+async function checkAndAutoFlipOnboarding(win: BrowserWindow): Promise<void> {
+  try {
+    const ollamaResponse = await fetch('http://127.0.0.1:11434/api/tags', {
+      signal: AbortSignal.timeout(3000),
+    }).catch(() => null);
+    if (!ollamaResponse?.ok) return;
+
+    const tagsData = (await ollamaResponse.json().catch(() => null)) as { models?: Array<{ name?: string }> } | null;
+    const models: string[] = (tagsData?.models ?? []).map((m) => m.name ?? '');
+    const hasGemma = models.some((name) => name.toLowerCase().includes('gemma'));
+    if (!hasGemma) return;
+
+    if (!win.isDestroyed()) {
+      win.webContents.send('onboarding:auto-flip-check', { ollamaHealthy: true, gemmaPresent: true });
+    }
+  } catch {
+    // Non-fatal — ignore
+  }
+}
+
 function openDashboard(opts?: { focus?: boolean }): void {
   if (dashboardWindow && !dashboardWindow.isDestroyed()) {
     dashboardWindow.show();
@@ -1172,6 +1206,12 @@ function openDashboard(opts?: { focus?: boolean }): void {
     }).catch((e) => {
       console.error('[preload-smoke] dashboardWindow probe threw:', e?.message ?? e);
     });
+
+    // A-3 BP081 v0.1.59.1: Send app version to renderer for stale-message pruning on upgrade
+    dashboardWindow?.webContents.send('app:version-check', { version: app.getVersion() });
+
+    // A-4 BP081 v0.1.59.1: Check Ollama health + Gemma presence for onboarding auto-flip
+    void checkAndAutoFlipOnboarding(dashboardWindow!);
   });
 
   dashboardWindow.loadURL(
@@ -1377,7 +1417,6 @@ function runAutoPrepareIfNeeded(): void {
   if (!getAutoPrepareEnabled()) return;
   if (autoPrepareRunning) return;
   if (isGemma4Ready()) return;
-  if (!ollamaManager) return;
 
   autoPrepareRunning = true;
 
@@ -1471,6 +1510,13 @@ function registerIPCHandlers(): void {
     pulling: autoPrepareRunning,
   }));
 
+  // BP081 K-2 — MCP server status + auth token IPC
+  safeHandle('mcp:get-status', async () => getMcpServerStatus());
+  safeHandle('mcp:get-auth-token', async () => {
+    const tokenPath = join(app.getPath('userData'), 'mcp_auth_token.txt');
+    return existsSync(tokenPath) ? readFileSync(tokenPath, 'utf8').trim() : null;
+  });
+
   ipcMain.on('auto-prepare:set', (_event, enabled: boolean) => {
     setAutoPrepareEnabled(enabled);
     if (enabled) {
@@ -1540,7 +1586,7 @@ function registerIPCHandlers(): void {
 
     // Windows: available disk space
     try {
-      const diskOk = await ollamaManager?.checkDiskSpace(6) ?? true;
+      const diskOk = await ollamaManager.checkDiskSpace(6);
       results.push(`Disk space ok (need 6GB): ${diskOk}`);
     } catch (e) {
       results.push(`Disk space check error: ${(e as Error).message}`);
@@ -1693,11 +1739,10 @@ function registerIPCHandlers(): void {
 
   // -- Ollama ----------------------------------------------------------------
   safeHandle('get-ollama-status', async () => {
-    return ollamaManager?.getStatus() ?? { running: false, model: null, source: 'none' };
+    return ollamaManager.getStatus();
   });
 
   safeHandle('pull-default-model', async () => {
-    if (!ollamaManager) return { success: false, error: 'Ollama manager not initialized' };
     const reachable = await ollamaManager.isReachable();
     if (!reachable) return { success: false, error: 'Ollama not running' };
     const hasModel = await ollamaManager.hasFloorModel();
@@ -1715,7 +1760,6 @@ function registerIPCHandlers(): void {
 
   // SEG-U-6: pull a user-named model with streaming progress
   safeHandle('pull-named-model', async (_event, { modelName }: { modelName: string }) => {
-    if (!ollamaManager) return { success: false, error: 'Ollama manager not initialized' };
     const reachable = await ollamaManager.isReachable();
     if (!reachable) return { success: false, error: 'Ollama not running' };
     const hasModel = await ollamaManager.hasModel(modelName);
@@ -1731,26 +1775,148 @@ function registerIPCHandlers(): void {
     }
   });
 
+  // SEG-2 v0.1.56 — first-launch auto-pull with streaming progress + cancellation
+  // AbortController is module-level closure so cancel can reach the in-flight request.
+  let _floorPullAbort: AbortController | null = null;
+
+  safeHandle('first-launch-model-check', async (_event, { modelName }: { modelName: string }) => {
+    try {
+      const model = modelName || 'gemma4:12b';
+      const models = await ollamaManager.listModels();
+      const exists = models.some(
+        (m) => m === model || m.startsWith(model.split(':')[0]),
+      );
+      return { exists, modelName: model };
+    } catch {
+      return { exists: false, modelName: modelName || 'gemma4:12b' };
+    }
+  });
+
+  safeHandle('first-launch-model-start', async (event, { modelName }: { modelName: string }) => {
+    const model = modelName || 'gemma4:12b';
+
+    // Abort any in-flight pull before starting a fresh one.
+    _floorPullAbort?.abort();
+    _floorPullAbort = new AbortController();
+    const { signal } = _floorPullAbort;
+
+    try {
+      const reachable = await ollamaManager.isReachable();
+      if (!reachable) {
+        event.sender.send('first-launch-model-error', 'Local AI engine not running. Open the Home tab first.');
+        return { ok: false, error: 'not reachable' };
+      }
+
+      const models = await ollamaManager.listModels();
+      const exists = models.some(
+        (m) => m === model || m.startsWith(model.split(':')[0]),
+      );
+      if (exists) {
+        event.sender.send('first-launch-model-complete');
+        return { ok: true, alreadyInstalled: true };
+      }
+
+      const res = await fetch('http://127.0.0.1:11434/api/pull', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: model, stream: true }),
+        signal,
+      });
+
+      if (!res.ok || !res.body) {
+        const msg = `Pull request failed: ${res.statusText}`;
+        event.sender.send('first-launch-model-error', msg);
+        return { ok: false, error: msg };
+      }
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+
+      while (true) {
+        if (signal.aborted) {
+          reader.cancel().catch(() => {});
+          event.sender.send('first-launch-model-error', 'Download cancelled.');
+          return { ok: false, cancelled: true };
+        }
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const lines = decoder.decode(value).split('\n').filter(Boolean);
+        for (const line of lines) {
+          try {
+            const ev = JSON.parse(line) as {
+              status: string;
+              completed?: number;
+              total?: number;
+            };
+            if (ev.status === 'success') {
+              event.sender.send('first-launch-model-complete');
+              return { ok: true };
+            }
+            const percent =
+              ev.total && ev.completed != null
+                ? Math.round((ev.completed / ev.total) * 100)
+                : 0;
+            event.sender.send('first-launch-model-progress', {
+              percent,
+              downloaded: ev.completed ?? 0,
+              total: ev.total ?? 0,
+              status: ev.status,
+            });
+          } catch { /* skip malformed lines */ }
+        }
+      }
+
+      event.sender.send('first-launch-model-complete');
+      return { ok: true };
+    } catch (err) {
+      if (signal.aborted) {
+        event.sender.send('first-launch-model-error', 'Download cancelled.');
+        return { ok: false, cancelled: true };
+      }
+      const msg = err instanceof Error ? err.message : String(err);
+      event.sender.send('first-launch-model-error', msg);
+      return { ok: false, error: msg };
+    }
+  });
+
+  safeHandle('first-launch-model-cancel', () => {
+    _floorPullAbort?.abort();
+    _floorPullAbort = null;
+    return { ok: true };
+  });
+
   // SEG-V-1: live pre-flight check -- routes through OllamaManager as single source of truth.
   // Shared utility reused by ModelSetupProgress (SEG-V-1) and Layer2ProveIt model selector (SEG-V-4).
   safeHandle('check-ollama-and-model', async (_event, { modelName }: { modelName: string }) => {
     try {
-      if (!ollamaManager) return { reachable: false, hasModel: false, models: [] as string[] };
-      const reachable = await ollamaManager.isReachable();
-      if (!reachable) return { reachable: false, hasModel: false, models: [] as string[] };
+      const status = ollamaManager.getStatus();
+      const reachable = status.running || (await ollamaManager.isReachable());
+      if (!reachable) {
+        return {
+          reachable: false,
+          hasModel: false,
+          models: [] as string[],
+          error: 'Local AI engine not running. Open the Home tab to set up MnemosyneC.',
+        };
+      }
       const models = await ollamaManager.listModels();
       const hasModel = models.some(
         (m) => m === modelName || m.startsWith(modelName.split(':')[0])
       );
       return { reachable: true, hasModel, models };
-    } catch {
-      return { reachable: false, hasModel: false, models: [] as string[] };
+    } catch (err) {
+      return {
+        reachable: false,
+        hasModel: false,
+        models: [] as string[],
+        error: String(err),
+      };
     }
   });
 
   // BP067 v0.1.24 ? transparent install + bundled Gemma floor
   safeHandle('setup-private-ai', async () => {
-    if (!ollamaManager) return { ok: false, error: 'Ollama manager not initialized' };
     const sendProgress = (p: import('./ollama_manager').EngineSetupProgress) => {
       overlayWindow?.webContents.send('engine-setup-progress', p);
       dashboardWindow?.webContents.send('engine-setup-progress', p);
@@ -1772,11 +1938,6 @@ function registerIPCHandlers(): void {
   // SEG-V0149-P0: lean-install-start — guided full-tier AI installation
   // Uses ollamaManager exclusively — zero new spawn() calls.
   safeHandle('lean-install-start', async (event) => {
-    if (!ollamaManager) {
-      event.sender.send('lean-install-error', { message: 'Ollama manager not initialized', retryable: false });
-      return { ok: false };
-    }
-
     const emitStatus = (step: string, message: string) => {
       event.sender.send('lean-install-status', { step, message });
     };
@@ -1854,12 +2015,11 @@ function registerIPCHandlers(): void {
   });
 
   safeHandle('ask-floor-model', async (_event, { prompt }: { prompt: string }) => {
-    if (!ollamaManager) return { ok: false, error: 'Ollama manager not initialized' };
     return ollamaManager.askFloorModel(prompt);
   });
 
   safeHandle('list-ollama-models', async () => {
-    return ollamaManager?.listModels() ?? [];
+    return ollamaManager.listModels();
   });
 
   // KniPr012 ? check if Ollama binary is installed (distinct from daemon running)
@@ -1874,7 +2034,7 @@ function registerIPCHandlers(): void {
   });
 
   safeHandle('check-disk-space', async () => {
-    const ok = (await ollamaManager?.checkDiskSpace(6)) ?? true;
+    const ok = await ollamaManager.checkDiskSpace(6);
     return { ok, requiredGB: 6 };
   });
 
@@ -2702,7 +2862,7 @@ function registerIPCHandlers(): void {
         try {
           const cooldownResp = await globalThis.fetch(
             `${supabaseUrl.replace(/\/$/, '')}/rest/v1/member_rejection_summary` +
-              `?sender_peer_id=eq.${encodeURIComponent(peerId)}&select=cooldown_until`,
+              `?sender_peer_id=eq.${encodeURIComponent(peerId)}&select=total_rejections,last_rejection_at`,
             {
               headers: {
                 'Authorization': `Bearer ${anonKey}`,
@@ -2712,16 +2872,31 @@ function registerIPCHandlers(): void {
             },
           );
           if (cooldownResp.ok) {
-            const rows: Array<{ cooldown_until: string | null }> = await cooldownResp.json();
-            const cooldownUntil = rows[0]?.cooldown_until;
-            if (cooldownUntil) {
-              const waitMs = new Date(cooldownUntil).getTime() - Date.now();
-              if (waitMs > 0) {
-                return {
-                  ok: false,
-                  error: 'cooldown',
-                  wait_seconds: Math.ceil(waitMs / 1000),
-                };
+            const rows: Array<{
+              total_rejections: number | null;
+              last_rejection_at: string | null;
+            }> = await cooldownResp.json();
+            const row = rows[0];
+            if (row?.last_rejection_at) {
+              const totalRejections = row.total_rejections ?? 0;
+              const lastRejectionMs = new Date(row.last_rejection_at).getTime();
+              // Option 2 (Founder-ratified): -1 effective strike per 30 clean days
+              const daysSinceLast = (Date.now() - lastRejectionMs) / 86_400_000;
+              const effectiveRejections = Math.max(
+                0,
+                totalRejections - Math.floor(daysSinceLast / 30),
+              );
+              if (effectiveRejections > 0) {
+                const cooldownUntilMs =
+                  lastRejectionMs + effectiveRejections * 5 * 60 * 1000;
+                const waitMs = cooldownUntilMs - Date.now();
+                if (waitMs > 0) {
+                  return {
+                    ok: false,
+                    error: 'cooldown',
+                    wait_seconds: Math.ceil(waitMs / 1000),
+                  };
+                }
               }
             }
           }
@@ -2822,6 +2997,90 @@ function registerIPCHandlers(): void {
     }
     return { ok: true };
   });
+
+  // SEG-5 v0.1.56 — federation:connect-peer
+  // Accepts { peerId, relayUrl? } and attempts peer connection via the existing relay-client.
+  // Falls back gracefully when relay is not yet connected.
+  safeHandle(
+    'federation:connect-peer',
+    async (
+      _ev,
+      { peerId, relayUrl }: { peerId: string; relayUrl?: string },
+    ): Promise<{ success: boolean; error?: string }> => {
+      try {
+        if (!peerId) return { success: false, error: 'peerId is required' };
+        if (peerDiscovery) {
+          peerDiscovery.registerWANPeer({
+            peerId,
+            address: relayUrl ?? 'relay',
+            port: 0,
+            transport: 'wan-relay',
+            phase: 'identified',
+            lastSeen: new Date().toISOString(),
+          });
+        }
+        if (relayClient?.isConnected()) {
+          relayClient.sendToPeer(peerId, {
+            type: 'identify',
+            peerId: getStablePeerId(),
+            payload: {
+              peerId: getStablePeerId(),
+              version: app.getVersion(),
+              pubkeyFingerprint: getStablePeerId(),
+            },
+            ts: new Date().toISOString(),
+          });
+          return { success: true };
+        }
+        return { success: false, error: 'relay_not_connected' };
+      } catch (e) {
+        return { success: false, error: String(e) };
+      }
+    },
+  );
+
+  // SEG-5 v0.1.56 — send-silent-email stub
+  // Infrastructure-only. Real email credentials are not wired here.
+  // Prevents UI crashes while the feature is pending activation.
+  safeHandle(
+    'send-silent-email',
+    (_ev, _args: unknown): { success: boolean; reason: string } => {
+      console.log('[silent-email] not yet configured — call received, no-op');
+      return { success: false, reason: 'not_configured' };
+    },
+  );
+
+  // SEG-3 v0.1.55 — COMMUNITY-CONNECT first-launch seed peer handshake
+  safeHandle(
+    'community-connect-handshake',
+    async (): Promise<{ success: boolean; peerName?: string; error?: string }> => {
+      try {
+        return await performCommunityConnectHandshake({
+          ownPeerId: getStablePeerId(),
+          appVersion: app.getVersion(),
+          registerWANPeer: (peer) => {
+            peerDiscovery?.registerWANPeer(peer);
+          },
+          sendIdentify: (toPeerId) => {
+            if (relayClient?.isConnected()) {
+              relayClient.sendToPeer(toPeerId, {
+                type: 'identify',
+                peerId: getStablePeerId(),
+                payload: {
+                  peerId: getStablePeerId(),
+                  version: app.getVersion(),
+                  pubkeyFingerprint: getStablePeerId(),
+                },
+                ts: new Date().toISOString(),
+              });
+            }
+          },
+        });
+      } catch (e) {
+        return { success: false, error: String(e) };
+      }
+    },
+  );
 
   // -- Chronos Research Consent (KniPr038) ----------------------------------
 
@@ -3228,6 +3487,205 @@ function registerIPCHandlers(): void {
     });
   });
 
+  // --- SEG-2 v0.1.57: Test It Out IPC handlers ---------------------------------
+
+  /**
+   * run-test-it-out — runs 5 random R11 questions through the local Ollama model.
+   * Emits 'test-it-out-progress' per question; emits 'test-it-out-complete' when done.
+   * Correct answers (HOT: all hot_required_elements present) are written to the
+   * verified eblet store (substrate-warming). Wrong answers are never written (Andon canon).
+   */
+  safeHandle('run-test-it-out', async (event) => {
+    const TOTAL = 5;
+
+    // Resolve question bank: prefer smoke (20 Qs) bundled in lb-reproducibility-pack.
+    const bankPaths = [
+      join(__dirname, '..', '..', 'lb-reproducibility-pack', 'datasets', 'smoke', 'questions_smoke.json'),
+      join(__dirname, '..', '..', 'lb-reproducibility-pack', 'datasets', 'reasonable', 'questions_reasonable.json'),
+      join(__dirname, '..', '..', 'librarian-mcp', 'r10_cross_vendor', 'R11v2_QUESTION_BANK_SEALED_K528.json'),
+    ];
+
+    type BankQuestion = {
+      id: string;
+      question: string;
+      canonical_answer: string;
+      hot_required_elements: string[];
+    };
+
+    let allQuestions: BankQuestion[] = [];
+    for (const bankPath of bankPaths) {
+      if (!existsSync(bankPath)) continue;
+      try {
+        const raw = JSON.parse(readFileSync(bankPath, 'utf8')) as {
+          questions?: BankQuestion[];
+        };
+        if (Array.isArray(raw.questions) && raw.questions.length > 0) {
+          allQuestions = raw.questions as BankQuestion[];
+          break;
+        }
+      } catch { /* try next bank */ }
+    }
+
+    if (allQuestions.length === 0) {
+      return { success: false, error: 'NO_QUESTION_BANK' };
+    }
+
+    // Pick 5 random unique questions (Fisher-Yates partial shuffle)
+    const pool = [...allQuestions];
+    for (let i = pool.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+    const selected = pool.slice(0, TOTAL);
+
+    // Determine model: prefer getSelectedModel(), fall back to floor model
+    const model = ollamaManager.getSelectedModel() ?? 'gemma4:12b';
+
+    const isCorrect = (response: string, elements: string[]): boolean => {
+      if (!response || elements.length === 0) return false;
+      const r = response.toLowerCase();
+      return elements.every((el) => r.includes(el.toLowerCase()));
+    };
+
+    const results: Array<{
+      questionIndex: number;
+      question: string;
+      modelAnswer: string;
+      correctAnswer: string;
+      isCorrect: boolean;
+    }> = [];
+
+    let score = 0;
+
+    for (let idx = 0; idx < selected.length; idx++) {
+      const q = selected[idx];
+      const prompt = `Answer the following question concisely and accurately:\n\n${q.question}`;
+
+      let modelAnswer = '';
+      try {
+        const resp = await fetch('http://127.0.0.1:11434/api/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ model, prompt, stream: false, options: { num_predict: 256, temperature: 0.1 } }),
+          signal: AbortSignal.timeout(60_000),
+        });
+        if (resp.ok) {
+          const data = await resp.json() as { response?: string };
+          modelAnswer = data.response?.trim() ?? '';
+        } else {
+          modelAnswer = `ERROR:${resp.status}`;
+        }
+      } catch (err) {
+        modelAnswer = `ERROR:${String(err).slice(0, 80)}`;
+      }
+
+      const correct = isCorrect(modelAnswer, q.hot_required_elements);
+      if (correct) score++;
+
+      const result = {
+        questionIndex: idx,
+        question: q.question,
+        modelAnswer,
+        correctAnswer: q.canonical_answer,
+        isCorrect: correct,
+      };
+      results.push(result);
+
+      // Emit per-question progress to the requesting window
+      if (!event.sender.isDestroyed()) {
+        event.sender.send('test-it-out-progress', { ...result, total: TOTAL });
+      }
+
+      // Andon canon: ONLY write correct answers to substrate
+      if (correct) {
+        try {
+          const { writeVerifiedEblet } = await import('./mnem_eblet_store');
+          const { createHash } = await import('crypto');
+          const sha256 = createHash('sha256').update(q.question + q.canonical_answer).digest('hex');
+          await writeVerifiedEblet({
+            question: q.question,
+            answer: q.canonical_answer,
+            provenance: 'test-it-out',
+            verified: true,
+            sha256,
+            timestamp: Date.now(),
+          });
+        } catch (e) {
+          console.warn('[test-it-out] eblet write failed (non-fatal):', e);
+        }
+      }
+    }
+
+    // Append run to history file
+    const historyDir = join(app.getPath('userData'), 'substrate');
+    const historyPath = join(historyDir, 'test_it_out_history.jsonl');
+    try {
+      if (!existsSync(historyDir)) mkdirSync(historyDir, { recursive: true });
+      const historyLine = JSON.stringify({
+        ts: Date.now(),
+        score,
+        total: TOTAL,
+        model,
+        results: results.map((r) => ({ q: r.question.slice(0, 80), correct: r.isCorrect })),
+      });
+      appendFileSync(historyPath, historyLine + '\n', 'utf-8');
+    } catch (e) {
+      console.warn('[test-it-out] history write failed (non-fatal):', e);
+    }
+
+    if (!event.sender.isDestroyed()) {
+      event.sender.send('test-it-out-complete', { score, total: TOTAL, results });
+    }
+
+    return { success: true, score, total: TOTAL };
+  });
+
+  /** get-test-it-out-history — returns last 20 run records from history JSONL. */
+  safeHandle('get-test-it-out-history', async () => {
+    const historyPath = join(app.getPath('userData'), 'substrate', 'test_it_out_history.jsonl');
+    if (!existsSync(historyPath)) return { runs: [] };
+    try {
+      const lines = readFileSync(historyPath, 'utf-8')
+        .split('\n')
+        .filter(Boolean)
+        .slice(-20);
+      const runs = lines.map((l) => {
+        try { return JSON.parse(l); } catch { return null; }
+      }).filter(Boolean);
+      return { runs };
+    } catch {
+      return { runs: [] };
+    }
+  });
+
+  // --- SEG-A2 BP081: Substrate stats dashboard IPC ------------------------------
+
+  safeHandle('get-substrate-stats', async () => {
+    const { queryStats } = await import('./mnem_eblet_store');
+    return queryStats();
+  });
+
+  // --- BP081 K-1: Membership IPC handlers (stub tier) --------------------------
+
+  safeHandle('membership:start-checkout', async () => {
+    const { createMembershipCheckoutSession } = await import('./membership/checkout_session');
+    const result = await createMembershipCheckoutSession();
+    if (result.checkoutUrl) {
+      shell.openExternal(result.checkoutUrl).catch(() => {});
+    }
+    return result;
+  });
+
+  safeHandle('membership:get-status', async () => {
+    // Stub — reads from persisted session in v0.1.61
+    return { tier: 'standard', status: 'never_joined', annualFeeUsd: 5 };
+  });
+
+  safeHandle('membership:cancel', async () => {
+    // Stub
+    return { success: false, reason: 'not_implemented_until_v0.1.61' };
+  });
+
   // --- SKU IPC handlers (BP078 Scope 6.5) --------------------------------------
 
   safeHandle('sku-check-model', async (_event, modelName: string) => {
@@ -3255,8 +3713,6 @@ function registerIPCHandlers(): void {
     if (!modelName) return { ok: false, error: 'Unknown tier' };
 
     skuPullRunning = false;
-
-    if (!ollamaManager) return { ok: false, error: 'Ollama not initialized' };
 
     skuPullRunning = true;
 
@@ -3326,11 +3782,6 @@ function registerIPCHandlers(): void {
   // Fires from LeanShell on first lean-mode launch. Reuses lean-install-start logic
   // but emits 'lean-bg-status' events for LeanShell thin status bar.
   safeHandle('lean-bg-start', async (event) => {
-    if (!ollamaManager) {
-      event.sender.send('lean-bg-status', { type: 'setup-status', msg: 'AI manager not ready.' });
-      return { ok: false };
-    }
-
     const emit = (type: string, msg: string, pct?: number) => {
       event.sender.send('lean-bg-status', { type, msg, ...(pct != null ? { pct } : {}) });
     };
@@ -3597,6 +4048,24 @@ function registerIPCHandlers(): void {
       vcard_qr_error: vcardQrError,
     };
   });
+
+  // ── SEG-4 v0.1.59 — Plow the Field IPC handlers ───────────────────────────
+
+  safeHandle('plow:load-domain-bank', async (_, domain: string) => {
+    const { loadDomainBank } = await import('./plow/per_domain_q_banks');
+    return loadDomainBank(domain as import('./plow/per_domain_q_banks').Domain);
+  });
+
+  safeHandle('plow:run-andon-replow', async (_, { question, domain }: { question: string; domain: string }) => {
+    const { runAndonReplowLoop } = await import('./plow/andon_replow');
+    return runAndonReplowLoop(question, domain);
+  });
+
+  // ── SEG-5 v0.1.59 — Clipboard read IPC ────────────────────────────────────
+
+  safeHandle('clipboard:read', async () => {
+    return clipboard.readText();
+  });
 }
 
 // --- Mesh Results Watcher (SEG-U-7 BP078) ------------------------------------
@@ -3795,6 +4264,14 @@ app.whenReady().then(async () => {
   // SEG-V0148-P1-RENAME-USERDATA: migrate amplify-computer → mnemosynec on first launch after rename
   migrateUserDataIfNeeded();
 
+  // A-2 BP081 v0.1.59.1: Startup eblet store integrity check (non-fatal)
+  try {
+    const { runStartupIntegrityCheck } = await import('./mnem_eblet_store');
+    await runStartupIntegrityCheck();
+  } catch (e) {
+    console.error('[Startup] Eblet integrity check failed (non-fatal):', e);
+  }
+
   // Initialize substrate API server (Phase 3: full implementation)
   substrateServer = new SubstrateAPIServer();
   await substrateServer.start();
@@ -3807,8 +4284,7 @@ app.whenReady().then(async () => {
   substrateServer.setFederationClient(federationClient);
   await federationClient.start();
 
-  // Initialize Ollama manager
-  ollamaManager = new OllamaManager();
+  // Initialize Ollama manager singleton (SEG-1 v0.1.55)
   // SEG-V0147-FIX-1 / SEG-V0148-P2: wire IPC heartbeat callback BEFORE init() so renderer
   // never goes silent >3s, and so _capturedOllamaBranch is updated for the diagnostic log.
   ollamaManager.setStatusUpdateCallback((update) => {
@@ -4026,10 +4502,16 @@ app.whenReady().then(async () => {
     dashboardWindow?.hide();
   });
 
-  // BP041 SAGA 3 ? Ctrl+Shift+M: toggle between Configure View and Watch View.
-  // Watch View = conjunction window hidden; overlay border + OverlayTag visible.
-  // Configure View = conjunction window shown + focused.
+  // BP041 SAGA 3 + SEG-5 v0.1.59: Ctrl+Shift+M.
+  // When dashboard is open: trigger clipboard Q+A capture (SEG-5).
+  // Otherwise: toggle HearthConjunctionWindow between Watch View and Configure View (BP041).
   const okWatchToggle = globalShortcut.register('CommandOrControl+Shift+M', () => {
+    // SEG-5 v0.1.59: clipboard capture → dashboard (highest priority when dashboard is open)
+    if (dashboardWindow && !dashboardWindow.isDestroyed()) {
+      dashboardWindow.webContents.send('clipboard:capture-qa');
+      return;
+    }
+    // BP041 SAGA 3 fallback: HearthConjunctionWindow toggle when dashboard is not open
     if (!hearthConjunctionWindow || hearthConjunctionWindow.isDestroyed()) {
       openHearthConjunctionWindow();
       return;
@@ -4099,6 +4581,13 @@ app.whenReady().then(async () => {
   runAutoPrepareIfNeeded();
   scheduleAutoPrepareIdle();
 
+  // BP081 K-2 — start local MCP substrate bridge server (failure is non-fatal)
+  try {
+    await startMcpServer();
+  } catch (e) {
+    console.error('[Frame] MCP server failed to start (non-fatal):', e);
+  }
+
   // SEG-U-7 BP078: mesh-test-complete file watcher
   // Watches two locations for mesh results JSON; sends IPC to renderer on detection.
   // Uses fs.watch (chokidar would be more robust but is not in this project's dependencies).
@@ -4120,7 +4609,8 @@ app.on('before-quit', async () => {
   pairedFrameManager?.stop();
   folderWatcher?.stopAll();
   autoUpdater?.destroy();
-  await ollamaManager?.shutdown();
+  await ollamaManager.shutdown();
   await federationClient?.stop();
   await substrateServer?.stop();
+  await stopMcpServer();
 });

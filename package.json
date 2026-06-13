@@ -1,6 +1,6 @@
 {
   "name": "mnemosynec",
-  "version": "0.1.53",
+  "version": "0.1.59.1",
   "description": "MnemosyneC — Memory, powered by CAI · local inference + cooperative substrate OS overlay (SSPL · Pledge #2260)",
   "homepage": "https://lianabanyan.com",
   "private": true,
@@ -43,6 +43,7 @@
   "license": "UNLICENSED",
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
+    "@modelcontextprotocol/sdk": "^1.29.0",
     "@peculiar/asn1-schema": "^2.7.0",
     "@peculiar/asn1-tsp": "^2.7.0",
     "@peculiar/asn1-x509": "^2.7.0",
