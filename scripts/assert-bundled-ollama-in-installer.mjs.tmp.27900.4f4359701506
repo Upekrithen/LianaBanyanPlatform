@@ -1,0 +1,195 @@
+#!/usr/bin/env node
+/**
+ * BP080 / SEG-V0147-FIX-0 — Assert that the NSIS installer contains resources/ollama/ollama.exe
+ *
+ * Usage:
+ *   node scripts/assert-bundled-ollama-in-installer.mjs release/MnemosyneC-Setup-0.1.47.exe
+ *   node scripts/assert-bundled-ollama-in-installer.mjs   # auto-detects from package.json version
+ *
+ * Exits 0 (PASS) if ollama.exe is found and >= 20 MB inside the installer payload.
+ * Exits 1 (FAIL) with a clear error message if not found or too small.
+ *
+ * Requires 7-Zip (7z) on PATH. On Windows: scoop install 7zip
+ *
+ * HOW IT WORKS — two-level archive structure:
+ *   electron-builder NSIS installers embed all app content inside a 7z archive:
+ *     outer: MnemosyneC-Setup-x.x.x.exe  (NSIS executable)
+ *     inner: $PLUGINSDIR/app-64.7z        (7z solid, contains resources\ollama\ollama.exe)
+ *   Listing only the outer NSIS archive will NOT reveal ollama.exe.
+ *   This script extracts app-64.7z to a temp dir, lists it, then checks for ollama.exe.
+ *
+ * Wire into dist:win AFTER electron-builder (see package.json scripts).
+ */
+
+import { execSync, spawnSync } from 'child_process';
+import { existsSync, mkdirSync, rmSync, statSync } from 'fs';
+import { join } from 'path';
+import { tmpdir } from 'os';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
+
+// Minimum acceptable size for ollama.exe inside the installer (20 MB)
+const MIN_OLLAMA_SIZE_BYTES = 20 * 1024 * 1024;
+
+let installer = process.argv[2];
+
+if (!installer) {
+  // Auto-detect from package.json version
+  try {
+    const pkg = require('../package.json');
+    installer = `release/MnemosyneC-Setup-${pkg.version}.exe`;
+    console.log(`[assert-ollama] Auto-detected installer: ${installer}`);
+  } catch {
+    console.error('[assert-ollama] Usage: node scripts/assert-bundled-ollama-in-installer.mjs <installer.exe>');
+    process.exit(1);
+  }
+}
+
+if (!existsSync(installer)) {
+  console.error(`[assert-ollama] FAIL: Installer not found at ${installer}`);
+  process.exit(1);
+}
+
+const installerSize = statSync(installer).size;
+console.log(`[assert-ollama] Inspecting ${installer} (${(installerSize / 1024 / 1024).toFixed(1)} MB)…`);
+
+// Locate 7z
+let sevenZip = '7z';
+try {
+  const result = spawnSync('where', ['7z'], { encoding: 'utf8' });
+  if (result.status === 0 && result.stdout.trim()) {
+    sevenZip = result.stdout.trim().split('\n')[0].trim();
+  } else {
+    throw new Error('not found');
+  }
+} catch {
+  const scoopPath = 'C:\\Users\\Administrator\\scoop\\shims\\7z.exe';
+  if (existsSync(scoopPath)) {
+    sevenZip = scoopPath;
+  }
+  // else leave as '7z' and let execSync fail with a clear message
+}
+
+console.log(`[assert-ollama] Using 7z at: ${sevenZip}`);
+
+// ── Step 1: Extract the inner app-64.7z from the outer NSIS installer ────────
+const tempDir = join(tmpdir(), `assert_ollama_${Date.now()}`);
+mkdirSync(tempDir, { recursive: true });
+
+const cleanup = () => {
+  try { rmSync(tempDir, { recursive: true, force: true }); } catch { /* ignore */ }
+};
+process.on('exit', cleanup);
+process.on('SIGINT', () => { cleanup(); process.exit(1); });
+process.on('SIGTERM', () => { cleanup(); process.exit(1); });
+
+console.log('[assert-ollama] Extracting inner app-64.7z from NSIS installer (may take ~10s)…');
+try {
+  execSync(
+    `"${sevenZip}" e "${installer}" -o"${tempDir}" "$PLUGINSDIR\\app-64.7z" -y`,
+    {
+      encoding: 'utf8',
+      timeout: 120_000,
+      stdio: 'pipe', // suppress 7z banner noise
+    },
+  );
+} catch (err) {
+  cleanup();
+  console.error('[assert-ollama] ERROR: Failed to extract app-64.7z from installer.');
+  console.error('[assert-ollama]   Ensure 7-Zip >= 22.x: scoop update 7zip');
+  console.error(err.stderr || err.message);
+  process.exit(1);
+}
+
+const appBundle = join(tempDir, 'app-64.7z');
+if (!existsSync(appBundle)) {
+  cleanup();
+  console.error('[assert-ollama] FAIL: app-64.7z not found after extraction.');
+  console.error('[assert-ollama]   The NSIS payload path may have changed — check electron-builder output.');
+  process.exit(1);
+}
+
+// ── Step 2: List app-64.7z and check for ollama.exe ──────────────────────────
+let innerListing = '';
+try {
+  innerListing = execSync(`"${sevenZip}" l "${appBundle}"`, {
+    encoding: 'utf8',
+    timeout: 60_000,
+    maxBuffer: 20 * 1024 * 1024,
+  });
+} catch (err) {
+  cleanup();
+  console.error('[assert-ollama] ERROR: Failed to list app-64.7z contents.');
+  console.error(err.message);
+  process.exit(1);
+}
+
+// ── Step 3: Parse listing ─────────────────────────────────────────────────────
+// 7z listing line format (file, not directory):
+// "DATE TIME ATTR   SIZE  COMPRESSED  NAME"
+// e.g.: "                    ....A     35578760      9247888  resources\ollama\ollama.exe"
+function parseSizeName(line) {
+  const match = line.match(/^\s+\S+\s+(\d+)\s+\d+\s+(.+)$/);
+  if (!match) return null;
+  return { size: parseInt(match[1], 10), name: match[2].trim() };
+}
+
+let ollamaExeSize = 0;
+let ollamaExeFound = false;
+let modelBlobFound = false;
+let modelBlobSize = 0;
+
+for (const line of innerListing.split('\n')) {
+  const entry = parseSizeName(line);
+  if (!entry) continue;
+  const norm = entry.name.replace(/\//g, '\\').toLowerCase();
+
+  if (norm === 'resources\\ollama\\ollama.exe') {
+    ollamaExeFound = true;
+    ollamaExeSize = entry.size;
+  }
+
+  // Large floor model blob under resources\ollama\bundled\models\blobs\
+  if (norm.startsWith('resources\\ollama\\bundled\\models\\blobs\\sha256-') && entry.size > 100 * 1024 * 1024) {
+    modelBlobFound = true;
+    modelBlobSize = entry.size;
+  }
+}
+
+// cleanup happens via process.on('exit')
+
+// ── Step 4: Report ────────────────────────────────────────────────────────────
+let failed = false;
+
+if (!ollamaExeFound) {
+  console.error('[assert-ollama] FAIL: resources\\ollama\\ollama.exe NOT FOUND in installer payload.');
+  console.error('[assert-ollama] Build is broken — installer will not work on clean machines.');
+  console.error('[assert-ollama] Fix steps:');
+  console.error('[assert-ollama]   1. Run: npm run prepare:ollama-binary');
+  console.error('[assert-ollama]   2. Confirm: resources/ollama/ollama.exe exists and is >20 MB');
+  console.error('[assert-ollama]   3. Re-run: npm run dist:win');
+  failed = true;
+} else if (ollamaExeSize < MIN_OLLAMA_SIZE_BYTES) {
+  console.error(`[assert-ollama] FAIL: ollama.exe found but too small (${ollamaExeSize} bytes < ${MIN_OLLAMA_SIZE_BYTES} min). Corrupt download?`);
+  console.error('[assert-ollama]   Delete resources/ollama/ollama.exe and re-run npm run prepare:ollama-binary');
+  failed = true;
+} else {
+  console.log(`[assert-ollama] PASS: ollama.exe present in installer (${(ollamaExeSize / 1024 / 1024).toFixed(1)} MB)`);
+}
+
+if (!modelBlobFound) {
+  console.warn('[assert-ollama] WARNING: Floor model blob (>100 MB) not found in installer payload.');
+  console.warn('[assert-ollama]   Users will download the model on first launch. Not a FAIL, but worse UX.');
+  console.warn('[assert-ollama]   To bundle: npm run prepare:floor-model (requires Ollama installed locally).');
+} else {
+  console.log(`[assert-ollama] PASS: Floor model blob present in installer (${(modelBlobSize / 1024 / 1024).toFixed(1)} MB)`);
+}
+
+if (failed) {
+  console.error('[assert-ollama] GATE FAILED — do NOT publish this installer.');
+  process.exit(1);
+}
+
+console.log('[assert-ollama] All checks passed. Installer is safe to publish.');
+process.exit(0);

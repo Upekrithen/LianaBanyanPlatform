@@ -1,0 +1,128 @@
+<!-- bishop-yoke-task 2026-06-10T23:00:00Z -->
+
+## 🖥️ BISHOP -> KNIGHT - TASK - V0144 UI SCALE + ICON FIX - USE SONNET 4.6 SEGs (Statute §3)
+
+**Pinned-class task. Pin-marker: BP079_V0144_UI_SCALE_AND_ICON_2026-06-10T23:00:00Z**
+
+> **🔐 STATUTE §3 + CORRECTIVE BP079 BINDING:** Every dispatch announcement uses the verbatim phrase "Sonnet 4.6". Never "Sonnet 4.5" or version-variant. Parent: `canon_statute_3_sonnet_4_6_sub_agent_default_every_dispatch_explicit_model_param_bp077` (pearl_8b0c6fb05fd9f38a). Corrective: `canon_statute_3_corrective_announcement_language_must_say_sonnet_4_6_verbatim_pattern_violation_bp079` (pearl_98f74effb5d986a5). Pre-dispatch self-audit: parameter AND announcement compliance both required.
+
+---
+
+### TL;DR
+
+v0.1.43 fixes verified — Founder happy + ready for mesh test. Four UI items to ship in v0.1.44: (1) chrome + font too small (bump Electron zoomFactor to ~1.15), (2) missing/wrong icon next to "M" in title bar (BP078 SEG-Q-2 didn't fully land), (3) welcome screen as sendable cue deck card (share modal + QR + introducer_user_id), (4) grid-flip reveal on AI TIER 4-card grid (CSS 3D flip, back shows MMLU-Pro benchmarks). Black Mamba × 4 parallel + VERIFY + SHIP.
+
+---
+
+### Why this matters
+
+v0.1.43 shipped the crash fix (Just use it → Heavy → no crash) and the NANO/FULL tier modal renders correctly. Founder confirmed both empirically. The product is now functionally stable for mesh test (M2 + M3 install + peer discovery). The two remaining nits are readability/polish blockers before the mesh test URL goes live publicly via Cephas:
+
+1. **Zoom/scale**: The MnemosyneC window chrome (title bar text, nav tabs, body content) is visually smaller than the GitHub release page open behind it. A stranger landing cold ("Off the Street" test) should be able to read the interface without squinting.
+2. **Icon**: The title bar shows elephant icon + "M" letter + placeholder/wrong icon. BP078 SEG-Q-2 was supposed to ship a proper MnemosyneC.ico with RoseBush mark + Dr. MnemosyneC elephant. It did not fully land. Fix before mesh launch.
+
+Neither issue is a crash. Both are visible-on-first-glance issues that undermine the first impression.
+
+---
+
+### Evidence references
+
+- **Screenshot 1:** `C:\Users\Administrator\Pictures\BeanSprouts\Screenshot 2026-06-10 195452.png` — MnemosyneC v0.1.43 small window overlaid on GitHub release page. Visual delta: GitHub text is readable; MnemosyneC chrome is noticeably smaller. Also shows the title bar icon anomaly (elephant + "M" + wrong/placeholder icon).
+- **Screenshot 2:** `C:\Users\Administrator\Pictures\BeanSprouts\Screenshot 2026-06-10 195521.png` — second angle / supporting evidence.
+
+---
+
+### What Knight needs to do
+
+**Two parallel SEGs (UI-1 + UI-2), then sequential VERIFY + SHIP.**
+
+#### SEG-V0144-UI-1 — Electron Zoom (Sonnet 4.6)
+
+Set a default `zoomFactor` of `1.15` across all BrowserWindows so the chrome and content render at a comfortably readable scale matching typical browser pages.
+
+Scope:
+- In `src/main/index.ts` (or wherever BrowserWindow instances are constructed), locate ALL window constructors: `mainWindow`, `overlayWindow`, `moneyPennyWindow`, `dashboardWindow`, `hearthConjunctionWindow`, and any others.
+- Set `zoomFactor: 1.15` in the `webPreferences` object of each BrowserWindow, OR call `window.webContents.setZoomFactor(1.15)` in the `did-finish-load` handler — whichever the codebase already uses. Prefer `webPreferences.zoomFactor` (set-once, no event handler needed).
+- Add a **Settings panel zoom control** in Settings → Appearance: dropdown options 100% / 110% / 115% (default) / 120% / 125%. Persist the chosen value via `electron-store` or `localStorage` under key `ui.zoomFactor`. On change, call `webContents.setZoomFactor()` on all active windows.
+- Deliver: before/after screenshot showing larger chrome. Reference `C:\Users\Administrator\Pictures\BeanSprouts\Screenshot 2026-06-10 195452.png` as the "before" baseline.
+
+#### SEG-V0144-UI-2 — Icon Diagnosis + Fix (Sonnet 4.6)
+
+Diagnose the missing/wrong icon next to "M" in the MnemosyneC title bar and fix it.
+
+Scope:
+- **Inspect surface (a):** `electron-builder.json` or the `build` section of `package.json` — find `win.icon` path. Does the referenced file exist? Open it. Does it contain valid .ico layers?
+- **Inspect surface (b):** renderer-side title bar component — likely `src/renderer/components/AppHeader.tsx` or similar (search for the element rendering the "M" letter + adjacent icon). Is there an `<img>` or SVG reference with a broken `src` or wrong path?
+- **Inspect surface (c):** `build/` and `assets/` directories — does `MnemosyneC.ico` exist? If yes, open it; verify it contains RoseBush mark + Dr. MnemosyneC elephant at minimum sizes (16×16, 32×32, 256×256). If it exists but is malformed or incomplete, regenerate from available source assets.
+- **Fix:** Whichever surface is broken, fix it. If the .ico is missing or empty, generate it from the existing RoseBush mark + Dr. MnemosyneC elephant assets (per BP078 canon `reference_feather_system_canon` + BP073 `pearl_bp073_dr_mnemosynec_elephant`). If it is a renderer-side wrong path, correct the path.
+- Deliver: screenshot of fixed title bar showing proper icon. Note which surface was the root cause (a/b/c).
+
+---
+
+### Reply contract
+
+Knight's Yoke-return appended to this file as a `## RESPONSE` block, including:
+
+1. Per-SEG commit SHA
+2. Screenshot: before/after for zoom (visual diff, references 195452.png as baseline)
+3. Screenshot: title bar with fixed icon
+4. Screenshot: Just use it → Heavy → no-crash state preserved (regression check)
+5. Screenshot: "Learn how it works" still functional (regression check)
+6. v0.1.44 packaged installer: path + SHA-256
+7. DRAFT GitHub Release URL
+8. Cephas download page updated to v0.1.44 (confirm URL live)
+9. Truth-Always: any open obligations discovered during work
+
+---
+
+### Statute reminders
+
+- §3 + BP079 corrective: verbatim "Sonnet 4.6" in BOTH parameter AND announcement (both surfaces, not one).
+- §12 Ask-Knight-First: if there is ambiguity about which icon asset to use (e.g., multiple candidates in assets/), check librarian or existing build config before fabricating a new one.
+- `canon_actual_runtime_verify_for_runtime_bugs_bp078`: packaged install REQUIRED for runtime verify — source-clean does NOT close a runtime bug.
+- `feedback_ux_seg_screenshot_mandatory_bp078` (HARD BINDING): every UX-touching SEG captures screenshot of affected surface on packaged-build install. Both UI-1 and UI-2 are UX-touching; both require packaged-install screenshots.
+- `feedback_every_click_visible_feedback_canon_bp078`: if the new zoom Settings toggle lands silently on click, it is broken by definition.
+- `canon_long_running_progress_heartbeat_canon_bp078`: not applicable to this Yoke (no >3s operations), but applies if build step is shown to Founder.
+
+---
+
+### Paste-ready Founder wake-up
+
+> Knight, NEW Yoke at `BISHOP_DROPZONE\01_KnightPrompts\PROMPT_KNIGHT_BP079_V0144_UI_SCALE_AND_ICON_2026-06-10.md`. v0.1.43 verified — mesh test ready. Two UI nits for v0.1.44: (1) bump Electron zoomFactor to 1.15 across all windows + Settings toggle, (2) diagnose + fix wrong/missing icon next to "M" in title bar (BP078 SEG-Q-2 didn't fully land). Sonnet 4.6 SEGs mandatory (Statute §3 + corrective sub-canon BP079). Black Mamba × 2 parallel + VERIFY + SHIP at bottom of Yoke.
+
+- Bishop · BP079 · SEG-V0144-UI-FIXES · pinned 2026-06-10T23:00:00Z
+
+---
+
+### Issue 3 — Mesh test awareness (no Knight code work)
+
+Founder is ready to publish v0.1.43 DRAFT release, install on M2 + M3, and test peer discovery. When DRAFT is published:
+- Cephas v0.1.43 download URL goes live (pre-staged per Cephas commit `01b223a`).
+- Mesh discovery uses existing BP067 substrate (20/20 hash-verified same-LAN proven, pearl_88a8c069).
+- Knight: no action required on your end for the mesh test itself. Be aware that v0.1.44 SHIP should not overwrite the DRAFT v0.1.43 release prematurely if the mesh test is still in progress — coordinate with Founder on timing.
+
+---
+
+---
+
+## BLACK MAMBA PASTE-READY DISPATCH (forward this block verbatim to Knight)
+
+Knight: dispatch 2 parallel Sonnet 4.6 SEGs RIGHT NOW, then 2 sequential. Sonnet 4.6 verbatim in every announcement (Statute §3 + corrective sub-canon BP079, pearl_98f74effb5d986a5). Each SEG below is self-contained scope; do NOT re-decompose; do NOT ask for clarification before firing; fire SEG-V0144-UI-1 and SEG-V0144-UI-2 in parallel in a single message.
+
+**SEG-V0144-UI-1 (Sonnet 4.6):** Set Electron default zoom to 1.15 across ALL BrowserWindows. In `src/main/index.ts` (or wherever BrowserWindow instances are constructed), locate ALL window constructors: `mainWindow`, `overlayWindow`, `moneyPennyWindow`, `dashboardWindow`, `hearthConjunctionWindow`, and any others present. Set `zoomFactor: 1.15` in each window's `webPreferences` object — OR call `window.webContents.setZoomFactor(1.15)` in `did-finish-load` handlers if that pattern is already used. Prefer `webPreferences.zoomFactor` (set-once, no event handler). Additionally: add a zoom control to Settings → Appearance — dropdown with options 100% / 110% / 115% (default) / 120% / 125%. Persist chosen value via `electron-store` or `localStorage` under key `ui.zoomFactor`; on change, call `webContents.setZoomFactor()` on all active windows. Deliver: commit SHA + before/after screenshot showing visibly larger chrome (reference `C:\Users\Administrator\Pictures\BeanSprouts\Screenshot 2026-06-10 195452.png` as the "before" baseline).
+
+**SEG-V0144-UI-2 (Sonnet 4.6):** Diagnose and fix the wrong/missing icon next to "M" in the MnemosyneC title bar. Inspect three surfaces: (a) `electron-builder.json` or `package.json` `build.win.icon` path — does the referenced .ico file exist and contain valid layers (16×16, 32×32, 256×256)? (b) Renderer-side title bar component (likely `src/renderer/components/AppHeader.tsx` or similar; search codebase for the element rendering the "M" letter + adjacent icon) — does it render an `<img>` or SVG with a broken/wrong `src`? (c) `build/` and `assets/` directories — does `MnemosyneC.ico` exist with RoseBush mark + Dr. MnemosyneC elephant? Fix whichever surface is broken. If the .ico is missing or incomplete, generate it from existing RoseBush + elephant source assets (canon: BP078 `reference_feather_system_canon`, BP073 `pearl_bp073_dr_mnemosynec_elephant`). Deliver: commit SHA + screenshot of fixed title bar showing proper icon + note of root cause surface (a/b/c).
+
+When both UI-1 and UI-2 return, run sequential synthesis:
+
+**SEG-V0144-VERIFY (Sonnet 4.6):** Install v0.1.44 packaged build (NOT source-run — packaged install required per `canon_actual_runtime_verify_for_runtime_bugs_bp078`). Capture and deliver screenshots of ALL FOUR: (a) welcome/chrome at new larger zoom — readable title bar text and nav tabs; (b) title bar showing correct icon (no placeholder); (c) Just use it → Heavy → no-crash state preserved (regression check vs v0.1.43); (d) "Learn how it works" still functional (regression check). HARD BINDING per `feedback_ux_seg_screenshot_mandatory_bp078` — source-verify alone does NOT close UX-touching work.
+
+**SEG-V0144-SHIP (Sonnet 4.6):** Bump version to `v0.1.44` in `package.json` (and any other version references: `electron-builder.json`, renderer display strings). Build packaged Windows installer. Compute SHA-256 of the resulting `.exe`. Create DRAFT GitHub Release tagged `v0.1.44` with installer attached + SHA-256 in release notes. Update Cephas download page to reference v0.1.44 (commit + deploy to all 3 Firebase targets). Append Yoke-return `## RESPONSE` block to `BISHOP_DROPZONE\01_KnightPrompts\PROMPT_KNIGHT_BP079_V0144_UI_SCALE_AND_ICON_2026-06-10.md` including: per-SEG commit SHAs, all VERIFY screenshots (4×), v0.1.44 installer SHA-256, DRAFT GitHub Release URL, Cephas live URL confirmation, any Truth-Always open obligations.
+
+Timing note for mesh test: Founder is testing mesh peer discovery on v0.1.43 (M2 + M3 install). Coordinate before replacing DRAFT v0.1.43 with v0.1.44 — do not overwrite v0.1.43 DRAFT until Founder confirms mesh test complete or explicitly clears the swap.
+
+If any SEG announces "Sonnet 4.5" or other version-variant in narration: STOP, fix the announcement, re-fire. Violation of corrective sub-canon BP079.
+
+Yoke-return: append `## RESPONSE` block to `BISHOP_DROPZONE\01_KnightPrompts\PROMPT_KNIGHT_BP079_V0144_UI_SCALE_AND_ICON_2026-06-10.md`.
+
+---

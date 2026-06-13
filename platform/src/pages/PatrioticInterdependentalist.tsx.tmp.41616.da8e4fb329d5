@@ -1,0 +1,127 @@
+/**
+ * Patriotic Interdependentalist — Philosophy page for Craig Newmark / Red Carpet.
+ * Route: /about/patriotic-interdependentalist
+ * SEO: title, meta description. data-xray-id on sections.
+ */
+
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { PortalPageLayout } from '@/components/PortalPageLayout';
+
+export default function PatrioticInterdependentalist() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    document.title = "Patriotic Interdependentalist | Liana Banyan";
+    const meta = document.querySelector('meta[name="description"]');
+    if (meta) meta.setAttribute("content", "A political philosophy for the platform age. Not left or right. A more effective team. Learn how interdependence powers a cooperative digital platform.");
+  }, []);
+
+  return (
+    <PortalPageLayout>
+        <div className="container mx-auto max-w-3xl px-4 py-12">
+          {/* Hero */}
+          <section className="text-center py-12" data-xray-id="patriotic-interdependentalist-hero">
+            <h1 className="text-3xl md:text-4xl font-bold tracking-tight">
+              Patriotic Interdependentalist
+            </h1>
+            <p className="text-lg text-muted-foreground mt-2">
+              A Political Philosophy for the Platform Age
+            </p>
+            <blockquote className="mt-8 text-muted-foreground italic border-l-4 border-primary pl-4">
+              &ldquo;The eye cannot say to the hand, &lsquo;I have no need of you,&rsquo; nor again the head to the feet, &lsquo;I have no need of you.&rsquo;&rdquo;
+              <footer className="mt-2 not-italic text-sm">— 1 Corinthians 12:21</footer>
+            </blockquote>
+          </section>
+
+          {/* Section 1 */}
+          <section className="py-8" data-xray-id="pi-section-1">
+            <h2 className="text-2xl font-semibold mb-4">What is a Patriotic Interdependentalist?</h2>
+            <p className="text-muted-foreground leading-relaxed">
+              A Patriotic Interdependentalist believes that individual agency is preserved and amplified through structured mutual obligation. This is <em>not</em> collectivism, which subordinates individual agency to group directives. Interdependence preserves your freedom to act — it acknowledges that your actions create value when they are connected to a community that acts back.
+            </p>
+            <p className="text-muted-foreground leading-relaxed mt-4">
+              &ldquo;Patriotic&rdquo; because this is an American project built on American civic ideals: voluntary association, democratic governance, equal access, and the belief that a rising tide should lift all boats — not just the yachts.
+            </p>
+          </section>
+
+          {/* Section 2 */}
+          <section className="py-8" data-xray-id="pi-section-2">
+            <h2 className="text-2xl font-semibold mb-4">Not Left or Right. A More Effective Team.</h2>
+            <div className="grid md:grid-cols-3 gap-4">
+              <Card>
+                <CardContent className="pt-4">
+                  <h3 className="font-medium mb-2">Individualism</h3>
+                  <p className="text-sm text-muted-foreground">&ldquo;I don&apos;t need you.&rdquo; Every person for themselves. Markets solve everything.</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="pt-4">
+                  <h3 className="font-medium mb-2">Collectivism</h3>
+                  <p className="text-sm text-muted-foreground">&ldquo;You must serve the group.&rdquo; The group decides for everyone. Central planning solves everything.</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="pt-4">
+                  <h3 className="font-medium mb-2">Interdependence</h3>
+                  <p className="text-sm text-muted-foreground">&ldquo;We&apos;re stronger together, and you keep your name.&rdquo; The group enables each person. Cooperative structures solve what markets and governments won&apos;t.</p>
+                </CardContent>
+              </Card>
+            </div>
+          </section>
+
+          {/* Section 3 */}
+          <section className="py-8" data-xray-id="pi-section-3">
+            <h2 className="text-2xl font-semibold mb-4">The Body Has Many Parts</h2>
+            <p className="text-muted-foreground leading-relaxed">
+              The oldest argument for interdependence comes from 1 Corinthians 12:21–26: the body has many parts; each part matters; when one suffers, all suffer; when one is honored, all rejoice. We present this not as preaching but as the philosophical root of the cooperative model — a model that predates the nation-state and outlives it.
+            </p>
+          </section>
+
+          {/* Section 4 */}
+          <section className="py-8" data-xray-id="pi-section-4">
+            <h2 className="text-2xl font-semibold mb-4">From Philosophy to Platform</h2>
+            <ul className="list-disc list-inside space-y-2 text-muted-foreground">
+              <li><strong className="text-foreground">Cost+20%</strong>: Every transaction funds the commons — not a corporation, not a government, but the infrastructure you use.</li>
+              <li><strong className="text-foreground">Marks</strong>: Effort creates value. You can&apos;t buy your way in. You participate your way in.</li>
+              <li><strong className="text-foreground">10-Person Cap</strong>: You matter to exactly 10 people, and they matter to you. That&apos;s a neighborhood, not a corporation.</li>
+              <li><strong className="text-foreground">Portable Reputation</strong>: Your work is yours. The platform verifies it; you own it.</li>
+              <li><strong className="text-foreground">Harper Guild</strong>: Truth-tellers who answer to the community, not to management.</li>
+            </ul>
+          </section>
+
+          {/* Section 5 */}
+          <section className="py-8" data-xray-id="pi-section-5">
+            <h2 className="text-2xl font-semibold mb-4">Standing on Adler&apos;s Shoulders</h2>
+            <p className="text-muted-foreground mb-4">
+              The Founder&apos;s VFW essay contest (&ldquo;Democracy: The Vanguard of Freedom,&rdquo; 2nd place) drew on Mortimer Adler&apos;s &ldquo;Six Great Ideas.&rdquo; Each maps to a platform principle:
+            </p>
+            <ul className="space-y-2 text-muted-foreground">
+              <li><strong className="text-foreground">Truth</strong> → Harper Guild, Reviewer Pipeline, SEC-safe language</li>
+              <li><strong className="text-foreground">Goodness</strong> → Cost+20% floor, no extraction, service to community</li>
+              <li><strong className="text-foreground">Beauty</strong> → Hexel design language, craft over commodity</li>
+              <li><strong className="text-foreground">Liberty</strong> → Portable reputation, no lock-in, you own your data</li>
+              <li><strong className="text-foreground">Equality</strong> → Equal membership ($5/year), Marks earned not bought</li>
+              <li><strong className="text-foreground">Justice</strong> → Democratic governance, Areopagus council, transparent rules</li>
+            </ul>
+          </section>
+
+          {/* Section 6 */}
+          <section className="py-8" data-xray-id="pi-section-6">
+            <h2 className="text-2xl font-semibold mb-4">Join the Conversation</h2>
+            <p className="text-muted-foreground leading-relaxed mb-6">
+              This isn&apos;t a manifesto. It&apos;s a working hypothesis. We&apos;re building it in public, testing it with real communities, and adjusting as we learn. If this resonates, come see how it works.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <Button onClick={() => navigate("/welcome")}>See the Platform</Button>
+              <Button variant="outline" onClick={() => navigate("/cephas")}>
+                Read the Academic Papers
+              </Button>
+            </div>
+          </section>
+        </div>
+      </PortalPageLayout>
+  );
+}

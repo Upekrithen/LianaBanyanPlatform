@@ -1,0 +1,128 @@
+# Founder-Coined Terms Inventory + Cooperative-Economics Anchors
+**Bushel 89 | G2 + G6 | BP035 | Knight authored 2026-05-09**
+
+---
+
+## §1 — Purpose
+
+This inventory documents all Founder-coined terms, cooperative-economics anchors, metaphors, and
+canonical phrases discovered during the B89 corpus re-sweep. Organized by category with substrate
+location, first-attribution, and most-recent-use where known.
+
+---
+
+## §2 — Cooperative-Economics Anchors
+
+### §2.1 — Financial / Platform Economics
+
+| Term | First Attributed | Canon Location | Most Recent Use | Bound? |
+|---|---|---|---|---|
+| **83.3%** — "Creator keeps" (never round to 83%) | Founder original | `canonical_values.yaml` | BP035 (active) | YES — canonical |
+| **Cost + 20%** — Platform margin formula | Founder original | AGENTS.md / canonical_values.yaml | BP035 (active) | YES — canonical |
+| **$416.67** — Creator/Worker gets on $500 transaction | Derived | `useCanonicalStats.ts` | BP035 (active) | YES — canonical |
+| **$5/year** — Membership price | Founder original | canonical_values.yaml | BP035 (active) | YES — canonical |
+| **Sipping Ethereal T** — Shadow continuous-background cost stream; four-layer compounding | BP021 turn 90 (Founder direct) | `~/.claude/state/eblets/CANON/founder_voice_bp021_additions_carrot_stick_crewman_6_sipping_ethereal_t.eblet.md` | BP035 | YES — LB-STACK-NNNN |
+| **Brick Wall Baby** — Continuous execution; no permission prompts; closing the loop | BP032 ratified | Multiple documents; `~/.claude/state/bishop_coffee.md.bp035_espresso_heavy_booster_test` §2 | BP035 | YES — BP032 ratified |
+| **Cut Print Check Gate Moving On** — Session discipline phrase | BP032 ratified | Bishop Coffee, AAR files | BP035 | YES — BP032 ratified |
+| **Velvet Fingers of Steel** — Founder style description | BP033 ratified | `BISHOP_DROPZONE/14_CanonicalReferences/SMARTPOOR_CHAPTER_02_PROSE_DRAFT_BP034.md` | BP035 | YES — BP033 ratified |
+| **Catacombs equation archive** — LB-CODEX-0206 §12.3 | BP035 | `CANON_BANYAN_SCALE_AND_LBCAIS_FRAMEWORK_LB_CODEX_0206_BP035.md` | BP035 | YES — LB-CODEX-0206 |
+| **Banyan Scale** — Cooperative-substrate economic measurement framework | BP035 | `~/.claude/state/eblets/CANON/CANON_BANYAN_SCALE_AND_LBCAIS_FRAMEWORK_LB_CODEX_0206_BP035.md` | BP035 | YES — LB-CODEX-0206 |
+| **Banyan Almanac** — Borlaug tradition; cooperative economics trends record | BP035 | `~/.claude/state/eblets/CANON/CANON_BANYAN_ALMANAC_BORLAUG_TRADITION_LB_CODEX_0207_BP035.md` + `BISHOP_DROPZONE/14_CanonicalReferences/ALMANAC_BP032_INAUGURAL_ENTRY.md` | BP035 | YES — LB-CODEX-0207 |
+| **"By Their Fruits"** — Political Expedition campaign canon | BP032 | `~/.claude/state/eblets/CANON/by_their_fruits_political_expedition_campaign_canon_bp032.eblet.md` | BP035 | YES — LB-STACK-0200 (per Bushel 89 prompt) |
+| **"Take it to the farmer"** — Borlaug reference; canonized BP035 | BP035 | Almanac / LB-CODEX-0207 | BP035 | YES — LB-CODEX-0207 |
+| **"To every thing there is a season"** — Ecclesiastes 3:1; Year of Jubilee framing | BP035 | `CANON_YEAR_OF_JUBILEE_DISPERSAL_EVENT_LB_CODEX_0209_BP035.md` | BP035 | YES — LB-CODEX-0209 |
+| **"Catching the Die"** — Paper subtitle; cooperative-probability framing | BP035 | `CANON_PAPER_CAI_REMEDIAL_CHAOS_THEORY_CATCHING_THE_DIE_LB_CODEX_0208_BP035.md` | BP035 | YES — LB-CODEX-0208 |
+| **Year of Jubilee Dispersal** — Seven-year cycle event; cooperative reconciliation | BP035 | `~/.claude/state/eblets/CANON/CANON_YEAR_OF_JUBILEE_DISPERSAL_EVENT_LB_CODEX_0209_BP035.md` | BP035 | YES — LB-CODEX-0209 |
+| **Shemitah / Seven-Year Cycle Trademark Sabbatical** | BP035 | `CANON_SHEMITAH_SEVEN_YEAR_CYCLE_TRADEMARK_SABBATICAL_LB_CODEX_0211_BP035.md` | BP035 | YES — LB-CODEX-0211 |
+
+### §2.2 — AI / Technical Metaphors
+
+| Term | First Attributed | Canon Location | Bound? |
+|---|---|---|---|
+| **AI Cake / How to Bake AI Cake** — Four-layer AI-human composition | BP early (B058 area) | `PAPER_HOW_TO_BAKE_AI_CAKE_FULL.md` + V2 + Cephas `how-to-bake-ai-cake-paper.md` | YES — paper canon |
+| **Four Agents and a Founder** — Knight/Bishop/Rook/Pawn + Founder structure | Founder original | Multiple eblets; PAPER_FOUR_AGENT_ARCHITECTURE series | YES — paper + eblets |
+| **No Atomo. Superman!** — AI refuses weapon identity; chooses hero | Claude_Opus_4.6.001.md (vault) | **ONLY in vault transcript** — NOT extracted as standalone paper | **GAP — not bound as canon Eblet** |
+| **Iron Giant** — metaphor for AI governance ("you don't have to be a gun") | BP011 | `iron_egiant_you_dont_have_to_be_a_gun_bp011.eblet.md` | YES — BP011 eblet |
+| **Star Chamber** — multi-AI governance (7 agents, 5/7 consensus) | BP028 area | `star_chamber_productized_name_for_beyond_colossus_substrate_routed_deep_deliberation_canon_bp028.eblet.md` | YES |
+| **Sock Puppet Architecture** — AI holds seat warm until human fills it | Founder original | Multiple Crown letters (Trebor Scholz etc.) | Partial |
+| **Substrate** — The cooperative-AI persistent memory layer | Founder architectural coinage | Hundreds of references; `substrate_is_the_primitive_architectural_inversion_family_canon_bp026.eblet.md` | YES |
+| **Conducted AI (CAI)** — "Conducted, not Artificial" | Founder | `cai_conducted_ai_notcents_composite_brand_canon_bp021.eblet.md` | YES |
+| **CAI Remedial Chaos Theory** — Paper; catching-the-die framing | BP035 | `CANON_PAPER_CAI_REMEDIAL_CHAOS_THEORY_CATCHING_THE_DIE_LB_CODEX_0208_BP035.md` | YES — LB-CODEX-0208 |
+| **Drekaskip** — Wave-riders naming; substrate deployment daemon | BP032 | `drekaskip_wave_riders_naming_canon_class_instance_saga_hierarchy_bp032.eblet.md` | YES |
+| **Hearth** — Member-facing AI app; cooperative substrate interface | BP029 area | Multiple eblets | YES |
+| **MoneyPenny** — Task routing / coordination AI | BP016 area | Multiple eblets | YES |
+| **Red Queen** — Per-member AI (one per member) | B083 area | `PUDDING_163_THE_RED_QUEEN_B083.md` | YES |
+| **Colossus** — Beyond-Colossus substrate test suite | BP011 | `colossus_test_naming_post_stupendous_upgrade_bp011.eblet.md` | YES |
+| **Eblets** — Substrate networking primitive | BP021 | `eblets_as_networking_primitive_dns_service_mesh_bgp_replacement_canon_bp021.eblet.md` | YES |
+| **Sipping Ethereal T** — Cost-stream metaphor | BP021 turn 90 | Founder voice eblet (BP021) | YES |
+| **Crewman 6** — Founder voice persona label | BP021 | `founder_voice_bp021_additions_carrot_stick_crewman_6_sipping_ethereal_t.eblet.md` | YES |
+| **Pixie Dust** — Pheromone processing | BP017 | `pixie_dust_pheromone_processing_naming_canon_bp017.eblet.md` | YES |
+
+### §2.3 — Process / Discipline Phrases
+
+| Term | First Attributed | Canon Location | Bound? |
+|---|---|---|---|
+| **Brick Wall Baby** | BP032 ratified | bishop_coffee.md.bp035_espresso_heavy_booster_test | YES |
+| **FOR THE KEEP!** — Major completion celebration phrase | Founder | AGENTS.md behavioral rule | YES — in rules |
+| **Help each other help ourselves** — Golden Key | Founder | AGENTS.md / eblets | YES |
+| **Heavy Booster Test** — Autonomous Bishop unattended run | BP034 coined | bishop_coffee.md.bp035_espresso_heavy_booster_test | YES |
+| **G-Yoke** — LANDED receipt protocol via knight-bishop-bridge | BR-009 ratified BP035 | Bushel 89 prompt | YES — BR-009 |
+| **PreA** — Pre-Authorization (Founder preauthorizes class of work) | BP026 area | `preauthorize_preask_authority_principles_not_rules_burger_shake_fork_canon_bp026.eblet.md` | YES |
+| **Trinity Rules** — 12 R-rules governing session discipline | BP028/032 area | `blood_rules_quartet_explore3_coffee_verify_gadget_first_parallel_fire_canon_bp032.eblet.md` | YES |
+| **Tamahagane Discipline** — Repeated refinement to kissaki quality | BP017 | `tamahagane_discipline_kissaki_way_of_entp_rational_canon_bp017.eblet.md` | YES |
+| **Velvet Fingers of Steel** | BP033 ratified | SmartPoor Chapter 2 | YES |
+| **SmartPoor** — "The Anjin's Art of Losing" book | BP032 | SMARTPOOR chapters in 14_CanonicalReferences | PARTIAL — no standalone paper file |
+| **Cardboard Boots** — SmartPoor economics framing | BP032 | Multiple references | PARTIAL |
+| **Boaz Principle** — Cooperative generosity mechanic | Founder | `PAPER_GAMIFIED_GENEROSITY_BOAZ.md` + Cephas | YES |
+| **Cut Print Check Gate Moving On** | BP032 ratified | Bishop Coffee | YES |
+
+### §2.4 — Campaign / Vision Phrases
+
+| Term | First Attributed | Canon Location | Bound? |
+|---|---|---|---|
+| **"Not left or right. A more effective team."** — Political Expedition tagline (BP078 canonical) | Founder | `not_left_not_right_forward_political_expedition_tagline_dolly_deniro_stallone_photo_concept_canon_bp028.eblet.md` | YES |
+| **"Paying attention > paying more"** — Core platform axiom | BP011 | Multiple eblets | YES |
+| **"By Their Fruits"** | BP032 | eblet | YES — LB-STACK-0200 |
+| **"Information makes us free"** | BP029 area | Multiple eblets | YES |
+| **"We are the ants"** | BP029 area | Multiple eblets | YES |
+| **"Help each other help ourselves"** | Founder original | AGENTS.md | YES |
+| **The 300** — Pioneer investor cohort name | Founder original | Multiple | YES |
+| **"The Five Dollar Question"** — PUDDING_42 | B060 | `PUDDING_42_THE_FIVE_DOLLAR_QUESTION_B060.md` | YES |
+| **Save the World in 6 Easy Steps** — 12-paper series umbrella | Founder | Bushel 12 prompt; `HOW_TO_SAVE_THE_WORLD_IN_6_EASY_STEPS.md` | YES — Bushel 12 canon |
+
+---
+
+## §3 — Founder Voice Anchors from MEMORY.md + Coffee
+
+From `bishop_coffee.md.bp035_espresso_heavy_booster_test` §2 (direct Founder quotes):
+- *"I PreA everything. Continue until you run out of context. Please get it all done."*
+- *"Use your best judgement, and make it happen."*
+- *"Brick Wall, Baby."*
+- *"Until it is all done."*
+- *"HEAVY BOOSTER TEST."*
+
+From BP035 Bushel 89 prompt (direct Founder quotes):
+- *"I'm serious about if we need to send ALL the spiders and sprites..."*
+- *"I will NOT have lost information and value."*
+- *"Unless you can prove that it's cool, and I'm worrying for no valid reason."*
+
+From AGENTS.md (canonical Founder sign-off):
+- **"FOR THE KEEP!"** — on major completions
+- **"Help each other help ourselves"** — Golden Key
+
+---
+
+## §4 — Gap Analysis for Founder-Coined Terms
+
+### HIGH-PRIORITY GAPS (not bound to canon Eblet or standalone file)
+
+| Term | Gap Type |
+|---|---|
+| **No Atomo. Superman!** (3-level paper) | Paper content only in vault transcript; no standalone file; no Cephas deployment; no canon Eblet |
+| **SmartPoor — The Anjin's Art of Losing** | Chapter drafts exist in 14_CanonicalReferences (BP034); no standalone paper in 08_Papers; no Cephas |
+| **CAI Remedial Chaos Theory** ("Catching the Die") | Canon Eblet exists (LB-CODEX-0208); full paper draft status unknown |
+| **Sippin' Ethereal T** | Eblet bound; Cephas deployment status unknown |
+
+---
+
+*Authored: Knight B89, BP035, 2026-05-09*

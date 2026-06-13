@@ -14,6 +14,7 @@ import { Layer2UseIt } from './Layer2UseIt';
 import { Layer2ProveIt } from './Layer2ProveIt';
 // SEG-V0145-2: Share modal
 import { ShareMnemosyneC } from './ShareMnemosyneC';
+import { CommunityConnectButton } from './CommunityConnectButton';
 
 export const LS_ONBOARDING_COMPLETE = 'mnemosynec_onboarding_complete';
 const MESH_KEY = 'mnemosynec_mesh_enabled';
@@ -256,6 +257,11 @@ export function WelcomeView({ onComplete }: WelcomeViewProps): React.ReactElemen
 
         {/* SEG-S-9: Mesh checkbox visible in Stage A */}
         {meshCheckbox}
+
+        {/* SEG-3 v0.1.55: COMMUNITY-CONNECT — seed peer handshake via WAN relay */}
+        <div style={{ marginTop: 12 }}>
+          <CommunityConnectButton />
+        </div>
 
         {/* SEG-V0145-2: Share footer link */}
         <div style={{

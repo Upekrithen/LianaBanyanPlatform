@@ -1,5 +1,5 @@
-// MnemosyneC · v0.1.51 · BP080 · 2026-06-11
-// §2 Truth-Always · §3 Sonnet 4.6 · Founder-ratified DRAFT
+// MnemosyneC · v0.1.56 · BP081 · 2026-06-12
+// §2 Truth-Always · §3 Sonnet 4.6 · Founder-ratified
 //
 // LeanGauntletTab — Gauntlet tab for the 3-tab LeanShell.
 // Renders a user-initiated federation panel ABOVE the existing GauntletTab.
@@ -7,6 +7,7 @@
 
 import React, { useState, useCallback } from 'react';
 import { GauntletTab } from './GauntletTab';
+import { CueDeckShareTab } from './CueDeckShareTab';
 import type { AuthState } from '../amplify.d';
 
 interface LeanGauntletTabProps {
@@ -32,8 +33,7 @@ function LeanFederationPanel() {
   const [lanPeers, setLanPeers] = useState<PeerSummary[]>([]);
   const [wanPeers, setWanPeers] = useState<PeerSummary[]>([]);
   const [ownId, setOwnId] = useState<string>('');
-  const [connectEmail, setConnectEmail] = useState('');
-  const [showEmailForm, setShowEmailForm] = useState(false);
+  const [showCueDeckTab, setShowCueDeckTab] = useState(false);
   const [connectStatus, setConnectStatus] = useState<string | null>(null);
   const [lanIp, setLanIp] = useState<string>('');
 
@@ -80,23 +80,6 @@ function LeanFederationPanel() {
 
     setScanState('done');
   }, [scanState]);
-
-  const handleEmailConnect = useCallback(async () => {
-    if (!connectEmail.trim()) return;
-    setConnectStatus('Connecting…');
-    try {
-      const result = await window.amplify?.federationAcceptInvite?.(connectEmail.trim());
-      if (result?.success) {
-        setConnectStatus(`Connected to ${result.peerName ?? 'peer'} ✓`);
-        setShowEmailForm(false);
-        setConnectEmail('');
-      } else {
-        setConnectStatus(result?.error ?? 'Connection failed. Check the Invite Token and try again.');
-      }
-    } catch (e) {
-      setConnectStatus('Connection error. Please try again.');
-    }
-  }, [connectEmail]);
 
   const shortId = ownId ? ownId.slice(0, 8) : '—';
   const totalPeers = lanPeers.length + wanPeers.length;
@@ -234,63 +217,26 @@ function LeanFederationPanel() {
             </button>
 
             <button
-              onClick={() => setShowEmailForm((v) => !v)}
+              onClick={() => setShowCueDeckTab((v) => !v)}
               style={{
-                background: 'none',
+                background: showCueDeckTab ? '#0d1b2a' : 'none',
                 color: '#6ee7b7',
-                border: '1px solid #1e4038',
+                border: `1px solid ${showCueDeckTab ? 'rgba(110,231,183,0.35)' : '#1e4038'}`,
                 borderRadius: 5,
                 padding: '5px 12px',
                 fontSize: 12,
+                fontWeight: 600,
                 cursor: 'pointer',
                 fontFamily: 'system-ui, sans-serif',
                 outline: 'none',
               }}
             >
-              Connect via Invite Token
+              Connect Via Invite Token Availability
             </button>
           </div>
 
-          {/* Email connect form */}
-          {showEmailForm && (
-            <div style={{ marginTop: 10, display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap' as const }}>
-              <span style={{ fontSize: 11, color: '#64748b', minWidth: 200 }}>
-                Paste the Invite Token from the other machine:
-              </span>
-              <input
-                value={connectEmail}
-                onChange={(e) => setConnectEmail(e.target.value)}
-                placeholder="mnemo-invite-…"
-                onKeyDown={(e) => e.key === 'Enter' && handleEmailConnect()}
-                style={{
-                  background: '#111827',
-                  border: '1px solid #1e2a38',
-                  borderRadius: 4,
-                  color: '#f0fdf4',
-                  fontSize: 12,
-                  padding: '4px 8px',
-                  outline: 'none',
-                  width: 180,
-                }}
-              />
-              <button
-                onClick={handleEmailConnect}
-                style={{
-                  background: '#10b981',
-                  color: '#fff',
-                  border: 'none',
-                  borderRadius: 4,
-                  padding: '4px 10px',
-                  fontSize: 12,
-                  cursor: 'pointer',
-                  fontFamily: 'system-ui, sans-serif',
-                  outline: 'none',
-                }}
-              >
-                Connect
-              </button>
-            </div>
-          )}
+          {/* Cue Deck Cards · Share & Receive tab */}
+          {showCueDeckTab && <CueDeckShareTab />}
 
           {connectStatus && (
             <div style={{ marginTop: 6, fontSize: 11, color: connectStatus.includes('✓') ? '#22c55e' : '#94a3b8' }}>

@@ -1998,6 +1998,9 @@ export function SettingsTab({
       {/* Auto-Prepare FULL Upgrade */}
       <AutoPreparePullPanel />
 
+      {/* MCP Substrate Bridge */}
+      <McpSubstrateBridgePanel />
+
       {/* Substrate Mode */}
       <section ref={setSectionRef('substrate') as React.RefCallback<HTMLElement>} style={s.section} id="settings-section-substrate">
         <div style={s.sectionHeader}>Substrate Mode</div>
@@ -2360,6 +2363,189 @@ function AutoPreparePullPanel() {
           <div style={{ marginTop: 8, fontSize: 10, color: '#4ade80', fontWeight: 600 }}>
             Google's Gemma 4 12B is ready on this machine. Open AI Tier above to activate it.
           </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+// ─── BP081 K-2: MCP Substrate Bridge Panel ────────────────────────────────────
+
+interface McpStatus {
+  running: boolean;
+  port: number | null;
+  connectedClients: number;
+  recentCalls: Array<{ tool: string; ts: number; clientId: string }>;
+}
+
+function McpSubstrateBridgePanel() {
+  const [status, setStatus] = React.useState<McpStatus | null>(null);
+  const [tokenPreview, setTokenPreview] = React.useState<string | null>(null);
+  const [copied, setCopied] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    let mounted = true;
+
+    async function fetchStatus() {
+      try {
+        const s = await (window.amplify as any)?.mcpGetStatus?.();
+        if (mounted && s) setStatus(s);
+      } catch { /* not available */ }
+      if (mounted) setLoading(false);
+    }
+
+    async function fetchToken() {
+      try {
+        const t = await (window.amplify as any)?.mcpGetAuthToken?.();
+        if (mounted && typeof t === 'string' && t.length > 0) {
+          setTokenPreview(t.slice(0, 8) + '...');
+        }
+      } catch { /* not available */ }
+    }
+
+    fetchStatus();
+    fetchToken();
+
+    const interval = setInterval(fetchStatus, 5000);
+    return () => {
+      mounted = false;
+      clearInterval(interval);
+    };
+  }, []);
+
+  function handleCopyToken() {
+    (async () => {
+      try {
+        const t = await (window.amplify as any)?.mcpGetAuthToken?.();
+        if (typeof t === 'string') {
+          await navigator.clipboard.writeText(t);
+          setCopied(true);
+          setTimeout(() => setCopied(false), 2000);
+        }
+      } catch { /* noop */ }
+    })();
+  }
+
+  const dotStyle: React.CSSProperties = {
+    display: 'inline-block',
+    width: 8,
+    height: 8,
+    borderRadius: '50%',
+    marginRight: 6,
+    background: status?.running ? '#4ade80' : '#ef4444',
+    boxShadow: status?.running ? '0 0 6px #4ade80' : 'none',
+    verticalAlign: 'middle',
+  };
+
+  return (
+    <section style={styles.section} id="settings-section-mcp-bridge">
+      <div style={styles.sectionHeader}>MCP Substrate Bridge</div>
+      <div style={styles.card}>
+        {loading ? (
+          <div style={{ fontSize: 10, color: '#64748b' }}>Loading MCP status...</div>
+        ) : (
+          <>
+            {/* Status row */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                <div style={{ fontSize: 11, color: '#cbd5e1', display: 'flex', alignItems: 'center' }}>
+                  <span style={dotStyle} />
+                  <span style={{ fontWeight: 600, marginRight: 4 }}>
+                    {status?.running ? 'Running' : 'Offline'}
+                  </span>
+                </div>
+                {status?.running && (
+                  <div style={{ fontSize: 10, color: '#64748b' }}>
+                    Port: <span style={{ color: '#93c5fd', fontFamily: 'monospace' }}>
+                      {status.port ?? 11456}
+                    </span>
+                  </div>
+                )}
+                <div style={{ fontSize: 10, color: '#64748b' }}>
+                  Clients: <span style={{ color: '#93c5fd' }}>{status?.connectedClients ?? 0}</span>
+                </div>
+              </div>
+              <div style={{ fontSize: 9, color: '#475569', fontStyle: 'italic' }}>
+                5 tools registered
+              </div>
+            </div>
+
+            {/* Auth token row */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+              <div style={{ fontSize: 10, color: '#94a3b8', flex: 1 }}>
+                Bearer token:{' '}
+                <span style={{ fontFamily: 'monospace', color: '#e2e8f0', letterSpacing: 1 }}>
+                  {tokenPreview ?? '—'}
+                </span>
+              </div>
+              <button
+                onClick={handleCopyToken}
+                style={{
+                  fontSize: 9,
+                  padding: '3px 10px',
+                  borderRadius: 4,
+                  border: '1px solid rgba(148,163,184,0.3)',
+                  background: copied ? 'rgba(74,222,128,0.15)' : 'rgba(51,65,85,0.6)',
+                  color: copied ? '#4ade80' : '#94a3b8',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease',
+                  fontWeight: copied ? 700 : 400,
+                  minWidth: 54,
+                  textAlign: 'center',
+                }}
+              >
+                {copied ? 'Copied!' : 'Copy'}
+              </button>
+            </div>
+
+            {/* Recent calls */}
+            <div style={{ fontSize: 10, color: '#64748b', marginBottom: 6, fontWeight: 600, textTransform: 'uppercase', letterSpacing: 0.5 }}>
+              Recent Calls
+            </div>
+            {!status?.recentCalls?.length ? (
+              <div style={{ fontSize: 10, color: '#475569', fontStyle: 'italic' }}>
+                No calls yet — connect a client to /mcp on port {status?.port ?? 11456}
+              </div>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                {status.recentCalls.map((call, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      fontSize: 9,
+                      padding: '3px 6px',
+                      borderRadius: 4,
+                      background: 'rgba(30,41,59,0.6)',
+                      border: '1px solid rgba(51,65,85,0.4)',
+                    }}
+                  >
+                    <span style={{ fontFamily: 'monospace', color: '#93c5fd' }}>{call.tool}</span>
+                    <span style={{ color: '#475569' }}>
+                      {new Date(call.ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Endpoint hint */}
+            <div style={{
+              marginTop: 10,
+              fontSize: 9,
+              color: '#334155',
+              padding: '5px 8px',
+              borderRadius: 4,
+              background: 'rgba(15,23,42,0.4)',
+              fontFamily: 'monospace',
+              letterSpacing: 0.3,
+            }}>
+              http://127.0.0.1:{status?.port ?? 11456}/mcp — add to Claude Desktop or Cursor MCP config
+            </div>
+          </>
         )}
       </div>
     </section>

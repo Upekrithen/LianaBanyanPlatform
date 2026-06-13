@@ -1,0 +1,428 @@
+# Food Truck Activation Kit C — Founder Ops and Attribution Ledger
+
+**Bishop SEG-KIT-C | Authored: 2026-06-10 | Status: READY-FOR-RATIFY**
+**Applies to: BP079 floor mode while Knight Wave A+B ship**
+**Statute bindings: §3 Sonnet 4.6, §5 83.3% doctrine, BP078 three-currency-no-fiat, Truth-Always**
+
+---
+
+## Purpose
+
+Founder needs operational infrastructure that works TODAY, before Knight ships the `promotion_attributions` table (Wave A) and the in-app Cue Card generator (Wave B). This kit gives Founder:
+
+- A working Stripe payment link he can hand a food-truck owner on the sidewalk
+- A manual attribution ledger so introducer credit is captured the moment the conversation happens
+- Protocols for Bishop to maintain that ledger across sessions
+- A backfill SEG to run the day Wave A goes green
+
+Once Wave A+B land, this kit becomes the import source for the first N attributions. It does not become obsolete; it becomes the audit trail.
+
+---
+
+## §1 — Stripe Dashboard Setup (Floor-Mode Checkout Link)
+
+### What you are building
+
+Two Stripe products and one Payment Link. The $5/year membership is what the food-truck owner pays to join Liana Banyan as a member. The weekly meal-prep subscription is a separate product the food-truck owner sells to LB members who subscribe to that merchant's service. These are two distinct flows on two distinct payment surfaces. Do not conflate them.
+
+**$5/year product = the food-truck owner paying LB to join**
+**Weekly meal-prep product = LB members paying the food-truck owner for food**
+
+The floor-mode Payment Link you hand the food-truck owner covers the $5/year membership only. The meal-prep subscription product is a separate Stripe product you configure in advance so that once the owner is a member, Knight Wave B can wire their merchant node and issue them a Cue Card pointing subscribers to THAT product.
+
+---
+
+### Step 1 — $5/Year Membership Product
+
+Navigate in Stripe dashboard: **Products** (left sidebar) > **+ Add product**
+
+Fill in:
+
+- **Name:** `Liana Banyan Annual Membership`
+- **Description:** `Annual membership for Workers, Builders, and Creators on the Liana Banyan platform. Includes full platform access, local AI memory, and cooperative attribution rights.`
+- **Statement descriptor:** `LIANA BANYAN MEMBERSHIP` (Stripe allows up to 22 characters; Founder confirms exact truncation behavior in dashboard under Account Settings > Business Settings > Statement descriptor)
+- **Pricing model:** Recurring
+- **Billing period:** Yearly
+- **Price:** $5.00 USD
+- **Tax behavior:** Select "Exclusive" (tax is added on top of $5.00). Then enable Stripe Tax (Products > Tax settings) and set the product's tax code to `txcd_10000000` (general digital services) or Founder confirms with accountant. Auto-tax handles multi-state obligations automatically at this price point.
+
+**Metadata to add on the product record** (Products > [product name] > Metadata section):
+
+```
+platform: liana_banyan
+member_class: general
+attribution_eligible: true
+currency_class_on_signup: Credits
+```
+
+Note: these metadata fields live on the product record, not on individual checkout sessions. Session-level metadata (who the introducer is) is set on the Payment Link in Step 3.
+
+If this product already exists in your Stripe account, skip this step and locate it under Products. Note its Product ID (starts with `prod_`) for reference.
+
+---
+
+### Step 2 — Weekly Meal-Prep Subscription Product
+
+This product is a template you configure once per merchant. You will create a new copy (or a new Price on the same Product) for each food-truck owner who joins.
+
+Navigate: **Products** > **+ Add product**
+
+- **Name template:** `Weekly Meal Prep — [Business Name]` (example: `Weekly Meal Prep — Joe's Rolling Kitchen`)
+- **Description:** `Weekly meal-prep subscription through the Liana Banyan cooperative network. Workers, Builders, and Creators keep 83.3% of every transaction.`
+- **Pricing model:** Recurring
+- **Billing period:** Weekly
+- **Price:** Founder sets based on local market. Suggested starting range for a food-truck operator: $25 to $65/week depending on portion count and region. Do not hardcode a default here; the merchant sets their price and Founder enters it.
+- **Tax behavior:** Exclusive (same rationale as membership product)
+
+**Metadata on the product record:**
+
+```
+platform: liana_banyan
+node_type: food
+merchant_type: food_truck
+business_entity_id: [fill at onboarding, leave blank until merchant has auth.users.id]
+introducer_user_id: [Founder's auth.users.id from Supabase — get this before floor mode opens]
+```
+
+**How to find Founder's auth.users.id:** Knight has access to the Supabase `auth.users` table. Before going to floor mode, ask Knight for a read on `SELECT id FROM auth.users WHERE email = '<founder_email>'` and record it. Alternatively, Founder can find it in the Supabase dashboard: Authentication > Users > locate your account > copy the UUID in the ID column.
+
+Record this UUID somewhere permanent (your MEMORY.md or a pinned note). Every product and payment link you create needs it in metadata.
+
+---
+
+### Step 3 — Stripe Payment Link Generation
+
+This is the link you hand the food-truck owner. It handles the $5/year membership signup.
+
+Navigate: **Payment Links** (left sidebar) > **+ New**
+
+1. **Product selection:** Add the `Liana Banyan Annual Membership` product. Confirm price is $5.00 / year.
+2. **Quantity:** Set to 1, locked (no adjustment by customer).
+3. **Collect customer information:** Enable email collection. This is how you match the Stripe customer to an LB member account later.
+4. **Metadata on this Payment Link:** Stripe allows metadata at the Payment Link level that propagates to every Checkout Session created from the link. Click "Additional options" or "Metadata" depending on your Stripe dashboard version (Founder confirms exact UI label). Add:
+
+```
+introducer_user_id: [Founder's UUID from Step 2]
+business_name_target: [e.g., "Joe's Rolling Kitchen"]
+merchant_type: food_truck
+cue_card_token: floor_mode_[ISO-8601 datetime with colons replaced by hyphens, e.g., floor_mode_2026-06-10T18-45-00Z]
+kit_version: kit_c_bp079
+```
+
+**Note on introducer_user_id:** Get this UUID from Knight before creating your first Payment Link. A Yoke is in flight to retrieve it. See `BISHOP_YOKE_FOUNDER_UUID_2026-06-10.md` in the BISHOP_DROPZONE for the result. Do not proceed to Step 5 without this value populated.
+
+**Metadata limit note (binding Truth-Always constraint):** Stripe enforces a maximum of 50 metadata keys and 500 characters per value on Payment Links and Checkout Sessions. The fields above are well within the key limit. The value for `cue_card_token` plus `introducer_user_id` plus `business_name_target` will not approach 500 characters unless the business name is extremely long. If a future iteration of this kit adds a cue card payload (JSON, encoded content, etc.) to the metadata value, that value WILL hit the 500-character limit and the floor mode will break silently at checkout. At that point, Founder must switch to creating Checkout Sessions via the Stripe API (not the dashboard Payment Link UI) to carry a full payload. This is a known forward constraint; it does not affect the $5 membership floor mode described here.
+
+5. **Usage limit:** If Founder wants this link to be specific to one food-truck owner (single-shot), set "Limit to 1 use" under Advanced options. If Founder wants a reusable link to hand to any food-truck owner (generic introducer attribution), set no limit. The trade-off: a single-shot link gives clean attribution (you know exactly who used it); a no-limit link is simpler to hand out but requires the `business_name_target` metadata to match the correct merchant. Recommended for floor mode: create one Payment Link per merchant conversation. It takes 30 seconds and the attribution is unambiguous.
+
+6. **After-payment redirect:** Under "Confirmation page," select "Redirect to URL" and enter a landing page you control. Until Knight Wave B ships the `CueCardLanding` component, use a static URL such as your current download page (`https://mnemosynec.ai/download` or equivalent) with a query parameter appended for tracking: `?source=floor_mode&kit=c`. The redirect does not need to be functional for attribution to work; attribution is captured at checkout session creation, not at redirect load.
+
+7. **Save and copy the link.** The link format will be `https://buy.stripe.com/[random_id]`. Copy this URL. You will paste it into the attribution ledger in §2 and hand it to the food-truck owner verbally, via text message, or on a physical card.
+
+---
+
+### Step 4 — Tax and Reporting Setup
+
+**Sales tax (for the $5/year membership):** Stripe Tax with "Exclusive" pricing handles this automatically if enabled. The $5 amount is the platform fee; tax is added on top. Founder does not need to configure per-state rates manually. Navigate: Settings > Tax > Enable Stripe Tax, connect your business address, and select automatic tax calculation. Stripe Tax costs 0.5% of transactions in jurisdictions where it calculates tax. On a $5 transaction this is $0.025, negligible.
+
+**Sales tax (for the weekly meal-prep subscription):** The food-truck merchant is the seller of the food subscription, not LB. LB is the platform. LB collects a platform fee (Cost+20% on the merchant's subscription revenue, once Wave B wires this) but does not collect or remit sales tax on food sales. The merchant bears that obligation. LB's platform fee is a B2B service fee, not a retail food sale. Founder should confirm this characterization with an accountant before going beyond floor mode at scale. At the pilot stage (one merchant, one link), the tax exposure is minimal.
+
+**1099 / W-9 for the food-truck merchant:** The food-truck owner, once operating as a merchant node on the platform, is a vendor receiving payments through LB's platform infrastructure. If annual payments to that merchant through LB exceed $600 in a calendar year, LB has a potential 1099-NEC or 1099-K reporting obligation depending on how the payment flow is structured. At the pilot stage and $5/year membership, there is no 1099 obligation on the membership payment itself. The 1099 question becomes live when recurring meal-prep subscription revenue routes through LB and LB remits the merchant's share. Founder should have a W-9 on file for each merchant before that revenue flow begins. Until Wave B is live and routing merchant payments, this is a forward-planning item, not a today item.
+
+**Bookkeeping label convention:** In Stripe, every Payment Link can be tagged with a label visible in your dashboard exports. Use this naming convention in the "Internal note" or "Description" field on the Payment Link:
+
+`LB_FLOOR_MODE | FOOD_TRUCK | [Business Name] | BP079 | [YYYY-MM-DD]`
+
+This makes the transaction identifiable in Stripe CSV exports, in your accounting system, and in the attribution ledger without ambiguity.
+
+---
+
+### Step 5 — Test Link Verification
+
+Before going to floor mode with a live link, verify in Stripe test mode.
+
+1. Toggle Stripe to **Test mode** (top-right toggle in Stripe dashboard, labeled "Test mode").
+2. Create a second Payment Link using the same steps above, but in test mode. The link will start with `https://buy.stripe.com/test_...`.
+3. Open the test link in a browser (incognito window recommended).
+4. Complete a test checkout using Stripe's test card: `4242 4242 4242 4242`, any future expiry, any CVC, any ZIP.
+5. After payment, confirm in Stripe dashboard (still in test mode): **Events** (left sidebar) > find the most recent `checkout.session.completed` event. Click into it and verify:
+   - `metadata.introducer_user_id` is present and matches what you entered
+   - `metadata.merchant_type` is `food_truck`
+   - `metadata.cue_card_token` is present
+   - `customer_email` is captured
+6. Verify the after-payment redirect lands on your target URL (browser tab should show the redirect destination).
+7. Switch back to **Live mode** before using the link with a real food-truck owner. The test-mode link does NOT accept real cards.
+
+If any metadata field is missing in the test event, return to the Payment Link, edit the metadata, and re-test. Do not go live until metadata is confirmed present in the `checkout.session.completed` event object.
+
+---
+
+## §2 — Manual Attribution Ledger
+
+### Ledger File
+
+The ledger Bishop maintains lives at:
+
+`C:\Users\Administrator\Documents\LianaBanyanPlatform\BISHOP_DROPZONE\00_FOUNDER_REVIEW\ATTRIBUTION_LEDGER_BP079.md`
+
+That file is authored separately (below, in this same response). This section describes the schema and update protocol.
+
+---
+
+### Ledger Schema
+
+| Field | Format | Notes |
+|---|---|---|
+| ts_utc | ISO-8601 UTC | Timestamp when card was handed or row was created |
+| introducer | string | "Founder" or LB member handle |
+| merchant_type | enum | `food_truck` / `coffee_shop` / `barber` / `daycare` / `other` |
+| business_name | string | As written on the merchant's card or signage |
+| business_owner_contact | string | Email and/or phone number |
+| stripe_payment_link | URL | The floor-mode link handed to this merchant |
+| stripe_session_id | string | `cs_live_...` or `cs_test_...` — filled after payment |
+| amount_cents | int | 500 for $5.00 membership |
+| currency | enum | `usd` almost always |
+| paid_at_utc | ISO-8601 UTC | Filled after Stripe payment confirmed |
+| attribution_class | enum | `first_signup` / `first_payment` / `recurring_payment` |
+| introducer_credit_class | enum | `Credits` / `Marks` / `Joules` |
+| introducer_credit_amount | numeric | TBD — deferred to Knight Wave B vesting canon implementation |
+| vesting_unlock_at_utc | ISO-8601 UTC | TBD — per canonical vesting window |
+| backfilled_to_promotion_attributions | bool | `false` until Knight Wave A lands, then `true` |
+| backfill_row_id | uuid | `promotion_attributions.id` once backfilled, else blank |
+| notes | string | Anything Founder remembers: follow-up scheduled, dietary specialty, vibe |
+
+---
+
+### Update Protocol (Binding for Bishop Sessions)
+
+**Protocol A — At card handoff (same day Founder has the conversation):**
+
+Bishop adds a new row immediately with the following fields populated:
+- `ts_utc` = now (ISO-8601 UTC at time Bishop authors the row)
+- `introducer` = "Founder" (or the LB member's handle if not Founder)
+- `merchant_type` = as told by Founder
+- `business_name` = as told by Founder
+- `business_owner_contact` = as told by Founder
+- `stripe_payment_link` = the Payment Link URL from §1 Step 3
+
+All other fields are left blank or set to explicit `null`. Do not estimate or prefill fields that are not yet known. Truth-Always applies to every cell in this ledger.
+
+**Protocol B — At Stripe payment confirmation:**
+
+When Founder reports a payment came in (or when Bishop queries Stripe via Knight Yoke per §3), Bishop fills:
+- `stripe_session_id` = from Stripe event
+- `amount_cents` = from Stripe event (should be 500)
+- `currency` = from Stripe event (should be `usd`)
+- `paid_at_utc` = from `checkout.session.completed` event `created` field (convert Unix timestamp to ISO-8601 UTC)
+- `attribution_class` = `first_payment` (for the initial $5 membership)
+
+Do not alter previously confirmed fields when updating.
+
+**Protocol C — At Knight Wave A landing (`promotion_attributions` table live):**
+
+Run the Backfill SEG in §4. That SEG reads the ledger, inserts rows, and returns the `backfill_row_id` values. Bishop then:
+- Sets `backfilled_to_promotion_attributions` = `true` for each row the SEG confirms inserted
+- Sets `backfill_row_id` = the UUID returned by the SEG
+- Does NOT alter any other fields
+
+**Protocol D — Discrepancy handling:**
+
+If a ledger row has a blank `paid_at_utc` but its `ts_utc` is more than 7 days old:
+- Query Stripe (via Knight Yoke) for any checkout session completed using that `stripe_payment_link` in the 7-day window after `ts_utc`
+- If found: execute Protocol B on that row
+- If not found: set `notes` = `"no payment captured at 7d — [ISO-8601 today]; follow up with introducer"` and surface the row to Founder explicitly in session output
+
+Do not silently drop unmatched rows. Every row Founder opens is a real person he spoke to.
+
+---
+
+## §3 — Bishop SEG Update Protocol
+
+**When this runs:** At every Bishop session-open, after Statutes + Coffee, before any other attribution work.
+
+**Step 1 — Scan the ledger for stale open rows.**
+
+Read `ATTRIBUTION_LEDGER_BP079.md`. Identify all rows where `paid_at_utc` is blank and `ts_utc` is more than 24 hours before now (UTC). These are conversations Founder had that have not yet converted.
+
+**Step 2 — For each stale row (24h+ old, unpaid):**
+
+Bishop cannot call the Stripe API directly without credentials. The path is:
+- Compose a Knight Yoke that asks Knight to run the following Stripe API query: `GET /v1/checkout/sessions?payment_link=[stripe_payment_link_id]&limit=10` filtered to sessions created after the row's `ts_utc`.
+- The `stripe_payment_link_id` is the path segment from the Payment Link URL (e.g., from `https://buy.stripe.com/abc123`, the ID is `plink_abc123` — Founder confirms the exact Payment Link ID format in Stripe dashboard under Payment Links > [link] > ID field).
+- Ask Knight to return the raw `id` (session ID), `created` (Unix timestamp), `amount_total`, and `customer_details.email` for any completed sessions.
+
+**Step 3 — If Knight returns a completed session:**
+Execute Protocol B from §2 on that ledger row. Record the session ID and confirm the email matches the merchant contact if possible.
+
+**Step 4 — If Knight returns no completed session and it has been 7 days:**
+Execute Protocol D from §2. Set `notes` to the no-payment-7d string and surface to Founder.
+
+**Step 5 — If Knight returns no completed session and it has been less than 7 days:**
+No action on the row. Note in session output to Founder: "Row for [business_name] is [N] days old, no payment yet, within 7-day window."
+
+**Step 6 — After scanning, report to Founder:**
+- How many rows are in the ledger total
+- How many are paid and backfilled
+- How many are paid but not yet backfilled (waiting for Wave A)
+- How many are open (no payment)
+- How many triggered the 7-day no-payment flag
+
+This report takes fewer than 50 words. Founder gets the ledger state at a glance every session.
+
+**Frequency:** This protocol runs at session-open only, not mid-session, unless Founder explicitly asks for a ledger refresh. Do not spam Knight with Stripe queries multiple times per session.
+
+---
+
+## §4 — Backfill SEG Template (Fire When Wave A Goes Green)
+
+**When to fire this:** The day Knight reports that `promotion_attributions` table is migrated and live in production. Confirm with Knight that the table schema matches what Wave A spec defines before firing. Do not fire against a partial migration.
+
+**How to fire:** Paste the following as a fresh Sonnet 4.6 SEG prompt (new session, no prior context needed). Fill in the bracketed values before firing.
+
+---
+
+**SEG PROMPT — COPY VERBATIM, FILL BRACKETS:**
+
+```
+You are a Sonnet 4.6 SEG executing a one-shot backfill operation.
+Statute: Sonnet 4.6 per §3. Truth-Always. No hallucinated data.
+
+## OBJECTIVE
+
+Read the Liana Banyan attribution ledger and insert a `promotion_attributions` row
+for every ledger entry that has:
+  - paid_at_utc filled (payment confirmed)
+  - backfilled_to_promotion_attributions = false
+
+## INPUTS
+
+Ledger file path:
+  C:\Users\Administrator\Documents\LianaBanyanPlatform\BISHOP_DROPZONE\00_FOUNDER_REVIEW\ATTRIBUTION_LEDGER_BP079.md
+
+Supabase project URL: [FILL: from Knight / Supabase dashboard]
+Supabase service role key: [FILL: from Knight — do not hardcode in any committed file]
+
+## TABLE SCHEMA (promotion_attributions — Wave A canonical)
+
+[FILL: Knight provides exact column names and types from the migration file before this SEG fires]
+
+## MAPPING
+
+For each qualifying ledger row, insert one `promotion_attributions` record with:
+  - introducer_user_id = the UUID from the ledger row's stripe_payment_link metadata
+    (if not directly on the ledger row, look it up via:
+     SELECT id FROM auth.users WHERE email = '<introducer_contact>')
+  - promoted_user_id = the Stripe customer email matched to auth.users.id
+    (if no match exists yet, set to null and flag in output — do not fabricate a UUID)
+  - source_payment_id = stripe_session_id from ledger row
+  - amount_cents = amount_cents from ledger row
+  - currency = currency from ledger row
+  - attribution_class = attribution_class from ledger row
+  - created_at = paid_at_utc from ledger row (convert ISO-8601 to timestamp with time zone)
+  - introducer_credit_class = introducer_credit_class from ledger row
+  - merchant_type = merchant_type from ledger row
+  - business_name = business_name from ledger row
+  - kit_version = 'kit_c_bp079'
+
+## OUTPUT REQUIRED
+
+For each row processed, return a JSON object:
+{
+  "ledger_business_name": string,
+  "ledger_ts_utc": string,
+  "insertion_status": "inserted" | "skipped_no_user_match" | "error",
+  "promotion_attributions_id": uuid | null,
+  "error_detail": string | null
+}
+
+After processing all rows, return a summary:
+{
+  "total_rows_in_ledger": int,
+  "rows_qualifying": int,
+  "rows_inserted": int,
+  "rows_skipped": int,
+  "rows_errored": int
+}
+
+## POST-INSERT ACTION
+
+Return the full list of JSON objects above to Bishop.
+Bishop will update the ledger file:
+  - Set backfilled_to_promotion_attributions = true for each inserted row
+  - Set backfill_row_id = the returned promotion_attributions_id
+  - Leave skipped rows unchanged and surface them to Founder
+
+## CONSTRAINTS
+
+- Do not insert duplicate rows. Before each insert, check:
+    SELECT id FROM promotion_attributions WHERE source_payment_id = '[stripe_session_id]'
+  If a row exists, skip with status "skipped_duplicate".
+- Do not convert Credits/Marks/Joules to USD. These fields are identifiers, not exchange values.
+- Do not invent UUIDs. If a lookup fails, flag it.
+- Return your full output before ending the session. Partial output is a failure.
+```
+
+---
+
+After the SEG returns, Bishop reads the JSON output, updates `ATTRIBUTION_LEDGER_BP079.md` per the backfill results, and reports the summary to Founder in plain language.
+
+---
+
+## §5 — Repeatability Notes
+
+### How Another LB Member Runs This Playbook
+
+The floor-mode kit is not Founder-exclusive. Any LB member with a Stripe account (or access to the platform's shared Stripe configuration, once Knight implements member payment link generation) can use the same playbook.
+
+**Their Stripe setup:**
+- They create their own Payment Link following §1 Step 3, but with their own `introducer_user_id` (their UUID from `auth.users`) in metadata.
+- They use the same product record (`Liana Banyan Annual Membership`) if the platform uses a shared Stripe account. If they have their own Stripe account, they recreate the product with identical parameters.
+
+**Attribution ledger:**
+- Bishop maintains a per-introducer row range in the same `ATTRIBUTION_LEDGER_BP079.md` file, identified by the `introducer` field.
+- If ledger volume grows past roughly 50 rows, Bishop splits the ledger into `ATTRIBUTION_LEDGER_BP079_FOUNDER.md` and `ATTRIBUTION_LEDGER_BP079_[MEMBER_HANDLE].md`. The backfill SEG in §4 reads all files matching the `ATTRIBUTION_LEDGER_BP079_*.md` pattern.
+
+**Attribution chain depth:**
+If Member-A introduces Member-B who introduces Merchant-C, both Member-A and Member-B have a legitimate attribution claim. The ledger records the direct introducer (Member-B in this example) in the `introducer` field. A separate `chain_introducer` field should be added to the ledger before depth-2 introductions occur. The backfill SEG maps this to the `promotion_attributions` table's chain fields once Knight implements chain depth in Wave B.
+
+**Confirm with Founder before depth >1 introductions are promised to any member.** The ledger can record the chain, but the vesting rules for depth-2 attribution are not yet finalized. Do not tell a member their depth-2 credit is guaranteed until Founder ratifies the chain depth canon.
+
+**Bishop as universal attribution recorder:**
+Until Knight automates this in Wave B, Bishop is the attribution layer for the cooperative. Every LB member who introduces a merchant should route their introduction through Bishop for ledger entry. Bishop does not need to be told the details of every conversation; at minimum, Bishop needs the fields in Protocol A of §2 (business name, contact, introducer, payment link URL) within 24 hours of the conversation.
+
+---
+
+## §6 — Truth-Always Footnotes
+
+**1. Stripe metadata limits will break floor mode if cue card payload exceeds 500 characters per value.**
+
+Floor-mode rule (Founder ratified 2026-06-10): Founder keeps metadata to the five baseline fields in §1 Step 3. Richer payload (cue card JSON, benefit text, referral codes, deep links) waits for Wave B API-created Checkout Sessions.
+
+Stripe enforces a 500-character maximum per metadata value and a 50-key maximum per object. The five baseline fields fit comfortably. If a future version of this kit embeds a full cue card JSON payload inside a single metadata value, that value WILL exceed 500 characters. The Payment Link will still process the checkout, but the oversized metadata value will be silently truncated or rejected depending on Stripe's behavior at that time. The fix is to create Checkout Sessions via the Stripe API (not the dashboard Payment Link UI) and pass full metadata programmatically. This is Knight Wave B territory. For floor mode with the five metadata fields listed, you are safe.
+
+**2. The $5/year membership and the weekly meal-prep subscription are two completely separate payment flows.**
+
+The food-truck owner pays $5/year to become an LB member. That is one Stripe checkout, one product, one payment.
+
+LB members who want weekly meal-prep from that food-truck owner pay a separate weekly subscription to that merchant. That is a different Stripe product, a different payment, and a different checkout flow that does not exist in floor mode yet. Wave B builds the in-app checkout surface for the meal-prep subscription. Do not tell a food-truck owner they are signing up for both today. Today they are signing up for membership only.
+
+The platform fee (Cost+20%) applies to the merchant subscription revenue stream, not to the $5/year membership. LB does not take 20% of the $5 membership fee in the sense of extracting a cut; the $5 is the platform membership price directly. The Cost+20% doctrine applies to the goods-and-services transactions that route through the platform once Wave B is live.
+
+**3. Introducer credit is not fiat-convertible. Ever.**
+
+Founder recording an attribution in this ledger does not create a USD receivable. The `introducer_credit_class` field records Credits, Marks, or Joules per the BP078 three-currency canon. These accrue in the ledger and in `promotion_attributions` once backfilled. They are redeemable through the platform's substitution economy. They are not exchangeable for dollars. Cash income to Founder from this activity happens through actual hiring and payment cycles (a merchant hires Founder for a service, a member pays Founder for work done) not through currency conversion. If Founder reads this kit and expects a USD payout when the food-truck owner pays $5, that expectation does not match the canon. The $5 goes to LB platform revenue. Founder's credit is attributed in the ledger and vests per the canonical vesting window (TBD by Knight Wave B). Substitution makes prior work more valuable over time; it does not create a conversion event.
+
+**4. Sales tax and 1099 obligations belong to the merchant, not to LB, for the food services flow.**
+
+LB is a platform intermediary. The food-truck merchant sells food subscriptions. LB collects a platform fee on that revenue. The merchant is responsible for food sales tax in their jurisdiction. LB is responsible for reporting its own platform fee income. Whether LB has a 1099 obligation to the merchant depends on total annual payment volume and payment routing structure. At pilot scale, Founder should get a W-9 on file before routing any meal-prep subscription revenue through LB accounts. Nothing in this kit constitutes tax advice. Confirm with an accountant before going past the pilot.
+
+**W-9 collection note:** W-9 collection from food-truck merchants is added to the Wave B onboarding spec per Founder ratification 2026-06-10. In floor mode, Founder collects W-9 manually before any meal-prep subscription revenue routes through LB. Wave B will wire this into the merchant onboarding flow automatically.
+
+**5. Floor mode is temporary and will not scale manually.**
+
+The protocols in this kit are designed for Founder's first few dozen conversations. They will become unwieldy at 100 rows and unmanageable at 1,000. Wave A+B replace the manual ledger with automated attribution at checkout. The manual ledger's purpose is to capture attribution that would otherwise be lost during the gap between today's floor-mode conversations and Knight's delivery. Once Wave A is live and the backfill SEG has run, the ledger is an audit trail, not an active workflow. Founder should not build processes that depend on the ledger being the long-term system of record.
+
+---
+
+*Authored by Bishop SEG-KIT-C | 2026-06-10 | BP079 floor mode | READY-FOR-RATIFY*
+*Status: 12 Founder ratifications applied by Bishop SEG-KIT-APPLY 2026-06-10. Operational claims ratified per Founder review session.*

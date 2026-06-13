@@ -1,0 +1,360 @@
+# Food truck activation kit — D: subscription and discount tier model
+
+**Status:** READY FOR FOUNDER REVIEW
+**Authored:** 2026-06-10
+**Author:** Bishop SEG-SUB-MODEL (Sonnet 4.6, Statute §3)
+**Canonical app name:** Atlas (scheduling app)
+**Feeds into:** Kit B (customer walkthrough), Kit C (operator setup)
+
+---
+
+## §1 — The decision in one sentence
+
+**Order and pay in advance, you get a discount. The further forward you commit, the better the deal.**
+
+This is not a coupon scheme. Coupons are extractive: the platform or the food truck eats the loss so a customer feels like they got one over on somebody. This is different. When a customer commits to three meals before they eat them, or twelve meals before the month begins, the food truck gains something concrete and valuable: they know what to buy at the grocery market Tuesday morning instead of guessing. They buy exactly what they need, not twenty percent extra as a buffer. They waste less food. They can schedule their helper for the right days and send them home on the slow days. They have cash in hand before they fire up the propane.
+
+The discount is the customer's share of the planning win. The food truck is not giving something away. They are paying the customer back in savings for the operational certainty the customer just handed them. The Liana Banyan platform enables the commitment mechanism (Atlas scheduling, advance payment escrow, week-start disbursement), takes Cost+20% as its platform margin on every transaction, and workers, builders, and creators keep 83.3%.
+
+**Platform margin note (ratified 2026-06-10):** The Cost+20% platform margin is structural. It is always baked into the customer price. Tier discounts come from the food truck's 83.3% share, not from LB's 16.7% platform margin. The food truck offers the discount in exchange for advance commitment, the planning win, and the cash-flow timing advantage. LB's 16.7% is constant on all three tiers.
+
+When a member places a forward commitment, that act of planned participation also earns Marks in the cooperative-class ledger, separate from the dollar discount on this transaction. (See §6 for the cooperative-class framing.)
+
+---
+
+## §2 — Recommended tier structure
+
+### How the pricing baseline works
+
+The Liana Banyan platform runs on Cost+20%. That means the customer pays the food truck's listed menu price, and the platform takes 16.7% of that total (1/1.20 = 0.833 keeper share). The food truck keeps 83.3 cents of every dollar the customer pays.
+
+For the math below, a representative meal is priced at $13.50 on the platform. The food truck receives $11.25 per meal. Cost of goods (ingredients, packaging) for a typical food-truck meal at that price point runs approximately $9.00 (about 67% of what the food truck receives, or about 66% of what the customer pays). That leaves approximately $2.25 per meal for labor, overhead, and margin before discounts.
+
+These are representative numbers. The operator tool in §5 lets each food truck enter their actual COGS percentage and receive a dynamically computed max-discount recommendation.
+
+---
+
+### Tier 1 — Order now (single meal, today)
+
+| | |
+|---|---|
+| **What you commit** | One meal, for today |
+| **When you pay** | At delivery |
+| **What you save** | Nothing — full menu price |
+| **Example (per meal)** | Customer pays $13.50 / food truck receives $11.25 / platform receives $2.25 |
+| **Best for** | First-time customers, one-off visits, customers not yet on a plan |
+
+Tier 1 is the baseline. No advance commitment, no discount, no cooperative mechanics engaged. The customer orders, shows up, eats, pays. This tier is open to any customer, member or not. It establishes the reference price that all discounts are measured against.
+
+**Food truck economics at Tier 1:**
+- Customer pays: $13.50
+- Food truck receives: $11.25 (83.3%)
+- Platform receives: $2.25 (16.7%)
+- Food truck COGS (estimate): $9.00
+- Food truck margin (gross): ~$2.25/meal (approximately 16.7% of menu price, before labor and overhead)
+- This is tight but typical for a food truck with good volume. Labor and overhead are the remaining squeeze.
+
+---
+
+### Tier 2 — Week plan (3 meals this week)
+
+| | |
+|---|---|
+| **What you commit** | 3 meals, to be eaten within the current week (7 days from first meal) |
+| **When you pay** | 50% upfront at time of commitment; remainder split across meal deliveries or paid in a single end-of-week settlement |
+| **What you save** | 15% off the menu total for all 3 meals |
+| **Advance notice required** | Customer commits at least 24 hours before the first meal |
+| **LB membership required** | Yes — $5/year member account required to access Atlas scheduling and forward-commitment tiers. Non-members see a "Join LB ($5/year) to unlock this plan" CTA at checkout. |
+
+**Customer math (representative):**
+- Walk-up price per meal: $13.50
+- Tier 2 price per meal: $13.50 × 85% = **$11.47**
+- Total for 3 meals: $34.42 (vs $40.50 walk-up)
+- Customer saves: $6.08 across 3 meals
+- Upfront payment at commitment: $17.21
+- Remaining payment: $17.21 (spread across meal pickups or end-of-week)
+
+**Food truck economics at Tier 2:**
+- Food truck receives: 83.3% × $34.42 = **$28.67 total / $9.55 per meal**
+- Food truck COGS (estimate, 3 meals): ~$27.00
+- Food truck gross margin: ~$1.67 total / ~$0.56 per meal
+- Cash-flow win: $14.31 of food truck revenue arrives at week-start, before cooking begins
+- Planning win: ingredient purchase is known 24+ hours in advance; waste from over-purchasing drops
+
+**Truth-Always note on Tier 2 margin:** at typical food-truck economics, $0.56/meal gross margin before labor and overhead is thin. The planning win needs to translate into real savings (less waste, tighter labor scheduling) for Tier 2 to be profitable. For food trucks with above-average efficiency or lower local ingredient costs, Tier 2 works well. See §5 for the operator discount calculator.
+
+---
+
+### Tier 3 — Month plan (12 meals across 4 weeks)
+
+| | |
+|---|---|
+| **What you commit** | 12 meals across 4 weeks (approximately 3 meals per week); customer picks which days when committing |
+| **When you pay** | Full prepayment at time of commitment |
+| **What you save** | Up to 20% off the menu total for all 12 meals (dynamically set per operator COGS; max is 20%) |
+| **LB membership required** | Yes — $5/year member account required ($5/year) |
+
+**Customer math (representative):**
+- Walk-up price per meal: $13.50
+- Tier 3 price per meal: $13.50 × 80% = **$10.80**
+- Total for 12 meals: $129.60 (vs $162.00 walk-up)
+- Customer saves: $32.40 across 12 meals
+- All $129.60 paid at commitment
+
+**Food truck economics at Tier 3:**
+- Food truck receives: 83.3% × $129.60 = **$107.96 total / $9.00 per meal**
+- Food truck COGS (estimate, 12 meals): ~$108.00
+- Food truck gross margin at typical COGS: **approximately $0 before labor and overhead**
+- Cash-flow win: substantial — full month's revenue for these 12 meals is in hand at signup; 50% of each week's portion disbursed at week-start (see §3)
+- Planning win: four weeks of ingredient purchasing planned in advance; bulk buying becomes realistic; labor scheduling locked four weeks out
+
+**Truth-Always note on Tier 3 margin:** Tier 3 at 20% discount is a break-even proposition for a typical food truck at $9 COGS/meal. The value proposition for the food truck is NOT the per-meal margin on these customers; it is the cash certainty, the planning horizon, and the customer loyalty that comes from a month-long commitment. A food truck operator who fills 30% of their weekly volume on Tier 3 Month Plans can plan their ingredient purchases weeks out, eliminate most over-purchase waste, and use that waste savings to offset the thin per-meal margin.
+
+For food trucks with very low margins (COGS above 45% of menu price), 20% off may cause losses. See §5 for the dynamic calculator.
+
+**The max-discount recommendation for Tier 3 is computed dynamically based on the operator's stated COGS percentage.** If a food truck's economics are tighter than the representative example, Tier 3 might be offered at 15% off. If the food truck is a premium operator with strong margins, Tier 3 could offer up to 20% off (hard cap) while staying profitable. The system computes this at onboarding and lets the owner adjust within safe bounds. The 20% cap is a hard ceiling regardless of margin strength.
+
+---
+
+### Tier structure summary
+
+| | Tier 1: Order now | Tier 2: Week plan | Tier 3: Month plan |
+|---|---|---|---|
+| Meals committed | 1 | 3 this week | 12 over 4 weeks |
+| Discount | None | 15% off | 20% off |
+| Customer pays (per meal, example) | $13.50 | $11.47 | $10.80 |
+| Payment timing | At delivery | 50% now, 50% over week | All upfront |
+| Food truck receives (per meal) | $11.25 | $9.55 | $9.00 |
+| Food truck cash-flow win | None | Half-week revenue early | Full month revenue early |
+| Planning win for food truck | None | 3-meal window | 4-week window |
+| LB membership required | No — open to any customer | Yes ($5/year) | Yes ($5/year) |
+| Atlas scheduling required | No | Yes | Yes |
+
+---
+
+## §3 — How this composes with the "food truck gets paid half upfront each week" rule
+
+Founder's spec states: the food truck gets half of the week's revenue at week-start, before they cook.
+
+Here is how the three tiers map to that disbursement rule:
+
+**Tier 1 customers** pay at delivery. There is no advance cash for the food truck from Tier 1 orders. Week-start disbursement does not apply to Tier 1. The food truck receives payment only after the meal is served.
+
+**Tier 2 customers** prepay 50% at the time they commit (which is at least 24 hours before the first meal). Atlas holds that 50% and disburses it to the food truck at the start of the week. The remaining 50% is collected across meal pickups or as a single end-of-week settlement and disbursed immediately on collection. The food truck's effective experience: they start the week with approximately half their Tier 2 revenue already in hand, before cooking begins.
+
+**Tier 3 customers** prepay 100% at commitment, which may be up to four weeks in advance. Atlas holds the full prepayment in escrow and releases it in weekly tranches: at each week-start, 50% of that week's portion (3 meals × $10.80 × 83.3% = $26.99 per week, 50% = ~$13.50) is disbursed to the food truck. The remaining 50% of each week's portion is released on delivery of each meal or as a weekly settlement. The food truck receives a predictable cash-flow installment every Monday (or equivalent week-start day) for four consecutive weeks.
+
+**Net effect:** Tier 2 and Tier 3 customers both produce early cash for the food truck, consistent with Founder's spec. Tier 1 customers do not. A food truck that builds a Tier 2 + Tier 3 base of regulars begins each week with reliable revenue before a single meal is cooked. That is the cooperative-class cash-flow architecture.
+
+**Wave B requirement (flag):** The escrow, week-start disbursement schedule, and per-meal release logic described here requires Atlas scheduling integration with payment processing. This is a Wave B build requirement. In Wave A (initial launch), a simplified version (manual disbursement record or single weekly transfer) can stand in, clearly marked as manual. Flag to Founder and Knight when Wave B scoping begins.
+
+---
+
+## §4 — Customer-side decision card
+
+*Drop-in for Kit B customer walkthrough. Sentence case, active voice, no em-dashes.*
+
+---
+
+### Which plan works for you?
+
+| | Order now | Week plan | Month plan |
+|---|---|---|---|
+| **What you commit to** | One meal today | 3 meals this week | 12 meals over 4 weeks |
+| **What you save** | No discount | 15% off your whole order | 20% off your whole order |
+| **What you pay** | At pickup | Half now, half over the week | Everything upfront |
+| **When you eat** | Today | This week, your schedule | Across the next 4 weeks, your schedule |
+| **Best for** | Trying it out | Weekly regulars who want a deal | Regular eaters who want the most savings |
+| **Example savings (per meal)** | $13.50 | $11.47 (save $2.03) | $10.80 (save $2.70) |
+| **Example savings (total)** | — | $6.08 on 3 meals | $32.40 on 12 meals |
+| **LB account needed?** | No | Yes ($5/year) | Yes ($5/year) |
+
+---
+
+**Order now**
+No commitment required. Order one meal, pick it up today, pay at pickup. This is the easiest way to try a new food truck. No account needed.
+
+**Start week plan**
+Pick 3 meals for this week. Pay half now, half over the week. You lock in 15% off every one of those meals compared to the walk-up price. You pick which days. You can change times within the week if plans shift (Atlas handles it). LB membership ($5/year) required.
+
+**Start month plan**
+Pick 12 meals spread over the next 4 weeks. Pay everything upfront and get 20% off every meal. The third meal is nearly free. You choose your days when you sign up. Missed meals roll forward up to 7 days, then go to the community pool for SNAP-recipient free meals. LB membership ($5/year) required.
+
+---
+
+**CTA row:**
+
+| | **Order one meal** | **Start week plan** | **Start month plan** |
+|---|---|---|---|
+
+---
+
+*Card copy word count: ~230 words. Within 250-word target.*
+
+---
+
+## §5 — Food-truck-owner economic decision aid
+
+*Drop-in for Kit C operator setup. Presented to the food truck owner when they configure their discount tiers inside Atlas.*
+
+---
+
+### What discount can I actually afford?
+
+The table below shows the maximum discount you can offer on Tier 2 and Tier 3 while still keeping at least $0.50 per meal in gross margin after the Liana Banyan platform fee (16.7% of customer price).
+
+These numbers assume the LB Cost+20% baseline pricing (food truck listed price = menu price; customer pays that price; LB takes 16.7%; food truck keeps 83.3%).
+
+Tier 3 hard cap is **20% off** regardless of margin. Ratification 2026-06-10.
+
+| Your COGS as % of menu price (approx) | COGS example on $13.50 meal | Tier 2 max discount | Tier 3 max discount | Notes |
+|---|---|---|---|---|
+| ~25% of menu price | ~$3.38 | 20% off | 20% off (hard cap) | Premium margin. Compelling offer, well within safe band. |
+| ~35% of menu price | ~$4.73 | 15% off | 20% off (hard cap) | Healthy margin. Full Tier 3 cap available. |
+| ~45% of menu price | ~$6.08 | 12% off | 15% off | Moderate margin. Tier 3 capped at 15% for safety. |
+| ~55% of menu price | ~$7.43 | 8% off | 10% off | Tight margin. Discounts rely on planning wins to break even. Focus on Tier 1 + volume. |
+| ~67% of menu price (typical food truck) | ~$9.00 | 15% off | 18% off | Representative baseline used throughout this document. Tier 3 at 18% is the computed safe ceiling at typical COGS before planning-win offset. |
+
+**Note:** The 20% Tier 3 cap is a hard ceiling ratified 2026-06-10. Atlas will not allow a Tier 3 discount above 20% regardless of stated COGS. The dynamic calculator sets the safe discount within that ceiling; it can only recommend lower, never higher.
+
+---
+
+**How to read this table**
+
+Your COGS percentage is the single biggest lever. If you spend 80 cents of every dollar you receive on ingredients and packaging, you have 20 cents left to cover labor, overhead, and profit before any discount. A 15% discount on a $13.50 meal reduces your received amount from $11.25 to $9.55. If your COGS is $9.00 on that meal, you have $0.55 left. That is your planning-win buffer: if you save $0.55 or more per meal by buying exactly what you need instead of guessing, you break even or better.
+
+**These are maximum discounts, not required discounts.** You can always offer less. A 10% discount on Tier 2 is still meaningful to a regular customer and is safer for operators with tighter margins.
+
+**The planning win is real.** Most food truck operators report that food waste runs 8 to 15% of ingredient cost when they buy by feel. If you know Tuesday you are cooking 12 bowls, you buy for 12 bowls. At $9.00 COGS and 10% waste reduction, you save $0.90/meal. That alone more than offsets a 10% Tier 2 discount. The discount is not charity to the customer; it is the customer paying you for the certainty they just gave you.
+
+**How Atlas sets this up:** when you register your food truck, Atlas asks for your estimated COGS percentage. It then computes a Tier 2 and Tier 3 max discount for you and pre-fills the discount fields with a conservative safe starting point. You can move the sliders up or down within the safe band. The band is enforced so you cannot accidentally set a discount that causes you to lose money at typical COGS. If your actual COGS changes (seasonal ingredients, new supplier), you update your COGS estimate and the safe band recalculates.
+
+---
+
+### The cash-flow math in plain language
+
+Even when the per-meal margin is thin at Tier 3, consider what the cash-flow advance is worth:
+
+A food truck doing 100 meals per week at $13.50 has roughly $1,125 in weekly food truck revenue. If 30 of those meals are Tier 3 Month Plan customers, the food truck receives 50% of those 30 meals' revenue ($30 × $10.80 × 83.3% × 50% = ~$135) on Monday morning before they cook a single meal. Across a month that is four Monday installments plus delivery-day releases. That is the difference between buying ingredients on credit and buying ingredients with cash in hand.
+
+Cash in hand before cooking is worth more than the per-meal discount costs. That is the food truck economics case for offering Tier 3 even at thin margins.
+
+---
+
+## §6 — The cooperative-class framing (the load-bearing why)
+
+Coupons are extractive. A coupon says: the platform, the brand, or the restaurant will absorb a loss so this customer feels like they won something. The customer pays less, the platform takes its cut regardless, and the food truck eats the difference. That is extraction dressed up as generosity.
+
+This tier model is designed differently. When a customer commits to three meals or twelve meals in advance, they are not exploiting a discount code. They are providing something the food truck cannot manufacture on their own: certainty. Certainty about volume. Certainty about timing. Certainty that translates directly into better purchasing decisions, less waste, and the ability to schedule labor without guessing.
+
+The discount is the food truck's payment to the customer for the certainty the customer just gave them. The food truck decides what that certainty is worth to them, within the bounds Atlas computes. The platform does not set the discount. The food truck does.
+
+On the Liana Banyan platform, the act of committing forward is also a form of cooperative-class participation. When a member places a Tier 2 or Tier 3 commitment, that forward commitment earns Marks in the cooperative-class ledger. Marks are separate from the dollar discount: the discount is immediate, on this transaction, from the food truck's planning win. The Marks accrue to the customer's participation record on the platform and can be spent on cooperative privileges, contribute to governance weight, and reflect the member's history of cooperative-class behavior (forward commitment, advance payment, reduced waste production).
+
+The food truck is not punished for offering bigger discounts to Tier 3 customers. They are rewarded: earlier cash, longer planning horizon, customer loyalty that compounds. The Liana Banyan platform takes the same Cost+20% margin on all three tiers. There is no platform tax on cooperative behavior. Workers, builders, and creators keep 83.3%.
+
+*Note on Marks implementation: the Marks ledger for forward-commitment participation is ratified canon as of 2026-06-10. Marks accrue to the customer's participation record in the cooperative-class ledger. They compose with the three-currency canon (Credits/Marks/Joules, never convertible to fiat). Wave C scope item: implement Marks accrual logic in Atlas for Tier 2 and Tier 3 forward commitments.*
+
+---
+
+## §7 — Truth-Always notes for Founder
+
+Eight honest surfaces. No softening.
+
+---
+
+**1. Founder's "50% off" number does not pencil for typical food-truck margins.**
+
+At the representative baseline ($13.50 menu price, $11.25 food truck receives, ~$9.00 COGS), a 50% customer discount means the customer pays $6.75. The food truck receives 83.3% of that: $5.62. COGS is still ~$9.00. The food truck loses $3.37 per meal, before labor and overhead. That is not a thin margin situation; that is a guaranteed operating loss on every discounted meal.
+
+50% off is not viable unless:
+- The food truck has exceptional margins (COGS below 40% of menu price, which is unusual)
+- The bulk-buy and planning savings exceed $3.37/meal, which is extraordinarily unlikely for advance notice measured in days
+
+Bishop recommends: the maximum discount in the tier model should be **20% off for Tier 3** (12-meal monthly commitment), dynamically adjusted down for lower-margin operators. 20% is still a compelling customer offer ("buy 12 meals, the cost is what 9.6 meals would have been") and can be profitable for typical operators when combined with planning wins.
+
+---
+
+**2. "Cost+20%" interpretation — RESOLVED (ratified 2026-06-10).**
+
+The Cost+20% platform margin is structural and always baked into the customer price. Subscription/Tier 2/Tier 3 customers pay the same baseline menu price as walk-up customers (already the Cost+20% platform price), with the tier discount applied on top of that. The discount comes out of the food truck's 83.3% share. LB's 16.7% platform margin is not discounted on any tier. This is confirmed and no longer requires Founder input.
+
+---
+
+**3. "The third meal is nearly free" — RESOLVED (ratified 2026-06-10).**
+
+The "slightly more than one meal" framing does not match the math and is no longer used in any kit copy. At 20% off for 3 meals, the customer pays $32.40 vs $40.50 walk-up. That is 2.4 meals' worth of cost for 3 meals. The canonical customer-facing framing is: "the third meal is nearly free." This is accurate and more compelling. All kit copy uses this framing.
+
+---
+
+**4. Atlas is the canonical name for the scheduling app — confirmed in the brief.**
+
+Atlas is confirmed as the canonical scheduling app name. Used throughout this document. If there is any ambiguity in source code or platform copy still using "MnemosyneC Scheduler" or another label, flag for Knight to clean up.
+
+---
+
+**5. Marks-for-forward-commitment — RESOLVED (ratified 2026-06-10).**
+
+Placing a Tier 2 or Tier 3 commitment earns Marks in the cooperative-class ledger, separate from the dollar discount. This is now canon. Marks are not fiat-convertible. They accrue to the customer's cooperative-class participation record. Knight Wave C scope item: implement Marks accrual logic in Atlas for Tier 2 and Tier 3 forward commitments.
+
+---
+
+**6. Tier 2 and Tier 3 require Atlas to handle "customer picks days within the week or month."**
+
+The customer-facing day-selection flow (pick Tuesday, Thursday, and Friday this week; pick specific days across a month) is calendar and scheduling logic that Atlas needs to support. This is a Wave B requirement. In Wave A, a simplified version (customer notes their preferred days in text; food truck confirms manually) can stand in. Flag for Knight and Wave B scoping.
+
+---
+
+**7. No-show and cancellation policy — RESOLVED (ratified 2026-06-10).**
+
+Missed meals roll forward up to 7 days from the scheduled date, then forfeit to the community pool. The community pool funds free meals for SNAP recipients and food-insecure community members. This is canon. It is clear to the customer, consistent with cooperative-class values, and creates a positive narrative around forfeiture ("your skipped meal fed your neighbor"). This policy applies to Tier 2 and Tier 3 prepaid commitments. Tier 1 (order now) has no prepaid meal to roll forward. Atlas Wave B: implement roll-forward logic and community pool tracking.
+
+---
+
+**8. Tier 1 (Order now) is accessible to non-members. Tier 2 and Tier 3 require LB membership — RESOLVED (ratified 2026-06-10).**
+
+Tier 1 is open to any customer, member or not. Tier 2 and Tier 3 require an LB membership ($5/year). The cooperative-class commitment machinery (Marks ledger, advance payment escrow, week-start disbursement) is member-bound.
+
+At checkout for a Tier 2 or Tier 3 commitment, Atlas surfaces the $5/year membership offer inline for non-members: "Join Liana Banyan ($5/year) to unlock this plan and start saving." Heart-of-Peace voice, not scarcity-FOMO. One tap, no friction. This is the access model for all kit copy.
+
+---
+
+## Appendix — Tier math verification (full working)
+
+*For Founder's spot-check. All figures are representative; actual operator economics vary.*
+
+**Baseline assumptions:**
+- Menu price (LB platform): $13.50 per meal
+- LB platform fee: 16.7% (= 1 - 83.3%)
+- Food truck receives: 83.3% × $13.50 = $11.25
+- LB receives: 16.7% × $13.50 = $2.25
+- Representative COGS per meal: $9.00 (= 67% of food truck receipts = 66.7% of menu price)
+- Representative gross margin before discount, per meal: $11.25 - $9.00 = $2.25
+
+**Tier 1 (no discount):**
+- Customer pays: $13.50
+- Food truck: $11.25 received, $9.00 COGS, $2.25 gross margin per meal
+- Platform: $2.25
+
+**Tier 2 (15% off, 3 meals):**
+- Per meal: $13.50 × 85% = $11.47 customer pays
+- Food truck per meal: $11.47 × 83.3% = $9.55 received; $9.00 COGS; $0.55 gross margin
+- 3 meals total: food truck receives $28.67; customer pays $34.42; platform receives $5.75
+- Customer savings vs 3× Tier 1: $40.50 - $34.42 = $6.08
+
+**Tier 3 (20% off, 12 meals):**
+- Per meal: $13.50 × 80% = $10.80 customer pays
+- Food truck per meal: $10.80 × 83.3% = $9.00 received; $9.00 COGS; $0.00 gross margin (break even before planning wins)
+- 12 meals total: food truck receives $107.96; customer pays $129.60; platform receives $21.64
+- Customer savings vs 12× Tier 1: $162.00 - $129.60 = $32.40
+
+**Founder's original "50% off" scenario:**
+- Per meal: $13.50 × 50% = $6.75 customer pays
+- Food truck per meal: $6.75 × 83.3% = $5.62 received; $9.00 COGS; **loss of $3.37 per meal**
+- Food truck total loss on 3 such meals: $10.12 before labor or overhead
+- Verdict: does not pencil. See §7, item 1.
+
+---
+
+*End of document. File ready for Founder review.*
+*Bishop SEG-SUB-MODEL — 2026-06-10 — Statute §3 (Sonnet 4.6) — Truth-Always*

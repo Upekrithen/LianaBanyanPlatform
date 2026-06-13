@@ -1,0 +1,87 @@
+# Knight Queue — BP079 Active Pending Yokes
+
+**Last updated by Bishop SEG-YOKES-3: 2026-06-10T20:30:00Z**
+
+---
+
+## ⚠️ STANDING REMINDER — Statute §3 (every dispatch) — TWO BINDING SURFACES
+
+**Every SEG / sub-agent / Agent / workflow `agent()` dispatch SHALL pass `model: "sonnet"` (Sonnet 4.6) explicit. NEVER inherit. NEVER "Sonnet 4.5" or other variant unless Founder explicitly overrides for a specific dispatch.**
+
+**Canon (parameter binding):** `canon_statute_3_sonnet_4_6_sub_agent_default_every_dispatch_explicit_model_param_bp077`
+Pearl: `pearl_8b0c6fb05fd9f38a` (anchor class)
+
+Catechist-class violation if omitted. Repeat → block + surface to Founder.
+
+**Canon (announcement-language binding — BP079 corrective):** `canon_statute_3_corrective_announcement_language_must_say_sonnet_4_6_verbatim_pattern_violation_bp079`
+Pearl: `pearl_98f74effb5d986a5` (anchor class)
+
+**BOTH surfaces must be clean.** The parameter is the runtime contract. The announcement is the observable witness. They must match.
+
+**Pre-dispatch self-audit (two checks, not one):**
+1. Is `model: "sonnet"` present in the Agent tool call? If not → STOP, add it.
+2. Does the dispatch announcement say "Sonnet 4.6" verbatim? If it says "Sonnet 4.5" or just "Sonnet" → STOP, fix to "Sonnet 4.6".
+
+- ❌ "Sonnet 4.5" in announcement (the empirical drift)
+- ❌ "Sonnet" with no version number (ambiguous)
+- ✅ "Sonnet 4.6" verbatim (canonical)
+
+**Empirical receipt (BP079 2026-06-10):** 7 announcements of "Sonnet 4.5" in a single Wave A+B dispatch chain (UUID + Schema + Routes + Dialog + Pages + Subscription + Vesting + LibRewrite + Ship). Parent canon §5 escalation rule (3+ violations in window) triggered the corrective sub-canon mint. This is that canon's standing binding in the Queue.
+
+---
+
+## 🟢 ACTIVE — Pending Knight Action
+
+### 1. PROMPT_KNIGHT_BP079_WAVE_C_ACTIVATION_PREFLIGHT_2026-06-10.md
+**Priority:** P1 — HIGHEST. Gates Wave C ship. Must clear before any Wave C code lands.
+**Scope:** Small verification task (~30 min SEG) — 3 pre-flight checks: PRE-1 migrations applied, PRE-2 STRIPE_PRICE_FOOD_NODE_WEEKLY env var set, PRE-3 secondary Firebase domains live.
+**Status:** NEW — filed by Bishop SEG-YOKES-3 2026-06-10T20:30:00Z. Awaiting Founder actions (apply migrations + set env var) then Knight verify.
+**If all 3 green → Knight fires Wave C per the canonical Wave C Yoke (α/β/γ already RATIFIED + locked).**
+
+### 2. PROMPT_KNIGHT_BP079_FIREBASE_CLI_FIX_2026-06-10.md
+**Priority:** P2 — Small task, parallel-safe with pre-flight.
+**Scope:** `npm install -g firebase-tools` + retry 4 secondary targets (dotcom/biz/org/net). ~15 min.
+**Status:** NEW — filed by Bishop SEG-YOKES-3 2026-06-10T20:30:00Z. Also feeds PRE-3 of the Wave C pre-flight.
+
+### 3. PROMPT_KNIGHT_BP079_RED_CARPET_WAVE_C_TURNKEY_2026-06-10.md
+**Priority:** P3 (formerly P2) — Awaits pre-flight Yoke green. α/β/γ already RATIFIED and locked.
+**Scope:** ~8-10 days Knight (5-6 days with concurrent Sonnet 4.6 SEGs in groups). 10-component scope: Seeker dashboard, cue card generator UI, PDF/PNG card layout generator, click-time Stripe Checkout Session edge fn, webhook auto-attribution, automated merchant onboarding wizard (5 steps incl Stripe Connect Express), Stripe Connect Express integration, Seeker notification system, attribution dashboard with cooperative-class leaderboard, Seeker-as-merchant onramp.
+**Founder ratify on 3 Wave C design decisions COMPLETED 2026-06-10:** α Marks vesting (10 at activation + 5/wk×4 + 1/recurring), β Multi-Seeker collision (first-write-wins), γ Self-introduction guard (Marks=0 when seeker=merchant). Knight cleared to ship Wave C webhook without further holds. Full RATIFIED block in the Yoke file.
+**Spec doc:** `BISHOP_DROPZONE\00_FOUNDER_REVIEW\FOOD_TRUCK_ACTIVATION_KIT_E_TURNKEY_SEEKER_INFRASTRUCTURE.md`
+
+### 4. PROMPT_KNIGHT_BP079_TODO_TRIAGE_CUECARDCONFIG_BEACONRUN_2026-06-10.md
+**Priority:** P4 DEFERRED — Do not action until Wave C clears OR Founder explicitly pulls forward.
+**Scope:** Scoping-only SEG (~1 hr) — CueCardDestinationConfig.tsx redesign (campaign vs Red Carpet distinction) + BeaconRunCueCard.tsx cue_card_id lookup pattern.
+**Status:** NEW — filed by Bishop SEG-YOKES-3 2026-06-10T20:30:00Z. Read + scope; surface estimates; do not build.
+
+### 5. PROMPT_KNIGHT_BP079_FOUNDER_UUID_2026-06-10.md
+**Priority:** P0 (legacy) — UUID resolved (Founder obtained); keeping for reference.
+**Scope:** Small (~5 min) — Supabase auth.users lookup for Founder's UUID + email mapping
+**Status:** In-flight per Knight's prior return (UUID SEG launched; result expected at BISHOP_YOKE_FOUNDER_UUID_2026-06-10.md OR the copy at this canonical path)
+
+---
+
+## ✅ COMPLETED — For Reference
+
+### PROMPT_KNIGHT_BP079_RED_CARPET_WAVE_A_B_2026-06-10.md
+COMPLETED by Knight 2026-06-10. Wave A SHIPPED commit b0b5e84 tag bp079-red-carpet-wave-a. Wave B SHIPPED commits fec6dbc + 3d57900 tag bp079-red-carpet-wave-b. lianabanyan.com hosting:main LIVE. Secondary domain deploys (hosting:dotcom/biz/org/net) errored with `paths[1] argument must be of type string. Received undefined` — firebase-tools version bug; separate Firebase CLI Fix Yoke filed.
+
+### PROMPT_KNIGHT_BP079_CEPHAS_V0138_2026-06-10.md
+COMPLETED by Knight 2026-06-10. Cephas page bumped to v0.1.38, all 3 Firebase targets PASS, commit 8f38159. **NEW:** page now needs bump to v0.1.39 (Step 3 progress UX release just shipped) — Bishop will file follow-up Yoke once Founder ratifies that piece.
+
+### PROMPT_KNIGHT_BP079_STEP3_PROGRESS_2026-06-10.md
+COMPLETED by Knight 2026-06-10. v0.1.39 shipped (SHA-256 7B778B...). **Live mid-pull screenshot obligation on Founder M1 still open** — closes the binding `feedback_ux_seg_screenshot_mandatory_bp078` canon obligation formally.
+
+---
+
+## 📋 Discovery + Canonical Path Notes (for future Bishop sessions)
+
+Bishop SEG-YOKE-DISCOVERY 2026-06-10 found:
+- Bishop's prior SEGs were writing Yoke files to `C:\Users\Administrator\Documents\LianaBanyanPlatform\` root
+- Knight's canonical session-open scan only checks `BISHOP_DROPZONE\01_KnightPrompts\` and `BISHOP_DROPZONE\03_BishopHandoffs\`
+- Result: 3 Yokes were dark to Knight for ~24 hours
+- **Fix going forward:** all new Bishop Yokes deposit at `BISHOP_DROPZONE\01_KnightPrompts\PROMPT_KNIGHT_BP<NNN>_<SCOPE>_<DATE>.md` with this file (`KNIGHT_QUEUE.md`) updated at each new Yoke
+- Root-level `BISHOP_YOKE_*.md` files preserved as redundant copies; do not edit or delete them
+- Knight bridge MCP still down this session; both canonical-path Yokes + KNIGHT_BISHOP_MESSAGES.md fallback remain available
+
+— Bishop · BP079 · SEG-YOKE-DISCOVERY · 2026-06-10

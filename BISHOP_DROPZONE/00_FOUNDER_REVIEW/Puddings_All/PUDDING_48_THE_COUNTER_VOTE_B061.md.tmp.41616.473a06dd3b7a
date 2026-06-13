@@ -1,0 +1,113 @@
+# Pudding #48: The Counter-Vote
+
+*What if every political text you hate became a vote for what you actually believe?*
+
+---
+
+## At a Glance
+
+You get the texts. Everyone gets the texts. "URGENT: Senator So-and-So wants to destroy everything you love! Reply STOP to unsubscribe or donate $25 to fight back!"
+
+You didn't ask for it. You don't agree with it. And hitting STOP is the only option they gave you. Your frustration goes nowhere. Their algorithm counts your engagement. Their donor gets the credit.
+
+What if you could do something with that anger?
+
+Political Expedition has a feature we call the Counter-Vote. When you encounter a political position you disagree with — a text, a mailer, a bill, a talking point — you can go on record *against* it. Not just ignore it. Not just unsubscribe. Vote for the diametrically opposed position, on the public record, attached to your real membership.
+
+They spent money to stir your pot. You spend five seconds to stir it back.
+
+---
+
+## More Info
+
+### How Political Spam Actually Works
+
+Political organizations send texts and emails because engagement — even angry engagement — is valuable to them. If you reply STOP, they log you as "contacted." If you click their link, they log you as "engaged." If you do nothing, you're still a data point. The system is designed to extract your attention regardless of whether you agree.
+
+The one thing you cannot do, in any of these systems, is *register disagreement in a way that matters.*
+
+You can unsubscribe. You can block. You can delete. But none of those actions create a counter-record. None of them say: "I heard your position, and I am formally, publicly, on the other side."
+
+### What the Counter-Vote Does
+
+Political Expedition tracks bills moving through Congress. When a member encounters a political position — from a text, a mailer, a news article, or a bill in the tracker — they can:
+
+1. **Find the bill** (or the closest matching legislation) in the tracker
+2. **Go on record** — FOR or AGAINST
+3. **See the aggregate** — how many members are on each side
+4. **Write their rep** — with a pre-filled letter template customized to their position
+
+The key innovation: the system doesn't care *how* you found out about the bill. Maybe you learned about it from responsible journalism. Maybe you learned about it from a rage-bait text at 11 PM. The origin doesn't matter. What matters is that you now have a mechanism to convert passive frustration into active civic participation.
+
+### The Jiu-Jitsu
+
+This is democratic jiu-jitsu. Someone spent money to manipulate your emotions about an issue. You redirect that energy into a formal, trackable, public position on the actual legislation. Their investment in your anger becomes your investment in your democracy.
+
+And here's what makes it different from Twitter polls or online petitions: **you are a verified member.** $5/year. Real name. One vote per person. The record is attached to a cooperative membership, not an anonymous account. When a representative receives a letter from a Liana Banyan member who went on record about a bill, they know it represents a real constituent with a verified identity — not a bot farm, not an astroturf campaign, not a petition anyone can sign twelve times.
+
+### Not Left or Right. A More Effective Team.
+
+Political Expedition is non-partisan by design. The platform doesn't tell you how to vote. It gives you tools to:
+
+- **Find your representatives** by address — federal, state, and local
+- **Track bills** that affect cooperative economics, food security, housing, and small business
+- **Write your rep** using professional letter templates
+- **Go on record** for or against legislation
+- **See the aggregate** — where your fellow members stand
+
+The No Religion/No Politics policy at Liana Banyan doesn't mean politics doesn't exist. It means the platform doesn't take sides. It builds infrastructure for participation — and then trusts its members to use it according to their own conscience.
+
+---
+
+## Full Detail
+
+### Why This Matters for Cooperatives
+
+Cooperatives have historically been under-represented in political engagement. Individual members care about policy, but cooperative platforms rarely provide civic tools because they fear appearing partisan. The result: cooperative members are politically invisible as a bloc.
+
+Political Expedition changes that by making the tool non-partisan and the engagement member-directed. The cooperative provides the infrastructure — rep lookup, bill tracking, letter templates, public record — but the positions are entirely the members'. A conservative member and a progressive member using the same tool to write the same representative about the same bill from opposite sides is not a failure of the system. It is the system working exactly as designed.
+
+### The Counter-Vote and the Attention Economy
+
+The attention economy runs on engagement. Political organizations buy your attention with provocative messaging because your engagement — even negative engagement — has value. The Counter-Vote reclaims that value.
+
+Every rage-text becomes a prompt. Not a prompt to donate $25 to someone else's campaign. A prompt to go on record yourself. The emotional energy that the sender intended to harvest for their agenda is redirected into your own civic record.
+
+Over time, this creates something that doesn't currently exist: a cooperative political record. Not a party platform. Not a PAC's talking points. A verified, member-driven, non-partisan record of where real people in real communities stand on real legislation.
+
+That record has no monetary value. It has civic value. And that is the point.
+
+### The Five-Second Investment
+
+The Cue Card asks: "Are you tired of your voice not counting?"
+
+The Counter-Vote answers: five seconds. Find the bill. Tap FOR or AGAINST. Your position is recorded. Your voice counts. Not because someone spent money to amplify it — because you spent five seconds to register it.
+
+They made you angry. You made it count.
+
+---
+
+*Pudding #48 — The Counter-Vote*
+*Bishop B061 | April 2, 2026*
+*~1,100 words | Three-level progressive disclosure*
+
+---
+
+**SQL INSERT:**
+```sql
+INSERT INTO pudding_articles (
+  number, title, slug, summary, content_key, word_count,
+  topics, innovations_referenced, created_by, status
+) VALUES (
+  48,
+  'The Counter-Vote',
+  'the-counter-vote',
+  'What if every political text you hate became a vote for what you actually believe?',
+  'pudding-48-the-counter-vote',
+  1100,
+  ARRAY['political-expedition', 'counter-vote', 'civic-engagement', 'democracy', 'attention-economy'],
+  ARRAY[]::text[],
+  'bishop',
+  'draft'
+);
+```

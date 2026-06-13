@@ -122,7 +122,7 @@ serve(async (req: Request): Promise<Response> => {
   }
 
   const newTotal = (existing?.total_rejections ?? 0) + 1;
-  // cooldown = n × 5 minutes (no decay — Founder chooses decay strategy separately)
+  // Option 2 (Founder-ratified): store raw count; decay at invite gate time
   const cooldownMs = newTotal * 5 * 60 * 1000;
   const cooldown_until = new Date(Date.now() + cooldownMs).toISOString();
 

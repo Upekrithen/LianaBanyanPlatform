@@ -63,6 +63,12 @@ import { useLifecycleStage, LS_STAGE_KEY } from '../hooks/useLifecycleStage';
 // BP067 Phase 2B/2C -- Battery Dispatch + Broadcast Schedule
 import { BatteryDispatchTab } from './BatteryDispatchTab';
 import { BroadcastScheduleTab } from './BroadcastScheduleTab';
+// SEG-2 v0.1.57 -- Test It Out substrate-warming workout
+import { TestItOutTab } from './TestItOutTab';
+// BP081 Wave A SEG-A1 -- Substrate Stats dashboard
+import { SubstrateStatsTab } from './SubstrateStatsTab';
+// BP081 K-1 SEG-K1-3 -- Membership tab
+import { MembershipTab } from './MembershipTab';
 
 // ─── Local-storage keys ───────────────────────────────────────────────────────
 
@@ -116,7 +122,10 @@ type TabId =
   | 'caithedral-core'
   | 'lb-account'
   | 'battery-dispatch'
-  | 'broadcast-schedule';
+  | 'broadcast-schedule'
+  | 'test-it-out'
+  | 'substrate-stats'
+  | 'membership';
 
 interface TabDef {
   id: TabId;
@@ -143,6 +152,9 @@ const TABS: TabDef[] = [
   { id: 'lb-account',        label: 'LB Account',        icon: '',   iconElement: <NotCentsGlyph size="13px" />, tooltip: 'Tab 14 · ₵ LB Account -- Link your Liana Banyan cooperative account · Join the Frontier mesh · Crewman attribution' },
   { id: 'battery-dispatch',  label: 'Battery',           icon: '⚡', tooltip: 'Tab 15 · Battery Dispatch -- Cooperative time/energy dispatch · Reserve vs Spend' },
   { id: 'broadcast-schedule', label: 'Broadcast',        icon: '📡', tooltip: 'Tab 16 · Broadcast Schedule -- Cooperative content/announcement scheduler · Pending vs Sent' },
+  { id: 'test-it-out',        label: 'Test It Out',      icon: '🧪', tooltip: 'Tab 17 · Test It Out -- 5-question substrate-warming diagnostic · run weekly · grows local accuracy' },
+  { id: 'substrate-stats',   label: '📊 Substrate',     icon: '',   tooltip: 'Tab 18 · Substrate Stats -- eblet count · verified rate · growth trend · recent writes · source breakdown' },
+  { id: 'membership',        label: '💎 Membership',    icon: '',   tooltip: 'Tab 19 · Membership -- $5/year · 83.3% creator-keep · Cost+20% · join or fork' },
 ];
 
 // ─── Props ───────────────────────────────────────────────────────────────────
@@ -237,7 +249,8 @@ export function MnemosyneTabView({
     const validTabs: TabId[] = [
       'frame', 'helm', 'gauntlet', 'settings', 'faq', 'developer', 'atlas',
       'kitchen-table', 'pearls', 'substrate', 'console', 'ai-selector',
-      'caithedral-core', 'lb-account', 'battery-dispatch', 'broadcast-schedule',
+      'caithedral-core', 'lb-account', 'battery-dispatch', 'broadcast-schedule', 'test-it-out',
+      'substrate-stats', 'membership',
     ];
     if (
       saved &&
@@ -296,12 +309,13 @@ export function MnemosyneTabView({
   useEffect(() => {
     if (!window.amplify?.onNavigateFocusTab) return;
     const cleanup = window.amplify.onNavigateFocusTab((tabId) => {
-      const validTabs: TabId[] = [
-        'frame', 'helm', 'gauntlet', 'settings', 'faq', 'developer',
-        'atlas', 'kitchen-table', 'pearls', 'substrate', 'console', 'ai-selector',
-        'caithedral-core', 'lb-account', 'battery-dispatch', 'broadcast-schedule',
-      ];
-      if (validTabs.includes(tabId as TabId)) setActiveTab(tabId as TabId);
+    const validTabs: TabId[] = [
+      'frame', 'helm', 'gauntlet', 'settings', 'faq', 'developer',
+      'atlas', 'kitchen-table', 'pearls', 'substrate', 'console', 'ai-selector',
+      'caithedral-core', 'lb-account', 'battery-dispatch', 'broadcast-schedule', 'test-it-out',
+      'substrate-stats', 'membership',
+    ];
+    if (validTabs.includes(tabId as TabId)) setActiveTab(tabId as TabId);
     });
     return cleanup;
   }, []);
@@ -1415,6 +1429,39 @@ export function MnemosyneTabView({
                 style={{ height: '100%', overflowY: 'auto' }}
               >
                 <BroadcastScheduleTab />
+              </div>
+            )}
+
+            {activeTab === 'test-it-out' && (
+              <div
+                id="panel-test-it-out"
+                role="tabpanel"
+                aria-labelledby="tab-test-it-out"
+                style={{ height: '100%' }}
+              >
+                <TestItOutTab />
+              </div>
+            )}
+
+            {activeTab === 'substrate-stats' && (
+              <div
+                id="panel-substrate-stats"
+                role="tabpanel"
+                aria-labelledby="tab-substrate-stats"
+                style={{ height: '100%' }}
+              >
+                <SubstrateStatsTab />
+              </div>
+            )}
+
+            {activeTab === 'membership' && (
+              <div
+                id="panel-membership"
+                role="tabpanel"
+                aria-labelledby="tab-membership"
+                style={{ height: '100%', overflowY: 'auto' }}
+              >
+                <MembershipTab />
               </div>
             )}
           </div>

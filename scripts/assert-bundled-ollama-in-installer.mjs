@@ -1,13 +1,15 @@
 #!/usr/bin/env node
 /**
- * BP080 / SEG-V0147-FIX-0 — Assert that the NSIS installer contains resources/ollama/ollama.exe
+ * BP080 / SEG-V0147-FIX-0 + SEG-V0147-FIX-4 — Assert NSIS installer contains:
+ *   1. resources/ollama/ollama.exe  (Ollama engine — required for local AI)
+ *   2. resources/vcredist/vc_redist.x64.exe  (VC++ 2019 x64 — required for Ollama on Windows)
  *
  * Usage:
  *   node scripts/assert-bundled-ollama-in-installer.mjs release/MnemosyneC-Setup-0.1.47.exe
  *   node scripts/assert-bundled-ollama-in-installer.mjs   # auto-detects from package.json version
  *
- * Exits 0 (PASS) if ollama.exe is found and >= 20 MB inside the installer payload.
- * Exits 1 (FAIL) with a clear error message if not found or too small.
+ * Exits 0 (PASS) if all required binaries are found at expected sizes.
+ * Exits 1 (FAIL) with a clear error message if any are missing or too small.
  *
  * Requires 7-Zip (7z) on PATH. On Windows: scoop install 7zip
  *
@@ -15,10 +17,10 @@
  *   electron-builder NSIS installers embed all app content inside a 7z archive:
  *     outer: MnemosyneC-Setup-x.x.x.exe  (NSIS executable)
  *     inner: $PLUGINSDIR/app-64.7z        (7z solid, contains resources\ollama\ollama.exe)
- *   Listing only the outer NSIS archive will NOT reveal ollama.exe.
- *   This script extracts app-64.7z to a temp dir, lists it, then checks for ollama.exe.
+ *   Listing only the outer NSIS archive will NOT reveal ollama.exe or vc_redist.x64.exe.
+ *   This script extracts app-64.7z to a temp dir, lists it, then checks for all required entries.
  *
- * Wire into dist:win AFTER electron-builder (see package.json scripts).
+ * Wire into dist:win and publish:win AFTER electron-builder (see package.json scripts).
  */
 
 import { execSync, spawnSync } from 'child_process';
@@ -31,6 +33,10 @@ const require = createRequire(import.meta.url);
 
 // Minimum acceptable size for ollama.exe inside the installer (20 MB)
 const MIN_OLLAMA_SIZE_BYTES = 20 * 1024 * 1024;
+
+// VC++ redist sanity bounds: typically ~25 MB (never < 10 MB, never > 50 MB)
+const MIN_VCREDIST_SIZE_BYTES = 10 * 1024 * 1024;
+const MAX_VCREDIST_SIZE_BYTES = 50 * 1024 * 1024;
 
 let installer = process.argv[2];
 
@@ -139,6 +145,8 @@ let ollamaExeSize = 0;
 let ollamaExeFound = false;
 let modelBlobFound = false;
 let modelBlobSize = 0;
+let vcredistFound = false;
+let vcredistSize = 0;
 
 for (const line of innerListing.split(/\r?\n/)) {
   const entry = parseSizeName(line);
@@ -154,6 +162,12 @@ for (const line of innerListing.split(/\r?\n/)) {
   if (norm.startsWith('resources\\ollama\\bundled\\models\\blobs\\sha256-') && entry.size > 100 * 1024 * 1024) {
     modelBlobFound = true;
     modelBlobSize = entry.size;
+  }
+
+  // SEG-V0147-FIX-4: VC++ 2019 x64 redistributable — required for Ollama v0.30.7+ on Windows
+  if (norm === 'resources\\vcredist\\vc_redist.x64.exe') {
+    vcredistFound = true;
+    vcredistSize = entry.size;
   }
 }
 
@@ -184,6 +198,27 @@ if (!modelBlobFound) {
   console.warn('[assert-ollama]   To bundle: npm run prepare:floor-model (requires Ollama installed locally).');
 } else {
   console.log(`[assert-ollama] PASS: Floor model blob present in installer (${(modelBlobSize / 1024 / 1024).toFixed(1)} MB)`);
+}
+
+// SEG-V0147-FIX-4: Assert vc_redist.x64.exe is in the installer payload
+if (!vcredistFound) {
+  console.error('[assert-ollama] FAIL: resources\\vcredist\\vc_redist.x64.exe NOT FOUND in installer payload.');
+  console.error('[assert-ollama] VC++ 2019 x64 is required for Ollama v0.30.7+ on Windows.');
+  console.error('[assert-ollama] Without it, ollama.exe will silently fail to start on clean machines.');
+  console.error('[assert-ollama] Fix steps:');
+  console.error('[assert-ollama]   1. Run: npm run prepare:vcredist');
+  console.error('[assert-ollama]   2. Confirm: resources/vcredist/vc_redist.x64.exe exists (>10 MB)');
+  console.error('[assert-ollama]   3. Re-run: npm run dist:win');
+  failed = true;
+} else if (vcredistSize < MIN_VCREDIST_SIZE_BYTES) {
+  console.error(`[assert-ollama] FAIL: vc_redist.x64.exe found but too small (${vcredistSize} bytes < ${MIN_VCREDIST_SIZE_BYTES} min). Corrupt download?`);
+  console.error('[assert-ollama]   Delete resources/vcredist/vc_redist.x64.exe and re-run npm run prepare:vcredist');
+  failed = true;
+} else if (vcredistSize > MAX_VCREDIST_SIZE_BYTES) {
+  console.error(`[assert-ollama] FAIL: vc_redist.x64.exe unusually large (${vcredistSize} bytes > ${MAX_VCREDIST_SIZE_BYTES} max). Wrong file?`);
+  failed = true;
+} else {
+  console.log(`[assert-ollama] PASS: vc_redist.x64.exe present in installer (${(vcredistSize / 1024 / 1024).toFixed(1)} MB)`);
 }
 
 if (failed) {

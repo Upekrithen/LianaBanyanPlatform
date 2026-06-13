@@ -1,0 +1,49 @@
+baseURL = "https://mnemosynec.ai/"
+languageCode = "en-us"
+title = "MnemosyneC — The AI that remembers"
+theme = "PaperMod"
+publishDir = "public-mnemosynec"
+contentDir = "content-mnemosynec"
+refLinksErrorLevel = "warning"
+enableRobotsTXT = true
+buildFuture = true
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+
+[pagination]
+  pagerSize = 10
+
+[params]
+  hideFooter = false
+  description = "MnemosyneC remembers. Every interaction with any AI grows your substrate. SHA256-stamped. Append-only. Federated. Workers, Builders, Creators keep 83.3%. No ads. No VC."
+  author = "Liana Banyan Corporation"
+  defaultTheme = "dark"
+  env = "production"
+  ShowReadingTime = false
+  ShowShareButtons = false
+  ShowPostNavLinks = false
+  ShowBreadCrumbs = false
+  ShowCodeCopyButtons = true
+  ShowWordCount = false
+  ShowRssButtonInSectionTermList = false
+  UseHugoToc = false
+
+  [params.label]
+    text = "MnemosyneC"
+    icon = "/LianaBanyanLogo.png"
+    iconHeight = 50
+
+[[menu.main]]
+  identifier = "nav-download"
+  name = "Download"
+  url = "/download/"
+  weight = 0
+
+[[menu.main]]
+  identifier = "nav-join"
+  name = "Join"
+  url = "https://lianabanyan.com/join"
+  weight = 1

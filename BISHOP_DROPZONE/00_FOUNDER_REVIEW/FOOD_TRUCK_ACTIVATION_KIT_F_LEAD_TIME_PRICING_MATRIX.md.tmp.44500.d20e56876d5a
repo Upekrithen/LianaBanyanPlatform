@@ -1,0 +1,182 @@
+# Food truck activation kit F: lead-time pricing matrix
+
+**Status:** READY FOR FOUNDER REVIEW
+**Authored:** 2026-06-10
+**Author:** Bishop SEG-FOOD-PRICING (Sonnet 4.6, Statute §3)
+**Composes with:** Kit D (meal-count tiers: Tier 1 / Tier 2 / Tier 3)
+**Feeds into:** Kit B (customer walkthrough), Kit C (operator setup), Wave C PRE-2
+
+---
+
+## RATIFICATION NOTICE
+
+**RATIFIED OPTION C (Founder direct 2026-06-10):** Merchant payment model is transaction-fee only. Merchant pays $0 weekly subscription. LB platform earns via Cost+20% application_fee_amount on each customer transaction routed through Stripe Connect Express. No weekly merchant billing relationship. The `STRIPE_PRICE_FOOD_NODE_WEEKLY` env var references a $0/week Stripe placeholder product (mechanically valid; never charges). Original Option A ($1/week) language below is preserved for posterity.
+
+Canon: `canon_merchant_payment_option_c_zero_weekly_transaction_fee_only_bp079_founder_ratify`
+Founder verbatim: "Option C. I'd go for that." (2026-06-10 in response to Bishop SEG-FOOD-PRICING Option A vs Option C comparison)
+
+---
+
+## §1: Founder verbatim (2026-06-10)
+
+"$5 per plate price if you order in advance and pay for it, per serving. Works for pizza/pasta/beans/rice. Not so much for beef or fish — that's why discount on pricier items (Cost+20% at least). Gadget what we have discussed and decided — what discount is applied, of what currency, for what lead time? Gadget 1 day or same day vs over 3 days etc. I want to make an amazing application of this for both the food provider and the recipient. If you order this to be delivered, in advance and pay for it, then it's $5 per serving. If you change any of those factors, it goes up in price. Because it's easy to add another 10 servings to the pizza I'm making, or even lasagna, if I know about it in advance so can buy ingredients to fit demand — which is what we need to emphasize on our little business plans — you can PREDICT THE FUTURE and leave the business you are already doing (which is On Demand) to the pricing that you already use. But on the future orders, the same scheduled delivery route, the same time of day, makes it VERY efficient, so you can literally plan the work day, excepting the much more expensive for all concerned spur of the moment orders."
+
+---
+
+## §2: Two-axis model
+
+This document adds a second axis to the Kit D tier model. Kit D answers: **how many meals do you commit to?** (1 / 3 / 12). Kit F answers: **how far ahead do you commit?** These two axes compose: a customer choosing a Month Plan who also commits 14 days out gets the best of both.
+
+### Axis 1: Protein cost class
+
+| Class | Examples | Pricing floor |
+|---|---|---|
+| Cheap protein | Pizza, pasta, beans, rice, lentils, eggs, tofu | $5.00/serving (advance, 3+ days) |
+| Expensive protein | Beef, fish, seafood, lamb, premium poultry | Cost+20% (no flat floor; margin must hold) |
+
+**Why the split exists:** cheap-protein meals have low, predictable ingredient costs. A food truck that knows 3 days ahead they need 40 extra servings of lasagna buys flour, cheese, and tomato sauce in bulk at negligible marginal cost per extra serving. $5/serving is a viable floor because COGS per additional serving is low.
+
+Beef and fish have volatile spot prices and no equivalent marginal-cost collapse at volume. A $5 floor on beef brisket or salmon would require the merchant to absorb real ingredient cost above that floor. Cost+20% protects the merchant: the customer pays Cost+20% of the merchant's actual ingredient cost for that item, and the platform takes its standard 16.7% of the customer price.
+
+### Axis 2: Lead time
+
+Five buckets. Discount and Marks scale with how far forward the customer commits.
+
+| Lead time | Label | Definition |
+|---|---|---|
+| Same day | On-demand | Order placed less than 4 hours before delivery/pickup |
+| 1 day | Near-term | Order placed 4 to 24 hours ahead |
+| 3 days | Planned | Order placed 3 to 6 days ahead (canonical minimum for $5/serving floor) |
+| 7 days | Week-ahead | Order placed 7 to 13 days ahead |
+| 14 days | Far-forward | Order placed 14+ days ahead |
+
+---
+
+## §3: The matrix
+
+**Merchant framing (canonical, for platform copy):**
+
+"On-demand stays on your existing menu prices. Planned-intake unlocks $5 per serving (cheap protein) or Cost+20% (expensive protein) when the customer commits 3 or more days ahead. The further forward, the better — both for you and for them."
+
+---
+
+### Cheap protein (pizza, pasta, beans, rice, lentils, eggs, tofu)
+
+| Lead time | Customer pays | Discount vs on-demand | Marks accrual | Notes |
+|---|---|---|---|---|
+| Same day (on-demand) | Full menu price | None | None | Merchant's existing pricing. Off-platform pricing allowed. |
+| 1 day | Full menu price | None | None | Convenience window. No planning win large enough to justify discount. |
+| 3 days | $5.00/serving (floor) | Varies by menu price | 5 Marks/meal | Canonical planned-intake floor. Requires advance payment at commitment. |
+| 7 days | $5.00/serving (floor) | Same as 3-day | 10 Marks/meal | Same dollar price; Marks bonus increases for longer commitment. |
+| 14 days | $5.00/serving (floor) | Same as 3-day | 20 Marks/meal | Maximum Marks accrual. Longest planning horizon for merchant. |
+
+**Note on $5 floor:** the $5/serving floor applies when the customer commits 3+ days ahead AND pays in full at the time of commitment. If either condition is missing (commitment without full prepayment, or prepayment same-day), the $5 floor does not apply and the meal prices at full menu price or standard tier discount per Kit D.
+
+---
+
+### Expensive protein (beef, fish, seafood, lamb, premium poultry)
+
+| Lead time | Customer pays | Discount vs on-demand | Marks accrual | Notes |
+|---|---|---|---|---|
+| Same day (on-demand) | Full menu price | None | None | Merchant's existing pricing. |
+| 1 day | Full menu price | None | None | No discount; lead time insufficient for expensive-protein planning. |
+| 3 days | Cost+20% of merchant ingredient cost | Up to 10% off menu price (dynamically computed) | 5 Marks/meal | Merchant enters ingredient cost; Atlas computes Cost+20% customer price. No fixed dollar floor. |
+| 7 days | Cost+20% of merchant ingredient cost | Up to 15% off menu price (dynamically computed) | 10 Marks/meal | Longer lead time = slight additional discount within Cost+20% constraint. |
+| 14 days | Cost+20% of merchant ingredient cost | Up to 20% off menu price (hard cap, Kit D Tier 3 ceiling) | 20 Marks/meal | Maximum lead-time discount. Hard cap: 20% off menu. |
+
+**How Cost+20% works for expensive protein:** the merchant logs the per-serving ingredient cost in Atlas. Atlas computes: customer price = ingredient cost × 1.20. The platform takes 16.7% of that customer price (Cost+20% structural margin). The merchant keeps 83.3%. If the merchant's salmon costs $8.00/serving in ingredients, the customer pays $9.60, the platform receives $1.60, and the merchant receives $8.00 — exactly recovering ingredient cost with zero margin before labor. To build margin, the merchant logs a cost that includes their labor overhead on expensive items, or prices at a higher cost basis. The COGS calculator in Atlas (Kit D §5) handles this.
+
+**Truth-Always:** the merchant must log honest ingredient cost. If a merchant logs $4 for salmon that costs $8, they set themselves up for a loss. Atlas prompts the merchant to verify cost entries against the platform's Harper Auditor transparency rule. This is not enforced automatically in Wave A; it is a merchant-honesty canon and a Wave C audit item.
+
+---
+
+### Combined matrix summary (per-serving, canonical)
+
+| | Same day | 1 day | 3 days | 7 days | 14 days |
+|---|---|---|---|---|---|
+| **Cheap protein** | Full menu price | Full menu price | **$5.00** | **$5.00** | **$5.00** |
+| **Expensive protein** | Full menu price | Full menu price | Cost+20% (up to 10% off) | Cost+20% (up to 15% off) | Cost+20% (up to 20% off) |
+| **Marks earned** | None | None | 5/meal | 10/meal | 20/meal |
+
+---
+
+## §4: How this composes with Kit D Tier 1/2/3
+
+Kit D tiers are about **meal count commitment.** Kit F lead-time tiers are about **advance notice.** They are orthogonal axes that compose as multipliers on planning win and Marks accrual.
+
+| Kit D tier | Minimum lead time to unlock | Lead-time pricing that applies |
+|---|---|---|
+| Tier 1 (Order now, 1 meal) | None (same-day fine) | On-demand pricing. No Kit F discount. |
+| Tier 2 (Week plan, 3 meals) | 24 hours (per Kit D §2) | 1-day lead-time bucket: no lead-time discount, but Kit D 15% meal-count discount applies. If customer commits 3+ days ahead for a Tier 2 plan, they also unlock Kit F pricing (cheap protein floors at $5/serving; $5 applied before or instead of the 15% discount, whichever is lower for the customer). |
+| Tier 3 (Month plan, 12 meals) | No minimum beyond payment at commitment | Customer committing 14 days out for 12 meals activates both Kit D 20% discount AND Kit F 20 Marks/meal. The two discounts do not stack (customer pays the better of the two prices, not both subtracted); Marks always accrue per Kit F regardless of which discount lane applies. |
+
+**Discount precedence rule (Truth-Always):** Kit D and Kit F discounts do not double-stack on the dollar price. The customer receives whichever discount is larger (Kit D meal-count discount or Kit F lead-time floor), not both. Marks always accrue independently per Kit F lead-time bracket. This prevents a compounding discount that makes the meal below merchant cost.
+
+Example: a Tier 3 month-plan customer committing 14 days out for cheap protein. Kit D 20% off gives $10.80/meal on a $13.50 menu price. Kit F $5/serving floor is lower. Customer pays $5.00/serving. Merchant receives 83.3% of $5.00 = $4.17/serving. COGS for cheap protein at volume should be well under $4.17 for this to work (see §8 Truth-Always).
+
+---
+
+## §5: Marks bonus per lead time (BP079 ratified)
+
+Marks accrue to the customer's cooperative-class ledger at commitment time, not at meal delivery. Marks are earned by the act of forward commitment — the planning gift to the merchant.
+
+| Lead time | Marks per meal committed | Basis |
+|---|---|---|
+| Same day / 1 day | 0 | No planning value delivered |
+| 3 days | 5 | Minimum planned-intake threshold |
+| 7 days | 10 | Week-ahead planning horizon |
+| 14 days | 20 | Far-forward planning; maximum accrual |
+
+**Canonical Marks rules (binding):**
+- Marks are not fiat-convertible. Ever. (Three-currency canon, structural bylaw.)
+- Marks accrue for the act of advance commitment with full prepayment. Commitment without prepayment earns no Marks.
+- Marks compound with Kit D tier participation: a Tier 3 Month Plan committed 14 days out earns 20 Marks/meal × 12 meals = 240 Marks for that commitment event.
+- Marks use: cooperative privileges, governance weight, platform participation record, unlock future cooperative tiers. Specific redemption mechanics are Wave C scope.
+
+---
+
+## §6: No-show policy reminder (ratified 2026-06-10)
+
+Applies to any prepaid meal (Tier 2, Tier 3, or any Kit F advance-paid commitment):
+
+1. Customer misses their scheduled meal.
+2. Atlas rolls the meal forward up to 7 days. Customer can reschedule within that window at no cost.
+3. If the customer does not reschedule within 7 days, the meal forfeits.
+4. Forfeited meal value goes to the community pool, which funds free meals for SNAP recipients and food-insecure neighbors.
+5. The customer sees: "Your meal was sent to your neighbor. Thank you."
+
+This is not a penalty. It is cooperative-class architecture. The customer's advance payment did not disappear; it fed someone. The merchant has already been compensated at week-start disbursement. No refunds are owed on forfeit; the community pool is the recipient.
+
+---
+
+## §7: What the merchant says to the customer (2 sentences)
+
+"Order now and you pay my regular menu price — no commitment needed. But if you order three or more days ahead and pay upfront, your meal costs $5 for pasta, rice, or beans, or closer to cost for beef and fish, and I can plan my whole week around knowing you're coming."
+
+---
+
+## §8: Truth-Always concerns
+
+**1. $5/serving may be below cost for cheap protein at low volume.**
+
+$5/serving works for cheap protein at volume: if the merchant is making 40 servings of lasagna instead of 30, the marginal cost of 10 more servings can be $2 to $3. But if a merchant prices a small-batch artisan pasta dish at $14 with $8 COGS, a $5 floor means they receive 83.3% of $5 = $4.17 and lose $3.83/serving. The $5 floor must be paired with the Atlas COGS calculator (Kit D §5). If a merchant's cheap-protein COGS is above $4.17/serving, the $5 floor is dangerous and Atlas should warn or decline to offer it.
+
+**Wave C requirement:** Atlas must validate merchant COGS before enabling the $5/serving floor. If COGS entered is above $4.17 per serving (83.3% of $5.00), Atlas surfaces a warning: "At your current ingredient cost, the $5 planned-intake price will result in a loss on this item. Consider a higher planned-intake floor or confirm your COGS is correct." Merchant can override with acknowledgment.
+
+**2. Expensive-protein Cost+20% requires honest COGS entry.**
+
+Already flagged above. Harper Auditor transparency rule applies. Wave C audit scope.
+
+**3. Kit D + Kit F discount non-stacking rule must be enforced in code.**
+
+If Atlas allows both Kit D meal-count discount and Kit F lead-time discount to stack, a Tier 3 + 14-day customer on cheap protein could get 20% off AND the $5 floor applied sequentially, producing an impossible price. The precedence rule in §4 (better of the two, not both) must be enforced at the Stripe Checkout Session creation step, not just in UI copy.
+
+**4. Marks accrual at commitment, not delivery, creates a forfeiture asymmetry.**
+
+If a customer earns 20 Marks at commitment and then no-shows, they keep the Marks but the meal forfeits to the community pool. This is by design (Marks reward the planning act; forfeit goes to community). But it is a policy Founder should consciously ratify rather than discover later. Flagged for ratification.
+
+---
+
+*End of document.*
+*Bishop SEG-FOOD-PRICING | 2026-06-10 | Statute §3 (Sonnet 4.6) | Truth-Always*
+*Kit F composes with Kit D (meal-count tiers). Both READY FOR FOUNDER REVIEW.*

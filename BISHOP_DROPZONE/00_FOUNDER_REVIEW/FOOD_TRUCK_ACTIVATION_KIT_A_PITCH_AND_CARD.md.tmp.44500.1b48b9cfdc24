@@ -1,0 +1,420 @@
+# Food Truck Activation Kit A: Pitch and Card
+## Liana Banyan Corporation, Cooperative-Class Merchant Onboarding
+### Status: READY FOR FOUNDER REVIEW / Floor mode available TODAY
+
+---
+
+> **Kit Purpose:** Founder (or any LB cooperative-class member acting as introducer) walks up to a local food truck owner, has a real human conversation, and invites them to join as a business node on the platform. This kit is a repeatable template. Any member can use it. The introducer gets attribution credit in the platform ledger when the merchant joins.
+
+> **One sentence of what LB IS today:** Liana Banyan is a cooperative platform where local businesses take online orders and offer weekly meal-prep subscriptions to members, and where Workers, Builders, and Creators keep 83.3% of every transaction, with a platform margin of Cost+20% and a $5/year structural membership fee. No VC. No ads. No extraction.
+
+---
+
+## §1. The Walk-Up Pitch (2 minutes spoken)
+
+### Opening: 10-Second Permission Ask
+
+You say this BEFORE handing anything. You're asking for a minute, not launching into a pitch.
+
+---
+
+**Variant A , Busy mid-rush** (owner is at the window, working)
+*(~15 words spoken; step back after so they can keep working)*
+
+> "Hey, I won't hold you up. Slow moment, I'd love to show you something I built. Card okay?"
+
+*If they nod or say sure: hand the card. Say nothing else until they have a break. Come back.*
+
+---
+
+**Variant B , Slow afternoon** (truck open, owner visible, no line)
+*(~25 words spoken)*
+
+> "Got a minute? I built something for local food businesses, and I'd like you to be one of the first ones I test it with. Can I show you?"
+
+---
+
+**Variant C , Post-shift relaxed** (truck closed or closing, owner packing down)
+*(~30 words spoken)*
+
+> "I know you're wrapping up. I won't take long. I've been building a platform for local businesses, and I wanted to walk you through it while I had the chance. Sound okay?"
+
+---
+
+### The 60-Second Pitch
+
+*(Read this aloud to practice; aim for conversational, not memorized. Adapt as needed.)*
+
+---
+
+"I built a cooperative platform. It's called Liana Banyan. You're already running your truck. This adds three things: a website for your business, a subscription engine so your customers can pre-commit to a weekly meal-prep order, and a scheduling app called Atlas that lets you plan ingredient buys before the week starts. The platform keeps Cost+20% as a margin. That's it. No VC taking a cut. No ads on your customers. No lock-in.
+
+The membership fee is $5 a year. That's the structural bylaw, not a promotion. Workers, Builders, and Creators keep 83.3% of every transaction on the platform.
+
+You set the menu. You set the price. Your customers pay half a week in advance through subscriptions, so you know what to buy before you buy it. Less waste, more predictable cash flow.
+
+I filed 21 provisional patents at the USPTO covering the technical architecture. The platform isn't backed by outside investors. It's designed to be owned by the people who use it.
+
+That's what it is."
+
+*(~155 words, ~65 seconds at conversational pace)*
+
+---
+
+### The 30-Second Close
+
+*(This is the ask. Say it plainly.)*
+
+---
+
+"Here's what I'm asking. I'd like to put your truck on the platform. You keep running your truck exactly as you always have. This adds online ordering, subscriptions for your customers, and cash-flow planning through Atlas. It takes about 10 minutes to walk through the setup with you.
+
+If you say yes: you get a node on the platform, I get credit for the introduction, and we get to work.
+
+If you say no: we shook hands and I learned something. Either way, we're good."
+
+*(~80 words, ~35 seconds)*
+
+---
+
+### Card Handoff Line
+
+*(Said as you physically hand them the card)*
+
+---
+
+"This card has the link. Scan the QR or type the URL. Takes about five minutes to walk through. Call me if you have questions, my number's on the back."
+
+---
+
+## §2. Card Copy Variants (3 designs)
+
+*All copy is print-ready. Each card side is 25 words or fewer. Sentence case. No shouting. No em-dashes.*
+
+---
+
+### Variant 1. Direct
+
+**FRONT**
+```
+Take online orders with no platform skim beyond Cost+20%.
+$5/year membership. Workers, Builders, and Creators keep 83.3%.
+
+<STRIPE_PAYMENT_LINK_URL>
+
+[QR CODE]
+```
+*(20 words)*
+
+**BACK**
+```
+What this is:
+
+- A cooperative platform for local food businesses
+- Weekly meal-prep subscriptions for your customers
+- No VC, no ads, no data sold
+
+Walk through it at <STRIPE_PAYMENT_LINK_URL>
+```
+*(28 words , trim "Walk through it at <STRIPE_PAYMENT_LINK_URL>" if needed for card size; fits standard 3.5x2 at 10pt)*
+
+---
+
+### Variant 2. Warm
+
+**FRONT**
+```
+What if you could offer weekly meal-prep subscriptions today,
+with no platform skim beyond Cost+20%?
+
+<STRIPE_PAYMENT_LINK_URL>
+
+[QR CODE]
+```
+*(22 words)*
+
+**BACK**
+```
+Why I'm asking:
+
+I built this platform for local businesses like yours.
+Workers, Builders, and Creators keep 83.3% of every transaction.
+$5/year membership. No VC. No ads.
+
+Let's talk: [Founder phone number]
+```
+*(31 words , trim to 25 by removing "Let's talk" line if space is tight)*
+
+---
+
+### Variant 3. Cooperative-class explicit
+
+**FRONT**
+```
+Liana Banyan: a cooperative platform for local businesses.
+Workers, Builders, and Creators keep 83.3%. $5/year membership. No VC. No ads.
+
+<STRIPE_PAYMENT_LINK_URL>
+
+[QR CODE]
+```
+*(24 words)*
+
+**BACK**
+```
+Ready to get set up?
+
+Scan the QR or use the link from your card.
+Takes five minutes. Call me with questions.
+
+[Founder name]
+[Founder phone number]
+```
+*(22 words)*
+
+---
+
+**Footnote, Card URL (applies to all three card variants above):**
+
+`<STRIPE_PAYMENT_LINK_URL>` is a placeholder. Founder generates the actual Stripe direct Payment Link in Stripe dashboard per Kit C §1 Step 3 before printing cards. Substitute a short Bitly or Stripe short-URL if the raw Stripe URL (format: `https://buy.stripe.com/[id]`) is too long for the card layout. Do not print cards pointing to `lianabanyan.com/join`; that route is not yet live.
+
+---
+
+## §3. Objection Handling
+
+*For each objection: Saladin's Pattern. Cooperative-class register. No false urgency. 60 words or fewer. Heart-of-Peace: this person is a person, not a target.*
+
+---
+
+**1. "What's the catch?" / "What's it cost me?"**
+
+> "No catch. The platform takes Cost+20% on each transaction, so if it costs the platform $1 to process your order, you pay $1.20. That's the full margin. Annual membership is $5. You keep 83.3%. That's not a promo, it's the structural bylaw."
+
+*(45 words)*
+
+---
+
+**2. "I'm too busy."**
+
+> "Completely fair. Here's the card. If there's ever a slow Tuesday, five minutes is all it takes to look. No follow-up pressure from me. You know where to find it."
+
+*(33 words)*
+
+---
+
+**3. "I don't have time to learn new tech."**
+
+> "The setup walk-through is about 10 minutes and I'll do it with you. You don't need to learn anything before you start. If it's not working for you after a week, you tell me."
+
+*(37 words)*
+
+---
+
+**4. "Is this a pyramid scheme / MLM?"**
+
+> "No. There's no recruitment structure, no commission chain, no requirement to bring in other members to earn anything. You take orders, you keep 83.3%, you pay $5 a year. That's the whole model."
+
+*(35 words)*
+
+---
+
+**5. "What happens to my data?"**
+
+> "Your data stays yours. The platform doesn't sell it. It doesn't run ads against it. The technical architecture is built so that data never leaves your node without your instruction. That's core to the design."
+
+*(37 words)*
+
+---
+
+**6. "Why $5/year? Sounds like a trick."**
+
+> "It's the structural membership fee written into the platform bylaws. It's not a loss-leader that goes up later. It's $5 because the cooperative-class structure requires members to have skin in the game, and $5 is the floor anyone can afford."
+
+*(44 words)*
+
+---
+
+**7. "Cost+20%? That's still 20%. Why not 0%?"**
+
+> "Fair question. 0% means someone else is paying for the platform, and that someone usually wants something back, like your customer data or a cut later when you're dependent. Cost+20% is what it costs to run the infrastructure plus a margin. No hidden line items."
+
+*(47 words)*
+
+---
+
+**8. "I already use Square / DoorDash / Toast / GrubHub. Why switch?"**
+
+> "You don't have to switch. You can run both. The difference is that those platforms take a much larger percentage and are owned by outside investors who need returns. This one is structured so you keep 83.3%. Use what works; add this where it fits."
+
+*(47 words)*
+
+---
+
+**9. "Who else is on this? Anyone I know?"**
+
+> "Honestly, this is a new platform. We have 8 members today, 21 USPTO provisional patents covering the architecture, and 2,270 innovations documented in the IP record. I'm the one who built it. I'm out here asking businesses I believe in to be early nodes. You'd be one of the first. We're at the founding-circle stage and that's exactly what it is."
+
+*(63 words)*
+
+*Note for Founder: member count above is 8 as of 2026-06-10, per Founder ratification. Update this number when it changes. Do not round up or estimate. Truth-Always.*
+
+---
+
+**10. "What if I want out later?"**
+
+> "You leave. There's no lock-in, no exit penalty, no contract that traps you. Your $5/year is for the current year. If you stop renewing, you're off the platform. Your data, your menu, your customers. You take all of that with you."
+
+*(44 words)*
+
+---
+
+**11. "I want to think about it."**
+
+> "That's exactly the right call. Take the card. There's no deadline, no limited-time offer. If you think about it and want to talk, call me. If you think about it and decide it's not for you, that's a real answer and I respect it."
+
+*(47 words)*
+
+*Heart-of-Peace note: Do not follow this with "but just consider..." Do not set a callback deadline. This person's time and decision are theirs.*
+
+---
+
+**12. "Why are YOU doing this?"**
+
+> "Because I think local businesses and the people who work in them deserve a better deal than what most platforms offer. I built this with my own hands. Liana Banyan is my garden. I'm not trying to get rich off it. I'm trying to make it work for the people who join it."
+
+*(56 words)*
+
+*Founder register note: This answer is yours. Adjust it to sound like you, not a script. The line "Liana Banyan is my garden" is canon and yours to use or not as feels right in the moment.*
+
+---
+
+## §4. Follow-Up Scripts
+
+*All follow-up is genuine contact, not pressure. Saladin's Pattern holds.*
+
+---
+
+### 24 Hours After (regardless of yes / no / maybe)
+
+**Text message:**
+> "Hey [name], it was good to meet you today. Just wanted to say thanks for the time. No pressure either way, I appreciated the conversation."
+
+*(26 words)*
+
+**Voicemail script:**
+> "Hey [name], this is [Founder name]. We talked today at your truck. I wanted to say thanks for the few minutes, I know you're busy. No action needed. If anything came to mind after I left, feel free to call me back. Take care."
+
+*(44 words)*
+
+---
+
+### 7 Days After (IF they said yes)
+
+**Text or short email:**
+> "Hey [name], checking in on the setup. How's it going? Anything that's not working or confusing? I want to make sure this is actually useful for you, not just another thing on your plate. Let me know."
+
+*(38 words)*
+
+---
+
+### 7 Days After (IF they said no)
+
+**Short note (text or handwritten if you see them again):**
+> "[Name], thanks again for hearing me out last week. I meant what I said, no pressure. If anything ever changes on your end, you know where to find me. Hope the truck's doing well."
+
+*(36 words)*
+
+*Do not re-pitch. Do not attach new materials. This note has one job: leave the door open with dignity.*
+
+---
+
+### 30 Days After (IF they said yes)
+
+**Message or call:**
+> "Hey [name], it's been a month. Wanted to check in on how the first subscription cycle went. What's working? What's a pain? Also, I want to be transparent: when you joined through my introduction, that gets recorded in the platform ledger as my attribution. You can see that in your account. The cooperative structure means those records are visible to you, not just to me. I want you to see how it works."
+
+*(75 words , trim for text; use full version for call or email)*
+
+*Truth-Always: the attribution ledger is in floor mode today, meaning it is tracked manually by Founder/Bishop until the in-app ledger view is live in Wave B. Be transparent about that if asked. "We're tracking it manually right now; the in-app view is coming in the next 48 hours."*
+
+---
+
+### 30 Days After (IF they said maybe)
+
+**One-line text:**
+> "Hey [name], no pressure. Wanted to see if anything's changed on your end. Happy to walk through it again or step back."
+
+*(23 words)*
+
+---
+
+## §5. Repeatability Notes
+
+**For any LB cooperative-class member who wants to use this kit with their own local merchant:**
+
+This kit is a template. You are the introducer. Your attribution credit is separate from Founder's. Here is how to use it cleanly.
+
+**What stays constant, regardless of merchant type:**
+
+- Heart-of-Peace: the owner is a person, not a lead. Respect their time and their no.
+- Cost+20% platform margin. Never misrepresent this as 0% or "free."
+- Workers, Builders, and Creators keep 83.3%. Full phrase, every time.
+- $5/year structural membership fee. Not negotiable, not promotional.
+- No false urgency, no false flattery, no false claims about what's built.
+- When in doubt, say what's true: "this is a new platform, here's what it does."
+
+**What changes by merchant type:**
+
+- Food truck: online ordering, weekly meal-prep subscription engine, local member customers.
+- Coffee shop: recurring subscription orders (daily coffee, weekly beans), local pickup.
+- Barber: appointment booking with subscription tiers (monthly cut, quarterly package).
+- Daycare: recurring invoice structure, parent communication node, cooperative-class provider support.
+
+For each merchant type, replace the food-truck-specific value prop in §1 and §2 with the one that fits. The Heart-of-Peace register, the 83.3% line, and the Cost+20% margin explanation stay identical.
+
+**Recording YOUR introducer credit (so it does not collide with Founder's):**
+
+When you walk up to a merchant, before or immediately after the conversation, log the introduction in the platform attribution ledger with your member ID, the merchant name, the date, and your contact method. If two members approach the same merchant, the first logged introduction is the one of record. If the merchant tells you they already spoke with someone from LB, ask who, and do not log yourself as introducer for that merchant.
+
+Floor mode today: log in the shared attribution ledger spreadsheet (see SEG-KIT-C for ops). Wave B will move this into the in-app ledger.
+
+*(293 words)*
+
+---
+
+## §6. Truth-Always Footnotes
+
+*These are the honest constraints on this kit as of the date authored (2026-06-10). Founder reads these before using any of the materials.*
+
+---
+
+**What IS working today (floor mode):**
+
+- The pitch script (§1) works in conversation today.
+- The card copy (§2) can be printed and handed today.
+- The objection responses (§3) are accurate to what LB IS today.
+- The follow-up scripts (§4) can be sent today.
+- Stripe dashboard direct checkout link is live for payment processing.
+- Attribution ledger is tracked manually by Founder/Bishop until Wave B.
+- 21 USPTO provisional patent applications are filed.
+- 2,270 innovation count is the canonical outward figure (source: BP070 close-stamp).
+- $5/year structural membership fee is bylaw-level.
+- Cost+20% platform margin is the stated structure.
+- Workers, Builders, and Creators keep 83.3% is the stated allocation.
+
+**What is NOT YET BUILT but is in-flight:**
+
+- Knight Wave A (substrate, routes, auth wiring, ~1 day): the cue card landing URL (lianabanyan.com/join) is not yet live as a registered route. Do not hand a card that points to a broken URL. Use the Stripe direct link or a manual onboarding conversation until Wave A lands.
+- Knight Wave B (page logic, food-node subscription engine, vesting, ~2 days): the full in-app walkthrough, the subscription automation, and the in-app attribution ledger view are all Wave B deliverables. The pitch describes what this WILL do; be prepared to say "we're activating the in-app setup in the next 48 hours" if the owner asks to sign up on the spot.
+- The in-app attribution ledger view (so the merchant can see the cooperative-class structure operating, as described in the 30-day follow-up) is Wave B. Floor mode: show them the manual ledger entry if they ask.
+
+**One structural constraint to surface:**
+
+The 83.3% allocation is the stated platform structure. It is not a guarantee of profitability for any individual merchant. A merchant who prices their food incorrectly or has high ingredient costs will not be made profitable by joining LB. Do not imply that joining LB fixes a struggling business. The cooperative structure improves the platform margin a merchant pays; it does not replace sound business fundamentals.
+
+**Founder reminder:** Fill in the current member count in Objection #9 before using this kit. Do not estimate. Do not round up.
+
+---
+
+*Authored by Bishop SEG-KIT-A, 2026-06-10. Statute §3: Sonnet 4.6. READY FOR FOUNDER REVIEW.*
+*File location: `LianaBanyanPlatform\BISHOP_DROPZONE\00_FOUNDER_REVIEW\FOOD_TRUCK_ACTIVATION_KIT_A_PITCH_AND_CARD.md`*

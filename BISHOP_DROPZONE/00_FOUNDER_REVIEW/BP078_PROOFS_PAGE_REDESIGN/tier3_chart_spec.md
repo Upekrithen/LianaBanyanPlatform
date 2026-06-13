@@ -1,0 +1,130 @@
+# Tier 3 Chart Specification
+
+## Status: PLACEHOLDER -- Data Pending
+
+<!-- TIER 3 DATA PENDING from Knight empirical Gemma 4 12B benchmark after v0.1.27-full install -->
+
+This chart runs after RoseBush v0.1.27-full installs on M1+M2+M3 and Knight executes the 120x30 benchmark program (BP073 Phase beta-W17).
+
+Knight fills the placeholder slots below and issues a Yoke return with the chart data.
+
+---
+
+## Chart: RoseBush vs Paid Flagships, Head to Head
+
+**Title:** RoseBush (Free Gemma 4 12B + Mnem-DRT + mesh) vs Paid Flagships
+
+**Chart type:** Horizontal grouped bar chart (models on Y axis, scores on X axis)
+- Horizontal layout for readability with 6-7 model rows
+- Color: RoseBush bar = distinct green/accent; flagships = muted gray/blue; Gemma baseline (no substrate) = orange dashed
+
+**Models (rows, top to bottom):**
+1. GPT flagship (GPT-4.5 or current)
+2. Claude Sonnet 4.6
+3. Gemini 2.5 Pro
+4. **RoseBush -- Gemma 4 12B + Mnem-DRT substrate (free)**
+5. Llama 3.1 (self-hosted)
+6. Gemma 2 2B (RoseBush bundled floor)
+7. Any model, substrate OFF (baseline control)
+
+**X axis:** Score (0-100), labeled "Banyan Metric Value (BMV)"
+- Reference line at 90 (PASS threshold)
+- Reference line at 85 (predicted minimum for Gemma 4 12B)
+
+---
+
+## Placeholder Data Slots (Knight fills these)
+
+### Slot T3-1: Gemma 4 12B + substrate, N=50 factual attribution
+- [ ] BMV mean: __________
+- [ ] BMV min: __________
+- [ ] BMV max: __________
+- [ ] Latency mean: __________
+- [ ] Latency median: __________
+- [ ] Pass rate: __ / 50
+- [ ] Cost (marginal per query): $__________
+- [ ] Test rig: CPU/GPU/RAM: __________
+- [ ] Ollama version: __________
+- [ ] Model tag: __________
+- [ ] Run timestamp: __________
+- [ ] Output JSONL path: __________
+
+### Slot T3-2: Gemma 2 2B baseline (bundled model)
+- [ ] BMV mean: __________
+- [ ] Pass rate: __ / 50
+- [ ] Latency mean: __________
+
+### Slot T3-3: Substrate OFF baseline (any model, no injection)
+- [ ] BMV mean: __________
+- [ ] Pass rate: __ / 50
+- [ ] Notes: __________
+
+### Slot T3-4: Flagship comparative scores (same harness or labeled proxy)
+- [ ] Claude Sonnet 4.6: __________  (method: __________  )
+- [ ] GPT-4o/4.5: __________  (method: __________ )
+- [ ] Gemini 2.5 Pro: __________  (method: __________ )
+
+**Acceptable method options for flagship slots:**
+- (a) Run flagship API against the same 50 questions with factual-key grading (gate_fact only; no BMV). Label clearly as "factual key match, not full BMV."
+- (b) Use MMLU-Pro public leaderboard as proxy. Label clearly as "MMLU-Pro proxy, different harness."
+- (c) Leave UNVERIFIED with hatched bar.
+
+Founder decides which method. Truth-Always: do not blend methods silently.
+
+### Slot T3-5: Cost per query comparison
+- [ ] Gemma 4 12B local: $__________ (electricity estimate at residential kWh rate + inference time)
+- [ ] Claude API (model: __________): $__________ per query (source: pricing page, date __________)
+- [ ] GPT API (model: __________): $__________ per query (source: pricing page, date __________)
+- [ ] Gemini API (model: __________): $__________ per query (source: pricing page, date __________)
+
+### Slot T3-6: Speed (first complete response, same hardware)
+- [ ] Gemma 4 12B local MTP: __________ s first token
+- [ ] Gemma 4 12B local, no MTP: __________ s first token
+- [ ] Comparison to Gemma 2 2B: __________ x faster/slower
+- [ ] Honest note: MTP binding status in Ollama: __________
+
+### Slot T3-7: Refusal rate
+- [ ] Gemma 4 12B: ____ / 50 questions refused
+- [ ] Frontier flagships (if tested): ____ / 50 questions refused
+- [ ] Domains with refusals (if any): __________
+
+---
+
+## Prediction Receipt (pre-run, locked 2026-06-04)
+
+The prediction for Tier 3 is locked to git commit `3c13d11cef010f39794eef65c795e4bfad3dd46f` (pre-run HEAD, 2026-06-03 19:31:51 -05:00). See `content/proofs/bishop-prediction-bp073.md` for the full signed statement.
+
+**Prediction headline:** Gemma 4 12B + substrate >= 85 on the same harness, at $0 marginal cost, ~227x cost ratio vs flagship API.
+
+**Falsification criteria:**
+- WINS if: score >= 85, cost ratio >= 50x
+- LOSES if: score < 75 OR cost ratio < 50x
+- PARTIAL (75-84): cooperative-class thesis defensible but not fully proven; next wave addresses the gap
+
+Results will be published regardless of outcome with "Check my Numbers" as the publication phrase.
+
+---
+
+## Knight Action Items for Tier 3
+
+1. Install RoseBush v0.1.27-full on M1+M2+M3
+2. Run: `python run_n50_swarm_bp077.py --model gemma4:12b --output results_bp073_gemma4_12b_tier3.jsonl --batch-mode --gap 15`
+3. Fill all placeholder slots above
+4. Run flagship comparisons (choose method from Slot T3-4 options; get Founder decision first)
+5. Compute cost per query: `electricity_kWh * inference_time_h * residential_rate_per_kWh`
+6. Test MTP drafter binding: `ollama run gemma4:12b` and check if MTP fires (logs show "speculative decoding" or similar)
+7. Record test rig specs (CPU model, RAM, GPU if any)
+8. Issue Yoke return to Bishop with all slots filled
+9. Bishop or Knight replaces placeholder section in `proofs_page_draft.md` with actual chart shortcode + verified numbers
+
+---
+
+## Chart Visual Treatment (placeholder display)
+
+Until Knight fills the slots, the page displays:
+
+- A static prediction table (already in `proofs_page_draft.md`)
+- A gray placeholder box with copy: "Results incoming. Test is running after v0.1.27-full installs. Prediction locked to commit hash. Check back."
+- Link to `bishop-prediction-bp073.md` for the full pre-run prediction
+
+Do NOT publish partially-filled chart data. Either all slots are filled, or the placeholder shows. Truth-Always.

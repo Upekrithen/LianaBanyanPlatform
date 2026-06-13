@@ -1,0 +1,1024 @@
+# FOOD TRUCK ACTIVATION KIT B — WALKTHROUGH COPY
+## Owner-Facing Screen-by-Screen Copy
+### SEG-KIT-B · Bishop Sonnet 4.6 · Statute §3 · 2026-06-10
+
+---
+
+## §0 — Voice + Visual Constraints (Knight implementation notes)
+
+**Purpose:** These rules govern every screen in the
+RedCarpetWalkthrough component. Knight: apply them uniformly.
+Do not override for any individual screen.
+
+**Voice:**
+- Sentence case only. No ALL CAPS words or phrases.
+- No em-dashes. Use a comma, period, or line break instead.
+- Plain English. If a food truck owner wouldn't say the word
+  on a Tuesday, cut it.
+- Owner is the subject of every call-to-action.
+  "Add your menu" not "Menu can be added."
+- Warmth comes from honesty, not exclamation marks.
+  One exclamation mark is allowed per full flow. Use it wisely.
+
+**Layout:**
+- Mobile-first. Max content width: 375px safe zone.
+- 80-character line limit for all copy blocks.
+- Each screen carries exactly one primary decision.
+  Secondary actions are visually subordinate.
+- Progressive disclosure: don't front-load information.
+  Owner earns the next screen by clicking through the last one.
+
+**Loading and feedback (canons, no exceptions):**
+- Every button triggers a visible state change on tap.
+  Minimum: spinner + button text change to "Working..."
+- Any async operation over 3 seconds shows a progress
+  indicator with specific copy (see §9).
+- Stripe redirect gets a named loading state, not a blank screen.
+- Post-checkout webhook wait gets a heartbeat indicator.
+
+**Accessibility:**
+- Tap targets: minimum 44x44px.
+- Color contrast: WCAG AA minimum.
+- Every interactive element has an accessible label.
+
+---
+
+## §1 — Screen 1: Landing
+
+*Displayed after owner scans QR code or visits cue card URL.*
+*Owner is on their phone. They have 7 seconds before they bounce.*
+
+---
+
+### Introducer attribution (top of screen, above headline)
+
+```
+[Founder photo thumbnail — 40px circle]
+<Founder first name> invited you to join LianaBanyan.
+```
+
+Knight implementation note: pull `introducer_name` and
+`introducer_photo_url` from cue_card payload. If photo is
+null, show initials avatar. If introducer_name is null,
+fall back to "A member invited you to join LianaBanyan."
+Never show a blank attribution strip.
+
+---
+
+### Headline
+
+```
+Your truck. Your customers. Your terms.
+```
+
+*(7 words, sentence case)*
+
+---
+
+### Subhead
+
+```
+An online ordering cooperative built for local food businesses,
+not for Wall Street.
+```
+
+*(16 words)*
+
+---
+
+### Hero copy
+
+```
+LianaBanyan is a member-owned cooperative. Your customers
+join for $5 a year. You list your truck, take online orders,
+and run weekly meal-prep subscriptions. You keep 83.3% of
+every transaction. No algorithm decides your placement.
+No VC is waiting to extract value from your business.
+```
+
+*(58 words)*
+
+---
+
+### CTAs
+
+**Primary button:**
+```
+Walk through this with me (5 min)
+```
+Loading state on tap: "Getting your walkthrough ready..."
+
+**Secondary button:**
+```
+Just give me the short version
+```
+Loading state on tap: "Loading..."
+Secondary action: jumps to §2 summary view (anchor #short-version)
+
+---
+
+### Trust strip (small text, bottom of screen)
+
+```
+SSPL licensed · Pledge #2260 · 21 USPTO provisional patents
+Workers, Builders, and Creators keep 83.3%
+```
+
+Knight implementation note: these are Truth-Always claims.
+Do not add to this strip without Founder ratification.
+The patent count (21) must match the current provisional
+count in the librarian; update if new provisionals are filed.
+
+---
+
+## §2 — Screen 2: What's In It For You
+
+*Owner-specific value proposition.*
+*This screen answers the only question that matters right now:*
+*"Why should I care about this?"*
+
+---
+
+### Headline
+
+```
+Here is what this does for your truck.
+```
+
+---
+
+### Four value propositions
+
+**1. Online ordering, without the toll booth.**
+```
+List your menu. Customers order online. You keep 83.3%.
+Cost+20% is the structural bylaw, not a marketing claim.
+```
+*(22 words)*
+
+**2. Weekly subscriptions that let you plan.**
+```
+Customers pre-commit to a weekly meal bundle. You know
+what to buy before you buy it. Less waste, more margin.
+```
+*(24 words)*
+
+**3. Customers who actually support local.**
+```
+Your customers are cooperative members, not bargain hunters
+looking for a coupon. They joined because they believe in this.
+```
+*(22 words)*
+
+**4. 83.3% is the rule, not the exception.**
+```
+Workers, Builders, and Creators keep 83.3%. We keep 16.7%
+to run the cooperative. That is the whole structure.
+```
+*(22 words)*
+
+---
+
+### CTAs
+
+**Primary button:**
+```
+Show me how it works
+```
+
+**Secondary button:**
+```
+I have questions first
+```
+Action: opens the FAQ accordion (§7). Back button returns
+owner to this screen.
+
+---
+
+## §3 — Screen 3: How It Actually Works
+
+*Three steps. Each step is one sentence of body copy.*
+*No more. Owner is still on their phone.*
+
+---
+
+### Headline
+
+```
+Three steps. About 10 minutes total.
+```
+
+---
+
+### Step 1
+
+**Headline:**
+```
+Sign up in 2 minutes.
+```
+
+**Body:**
+```
+$5/year membership. Stripe checkout. No card on file
+beyond that until you ship your first order.
+```
+
+---
+
+### Step 2
+
+**Headline:**
+```
+List your truck.
+```
+
+**Body:**
+```
+Add your menu, your delivery area, and your weekly
+subscription tiers. Founder helps you set the first version.
+```
+
+---
+
+### Step 3
+
+**Headline:**
+```
+Start taking orders.
+```
+
+**Body:**
+```
+Online ordering goes live. Subscriptions roll weekly.
+Workers, Builders, and Creators keep 83.3%.
+```
+
+---
+
+### CTAs
+
+**Primary button:**
+```
+I'm in. Let's do this.
+```
+Action: opens Stripe checkout.
+Loading state: "Opening secure checkout... (this takes a
+few seconds)"
+If Stripe redirect takes over 5 seconds: show "Still
+working on it. Stripe is loading your checkout."
+
+**Secondary button:**
+```
+I want to talk to a human first.
+```
+Action: opens contact-Founder form. Pre-fill with
+Founder's name, phone, and email from platform config.
+Form headline: "Send <Founder first name> a message."
+
+---
+
+## §4 — Screen 4: The Cooperative-Class Difference
+
+*For the owner who wants to know why this isn't*
+*just another Square or DoorDash.*
+*This screen is optional depth. Don't force it.*
+
+---
+
+### Headline
+
+```
+Why this is different from every other option.
+```
+
+---
+
+### Subhead
+
+```
+Not a slight improvement on the extractive model.
+A different structure entirely.
+```
+
+---
+
+### Three differentiators
+
+**No VC.**
+```
+We refused venture capital. This cooperative will not be
+sold. The charter includes a 50-year dissipation clause.
+There is no exit that benefits an investor at your expense.
+```
+*(35 words)*
+
+**No ads.**
+```
+Your customers are members, not products. We do not sell
+their attention. We do not sell their data. Their
+information lives on their own machines.
+```
+*(30 words)*
+
+**No extraction.**
+```
+Cost+20% is a structural bylaw. You keep 83.3%.
+We keep 16.7% to operate. That is the whole math.
+No platform fee creep. No surprise commission changes.
+```
+*(33 words)*
+
+*Total: 98 words. Under 150-word cap.*
+
+---
+
+### CTAs
+
+**Primary button:**
+```
+Take me to signup
+```
+Action: opens Stripe checkout.
+
+**Secondary button:**
+```
+Tell me more about the structure
+```
+Action: links to architecture/about page on lianabanyan.com.
+Opens in new tab.
+
+---
+
+## §5 — Screen 5: Sign-Up + Stripe Checkout Handoff
+
+*Final decision screen before Stripe opens.*
+*Owner reads exactly what they are agreeing to.*
+*No ambiguity. No fine print that changes the terms.*
+
+---
+
+### Confirmation block
+
+Knight: populate all `<variable>` fields from cue card
+payload and session state.
+
+```
+You are signing up <business name> for LianaBanyan
+membership.
+
+Membership: $5 per year
+Your share: Workers, Builders, and Creators keep 83.3%
+Introduced by: <Founder first name> <Founder last name>
+
+This is a cooperative membership, not an investment.
+You are not purchasing equity, shares, or any financial
+instrument. You are joining a cooperative that operates
+under Cost+20% bylaws.
+```
+
+If `business_name` is null: "You are signing up for
+LianaBanyan membership." (do not show a blank field)
+
+If `introducer_name` is null: omit the "Introduced by"
+line entirely. Do not show a blank or placeholder.
+
+---
+
+### CTAs
+
+**Primary button:**
+```
+Confirm and pay
+```
+Action: opens Stripe checkout with introducer_user_id
+threaded in metadata.
+Loading state on tap: "Opening secure checkout..."
+If Stripe redirect fails: show error state (see §8).
+
+**Secondary button:**
+```
+Back
+```
+Action: returns owner to Screen 1 (walkthrough start).
+
+---
+
+### Below-button text
+
+```
+After payment, you will set up your truck profile.
+About 10 minutes. <Founder first name> is on text
+if you get stuck: <Founder phone number>.
+```
+
+Knight: pull Founder phone from platform config constant.
+Do not hardcode. If phone is not configured, omit the
+sentence rather than showing a blank.
+
+---
+
+## §6 — Screen 6: Post-Checkout Success
+
+*Shown after Stripe webhook fires success.*
+*Owner just paid. This is the first moment they are a member.*
+*Warmth. Clarity. Next step immediately visible.*
+
+---
+
+### Visual
+
+Large checkmark icon (cooperative green or brand primary).
+No animation longer than 1 second. Owner is on mobile;
+keep it snappy.
+
+---
+
+### Headline
+
+```
+Welcome to LianaBanyan. Let's set up <business name>.
+```
+
+If `business_name` is null: "Welcome to LianaBanyan.
+Let's set up your truck."
+
+---
+
+### Body
+
+```
+You are in. Your membership is active. Here is what
+to do next. Each step takes just a few minutes.
+```
+
+---
+
+### Three next-step buttons (equal visual weight, stacked)
+
+**Button 1:**
+```
+Set up your menu (~5 min)
+```
+Action: opens MenuSetupView.
+Loading state: "Loading your menu builder..."
+
+**Button 2:**
+```
+Set up weekly subscriptions (~3 min)
+```
+Action: opens SubscriptionSetupView.
+Loading state: "Loading subscription setup..."
+
+**Button 3:**
+```
+I'll do this later. Show me the dashboard.
+```
+Action: routes to main truck dashboard.
+Loading state: "Taking you to your dashboard..."
+
+---
+
+### Below buttons, small text
+
+```
+Need a hand? Text <Founder first name> at <Founder phone>.
+He is the human who introduced you.
+```
+
+Knight: same config-pull pattern as §5. Omit sentence if
+phone not configured. Do not show a placeholder.
+
+---
+
+## §7 — In-App FAQ Copy
+
+*Expandable accordion. Owner can access from Screen 2*
+*secondary CTA or from Settings at any time.*
+*Rhythm here is direct. Read once, understand once.*
+
+---
+
+### Q1: What is LianaBanyan?
+
+```
+LianaBanyan is a member-owned cooperative platform for
+local food businesses. Members are customers, truck owners,
+builders, and creators. There is no investor class.
+No one profits by extracting value from your work.
+The cooperative operates under Cost+20% bylaws.
+You keep 83.3% of every transaction you generate.
+```
+*(56 words)*
+
+---
+
+### Q2: Is this a coop? How is it different from a normal company?
+
+```
+Yes, a cooperative. A normal company has shareholders who
+profit when costs go down and prices go up. That incentive
+is the problem. This cooperative has a structural bylaw:
+Cost+20% is the operating limit. Members direct the
+cooperative. There is no board extracting returns.
+The 50-year charter includes a dissipation clause:
+if this ever dissolves, assets go to members, not founders.
+```
+*(70 words)*
+
+---
+
+### Q3: What is the $5/year for?
+
+```
+It is your membership contribution. It covers your seat
+at the table as a cooperative member. It is not a
+subscription fee for access to features. It is not
+a deposit. It does not auto-escalate. $5/year is the
+structural floor. The bylaw does not permit extracting
+more from members to fund growth for investors,
+because there are no investors.
+```
+*(61 words)*
+
+---
+
+### Q4: Why Cost+20%? Why not 0%?
+
+```
+Operating a payment platform, hosting infrastructure,
+and member support costs real money. 0% would mean the
+platform runs at a loss funded by... what? Advertising?
+Investor capital? Both corrupt the incentive. Cost+20%
+is honest: we recover actual costs, plus a 20% margin
+to stay healthy and build. You see the math.
+It does not compound to extraction.
+```
+*(62 words)*
+
+---
+
+### Q5: What happens to my customer data?
+
+```
+Customer data lives on their own machines via the
+MnemosyneC local substrate. It is not sold. It is not
+used for advertising. It is not on a central server
+waiting to be breached or subpoenaed. The SSPL license
+and cooperative charter both bind us to this.
+We cannot monetize member data without a charter amendment
+that members themselves would have to ratify.
+```
+*(65 words)*
+
+---
+
+### Q6: Can I leave? What happens to my customers if I do?
+
+```
+You can leave. Your membership is year-to-year; do not
+renew and it lapses. Your customer relationships are yours.
+We do not lock customers to your truck profile on exit.
+You keep your contact list. Your order history is yours
+to export. We do not hold your customers hostage
+to keep you on the platform. That would be extraction.
+```
+*(63 words)*
+
+---
+
+### Q7: How does the introducer credit work?
+
+```
+When a member introduces a new member who joins,
+the introducer receives a credit allocation inside the
+cooperative. Credits are one of three currencies the
+cooperative uses (Credits, Marks, and Joules). Credits
+track contribution and participation. They are not
+equity. They are not shares. They do not convert to
+dollars. They make prior contribution more valuable
+as the cooperative grows.
+```
+*(63 words)*
+
+---
+
+### Q8: What are Credits, Marks, and Joules?
+
+```
+Three internal currencies that track different kinds of
+contribution. Credits track participation and referral.
+Marks track labor and creative work. Joules track
+computational work contributed to the cooperative.
+None of the three convert to fiat currency. Ever.
+Members get actual dollars through actual hiring and
+payment for real work, not through currency conversion.
+Substitution makes earlier contributions more valuable
+as the cooperative grows.
+```
+*(69 words)*
+
+---
+
+### Q9: Why no VC, no ads?
+
+```
+Venture capital creates an exit incentive. The investor
+needs a return. The only way to get that return is to
+sell the platform or extract more value from members.
+We refused that structure. Advertising creates a second
+problem: members become products. We refused that too.
+The cooperative is funded by Cost+20% operations.
+Growth comes from member value, not from monetizing
+member attention.
+```
+*(66 words)*
+
+---
+
+### Q10: Are you actually open source? Can I see the code?
+
+```
+Yes. The platform is licensed under SSPL (Server Side
+Public License). The license is stricter than MIT.
+If you modify and run this code as a service,
+you must open source the whole stack. That means
+no one can fork it into a closed competitor.
+The code is publicly visible. 21 USPTO provisional
+patents are filed on the underlying methodology.
+Those are on record at the USPTO.
+```
+*(70 words)*
+
+---
+
+### Q11: Who runs this? Who owns it?
+
+```
+The cooperative is member-owned. The founding team
+built the initial platform. As the cooperative grows,
+governance passes to members through the cooperative
+structure. The founding charter includes a 50-year
+dissipation clause: even if the founders wanted to,
+they cannot sell it to a VC or a corporation without
+a member-ratified amendment. Right now, the founding
+team operates it. The structure prevents capture.
+```
+*(66 words)*
+
+---
+
+### Q12: What is "Pledge #2260"?
+
+```
+Pledge #2260 is a public commitment logged in the
+cooperative record. It marks a founding principle:
+this platform will not be used to harm the people
+it serves. The number is the pledge index in the
+cooperative ledger. It is not a slogan. It is a
+logged, permanent commitment that members can cite
+if the cooperative ever drifts from what it said
+it would be.
+```
+*(68 words)*
+
+---
+
+## §8 — Error States + Empty States
+
+*Each error state: Heart-of-Peace voice.*
+*Do not blame the owner. Do not pretend everything is fine.*
+*State the situation. Give the owner one clear next step.*
+
+---
+
+### Stripe payment failure
+
+```
+Payment did not go through. Your card was not charged.
+Try a different card, or text <Founder first name>
+for help: <Founder phone>.
+```
+*(27 words)*
+
+**Button:** "Try again" (returns owner to Stripe checkout)
+
+---
+
+### Network drop mid-walkthrough
+
+```
+Lost the connection. Your progress is saved.
+Reload when you have signal and pick up where you left off.
+```
+*(22 words)*
+
+**Button:** "Reload" (attempts reconnect and resumes state)
+
+---
+
+### Owner already has an account
+
+```
+You already have a LianaBanyan account.
+Sign in to get to your dashboard.
+```
+*(15 words)*
+
+**Button:** "Sign in" (routes to auth screen)
+
+---
+
+### Card link expired
+
+```
+This invitation link has expired.
+Ask <introducer name> to send you a fresh one.
+```
+*(16 words)*
+
+If introducer name is null: "Ask your contact to send
+you a fresh invitation link."
+
+---
+
+### Card link revoked by introducer
+
+```
+This invitation is no longer active.
+Ask <introducer name> to send a new one if you still
+want to join.
+```
+*(22 words)*
+
+If introducer name is null: "This invitation is no
+longer active. Contact the person who gave you the link if you still want to join."
+
+---
+
+## §9 — Long-Running Progress States
+
+*Per BP078 canon: any operation over 3 seconds wall-clock*
+*must show a progress indicator with specific copy.*
+*"Loading..." is not acceptable. Name what is happening.*
+
+---
+
+### Stripe redirect (loading state)
+
+**Trigger:** primary CTA tap on Screen 3 or Screen 5.
+**Expected duration:** 2 to 6 seconds.
+
+**Loading copy:**
+```
+Opening your secure checkout. Just a moment.
+```
+
+**Progress indicator:** spinner + copy above.
+
+**Fallback (over 8 seconds):**
+```
+Stripe is taking a little longer than usual.
+Still working. Do not close this screen.
+```
+*(16 words)*
+
+---
+
+### Post-checkout webhook wait (Screen 6 entry)
+
+**Trigger:** return from Stripe after successful payment.
+**Expected duration:** 3 to 10 seconds for webhook confirmation.
+
+**Loading copy:**
+```
+Confirming your membership. This takes just a few seconds.
+```
+
+**Progress indicator:** animated step indicator showing
+"Payment received" checkmark + "Activating membership..." spinner.
+
+**Fallback (over 15 seconds):**
+```
+This is taking a little longer than expected.
+Your payment went through. We are confirming membership.
+If this screen does not advance, text <Founder phone>.
+```
+*(28 words including contact line. Acceptable: this is a
+money moment and needs the contact fallback.)*
+
+Knight: at 15 seconds, if webhook has not fired,
+also trigger a background email to Founder alerting
+to the delayed confirmation so he can manually verify.
+This is a human-safety net, not a band-aid.
+
+---
+
+### Walkthrough initial load (cue card data fetch)
+
+**Trigger:** owner opens the cue card URL or scans QR.
+**Expected duration:** 1 to 4 seconds.
+
+**Loading copy:**
+```
+Loading your invitation from <introducer name>...
+```
+
+If introducer name is unknown at load time:
+```
+Loading your invitation...
+```
+
+**Fallback (over 6 seconds):**
+```
+Taking a little longer than usual. Almost there.
+```
+
+---
+
+### Menu setup save (Screen 6, "Set up your menu" flow)
+
+**Trigger:** owner taps save on any menu item.
+**Expected duration:** 1 to 3 seconds.
+
+**Loading copy:**
+```
+Saving your menu item...
+```
+
+**Fallback (over 5 seconds):**
+```
+Save is taking a moment. Your item is not lost.
+Still working.
+```
+
+---
+
+## §10 — Truth-Always Footnotes (Developer Notes for Knight)
+
+*These notes are for Knight implementing Wave B.*
+*They surface copy lines that depend on live tables,*
+*fall-back modes, and threading requirements.*
+*Read all of §10 before writing a line of implementation.*
+
+---
+
+### Screen dependencies on Wave A tables
+
+**The following screens require Wave A to be deployed:**
+
+- Screen 1 (introducer attribution): requires
+  `leviathan_cue_cards` table with `introducer_user_id`,
+  `introducer_name`, and `introducer_photo_url` fields.
+  Fall-back: show "A member invited you to join LianaBanyan."
+
+- Screen 5 (confirmation block): requires
+  `leviathan_cue_cards` for `business_name` and
+  `introducer_name`. Fall-back copy specified in §5.
+
+- Screen 6 (post-checkout): requires
+  `red_carpet_access` and `membership_payments` for
+  membership activation confirmation.
+  Fall-back: show generic success + Founder contact.
+
+- Screen 8 error states: "card link expired" and
+  "card link revoked" require `leviathan_cue_cards`
+  status field. Fall-back: show generic "link not active"
+  message.
+
+---
+
+### Screens that work in floor mode (Wave A not live)
+
+- Screen 1: works with static Founder attribution
+  (hardcoded Founder name + photo from platform config).
+- Screen 2: fully static. No table dependency.
+- Screen 3: fully static. No table dependency.
+- Screen 4: fully static. No table dependency.
+- Screen 5 floor: show "You are signing up for
+  LianaBanyan membership" without business name or
+  introducer. Direct Stripe checkout link.
+- Screen 6 floor: show generic success screen with
+  Founder contact. No personalization.
+- FAQ (§7): fully static.
+
+**Floor mode Stripe link:** use the platform's direct
+$5/year membership Stripe payment link from config.
+Do not hardcode a URL in the component. Pull from
+`STRIPE_MEMBERSHIP_LINK` environment constant.
+
+---
+
+### introducer_user_id threading
+
+The introducer_user_id must travel the full chain:
+
+```
+QR code / cue card URL
+  → cue card token in URL query param
+  → fetch leviathan_cue_cards by token
+  → extract introducer_user_id
+  → pass as Stripe checkout metadata key
+    "introducer_user_id"
+  → webhook handler reads metadata
+  → writes introducer_user_id to membership_payments row
+  → attribution credit allocated to introducer
+```
+
+If introducer_user_id is missing at any step: proceed
+with checkout, log the gap, do NOT block the signup.
+A missed attribution is recoverable. A blocked signup
+is not.
+
+---
+
+### Every-click-visible-feedback canon (per BP078)
+
+Applies to every button in the walkthrough. Knight:
+this is a hard binding, not a suggestion.
+
+Minimum compliance per button:
+- Button text changes to "Working..." on tap.
+- OR button shows a spinner inside the button bounds.
+- OR button disables with visual dimming + spinner appears.
+
+Specific high-risk buttons (money moments):
+- "Confirm and pay" (Screen 5): disable immediately on
+  tap to prevent double-tap double-charge. Show spinner.
+  Do not re-enable until Stripe redirect completes or
+  error state is shown.
+- "I'm in. Let's do this." (Screen 3): same pattern.
+
+Every button in §8 error states must also have
+visible feedback on tap.
+
+---
+
+### Long-running-progress-heartbeat canon (per BP078)
+
+Applies to every async operation in the walkthrough.
+
+Minimum threshold: 3 seconds wall-clock.
+
+Operations that require heartbeat handling:
+- Cue card fetch on initial load (§9)
+- Stripe redirect (§9)
+- Post-checkout webhook confirmation (§9)
+- Menu setup save (§9)
+- Subscription setup save (not copy-authored here;
+  apply same pattern from §9)
+
+Knight: the post-checkout webhook wait is the
+highest-risk. A user who paid and sees a blank or
+frozen screen will call their bank. The 15-second
+fallback with Founder contact is not optional.
+
+---
+
+### Truth-Always concerns surfaced for Founder review
+
+**"Walk through this with me (5 min)" — Screen 1 primary CTA:**
+The 5-minute claim is accurate if Wave B is fully deployed
+and the Stripe redirect is under 30 seconds. In floor mode
+(no cue card tables, no personalization), the flow is
+shorter, not longer. The claim is defensible.
+
+**"About 10 minutes total." — Screen 3 headline:**
+This covers sign-up + menu setup + subscription setup.
+In practice, a first-time owner setting real menu items
+may take 20 to 30 minutes. Consider "About 10 minutes
+to get started" to allow for real setup time.
+Flag for Founder to decide before ship.
+
+**"Founder helps you set the first version." — Screen 3, Step 2:**
+This is true when Founder is doing personal activation.
+As the cooperative scales, this will be a team function.
+Either time-bound this copy ("during early access") or
+flag for revision before scale. Do not let it age into
+a false promise.
+
+**"21 USPTO provisional patents" — Screen 1 trust strip:**
+This count must match the current provisional filing count.
+If Prov-22 is filed before Wave B ships, update to 22.
+Do not ship stale IP count. Knight: pull from a config
+constant, not a hardcoded string.
+
+**Credits, Marks, and Joules (FAQ Q8):**
+The three-currency answer is accurate per canon.
+The line "substitution makes earlier contributions more
+valuable" is canon but may need a plain-English example
+for a food truck owner who has never heard of it.
+Consider adding one sentence of example in a future
+pass. Flagged, not blocking.
+
+**"50-year charter includes a dissipation clause" (FAQ Q2, Q11, Screen 4):**
+This is canon per memory. Founder should verify this
+is in the finalized Articles before this copy ships
+publicly. If Articles+Bylaws are still in counsel review,
+soften to "charter is structured to prevent sale or
+dissolution for investor benefit" until ratified.
+
+---
+
+*End of FOOD_TRUCK_ACTIVATION_KIT_B_WALKTHROUGH_COPY.md*
+*SEG-KIT-B · Bishop Sonnet 4.6 · READY FOR FOUNDER REVIEW*
+*STAGED: LianaBanyanPlatform\BISHOP_DROPZONE\00_FOUNDER_REVIEW\*

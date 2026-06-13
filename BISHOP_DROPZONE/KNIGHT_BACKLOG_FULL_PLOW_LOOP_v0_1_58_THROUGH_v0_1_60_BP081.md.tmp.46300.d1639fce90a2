@@ -1,0 +1,351 @@
+---
+backlog: KNIGHT_BACKLOG_FULL_PLOW_LOOP_v0_1_58_THROUGH_v0_1_60_BP081
+bp: BP081
+composed_at: 2026-06-13
+composed_by: Bishop Opus 4.7 (1M)
+target_versions: v0.1.58 + v0.1.59 + v0.1.60
+purpose: close the FULL Plow Loop — Shadow E-Giant adjudication + domain-scattered Spider fan-out + per-domain Q banks + Andon re-plow trigger + multi-vote Giant. End state: mesh can do domain-scattered "get-it-right-the-last-time" across 14 domains.
+supersedes: KNIGHT_BACKLOG_v0_1_57_AND_v0_1_58_BP081.md (prior v0.1.58 scope was Post Results + Cue Deck Card share; reprioritized — Plow loop is more load-bearing)
+status: QUEUED — Knight fires v0.1.58 wave when Founder pastes "v0.1.58 GO" (AFTER v0.1.57.1 heartbeat/streaming wave lands first if Founder ratifies that)
+hard_bindings:
+  - "🚨 BP081 BLOOD STATUTE — ONLY Sonnet 4.6 for SEGs. EVER. Every yoke-return 'Model used: Sonnet 4.6' verbatim. NEVER Composer 2.5."
+  - "Forward-pressure ≠ verified-ratify (BP080) — DRAFT until Founder explicit 'publish it' post-smoke."
+  - "Caithedral spelling enforced — never 'Cathedral'"
+  - "Actual runtime verify (BP078) — compiles-clean ≠ fixed; runtime probe / install screenshot required"
+  - "UX SEG screenshot mandatory (BP078)"
+  - "Every-click visible feedback (BP078) — silence = broken"
+  - "Long-running heartbeat (BP078) — anything >3s shows progress"
+  - "Dispatch ≠ executing — verify each SEG output file has real content before relaying"
+  - "Belief-vs-binary check (BP081) — diagnostic log confirms binary version BEFORE diagnosing regression"
+  - "Verify-network-call-fired (BP081) — check server.log / receiver-layer BEFORE diagnosing IPC failures"
+  - "100%-read before eblet (Statutes §2 BP063)"
+  - "Session canon must be disk-backed (BP080) — anything Knight claims exists must have a disk path. No more Phase-10-P-style claims-without-receipts."
+  - "Velocity statement (Founder BP081): 'AS SOON AS POSSIBLE to v0.1.60.'"
+substrate_thesis_load_bearing:
+  - "The substrate is a verified-knowledge accumulator. Plow loop writes only verified-correct answers (Andon-gated) → eblets. Gemma reads eblets BEFORE answering (HOT path). Each Test It Out run grows the user's local substrate. Free + Accurate + Fast is architectural consequence of three-layer architecture (Reader = Gemma · Verifier = Shadow E-Giant · Accumulator = Eblet store)."
+  - "v0.1.56 SEG-4 = R1 writer (Spider/Sprite accept → writeVerifiedEblet)"
+  - "v0.1.57 SEG-1 = R2 HOT reader (Gemma retrieves eblets BEFORE inference)"
+  - "v0.1.58 = R3 Andon persistence + Shadow E-Giant basic concordance dispatch in LIVE TS Plow loop (replaces exact-match grading)"
+  - "v0.1.59 = Spider domain fan-out + per-domain Q banks + Andon re-plow trigger + multi-domain Plow runner"
+  - "v0.1.60 = Multi-vote Giant + 14-domain Deep Test tab + Full Plow Loop demonstrable end-to-end + LB membership + Stage 6 + Cue Deck Card share + Post Results"
+shadow_corp_taxonomy:
+  - "Shadow Corp = umbrella for cooperative-class agent ecosystem"
+  - "Shadow E-Giants (SEGs) = the subagents Bishop + Knight dispatch (Sonnet 4.6 BLOOD STATUTE binding). What we've been calling 'SEGs' all session = Shadow E-Giants."
+  - "Shadow E-Spiders (E-Spiders, Espiders, Spiders) = spider_registry.ts — FAISS cosine drift traversal, parallel prospecting per anchor"
+  - "Shadow E-Sprites (E-Sprites, Esprites, Sprites) = sprite_registry.ts — N-parallel first-win delivery, file-flag recall"
+  - "The Giant CLASS exists and operates today at the agent dispatch layer. What is NOT yet wired: MnemosyneC application runtime dispatching Shadow E-Giants programmatically inside its own Plow loop. v0.1.58 closes that gap at basic level."
+---
+
+# Knight Backlog · FULL PLOW LOOP · v0.1.58 → v0.1.59 → v0.1.60 · BP081
+
+Knight — Bishop. This backlog supersedes the prior v0.1.57+v0.1.58 queue. Founder ratified the full Plow Loop priority over Post Results / MCP polish — those slip to v0.1.60 carry-along. Plow Loop is load-bearing: it's what makes the substrate-accumulator architecture demonstrable end-to-end.
+
+**Fire order:**
+1. v0.1.57.1 heartbeat/streaming (spec at `BP081_FEATURE_SPEC_ASK_HEARTBEAT_AND_TOKEN_STREAMING.md`) — Founder ratifies separately
+2. **v0.1.58 = THIS DOCUMENT, §A** — wait for Founder "v0.1.58 GO"
+3. **v0.1.59 = THIS DOCUMENT, §B** — wait for Founder "v0.1.59 GO"
+4. **v0.1.60 = THIS DOCUMENT, §C** — wait for Founder "v0.1.60 GO"
+
+Each wave: paste-ready Knight Yoke, 4-5 SEGs (Sonnet 4.6 ALL), VERIFY → STAGING-UPLOAD → SHIP. DRAFT until verified-ratify. Same canonical pattern that landed v0.1.55 → v0.1.57 LATEST.
+
+---
+
+# §A — v0.1.58 SCOPE — Shadow E-Giant basic concordance in live Plow loop + R3 Andon persistence
+
+**Theme:** wire the Giant CLASS into the MnemosyneC runtime. Today `iron_egiant_promotion.py` exists as a Shadow-promotion entity but the live TypeScript Plow loop has NO concordance verifier — `TestItOutTab.tsx` uses exact-match grading only. v0.1.58 changes that.
+
+## SEG-1 · Live Giant concordance dispatch into TS Plow loop (P0, **Sonnet 4.6**)
+
+**Goal:** when the Plow loop needs to adjudicate "is this answer verified-correct?" — dispatch a Shadow E-Giant concordance verifier in TypeScript, NOT exact-match string compare.
+
+**Scope:**
+- New module: `src/main/plow/giant_concordance.ts`
+- Function: `runGiantConcordance(question, candidateAnswer, opts): Promise<{verdict: 'verified' | 'rejected' | 'split', confidence: number, votes: VoterVote[]}>`
+- Implementation: dispatch N (default 3) parallel Ollama prompts to local Gemma, each with a different prompt-template (correctness lens / consistency lens / coverage lens — three distinct adversarial framings)
+- Parse each verdict (verified / rejected) — Andon discipline: REJECT on uncertainty
+- Concordance: 2-of-3 agree → verdict locked; split → escalate (log + flag for manual review)
+- Replace exact-match grading in `TestItOutTab.tsx` with this concordance call
+- Spider/Sprite accept paths: continue to call `writeVerifiedEblet` ONLY when Giant verdict = `verified`
+- Telemetry: log every concordance run with verdict + per-voter votes (for substrate-improvement analysis)
+
+**Edge cases:**
+- All 3 voters return same verdict → high-confidence write
+- Split 2-1 → write but flag confidence
+- Network failure mid-vote → degrade gracefully, log, retry once
+- Local Gemma OOM → fallback to single-vote with low confidence flag
+
+**Verify (runtime):**
+- Run Test It Out 5 questions on M0 → confirm concordance log entries written
+- Confirm verified-correct answers land in eblet store with Giant verdict metadata
+- Confirm rejected answers do NOT write (Andon)
+- Screenshot Test It Out tab post-run with concordance summary visible
+
+## SEG-2 · R3 Andon cross-session persistence audit + fix (P0, **Sonnet 4.6**)
+
+**Goal:** prove that failed-answer eblets NEVER cache, AND that verified-correct eblets DO persist across Electron restart / app reinstall / OS reboot.
+
+**Reference:** `BP081_SUBSTRATE_ACCUMULATOR_AUDIT.md` SEG-0 R3 gap.
+
+**Scope:**
+- Walk every eblet-write path (Spider accept, Sprite delivery winner, Test It Out verified-correct, Ask HOT-write-through)
+- Confirm `verified=true` structurally enforced BEFORE write call
+- Confirm append-only JSONL is in app userData path that survives reinstall (NOT temp / NOT in-bundle)
+- Add startup integrity check: on app launch, scan eblet store for any malformed lines / verified=false survivors → quarantine to `eblets.quarantine.jsonl` + log to diagnostic
+- Add "substrate stats" surface (small): Total eblets · Verified-correct count · Last-write timestamp · Quarantine count
+
+**Verify (runtime):**
+- Install on M0 · write 3 test eblets via Test It Out · close app · reopen → confirm 3 still present
+- Simulate Electron crash mid-write → confirm no partial line · no verified=false survivors
+- Screenshot substrate stats surface
+
+## SEG-3 · Stale-message auto-clear on app-version change (P1, **Sonnet 4.6**)
+
+**Founder ratified BP081 2026-06-13 — implement.**
+
+**Goal:** prevent ghost-error rehydration across version upgrades (the BP081 v0.1.57 trap).
+
+**Scope:**
+- Stamp app version in localStorage alongside message history: `mnemo_ask_history_version`
+- On app launch: read `app.getVersion()`; compare to stamped version
+- If different (= upgrade) → prune `mnemo_ask_history` of any entries with error class messages; OR clear entirely; OR keep but mark stale
+- Recommend: prune only error-class messages, keep successful Q&A history
+
+**Verify:** simulate v0.1.X → v0.1.X+1 upgrade with seeded error in history → confirm error pruned, valid history kept.
+
+## SEG-4 · Onboarding gate UX auto-flip (P1, **Sonnet 4.6**)
+
+**Founder ratified BP081 2026-06-13 — implement.**
+
+**Goal:** when SKU tier is `full` + Ollama healthy + Gemma present + Test It Out has run at least once, auto-set `mnemosynec_onboarding_complete='1'` so user sees full 17-tab Advanced view.
+
+**Scope:**
+- Diagnostic check at app launch
+- If all conditions met → set onboarding flag automatically
+- Otherwise: keep LeanShell + show "Get Started" affordance with clear progression
+
+**Verify:** install on M2 (pre-existing Gemma) → confirm Advanced view appears post-first-launch without manual flag-setting.
+
+## SEG-5 · v0.1.57.1 / v0.1.58 carry-along sweep (P2, **Sonnet 4.6**)
+
+Any deferred items from prior waves + new drift Founder surfaces. Fold in if zero-conflict; else queue v0.1.58.1.
+
+## VERIFY · STAGING-UPLOAD · SHIP (Sonnet 4.6, canonical pattern)
+
+Same 4 EVERY TIME sharpenings. DRAFT until Founder "publish it" post 4-machine smoke.
+
+---
+
+# §B — v0.1.59 SCOPE — Spider domain fan-out + per-domain Q banks + Andon re-plow trigger
+
+**Theme:** make the Plow loop DOMAIN-SCATTERED. Today `spider_registry.ts` is single-anchor drift with no domain parameter. v0.1.59 adds: per-domain Spider dispatch, per-domain question banks for 14 MMLU-Pro domains, and the live Andon re-plow trigger (failed answer → re-dispatch through Spider → re-vote → write only when verified).
+
+## SEG-1 · Spider domain fan-out (P0, **Sonnet 4.6**)
+
+**Goal:** Spider class accepts a `domain` parameter and dispatches per-domain prospecting in parallel.
+
+**Scope:**
+- Extend `spider_registry.ts` Spider type with `domain: DomainTag`
+- New dispatch path: `dispatchSpidersForDomains(domains: DomainTag[], anchor): Spider[]` — fans out N Spiders in parallel, one per domain
+- Each Spider drifts within its domain's FAISS subspace (or uses domain-tagged eblets as anchors)
+- Aggregation: collect parallel Spider returns, sort by drift-coherence per domain
+- Used by: Plow runner when seeking verified answers across multiple domains
+
+**Verify:** dispatch 3 Spiders concurrently (Math / Physics / Biology), confirm each returns domain-tagged candidates, no cross-domain contamination.
+
+## SEG-2 · Per-domain 14-domain MMLU-Pro Q banks (P0, **Sonnet 4.6**)
+
+**Goal:** create per-domain question banks for all 14 MMLU-Pro domains. Today only K533 sealed 20-Q smoke exists. Need real per-domain banks.
+
+**CRITICAL — disk-backed canon binding (BP080):** every claim of "Q bank exists" must have a file path verifiable on disk. No Phase-10-P-style aspirational claims. If a bank can't be built for a domain in this wave, surface it explicitly and queue.
+
+**Scope:**
+- Layout: `lb-reproducibility-pack/datasets/mmlu_pro_per_domain/<domain>/questions.json`
+- 14 domains: Math, Physics, Chemistry, Biology, Computer Science, Engineering, History, Philosophy, Law, Business, Economics, Psychology, Health, Other
+- Per-domain target: minimum 20 Qs (matching K533 smoke quality), ideal 50+
+- Sources: MMLU-Pro upstream HuggingFace dataset (`TIGER-Lab/MMLU-Pro`) — fetch + filter per-domain + curate against the Andon discipline (each Q has correct answer locked + adversarial-vetted)
+- Sealed receipt: each domain bank gets a sha256 + metadata file + canon eblet receipt
+- Bank-load path: `runMmluProPerDomain(domain, qIndex): Question` — used by Plow runner
+
+**Edge cases:**
+- Some domains may not have 20 high-quality Qs in upstream → surface explicitly, queue for v0.1.60 augmentation
+- Upstream HuggingFace API rate limits → batched fetch with retry
+- Curated banks need disk-backed receipts before claiming "14 domains ready"
+
+**Verify (runtime):**
+- Confirm all 14 directories exist on disk with at least one Q file each
+- Confirm sha256 receipts present for each bank
+- Run Plow on 5 random Qs from 3 different domains → confirm domain-routing works
+
+## SEG-3 · Andon re-plow trigger (P0, **Sonnet 4.6**)
+
+**Goal:** wire the live re-plow loop. When Giant concordance returns `rejected` or `split`, the Plow runner re-dispatches through Spider with adjusted parameters and re-votes.
+
+**Scope:**
+- New module: `src/main/plow/andon_replow.ts`
+- Function: `runAndonReplowLoop(question, maxAttempts=3): Promise<EbletWriteResult>`
+- Loop body:
+  1. Spider domain fan-out (SEG-1)
+  2. Sprite first-win selection
+  3. Giant concordance verify (v0.1.58 SEG-1)
+  4. If verified → writeVerifiedEblet + return
+  5. If rejected/split → adjust Spider params (different drift, more candidates), increment attempt counter
+  6. Repeat until verified OR maxAttempts hit
+- On max-attempts-hit: log + quarantine the unresolved question for future analysis
+- Telemetry: log every loop iteration for substrate-improvement analysis
+
+**Verify (runtime):**
+- Seed a question that initially fails concordance
+- Confirm re-plow loop iterates 2-3 times before either verifying or quarantining
+- Confirm only verified-correct lands in eblet store
+
+## SEG-4 · Multi-domain Plow runner UI (P1, **Sonnet 4.6**)
+
+**Goal:** Test It Out tab grows beyond 5-Q smoke. New "Plow the Field" mode that runs N Qs across M domains in parallel, surfacing progress per-domain and overall.
+
+**Scope:**
+- Test It Out tab gets domain selector (multi-select)
+- "Plow" button kicks off SEG-3 loop across all selected domains in parallel
+- Live UI: per-domain progress bar + counter + heartbeat (BP078 long-running canon)
+- Aggregate stats panel: total Qs · verified-correct count · rejected count · quarantined count · eblets written
+- Substrate growth indicator: "Your local substrate grew by N eblets this run"
+
+**Verify:** screenshot all states (idle / running with per-domain progress / complete with summary).
+
+## SEG-5 · v0.1.58 carry-along sweep (P2, **Sonnet 4.6**)
+
+Same pattern.
+
+## VERIFY · STAGING-UPLOAD · SHIP (Sonnet 4.6, canonical pattern)
+
+---
+
+# §C — v0.1.60 SCOPE — Multi-vote Giant + Deep Test 14-domain + Full Plow Loop demonstrable + LB membership + Stage 6 + Post Results + Cue Deck Card share
+
+**Theme:** the FULL substrate-accumulator architecture demonstrable end-to-end. v0.1.60 is the version the Founder velocity statement targets ("AS SOON AS POSSIBLE to v0.1.60"). This is where the moat goes from "buildable" to "built."
+
+## SEG-1 · Multi-vote Giant concordance (P0, **Sonnet 4.6**)
+
+**Goal:** scale concordance from 3 voters (v0.1.58) to configurable N (default 5+) with weighted voting + perspective-diverse prompts (correctness / consistency / coverage / security / repro).
+
+**Scope:**
+- Extend `giant_concordance.ts` from v0.1.58
+- Voter pool: 5+ parallel Gemma calls with 5+ distinct perspective-lens prompts (per Bishop's adversarial-verify canon — "diversity catches failure modes redundancy can't")
+- Weighted voting: high-confidence verdicts count more; ties broken by adversarial-pass lens
+- Configurable threshold (3-of-5 default, 4-of-5 for high-stakes domains)
+- Audit trail: every vote logged with prompt-lens + verdict + reasoning excerpt
+
+**Verify:** seed 10 known-correct + 10 known-incorrect answers; confirm concordance discriminates ≥90% correctly.
+
+## SEG-2 · Deep Test 14-domain tab unlock (P0, **Sonnet 4.6**)
+
+**Goal:** new "Deep Test" tab that runs the FULL 14-domain MMLU-Pro Plow Loop. This is the demonstrable end-state.
+
+**Scope:**
+- New tab: `DeepTestTab.tsx`
+- Run mode: all 14 domains × 20+ Qs each (= 280+ Qs minimum), parallel-batched per domain
+- Live progress: per-domain bar + overall bar + ETA
+- Output: per-domain accuracy score + aggregate score + substrate-growth count + eblets-written count
+- Post-run: "Share your results" button → triggers v0.1.60 Cue Deck Card share to peers (opt-in per BP080 mesh-share canon)
+- Result-card surface: shows score across domains in a visual that's screen-shottable for sharing
+
+**Verify:** install on M0 + walk Deep Test on Gemma 4 12B → confirm completes + accuracy lands in expected range (per BP080 honest baseline: COLD ≈ Google's 77.2% MMLU-Pro; HOT lift after substrate-warming should be measurable).
+
+## SEG-3 · LB membership + Stage 6 unlock (P0, **Sonnet 4.6**)
+
+**Coffee §5 v0.1.60 scope.**
+
+**Scope:**
+- LB membership join flow (Cost+20% / $5/year / canonical numbers strict — BP080 §5 canonical voice)
+- Stage 6 (Federation stage in Gauntlet, per BP080 LAN federation infrastructure)
+- 3-option intent capture at JOIN modal (BP078 canon)
+- Post-join: Deep Test unlocked + Cue Deck Card share unlocked
+
+**Verify:** end-to-end join + Deep Test + share roundtrip across 2 machines.
+
+## SEG-4 · Post Results + Cue Deck Card share (P1, **Sonnet 4.6**)
+
+**Coffee §5 v0.1.58 scope, slipped to v0.1.60.**
+
+**Scope:**
+- After Test It Out / Deep Test runs, "Post Results" button: composes a shareable result-card (score + version + machine fingerprint) → pushes to peer via v0.1.56 Cue Deck Card share infrastructure
+- Inbound: receive other peers' results → "MnemosyneC Leaderboard" panel
+- Privacy: opt-in per result-post; default off; explicit toggle
+
+**Verify:** M0→M1 share roundtrip with screenshots.
+
+## SEG-5 · MCP server as Substrate Bridge (P0, **Sonnet 4.6**) — Founder ratified BP081 2026-06-13
+
+**Promoted from P1 polish to P0 substrate-bridge.** This is the Path B closer for browser-AI users. Every MCP-aware client (Claude Desktop, Cursor, any other MCP-capable tool) calls into MnemosyneC and grows the user's substrate even when they never open MnemosyneC's own Ask tab.
+
+**Goal:** MnemosyneC exposes a local MCP server. External MCP clients connect to it. Every tool call routed through MnemosyneC's substrate-accumulator pipeline. The user gets eblet growth FROM ANY AI INTERACTION THAT GOES THROUGH AN MCP-AWARE CLIENT.
+
+**Strategic load-bearing:** today the substrate accumulator only fires when user opens MnemosyneC's Ask tab. This SEG closes the gap for the Path B user (keeps using ChatGPT-style flow via Claude Desktop or Cursor). The substrate-as-asset thesis materializes for far more user types.
+
+**Scope:**
+
+### Required tools exposed by MnemosyneC MCP server
+
+- **`mnem_query_substrate(question)`** — query the user's local eblet store; returns top-K verified eblets matching the question. Read-only. This lets external AI tools "consult the user's accumulator" before answering.
+- **`mnem_record_qa(question, answer, provenance?, verified?)`** — record a Q+A pair into the Plow pipeline. If `verified=true` (e.g., user-marked good answer in external tool), goes directly to Andon-gated write path. If unspecified, dispatched into the Plow loop for concordance verification before write.
+- **`mnem_get_substrate_stats()`** — returns total eblets, verified-correct count, last-write timestamp, top domains by eblet count. Lets external tools surface "your MnemosyneC substrate has N eblets in M domains" status.
+- **`mnem_run_giant_concordance(question, candidateAnswer)`** — let an external tool ask MnemosyneC to verify an answer through the Shadow E-Giant concordance pipeline (3-voter from v0.1.58, multi-vote from v0.1.60 SEG-1). Returns verdict + confidence.
+- **`mnem_share_eblet_to_peer(ebletId, peerId?)`** — opt-in per-eblet mesh share (R4 from substrate-accumulator audit). User-consent-gated.
+
+### MCP server transport
+
+- Local-only (default): `stdio` and `localhost:` TCP — no remote MCP exposure by default
+- Discovery: standard MCP manifest at well-known path so Claude Desktop / Cursor / other MCP clients auto-discover
+- Auth: token-based, user grants per-client access via a settings panel in MnemosyneC ("MCP clients connected: 2 — Claude Desktop, Cursor")
+
+### UX surface in MnemosyneC
+
+- New small panel in Settings or Connect Via Invite Token Availability tab: "MCP Substrate Bridge"
+- Shows: server status (running / off), token to paste into MCP client config, connected clients list, recent calls (last 10)
+- Toggle: enable / disable per-tool (allow `mnem_query_substrate` but require explicit consent for `mnem_record_qa`)
+- Every-click visible feedback canon
+
+### Integration with v0.1.58 Giant + v0.1.60 multi-vote
+
+- `mnem_record_qa` with `verified=false` (default) → routes through the Plow loop, Giant concordance (v0.1.58 SEG-1, scaled to v0.1.60 SEG-1's 5-voter)
+- `mnem_record_qa` with `verified=true` → direct Andon-gated write (user explicitly vouched)
+- `mnem_run_giant_concordance` → exposes the verification primitive directly
+
+### Marketing implication (for Bishop to draft after ship)
+
+> *"Use Claude Desktop. Use Cursor. Use whatever MCP-aware tool you like. MnemosyneC's substrate grows from those sessions automatically. Your substrate. Your eblets. Your knowledge. Compounding in the background while you work."*
+
+### Verify (runtime)
+
+- Install MnemosyneC v0.1.60 + configure Claude Desktop to connect to MnemosyneC MCP server (token paste)
+- In Claude Desktop, ask a question that triggers a tool call → confirm `mnem_query_substrate` fires + returns
+- Mark an answer as verified in Claude Desktop → confirm `mnem_record_qa` writes eblet
+- Open MnemosyneC Settings → confirm "Connected clients: Claude Desktop · 3 calls last hour"
+- Run `mnem_run_giant_concordance` from Claude Desktop on a test answer → confirm verdict returned
+- Screenshot all surfaces (Settings panel, Claude Desktop showing tool calls, MnemosyneC substrate stats showing growth)
+
+### Edge cases
+
+- MCP client disconnects mid-call → graceful, no eblet half-write
+- Multiple clients connect simultaneously → independent sessions, no conflict
+- User revokes a client's token → immediate cutoff, no orphan calls
+- Substrate query returns nothing → graceful empty response (client decides what to do)
+
+## SEG-6 · v0.1.59 carry-along sweep (P2, **Sonnet 4.6**)
+
+Same pattern.
+
+## VERIFY · STAGING-UPLOAD · SHIP (Sonnet 4.6, canonical pattern)
+
+**v0.1.60 SHIP is the moment.** The substrate-accumulator architectural thesis goes from "buildable" to "demonstrable end-to-end" on real hardware on real machines. The moat is built.
+
+---
+
+# Bishop velocity notes for Knight
+
+- **Founder velocity statement: "AS SOON AS POSSIBLE to v0.1.60."** Each version should be a tight, shippable bump — NOT a batched mega-wave. If a SEG in v0.1.58 turns out 3× bigger than estimated, surface it and split to v0.1.58.1 / v0.1.59 instead of bloating the wave.
+- **Disk-backed canon (BP080)** binds especially tight at v0.1.59 SEG-2 (per-domain Q banks) and v0.1.60 SEG-2 (Deep Test). Every claim of "14 domains ready" must have 14 disk paths verifiable. No phantom Phase-10-P claims.
+- **Belief-vs-binary canon (BP081)** binds at every VERIFY: confirm the SHIPPED binary contains the new feature, not just that source compiled clean.
+- **Verify-network-call-fired canon (BP081)** binds at every runtime test: don't trust UI; check the receiver-layer log.
+- **v0.1.60 = the moat.** Every prior version is foundation; v0.1.60 is the demonstrable architecture. Treat it with appropriate gravity.
+
+— Bishop · BP081 · 2026-06-13

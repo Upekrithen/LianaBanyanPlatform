@@ -1,0 +1,138 @@
+# MnemosyneC + Liana Banyan: User Threads Cohesion Package
+
+**For:** Pawn (Perplexity)
+**From:** Bishop on behalf of Founder, BP078, 2026-06-08
+**Ask:** Independent cohesion judgment. Read the three threads below. Return YOUR own gap list. Bishop's gap list has been deliberately omitted so you do not anchor on it. Three to five gaps maximum per thread, plus an overall arc verdict.
+
+The arc Founder is testing: AI savings/proof = the LURE and the PAYOFF. The cooperative platform = the continued colossal value. Where does that arc hold? Where does it fragment? Where is the user thrown off the rails?
+
+All claims below are source-verified by Sonnet 4.6 SEGs against the codebase paths listed in each thread. No Bishop inference. If a claim is spec-only and not implemented, the package says so.
+
+---
+
+## THREAD 1: THE LURE (Visit → Install → Proof → Join)
+
+The actual screen sequence a user moves through, in order. Each line is sourced.
+
+1. **mnemosynec.ai download card** (`amplify-computer/public/download.html`). User clicks the .exe link. **Note: the on-disk file is pinned at v0.1.16 with old branding "Mnemosyne" not "MnemosyneC."** The live mnemosynec.ai page is a different deploy (BP067 download-page-v2, canon pearl_46fef838) that does carry the Cue Card and benchmark graph; the source-of-truth file on disk is stale.
+
+2. **Windows SmartScreen / UAC.** OS installer prompt. No in-app coaching. User on their own.
+
+3. **Bp067FirstRunSpine Step 1 "Welcome"** (`src/renderer/components/Bp067FirstRunSpine.tsx` line 270). Gated by `LS_BP067_FIRST_RUN_COMPLETE`. User reads "Your private AI. Lives on your computer. $0 to ask anything." Actions: "Let's try it" or "Skip first-run."
+
+4. **Step 2 "Try it"** (line 299). Auto-fires `window.amplify?.askFloorModel?.(AUTO_TEST_PROMPT)` with prompt "What is the name of a famous elephant?" and a 30-second timeout. User watches spinner.
+
+5. **Step 3 "Success"** (line 321). Green checkmark + AI's actual answer in a blockquote. Actions: "Ask it anything" (jumps to Frame tab) or ghost link "Optional: Add a folder." **No mention here of $5 join, cooperative, or Gauntlet.**
+
+   OR **Step 4 "Options"** (line 360, error/timeout fallback only). Three options:
+   - A: "Use the bundled AI" (retry local Ollama, calls `setupPrivateAI`)
+   - B: "Borrow a trusted friend's node" (calls `lbRequestFrontierBorrow`, mesh TCP)
+   - C: "Choose a different AI folder" (folder dialog for existing Ollama model path)
+   - Ghost: "Continue without AI for now"
+
+   These are NOT user-intent options. They are AI-setup-failure recovery.
+
+6. **Step 5 "Folder picker"** (line 481). Optional, only via ghost link on success screen. User picks a folder for watcher IPC. Not mandatory.
+
+7. **MnemosyneTabView main shell** (`src/renderer/components/MnemosyneTabView.tsx` line 434). After `bp067Complete`, the spine unmounts, Tab 1 (Frame) loads as default. Transparent outlining window. No "what now?" prompting toward proof tests.
+
+8. **Gauntlet Tab (Tab 3)** (`GauntletTab.tsx`). **Hidden behind `forTechies` localStorage flag** (MnemosyneTabView line 327). Default users do not see it. No UI surfaces a way to enable "For Techies."
+
+9. **Gauntlet results page** (line 262). Per-stage rows (speed_delta, cost_delta, accuracy_delta) + cumulative Banyan Metric card. **ALL deltas are scaffolded simulations.** `simulateDelta()` (line 221) returns random floats; `simulateBanyanMetric()` (line 215) returns from a hardcoded array. Comment at line 218: "SAGA 08 replaces this with real substrate measurement." The actual cross-node network-effect proof (pearl_88a8c069: 20/20 hash-verified mesh test, p50 16.6ms, +100pp resolution) exists in `run_mesh_test.py` but is not wired into the Gauntlet.
+
+   Stage 6 "Federation" for non-members shows a dim note: "Requires LB membership · $5/year · unlock cross-Cathedral peer-mesh" (line 315). It is a tooltip, not a button. No `setShowFirstSteps(true)` call from here.
+
+10. **FirstStepsView modal** (`src/renderer/components/FirstStepsView.tsx`). $5/year join CTA with Stripe checkout. Four benefit bullets (lights-on support, founding-member-owner stake, unlock Helm + Federation, early access to 15 additional initiatives). Stripe call: `window.amplify?.membership?.createCheckout?.(autoRenew)` with fallback to `https://lianabanyan.com/join`. **The modal is only shown when `showFirstSteps` is true. That flag is set in exactly two places, both inside `handleOnboardChoice('member' | 'developer')`, which is itself only reached from a `showOnboardAsk` modal that is never activated in the current code.** The modal exists. The trigger is not connected.
+
+The "pause to use included tests or own data" the Founder asked for IS implemented at `GauntletTab.tsx` lines 508-551 (`GauntletModeSelect`): three modes "Use Included Test Data" / "Choose Your Own Data" / "Advanced Manual Mode" gate the run start. The Own Data path calls folder ingestion via `window.amplify?.watcher` and builds a Pheromone substrate from the user's chosen folder. This is the most coherent piece of the lure thread.
+
+---
+
+## THREAD 2: THE THREE-OPTION DISCLOSURE (I need help / I want to help / I want to make money)
+
+**Source-verified Truth-Always finding: the user-intent three-option split as Founder describes it ("I need help / I want to help / I want to make money") does NOT exist anywhere in the current codebase.** No file in `LianaBanyanPlatform/src/` contains those strings. The librarian substrate has no canon, pearl, or scribe entry for it. This is spec only.
+
+The codebase has TWO first-run components in `src/renderer/components/`:
+
+**SaltFighterFirstRun.tsx** (gate `mnemosyne-saltfighter-done`). Old flow. Screen 1: star-field text crawl + "Do not show again" checkbox + Enter button. Screen 2: HEOHO 16-initiatives grid + "Join for $5/year" button. Screen 3: "Never Repeat Yourself" folder picker + benchmark nudge + "Open the app." **MnemosyneTabView only renders Bp067FirstRunSpine, not SaltFighterFirstRun. SaltFighter is dead code in the current flow.** The line 53 comment in MnemosyneTabView says "supersedes SaltFighterFirstRun + OnboardingWizard."
+
+**Bp067FirstRunSpine.tsx** (the active flow per Thread 1 above). Its "three options" are the A/B/C technical fallback for AI-setup failure (bundled / borrow / folder), not a user-intent split.
+
+What each existing A/B/C option does at level 2:
+- A: Single action "Start bundled AI" → calls `setupPrivateAI`. Retry-err state shows "Try again."
+- B: Single action "Request a frontier node" → calls `lbRequestFrontierBorrow`. Result card shows connected-node count or error.
+- C: Single action "Browse for model folder" → opens folder dialog. **Path is stored in state only. No IPC call follows. Dead-end at level 2.**
+
+Level 3 (only Option B has any): the borrow result card shows connected nodes or an error string. No further branch.
+
+The 16 initiatives are hardcoded as a flat grid in `SaltFighterFirstRun.tsx` lines 17-34. **No mapping to user-intent axes.** Since the intent split does not exist, there is no implemented mapping from "I need help" / "I want to help" / "I want to make money" to specific initiatives.
+
+The $5 join modal (FirstStepsView) terminates with `onClose()` and drops the user into the bare app. **No post-join routing.** The intent split was presumably meant to fill this gap.
+
+---
+
+## THREAD 3: THE COOPERATIVE VALUE (16 initiatives + posting + sharing)
+
+The 16 initiatives, ordered by Six Steps (source: `platform/src/data/initiativeWalkthroughs.ts` + `InitiativeProjectsPage.tsx` SWEET_SIXTEEN array, ratified BP071 Scope 1):
+
+Step 2 Feed Your Neighbors: Let's Make Dinner · Let's Get Groceries · The Family Table · Let's Make Bread
+Step 3 Employ the World: Let's Go Shopping · Household Concierge · Defense Klaus · Rally Group
+Step 4 Build Businesses and Make Things: VSL (Vouch Short Loans) · Brass Tacks
+Step 5 Power to the People: Power to the People · Tatiana Schlossberg Health Accords · MSA (Member Savings Accounts)
+Step 6 Belong Together: Harper Guild · JukeBox · Didasko
+
+**Implementation coverage:**
+
+Dedicated deep-build pages exist for priority initiatives only: Let's Make Dinner (+ `/chefs`, `/start-node`, `/reviews`), Let's Get Groceries (+ `/box`, `/start-node`), Let's Make Bread, Defense Klaus (+ spinout), Let's Go Shopping, Household Concierge, Health Accords (route-aliased), Harper Guild (+ spinout), Jukebox, Didasko.
+
+**Generic-page-only (no dedicated flow):** VSL, Brass Tacks, Power to the People, MSA, Rally Group. These render via the generic `InitiativePage` template at `/initiatives/:slug` with walkthrough data. A user who clicks "Join a lending circle" on the VSL page has no next step in code.
+
+In the desktop app: cooperative surface is **Tab 2 (Helm)** which embeds the LB platform interface, and **Tab 14 (LB Account)** which links the local install to the member's LB account and joins the Frontier mesh. **Tab 14 is not part of the first-run spine.** A user who installs MnemosyneC and wants to "join the cooperative" must navigate to Tab 14 manually.
+
+**Posting flows:**
+
+Surface A: **Battery Dispatch / DispatchComposePage** (Tab 15; `/dispatch/compose`). External social scheduler. Connects to Twitter, TikTok, Instagram, LinkedIn, Facebook, Discord, Bluesky, Threads, Mastodon, YouTube, Substack, Imgur via "Social Plugs." Per-platform adaptation via `dispatchGuardrails.ts`. "Stamp to Send" modal requires second confirmation. Access gated by `getBatteryDispatchAccessStatus`. Structure built. OAuth wiring not determinable from these files alone.
+
+Surface B — **BroadcastScheduleTab** (Tab 16). Local-only scheduler for internal cooperative announcements. **Stores in `localStorage` only (`mnemo_broadcasts`). No backend persistence. No actual send mechanism visible in the tab.** Wireframe.
+
+Surface C — **Cue Card sharing** (`/cue-cards/:cardType`, `/c/:shortCode`). Generates shareable card with QR + short link for an initiative. Recipient sees landing at `/c/:shortCode` with sender's display name + personal message + join/interest CTA. View counter increments in Supabase `cue_card_shares` table. This is the most complete sharing flow.
+
+**What "share" means in MnemosyneC v0.1.27:**
+
+One: Member generates a Cue Card → recipient lands on `/c/:shortCode` → join/interest CTA. Implemented.
+
+Two: Battery Dispatch posts to external social. Recipient sees normal social post.
+
+No "your substrate just helped a stranger" notification flow exists. Mesh sharing (SID fetch across nodes) is protocol-level only; no member-visible notification surface.
+
+**Cooperative-value reinforcement — real vs aspirational:**
+
+Real (code exists):
+- 83.3% earnings split displayed on every initiative walkthrough card.
+- Cue Card share view counter (Supabase increment). Referral chain tracked.
+- `/initiatives` deck-card hub with Marks mechanics — **but Marks balance is session-only test, non-persistent**, explicitly commented in `InitiativeProjectsPage.tsx`.
+- Tab 14 LB Account shows node heartbeat and Frontier mesh registration.
+
+Aspirational (spec language only, no delivery surface found):
+- "Your review earns Marks" (Let's Make Dinner walkthrough step 4) — no Marks-earn event trigger wired to review submission.
+- "Node hosts earn Marks for running distribution point" (Let's Get Groceries step 4) — same gap.
+- "Your post just boosted three nodes" — no such surface anywhere.
+- Community emergency pool access, Rally Group responder activation, Harper Guild algorithmic nomination — described in walkthrough data, no backend or UI surface.
+
+---
+
+## YOUR ASK, PAWN
+
+Read the three threads above. Bishop's own gap list is deliberately withheld so you do not anchor on it.
+
+Return:
+
+1. **Lure thread independent gaps** — three to five named gaps, in order of severity, with one-line reasoning each.
+2. **Three-option disclosure thread independent gaps** — same format.
+3. **Cooperative-value thread independent gaps** — same format.
+4. **Overall arc verdict** — does the lure → payoff → cooperative-value arc hold or fragment? One paragraph. Where does the user fall off the rails first? Where does the cooperative feel like continued colossal value vs a tacked-on upsell?
+5. **The one fix you would make first if you only had time for one.** Across all three threads.
+
+Truth-Always: if a thread's evidence is insufficient to judge a gap honestly, say so and ask Bishop for a follow-up. Do not invent gaps to fill quota.
+
+End of package.

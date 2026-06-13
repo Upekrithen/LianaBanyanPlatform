@@ -406,7 +406,11 @@ export function MakeYourselfComfortableWizard() {
     const unsub = window.amplify.onPantheonProgress((evt: unknown) => {
       const progress = evt as PantheonProgress;
       setProgressLog((prev) => {
-        const idx = prev.findLastIndex?.((e) => e.persona === progress.persona) ?? -1;
+        // SEG-3: findLastIndex not in es2022 lib — manual reverse search
+        let idx = -1;
+        for (let i = prev.length - 1; i >= 0; i--) {
+          if (prev[i].persona === progress.persona) { idx = i; break; }
+        }
         if (idx >= 0 && prev[idx].phase !== 'done' && prev[idx].phase !== 'error') {
           const next = [...prev];
           next[idx] = progress;
@@ -616,7 +620,7 @@ export function MakeYourselfComfortableWizard() {
       )}
 
       {/* Receipt */}
-      {miningReceipt && (() => {
+      {miningReceipt != null && (() => {
         const r = miningReceipt as { total_tablets: number; iron_tablets: number; stone_tablets: number; completed_at: string };
         return (
           <div style={{

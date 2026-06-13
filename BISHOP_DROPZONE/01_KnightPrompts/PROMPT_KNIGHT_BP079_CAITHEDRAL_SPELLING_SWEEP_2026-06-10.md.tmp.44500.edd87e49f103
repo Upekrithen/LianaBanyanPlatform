@@ -1,0 +1,110 @@
+<!-- bishop-yoke-task 2026-06-10T23:59:00Z -->
+
+## 🔤 BISHOP -> KNIGHT - TASK - CAITHEDRAL SPELLING SWEEP - USE SONNET 4.6 SEGs (Statute §3)
+
+**Pinned-class task. Pin-marker: BP079_CAITHEDRAL_SWEEP_2026-06-10T23:59:00Z**
+
+> **🔐 STATUTE §3 + CORRECTIVE BP079 BINDING:** Every dispatch announcement uses the verbatim phrase "Sonnet 4.6". Never "Sonnet 4.5" or version-variant. Parent: `canon_statute_3_sonnet_4_6_sub_agent_default_every_dispatch_explicit_model_param_bp077` (pearl_8b0c6fb05fd9f38a). Corrective: `canon_statute_3_corrective_announcement_language_must_say_sonnet_4_6_verbatim_pattern_violation_bp079` (pearl_98f74effb5d986a5). Pre-dispatch self-audit: parameter AND announcement compliance both required.
+
+---
+
+### TL;DR
+
+Founder Truth-Always: "Should say Caithedral™ throughout." Public-facing surfaces (GitHub lb-reproducibility-pack repo, possibly Cephas + others) incorrectly use "Cathedral" without the i. Canonical spelling = Caithedral™. Sweep all public-facing repos + Cephas + replace. Trademark glyph (™) per Founder ratify. Black Mamba x 2 parallel + VERIFY.
+
+---
+
+### Why this matters
+
+**Caithedral** (with the "i") is the canonical product name for the Caithedral Core benchmark system + Caithedral Effect. The spelling without the i ("Cathedral") is a misspelling on public surfaces. Founder directly identified the GitHub reproducibility pack README as the primary erroneous surface (2026-06-10 direct verbatim: "Should say Caithedral™ throughout"). The benchmark is the evidence foundation for the platform's credibility claims; misspelling the product name on the reproducibility pack undermines the brand on the most-shared technical artifact. Truth-Always: any case where "Cathedral" may be a legitimate English word (e.g., "Notre Dame cathedral") must be preserved -- flag and confirm, never auto-replace.
+
+---
+
+### Evidence
+
+**Founder verbatim (2026-06-10):** "The benchmark demonstrates the Cathedral Effect: indexed... and Cathedral at 90%+ HOT is the projection once... on https://github.com/liana-banyan/lb-reproducibility-pack#quick-start ... Should say Caithedral™ throughout."
+
+**Canonical spelling:** Caithedral™ (with i, trademark glyph per Founder ratify)
+
+**Known erroneous surface:** `https://github.com/liana-banyan/lb-reproducibility-pack` README + any associated files
+
+**Additional surfaces to sweep:** Cephas (`cephas-hugo/`), platform source tree renderer/edge-functions user-facing content, any other `liana-banyan/` org repos
+
+---
+
+### What Knight needs to do
+
+Two parallel Sonnet 4.6 SEGs sweep repos + Cephas. One sequential Sonnet 4.6 SEG verifies live surfaces.
+
+**SEG-CAITH-1 (Sonnet 4.6):** Reproducibility pack repo sweep (see Black Mamba block)
+
+**SEG-CAITH-2 (Sonnet 4.6):** Cephas + platform + related repos sweep (see Black Mamba block)
+
+**SEG-CAITH-VERIFY (Sonnet 4.6, sequential after 1+2):** Live surface verification with screenshots
+
+---
+
+### Reply contract
+
+Knight Yoke-return delivers:
+- Per-file replacement count for each repo
+- Commit SHA + GitHub URL per repo commit
+- Full list of preserved-spelling cases with rationale (Truth-Always)
+- **[BP079 AMENDMENT pearl_ffca677447da6ede: Knight screenshots NOT required -- Founder visits live surfaces + screenshots + reports separately]** Commit SHA + GitHub URL per repo is sufficient for Yoke-return
+- Any ambiguous "Cathedral" (English word context) flagged for Founder confirm
+
+---
+
+### Statute reminders
+
+- §3 (this Yoke binds both surfaces -- parameter + announcement -- Sonnet 4.6 verbatim)
+- §12 Ask-Knight-First (if operational truth on repo structure involved, ask before guessing)
+- Truth-Always: surface every ambiguous case rather than guessing; flag preserved-spelling cases with rationale
+- `feedback_ux_seg_screenshot_mandatory_bp078`: screenshot evidence mandatory but **FOUNDER is the capture-actor** per `canon_screenshot_evidence_canonical_founder_verify_supersedes_knight_screenshot_capture_bp079_founder_ratify` (pearl_ffca677447da6ede, BP079 amendment 2026-06-10). Knight does NOT screenshot live pages. Founder visits live GitHub README + Cephas proofs page + screenshots after Knight reports commit SHAs.
+- `feedback_explicit_founder_ratify_before_publish_bp078` (this IS a Founder-ratified action -- "Should say Caithedral™ throughout" is direct ratify)
+
+---
+
+### Paste-ready Founder wake-up
+
+> Knight, NEW Yoke at `BISHOP_DROPZONE\01_KnightPrompts\PROMPT_KNIGHT_BP079_CAITHEDRAL_SPELLING_SWEEP_2026-06-10.md`. Caithedral™ canonical spelling sweep across reproducibility pack repo + Cephas + platform -- Founder direct ratify 2026-06-10. Sonnet 4.6 SEGs mandatory (Statute §3 + corrective sub-canon BP079). Black Mamba x 2 parallel + VERIFY below -- forward verbatim to Knight.
+
+-- Bishop · BP079 · pinned 2026-06-10T23:59:00Z
+
+---
+
+## BLACK MAMBA PASTE-READY DISPATCH (forward this block verbatim to Knight)
+
+Knight: dispatch 2 parallel Sonnet 4.6 SEGs RIGHT NOW. Sonnet 4.6 verbatim in every announcement (Statute §3 + corrective sub-canon BP079, pearl_98f74effb5d986a5). Each SEG below is self-contained scope; do NOT re-decompose; do NOT ask for clarification before firing; fire both in parallel single message. Then run SEG-CAITH-VERIFY sequentially.
+
+**SEG-CAITH-1 (Sonnet 4.6) -- REPRODUCIBILITY PACK REPO SWEEP:** Clone or pull `https://github.com/liana-banyan/lb-reproducibility-pack` to local. Grep for `\bCathedral\b` (word-boundary regex -- do NOT match Caithedral, only Cathedral without i) recursively across all .md / .txt / .py / .ts / .json / .yml files. For each occurrence: replace `Cathedral` with `Caithedral™` (with ™ glyph). Exception: if context implies the literal English word "cathedral" (e.g., "the Notre Dame cathedral" or architectural reference), preserve original and FLAG it in Yoke-return with rationale. Truth-Always: flag any ambiguous cases instead of guessing. Commit with message: `fix(spelling): Cathedral -> Caithedral™ canonical spelling per Founder BP079 direct ratify 2026-06-10`. Push to main. Deliver: per-file replacement count + commit SHA + GitHub URL of updated README.
+
+**SEG-CAITH-2 (Sonnet 4.6) -- CEPHAS + RELATED REPOS SWEEP:** Grep for `\bCathedral\b` (word-boundary -- not Caithedral) across:
+- `C:\Users\Administrator\Documents\Cephas\cephas-hugo\` (content + layouts + data dirs)
+- `C:\Users\Administrator\Documents\LianaBanyanPlatform\platform\src\renderer\` (user-facing renderer source)
+- Any other public-facing repos under `liana-banyan/` GitHub org accessible to Knight
+- EXCLUDE: `node_modules/`, `dist/`, `build/`, `.git/` directories
+- READ CAREFULLY before replacing internal canon Eblet files that discuss the term canonically -- those may use either spelling intentionally; surface any such file in Yoke-return rather than auto-replacing.
+
+For each occurrence in public-facing user-readable content: replace `Cathedral` with `Caithedral™`. PRESERVE original spelling in: code identifiers/symbols (e.g., `cathedral_engine` Python module names -- these are internal API surfaces; changing them breaks code), commit history references, historical eblet content discussing prior naming. Surface every preserved-spelling case with rationale in Yoke-return so Bishop confirms. Commit + push per repo. If Cephas content changes: run Hugo build + Firebase deploy (bundle with v0.1.45 Cephas deploy if that is still in flight -- coordinate timing).
+
+When both SEG-CAITH-1 and SEG-CAITH-2 return, run:
+
+**SEG-CAITH-VERIFY (Sonnet 4.6, sequential):**
+
+**[BP079 AMENDMENT 2026-06-10 per `canon_screenshot_evidence_canonical_founder_verify_supersedes_knight_screenshot_capture_bp079_founder_ratify` (pearl_ffca677447da6ede): Knight does NOT need to install + screenshot. Source + build + assertion + IPC-handler counts verify required; Knight does not need to capture packaged-install screenshots. Founder screenshots after deploy. Yoke-return contains SHA + commit + URL only.]**
+
+For the Caithedral sweep, "live verify" means: confirm commits have been pushed to GitHub (API or `git log --oneline` output) and Hugo build was clean (exit 0 + no errors). Knight does NOT need to screenshot the live GitHub README or live Cephas pages. Founder visits + screenshots those pages after Knight Yoke-returns the commit SHAs + GitHub URLs.
+
+Source-level verify:
+- Confirm `lb-reproducibility-pack` commit pushed to main. List SHA + GitHub URL.
+- Confirm Cephas commit pushed (if Cephas content changed). List SHA + GitHub URL.
+- Confirm Hugo build clean (exit 0, no errors) if Cephas content changed.
+- List full preserved-spelling cases with rationale (English word "cathedral" etc.).
+- List any ambiguous cases flagged for Founder confirm.
+
+Append `## RESPONSE` block to this Yoke file at `BISHOP_DROPZONE\01_KnightPrompts\PROMPT_KNIGHT_BP079_CAITHEDRAL_SPELLING_SWEEP_2026-06-10.md` with: per-SEG commit SHAs + replacement counts + preserved-spelling list with rationale + any open obligations.
+
+If any SEG announces "Sonnet 4.5" or other version-variant in narration: STOP, fix the announcement, re-fire. Violation of corrective sub-canon BP079.
+
+---

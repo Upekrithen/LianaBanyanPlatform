@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 SEG-T-1 -- Mesh Precondition Diagnostic
-Checks all three mesh nodes (M1, M2, M3) for:
+Checks mesh nodes for:
   1. version_ok  -- MnemosyneC substrate API reachable on port 11480
   2. model_ok    -- Ollama has a Gemma 4/2 12B model on port 11434
   3. peers_ok    -- federation/status shows expected peers visible
@@ -18,9 +18,11 @@ TODO: If a /dag/version or /app/version endpoint is added in a future release,
 update _check_version() to parse the electron app version directly.
 
 Usage:
-    python scripts/mesh_precondition_check.py
+    python scripts/mesh_precondition_check.py                  # all 4 nodes
+    python scripts/mesh_precondition_check.py --node-count 3   # first 3 nodes
 """
 
+import argparse
 import json
 import sys
 import urllib.request
@@ -28,21 +30,26 @@ import urllib.error
 from typing import Any
 
 # ---------------------------------------------------------------------------
-# Node definitions
+# Node definitions  (federation auto-discovered 2026-06-12)
 # ---------------------------------------------------------------------------
 
+# Ordered list: M0 = orchestrator (this machine), M1–M3 = remote nodes.
+# --node-count N selects the first N entries.
 NODES = [
-    {"name": "M1", "ip": "127.0.0.1",     "display_ip": "192.168.86.x (localhost)"},
-    {"name": "M2", "ip": "192.168.86.45", "display_ip": "192.168.86.45"},
-    {"name": "M3", "ip": "192.168.86.64", "display_ip": "192.168.86.64"},
+    {"name": "M0", "ip": "192.168.86.30",  "display_ip": "192.168.86.30 (orchestrator)"},
+    {"name": "M1", "ip": "192.168.86.45",  "display_ip": "192.168.86.45"},
+    {"name": "M2", "ip": "192.168.86.64",  "display_ip": "192.168.86.64"},
+    {"name": "M3", "ip": "192.168.86.156", "display_ip": "192.168.86.156"},
 ]
 
-# Expected peer IPs (without M1 localhost alias)
-PEER_IPS_BY_NODE = {
-    "M1": {"192.168.86.45", "192.168.86.64"},
-    "M2": {"192.168.86.64"},  # must see at least M3; M1 appears as its own LAN IP
-    "M3": {"192.168.86.45"},  # must see at least M2; M1 appears as its own LAN IP
-}
+
+def _build_peer_map(active_nodes: list) -> dict:
+    """Each node must see every other active node's IP."""
+    all_ips = {n["name"]: n["ip"] for n in active_nodes}
+    return {
+        name: {ip for other_name, ip in all_ips.items() if other_name != name}
+        for name, _ in all_ips.items()
+    }
 
 MESH_PORT = 11480   # SubstrateAPIServer (src/main/substrate_api.ts, API_PORT)
 OLLAMA_PORT = 11434
@@ -136,7 +143,7 @@ def _check_model(ip: str) -> tuple[bool, str | None]:
     return False, first
 
 
-def _check_peers(node_name: str, ip: str) -> tuple[bool, list[str]]:
+def _check_peers(node_name: str, ip: str, peer_map: dict) -> tuple[bool, list[str]]:
     """
     Returns (peers_ok, peers_found).
     Calls /federation/status on the node and checks that the expected peer IPs
@@ -158,7 +165,7 @@ def _check_peers(node_name: str, ip: str) -> tuple[bool, list[str]]:
         elif isinstance(p, str):
             found_ips.append(p)
 
-    required = PEER_IPS_BY_NODE.get(node_name, set())
+    required = peer_map.get(node_name, set())
     found_set = set(found_ips)
     peers_ok = required.issubset(found_set)
     return peers_ok, found_ips
@@ -168,14 +175,14 @@ def _check_peers(node_name: str, ip: str) -> tuple[bool, list[str]]:
 # Main runner
 # ---------------------------------------------------------------------------
 
-def check_node(node: dict[str, Any]) -> dict[str, Any]:
+def check_node(node: dict[str, Any], peer_map: dict) -> dict[str, Any]:
     name = node["name"]
     ip = node["ip"]
     display_ip = node["display_ip"]
 
     version_ok, version_found = _check_version(ip)
     model_ok, model_found = _check_model(ip)
-    peers_ok, peers_found = _check_peers(name, ip)
+    peers_ok, peers_found = _check_peers(name, ip, peer_map)
 
     return {
         "node": name,
@@ -191,7 +198,20 @@ def check_node(node: dict[str, Any]) -> dict[str, Any]:
 
 
 def main() -> None:
-    results = [check_node(n) for n in NODES]
+    parser = argparse.ArgumentParser(description="SEG-T-1: Mesh precondition diagnostic")
+    parser.add_argument(
+        "--node-count",
+        type=int,
+        default=4,
+        choices=[1, 2, 3, 4],
+        help="Number of nodes to check (default: 4, uses first N from NODES list)",
+    )
+    args = parser.parse_args()
+
+    active_nodes = NODES[: args.node_count]
+    peer_map = _build_peer_map(active_nodes)
+
+    results = [check_node(n, peer_map) for n in active_nodes]
 
     print(json.dumps(results, indent=2))
     print()

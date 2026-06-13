@@ -17,6 +17,7 @@ import { UpdateToast } from './components/UpdateToast';
 import { MnemosyneTabView } from './components/MnemosyneTabView';
 import { LeanShell } from './components/LeanShell';
 import { AMPLIFYDashboard } from './components/AMPLIFYDashboard';
+import { ClipboardCaptureModal } from './components/ClipboardCaptureModal';
 import { ModelPullDialog } from './components/ModelPullDialog';
 import { AuthGate } from './components/AuthGate';
 import { TrialBanner } from './components/TrialBanner';
@@ -181,6 +182,8 @@ export default function App() {
           onClose={() => window.close()}
           authState={authState}
         />
+        {/* SEG-5 v0.1.59: Clipboard Q+A capture modal — hidden until triggered via tray or Ctrl+Shift+M */}
+        <ClipboardCaptureModal />
       </ErrorBoundary>
     );
   }

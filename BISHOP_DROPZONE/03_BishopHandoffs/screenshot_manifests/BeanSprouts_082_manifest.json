@@ -1,0 +1,15 @@
+{
+  "folder_name": "082",
+  "folder_path": "C:\\Users\\Administrator\\Pictures\\BeanSprouts\\082",
+  "generated_at": "2026-06-10T08:04:35.504322+00:00",
+  "screenshot_count": 1,
+  "screenshots": [
+    {
+      "filename": "Screenshot 2026-06-10 025230.png",
+      "sha256": "0865af724fd55f6a51bc7c08d0e0c51bfac54eb0e3f77ab4be359b58f7e821df",
+      "size_bytes": 71308,
+      "mtime_iso": "2026-06-10T07:52:30.439349+00:00"
+    }
+  ],
+  "note": "SHA-256 hashes anchor each screenshot at this commit time. Full files stay local at folder_path; this manifest is the tamper-evident receipt-class artifact for git."
+}

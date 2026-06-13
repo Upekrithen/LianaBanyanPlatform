@@ -1,0 +1,262 @@
+# Sweet Sixteen Initiatives — Full Content Recovery
+**Bushel 89 | G4 | BP035 | Knight authored 2026-05-09**
+
+---
+
+## §1 — Purpose
+
+This document recovers the full per-initiative content for all sixteen Sweet Sixteen Initiatives,
+cross-referenced against Crown letters, sub-system mappings, and canonical sources found during
+the B89 corpus re-sweep.
+
+---
+
+## §2 — Canonical Reference Sources
+
+| Source | Location | Type |
+|---|---|---|
+| AGENTS.md Sweet Sixteen section | `.cursor/rules/liana-banyan-context.mdc` | Primary names + Crowns |
+| Crown Letters Index | `BISHOP_DROPZONE/04_Letters/00_CROWN_LETTERS_INDEX.md` | Crown mapping |
+| Master Letter Registry | `BISHOP_DROPZONE/04_Letters/00_MASTER_LETTER_REGISTRY.md` | Full Crown-letter mapping |
+| Tatiana Schlossberg Crown letter | `BISHOP_DROPZONE/.../CROWN_LETTER_ALEX_OSHMYANSKY_V03.md` | Initiative descriptions |
+| Sal Khan Letter | `BISHOP_DROPZONE/.../01_SAL_KHAN_LETTER.md` | Didasko full description |
+| All-letters compilation | `ALL_187_LETTERS_POST_PAWN_FIXES.md` | Short descriptions |
+| Statutes Ward canon | `~/.claude/state/eblets/CANON/CANON_STATUTES_WARD_SUB_INITIATIVE_15_POWER_TO_THE_PEOPLE_LB_CODEX_0210_BP035.md` | Sub-system detail |
+
+---
+
+## §3 — The Sweet Sixteen — Full Content
+
+### Initiative #1 — Let's Make Dinner
+**Crown:** Maneet Chauhan — Grand Chef Mentor
+**Crown letter file:** `CROWN_LETTER_MANEET_CHAUHAN-02.md`
+**Category:** Food / Meal Services
+**Description:** Local cooperative meal preparation and delivery. Members can order meals prepared
+by local member-creators (home cooks, professional chefs). Creators keep 83.3% of earnings.
+Serves the food-security mission by making quality home cooking accessible and compensating cooks fairly.
+**Sub-systems:** Composes with Let's Get Groceries (ingredient sourcing) and The Family Table (family dining)
+**Status:** Crown letter written; initiative fully designed
+
+---
+
+### Initiative #2 — Let's Get Groceries
+**Crown:** (Per letters registry — José Andrés referenced as "food sourcing" Crown)
+**Crown letter file:** `CROWN_LETTER_JOSE_ANDRES.md`
+**Category:** Food / Supply Chain
+**Description:** Cooperative grocery sourcing and delivery. Connects member-consumers to
+local/regional food producers. Composes with Let's Make Dinner and The Family Table to
+form the full food ecosystem.
+**Sub-systems:** Food supply chain; local farmer integration
+**Status:** Crown letter written; Sal Khan letter references José Andrés for Let's Get Groceries
+
+---
+
+### Initiative #3 — Let's Go Shopping
+**Crown:** Mary Beth Laughton — Merchant Mentor
+**Crown letter file:** `CROWN_LETTER_MARY_BETH_LAUGHTON-02.md`
+**Category:** Retail / Cooperative Commerce
+**Description:** Cooperative buying platform. Members shop cooperatively, driving fair pricing.
+Merchant-creators sell through the platform keeping 83.3%. Removes extractive middlemen.
+**Status:** Crown letter written
+
+---
+
+### Initiative #4 — Household Concierge
+**Crown:** Marie Kondo (per Master Letter Registry)
+**Crown letter file:** `CROWN_LETTER_MARIE_KONDO-01.md`
+**Category:** Home Services
+**Description:** Cooperative household services marketplace. Member-workers provide cleaning,
+organizing, home repair, and maintenance services. Workers keep 83.3%.
+**Status:** Crown letter written
+
+---
+
+### Initiative #5 — The Family Table
+**Crown:** (not confirmed in sweep — no distinct Crown letter found)
+**Category:** Family / Dining / Community
+**Description:** Family-centered community dining and gathering hub. Connects families through
+cooperative meal experiences. Composes with Let's Make Dinner and Let's Get Groceries.
+**Gap:** Minimal standalone documentation found. Crown not confirmed in registry sweep.
+**Status:** PARTIAL — needs deeper search
+
+---
+
+### Initiative #6 — Tatiana Schlossberg Health Accords
+**Crown:** Alex Oshmyansky — Apothecary Mentor, Lord Banyan of The Tatiana Schlossberg Health Accords
+**Crown letter file:** `CROWN_LETTER_ALEX_OSHMYANSKY_V03.md`
+**Category:** Healthcare / Medication Access
+**Former name:** LifeLine Medications (renamed in honor of Tatiana Schlossberg)
+**Description (from crown letter verbatim):**
+> "The Tatiana Schlossberg Health Accords" — healthcare access initiative. Provides affordable
+> medications and health resources to members. Operates as a cooperative pharmaceutical access
+> program. Composes with VSL (microfinance) and Let's Make Dinner (nutrition).
+**Statutes Ward cross-reference:** Health-Accords-relevant statutes auto-flagged per jurisdiction
+**Status:** Crown letter written (v03); initiative fully documented
+
+---
+
+### Initiative #7 — MSA
+**Crown:** Cathie Mahon — Treasury Keeper (per liana-banyan-context.mdc VSL Crown mapping — NOTE: registry shows some conflict; see §4)
+**Category:** Financial Services / Mutual Savings
+**Description:** MSA = Mutual Savings Account (inferred from context). Cooperative savings
+mechanism for members. Composes with VSL (Vouched Short Loans) as the savings ↔ lending pair.
+**Gap:** Limited standalone documentation found. Full description needs extraction from financial-architecture docs.
+**Status:** PARTIAL — MSA/VSL Crown attribution conflict (see §4)
+
+---
+
+### Initiative #8 — Defense Klaus
+**Founder subtitle:** "For Someone You Love"
+**Crown:** Ruth Glenn — Sentinel
+**Crown letter file:** `CROWN_LETTER_RUTH_GLENN-02.md`
+**Category:** Safety / Domestic Abuse Defense
+**Description (from CROWN_LETTER_ALEX_OSHMYANSKY_V03.md):**
+> "Defense Klaus - product, support, and legal defense fund for domestic abuse survivors."
+Provides product assistance, support network, and legal defense funding for domestic abuse survivors.
+Named "Klaus" — the protector character framing (someone fierce who stands between harm and the vulnerable).
+**Status:** Crown letter written
+
+---
+
+### Initiative #9 — Rally Group
+**Crown:** Kimberly A. Williams — Responder General
+**Crown letter file:** `CROWN_LETTER_KIMBERLY_WILLIAMS-02.md`
+**Category:** Crisis Response / Emergency Support
+**Description (from CROWN_LETTER_ALEX_OSHMYANSKY_V03.md):**
+> "Rally Group - crisis response embedded into everyday interactions."
+Crisis-response capability embedded into the platform's normal social fabric. When a member
+signals crisis (health, financial, domestic), the Rally Group activates support routing.
+Not separate from daily life — embedded in every interaction as a ready state.
+**Status:** Crown letter written
+
+---
+
+### Initiative #10 — VSL (Vouched Short Loans)
+**Crown:** Jessica Jackley (per Master Letter Registry) — Cathie Mahon also referenced (conflict; see §4)
+**Crown letter files:** `CROWN_LETTER_JESSICA_JACKLEY_V05.md` (CANONICAL per registry)
+**Category:** Microfinance / Credit
+**Description (from crown letter references):**
+> VSL = Vouched Short Loans — cooperative microfinance. Short-term loans vouched by the member's
+> social trust network (peers vouch = lower interest). Connects to Kiva model. Composes with MSA.
+**Cross-reference:** Alex Oshmyansky letter references: "I've also written to Jessica Jackley,
+co-founder of Kiva, about our VSL microfinance initiative."
+**Status:** Crown letter written (v05 canonical)
+
+---
+
+### Initiative #11 — Let's Make Bread
+**Crown:** Dale Dougherty
+**Crown letter file:** `CROWN_LETTER_DALE_DOUGHERTY_FINAL.md`
+**Category:** Entrepreneurship / Business Incubation
+**Description (from CROWN_LETTER_ALEX_OSHMYANSKY_V03.md):**
+> "Let's Make Bread - a $5 real-members business simulator and incubator where you test a
+> business idea as a Thought Leader then launch it as a Business."
+For $5 membership, members can test a business idea as a "Thought Leader" then launch it.
+The Maker Initiative — cooperative business incubator funded by the for-profit platform.
+**Statutes Ward cross-reference:** Food-handling regulations auto-flagged per jurisdiction
+**Status:** Crown letter written (final)
+
+---
+
+### Initiative #12 — Harper Guild
+**Crown:** Robert Kaiser (per Master Letter Registry)
+**Crown letter file:** `CROWN_LETTER_ROBERT_KAISER-02.md`
+**Category:** Journalism / HR / Ethics
+**Description (from all-letters compilation):**
+> "Harper Guild — HR & ethics for all"
+Cooperative HR and ethics infrastructure. Named for a journalist/editor tradition.
+Provides ethical standards, HR protection, and worker rights advocacy across the platform.
+**Cross-reference:** Crown letters for Craig Newmark reference Harper Guild alongside Defense Klaus
+and Rally Group as "Newmark-aligned initiatives."
+**Status:** Crown letter written
+
+---
+
+### Initiative #13 — JukeBox
+**Crown:** Taylor Swift
+**Crown letter file:** `CROWN_LETTER_TAYLOR_SWIFT-02.md`
+**Category:** Music / Entertainment / Fair Licensing
+**Description (from all-letters compilation):**
+> "JukeBox — fair music licensing (artists keep 83.3%+)"
+Cooperative music licensing platform. Artists license their music and keep 83.3%. Addresses
+the creator extraction problem in the music industry that Taylor Swift has publicly championed.
+**Status:** Crown letter written
+
+---
+
+### Initiative #14 — Didasko (Academic)
+**Crown:** Sal Khan — Chancellor
+**Crown letter file:** `CROWN_LETTER_SAL_KHAN_V02.md` (LOCKED)
+**Category:** Education / K-12 / Lifelong Learning
+**Description (from 01_SAL_KHAN_LETTER.md verbatim):**
+> "Didasko is the education initiative within Liana Banyan — a cooperative commerce platform where
+> creators keep 83.3% of everything they earn. Didasko is built on the same principle [as Khan
+> Academy]: education should be accessible to everyone."
+**How Didasko Works:** Educators on the platform create courses, curricula, tutoring sessions.
+Students access through cooperative membership. Educators keep 83.3%. Crown Council guidance from
+Chancellor. Sal Khan letter references "cooperative education" as both access AND economic sustainability.
+**Status:** Crown letter written (LOCKED)
+
+---
+
+### Initiative #15 — Power to the People (Political Expedition)
+**Crown:** Seeking
+**Category:** Governance / Civic / Political Participation
+**Description:** Political expedition campaign infrastructure — "Not left or right. A more effective team."
+"By Their Fruits" accountability cross-reference (how legislators voted). Citizen-facing political
+participation and accountability tools.
+**Sub-system: STATUTES WARD** (LB-CODEX-0210, BP035 Founder direct ratification)
+> *"Did I mention including a law library for everyone in the world specific to their area —
+> wherever they live? It will be known as the STATUTES ward."* — Founder direct, BP035
+Statutes Ward provides per-jurisdiction statute lookup, plain-language summaries, member-relevance
+flags, cross-initiative compliance, and By-Their-Fruits accountability cross-reference.
+**Canon Eblet:** `CANON_STATUTES_WARD_SUB_INITIATIVE_15_POWER_TO_THE_PEOPLE_LB_CODEX_0210_BP035.md`
+**Status:** Crown seeking; Statutes Ward sub-system fully canonized (LB-CODEX-0210)
+
+---
+
+### Initiative #16 — Brass Tacks
+**Crown:** Seeking (per Master Letter Registry: "Needed")
+**Category:** (TBD — no description found in sweep)
+**Description:** Minimal documentation found. Name implies a "down to basics / no-nonsense"
+economic or trades-based initiative.
+**Gap:** No standalone description document found. Crown not written. Status: NEEDS RESEARCH.
+
+---
+
+## §4 — Crown Attribution Conflicts Surfaced
+
+| Initiative | AGENTS.md Crown | Letters Registry Crown | Conflict? |
+|---|---|---|---|
+| #10 VSL | "Cathie Mahon" | "Jessica Jackley" (CANONICAL per MASTER_LETTER_REGISTRY) | **YES** — needs Founder resolution |
+| #7 MSA | (not in context.mdc — MSA listed without Crown) | Crown references unclear | PARTIAL CONFLICT |
+| Tatiana Schlossberg Health Accords | Listed as initiative #6 | Named for Tatiana (deceased); Crown = Alex Oshmyansky as Apothecary Mentor | Cross-reference confusion; Crown ≠ Initiative namesake |
+
+**Recommendation:** AGENTS.md Crown list for VSL should be updated to Jessica Jackley per canonical
+MASTER_LETTER_REGISTRY V05. Cathie Mahon = MSA Treasury Keeper.
+
+---
+
+## §5 — Sister Bushel: B90 Crown Cross-Reference
+
+This document provides the §3 full-Sixteen content. B90 (Crown Cross-Reference Bushel) maps all
+Crown letters by initiative × Crown name × letter version × status. Together:
+- B89 = full Initiative content (this document)
+- B90 = full Crown letter matrix
+- Combined = complete Initiative-Crown matrix for Founder review
+
+---
+
+## §6 — Sub-System Mapping Summary
+
+| Initiative | Known Sub-Systems | Canon |
+|---|---|---|
+| #15 Power to the People | Statutes Ward | LB-CODEX-0210 |
+| #1 Let's Make Dinner | Composes with Let's Get Groceries, The Family Table | informal |
+| #6 Tatiana Schlossberg | Composes with VSL, Let's Make Dinner | informal |
+| Other 13 | Sub-systems not formally canonized in current sweep | GAP |
+
+---
+
+*Authored: Knight B89, BP035, 2026-05-09*
+*Source: B89 corpus re-sweep + Crown letters inventory*

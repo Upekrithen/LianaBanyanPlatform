@@ -1,0 +1,660 @@
+# KNIGHT YOKE — BP080 — v0.1.53b — GENESIS MINT + VCARD QR
+**DRAFT · Founder TWO-GATE ratify required: (1) payload confirm, (2) ship publish**
+**Date: 2026-06-11 · Bishop: Sonnet 4.6 · Scope: SEG-V0153B-P0-PAYLOAD-DRAFT / LEDGER-WIRE / VCARD-QR-GEN / RECEIPT / VERIFY / SHIP**
+
+---
+
+> **DO NOT PASTE THIS YET.**
+> v0.1.53a ships first. v0.1.53b fires ONLY after:
+> 1. v0.1.53a is tagged + verified live
+> 2. Founder reviews `BISHOP_DROPZONE/00_FOUNDER_REVIEW/V0153B_GENESIS_MINT_PAYLOAD_DRAFT.json`
+> 3. Founder writes explicit "confirm payload" (GATE 1 of 2)
+> 4. Founder writes explicit "ship it / publish" after VERIFY GREEN (GATE 2 of 2)
+
+---
+
+## WAKE-UP PROMPT (paste this first into a fresh Knight session)
+
+You are Knight, the implementer for the Liana Banyan / MnemosyneC platform. Bishop has researched the codebase and all canonical filing references. Your job is to execute the Genesis Mint: register Founder as User 000001 in the production IP Ledger with 21 linked provisional filing entries, generate a FounderDenken vCard QR, and write a receipt to Asteroid-ProofVault. ALL work uses Sonnet 4.6 SEGs. You do not self-stamp SHIP gates. Federal Body Cam doctrine: once written to the JSONL ledger, entries are permanent — append-only, never deleted, corrected only via supersedes-chain. This is a founding moment. Read this entire prompt before starting any work. Do not execute any registerClaim() call until Founder has written "confirm payload" reviewing V0153B_GENESIS_MINT_PAYLOAD_DRAFT.json.
+
+---
+
+## CONTEXT: FOUNDER RATIFY (verbatim 2026-06-11)
+
+> "yes, follow your recommendations"
+
+This ratifies:
+- Split v0.1.53 into a/b — v0.1.53a ships first (PeerCueCard + email invite), v0.1.53b is this yoke (Genesis Mint)
+- Per-filing entries APPROVED — 22 ledger writes: 1 genesis user entry + 21 per-filing provisional entries
+- Display name `FounderDenken` — matches GitHub identity + DenkenXoff/On/Hover brand stamp filename canon
+- Public-facing email `Founder@lianabanyan.com` — org-domain public-facing email from gcloud auth output
+- Both gated on Founder payload review before Knight writes (Federal Body Cam doctrine)
+
+---
+
+## §2 TRUTH-ALWAYS SUBSTRATE FINDINGS (Bishop verified 2026-06-11)
+
+1. **IP Ledger is production-ready.** `src/main/ip_ledger/ip_ledger_store.ts` — append-only JSONL at `~/.lb_substrate/ip_ledger/ledger.jsonl`. `registerClaim()` accepts `{ registered_by, claim, claim_body, evidence, category }` and returns the full `IpLedgerEntry` including `ledger_id`. Federal Body Cam doctrine encoded in the module. `category: 'provisional'` is a valid `LedgerCategory` type.
+
+2. **`qrcode.react` is in package.json — but `qrcode` (Node.js API) is NOT.** `qrcode.react` is a React rendering component. It cannot generate a PNG file or a `toDataURL()` string in the main process. For main-process PNG generation (saving to `resources/founder-vcard.png`), Knight must `npm install qrcode` in the Electron project root and add `@types/qrcode` as a devDependency. For renderer-side display, `qrcode.react` can render the QR inline. Both uses are in scope.
+
+3. **No genesis entry exists yet.** `loadAllEntries().find(e => e.claim === 'genesis:user:000001')` will return `undefined` on current ledger state. The 21 provisional filings have zero IP Ledger entries. This is the founding write.
+
+4. **Canonical filing data source.** The only available filing checklist with confirmed app number is Prov 21: `App #64/079,336, filed 2026-06-01, conf 6635, docket LB-PROV-021, $65`. Provs 1–20 have docket IDs LB-PROV-001 through LB-PROV-020 per MEMORY.md canon but individual app numbers and filing dates for each are NOT in any scanned file. Per §2, Knight must NOT fabricate app numbers. The payload draft uses `app_number: "see-canonical_values.yaml"` for Provs 1–20 and the verified number for Prov 21. Founder can update the payload if they have the individual app numbers before confirming.
+
+5. **`getStablePeerId()` is available** in `src/main/index.ts` scope. The genesis check at startup uses it as the heuristic for "is this Founder's machine."
+
+6. **No existing `genesis-mint` IPC handler.** Must be added.
+
+---
+
+## CANONICAL FILING REFERENCES (Bishop compiled, §2-verified)
+
+### Prov 21 — CONFIRMED
+- Docket: LB-PROV-021
+- App number: 64/079,336
+- Filing date: 2026-06-01
+- Conf: 6635
+- Fee: $65 micro-entity
+- Title: "Cooperative AI Substrate Systems: Roll Architecture Peer-Mesh Ratification, Pearl-Class Transmission, Wrasse-Quartermaster Context Pre-Injection, Anti-Hype Empirical Honesty Framework, Caithedral Cathedral Architecture, MENUS-Helm Cooperative Inventory Layer, Hard Candy Stitchpunk Configuration Sharing, Mnemosyne P2P Cold-Storage Capsule Protocol, Employ the World Cooperative-Economy Backbone, Computation-Knowledge Separation via Speckle/Hex-Soccerball/Peanut-Roll/Mass-Crystal Substrate Primitives, AI Tuner Role-Class, and Human-Substrate Anecdote-Corpus Method for Multi-Agent Cooperative Platform Orchestration"
+- Filed by: Jonathan Ray Jones, 9627 Krier Ct, Converse TX 78109
+
+### Prov 13 — CONFIRMED (from MEMORY.md)
+- Docket: LB-PROV-013
+- App number: 64/036,646
+- Filing date: 2026-04-12
+- Title: Romulator / ROM+Emulator+HAL9000 genesis strain
+- Note: First AI session Oct 9 2025; MnemosyneC product name
+
+### Provs 1–12, 14–20 — DOCKET IDs CONFIRMED; individual app numbers NOT in scanned vault
+- Dockets LB-PROV-001 through LB-PROV-020 confirmed in MEMORY.md canon
+- Individual app numbers: Knight writes `"app_number": "see-canonical_values.yaml"` for each
+- Founder: if you have USPTO confirmation PDFs for Provs 1–12 and 14–20, supply app numbers before confirming payload
+
+---
+
+## SCOPE
+
+### SEG-V0153B-P0-PAYLOAD-DRAFT (Sonnet 4.6)
+
+**DO THIS FIRST. Do NOT call registerClaim() yet.**
+
+Read:
+- `Asteroid-ProofVault/03_PATENT_BAGS/PROV_21_FILING_CHECKLIST_BP067.md` — Prov 21 details
+- MEMORY.md canon for Prov 13 app number (64/036,646)
+- `src/main/ip_ledger/ip_ledger_store.ts` — confirm `registerClaim()` signature (done per Bishop findings above)
+
+Draft the exact JSON payload for all 22 entries. Structure:
+
+```json
+{
+  "genesis_user_entry": {
+    "registered_by": "member_000001",
+    "claim": "genesis:user:000001",
+    "category": "provisional",
+    "claim_body": {
+      "display_name": "FounderDenken",
+      "email": "Founder@lianabanyan.com",
+      "role": "founder",
+      "cooperative": "MnemosyneC",
+      "founding_date": "2026-06-11",
+      "provisional_filings_count": 21,
+      "filing_dockets": ["LB-PROV-001","LB-PROV-002","LB-PROV-003","LB-PROV-004","LB-PROV-005","LB-PROV-006","LB-PROV-007","LB-PROV-008","LB-PROV-009","LB-PROV-010","LB-PROV-011","LB-PROV-012","LB-PROV-013","LB-PROV-014","LB-PROV-015","LB-PROV-016","LB-PROV-017","LB-PROV-018","LB-PROV-019","LB-PROV-020","LB-PROV-021"],
+      "ratify_quote": "yes, follow your recommendations — 2026-06-11",
+      "ratify_session": "BP080"
+    },
+    "evidence": [
+      "Asteroid-ProofVault/03_PATENT_BAGS/PROV_21_FILING_CHECKLIST_BP067.md",
+      "MEMORY.md — BP070 CLOSE-STAMP canonical filing count 21",
+      "Founder explicit ratify 2026-06-11 BP080"
+    ]
+  },
+  "provisional_filing_entries": [
+    {
+      "registered_by": "member_000001",
+      "claim": "patent:provisional:LB-PROV-001",
+      "category": "provisional",
+      "claim_body": {
+        "docket": "LB-PROV-001",
+        "app_number": "see-canonical_values.yaml",
+        "filing_date": "see-canonical_values.yaml",
+        "filed_by": "Jonathan Ray Jones",
+        "cooperative": "MnemosyneC",
+        "refs": ["genesis:user:000001"]
+      },
+      "evidence": ["MEMORY.md — 21 provisionals canonical count"]
+    },
+    "... (entries for LB-PROV-002 through LB-PROV-012 follow same pattern) ...",
+    {
+      "registered_by": "member_000001",
+      "claim": "patent:provisional:LB-PROV-013",
+      "category": "provisional",
+      "claim_body": {
+        "docket": "LB-PROV-013",
+        "app_number": "64/036,646",
+        "filing_date": "2026-04-12",
+        "title": "Romulator / ROM+Emulator+HAL9000 genesis strain of Mnemosyne",
+        "filed_by": "Jonathan Ray Jones",
+        "cooperative": "MnemosyneC",
+        "refs": ["genesis:user:000001"]
+      },
+      "evidence": ["MEMORY.md — BP072 Romulator canon — App 64/036,646 filed April 12 2026"]
+    },
+    "... (entries for LB-PROV-014 through LB-PROV-020 follow same pattern as 001-012) ...",
+    {
+      "registered_by": "member_000001",
+      "claim": "patent:provisional:LB-PROV-021",
+      "category": "provisional",
+      "claim_body": {
+        "docket": "LB-PROV-021",
+        "app_number": "64/079,336",
+        "filing_date": "2026-06-01",
+        "conf": "6635",
+        "filing_fee": "$65",
+        "entity_status": "micro_entity",
+        "title": "Cooperative AI Substrate Systems: Roll Architecture Peer-Mesh Ratification, Pearl-Class Transmission, Wrasse-Quartermaster Context Pre-Injection, Anti-Hype Empirical Honesty Framework, Caithedral Cathedral Architecture, MENUS-Helm Cooperative Inventory Layer, Hard Candy Stitchpunk Configuration Sharing, Mnemosyne P2P Cold-Storage Capsule Protocol, Employ the World Cooperative-Economy Backbone, Computation-Knowledge Separation via Speckle/Hex-Soccerball/Peanut-Roll/Mass-Crystal Substrate Primitives, AI Tuner Role-Class, and Human-Substrate Anecdote-Corpus Method for Multi-Agent Cooperative Platform Orchestration",
+        "filed_by": "Jonathan Ray Jones",
+        "address": "9627 Krier Ct, Converse TX 78109",
+        "cooperative": "MnemosyneC",
+        "refs": ["genesis:user:000001"]
+      },
+      "evidence": [
+        "Asteroid-ProofVault/03_PATENT_BAGS/PROV_21_FILING_CHECKLIST_BP067.md",
+        "BP069 CLOSE-STAMP — Prov-21 filed 2026-06-01 conf 6635"
+      ]
+    }
+  ]
+}
+```
+
+**Expand all 21 per-filing entries in full (no ellipsis) in the saved file.**
+
+Write the complete expanded draft to:
+`C:\Users\Administrator\Documents\LianaBanyanPlatform\BISHOP_DROPZONE\00_FOUNDER_REVIEW\V0153B_GENESIS_MINT_PAYLOAD_DRAFT.json`
+
+**STOP HERE.** Do NOT call `registerClaim()`. Return the file path + byte size + a clean summary of the 22 entries. Await Founder "confirm payload."
+
+---
+
+### SEG-V0153B-P0-LEDGER-WIRE (Sonnet 4.6)
+
+**Execute ONLY after Founder writes "confirm payload."**
+
+**Audit `registerClaim()` interface** (should match Bishop findings above — confirm or flag differences):
+- Located at `C:\Users\Administrator\Documents\LianaBanyanPlatform\src\main\ip_ledger\ip_ledger_store.ts`
+- Signature: `registerClaim({ registered_by, claim, claim_body?, evidence?, category? }): IpLedgerEntry`
+- Returns `IpLedgerEntry` with `ledger_id` field
+- Federal Body Cam: every call is permanent
+
+**Add IPC handler in `src/main/index.ts`:**
+
+```typescript
+// genesis-mint IPC — executes 22 registerClaim() calls: genesis first, then 21 per-filing entries
+// BLOOD RULE: registered_by = 'member_000001' (cooperative ID, never real name directly)
+safeHandle('ip-ledger:genesis-mint', async (): Promise<{
+  success: boolean;
+  genesis_ledger_id: string;
+  filing_ledger_ids: string[];
+  all_22_entries: IpLedgerEntry[];
+  error?: string;
+}> => {
+  // Idempotency check — never double-mint
+  const existing = loadAllEntries().find(e => e.claim === 'genesis:user:000001');
+  if (existing) {
+    return {
+      success: false,
+      genesis_ledger_id: existing.ledger_id,
+      filing_ledger_ids: [],
+      all_22_entries: [existing],
+      error: 'Genesis entry already exists — ledger_id: ' + existing.ledger_id + '. Federal Body Cam: no duplicate write permitted.'
+    };
+  }
+  // Step 1: Mint genesis user entry FIRST
+  const genesisEntry = registerClaim({ /* payload from V0153B_GENESIS_MINT_PAYLOAD_DRAFT.json */ });
+  // Step 2: Mint 21 per-filing entries SECOND, each with refs: [genesisEntry.ledger_id]
+  const filingEntries: IpLedgerEntry[] = [];
+  for (const filingPayload of PROV_FILING_PAYLOADS) {
+    // Update refs to include actual genesis_ledger_id
+    const entry = registerClaim({
+      ...filingPayload,
+      claim_body: JSON.stringify({ ...JSON.parse(filingPayload.claim_body), refs: [genesisEntry.ledger_id] })
+    });
+    filingEntries.push(entry);
+  }
+  return {
+    success: true,
+    genesis_ledger_id: genesisEntry.ledger_id,
+    filing_ledger_ids: filingEntries.map(e => e.ledger_id),
+    all_22_entries: [genesisEntry, ...filingEntries]
+  };
+});
+```
+
+Knight: use the exact payloads from V0153B_GENESIS_MINT_PAYLOAD_DRAFT.json as confirmed by Founder. Do NOT inline fabricated data.
+
+**Add corresponding preload bridge in `src/main/preload.ts`:**
+
+```typescript
+ipLedgerGenesisMint: () => ipcRenderer.invoke('ip-ledger:genesis-mint'),
+ipLedgerGetGenesis: () => ipcRenderer.invoke('ip-ledger:get-genesis'),
+```
+
+Also add the `get-genesis` read handler in index.ts:
+
+```typescript
+safeHandle('ip-ledger:get-genesis', () =>
+  loadAllEntries().find(e => e.claim === 'genesis:user:000001') ?? null
+);
+```
+
+---
+
+### SEG-V0153B-P0-VCARD-QR-GEN (Sonnet 4.6)
+
+**qrcode package status (§2 Truth-Always):**
+- `qrcode.react` IS in package.json — renders QR in React (renderer-side only, no PNG file output)
+- `qrcode` (Node.js API) is NOT in package.json — needed for `qrcode.toDataURL()` in main process
+
+**Knight action:**
+1. Run `npm install qrcode @types/qrcode` in `C:\Users\Administrator\Documents\LianaBanyanPlatform\`
+2. Import in `src/main/index.ts`:
+   ```typescript
+   import QRCode from 'qrcode';
+   ```
+3. After successful genesis mint, generate vCard 3.0 string:
+   ```
+   BEGIN:VCARD
+   VERSION:3.0
+   FN:FounderDenken
+   ORG:MnemosyneC Cooperative
+   EMAIL:Founder@lianabanyan.com
+   URL:https://mnemosynec.ai
+   NOTE:User 000001 · MnemosyneC Cooperative · 21 provisional filings · genesis ledger_id: <genesis_ledger_id>
+   END:VCARD
+   ```
+   Replace `<genesis_ledger_id>` with the actual `ledger_id` returned from the genesis registerClaim() call.
+
+4. Generate PNG:
+   ```typescript
+   const vcardString = `BEGIN:VCARD\nVERSION:3.0\nFN:FounderDenken\n...END:VCARD`;
+   await QRCode.toFile(
+     path.resolve(process.resourcesPath ?? __dirname, '..', 'resources', 'founder-vcard.png'),
+     vcardString,
+     { width: 300, margin: 2, type: 'png' }
+   );
+   ```
+   Save path: `C:\Users\Administrator\Documents\LianaBanyanPlatform\resources\founder-vcard.png`
+
+5. Also expose as IPC for renderer display:
+   ```typescript
+   safeHandle('ip-ledger:founder-vcard-qr', async () => {
+     const base64 = await QRCode.toDataURL(vcardString, { width: 300, margin: 2 });
+     return base64; // data:image/png;base64,...
+   });
+   ```
+   Add `ipLedgerFounderVcardQr: () => ipcRenderer.invoke('ip-ledger:founder-vcard-qr')` to preload.
+
+6. **Wire QR to PeerCueCard FRONT:** In `PeerCueCard.tsx` (from v0.1.53a), when the card renders the Founder (identified by `peer.displayName === 'FounderDenken'` or `peer.peerId.startsWith('founder')`), replace the placeholder stamp area with the vCard QR rendered via `qrcode.react`'s `<QRCodeSVG value={vcardString} size={64} />`. For all other peers, render the standard FounderDenken medallion stamp.
+
+   **Fallback for non-renderer contexts (email mailto: invite):** Include `https://mnemosynec.ai` as the URL payload in the vCard string so the QR always resolves to a scannable destination even if the local PNG is unavailable.
+
+---
+
+### SEG-V0153B-P0-RECEIPT (Sonnet 4.6)
+
+After successful mint (all 22 registerClaim() calls complete + QR PNG saved), write:
+
+**File:** `C:\Users\Administrator\Documents\LianaBanyanPlatform\Asteroid-ProofVault\BP080_GENESIS_MINT_RECEIPT_USER_000001.md`
+
+Content must include:
+- All 22 ledger_ids (genesis entry first, then LB-PROV-001 through LB-PROV-021 in order)
+- Exact `claim_body` JSON written for each entry (verbatim from registerClaim() args)
+- `registered_at` ISO timestamp for each entry
+- vCard QR file path: `resources/founder-vcard.png`
+- SHA-256 of `founder-vcard.png` (use `createHash('sha256')` on file contents)
+- Founder explicit ratify quote: "yes, follow your recommendations — 2026-06-11"
+- Session: BP080
+- Federal Body Cam note: "These entries are permanent. Correction only via supersedes-chain per ip_ledger_store.ts submitDispute()."
+
+Also **append one line to MEMORY.md** (at the bottom of the active section):
+
+```
+- [User 000001 Genesis Mint (BP080 2026-06-11)](Asteroid-ProofVault/BP080_GENESIS_MINT_RECEIPT_USER_000001.md) — genesis_ledger_id: <actual_id> · 21 provisional filing entries minted · FounderDenken · Founder@lianabanyan.com · Federal Body Cam permanent write.
+```
+
+Replace `<actual_id>` with the real ledger_id. Do NOT fabricate.
+
+---
+
+### SEG-V0153B-VERIFY (Sonnet 4.6 — sequential, after all writes)
+
+Per [[feedback_actual_runtime_verify_for_runtime_bugs_bp078]]: runtime evidence required.
+
+1. Read back `~/.lb_substrate/ip_ledger/ledger.jsonl` — count lines, confirm 22 new entries present
+2. For each entry: confirm `claim` field matches expected pattern (`genesis:user:000001` for entry 1; `patent:provisional:LB-PROV-001` through `patent:provisional:LB-PROV-021` for entries 2–22)
+3. Confirm `status: 'active'` on all 22 entries
+4. Confirm no duplicate `genesis:user:000001` entries (idempotency guard worked)
+5. Confirm `resources/founder-vcard.png` exists + size > 0 bytes
+6. Decode QR: run `node -e "const QRCode = require('qrcode'); QRCode.toString('<vcard_string>', {type:'terminal'}, (err,str) => console.log(str))"` to visually confirm QR renders
+7. Confirm `BP080_GENESIS_MINT_RECEIPT_USER_000001.md` exists in Asteroid-ProofVault + contains all 22 ledger_ids
+8. TypeScript compile clean: `npm run build` zero errors
+
+**Return evidence:** ledger_id list (all 22), file size of receipt, QR decode confirmation, compile result.
+
+---
+
+### SEG-V0153B-SHIP (Sonnet 4.6 — DRAFT only initially)
+
+**THREE SHIP GATES — Knight does NOT self-stamp any gate:**
+
+- **GATE 1:** TypeScript compiles clean (`npm run build` zero errors) — Knight returns compile output
+- **GATE 2:** Packaged installer builds successfully (`npm run dist` or `electron-builder --win`) — Knight returns build log + .exe file size
+- **GATE 3:** Founder installs the .exe on a clean machine, opens the app, calls `window.amplify.ipLedgerGetGenesis()` from DevTools console — confirms genesis entry is present in ledger — returns screenshot or DevTools output as runtime evidence per [[feedback_actual_runtime_verify_for_runtime_bugs_bp078]]
+
+Knight returns a DRAFT SHIP REPORT with gate evidence. Founder writes explicit "ship it / push / fire" for GATE-ALL-GREEN before Knight tags v0.1.53b.
+
+---
+
+## FILE MAP
+
+| File | Action |
+|------|--------|
+| `src/main/ip_ledger/ip_ledger_store.ts` | READ-ONLY audit — confirm registerClaim() signature |
+| `src/main/index.ts` | ADD: `ip-ledger:genesis-mint` handler, `ip-ledger:get-genesis` handler, `ip-ledger:founder-vcard-qr` handler |
+| `src/main/preload.ts` | ADD: `ipLedgerGenesisMint`, `ipLedgerGetGenesis`, `ipLedgerFounderVcardQr` bridge |
+| `src/renderer/components/PeerCueCard.tsx` | MODIFY: wire vCard QR for FounderDenken card front (from v0.1.53a) |
+| `resources/founder-vcard.png` | CREATE: QR PNG output |
+| `package.json` | ADD: `qrcode`, `@types/qrcode` |
+| `BISHOP_DROPZONE/00_FOUNDER_REVIEW/V0153B_GENESIS_MINT_PAYLOAD_DRAFT.json` | CREATE: payload draft for Founder review (SEG-PAYLOAD-DRAFT) |
+| `Asteroid-ProofVault/BP080_GENESIS_MINT_RECEIPT_USER_000001.md` | CREATE: receipt after mint |
+| `memory/MEMORY.md` | APPEND: one-line genesis mint record |
+
+**DO NOT TOUCH:**
+- Any existing ledger entries — Federal Body Cam, never delete or modify
+- `platform/src/lib/` — web platform, not in scope
+- `Asteroid-ProofVault/03_PATENT_BAGS/` — read-only reference, no edits
+
+---
+
+## HARD BINDINGS
+
+- ALL SEGs use **Sonnet 4.6** verbatim — no exceptions, no Opus on main
+- **Federal Body Cam doctrine** — once written to ledger.jsonl, entries are permanent; the idempotency check in `ip-ledger:genesis-mint` is mandatory; never write twice
+- **BLOOD RULE** — `registered_by` = `'member_000001'` (cooperative ID); never real name (Jonathan Ray Jones is for USPTO filings only, not for IP Ledger `registered_by` field)
+- **§2 Truth-Always** — Knight does NOT fabricate app numbers for Provs 1–12, 14–20; write `"see-canonical_values.yaml"` for unknowns; flag to Founder for supply
+- **DRAFT until Founder TWO ratifies**: (1) "confirm payload" after reviewing V0153B_GENESIS_MINT_PAYLOAD_DRAFT.json, (2) "ship it" after VERIFY GREEN
+- **Runtime evidence required** per [[feedback_actual_runtime_verify_for_runtime_bugs_bp078]] — source-only verification does not pass GATE 3
+- **No self-stamp of SHIP gates**
+- **Every click visible feedback** — any UI surface that calls ipLedgerGenesisMint must show a spinner/progress during the 22 writes and a confirmation toast on completion
+- **v0.1.53a ships FIRST** — this yoke does not fire until v0.1.53a is live
+
+---
+
+## OPEN FOUNDER DECISIONS (flag in yoke-return)
+
+1. **App numbers for Provs 1–12 and 14–20**: Bishop could only verify Prov 13 (64/036,646) and Prov 21 (64/079,336). The other 19 filings have their docket IDs confirmed but individual USPTO app numbers are not in the scanned vault. Do you want to supply the app numbers before Knight runs the mint, or are you comfortable with `"see-canonical_values.yaml"` as the placeholder? This is the primary data gap.
+
+2. **Sequencing of per-filing entries**: Should the 21 per-filing entries be registered with `claim_body.refs: ["genesis:user:000001"]` pointing to the genesis entry's docket, or pointing to the actual `ledger_id` returned by the genesis registerClaim() call? Bishop recommends the actual `ledger_id` (stronger link). Knight uses this unless Founder overrides.
+
+3. **`qrcode` npm dep**: Not currently in package.json. Knight adds `qrcode` + `@types/qrcode` during SEG-V0153B-P0-VCARD-QR-GEN. Confirm this is acceptable (adds ~100KB to the main bundle).
+
+4. **vCard URL field**: Draft uses `https://mnemosynec.ai`. If a `/member/000001` profile page exists or is planned, supply the URL and Knight substitutes it. Otherwise mnemosynec.ai is the canonical fallback.
+
+5. **PeerCueCard FRONT integration**: The FounderDenken QR goes on the FRONT of the Cue Card when Founder is the sender of an invite. The detection heuristic is `peer.displayName === 'FounderDenken'`. Is this the correct display_name that will be set on Founder's node at announce time? If a different name is used, update the heuristic.
+
+---
+
+## SEQUENCE (explicit, for Founder clarity)
+
+```
+1. v0.1.53a ships and is tagged (PeerCueCard + email invite — separate yoke)
+   ↓
+2. Knight runs SEG-V0153B-P0-PAYLOAD-DRAFT
+   → Writes V0153B_GENESIS_MINT_PAYLOAD_DRAFT.json to 00_FOUNDER_REVIEW
+   → STOPS — awaits Founder review
+   ↓
+3. FOUNDER GATE 1: Reads payload JSON, writes "confirm payload" (or requests edits)
+   ↓
+4. Knight runs SEG-V0153B-P0-LEDGER-WIRE + SEG-V0153B-P0-VCARD-QR-GEN
+   → 22 registerClaim() calls execute (genesis first, then 21 filing entries)
+   → QR PNG saved to resources/founder-vcard.png
+   ↓
+5. Knight runs SEG-V0153B-P0-RECEIPT
+   → Receipt written to Asteroid-ProofVault
+   → One-line appended to MEMORY.md
+   ↓
+6. Knight runs SEG-V0153B-VERIFY
+   → Returns all 22 ledger_ids + QR decode + compile result
+   ↓
+7. FOUNDER GATE 2: Reviews verify evidence, writes "ship it / publish"
+   ↓
+8. Knight runs SEG-V0153B-SHIP
+   → 3 gates, returns DRAFT SHIP REPORT
+   → Founder explicit "ship it" → Knight tags v0.1.53b
+```
+
+---
+
+## BLACK MAMBA BLOCK (paste into fresh Knight session — ONLY after v0.1.53a is live)
+
+```
+You are Knight for Liana Banyan / MnemosyneC. Use Sonnet 4.6 SEGs for ALL work. You are implementing BP080 v0.1.53b Genesis Mint.
+
+MISSION: Register Founder as User 000001 in the production IP Ledger with 21 provisional filing entries. Generate FounderDenken vCard QR. Write receipt to Asteroid-ProofVault.
+
+CORE FILES:
+- IP Ledger store: C:\Users\Administrator\Documents\LianaBanyanPlatform\src\main\ip_ledger\ip_ledger_store.ts
+- Main IPC: C:\Users\Administrator\Documents\LianaBanyanPlatform\src\main\index.ts
+- Preload: C:\Users\Administrator\Documents\LianaBanyanPlatform\src\main\preload.ts
+- PeerCueCard (from v0.1.53a): C:\Users\Administrator\Documents\LianaBanyanPlatform\src\renderer\components\PeerCueCard.tsx
+- Payload draft: C:\Users\Administrator\Documents\LianaBanyanPlatform\BISHOP_DROPZONE\00_FOUNDER_REVIEW\V0153B_GENESIS_MINT_PAYLOAD_DRAFT.json
+- Prov 21 checklist: C:\Users\Administrator\Documents\LianaBanyanPlatform\Asteroid-ProofVault\03_PATENT_BAGS\PROV_21_FILING_CHECKLIST_BP067.md
+- Full yoke: C:\Users\Administrator\Documents\LianaBanyanPlatform\BISHOP_DROPZONE\01_KnightPrompts\PROMPT_KNIGHT_BP080_V0153B_GENESIS_MINT_VCARD_QR_2026-06-11.md
+
+STEP 1 (do first, stop here):
+Run SEG-V0153B-P0-PAYLOAD-DRAFT — write V0153B_GENESIS_MINT_PAYLOAD_DRAFT.json. Do NOT call registerClaim() yet. Return file path + byte size. Wait for Founder "confirm payload."
+
+CONSTRAINTS:
+- Federal Body Cam: append-only, no updates, no deletes
+- BLOOD RULE: registered_by = 'member_000001' always
+- §2 Truth-Always: do NOT fabricate app numbers for Provs 1-12 and 14-20
+- DRAFT only — 2 Founder gates required before any registerClaim() executes
+- Runtime evidence required for GATE 3 (DevTools screenshot of genesis entry in ledger)
+- Knight does NOT self-stamp any gate
+
+Return: payload draft file path, entry count (should be 22), any §2 flags on missing data.
+```
+
+---
+
+> **REMINDER: DO NOT PASTE THIS YET.**
+> v0.1.53a ships first. v0.1.53b fires ONLY after v0.1.53a is tagged + Founder reviews V0153B_GENESIS_MINT_PAYLOAD_DRAFT.json + writes "confirm payload."
+
+---
+
+*Bishop staged: 2026-06-11 · BP080 · READY-FOR-RATIFY (pending v0.1.53a ship) · Founder explicit "confirm payload" then "ship it" required · Federal Body Cam doctrine — 22 permanent writes.*
+
+---
+
+## ADDENDUM 2 — REAL USPTO APP NUMBERS + FOUNDER RATIFY (2026-06-11)
+
+**Source:** Bishop direct read of `03_PATENT_BAGS/0 Patents Filed/` folder names + `librarian-mcp/canonical_values.yaml`. §2 Truth-Always applied throughout. Founder-ratified: `display_name = "FounderDenken"` + `email = "Founder@LianaBanyan.com"`.
+
+---
+
+### FOUNDER RATIFY (verbatim 2026-06-11)
+
+> "yes, follow your recommendations"
+
+Ratifies:
+- `display_name = "FounderDenken"` on genesis entry
+- `email = "Founder@LianaBanyan.com"` (org-domain public-facing per gcloud auth output)
+- 21 per-filing provisional entries with real app numbers where confirmed
+
+---
+
+### PATENT INVENTORY — §2 TRUTH-ALWAYS (Bishop compiled 2026-06-11)
+
+App numbers extracted from `03_PATENT_BAGS/0 Patents Filed/` folder names (folder naming is `64_XXX_XXX Provisional Patent N`). Filing dates from `Archive1Apr2026/2026/` subfolder names where present; canonical_values.yaml for Provs 13–21. Titles from filing specification documents where found; scope summaries from canonical_values.yaml where available.
+
+| Prov # | App # | Filing Date | Title / Scope | Source |
+|--------|-------|-------------|---------------|--------|
+| 1 | 63/925,672 | 2025-11-26 | (title not in vault text files) | folder + archive |
+| 2 | 63/927,674 | 2025-11-30 | (title not in vault text files) | folder + archive |
+| 3 | 63/938,216 | 2025-12-10 | (title not in vault text files) | folder + archive |
+| 4 | 63/967,200 | 2026-01-23 | (title not in vault text files) | folder + archive |
+| 5 | 63/969,601 | 2026-01-28 | (title not in vault text files) | folder + archive |
+| 6 | 63/989,913 | 2026-02-24 | (title not in vault text files) | folder + archive |
+| 7 | 64/006,010 | 2026-03-15 | (title not in vault text files) | folder + archive |
+| 8 | 64/009,803 | 2026-03-18 | (title not in vault text files) | folder + archive |
+| 9 | 64/017,140 | 2026-03-25 | (title not in vault text files) | folder + archive |
+| 10 | 64/017,457 | NOT CONFIRMED in vault | (title not in vault text files) | folder only |
+| 11 | 64/025,635 | NOT CONFIRMED in vault | (title not in vault text files) | folder only |
+| 12 | 64/031,531 | NOT CONFIRMED in vault | 93 innovations #2131–#2224 — Context/Beacon/Distribution/Temporal/Trust/UX clusters (B077–B087) | folder + PROV_12_FILING_MANIFEST |
+| 13 | 64/036,646 | 2026-04-12 | Romulator / ROM+Emulator+HAL9000 genesis strain of Mnemosyne | MEMORY.md canon BP072 ✅ |
+| 14 | 64/052,602 | 2026-04-29 | Cooperative-Platform AI Memory Infrastructure with Discipline-Enforcement Federation | PROV_14_FILING_SPECIFICATION_B126.md |
+| 15 | 64/052,618 | 2026-04-29 | Cooperative-Platform AI Memory Infrastructure — Agent-Spawn Boundary Pre-Injection, Lossless Vendor-Layer Tablet Capture, Corpus-Alias Registry-Keyword-Extension, Substrate Discipline Primitives | PROV_15_FILING_SPECIFICATION_B133.md |
+| 16 | 64/060,080 | 2026-05-07 | Method and System for Cooperative-AI-Substrate Platform with Multi-Organism Federation and Substrate-Routed Memory Expansion | PROV_16_FILING_SPECIFICATION_BP010.md + canonical_values.yaml conf 2171 |
+| 17 | 64/060,093 | 2026-05-07 | Save-the-World 12-Paper Series + HexIsle Wave 4 + Cooperative Manufacturing Sovereignty + Substrate-IS-the-Primitive (canonical_values.yaml scope) | canonical_values.yaml conf 7640 |
+| 18 | 64/062,332 | 2026-05-11 | BP036 substrate canon — PGP/Edition/Aviator + SEG-Cascade + Aircraft Carrier + Excalibur + TCP/IP 4-Tuple substrate-layer | canonical_values.yaml conf 5732 |
+| 19 | 64/062,334 | 2026-05-11 | HexIsle 2D Isometric World Operational Interface + Substrate kernel extensions + Sonnet S7/S8/S1 clusters | canonical_values.yaml conf 8134 |
+| 20 | 64/073,890 | 2026-05-25 | Substrace Theorem + Pheromone Trail + Wrasse-Quartermaster + MENUS + Hard Candy Stitchpunk + Pearl Registry + Cephas + SEG-Cascade + Employ-the-World backbone | canonical_values.yaml |
+| 21 | 64/079,336 | 2026-06-01 | Cooperative AI Substrate Systems: Roll Architecture Peer-Mesh Ratification, Pearl-Class Transmission, Wrasse-Quartermaster, Anti-Hype Empirical Honesty Framework, Caithedral Cathedral Architecture, MENUS-Helm, Hard Candy Stitchpunk, Mnemosyne P2P Cold-Storage Capsule Protocol, Employ the World Cooperative-Economy Backbone, Computation-Knowledge Separation via Speckle/Hex-Soccerball/Peanut-Roll/Mass-Crystal Substrate Primitives, AI Tuner Role-Class, Human-Substrate Anecdote-Corpus Method | canonical_values.yaml conf 6635 ✅ |
+
+---
+
+### §2 TRUTH-ALWAYS GAP REPORT
+
+**App numbers confirmed (folder-verified):** ALL 21 — Provs 1–20 from `0 Patents Filed/` folder names; Prov 21 from canonical_values.yaml.
+
+**Filing dates — confirmed:** Provs 1–9, 13–21 (sources above).
+
+**Filing dates — NOT CONFIRMED in vault:** Provs 10, 11, 12. Archive subfolder structure has no folder named after these app numbers. Knight writes `"filing_date": "see-patent-receipt"` for these three; Founder supplies from USPTO confirmation emails or receipts.
+
+**Titles — confirmed:** Provs 12 (scope only), 13–21.
+
+**Titles — NOT CONFIRMED:** Provs 1–11. No filing-specification text documents found for these provisionals in the vault. Knight writes `"title": "see-patent-receipt"` for these; Founder supplies from USPTO filings.
+
+**No fabrication permitted** (§2 + Federal Body Cam doctrine): Knight does NOT invent filing dates or titles for gaps.
+
+---
+
+### UPDATED PAYLOAD INSTRUCTION FOR KNIGHT
+
+Replace all `"see-canonical_values.yaml"` placeholders in the payload draft with REAL values from this table:
+
+- All 21 app numbers: use the exact values from the inventory above
+- Confirmed filing dates: substitute real dates
+- Unconfirmed dates (Provs 10, 11, 12): leave as `"see-patent-receipt"` — flag to Founder
+- Titles: substitute where confirmed; `"see-patent-receipt"` for Provs 1–11
+
+Founder reviews `V0153B_GENESIS_MINT_PAYLOAD_DRAFT.json` (with these real values substituted) before Knight executes any `registerClaim()` call. Two-gate ratify process unchanged.
+
+---
+
+*Addendum 2 appended by Bishop · 2026-06-11 · BP080 · Real USPTO app numbers embedded · Founder ratify required before Knight executes registerClaim().*
+
+---
+
+## ADDENDUM 1 — MEMBER ID-ANCHORED PAYLOAD (2026-06-11)
+
+**Source:** Founder architectural decision verbatim 2026-06-11. Bishop gadget sweep. §2 Truth-Always findings embedded below.
+
+---
+
+### MEMBER ID ARCHITECTURE — HOW IT APPLIES TO GENESIS MINT
+
+**Canonical Member ID (§2 verified):**
+
+The immutable anchor for Founder's identity is `MemberInfo.user_id` — the Supabase `auth.users` UUID returned from `lianabanyan.com/api/amplify/validate`. This never changes. It is the primary key of Founder's cooperative identity.
+
+**Important distinction (§2 Truth-Always):**
+- `wanSoccerballId` = session-rotating transport handle (24h expiry) — NOT the Member ID
+- `getStablePeerId()` = local machine mesh peer ID — NOT the Member ID
+- `MemberInfo.user_id` = the immutable anchor
+
+**Founder's Member ID is NOT yet known at yoke-staging time.** It is the Supabase UUID assigned when Founder first authenticated via `lianabanyan.com/amplify-auth`. Knight retrieves it at runtime via `window.amplify.getAuthState().member.user_id` (renderer) or the auth manager's in-memory state (main process).
+
+---
+
+### GENESIS ENTRY PRIMARY KEY — REVISED SPEC
+
+The genesis entry `claim` field is `'genesis:user:000001'` — this is the human-readable cooperative sequence label. The `registered_by` field is `'member_000001'` (cooperative ID per BLOOD RULE).
+
+**Add to `claim_body` JSON (Member ID-anchored fields):**
+
+```json
+{
+  "display_name": "FounderDenken",
+  "email": "Founder@LianaBanyan.com",
+  "role": "founder",
+  "cooperative": "MnemosyneC",
+  "founding_date": "2026-06-11",
+  "supabase_user_id": "<runtime: window.amplify.getAuthState().member.user_id>",
+  "stable_peer_id": "<runtime: getStablePeerId()>",
+  "provisional_filings_count": 21,
+  "filing_dockets": ["LB-PROV-001","LB-PROV-002","LB-PROV-003","LB-PROV-004","LB-PROV-005","LB-PROV-006","LB-PROV-007","LB-PROV-008","LB-PROV-009","LB-PROV-010","LB-PROV-011","LB-PROV-012","LB-PROV-013","LB-PROV-014","LB-PROV-015","LB-PROV-016","LB-PROV-017","LB-PROV-018","LB-PROV-019","LB-PROV-020","LB-PROV-021"],
+  "ratify_quote": "yes, follow your recommendations — 2026-06-11",
+  "ratify_session": "BP080",
+  "member_id_note": "supabase_user_id is the immutable anchor; display_name and email are mutable proxies — supersede-chain tracks changes per Federal Body Cam doctrine"
+}
+```
+
+**Knight action:** At runtime during `ip-ledger:genesis-mint` IPC execution, populate `supabase_user_id` and `stable_peer_id` from live values. Do NOT hardcode placeholder strings in the ledger entry. If auth state is unavailable (unauthenticated), log a warning and use `'member_000001'` as the sole identifier — do NOT block the mint.
+
+---
+
+### MUTABLE PROXY SUPERSEDES-CHAIN DESIGN
+
+Per Founder: display_name + email can change (e.g., `Founder@LianaBanyan.com` → `Founder@something-else.com`). The cooperative ID stays the same. The ledger tracks this via Federal Body Cam supersedes-chain.
+
+**Knight does NOT implement supersedes-chain updates in v0.1.53b.** The genesis entry records initial values. Future email/name changes are a separate SEG (out of scope). Flag this to Founder in yoke-return: "Supersede-chain for mutable proxy updates (email/name change) is not in v0.1.53b scope — flag for future migration."
+
+---
+
+### vCARD QR — MEMBER ID-ANCHORED PAYLOAD (revised)
+
+**vCard 3.0 string — updated spec:**
+
+```
+BEGIN:VCARD
+VERSION:3.0
+FN:FounderDenken
+ORG:MnemosyneC Cooperative
+EMAIL:Founder@LianaBanyan.com
+URL:https://mnemosynec.ai
+NOTE:User 000001 · MnemosyneC Cooperative Founder · 21 provisional filings · Ledger entry: genesis:user:000001 · genesis_ledger_id: <actual_id> · member_id_anchor: <supabase_user_id>
+END:VCARD
+```
+
+**Privacy property confirmed:** If Founder later changes email to `Founder@something-else.com`, the Member ID (`supabase_user_id`) stays the same and the vCard QR's `NOTE` field still contains the stable `genesis_ledger_id` — which resolves to the correct identity via the IP Ledger even after the email proxy changes. The `EMAIL` field in the vCard is the current value at mint time (mutable proxy — initial value).
+
+**vCard URL field:** `https://mnemosynec.ai` is the canonical fallback. If a `/u/<member-id>` or `/founder` profile page is added at mnemosynec.ai in a future release, Knight substitutes it at that point. Flag in yoke-return: "vCard URL is mnemosynec.ai root — update when /u/<member-id> profile route is live."
+
+---
+
+### PAYLOAD DRAFT FILE — REVISED FIELD REQUIREMENT
+
+The `V0153B_GENESIS_MINT_PAYLOAD_DRAFT.json` file (SEG-V0153B-P0-PAYLOAD-DRAFT) must include placeholder tokens for runtime-populated fields:
+
+In `genesis_user_entry.claim_body`, add:
+```json
+"supabase_user_id": "RUNTIME_POPULATE_FROM_AUTH_STATE",
+"stable_peer_id": "RUNTIME_POPULATE_FROM_GET_STABLE_PEER_ID"
+```
+
+These are clearly labeled so Founder reviewing the payload understands they will be filled at runtime — not fabricated or left as literal strings in the ledger.
+
+---
+
+### §2 TRUTH-ALWAYS FLAGS FOR KNIGHT (Addendum 1)
+
+1. **`wanSoccerballId` is NOT the Member ID anchor.** It is a 24h-expiring session transport handle. The `memberId` parameter passed INTO `deriveWanSoccerballAddress()` is the Member ID input — not the output SID. Do not confuse the two in any receipt or ledger entry.
+
+2. **Founder's `supabase_user_id` is unknown at staging time.** Knight populates it at mint execution from live auth state. If `getAuthState().member` is null, warn and record `'member_000001'` only — do not block the mint or fabricate a UUID.
+
+3. **Email value in genesis entry is initial-value-only.** It is the mutable proxy at mint time. It does not lock Founder's email forever. This property should be stated clearly in the receipt (`BP080_GENESIS_MINT_RECEIPT_USER_000001.md`).
+
+---
+
+*Addendum 1 appended by Bishop · 2026-06-11 · BP080 · Member ID architecture applied to Genesis Mint · Federal Body Cam — mutable proxies recorded at initial values, supersede-chain tracks future changes.*

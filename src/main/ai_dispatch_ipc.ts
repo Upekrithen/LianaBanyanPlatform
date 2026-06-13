@@ -9,9 +9,15 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import { app } from 'electron';
 import { FLOOR_MODEL } from '../shared/floor-model';
-import { queryEbletStore } from './mnem_eblet_store';
+import { queryEbletStore, queryVerifiedEblets, substrateCounters } from './mnem_eblet_store';
+import { ollamaManager } from './ollama_manager';
 
 const OLLAMA_API_BASE = 'http://127.0.0.1:11434';
+
+// v0.1.57.1: module-scope streaming state — AbortController for in-flight stream,
+// inference counter for cold-start detection.
+let activeQueryController: AbortController | null = null;
+let sessionInferenceCount = 0;
 
 type Sku = 'nano' | 'core' | 'lite' | 'full';
 
@@ -82,18 +88,14 @@ function shouldRunMnemDrt(settings: AiDispatchSettings): boolean {
 export function registerAiDispatchIPC(): void {
   // ── ai-dispatch:list-local-models ────────────────────────────────────────
   ipcMain.handle('ai-dispatch:list-local-models', async () => {
-    const settings = loadSettings();
-    const base = settings.local_runtime_url ?? OLLAMA_API_BASE;
     try {
-      const res = await fetch(`${base}/api/tags`);
-      if (!res.ok) return { ok: false, models: [], error: `Ollama unreachable (${res.status})` };
-      const data = await res.json() as { models?: Array<{ name: string; size?: number; modified_at?: string }> };
-      const models = (data.models ?? []).map((m) => ({
-        name: m.name,
-        size_bytes: m.size,
-        modified_at: m.modified_at,
-      }));
-      return { ok: true, models };
+      const status = ollamaManager.getStatus();
+      const reachable = status.running || (await ollamaManager.isReachable());
+      if (!reachable) {
+        return { ok: false, models: [], error: 'Local AI engine not running' };
+      }
+      const names = await ollamaManager.listModels();
+      return { ok: true, models: names.map((name) => ({ name })) };
     } catch (err) {
       return { ok: false, models: [], error: String(err) };
     }
@@ -101,13 +103,14 @@ export function registerAiDispatchIPC(): void {
 
   // ── ai-dispatch:test-connection ──────────────────────────────────────────
   ipcMain.handle('ai-dispatch:test-connection', async () => {
-    const settings = loadSettings();
-    const base = settings.local_runtime_url ?? OLLAMA_API_BASE;
     try {
-      const res = await fetch(`${base}/api/tags`, { signal: AbortSignal.timeout(4000) });
-      if (!res.ok) return { ok: false, error: `HTTP ${res.status}` };
-      const data = await res.json() as { models?: unknown[] };
-      return { ok: true, model_count: (data.models ?? []).length };
+      const status = ollamaManager.getStatus();
+      const reachable = status.running || (await ollamaManager.isReachable());
+      if (!reachable) {
+        return { ok: false, error: 'Local AI engine not running' };
+      }
+      const models = await ollamaManager.listModels();
+      return { ok: true, model_count: models.length };
     } catch (err) {
       return { ok: false, error: String(err) };
     }
@@ -143,11 +146,13 @@ export function registerAiDispatchIPC(): void {
 
   // ── ai-dispatch:query ────────────────────────────────────────────────────
   // args: { court_member: string; messages: [{role, content}]; model_override?: string }
-  // Returns: { ok: boolean; text?: string; error?: string; model_used?: string }
+  // v0.1.57.1: returns { ok: true, streaming: true } immediately; content flows via
+  // 'ask-token-progress' and 'ask-token-complete' IPC push events.
+  // Pre-flight errors still return { ok: false, error } synchronously.
   ipcMain.handle(
     'ai-dispatch:query',
     async (
-      _event,
+      event,
       args: {
         court_member: string;
         messages: Array<{ role: string; content: string }>;
@@ -155,8 +160,20 @@ export function registerAiDispatchIPC(): void {
       },
     ) => {
       const settings = loadSettings();
-      const base = settings.local_runtime_url ?? OLLAMA_API_BASE;
-      const model = args.model_override ?? settings.preferred_model ?? FLOOR_MODEL;
+      // SEG-1 v0.1.56: prefer family-matched Gemma model over hard-coded FLOOR_MODEL.
+      const selectedGemmaModel = ollamaManager.getSelectedModel();
+      const model = args.model_override ?? settings.preferred_model ?? selectedGemmaModel ?? FLOOR_MODEL;
+
+      const status = ollamaManager.getStatus();
+      const reachable = status.running || (await ollamaManager.isReachable());
+      if (!reachable) {
+        return { ok: false, error: 'Local AI engine not running' };
+      }
+
+      // SEG-1 v0.1.56: if no override/preference and no gemma model was found, signal SEG-2.
+      if (!args.model_override && !settings.preferred_model && selectedGemmaModel === null) {
+        return { ok: false, error: 'No compatible model — downloading now…' };
+      }
 
       // Extract the user's message text for substrate + eblet lookups.
       const userMessage = args.messages
@@ -168,8 +185,31 @@ export function registerAiDispatchIPC(): void {
       // Step 1: Load r10v3 substrate (all SKUs).
       const substrateText = loadSubstrateText();
 
+      // SEG-1 v0.1.57: HOT retrieve — query verified eblet store before LLM inference.
+      // Runs unconditionally (not gated by Mnem-DRT). Fresh-install path: store absent → [].
+      let verifiedHits: import('./mnem_eblet_store').VerifiedEbletEntry[] = [];
+      try {
+        verifiedHits = await queryVerifiedEblets(userMessage);
+      } catch (err) {
+        console.warn('[SubstrateHOT] queryVerifiedEblets failed:', err);
+      }
+
+      let verifiedContext = '';
+      if (verifiedHits.length > 0) {
+        substrateCounters.hotHits++;
+        verifiedContext =
+          'Based on previously-verified knowledge:\n\n' +
+          verifiedHits.map((h) => `Q: ${h.question}\nA: ${h.answer}`).join('\n\n') +
+          '\n\nNow answer the following question:\n\n';
+      } else {
+        substrateCounters.coldCalls++;
+      }
+      console.log(
+        `[SubstrateHOT] hits=${verifiedHits.length} hotTotal=${substrateCounters.hotHits} coldTotal=${substrateCounters.coldCalls}`,
+      );
+
       // Step 2: SKU gate -- determine if Mnem-DRT eblet compose should run.
-      let systemContent = substrateText ?? '';
+      let systemContent = verifiedContext + (substrateText ?? '');
 
       if (shouldRunMnemDrt(settings) && userMessage.length > 0) {
         // Step 3: Query local eblet store for context snippets.
@@ -202,29 +242,97 @@ export function registerAiDispatchIPC(): void {
         chatMessages.push(m);
       }
 
-      try {
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 120_000);
-        const res = await fetch(`${base}/api/chat`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            model,
-            messages: chatMessages,
-            stream: false,
-            options: { num_predict: 1024, temperature: 0.7 },
-          }),
-          signal: controller.signal,
-        }).finally(() => clearTimeout(timeout));
-
-        if (!res.ok) {
-          return { ok: false, error: `Ollama request failed: ${res.statusText}` };
-        }
-        const data = await res.json() as { message?: { content?: string } };
-        return { ok: true, text: data.message?.content ?? '', model_used: model };
-      } catch (err) {
-        return { ok: false, error: String(err) };
+      // v0.1.57.1: Abort any in-flight stream before starting a new one (AbortController discipline)
+      if (activeQueryController) {
+        activeQueryController.abort();
+        activeQueryController = null;
       }
+      const queryController = new AbortController();
+      activeQueryController = queryController;
+
+      // v0.1.57.1: Cold-start detection — /api/ps check + sessionInferenceCount fallback
+      let isColdStart = sessionInferenceCount === 0;
+      if (!isColdStart) {
+        try {
+          const psCtrl = new AbortController();
+          const psTmo = setTimeout(() => psCtrl.abort(), 3000);
+          const psRes = await fetch(`${OLLAMA_API_BASE}/api/ps`, { signal: psCtrl.signal });
+          clearTimeout(psTmo);
+          const psData = await psRes.json() as { models?: Array<{ name: string }> };
+          isColdStart = !(psData.models ?? []).some((m) => m.name === model);
+        } catch {
+          // /api/ps unavailable — fallback to sessionInferenceCount (already set above)
+        }
+      }
+
+      if (isColdStart && !event.sender.isDestroyed()) {
+        event.sender.send('ask-token-progress', { coldStart: true, delta: '', assembled: '' });
+      }
+
+      // v0.1.57.1: Stream NDJSON response tokens to renderer — fire-and-forget
+      void (async () => {
+        let assembled = '';
+        const streamTimeout = setTimeout(() => queryController.abort(), 120_000);
+        try {
+          const res = await fetch(`${OLLAMA_API_BASE}/api/chat`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              model,
+              messages: chatMessages,
+              stream: true,
+              options: { num_predict: 1024, temperature: 0.7 },
+            }),
+            signal: queryController.signal,
+          });
+          clearTimeout(streamTimeout);
+
+          if (!res.ok) {
+            if (!event.sender.isDestroyed()) {
+              event.sender.send('ask-token-complete', { content: '', error: `Ollama request failed: ${res.statusText}` });
+            }
+            return;
+          }
+
+          const reader = res.body!.getReader();
+          const decoder = new TextDecoder();
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            const chunk = decoder.decode(value, { stream: true });
+            for (const line of chunk.split('\n').filter((l) => l.trim())) {
+              try {
+                const parsed = JSON.parse(line) as { message?: { content?: string }; done?: boolean };
+                if (parsed.message?.content) {
+                  assembled += parsed.message.content;
+                  if (!event.sender.isDestroyed()) {
+                    event.sender.send('ask-token-progress', { delta: parsed.message.content, assembled });
+                  }
+                }
+                if (parsed.done) {
+                  sessionInferenceCount++;
+                  if (activeQueryController === queryController) activeQueryController = null;
+                  if (!event.sender.isDestroyed()) {
+                    // substrate R1: write complete assembled content on done:true
+                    event.sender.send('ask-token-complete', { content: assembled, hotHits: substrateCounters?.hotHits });
+                  }
+                }
+              } catch { /* skip malformed NDJSON line */ }
+            }
+          }
+        } catch (err) {
+          clearTimeout(streamTimeout);
+          const isAbort = (err as Error)?.name === 'AbortError';
+          if (!event.sender.isDestroyed()) {
+            event.sender.send('ask-token-complete', {
+              content: assembled,
+              error: isAbort ? 'Stream interrupted' : String(err),
+            });
+          }
+        }
+      })();
+
+      return { ok: true, streaming: true };
     },
   );
 }

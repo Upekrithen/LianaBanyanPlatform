@@ -1,0 +1,24 @@
+fix(preload): revert declare-const to require('electron') -- actual root cause of 5-version P0
+
+SEG-W-1 runtime evidence (CDP probe on installed v0.1.37):
+  - console.error: "ReferenceError: ipcRenderer is not defined at <anonymous>:8:1
+    at runPreloadScript (node:electron/js2c/sandbox_bundle)"
+  - typeof window.amplify = "undefined" (confirmed via Runtime.evaluate)
+  - checkOllamaAndModel returns reachable:true, hasModel:true after fix (confirmed)
+
+Root cause: In Electron 31 sandboxed preloads, contextBridge and ipcRenderer are
+NOT injected as globals. The SEG-FIX-1 change at v0.1.32 (declare const pattern)
+was incorrect -- it removed require('electron'), leaving ipcRenderer undefined.
+Every invocation of ipcRenderer.on() or contextBridge.exposeInMainWorld() threw
+ReferenceError silently, so window.amplify stayed permanently undefined across
+v0.1.32, v0.1.33, v0.1.36, and v0.1.37.
+
+Fix: revert to import { contextBridge, ipcRenderer } from 'electron', which compiles
+to const electron_1 = require("electron"). require('electron') in Electron 31
+sandboxed preloads returns contextBridge, ipcRenderer, and safe subset -- confirmed.
+
+Version bumped 0.1.37 -> 0.1.38.
+
+SEG-W-3 pending: Bishop/Founder packaged-install verify before this ships to releases.
+
+Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>

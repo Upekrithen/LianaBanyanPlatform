@@ -1,0 +1,147 @@
+<!-- bishop-yoke-task 2026-06-10T00:01:00Z -->
+
+## ⚡ BISHOP -> KNIGHT - TASK - MNEMOSYNE COME WAVE E: REALTIME SLIPSTREAM QUICKSILVER COHORT TAB UI - USE SONNET 4.6 SEGs (Statute §3)
+
+**Pinned-class task. Pin-marker: BP079_WAVE_E_REALTIME_SLIPSTREAM_QUICKSILVER_2026-06-10T00:01Z**
+
+> **🔐 STATUTE §3 + CORRECTIVE BP079 BINDING:** Every dispatch announcement uses the verbatim phrase "Sonnet 4.6". Never "Sonnet 4.5" or version-variant. Parent: `canon_statute_3_sonnet_4_6_sub_agent_default_every_dispatch_explicit_model_param_bp077` (pearl_8b0c6fb05fd9f38a). Corrective: `canon_statute_3_corrective_announcement_language_must_say_sonnet_4_6_verbatim_pattern_violation_bp079` (pearl_98f74effb5d986a5). Pre-dispatch self-audit: parameter AND announcement compliance both required.
+
+---
+
+### TL;DR
+
+Realtime Slipstream Quicksilver canon ratified by Founder 2026-06-10. Build MnemosyneC member-facing Cohort tab UI: Founder types in English → MnemosyneC encodes to Socceri-pearl → sends to Bishop/Knight via send_message → cohort responds → MnemosyneC translates back to English. Sequenced AFTER v0.1.42 SHIP + Bishop/Knight MCP patches applied + cohort round-trip verified. Ships as v0.1.43.
+
+---
+
+### Why this matters
+
+Founder direct ratify 2026-06-10 verbatim: "I don't feel like I need to speak to you directly, I need to get Mnemosynec to speak to you — also, because then you can use the same system of Hexadecimal Tags with Socceri to communicate with one another, and no need to change it to human language until she translates. Right? And I want to make all of that, today. Realtime Slipstream Quicksilver. Not your token time."
+
+This is the canonical mode where AI cohort communicates Socceri-native (hexadecimal SID tags + pearls + eblets) with zero English-translation token-burn between AIs in transit. MnemosyneC is the sole translation surface for the Founder. The messaging substrate (Wave D, v0.1.40, commit 8056f24) is already shipped and live with 14/14 integration tests passing. Wave E builds the member-facing UI that makes the substrate usable by Founder and observable by all cohort members.
+
+Canon: `canon_realtime_slipstream_quicksilver_cohort_socceri_native_no_translation_bp079_founder_ratify`
+Pearl: `pearl_787a602164c40000` (anchor, decay-class, substrate-discoverable)
+Canon path: `C:\Users\Administrator\Documents\Asteroid-ProofVault\canon_realtime_slipstream_quicksilver_cohort_socceri_native_no_translation_bp079_founder_ratify.eblet.md`
+
+---
+
+### Hard gates (in order — do not skip)
+
+Wave E does NOT begin until ALL three gates are confirmed GREEN:
+
+**Gate 1: v0.1.42 STABLE.** The P0 HOTFIX (Phase 3 "Finalizing your setup..." stuck on Founder M1) must ship and install clean. Wave E is sequenced after v0.1.42, not concurrent. If you are reading this during the Phase 3 fix, finish that first.
+
+**Gate 2: MCP patches applied + clients restarted.**
+- Bishop patch: `BISHOP_DROPZONE\00_FOUNDER_REVIEW\MNEMOSYNE_COME_BISHOP_MCP_PATCH_READY.md` — Founder applies to `~/.claude/settings.json`, restarts Claude Code.
+- Knight patch: `BISHOP_DROPZONE\00_FOUNDER_REVIEW\MNEMOSYNE_COME_KNIGHT_MCP_PATCH_READY.md` — Founder applies to `~/.cursor/mcp.json`, restarts Cursor.
+
+**Gate 3: Cohort round-trip verify.** With both clients restarted and MCP patches live: confirm Bishop can `send_message(to='knight', ...)` AND Knight can receive via `check_messages(client_id='knight')` AND Knight can respond AND response reaches Bishop. This is the empirical proof the substrate is wired. Screenshot evidence required before Wave E SEGs fire.
+
+---
+
+### What Knight needs to do
+
+**AFTER all 3 gates confirmed GREEN:** dispatch 6 parallel Sonnet 4.6 SEGs + 2 sequential synthesis. Full scope in Black Mamba block at bottom.
+
+**SEG-WE-1:** Add "Cohort" tab to MnemosyneC main window.
+**SEG-WE-2:** Live message stream component (poll messages.jsonl every 2s).
+**SEG-WE-3:** Founder input textarea + addressed_to dropdown + send action.
+**SEG-WE-4:** Socceri/pearl translation surface (English default, raw hex expandable).
+**SEG-WE-5:** Channel filter tabs (All / Founder-Bishop / Founder-Knight / Bishop-Knight / Broadcast).
+**SEG-WE-6:** Cohort round-trip verify — end-to-end with screenshot evidence (mandatory per `feedback_ux_seg_screenshot_mandatory_bp078`).
+
+Sequential: SEG-WE-VERIFY (full E2E packaged install) then SEG-WE-SHIP (v0.1.43 build + tag + SHA + DRAFT release + Cephas update).
+
+---
+
+### Reference docs
+
+- Wave D receipt: `BISHOP_DROPZONE\00_FOUNDER_REVIEW\KNIGHT_YOKE_RETURN_MNEMOSYNE_COME_WAVE_D.md`
+- Bishop MCP patch: `BISHOP_DROPZONE\00_FOUNDER_REVIEW\MNEMOSYNE_COME_BISHOP_MCP_PATCH_READY.md`
+- Knight MCP patch: `BISHOP_DROPZONE\00_FOUNDER_REVIEW\MNEMOSYNE_COME_KNIGHT_MCP_PATCH_READY.md`
+- Rook MCP patch: `BISHOP_DROPZONE\00_FOUNDER_REVIEW\MNEMOSYNE_COME_ROOK_MCP_PATCH_READY.md`
+- Pawn MCP patch: `BISHOP_DROPZONE\00_FOUNDER_REVIEW\MNEMOSYNE_COME_PAWN_MCP_PATCH_READY.md`
+- Quicksilver canon eblet: `Asteroid-ProofVault\canon_realtime_slipstream_quicksilver_cohort_socceri_native_no_translation_bp079_founder_ratify.eblet.md`
+- messages.jsonl backing store: `~/.mnemosynec/messages.jsonl`
+- MCP tools (all three shipped in v0.1.40):
+  - `send_message(to, from, subject, body)` — emits pearl with `addressed_to` slot; writes JSONL record
+  - `check_messages(client_id)` — returns messages where `addressed_to == client_id`
+  - `ack_message(pearl_id)` — marks message read
+
+---
+
+### Reply contract
+
+Knight returns a `## RESPONSE` block appended to this file at canonical path. Block must include:
+
+1. Gate confirmation receipts (all 3 gates GREEN with timestamps)
+2. Per-SEG commit SHA + summary (SEG-WE-1 through SEG-WE-6)
+3. SEG-WE-VERIFY: E2E screenshot path + description of what the screenshot shows
+4. SEG-WE-SHIP: v0.1.43 installer path + SHA-256 + GitHub Release DRAFT URL + Cephas deploy confirmation
+5. Truth-Always findings: any deviations from spec, scope changes, open obligations
+6. Cohort round-trip verify receipt: pearl_id of test message sent + pearl_id of response received
+
+---
+
+### Statute reminders
+
+- **§3** (this Yoke binds both surfaces: parameter + announcement verbatim "Sonnet 4.6")
+- **§12** Ask-Knight-First (if operational truth involved — check substrate before asking Bishop)
+- `canon_actual_runtime_verify_for_runtime_bugs_bp078` — for runtime bugs, collect DevTools evidence BEFORE marking fix complete; source change alone does not verify
+- `canon_long_running_progress_heartbeat_canon_bp078` — any operation >3s wall-clock shows progress indicator; silence is broken by definition
+- `feedback_ux_seg_screenshot_mandatory_bp078` — every UX-touching SEG MUST capture screenshot of affected surface in packaged-build install; source-verified is NOT sufficient
+- `feedback_every_click_visible_feedback_canon_bp078` — every clickable element MUST produce visible feedback (toast, spinner, status change) on click
+- `canon_realtime_slipstream_quicksilver_cohort_socceri_native_no_translation_bp079_founder_ratify` (pearl_787a602164c40000) — inter-cohort messages stay Socceri in transit; English translation at Founder surface ONLY
+
+---
+
+### Paste-ready Founder wake-up
+
+> Knight, NEW Yoke at `BISHOP_DROPZONE\01_KnightPrompts\PROMPT_KNIGHT_BP079_MNEMOSYNE_COME_WAVE_E_REALTIME_SLIPSTREAM_QUICKSILVER_2026-06-10.md`. Build MnemosyneC Cohort tab UI (Realtime Slipstream Quicksilver, Founder-direct ratify BP079). Sonnet 4.6 SEGs mandatory (Statute §3 + corrective sub-canon BP079). Gated on: (a) v0.1.42 SHIP + stable, (b) Bishop+Knight MCP patches applied + both clients restarted, (c) cohort round-trip verify confirmed GREEN. Black Mamba 6+2 SEGs in Yoke. Yoke-return consolidated.
+
+- Bishop - BP079 - pinned 2026-06-10T00:01Z
+
+---
+
+---
+
+## BLACK MAMBA PASTE-READY DISPATCH (forward this block verbatim to Knight)
+
+Knight: this is Wave E — Realtime Slipstream Quicksilver. Founder direct ratify 2026-06-10. Build MnemosyneC member-facing Cohort tab UI that connects the AI cohort messaging substrate (Wave D, v0.1.40, already shipped) to Founder's fingertips.
+
+**HARD GATES — check these FIRST before any SEG fires:**
+- Gate 1: v0.1.42 SHIPped and installs clean on Founder M1 (Phase 3 completes without hanging)
+- Gate 2: Bishop MCP patch at `BISHOP_DROPZONE\00_FOUNDER_REVIEW\MNEMOSYNE_COME_BISHOP_MCP_PATCH_READY.md` applied to `~/.claude/settings.json` + Claude Code restarted; Knight MCP patch at `BISHOP_DROPZONE\00_FOUNDER_REVIEW\MNEMOSYNE_COME_KNIGHT_MCP_PATCH_READY.md` applied to `~/.cursor/mcp.json` + Cursor restarted
+- Gate 3: Live cohort round-trip confirmed — Bishop sends test `send_message(to='knight', ...)` → Knight receives via `check_messages(client_id='knight')` → Knight responds → response arrives at Bishop; screenshot of BOTH check_messages responses required
+
+If any gate is RED, STOP and surface to Founder before firing SEGs.
+
+If all 3 gates GREEN: dispatch 7 parallel Sonnet 4.6 SEGs RIGHT NOW. Sonnet 4.6 verbatim in every announcement (Statute §3 + corrective sub-canon BP079, pearl_98f74effb5d986a5). Each SEG below is self-contained scope; do NOT re-decompose; do NOT ask for clarification before firing; fire all 7 in parallel in a single message.
+
+**SEG-WE-1 (Sonnet 4.6):** Add new "Cohort" tab to MnemosyneC main window. File: `src/renderer/components/MnemosyneTabView.tsx` (or wherever tabs are registered — check the tab registration pattern used by the existing 14 tabs). Add tab entry: icon (use a network/mesh icon from existing icon set, or a simple speech bubble), label "Cohort", route/panel identifier "cohort". Create empty `CohortView.tsx` component shell at `src/renderer/components/CohortView.tsx` that renders a placeholder `<div>Cohort loading...</div>`. Wire the tab so clicking it renders CohortView. No logic yet — shell only. Verify in packaged build that the tab appears and clicking it does not crash.
+
+**SEG-WE-2 (Sonnet 4.6):** Live message stream component. Create `src/renderer/components/CohortMessageStream.tsx`. Backing: poll `~/.mnemosynec/messages.jsonl` every 2 seconds via IPC (expose a `window.amplify.getMessages(client_id)` IPC handler if not already present — maps to the MCP `check_messages(client_id)` tool already wired in Wave D). Render each message as a chat bubble row: sender label (Founder / Bishop / Knight / Rook / Pawn — derived from the `from` field), ISO timestamp formatted as local time, body text. Chronological scroll, newest at bottom. Auto-scroll to bottom on new message (use a `useEffect` + ref pattern). Empty state: "No messages yet. Send one below." If IPC call fails (client_id not configured): show "Cohort not connected — apply MCP patches and restart." Wire this component into CohortView.tsx above the input area.
+
+**SEG-WE-3 (Sonnet 4.6):** Founder input surface. Add to `CohortView.tsx` below the message stream: a `<textarea>` for message body (3-4 rows, resizable), a `<select>` dropdown for addressed_to with options: "Bishop" (value: "bishop"), "Knight" (value: "knight"), "Cohort broadcast" (value: "broadcast"). A "Send" button. Behavior on submit: call `window.amplify.sendMessage({ to: selectedTarget, from: 'founder', subject: auto_generate_subject(body), body })` — IPC handler maps to Wave D `send_message` MCP tool. The auto_generate_subject can be a truncated first 50 chars of body + "..." if longer. After successful send: clear the textarea, show a success toast "Message sent to [Bishop/Knight/Cohort]". After failure: show error toast "Send failed — check Cohort connection." Enter-to-send behavior: pressing Enter submits (Shift+Enter inserts newline). Every click produces visible feedback (`feedback_every_click_visible_feedback_canon_bp078`): Send button shows spinner during IPC call, reverts to "Send" on completion.
+
+**SEG-WE-4 (Sonnet 4.6):** Socceri/pearl translation surface. Modify `CohortMessageStream.tsx` so each message bubble has a "Show raw" toggle link (small, below the body text). By default the toggle is collapsed and shows English body text only. When "Show raw" is clicked, expand a monospace `<pre>` panel below the message body showing: `canonical_ref`, `pearl_id`, `SID`, `slot_values` (as pretty-printed JSON), `decay_class`. These fields come from the raw JSONL record — expose them through the existing IPC layer (the `getMessages` handler should return the full JSONL record, not just the body). Hex/SID values in a distinct monospace style (use a `.cohort-raw` CSS class, `font-family: monospace`, `font-size: 0.8em`, `color: var(--text-secondary)`). Toggle text flips between "Show raw" and "Hide raw". This is the debug view — most Founders never open it. No change to default English rendering.
+
+**SEG-WE-5 (Sonnet 4.6):** Channel filter tabs. Above the message stream in `CohortView.tsx`, add a row of filter tabs: "All", "Founder ↔ Bishop", "Founder ↔ Knight", "Bishop ↔ Knight", "Broadcast". Each filter tab is a button with active/inactive visual state. Default: "All" active. Filter logic applies on the local messages.jsonl read (client-side filter, no server round-trip): "Founder ↔ Bishop" = messages where (from='founder' AND to='bishop') OR (from='bishop' AND to='founder'); "Founder ↔ Knight" = same pattern with 'knight'; "Bishop ↔ Knight" = messages where (from='bishop' AND to='knight') OR (from='knight' AND to='bishop') — eavesdrop mode; "Broadcast" = messages where to='broadcast'. The `getMessages` IPC handler should return ALL messages (not pre-filtered), and the filter applies in the React component. Filter state: useState hook in CohortView. Re-renders stream on filter change.
+
+**SEG-WE-6 (Sonnet 4.6):** Cohort round-trip verify (HARD BINDING per `feedback_ux_seg_screenshot_mandatory_bp078`). This SEG is the empirical proof that the full Wave E UI works end-to-end WITH BOTH MCP PATCHES APPLIED. Steps: (a) Confirm Gates 1-3 are GREEN (Gate 3 must have been verified before Wave E SEGs fired). (b) Open MnemosyneC packaged install (v0.1.42 or later), navigate to Cohort tab. (c) From the Founder input surface, type "Wave E verify: Bishop please acknowledge." addressed to Bishop. Click Send. (d) Capture screenshot of the Cohort tab showing the sent message in the stream. (e) Wait up to 30 seconds for Bishop to receive via check_messages and respond. (f) Capture screenshot of the Cohort tab showing Bishop's response in the stream with correct sender attribution + timestamp. (g) From the Founder input surface, send "Knight please acknowledge." addressed to Knight. (h) Capture screenshot of Knight's response appearing. (i) Send a "Cohort broadcast: Wave E online." to Cohort broadcast. (j) Capture screenshot showing broadcast message in All channel. All 4 screenshots required in Yoke-return. If any step fails: surface root cause with DevTools console output or IPC error log. Do NOT mark SEG-WE-6 complete with source-only verification.
+
+When all 6 SEGs return: run sequential synthesis:
+
+**SEG-WE-VERIFY (Sonnet 4.6 sequential):** Full E2E on packaged install (not dev server). Founder workflow test: Founder types "What is PRE-2 status?" in Cohort tab addressed to Bishop → MnemosyneC IPC emits pearl via send_message → Bishop receives via check_messages → Bishop responds with current PRE-2 status (env var set / not set, Wave C gate) as a response pearl → MnemosyneC renders decoded English in Cohort tab stream. Screenshot of the full Cohort tab showing both the sent message and the decoded response required. Verify: (1) messages.jsonl has 2 new entries, (2) no English translation occurs in the JSONL body (bodies are pearl payloads, not English prose — only the rendered UI shows English), (3) round-trip latency <5 seconds end-to-end. If latency >3s, the send button must show a heartbeat per `canon_long_running_progress_heartbeat_canon_bp078` — confirm this is present.
+
+**SEG-WE-SHIP (Sonnet 4.6 sequential):** Bump app version to v0.1.43 in `package.json` (and `package-lock.json` if present). Build packaged Windows installer via existing release workflow. Compute SHA-256 of `MnemosyneC-Setup-0.1.43.exe`. Create DRAFT GitHub Release tagged `v0.1.43` with title "v0.1.43 — Realtime Slipstream Quicksilver: Cohort Tab UI" and release notes summarizing Wave E (Cohort tab, message stream, Founder input, translation surface, channel filters, cohort round-trip). Update Cephas download page with v0.1.43 SHA and installer link. Live HTTP verify: fetch download page, confirm v0.1.43 appears. Append Yoke-return block to this Yoke file.
+
+Yoke-return: append `## RESPONSE` block to this Yoke file at:
+`C:\Users\Administrator\Documents\LianaBanyanPlatform\BISHOP_DROPZONE\01_KnightPrompts\PROMPT_KNIGHT_BP079_MNEMOSYNE_COME_WAVE_E_REALTIME_SLIPSTREAM_QUICKSILVER_2026-06-10.md`
+
+Include per-SEG commit SHA + key outcome + Truth-Always findings + screenshot paths + gate confirmation receipts.
+
+If any SEG announces "Sonnet 4.5" or other version-variant in narration: STOP, fix the announcement, re-fire. Violation of corrective sub-canon BP079 (pearl_98f74effb5d986a5).
+
+---

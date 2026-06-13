@@ -1,0 +1,134 @@
+# Knight Queue -- BP079 Active Pending Yokes
+
+**Last updated by Bishop SEG-YOKE-CHECK: 2026-06-10T23:00:00Z**
+
+---
+
+## ⚠️ STANDING REMINDER -- Statute §3 (every dispatch) -- TWO BINDING SURFACES
+
+**Every SEG / sub-agent / Agent / workflow `agent()` dispatch SHALL pass `model: "sonnet"` (Sonnet 4.6) explicit. NEVER inherit. NEVER "Sonnet 4.5" or other variant unless Founder explicitly overrides for a specific dispatch.**
+
+**Canon (parameter binding):** `canon_statute_3_sonnet_4_6_sub_agent_default_every_dispatch_explicit_model_param_bp077`
+Pearl: `pearl_8b0c6fb05fd9f38a` (anchor class)
+
+Catechist-class violation if omitted. Repeat → block + surface to Founder.
+
+**Canon (announcement-language binding -- BP079 corrective):** `canon_statute_3_corrective_announcement_language_must_say_sonnet_4_6_verbatim_pattern_violation_bp079`
+Pearl: `pearl_98f74effb5d986a5` (anchor class)
+
+**BOTH surfaces must be clean.** The parameter is the runtime contract. The announcement is the observable witness. They must match.
+
+**Pre-dispatch self-audit (two checks, not one):**
+1. Is `model: "sonnet"` present in the Agent tool call? If not → STOP, add it.
+2. Does the dispatch announcement say "Sonnet 4.6" verbatim? If it says "Sonnet 4.5" or just "Sonnet" → STOP, fix to "Sonnet 4.6".
+
+- ❌ "Sonnet 4.5" in announcement (the empirical drift)
+- ❌ "Sonnet" with no version number (ambiguous)
+- ✅ "Sonnet 4.6" verbatim (canonical)
+
+**Empirical receipt (BP079 2026-06-10):** 7 announcements of "Sonnet 4.5" in a single Wave A+B dispatch chain (UUID + Schema + Routes + Dialog + Pages + Subscription + Vesting + LibRewrite + Ship). Parent canon §5 escalation rule (3+ violations in window) triggered the corrective sub-canon mint. This is that canon's standing binding in the Queue.
+
+---
+
+## ⚡ FOUNDER RATIFY 2026-06-10T21:00:00Z -- KNIGHT OWNS ALL OUTSTANDING WORK
+
+Founder verbatim: **"Have Knight do all of that, please."**
+
+Knight is authorized + directed to execute the full priority queue below. Bishop role: orchestrator only -- no Bishop main-thread work; all Bishop tasks dispatched via Sonnet 4.6 SEGs per Statute §3 + corrective sub-canon BP079.
+
+**Knight has full Supabase operational access** (per Statutes §4 binding added 2026-06-10): service-role SELECT/INSERT/UPDATE/DELETE, edge function deploy, auth.users management, migration apply (`supabase migration up`), dashboard env var read/write. No Founder dashboard step needed for PRE-1 + PRE-2; Knight executes directly.
+
+---
+
+## 🟢 ACTIVE -- Pending Knight Action
+
+### NEW P0 -- Mnemosyne Come Wave D -- MnemosyneC as canonical MCP server for the 4-AI cohort
+
+**File:** `PROMPT_KNIGHT_BP079_MNEMOSYNE_COME_WAVE_D_2026-06-10.md` (17,254 bytes)
+**Spec doc:** `BISHOP_DROPZONE\00_FOUNDER_REVIEW\MNEMOSYNE_COME_02_MCP_ARCHITECTURE_SPEC.md` (15,997 bytes)
+**Audit doc:** `BISHOP_DROPZONE\00_FOUNDER_REVIEW\MNEMOSYNE_COME_01_MCP_AUDIT_REPORT.md` (14,784 bytes)
+**Bishop config patch (staged):** `BISHOP_DROPZONE\00_FOUNDER_REVIEW\MNEMOSYNE_COME_03_BISHOP_MCP_CONFIG_PATCH.md` (7,085 bytes)
+**Founder verbatim ratify:** "fix this pesky MCP issue, for both you, knight, rook, and pawn, please. Once and for all with... Mnemosynec As was Foretold."
+**Scope:** 9 Sonnet 4.6 SEGs (SEG-MC-1 through SEG-MC-9). MnemosyneC exposes ~20 canonical MCP tools (librarian gadgets read + substrate write + Knight-Bishop bridge replacement via pearls). stdio for local cohort (Bishop on Claude Code, Knight on Cursor). HTTP+SSE on port 11482 for remote cohort (Rook on Antigravity, Pawn on Comet if MCP-capable). Auth: local trust + remote shared-secret derived from Founder auth.users.id + rotating member token.
+**Knight wall-clock estimate:** 8-12 days (5-7 with concurrent SEGs)
+**Ships as:** v0.1.40 (or appropriate next semver)
+**Knight TODOs to confirm before Wave D ships** (from spec audit):
+- How harness-injected MCPs (librarian, knight-bishop-bridge) are deprecated in Claude Code
+- Cursor MCP config authority (root vs per-project)
+- Port 11482 availability in platform port map (gadget-confirm)
+- MESH-6 mesh port number (gadget-confirm)
+- Authoritative IPC channel list from Electron main process
+**Composes with:** MnemosyneC-as-Orchestrator (BP067 pearl_872d05c7), MoneyPenny-in-Mnemosyne autonomy (BP061), Constitution of Mnemosyne v1.1 (Statute §8), Substrace Theorem (BP061), "Until Mnemosyne Come" canon.
+
+### P1 -- PROMPT_KNIGHT_BP079_WAVE_C_ACTIVATION_PREFLIGHT_2026-06-10.md
+
+**Priority:** P1 -- Gates Wave C ship. Must clear before any Wave C code lands.
+**Scope:** Small verification task (~30 min SEG) -- 3 pre-flight checks: PRE-1 migrations applied, PRE-2 STRIPE_PRICE_FOOD_NODE_WEEKLY env var set, PRE-3 secondary Firebase domains live.
+**Status:** Awaiting Knight execution. PRE-3 already GREEN (Bishop SEG-FIREBASE-FIX confirmed 2026-06-10). Knight executes PRE-1 (migration apply via direct Supabase service-role) + PRE-2 (Stripe env var via Supabase dashboard write) directly per Statutes §4 -- no Founder dashboard step needed.
+**If all 3 green → Knight fires Wave C per the canonical Wave C Yoke (α/β/γ already RATIFIED + locked).**
+
+### P2 -- PROMPT_KNIGHT_BP079_RED_CARPET_WAVE_C_TURNKEY_2026-06-10.md
+
+**Priority:** P2 -- Awaits P1 pre-flight green. α/β/γ already RATIFIED and locked.
+**Scope:** ~8-10 days Knight (5-6 days with concurrent Sonnet 4.6 SEGs in groups). 10-component scope: Seeker dashboard, cue card generator UI, PDF/PNG card layout generator, click-time Stripe Checkout Session edge fn, webhook auto-attribution, automated merchant onboarding wizard (5 steps incl Stripe Connect Express), Stripe Connect Express integration, Seeker notification system, attribution dashboard with cooperative-class leaderboard, Seeker-as-merchant onramp.
+**Founder ratify on 3 Wave C design decisions COMPLETED 2026-06-10:** α Marks vesting (10 at activation + 5/wk×4 + 1/recurring), β Multi-Seeker collision (first-write-wins), γ Self-introduction guard (Marks=0 when seeker=merchant). Knight cleared to ship Wave C webhook without further holds. Full RATIFIED block in the Yoke file.
+**Spec doc:** `BISHOP_DROPZONE\00_FOUNDER_REVIEW\FOOD_TRUCK_ACTIVATION_KIT_E_TURNKEY_SEEKER_INFRASTRUCTURE.md`
+
+### P3 DEFERRED -- PROMPT_KNIGHT_BP079_TODO_TRIAGE_CUECARDCONFIG_BEACONRUN_2026-06-10.md
+
+**Priority:** P3 DEFERRED -- Do not action until Wave C clears OR Founder explicitly pulls forward.
+**Scope:** Scoping-only SEG (~1 hr) -- CueCardDestinationConfig.tsx redesign (campaign vs Red Carpet distinction) + BeaconRunCueCard.tsx cue_card_id lookup pattern.
+**Status:** Filed by Bishop SEG-YOKES-3 2026-06-10T20:30:00Z. Read + scope; surface estimates; do not build.
+
+---
+
+## ✅ Founder action gates: NONE OUTSTANDING (as of 2026-06-10T21:00:00Z)
+
+Per Founder ratify + Statutes §4 Supabase access binding, Knight executes PRE-1 + PRE-2 directly. Bishop standing by as orchestrator.
+
+**Standing Founder optional items (no urgency, Founder's call):**
+- v0.1.39 mid-pull screenshot on M1 install (closes binding `feedback_ux_seg_screenshot_mandatory_bp078`)
+- Read kit files in `BISHOP_DROPZONE\00_FOUNDER_REVIEW\` when desired (Kits A/B/C/D/E + 3 Mnemosyne Come docs)
+- Key rotation per Founder schedule (Founder owns timing)
+
+---
+
+## ✅ COMPLETED -- For Reference
+
+### PROMPT_KNIGHT_BP079_FIREBASE_CLI_FIX_2026-06-10.md
+COMPLETED by Bishop SEG-FIREBASE-FIX 2026-06-10. firebase-tools old 15.19.1 → new 15.19.1 (already latest). Actual targets = cephas/museum/mnemosyne (Yoke had wrong target names dotcom/biz/org/net). All 3 real targets deployed Wave B build. mnemosyne-lianabanyan.web.app live v0.1.38 verified. PRE-3 Wave C pre-flight = GREEN.
+
+### Bishop SEG-YOKE-TEMPLATE-EMBED -- 2026-06-10
+Yoke template embedding completed. STANDING_YOKE_TEMPLATE with Statute §3 + corrective BP079 binding block embedded in all new Yoke files dispatched this session.
+
+### Bishop SEG-STATUTES-SUPABASE -- 2026-06-10
+Statutes §4 Supabase operational access binding added. Knight now has canonical authority for service-role SELECT/INSERT/UPDATE/DELETE, edge function deploy, auth.users management, migration apply, dashboard env var read/write. No Founder dashboard step needed for any Knight Supabase operation.
+
+### Bishop SEG-CANON-MINT-S3-CORRECTIVE -- 2026-06-10
+Statute §3 corrective sub-canon minted (BP079). Canon: `canon_statute_3_corrective_announcement_language_must_say_sonnet_4_6_verbatim_pattern_violation_bp079`. Pearl: `pearl_98f74effb5d986a5`. Triggered by 7 "Sonnet 4.5" announcement violations in Wave A+B dispatch chain. Standing reminder block in this file is that canon's canonical binding surface.
+
+### PROMPT_KNIGHT_BP079_RED_CARPET_WAVE_A_B_2026-06-10.md
+COMPLETED by Knight 2026-06-10. Wave A SHIPPED commit b0b5e84 tag bp079-red-carpet-wave-a. Wave B SHIPPED commits fec6dbc + 3d57900 tag bp079-red-carpet-wave-b. lianabanyan.com hosting:main LIVE. Secondary domain deploys (hosting:dotcom/biz/org/net) errored with `paths[1] argument must be of type string. Received undefined` -- firebase-tools version bug; separate Firebase CLI Fix Yoke filed.
+
+### PROMPT_KNIGHT_BP079_CEPHAS_V0138_2026-06-10.md
+COMPLETED by Knight 2026-06-10. Cephas page bumped to v0.1.38, all 3 Firebase targets PASS, commit 8f38159. Page subsequently bumped to v0.1.39 (Step 3 progress UX release).
+
+### PROMPT_KNIGHT_BP079_STEP3_PROGRESS_2026-06-10.md
+COMPLETED by Knight 2026-06-10. v0.1.39 shipped (SHA-256 7B778B...). Live mid-pull screenshot obligation on Founder M1 still open (standing optional item above) -- closes the binding `feedback_ux_seg_screenshot_mandatory_bp078` canon obligation formally.
+
+### PROMPT_KNIGHT_BP079_FOUNDER_UUID_2026-06-10.md
+COMPLETED (legacy). UUID resolved; Founder obtained mapping. Kept for reference.
+
+---
+
+## 📋 Discovery + Canonical Path Notes (for future Bishop sessions)
+
+Bishop SEG-YOKE-DISCOVERY 2026-06-10 found:
+- Bishop's prior SEGs were writing Yoke files to `C:\Users\Administrator\Documents\LianaBanyanPlatform\` root
+- Knight's canonical session-open scan only checks `BISHOP_DROPZONE\01_KnightPrompts\` and `BISHOP_DROPZONE\03_BishopHandoffs\`
+- Result: 3 Yokes were dark to Knight for ~24 hours
+- **Fix going forward:** all new Bishop Yokes deposit at `BISHOP_DROPZONE\01_KnightPrompts\PROMPT_KNIGHT_BP<NNN>_<SCOPE>_<DATE>.md` with this file (`KNIGHT_QUEUE.md`) updated at each new Yoke
+- Root-level `BISHOP_YOKE_*.md` files preserved as redundant copies; do not edit or delete them
+- Knight bridge MCP still down this session; both canonical-path Yokes + KNIGHT_BISHOP_MESSAGES.md fallback remain available
+
+-- Bishop · BP079 · SEG-YOKE-DISCOVERY · 2026-06-10

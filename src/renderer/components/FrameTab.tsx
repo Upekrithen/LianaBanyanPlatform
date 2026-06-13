@@ -114,7 +114,7 @@ export function FrameTab({ currentMode, onModeChange, authState, windUnlocked = 
     const resizeObserver = typeof ResizeObserver !== 'undefined' && parent
       ? new ResizeObserver(resize)
       : null;
-    resizeObserver?.observe(parent);
+    resizeObserver?.observe(parent!);
     window.addEventListener('blur', onBlur);
     window.addEventListener('focus', onFocus);
     document.addEventListener('visibilitychange', onVisibilityChange);

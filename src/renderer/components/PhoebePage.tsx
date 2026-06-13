@@ -13,14 +13,6 @@ interface Idea {
   timestamp: string;
 }
 
-declare global {
-  interface Window {
-    amplify?: {
-      saveIdea?: (idea: { title: string; content: string; timestamp: string }) => Promise<{ ok: boolean; id: string }>;
-      getIdeas?: () => Promise<{ ok: boolean; ideas: Idea[] }>;
-    };
-  }
-}
 
 export function PhoebePage() {
   const [title, setTitle] = useState('');

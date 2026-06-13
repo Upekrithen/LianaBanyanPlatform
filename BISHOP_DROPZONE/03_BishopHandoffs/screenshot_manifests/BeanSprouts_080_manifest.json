@@ -1,0 +1,51 @@
+{
+  "folder_name": "080",
+  "folder_path": "C:\\Users\\Administrator\\Pictures\\BeanSprouts\\080",
+  "generated_at": "2026-06-09T05:43:20.528309+00:00",
+  "screenshot_count": 7,
+  "screenshots": [
+    {
+      "filename": "Screenshot 2026-06-08 195914.png",
+      "sha256": "017eb4c85e627fcaac8b1132f7a646163074f89a06d86bf6b348521ce763556a",
+      "size_bytes": 386320,
+      "mtime_iso": "2026-06-09T00:59:14.857061+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-08 200013.png",
+      "sha256": "6670f22f6d0c30e124f64aade0e60a70d400354e8f4b06b21f046b5d28b9c1c4",
+      "size_bytes": 155106,
+      "mtime_iso": "2026-06-09T01:00:13.367386+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-08 211003.png",
+      "sha256": "bd0386c21cbbf4e103609ad4e0888d833102b7de7efb75099c52836b9b1ddfbc",
+      "size_bytes": 584008,
+      "mtime_iso": "2026-06-09T02:10:03.965113+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-08 211007.png",
+      "sha256": "61cb96552024af0974682e30394ebe0d49c2600a69bbcb36edea09d5fbd640e8",
+      "size_bytes": 490525,
+      "mtime_iso": "2026-06-09T02:10:08.005568+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-09 001104.png",
+      "sha256": "089bf2f59094ef25ebe0a3d8b597c0e773abb4ea4cd1694431faead21275e2ac",
+      "size_bytes": 82631,
+      "mtime_iso": "2026-06-09T05:11:04.860522+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-09 001715.png",
+      "sha256": "4de9214461a4035322a37c806f3a8c2f3616cdef9e310ac2a44e29f2a719bf3a",
+      "size_bytes": 503670,
+      "mtime_iso": "2026-06-09T05:17:15.823153+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-09 001721.png",
+      "sha256": "ad671c03252d5d7ab06b001fdd0292ea100b5f1dce5ae9733521d9700598d110",
+      "size_bytes": 508911,
+      "mtime_iso": "2026-06-09T05:17:21.085574+00:00"
+    }
+  ],
+  "note": "SHA-256 hashes anchor each screenshot at this commit time. Full files stay local at folder_path; this manifest is the tamper-evident receipt-class artifact for git."
+}

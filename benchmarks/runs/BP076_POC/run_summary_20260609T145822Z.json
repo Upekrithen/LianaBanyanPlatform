@@ -1,0 +1,18 @@
+[
+  {
+    "condition": "baseline_no_substrate",
+    "model": "gemma4:12b",
+    "n_total": 1000,
+    "n_correct": 401,
+    "accuracy": 0.401,
+    "output_file": "benchmarks\\runs\\BP076_POC\\baseline_no_substrate\\20260608T050810Z.jsonl"
+  },
+  {
+    "condition": "drt_wikipedia_only",
+    "model": "gemma4:12b",
+    "n_total": 1000,
+    "n_correct": 436,
+    "accuracy": 0.436,
+    "output_file": "benchmarks\\runs\\BP076_POC\\drt_wikipedia_only\\20260609T011959Z.jsonl"
+  }
+]

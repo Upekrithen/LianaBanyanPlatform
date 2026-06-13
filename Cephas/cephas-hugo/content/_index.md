@@ -1,195 +1,150 @@
 ---
-title: "Liana Banyan — The Cooperative Substrate for AI Memory"
-description: "Member-sovereign. Designed to be copied. Not extractive. The cooperative substrate for AI memory and 23 cooperative-class projects rebuilding the way people own their work, their food, their safety, their health, and their future."
-date: 2026-05-24
+title: "MnemosyneC — The AI that remembers"
+description: "MnemosyneC remembers. Every interaction with any AI grows your substrate. SHA256-stamped. Append-only. Federated. Workers, Builders, Creators keep 83.3%. No ads. No VC."
+date: 2026-06-13
 draft: false
 wrasseTriggers:
-  - "liana banyan landing"
+  - "mnemosynec ai memory"
+  - "mnemosynec remembers"
   - "cooperative substrate ai memory"
-  - "lianabanyan home"
+  - "shadow e-giant concordance"
   - "_index"
   - "cephas member content"
 ---
 
-# The Cooperative Substrate for AI Memory
+# Your AI has Amnesia.
 
-**Designed to be copied. Member-sovereign. Not extractive.**
+## Dr. MnemosyneC has the Cure.
 
-A 50-year cooperative-class charter. No VC. No ads. No surveillance. **83.3% of every dollar stays with the Workers, Builders, and Creators that make it.** $5 a year. One vote. Everything we build is published under a Cooperative Defensive Patent Pledge so members — and any community on Earth — can fork it, run it, and keep it.
+Mnemosyne (neh-MOZ-uh-nee) is the Greek goddess of memory. **Dr. MnemosyneC inherited her Memory.**
+
+Every time you start a new session, your AI forgets everything. Your projects, your preferences, your past conversations, gone. Dr. MnemosyneC gives your AI a permanent, private memory that actually stays.
+
+- Works alongside ChatGPT, Claude, Gemini, or any AI you already use.
+- All your data stays on your own computer. No cloud. No account required.
+- Free to use. A $5/year membership unlocks the full cooperative.
+
+[Download for Windows v0.1.60](/download/) · [Six Pillars](#six-pillars) · [How it works](#how-it-works)
+
+---
+
+# MnemosyneC remembers.
+
+You use AI all day across a dozen surfaces. Each one forgets every time.
+
+**MnemosyneC remembers.** Every interaction with any AI grows your substrate. Every time you ask any AI a question, your substrate informs the answer.
+
+The substrate is YOURS. SHA256-stamped. Append-only. Federated with anyone you choose. Free to copy if you want to fork. Cost+20% if you stay. Workers, Builders, Creators keep **83.3%**. No ads. No VC.
+
+**For the keep.**
 
 <div class="cta-row">
-
-<a href="https://mnemosynec.ai/download" class="cta-primary"><strong>Download Mnemosyne&trade; &mdash; Free</strong></a>
-<a href="/cooperative-compact/" class="cta-secondary">Read the cooperative compact &rarr;</a>
-
+<a href="/download/" class="cta-primary"><strong>Download for Windows</strong></a>
+<a href="#six-pillars" class="cta-secondary">Six Pillars &rarr;</a>
+<a href="#how-it-works" class="cta-secondary">How it works &rarr;</a>
 </div>
 
 ---
 
-## What Mnemosyne&trade; does to your computer
+## Good. Fast. Cheap. MnemosyneC gives you all six. {#six-pillars}
 
-**Nothing destructive. Mnemosyne is a READ-ONLY companion.**
-
-Mnemosyne reads your Documents folder *(only the folders you mark as Substrated)* and creates new, immutable Eblet records inside its own data folder — preserving the exact text byte-for-byte with **sha256 verification**. Your original files are never moved, modified, copied to the cloud, or sent anywhere.
-
-- **Runs entirely on your machine.** No account required.
-- **No upload. No telemetry. No phone-home.**
-- **You can verify this yourself** with the Caithedral&trade; Inspector in the Developer Tab — every Eblet shows its source file path and matching hash.
-- **Uninstall any time. Your original data is untouched.**
-
-**This is the empirical doorpost claim:** members can verify by sha256 and Vault inspection that Mnemosyne never moved a byte of their data. Not a promise. A structurally verifiable receipt.
-
-*This is the structural difference between Mnemosyne and every commercial AI-memory tool. The market does not have other tools that can honestly say all of the above.*
+| Pillar | What it means |
+|---|---|
+| **Good** | Verified by Shadow E-Giant concordance &middot; Andon discipline &middot; only verified-correct answers persist |
+| **Fast** | HOT eblet retrieve before LLM inference &middot; cached knowledge beats cold reasoning |
+| **Cheap** | Local Gemma 4 12B &middot; no cloud account &middot; no API key &middot; $0/call |
+| **Private** | Your machine &middot; your substrate &middot; your choice to share or not |
+| **Free** | Free as in beer (no cost) AND free as in freedom (SSPL + Cooperative Defensive Patent Pledge #2260) |
+| **Yours** | SHA256-stamped &middot; append-only &middot; federation opt-in &middot; portable &middot; forkable |
 
 ---
 
-## §1 &mdash; Sweet 16 Initiatives &middot; 7 Spinouts
+## How We Make Sure Things Are True
 
-<div style="background:rgba(34,197,94,0.07);border:1px solid rgba(34,197,94,0.3);border-radius:10px;padding:1.1rem 1.4rem;margin:0 0 1.4rem;">
-<strong style="color:#22c55e;display:block;margin-bottom:0.5rem;">Three Ways to Work Inside Liana Banyan</strong>
+The substrate doesn&rsquo;t just store knowledge. It **lives**.
 
-<ol style="margin:0;padding-left:1.4rem;line-height:1.75;">
-<li><strong>Get hired BY LB initiatives.</strong> The 16 initiatives and 7 spinouts are operating businesses. They hire people to run them.</li>
-<li><strong>Get hired THROUGH LB.</strong> LB connects members with employers, including AI companies and cooperative partners, who hire from the member network.</li>
-<li><strong>Start your own LB-member business.</strong> Any member can open a business inside the cooperative. Members hire members.</li>
-</ol>
+### Pheromones decay.
 
-<p style="margin:0.8rem 0 0;font-size:0.88rem;color:rgba(255,255,255,0.6);">Marks represent participation in the cooperative, not equity or ownership shares. Membership is $5/year.</p>
-</div>
+Every claim entering the substrate starts as a pheromone &mdash; a signal that something might be true. Pheromones have a half-life. If nothing refreshes them, they fade. Old guesses die naturally. The substrate doesn&rsquo;t accumulate noise &mdash; it lets noise wither.
 
-<div style="background:rgba(59,130,246,0.07);border:1px solid rgba(59,130,246,0.3);border-radius:10px;padding:1.1rem 1.4rem;margin:0 0 1.4rem;">
-<strong style="color:#60a5fa;display:block;margin-bottom:0.5rem;">Big AI Company? See the Incentive to Hire.</strong>
+### Socceri triads confirm.
 
-When a large AI company installs MnemosyneC, the license carries an <strong>Incentive to Hire</strong>: every Liana Banyan cooperative member they hire to operate it pays for itself, roughly twice over. They are not required to hire from us. They are paid to. Each hire creates the discount. The discount is doubled as an estimate. Net-save by hiring from the cooperative. <strong>Job-creation, by price.</strong>
+When three independent verifications converge &mdash; three Shadow E-Giants from different perspective lenses (correctness &middot; consistency &middot; coverage) returning the same verdict &mdash; a pheromone becomes a **socceri triad confirmation**. Verified. But still subject to decay. Verification without continued use still fades.
 
-<a href="/incentive-to-hire/" style="color:#60a5fa;">Read the full Incentive to Hire mechanism &rarr;</a>
-</div>
+### Living connection buoys.
 
-These are businesses that hire people. Twenty-three cooperative-class projects, each built to stand on its own and to compose with the others. Starred items are LIVE or SHIPPED. The rest are scaffolded and queued.
+Confirmed claims survive only if the community keeps them alive &mdash; through use, through query, through federation. Every time another user&rsquo;s substrate concordance-aligns with yours, the claim is buoyed. Without that living connection, even verified truth withers on the vine.
 
-### Sweet 16 Initiatives
+### Stone tablets are forever.
 
-| # | Initiative | One-line |
+When a claim has been buoyed by enough living connection over enough time, it gets promoted to a **stone tablet** &mdash; immutable, append-only, permanent. Stone tablets are the substrate&rsquo;s load-bearing canon. They don&rsquo;t decay. They are the truth the network has earned together.
+
+### This is the innovation itself.
+
+Truth isn&rsquo;t asserted by authority. It&rsquo;s **earned through use, hardened through verification, and preserved through community**.
+
+- **Failed claims die.** No noise accumulates.
+- **Verified claims persist if used.** No abandoned facts survive.
+- **Used-and-verified claims become permanent.** Stone tablets compound the network&rsquo;s hardest-won knowledge.
+
+The substrate gets cleaner over time, not noisier. It&rsquo;s how biological memory works. It&rsquo;s how scientific consensus works. It&rsquo;s how cooperative-class trust always worked, before extraction-class platforms tried to centralize it.
+
+We&rsquo;re just naming the mechanism, building it into code, and giving you the keys.
+
+---
+
+## The Substrate Is the Asset {#how-it-works}
+
+MnemosyneC has three layers. Each does one thing well.
+
+| Layer | Role | Component |
 |---|---|---|
-| 1 | **Let's Make Dinner&trade;** | Community meal sharing &middot; cost+20% &middot; the table is the front door |
-| 2 | **Let's Get Groceries&trade;** | Volume-buying coop for staples &middot; pennies back to households |
-| 3 | **Let's Go Shopping&trade;** | Group purchasing for everyday needs &middot; no Prime tax |
-| 4 | **Household Concierge&trade;** | Shared butler &middot; one helper, many households |
-| 5 | **Kitchen Table&trade;** &#9733; *(LIVE in Mnemosyne v0.1.8)* | The Sunday-dinner conversation interface &middot; recipes &middot; family memory |
-| 6 | **Tatiana Schlossberg Health Accords&trade;** | Health coverage built like a barn-raising &middot; not insurance theater |
-| 7 | **Tereno&trade;** | Land cooperation &middot; commons that stay common |
-| 8 | **Defense Klaus&trade;** | Personal safety &middot; legal defense fund &middot; nobody alone |
-| 9 | **The Rally Group&trade;** | Community safety network on every page &middot; one button, neighbors |
-| 10 | **VSL&trade;** | Voucher Short Loans &middot; microfinance without the predator |
-| 11 | **Let's Make Bread&trade;** | Maker incubator &middot; idea to product without traditional gatekeepers |
-| 12 | **The Harper's Guild&trade;** | Writers and storytellers &middot; royalties that actually arrive |
-| 13 | **The JukeBox&trade;** | Music licensing &middot; One Take Wonders &middot; artists keep more |
-| 14 | **Didasko&trade;** | Education &middot; *Milk-not-Meat&trade;* scripture-density learning paths |
-| 15 | **Political Expedition&trade; / Power to the People&trade;** | Civic engagement &middot; ground game without billionaires |
-| 16 | **Brass Tacks&trade;** | The receipts &middot; transparency &middot; how the books actually look |
+| **Reader** | Answers your question | Gemma 4 12B (local, free, private) |
+| **Verifier** | Adjudicates whether the answer is correct | Shadow E-Giant concordance (3+ parallel votes) |
+| **Accumulator** | Stores verified knowledge for next time | Eblet store (append-only JSONL, SHA256-stamped) |
 
-### Seven Spinouts (autonomous cooperative-class projects)
-
-| # | Spinout | One-line |
-|---|---|---|
-| S1 | **CAI&trade; Core / Bonfire Project** &#9733; *(v0.1.8 SHIPPED &middot; 94% Banyan Metric)* | The 3,252-LOC engine-pure cooperative AI substrate |
-| S2 | **Defense Klaus&trade;** (spinout) | Standalone safety-coop deliverable |
-| S3 | **Mnemosyne&trade;** &#9733; *(v0.1.10 LIVE)* | Member-sovereign AI memory companion |
-| S4 | **Battery Dispatch&trade;** | Energy resilience for households and clinics |
-| S5 | **Map &amp; Compass&trade;** | Wayfinding for new members &middot; no map, no shame |
-| S6 | **Stand in the Gap&trade;** | The five programs &middot; Dignity &middot; Such a Time as This &middot; The Calling &middot; Six &middot; Restoration &middot; Steady |
-| S7 | **Anchor&trade;** | Sponsorship circles &middot; 3-6 month commitments &middot; the rope that holds |
-
-[Browse all initiatives &rarr;](/initiatives/) &middot; [Browse all spinouts &rarr;](/spinouts/)
+Use Ask in MnemosyneC. Use Claude Desktop. Use Cursor. Use ChatGPT in your browser (browser extension coming v0.2). Whichever surface you use, the **substrate underneath compounds**. Your knowledge grows. The model is interchangeable. The substrate is what makes any AI smarter &mdash; for you, for your work, for the keep.
 
 ---
 
-## §3 &mdash; Not Charity. A Way Out.
+## How the Economy Works
 
-**Not Charity. A Way Out.&trade;** is the four-word framing for everything Liana Banyan builds.
+Three currencies. Closed loop. **Never redeemable in fiat &mdash; ever.**
 
-Charity, however well-meant, is a one-way street. The giver keeps the dignity, the giver keeps the choice, the receiver keeps the receipt. We have spent generations building systems that ask people in hard places to be grateful for crumbs and quiet about the rest.
+- **Credits** &mdash; purchased $1:$1, used for platform services
+- **Marks** &mdash; earned through work; a forward obligation; clear through participation
+- **Joules** &mdash; stored-value instrument; 1.2 Credits per Joule; Forever Stamp mechanic (locked at acquisition rate)
 
-Liana Banyan is built around the opposite gesture. **Stand in the Gap&trade;** programs (Dignity &middot; Such a Time as This &middot; The Calling &middot; Six &middot; Restoration &middot; Steady) and the **Anchor&trade;** sponsorship circles are not handouts. They are a **graduation pathway**: Voucher in &middot; Sponsorship alongside &middot; Medallion out. A neighbor walks with you for three to six months, then you walk with the next neighbor. The Threefold Cord&trade;. The LB Six&trade;. Sprouts grow into Banyans.
-
-The promise is structural: *Everyone gets their shot.* Not because we are generous. Because the math works when the dignity is preserved.
-
----
-
-## §4 &mdash; Designed to be Copied
-
-Every install of Mnemosyne is autonomous. Every Eblet is portable. Every line of code we ship is published under the **Server Side Public License (SSPL)** and bound by the **Cooperative Defensive Patent Pledge #2260**.
-
-That means: if Liana Banyan, the corporation, vanishes tomorrow, the substrate does not. Members can fork it, run their own Cathedral, federate peer-to-peer, and keep going. **300 Golden Keys** are seeded into the propagation network so that no single point of failure can ever capture the commons.
-
-This is not a marketing posture. It is the *architecture*. We built it this way on purpose. **Build the bridge behind you.&trade;** **Be Who You Needed.&trade;** Every project ships with the receipts that let the next person rebuild it without asking our permission.
-
-That is also why we filed **19 USPTO provisional patents** (with Provisional 20 ship-ready). Defensive patents, pledged to the commons. The patents protect the commons from being closed by someone else &mdash; they are not a moat for us.
+Workers, Builders, Creators keep **83.3%**. Platform takes Cost+20% &mdash; no more, no less. **No ads. No VC.** Cooperative-class structure. Designed to be copied.
 
 ---
 
-## §5 &mdash; The Cooperative Substrate (for developers)
+## Get Started
 
-For the technically curious, here is what is actually shipping:
+<div class="cta-row">
+<a href="/download/" class="cta-primary"><strong>Download for Windows v0.1.60</strong></a>
+<a href="/changelog/" class="cta-secondary">Read the canon &rarr;</a>
+<a href="/join/" class="cta-secondary">Join the mesh &rarr;</a>
+</div>
 
-- **CAI&trade; Core v0.1.8** &mdash; SHIPPED. 3,252 lines of engine-pure code. **94% Banyan Metric&trade;** composite score on the v0.1.8 evaluation harness.
-- **Mnemosyne&trade; v0.1.10** &mdash; LIVE. BP054 release.
-- **19 USPTO provisional patents filed** plus **Provisional 20 ship-ready**, covering six canonical claim families:
-  1. **Thorax** &mdash; inter-substrate signaling protocol
-  2. **Lockbox** &mdash; member-sovereign credential vault
-  3. **Pioneer Bonus** &mdash; first-mover propagation incentive
-  4. **3-class Pheromone hybrid** &mdash; substrate-scoped attention diffusion
-  5. **Production-Level composability** &mdash; live composition of cooperative modules
-  6. **Bounty Posters** &mdash; verifiable cooperative-class task markets
-- Source: [github.com/liana-banyan](https://github.com/liana-banyan)
-- Architecture write-ups: [Under the Hood &rarr;](/under-the-hood/) and [Architecture &rarr;](/architecture/)
+One-line installer. Right-click &rarr; Run as Administrator. Wait for the install dialog. Launch. Your substrate starts the moment you do.
 
-Fork CAI Core. Ship something. We will help.
+**$5/year** if you stay. **Free forever** if you want to fork the code (SSPL + Pledge #2260).
 
 ---
 
-## §6 &mdash; The Faith Statement
+---
 
-People ask, sooner or later, *why*. Why build a 50-year cooperative-class charter with no VC and no exit? Why give it all away under SSPL and a patent pledge?
+## About Liana Banyan
 
-The honest answer the Founder gives, on the record, is a verse: *"I will show you my Faith BY my works."* (James 2:18.) The works are the architecture. The architecture is the answer. We do not ask anyone to share the Founder's particular faith; we ask only that the structural promises hold. The math, the patents, the source, the pledge, and the cooperative compact are all readable, forkable, and verifiable by anyone &mdash; believer or skeptic.
+Liana Banyan Corporation &mdash; the cooperative-class substrate behind MnemosyneC and 16 cooperative initiatives.
 
-[Read the full Faith Statement &rarr;](/founder/faith-statement/)
+**83.3% of every dollar** stays with the Workers, Builders, and Creators that make it. $5 a year. One vote. Everything we build is published under a Cooperative Defensive Patent Pledge so members &mdash; and any community on Earth &mdash; can fork it, run it, and keep it.
+
+[Read the Cooperative Compact &rarr;](/cooperative-compact/) &middot; [Browse initiatives &rarr;](/initiatives/) &middot; [Join for $5/year &rarr;](/join/)
 
 ---
 
-## §7 &mdash; Get Involved
+*Liana Banyan Corporation &middot; J. Jones &middot; For the keep.*
 
-- **Members** &middot; [Download Mnemosyne&trade;](https://mnemosynec.ai/download) (free) &middot; [Join for $5/year](/join/) cooperative-class membership &middot; join the Substrate.
-- **Developers** &middot; [github.com/liana-banyan](https://github.com/liana-banyan) &middot; fork CAI Core &middot; ship something &middot; we'll help.
-- **Recipients** &middot; [Stand in the Gap&trade; programs](/stories/stand-in-the-gap/): Dignity &middot; Such a Time as This &middot; The Calling &middot; Six &middot; Restoration &middot; Steady.
-- **Sponsors** &middot; [Anchor&trade; sponsor circles](/anchor/) &middot; Voucher + Sponsorship + Medallion &middot; 3 to 6 month commitments &middot; one neighbor walks beside one neighbor.
-
-Press &middot; partnership &middot; questions: [Support@LianaBanyan.org](mailto:Support@LianaBanyan.org)
-
----
-
-## §8 &mdash; Sources &amp; Canonical References
-
-**Scripture cited inline:**
-
-- James 2:18 (KJV) &mdash; *"Yea, a man may say, Thou hast faith, and I have works: shew me thy faith without thy works, and I will shew thee my faith by my works."* (referenced in §6)
-
-**Canonical sources of truth:**
-
-- [The Cooperative Compact (SSPL + Cooperative Defensive Patent Pledge #2260)](/cooperative-compact/)
-- [USPTO Provisional Patents Filed (1-19) &middot; Provisional 20 ship-ready](/patents/)
-- [50-Year Charter &amp; Dissipate Clause](/about/#charter)
-- [Wyoming Corporation Filing](/about/#corporation)
-- [The Full Business Plan](/business-plan/)
-- [The Roll &middot; ~140+ Members](/roll/)
-- [Founder &middot; Verified Anecdotes](/founder/)
-- [Brass Tacks &middot; the receipts](/initiatives/brass-tacks/)
-
----
-
-**Liana Banyan**, a Wyoming Corporation &middot; 50-year cooperative-class charter &middot; built to dissipate the value back to the members on a structured timeline, not to compound it into an empire.
-
-*Of the People &middot; By the People &middot; For the People.*
-
-&mdash; J. Jones, Founder &middot; The North &middot; BP052 &middot; 2026-05-24
+*Caithedral &middot; Substrate &middot; Plow &middot; Stone Tablets &middot; Shadow E-Giants &middot; Cooperative-class*

@@ -1,0 +1,91 @@
+# BP078 Proofs Page Redesign -- Founder Review Package
+
+**Author:** Bishop Sonnet 4.6 (SEG-AK)
+**Date:** 2026-06-08
+**Status:** Founder Review Gate
+
+---
+
+## What Is in This Package
+
+| File | Purpose |
+|---|---|
+| `proofs_page_draft.md` | Hugo-ready markdown for the new Proofs page. Drop into `content/proofs/_index.md`. |
+| `tier1_chart_spec.md` | Chart spec for builders: BMV scatter by domain + latency histogram. Data: FINAL v6 run. |
+| `tier2_chart_spec.md` | Chart spec for comparison-shoppers: MnemosyneC vs flagships, 5 dimensions. Includes Pawn-fact-check checklist. |
+| `tier3_chart_spec.md` | Chart spec placeholder for Gemma 4 12B head-to-head. Knight fills slots after v0.1.27-full. |
+
+---
+
+## Summary of Redesign
+
+**Problem:** Current Proofs page is a narrative insider story ("Two is better than one" recovery arc). Dense, compelling to builders, inaccessible to general readers.
+
+**Solution:** Three-tier structure. Same page, three reading depths.
+- Hero: one plain-language sentence landing the value prop
+- Tier 1 (builders): raw benchmark data, per-domain table, BMV dimension explanation, JSONL link
+- Tier 2 (comparison-shoppers): normalized comparison table vs flagships, honest caveats, Pawn-fact-check flags on every unverified number
+- Tier 3 (everyone): placeholder "free Gemma 4 12B vs paid flagships" with prediction receipt, fills empirically after v0.1.27-full
+- Substrate Theorem: formal statement + plain English translation
+- Trust badges: Off the Street test + 20/20 mesh proof
+- Caveat block: in-bank vs out-of-bank, what is still being measured
+
+**Key empirical numbers used (verified from source files):**
+- Phase 7 FINAL v6: 50/50 PASS, BMV mean 98.0, latency mean 18.8s, median 18.2s (source: `benchmarks/run_FINAL_v6_50Q.log`)
+- Mesh: 20/20 hash-verified, p50 16.6ms, p95 25.8ms (source: BP067 pearl_88a8c069)
+- Substrate OFF baseline: BMV 5-25 range (source: BP073 prediction receipt / BP067 testing)
+
+---
+
+## Structural Conflict with Existing Proofs Page
+
+**Current state:** `content/proofs/` has no `_index.md`. It contains only `bishop-prediction-bp073.md` and an empty `charts_bp058/` directory. There is no existing narrative page to replace at that URL.
+
+**Recommendation:** Create `content/proofs/_index.md` with the new draft. The prediction file (`bishop-prediction-bp073.md`) stays as a sub-page and is linked from the Tier 3 section.
+
+**URL:** `/proofs/` (already the canonical path; no redirect needed)
+
+**Frontmatter note:** The draft uses `slug: "proofs"` which is redundant with the directory name but harmless. Hugo will serve at `/proofs/` either way.
+
+**Layout:** No dedicated `layouts/proofs/` exists. Hugo will use the default section template. If the site has a content-class CSS system (the `class` frontmatter field suggests it does), the `empirical-proofs` class may need a corresponding style rule. Check with Knight or look at how other class values render.
+
+---
+
+## Open Items for Founder
+
+1. **Tier 2 flagship numbers: MMLU-Pro proxy vs leave UNVERIFIED?**
+   - Option A: Show MMLU-Pro scores (73-80 range) as a proxy with a clear label and caveat. More informative but requires explaining the harness difference.
+   - Option B: Leave flagship Dimension 1 bars as hatched/empty until Tier 3 run lands. Cleaner but the page looks incomplete.
+   - Recommendation: Option B for now; Tier 3 will fill the gap empirically.
+
+2. **Tier 2 pricing: Pawn-fact-check needed before publish.** API pricing changes frequently. The draft uses ranges ($200-$400 for Opus) that need verification against current pricing pages before going live.
+
+3. **Tier 3 timing.** The Tier 3 placeholder goes live with the page. The actual chart fills after v0.1.27-full installs and Knight runs the benchmark. Estimated: 1-2 sessions after v0.1.27-full launch.
+
+4. **Hugo shortcode for charts.** The draft uses `{{< chart id="..." spec="..." >}}` shortcode syntax. This shortcode does not exist yet. Options:
+   - Option A: Knight builds the shortcode system (Chart.js or similar via Hugo partial).
+   - Option B: Embed static SVG chart images generated from the spec data.
+   - Option C: Use a simple HTML table + CSS bar visualization (no JS required).
+   - Recommendation: Option C for the fastest path to publish; upgrade to interactive later.
+
+5. **"Wife Test" naming.** The trust badge uses this phrase directly. Founder-ratified language in the codebase. Confirm OK for public-facing use.
+
+6. **FINAL v6 JSONL availability.** The JSONL output `results_bp077_phase7_FINAL_v6_50_50.jsonl` is referenced in the replication kit link but the file was not found in `replication-kit/receipts/` at time of writing (only the earlier 42-record file exists there). Knight should copy the FINAL v6 JSONL from `benchmarks/` to `replication-kit/receipts/` and commit it so the public link works.
+
+---
+
+## Next Steps (Ordered)
+
+1. Founder reviews + approves copy (especially hero line, Wife Test naming, caveat block tone)
+2. Pawn-fact-check: current flagship API pricing + MMLU-Pro scores (Tier 2 decision)
+3. Copy FINAL v6 JSONL to `replication-kit/receipts/` (Knight)
+4. Choose chart implementation path (shortcode vs static image vs CSS table)
+5. Create `content/proofs/_index.md` from draft
+6. Deploy and verify at `/proofs/`
+7. After v0.1.27-full: Knight fills Tier 3 slots, replaces placeholder, redeploys
+
+---
+
+## Word Count
+
+`proofs_page_draft.md`: approximately 1,350 words (excluding frontmatter, code blocks, and table content).

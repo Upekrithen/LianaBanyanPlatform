@@ -1,0 +1,441 @@
+{
+  "folder_name": "083",
+  "folder_path": "C:\\Users\\Administrator\\Pictures\\BeanSprouts\\083",
+  "generated_at": "2026-06-11T03:44:04.018340+00:00",
+  "screenshot_count": 72,
+  "screenshots": [
+    {
+      "filename": "app_alttab.png",
+      "sha256": "f41869f08b978c50a61885ea760ff3094f41648a83a2f1f09b791acceba6dede",
+      "size_bytes": 423167,
+      "mtime_iso": "2026-06-11T02:45:53.101085+00:00"
+    },
+    {
+      "filename": "app_current.png",
+      "sha256": "702fe065b687aea914ccb0f2daa8931e860a331284074a4301f34e927c4d6fea",
+      "size_bytes": 440833,
+      "mtime_iso": "2026-06-11T02:41:31.770188+00:00"
+    },
+    {
+      "filename": "app_forced.png",
+      "sha256": "1f72d6a2a601e6a5e505b4a73095c2b6256d7a8f135cf3984aa62ae28dc1b760",
+      "size_bytes": 420921,
+      "mtime_iso": "2026-06-11T02:46:38.074005+00:00"
+    },
+    {
+      "filename": "app_foreground.png",
+      "sha256": "87c44745fb9c3215d49239d759cb3ee6cc1884a6bd72b466da33d51d4f48fc29",
+      "size_bytes": 428289,
+      "mtime_iso": "2026-06-11T02:43:49.390239+00:00"
+    },
+    {
+      "filename": "app_state2.png",
+      "sha256": "9a7b8b9f1e290126742ea584d84348460507a7657e7c5619f2e49423d24989fb",
+      "size_bytes": 425920,
+      "mtime_iso": "2026-06-11T02:45:07.954184+00:00"
+    },
+    {
+      "filename": "app_visible.png",
+      "sha256": "b6b8f530323d443a3d9ff89147413e9dd36397a6c0938485f29dc2c53dbe8140",
+      "size_bytes": 426545,
+      "mtime_iso": "2026-06-11T02:44:21.995232+00:00"
+    },
+    {
+      "filename": "installer_screen.png",
+      "sha256": "95f9d20faeeffb5ecc610837bc61b2b9657245bd3de418b44852d340386854ae",
+      "size_bytes": 331114,
+      "mtime_iso": "2026-06-11T02:40:26.443073+00:00"
+    },
+    {
+      "filename": "installer_screen2.png",
+      "sha256": "517547aaab9370894f33c29439b5f4949a359e979a615abad743a3c8219a3f8c",
+      "size_bytes": 412007,
+      "mtime_iso": "2026-06-11T02:40:50.778766+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 114838.png",
+      "sha256": "fd39e3b85fbf129eaba62974c0657ce014449dbea983ccbfc3e9bbc809e73593",
+      "size_bytes": 11211,
+      "mtime_iso": "2026-06-10T16:48:38.101268+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 172149.png",
+      "sha256": "c18abf266906f3ed2d6b2cf03360232df78327a6ccd3e4254398e69370d16686",
+      "size_bytes": 393103,
+      "mtime_iso": "2026-06-10T22:21:49.710440+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 173109.png",
+      "sha256": "9811dea9569ab51c0e9836453513c5b7d938bf8a2b3e3f550ecad5f24d29c397",
+      "size_bytes": 172025,
+      "mtime_iso": "2026-06-10T22:31:09.705863+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 173345.png",
+      "sha256": "b9665baf9567640fc6ff813dacd5256577974a8d88d21289b0d71c5538eddf86",
+      "size_bytes": 12110,
+      "mtime_iso": "2026-06-10T22:33:45.812129+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 174224.png",
+      "sha256": "272756404a065a50c144b3ee9f1e19d06ece59ee36ac8597d81de208bff4d593",
+      "size_bytes": 230284,
+      "mtime_iso": "2026-06-10T22:42:24.841866+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 174352.png",
+      "sha256": "7c6745f1fd33585cb996fdb03c66e7dbea17f78338c9132b037cc26c2aae4827",
+      "size_bytes": 242100,
+      "mtime_iso": "2026-06-10T22:43:52.408138+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 175321.png",
+      "sha256": "02318aabcff210504b650e3d6b2c7c1049d29f38eb33e3a22d35b863f036f53e",
+      "size_bytes": 380653,
+      "mtime_iso": "2026-06-10T22:53:21.153507+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 175329.png",
+      "sha256": "62f1c5792b0bc8fa14c9d1d2e1a4713eb41db5bc3aa71ba1086ba79d64721765",
+      "size_bytes": 384543,
+      "mtime_iso": "2026-06-10T22:53:29.422792+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 175336.png",
+      "sha256": "52c7bfae01dba7855160b1385840ba69cdf4252a548d3ff899b94be54189ac53",
+      "size_bytes": 341408,
+      "mtime_iso": "2026-06-10T22:53:36.630075+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 175344.png",
+      "sha256": "a3f00d1b1290076dc114f0b3ab59d259617670adf3d744a4c48acba2f0aceaf7",
+      "size_bytes": 359759,
+      "mtime_iso": "2026-06-10T22:53:44.593621+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 175359.png",
+      "sha256": "f1028ffee83b2203e3c9b35381abeeb3d5f2eef583bcc1a2464ee6237e58fa58",
+      "size_bytes": 351658,
+      "mtime_iso": "2026-06-10T22:53:59.046550+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 175423.png",
+      "sha256": "1ed1f6cf4b0185ef1e54ce8a203cca613fe898b57c3b1fe319e03fc5937e1f80",
+      "size_bytes": 349494,
+      "mtime_iso": "2026-06-10T22:54:24.019706+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 175455.png",
+      "sha256": "6ce555cf3b34cbbaa2445806b60599f07891cb280d062a7facac6fd460f3a774",
+      "size_bytes": 339300,
+      "mtime_iso": "2026-06-10T22:54:55.999371+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 180142.png",
+      "sha256": "202141a7c6f26b41442e6223b49c5d7ba7bdf62b468d187e27ed008de9111d23",
+      "size_bytes": 78567,
+      "mtime_iso": "2026-06-10T23:01:42.302843+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 180148.png",
+      "sha256": "c03776c6ca7be3268e7f71d912c5d11a16c62e9e5b9d9b1e4147b5319ee91365",
+      "size_bytes": 192125,
+      "mtime_iso": "2026-06-10T23:01:48.508539+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 181735.png",
+      "sha256": "00684ee9d85a7fb991e14119135f0dd4132d82e67f5e50c0eaf4599906f710dc",
+      "size_bytes": 19597,
+      "mtime_iso": "2026-06-10T23:17:35.866575+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 181832.png",
+      "sha256": "cb7a30c3e6cc2b4368bdcee4c208535581cf38d85c591b804f24ce50b0b1170d",
+      "size_bytes": 11077,
+      "mtime_iso": "2026-06-10T23:18:32.948934+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 182103.png",
+      "sha256": "0fd2397ff430598b7bb6098b640d63461872eaa34487dae3305fc05bfe9a11d1",
+      "size_bytes": 14657,
+      "mtime_iso": "2026-06-10T23:21:03.739509+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 182141.png",
+      "sha256": "14f46c0f63006d8c951adc568d78a07c422b549bda98773cbd55c3806bc1c6e3",
+      "size_bytes": 15991,
+      "mtime_iso": "2026-06-10T23:21:41.505139+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 182208.png",
+      "sha256": "cdffaedda4c01412c621bf82495b8a6b8ff5c5e5249a92b88b45674e00dcee2d",
+      "size_bytes": 14015,
+      "mtime_iso": "2026-06-10T23:22:08.760581+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 182236.png",
+      "sha256": "a70c15baab993fc27386e506dbc757d80e048adeefb00af833ab75087d74666e",
+      "size_bytes": 10965,
+      "mtime_iso": "2026-06-10T23:22:36.725261+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 182952.png",
+      "sha256": "8a1a3511dc3e456c2621cf4127151aa09f671bd7993798fc5ee729ae8cc6fbfb",
+      "size_bytes": 11068,
+      "mtime_iso": "2026-06-10T23:29:52.941984+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 183012.png",
+      "sha256": "802de04290a570a05fda71a5aeda8d576f7abb92cf4a070b461f5e2a15dfd90a",
+      "size_bytes": 333168,
+      "mtime_iso": "2026-06-10T23:30:12.447388+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 183519.png",
+      "sha256": "741e244f6bdcb6f78f125afb0263d1b13cbf561a5e1349558d91e77bdedb8d1d",
+      "size_bytes": 359146,
+      "mtime_iso": "2026-06-10T23:35:19.545027+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 185407.png",
+      "sha256": "bf5fd382228ab2185adb5e99917e78eb5be0b7310077ff72547ffd366d398b2b",
+      "size_bytes": 508001,
+      "mtime_iso": "2026-06-10T23:54:07.283999+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 185411.png",
+      "sha256": "b2a807c60f3fe58c53a9b6e0160a133780f181c789bc88108651f784df01ba76",
+      "size_bytes": 351799,
+      "mtime_iso": "2026-06-10T23:54:11.747625+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 190317.png",
+      "sha256": "12634a595162fd09273d8368d954303e3e51a1f0015c0b29a68b59e3a21b6dfd",
+      "size_bytes": 358671,
+      "mtime_iso": "2026-06-11T00:03:17.483808+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 191331.png",
+      "sha256": "ed28a068d08686677000ff94da7db909852128e872f9fc665f775d2b521bd66d",
+      "size_bytes": 60135,
+      "mtime_iso": "2026-06-11T00:13:31.055138+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 191336.png",
+      "sha256": "2fc4f24c04e1d14c2d66d6f9f6155f63645fb8d7fa15483448c451f8eb1cf1ec",
+      "size_bytes": 19648,
+      "mtime_iso": "2026-06-11T00:13:36.734066+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 191437.png",
+      "sha256": "0f1438bf2322e2ff60c7fbc059bcaabc7bb9ea1b988b235e2e5777510234ee02",
+      "size_bytes": 24958,
+      "mtime_iso": "2026-06-11T00:14:37.703420+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 195104.png",
+      "sha256": "4dd359f9de3fa3aacba905dba22c51f153370705cf691090e9bfe32dc20ec451",
+      "size_bytes": 46520,
+      "mtime_iso": "2026-06-11T00:51:04.845363+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 195452.png",
+      "sha256": "9e5ce231549ed2eb540b47a8ddfc0e62497ef7d7be9e878b6f64e6bcaf8b3dc7",
+      "size_bytes": 251423,
+      "mtime_iso": "2026-06-11T00:54:52.536337+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 195521.png",
+      "sha256": "683f569afa19e20b4f6eb972c44e6c2cb1fcbb19c70c410ae281200b292ccdc4",
+      "size_bytes": 52773,
+      "mtime_iso": "2026-06-11T00:55:21.908884+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 195540.png",
+      "sha256": "0884bfe15e4ebcb7d6a85608a8b6a13d191346d77320042f4fb3897c9d2b673d",
+      "size_bytes": 53597,
+      "mtime_iso": "2026-06-11T00:55:40.878997+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 200605.png",
+      "sha256": "0ae33b9abe0f54c3555ed396f2d9541040446ea35f682f2b009576e1ee782fe4",
+      "size_bytes": 281366,
+      "mtime_iso": "2026-06-11T01:06:05.867043+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 200614.png",
+      "sha256": "8c8180197dac92527af07d644e3886fc02468460c2982cadf4688deeb467ef3d",
+      "size_bytes": 309844,
+      "mtime_iso": "2026-06-11T01:06:14.449677+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 200916.png",
+      "sha256": "d503d00ac6cf62c454a9c5dadcfff0d449c3036d50a04920636e0b559849c96a",
+      "size_bytes": 372780,
+      "mtime_iso": "2026-06-11T01:09:17.016588+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 200947.png",
+      "sha256": "abbf8f00f087efbda03d5b0cc3e6c1257a96419d860d7e35a1a5be865b93d610",
+      "size_bytes": 171779,
+      "mtime_iso": "2026-06-11T01:09:47.077193+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 202415.png",
+      "sha256": "e22cd47fee38ab7200c4a4ec99a78e5028e91b101b76fc2039b9da379ed5c159",
+      "size_bytes": 312008,
+      "mtime_iso": "2026-06-11T01:24:15.398337+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 202427.png",
+      "sha256": "c1e10eb62a9e023f8d274c84b5e24ca146fe09d0e5895c010b4f7b4a2c599145",
+      "size_bytes": 331526,
+      "mtime_iso": "2026-06-11T01:24:27.678263+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 204831.png",
+      "sha256": "24879d00bdeede16783b20bf9195374438a5145b581245de45b8b44b0069b89d",
+      "size_bytes": 56941,
+      "mtime_iso": "2026-06-11T01:48:31.996751+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 205152.png",
+      "sha256": "938599da43d410553799b7b08712b69afab312cc385da9f4351e29c2c0539517",
+      "size_bytes": 57008,
+      "mtime_iso": "2026-06-11T01:51:52.743243+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 205230.png",
+      "sha256": "929a0c828783b198898da71ef24ff9f92524ee9bd3c9eb512dc15e8a2ebab640",
+      "size_bytes": 56897,
+      "mtime_iso": "2026-06-11T01:52:30.881843+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 212836.png",
+      "sha256": "f1082f9355ec445c36bbeb5fa08b8c3a7edfd6b44f417a97150d883cf6a6bf01",
+      "size_bytes": 191175,
+      "mtime_iso": "2026-06-11T02:28:37.036495+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 213329.png",
+      "sha256": "5618b59bb56154f24e80dfc6dccb9dc36c31b287918c8ab0bf9c77d45b1e4325",
+      "size_bytes": 193726,
+      "mtime_iso": "2026-06-11T02:33:29.178647+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 214453.png",
+      "sha256": "40ec5332412f69fab3fee35ea00f8b0e5d4d552e7f82eb60fe0dbd1ba64535f1",
+      "size_bytes": 327052,
+      "mtime_iso": "2026-06-11T02:44:53.681531+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 220800.png",
+      "sha256": "88ea65b4289d3d6e8a2b63de61ca819aa252a8b15ac7fce9dcc45ff48d0fc8bb",
+      "size_bytes": 586635,
+      "mtime_iso": "2026-06-11T03:08:00.100878+00:00"
+    },
+    {
+      "filename": "Screenshot 2026-06-10 220811.png",
+      "sha256": "3218baaf5c40be67344ec37d855c13662538cc9818eecd47297a59287221e975",
+      "size_bytes": 338782,
+      "mtime_iso": "2026-06-11T03:08:11.443480+00:00"
+    },
+    {
+      "filename": "screenshot_external.png",
+      "sha256": "43f7844303c678b450e3b05aaec8f5794436d6b910744cac9d5b3a069f91f26e",
+      "size_bytes": 422554,
+      "mtime_iso": "2026-06-11T02:47:12.112536+00:00"
+    },
+    {
+      "filename": "v0144_after_justuseit_click.png",
+      "sha256": "57dc790e7e833eb69119ea108f4900431eb3ac918a7b5e05d8edc1f277c15e94",
+      "size_bytes": 390807,
+      "mtime_iso": "2026-06-11T01:34:53.631912+00:00"
+    },
+    {
+      "filename": "v0144_after_justuseit_v2.png",
+      "sha256": "17f62c2d6a0841ef79355f8108ac27adc09b6d48212499914cd9f487a3bde4b1",
+      "size_bytes": 373811,
+      "mtime_iso": "2026-06-11T01:37:09.381434+00:00"
+    },
+    {
+      "filename": "v0144_display2.png",
+      "sha256": "c4320aaa98a99ca3e2755689ce7074f875c117db234410d5bb55d42c606789eb",
+      "size_bytes": 252704,
+      "mtime_iso": "2026-06-11T01:32:40.301991+00:00"
+    },
+    {
+      "filename": "v0144_full_desktop.png",
+      "sha256": "7a51dc1658735b98018617406f7be28752e307c13fec8ece413566bde7271137",
+      "size_bytes": 679362,
+      "mtime_iso": "2026-06-11T01:32:17.487765+00:00"
+    },
+    {
+      "filename": "v0144_heavy_mode_selected.png",
+      "sha256": "e9cb9096b8946382e6eb5c65397c876570e4b8476253df4d438db17d779bcaa8",
+      "size_bytes": 396270,
+      "mtime_iso": "2026-06-11T01:37:54.798947+00:00"
+    },
+    {
+      "filename": "v0144_main_app_clean.png",
+      "sha256": "afc6da16e347bd319646b2abd8d795a048eb55e7c07421a150d227ec4c68f6f4",
+      "size_bytes": 392384,
+      "mtime_iso": "2026-06-11T01:40:49.619562+00:00"
+    },
+    {
+      "filename": "v0144_mode_selector.png",
+      "sha256": "056024367f8c3a52d46debbb66d1336340bfdb217312e2e192f0a8811c921911",
+      "size_bytes": 410535,
+      "mtime_iso": "2026-06-11T01:39:06.747067+00:00"
+    },
+    {
+      "filename": "v0144_primary_current.png",
+      "sha256": "8cad679fa93174fa134e16530789b649acc2e9b2f9d707beb2b7f86208e4821e",
+      "size_bytes": 427433,
+      "mtime_iso": "2026-06-11T01:32:58.505876+00:00"
+    },
+    {
+      "filename": "v0144_primary_moved.png",
+      "sha256": "a738e82d820de5004aac4824e19b25209a4bf9f93cc5b5eaa8f7dadc374437e7",
+      "size_bytes": 404757,
+      "mtime_iso": "2026-06-11T01:33:54.172349+00:00"
+    },
+    {
+      "filename": "v0144_verify_a_zoom.png",
+      "sha256": "c0115dd6bb75b040de144ae0980236cf45e117ba4d1361add9946dc7bdc30d0d",
+      "size_bytes": 392111,
+      "mtime_iso": "2026-06-11T01:38:44.848583+00:00"
+    },
+    {
+      "filename": "v0144_verify_b_icon.png",
+      "sha256": "50b8d8fd1af17056352b89a6a66300a14839f347eddb43e2e154cf89889919ef",
+      "size_bytes": 404748,
+      "mtime_iso": "2026-06-11T01:34:30.756982+00:00"
+    },
+    {
+      "filename": "v0144_verify_c_justuseit_nocrash.png",
+      "sha256": "952379a1c7c9a3d20a618346502a0dac5b3e04a32ba73e22671609a31117dbc3",
+      "size_bytes": 388574,
+      "mtime_iso": "2026-06-11T01:41:18.158788+00:00"
+    },
+    {
+      "filename": "v0144_verify_d_learn_how_it_works.png",
+      "sha256": "3b2b30078cecf74a8bc6d58ba6737246100faf6ad3f48790ab029b99703b0710",
+      "size_bytes": 134631,
+      "mtime_iso": "2026-06-11T01:41:38.743362+00:00"
+    },
+    {
+      "filename": "v0144_welcome_positioned.png",
+      "sha256": "2296fe5f645ca188b9adbb8dab3d9bc0b82087450579025a56df6367a519ab81",
+      "size_bytes": 408271,
+      "mtime_iso": "2026-06-11T01:35:59.058829+00:00"
+    },
+    {
+      "filename": "v0145_verify_b.png",
+      "sha256": "271711343a50c257998a2757a2b95448b186c309b8350e49835cb6dc0d5639b0",
+      "size_bytes": 427800,
+      "mtime_iso": "2026-06-11T02:41:06.886598+00:00"
+    }
+  ],
+  "note": "SHA-256 hashes anchor each screenshot at this commit time. Full files stay local at folder_path; this manifest is the tamper-evident receipt-class artifact for git."
+}

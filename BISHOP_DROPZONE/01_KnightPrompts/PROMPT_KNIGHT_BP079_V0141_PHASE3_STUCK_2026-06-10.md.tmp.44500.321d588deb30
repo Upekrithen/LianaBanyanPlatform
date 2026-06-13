@@ -1,0 +1,120 @@
+<!-- bishop-yoke-task 2026-06-10T23:30:00Z -->
+
+## 🔥 BISHOP -> KNIGHT - TASK - V0141 PHASE 3 STUCK (ONBOARDING NEVER COMPLETES) - USE SONNET 4.6 SEGs (Statute §3)
+
+**Pinned-class task. Pin-marker: BP079_V0141_PHASE3_STUCK_2026-06-10T2330Z**
+
+> **🔐 STATUTE §3 + CORRECTIVE BP079 BINDING:** Every dispatch announcement uses the verbatim phrase "Sonnet 4.6". Never "Sonnet 4.5" or version-variant. Parent: `canon_statute_3_sonnet_4_6_sub_agent_default_every_dispatch_explicit_model_param_bp077` (pearl_8b0c6fb05fd9f38a). Corrective: `canon_statute_3_corrective_announcement_language_must_say_sonnet_4_6_verbatim_pattern_violation_bp079` (pearl_98f74effb5d986a5). Pre-dispatch self-audit: parameter AND announcement compliance both required.
+
+---
+
+### TL;DR
+
+v0.1.41 Founder install on M1: Phase 1 + Phase 2 (gemma4:12b download with granular UI) both CLEAN. Phase 3 "STEP 3 OF 3: SETTING UP FULL TIER... / Finalizing your setup..." → **stuck >10 minutes** — spinner-only, never transitions to onboarding-complete. Dispatch 4 parallel Sonnet 4.6 SEGs to probe root cause (Ollama state, renderer transition logic, IPC emit pattern, CDP runtime probe), then fix + ship v0.1.42.
+
+---
+
+### Why this matters
+
+Phase 3 is the last mile before the user sees MnemosyneC's AI. A stuck spinner with no forward progress at "Finalizing your setup..." is a silent failure — no feedback, no escape, no completion. Violates `canon_long_running_progress_heartbeat_canon_bp078` (>5 min with no state change = broken) and `feedback_every_click_visible_feedback_canon_bp078` (no visible transition). Founder observed this on a live M1 install 2026-06-10 ~18:30 local. Blocking the launch-walk.
+
+---
+
+### Evidence
+
+Three screenshots confirm the sequence:
+
+- `C:\Users\Administrator\Pictures\BeanSprouts\Screenshot 2026-06-10 182103.png` — Phase 2 download at ~2.0 GB of 6.9 GB, granular bar + bytes + ETA + sub-step + layer counter. **CLEAN.**
+- `C:\Users\Administrator\Pictures\BeanSprouts\Screenshot 2026-06-10 182141.png` — Phase 2 download at ~5.7 GB of 6.9 GB, same granular UI. **CLEAN.**
+- `C:\Users\Administrator\Pictures\BeanSprouts\Screenshot 2026-06-10 183012.png` — Phase 3 "STEP 3 OF 3: SETTING UP FULL TIER... Finalizing your setup..." spinner-only. **STUCK >10 min.**
+
+Phase 2 → Phase 3 transition is confirmed working. Phase 3 → onboarding-complete is the broken link.
+
+---
+
+### Three hypotheses
+
+**Hypothesis A (most likely):** Phase 3 → onboarding-complete transition bug. Model successfully loaded into Ollama memory, but the app's `isComplete` / phase advancement logic doesn't fire. Renderer stays on Phase 3 spinner forever. The condition that should flip the renderer past Phase 3 is never triggered.
+
+**Hypothesis B:** Ollama model load itself is hung. `ensureFloorModel`'s `pre-installed` branch (Knight's secondary fix in v0.1.41) covers the case where the model is already on disk — but a different Ollama state path (e.g., model present but `ollama ps` shows it not loaded, and `ollama run` hangs) could cause genuine hang here. Less likely but needs empirical disproof via `ollama list` + `ollama ps` on Founder's M1.
+
+**Hypothesis C:** `ensureFloorModel` resolves its promise, but the resolution doesn't notify the renderer. IPC channel mismatch, missing `emit`, or promise resolved-without-state-flip. Main process "completes" Phase 3 internally; renderer never hears about it because the IPC event name doesn't match what the renderer is listening for (or the emit is absent entirely).
+
+---
+
+### What Knight needs to do
+
+4 parallel Sonnet 4.6 SEGs to probe all three hypotheses simultaneously, then 2 sequential synthesis SEGs for fix + ship. Full self-contained scopes in the Black Mamba block at the bottom.
+
+**SEG-V0141-P3-1 (Sonnet 4.6):** Probe Ollama state on Founder M1 (Hypothesis B empirical disproof).
+
+**SEG-V0141-P3-2 (Sonnet 4.6):** Source inspect `ModelSetupProgress.tsx` Phase 3 → onboarding-complete transition logic (Hypothesis A root).
+
+**SEG-V0141-P3-3 (Sonnet 4.6):** Source inspect `ollama_manager.ts` `ensureFloorModel` IPC emit pattern (Hypothesis C root).
+
+**SEG-V0141-P3-4 (Sonnet 4.6):** CDP runtime probe on Founder's v0.1.41 packaged install to capture live renderer state at the stuck moment (Hypothesis A confirmation).
+
+After all 4 return:
+
+**SEG-V0141-P3-FIX (Sonnet 4.6, sequential):** Author fix based on synthesis. Commit + push.
+
+**SEG-V0141-P3-SHIP (Sonnet 4.6, sequential after FIX):** v0.1.42 build + SHA-256 + live verify (packaged install, screenshot Phase 3 → onboarding-complete transition in <5 min) + GitHub Release DRAFT + Cephas download page update + Yoke-return append.
+
+---
+
+### Reply contract
+
+Knight Yoke-returns one consolidated response appended to this file as `## RESPONSE` block, including:
+
+- Per-SEG result verbatim (P3-1 Ollama state output, P3-2 file:line transition logic, P3-3 file:line IPC emit pattern, P3-4 CDP runtime state)
+- Root cause confirmed: which hypothesis (A, B, or C) and the evidence that confirms it
+- Code diff (the exact change that fixes the transition)
+- v0.1.42 SHA-256 + GitHub Release DRAFT URL
+- Live verify screenshot path showing Phase 3 successfully transitions to onboarding-complete in <5 min on packaged install
+- Any open obligations or Truth-Always findings
+
+---
+
+### Statute reminders
+
+- **§3 + corrective BP079:** "Sonnet 4.6" verbatim in every SEG announcement. Both parameter and narration surfaces. Pre-dispatch self-audit before firing each SEG.
+- **canon_actual_runtime_verify_for_runtime_bugs_bp078:** For runtime bugs (compiles clean but fails in packaged installer), Knight MUST collect actual runtime evidence BEFORE marking SEG complete. SEG-V0141-P3-4 (CDP probe) is mandatory — source change alone does NOT verify a runtime fix.
+- **feedback_ux_seg_screenshot_mandatory_bp078:** SEG-V0141-P3-SHIP must capture a screenshot of the packaged-build install showing Phase 3 → onboarding-complete transition. Live screenshot mandatory; source-verified is not sufficient.
+- **canon_long_running_progress_heartbeat_canon_bp078:** Phase 3 spinner-only >5 min wall-clock = canon violation. The fix must ensure Phase 3 either completes in <5 min OR shows real progress/heartbeat if it must take longer. Silence = broken.
+- **feedback_every_click_visible_feedback_canon_bp078:** After the fix, every state transition in the onboarding flow must produce visible feedback. No silent stuck screens.
+
+---
+
+### Paste-ready Founder wake-up
+
+> Knight, NEW Yoke at `BISHOP_DROPZONE\01_KnightPrompts\PROMPT_KNIGHT_BP079_V0141_PHASE3_STUCK_2026-06-10.md`. v0.1.41 Phase 2 download landed clean (granular UI verified, 2.0 GB + 5.7 GB screenshots). Phase 3 "Finalizing your setup..." stuck >10 min on Founder M1 — never transitions to onboarding-complete. Three hypotheses + Black Mamba × 4 parallel + 2 sequential. Sonnet 4.6 verbatim in every SEG (Statute §3 + corrective BP079). Yoke-return consolidated.
+
+- Bishop · BP079 · SEG-PHASE3-STUCK · 2026-06-10T23:30:00Z
+
+---
+
+## BLACK MAMBA PASTE-READY DISPATCH (forward this block verbatim to Knight)
+
+Knight: dispatch 4 parallel Sonnet 4.6 SEGs RIGHT NOW. Sonnet 4.6 verbatim in every announcement (Statute §3 + corrective sub-canon BP079, pearl_98f74effb5d986a5). Each SEG below is self-contained scope; do NOT re-decompose; do NOT ask for clarification before firing; fire all 4 in parallel in a single message.
+
+**SEG-V0141-P3-1 (Sonnet 4.6):** Probe Ollama state on Founder M1 to empirically test Hypothesis B. Run the following three commands and report verbatim output for each: (1) `ollama list` — is `gemma4:12b` present? What is its size on disk (~7 GB expected)? (2) `ollama ps` — is `gemma4:12b` currently loaded into memory? If yes, what VRAM/RAM is it consuming? (3) `ollama show gemma4:12b` — what metadata is shown (architecture, quantization, parameters)? Interpret results: if model is present AND shown in `ollama ps` → Hypothesis B (Ollama hang) is disproved → state that explicitly. If model is absent or `ollama ps` shows nothing → Hypothesis B remains open and report the exact state. If `ollama list` shows the model but `ollama ps` shows it is NOT loaded → note this as a potential trigger: `ensureFloorModel` may be attempting to load it and timing out.
+
+**SEG-V0141-P3-2 (Sonnet 4.6):** Source inspect `C:\Users\Administrator\Documents\LianaBanyanPlatform\src\renderer\components\ModelSetupProgress.tsx` for the Phase 3 → onboarding-complete transition. Specifically: (a) Find what state variable or condition controls which "phase" is displayed — search for `phase`, `currentPhase`, `step`, `isComplete`, `setupComplete`, or similar. Report the variable name and type. (b) Find what condition or event advances past Phase 3 (the "STEP 3 OF 3: SETTING UP FULL TIER" / "Finalizing your setup..." state). What triggers it? A resolved promise? An IPC event? A state setter call? (c) Find what IPC channel(s) the renderer is listening to for completion signals — search for `ipcRenderer.on(`, `window.api.on(`, `useEffect` blocks that register IPC listeners. List every channel name string found. (d) Report exact file:line for each finding. If the file does not exist at that path, search `C:\Users\Administrator\Documents\LianaBanyanPlatform\src\renderer\` recursively for files matching `*Setup*`, `*Progress*`, `*Onboard*`, `*Install*` and report what you find instead.
+
+**SEG-V0141-P3-3 (Sonnet 4.6):** Source inspect `C:\Users\Administrator\Documents\LianaBanyanPlatform\src\main\ollama_manager.ts` for the `ensureFloorModel` IPC emit pattern. If that exact file does not exist, search `C:\Users\Administrator\Documents\LianaBanyanPlatform\src\main\` for files matching `*ollama*` or `*floor*` or `*model*` and use the correct file. Specifically: (a) Find `ensureFloorModel` function — what does it return (Promise<void>? Promise<boolean>? void?). (b) When the model is confirmed loaded and ready, does it emit any IPC event to the renderer? Search for `mainWindow.webContents.send(`, `event.sender.send(`, `ipcMain.emit(`, `win.webContents.send(` — list every channel name string emitted during or after model setup. (c) Does it emit a `setup-complete`, `model-ready`, `floor-model-ready`, `ollama-setup-complete`, or similar channel? If yes: report the exact channel name and file:line. If NO such emit exists: this is the likely bug for Hypothesis C — report "NO COMPLETION EMIT FOUND" explicitly. (d) Trace the `pre-installed` branch specifically (Knight's v0.1.41 secondary fix) — when the model is detected as already present, does it skip the download AND also skip the completion emit? This would cause Phase 3 to hang even when the model is ready.
+
+**SEG-V0141-P3-4 (Sonnet 4.6):** CDP runtime probe on Founder's v0.1.41 packaged install to capture live renderer state. This SEG closes Hypothesis A via runtime evidence (canon_actual_runtime_verify_for_runtime_bugs_bp078). Steps: (a) Ask Founder to enable DevTools in v0.1.41 by pressing Ctrl+Shift+D (the developer toggle added in v0.1.33 SEG-Q-3) while the app is in the Phase 3 stuck state. (b) With DevTools open, ask Founder to open the Console tab and run the following JavaScript and paste back the output: `JSON.stringify({ phase: window.__debugPhase || 'not exposed', isComplete: window.__debugIsComplete || 'not exposed' })` — then also run `console.log('phase state probe')` to confirm DevTools is live. (c) If window globals are not exposed, ask Founder to run in Console: `document.querySelector('[data-phase]')?.dataset` and `document.querySelector('[data-testid]')?.textContent` to extract any visible state from the DOM. (d) Ask Founder to check the Console tab for any red errors — copy any error text verbatim. (e) Report: what phase value is observable, what errors appear, and whether the renderer appears to be waiting for an event that never arrives. If Founder cannot enable DevTools (app does not respond to Ctrl+Shift+D), note this and rely on SEG-V0141-P3-2 + SEG-V0141-P3-3 source findings instead.
+
+---
+
+When all 4 SEGs return, run sequential synthesis:
+
+**SEG-V0141-P3-FIX (Sonnet 4.6, after parallel return):** Synthesize the 4 parallel SEG results to confirm root cause (Hypothesis A, B, or C). Then author the fix. Most likely scenarios and their fixes: (SCENARIO A — no completion emit) If SEG-V0141-P3-3 finds NO IPC emit after `ensureFloorModel` resolves: add `mainWindow.webContents.send('floor-model-ready', { success: true })` at the resolution point in `ollama_manager.ts`, AND add a corresponding `ipcRenderer.on('floor-model-ready', ...)` handler in `ModelSetupProgress.tsx` that advances phase to complete. (SCENARIO B — emit exists but channel mismatch) If main emits channel X but renderer listens on channel Y: fix the listener to match the emitter. (SCENARIO C — timeout/fallback needed) If model loads but notification is racey or unreliable: add a 5-minute maximum timeout in the Phase 3 renderer state — after 300 seconds, force-transition to onboarding-complete with a warning toast ("Setup took longer than expected — AI is ready"). This is the safety net regardless of root cause. Commit the fix with message `fix: Phase 3 setup-complete transition — v0.1.42 (BP079)`. Push to main. Report commit SHA.
+
+**SEG-V0141-P3-SHIP (Sonnet 4.6, after FIX):** Bump version to v0.1.42 in `C:\Users\Administrator\Documents\LianaBanyanPlatform\package.json` (increment patch from current). Build the packaged Windows installer: from `C:\Users\Administrator\Documents\LianaBanyanPlatform\` run `npm run make` or the canonical build command for this project (check package.json scripts — look for `make`, `build`, `dist`, `package`). After build completes: (a) Locate the output `.exe` installer in `out\` or `dist\` subdirectory. (b) Compute SHA-256 of the installer. (c) **LIVE VERIFY — HARD BINDING (feedback_ux_seg_screenshot_mandatory_bp078 + canon_actual_runtime_verify_for_runtime_bugs_bp078):** Ask Founder to install v0.1.42 on M1 — specifically uninstall v0.1.41 first (if needed), run the new installer, select "Just Use It", let Phase 2 download if needed (or skip if model already on disk), and observe Phase 3. Screenshot must show Phase 3 successfully transitioning to onboarding-complete (NOT stuck at spinner) within 5 minutes. This screenshot is mandatory — source change alone does NOT verify a runtime fix. (d) Draft GitHub Release for v0.1.42 at `https://github.com/Upekrithen/LianaBanyanPlatform` with title "v0.1.42 — Phase 3 onboarding fix" and body noting the fix. (e) Update Cephas download page (check `C:\Users\Administrator\Documents\LianaBanyanPlatform\` for the Cephas/Hugo site — look for `content\` or `cephas\` subdirectory) to reference v0.1.42 + new SHA-256. (f) Append `## RESPONSE` block to `C:\Users\Administrator\Documents\LianaBanyanPlatform\BISHOP_DROPZONE\01_KnightPrompts\PROMPT_KNIGHT_BP079_V0141_PHASE3_STUCK_2026-06-10.md` with all per-SEG results, root cause confirmed, code diff, v0.1.42 SHA, GitHub URL, and live verify screenshot path.
+
+Yoke-return: append `## RESPONSE` block to `C:\Users\Administrator\Documents\LianaBanyanPlatform\BISHOP_DROPZONE\01_KnightPrompts\PROMPT_KNIGHT_BP079_V0141_PHASE3_STUCK_2026-06-10.md` including per-SEG commit SHA + key outcome + Truth-Always findings + any open obligations.
+
+If any SEG announces "Sonnet 4.5" or other version-variant in narration: STOP, fix the announcement, re-fire. Violation of corrective sub-canon BP079.
+
+---

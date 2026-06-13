@@ -3,10 +3,12 @@ dist/
 release/
 release-*/
 
-# Bundled binary resources (large binaries, populated by prepare:floor-model)
+# Bundled binary resources (large binaries, populated by prepare scripts)
 resources/ollama/ollama.exe
 resources/ollama/ollama
 resources/ollama/bundled/
+resources/vcredist/vc_redist.x64.exe
+resources/vcredist/vc_redist.x64.exe.sha256
 
 # Electron build intermediates
 out/

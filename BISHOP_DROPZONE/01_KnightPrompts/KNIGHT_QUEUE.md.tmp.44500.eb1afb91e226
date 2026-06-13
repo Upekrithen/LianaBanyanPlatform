@@ -1,0 +1,62 @@
+# Knight Queue — BP079 Active Pending Yokes
+
+**Last updated by Bishop SEG-WAVE-C-RATIFY: 2026-06-10T20:00:00Z**
+
+---
+
+## ⚠️ STANDING REMINDER — Statute §3 (every dispatch)
+
+**Every SEG / sub-agent / Agent / workflow `agent()` dispatch SHALL pass `model: "sonnet"` (Sonnet 4.6) explicit. NEVER inherit. NEVER "Sonnet 4.5" or other variant unless Founder explicitly overrides for a specific dispatch.**
+
+Canon: `canon_statute_3_sonnet_4_6_sub_agent_default_every_dispatch_explicit_model_param_bp077`
+Pearl: `pearl_8b0c6fb05fd9f38a` (anchor class)
+
+Catechist-class violation if omitted. Repeat → block + surface to Founder.
+
+If Knight is announcing dispatches and writes "Sonnet 4.5," that's the drift — silently fix to 4.6 in the actual `model:` parameter; don't announce 4.5 either way.
+
+---
+
+## 🟢 ACTIVE — Pending Knight Action
+
+### 1. PROMPT_KNIGHT_BP079_FOUNDER_UUID_2026-06-10.md
+**Priority:** P0 — unblocks Founder's floor-mode food-truck activation TODAY
+**Scope:** Small (~5 min) — Supabase auth.users lookup for Founder's UUID + email mapping
+**Status:** In-flight per Knight's prior return (UUID SEG launched; result expected at BISHOP_YOKE_FOUNDER_UUID_2026-06-10.md OR the copy at this canonical path)
+
+### 2. PROMPT_KNIGHT_BP079_RED_CARPET_WAVE_A_B_2026-06-10.md
+**Priority:** P1 — Wave A unblocks Founder live food-truck floor mode; Wave B unblocks end-to-end automation
+**Scope:** Wave A ~1 day + Wave B ~2 days
+**Status:** AWAITING Knight start. Substrate (7 NEW tables + ALTER creator_referrals + introducer_id FK on membership_payments) + route registration + SeamlessOnboardDialog Supabase writes. Then page logic + food-node subscription shape + vesting cron + end-to-end test.
+**Bishop's prior audit (RED verdict) corrections embedded in Yoke:** `creator_referrals` EXISTS (ALTER not CREATE); `profiles` EXISTS (removed from migration); Stripe checkout fn is `create-membership-checkout` not `stripe-create-checkout-session`; route file needs creation + wiring.
+
+### 3. PROMPT_KNIGHT_BP079_RED_CARPET_WAVE_C_TURNKEY_2026-06-10.md
+**Priority:** P2 — Wave C builds turnkey Seeker self-service ON TOP of Wave A+B
+**Scope:** ~8-10 days Knight (5-6 days with concurrent SEGs in groups)
+**Status:** AWAITING Wave A+B prerequisites green. 10-component scope: Seeker dashboard, cue card generator UI, PDF/PNG card layout generator, click-time Stripe Checkout Session edge fn, webhook auto-attribution, automated merchant onboarding wizard (5 steps incl Stripe Connect Express), Stripe Connect Express integration, Seeker notification system, attribution dashboard with cooperative-class leaderboard, Seeker-as-merchant onramp.
+**Founder ratify pending** on 3 design decisions before Wave C webhook ships: (α) Marks vesting schedule, (β) Multi-Seeker collision policy, (γ) Self-introduction guard — Bishop's recommendations in spec.
+**Spec doc:** `BISHOP_DROPZONE\00_FOUNDER_REVIEW\FOOD_TRUCK_ACTIVATION_KIT_E_TURNKEY_SEEKER_INFRASTRUCTURE.md`
+
+---
+
+## ✅ COMPLETED — For Reference
+
+### PROMPT_KNIGHT_BP079_CEPHAS_V0138_2026-06-10.md
+COMPLETED by Knight 2026-06-10. Cephas page bumped to v0.1.38, all 3 Firebase targets PASS, commit 8f38159. **NEW:** page now needs bump to v0.1.39 (Step 3 progress UX release just shipped) — Bishop will file follow-up Yoke once Founder ratifies that piece.
+
+### PROMPT_KNIGHT_BP079_STEP3_PROGRESS_2026-06-10.md
+COMPLETED by Knight 2026-06-10. v0.1.39 shipped (SHA-256 7B778B...). **Live mid-pull screenshot obligation on Founder M1 still open** — closes the binding `feedback_ux_seg_screenshot_mandatory_bp078` canon obligation formally.
+
+---
+
+## 📋 Discovery + Canonical Path Notes (for future Bishop sessions)
+
+Bishop SEG-YOKE-DISCOVERY 2026-06-10 found:
+- Bishop's prior SEGs were writing Yoke files to `C:\Users\Administrator\Documents\LianaBanyanPlatform\` root
+- Knight's canonical session-open scan only checks `BISHOP_DROPZONE\01_KnightPrompts\` and `BISHOP_DROPZONE\03_BishopHandoffs\`
+- Result: 3 Yokes were dark to Knight for ~24 hours
+- **Fix going forward:** all new Bishop Yokes deposit at `BISHOP_DROPZONE\01_KnightPrompts\PROMPT_KNIGHT_BP<NNN>_<SCOPE>_<DATE>.md` with this file (`KNIGHT_QUEUE.md`) updated at each new Yoke
+- Root-level `BISHOP_YOKE_*.md` files preserved as redundant copies; do not edit or delete them
+- Knight bridge MCP still down this session; both canonical-path Yokes + KNIGHT_BISHOP_MESSAGES.md fallback remain available
+
+— Bishop · BP079 · SEG-YOKE-DISCOVERY · 2026-06-10

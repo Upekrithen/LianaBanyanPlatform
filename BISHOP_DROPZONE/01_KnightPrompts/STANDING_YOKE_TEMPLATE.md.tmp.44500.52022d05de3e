@@ -1,0 +1,66 @@
+# Standing Yoke Template -- Canonical Bishop -> Knight Dispatch Pattern
+
+**Source:** Bishop maintains. Last updated 2026-06-10 by SEG-YOKE-TEMPLATE-EMBED.
+**Purpose:** Every Bishop SEG authoring a new Knight Yoke uses this template as starting point. Embeds the §3 binding so each Yoke independently carries the discipline.
+
+---
+
+## Template Structure (copy + customize)
+
+```markdown
+<!-- bishop-yoke-task <ISO-8601-UTC> -->
+
+## <EMOJI> BISHOP -> KNIGHT - TASK - <SCOPE-TITLE> - USE SONNET 4.6 SEGs (Statute §3)
+
+**Pinned-class task. Pin-marker: <BP_NNN>_<SCOPE>_<UTC>**
+
+> **🔐 STATUTE §3 + CORRECTIVE BP079 BINDING:** Every dispatch announcement uses the verbatim phrase "Sonnet 4.6". Never "Sonnet 4.5" or version-variant. Parent: `canon_statute_3_sonnet_4_6_sub_agent_default_every_dispatch_explicit_model_param_bp077` (pearl_8b0c6fb05fd9f38a). Corrective: `canon_statute_3_corrective_announcement_language_must_say_sonnet_4_6_verbatim_pattern_violation_bp079` (pearl_98f74effb5d986a5). Pre-dispatch self-audit: parameter AND announcement compliance both required.
+
+### TL;DR
+<1-2 sentence summary of what Knight is being asked to do>
+
+### Why this matters
+<Truth-Always: brief context of how this fits into current BP arc>
+
+### What Knight needs to do
+<SEG fan-out specification, Sonnet 4.6 SEGs mandatory, each SEG scoped>
+
+### Reply contract
+<What Knight returns: paths, byte counts, commits, screenshots, etc.>
+
+### Statute reminders
+- §3 (this Yoke binds both surfaces -- parameter + announcement)
+- §12 Ask-Knight-First (if operational truth involved)
+- canon_actual_runtime_verify_for_runtime_bugs_bp078 (for runtime bugs)
+- canon_long_running_progress_heartbeat_canon_bp078 (for >3s operations)
+- feedback_ux_seg_screenshot_mandatory_bp078 (for UX-touching surfaces)
+
+### Paste-ready Founder wake-up
+> Knight, NEW Yoke at `<canonical-path>`. <one-line scope>. Sonnet 4.6 SEGs mandatory (Statute §3 + corrective sub-canon BP079). Yoke-return consolidated.
+
+- Bishop - BP<NNN> - pinned <ISO-8601-UTC>
+```
+
+---
+
+## Discipline (binding for any Bishop SEG authoring a new Yoke)
+
+1. **Always include the STATUTE §3 + CORRECTIVE BP079 BINDING block** verbatim. Copy-paste it. Don't paraphrase.
+2. **Always use "Sonnet 4.6" verbatim** in the Yoke title line + SEG fan-out + reply contract + paste-ready wake-up. Never "Sonnet 4.5" or version-variant.
+3. **Always deposit at canonical path** `BISHOP_DROPZONE\01_KnightPrompts\PROMPT_KNIGHT_BP<NNN>_<SCOPE>_<DATE>.md`.
+4. **Always update KNIGHT_QUEUE.md** with new active entry at appropriate priority.
+5. **Always include paste-ready Founder wake-up** at the end (per BP078 canon `feedback_knight_yoke_wakeup_prompt.md`).
+6. **Statute §10 ACCURACY > SPEED** -- better to author the Yoke with precise scope than rush an ambiguous brief that triggers Knight clarification roundtrip.
+7. **Truth-Always** -- if the Yoke scope has uncertainty (e.g., schema unknown), surface that uncertainty in the brief rather than papering over.
+
+---
+
+## Citations
+
+- canon_yoke_is_the_bridge_bishop_dispatches_knight_directly_bp051
+- canon_statute_3_sonnet_4_6_sub_agent_default_every_dispatch_explicit_model_param_bp077
+- canon_statute_3_corrective_announcement_language_must_say_sonnet_4_6_verbatim_pattern_violation_bp079
+- canon_every_knight_dispatch_and_paste_prompt_must_say_use_segs_bp063
+- canon_novaculi_default_covers_yoke_dispatches_no_trickle_self_audit_before_single_send_bp067
+- feedback_knight_yoke_wakeup_prompt.md
+- feedback_knight_yoke_seg_mandatory.md

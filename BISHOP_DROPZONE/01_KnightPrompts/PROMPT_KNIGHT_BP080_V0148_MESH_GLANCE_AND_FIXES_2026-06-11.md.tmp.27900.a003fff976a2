@@ -1,0 +1,395 @@
+<!-- bishop-yoke-task 2026-06-11T00:00:00Z -->
+
+## BISHOP -> KNIGHT — TASK — V0148 MESH GLANCE PAGE + SKU MODEL PROMOTION + SUBSTRATE PATHS + RENAME USERDATA + DIAGNOSTIC ENRICHMENT — USE SONNET 4.6 SEGs (Statute §3)
+
+**Pinned-class task. Pin-marker: BP080_V0148_MESH_GLANCE_AND_FIXES_2026-06-11T00:00:00Z**
+
+> **STATUTE §3 BINDING:** Every dispatch announcement uses the verbatim phrase "Sonnet 4.6". Never "Sonnet 4.5" or any version-variant. Parent: `canon_statute_3_sonnet_4_6_sub_agent_default_every_dispatch_explicit_model_param_bp077` (pearl_8b0c6fb05fd9f38a). Pre-dispatch self-audit: parameter AND announcement compliance both required.
+
+---
+
+### TL;DR
+
+v0.1.47 published. v0.1.48 must ship BEFORE the 3-machine mesh test fires. Two P0 scopes block the test:
+
+1. **SKU Model Promotion (P0):** v0.1.47 diagnostic shows `sku.tier = full` but Ollama is serving `qwen2.5:0.5b` (floor model). `gemma4:12b` manifest exists on disk. Full-tier must run `gemma4:12b` — without this fix, mesh test results are not comparable to Google's published 77.2% / 78.8% benchmarks on gemma4:12b.
+
+2. **Mesh Glance Page (P0):** Founder's wife needs to watch mesh test progress from her phone on the couch while the test runs on the home network. LAN-visible HTML page, auto-refresh every 30s, per-node progress bars, ETA countdown. No JS framework. Heartbeat canon compliance.
+
+Both P0s gate the mesh test. If P1+P2 would delay ship of P0s, Knight may stage v0.1.48-alpha with just P0s and bundle P1+P2 into v0.1.48 proper — flag the decision in the Yoke-return.
+
+---
+
+### HARD-BINDING BLOCK
+
+| Canon ref | One-liner |
+|---|---|
+| `[[feedback_actual_runtime_verify_for_runtime_bugs_bp078]]` | Source change alone does NOT verify a runtime fix. Diagnostic log required. |
+| `[[feedback_verify_seg_output_before_claiming_inflight]]` | Dispatched ≠ executing ≠ landed. |
+| `[[feedback_every_click_visible_feedback_canon_bp078]]` | Every click gives visible feedback. Silence = broken. |
+| `[[feedback_long_running_progress_heartbeat_canon_bp078]]` | Any op >3s shows progress: bar > step-by-step > heartbeat. |
+| `[[feedback_ux_seg_screenshot_mandatory_bp078]]` | UX-touching SEGs capture packaged-build screenshot. |
+| `[[feedback_knight_yoke_seg_mandatory]]` | "use Sonnet 4.6 SEGs for ALL work" — hard binding. |
+| `[[feedback_explicit_founder_ratify_before_publish]]` | Nothing publishes without Founder explicit "publish it / push / send / fire". |
+| `[[feedback_forward_pressure_ratify_is_not_verified_ratify_bp080]]` | Forward-pressure ratify ≠ verified ratify. A stamp given to "move forward" is not a GREEN gate. |
+| `[[reference_amnesia_substrate_cure_dr_mnemosynec_canon]]` | MnemosyneC branding canonical. userData dir must reflect it. |
+| Statute §3 | All SEGs Sonnet 4.6, must say "Sonnet 4.6" verbatim. |
+| Statute §13 | Substrate retrieval: pheromone_query first. search_knowledge = product-index only, NOT substrate. |
+
+---
+
+### SEG-V0148-P0-SKU-MODEL (Sonnet 4.6) — FIX ACTIVE MODEL PROMOTION — TOP PRIORITY
+
+**Context:** v0.1.47 diagnostic output showed `sku.tier = full` but the active Ollama model was `qwen2.5:0.5b` (the bundled floor model). `gemma4:12b` manifest was confirmed present on disk. The mesh test uses gemma4:12b as the target — Google's benchmark numbers (77.2% cold / 78.8% hot) are for gemma4:12b specifically. Running the mesh test on the floor model produces incomparable results.
+
+**Deliverables:**
+
+1. Search `src/main/` for the model resolver. Likely candidates: `model_router.ts`, `ollama_manager.ts`, `model_selector.ts`. Identify the function that decides which model Ollama serves after init.
+
+2. Fix the resolution logic:
+   - When `sku.tier === 'full'` AND `gemma4:12b` is present in `ollama list` output, set `gemma4:12b` as the active model via `ollama run` or the appropriate Ollama API call.
+   - Do NOT fall back to the floor model when the tier-appropriate model is available on disk.
+   - If `gemma4:12b` is unavailable despite tier=full (model manifest missing), emit a visible IPC warning: `"Full-tier model gemma4:12b not found on disk. Serving floor model instead. Check model installation."` — never fall through silently.
+
+3. Wire diagnostic log emission:
+   - At model-selection time, log: `activeModel=<name>` and `targetModel=<name>` as a single JSON field pair.
+   - Example: `activeModel=gemma4:12b targetModel=gemma4:12b` (match = healthy) vs `activeModel=qwen2.5:0.5b targetModel=gemma4:12b` (mismatch = flag).
+   - The mismatch pattern must be visually distinct in the diagnostic log so future regressions are immediately identifiable.
+
+**Verify requirement:** Per `[[feedback_actual_runtime_verify_for_runtime_bugs_bp078]]` — diagnostic log from the packaged build must show `activeModel=gemma4:12b` when `sku.tier=full` and the model is present. Source change alone does not verify this. Runtime diagnostic output is the VERIFY gate.
+
+Deliver: code diff + diagnostic log snippet showing `activeModel=gemma4:12b targetModel=gemma4:12b`.
+
+---
+
+### SEG-V0148-P0-GLANCE (Sonnet 4.6) — MESH TEST GLANCE PAGE — TOP PRIORITY
+
+**Context:** The 3-machine mesh test is a long-running process (estimated 2+ hours wall-clock). Founder's wife's machine is on the home wifi. She needs to check test progress from her phone or her machine while watching Apple TV, without needing to be at Founder's desk. Per `[[feedback_long_running_progress_heartbeat_canon_bp078]]` — any operation >3s must show progress.
+
+**Deliverables:**
+
+#### 1. Module-level store in `src/main/substrate_api.ts`
+
+Add a module-level store:
+
+```typescript
+interface NodeProgress {
+  nodeId: string;
+  label: string;         // e.g. "Desktop", "Laptop", "Wife's Machine"
+  pct: number;           // 0–100
+  eta_s: number;         // seconds remaining
+  cold_accuracy: number; // 0.0–1.0
+  hot_accuracy: number;  // 0.0–1.0
+  last_seen: number;     // Unix timestamp (seconds)
+  total_rounds: number;
+  rounds_done: number;
+}
+
+const meshProgressStore = new Map<string, NodeProgress>(); // keyed by nodeId; 3 nodes max
+```
+
+#### 2. New endpoint: `POST /mesh/progress/update`
+
+- Localhost-only: reject requests where `req.socket.remoteAddress` is not `127.0.0.1` or `::1`.
+- Body: JSON matching `NodeProgress`.
+- Upserts into `meshProgressStore` by `nodeId`.
+- Returns `200 OK` with `{"ok": true}`.
+
+#### 3. New endpoint: `GET /mesh/progress`
+
+- LAN-visible (server MUST bind `0.0.0.0:11480` — confirm this, do not assume existing binding).
+- Returns JSON: `{ nodes: NodeProgress[], runActive: boolean, globalPct: number, globalEta_s: number }`.
+- `globalPct` = mean of all node `pct` values.
+- `runActive` = true if any node's `last_seen` is within the last 30 minutes.
+
+#### 4. New endpoint: `GET /mesh/progress.html`
+
+- LAN-visible.
+- Inline HTML template string inside `substrate_api.ts` — no extra `.html` files.
+- Auto-refresh via `<meta http-equiv="refresh" content="30">` — no JavaScript framework, no bundler dependency.
+- Displays:
+  - Per-node progress bar (CSS only, no JS for rendering): node label, percentage, rounds done/total, cold/hot accuracy, HOT-COLD lift delta, last-seen relative time.
+  - Last-seen indicator: red text "STALE" if `now - last_seen > 240` (4 minutes).
+  - Global progress bar: weighted mean across all nodes.
+  - ETA countdown: human-readable (e.g., "2h 14m remaining") derived from `globalEta_s`.
+  - Page footer: "Auto-refreshes every 30s · MnemosyneC mesh test · `http://192.168.86.<HOST_IP>:11480/mesh/progress.html`"
+- Must render legibly on a phone browser at 375px width (use `<meta name="viewport" content="width=device-width, initial-scale=1">`).
+- Inline CSS only (no external stylesheets, no CDN — must work on LAN without internet).
+- Color: dark background preferred (less jarring at night). Simple: black/dark-gray bg, white text, green bars, red for stale.
+
+#### 5. Wire `emit_progress()` in `scripts/mesh_test_runner.py`
+
+After the existing `/dag/emit` call (which stays), add a non-fatal POST to `/mesh/progress/update`:
+
+```python
+import urllib.request
+import json
+
+def _post_mesh_progress(node_progress: dict, timeout_s: float = 1.0) -> None:
+    """Non-fatal — mesh test continues even if the progress endpoint is unreachable."""
+    try:
+        body = json.dumps(node_progress).encode()
+        req = urllib.request.Request(
+            "http://127.0.0.1:11480/mesh/progress/update",
+            data=body,
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        with urllib.request.urlopen(req, timeout=timeout_s):
+            pass
+    except Exception:
+        pass  # non-fatal
+```
+
+Call `_post_mesh_progress(...)` from within `emit_progress()` after the DAG emit. Existing `/dag/emit` call is unchanged.
+
+#### 6. Tray tooltip — mesh progress suffix
+
+When `meshProgressStore` has at least one entry and `runActive` is true, append to the existing tray tooltip:
+
+```
+Mesh: <globalPct>% (ETA <human-readable>)
+```
+
+Example: `"Mesh: 47% (ETA 2h 14m)"`. Clear/remove the suffix when the store has been idle (all nodes `last_seen` older than 30 minutes).
+
+**Verify requirement:** Per `[[feedback_ux_seg_screenshot_mandatory_bp078]]` — screenshot of the Glance page rendered on a second LAN device (Founder's phone or wife's machine) at `http://192.168.86.<M1>:11480/mesh/progress.html` is MANDATORY. Source-only verify is a canon violation. If no real mesh run is in flight during verify, Knight must simulate progress by POSTing fake node data to `/mesh/progress/update` manually, then screenshot the rendered page on the second device.
+
+Deliver: code diff (substrate_api.ts + mesh_test_runner.py) + screenshot of Glance page rendered on second LAN device.
+
+---
+
+### SEG-V0148-P1-SUBSTRATE-PATHS (Sonnet 4.6) — FIX `substrate (resources): false` + `substrate (dist-relative): false`
+
+**Context:** v0.1.47 diagnostic showed both substrate path probes returning `false` on the packaged install. Per Statute §13, the substrate backend is the path the WAN/pheromone transport depends on. Both probes must return `true` on a packaged install.
+
+**Deliverables:**
+
+1. Read `src/main/substrate_api.ts` end-to-end. Find all path-resolution logic, specifically:
+   - The `resources` probe (likely checking `app.getPath('resources')` or `process.resourcesPath`).
+   - The `dist-relative` probe (likely checking a path relative to `__dirname` or `app.getAppPath()`).
+
+2. Identify why each probe returns `false` on a packaged install. Candidate causes:
+   - Dev-only path (e.g., `__dirname + '/../../'`) that resolves correctly in dev but is invalid in the packaged `app.asar` context.
+   - Incorrect packaged/unpackaged branch: `app.isPackaged` guard missing or inverted.
+   - `resources/substrate/` directory not in `extraResources` or `build.files` — directory absent from installed app.
+   - Path constructed with forward slashes on Windows (use `path.join`).
+
+3. Fix both probes so they return `true` on packaged installs. Ensure `app.isPackaged` is checked where relevant and the packaged path uses `process.resourcesPath` (not `__dirname`).
+
+4. If the substrate directory (`resources/substrate/` or equivalent) is missing from the packaging config, add it with the same gitignore-override pattern established in v0.1.47 FIX-0.
+
+**Verify requirement:** Diagnostic log from a packaged build must show `substrate (resources): true` AND `substrate (dist-relative): true`. Runtime evidence required.
+
+Deliver: code diff + diagnostic log snippet showing both probes `true`.
+
+---
+
+### SEG-V0148-P1-RENAME-USERDATA (Sonnet 4.6) — `package.json` `"name"` → `"mnemosynec"`
+
+**Context:** Electron derives the `userData` directory from `package.json` `"name"`. Currently that field is `"amplify-computer"`, which means user data lives at `%AppData%\Roaming\amplify-computer\` — the legacy pre-rename path. This is a branding inconsistency per `[[reference_amnesia_substrate_cure_dr_mnemosynec_canon]]`.
+
+**Deliverables:**
+
+1. Change `package.json` `"name"` field from `"amplify-computer"` (or whatever the current value is) to `"mnemosynec"` (all-lowercase, no spaces). Knight may choose `"mnemosyne-c"` instead if that better matches Electron's sanitization requirements — document the choice.
+
+2. Add a first-launch migration function in `src/main/index.ts` (or wherever app startup is handled):
+   - Check: does `%AppData%\Roaming\amplify-computer\` (old path) exist AND `%AppData%\Roaming\mnemosynec\` (new path) NOT exist?
+   - If yes: COPY (not move) the entire directory tree from old to new. Preserve original for rollback.
+   - Log the migration to the diagnostic output: `userData migration: copied <old_path> → <new_path> (<N> files)`.
+   - On subsequent launches (new path exists): skip migration silently.
+
+3. Per `[[feedback_long_running_progress_heartbeat_canon_bp078]]`: if the COPY operation takes >3s (possible for large userData directories), emit a visible IPC status: `"Migrating user data to updated location… (this happens once)"`. Do not let the app appear frozen during migration.
+
+4. After migration, verify `app.getPath('userData')` returns the new `mnemosynec` path in diagnostic output.
+
+**Verify requirement:** Diagnostic log must show `userData=...mnemosynec` (new path) after the rename. If a migration was performed, log must show the migration summary line. Runtime evidence required.
+
+Deliver: code diff (package.json + src/main/index.ts or equivalent) + diagnostic log snippet showing new userData path.
+
+---
+
+### SEG-V0148-P2-DIAGNOSTIC-ENRICHMENT (Sonnet 4.6) — add `ollamaPath` + `branch=` to diagnostic log
+
+**Context:** The existing diagnostic log does not capture which Ollama binary path is being used (bundled vs pre-installed) or which `init()` branch was taken. SEG-V0147-FIX-1 added the IPC heartbeat events, but those are transient (not persisted in the written diagnostic log). This SEG persists them.
+
+**Deliverables:**
+
+1. In the diagnostic JSON output (the written log file), add two new fields alongside the existing fields:
+   - `ollamaPath`: absolute path of the Ollama binary actually used (bundled or pre-installed). Emit `null` if not yet resolved at diagnostic write time.
+   - `branch`: the OllamaManager `init()` branch taken — one of `PRE_INSTALLED_RUNNING`, `PRE_INSTALLED_SPAWN`, `BUNDLED_SPAWN`, `NONE`, or `UNKNOWN` if init has not completed.
+
+2. Knight has the IPC events from v0.1.47 FIX-1 — read `src/main/ollama_manager.ts` to find where `onStatusUpdate` fires. Persist the relevant fields from there into the diagnostic writer.
+
+3. Ensure the diagnostic log is written (or re-written with updated fields) AFTER `OllamaManager.init()` completes, so the log captures the final resolved state rather than an in-progress snapshot.
+
+**Verify requirement:** Diagnostic log from a packaged build must contain `ollamaPath` and `branch` fields with non-null values. Source-only verify is not sufficient.
+
+Deliver: code diff + diagnostic log snippet showing both new fields.
+
+---
+
+### SEG-V0148-VERIFY (Sonnet 4.6) — CLEAN-VM 5-CAPTURE VERIFY + NEW CAPTURES
+
+**Environment requirements (non-negotiable):**
+- Fresh Windows VM or clean profile.
+- NO pre-installed Ollama (bundled must handle it).
+- NO admin elevation (standard user install).
+- Install from shipped v0.1.48 `.exe` installer — NOT from dev tree, NOT from `win-unpacked`.
+
+**Required captures — ALL MANDATORY — HOLD if any are missing:**
+
+1. **SCREENSHOT A:** Working AI response in packaged app window (clean machine, no pre-installed Ollama) — same as v0.1.47 gate.
+
+2. **SCREENSHOT B:** Window top showing visible buffer above title bar (FIX-3 carry-forward from v0.1.47 — confirm not regressed).
+
+3. **SCREENSHOT C (NEW):** Glance page rendered on a SECOND LAN device (Founder's phone or wife's machine) at `http://192.168.86.<M1>:11480/mesh/progress.html`. The page must show at least one node's progress bar (simulate with fake POST data if no real mesh run is in flight). This screenshot is MANDATORY per `[[feedback_ux_seg_screenshot_mandatory_bp078]]`.
+
+4. **DIAGNOSTIC LOG EXCERPT (NEW):** Confirms all of the following on one screen capture or paste:
+   - `activeModel=gemma4:12b` (SKU promotion fix verified — P0-SKU-MODEL)
+   - `targetModel=gemma4:12b`
+   - `substrate (resources): true` (P1-SUBSTRATE-PATHS verified)
+   - `substrate (dist-relative): true`
+   - `ollamaPath=<path>` and `branch=<branch>` (P2-DIAGNOSTIC-ENRICHMENT verified)
+   - `userData=...\mnemosynec\` (P1-RENAME-USERDATA verified, if included in this build)
+
+5. **ASSERTION PASS:** `node scripts/assert-bundled-ollama-in-installer.mjs` on v0.1.48 installer — must output PASS (all three checks: ollama.exe, floor model, vc_redist.x64.exe). Carry-forward from v0.1.47 gate.
+
+Do NOT mark VERIFY complete if any capture is missing. State explicitly which captures are present and which are pending.
+
+---
+
+### SEG-V0148-SHIP (Sonnet 4.6) — BUILD + TAG + DRAFT RELEASE
+
+**HARD GATE: do NOT execute until VERIFY is GREEN (all five captures confirmed).**
+
+1. Bump version to `0.1.48` in `package.json` (and `electron-builder.json` / `electron-builder.yml` if version is stored there separately).
+2. Build packaged installer via `npm run dist:win` (or equivalent).
+3. Run `node scripts/assert-bundled-ollama-in-installer.mjs` on the built installer — must PASS before continuing.
+4. SHA-256 the installer.
+5. Update `latest.yml` sha512.
+6. Create GitHub Release as **DRAFT** — title: `v0.1.48 — Mesh Glance page + gemma4:12b SKU promotion + substrate paths + userData rename`.
+
+Release body (Knight fills in actuals):
+
+```
+Fixes:
+- SKU model promotion: Full tier now correctly activates gemma4:12b (was falling back to floor model qwen2.5:0.5b). Mesh test comparability restored.
+- Mesh Glance page: LAN-visible /mesh/progress.html auto-refreshes every 30s. Per-node bars, ETA countdown, stale indicator. Reachable from any home network device.
+- Substrate path probes: substrate (resources) and substrate (dist-relative) both now return true on packaged installs.
+- userData renamed: amplify-computer → mnemosynec (MnemosyneC branding consistency). First-launch migration copies existing data.
+- Diagnostic enrichment: ollamaPath + branch fields added to diagnostic log output.
+```
+
+7. Write the following gate status into this Yoke file as a new `## GATE STATUS` section:
+
+```
+GATE: DRAFT — awaiting Founder ratify
+```
+
+**Knight does NOT self-stamp GREEN. Knight does NOT publish. Founder ratifies in their own words.**
+
+Per `[[feedback_explicit_founder_ratify_before_publish]]` and `[[feedback_forward_pressure_ratify_is_not_verified_ratify_bp080]]`.
+
+Deliver: SHA-256 + GitHub Release DRAFT URL + assertion PASS confirmation.
+
+---
+
+### P0 STAGING DECISION
+
+If P1-SUBSTRATE-PATHS, P1-RENAME-USERDATA, or P2-DIAGNOSTIC-ENRICHMENT would block timely ship of the two P0 scopes (because of build complexity, time constraints, or dependency conflicts), Knight MAY:
+
+- Stage `v0.1.48-alpha` with ONLY P0-SKU-MODEL + P0-GLANCE.
+- Bundle P1+P2 into `v0.1.48` proper.
+- Document the staging decision explicitly in the Yoke-return: `STAGING: v0.1.48-alpha (P0s only) → v0.1.48 (full)`.
+
+The mesh test CANNOT fire until both P0s are green. That deadline governs.
+
+---
+
+### Acceptance gate
+
+All five captures required for HARD GATE GREEN. Anything short = DRAFT:
+
+1. Assertion PASS on v0.1.48 installer (all three checks).
+2. Clean-VM install: SCREENSHOT A (AI response) + Diagnostic log showing `activeModel=gemma4:12b`, both substrate probes `true`, `ollamaPath` + `branch` populated.
+3. SCREENSHOT B: window top has visible buffer above title bar (FIX-3 carry-forward, confirm no regression).
+4. SCREENSHOT C: Glance page rendered on SECOND LAN device.
+5. Founder explicit ratify in own words in this file.
+
+---
+
+### Reply contract
+
+Knight Yoke-returns with:
+
+- **SEG-V0148-P0-SKU-MODEL:** Code diff (model resolver) + diagnostic log snippet showing `activeModel=gemma4:12b targetModel=gemma4:12b`.
+- **SEG-V0148-P0-GLANCE:** Code diff (substrate_api.ts + mesh_test_runner.py) + screenshot of Glance page on second LAN device.
+- **SEG-V0148-P1-SUBSTRATE-PATHS:** Code diff + diagnostic log showing both probes `true`.
+- **SEG-V0148-P1-RENAME-USERDATA:** Code diff (package.json + index.ts) + diagnostic log showing new userData path.
+- **SEG-V0148-P2-DIAGNOSTIC-ENRICHMENT:** Code diff + diagnostic log snippet with `ollamaPath` + `branch`.
+- **SEG-V0148-VERIFY:** All five captures present, or explicit HOLD stating which are pending.
+- **SEG-V0148-SHIP:** SHA-256 + GitHub Release DRAFT URL + GATE: DRAFT line.
+- **Staging decision** (if applicable): `STAGING: v0.1.48-alpha (P0s only) → v0.1.48 (full)` — with rationale.
+- **Truth-Always flags:** any findings during SEG execution.
+
+If VERIFY is PENDING-FOUNDER: Knight states "HOLD — SHIP blocked pending Founder verify on second LAN device + clean-VM install. All fixes committed and staged. Resume SHIP after Founder confirms."
+
+---
+
+### Statute reminders
+
+- §3: "Sonnet 4.6" verbatim in every SEG announcement AND every `model:` parameter. Not "Sonnet 4.5". Not "the model". Verbatim.
+- §12: Ask-Knight-First for anything Knight could know before surfacing to Founder.
+- §13: Substrate retrieval in SEG discovery = `pheromone_query` first, `consult_scribes` second. Do NOT use `search_knowledge` for substrate facts.
+- `[[feedback_actual_runtime_verify_for_runtime_bugs_bp078]]`: P0-SKU-MODEL, P1-SUBSTRATE-PATHS, P1-RENAME-USERDATA, and P2-DIAGNOSTIC-ENRICHMENT are all runtime-state bugs. Source change alone does NOT verify any of them. Diagnostic log output from a packaged build is the gate for each.
+- `[[feedback_ux_seg_screenshot_mandatory_bp078]]`: P0-GLANCE is a UX-touching SEG. Screenshot of the Glance page on a SECOND LAN device is mandatory. Not a screenshot from the build machine's localhost.
+- `[[feedback_long_running_progress_heartbeat_canon_bp078]]`: The Glance page IS the heartbeat for the mesh test. It must work before the test fires.
+- `[[feedback_every_click_visible_feedback_canon_bp078]]`: No silent failures. If gemma4:12b is missing when tier=full, emit a visible warning. If userData migration runs, show a visible IPC message.
+- `[[feedback_forward_pressure_ratify_is_not_verified_ratify_bp080]]`: Knight does not self-stamp GREEN. DRAFT stays DRAFT.
+
+---
+
+### Paste-ready wake-up
+
+Knight — v0.1.47 is published. v0.1.48 must ship before the 3-machine mesh test fires. Two scopes block the test. First: v0.1.47 diagnostic shows `sku.tier=full` but Ollama is serving `qwen2.5:0.5b` (floor model) — `gemma4:12b` is on disk, full tier must run it, mesh results against Google's 77.2%/78.8% benchmarks are meaningless without this fix. Find the model resolver in `src/main/`, fix the SKU promotion logic, and wire `activeModel=` + `targetModel=` into the diagnostic log. Second: Founder's wife needs a LAN-visible progress page for the long-running mesh test — she'll check it from her phone on the couch. Add `meshProgressStore` to `substrate_api.ts`, add `/mesh/progress/update` (localhost-only POST), `/mesh/progress` (JSON), and `/mesh/progress.html` (auto-refresh 30s, inline HTML, no JS framework, CSS-only bars, ETA countdown, stale indicator). Wire `_post_mesh_progress()` into `scripts/mesh_test_runner.py` alongside the existing DAG emit — 1s timeout, non-fatal. Tray tooltip appends "Mesh: 47% (ETA 2h 14m)" when a run is active. Also fix `substrate (resources): false` + `substrate (dist-relative): false` (both failing on packaged install — audit path resolution in `substrate_api.ts`, fix `app.isPackaged` guards). Rename `package.json` "name" from `amplify-computer` to `mnemosynec` + add first-launch userData migration (COPY, not move, log it). Add `ollamaPath` + `branch` to the written diagnostic log (IPC events exist from v0.1.47 FIX-1 — persist them). VERIFY: all five captures required — AI response, window buffer, Glance page on SECOND LAN device (phone or wife's machine, not localhost), full diagnostic log excerpt showing `activeModel=gemma4:12b` + both substrate probes `true` + `ollamaPath` + `branch`, and assertion PASS on installer. DRAFT only. Founder ratifies in own words. If P1+P2 would block P0 ship, stage v0.1.48-alpha with P0s only and document the split. Use Sonnet 4.6 SEGs for ALL work — every dispatch must say "Sonnet 4.6" verbatim.
+
+- Bishop SEG-V0148-MESH-GLANCE-AND-FIXES-YOKE — BP080 — pinned 2026-06-11T00:00:00Z
+
+---
+
+## BLACK MAMBA PASTE-READY DISPATCH (forward this block verbatim to Knight)
+
+Knight, dispatch 5 parallel Sonnet 4.6 SEGs RIGHT NOW, then 2 sequential synthesis SEGs. Sonnet 4.6 verbatim in every announcement (Statute §3). Each SEG below is self-contained scope; do NOT re-decompose; do NOT ask for clarification before firing; fire all 5 in parallel in a single message. P0-SKU-MODEL and P0-GLANCE are TOP PRIORITY and gate the mesh test — flag immediately if either is blocked.
+
+**SEG-V0148-P0-SKU-MODEL (Sonnet 4.6) — FIX ACTIVE MODEL PROMOTION:** v0.1.47 diagnostic shows `sku.tier = full` but Ollama serving `qwen2.5:0.5b` (floor model). `gemma4:12b` manifest confirmed on disk. Search `src/main/` for model resolver (likely `model_router.ts`, `ollama_manager.ts`, or `model_selector.ts`). Fix logic: when `sku.tier === 'full'` AND `gemma4:12b` is present in `ollama list`, set it as active model. Do NOT fall back to floor model when tier-appropriate model is available. If `gemma4:12b` unavailable despite tier=full, emit visible IPC warning (never silent). Wire diagnostic log: emit `activeModel=<name>` and `targetModel=<name>` at model-selection time; mismatch must be visually distinct in log. Verify requirement: diagnostic log from packaged build must show `activeModel=gemma4:12b targetModel=gemma4:12b` when tier=full and model is present. Source change alone does NOT verify. Per `[[feedback_actual_runtime_verify_for_runtime_bugs_bp078]]`. Deliver: code diff + diagnostic log snippet.
+
+**SEG-V0148-P0-GLANCE (Sonnet 4.6) — MESH TEST GLANCE PAGE:** Add to `src/main/substrate_api.ts`: (1) Module-level `meshProgressStore: Map<string, NodeProgress>` where NodeProgress = `{nodeId, label, pct, eta_s, cold_accuracy, hot_accuracy, last_seen, total_rounds, rounds_done}`. (2) `POST /mesh/progress/update` — localhost-only (reject non-127.0.0.1/::1), upserts store by nodeId, returns `{"ok":true}`. (3) `GET /mesh/progress` — LAN-visible JSON: `{nodes, runActive, globalPct, globalEta_s}` — confirm server binds `0.0.0.0:11480`. (4) `GET /mesh/progress.html` — LAN-visible, inline HTML template string inside substrate_api.ts (no extra files), `<meta http-equiv="refresh" content="30">`, NO JS framework, inline CSS only, mobile-ready viewport meta. Shows per-node CSS-only progress bars, node label, pct, rounds done/total, cold/hot accuracy, HOT-COLD lift delta, last-seen relative time, "STALE" in red if `now - last_seen > 240s`, global progress bar, ETA human-readable, footer with LAN URL. Dark background. Wire `_post_mesh_progress()` in `scripts/mesh_test_runner.py` — non-fatal POST to `http://127.0.0.1:11480/mesh/progress/update` after existing `/dag/emit` call, 1s timeout, bare `except: pass`. Tray tooltip: append `"Mesh: <pct>% (ETA <human>)"` when store has active run; clear after 30 min idle. Verify: screenshot of `/mesh/progress.html` rendered on SECOND LAN device (phone or wife's machine, NOT localhost). If no real run in flight, simulate with fake POST. Per `[[feedback_ux_seg_screenshot_mandatory_bp078]]` and `[[feedback_long_running_progress_heartbeat_canon_bp078]]`. Deliver: code diff (substrate_api.ts + mesh_test_runner.py) + screenshot from second device.
+
+**SEG-V0148-P1-SUBSTRATE-PATHS (Sonnet 4.6) — FIX SUBSTRATE PATH PROBES:** v0.1.47 diagnostic shows `substrate (resources): false` and `substrate (dist-relative): false` on packaged install. Read `src/main/substrate_api.ts` end-to-end. Find both probe resolution points. Identify cause — likely: dev-only `__dirname`-relative path invalid in packaged `app.asar`; `app.isPackaged` guard missing/inverted; substrate directory absent from packaging config; path separator issue. Fix both probes: packaged path uses `process.resourcesPath`, `app.isPackaged` correctly guarded, path joins use `path.join`. If substrate directory missing from packaging config, add it with gitignore-override pattern from v0.1.47 FIX-0. Per Statute §13 — substrate backend is the path WAN/pheromone depends on. Verify: diagnostic log from packaged build must show `substrate (resources): true` AND `substrate (dist-relative): true`. Runtime evidence required per `[[feedback_actual_runtime_verify_for_runtime_bugs_bp078]]`. Deliver: code diff + diagnostic log snippet.
+
+**SEG-V0148-P1-RENAME-USERDATA (Sonnet 4.6) — `package.json` name → `mnemosynec`:** Electron derives userData from `package.json` `"name"`. Currently `amplify-computer` → userData at `%AppData%\Roaming\amplify-computer\` (legacy). Change `"name"` to `"mnemosynec"` (or `"mnemosyne-c"` if Electron sanitization requires — document choice). Add first-launch migration in `src/main/index.ts` (or app startup): if `%AppData%\Roaming\amplify-computer\` exists AND `%AppData%\Roaming\mnemosynec\` does NOT exist → COPY (not move) full directory tree, log: `"userData migration: copied <old> → <new> (<N> files)"`. If copy takes >3s, emit visible IPC: `"Migrating user data to updated location… (this happens once)"` — no silent freezes. On subsequent launches (new path exists), skip silently. Verify: diagnostic log must show `userData=...\mnemosynec\`; if migration ran, log must show migration summary. Runtime evidence required. Per `[[reference_amnesia_substrate_cure_dr_mnemosynec_canon]]`. Deliver: code diff + diagnostic log snippet.
+
+**SEG-V0148-P2-DIAGNOSTIC-ENRICHMENT (Sonnet 4.6) — add `ollamaPath` + `branch=` to diagnostic log:** Current diagnostic log missing `ollamaPath` (which Ollama binary was used) and `branch` (which `init()` path was taken). SEG-V0147-FIX-1 added IPC heartbeat events — those are transient. This SEG persists them to the written log file. Read `src/main/ollama_manager.ts` — find `onStatusUpdate` callback pattern from FIX-1. Add two fields to diagnostic JSON output: `ollamaPath` (absolute path of binary actually used; `null` if unresolved) and `branch` (one of `PRE_INSTALLED_RUNNING`, `PRE_INSTALLED_SPAWN`, `BUNDLED_SPAWN`, `NONE`, `UNKNOWN`). Ensure diagnostic log is written AFTER `OllamaManager.init()` completes so fields reflect final resolved state. Verify: diagnostic log from packaged build must contain both fields with non-null values. Deliver: code diff + diagnostic log snippet showing both fields.
+
+When all 5 parallel SEGs return, run sequential synthesis:
+
+**SEG-V0148-VERIFY (Sonnet 4.6):** Clean-VM packaged install verify. Environment: fresh Windows VM or clean profile, NO pre-installed Ollama, NO admin elevation, install from shipped v0.1.48 `.exe` installer. ALL FIVE CAPTURES MANDATORY — HOLD if any missing: (A) SCREENSHOT — working AI response in packaged window; (B) SCREENSHOT — window top with visible buffer above title bar (FIX-3 carry-forward, no regression); (C) SCREENSHOT — Glance page `/mesh/progress.html` rendered on SECOND LAN device (phone or wife's machine, NOT localhost); (D) DIAGNOSTIC LOG — single excerpt showing: `activeModel=gemma4:12b`, `targetModel=gemma4:12b`, `substrate (resources): true`, `substrate (dist-relative): true`, `ollamaPath=<path>`, `branch=<branch>`, `userData=...\mnemosynec\`; (E) ASSERTION PASS — `node scripts/assert-bundled-ollama-in-installer.mjs` on v0.1.48 installer. Per `[[feedback_actual_runtime_verify_for_runtime_bugs_bp078]]` and `[[feedback_ux_seg_screenshot_mandatory_bp078]]`. If PENDING-FOUNDER, state HOLD explicitly with which captures are pending.
+
+**SEG-V0148-SHIP (Sonnet 4.6, sequential after VERIFY GREEN):** HARD GATE: do NOT execute until all five VERIFY captures confirmed. When gate GREEN: (1) bump version to `0.1.48` in `package.json` + `electron-builder.json`, (2) `npm run dist:win`, (3) run assertion script — must PASS, (4) SHA-256, (5) update `latest.yml` sha512, (6) create GitHub Release as DRAFT — title: `"v0.1.48 — Mesh Glance page + gemma4:12b SKU promotion + substrate paths + userData rename"` — body: "SKU promotion: full tier now activates gemma4:12b (mesh test comparability restored). Mesh Glance: LAN-visible /mesh/progress.html auto-refreshes every 30s. Substrate paths: both probes now true on packaged installs. userData renamed: amplify-computer → mnemosynec + first-launch migration. Diagnostic log: ollamaPath + branch fields added.", (7) write `GATE: DRAFT — awaiting Founder ratify` into this Yoke file. If P1+P2 were staged separately (v0.1.48-alpha), document split explicitly. Knight does NOT self-stamp GREEN. Founder ratifies in own words. Per `[[feedback_explicit_founder_ratify_before_publish]]` and `[[feedback_forward_pressure_ratify_is_not_verified_ratify_bp080]]`. Deliver: SHA-256 + GitHub Release DRAFT URL + assertion PASS.
+
+Yoke-return: per-SEG status + all five VERIFY captures (or HOLD with explicit pending list) + SHA-256 + GitHub Release DRAFT URL + staging decision if applicable + Truth-Always findings.
+
+If any SEG announces "Sonnet 4.5" or other version-variant in narration: STOP, fix the announcement, re-fire.
+
+---
+
+## GATE STATUS
+
+GATE: DRAFT — awaiting Knight execution + Founder ratify
+
+---
+
+## RESPONSE
+
+_Pending._

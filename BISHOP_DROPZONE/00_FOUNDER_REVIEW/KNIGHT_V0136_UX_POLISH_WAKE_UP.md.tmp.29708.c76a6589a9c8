@@ -1,0 +1,238 @@
+# KNIGHT v0.1.36 UX POLISH WAKE-UP
+**CLASS: BLACK MAMBA -- Novaculi (no-trickle, dispatch entire wave at once)**
+**Staged by Bishop SEG-CF | 2026-06-09 UTC**
+
+---
+
+Knight, wake up. v0.1.36 UX polish wave incoming. This wave is gated: do NOT begin until the mesh test wave (KNIGHT_MESH_TEST_ORCHESTRATION_WAKE_UP.md) has returned with results and Founder has ratified the mesh test data.
+
+CLASS: BLACK MAMBA -- Novaculi (no-trickle, dispatch entire wave at once).
+SCOPE: WelcomeView UX overhaul, mascot wire-in, proof accordion, stage-C progress, doorway reorder.
+Use Sonnet 4.6 SEGs per Statute §3. Foreman main thread. Context LEAN.
+No em-dashes. NO Composer 2.5. Brick Wall. Truth-Always.
+Every UX SEG requires packaged-build screenshot per feedback_ux_seg_screenshot_mandatory_bp078.
+
+---
+
+## CONTEXT
+
+- v0.1.35 shipped clean. Mesh test results must be in hand before this wave ships.
+- Founder reviewed v0.1.35 screenshots in BP078 and produced the following UX feedback items. All items below are direct Founder feedback, not Bishop speculation.
+- Mascot icon file exists at `src/renderer/public/icons/mnemosynec-mark.png` (son's elephant icon). Wire it in -- do not leave "Mascot pending" placeholders.
+- Compose with mesh test results: SEG-U-6 accordion line 2 wires to the JSON output from the mesh test wave when present. If the mesh test has not returned by the time this SEG runs, SEG-U-6 inserts a clearly-labeled placeholder that auto-populates when the JSON arrives.
+
+---
+
+## SEG DISPATCH -- 9 PARALLEL SEGs
+
+**Sequence rule:** SEG-U-1 through SEG-U-8 run in parallel after this wake-up is dispatched. SEG-U-9 (build + ship) is a hard gate that runs only after ALL of SEG-U-1 through SEG-U-8 return GREEN. No partial ship.
+
+---
+
+### SEG-U-1: Restore H1 Amnesia Line Above Cure Line
+
+**Founder feedback:** The "Your AI has Amnesia." line was removed from the WelcomeView header. It must be restored.
+
+**Spec:**
+- WelcomeView top of page (above the doorway cards): two-line hero text.
+  - Line 1: "Your AI has Amnesia." (large, primary weight)
+  - Line 2: "Dr. MnemosyneC has the Cure." (large, secondary weight or subtitle style)
+- Both lines must be visible without scrolling on a 1080p display.
+- Do NOT compress into a single line. The two-line rhythm is the brand cadence.
+- Reference: reference_amnesia_substrate_cure_dr_mnemosynec_canon.md -- "H1: Your AI has Amnesia. Dr. MnemosyneC.ai has the Cure."
+
+**Packaged-build screenshot required:** WelcomeView top of screen showing both lines.
+
+Yoke-return: screenshot showing both lines + diff confirming the change.
+
+---
+
+### SEG-U-2: Flip Doorway Order -- Prove It ABOVE Just Use It
+
+**Founder feedback:** "Prove it with a test" doorway should be above "Just use it" doorway.
+
+**Spec:**
+- Current order (wrong): Just use it | Prove it with a test
+- Correct order: Prove it with a test | Just use it
+- The copy and behavior of each doorway card does not change. Only the order changes.
+- Rationale: leads with the empirical proof framing, which is the brand's core claim. "Prove it" is the invitation that builds trust before asking for anything.
+
+**Packaged-build screenshot required:** WelcomeView showing doorway cards in new order.
+
+Yoke-return: screenshot showing Prove It card on top + diff confirming reorder.
+
+---
+
+### SEG-U-3: Restructure Proof Area as Three-Accordion
+
+**Founder feedback:** The proof area below the hero text should be restructured as a collapsible three-accordion. Currently the HOT/COLD chart is shown inline (takes space, not expandable).
+
+**Spec:**
+- Replace the current inline proof display with a three-item accordion component.
+- Accordion Line 1: "HOT/COLD Banyan Metric Results" -- expands to show the existing HOT/COLD bar chart that is currently rendered inline. Move it into the accordion body, do not remove it.
+- Accordion Line 2: "Gemma 4 12B MMLU-Pro Benchmark" -- placeholder state until mesh test results JSON is present. When `MESH_TEST_RESULTS_v0135_*.json` exists in the expected results path, auto-populate with the GOOD metric (HOT accuracy lift in percentage points) and the Big Numbers SVG from SEG-T-6. If no results file exists, show: "Mesh benchmark pending -- results will populate here after the three-node test completes."
+- Accordion Line 3: "BP074 Sound Barrier -- Cohen's Kappa 1.000 Trophy" -- expands to show the BP074 kappa 1.000 result. Render as a trophy or highlighted stat card: "Cohen's Kappa: 1.000 (perfect agreement)" with a one-line explanation: "Perfect agreement between AI and human judgment across 75 benchmark questions."
+- All three accordion items are collapsed by default. The labels alone are readable at a glance.
+- Accordion wire-in to mesh results: check for the JSON file at startup and on IPC event `mesh-test-complete`. Auto-expand Line 2 on first detection of new results.
+
+**Packaged-build screenshot required:** Proof accordion in collapsed state showing all three labels.
+
+Yoke-return: screenshot of collapsed accordion + screenshot of at least one accordion item expanded + confirmation of mesh-results auto-populate logic.
+
+---
+
+### SEG-U-4: Prove It Landing Page -- Big Numbers + Flippable Detail Cards
+
+**Founder feedback:** The "Prove it with a test" landing page (the view reached after clicking that doorway) needs a stronger data-first presentation.
+
+**Spec:**
+- Top of the Prove It landing page: Big Numbers strip. Three large-numeral stats drawn from the existing benchmark data.
+  - FAST: median response time in milliseconds (from the BP064/BP067 Eyewitness benchmark).
+  - CHEAP: "$0.00 per query" (local compute, zero API cost).
+  - GOOD: the HOT vs COLD accuracy delta as a percentage with a plus sign (e.g., "+12.4 pp improvement with substrate context").
+- Below the Big Numbers strip: one flippable detail card per benchmark result.
+  - Front face: benchmark name + key stat (e.g., "Eyewitness Benchmark -- Cohen's Kappa 0.883").
+  - Back face (flip on hover or tap): methodology summary in two sentences + dataset citation + date.
+  - Implement flip as CSS transform (rotateY 180deg) with a 300ms transition. No JS animation library required.
+  - Cards to include: (a) Eyewitness Benchmark BP064, (b) 4-Model Star Chamber BP067, (c) BP074 Sound Barrier kappa 1.000, (d) placeholder card for MMLU-Pro mesh results (same placeholder logic as SEG-U-3 Line 2).
+
+**Packaged-build screenshot required:** Prove It landing page showing Big Numbers strip and at least two detail cards (one showing front face, one showing back face).
+
+Yoke-return: two screenshots (front and back of a card) + confirmation of Big Numbers data source (where the numbers are pulled from).
+
+---
+
+### SEG-U-5: Wire Son's Elephant Icon into WelcomeView and In-App Header
+
+**Founder feedback:** Son's elephant icon file exists at `src/renderer/public/icons/mnemosynec-mark.png`. Wire it in. Replace "Mascot pending" placeholder.
+
+**Spec:**
+- WelcomeView mascot slot: render the elephant icon at the top of WelcomeView, sized appropriately for the hero area. Do not stretch or distort -- use `object-fit: contain`. Target size: 64px to 96px height, width auto.
+- In-app header brand div: find the element currently rendering "Mascot pending" text (or a blank brand logo slot). Replace with the elephant icon at 32px to 40px height. The icon appears next to the "MnemosyneC" wordmark in the header.
+- Use the PNG directly (`/icons/mnemosynec-mark.png` relative path from the renderer public root). Do not convert or re-export it.
+- If the file does not exist at that path at build time, surface a build error (do not silently omit the icon).
+
+**Packaged-build screenshot required:** (a) WelcomeView showing the elephant icon in the mascot slot. (b) In-app header showing the elephant icon next to the wordmark.
+
+Yoke-return: two screenshots (WelcomeView + in-app header) + confirmation of file path used.
+
+---
+
+### SEG-U-6: Stage C Placeholder -- Replace Silent "Being Set Up" with Real Progress
+
+**Founder feedback (verbatim):** "If this is true, then I need a progress bar, or at least a heartbeat progress bar. So I know it's DOING something. please. :D"
+
+**Binding:** feedback_long_running_progress_heartbeat_canon_bp078 (HARD BINDING, ratified BP078).
+
+**The problem:** When Founder chose "Free heavy-duty AI Gemma 4 12B" in the WelcomeView, the app showed only "Your AI is being set up. Full chat experience coming in the next update." -- static text, no animation, no progress, no indication anything was happening. A 7 GB Ollama pull was running silently.
+
+**Spec:**
+- Find the component or view that renders the "Your AI is being set up" text (likely in WelcomeView, TierActivationView, or a model-selection result state).
+- Replace it with a step-by-step progress display. Three phases:
+
+  Phase 1 -- Checking environment:
+  "Step 1 of 3: Checking Ollama installation..."
+  Show: animated spinner next to the text. Duration: actual check time (fast, typically under 2 seconds).
+
+  Phase 2 -- Downloading model:
+  "Step 2 of 3: Downloading Gemma 4 12B"
+  "2.1 GB of 7.0 GB downloaded (30%) -- estimated 4 minutes remaining"
+  Show: progress bar filling from 0% to 100% as Ollama pull events arrive.
+  Data source: POST to Ollama `/api/pull` with `stream: true`. Parse NDJSON. Each line contains `{ "status": "...", "completed": N, "total": N }`. Wire `completed` and `total` into the progress bar and the "X GB of Y GB" display. Update on every event (typically fires every 1 to 3 seconds).
+
+  Phase 3 -- Finalizing:
+  "Step 3 of 3: Setting up FULL tier..."
+  Show: animated spinner. Duration: actual finalization time.
+
+- If Ollama pull events are not available (e.g., model is already cached and phase 2 is instant), skip directly to phase 3. The step counter alone signals progress.
+- Fallback heartbeat: if the IPC channel to main is established but no Ollama events arrive within 5 seconds of starting phase 2, switch to heartbeat mode: animated dots cycling on "Downloading Gemma 4 12B..." until the pull completes. This is the minimum floor. Static text is not acceptable.
+- Do not use "Full chat experience coming in the next update." -- that text implies the current version is broken. Replace entirely with the progress display.
+
+**Compose with SEG-T-9 (mesh wake-up progress canon):** same principle, same binding. The Ollama pull progress and the mesh test progress are both governed by feedback_long_running_progress_heartbeat_canon_bp078.
+
+**Packaged-build screenshot required:** Screenshot of the progress display during an actual Ollama pull, showing the progress bar at a value between 10% and 90% (not start, not end). If a live pull cannot be triggered in the packaged build test environment, trigger a dry-run with a small model to demonstrate the progress bar renders and updates.
+
+Yoke-return: screenshot of progress display mid-pull + diff showing removal of the static "being set up" text + confirmation that Ollama pull events are wired.
+
+---
+
+### SEG-U-7: Accordion Wire-in to Mesh Test Results JSON
+
+**Spec (complements SEG-U-3):**
+- When `MESH_TEST_RESULTS_v0135_*.json` is detected in `~/.mnemosynec/test-data/mmlu-pro/results/` or the BISHOP_DROPZONE results path, fire IPC event `mesh-test-complete` from main to renderer.
+- Renderer listens for this event and updates Accordion Line 2 (SEG-U-3) with the live values from the JSON.
+- Fields to pull: `hot_accuracy`, `cold_accuracy`, `hot_minus_cold_delta`, `p50_latency_ms`, `wall_clock_total_seconds`.
+- Render the delta as the headline stat: "+X.X pp improvement" where X.X is `hot_minus_cold_delta` rounded to one decimal.
+- On first detection, auto-expand Accordion Line 2 so Founder sees the result without having to click.
+- Wire to the Big Numbers SVG path from SEG-T-6: if the SVG file exists at the expected path, embed it in Accordion Line 2 body instead of rendering raw numbers.
+
+**Packaged-build screenshot required:** Accordion Line 2 auto-expanded with live mesh test data populated (or with a synthetic test JSON to prove the wire-in renders correctly).
+
+Yoke-return: screenshot of accordion with data + confirmation of file-watch or IPC event logic + confirmation of SVG embed path.
+
+---
+
+### SEG-U-8: Visual Consistency Pass -- Spacing, Typography, Color
+
+After SEG-U-1 through SEG-U-7 are implemented but before the build gate (SEG-U-9), run a consistency pass:
+
+- WelcomeView: confirm H1 amnesia line (SEG-U-1), doorway order (SEG-U-2), accordion (SEG-U-3), and mascot icon (SEG-U-5) are all visually consistent. No mismatched font sizes. No orphaned margin or padding artifacts from component moves.
+- Prove It landing page: confirm Big Numbers strip (SEG-U-4) uses the same type scale as the rest of the app. Confirm detail card flip does not clip or overflow its container.
+- Progress display (SEG-U-6): confirm progress bar color matches the existing brand palette (check current accent color in the CSS variables or Tailwind config). Confirm animated spinner matches other spinners in the app (use the same component, not a new one).
+- No new color values, font families, or animation libraries may be introduced in this wave. Use only what is already in the codebase.
+
+**Packaged-build screenshot required:** Full WelcomeView at 1080p showing all v0.1.36 changes together in one screenshot.
+
+Yoke-return: screenshot of full WelcomeView + checklist confirming no new CSS variables, font families, or animation libraries introduced.
+
+---
+
+### SEG-U-9: Build + Ship v0.1.36 (GATE -- runs after all others return GREEN)
+
+**Hard gate.** Do NOT begin this SEG until SEG-U-1 through SEG-U-8 have all returned yoke-returns with at minimum one non-empty packaged-build screenshot each and no documented divergences that require Founder decision.
+
+**Spec:**
+- Run `npm run build` (or the equivalent electron-builder command for the project). Build must produce a clean `.exe` with zero errors and zero warnings that indicate broken functionality.
+- Tag the release as `v0.1.36`.
+- Create GitHub release with title "v0.1.36 -- UX Polish + Progress + Proof Accordion".
+- Release notes must include: list of SEG-U changes in plain English, download link, SHA-256 checksum of the installer.
+- Confirm the release is live on GitHub before claiming LANDED.
+
+**Verify-before-stamp (Brick Wall):** "LANDED" requires (a) GitHub release page is live at the tagged URL, (b) the installer `.exe` is downloadable, and (c) SHA-256 checksum is present in the release notes. If any of these three are not true, do not claim LANDED.
+
+**Packaged-build screenshot required:** Screenshot of GitHub release page showing v0.1.36 tag, release notes, and download asset.
+
+Yoke-return: GitHub release URL + SHA-256 checksum + screenshot of release page.
+
+---
+
+## AGGREGATED YOKE-RETURN TARGET
+
+After all SEGs complete, assemble one aggregated yoke-return for Bishop containing:
+
+1. SEG-U-1 result: H1 amnesia line screenshot.
+2. SEG-U-2 result: doorway reorder screenshot.
+3. SEG-U-3 result: accordion collapsed + one expanded screenshot.
+4. SEG-U-4 result: Prove It landing page Big Numbers + card screenshots.
+5. SEG-U-5 result: mascot icon screenshots (WelcomeView + header).
+6. SEG-U-6 result: progress display mid-pull screenshot + removal confirmation.
+7. SEG-U-7 result: accordion with mesh data screenshot.
+8. SEG-U-8 result: full WelcomeView consistency screenshot.
+9. SEG-U-9 result: GitHub release URL + SHA-256 + release page screenshot.
+
+Bishop relays this aggregated return to Founder. Founder ratifies before v0.1.36 is announced publicly.
+
+---
+
+**Hard bindings:**
+- Sonnet 4.6 SEGs mandatory (Statute §3).
+- No em-dashes.
+- No Composer 2.5.
+- Brick Wall on overclaims.
+- Truth-Always.
+- Every UX SEG requires packaged-build screenshot (feedback_ux_seg_screenshot_mandatory_bp078).
+- SEG-U-6 is HARD BINDING per feedback_long_running_progress_heartbeat_canon_bp078. Static "being set up" text is not acceptable. Progress or heartbeat is required.
+- This wave is gated on mesh test results. SEG-U-7 is a placeholder if results are not yet available -- do not block the other SEGs on this.
+- Explicit Founder ratify required before announcing v0.1.36 publicly (feedback_explicit_founder_ratify_before_publish).
+
+End of wake-up.

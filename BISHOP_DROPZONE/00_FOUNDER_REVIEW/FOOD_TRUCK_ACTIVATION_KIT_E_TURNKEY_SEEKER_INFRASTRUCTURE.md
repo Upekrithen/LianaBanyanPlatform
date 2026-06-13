@@ -1,0 +1,374 @@
+# Food Truck Activation Kit — Part E
+# Turnkey Seeker Infrastructure
+## Bishop Design Spec — Wave C
+**Authored: 2026-06-10 | Bishop SEG-TURNKEY-DESIGN | BP079**
+
+---
+
+## §1 — The Seeker Experience (what changes)
+
+### Before Wave C
+
+Founder generates every card manually. Founder maintains the attribution ledger. Founder prints and delivers custom cards. Founder follows up with merchants. The system is powerful but Founder-shaped: it scales with Founder's attention, not with the cooperative.
+
+### After Wave C
+
+Any LB member with a $5/year membership opens their dashboard, clicks "Invite a local business," fills in a merchant name and type in under 30 seconds, and receives a print-ready PDF card with a unique token baked in. That card is the only thing they hand to a merchant. The system does everything else.
+
+### The Seeker Journey End-to-End
+
+**Step 1 — Membership (existing flow).** Member pays $5/year via the existing Stripe Checkout. They land in their LB dashboard. A tab labelled "Become a Seeker" is visible.
+
+**Step 2 — Generate a card.** Seeker clicks "Invite a local business." They choose a merchant type (food truck / coffee shop / barber / daycare / other). They optionally type the business name. They click "Generate card." The system writes a row to `leviathan_cue_cards` with `introducer_user_id` set to the Seeker's UUID and `short_token` as a unique 8-character slug. The card generator returns a print-ready PDF (3.5" x 2" with bleed, 3 Kit A layout variants) plus a standalone QR code image. Download begins automatically. The dashboard shows a status chip: "Card generated — not yet activated."
+
+**Step 3 — The conversation.** Seeker hands or sends the card to the merchant. The "What to say" reference cards from Kit A are pre-loaded in the Seeker dashboard so they can glance at the script any time. The cooperative-class framing is built in. Seeker's only real job is the human contact.
+
+**Step 4 — Merchant scans the card.** Merchant opens the QR link. They land on the cue card landing page, see the walkthrough, and reach Stripe Checkout. The cue card landing page calls `create-merchant-onboarding-checkout` at click time. That edge function creates a Stripe Checkout Session with `introducer_user_id` baked into metadata. Merchant pays.
+
+**Step 5 — Everything fires automatically.** Stripe webhook receives `checkout.session.completed`. The handler reads `metadata.introducer_user_id`, writes a `membership_payments` row, writes a `promotion_attributions` row, writes a `creator_referrals` row, marks `seeker_invitations.activated_at`, and fires an in-app notification to the Seeker. Seeker sees: "Joe's Food Truck just activated their LianaBanyan node. You earned 10 Marks."
+
+**Step 6 — Merchant onboards themselves.** Post-checkout, merchant lands at `/merchant/onboard/welcome`. The wizard walks them through 5 steps: confirm business info, enter menu items, configure subscription tiers (COGS calculator built in), connect Stripe Account via Stripe Connect Express (Stripe handles W-9, 1099, payouts), then go live. Merchant gets their storefront URL and QR code. LB stores `stripe_account_id` on their `entity_memberships` row.
+
+**Step 7 — Seeker watches from their dashboard.** Seeker's dashboard shows every introduction they have generated: status badge (generated / opened / activated / churned), Marks earned, vesting schedule, and a "Generate next card" CTA. One click generates the next card. The loop repeats.
+
+**Total Seeker effort beyond the conversation: approximately 30 seconds to generate the card. Zero seconds for merchant onboarding, attribution, payouts, or follow-up reminders. The system runs the rest.**
+
+---
+
+## §2 — Component Inventory
+
+### Component 1 — Seeker Dashboard Page
+
+- **Name:** Seeker Dashboard
+- **Route:** `/seeker/dashboard`
+- **Wave dependencies:** Wave B (subscription state, user profile, Marks balance)
+- **Supabase tables:** `seeker_invitations`, `promotion_attributions`, `seeker_notifications`, `auth.users`
+- **Edge functions:** none (read-only page; server component or client fetch)
+- **Description:** Lists Seeker's introductions with status badges (generated / opened / activated / churned). Shows Marks earned and vesting schedule per introduction. Shows a cooperative-class summary ("You have activated 3 local businesses. Fellow Seekers have activated 47 total."). CTA: "Invite a local business." Secondary CTA: "Set up your own node" (if Seeker is also eligible as a merchant).
+- **Scope:** M
+
+### Component 2 — Cue Card Generator UI
+
+- **Name:** Cue Card Generator
+- **Route:** `/seeker/invite/:merchantType`
+- **Wave dependencies:** Wave A (`leviathan_cue_cards` table), Wave B (auth)
+- **Supabase tables:** `leviathan_cue_cards`, `seeker_invitations`
+- **Edge functions:** `generate-seeker-cue-card`
+- **Description:** Form with merchant type selector (food truck / coffee shop / barber / daycare / other), business name field (optional), optional notes field. "Generate card" button calls `generate-seeker-cue-card` edge function. Function writes a `leviathan_cue_cards` row with `introducer_user_id = current user`, generates a unique `short_token` (8-char nanoid), writes a `seeker_invitations` row, then calls the card layout generator. Returns download URL for PDF + standalone QR PNG + 3 layout variant thumbnails. Download triggers automatically. Dashboard status chip updates in real time. Every click produces a visible response per `canon_every_click_visible_feedback_canon_bp078` — "Generating your card..." spinner while the edge function runs, then download trigger + confirmation toast.
+- **Scope:** M
+
+### Component 3 — Card Layout PDF/PNG Generator
+
+- **Name:** Card Layout Generator
+- **Service location:** Next.js API route `/api/card-generator` OR Supabase Edge Function `card-layout-renderer`
+- **Wave dependencies:** Wave A (card template assets from Kit A)
+- **Supabase tables:** reads `leviathan_cue_cards` for payload; no writes
+- **Edge functions:** `card-layout-renderer`
+- **Description:** Accepts cue card payload (short_token, Seeker name, Seeker profile photo URL, merchant type, business name, cooperative tagline). Renders 3 Kit A layout variants as print-ready PDF (3.5" x 2" with 0.125" bleed, 300 DPI) and PNG. QR code encodes the full short-link URL (`lianab.an/<short_token>` or similar). Implementation: Puppeteer (headless Chromium renders an HTML template to PDF/PNG). Three monochrome templates from Kit A. Custom colors and photo styling deferred to Wave D. Returns signed Supabase Storage URLs valid for 24 hours.
+- **Scope:** L (Puppeteer in Edge environment requires careful dependency management; consider Vercel OG or @resvg/resvg-js as lighter alternative if Puppeteer is too heavy for edge)
+
+### Component 4 — Click-Time Stripe Checkout Session Generator
+
+- **Name:** Merchant Onboarding Checkout Creator
+- **Service location:** Supabase Edge Function `create-merchant-onboarding-checkout`
+- **Wave dependencies:** Wave A (Stripe integration scaffolding), Wave B (membership payment flow)
+- **Supabase tables:** reads `leviathan_cue_cards` for `introducer_user_id`; writes nothing (webhook handles writes)
+- **Edge functions:** `create-merchant-onboarding-checkout`
+- **Description:** Called by the cue card landing page when merchant is ready to pay. Reads the cue card from `short_token`. Creates a Stripe Checkout Session (NOT a static Payment Link — dynamic creation gives full metadata control). Bakes `introducer_user_id`, `cue_card_id`, `business_node_type` into Stripe metadata. Sets `success_url` to `/merchant/onboard/welcome?session_id={CHECKOUT_SESSION_ID}`. Returns the Checkout URL. Merchant clicks through to Stripe-hosted checkout. Note: static Payment Links cannot carry per-card metadata; dynamic Checkout Sessions are mandatory here.
+- **Scope:** S
+
+### Component 5 — Stripe Webhook Handler with Auto-Attribution
+
+- **Name:** Stripe Webhook Handler (Wave C extension)
+- **Service location:** Existing webhook handler (Wave B) extended for `checkout.session.completed` with Seeker metadata path
+- **Wave dependencies:** Wave A (tables), Wave B (existing webhook scaffold)
+- **Supabase tables:** `membership_payments`, `promotion_attributions`, `creator_referrals`, `cue_card_share_clicks`, `seeker_invitations`, `seeker_notifications`
+- **Edge functions:** `stripe-webhook` (extend existing)
+- **Description:** On `checkout.session.completed`, reads `metadata.introducer_user_id` and `metadata.cue_card_id`. Writes `membership_payments` row with `introducer_user_id`. Writes `promotion_attributions` row (introducer earns 10 Marks immediately; see §6 for vesting spec). Writes `creator_referrals` row. Updates `cue_card_share_clicks.converted = true`. Updates `seeker_invitations.activated_at = now()` and `activated_entity_id = new entity_memberships.id`. Inserts row into `seeker_notifications` with `event_type = 'activation'` and cooperative-class copy. Self-introduction guard: if `introducer_user_id = checkout merchant user_id`, sets Marks to 0 and logs reason (see §6 edge case 3).
+- **Scope:** M
+
+### Component 6 — Automated Merchant Onboarding Wizard
+
+- **Name:** Merchant Onboarding Wizard
+- **Route:** `/merchant/onboard/welcome` through `/merchant/onboard/live`
+- **Wave dependencies:** Wave A (`entity_memberships`, `food_node_subscription_tiers`), Wave B (auth, Stripe Connect)
+- **Supabase tables:** `entity_memberships`, `food_node_subscription_tiers`, `menu_items` (new or existing Wave A table)
+- **Edge functions:** `merchant-onboard-step` (server actions for each step)
+- **Description:** 5-step wizard. Progress bar visible at all times per `canon_long_running_progress_heartbeat_canon_bp078`. Each step shows a cooperative-class header ("You're building something real. Let's get your node live.").
+  - **Step 1 — Business info:** confirm business name, address, contact email, phone. Writes `entity_memberships` row.
+  - **Step 2 — Menu items:** manual entry MVP (name, description, regular price, photo upload optional). OCR deferred to Wave D. "Add item" button adds a row. Minimum 1 item required to proceed.
+  - **Step 3 — Configure subscription tiers:** interactive COGS calculator from Kit D. Merchant enters their COGS percentage; system recommends 3 tiers with discount values that keep margin healthy. Merchant can override. Writes to `food_node_subscription_tiers`.
+  - **Step 4 — Connect Stripe Account:** Stripe Connect Express OAuth. LB calls `stripe.accounts.create` + `stripe.accountLinks.create` (type: `account_onboarding`). Redirects merchant to Stripe's hosted onboarding (ID verification, banking info, W-9). Stripe redirects back to `/merchant/onboard/connect-return?account_id=...`. LB stores `stripe_account_id` on `entity_memberships`. Note: this step runs on Stripe's domain; the redirect-back must be handled gracefully (loading state while waiting, timeout handling, retry link if merchant abandons mid-flow).
+  - **Step 5 — Go live:** generates storefront URL and QR code for merchant's own customers. Shows a celebration confirmation per `canon_every_click_visible_feedback_canon_bp078`. Sends merchant a welcome email with their storefront link. Sets `entity_memberships.status = 'active'`.
+- **Scope:** L
+
+### Component 7 — Stripe Connect Express Integration
+
+- **Name:** Stripe Connect Express Layer
+- **Service location:** `lib/stripe-connect.ts` + edge functions `create-connect-account`, `connect-onboarding-link`, `connect-dashboard-link`
+- **Wave dependencies:** Wave B (Stripe keys, environment config)
+- **Supabase tables:** `entity_memberships` (adds `stripe_account_id` column if not already in Wave A schema)
+- **Edge functions:** `create-connect-account`, `connect-onboarding-link`, `connect-dashboard-link`
+- **Description:** Creates and manages Stripe Express connected accounts. Handles `application_fee_amount` on each transaction (16.7% of customer total, matching the Cost+20% structural bylaw: 1/1.20 = 0.833 merchant share; 0.167 platform fee). Application fee is charged at transaction time, not monthly. Refund flow: merchant initiates via LB dashboard, LB calls Stripe API, application fee refunded proportionally, Marks reverted via `promotion_attributions` update. Each merchant gets a link to their own Stripe Express dashboard (tax docs, payout schedule, dispute handling) generated via `stripe.accounts.createLoginLink`.
+- **Scope:** M
+
+### Component 8 — Seeker Notification System
+
+- **Name:** Seeker Notification System
+- **Service location:** `seeker_notifications` table + real-time Supabase subscription on dashboard + optional email via Resend/Postmark
+- **Wave dependencies:** Wave B (user profile, email service if already wired)
+- **Supabase tables:** `seeker_notifications`
+- **Edge functions:** called from webhook handler (Component 5) to insert notifications; dashboard subscribes via Supabase Realtime
+- **Description:** In-app notification bell on Seeker dashboard subscribes to `seeker_notifications` table via Supabase Realtime. Unread count badge. Notification copy is cooperative-class warmth: "Joe's Food Truck just activated their LianaBanyan node. You earned 10 Marks. Click to see your vesting schedule." NOT bank-style: "Payment received. Attribution ID: 8f3a...". Optional email notification (Seeker can toggle). Email uses same cooperative-class copy. Notification types: `activation` / `payment` (recurring) / `churn` / `vesting_milestone`.
+- **Scope:** S
+
+### Component 9 — Attribution Dashboard with Cooperative-Class Leaderboard
+
+- **Name:** Attribution Dashboard
+- **Route:** Section of `/seeker/dashboard` (scrollable panel below introduction list)
+- **Wave dependencies:** Wave B (Marks balance, vesting schedule)
+- **Supabase tables:** `promotion_attributions`, `seeker_invitations`, `creator_referrals`
+- **Edge functions:** none (server component or client fetch)
+- **Description:** Shows Seeker's total Marks earned (lifetime), vesting schedule (when Marks unlock), claim CTA when vested. Cooperative-class leaderboard shows "Fellow Seekers this month" as a grid of names + merchant count activated. NOT ranked by score. Framing: "These are your fellow cooperative builders." No position numbers. No competitive language. Shows Seeker's own count prominently. Heart-of-Peace register throughout.
+- **Scope:** S
+
+### Component 10 — Seeker-as-Merchant Onramp
+
+- **Name:** Seeker-as-Merchant Onramp
+- **Route:** CTA button on `/seeker/dashboard` linking to `/merchant/onboard/welcome`
+- **Wave dependencies:** Merchant Onboarding Wizard (Component 6)
+- **Supabase tables:** same as Component 6
+- **Edge functions:** same as Component 6
+- **Description:** If a Seeker is also eligible to be a merchant (no existing active `entity_memberships` row for their user), dashboard shows "Set up your own node" CTA with cooperative framing: "You can also participate as a business node yourself. Same cooperative terms apply." Clicking launches the same merchant onboarding wizard from Step 1. Self-introduction guard applies (see §6 edge case 3). Reuses all Component 6 code — no separate wizard needed.
+- **Scope:** XS (CTA + guard logic only; wizard is Component 6)
+
+---
+
+## §3 — New Tables Needed (Wave C additions beyond Wave A)
+
+### Table 1 — `seeker_invitations`
+
+Tracks every card a Seeker generates.
+
+```sql
+CREATE TABLE seeker_invitations (
+  id                  uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  seeker_user_id      uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  merchant_type       text NOT NULL CHECK (merchant_type IN ('food_truck','coffee_shop','barber','daycare','other')),
+  merchant_name_target text,
+  cue_card_id         uuid REFERENCES leviathan_cue_cards(id) ON DELETE SET NULL,
+  generated_at        timestamptz NOT NULL DEFAULT now(),
+  opened_count        integer NOT NULL DEFAULT 0,
+  last_opened_at      timestamptz,
+  activated_at        timestamptz,
+  activated_entity_id uuid REFERENCES entity_memberships(id) ON DELETE SET NULL
+);
+
+-- RLS: Seeker owns their rows
+ALTER TABLE seeker_invitations ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "seeker_invitations_seeker_select"
+  ON seeker_invitations FOR SELECT
+  USING (auth.uid() = seeker_user_id);
+
+CREATE POLICY "seeker_invitations_seeker_insert"
+  ON seeker_invitations FOR INSERT
+  WITH CHECK (auth.uid() = seeker_user_id);
+
+CREATE POLICY "seeker_invitations_service_all"
+  ON seeker_invitations FOR ALL
+  USING (auth.role() = 'service_role');
+```
+
+### Table 2 — `food_node_subscription_tiers`
+
+Per-merchant tier configuration. Stores the output of the COGS calculator.
+
+```sql
+CREATE TABLE food_node_subscription_tiers (
+  id                      uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  entity_id               uuid NOT NULL REFERENCES entity_memberships(id) ON DELETE CASCADE,
+  tier_number             integer NOT NULL CHECK (tier_number IN (1, 2, 3)),
+  tier_name               text NOT NULL,
+  meal_count              integer NOT NULL,
+  discount_pct            numeric(5,2) NOT NULL,
+  prepay_pct              numeric(5,2) NOT NULL DEFAULT 0,
+  cogs_calculator_output  jsonb,
+  created_at              timestamptz NOT NULL DEFAULT now(),
+  updated_at              timestamptz NOT NULL DEFAULT now(),
+  UNIQUE (entity_id, tier_number)
+);
+
+-- RLS: merchant (entity owner) owns; service_role full access
+ALTER TABLE food_node_subscription_tiers ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "food_node_tiers_merchant_select"
+  ON food_node_subscription_tiers FOR SELECT
+  USING (
+    EXISTS (
+      SELECT 1 FROM entity_memberships em
+      WHERE em.id = food_node_subscription_tiers.entity_id
+        AND em.user_id = auth.uid()
+    )
+  );
+
+CREATE POLICY "food_node_tiers_merchant_insert_update"
+  ON food_node_subscription_tiers FOR ALL
+  USING (
+    EXISTS (
+      SELECT 1 FROM entity_memberships em
+      WHERE em.id = food_node_subscription_tiers.entity_id
+        AND em.user_id = auth.uid()
+    )
+  );
+
+CREATE POLICY "food_node_tiers_service_all"
+  ON food_node_subscription_tiers FOR ALL
+  USING (auth.role() = 'service_role');
+```
+
+### Table 3 — `seeker_notifications`
+
+In-app notification queue for Seekers.
+
+```sql
+CREATE TABLE seeker_notifications (
+  id             uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  seeker_user_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  event_type     text NOT NULL CHECK (event_type IN ('activation','payment','churn','vesting_milestone')),
+  payload        jsonb NOT NULL DEFAULT '{}',
+  read_at        timestamptz,
+  sent_at        timestamptz NOT NULL DEFAULT now()
+);
+
+-- RLS: Seeker owns their notifications
+ALTER TABLE seeker_notifications ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "seeker_notifications_seeker_select"
+  ON seeker_notifications FOR SELECT
+  USING (auth.uid() = seeker_user_id);
+
+CREATE POLICY "seeker_notifications_seeker_update"
+  ON seeker_notifications FOR UPDATE
+  USING (auth.uid() = seeker_user_id);
+
+CREATE POLICY "seeker_notifications_service_all"
+  ON seeker_notifications FOR ALL
+  USING (auth.role() = 'service_role');
+```
+
+---
+
+## §4 — Repeatability Loop (Designed-to-be-Copied canon at work)
+
+Wave C is the literal embodiment of `canon_designed_to_be_copied_autonomous_propagation_doctrine_bp051`. The cooperative does not grow because LB markets to strangers. It grows because every member is structurally equipped to bring someone else in.
+
+**The propagation path:**
+
+1. A person pays $5/year and becomes an LB member. They now have a Seeker tab in their dashboard.
+2. They generate a card and hand it to a local merchant. One conversation. Thirty seconds of system work. The merchant onboards themselves.
+3. The merchant's customers see the QR code at the truck and become LB members to access subscription deals.
+4. Some of those new members open their Seeker tab and introduce OTHER merchants they know.
+5. Marks accumulate at each layer. Not as a competitive ranking. As a record of cooperative contribution.
+
+**Why this is not MLM:** There is no recruitment-of-recruiters. Marks are earned only when a real merchant activates and real customers transact. The Seeker earns for introducing a working node, not for recruiting other Seekers. The merchant's customers join for the meal discounts, not to become Seekers. Growth is demand-driven.
+
+**Heart-of-Peace at the propagation layer:** The leaderboard shows fellow Seekers as builders, not competitors. The notification copy uses "you contributed to something real," not "you won." The COGS calculator helps merchants price sustainably, not extract. The vesting schedule rewards loyalty, not churn. Every system touchpoint is written in the cooperative-class register.
+
+**No central marketing required:** LB's CAC on a Seeker-introduced merchant is the cost of the $5 membership plus the Marks paid out. The Seeker did the relationship work for free because they believed in the cooperative, not because they were paid to recruit. The attribution system makes that belief legible and rewardable.
+
+**The loop closes:** A merchant who activates via a Seeker card can, six months later, generate their own Seeker cards and introduce OTHER merchants. The "Seeker-as-merchant onramp" works in reverse too. The cooperative is self-reinforcing at every node.
+
+---
+
+## §5 — Stripe Connect Express Specifics
+
+### Why Connect Express (not Standard or Custom)
+
+Connect Standard requires merchants to already have or create a full Stripe account, manage their own dashboard, and handle their own onboarding. It offers maximum flexibility but puts operational burden on LB to support diverse merchant configurations.
+
+Connect Custom gives LB maximum control but requires LB to handle all KYC, W-9 collection, 1099 generation, and payout management. That is significant legal and operational liability for an early-stage cooperative.
+
+Connect Express is the correct choice: Stripe owns the KYC and compliance surface. Merchants get their own Stripe Express dashboard for tax docs and payouts. LB's liability is scoped to the platform fee and the transaction data it stores. Merchants see "Powered by Stripe" during onboarding, which builds trust. W-9 and 1099 are handled by Stripe without LB touching tax information.
+
+### Application Fee Calculation
+
+The Cost+20% structural bylaw means workers keep 83.3% of the economic value they create. For each merchant transaction:
+
+- Customer pays price P
+- Merchant receives P x 0.833 (after application fee)
+- LB platform fee = P x 0.167 (16.7%)
+- Stripe processing fee (2.9% + $0.30) is charged on top of P, paid by the customer or built into pricing
+
+The `application_fee_amount` parameter on each Stripe Charge or PaymentIntent = `Math.round(amount * 0.167)`. This is set by LB at transaction creation time.
+
+The COGS calculator in Step 3 of the merchant wizard surfaces the net math explicitly so merchants understand their take-home before they go live. No hidden fees.
+
+### Connect Express Dashboard
+
+Each merchant gets a Stripe Express dashboard link generated on demand via `stripe.accounts.createLoginLink(stripeAccountId)`. This link is single-use and expires. LB's merchant dashboard shows a "View payouts and tax docs" button that generates a fresh link on click. Merchant handles their own payout schedule, disputes, and 1099-K retrieval directly in Stripe.
+
+### Refund Flow
+
+1. Merchant initiates refund from LB dashboard (or customer requests via LB support flow).
+2. LB calls `stripe.refunds.create({ charge: chargeId, refund_application_fee: true })`.
+3. Stripe refunds the customer and proportionally reverses LB's application fee.
+4. LB webhook receives `charge.refund.updated` event.
+5. Handler reverts the `promotion_attributions` Marks for the associated Seeker (decrement by the Marks that were awarded for this transaction, not the full activation award).
+
+---
+
+## §6 — Truth-Always Surface
+
+### 1. Stripe Connect Express onboarding is an external flow
+
+Step 4 of the merchant wizard sends the merchant to Stripe's domain for 5-15 minutes. This is non-negotiable; LB cannot shorten it. The wizard must communicate this clearly before the redirect: "You'll be taken to Stripe's secure onboarding. It takes about 10 minutes. After that you'll be brought right back to finish your setup." Show a loading/waiting state on the return URL that polls for `stripe_account_id` being set. If merchant abandons mid-flow, the wizard should offer a "Continue Stripe setup" button on next login. Never mark Step 4 complete until `entity_memberships.stripe_account_id` is confirmed non-null.
+
+### 2. Marks vesting schedule needs Founder ratification before Wave C ships
+
+**RATIFIED 2026-06-10:** +10 Marks at merchant activation (fires on `checkout.session.completed`); +5 Marks/week for merchant's first 4 weeks if ≥1 paid order that week (loyalty bonus, weekly cron); +1 Mark per recurring payment thereafter (long-tail, fires on each successful Stripe invoice for that merchant's subscription customers). All Marks accrue to the Seeker (introducer_user_id) in `promotion_attributions`; `vesting_unlock_at` uses Wave A canonical vesting window.
+
+Bishop recommendation (illustrative; preserved for forensic record):
+- 10 Marks at merchant activation (immediate, on `checkout.session.completed`)
+- 5 additional Marks per week of merchant activity for the first 4 weeks (loyalty bonus; fires on weekly cron checking `membership_payments` activity)
+- 1 Mark per recurring payment after week 4 (long-tail reward for introducing a sticky node)
+
+These numbers are designed to be generous at activation (rewarding the relationship work) and modest long-tail (avoiding Marks inflation). Founder ratification received 2026-06-10; webhook handler ships with these values hardcoded.
+
+### 3. Self-attribution edge case
+
+**RATIFIED 2026-06-10:** `marks_earned = 0` when `seeker_user_id = merchant.user_id`; creator_referrals + promotion_attributions rows still fire with `attributed_amount_cents = 0` for record; cross-introductions remain valid; original attribution stands if a Seeker who introduced a merchant later becomes ALSO a merchant on the same entity (only self-introduction is zeroed).
+
+If a Seeker generates a card for their own business (Seeker user ID = merchant user ID at checkout), the system must detect this and set Marks earned = 0. The `seeker_invitations` and `promotion_attributions` rows are still written for record-keeping (the provenance is real; the node was activated), but no Marks are awarded. The webhook handler checks `metadata.introducer_user_id == checkout session customer user_id` and branches accordingly. Log reason as `self_introduction_no_marks`.
+
+### 4. Multi-Seeker collision (first-write-wins)
+
+**RATIFIED 2026-06-10:** First-write-wins on the scanned cue card token (whoever's card the merchant clicked through gets the attribution); ties broken by oldest `cue_card_share_clicks` row (ts_utc ascending); no retroactive reassignment; Bishop manual override available via service-role UPDATE for disputed cases, logged in audit trail. NOTE: original spec below used `first created_at in seeker_invitations` as tie-break; ratified tie-break is `cue_card_share_clicks.ts_utc` (oldest row) -- Knight use ratified value.
+
+If two Seekers each generate a card for the same merchant and the merchant activates via one of them, the attribution goes to the cue card that was scanned (the `short_token` in the URL). If the merchant received both cards but opened both URLs without completing checkout, the `cue_card_share_clicks` table records both opens with timestamps. Attribution goes to the card that was scanned at checkout (not first-open). If somehow both are present in metadata (edge case in URL sharing), first `created_at` in `seeker_invitations` wins. Founder should ratify this policy; it is fair but not the only defensible choice.
+
+### 5. Card layout generator dependency
+
+Puppeteer running in a Supabase Edge Function is non-trivial. The edge environment is Deno; Puppeteer requires a Chromium binary that may exceed Edge Function memory limits. Recommended alternative: `@resvg/resvg-js` for SVG-to-PNG rendering (lighter, Deno-compatible) for the QR + simple card layouts; use a dedicated Vercel Function or a lightweight Next.js API route with `puppeteer-core` + a hosted Chromium layer (e.g., `chrome-aws-lambda`) for the full PDF export. MVP ships 3 monochrome templates. Custom colors and photo styling are Wave D scope.
+
+### 6. OCR menu upload deferred to Wave D
+
+Step 2 of the merchant wizard uses manual entry only in Wave C. A merchant with 20 menu items will spend 15-20 minutes on manual entry. This is acceptable for MVP. OCR via OpenAI Vision or Google Document AI is Wave D. The schema should accommodate an `ocr_source_url` column on menu items so Wave D can backfill.
+
+### 7. Wave C scope estimate
+
+- SEG-WC-1: Seeker dashboard scaffold + cue card generator UI — **2 days**
+- SEG-WC-2: PDF/PNG card layout generator — **1 day**
+- SEG-WC-3: Stripe Checkout Session edge function + webhook handler — **1 day**
+- SEG-WC-4: Merchant onboarding wizard scaffold (Steps 1, 2, 3, 5) — **2 days**
+- SEG-WC-5: Stripe Connect Express integration (Step 4 + refund flow) — **1 day**
+- SEG-WC-6: Notification system + attribution dashboard — **1 day**
+- SEG-WC-7: End-to-end test on packaged install / live web with screenshots — **0.5 days**
+
+**Total Wave C: approximately 8.5 days Knight wall-clock.** The earlier "3-5 days" estimate in the Yoke TL;DR was optimistic once merchant wizard complexity and Stripe Connect Express are fully scoped. Founder should treat 8-10 days as the realistic range. Parallelizing SEG-WC-1 and SEG-WC-2 (independent) with SEG-WC-3 (independent) reduces wall-clock to approximately 5-6 days with 3 concurrent SEGs.
+
+---
+
+*Bishop SEG-TURNKEY-DESIGN — BP079 — 2026-06-10*
+*Statute §3 (Sonnet 4.6) | Statute §10 (Accuracy > Speed)*
+*No em-dashes used in this document.*

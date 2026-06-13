@@ -1,0 +1,199 @@
+# KNIGHT MESH TEST ORCHESTRATION WAKE-UP
+**CLASS: BLACK MAMBA -- Novaculi (no-trickle, dispatch entire wave at once)**
+**Staged by Bishop SEG-CE | 2026-06-09 UTC**
+
+---
+
+Knight, wake up. Bishop Black Mamba mesh-test wave incoming. Pull bridge.
+CLASS: BLACK MAMBA -- Novaculi (no-trickle, dispatch entire wave at once).
+SCOPE: Three-node mesh proof + MMLU-Pro test runner + results aggregation.
+Use Sonnet 4.6 SEGs per Statute §3. Foreman main thread. Context LEAN.
+No em-dashes. NO Composer 2.5. Brick Wall. Truth-Always.
+
+---
+
+## CONTEXT
+
+- v0.1.35 shipped clean. v0.1.36 UX wave is deferred until this mesh test completes and results are in hand.
+- Three machines:
+  - M1: Founder dev machine (this machine). Gemma 4 12B already installed. Aggregator node.
+  - M2: 192.168.86.45 -- needs v0.1.35 install + Gemma 4 12B pull.
+  - M3: 192.168.86.64 -- needs v0.1.35 install + Gemma 4 12B pull.
+- Peer discovery proven bidirectional at 20/20 hash-verified per BP067 canon. MESH-6 Option-B HTTP endpoints /dag/emit + /dag/fetch_from_peer are live.
+- Reuse `librarian-mcp/r10_cross_vendor/run_benchmark.py` as the COLD-vs-HOT runner template.
+- Eyewitness Benchmark protocol: Cohen's kappa 0.883 baseline from BP064.
+- IPC scaffold `run-mesh-test` handler exists in `src/main/index.ts` around line 1921 -- check before building new.
+- Target datasets: MMLU-Pro standard tier (~12K questions) + MMLU-Pro Diamond tier (~2K questions).
+
+---
+
+## SEG DISPATCH -- 8 PARALLEL SEGs
+
+**Sequence rule:** SEG-T-1 completes first (precondition gate). SEG-T-2 through SEG-T-7 run in parallel after SEG-T-1 passes. SEG-T-8 is a discipline overlay running across all others.
+
+---
+
+### SEG-T-1: Precondition Install Verification Helper (GATE -- runs first)
+
+Build a Bishop-callable diagnostic script that checks all three nodes and outputs a structured JSON report. Each node must confirm:
+
+1. v0.1.35 or higher is installed and the main process is reachable.
+2. Gemma 4 12B is present in the local Ollama model store (`ollama list` returns the model).
+3. Peer discovery handshake is confirmed bidirectional: M1 sees M2 and M3, M2 sees M1 and M3, M3 sees M1 and M2.
+
+Output format: `{ "node": "M2", "version_ok": true, "model_ok": false, "peers_ok": true, "remediation": "M2 needs Gemma 4 12B -- open WelcomeView, Activate FULL, wait for pull." }`
+
+If any condition fails: surface which node, which condition, and a one-line remediation hint. Do NOT proceed to SEG-T-2 through T-7 until all three nodes pass all three conditions.
+
+Yoke-return: the diagnostic script path + a sample JSON output from a live or dry-run pass.
+
+---
+
+### SEG-T-2: MMLU-Pro Test Data Ingestion
+
+Download MMLU-Pro standard tier dataset from Hugging Face (`TIGER-Lab/MMLU-Pro`). Cache locally at `~/.mnemosynec/test-data/mmlu-pro/standard/`. Verify SHA-256 checksum against the published value.
+
+Repeat for MMLU-Pro Diamond tier. Cache at `~/.mnemosynec/test-data/mmlu-pro/diamond/`.
+
+Document in test report metadata: dataset version, license (MIT / CC-BY / Apache -- confirm actual), Hugging Face citation string, and download timestamp.
+
+If Hugging Face is unreachable offline: fall back to the local subset used in the existing 75-question LB benchmark as a smoke-test dataset, and flag this in the report metadata.
+
+Yoke-return: confirmation of cached paths, checksum results, and metadata block.
+
+---
+
+### SEG-T-3: Three-Node Sharding Strategy
+
+Implement the shard distribution logic. MMLU-Pro standard has approximately 12,032 questions; Diamond approximately 2,778. For each dataset:
+
+- M1 gets shard 1: questions index 0 to floor(N/3) - 1
+- M2 gets shard 2: questions index floor(N/3) to floor(2N/3) - 1
+- M3 gets shard 3: questions index floor(2N/3) to N - 1
+
+Each node runs its assigned shard locally against its Gemma 4 12B instance via Ollama HTTP API.
+
+Check `src/main/index.ts` around line 1921 for the existing `run-mesh-test` IPC handler scaffold. If it exists and is functional, extend it. If it is a stub, implement the shard dispatch there using the existing IPC pattern used elsewhere in the file.
+
+Shard manifests are written to `~/.mnemosynec/test-data/mmlu-pro/shards/` as JSON files: `shard_M1.json`, `shard_M2.json`, `shard_M3.json`. M1 sends the appropriate shard manifest to M2 and M3 via `/dag/emit` before test execution begins.
+
+Yoke-return: shard manifest files + confirmation of IPC handler status (existing scaffold found vs. new implementation).
+
+---
+
+### SEG-T-4: Test Runner Per Node
+
+Each node executes its assigned shard against local Gemma 4 12B. Two conditions per question, following the Eyewitness Benchmark COLD-vs-HOT protocol:
+
+- COLD: question answered with no MnemosyneC substrate context injected.
+- HOT: question answered with MnemosyneC substrate context injected (relevant prior memory retrieved and prepended).
+
+Per question record: `{ "question_id": "...", "gold_answer": "...", "cold_response": "...", "hot_response": "...", "cold_correct": true/false, "hot_correct": true/false, "latency_cold_ms": 0, "latency_hot_ms": 0 }`
+
+Stream progress events back to M1 (aggregator) via the mesh transport (`/dag/emit` with event_type `mesh_test_progress`) at every 100 questions or every 60 seconds, whichever comes first.
+
+M2 and M3 write their shard result files locally to `~/.mnemosynec/test-data/mmlu-pro/results/shard_M2_results.json` etc. M1 fetches via `/dag/fetch_from_peer` at completion.
+
+Yoke-return: one complete sample record showing both COLD and HOT responses + a screenshot or log excerpt from a live or dry-run execution on M1's shard.
+
+---
+
+### SEG-T-5: Results Aggregation on M1
+
+M1 collects shard result files from M2 and M3. Compute across the full merged dataset:
+
+- Per-condition accuracy: COLD accuracy (%), HOT accuracy (%), delta (HOT - COLD percentage points).
+- Cohen's kappa: compute kappa between COLD responses and gold answers, and between HOT responses and gold answers.
+- Per-node latency: p50 and p95 in milliseconds, computed separately for COLD and HOT conditions.
+- Cross-node hash verification rate: each shard result file is hash-verified on receipt. Report number of verified files vs. total. Target: match the BP067 baseline of 20/20 (100%).
+- FAST / CHEAP / GOOD metrics:
+  - FAST: p50 latency across all nodes for HOT condition.
+  - CHEAP: $0.00 (local compute, zero token cost -- no API calls).
+  - GOOD: HOT accuracy minus COLD accuracy (the MnemosyneC lift).
+
+Output to `BISHOP_DROPZONE/00_FOUNDER_REVIEW/MESH_TEST_RESULTS_v0135_<ISO8601timestamp>.json`.
+
+Human-readable summary: `BISHOP_DROPZONE/00_FOUNDER_REVIEW/MESH_TEST_SUMMARY_v0135_<ISO8601timestamp>.md`.
+
+Yoke-return: the aggregation script + a sample JSON structure showing all computed fields.
+
+---
+
+### SEG-T-6: Results Visualization
+
+Render three output artifacts from the aggregated results JSON:
+
+1. Big Numbers card: three large-numeral stats. FAST = p50 latency value + unit. CHEAP = "$0.00". GOOD = HOT accuracy lift as a percentage with a sign (e.g., "+12.4 pp"). Output as SVG at `MESH_TEST_BIG_NUMBERS_<timestamp>.svg`.
+
+2. Per-node flippable detail chart: front face shows per-node accuracy bar (COLD vs HOT). Flip face shows shard size, p50, p95, hash-verify rate per node. If SVG flip animation is not feasible in one artifact, deliver as two static SVGs per node labeled `_front` and `_back`. Output at `MESH_TEST_NODE_DETAIL_<nodename>_<timestamp>.svg`.
+
+3. HOT vs COLD comparison bar chart: one bar pair per node (M1/M2/M3) plus a combined bar. Same visual language as the existing 4-model benchmark chart on the download page. Output at `MESH_TEST_HOT_COLD_BARS_<timestamp>.svg`.
+
+Note for v0.1.36 integration: the Big Numbers SVG is the target artifact for the WelcomeView accordion line 2 live-numbers slot. Compose to that spec so the v0.1.36 UX wave can drop it in with no rework.
+
+Yoke-return: all SVG files committed to the dropzone + a thumbnail screenshot of each (or base64 preview if screenshot is unavailable in headless context).
+
+---
+
+### SEG-T-7: Founder Paste-Ready Launch Instructions
+
+Write `BISHOP_DROPZONE/00_FOUNDER_REVIEW/MESH_TEST_RUN_INSTRUCTIONS.md` with the following steps:
+
+**Step 1.** Download MnemosyneC-Setup-0.1.35.exe on M2 (192.168.86.45) and M3 (192.168.86.64). Install. Accept SmartScreen prompt.
+
+**Step 2.** On M2: open MnemosyneC, go to WelcomeView "Just use it" doorway, choose Activate FULL. This triggers the Gemma 4 12B pull (~5 GB). Repeat on M3.
+
+**Step 3.** Wait for Gemma pull to complete on both M2 and M3. Estimated time: 10 to 30 minutes per machine depending on LAN speed. The Settings -> AI Tier screen shows pull progress.
+
+**Step 4.** On M1: open MnemosyneC, click "Prove it with a test" -> "Google benchmark set, standard" (MMLU-Pro Standard tier). Confirm M2 and M3 appear as active peers in the mesh view before starting.
+
+**Step 5.** M1 orchestrates: shards the dataset, sends shard manifests to M2 and M3, all three nodes run locally. M1 shows aggregation progress. Do not close MnemosyneC on any machine during the run.
+
+**Step 6.** When the run completes: view the Big Numbers card in the WelcomeView accordion, open the results JSON and markdown summary from the dropzone, review the SVG charts.
+
+**Estimated wall-clock time:** Standard tier (~12K questions): 2 to 4 hours total across 3 nodes in parallel (each node processes ~4K questions). Diamond tier (~2K questions): 30 to 60 minutes. Resource budget: CPU and RAM only, no GPU required, no API cost.
+
+Yoke-return: the completed `MESH_TEST_RUN_INSTRUCTIONS.md` file ready for Founder to read without modification.
+
+---
+
+### SEG-T-8: Discipline and Verify Overlay
+
+This SEG is a discipline binding that applies to all other SEGs above. Per the KNIGHT_USER_REALITY_VERIFY_CHECKLIST canon and the screenshot canon:
+
+- Every SEG above must produce at minimum one of: a packaged-build screenshot, a live test artifact, a dry-run log excerpt, or a verified file path with checksum.
+- "LANDED" may not be claimed in any yoke-return unless the artifact exists at the stated path and is non-empty.
+- If any SEG produces an output that diverges from the specification above (different path, missing field, partial result), document the divergence explicitly in the yoke-return. Do not paper over it.
+- If SEG-T-1 fails (any node does not pass precondition gate), halt SEG-T-2 through T-7 and surface the remediation instructions to Founder before continuing.
+
+Yoke-return: a checklist confirming each SEG-T-1 through T-7 artifact was verified non-empty + one sentence per SEG noting pass or documented divergence.
+
+---
+
+## AGGREGATED YOKE-RETURN TARGET
+
+After all SEGs complete, assemble one aggregated yoke-return for Bishop containing:
+
+1. Precondition gate status (SEG-T-1 result).
+2. Dataset cache confirmation + metadata (SEG-T-2).
+3. Shard manifests confirmed written (SEG-T-3).
+4. Sample test record with COLD and HOT responses (SEG-T-4).
+5. Aggregated results JSON path + key metrics (FAST/CHEAP/GOOD values) (SEG-T-5).
+6. SVG artifact paths (SEG-T-6).
+7. Run instructions file path (SEG-T-7).
+8. Discipline checklist (SEG-T-8).
+
+This aggregated return feeds directly into the v0.1.36 UX wave as the source of truth for live numbers. Hold v0.1.36 wave until this return is in hand and Founder has ratified the results.
+
+---
+
+**Hard bindings:**
+- Sonnet 4.6 SEGs mandatory (Statute §3).
+- No em-dashes.
+- No Composer 2.5.
+- Brick Wall on overclaims.
+- Truth-Always.
+- Cohesion Scopes 5 and 6 stay queued.
+- Rook paused.
+
+End of wake-up.

@@ -1,0 +1,113 @@
+/* MnemosyneC popup — dark substrate theme */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  width: 280px;
+  min-height: 160px;
+  background: #0f1117;
+  color: #e2e8f0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 13px;
+  padding: 14px 16px 12px;
+}
+
+/* ── Header ─────────────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #1e2333;
+}
+
+.logo {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  color: #a78bfa;
+}
+
+.version {
+  font-size: 10px;
+  color: #4a5568;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Status row ─────────────────────────────────────── */
+.status-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #4a5568;
+  flex-shrink: 0;
+  transition: background 0.3s ease;
+}
+
+.status-dot.connected {
+  background: #68d391;
+  box-shadow: 0 0 6px rgba(104, 211, 145, 0.5);
+}
+
+.status-dot.disconnected {
+  background: #fc8181;
+}
+
+#status-text {
+  color: #a0aec0;
+  font-size: 12px;
+}
+
+/* ── Stats ──────────────────────────────────────────── */
+.stats {
+  background: #161b27;
+  border: 1px solid #1e2333;
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #a78bfa;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 10px;
+  color: #4a5568;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ── Footer ─────────────────────────────────────────── */
+.footer {
+  text-align: center;
+}
+
+.tagline {
+  font-size: 10px;
+  color: #2d3748;
+  font-style: italic;
+}

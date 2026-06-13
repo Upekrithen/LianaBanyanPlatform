@@ -1,0 +1,26 @@
+feat(mnemosynec): release v0.1.37 -- SEG-V-1 thru SEG-V-7
+
+SEG-V-1: Ollama pre-flight IPC hardened -- localhost->127.0.0.1 in
+ai_dispatch_ipc.ts and bridge_ipc.ts (Windows IPv6 resolution fix)
+
+SEG-V-2: "Google's Gemma 4 12B" prefix added in SkuUpgradePanel,
+SkuUpgradeModal, MnemosyneTabView, and Cephas download page
+
+SEG-V-3: All six proof cards now flippable with plain-language backs
+(source-verified, dev-mode screenshot rule applied per BP078 amendment)
+
+SEG-V-4: Gemma 4 12B model selector added to Prove It benchmark path
+
+SEG-V-5: Source-verified -- dev-mode screenshots confirmed per amended
+cheapest-acceptable rule; IPC/runtime final sign-off deferred to Founder
+packaged-install verify
+
+SEG-V-6: package.json bumped 0.1.36->0.1.37; Windows installer built
+and published to GitHub Releases; latest.yml patched to v0.1.37 URL
+
+SEG-V-7: WelcomeView subline updated with SSPL tooltip, Free Forever,
+and revised join CTA
+
+Cephas: version.json, list.html, latest.yml all updated to 0.1.37
+
+Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>

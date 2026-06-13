@@ -1,0 +1,160 @@
+<!-- bishop-yoke-task 2026-06-10T18:30:00Z -->
+
+## 🔗 BISHOP -> KNIGHT - TASK - V0141 FOLLOWUP: CEPHAS 404 + STEP 3 VERIFY - USE SONNET 4.6 SEGs (Statute §3)
+
+**Pinned-class task. Pin-marker: BP079_V0141_404_STEP3_2026-06-10T18:30Z**
+
+> **🔐 STATUTE §3 + CORRECTIVE BP079 BINDING:** Every dispatch announcement uses the verbatim phrase "Sonnet 4.6". Never "Sonnet 4.5" or version-variant. Parent: `canon_statute_3_sonnet_4_6_sub_agent_default_every_dispatch_explicit_model_param_bp077` (pearl_8b0c6fb05fd9f38a). Corrective: `canon_statute_3_corrective_announcement_language_must_say_sonnet_4_6_verbatim_pattern_violation_bp079` (pearl_98f74effb5d986a5). Pre-dispatch self-audit: parameter AND announcement compliance both required.
+
+---
+
+### TL;DR
+
+Two issues from v0.1.41 install:
+(a) **"Learn how it works" CTA in the app links to `https://mnemosynec.ai/how-it-works/` — that page does not exist on Cephas → 404.** Bishop diagnosis: page is entirely MISSING (confirmed: no `how-it-works` at Cephas root, no matching Hugo content file outside `programs/` subfolders). Fix = author the page + deploy.
+(b) **Step 3 granular UI verification** — Founder ran `ollama rm gemma4:12b` + retry to confirm whether Knight's v0.1.41 fix renders granular download progress on a REAL fresh download. Founder result not yet reported. SEG-V0141-F-4 handles this conditional: if granular UI shows → close obligation. If still heartbeat-only → hotfix v0.1.42.
+
+---
+
+### Why this matters
+
+The "Learn how it works" link is the primary educational CTA in WelcomeView — first thing a new user sees after install. Landing on a 404 breaks trust at the worst possible moment. Every click must give visible feedback (canon `feedback_every_click_visible_feedback_canon_bp078`). A 404 is the anti-pattern.
+
+Step 3 granular UI canon obligation (`feedback_long_running_progress_heartbeat_canon_bp078`) remains open until Founder confirms the fix works on a REAL fresh download (prior v0.1.41 verify was source-only; canon requires actual runtime evidence per `feedback_actual_runtime_verify_for_runtime_bugs_bp078`).
+
+---
+
+### Bishop's diagnosis (source-verified, binding for SEG-F-1)
+
+**CTA source:**
+- File: `src/renderer/components/WelcomeView.tsx`
+- Line: 206
+- Verbatim href: `https://mnemosynec.ai/how-it-works/`
+
+**Cephas page status:**
+- Searched `Cephas/cephas-hugo/content/` recursively for `how-it-works*` at root + all sections
+- Result: ONLY `programs/brucklyn/how-it-works.md`, `programs/pnyx/how-it-works.md`, `programs/slingshot/how-it-works.md` exist
+- **No `how-it-works` page exists at Cephas root or at any `mnemosynec` section**
+- Librarian search_knowledge + pheromone_query returned no record of this page being authored
+- **Verdict: MISSING ENTIRELY → Option A (author the page)**
+
+**Screenshot evidence:**
+- `C:\Users\Administrator\Pictures\BeanSprouts\Screenshot 2026-06-10 181735.png` — Cephas 404 page after clicking CTA. Nav visible: Decent DC / Join / Letters / Proofs / Articles / Pudding / Innovations / About / Press Room. Cephas is reachable; `/how-it-works/` does not exist.
+
+---
+
+### What Knight needs to do
+
+**4 parallel SEGs + 2 sequential synthesis steps.**
+
+#### SEG-V0141-F-1 (Sonnet 4.6) — Source verification
+Verify Bishop's finding. Open `C:\Users\Administrator\Documents\LianaBanyanPlatform\src\renderer\components\WelcomeView.tsx` line 206. Confirm href is `https://mnemosynec.ai/how-it-works/`. Grep the full renderer source for any OTHER occurrence of `how-it-works` to confirm no alternate CTA points elsewhere. Report: exact href + file:line + any additional matches.
+
+#### SEG-V0141-F-2 (Sonnet 4.6) — Author the missing Cephas page
+Create `C:\Users\Administrator\Documents\LianaBanyanPlatform\Cephas\cephas-hugo\content\how-it-works\index.md` (or `how-it-works.md` at content root — check existing Cephas page patterns for correct placement to produce `/how-it-works/` URL).
+
+**Content requirements (~600-1000 words, cooperative-class voice):**
+- Title: "How MnemosyneC Works"
+- H2: "Your AI Has Amnesia" — explain the memory-wall problem (AI forgets everything between sessions; you re-explain yourself every time; costs you tokens + time + trust)
+- H2: "The Cure: Your Computer Remembers" — explain MnemosyneC runs locally, private, no cloud, no subscription lock-in. Your data stays on YOUR machine. Zero-token local ingestion.
+- H2: "The 83.3% Savings" — the Substrace-Theorem: Cost + 20% vs. the alternative of paying $20-200/month per AI. Members pay $5/yr. The math is on the Proof page.
+- H2: "Mnemosyne Come: AI That Talks to AI" — introduce the MCP server capability. MnemosyneC serves as the cooperative substrate connecting your whole cohort (Bishop/Knight/Rook/Pawn). One memory layer for all four AIs.
+- H2: "Be Part of Something" — cooperative framing. Not a product you buy. A rung on the ladder. $5/yr membership. Founding Circle still open. Link to `/join/` for the $5 membership.
+- Footer CTA: "Ready? [Download MnemosyneC — Free Forever](/)" — links back to the download page (root `/`).
+- Tone: plain, direct, "Off the Street" readable. No jargon. No hype. "Your AI has amnesia. We have the cure."
+- Hugo front matter: `title`, `description` (~160 chars for SEO), `date: 2026-06-10`, `draft: false`.
+
+Check one existing Cephas page (e.g. `content/innovations/index.md` or similar) for front matter conventions before writing.
+
+#### SEG-V0141-F-3 (Sonnet 4.6) — Hugo rebuild + Firebase deploy
+After SEG-F-2 creates the page:
+1. `cd C:\Users\Administrator\Documents\LianaBanyanPlatform\Cephas\cephas-hugo && hugo` — confirm build succeeds, no errors.
+2. `firebase deploy --only hosting:cephas,hosting:museum,hosting:mnemosyne` from the appropriate directory (check `firebase.json` for correct targets — prior confirmed targets are `cephas`, `museum`, `mnemosyne`).
+3. Verify live: `curl -I https://mnemosynec.ai/how-it-works/` → confirm HTTP 200 (not 404).
+4. Report: build output, deploy output, HTTP status code.
+
+#### SEG-V0141-F-4 (Sonnet 4.6) — Step 3 verify — RESOLVED
+
+**RESOLVED: Founder confirmed granular UI fires during fresh download.** Live mid-pull screenshots `BeanSprouts/Screenshot 2026-06-10 182103.png` (2.0 GB of 6.9 GB) and `182141.png` (5.7 GB of 6.9 GB) show bar + bytes + ETA + sub-step + layer counter rendering correctly. v0.1.42 NOT needed for granular UI. Canon obligations `feedback_long_running_progress_heartbeat_canon_bp078` + `feedback_actual_runtime_verify_for_runtime_bugs_bp078` + `feedback_ux_seg_screenshot_mandatory_bp078` CLOSED. SEG-F-4 collapses to the UX nit fix in SEG-F-5 below.
+
+#### SEG-V0141-F-5 (Sonnet 4.6) — UX nit: inner sub-step counter rename Step→Phase
+
+The outer header says "STEP 2 OF 3: DOWNLOADING GEMMA4:12B". The inner sub-step line says "Step 2 of 5: Downloading model (layer 1 of 1)". Same word "Step" at two scales — mathematically correct, visually confusing.
+
+Fix: in `src/renderer/components/ModelSetupProgress.tsx`, rename the inner sub-step counter prefix from "Step" to "Phase" (or "Stage" — Knight chooses). All 5 inner phases should now read "Phase 1 of 5: Connecting to model repository", "Phase 2 of 5: Downloading model (layer 1 of 1)", etc. (use the actual 5 ollama-pull phase labels already in the code). Verify on packaged install with fresh `ollama rm gemma4:12b` + retry. Screenshot embedded in Yoke-return (BINDING per `feedback_ux_seg_screenshot_mandatory_bp078`). Knight decides whether this rename ships as v0.1.42 (bundled with Cephas /how-it-works) or waits for next natural release.
+
+---
+
+### Sequential synthesis (after parallel SEGs return)
+
+#### SEG-V0141-F-VERIFY (Sonnet 4.6)
+After Cephas deploy confirmed live (SEG-F-3 returned HTTP 200):
+- Screenshot `https://mnemosynec.ai/how-it-works/` in browser — confirm page renders with correct title, readable content, no Hugo template errors.
+- Embed screenshot in Yoke-return.
+- Confirm the link from WelcomeView.tsx resolves correctly (if possible, test in packaged install or Electron dev).
+
+#### SEG-V0141-F-SHIP (Sonnet 4.6, conditional)
+**If SEG-F-5 changes ModelSetupProgress.tsx (Step→Phase rename):** bump to v0.1.42, build, SHA-256, DRAFT GitHub release, update Cephas download page version. Report: SHA-256, tag, DRAFT release URL.
+
+**If Cephas-only (no app code change):** Cephas deploy from SEG-F-3 is the only artifact. Write "NOT needed" for v0.1.42. Confirm Yoke-return captures both issues closed.
+
+---
+
+### Reply contract
+
+Knight returns a `## RESPONSE` block appended to this file at canonical path. Must include:
+
+1. **SEG-F-1:** Confirmed href + file:line + any additional matches found.
+2. **SEG-F-2:** Path of created page + word count + brief content summary.
+3. **SEG-F-3:** Hugo build output (last 5 lines) + Firebase deploy targets + `curl -I` HTTP status.
+4. **SEG-F-4:** PATH A or PATH B — Step 3 verdict + evidence (screenshot path if PATH B).
+5. **SEG-F-VERIFY:** Screenshot of live `how-it-works` page + confirmation link resolves.
+6. **SEG-F-SHIP:** v0.1.42 SHA + DRAFT URL if triggered; else "NOT needed".
+7. Open obligations remaining (if any).
+
+---
+
+### Statute reminders
+
+- §3 + BP079 corrective: "Sonnet 4.6" verbatim in every announcement. Both surfaces (parameter + announcement) must be clean.
+- `feedback_ux_seg_screenshot_mandatory_bp078`: every UX-touching SEG captures screenshot of affected surface on packaged-build install.
+- `feedback_actual_runtime_verify_for_runtime_bugs_bp078`: for PATH B runtime bugs — source change alone does NOT verify. Actual DevTools console evidence required.
+- `feedback_long_running_progress_heartbeat_canon_bp078`: any operation >3s shows progress.
+- `feedback_every_click_visible_feedback_canon_bp078`: every clickable element produces visible feedback. 404 is the anti-pattern.
+- Statute §10 ACCURACY > SPEED.
+
+---
+
+### Paste-ready Founder wake-up
+
+> Knight, NEW Yoke at `BISHOP_DROPZONE\01_KnightPrompts\PROMPT_KNIGHT_BP079_V0141_FOLLOWUP_404_AND_STEP3_VERIFY_2026-06-10.md`. Two issues: (a) "Learn how it works" CTA → Cephas 404 — page MISSING, author + deploy it; (b) Step 3 granular UI — verify your v0.1.41 fix worked on a real fresh download (report PATH A or B per Yoke). Black Mamba × 4 parallel + 2 sequential. Sonnet 4.6 SEGs mandatory (Statute §3 + corrective sub-canon BP079).
+
+- Bishop · BP079 · SEG-V0141-404-DIAGNOSE · 2026-06-10T18:30:00Z
+
+---
+
+## BLACK MAMBA PASTE-READY DISPATCH (forward this block verbatim to Knight)
+
+Knight: dispatch 4 parallel Sonnet 4.6 SEGs RIGHT NOW. Sonnet 4.6 verbatim in every announcement (Statute §3 + corrective sub-canon BP079, pearl_98f74effb5d986a5). Each SEG below is self-contained scope; do NOT re-decompose; do NOT ask for clarification before firing; fire all 4 in parallel single message.
+
+**SEG-V0141-F-1 (Sonnet 4.6):** Verify "Learn how it works" CTA source. Open `C:\Users\Administrator\Documents\LianaBanyanPlatform\src\renderer\components\WelcomeView.tsx` line 206. Confirm href is `https://mnemosynec.ai/how-it-works/`. Grep full `src/renderer/` for any other occurrence of `how-it-works` (could be multiple CTAs). Report: exact href(s) + file:line per match.
+
+**SEG-V0141-F-2 (Sonnet 4.6):** Author the MISSING Cephas page. First: check one existing Cephas leaf page (e.g. `C:\Users\Administrator\Documents\LianaBanyanPlatform\Cephas\cephas-hugo\content\` — look at `innovations/` or `about/` for front matter conventions). Then create `how-it-works/index.md` (or `how-it-works.md` at content root — whichever pattern Cephas uses for top-level routes) with `draft: false` + `date: 2026-06-10`. Content ~600-1000 words, cooperative-class voice, sections: (1) "Your AI Has Amnesia" — the memory-wall problem; (2) "The Cure: Your Computer Remembers" — local, private, zero-token ingestion; (3) "The 83.3% Savings" — Substrace-Theorem, Cost+20%, $5/yr vs. $20-200/month per AI; (4) "Mnemosyne Come: AI That Talks to AI" — MCP server substrate, one memory layer for Bishop/Knight/Rook/Pawn; (5) "Be Part of Something" — cooperative framing, Founding Circle, link to `/join/`; footer CTA: "Download MnemosyneC — Free Forever" links to root `/`. Tone: plain, direct, "Off the Street" readable. Report: file path created + word count.
+
+**SEG-V0141-F-3 (Sonnet 4.6):** Hugo rebuild + Firebase deploy. After SEG-F-2 file exists: (a) Run `hugo` from `C:\Users\Administrator\Documents\LianaBanyanPlatform\Cephas\cephas-hugo\` — confirm no build errors; (b) Check `C:\Users\Administrator\Documents\LianaBanyanPlatform\Cephas\firebase.json` for correct hosting target names (prior confirmed: `cephas`, `museum`, `mnemosyne`); (c) Run `firebase deploy --only hosting:cephas,hosting:museum,hosting:mnemosyne` from the appropriate dir; (d) Run `curl -I https://mnemosynec.ai/how-it-works/` → confirm HTTP 200. Report: build success/error + deploy output + HTTP status code.
+
+**SEG-V0141-F-4 (Sonnet 4.6):** Step 3 verification — RESOLVED. Founder confirmed granular UI fires during fresh download (live mid-pull screenshots BeanSprouts 182103.png + 182141.png show bar+bytes+ETA+sub-step+layer counter at 2.0 GB and 5.7 GB of 6.9 GB). v0.1.42 NOT needed for granular UI. SEG-F-4 collapses to a small UX nit fix below. Canon obligations `feedback_long_running_progress_heartbeat_canon_bp078` + `feedback_actual_runtime_verify_for_runtime_bugs_bp078` + `feedback_ux_seg_screenshot_mandatory_bp078` CLOSED.
+
+**SEG-V0141-F-5 (Sonnet 4.6):** UX nit — inner sub-step counter word collision. The outer onboarding header says "STEP 2 OF 3: DOWNLOADING GEMMA4:12B" while the inner sub-step line says "Step 2 of 5: Downloading model (layer 1 of 1)". Same word "Step" at two different scales — mathematically correct but visually confusing. Fix: in `C:\Users\Administrator\Documents\LianaBanyanPlatform\src\renderer\components\ModelSetupProgress.tsx`, rename the inner sub-step counter prefix from "Step" to "Phase" (or "Stage" — Knight chooses whichever reads cleaner in context). All 5 inner phases should now read "Phase 1 of 5: Connecting to model repository", "Phase 2 of 5: Downloading model (layer 1 of 1)", etc. (use whatever the actual 5 ollama-pull phase labels are in the code). Verify on packaged install with fresh `ollama rm gemma4:12b` + retry — confirm outer header still says "STEP 2 OF 3" and inner counter now says "Phase X of 5". Screenshot embedded in Yoke-return (BINDING per `feedback_ux_seg_screenshot_mandatory_bp078`). If Knight wants to ship this rename bundled with the Cephas /how-it-works page authoring as v0.1.42, that is a clean ship. If Cephas-only with no app code change, Knight decides whether this rename warrants a release or waits for the next natural release.
+
+When all 4 SEGs return, run sequential synthesis:
+
+**SEG-V0141-F-VERIFY (Sonnet 4.6):** Screenshot `https://mnemosynec.ai/how-it-works/` in browser — confirm page renders with correct title, content, no template errors. Embed screenshot in Yoke-return.
+
+**SEG-V0141-F-SHIP (Sonnet 4.6, conditional):** If SEG-F-5 changes ModelSetupProgress.tsx (the Step→Phase rename), bump to v0.1.42, build, SHA-256, DRAFT GitHub release, update Cephas download page version. Report SHA + DRAFT URL. If Cephas-only (no app code change), Cephas deploy is already covered by SEG-F-3 — write "NOT needed" for v0.1.42.
+
+Yoke-return: append `## RESPONSE` block to `BISHOP_DROPZONE\01_KnightPrompts\PROMPT_KNIGHT_BP079_V0141_FOLLOWUP_404_AND_STEP3_VERIFY_2026-06-10.md` with per-SEG results: (1) confirmed href + line, (2) page path + word count, (3) HTTP 200 confirmation, (4) PATH A or B + evidence, (5) live page screenshot, (6) v0.1.42 SHA or "NOT needed". Any open obligations.
+
+If any SEG announces "Sonnet 4.5" or other version-variant: STOP, fix the announcement, re-fire. Violation of corrective sub-canon BP079.
+
+---

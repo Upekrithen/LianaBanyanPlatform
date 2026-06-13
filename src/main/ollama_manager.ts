@@ -82,6 +82,8 @@ export class OllamaManager {
   /** SEG-V0148-P2: resolved binary path and branch from last init() */
   private _resolvedBinaryPath: string | null = null;
   private _resolvedBranch: OllamaStatusUpdate['branch'] = 'NONE';
+  /** SEG-1 v0.1.56: best available Gemma family model, resolved at init time. */
+  private _selectedModel: string | null = null;
 
   setProgressCallback(cb: (progress: ModelPullProgress) => void): void {
     this.onProgress = cb;
@@ -107,6 +109,7 @@ export class OllamaManager {
       this._resolvedBinaryPath = null;
       this.status = { running: true, model: DEFAULT_MODEL, source: 'pre-installed', version, resolvedBranch: 'PRE_INSTALLED_RUNNING', resolvedBinaryPath: null };
       this._emitStatus('PRE_INSTALLED_RUNNING', `Pre-installed Ollama detected (${version}) — connecting…`);
+      await this.selectBestGemmaModel();
       this._startHealthMonitor();
       return;
     }
@@ -122,6 +125,7 @@ export class OllamaManager {
         this._resolvedBinaryPath = preInstalled;
         this.status = { running: true, model: null, source: 'pre-installed', version, resolvedBranch: 'PRE_INSTALLED_SPAWN', resolvedBinaryPath: preInstalled };
         this._emitStatus('PRE_INSTALLED_SPAWN', `Ollama port 11434 ready (pre-installed ${version})`);
+        await this.selectBestGemmaModel();
         this._startHealthMonitor();
         return;
       }
@@ -139,6 +143,7 @@ export class OllamaManager {
         this._resolvedBinaryPath = bundledBinary;
         this.status = { running: true, model: null, source: 'bundled', version, resolvedBranch: 'BUNDLED_SPAWN', resolvedBinaryPath: bundledBinary };
         this._emitStatus('BUNDLED_SPAWN', `Ollama port 11434 ready (bundled ${version})`);
+        await this.selectBestGemmaModel();
         this._startHealthMonitor();
         return;
       }
@@ -211,7 +216,7 @@ export class OllamaManager {
     return candidates.find((p) => existsSync(p)) ?? null;
   }
 
-  /** SEG-V0147-FIX-2: spawn with correct OLLAMA_HOST (localhost only) and explicit OLLAMA_MODELS path. */
+  /** SEG-2 v0.1.55: respect installer/system OLLAMA_HOST (LAN binding); explicit OLLAMA_MODELS path. */
   private async _spawnOllama(binary: string, branch: OllamaStatusUpdate['branch']): Promise<void> {
     // SEG-V0147-FIX-2: OLLAMA_MODELS must point to the bundled model store, NOT ~/.ollama/models.
     // This prevents the bundled Ollama from accidentally reading the user's pre-installed model store
@@ -224,8 +229,8 @@ export class OllamaManager {
       stdio: ['ignore', 'pipe', 'pipe'],
       env: {
         ...process.env,
-        // SEG-V0147-FIX-2: bind to localhost only (was 0.0.0.0 — exposed on all interfaces)
-        OLLAMA_HOST: '127.0.0.1:11434',
+        // SEG-2 v0.1.55: NSIS sets system OLLAMA_HOST=0.0.0.0:11434; inherit when present
+        OLLAMA_HOST: process.env.OLLAMA_HOST || '0.0.0.0:11434',
         OLLAMA_ORIGINS: 'http://localhost:5173,http://localhost:3000,app://.',
         // SEG-V0147-FIX-2: explicit model path so bundled Ollama uses bundled models
         OLLAMA_MODELS: bundledModelsPath,
@@ -327,6 +332,67 @@ export class OllamaManager {
     } catch {
       return [];
     }
+  }
+
+  /**
+   * SEG-1 v0.1.56: Family-match algorithm for Gemma-family models.
+   * Queries /api/tags, filters by 'gemma' prefix, ranks by size then version.
+   * Primary size preference: 12b > 13b/27b > other sizes.
+   * Tiebreaker: higher version number (gemma4 > gemma2 > gemma).
+   * Caches result in _selectedModel. Returns null if no gemma model found.
+   */
+  async selectBestGemmaModel(): Promise<string | null> {
+    try {
+      const models = await this.listModels();
+      const gemmaModels = models.filter((m) =>
+        m.split(':')[0].toLowerCase().startsWith('gemma'),
+      );
+
+      if (gemmaModels.length === 0) {
+        console.log('[OllamaManager] no gemma family models found in ollama list');
+        this._selectedModel = null;
+        return null;
+      }
+
+      const sizeScore = (tag: string): number => {
+        const m = tag.match(/(\d+)b/i);
+        if (!m) return 0;
+        const n = parseInt(m[1]);
+        if (n === 12) return 1000;
+        if (n === 13) return 900;
+        if (n === 27) return 850;
+        if (n >= 7) return 600 + n;
+        return n; // smaller is lower priority
+      };
+
+      const versionScore = (modelName: string): number => {
+        const base = modelName.split(':')[0].toLowerCase();
+        const m = base.match(/gemma(\d+)/);
+        return m ? parseInt(m[1]) : 0; // gemma=0, gemma2=2, gemma3=3, gemma4=4
+      };
+
+      const ranked = [...gemmaModels].sort((a, b) => {
+        const aTag = a.includes(':') ? a.split(':')[1] : '';
+        const bTag = b.includes(':') ? b.split(':')[1] : '';
+        const sizeDiff = sizeScore(bTag) - sizeScore(aTag);
+        if (sizeDiff !== 0) return sizeDiff;
+        return versionScore(b) - versionScore(a);
+      });
+
+      const selected = ranked[0];
+      this._selectedModel = selected;
+      console.log(`[OllamaManager] selected model: ${selected}`);
+      return selected;
+    } catch (err) {
+      console.warn('[OllamaManager] selectBestGemmaModel failed:', err);
+      this._selectedModel = null;
+      return null;
+    }
+  }
+
+  /** SEG-1 v0.1.56: Returns the cached best Gemma family model, or null if none was found. */
+  getSelectedModel(): string | null {
+    return this._selectedModel;
   }
 
   async hasModel(modelName: string = DEFAULT_MODEL): Promise<boolean> {
@@ -599,7 +665,11 @@ export class OllamaManager {
     promoted: boolean;
     mismatch: boolean;
   }> {
-    const FULL_TIER_MODEL = 'gemma4:12b';
+    // SEG-1 v0.1.56: use family-matched model instead of hard-coded 'gemma4:12b'.
+    // Ensures machines with gemma2:12b, gemma:12b, etc. are correctly promoted.
+    const familySelected = this._selectedModel ?? await this.selectBestGemmaModel();
+    const FULL_TIER_MODEL = familySelected ?? 'gemma4:12b';
+
     let tier = 'floor';
     try {
       const skuPath = join(app.getPath('userData'), 'sku_tier.json');
@@ -607,32 +677,25 @@ export class OllamaManager {
         const raw = readFileSync(skuPath, 'utf-8');
         const sku = JSON.parse(raw) as { tier?: string };
         tier = sku.tier ?? 'floor';
-      } else {
-        const manifestPath = join(homedir(), '.ollama', 'models', 'manifests',
-          'registry.ollama.ai', 'library', 'gemma4', '12b');
-        if (existsSync(manifestPath)) {
-          tier = 'full';
-          try {
-            writeFileSync(skuPath, JSON.stringify({ tier: 'full', model: 'gemma4:12b' }), 'utf-8');
-            console.log('[Ollama/SKU] Back-filled sku_tier.json from manifest presence');
-          } catch { /* non-fatal */ }
-        }
+      } else if (familySelected && /12b/i.test(familySelected)) {
+        // Back-fill: a 12b gemma is present — treat as full tier
+        tier = 'full';
+        try {
+          writeFileSync(skuPath, JSON.stringify({ tier: 'full', model: familySelected }), 'utf-8');
+          console.log(`[Ollama/SKU] Back-filled sku_tier.json from family-matched model: ${familySelected}`);
+        } catch { /* non-fatal */ }
       }
     } catch { /* non-fatal */ }
 
     const targetModel = tier === 'full' ? FULL_TIER_MODEL : DEFAULT_MODEL;
 
     if (tier === 'full') {
-      const models = await this.listModels();
-      const hasFullModel = models.some(
-        (m) => m === FULL_TIER_MODEL || m.startsWith('gemma4:12b'),
-      );
-      if (hasFullModel) {
-        this.status.model = FULL_TIER_MODEL;
+      if (familySelected) {
+        this.status.model = familySelected;
         console.log(
-          `[Ollama/SKU] ✓ MATCH  activeModel=${FULL_TIER_MODEL} targetModel=${FULL_TIER_MODEL}`,
+          `[Ollama/SKU] ✓ MATCH  activeModel=${familySelected} targetModel=${FULL_TIER_MODEL}`,
         );
-        return { activeModel: FULL_TIER_MODEL, targetModel: FULL_TIER_MODEL, promoted: true, mismatch: false };
+        return { activeModel: familySelected, targetModel: FULL_TIER_MODEL, promoted: true, mismatch: false };
       } else {
         const activeModel = this.status.model ?? DEFAULT_MODEL;
         console.warn(
@@ -724,3 +787,6 @@ export class OllamaManager {
     this.status = { running: false, model: null, source: 'none' };
   }
 }
+
+/** SEG-1 v0.1.55 — single process-wide instance; all IPC/settings/Ask paths share one health-check + model state. */
+export const ollamaManager = new OllamaManager();

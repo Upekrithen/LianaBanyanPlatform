@@ -1,0 +1,225 @@
+<!-- bishop-yoke-task 2026-06-10T23:30:00Z -->
+
+## 📦 BISHOP -> KNIGHT - TASK - V0145 CONSOLIDATED SHIP (NOTCENTS + UI-3 + UI-4 + CEPHAS) - USE SONNET 4.6 SEGs (Statute §3)
+
+**Pinned-class task. Pin-marker: BP079_V0145_CONSOLIDATED_2026-06-10T23:30:00Z**
+
+> **🔐 STATUTE §3 + CORRECTIVE BP079 BINDING:** Every dispatch announcement uses the verbatim phrase "Sonnet 4.6". Never "Sonnet 4.5" or version-variant. Parent: `canon_statute_3_sonnet_4_6_sub_agent_default_every_dispatch_explicit_model_param_bp077` (pearl_8b0c6fb05fd9f38a). Corrective: `canon_statute_3_corrective_announcement_language_must_say_sonnet_4_6_verbatim_pattern_violation_bp079` (pearl_98f74effb5d986a5). Pre-dispatch self-audit: parameter AND announcement compliance both required.
+
+---
+
+### TL;DR
+
+Founder ratified "YES bundle it" for v0.1.45 consolidated SHIP. Five MnemosyneC installer features + Cephas v0.1.45 deploy coordination. Black Mamba x 5 parallel + 2 sequential. Sonnet 4.6 verbatim.
+
+---
+
+### Why this matters
+
+v0.1.44 shipped zoom + icon (VERIFY 4/4 PASS, SHIP in flight). Founder ratified bundling the three remaining items into a single v0.1.45 SHIP rather than releasing them piecemeal. The NotCents glyph swap closes a recurring cross-session canon violation ("for the millionth time") on cooperative identity surfaces. The welcome screen as cue deck card turns first-impression into a shareable artifact with referral attribution. The grid-flip reveal rewards curiosity on the AI TIER grid. All three land in one installer. Bishop has also staged two Cephas commits (Pawn rewrite + footer reword + global NotCents footer) that deploy alongside the installer publish.
+
+This Yoke supersedes two prior Yokes:
+- `BISHOP_DROPZONE\01_KnightPrompts\PROMPT_KNIGHT_BP079_V0144_UI_SCALE_AND_ICON_2026-06-10.md` -- deferred UI-3 + UI-4 are folded here
+- `BISHOP_DROPZONE\01_KnightPrompts\PROMPT_KNIGHT_BP079_V0145_NOTCENTS_GLYPH_LB_ACCOUNT_2026-06-10.md` -- full NotCents scope folded into SEG-V0145-1 below
+
+---
+
+### Canon anchors (all three, required reading for SEG context)
+
+1. **NotCents glyph swap** -- `canon_notcents_glyph_lb_cooperative_currency_symbol_replaces_dollar_on_identity_surfaces_bp079_founder_ratify` (pearl_7e9f4dc07ed80dad, anchor class)
+   - Asset: `C:\Users\Administrator\Downloads\NotCents - Copy.png` (1,075 bytes)
+   - Destination: `src\renderer\public\icons\notcents.png`
+
+2. **Welcome screen as sendable cue deck card** -- `canon_welcome_screen_is_sendable_cue_deck_card_first_impression_shareable_bp079_founder_ratify` (pearl_d56974f298d8cd0d, anchor class)
+   - Target: Supabase `cue_card_templates` table + Settings share button + welcome screen footer icon
+
+3. **Grid-flip reveal on AI TIER** -- `canon_grid_flip_reveal_more_info_if_you_keep_digging_curiosity_reward_ux_pattern_bp079_founder_ratify` (pearl_feb246b70ef2d72c, anchor class)
+   - Target: SkuUpgradePanel/SkuUpgradeModal 4-card grid (NANO/CORE/LITE/FULL)
+
+---
+
+### Cephas v0.1.45 coordination
+
+Bishop has staged two commits on main:
+- `f0cfd7a` (SEG-CEPHAS-V0145-PAWN-REWRITE): full Pawn rewrite, all 7 Pawn changes, Dr. MnemosyneC at SmartScreen + hero, reframed copy, version bump 0.1.44 -> 0.1.45
+- `f9154be` (SEG-CEPHAS-REWORD-FOOTER): reworded "What your first session looks like" + global NotCents footer (Copyright 2026 LB | Powered by [NotCents] NotCents) via PaperMod extend_footer.html partial
+
+Deploy script: `BISHOP_DROPZONE\00_FOUNDER_REVIEW\CEPHAS_V0145_DEPLOY_READY.ps1`
+
+**Coordination decision -- Founder to ratify:** When Knight publishes the v0.1.45 installer DRAFT release, Knight ALSO runs `CEPHAS_V0145_DEPLOY_READY.ps1` to deploy Cephas v0.1.45 alongside the installer. Before running that script, Knight must update `static/download/latest.yml` `sha512` PLACEHOLDER with the real sha512 from the v0.1.45 build. Alternatively, Bishop can run the deploy script separately after Knight returns the sha512. Founder ratify which path at session open.
+
+---
+
+### What Knight needs to do
+
+Five parallel Sonnet 4.6 SEGs, then two sequential:
+
+**SEG-V0145-1 (Sonnet 4.6) -- NOTCENTS GLYPH SWAP (parallel)**
+
+Per canon `canon_notcents_glyph_lb_cooperative_currency_symbol_replaces_dollar_on_identity_surfaces_bp079_founder_ratify` (pearl_7e9f4dc07ed80dad). Asset at `C:\Users\Administrator\Downloads\NotCents - Copy.png` (1,075 bytes).
+
+- Copy asset to `src\renderer\public\icons\notcents.png` (create `icons\` dir if missing).
+- Create `src\renderer\components\NotCents.tsx`:
+  ```tsx
+  import React from 'react';
+  interface NotCentsProps { size?: string | number; className?: string; }
+  export const NotCents: React.FC<NotCentsProps> = ({ size = '1em', className }) => (
+    <img src="/icons/notcents.png" alt="NotCents" style={{ verticalAlign: 'middle', height: size, display: 'inline' }} className={className} />
+  );
+  export default NotCents;
+  ```
+- If `src\renderer\components\index.ts` is a barrel, add `export { NotCents } from './NotCents';`.
+- In `src\renderer\components\MnemosyneTabView.tsx` find the LB Account nav tab label (currently "$ $ LB Account" or "$ LB Account"). Remove ALL leading `$` prefix(es); replace with `<NotCents />`. Import from `./NotCents`.
+- In the LB Account page component (search renderer for "$ LB Account" header rendering -- likely `LBAccountTab.tsx` or `LBAccount.tsx`), swap leading `$` to `<NotCents />`.
+- CRITICAL: keep ALL `$5/year` strings unchanged -- those are USD Stripe prices.
+- Return: paths copied/created + before/after snippet for each swap (5 lines each).
+
+**SEG-V0145-2 (Sonnet 4.6) -- WELCOME AS CUE DECK CARD (parallel)**
+
+Per canon `canon_welcome_screen_is_sendable_cue_deck_card_first_impression_shareable_bp079_founder_ratify` (pearl_d56974f298d8cd0d).
+
+- Create `cue_card_templates` row in Supabase with `node_type='welcome'` and `template_payload` containing: hero text "Your AI has Amnesia. Dr. MnemosyneC has the Cure.", subhead, 3 highlight cards, 2 CTAs.
+- Add "Share MnemosyneC" button in Settings panel + small share icon in welcome screen footer.
+- Click opens share modal with QR + URL + downloadable PNG. Bake `introducer_user_id` into URL params and into Stripe metadata via Wave C `create-merchant-onboarding-checkout` pattern. Reuse Wave B `CueCardBuilder` component.
+- Return: Supabase row ID + component paths modified + screenshot of share modal + working QR/URL.
+
+**SEG-V0145-3 (Sonnet 4.6) -- GRID-FLIP REVEAL ON AI TIER (parallel)**
+
+Per canon `canon_grid_flip_reveal_more_info_if_you_keep_digging_curiosity_reward_ux_pattern_bp079_founder_ratify` (pearl_feb246b70ef2d72c).
+
+- Apply CSS 3D transform to the AI TIER 4-card grid in SkuUpgradePanel/SkuUpgradeModal (NANO/CORE/LITE/FULL). Use `perspective` + `rotateY` on the grid container.
+- Trigger: any tile click OR "Activate FULL" button click flips entire 4-card grid as one unit.
+- Back of grid shows: MMLU-Pro benchmark chart for gemma4:12b vs other tiers (use existing benchmark data from Cephas Proofs page or BP074 Cohen's Kappa data), tier feature comparison table, substrate depth explainer, "Flip back" CTA.
+- Animation: ~600ms ease-in-out. Every click MUST produce visible feedback per `feedback_every_click_visible_feedback_canon_bp078`.
+- Return: file paths modified + screenshots front + back of grid.
+
+**SEG-V0145-4 (Sonnet 4.6) -- NOTCENTS IN FAQ VERNACULAR (parallel)**
+
+Per canon `canon_notcents_glyph_lb_cooperative_currency_symbol_replaces_dollar_on_identity_surfaces_bp079_founder_ratify` (pearl_7e9f4dc07ed80dad) and `canon_three_currency_no_fiat_substitution_canon` (BP078).
+
+- Search the renderer tree for the FAQ component: `src\renderer\components\FAQTab.tsx` or any file containing "FAQ" in `src\renderer\components\` or `src\renderer\views\`. Identify it.
+- Add a NotCents FAQ entry with the following copy verbatim:
+
+  **NotCents** [render `<NotCents />` component from SEG-V0145-1] is Founder's name for the three cooperative currencies -- Credits, Marks, and Joules -- held together in cooperative-class pouches per the substrate wallet model. Not USD. Composes with the three-currency-NEVER-fiat canon: substitution makes prior work more valuable; you get paid through actual hiring and payment, not currency conversion.
+
+  Cite: `canon_notcents_glyph_lb_cooperative_currency_symbol_replaces_dollar_on_identity_surfaces_bp079_founder_ratify` (pearl_7e9f4dc07ed80dad) + `canon_three_currency_no_fiat_substitution_canon` (BP078).
+- Import and reuse the `<NotCents />` component from SEG-V0145-1 (`./NotCents`).
+- If FAQ has categorized sections (e.g., "Money & Currency", "Cooperative-class", "Currencies"), place the entry in the most relevant section; otherwise add a new "Currencies" section.
+- CRITICAL: if the FAQ component is not yet in the renderer tree, create a minimal `FAQTab.tsx` wired into `MnemosyneTabView.tsx` as a new tab -- but check first before creating (search exhaustively: "faq", "FAQ", "Faq" in renderer directory).
+- Return: FAQ component path + section the entry was placed in + before/after snippet + screenshot of FAQ tab showing the NotCents entry.
+
+**SEG-V0145-5 (Sonnet 4.6) -- CEPHAS FOOTER LINK TO UNIVERSAL PROSPERITY (parallel)**
+
+File: `Cephas\cephas-hugo\layouts\partials\extend_footer.html` (created by SEG-CEPHAS-REWORD-FOOTER, commit f9154be).
+
+- Search `Cephas\cephas-hugo\content\papers\` (and sibling dirs `content\publications\`, `content\writing\`, `content\` root) for a file whose title most closely matches "A considered approach to universal sustained economic prosperity". Likely candidates: `papers/universal-prosperity/`, `papers/considered-approach-universal-sustained-economic-prosperity/`, `papers/universal-sustained-economic-prosperity/`. Truth-Always: if multiple candidates exist, pick the closest title match; if none found, surface candidate file list to Bishop without guessing.
+- Once canonical path confirmed, wrap the `NotCents&trade;` text in `extend_footer.html` as:
+  ```html
+  <a href="/papers/[slug]/" style="color: inherit; text-decoration: underline dotted; text-underline-offset: 3px;">NotCents&trade;</a>
+  ```
+  where `[slug]` is the directory name of the matched paper.
+- After wrapping, run `hugo --minify` in `Cephas\cephas-hugo\` to confirm build is clean. Do NOT deploy -- deploy happens in SEG-V0145-SHIP.
+- Return: `extend_footer.html` before/after snippet + paper path confirmed + hugo build clean confirmation + screenshot of footer after local `hugo serve` showing the NotCents link underlined.
+
+**SEG-V0145-VERIFY (Sonnet 4.6) -- PACKAGED INSTALL SCREENSHOT (sequential, after all 5 parallel complete)**
+
+Install v0.1.45 packaged build on M1. Capture and embed screenshots (HARD BINDING per `feedback_ux_seg_screenshot_mandatory_bp078` -- source-only is NOT sufficient):
+
+(a) Nav tab shows "[NotCents glyph] LB Account" -- single glyph, no leading `$`
+(b) LB Account page header shows "[NotCents glyph] LB Account"
+(c) Welcome screen "Share MnemosyneC" button visible + share modal opens with QR/URL
+(d) AI TIER grid front face (4 cards)
+(e) AI TIER grid back face (benchmark chart + comparison table + Flip back CTA)
+(f) FAQ tab showing NotCents entry with glyph rendered inline
+(g) Cephas footer NotCents link (local hugo serve or post-deploy): click navigates to Universal Prosperity paper
+(h) Regressions from v0.1.44: zoom 1.15 intact, title bar icon correct, Just use it -> Heavy no crash, Cephas /how-it-works HTTP 200
+
+Flag if NotCents PNG is blurry at 1em (SVG variant may be needed, Founder ratify).
+
+**SEG-V0145-SHIP (Sonnet 4.6) -- BUILD + RELEASE + CEPHAS DEPLOY (sequential, after VERIFY)**
+
+- Bump version to v0.1.45 (currently v0.1.44 post-Knight SHIP).
+- Pull Bishop's staged Cephas commits before any Cephas deploy: `git pull origin main` will include f0cfd7a + f9154be (Pawn rewrite + footer reword + NotCents footer + v0.1.45 version bump).
+- Build packaged installer. Compute SHA-256.
+- Update `static/download/latest.yml` `sha512` PLACEHOLDER with real sha512 from v0.1.45 build.
+- Create DRAFT GitHub Release (do NOT publish -- Founder ratifies before publish per `feedback_explicit_founder_ratify_before_publish_bp078`).
+- Run `BISHOP_DROPZONE\00_FOUNDER_REVIEW\CEPHAS_V0145_DEPLOY_READY.ps1` to deploy Cephas v0.1.45 alongside installer DRAFT (or flag if Founder chose Bishop-handles-deploy path at session open).
+- Append consolidated Yoke-return with: per-SEG status, SHA-256, GitHub DRAFT URL, Cephas deploy verify (3 domains showing v0.1.45 + Pawn rewrite + NotCents footer).
+
+---
+
+### Reply contract
+
+Knight returns:
+
+1. Per-SEG commit SHAs (NC swap + welcome card + grid flip + FAQ entry + Cephas footer link)
+2. Paths: `notcents.png`, `NotCents.tsx`, `LBAccountTab.tsx`/equiv (modified), `cue_card_templates` row ID, `SkuUpgradePanel`/equiv (modified), FAQ component path, `extend_footer.html` (modified)
+3. Screenshots embedded or SID-referenced: all 8 VERIFY items above
+4. v0.1.45 installer SHA-256
+5. DRAFT GitHub Release URL
+6. Cephas deploy confirm: 3 domains live at v0.1.45 + Pawn rewrite present + NotCents footer present + NotCents footer link navigates to Universal Prosperity paper
+7. Truth-Always findings: PNG blur flag, any barrel export conflicts, any Wave C integration gaps in welcome share modal, FAQ component not found (flag if search exhausted with no result), Universal Prosperity paper path not found (flag if search exhausted with no result)
+8. `latest.yml` sha512 updated (confirm)
+
+---
+
+### Statute reminders
+
+- §3 + corrective BP079: "Sonnet 4.6" verbatim in BOTH parameter AND announcement (pearl_8b0c6fb05fd9f38a + pearl_98f74effb5d986a5)
+- `feedback_ux_seg_screenshot_mandatory_bp078`: HARD BINDING -- every UX-touching SEG captures packaged-install screenshot; source-only is insufficient
+- `feedback_every_click_visible_feedback_canon_bp078`: grid flip + share modal must produce visible feedback on click
+- `feedback_long_running_progress_heartbeat_canon_bp078`: any operation >3s shows progress indicator
+- `canon_actual_runtime_verify_for_runtime_bugs_bp078`: runtime bugs require actual evidence before marking complete
+- Three-currency NEVER fiat (BP078): NotCents on identity surfaces + `$` on Stripe prices = correct split
+- `feedback_explicit_founder_ratify_before_publish_bp078`: DRAFT release only; Founder pushes publish
+
+---
+
+### Paste-ready Founder wake-up
+
+> Knight, UPDATED consolidated Yoke at `BISHOP_DROPZONE\01_KnightPrompts\PROMPT_KNIGHT_BP079_V0145_CONSOLIDATED_2026-06-10.md`. Two SEGs added by Founder ratify 2026-06-11: (4) NotCents entry in in-app FAQ tab with vernacular description + three-currency-NEVER-fiat canon cite, (5) Cephas footer NotCents link to Universal Prosperity paper. Now five parallel Sonnet 4.6 SEGs: (1) NotCents glyph swap on LB Account, (2) welcome screen as sendable cue deck card, (3) grid-flip reveal on AI TIER grid, (4) NotCents FAQ vernacular, (5) Cephas footer link. Then VERIFY (8 screenshots) + SHIP with Cephas v0.1.45 deploy coordination. Sonnet 4.6 verbatim in every SEG announcement (Statute §3 + corrective sub-canon BP079). Black Mamba x 5 + 2. Yoke-return consolidated.
+
+- Bishop -- SEG-V0145-CONSOLIDATE -- BP079 -- pinned 2026-06-10T23:30:00Z
+
+---
+
+---
+
+## BLACK MAMBA PASTE-READY DISPATCH (forward this block verbatim to Knight)
+
+Knight: dispatch 5 parallel Sonnet 4.6 SEGs RIGHT NOW. Sonnet 4.6 verbatim in every announcement (Statute §3 + corrective sub-canon BP079, pearl_98f74effb5d986a5). Each SEG below is self-contained scope; do NOT re-decompose; do NOT ask for clarification before firing; fire all 5 in parallel single message.
+
+**SEG-V0145-1 (Sonnet 4.6) -- NOTCENTS GLYPH SWAP:** Per canon `canon_notcents_glyph_lb_cooperative_currency_symbol_replaces_dollar_on_identity_surfaces_bp079_founder_ratify` (pearl_7e9f4dc07ed80dad). Asset at `C:\Users\Administrator\Downloads\NotCents - Copy.png` (1,075 bytes). Copy to `src\renderer\public\icons\notcents.png` (create `icons\` dir if missing). Create `src\renderer\components\NotCents.tsx` React component:
+```tsx
+import React from 'react';
+interface NotCentsProps { size?: string | number; className?: string; }
+export const NotCents: React.FC<NotCentsProps> = ({ size = '1em', className }) => (
+  <img src="/icons/notcents.png" alt="NotCents" style={{ verticalAlign: 'middle', height: size, display: 'inline' }} className={className} />
+);
+export default NotCents;
+```
+If `src\renderer\components\index.ts` is a barrel add `export { NotCents } from './NotCents';`. In `src\renderer\components\MnemosyneTabView.tsx` find the LB Account nav tab label (currently "$ $ LB Account" or "$ LB Account") -- remove ALL leading `$` prefixes, replace with `<NotCents />`. In the LB Account page component (search renderer for "$ LB Account" header -- likely `LBAccountTab.tsx`) swap leading `$` to `<NotCents />`. CRITICAL: keep ALL `$5/year` strings unchanged. Return: paths + before/after snippets (5 lines each).
+
+**SEG-V0145-2 (Sonnet 4.6) -- WELCOME AS CUE DECK CARD:** Per canon `canon_welcome_screen_is_sendable_cue_deck_card_first_impression_shareable_bp079_founder_ratify` (pearl_d56974f298d8cd0d). Insert row into Supabase `cue_card_templates` with `node_type='welcome'` and `template_payload` JSON containing: hero "Your AI has Amnesia. Dr. MnemosyneC has the Cure.", subhead, 3 highlight cards, 2 CTAs. Add "Share MnemosyneC" button in Settings panel + small share icon in welcome screen footer. Click handler opens share modal with QR code + URL + downloadable PNG; bake `introducer_user_id` into URL params + into Stripe metadata via Wave C `create-merchant-onboarding-checkout` pattern; reuse Wave B `CueCardBuilder` component. Return: Supabase row ID + component paths modified + screenshot of share modal + QR/URL example.
+
+**SEG-V0145-3 (Sonnet 4.6) -- GRID-FLIP REVEAL ON AI TIER:** Per canon `canon_grid_flip_reveal_more_info_if_you_keep_digging_curiosity_reward_ux_pattern_bp079_founder_ratify` (pearl_feb246b70ef2d72c). In SkuUpgradePanel/SkuUpgradeModal (NANO/CORE/LITE/FULL 4-card grid): add CSS 3D transform on grid container (`perspective` + `rotateY`). Trigger on any tile click OR "Activate FULL" button: flip entire 4-card grid as one unit, ~600ms ease-in-out. Back face shows: MMLU-Pro benchmark chart for gemma4:12b vs other tiers (use existing benchmark data from Cephas Proofs page or BP074 Cohen's Kappa data), tier feature comparison table, substrate depth explainer, "Flip back" CTA. Every click MUST produce visible feedback per `feedback_every_click_visible_feedback_canon_bp078`. Return: file paths modified + screenshots front + back.
+
+**SEG-V0145-4 (Sonnet 4.6) -- NOTCENTS IN FAQ VERNACULAR:** Per canon `canon_notcents_glyph_lb_cooperative_currency_symbol_replaces_dollar_on_identity_surfaces_bp079_founder_ratify` (pearl_7e9f4dc07ed80dad) and `canon_three_currency_no_fiat_substitution_canon` (BP078). Search renderer tree for FAQ component (`src\renderer\components\FAQTab.tsx` or any file with "FAQ" in `src\renderer\components\` or `src\renderer\views\`). Add a NotCents FAQ entry with the following copy verbatim: "NotCents [render `<NotCents />` component from SEG-V0145-1] is Founder's name for the three cooperative currencies -- Credits, Marks, and Joules -- held together in cooperative-class pouches per the substrate wallet model. Not USD. Composes with the three-currency-NEVER-fiat canon: substitution makes prior work more valuable; you get paid through actual hiring and payment, not currency conversion." Import and reuse `<NotCents />` from SEG-V0145-1. If FAQ has categorized sections (e.g., "Money & Currency", "Cooperative-class", "Currencies"), place entry in the most relevant; otherwise add new "Currencies" section. CRITICAL: if the FAQ component does not exist in the renderer tree, create a minimal `FAQTab.tsx` wired into `MnemosyneTabView.tsx` as a new tab (search exhaustively for "faq"/"FAQ"/"Faq" first). Return: FAQ component path + section placed + before/after snippet + screenshot of FAQ tab with NotCents entry visible.
+
+**SEG-V0145-5 (Sonnet 4.6) -- CEPHAS FOOTER LINK TO UNIVERSAL PROSPERITY:** File: `Cephas\cephas-hugo\layouts\partials\extend_footer.html` (commit f9154be). Search `Cephas\cephas-hugo\content\papers\` (and `content\publications\`, `content\writing\`, `content\` root) for file whose title most closely matches "A considered approach to universal sustained economic prosperity". Truth-Always: if multiple candidates exist choose closest title match; if not found surface candidate list to Bishop without guessing. Once canonical path confirmed, wrap `NotCents&trade;` text in `extend_footer.html` as: `<a href="/papers/[slug]/" style="color: inherit; text-decoration: underline dotted; text-underline-offset: 3px;">NotCents&trade;</a>` (where `[slug]` is matched paper directory name). Run `hugo --minify` in `Cephas\cephas-hugo\` to confirm build clean. Do NOT deploy (deploy in SEG-V0145-SHIP). Return: `extend_footer.html` before/after snippet + paper path confirmed + hugo build clean confirm + screenshot of footer after local `hugo serve` showing NotCents link underlined.
+
+When all 5 SEGs return, run sequential synthesis:
+
+**SEG-V0145-VERIFY (Sonnet 4.6):** Install v0.1.45 packaged build on M1. Capture and embed screenshots (HARD BINDING per `feedback_ux_seg_screenshot_mandatory_bp078`): (a) nav tab "[NotCents glyph] LB Account" -- single glyph, no $; (b) LB Account page header "[NotCents glyph] LB Account"; (c) welcome screen "Share MnemosyneC" button visible + share modal opens with QR/URL; (d) AI TIER grid front face (4 cards); (e) AI TIER grid back face (benchmark chart + comparison + Flip back CTA); (f) FAQ tab showing NotCents entry with glyph rendered inline; (g) Cephas footer NotCents link (local hugo serve or post-deploy): click navigates to Universal Prosperity paper; (h) regressions: zoom 1.15, icon, no crash Just use it -> Heavy, /how-it-works HTTP 200. Flag if NotCents PNG is blurry at 1em (SVG may be needed). Embed screenshots or SID-reference in Yoke-return.
+
+**SEG-V0145-SHIP (Sonnet 4.6):** Bump version to v0.1.45 (currently v0.1.44). Pull Bishop's staged Cephas commits from main (`git pull origin main` -- includes f0cfd7a Pawn rewrite + f9154be footer reword + NotCents footer + v0.1.45 version bump). Build packaged installer. Compute SHA-256. Update `static/download/latest.yml` `sha512` PLACEHOLDER with real sha512 from v0.1.45 build. Create DRAFT GitHub Release (do NOT publish -- Founder ratifies). Run `BISHOP_DROPZONE\00_FOUNDER_REVIEW\CEPHAS_V0145_DEPLOY_READY.ps1` to deploy Cephas v0.1.45 alongside DRAFT (if Founder chose Knight-runs-deploy path at session open; otherwise flag for Bishop to run). Append consolidated Yoke-return: per-SEG status, SHA-256, GitHub DRAFT URL, Cephas deploy verify (3 domains: v0.1.45 + Pawn rewrite + NotCents footer).
+
+Yoke-return: append `## RESPONSE` block to this Yoke file at `BISHOP_DROPZONE\01_KnightPrompts\PROMPT_KNIGHT_BP079_V0145_CONSOLIDATED_2026-06-10.md`, including per-SEG commit SHA + key outcome + Truth-Always findings + open obligations.
+
+If any SEG announces "Sonnet 4.5" or other version-variant in narration: STOP, fix the announcement, re-fire. Violation of corrective sub-canon BP079.
+
+---
+
+## RESPONSE
+
+[Knight appends here]

@@ -20,15 +20,15 @@
         {
           "source": "/download/**",
           "headers": [
-            {"key": "X-LB-Version", "value": "v0.1.53"},
-            {"key": "X-LB-Build-Hash", "value": "v0.1.53+d0c5fdb"},
+            {"key": "X-LB-Version", "value": "v0.1.60"},
+            {"key": "X-LB-Build-Hash", "value": "v0.1.60"},
             {"key": "X-LB-Phase", "value": "alpha"}
           ]
         },
         {
           "source": "/changelog/**",
           "headers": [
-            {"key": "X-LB-Version", "value": "v0.1.46"},
+            {"key": "X-LB-Version", "value": "v0.1.60"},
             {"key": "Cache-Control", "value": "max-age=1800"}
           ]
         }
@@ -55,11 +55,8 @@
     },
     {
       "target": "mnemosyne",
-      "public": "public",
+      "public": "public-mnemosynec",
       "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-      "redirects": [
-        { "source": "/", "destination": "/download/", "type": 301 }
-      ],
       "headers": [
         {
           "source": "**/*.html",
@@ -76,15 +73,15 @@
         {
           "source": "/download/**",
           "headers": [
-            {"key": "X-LB-Version", "value": "v0.1.53"},
-            {"key": "X-LB-Build-Hash", "value": "v0.1.53+d0c5fdb"},
+            {"key": "X-LB-Version", "value": "v0.1.60"},
+            {"key": "X-LB-Build-Hash", "value": "v0.1.60"},
             {"key": "X-LB-Phase", "value": "alpha"}
           ]
         },
         {
           "source": "/changelog/**",
           "headers": [
-            {"key": "X-LB-Version", "value": "v0.1.46"},
+            {"key": "X-LB-Version", "value": "v0.1.60"},
             {"key": "Cache-Control", "value": "max-age=1800"}
           ]
         }
