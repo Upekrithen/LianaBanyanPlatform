@@ -1,1 +1,6 @@
-{ "version": "0.1.52", "filename": "MnemosyneC-Setup-0.1.52.exe" }
+{
+    "version":  "0.1.60",
+    "filename":  "MnemosyneC-Setup-0.1.60.exe",
+    "download_url":  "https://github.com/liana-banyan/mnemosyne/releases/download/v0.1.60/MnemosyneC-Setup-0.1.60.exe",
+    "release_notes":  "Real 3-voter Shadow E-Giant concordance. Plow the Field 14-domain UI. Substrate Stats Tab. LB Membership scaffold. MCP Bridge scaffold."
+}
