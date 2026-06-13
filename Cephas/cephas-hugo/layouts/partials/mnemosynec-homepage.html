@@ -1,0 +1,822 @@
+{{/* ═══════════════════════════════════════════════════════
+     MNEMOSYNEC HOMEPAGE — v0.1.60.3
+     BP081 SEG-1 through SEG-8 all applied here.
+     Dispatcher: layouts/index.html (isMnemosynec guard)
+     ═══════════════════════════════════════════════════════ */}}
+<style>
+/* ════════════════════════════════════════════════════════
+   HOMEPAGE SHELL — full-bleed dark page, no horizontal scroll
+   BP081 UX CANON: NEVER SCROLL SIDEWAYS
+   ════════════════════════════════════════════════════════ */
+.main { max-width:100% !important; padding:0 !important; margin:0 !important; overflow-x:hidden !important; }
+html, body { overflow-x:hidden !important; max-width:100% !important; background:#0a1628 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.06'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat; }
+
+/* Hide PaperMod default footer — custom footer below handles copyright (SEG-8) */
+footer.footer { display: none !important; }
+
+.mn-hp-page {
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  background: transparent;
+  color: #faf5eb;
+  width: 100%;
+  min-height: 100vh;
+  padding: 0 0 4rem;
+  line-height: 1.7;
+}
+.mn-hp-page a { color: #d69e2e; text-decoration: none; border-bottom: 1px solid rgba(214,158,46,0.35); }
+.mn-hp-page a:hover { border-bottom-color: #d69e2e; }
+
+.mn-v2-wrap {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 1.2rem;
+}
+
+/* ── HERO ── */
+.mn-v2-hero { padding: 3rem 0 2rem; }
+.mn-v2-hero-card {
+  background: linear-gradient(135deg, rgba(10,22,40,0.97) 0%, rgba(5,14,30,0.99) 100%);
+  border: 1px solid rgba(214,158,46,0.35);
+  border-radius: 14px;
+  padding: 2.4rem 2rem 2rem;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(214,158,46,0.12);
+  position: relative;
+  overflow: hidden;
+}
+.mn-v2-hero-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(214,158,46,0.6), transparent);
+}
+.mn-hero-grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1.8rem;
+  align-items: center;
+}
+.mn-hero-grid__text { min-width: 0; }
+.mn-hero-grid__mascot {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+.mn-hero-grid__mascot img { width: 220px; height: auto; display: block; border-radius: 8px; }
+.mn-hero-grid__mascot-caption {
+  font-size: 0.68rem;
+  color: rgba(250,245,235,0.4);
+  text-align: center;
+  font-style: italic;
+  line-height: 1.4;
+  max-width: 180px;
+}
+@media (max-width: 600px) {
+  .mn-hero-grid { grid-template-columns: 1fr; }
+  .mn-hero-grid__mascot { order: -1; margin-bottom: 0.5rem; }
+  .mn-hero-grid__mascot img { width: 110px; }
+}
+.mn-v2-hero-card h1 {
+  color: #faf5eb;
+  font-size: clamp(1.5rem, 4vw, 2.1rem);
+  font-weight: 800;
+  line-height: 1.2;
+  margin: 0 0 0.9rem;
+  letter-spacing: -0.02em;
+}
+.mn-hero-pronunciation {
+  font-size: 0.8rem;
+  color: rgba(250,245,235,0.45);
+  font-style: italic;
+  margin: 0 0 1rem;
+}
+.mn-v2-hero-card p {
+  color: rgba(250,245,235,0.82);
+  font-size: clamp(0.92rem, 2.2vw, 1.05rem);
+  margin: 0 0 1rem;
+  line-height: 1.75;
+}
+.mn-hero-bullets {
+  color: rgba(250,245,235,0.82);
+  font-size: clamp(0.9rem, 2vw, 1rem);
+  margin: 0 0 1.3rem;
+  padding-left: 1.3rem;
+  line-height: 1.65;
+}
+.mn-hero-bullets li { margin-bottom: 0.3rem; }
+
+/* SEG-2: GREEN download button */
+.mn-v2-dl-btn {
+  display: inline-block;
+  background: #38a169;
+  color: #fff !important;
+  border: 2px solid #38a169 !important;
+  border-bottom: 2px solid #38a169 !important;
+  border-radius: 12px;
+  padding: 1rem 2.2rem;
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  font-weight: 800;
+  text-decoration: none !important;
+  box-shadow: 0 6px 24px rgba(56,161,105,0.35);
+  letter-spacing: 0.01em;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+.mn-v2-dl-btn:hover {
+  background: #2f8a59 !important;
+  border-color: #2f8a59 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 32px rgba(56,161,105,0.5);
+}
+.mn-hp-nav-links {
+  text-align: center;
+  font-size: 0.9rem;
+  margin: 0.7rem 0 0.3rem !important;
+  color: rgba(250,245,235,0.65) !important;
+}
+.mn-hp-nav-links a { color: #d69e2e !important; font-size: 0.88rem; }
+.mn-v2-hero-tagline {
+  margin-top: 0.5rem !important;
+  font-size: 0.82rem !important;
+  color: rgba(250,245,235,0.4) !important;
+  text-align: center;
+  letter-spacing: 0.03em;
+}
+
+/* First-session explainer */
+.mn-first-session {
+  background: rgba(56,161,105,0.07);
+  border: 1px solid rgba(56,161,105,0.28);
+  border-radius: 10px;
+  padding: 1rem 1.3rem 0.9rem;
+  margin: 1.2rem 0 0;
+}
+
+/* ── BENCHMARK CHART (Does It Actually Work?) ── */
+.mn-v2-chart-section {
+  margin: 2rem 0;
+  padding: 1.8rem;
+  background: rgba(5,11,20,0.7);
+  border: 1px solid rgba(214,158,46,0.18);
+  border-radius: 12px;
+}
+.mn-v2-chart-section h2 {
+  color: #d69e2e;
+  font-size: clamp(1.1rem, 3vw, 1.45rem);
+  margin: 0 0 0.3rem;
+  font-weight: 700;
+}
+.mn-v2-chart-subtitle {
+  color: rgba(250,245,235,0.55);
+  font-size: 0.82rem;
+  margin: 0 0 0.6rem;
+  font-style: italic;
+}
+.mn-benchmark-clarify {
+  background: rgba(214,158,46,0.06);
+  border-left: 3px solid rgba(214,158,46,0.4);
+  padding: 0.6rem 0.9rem;
+  margin: 0 0 1.4rem;
+  font-size: 0.82rem;
+  color: rgba(250,245,235,0.72);
+  line-height: 1.65;
+  border-radius: 0 6px 6px 0;
+}
+.mn-v2-chart-legend {
+  display: flex;
+  gap: 1.4rem;
+  margin: 0 0 1.2rem;
+  font-size: 0.8rem;
+  flex-wrap: wrap;
+}
+.mn-v2-legend-item { display: flex; align-items: center; gap: 0.4rem; color: rgba(250,245,235,0.7); }
+.mn-v2-legend-dot { width: 12px; height: 12px; border-radius: 2px; flex-shrink: 0; }
+.mn-v2-legend-dot--cold { background: rgba(160,174,192,0.55); }
+.mn-v2-legend-dot--hot  { background: #38a169; }
+.mn-v2-bar-group { margin-bottom: 1.4rem; }
+.mn-v2-bar-group:last-child { margin-bottom: 0; }
+.mn-v2-model-name { font-size: 0.82rem; font-weight: 700; color: rgba(250,245,235,0.9); margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.5rem; }
+.mn-v2-model-free-badge { background: rgba(56,161,105,0.2); color: #38a169; border: 1px solid rgba(56,161,105,0.4); border-radius: 4px; font-size: 0.65rem; font-weight: 700; padding: 0.1rem 0.4rem; letter-spacing: 0.05em; text-transform: uppercase; }
+.mn-v2-bar-row { display: flex; align-items: center; gap: 0.55rem; margin-bottom: 0.25rem; }
+.mn-v2-bar-row:last-child { margin-bottom: 0; }
+.mn-v2-bar-cond { font-size: 0.68rem; color: rgba(250,245,235,0.45); width: 56px; flex-shrink: 0; text-align: right; letter-spacing: 0.03em; }
+.mn-v2-bar-track { flex: 1; background: rgba(255,255,255,0.05); border-radius: 4px; height: 22px; overflow: hidden; position: relative; }
+.mn-v2-bar-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; justify-content: flex-end; padding-right: 6px; font-size: 0.72rem; font-weight: 700; white-space: nowrap; min-width: 32px; box-sizing: border-box; transition: width 0.4s ease; }
+.mn-v2-bar-fill--cold { background: rgba(160,174,192,0.5); color: rgba(255,255,255,0.7); }
+.mn-v2-bar-fill--hot  { background: linear-gradient(90deg, #2d7d52, #38a169); color: #fff; }
+.mn-v2-chart-note { margin-top: 1.2rem; font-size: 0.76rem; color: rgba(250,245,235,0.45); line-height: 1.6; border-top: 1px solid rgba(214,158,46,0.1); padding-top: 0.8rem; }
+.mn-v2-chart-note strong { color: rgba(250,245,235,0.7); }
+.prove-it-pill { display: inline-block; padding: 0.42rem 1.1rem; border-radius: 9999px; background: #c9a84c; color: #0f1117 !important; font-weight: 700; font-size: 0.8rem; letter-spacing: 0.06em; text-decoration: none; white-space: nowrap; border-bottom: none !important; flex-shrink: 0; line-height: 1.4; }
+.prove-it-pill:hover { opacity: 0.85; border-bottom: none !important; }
+
+/* ── MNEMOSYNEC REMEMBERS section ── */
+.mn-hp-remembers {
+  margin: 2rem 0;
+  padding: 2rem;
+  background: rgba(10,22,40,0.7);
+  border: 1px solid rgba(214,158,46,0.22);
+  border-radius: 12px;
+}
+.mn-hp-remembers h2 { color: #faf5eb; font-size: clamp(1.2rem,3.5vw,1.6rem); font-weight:800; margin:0 0 1rem; }
+.mn-hp-remembers h3 { color: #d69e2e; font-size: 0.95rem; margin: 0 0 0.4rem; font-weight:700; }
+.mn-hp-remembers p { color: rgba(250,245,235,0.82); font-size: 0.95rem; line-height: 1.75; margin: 0 0 0.9rem; }
+.mn-hp-remembers strong { color: #faf5eb; }
+
+/* ── DIVIDER ── */
+.mn-v2-divider { border: none; border-top: 1px solid rgba(214,158,46,0.12); margin: 1.8rem 0; }
+
+/* ── SEG-6: PINNED PROOFS ACCORDIONS — NEVER SCROLL SIDEWAYS ── */
+.mn-proofs-accordion-section {
+  margin: 2rem 0;
+  padding: 1.5rem 1.8rem 1.5rem;
+  background: rgba(5,11,20,0.75);
+  border: 1px solid rgba(214,158,46,0.22);
+  border-radius: 12px;
+}
+.mn-proofs-accordion-section h3 {
+  color: #d69e2e;
+  font-size: clamp(0.95rem, 2.5vw, 1.2rem);
+  font-weight: 700;
+  margin: 0 0 0.4rem;
+}
+.mn-proofs-subtitle {
+  color: rgba(250,245,235,0.45);
+  font-size: 0.75rem;
+  font-style: italic;
+  margin: 0 0 1.1rem;
+}
+/* Accordion rows — vertical only, no horizontal scroll ever */
+.mn-proof-accordion {
+  border: 1px solid rgba(214,158,46,0.2);
+  border-radius: 10px;
+  background: rgba(10,22,40,0.6);
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+}
+.mn-proof-accordion:last-child { margin-bottom: 0; }
+.mn-proof-accordion > summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 0.9rem 1.1rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  user-select: none;
+  transition: background 0.15s;
+}
+.mn-proof-accordion > summary:hover { background: rgba(214,158,46,0.07); }
+.mn-proof-accordion[open] > summary { background: rgba(214,158,46,0.09); border-bottom: 1px solid rgba(214,158,46,0.18); }
+.mn-proof-accordion > summary::-webkit-details-marker { display: none; }
+.mn-proof-accordion__label {
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #d69e2e;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.mn-proof-accordion__title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #faf5eb;
+  flex: 1;
+  min-width: 0;
+  line-height: 1.35;
+}
+.mn-proof-accordion__result {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #3ddc84;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+.mn-proof-accordion__body {
+  padding: 1.2rem 1.4rem 1.3rem;
+  color: rgba(250,245,235,0.82);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+.mn-proof-accordion__body p { margin: 0 0 0.7rem; }
+.mn-proof-accordion__body p:last-child { margin-bottom: 0; }
+/* Screenshot placeholders — stacked VERTICALLY (BP081 HARD BINDING: NEVER SCROLL SIDEWAYS) */
+.mn-proof-screenshots {
+  display: flex;
+  flex-direction: column;  /* vertical stack always */
+  gap: 0.8rem;
+  margin: 1rem 0;
+}
+.mn-proof-screenshot-placeholder {
+  background: rgba(10,22,40,0.8);
+  border: 1px dashed rgba(214,158,46,0.3);
+  border-radius: 8px;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}
+.mn-proof-screenshot-placeholder__caption {
+  font-size: 0.72rem;
+  color: rgba(250,245,235,0.45);
+  font-style: italic;
+}
+.mn-proof-accordion__receipt {
+  font-size: 0.72rem;
+  color: rgba(214,158,46,0.65);
+  font-style: italic;
+  border-top: 1px solid rgba(214,158,46,0.1);
+  padding-top: 0.6rem;
+  margin-top: 0.6rem;
+}
+
+/* ── SEG-5/7: COMBINED SUBSTRATE + HOW WE MAKE SURE ── */
+.mn-substrate-card {
+  margin: 2rem 0;
+  padding: 2rem;
+  background: rgba(5,11,20,0.7);
+  border: 1px solid rgba(214,158,46,0.22);
+  border-radius: 12px;
+}
+.mn-substrate-card h2 {
+  color: #d69e2e;
+  font-size: clamp(1.05rem, 3vw, 1.35rem);
+  font-weight: 700;
+  margin: 0 0 0.4rem;
+}
+.mn-substrate-card h3 {
+  color: #d69e2e;
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 1.3rem 0 0.4rem;
+}
+.mn-substrate-card p { color: rgba(250,245,235,0.82); font-size: 0.92rem; line-height: 1.78; margin: 0 0 0.9rem; }
+.mn-substrate-card p:last-child { margin-bottom: 0; }
+.mn-substrate-card strong { color: #faf5eb; }
+.mn-substrate-card table { width:100%; border-collapse:collapse; font-size:0.85rem; margin:0.8rem 0 1.2rem; }
+.mn-substrate-card th { color:#d69e2e; font-size:0.72rem; letter-spacing:0.07em; text-transform:uppercase; text-align:left; padding:0.5rem 0.7rem; border-bottom:1px solid rgba(214,158,46,0.2); }
+.mn-substrate-card td { padding:0.45rem 0.7rem; border-bottom:1px solid rgba(255,255,255,0.05); vertical-align:top; color:rgba(250,245,235,0.82); }
+.mn-substrate-card td strong { color:#faf5eb; }
+.mn-substrate-divider { border:none; border-top:1px solid rgba(214,158,46,0.15); margin:1.4rem 0; }
+.mn-substrate-card ul { padding-left:1.4rem; margin:0.5rem 0 0.9rem; }
+.mn-substrate-card li { margin-bottom:0.3rem; color:rgba(250,245,235,0.82); font-size:0.92rem; line-height:1.7; }
+
+/* ── Footer (SEG-8) — single copyright via extend_footer.html for all pages ── */
+</style>
+
+<div class="mn-hp-page">
+<div class="mn-v2-wrap">
+
+  <!-- ═══════════════════════════════════════════════
+       HERO — Amnesia/Cure + SEG-1 bullets + SEG-2 green Download + nav
+       ═══════════════════════════════════════════════ -->
+  <section class="mn-v2-hero" aria-label="MnemosyneC hero">
+    <div class="mn-v2-hero-card">
+      <div class="mn-hero-grid">
+
+        <!-- Left: headline + bullets + CTA -->
+        <div class="mn-hero-grid__text">
+          <h1>Your AI has Amnesia. Dr.&nbsp;MnemosyneC has the Cure.</h1>
+          <p class="mn-hero-pronunciation">Mnemosyne (neh-MOZ-uh-nee) is the Greek goddess of memory. <strong>Dr.&nbsp;MnemosyneC inherited her Memory.</strong></p>
+          <p>Every time you start a new session, your AI forgets everything. Your projects, your preferences, your past conversations, gone. Dr.&nbsp;MnemosyneC gives your AI a permanent, private memory that actually stays.</p>
+
+          <!-- SEG-1: Founder-ratified bullet text verbatim -->
+          <ul class="mn-hero-bullets">
+            <li>Works alongside ChatGPT, Claude, Gemini, or any AI you already use.</li>
+            <li>All your data stays on your own computer. No cloud. No account required.</li>
+            <li>FREE (SSPL license) to use FOREVER. No Ads. No Strings.</li>
+            <li>Optionally join the Cooperative Universal Substrate for $5 a year. Not required.</li>
+          </ul>
+
+          <!-- SEG-2: Green Download button -->
+          <div style="text-align:center; margin:1.4rem 0 0.5rem;">
+            <a class="mn-v2-dl-btn"
+               href="{{ .Site.Data.version.download_url }}"
+               download="MnemosyneC-Setup-{{ .Site.Data.version.version }}.exe"
+               aria-label="Download MnemosyneC {{ .Site.Data.version.version }} for Windows">
+              &#8595;&nbsp; Download for Windows v{{ .Site.Data.version.version }}
+            </a>
+          </div>
+
+          <!-- SEG-2: Install guide FIRST, then Six Pillars, How it works, All proofs, Community -->
+          <p class="mn-hp-nav-links">
+            <a href="/install/">Install guide</a>
+            &nbsp;&middot;&nbsp;
+            <a href="#six-pillars">Six Pillars</a>
+            &nbsp;&middot;&nbsp;
+            <a href="#how-it-works">How it works</a>
+            &nbsp;&middot;&nbsp;
+            <a href="/proofs/">All proofs</a>
+            &nbsp;&middot;&nbsp;
+            <a href="/community/">Community</a>
+          </p>
+          <p class="mn-v2-hero-tagline">Mac / Linux &mdash; <em>coming soon</em></p>
+        </div>
+
+        <!-- Right: Dr. MnemosyneC mascot -->
+        <div class="mn-hero-grid__mascot" aria-hidden="true">
+          <img src="/img/mascots/dr-mnemosynec.png"
+               alt="Dr. MnemosyneC, the gray elephant mascot in a white coat with stethoscope and half-moon spectacles"
+               width="220" height="220"
+               loading="eager">
+          <p class="mn-hero-grid__mascot-caption">Dr.&nbsp;MnemosyneC<br>Memory specialist</p>
+        </div>
+
+      </div><!-- /mn-hero-grid -->
+
+      <!-- What your first session looks like -->
+      <div class="mn-first-session" role="note" aria-label="What your first session looks like">
+        <h3 style="font-size:1rem; font-weight:700; color:#38a169; margin:0 0 0.7rem;">What your first session looks like</h3>
+        <ol style="margin:0 0 0.7rem; padding-left:1.4rem; color:rgba(250,245,235,0.82); font-size:0.9rem; line-height:1.7;">
+          <li style="margin-bottom:0.4rem;"><strong>Tell it something.</strong> &ldquo;I&rsquo;m working on a report about water treatment costs in rural areas.&rdquo;</li>
+          <li><strong>Come back three days later.</strong> Start a fresh session. Ask about it. It remembers.</li>
+        </ol>
+        <p style="margin:0 0 0.5rem; font-size:0.9rem; color:rgba(250,245,235,0.82); line-height:1.7;">No copy-paste. No re-explaining. Pick up exactly where you left off, every time.</p>
+        <p style="margin:0; font-size:0.9rem; color:rgba(250,245,235,0.82); line-height:1.7;"><strong>Free.</strong> Or pair MnemosyneC with a paid AI like Claude or GPT for faster, bigger answers. Either way, the substrate carries the memory, so your paid AI bill stays smaller too.</p>
+      </div>
+
+    </div><!-- /mn-v2-hero-card -->
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SEG-3: Does It Actually Work? — SECOND (moved up)
+       ═══════════════════════════════════════════════ -->
+  <section class="mn-v2-chart-section" aria-labelledby="mn-hp-chart-title" id="does-it-actually-work">
+    <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem; margin:0 0 0.3rem;">
+      <h2 id="mn-hp-chart-title" style="margin:0;">Does it actually work?</h2>
+      <a href="https://github.com/liana-banyan/lb-reproducibility-pack#quick-start"
+         class="prove-it-pill" target="_blank" rel="noopener">PROVE IT YOURSELF</a>
+    </div>
+    <p class="mn-v2-chart-subtitle">75 questions &middot; 4 AI vendors &middot; real test run 2026-05-30. No tricks.</p>
+
+    <div class="mn-benchmark-clarify" role="note">
+      These 75 questions test recall of information that was manually stored in the substrate by a human, then asked again in a fresh session where the model had no access to its own context history. Without the substrate, the model forgot everything. With it, the model found the stored answer.
+    </div>
+
+    <div class="mn-v2-chart-legend" aria-hidden="true">
+      <span class="mn-v2-legend-item"><span class="mn-v2-legend-dot mn-v2-legend-dot--cold"></span>Without MnemosyneC substrate</span>
+      <span class="mn-v2-legend-item"><span class="mn-v2-legend-dot mn-v2-legend-dot--hot"></span>With MnemosyneC substrate</span>
+    </div>
+
+    <div class="mn-v2-bar-group" role="group" aria-label="Claude Opus 4.8 results">
+      <div class="mn-v2-model-name">Claude Opus 4.8</div>
+      <div class="mn-v2-bar-row">
+        <span class="mn-v2-bar-cond">Without</span>
+        <div class="mn-v2-bar-track" role="meter" aria-valuenow="6" aria-valuemin="0" aria-valuemax="100" aria-label="6% accuracy without substrate">
+          <div class="mn-v2-bar-fill mn-v2-bar-fill--cold" style="width:6%">6%</div>
+        </div>
+      </div>
+      <div class="mn-v2-bar-row">
+        <span class="mn-v2-bar-cond">With</span>
+        <div class="mn-v2-bar-track" role="meter" aria-valuenow="89.3" aria-valuemin="0" aria-valuemax="100" aria-label="89.3% accuracy with substrate">
+          <div class="mn-v2-bar-fill mn-v2-bar-fill--hot" style="width:89.3%">89.3%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mn-v2-bar-group" role="group" aria-label="GPT-5.5 results">
+      <div class="mn-v2-model-name">GPT&#8209;5.5</div>
+      <div class="mn-v2-bar-row">
+        <span class="mn-v2-bar-cond">Without</span>
+        <div class="mn-v2-bar-track" role="meter" aria-valuenow="19.3" aria-valuemin="0" aria-valuemax="100" aria-label="19.3% accuracy without substrate">
+          <div class="mn-v2-bar-fill mn-v2-bar-fill--cold" style="width:19.3%">19.3%</div>
+        </div>
+      </div>
+      <div class="mn-v2-bar-row">
+        <span class="mn-v2-bar-cond">With</span>
+        <div class="mn-v2-bar-track" role="meter" aria-valuenow="93.3" aria-valuemin="0" aria-valuemax="100" aria-label="93.3% accuracy with substrate">
+          <div class="mn-v2-bar-fill mn-v2-bar-fill--hot" style="width:93.3%">93.3%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mn-v2-bar-group" role="group" aria-label="Llama 3.1 8b results">
+      <div class="mn-v2-model-name">
+        Llama&nbsp;3.1&nbsp;8b (Ollama)
+        <span class="mn-v2-model-free-badge">Local &middot; Free</span>
+      </div>
+      <div class="mn-v2-bar-row">
+        <span class="mn-v2-bar-cond">Without</span>
+        <div class="mn-v2-bar-track" role="meter" aria-valuenow="6" aria-valuemin="0" aria-valuemax="100" aria-label="6% accuracy without substrate">
+          <div class="mn-v2-bar-fill mn-v2-bar-fill--cold" style="width:6%">6%</div>
+        </div>
+      </div>
+      <div class="mn-v2-bar-row">
+        <span class="mn-v2-bar-cond">With</span>
+        <div class="mn-v2-bar-track" role="meter" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100" aria-label="78% accuracy with substrate">
+          <div class="mn-v2-bar-fill mn-v2-bar-fill--hot" style="width:78%">78.0%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mn-v2-bar-group" role="group" aria-label="Gemini 3.5 Flash results">
+      <div class="mn-v2-model-name">Gemini 3.5 Flash</div>
+      <div class="mn-v2-bar-row">
+        <span class="mn-v2-bar-cond">Without</span>
+        <div class="mn-v2-bar-track" role="meter" aria-valuenow="8" aria-valuemin="0" aria-valuemax="100" aria-label="8% accuracy without substrate">
+          <div class="mn-v2-bar-fill mn-v2-bar-fill--cold" style="width:8%">8%</div>
+        </div>
+      </div>
+      <div class="mn-v2-bar-row">
+        <span class="mn-v2-bar-cond">With</span>
+        <div class="mn-v2-bar-track" role="meter" aria-valuenow="90.7" aria-valuemin="0" aria-valuemax="100" aria-label="90.7% accuracy with substrate">
+          <div class="mn-v2-bar-fill mn-v2-bar-fill--hot" style="width:90.7%">90.7%</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="mn-v2-chart-note">
+      <strong>The Banyan Metric</strong> measures recall of substrate-stored information. &ldquo;Without&rdquo; = model alone, cold start. &ldquo;With&rdquo; = same model after MnemosyneC substrate context injected.
+      <br>The <strong>free local model</strong> (Ollama, $0 inference cost) lifted from 6% to 78% entirely because of the shared substrate. <a href="/proofs/" style="font-size:0.88em;">Full proofs &rarr;</a>
+    </p>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SEG-3: MnemosyneC remembers — THIRD (was second)
+       ═══════════════════════════════════════════════ -->
+  <section class="mn-hp-remembers" aria-label="MnemosyneC remembers" id="mnemosynec-remembers">
+    <h2>MnemosyneC remembers.</h2>
+    <p>You use AI all day across a dozen surfaces. Each one forgets every time.</p>
+    <p><strong>MnemosyneC remembers.</strong> Every interaction with any AI grows your substrate. Every time you ask any AI a question, your substrate informs the answer.</p>
+    <p>The substrate is YOURS. SHA256-stamped. Append-only. Federated with anyone you choose. Free to copy if you want to fork. Cost+20% if you stay. Workers, Builders, Creators keep <strong>83.3%</strong>. No ads. No VC.</p>
+    <p><strong>For the keep.</strong></p>
+    <div style="text-align:center; margin:1.4rem 0 0.3rem;">
+      <a class="mn-v2-dl-btn"
+         href="{{ .Site.Data.version.download_url }}"
+         download="MnemosyneC-Setup-{{ .Site.Data.version.version }}.exe">
+        &#8595;&nbsp; Download for Windows v{{ .Site.Data.version.version }}
+      </a>
+    </div>
+    <p style="text-align:center; font-size:0.82rem; color:rgba(250,245,235,0.45); margin-top:0.5rem;"><em>Mac / Linux &mdash; coming soon</em></p>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SEG-4: Good Fast Cheap — blue card with green checkmarks
+       (Founder: "Replace the right side with the left side version")
+       ═══════════════════════════════════════════════ -->
+  <section aria-label="Good Fast Cheap Private Free Yours" id="six-pillars" style="margin:0 0 2rem;">
+<div style="max-width:760px;margin:0 auto;background:#11243a;border:1px solid #21527e;border-radius:14px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.35);">
+  <div style="padding:26px 28px 18px;text-align:center;background:linear-gradient(180deg,#143456 0%,#11243a 100%);border-bottom:1px solid #21527e;">
+    <div style="font-size:30px;font-weight:800;color:#ffffff;letter-spacing:.5px;line-height:1.15;">Good. Fast. Cheap.</div>
+    <div style="font-size:20px;font-weight:600;color:#7fd1ff;margin-top:6px;">MnemosyneC gives you all&nbsp;six.</div>
+    <div style="font-size:16px;font-style:italic;color:#bcd6ee;margin-top:10px;">Can&rsquo;t we all just get along?</div>
+  </div>
+  <table style="width:100%;border-collapse:collapse;font-size:15px;color:#e7f0fa;">
+    <tbody>
+      <tr style="border-top:1px solid #1c3f63;">
+        <td style="padding:16px 20px;line-height:1.5;"><strong style="color:#ffffff;">Good</strong> &mdash; Every AI we tested got smarter on a shared memory: <strong>+72 to +83 points of accuracy</strong> across four model families. A free, local model jumped from <strong>6% to 78%.</strong></td>
+        <td style="padding:16px 22px;text-align:right;font-size:22px;color:#3ddc84;white-space:nowrap;">&#10004;</td>
+      </tr>
+      <tr style="border-top:1px solid #1c3f63;">
+        <td style="padding:16px 20px;line-height:1.5;"><strong style="color:#ffffff;">Fast</strong> &mdash; Answers resolve against <em>your own</em> memory in milliseconds. A hash-verified mesh measured <strong>16.6&nbsp;ms</strong> median instead of a metered round-trip to someone else&rsquo;s server.</td>
+        <td style="padding:16px 22px;text-align:right;font-size:22px;color:#3ddc84;white-space:nowrap;">&#10004;</td>
+      </tr>
+      <tr style="border-top:1px solid #1c3f63;">
+        <td style="padding:16px 20px;line-height:1.5;"><strong style="color:#ffffff;">Cheap</strong> &mdash; That free local model answers at <strong>$0 a call.</strong> Everything else runs at <strong>cost plus 20%</strong>, on hardware you already own. No new data center.</td>
+        <td style="padding:16px 22px;text-align:right;font-size:22px;color:#3ddc84;white-space:nowrap;">&#10004;</td>
+      </tr>
+      <tr style="border-top:1px solid #1c3f63;">
+        <td style="padding:16px 20px;line-height:1.5;"><strong style="color:#ffffff;">Private</strong> &mdash; Runs <strong>entirely on your machine.</strong> No account, no upload, no telemetry, no phone&#8209;home.</td>
+        <td style="padding:16px 22px;text-align:right;font-size:22px;color:#3ddc84;white-space:nowrap;">&#10004;</td>
+      </tr>
+      <tr style="border-top:1px solid #1c3f63;">
+        <td style="padding:16px 20px;line-height:1.5;"><strong style="color:#ffffff;">Free</strong> &mdash; <strong>SSPL Free Forever</strong>, Pledge&nbsp;#2260. No ads. No strings. No subscription.<br><span style="color:rgba(214,158,46,0.8);font-size:0.88em;">Patent-pending, 19 provisional filings, pledged to the member commons, never sold for extraction.</span></td>
+        <td style="padding:16px 22px;text-align:right;font-size:22px;color:#3ddc84;white-space:nowrap;">&#10004;</td>
+      </tr>
+      <tr style="border-top:1px solid #1c3f63;border-bottom:1px solid #1c3f63;">
+        <td style="padding:16px 20px;line-height:1.5;"><strong style="color:#ffffff;">Yours</strong> &mdash; <strong>Storm-proof immutability.</strong> Three infrastructure failures hit at once. The substrate held. Every fact is sha256-stamped, content-addressed, append-only. Nothing can be overwritten. Uninstall anytime; your originals are untouched and independently verifiable.</td>
+        <td style="padding:16px 22px;text-align:right;font-size:22px;color:#3ddc84;white-space:nowrap;">&#10004;</td>
+      </tr>
+    </tbody>
+  </table>
+  <div style="padding:12px 20px;text-align:center;font-size:12px;color:#86a6c6;background:#0e1f33;">
+    Every figure is reproducible &mdash; <a href="/prove-it/" style="color:#7fd1ff;text-decoration:none;border-bottom:none !important;">Prove It</a> &middot; <a href="/run-your-own-cabinet/" style="color:#7fd1ff;text-decoration:none;border-bottom:none !important;">Run your own cabinet</a>
+  </div>
+</div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SEG-6: Pinned Proofs — expandable accordions
+       HARD BINDING: NEVER SCROLL SIDEWAYS (BP081)
+       Screenshots stack VERTICALLY
+       ═══════════════════════════════════════════════ -->
+  <section class="mn-proofs-accordion-section" aria-label="Pinned proof receipts" id="proofs">
+    <h3>&#128204;&nbsp; Pinned Proofs</h3>
+    <p class="mn-proofs-subtitle">Plain receipts. Caveats stated aloud. No hype. Click any row to expand.</p>
+
+    <!-- Accordion 1: Storm Test -->
+    <details class="mn-proof-accordion">
+      <summary>
+        <span class="mn-proof-accordion__label">Storm Test</span>
+        <span class="mn-proof-accordion__title">Three failures at once. Nothing lost.</span>
+        <span class="mn-proof-accordion__result">&#10003; Zero work lost</span>
+      </summary>
+      <div class="mn-proof-accordion__body">
+        <p>A routine update wiped connectors. A hook-script deletion blocked every prompt. The AI service returned overload errors. Three simultaneous infrastructure failures. The substrate held.</p>
+        <p>&#10003; Zero work lost</p>
+
+        <!-- Screenshots stacked vertically — NEVER sideways scroll -->
+        <div class="mn-proof-screenshots" role="list">
+          <div class="mn-proof-screenshot-placeholder" role="listitem">
+            <span style="font-size:1.5rem; color:rgba(214,158,46,0.4);">&#128247;</span>
+            <span class="mn-proof-screenshot-placeholder__caption">Screenshot 1 &middot; BP071 connector wipe receipt</span>
+          </div>
+          <div class="mn-proof-screenshot-placeholder" role="listitem">
+            <span style="font-size:1.5rem; color:rgba(214,158,46,0.4);">&#128247;</span>
+            <span class="mn-proof-screenshot-placeholder__caption">Screenshot 2 &middot; BP071 hook-script deletion log</span>
+          </div>
+          <div class="mn-proof-screenshot-placeholder" role="listitem">
+            <span style="font-size:1.5rem; color:rgba(214,158,46,0.4);">&#128247;</span>
+            <span class="mn-proof-screenshot-placeholder__caption">Screenshot 3 &middot; BP071 substrate-held confirmation</span>
+          </div>
+        </div>
+
+        <p class="mn-proof-accordion__receipt">Receipt: BP071 close stamp &rarr;</p>
+      </div>
+    </details>
+
+    <!-- Accordion 2: Mesh Proof -->
+    <details class="mn-proof-accordion">
+      <summary>
+        <span class="mn-proof-accordion__label">Mesh Proof</span>
+        <span class="mn-proof-accordion__title">A node answered for data it did not hold.</span>
+        <span class="mn-proof-accordion__result">&#10003; 20/20 &middot; 16.6 ms p50</span>
+      </summary>
+      <div class="mn-proof-accordion__body">
+        <p>Machine A had never seen the data. Machine B held it. Connected on local network, Machine A answered 20 of 20 correctly, hash-verified. Median response: 16.6&nbsp;ms.</p>
+        <p>&#10003; 20/20 &middot; 16.6 ms p50</p>
+
+        <div class="mn-proof-screenshots" role="list">
+          <div class="mn-proof-screenshot-placeholder" role="listitem">
+            <span style="font-size:1.5rem; color:rgba(214,158,46,0.4);">&#128247;</span>
+            <span class="mn-proof-screenshot-placeholder__caption">Screenshot 1 &middot; BP063 mesh test setup</span>
+          </div>
+          <div class="mn-proof-screenshot-placeholder" role="listitem">
+            <span style="font-size:1.5rem; color:rgba(214,158,46,0.4);">&#128247;</span>
+            <span class="mn-proof-screenshot-placeholder__caption">Screenshot 2 &middot; BP063 20/20 result log</span>
+          </div>
+          <div class="mn-proof-screenshot-placeholder" role="listitem">
+            <span style="font-size:1.5rem; color:rgba(214,158,46,0.4);">&#128247;</span>
+            <span class="mn-proof-screenshot-placeholder__caption">Screenshot 3 &middot; BP063 hash verification</span>
+          </div>
+        </div>
+
+        <p class="mn-proof-accordion__receipt">Receipt: Asteroid-ProofVault/MESH_6_RECEIPT_BP063.md &rarr;</p>
+      </div>
+    </details>
+
+    <!-- Accordion 3: Benchmark R10 -->
+    <details class="mn-proof-accordion">
+      <summary>
+        <span class="mn-proof-accordion__label">Benchmark R10</span>
+        <span class="mn-proof-accordion__title">A free, local Ollama model jumped from 6% to 78% accuracy.</span>
+        <span class="mn-proof-accordion__result">&#10003; +72&ndash;83 pts</span>
+      </summary>
+      <div class="mn-proof-accordion__body">
+        <p>A free, local Ollama model jumped from 6% to 78% accuracy. No retraining. Just substrate.</p>
+        <p>Cohen&rsquo;s &kappa; = 0.936. Three independent raters. Hash-verified. Caithedral&trade; Core applied substrate context &mdash; no model fine-tuning, no new training data. The substrate did it. (+72&ndash;83 percentage point gain, BP065)</p>
+
+        <div class="mn-proof-screenshots" role="list">
+          <div class="mn-proof-screenshot-placeholder" role="listitem">
+            <span style="font-size:1.5rem; color:rgba(214,158,46,0.4);">&#128247;</span>
+            <span class="mn-proof-screenshot-placeholder__caption">Screenshot 1 &middot; BP065 benchmark cold run (6%)</span>
+          </div>
+          <div class="mn-proof-screenshot-placeholder" role="listitem">
+            <span style="font-size:1.5rem; color:rgba(214,158,46,0.4);">&#128247;</span>
+            <span class="mn-proof-screenshot-placeholder__caption">Screenshot 2 &middot; BP065 benchmark hot run (78%)</span>
+          </div>
+          <div class="mn-proof-screenshot-placeholder" role="listitem">
+            <span style="font-size:1.5rem; color:rgba(214,158,46,0.4);">&#128247;</span>
+            <span class="mn-proof-screenshot-placeholder__caption">Screenshot 3 &middot; BP065 Cohen&rsquo;s kappa inter-rater verification</span>
+          </div>
+        </div>
+
+        <p class="mn-proof-accordion__receipt">Receipt: Benchmark R10 &middot; BP065 &rarr;</p>
+      </div>
+    </details>
+
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       SEG-5 + SEG-7: HOW IT WORKS — Combined card
+       "The Substrate Is the Asset" + "How We Make Sure Things Are True"
+       ═══════════════════════════════════════════════ -->
+  <section class="mn-substrate-card" id="how-it-works" aria-labelledby="mn-substrate-title">
+    <h2 id="mn-substrate-title">HOW IT WORKS &mdash; The Substrate Is the Asset &middot; How We Make Sure Things Are True</h2>
+    <p>MnemosyneC has three layers. Each does one thing well.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Layer</th>
+          <th>Role</th>
+          <th>Component</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Reader</strong></td>
+          <td>Answers your question</td>
+          <td>Gemma 4 12B (local, free, private)</td>
+        </tr>
+        <tr>
+          <td><strong>Verifier</strong></td>
+          <td>Adjudicates whether the answer is correct</td>
+          <td>Shadow E-Giant concordance (3+ parallel votes)</td>
+        </tr>
+        <tr>
+          <td><strong>Accumulator</strong></td>
+          <td>Stores verified knowledge for next time</td>
+          <td>Eblet store (append-only JSONL, SHA256-stamped)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>Use Ask in MnemosyneC. Use Claude Desktop. Use Cursor. Use ChatGPT in your browser (browser extension coming v0.2). Whichever surface you use, the <strong>substrate underneath compounds</strong>. Your knowledge grows. The model is interchangeable. The substrate is what makes any AI smarter &mdash; for you, for your work, for the keep.</p>
+
+    <hr class="mn-substrate-divider">
+
+    <p>The substrate doesn&rsquo;t just store knowledge. It <strong>lives</strong>.</p>
+
+    <h3>Pheromones decay.</h3>
+    <p>Every claim entering the substrate starts as a pheromone &mdash; a signal that something might be true. Pheromones have a half-life. If nothing refreshes them, they fade. Old guesses die naturally. The substrate doesn&rsquo;t accumulate noise &mdash; it lets noise wither.</p>
+
+    <h3>Socceri triads confirm.</h3>
+    <p>When three independent verifications converge &mdash; three Shadow E-Giants from different perspective lenses (correctness &middot; consistency &middot; coverage) returning the same verdict &mdash; a pheromone becomes a <strong>socceri triad confirmation</strong>. Verified. But still subject to decay. Verification without continued use still fades.</p>
+
+    <h3>Living connection buoys.</h3>
+    <p>Confirmed claims survive only if the community keeps them alive &mdash; through use, through query, through federation. Every time another user&rsquo;s substrate concordance-aligns with yours, the claim is buoyed. Without that living connection, even verified truth withers on the vine.</p>
+
+    <h3>Stone tablets are forever.</h3>
+    <p>When a claim has been buoyed by enough living connection over enough time, it gets promoted to a <strong>stone tablet</strong> &mdash; immutable, append-only, permanent. Stone tablets are the substrate&rsquo;s load-bearing canon. They don&rsquo;t decay. They are the truth the network has earned together.</p>
+
+    <h3>This is the innovation itself.</h3>
+    <p>Truth isn&rsquo;t asserted by authority. It&rsquo;s <strong>earned through use, hardened through verification, and preserved through community</strong>.</p>
+
+    <ul>
+      <li><strong>Failed claims die.</strong> No noise accumulates.</li>
+      <li><strong>Verified claims persist if used.</strong> No abandoned facts survive.</li>
+      <li><strong>Used-and-verified claims become permanent.</strong> Stone tablets compound the network&rsquo;s hardest-won knowledge.</li>
+    </ul>
+
+    <p>The substrate gets cleaner over time, not noisier. It&rsquo;s how biological memory works. It&rsquo;s how scientific consensus works. It&rsquo;s how cooperative-class trust always worked, before extraction-class platforms tried to centralize it.</p>
+
+    <p>We&rsquo;re just naming the mechanism, building it into code, and giving you the keys.</p>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       Economy + Get Started + About
+       ═══════════════════════════════════════════════ -->
+  <hr class="mn-v2-divider" />
+
+  <section aria-label="How the economy works" style="margin:2rem 0;">
+    <h2 style="color:#d69e2e; font-size:clamp(1.05rem,3vw,1.35rem); font-weight:700; margin:0 0 1rem;">How the Economy Works</h2>
+    <p style="color:rgba(250,245,235,0.82); font-size:0.92rem; line-height:1.78; margin:0 0 0.5rem;">Three currencies. Closed loop. <strong style="color:#faf5eb;">Never redeemable in fiat &mdash; ever.</strong></p>
+    <ul style="color:rgba(250,245,235,0.78); font-size:0.9rem; padding-left:1.4rem; line-height:1.75; margin:0 0 0.9rem;">
+      <li><strong style="color:#faf5eb;">Credits</strong> &mdash; purchased $1:$1, used for platform services</li>
+      <li><strong style="color:#faf5eb;">Marks</strong> &mdash; earned through work; a forward obligation; clear through participation</li>
+      <li><strong style="color:#faf5eb;">Joules</strong> &mdash; stored-value instrument; 1.2 Credits per Joule; Forever Stamp mechanic (locked at acquisition rate)</li>
+    </ul>
+    <p style="color:rgba(250,245,235,0.82); font-size:0.92rem; line-height:1.78;">Workers, Builders, Creators keep <strong style="color:#faf5eb;">83.3%</strong>. Platform takes Cost+20% &mdash; no more, no less. <strong style="color:#faf5eb;">No ads. No VC.</strong> Cooperative-class structure. Designed to be copied.</p>
+  </section>
+
+  <hr class="mn-v2-divider" />
+
+  <section aria-label="Get started" style="margin:2rem 0;">
+    <h2 style="color:#d69e2e; font-size:clamp(1.05rem,3vw,1.35rem); font-weight:700; margin:0 0 1rem;">Get Started</h2>
+    <div style="text-align:center; margin:0 0 1rem;">
+      <a class="mn-v2-dl-btn"
+         href="{{ .Site.Data.version.download_url }}"
+         download="MnemosyneC-Setup-{{ .Site.Data.version.version }}.exe">
+        &#8595;&nbsp; Download for Windows v{{ .Site.Data.version.version }}
+      </a>
+    </div>
+    <p style="text-align:center; color:rgba(250,245,235,0.65); font-size:0.9rem; margin:0 0 0.7rem;">
+      <a href="/changelog/">Read the canon &rarr;</a>
+      &nbsp;&middot;&nbsp;
+      <a href="/join/">Join the mesh &rarr;</a>
+    </p>
+    <p style="color:rgba(250,245,235,0.78); font-size:0.9rem; line-height:1.75; text-align:center;">One-line installer. Right-click &rarr; Run as Administrator. Wait for the install dialog. Launch. Your substrate starts the moment you do.</p>
+  </section>
+
+  <hr class="mn-v2-divider" />
+
+  <section aria-label="About Liana Banyan" style="margin:2rem 0;">
+    <h2 style="color:#d69e2e; font-size:clamp(1.05rem,3vw,1.35rem); font-weight:700; margin:0 0 1rem;">About Liana Banyan</h2>
+    <p style="color:rgba(250,245,235,0.82); font-size:0.92rem; line-height:1.78; margin:0 0 0.8rem;">Liana Banyan Corporation &mdash; the cooperative-class substrate behind MnemosyneC and 16 cooperative initiatives.</p>
+    <p style="color:rgba(250,245,235,0.82); font-size:0.92rem; line-height:1.78; margin:0 0 0.9rem;"><strong style="color:#faf5eb;">83.3% of every dollar</strong> stays with the Workers, Builders, and Creators that make it. $5 a year. One vote. Everything we build is published under a Cooperative Defensive Patent Pledge so members &mdash; and any community on Earth &mdash; can fork it, run it, and keep it.</p>
+    <p style="color:rgba(250,245,235,0.65); font-size:0.88rem;">
+      <a href="/cooperative-compact/">Read the Cooperative Compact &rarr;</a>
+      &nbsp;&middot;&nbsp;
+      <a href="/initiatives/">Browse initiatives &rarr;</a>
+      &nbsp;&middot;&nbsp;
+      <a href="/join/">Join for $5/year &rarr;</a>
+    </p>
+    <p style="color:rgba(250,245,235,0.35); font-size:0.8rem; font-style:italic; margin-top:1rem;">Caithedral&trade; &middot; Substrate &middot; Plow &middot; Stone Tablets &middot; Shadow E-Giants &middot; Cooperative-class &middot; For the keep.</p>
+  </section>
+
+</div><!-- /mn-v2-wrap -->
+<!-- SEG-8: Footer rendered by extend_footer.html (applies to all pages). One occurrence. &copy; entity. No mojibake. -->
+</div><!-- /mn-hp-page -->

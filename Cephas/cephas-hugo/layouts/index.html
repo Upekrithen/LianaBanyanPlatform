@@ -1,51 +1,60 @@
 {{- define "main" }}
-<style>
-/* ════════════════════════════════════════════════════
-   HOMEPAGE HERO — 2-col mascot layout
-   Matches /download/ hero structure for consistency
-   ════════════════════════════════════════════════════ */
-.mn-hp-mascot-wrap {
-  float: right;
-  margin: 0 0 1.5rem 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  clear: right;
-}
-.mn-hp-mascot-wrap img {
-  width: 220px;
-  height: auto;
-  display: block;
-  border-radius: 8px;
-}
-.mn-hp-mascot-caption {
-  font-size: 0.68rem;
-  color: rgba(250,245,235,0.4);
-  text-align: center;
-  font-style: italic;
-  line-height: 1.4;
-  max-width: 180px;
-}
-@media (max-width: 640px) {
+{{- if .Site.Params.isMnemosynec }}
+  {{/*
+      MnemosyneC homepage — full rich landing page
+      All SEG-1 through SEG-8 (BP081) applied via partial
+      Cephas museum homepage uses the else branch below
+  */}}
+  {{- partial "mnemosynec-homepage.html" . -}}
+{{- else }}
+  {{/*
+      Cephas museum homepage — simple markdown content wrapper
+      Used by cephas.lianabanyan.com (config.toml, no isMnemosynec param)
+  */}}
+  <style>
   .mn-hp-mascot-wrap {
-    float: none;
-    margin: 0 auto 1.2rem;
+    float: right;
+    margin: 0 0 1.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    clear: right;
   }
-  .mn-hp-mascot-wrap img { width: 130px; }
-}
-</style>
+  .mn-hp-mascot-wrap img {
+    width: 220px;
+    height: auto;
+    display: block;
+    border-radius: 8px;
+  }
+  .mn-hp-mascot-caption {
+    font-size: 0.68rem;
+    color: rgba(250,245,235,0.4);
+    text-align: center;
+    font-style: italic;
+    line-height: 1.4;
+    max-width: 180px;
+  }
+  @media (max-width: 640px) {
+    .mn-hp-mascot-wrap {
+      float: none;
+      margin: 0 auto 1.2rem;
+    }
+    .mn-hp-mascot-wrap img { width: 130px; }
+  }
+  </style>
 
-<div class="post-content">
-  <div class="mn-hp-mascot-wrap" aria-hidden="true">
-    <img src="/img/mascots/dr-mnemosynec.png"
-         alt="Dr. MnemosyneC, the gray elephant mascot in a white coat with stethoscope and half-moon spectacles"
-         width="220" height="220"
-         loading="eager">
-    <p class="mn-hp-mascot-caption">Dr.&nbsp;MnemosyneC<br>Memory specialist</p>
+  <div class="post-content">
+    <div class="mn-hp-mascot-wrap" aria-hidden="true">
+      <img src="/img/mascots/dr-mnemosynec.png"
+           alt="Dr. MnemosyneC, the gray elephant mascot in a white coat with stethoscope and half-moon spectacles"
+           width="220" height="220"
+           loading="eager">
+      <p class="mn-hp-mascot-caption">Dr.&nbsp;MnemosyneC<br>Memory specialist</p>
+    </div>
+    {{- if not (.Param "disableAnchoredHeadings") }}
+    {{- partial "anchored_headings.html" .Content -}}
+    {{- else }}{{ .Content }}{{ end }}
   </div>
-  {{- if not (.Param "disableAnchoredHeadings") }}
-  {{- partial "anchored_headings.html" .Content -}}
-  {{- else }}{{ .Content }}{{ end }}
-</div>
+{{- end }}
 {{- end }}

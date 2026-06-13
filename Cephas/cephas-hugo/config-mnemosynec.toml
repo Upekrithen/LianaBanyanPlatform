@@ -17,7 +17,7 @@ buildFuture = true
   pagerSize = 10
 
 [params]
-  hideFooter = false
+  hideFooter = true
   description = "MnemosyneC remembers. Every interaction with any AI grows your substrate. SHA256-stamped. Append-only. Federated. Workers, Builders, Creators keep 83.3%. No ads. No VC."
   author = "Liana Banyan Corporation"
   defaultTheme = "dark"
@@ -30,6 +30,9 @@ buildFuture = true
   ShowWordCount = false
   ShowRssButtonInSectionTermList = false
   UseHugoToc = false
+
+  # BP081: conditional for mnemosynec homepage partial
+  isMnemosynec = true
 
   [params.label]
     text = "MnemosyneC"

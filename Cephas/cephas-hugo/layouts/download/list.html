@@ -851,10 +851,10 @@ body { background: #0a1628; background-image: url("data:image/svg+xml,%3Csvg xml
           <!-- Download CTA above fold -->
           <div style="text-align:center; margin:1.4rem 0 0.5rem;">
             <a class="mn-v2-dl-btn"
-               href="https://github.com/Upekrithen/LianaBanyanPlatform/releases/download/v{{ .Site.Data.version.version }}/MnemosyneC-Setup-{{ .Site.Data.version.version }}.exe"
+               href="{{ .Site.Data.version.download_url }}"
                download="MnemosyneC-Setup-{{ .Site.Data.version.version }}.exe"
                aria-label="Download MnemosyneC {{ .Site.Data.version.version }} for Windows">
-              &#8595;&nbsp; Download MnemosyneC v{{ .Site.Data.version.version }} for Windows
+              &#8595;&nbsp; Download for Windows v{{ .Site.Data.version.version }}
             </a>
           </div>
           <p class="mn-v2-hero-tagline">Free forever &nbsp;&middot;&nbsp; No ads &nbsp;&middot;&nbsp; No strings &nbsp;&middot;&nbsp; Data stays on your computer</p>
@@ -1105,10 +1105,10 @@ body { background: #0a1628; background-image: url("data:image/svg+xml,%3Csvg xml
 
     <div style="display:flex; flex-direction:column; align-items:center; max-width:400px; margin:1.4rem auto 0;">
       <a class="mn-v2-dl-btn"
-         href="https://github.com/Upekrithen/LianaBanyanPlatform/releases/download/v{{ .Site.Data.version.version }}/MnemosyneC-Setup-{{ .Site.Data.version.version }}.exe"
+         href="{{ .Site.Data.version.download_url }}"
          download="MnemosyneC-Setup-{{ .Site.Data.version.version }}.exe"
          aria-label="Download MnemosyneC starter version for Windows, v{{ .Site.Data.version.version }}">
-        &#8595;&nbsp; Download MnemosyneC v{{ .Site.Data.version.version }} for Windows
+        &#8595;&nbsp; Download for Windows v{{ .Site.Data.version.version }}
       </a>
     </div>
 
@@ -1163,6 +1163,27 @@ body { background: #0a1628; background-image: url("data:image/svg+xml,%3Csvg xml
   <hr class="mn-v2-divider" />
 
   <!-- ═══════════════════════════════════════════════
+       HOW WE MAKE SURE THINGS ARE TRUE
+       ═══════════════════════════════════════════════ -->
+  <section class="mn-v2-commons-section" id="how-we-make-sure-things-are-true" aria-labelledby="mn-truth-title">
+    <h2 id="mn-truth-title">How We Make Sure Things Are True</h2>
+    <p>The substrate doesn&rsquo;t just store knowledge. It <strong>lives</strong>.</p>
+
+    <h3 style="color:#d69e2e;font-size:1rem;margin:1.2rem 0 0.4rem;">Pheromones decay.</h3>
+    <p>Every claim entering the substrate starts as a pheromone &mdash; a signal that something might be true. Pheromones have a half-life. If nothing refreshes them, they fade. Old guesses die naturally. The substrate doesn&rsquo;t accumulate noise &mdash; it lets noise wither.</p>
+
+    <h3 style="color:#d69e2e;font-size:1rem;margin:1.2rem 0 0.4rem;">Socceri triads confirm.</h3>
+    <p>When three independent verifications converge &mdash; three Shadow E-Giants from different perspective lenses (correctness &middot; consistency &middot; coverage) returning the same verdict &mdash; a pheromone becomes a <strong>socceri triad confirmation</strong>. Verified. But still subject to decay. Verification without continued use still fades.</p>
+
+    <h3 style="color:#d69e2e;font-size:1rem;margin:1.2rem 0 0.4rem;">Stone tablets are forever.</h3>
+    <p>When a claim has been buoyed by enough living connection over enough time, it gets promoted to a <strong>stone tablet</strong> &mdash; immutable, append-only, permanent. Stone tablets are the substrate&rsquo;s load-bearing canon. They don&rsquo;t decay. They are the truth the network has earned together.</p>
+
+    <p style="font-size:0.88rem;color:rgba(250,245,235,0.6);margin-top:1rem;font-style:italic;">Truth isn&rsquo;t asserted by authority. It&rsquo;s earned through use, hardened through verification, and preserved through community. <a href="/#how-we-make-sure-things-are-true">Full explanation on homepage &rarr;</a></p>
+  </section>
+
+  <hr class="mn-v2-divider" />
+
+  <!-- ═══════════════════════════════════════════════
        TECHNICAL METHODOLOGY (all internal notation here)
        ═══════════════════════════════════════════════ -->
   <details class="mn-v2-chip mn-v2-chip--technical" id="mn-technical">
@@ -1204,7 +1225,7 @@ body { background: #0a1628; background-image: url("data:image/svg+xml,%3Csvg xml
 
       <h3>Download on GitHub</h3>
       <p>
-        <a href="https://github.com/Upekrithen/LianaBanyanPlatform/releases/tag/v{{ .Site.Data.version.version }}" target="_blank" rel="noopener">View Release v{{ .Site.Data.version.version }} on GitHub &rarr;</a>
+        <a href="https://github.com/liana-banyan/mnemosyne/releases/tag/v{{ .Site.Data.version.version }}" target="_blank" rel="noopener">View Release v{{ .Site.Data.version.version }} on GitHub &rarr;</a>
         &nbsp;&middot;&nbsp;
         <a href="/changelog/">Release changelog &rarr;</a>
         &nbsp;&middot;&nbsp;
