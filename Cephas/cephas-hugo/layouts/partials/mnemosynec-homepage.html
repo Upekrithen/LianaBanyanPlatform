@@ -550,17 +550,21 @@ footer.footer { display: none !important; }
   .mn-install-card__mascot img { width: 70px; }
 }
 
-/* v0.1.60.6 SEG-3: "Substrate." anchor in H1 — same color as heading, subtle hover affordance */
-.mn-hero-substrate-link {
-  color: inherit !important;
-  text-decoration: none !important;
-  border-bottom: 1px solid rgba(250,245,235,0.25) !important;
-  border-bottom-width: 1px !important;
+/* v0.1.60.7 SEG-3: Substrate Teal — consistent click-discovery color for anchor jumps to HOW IT WORKS */
+.mn-hero-substrate-link,
+.mn-cheap-how-link {
+  color: #5DBCD1 !important;
+  text-decoration: underline !important;
+  text-decoration-color: rgba(93, 188, 209, 0.4) !important;
+  text-underline-offset: 0.15em;
+  border-bottom: none !important;
+  transition: color 0.2s, text-decoration-color 0.2s;
   cursor: pointer;
 }
-.mn-hero-substrate-link:hover {
-  border-bottom-color: rgba(250,245,235,0.7) !important;
-  color: inherit !important;
+.mn-hero-substrate-link:hover,
+.mn-cheap-how-link:hover {
+  color: #7BD3E5 !important;
+  text-decoration-color: rgba(123, 211, 229, 1) !important;
 }
 
 /* v0.1.60.6: Smooth scroll for anchor navigation */
@@ -577,11 +581,10 @@ html { scroll-behavior: smooth; }
        ═══════════════════════════════════════════════ -->
   <section class="mn-v2-hero" aria-label="MnemosyneC hero">
     <div class="mn-v2-hero-card">
-<!-- TOP ROW: heading + mascot side-by-side -->
+<!-- TOP ROW: heading + mascot side-by-side (v0.1.60.7 Layout 2: subtitle escapes to full-width below) -->
 <div class="mn-hero-top-row">
   <div class="mn-hero-top-row__text">
     <h1>Your AI has Amnesia. Dr.&nbsp;MnemosyneC has the Cure. <a href="#how-it-works" class="mn-hero-substrate-link">Substrate.</a></h1>
-    <p class="mn-hero-pronunciation">Mnemosyne (neh-MOZ-uh-nee) is the Greek goddess of memory. <strong>Dr.&nbsp;MnemosyneC inherited her Memory.</strong></p>
   </div>
   <div class="mn-hero-top-row__mascot" aria-hidden="true">
     <img src="/img/mascots/dr-mnemosynec.png"
@@ -592,10 +595,12 @@ html { scroll-behavior: smooth; }
   </div>
 </div><!-- /mn-hero-top-row -->
 
-<!-- FULL-WIDTH body content -->
+<!-- FULL-WIDTH body content (subtitle now full-width below the heading+mascot grid) -->
 <div class="mn-hero-body">
-  <!-- v0.1.60.6 SEG-1: Download button moved UP into empty space below subtitle -->
-  <div style="text-align:center; margin:0.2rem 0 0.2rem;">
+  <p class="mn-hero-pronunciation">Mnemosyne (neh-MOZ-uh-nee) is the Greek goddess of memory. <strong>Dr.&nbsp;MnemosyneC inherited her Memory.</strong></p>
+
+  <!-- Download button centered below full-width subtitle (v0.1.60.7 Layout 2 alignment) -->
+  <div style="text-align:center; margin:0.5rem 0 0.2rem;">
     <a class="mn-v2-dl-btn"
        href="{{ .Site.Data.version.download_url }}"
        download="MnemosyneC-Setup-{{ .Site.Data.version.version }}.exe"
@@ -763,7 +768,7 @@ html { scroll-behavior: smooth; }
         <td style="padding:16px 22px;text-align:right;font-size:22px;color:#3ddc84;white-space:nowrap;">&#10004;</td>
       </tr>
       <tr style="border-top:1px solid #1c3f63;">
-        <td style="padding:16px 20px;line-height:1.5;"><strong style="color:#ffffff;">Cheap</strong> &mdash; That free local model answers at <strong>$0 a call.</strong> Everything else runs at <strong>cost plus 20%</strong>, on hardware you already own. No new data center.</td>
+        <td style="padding:16px 20px;line-height:1.5;"><strong style="color:#ffffff;">Cheap</strong> &mdash; That free local model answers at <strong>$0 a call.</strong> Our patent-pending Substrace Theorem means No new Data Centers needed &mdash; we make existing data centers 95% cheaper, more efficient, AND more accurate. For Us AND for Them. <a href="#how-it-works" class="mn-cheap-how-link">How?</a></td>
         <td style="padding:16px 22px;text-align:right;font-size:22px;color:#3ddc84;white-space:nowrap;">&#10004;</td>
       </tr>
       <tr style="border-top:1px solid #1c3f63;">
@@ -894,6 +899,10 @@ html { scroll-behavior: smooth; }
        ═══════════════════════════════════════════════ -->
   <section class="mn-substrate-card" id="how-it-works" aria-labelledby="mn-substrate-title">
     <h2 id="mn-substrate-title">HOW IT WORKS &mdash; The Substrate Persistent Memory Is the Asset &middot; How We Make Sure Things Are True &amp; Quickly &amp; Cheaply Accessed.</h2>
+
+    <!-- v0.1.60.7 SEG-2: LONG preamble — Founder direct verbatim ("you're" → "you'll" typo corrected per Bishop Truth-Always flag) -->
+    <p>That free local model answers at $0 a call. With our Patented Substrace Theorem, you will get the correct answer, in time, and if you or anyone else in the Cooperative Substrate ever asked it before - you'll get the answer FAST and FREE. The Mesh Frontier runs on hardware every user already owns. No new data center needed, since this makes existing data centers 95% cheaper, more efficient, AND more accurate! A third option to the Data Center Dilemma.</p>
+
     <p>MnemosyneC has three layers. Each does one thing well. Click any row to expand.</p>
 
     <details class="mn-layer-row">
