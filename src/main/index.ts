@@ -1713,6 +1713,216 @@ function registerIPCHandlers(): void {
     }
   });
 
+  // -- v0.2.0 BP082 OAuth (Discord + Reddit) ----------------------------------
+  //
+  // Secrets discipline: client IDs from env (DISCORD_OAUTH_CLIENT_ID /
+  // REDDIT_OAUTH_CLIENT_ID). Client secrets ONLY in 22May2026.env — never
+  // in source, never in renderer context, never in logs.
+  // OAuth tokens stored via safeStorage.encryptString() → userData/oauth_tokens.json.enc
+  // Protocol redirect: mnemo://oauth/<platform>/callback (registered in package.json).
+
+  const OAUTH_CONFIGS: Record<string, { authUrl: string; tokenUrl: string; scope: string }> = {
+    discord: {
+      authUrl: 'https://discord.com/api/oauth2/authorize',
+      tokenUrl: 'https://discord.com/api/oauth2/token',
+      scope: 'identify email guilds guilds.members.read messages.read',
+    },
+    reddit: {
+      authUrl: 'https://www.reddit.com/api/v1/authorize',
+      tokenUrl: 'https://www.reddit.com/api/v1/access_token',
+      scope: 'identity read submit vote subscribe mysubreddits',
+    },
+  };
+
+  safeHandle('oauth:start-flow', async (_event, { platform }: { platform: 'discord' | 'reddit' }) => {
+    const { shell, safeStorage } = require('electron');
+    const { join } = require('path');
+    const { readFileSync, writeFileSync, existsSync } = require('fs');
+    const crypto = require('crypto');
+
+    const clientIdKey = platform === 'discord' ? 'DISCORD_OAUTH_CLIENT_ID' : 'REDDIT_OAUTH_CLIENT_ID';
+    const clientId = process.env[clientIdKey];
+    if (!clientId) {
+      console.log(`[OAuth] ${platform} client ID not set — needs app registration`);
+      return { success: false, needsRegistration: true };
+    }
+
+    const cfg = OAUTH_CONFIGS[platform];
+    const state = crypto.randomBytes(16).toString('hex');
+    const redirectUri = `mnemo://oauth/${platform}/callback`;
+
+    const params = new URLSearchParams({
+      client_id: clientId,
+      response_type: 'code',
+      redirect_uri: redirectUri,
+      scope: cfg.scope,
+      state,
+      ...(platform === 'discord' ? {} : { duration: 'permanent' }),
+    });
+
+    const authUrl = `${cfg.authUrl}?${params.toString()}`;
+
+    return new Promise<{ success: boolean; username?: string; scopes?: string[]; error?: string; needsRegistration?: boolean }>((resolve) => {
+      // Timeout after 5 minutes
+      const timeout = setTimeout(() => {
+        app.removeListener('open-url', handler);
+        resolve({ success: false, error: 'OAuth timeout — user did not complete authorization.' });
+      }, 5 * 60 * 1000);
+
+      const handler = (_e: Electron.Event, url: string) => {
+        if (!url.startsWith(`mnemo://oauth/${platform}/callback`)) return;
+        clearTimeout(timeout);
+        app.removeListener('open-url', handler);
+
+        const u = new URL(url);
+        const code = u.searchParams.get('code');
+        const returnedState = u.searchParams.get('state');
+        const error = u.searchParams.get('error');
+
+        if (error || !code) {
+          resolve({ success: false, error: error ?? 'No code returned from OAuth provider.' });
+          return;
+        }
+        if (returnedState !== state) {
+          resolve({ success: false, error: 'OAuth state mismatch — possible CSRF. Please try again.' });
+          return;
+        }
+
+        // Exchange code for token in main process
+        const clientSecretKey = platform === 'discord' ? 'DISCORD_OAUTH_CLIENT_SECRET' : 'REDDIT_OAUTH_CLIENT_SECRET';
+        const clientSecret = process.env[clientSecretKey];
+        if (!clientSecret) {
+          resolve({ success: false, error: `${platform} client secret not set. Add ${clientSecretKey} to env.` });
+          return;
+        }
+
+        const tokenBody = new URLSearchParams({
+          grant_type: 'authorization_code',
+          code,
+          redirect_uri: redirectUri,
+          client_id: clientId!,
+          client_secret: clientSecret,
+        });
+
+        fetch(cfg.tokenUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            ...(platform === 'reddit' ? {
+              Authorization: `Basic ${Buffer.from(`${clientId}:${clientSecret}`).toString('base64')}`,
+            } : {}),
+          },
+          body: tokenBody.toString(),
+        })
+          .then((r) => r.json())
+          .then(async (tokenData: Record<string, unknown>) => {
+            if (tokenData.error) {
+              resolve({ success: false, error: String(tokenData.error_description ?? tokenData.error) });
+              return;
+            }
+
+            // Store token encrypted via safeStorage
+            const tokenPath = join(app.getPath('userData'), `oauth_${platform}.enc`);
+            if (safeStorage.isEncryptionAvailable()) {
+              const encrypted = safeStorage.encryptString(JSON.stringify(tokenData));
+              writeFileSync(tokenPath, encrypted);
+            } else {
+              // Fallback: write with mild obfuscation + warn (safeStorage unavailable on headless)
+              console.warn(`[OAuth] safeStorage unavailable — ${platform} token stored with reduced security`);
+              writeFileSync(tokenPath, Buffer.from(JSON.stringify(tokenData)).toString('base64'));
+            }
+
+            // Fetch username from platform API
+            let username = 'user';
+            try {
+              const accessToken = String(tokenData.access_token);
+              if (platform === 'discord') {
+                const meRes = await fetch('https://discord.com/api/users/@me', {
+                  headers: { Authorization: `Bearer ${accessToken}` },
+                });
+                const me = await meRes.json() as { username?: string };
+                username = me.username ?? 'user';
+              } else {
+                const meRes = await fetch('https://oauth.reddit.com/api/v1/me', {
+                  headers: { Authorization: `Bearer ${accessToken}`, 'User-Agent': 'MnemosyneC/0.2.0' },
+                });
+                const me = await meRes.json() as { name?: string };
+                username = me.name ?? 'user';
+              }
+            } catch { /* non-fatal — username fallback */ }
+
+            // Store metadata (non-secret) in plain JSON for quick reads
+            const metaPath = join(app.getPath('userData'), `oauth_${platform}_meta.json`);
+            writeFileSync(metaPath, JSON.stringify({ connected: true, username, scopes: cfg.scope.split(' '), connectedAt: new Date().toISOString() }));
+
+            resolve({ success: true, username, scopes: cfg.scope.split(' ') });
+          })
+          .catch((err: Error) => {
+            resolve({ success: false, error: `Token exchange failed: ${err.message}` });
+          });
+      };
+
+      app.on('open-url', handler);
+      shell.openExternal(authUrl).catch(() => {
+        clearTimeout(timeout);
+        app.removeListener('open-url', handler);
+        resolve({ success: false, error: 'Could not open browser for OAuth.' });
+      });
+    });
+  });
+
+  safeHandle('oauth:revoke-token', (_event, { platform }: { platform: string }) => {
+    const { join } = require('path');
+    const { existsSync, unlinkSync } = require('fs');
+    const tokenPath = join(app.getPath('userData'), `oauth_${platform}.enc`);
+    const metaPath = join(app.getPath('userData'), `oauth_${platform}_meta.json`);
+    try {
+      if (existsSync(tokenPath)) unlinkSync(tokenPath);
+      if (existsSync(metaPath)) unlinkSync(metaPath);
+      console.log(`[OAuth] ${platform} token revoked`);
+    } catch { /* non-fatal */ }
+    return { ok: true };
+  });
+
+  safeHandle('oauth:get-connection-info', (_event, { platform }: { platform: string }) => {
+    const { join } = require('path');
+    const { existsSync, readFileSync } = require('fs');
+    const metaPath = join(app.getPath('userData'), `oauth_${platform}_meta.json`);
+    if (!existsSync(metaPath)) return { connected: false };
+    try {
+      const meta = JSON.parse(readFileSync(metaPath, 'utf-8')) as { connected: boolean; username?: string };
+      return { connected: meta.connected, username: meta.username };
+    } catch {
+      return { connected: false };
+    }
+  });
+
+  safeHandle('oauth:accrue-connect-marks', (_event, { platform, amount }: { platform: string; amount: number }) => {
+    const { join } = require('path');
+    const { existsSync, readFileSync, writeFileSync } = require('fs');
+    const flagPath = join(app.getPath('userData'), `oauth_${platform}_marks_credited.flag`);
+    if (existsSync(flagPath)) {
+      // Already credited — idempotent
+      const ledger = join(app.getPath('userData'), 'marks_ledger.json');
+      try {
+        const existing = JSON.parse(readFileSync(ledger, 'utf-8')) as { total: number };
+        return { ok: true, total: existing.total };
+      } catch {
+        return { ok: true };
+      }
+    }
+    writeFileSync(flagPath, new Date().toISOString(), 'utf-8');
+    const ledgerPath = join(app.getPath('userData'), 'marks_ledger.json');
+    let total = amount;
+    try {
+      const existing = JSON.parse(readFileSync(ledgerPath, 'utf-8')) as { total: number };
+      total = (existing.total || 0) + amount;
+    } catch { /* first entry */ }
+    writeFileSync(ledgerPath, JSON.stringify({ total, updated: new Date().toISOString() }), 'utf-8');
+    console.log(`[Marks] +${amount} for ${platform} connect. Total: ${total}`);
+    return { ok: true, total };
+  });
+
   // -- Mode ------------------------------------------------------------------
   safeHandle('get-frame-mode', () => ({
     mode: currentMode,

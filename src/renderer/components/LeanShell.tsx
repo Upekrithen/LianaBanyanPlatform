@@ -1,22 +1,24 @@
-// MnemosyneC · v0.1.51 · BP080 · 2026-06-11
-// §2 Truth-Always · §3 Sonnet 4.6 · Founder-ratified DRAFT
+// MnemosyneC · v0.2.0 · BP082 · 2026-06-13
+// §2 Truth-Always · §3 Sonnet 4.6 · Founder-ratified
 //
-// LeanShell — 3-tab wrapper for first-time users.
+// LeanShell — 4-tab wrapper (Home / Gauntlet / Ask / Help) for first-time users.
 // Feature-flag driven: localStorage 'mnemoUiMode' = 'lean' | 'advanced'
 // New users default to 'lean'; existing users (mnemosynec_onboarding_complete) default to 'advanced'.
 // Advanced mode passes through to MnemosyneTabView unchanged.
+// v0.2.0 (BP082): added 4th "Help" tab — community + OAuth + eblet capture.
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { MnemosyneTabView } from './MnemosyneTabView';
 import { LeanHomeTab } from './LeanHomeTab';
 import { LeanGauntletTab } from './LeanGauntletTab';
 import { LeanAskTab } from './LeanAskTab';
+import { LeanHelpTab } from './LeanHelpTab';
 import type { FrameMode } from './FrameModeIndicator';
 import type { AuthState } from '../amplify.d';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type LeanTab = 'home' | 'gauntlet' | 'ask';
+type LeanTab = 'home' | 'gauntlet' | 'ask' | 'help';
 type UiMode = 'lean' | 'advanced';
 
 const LS_UI_MODE = 'mnemoUiMode';
@@ -144,6 +146,7 @@ const TABS: Array<{ id: LeanTab; label: string }> = [
   { id: 'home',     label: 'Home' },
   { id: 'gauntlet', label: 'Gauntlet' },
   { id: 'ask',      label: 'Ask' },
+  { id: 'help',     label: 'Help' },
 ];
 
 function TabBar({
@@ -392,6 +395,9 @@ export function LeanShell({ currentMode, onModeChange, onClose, authState }: Lea
         )}
         {activeTab === 'ask' && (
           <LeanAskTab onSwitchToHome={() => setActiveTab('home')} />
+        )}
+        {activeTab === 'help' && (
+          <LeanHelpTab />
         )}
       </div>
     </div>

@@ -773,6 +773,38 @@ contextBridge.exposeInMainWorld('amplify', {
   creditFirstInstallMarks: (): void =>
     ipcRenderer.send('credit-first-install-marks'),
 
+  // ── v0.2.0 BP082 — OAuth (Discord + Reddit) + Marks accrual ──────────────
+  oauth: {
+    /**
+     * Start an OAuth flow for the given platform ('discord' | 'reddit').
+     * Main process opens the authorization URL in the default browser,
+     * catches the mnemo://oauth/<platform>/callback redirect,
+     * exchanges the code for a token, and stores it via safeStorage.
+     * Returns { success, username?, scopes?, error?, needsRegistration? }.
+     */
+    startFlow: (platform: 'discord' | 'reddit'): Promise<{
+      success: boolean;
+      username?: string;
+      scopes?: string[];
+      error?: string;
+      needsRegistration?: boolean;
+    }> => ipcRenderer.invoke('oauth:start-flow', { platform }),
+
+    /** Revoke and delete stored token for the given platform. */
+    revokeToken: (platform: 'discord' | 'reddit'): Promise<{ ok: boolean }> =>
+      ipcRenderer.invoke('oauth:revoke-token', { platform }),
+
+    /** Credit Marks for a connect action (one-time per platform). */
+    accrueConnectMarks: (platform: 'discord' | 'reddit', amount: number): Promise<{ ok: boolean; total?: number }> =>
+      ipcRenderer.invoke('oauth:accrue-connect-marks', { platform, amount }),
+
+    /** Retrieve stored OAuth username for a platform (does not expose token). */
+    getConnectionInfo: (platform: 'discord' | 'reddit'): Promise<{
+      connected: boolean;
+      username?: string;
+    }> => ipcRenderer.invoke('oauth:get-connection-info', { platform }),
+  },
+
   // ── Trail Eblet Reader (KniPr035) ────────────────────────────────────────
   trailEblet: {
     list: (): Promise<{ files: string[]; dir: string }> =>
@@ -1414,6 +1446,19 @@ declare global {
       onFederationDeepLinkAccept?: (cb: (data: { token: string; slug: string }) => void) => () => void;
       // SAGA 13 BP046B
       creditFirstInstallMarks: () => void;
+      // v0.2.0 BP082 — OAuth + Marks
+      oauth?: {
+        startFlow: (platform: 'discord' | 'reddit') => Promise<{
+          success: boolean;
+          username?: string;
+          scopes?: string[];
+          error?: string;
+          needsRegistration?: boolean;
+        }>;
+        revokeToken: (platform: 'discord' | 'reddit') => Promise<{ ok: boolean }>;
+        accrueConnectMarks: (platform: 'discord' | 'reddit', amount: number) => Promise<{ ok: boolean; total?: number }>;
+        getConnectionInfo: (platform: 'discord' | 'reddit') => Promise<{ connected: boolean; username?: string }>;
+      };
       // SAGA 07 BP046B utilities
       openExternal?: (url: string) => void;
       hideOverlay?: () => void;
