@@ -95,6 +95,8 @@ import {
 
 // BP060 Application 002 Steps 3+4 ? Bridge IPC (UI-7 live Yoke wire)
 import { registerBridgeIPC } from './bridge_ipc';
+// Battery Dispatch v0.3.0 — BP082 publish fan-out engine
+import { registerDispatchIPC } from './dispatch/dispatch_ipc';
 
 // BP060 Application 002 Steps 3+4 ? AI Dispatch IPC (UI-8 backend)
 import { registerAiDispatchIPC } from './ai_dispatch_ipc';
@@ -2727,6 +2729,9 @@ function registerIPCHandlers(): void {
   // -- Bridge IPC (BP060 Application 002 Steps 3+4 ? UI-7 live Yoke wire) --
   registerBridgeIPC();
 
+  // -- Battery Dispatch v0.3.0 publish fan-out (BP082) ----------------------
+  registerDispatchIPC();
+
   // -- AI Dispatch IPC (BP060 Application 002 Steps 3+4 ? UI-8 backend) ----
   registerAiDispatchIPC();
 
@@ -4343,6 +4348,111 @@ function registerIPCHandlers(): void {
     broadcastProgress({ written, skipped, total, pct: 100, done: true });
 
     return { ok: true, written, skipped, total, errors };
+  });
+
+  // ── BP082 v0.2.3 — Beat-Google Benchmark IPC ──────────────────────────────
+
+  safeHandle('plow:get-google-baselines', async () => {
+    const { readFileSync, existsSync } = await import('fs');
+    const { join } = await import('path');
+    const basePath = app.isPackaged
+      ? join(process.resourcesPath, 'google_baselines.json')
+      : join(__dirname, '../../../resources/google_baselines.json');
+    if (existsSync(basePath)) {
+      try {
+        return JSON.parse(readFileSync(basePath, 'utf-8')) as unknown;
+      } catch {
+        // fallthrough to inline fallback
+      }
+    }
+    return { model: 'gemma4-12b-unified', aggregate: 0.772, per_domain_available_12b: false };
+  });
+
+  // Cancel token for the active benchmark run
+  let _benchmarkCancelRequested = false;
+
+  safeHandle('plow:cancel-benchmark', () => {
+    _benchmarkCancelRequested = true;
+    console.log('[BenchmarkRunner] Cancel requested via IPC');
+    return { ok: true };
+  });
+
+  safeHandle('plow:run-benchmark', async (
+    _event,
+    config: { nPerDomain: number; randomSeed: number; model: string; ollamaBaseUrl: string },
+  ) => {
+    _benchmarkCancelRequested = false;
+    const { runBeatGoogleBenchmark, generateReceiptMarkdown } = await import('./plow/benchmark_runner');
+    const { writeFileSync, mkdirSync, existsSync } = await import('fs');
+    const { join } = await import('path');
+
+    const broadcastProgress = (data: object) => {
+      for (const w of BrowserWindow.getAllWindows()) {
+        if (!w.isDestroyed()) w.webContents.send('plow:benchmark-progress', data);
+      }
+    };
+
+    const writeReceipt = (receiptMarkdown: string, timestamp: number): string | null => {
+      try {
+        const receiptsDir = join(app.getPath('userData'), 'benchmark_receipts');
+        if (!existsSync(receiptsDir)) mkdirSync(receiptsDir, { recursive: true });
+        const dateStr = new Date(timestamp).toISOString().slice(0, 10).replace(/-/g, '');
+        const filename = `BP082_BEAT_GOOGLE_BENCHMARK_${dateStr}_${timestamp}.md`;
+        const fullPath = join(receiptsDir, filename);
+        writeFileSync(fullPath, receiptMarkdown, 'utf-8');
+        console.log('[BenchmarkRunner] Receipt written:', fullPath);
+        // Auto-copy to Asteroid-ProofVault (workspace vault)
+        const vaultDir = join(app.getAppPath(), '../../../Asteroid-ProofVault');
+        if (existsSync(vaultDir)) {
+          try {
+            writeFileSync(join(vaultDir, `BP082_BEAT_GOOGLE_BENCHMARK_RECEIPT_${dateStr}.md`), receiptMarkdown, 'utf-8');
+            console.log('[BenchmarkRunner] Vault copy written');
+          } catch (vErr) {
+            console.warn('[BenchmarkRunner] Vault copy failed:', vErr);
+          }
+        }
+        return fullPath;
+      } catch (rErr) {
+        console.error('[BenchmarkRunner] Receipt write failed:', rErr);
+        return null;
+      }
+    };
+
+    try {
+      const result = await runBeatGoogleBenchmark(config, (progressEvent) => {
+        broadcastProgress(progressEvent);
+      });
+      // Auto-generate and write receipt
+      const receiptMarkdown = generateReceiptMarkdown(result);
+      const receiptPath = writeReceipt(receiptMarkdown, result.startedAt);
+      // Broadcast final complete event with receipt path
+      broadcastProgress({ type: 'complete', result, receiptPath });
+      return { ok: true, result, receiptPath };
+    } catch (err) {
+      console.error('[BenchmarkRunner] Fatal error:', err);
+      broadcastProgress({ type: 'error', message: (err as Error).message });
+      return { ok: false, error: (err as Error).message };
+    }
+  });
+
+  // ── plow:write-receipt (BP082 v0.2.3 benchmark receipt writer) ───────────
+  safeHandle('plow:write-receipt', async (
+    _event,
+    args: { receiptMarkdown: string; timestamp: number },
+  ) => {
+    try {
+      const { writeFileSync, mkdirSync, existsSync } = await import('fs');
+      const { join } = await import('path');
+      const receiptsDir = join(app.getPath('userData'), 'benchmark_receipts');
+      if (!existsSync(receiptsDir)) mkdirSync(receiptsDir, { recursive: true });
+      const dateStr = new Date(args.timestamp).toISOString().slice(0, 10).replace(/-/g, '');
+      const filename = `BP082_BENCHMARK_RECEIPT_${dateStr}_${args.timestamp}.md`;
+      const fullPath = join(receiptsDir, filename);
+      writeFileSync(fullPath, args.receiptMarkdown, 'utf-8');
+      return { ok: true, path: fullPath };
+    } catch (e) {
+      return { ok: false, path: undefined };
+    }
   });
 
   // ── SEG-5 v0.1.59 — Clipboard read IPC ────────────────────────────────────

@@ -1,6 +1,6 @@
 {
-    "version":  "0.2.2",
-    "filename":  "MnemosyneC-Setup-0.2.2.exe",
-    "download_url":  "https://mnemosynec.ai/download/MnemosyneC-Setup-0.2.2.exe",
-    "release_notes":  "v0.2.2: 3-voter concordance wired into Plow Loop. extractLetterChoice() fixes letter extraction. Andon Cord retry loop (MAX_ATTEMPTS=3). Founder substrate seed admin path in Gauntlet tab."
+    "version":  "0.2.3",
+    "filename":  "MnemosyneC-Setup-0.2.3.exe",
+    "download_url":  "https://mnemosynec.ai/download/MnemosyneC-Setup-0.2.3.exe",
+    "release_notes":  "v0.2.3: Beat-Google Benchmark mode. 5-shot CoT apples-to-apples vs Google Gemma 4 12B 77.2% baseline. 3-voter concordance. Auto-receipt to userData/benchmark_receipts/ and Asteroid-ProofVault/."
 }

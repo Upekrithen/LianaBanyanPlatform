@@ -1,0 +1,30 @@
+{
+  "_comment": "Google's official published Gemma 4 12B MMLU-Pro baseline. BP082 2026-06-14.",
+  "model": "gemma4-12b-unified",
+  "aggregate": 0.772,
+  "source": "https://ai.google.dev/gemma/docs/core/model_card_4",
+  "source_huggingface": "https://huggingface.co/google/gemma-4-12B-it",
+  "methodology": "5-shot CoT (TIGER-Lab MMLU-Pro standard)",
+  "fetched_date": "2026-06-14",
+  "per_domain_available_12b": false,
+  "per_domain_note": "Google has not published per-domain scores for Gemma 4 12B. Aggregate 77.2% used as comparison target per yoke spec.",
+  "per_domain_31b_reference": {
+    "_comment": "Black Sheep AI RAM-compression study of Gemma 4 31B — for reference only, NOT the 12B baseline.",
+    "_source": "https://baa.ai/research-ram-gemma4-mmlu-pro.html",
+    "math": 0.944,
+    "biology": 0.927,
+    "physics": 0.898,
+    "business": 0.895,
+    "chemistry": 0.894,
+    "economics": 0.890,
+    "computer_science": 0.883,
+    "psychology": 0.850,
+    "philosophy": 0.806,
+    "health": 0.801,
+    "engineering": 0.796,
+    "other": 0.779,
+    "history": 0.761,
+    "law": 0.719,
+    "aggregate_31b": 0.852
+  }
+}

@@ -1,11 +1,13 @@
-// TestItOutTab.tsx — SEG-2 v0.1.57 · SEG-4 v0.1.59 · BP079/BP081 · BP082 v0.2.2
+// TestItOutTab.tsx — SEG-2 v0.1.57 · SEG-4 v0.1.59 · BP079/BP081 · BP082 v0.2.2 · v0.2.3
 // Single Q: 5-question MMLU-Pro / R11 diagnostic workout.
 // Plow the Field: multi-domain parallel Plow run with per-domain progress.
 // Andon discipline: correct answers grow substrate; wrong answers never written.
 // v0.2.2: Substrate seed panel added (Settings → Substrate → Seed from Sealed Bank)
+// v0.2.3: Beat-Google Benchmark mode added (BP082 — 5-shot CoT, 3-voter concordance, receipt)
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { SubstrateSeedPanel } from './SubstrateSeedPanel';
+import { BenchmarkModal } from './BenchmarkModal';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -315,6 +317,9 @@ export function TestItOutTab(): React.ReactElement {
   const [plowState, setPlowState] = useState<PlowRunState>({ id: 'idle' });
   const plowRunningRef = useRef(false);
 
+  // ── Beat-Google Benchmark state ────────────────────────────────────────────
+  const [benchmarkModalOpen, setBenchmarkModalOpen] = useState(false);
+
   // Load history on mount
   useEffect(() => {
     window.amplify?.getTestItOutHistory?.()
@@ -530,7 +535,7 @@ export function TestItOutTab(): React.ReactElement {
                 </div>
               </div>
 
-              {/* Q count + Plow button */}
+              {/* Q count + Plow button + Beat-Google Benchmark button */}
               <div style={S.plowControlRow}>
                 <span style={{ fontSize: 13, color: '#94a3b8' }}>Questions per domain:</span>
                 <input
@@ -548,6 +553,23 @@ export function TestItOutTab(): React.ReactElement {
                   onClick={() => { void handlePlow(); }}
                 >
                   Plow 🌾
+                </button>
+                <button
+                  type="button"
+                  style={{
+                    background: 'rgba(99,102,241,0.18)',
+                    border: '1px solid rgba(99,102,241,0.4)',
+                    borderRadius: 8,
+                    color: '#a5b4fc',
+                    padding: '7px 14px',
+                    fontSize: 12,
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    whiteSpace: 'nowrap' as const,
+                  }}
+                  onClick={() => setBenchmarkModalOpen(true)}
+                >
+                  🏁 Beat-Google
                 </button>
               </div>
 
@@ -856,6 +878,11 @@ export function TestItOutTab(): React.ReactElement {
         </div>
         <SubstrateSeedPanel />
       </div>
+
+      {/* Beat-Google Benchmark modal — rendered outside the scroll container */}
+      {benchmarkModalOpen && (
+        <BenchmarkModal onClose={() => setBenchmarkModalOpen(false)} />
+      )}
     </div>
   );
 }
