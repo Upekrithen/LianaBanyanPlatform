@@ -1,9 +1,11 @@
-// TestItOutTab.tsx — SEG-2 v0.1.57 · SEG-4 v0.1.59 · BP079/BP081
+// TestItOutTab.tsx — SEG-2 v0.1.57 · SEG-4 v0.1.59 · BP079/BP081 · BP082 v0.2.2
 // Single Q: 5-question MMLU-Pro / R11 diagnostic workout.
 // Plow the Field: multi-domain parallel Plow run with per-domain progress.
 // Andon discipline: correct answers grow substrate; wrong answers never written.
+// v0.2.2: Substrate seed panel added (Settings → Substrate → Seed from Sealed Bank)
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { SubstrateSeedPanel } from './SubstrateSeedPanel';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -846,6 +848,14 @@ export function TestItOutTab(): React.ReactElement {
       )}
         </>
       )}
+
+      {/* ── Substrate Settings ────────────────────────────────────────────────── */}
+      <div style={{ marginTop: 8, paddingTop: 16, borderTop: '1px solid rgba(100,116,139,0.1)' }}>
+        <div style={{ fontSize: 11, color: '#475569', letterSpacing: '0.06em', textTransform: 'uppercase' as const, marginBottom: 10 }}>
+          Substrate Settings
+        </div>
+        <SubstrateSeedPanel />
+      </div>
     </div>
   );
 }

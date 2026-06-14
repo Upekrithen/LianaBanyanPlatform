@@ -2,12 +2,16 @@
  * andon_replow.ts — Andon Re-Plow loop for per-domain MMLU-Pro Q banks.
  * BP081 v0.1.59 SEG-4 "Plow the Field"
  * BP082 v0.2.1 SEG-2 diagnostic logging + DATA_ROOT fix
+ * BP082 v0.2.2 SEG-1 wire 3-voter concordance (runMMLUProConcordance)
+ *              SEG-2 extractLetterChoice (via giant_concordance)
+ *              Andon Cord retry loop MAX_ATTEMPTS=3
  *
- * Andon discipline: ONLY verified answers (model correct) are written to substrate.
- * Wrong answers are never written.
+ * Andon discipline: ONLY verified answers (2-of-3 concordance) are written
+ * to substrate. Wrong answers are never written.
  */
 
 import { loadDomainBank, type Domain } from './per_domain_q_banks';
+import { runMMLUProConcordance } from './giant_concordance';
 import { createHash } from 'crypto';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -17,7 +21,7 @@ import { homedir } from 'os';
 
 const OLLAMA_URL = 'http://127.0.0.1:11434';
 const DEFAULT_MODEL = 'gemma4:12b';
-const OPTION_LABELS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+const MAX_ATTEMPTS = 3;
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -33,6 +37,10 @@ function resolveModel(): string {
   return DEFAULT_MODEL;
 }
 
+function promptHash(s: string): string {
+  return createHash('sha256').update(s).digest('hex').slice(0, 12);
+}
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 export interface PlowResult {
@@ -42,6 +50,7 @@ export interface PlowResult {
   question?: string;
   answer?: string;
   modelAnswer?: string;
+  attempts?: number;
   error?: string;
 }
 
@@ -50,20 +59,17 @@ export interface PlowResult {
 /**
  * Run one Andon Re-Plow iteration for a given question text + domain.
  *
- * Steps:
+ * v0.2.2 flow:
  *   1. Look up the correct answer from the sealed domain bank.
- *   2. Ask the local Ollama model.
- *   3. Grade the response (letter-match for MMLU-Pro).
- *   4. Write a verified eblet if correct (Andon discipline).
- *   5. Return verdict: 'verified' | 'rejected' | 'quarantined'.
+ *   2. Run runMMLUProConcordance() — 3 voters, each independently asks Gemma,
+ *      extracts the answer letter, votes if it matches sealed answer.
+ *   3. 2-of-3 match → write verified eblet (Andon discipline).
+ *   4. If 0-1 match → Andon Cord: retry up to MAX_ATTEMPTS with higher temperature.
+ *   5. After MAX_ATTEMPTS without concordance → quarantine (Andon discipline).
  */
-function promptHash(s: string): string {
-  return createHash('sha256').update(s).digest('hex').slice(0, 12);
-}
-
 export async function runAndonReplowLoop(question: string, domain: string): Promise<PlowResult> {
   const qId = promptHash(question);
-  console.log(`[PlowLoop] Q ${qId} domain=${domain} attempt=1`);
+  console.log(`[PlowLoop] Q ${qId} domain=${domain} attempt=1/${MAX_ATTEMPTS}`);
 
   // ── Step 1: load domain bank + find entry ──────────────────────────────────
   let bank;
@@ -83,115 +89,111 @@ export async function runAndonReplowLoop(question: string, domain: string): Prom
 
   const entry = bank.find((q) => q.question.trim() === question.trim());
   if (!entry) {
-    const errMsg = 'Question not found in domain bank';
-    console.error(`[PlowLoop] Q ${qId} QUARANTINE not-found — question length=${question.length} bank sample[0] length=${bank[0]?.question?.length ?? 'N/A'}`);
+    console.error(
+      `[PlowLoop] Q ${qId} QUARANTINE not-found — ` +
+      `question length=${question.length} bank sample[0] length=${bank[0]?.question?.length ?? 'N/A'}`,
+    );
     return {
       ok: false,
       verdict: 'quarantined',
       ebletWritten: false,
-      error: errMsg,
+      error: 'Question not found in domain bank',
     };
   }
-
-  // ── Step 2: build MMLU-Pro prompt + ask local model ────────────────────────
-  const optionsText = entry.options
-    .map((o, i) => `${OPTION_LABELS[i] ?? String(i)}. ${o}`)
-    .join('\n');
-  const prompt =
-    `Answer the following multiple-choice question. ` +
-    `Reply with ONLY the letter of the correct answer (e.g. "A").\n\n` +
-    `Question: ${entry.question}\n\n${optionsText}\n\nAnswer:`;
 
   const model = resolveModel();
-  console.log(`[PlowLoop] lens=single model=${model} prompt-hash=${promptHash(prompt)}`);
+  const correctLetter = entry.correct_answer.trim().toUpperCase().replace(/[^A-J]/g, '').charAt(0);
 
-  let modelAnswer = '';
+  console.log(`[PlowLoop] Q ${qId} sealed answer="${correctLetter}" model="${model}" options count=${entry.options.length}`);
 
-  try {
-    const resp = await fetch(`${OLLAMA_URL}/api/generate`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model,
-        prompt,
-        stream: false,
-        options: { num_predict: 8, temperature: 0.0 },
-      }),
-      signal: AbortSignal.timeout(45_000),
-    });
-    if (resp.ok) {
-      const data = (await resp.json()) as { response?: string };
-      modelAnswer = data.response?.trim() ?? '';
-      console.log(`[PlowLoop] lens=single verdict=raw modelAnswer="${modelAnswer}"`);
-    } else {
-      const errMsg = `Ollama HTTP ${resp.status}`;
-      console.error(`[PlowLoop] Q ${qId} QUARANTINE ollama-http: ${errMsg}`);
+  // ── Step 2-3: 3-voter concordance with Andon Cord retry ───────────────────
+  let attempt = 0;
+
+  while (attempt < MAX_ATTEMPTS) {
+    attempt++;
+
+    // Slightly raise temperature on retries to get different responses
+    const temperature = attempt === 1 ? 0.0 : (attempt - 1) * 0.1;
+
+    console.log(`[PlowLoop] Q ${qId} attempt=${attempt}/${MAX_ATTEMPTS} temperature=${temperature}`);
+
+    const concordance = await runMMLUProConcordance(
+      entry.question,
+      entry.options,
+      correctLetter,
+      { model, temperature },
+    );
+
+    console.log(
+      `[PlowLoop] concordance result: { ` +
+      `verified: ${concordance.verdict === 'verified'}, ` +
+      `matchCount: ${concordance.matchCount}, ` +
+      `sealed: "${concordance.sealedLetter}", ` +
+      `voterLetters: [${concordance.voterLetters.join(',')}], ` +
+      `attempts: ${attempt} }`,
+    );
+
+    if (concordance.verdict === 'verified') {
+      // ── Write verified eblet (Andon discipline) ────────────────────────────
+      let ebletWritten = false;
+      try {
+        const { writeVerifiedEblet } = await import('../mnem_eblet_store');
+        const sha256 = createHash('sha256')
+          .update(entry.question + entry.correct_answer)
+          .digest('hex');
+        await writeVerifiedEblet({
+          question: entry.question,
+          answer: entry.correct_answer,
+          provenance: `plow-field:${domain}`,
+          verified: true,
+          sha256,
+          timestamp: Date.now(),
+        });
+        ebletWritten = true;
+        console.log(`[PlowLoop] eblet written sha256=${sha256.slice(0, 12)}`);
+      } catch (err) {
+        console.warn('[PlowLoop] eblet write failed (non-fatal):', err);
+      }
+
+      console.log(
+        `[PlowLoop] disposition: { questionId: "${qId}", verified: true, ` +
+        `verdict: "verified", ebletWritten: ${ebletWritten}, attempts: ${attempt}, ` +
+        `totalLensCalls: ${attempt * 3} }`,
+      );
+
       return {
-        ok: false,
-        verdict: 'quarantined',
-        ebletWritten: false,
-        error: errMsg,
+        ok: true,
+        verdict: 'verified',
+        ebletWritten,
+        question: entry.question,
+        answer: entry.correct_answer,
+        attempts: attempt,
       };
     }
-  } catch (err) {
-    const errMsg = `Model call failed: ${String(err).slice(0, 80)}`;
-    console.error(`[PlowLoop] Q ${qId} QUARANTINE model-call-error: ${errMsg}`);
-    return {
-      ok: false,
-      verdict: 'quarantined',
-      ebletWritten: false,
-      error: errMsg,
-    };
+
+    // Concordance failed — Andon Cord pull
+    if (attempt < MAX_ATTEMPTS) {
+      console.log(
+        `[PlowLoop] Andon Cord pulled — retrying with ` +
+        `{ newContext: temperature=${(attempt) * 0.1}, attempt: ${attempt + 1} }`,
+      );
+    }
   }
 
-  // ── Step 3: grade ──────────────────────────────────────────────────────────
-  const correctLetter = entry.correct_answer.trim().toUpperCase().replace(/[^A-Z]/g, '').charAt(0);
-  const modelLetter = modelAnswer.toUpperCase().replace(/[^A-Z]/g, '').charAt(0);
-  const isCorrect = correctLetter.length > 0 && correctLetter === modelLetter;
-
-  console.log(`[PlowLoop] concordance result: { verified: ${isCorrect}, correct: "${correctLetter}", modelLetter: "${modelLetter}", rawModel: "${modelAnswer}" }`);
-
-  if (!isCorrect) {
-    console.log(`[PlowLoop] disposition: { questionId: "${qId}", verified: false, verdict: "rejected", attempts: 1 }`);
-    return {
-      ok: true,
-      verdict: 'rejected',
-      ebletWritten: false,
-      question: entry.question,
-      answer: entry.correct_answer,
-      modelAnswer,
-    };
-  }
-
-  // ── Step 4: write verified eblet (Andon discipline) ────────────────────────
-  let ebletWritten = false;
-  try {
-    const { writeVerifiedEblet } = await import('../mnem_eblet_store');
-    const sha256 = createHash('sha256')
-      .update(entry.question + entry.correct_answer)
-      .digest('hex');
-    await writeVerifiedEblet({
-      question: entry.question,
-      answer: entry.correct_answer,
-      provenance: `plow-field:${domain}`,
-      verified: true,
-      sha256,
-      timestamp: Date.now(),
-    });
-    ebletWritten = true;
-    console.log(`[PlowLoop] eblet written sha256=${sha256.slice(0, 12)}`);
-  } catch (err) {
-    console.warn('[PlowLoop] eblet write failed (non-fatal):', err);
-  }
-
-  console.log(`[PlowLoop] disposition: { questionId: "${qId}", verified: true, verdict: "verified", ebletWritten: ${ebletWritten}, attempts: 1 }`);
+  // ── Exhausted all attempts — quarantine ───────────────────────────────────
+  console.log(
+    `[PlowLoop] disposition: { questionId: "${qId}", verified: false, ` +
+    `verdict: "quarantined", ebletWritten: false, attempts: ${attempt}, ` +
+    `totalLensCalls: ${attempt * 3} }`,
+  );
 
   return {
     ok: true,
-    verdict: 'verified',
-    ebletWritten,
+    verdict: 'quarantined',
+    ebletWritten: false,
     question: entry.question,
     answer: entry.correct_answer,
-    modelAnswer,
+    attempts: attempt,
+    error: `Andon: concordance not reached after ${attempt} attempt(s)`,
   };
 }

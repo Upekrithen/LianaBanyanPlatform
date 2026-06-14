@@ -1,6 +1,6 @@
 {
-    "version":  "0.2.1",
-    "filename":  "MnemosyneC-Setup-0.2.1.exe",
-    "download_url":  "https://mnemosynec.ai/download/MnemosyneC-Setup-0.2.1.exe",
-    "release_notes":  "v0.2.1: Plow Loop cold-start fix — MMLU-Pro question banks now bundled in installer. Verbose Plow diagnostic logging added. All 4-machine 0/168 quarantine reproduced and resolved."
+    "version":  "0.2.2",
+    "filename":  "MnemosyneC-Setup-0.2.2.exe",
+    "download_url":  "https://mnemosynec.ai/download/MnemosyneC-Setup-0.2.2.exe",
+    "release_notes":  "v0.2.2: 3-voter concordance wired into Plow Loop. extractLetterChoice() fixes letter extraction. Andon Cord retry loop (MAX_ATTEMPTS=3). Founder substrate seed admin path in Gauntlet tab."
 }

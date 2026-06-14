@@ -1259,6 +1259,26 @@ contextBridge.exposeInMainWorld('amplify', {
   }>> =>
     ipcRenderer.invoke('plow:load-domain-bank', domain),
 
+  // ── BP082 v0.2.2 — Founder substrate seed ────────────────────────────────
+
+  plowSeedFromBank: (): Promise<{
+    ok: boolean;
+    written: number;
+    skipped: number;
+    total: number;
+    errors: string[];
+  }> =>
+    ipcRenderer.invoke('plow:seed-from-bank'),
+
+  onPlowSeedProgress: (
+    callback: (data: { written: number; skipped: number; total: number; pct: number; done?: boolean }) => void,
+  ): (() => void) => {
+    const handler = (_: unknown, data: { written: number; skipped: number; total: number; pct: number; done?: boolean }) =>
+      callback(data);
+    ipcRenderer.on('plow:seed-progress', handler);
+    return () => ipcRenderer.removeListener('plow:seed-progress', handler);
+  },
+
   // ── SEG-5 v0.1.59 — Clipboard capture IPC ────────────────────────────────
 
   readClipboard: (): Promise<string> =>
@@ -1669,6 +1689,17 @@ declare global {
         source_id: string;
         source_category: string;
       }>>;
+      // BP082 v0.2.2 — Founder substrate seed
+      plowSeedFromBank?: () => Promise<{
+        ok: boolean;
+        written: number;
+        skipped: number;
+        total: number;
+        errors: string[];
+      }>;
+      onPlowSeedProgress?: (
+        callback: (data: { written: number; skipped: number; total: number; pct: number; done?: boolean }) => void,
+      ) => () => void;
       // SEG-5 v0.1.59 — Clipboard capture
       readClipboard?: () => Promise<string>;
       onClipboardCaptureQA?: (callback: () => void) => () => void;

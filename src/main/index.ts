@@ -4271,6 +4271,80 @@ function registerIPCHandlers(): void {
     return runAndonReplowLoop(question, domain);
   });
 
+  // ── BP082 v0.2.2 — Founder Substrate Seed (Hypothesis D) ──────────────────
+  // Reads all MMLU-Pro questions from bundled resources and writes Founder-attested
+  // seed eblets to verified_eblets.jsonl. Bypasses concordance per Founder-attestation
+  // doctrine (BP080 Tower-of-Peace canon). Emits progress events on the main window.
+
+  safeHandle('plow:seed-from-bank', async (event) => {
+    const { loadDomainBank, getDomainList } = await import('./plow/per_domain_q_banks');
+    const { writeVerifiedEblet } = await import('./mnem_eblet_store');
+    const { createHash } = await import('crypto');
+
+    const domains = getDomainList();
+    let total = 0;
+    let written = 0;
+    let skipped = 0;
+    const errors: string[] = [];
+
+    // Count total questions first
+    const allBanks: Array<{ domain: string; questions: import('./plow/per_domain_q_banks').Question[] }> = [];
+    for (const domain of domains) {
+      try {
+        const q = loadDomainBank(domain);
+        allBanks.push({ domain, questions: q });
+        total += q.length;
+      } catch (err) {
+        errors.push(`${domain}: ${(err as Error).message}`);
+      }
+    }
+
+    console.log(`[PlowSeed] Starting Founder seed — total=${total} domains=${allBanks.length}`);
+    const broadcastProgress = (data: object) => {
+      for (const w of BrowserWindow.getAllWindows()) {
+        if (!w.isDestroyed()) w.webContents.send('plow:seed-progress', data);
+      }
+    };
+
+    // Write in batches, emitting progress
+    for (const { domain, questions } of allBanks) {
+      for (const q of questions) {
+        try {
+          const sha256 = createHash('sha256')
+            .update(q.question + q.correct_answer)
+            .digest('hex');
+          await writeVerifiedEblet({
+            question: q.question,
+            answer: q.correct_answer,
+            provenance: `founder_seed:mmlu_pro:${domain}:bp082`,
+            verified: true,
+            sha256,
+            timestamp: Date.now(),
+          });
+          written++;
+        } catch (err) {
+          skipped++;
+          console.warn(`[PlowSeed] skip error for domain=${domain}:`, err);
+        }
+
+        // Emit progress every 50 entries
+        if ((written + skipped) % 50 === 0) {
+          broadcastProgress({
+            written,
+            skipped,
+            total,
+            pct: Math.round(((written + skipped) / total) * 100),
+          });
+        }
+      }
+    }
+
+    console.log(`[PlowSeed] Complete — written=${written} skipped=${skipped} errors=${errors.length}`);
+    broadcastProgress({ written, skipped, total, pct: 100, done: true });
+
+    return { ok: true, written, skipped, total, errors };
+  });
+
   // ── SEG-5 v0.1.59 — Clipboard read IPC ────────────────────────────────────
 
   safeHandle('clipboard:read', async () => {
