@@ -1279,6 +1279,36 @@ contextBridge.exposeInMainWorld('amplify', {
     return () => ipcRenderer.removeListener('plow:seed-progress', handler);
   },
 
+  // ── BP082 v0.2.3 — Beat-Google Benchmark ─────────────────────────────────
+
+  getGoogleBaselines: (): Promise<unknown> =>
+    ipcRenderer.invoke('plow:get-google-baselines'),
+
+  runBenchmark: (config: {
+    nPerDomain: number;
+    randomSeed: number;
+    model: string;
+    ollamaBaseUrl: string;
+  }): Promise<{ ok: boolean; result?: unknown; error?: string }> =>
+    ipcRenderer.invoke('plow:run-benchmark', config),
+
+  cancelBenchmark: (): Promise<{ ok: boolean }> =>
+    ipcRenderer.invoke('plow:cancel-benchmark'),
+
+  writeBenchmarkReceipt: (args: {
+    receiptMarkdown: string;
+    timestamp: number;
+  }): Promise<{ ok: boolean; path?: string }> =>
+    ipcRenderer.invoke('plow:write-receipt', args),
+
+  onBenchmarkProgress: (
+    callback: (event: Record<string, unknown>) => void,
+  ): (() => void) => {
+    const handler = (_: unknown, data: Record<string, unknown>) => callback(data);
+    ipcRenderer.on('plow:benchmark-progress', handler);
+    return () => ipcRenderer.removeListener('plow:benchmark-progress', handler);
+  },
+
   // ── SEG-5 v0.1.59 — Clipboard capture IPC ────────────────────────────────
 
   readClipboard: (): Promise<string> =>
@@ -1304,6 +1334,31 @@ contextBridge.exposeInMainWorld('amplify', {
     const handler = (_event: Electron.IpcRendererEvent, data: { ollamaHealthy: boolean; gemmaPresent: boolean }) => callback(data);
     ipcRenderer.on('onboarding:auto-flip-check', handler);
     return () => ipcRenderer.removeListener('onboarding:auto-flip-check', handler);
+  },
+
+  // ── Battery Dispatch v0.3.0 — BP082 · Sonnet 4.6 ──────────────────────────
+  dispatchListContentFiles: (): Promise<unknown[]> =>
+    ipcRenderer.invoke('dispatch:list-content-files'),
+
+  dispatchDefaultPlatforms: (cls: string): Promise<string[]> =>
+    ipcRenderer.invoke('dispatch:default-platforms', cls),
+
+  dispatchGetFileBody: (filePath: string): Promise<{ v1Body?: string; v2Body?: string; error?: string }> =>
+    ipcRenderer.invoke('dispatch:get-file-body', filePath),
+
+  dispatchFire: (req: { filePath: string; platforms: string[]; ratifiedPlatforms: string[] }): Promise<unknown> =>
+    ipcRenderer.invoke('dispatch:fire', req),
+
+  dispatchHistory: (): Promise<unknown[]> =>
+    ipcRenderer.invoke('dispatch:history'),
+
+  dispatchCredentialStatus: (): Promise<{ substack: boolean; medium: boolean; gmail: boolean; cephas: boolean; lianabanyan: boolean; hackernews: boolean }> =>
+    ipcRenderer.invoke('dispatch:credential-status'),
+
+  onDispatchProgress: (callback: (msg: string) => void): (() => void) => {
+    const handler = (_event: Electron.IpcRendererEvent, data: { msg: string }) => callback(data.msg);
+    ipcRenderer.on('dispatch:progress', handler);
+    return () => ipcRenderer.removeListener('dispatch:progress', handler);
   },
 });
 
@@ -1700,6 +1755,12 @@ declare global {
       onPlowSeedProgress?: (
         callback: (data: { written: number; skipped: number; total: number; pct: number; done?: boolean }) => void,
       ) => () => void;
+      // BP082 v0.2.3 — Beat-Google Benchmark
+      getGoogleBaselines?: () => Promise<unknown>;
+      runBenchmark?: (config: { nPerDomain: number; randomSeed: number; model: string; ollamaBaseUrl: string }) => Promise<{ ok: boolean; result?: unknown; error?: string }>;
+      cancelBenchmark?: () => Promise<{ ok: boolean }>;
+      writeBenchmarkReceipt?: (args: { receiptMarkdown: string; timestamp: number }) => Promise<{ ok: boolean; path?: string }>;
+      onBenchmarkProgress?: (callback: (event: Record<string, unknown>) => void) => () => void;
       // SEG-5 v0.1.59 — Clipboard capture
       readClipboard?: () => Promise<string>;
       onClipboardCaptureQA?: (callback: () => void) => () => void;
@@ -1707,6 +1768,14 @@ declare global {
       onAppVersionCheck?: (callback: (data: { version: string }) => void) => () => void;
       // A-4 BP081 v0.1.59.1 — Onboarding auto-flip check
       onOnboardingAutoFlipCheck?: (callback: (data: { ollamaHealthy: boolean; gemmaPresent: boolean }) => void) => () => void;
+      // Battery Dispatch v0.3.0 — BP082
+      dispatchListContentFiles?: () => Promise<unknown[]>;
+      dispatchDefaultPlatforms?: (cls: string) => Promise<string[]>;
+      dispatchGetFileBody?: (filePath: string) => Promise<{ v1Body?: string; v2Body?: string; error?: string }>;
+      dispatchFire?: (req: { filePath: string; platforms: string[]; ratifiedPlatforms: string[] }) => Promise<unknown>;
+      dispatchHistory?: () => Promise<unknown[]>;
+      dispatchCredentialStatus?: () => Promise<{ substack: boolean; medium: boolean; gmail: boolean; cephas: boolean; lianabanyan: boolean; hackernews: boolean }>;
+      onDispatchProgress?: (callback: (msg: string) => void) => () => void;
     };
     // SEG-V0150-P0-DIAGNOSE-BRIDGE: sentinel — set by preload before main bridge wires up
     __preloadLoaded?: boolean;

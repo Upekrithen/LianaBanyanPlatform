@@ -13,12 +13,14 @@ import { LeanHomeTab } from './LeanHomeTab';
 import { LeanGauntletTab } from './LeanGauntletTab';
 import { LeanAskTab } from './LeanAskTab';
 import { LeanHelpTab } from './LeanHelpTab';
+// BP082 v0.3.0 -- Battery Dispatch Publish Fan-Out
+import { BatteryPublishTab } from './BatteryPublishTab';
 import type { FrameMode } from './FrameModeIndicator';
 import type { AuthState } from '../amplify.d';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type LeanTab = 'home' | 'gauntlet' | 'ask' | 'help';
+type LeanTab = 'home' | 'gauntlet' | 'ask' | 'help' | 'publish';
 type UiMode = 'lean' | 'advanced';
 
 const LS_UI_MODE = 'mnemoUiMode';
@@ -147,6 +149,7 @@ const TABS: Array<{ id: LeanTab; label: string }> = [
   { id: 'gauntlet', label: 'Gauntlet' },
   { id: 'ask',      label: 'Ask' },
   { id: 'help',     label: 'Help' },
+  { id: 'publish',  label: '🔥 Publish' },
 ];
 
 function TabBar({
@@ -398,6 +401,9 @@ export function LeanShell({ currentMode, onModeChange, onClose, authState }: Lea
         )}
         {activeTab === 'help' && (
           <LeanHelpTab />
+        )}
+        {activeTab === 'publish' && (
+          <BatteryPublishTab />
         )}
       </div>
     </div>

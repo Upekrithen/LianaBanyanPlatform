@@ -63,6 +63,8 @@ import { useLifecycleStage, LS_STAGE_KEY } from '../hooks/useLifecycleStage';
 // BP067 Phase 2B/2C -- Battery Dispatch + Broadcast Schedule
 import { BatteryDispatchTab } from './BatteryDispatchTab';
 import { BroadcastScheduleTab } from './BroadcastScheduleTab';
+// BP082 v0.3.0 -- Battery Dispatch Publish Fan-Out
+import { BatteryPublishTab } from './BatteryPublishTab';
 // SEG-2 v0.1.57 -- Test It Out substrate-warming workout
 import { TestItOutTab } from './TestItOutTab';
 // BP081 Wave A SEG-A1 -- Substrate Stats dashboard
@@ -155,6 +157,8 @@ const TABS: TabDef[] = [
   { id: 'test-it-out',        label: 'Test It Out',      icon: '🧪', tooltip: 'Tab 17 · Test It Out -- 5-question substrate-warming diagnostic · run weekly · grows local accuracy' },
   { id: 'substrate-stats',   label: '📊 Substrate',     icon: '',   tooltip: 'Tab 18 · Substrate Stats -- eblet count · verified rate · growth trend · recent writes · source breakdown' },
   { id: 'membership',        label: '💎 Membership',    icon: '',   tooltip: 'Tab 19 · Membership -- $5/year · 83.3% creator-keep · Cost+20% · join or fork' },
+  // BP082 v0.3.0 -- Battery Dispatch Publish Fan-Out
+  { id: 'battery-publish',   label: '🔥 Publish',       icon: '',   tooltip: 'Tab 20 · Battery Publish -- One-click fan-out to Cephas · lianabanyan.com · Substack · Medium · HN · Gmail editorial · Crown Letters' },
 ];
 
 // ─── Props ───────────────────────────────────────────────────────────────────
@@ -1421,6 +1425,18 @@ export function MnemosyneTabView({
                 style={{ height: '100%', overflowY: 'auto' }}
               >
                 <BatteryDispatchTab />
+              </div>
+            )}
+
+            {/* BP082 v0.3.0 -- Battery Dispatch Publish Fan-Out (Tab 17) */}
+            {activeTab === 'battery-publish' && (
+              <div
+                id="panel-battery-publish"
+                role="tabpanel"
+                aria-labelledby="tab-battery-publish"
+                style={{ height: '100%', overflow: 'hidden' }}
+              >
+                <BatteryPublishTab />
               </div>
             )}
 
