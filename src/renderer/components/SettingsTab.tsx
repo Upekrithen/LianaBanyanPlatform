@@ -1324,13 +1324,12 @@ export function SettingsTab({
   async function handleCheckForUpdate() {
     setUpdateStatus((s) => ({ ...s, checking: true, upToDate: null, error: null }));
     try {
-      const result = await (window as any).amplify?.checkForUpdate?.();
-      if (result === null || result === undefined) {
-        setUpdateStatus((s) => ({ ...s, checking: false, upToDate: true, latestVersion: s.currentVersion }));
-      } else {
-        setUpdateStatus((s) => ({ ...s, checking: false, upToDate: false, latestVersion: result }));
-      }
-    } catch (err) {
+      window.amplify?.checkForUpdates?.();
+      // State arrives via onUpdateStateChanged / liveUpdateState — brief checking window
+      setTimeout(() => {
+        setUpdateStatus((s) => ({ ...s, checking: false }));
+      }, 2500);
+    } catch {
       setUpdateStatus((s) => ({ ...s, checking: false, error: 'Update check failed — try again later.' }));
     }
   }
@@ -1548,9 +1547,17 @@ export function SettingsTab({
               <div style={s.value}>{updateStatus.currentVersion || liveUpdateState?.version || '\u2014'}</div>
             </div>
             {liveUpdateState?.status === 'available' && liveUpdateState.version && (
-              <div>
-                <div style={s.label}>Available</div>
-                <div style={{ ...s.value, color: '#6ee7b7' }}>{liveUpdateState.version}</div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'flex-end' }}>
+                <div>
+                  <div style={s.label}>Available</div>
+                  <div style={{ ...s.value, color: '#6ee7b7' }}>v{liveUpdateState.version}</div>
+                </div>
+                <button
+                  onClick={() => window.amplify?.downloadUpdate?.()}
+                  style={{ ...s.btn, background: 'rgba(245,158,11,0.15)', borderColor: 'rgba(245,158,11,0.4)', color: '#fbbf24', fontWeight: 700 }}
+                >
+                  Install Now
+                </button>
               </div>
             )}
             {(!liveUpdateState || liveUpdateState.status === 'idle' || liveUpdateState.status === 'not-available' || liveUpdateState.status === 'error') && (

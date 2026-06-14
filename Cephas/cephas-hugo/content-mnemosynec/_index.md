@@ -17,7 +17,7 @@ Every time you start a new session, your AI forgets everything. Your projects, y
 - All your data stays on your own computer. No cloud. No account required.
 - Free to use. A $5/year membership unlocks the full cooperative.
 
-[Download for Windows v0.1.60](/download/) · [Six Pillars](#six-pillars) · [How it works](#how-it-works)
+[Download for Windows v0.1.60](/download/) · [Install guide](/install/) · [Six Pillars](#six-pillars) · [How it works](#how-it-works) · [All proofs](/proofs/) · [Community](/community/)
 
 ---
 
@@ -29,7 +29,7 @@ You use AI all day across a dozen surfaces. Each one forgets every time.
 
 The substrate is YOURS. SHA256-stamped. Append-only. Federated with anyone you choose. Free to copy if you want to fork. Cost+20% if you stay. Workers, Builders, Creators keep **83.3%**. No ads. No VC.
 
-**For the keep.**
+**For the keep.** *(Yours, permanently.)*
 
 <div class="cta-row">
 <a href="/download/" class="cta-primary"><strong>Download for Windows</strong></a>
@@ -37,18 +37,20 @@ The substrate is YOURS. SHA256-stamped. Append-only. Federated with anyone you c
 <a href="#how-it-works" class="cta-secondary">How it works &rarr;</a>
 </div>
 
+<p><small><em>Mac / Linux — coming soon &middot; <a href="mailto:hello@lianabanyan.com">join waitlist &rarr;</a></em></small></p>
+
 ---
 
 ## Good. Fast. Cheap. MnemosyneC gives you all six. {#six-pillars}
 
 | Pillar | What it means |
 |---|---|
-| **Good** | Verified by Shadow E-Giant concordance &middot; Andon discipline &middot; only verified-correct answers persist |
-| **Fast** | HOT eblet retrieve before LLM inference &middot; cached knowledge beats cold reasoning |
-| **Cheap** | Local Gemma 4 12B &middot; no cloud account &middot; no API key &middot; $0/call |
-| **Private** | Your machine &middot; your substrate &middot; your choice to share or not |
-| **Free** | Free as in beer (no cost) AND free as in freedom (SSPL + Cooperative Defensive Patent Pledge #2260) |
-| **Yours** | SHA256-stamped &middot; append-only &middot; federation opt-in &middot; portable &middot; forkable |
+| **Good** | Only verified-correct answers stick around. (Shadow E-Giant concordance + Andon discipline) |
+| **Fast** | Cached knowledge beats cold reasoning. (HOT eblet retrieval before LLM inference) |
+| **Cheap** | Free local AI — no cloud, no API key, $0/call. (Local Gemma 4 12B) |
+| **Private** | Your machine. Your data. Your choice to share or not. |
+| **Free** | Free as in beer (no cost) AND free as in freedom. (SSPL + Cooperative Defensive Patent Pledge #2260) |
+| **Yours** | Stamp it. Keep it. Fork it if you want. (SHA256-stamped &middot; append-only &middot; federated &middot; forkable) |
 
 ---
 
@@ -86,6 +88,30 @@ We&rsquo;re just naming the mechanism, building it into code, and giving you the
 
 ---
 
+## Pinned Proofs {#proofs}
+
+<div class="proof-card">
+<p><strong>3 cloud services failed simultaneously. MnemosyneC kept working.</strong></p>
+<p>The mesh protocol (Caithedral&trade; Federation Protocol) maintains consensus even when central services drop. 20 nodes tested. Latency held at 16.6 ms p50 throughout the failure window. No central server. No single point of failure.</p>
+<p><small><a href="/proofs/#storm-test">Receipt: Storm Test &middot; BP067 &rarr;</a></small></p>
+</div>
+
+<div class="proof-card">
+<p><strong>A free, local Ollama model jumped from 6% to 78% accuracy. No retraining. Just substrate.</strong></p>
+<p>Cohen's &kappa; = 0.936. Three independent raters. Hash-verified. Caithedral&trade; Core applied substrate context — no model fine-tuning, no new training data. The substrate did it. (+72&ndash;83 percentage point gain, BP065)</p>
+<p><small><a href="/proofs/#benchmark-r10">Receipt: Benchmark R10 &middot; BP065 &rarr;</a></small></p>
+</div>
+
+<div class="proof-card">
+<p><strong>Your entire knowledge store is a flat file you can audit yourself with standard tools.</strong></p>
+<p>Append-only JSONL. Every Eblet&trade; record SHA256-stamped. One path. No black box. You can verify that nothing moved, nothing was altered, nothing was deleted — without trusting us.</p>
+<p><small><a href="/proofs/#architecture">Receipt: Architecture Proof &rarr;</a></small></p>
+</div>
+
+[All proofs &rarr;](/proofs/)
+
+---
+
 ## The Substrate Is the Asset {#how-it-works}
 
 MnemosyneC has three layers. Each does one thing well.
@@ -120,12 +146,14 @@ Workers, Builders, Creators keep **83.3%**. Platform takes Cost+20% &mdash; no m
 <a href="/join/" class="cta-secondary">Join the mesh &rarr;</a>
 </div>
 
+<p><small><em>Mac / Linux — coming soon &middot; <a href="mailto:hello@lianabanyan.com">join waitlist &rarr;</a></em></small></p>
+
 One-line installer. Right-click &rarr; Run as Administrator. Wait for the install dialog. Launch. Your substrate starts the moment you do.
 
 **$5/year** if you stay. **Free forever** if you want to fork the code (SSPL + Pledge #2260).
 
 ---
 
-*MnemosyneC &middot; Liana Banyan Corporation &middot; For the keep.*
+*MnemosyneC &middot; Liana Banyan Corporation &middot; For the keep. *(Yours, permanently.)*
 
 *Caithedral &middot; Substrate &middot; Plow &middot; Stone Tablets &middot; Shadow E-Giants &middot; Cooperative-class*

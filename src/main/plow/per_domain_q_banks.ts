@@ -44,6 +44,8 @@ export type Domain =
   | 'health'
   | 'other';
 
+const OPTION_LABELS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'] as const;
+
 // ---------------------------------------------------------------------------
 // Internal helpers
 // ---------------------------------------------------------------------------
@@ -116,6 +118,44 @@ function isCacheValid(entry: CacheEntry): boolean {
  */
 export function getDomainList(): Domain[] {
   return [...ALL_DOMAINS];
+}
+
+/**
+ * Resolve the MMLU-Pro original answer key (option letter A–J) for grading.
+ *
+ * BP083 SEG-5: Founder-attested substrate seeds store full answer *text* in
+ * `correct_answer` (e.g. "False, True"). The grader must NOT strip non-letters
+ * from that string — it must match against the bundled option list, the same
+ * key MMLU-Pro uses. Substrate seed eblets are for B/C retrieval only.
+ */
+export function resolveMMLUProAnswerLetter(question: Question): string | null {
+  const raw = question.correct_answer.trim();
+  if (!raw) return null;
+
+  if (/^[A-J]$/i.test(raw)) {
+    return raw.toUpperCase();
+  }
+
+  const normalizedAnswer = raw.toLowerCase();
+  for (let i = 0; i < question.options.length; i++) {
+    const opt = question.options[i]?.trim().toLowerCase() ?? '';
+    if (opt === normalizedAnswer) {
+      return OPTION_LABELS[i] ?? null;
+    }
+  }
+
+  for (let i = 0; i < question.options.length; i++) {
+    const opt = question.options[i]?.trim().toLowerCase() ?? '';
+    if (!opt) continue;
+    if (opt.includes(normalizedAnswer) || normalizedAnswer.includes(opt)) {
+      return OPTION_LABELS[i] ?? null;
+    }
+  }
+
+  console.warn(
+    `[resolveMMLUProAnswerLetter] Could not resolve letter — answer="${raw.slice(0, 60)}"`,
+  );
+  return null;
 }
 
 /**

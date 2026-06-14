@@ -60,6 +60,22 @@ export function LeanHelpTab() {
 
       {/* Scrollable content */}
       <div style={s.scroll}>
+        {/* Op-Ed feature tile */}
+        <a
+          href="https://lianabanyan.com/op-eds/thou-art-the-man"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={s.opEdTile}
+        >
+          <span style={s.opEdIcon}>📖</span>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={s.opEdNew}>NEW</div>
+            <div style={s.opEdTitle}>Read "Thou Art the Man"</div>
+            <div style={s.opEdDesc}>The structural argument for why we built the cooperative.</div>
+          </div>
+          <span style={s.opEdArrow}>→</span>
+        </a>
+
         {/* FAQ + Install Guide */}
         <FAQCard />
 
@@ -155,5 +171,45 @@ const s = {
     textTransform: 'uppercase' as const,
     marginBottom: 8,
     marginTop: 4,
+  } as React.CSSProperties,
+  opEdTile: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 10,
+    background: 'linear-gradient(135deg, #0a1a12 0%, #0f2318 100%)',
+    border: '1px solid #166534',
+    borderRadius: 8,
+    padding: '10px 12px',
+    marginBottom: 12,
+    textDecoration: 'none',
+    cursor: 'pointer',
+  } as React.CSSProperties,
+  opEdIcon: {
+    fontSize: 20,
+    flexShrink: 0,
+  } as React.CSSProperties,
+  opEdNew: {
+    fontSize: 9,
+    fontWeight: 700,
+    letterSpacing: '0.1em',
+    color: '#4ade80',
+    textTransform: 'uppercase' as const,
+    marginBottom: 2,
+  } as React.CSSProperties,
+  opEdTitle: {
+    fontSize: 12,
+    fontWeight: 700,
+    color: '#d1fae5',
+    marginBottom: 2,
+  } as React.CSSProperties,
+  opEdDesc: {
+    fontSize: 10,
+    color: '#6ee7b7',
+    lineHeight: 1.4,
+  } as React.CSSProperties,
+  opEdArrow: {
+    fontSize: 14,
+    color: '#4ade80',
+    flexShrink: 0,
   } as React.CSSProperties,
 };

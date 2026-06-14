@@ -865,21 +865,25 @@ export function MnemosyneTabView({
                     </button>
                   )}
                   {updateState && updateState.status === 'available' && (
-                    <span
-                      title={`v${updateState.version} downloading...`}
+                    <button
+                      type="button"
+                      onClick={() => window.amplify?.downloadUpdate?.()}
+                      title={`Install v${updateState.version} now`}
                       style={{
                         background: 'rgba(245,158,11,0.15)',
-                        border: '1px solid rgba(245,158,11,0.3)',
+                        border: '1px solid rgba(245,158,11,0.4)',
                         borderRadius: 10,
                         color: '#fbbf24',
                         fontSize: 9,
-                        fontWeight: 600,
-                        padding: '1px 6px',
+                        fontWeight: 700,
+                        padding: '1px 8px',
+                        cursor: 'pointer',
                         whiteSpace: 'nowrap',
                       }}
+                      aria-label={`Install v${updateState.version} now`}
                     >
-                      update available
-                    </span>
+                      v{updateState.version} · Install Now
+                    </button>
                   )}
                   {updateState && updateState.status === 'downloading' && (
                     <span

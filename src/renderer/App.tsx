@@ -14,6 +14,7 @@ import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { FrameModeIndicator } from './components/FrameModeIndicator';
 import { DashboardCornerAffordance } from './components/DashboardCornerAffordance';
 import { UpdateToast } from './components/UpdateToast';
+import { UpdateModal } from './components/UpdateModal';
 import { MnemosyneTabView } from './components/MnemosyneTabView';
 import { LeanShell } from './components/LeanShell';
 import { AMPLIFYDashboard } from './components/AMPLIFYDashboard';
@@ -182,6 +183,9 @@ export default function App() {
           onClose={() => window.close()}
           authState={authState}
         />
+        {/* BP083 v0.3.2: update UI must mount in dashboard window (was overlay-only) */}
+        <UpdateToast />
+        <UpdateModal />
         {/* SEG-5 v0.1.59: Clipboard Q+A capture modal — hidden until triggered via tray or Ctrl+Shift+M */}
         <ClipboardCaptureModal />
       </ErrorBoundary>
@@ -277,8 +281,9 @@ export default function App() {
         />
       )}
 
-      {/* Bug #1 v0.1.10: update download progress + ready-to-install toast */}
+      {/* Bug #1 v0.1.10 + BP083 v0.3.2: update download progress + install modal */}
       <UpdateToast />
+      <UpdateModal />
 
       {/* Phase 7: Trial banner (active or expired) */}
       {showTrialBanner && (

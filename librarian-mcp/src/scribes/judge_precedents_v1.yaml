@@ -5860,5 +5860,174 @@ precedents:
     pending_bouncer_update: true
     ratifying_authority: "Judge"
 
+
+  - case_id: "49639f23-5ad8-4264-8f14-4d1bf60f4f05"
+    date: "2026-06-13"
+    session: "JUDGE_AUTO"
+    description: >-
+      Auto-recorded Judge PASS: C:\Users\Administrator\.claude\projects\C--Users-Administrator-Documents\memory\feedback_never_scroll_sideways_ux_canon_bp081.md
+    scales_case_id: "b9b1fa89-cc58-4da5-a9a5-cde2bc3535fb"
+    judge_verdict: "PASS"
+    new_precedent: >-
+      Write to 'C:\Users\Administrator\.claude\projects\C--Users-Administrator-Documents\memory\feedback_never_scroll_sideways_ux_canon_bp081.md' by organism 'Bishop' was PASS-adjudicated by Judge (Scales case b9b1fa89-cc58-4da5-a9a5-cde2bc3535fb). Context established as acceptable.
+    pending_bouncer_update: true
+    ratifying_authority: "Judge"
+
+
+  - case_id: "f8e55a3b-23fe-4980-9591-5ef8d0006dab"
+    date: "2026-06-13"
+    session: "JUDGE_AUTO"
+    description: >-
+      Auto-recorded Judge PASS: C:\Users\Administrator\.claude\projects\C--Users-Administrator-Documents\memory\feedback_distribution_selfhost_primary_github_fallback_bp081.md
+    scales_case_id: "cb37465f-074a-4827-be57-cb49b0634a19"
+    judge_verdict: "PASS"
+    new_precedent: >-
+      Write to 'C:\Users\Administrator\.claude\projects\C--Users-Administrator-Documents\memory\feedback_distribution_selfhost_primary_github_fallback_bp081.md' by organism 'Bishop' was PASS-adjudicated by Judge (Scales case cb37465f-074a-4827-be57-cb49b0634a19). Context established as acceptable.
+    pending_bouncer_update: true
+    ratifying_authority: "Judge"
+
+
+  - case_id: "0e82e75e-9b1d-4f91-a03c-3006a8fb1d35"
+    date: "2026-06-13"
+    session: "JUDGE_AUTO"
+    description: >-
+      Auto-recorded Judge PASS: C:\Users\Administrator\.claude\projects\C--Users-Administrator-Documents\memory\MEMORY.md
+    scales_case_id: "d5f3488e-ca7f-4dc4-96a3-53c58ba510c9"
+    judge_verdict: "PASS"
+    new_precedent: >-
+      Write to 'C:\Users\Administrator\.claude\projects\C--Users-Administrator-Documents\memory\MEMORY.md' by organism 'Bishop' was PASS-adjudicated by Judge (Scales case d5f3488e-ca7f-4dc4-96a3-53c58ba510c9). Context established as acceptable.
+    pending_bouncer_update: true
+    ratifying_authority: "Judge"
+
+
+  - case_id: "45f0b65c-2894-43ea-a4d6-777b7bab3541"
+    date: "2026-06-13"
+    session: "JUDGE_AUTO"
+    description: >-
+      Auto-recorded Judge PASS: C:\Users\Administrator\.claude\projects\C--Users-Administrator-Documents\memory\MEMORY.md
+    scales_case_id: "9137bc54-f19b-4b7f-8e19-31fb5243d38d"
+    judge_verdict: "PASS"
+    new_precedent: >-
+      Write to 'C:\Users\Administrator\.claude\projects\C--Users-Administrator-Documents\memory\MEMORY.md' by organism 'Bishop' was PASS-adjudicated by Judge (Scales case 9137bc54-f19b-4b7f-8e19-31fb5243d38d). Context established as acceptable.
+    pending_bouncer_update: true
+    ratifying_authority: "Judge"
+
+
+  - case_id: "71a41d69-79d1-432c-86b2-c21109cc4d9a"
+    date: "2026-06-13"
+    session: "JUDGE_AUTO"
+    description: >-
+      Auto-recorded Judge PASS: C:\Users\Administrator\.claude\projects\C--Users-Administrator-Documents\memory\reference_capitalist_cooperative_rains_on_just_and_unjust_canon_bp082.md
+    scales_case_id: "fab59df2-bd35-4477-9e4b-29b17c7692cc"
+    judge_verdict: "PASS"
+    new_precedent: >-
+      Write to 'C:\Users\Administrator\.claude\projects\C--Users-Administrator-Documents\memory\reference_capitalist_cooperative_rains_on_just_and_unjust_canon_bp082.md' by organism 'Bishop' was PASS-adjudicated by Judge (Scales case fab59df2-bd35-4477-9e4b-29b17c7692cc). Context established as acceptable.
+    pending_bouncer_update: true
+    ratifying_authority: "Judge"
+
+
+  - case_id: "d1afee12-f077-49f2-abd1-3ad509bfcd9a"
+    date: "2026-06-13"
+    session: "JUDGE_AUTO"
+    description: >-
+      Auto-recorded Judge PASS: C:\Users\Administrator\.claude\projects\C--Users-Administrator-Documents\memory\MEMORY.md
+    scales_case_id: "94092f56-afa5-4703-ac2d-ace72dffb92c"
+    judge_verdict: "PASS"
+    new_precedent: >-
+      Write to 'C:\Users\Administrator\.claude\projects\C--Users-Administrator-Documents\memory\MEMORY.md' by organism 'Bishop' was PASS-adjudicated by Judge (Scales case 94092f56-afa5-4703-ac2d-ace72dffb92c). Context established as acceptable.
+    pending_bouncer_update: true
+    ratifying_authority: "Judge"
+
+
+  - case_id: "6838521c-7f5d-43eb-ac0e-447baa558789"
+    date: "2026-06-14"
+    session: "JUDGE_AUTO"
+    description: >-
+      Auto-recorded Judge PASS: C:\Users\Administrator\.claude\projects\C--Users-Administrator-Documents\memory\reference_help_each_other_help_ourselves_catchphrase_canon_bp082.md
+    scales_case_id: "881339fc-b157-49ff-9c8d-74ac5a8a104c"
+    judge_verdict: "PASS"
+    new_precedent: >-
+      Write to 'C:\Users\Administrator\.claude\projects\C--Users-Administrator-Documents\memory\reference_help_each_other_help_ourselves_catchphrase_canon_bp082.md' by organism 'Bishop' was PASS-adjudicated by Judge (Scales case 881339fc-b157-49ff-9c8d-74ac5a8a104c). Context established as acceptable.
+    pending_bouncer_update: true
+    ratifying_authority: "Judge"
+
+
+  - case_id: "ba10c5bc-1149-4438-9986-03001e3ac862"
+    date: "2026-06-14"
+    session: "JUDGE_AUTO"
+    description: >-
+      Auto-recorded Judge PASS: C:\Users\Administrator\.claude\projects\C--Users-Administrator-Documents\memory\MEMORY.md
+    scales_case_id: "7da543b3-9e7c-4f89-984f-fcbfd3fe0a72"
+    judge_verdict: "PASS"
+    new_precedent: >-
+      Write to 'C:\Users\Administrator\.claude\projects\C--Users-Administrator-Documents\memory\MEMORY.md' by organism 'Bishop' was PASS-adjudicated by Judge (Scales case 7da543b3-9e7c-4f89-984f-fcbfd3fe0a72). Context established as acceptable.
+    pending_bouncer_update: true
+    ratifying_authority: "Judge"
+
+
+  - case_id: "7bc0913c-01ed-4ed7-b15e-c8d4004f8b54"
+    date: "2026-06-14"
+    session: "JUDGE_AUTO"
+    description: >-
+      Auto-recorded Judge PASS: C:\Users\Administrator\.claude\projects\C--Users-Administrator-Documents\memory\MEMORY.md
+    scales_case_id: "62f98edc-40aa-4ab9-a838-972c3dc56b14"
+    judge_verdict: "PASS"
+    new_precedent: >-
+      Write to 'C:\Users\Administrator\.claude\projects\C--Users-Administrator-Documents\memory\MEMORY.md' by organism 'Bishop' was PASS-adjudicated by Judge (Scales case 62f98edc-40aa-4ab9-a838-972c3dc56b14). Context established as acceptable.
+    pending_bouncer_update: true
+    ratifying_authority: "Judge"
+
+
+  - case_id: "d585b01c-782e-4974-9b88-208c7ce61158"
+    date: "2026-06-14"
+    session: "JUDGE_AUTO"
+    description: >-
+      Auto-recorded Judge PASS: C:\Users\Administrator\.claude\projects\C--Users-Administrator-Documents\memory\MEMORY.md
+    scales_case_id: "97d388a2-028f-400b-a2cb-8c4d698fc53b"
+    judge_verdict: "PASS"
+    new_precedent: >-
+      Write to 'C:\Users\Administrator\.claude\projects\C--Users-Administrator-Documents\memory\MEMORY.md' by organism 'Bishop' was PASS-adjudicated by Judge (Scales case 97d388a2-028f-400b-a2cb-8c4d698fc53b). Context established as acceptable.
+    pending_bouncer_update: true
+    ratifying_authority: "Judge"
+
+
+  - case_id: "a6541ff4-ee9d-4176-b588-22c8a64aa989"
+    date: "2026-06-14"
+    session: "JUDGE_AUTO"
+    description: >-
+      Auto-recorded Judge PASS: C:\Users\Administrator\.claude\projects\C--Users-Administrator-Documents\memory\MEMORY.md
+    scales_case_id: "d21dcd87-8162-4021-baef-650756230cb2"
+    judge_verdict: "PASS"
+    new_precedent: >-
+      Write to 'C:\Users\Administrator\.claude\projects\C--Users-Administrator-Documents\memory\MEMORY.md' by organism 'Bishop' was PASS-adjudicated by Judge (Scales case d21dcd87-8162-4021-baef-650756230cb2). Context established as acceptable.
+    pending_bouncer_update: true
+    ratifying_authority: "Judge"
+
+
+  - case_id: "03e0c0e7-0ecd-4c73-8cad-dc44d17e21b4"
+    date: "2026-06-14"
+    session: "JUDGE_AUTO"
+    description: >-
+      Auto-recorded Judge PASS: C:\Users\Administrator\.claude\projects\C--Users-Administrator-Documents\memory\MEMORY.md
+    scales_case_id: "e1d8dfcd-4626-4293-9ba3-057c7ffcfac2"
+    judge_verdict: "PASS"
+    new_precedent: >-
+      Write to 'C:\Users\Administrator\.claude\projects\C--Users-Administrator-Documents\memory\MEMORY.md' by organism 'Bishop' was PASS-adjudicated by Judge (Scales case e1d8dfcd-4626-4293-9ba3-057c7ffcfac2). Context established as acceptable.
+    pending_bouncer_update: true
+    ratifying_authority: "Judge"
+
+
+  - case_id: "922005f1-c0c0-4d16-8135-b2f6ab3d3231"
+    date: "2026-06-14"
+    session: "JUDGE_AUTO"
+    description: >-
+      Auto-recorded Judge PASS: C:\Users\Administrator\.claude\projects\C--Users-Administrator-Documents\memory\MEMORY.md
+    scales_case_id: "ad101d34-2c0d-4d06-99ae-c0a20e7069ad"
+    judge_verdict: "PASS"
+    new_precedent: >-
+      Write to 'C:\Users\Administrator\.claude\projects\C--Users-Administrator-Documents\memory\MEMORY.md' by organism 'Bishop' was PASS-adjudicated by Judge (Scales case ad101d34-2c0d-4d06-99ae-c0a20e7069ad). Context established as acceptable.
+    pending_bouncer_update: true
+    ratifying_authority: "Judge"
+
 registry_version: 1
 last_updated: 2026-05-01

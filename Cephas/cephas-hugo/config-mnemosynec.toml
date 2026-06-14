@@ -18,7 +18,7 @@ buildFuture = true
 
 [params]
   hideFooter = true
-  description = "MnemosyneC remembers. Every interaction with any AI grows your substrate. SHA256-stamped. Append-only. Federated. Workers, Builders, Creators keep 83.3%. No ads. No VC."
+  description = "Your AI has Amnesia. MnemosyneC has the Cure. Private, permanent AI memory — runs locally, free forever. Workers, Builders, Creators keep 83.3%. No ads. No VC."
   author = "Liana Banyan Corporation"
   defaultTheme = "dark"
   env = "production"

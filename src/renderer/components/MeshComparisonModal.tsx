@@ -246,6 +246,14 @@ export function MeshComparisonModal({ onClose }: { onClose: () => void }) {
             doneResults: [...prev.doneResults, ev.result as MeshDomainResult],
           };
         });
+      } else if (ev.type === 'smoke-test') {
+        setState((prev) => {
+          if (prev.id !== 'running') return prev;
+          return {
+            ...prev,
+            currentDomain: `Smoke test: ${(ev.message as string | undefined) ?? 'running…'}`,
+          };
+        });
       } else if (ev.type === 'complete') {
         runningRef.current = false;
         setState({ id: 'complete', result: ev.result as MeshComparisonResult });

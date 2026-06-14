@@ -1,6 +1,6 @@
 {
-    "version":  "0.2.3",
-    "filename":  "MnemosyneC-Setup-0.2.3.exe",
-    "download_url":  "https://mnemosynec.ai/download/MnemosyneC-Setup-0.2.3.exe",
-    "release_notes":  "v0.2.3: Beat-Google Benchmark mode. 5-shot CoT apples-to-apples vs Google Gemma 4 12B 77.2% baseline. 3-voter concordance. Auto-receipt to userData/benchmark_receipts/ and Asteroid-ProofVault/."
+  "version": "0.3.2",
+  "filename": "MnemosyneC-Setup-0.3.2.exe",
+  "download_url": "https://mnemosynec.ai/download/MnemosyneC-Setup-0.3.2.exe",
+  "release_notes": "v0.3.2: Auto-update Install button P0 (BP083). Wire downloadUpdate + quitAndInstall + progress modal. Mesh grader uses MMLU-Pro original answer key. Single-Q question bank path fixed."
 }

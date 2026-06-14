@@ -25,7 +25,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
 import { createHash } from 'crypto';
-import { loadDomainBank, getDomainList, type Domain, type Question } from './per_domain_q_banks';
+import { loadDomainBank, getDomainList, resolveMMLUProAnswerLetter, type Domain, type Question } from './per_domain_q_banks';
 import { runMMLUProConcordance, extractLetterChoice } from './giant_concordance';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -129,11 +129,7 @@ function buildFiveShotCoTPrompt(
     const optText = shot.options
       .map((o, i) => `${OPTION_LABELS[i] ?? i}. ${o}`)
       .join('\n');
-    const correctLabel = shot.correct_answer
-      .trim()
-      .toUpperCase()
-      .replace(/[^A-J]/g, '')
-      .charAt(0);
+    const correctLabel = resolveMMLUProAnswerLetter(shot) ?? '?';
     lines.push(
       `Question: ${shot.question}\n${optText}\nThe answer is (${correctLabel}).\n`,
     );
@@ -244,7 +240,11 @@ export async function runBeatGoogleBenchmark(
 
     for (let qi = 0; qi < selected.length; qi++) {
       const q = selected[qi];
-      const sealedLetter = q.correct_answer.trim().toUpperCase().replace(/[^A-J]/g, '').charAt(0);
+      const sealedLetter = resolveMMLUProAnswerLetter(q);
+      if (!sealedLetter) {
+        console.warn(`[BenchmarkRunner] skip Q — unresolved answer key domain=${domain}`);
+        continue;
+      }
       const qId = createHash('sha256').update(q.question).digest('hex').slice(0, 10);
 
       // Run 3-voter concordance with 5-shot CoT voters

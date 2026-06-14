@@ -25,6 +25,7 @@ interface Anecdote {
   title: string;
   body_markdown: string;
   photo_urls: string[];
+  hero_image_url: string | null;
   privacy_level: string;
   when_it_happened: string | null;
   where_it_happened: string | null;
@@ -219,6 +220,19 @@ export function AnecdoteCard({
       </h3>
 
       {isFounder && <FounderBadge />}
+
+      {/* Hero image */}
+      {anecdote.hero_image_url && (
+        <figure className="mb-4 rounded-lg overflow-hidden">
+          <img
+            src={anecdote.hero_image_url}
+            alt={anecdote.title}
+            className="w-full h-auto"
+            style={{ maxHeight: "320px", objectFit: "cover", borderRadius: "8px" }}
+            loading="lazy"
+          />
+        </figure>
+      )}
 
       {/* Body (markdown) */}
       <div className="prose prose-sm prose-invert max-w-none mb-4 text-slate-300 leading-relaxed [&_table]:text-xs [&_th]:text-slate-400 [&_td]:text-slate-300 [&_hr]:border-slate-700 [&_strong]:text-emerald-300 [&_em]:text-slate-200">

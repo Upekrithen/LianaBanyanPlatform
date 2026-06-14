@@ -3713,12 +3713,8 @@ function registerIPCHandlers(): void {
   safeHandle('run-test-it-out', async (event) => {
     const TOTAL = 5;
 
-    // Resolve question bank: prefer smoke (20 Qs) bundled in lb-reproducibility-pack.
-    const bankPaths = [
-      join(__dirname, '..', '..', 'lb-reproducibility-pack', 'datasets', 'smoke', 'questions_smoke.json'),
-      join(__dirname, '..', '..', 'lb-reproducibility-pack', 'datasets', 'reasonable', 'questions_reasonable.json'),
-      join(__dirname, '..', '..', 'librarian-mcp', 'r10_cross_vendor', 'R11v2_QUESTION_BANK_SEALED_K528.json'),
-    ];
+    // BP083 SEG-4: same bundled extraResources MMLU-Pro path as substrate seed + mesh
+    const { loadDomainBank, getDomainList } = await import('./plow/per_domain_q_banks');
 
     type BankQuestion = {
       id: string;
@@ -3728,17 +3724,20 @@ function registerIPCHandlers(): void {
     };
 
     let allQuestions: BankQuestion[] = [];
-    for (const bankPath of bankPaths) {
-      if (!existsSync(bankPath)) continue;
+    for (const domain of getDomainList()) {
       try {
-        const raw = JSON.parse(readFileSync(bankPath, 'utf8')) as {
-          questions?: BankQuestion[];
-        };
-        if (Array.isArray(raw.questions) && raw.questions.length > 0) {
-          allQuestions = raw.questions as BankQuestion[];
-          break;
+        const bank = loadDomainBank(domain);
+        for (const q of bank) {
+          allQuestions.push({
+            id: `${domain}:${q.source_id}`,
+            question: q.question,
+            canonical_answer: q.correct_answer,
+            hot_required_elements: [q.correct_answer],
+          });
         }
-      } catch { /* try next bank */ }
+      } catch {
+        /* domain bank missing — skip */
+      }
     }
 
     if (allQuestions.length === 0) {
@@ -4458,6 +4457,14 @@ function registerIPCHandlers(): void {
   // ── plow:mesh-comparison — BP082 v0.3.1 3-condition runner ──────────────
   let _meshCancelToken = { cancelled: false };
 
+  safeHandle('plow:mesh-grader-smoke-test', async (
+    _event,
+    config: { model: string; ollamaBaseUrl: string },
+  ) => {
+    const { runMeshGraderSmokeTest } = await import('./plow/mesh_comparison_runner');
+    return runMeshGraderSmokeTest(config);
+  });
+
   safeHandle('plow:cancel-mesh-comparison', () => {
     _meshCancelToken.cancelled = true;
     console.log('[MeshComparison] Cancel requested via IPC');
@@ -4469,7 +4476,7 @@ function registerIPCHandlers(): void {
     config: { nPerDomain: number; randomSeed: number; model: string; ollamaBaseUrl: string },
   ) => {
     _meshCancelToken = { cancelled: false };
-    const { runMeshComparison, generateMeshComparisonReceipt } = await import('./plow/mesh_comparison_runner');
+    const { runMeshComparison, generateMeshComparisonReceipt, runMeshGraderSmokeTest } = await import('./plow/mesh_comparison_runner');
     const { writeFileSync, mkdirSync, existsSync } = await import('fs');
     const { join } = await import('path');
 
@@ -4505,6 +4512,16 @@ function registerIPCHandlers(): void {
     };
 
     try {
+      const smoke = await runMeshGraderSmokeTest({
+        model: config.model,
+        ollamaBaseUrl: config.ollamaBaseUrl,
+      });
+      broadcastProgress({ type: 'smoke-test', ...smoke });
+      if (!smoke.ok) {
+        broadcastProgress({ type: 'error', message: smoke.message });
+        return { ok: false, error: smoke.message, smoke };
+      }
+
       const result = await runMeshComparison(config, (progressEvent) => {
         broadcastProgress(progressEvent);
       }, _meshCancelToken);

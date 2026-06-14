@@ -1,13 +1,15 @@
----
+﻿---
 title: "Because I Was a Soldier"
 date: 2026-05-24
-draft: true
+draft: false
 categories: ["Founder Anecdotes"]
 tags: ["military", "ARNG", "discipline", "service", "origin"]
 summary: "People ask Jonathan why he works so hard on something with no guaranteed payoff. The answer is short: because I was a soldier. You don't stop because it gets hard. You stop when the mission is complete."
+hero_image: "/img/founder/founder-fort-benning-1989.jpg"
+hero_image_caption: "Fort Benning, Basic Training, 1989. Infantry 11B."
 ---
 
-The question comes up at every pitch, every coffee meeting, every investor call that goes sideways: "Why are you still doing this? Why not take a job?" Jonathan's answer, when he gives it fully, always returns to the same place — the Army.
+The question comes up at every pitch, every coffee meeting, every investor call that goes sideways: "Why are you still doing this? Why not take a job?" Jonathan's answer, when he gives it fully, always returns to the same place â€” the Army.
 
 Not because of any particular deployment or training exercise, but because of what service instills: the understanding that there is such a thing as a mission, that the mission has requirements independent of your comfort, and that the difference between a professional and an amateur is what happens when the conditions are terrible.
 
