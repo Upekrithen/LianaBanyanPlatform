@@ -1,10 +1,11 @@
-// MnemosyneC · v0.1.57.1 · SEG BP081 · 2026-06-13
+// MnemosyneC · v0.1.62 · BP082 · 2026-06-13
 // §2 Truth-Always · §3 Sonnet 4.6 · Founder-ratified
 //
 // LeanAskTab — Ask A Question tab for the 3-tab LeanShell.
 // Model: gemma4:12b — LOCAL ONLY (A1.1 hard binding, no cloud exposure).
 // SEG-1 v0.1.57: routes through ai-dispatch:query IPC (substrate HOT retrieve active).
 // v0.1.57.1 (BP081): token streaming + cold-start heartbeat.
+// v0.1.62 (BP082): Clear + Save & Clear buttons in header. Save uses Blob download (path-b).
 // Persistent history in localStorage key 'mnemo_ask_history' (max 200 msgs).
 // Membership CTA banner pinned at bottom, never dismissible.
 
@@ -153,8 +154,63 @@ export function LeanAskTab({ onSwitchToHome }: LeanAskTabProps) {
   const [retrying, setRetrying] = useState(false);
   // SEG-2 v0.1.56: show pull progress UI when gemma4:12b is missing
   const [showPullProgress, setShowPullProgress] = useState(false);
+  // v0.1.62 BP082: toast state for Clear / Save & Clear feedback
+  const [toast, setToast] = useState<string | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const showToast = useCallback((msg: string) => {
+    if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+    setToast(msg);
+    toastTimerRef.current = setTimeout(() => setToast(null), 3000);
+  }, []);
+
+  // v0.1.62: Clear all message history after confirm
+  const handleClear = useCallback(() => {
+    if (messages.length === 0) return;
+    const ok = window.confirm(
+      `Clear ${messages.length} message${messages.length === 1 ? '' : 's'} and start fresh? This cannot be undone.`
+    );
+    if (!ok) return;
+    setMessages([]);
+    localStorage.removeItem(LS_HISTORY_KEY);
+    showToast('Cleared. Ready for a fresh question.');
+  }, [messages, showToast]);
+
+  // v0.1.62: Save conversation to .md via Blob download (path-b), then clear
+  const handleSaveAndClear = useCallback(() => {
+    if (messages.length === 0) return;
+    const ts = new Date().toISOString().replace(/[:.]/g, '-');
+    const md = [
+      '# MnemosyneC Ask — Saved Conversation',
+      '',
+      `**Saved:** ${new Date().toLocaleString()}`,
+      `**Model:** ${MODEL}`,
+      `**Messages:** ${messages.length}`,
+      '',
+      '---',
+      '',
+      ...messages.map(m => {
+        const who = m.role === 'user' ? '**You:**' : '**Gemma:**';
+        return `${who}\n\n${m.content}\n\n---\n`;
+      }),
+    ].join('\n');
+
+    const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `mnemo-ask-${ts}.md`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    setMessages([]);
+    localStorage.removeItem(LS_HISTORY_KEY);
+    showToast('Saved to your Downloads folder. Ready for a fresh question.');
+  }, [messages, showToast]);
 
   // v0.1.57.1 (BP081): streaming state — refs only (no extra React state for per-second ticks)
   const currentAiIdRef = useRef<string | null>(null);
@@ -398,12 +454,86 @@ export function LeanAskTab({ onSwitchToHome }: LeanAskTabProps) {
     }}>
       {/* Header */}
       <div style={{ padding: '14px 16px 4px', flexShrink: 0 }}>
-        <h2 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: '#f0fdf4' }}>
-          Ask A Question
-        </h2>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+          <h2 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: '#f0fdf4', flex: 1, minWidth: 120 }}>
+            Ask A Question
+          </h2>
+          {/* v0.1.62: Clear + Save & Clear buttons */}
+          <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
+            <button
+              type="button"
+              onClick={handleClear}
+              disabled={messages.length === 0}
+              aria-label={`Clear ${messages.length} messages`}
+              title="Clear all messages"
+              style={{
+                background: 'none',
+                border: '1px solid #334155',
+                borderRadius: 5,
+                color: messages.length === 0 ? '#334155' : '#94a3b8',
+                fontSize: 11,
+                padding: '3px 9px',
+                cursor: messages.length === 0 ? 'default' : 'pointer',
+                opacity: messages.length === 0 ? 0.4 : 1,
+                fontFamily: 'system-ui, sans-serif',
+                outline: 'none',
+                transition: 'background 0.12s, color 0.12s',
+                whiteSpace: 'nowrap',
+              }}
+              onMouseEnter={e => { if (messages.length > 0) (e.currentTarget as HTMLButtonElement).style.background = '#1e2a38'; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'none'; }}
+            >
+              🧹 Clear
+            </button>
+            <button
+              type="button"
+              onClick={handleSaveAndClear}
+              disabled={messages.length === 0}
+              aria-label={`Save and clear ${messages.length} messages`}
+              title="Save conversation to a file, then clear"
+              style={{
+                background: 'none',
+                border: '1px solid #334155',
+                borderRadius: 5,
+                color: messages.length === 0 ? '#334155' : '#94a3b8',
+                fontSize: 11,
+                padding: '3px 9px',
+                cursor: messages.length === 0 ? 'default' : 'pointer',
+                opacity: messages.length === 0 ? 0.4 : 1,
+                fontFamily: 'system-ui, sans-serif',
+                outline: 'none',
+                transition: 'background 0.12s, color 0.12s',
+                whiteSpace: 'nowrap',
+              }}
+              onMouseEnter={e => { if (messages.length > 0) (e.currentTarget as HTMLButtonElement).style.background = '#1e2a38'; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'none'; }}
+            >
+              💾 Save &amp; Clear
+            </button>
+          </div>
+        </div>
         <p style={{ margin: '4px 0 0', fontSize: 11, color: '#475569' }}>
           Powered by gemma4:12b running on your own computer. Private by default.
         </p>
+        {/* Toast feedback pill */}
+        {toast && (
+          <div
+            role="status"
+            aria-live="polite"
+            style={{
+              marginTop: 6,
+              background: '#064e3b',
+              border: '1px solid #059669',
+              borderRadius: 5,
+              padding: '5px 10px',
+              fontSize: 11,
+              color: '#6ee7b7',
+              animation: 'fadeIn 0.15s ease',
+            }}
+          >
+            {toast}
+          </div>
+        )}
       </div>
 
       {/* SEG-2: Full-screen pull progress UI when gemma4:12b is missing */}

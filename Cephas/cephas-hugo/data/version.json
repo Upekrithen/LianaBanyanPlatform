@@ -1,6 +1,6 @@
 {
-    "version":  "0.1.61",
-    "filename":  "MnemosyneC-Setup-0.1.61.exe",
-    "download_url":  "https://mnemosynec.ai/download/MnemosyneC-Setup-0.1.61.exe",
-    "release_notes":  "P0 hotfix: tab strip now always visible on fresh install. Fixes blank/no-tab UI for users upgrading from pre-v0.1.51 installs."
+    "version":  "0.1.62",
+    "filename":  "MnemosyneC-Setup-0.1.62.exe",
+    "download_url":  "https://mnemosynec.ai/download/MnemosyneC-Setup-0.1.62.exe",
+    "release_notes":  "v0.1.62: Ask tab Clear + Save & Clear buttons. Clears message history with confirm; saves full conversation as .md to Downloads folder before clearing. Fresh-install tab strip fix from v0.1.61 included."
 }
