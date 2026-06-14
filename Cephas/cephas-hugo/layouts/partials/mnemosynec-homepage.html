@@ -8,6 +8,7 @@
    HOMEPAGE SHELL — full-bleed dark page, no horizontal scroll
    BP081 UX CANON: NEVER SCROLL SIDEWAYS
    ════════════════════════════════════════════════════════ */
+:root { --mn-card-gap: 1.5rem; }
 .main { max-width:100% !important; padding:0 !important; margin:0 !important; overflow-x:hidden !important; }
 html, body { overflow-x:hidden !important; max-width:100% !important; background:#0a1628 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.06'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat; }
 
@@ -33,12 +34,12 @@ footer.footer { display: none !important; }
 }
 
 /* ── HERO ── */
-.mn-v2-hero { padding: 1rem 0 2rem; }
+.mn-v2-hero { padding: 1rem 0; }
 .mn-v2-hero-card {
   background: linear-gradient(135deg, rgba(10,22,40,0.97) 0%, rgba(5,14,30,0.99) 100%);
   border: 1px solid rgba(214,158,46,0.35);
   border-radius: 14px;
-  padding: 2.4rem 2rem 2rem;
+  padding: 1rem 2rem;
   box-shadow: 0 8px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(214,158,46,0.12);
   position: relative;
   overflow: hidden;
@@ -100,6 +101,32 @@ footer.footer { display: none !important; }
   .mn-hero-top-row__mascot img { width: 110px; }
 }
 .mn-hero-body { width: 100%; }
+/* v0.1.60.8 SEG-1: mn-hero-block — subtitle+button in LEFT col, mascot in RIGHT col */
+.mn-hero-block {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1.8rem;
+  align-items: flex-start;
+  margin-bottom: 1.2rem;
+}
+.mn-hero-left { min-width: 0; }
+.mn-hero-right {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+.mn-hero-right img { width: 220px; height: auto; display: block; border-radius: 8px; }
+.mn-hero-download-block { margin-top: 0.8rem; }
+.mn-hero-body-fullwidth { width: 100%; }
+@media (max-width: 720px) {
+  .mn-hero-block {
+    grid-template-columns: 1fr;
+  }
+  .mn-hero-right { order: -1; margin-bottom: 0.5rem; }
+  .mn-hero-right img { width: 110px; }
+}
 .mn-v2-hero-card h1 {
   color: #faf5eb;
   font-size: clamp(1.5rem, 4vw, 2.1rem);
@@ -123,7 +150,7 @@ footer.footer { display: none !important; }
 .mn-hero-bullets {
   color: rgba(250,245,235,0.82);
   font-size: clamp(0.9rem, 2vw, 1rem);
-  margin: 0 0 1.3rem;
+  margin: 0 0 1rem;
   padding-left: 1.3rem;
   line-height: 1.65;
 }
@@ -150,6 +177,25 @@ footer.footer { display: none !important; }
   border-color: #2f8a59 !important;
   transform: translateY(-2px);
   box-shadow: 0 10px 32px rgba(56,161,105,0.5);
+}
+/* Download button state machine — v0.1.60.11 */
+.mn-v2-dl-btn[data-state="downloading"] {
+  background: #c9a84c !important;
+  border-color: #c9a84c !important;
+  border-bottom-color: #c9a84c !important;
+  cursor: wait !important;
+  pointer-events: none;
+  animation: mn-dl-pulse 1.6s ease-in-out infinite;
+}
+.mn-v2-dl-btn[data-state="downloaded"] {
+  background: #2d7d52 !important;
+  border-color: #2d7d52 !important;
+  border-bottom-color: #2d7d52 !important;
+  cursor: default !important;
+}
+@keyframes mn-dl-pulse {
+  0%, 100% { box-shadow: 0 6px 24px rgba(201, 168, 76, 0.35); }
+  50%      { box-shadow: 0 10px 40px rgba(201, 168, 76, 0.7); }
 }
 .mn-hp-nav-links {
   text-align: center;
@@ -205,7 +251,7 @@ footer.footer { display: none !important; }
 
 /* ── BENCHMARK CHART (Does It Actually Work?) ── */
 .mn-v2-chart-section {
-  margin: 2rem 0;
+  margin: var(--mn-card-gap) 0;
   padding: 1.8rem;
   background: rgba(5,11,20,0.7);
   border: 1px solid rgba(214,158,46,0.18);
@@ -262,7 +308,7 @@ footer.footer { display: none !important; }
 
 /* ── MNEMOSYNEC REMEMBERS section ── */
 .mn-hp-remembers {
-  margin: 2rem 0;
+  margin: var(--mn-card-gap) 0;
   padding: 2rem;
   background: rgba(10,22,40,0.7);
   border: 1px solid rgba(214,158,46,0.22);
@@ -278,7 +324,7 @@ footer.footer { display: none !important; }
 
 /* ── SEG-6: PINNED PROOFS ACCORDIONS — NEVER SCROLL SIDEWAYS ── */
 .mn-proofs-accordion-section {
-  margin: 2rem 0;
+  margin: var(--mn-card-gap) 0;
   padding: 1.5rem 1.8rem 1.5rem;
   background: rgba(5,11,20,0.75);
   border: 1px solid rgba(214,158,46,0.22);
@@ -434,7 +480,7 @@ footer.footer { display: none !important; }
 
 /* ── SEG-5/7: COMBINED SUBSTRATE + HOW WE MAKE SURE ── */
 .mn-substrate-card {
-  margin: 2rem 0;
+  margin: var(--mn-card-gap) 0;
   padding: 2rem;
   background: rgba(5,11,20,0.7);
   border: 1px solid rgba(214,158,46,0.22);
@@ -571,6 +617,39 @@ footer.footer { display: none !important; }
 html { scroll-behavior: smooth; }
 
 /* ── Footer (SEG-8) — single copyright via extend_footer.html for all pages ── */
+
+/* v0.1.61.0 SEG-1: Real proof thumbnails */
+.mn-proof-thumb-link {
+  display: block;
+  text-decoration: none !important;
+  border-bottom: none !important;
+  flex: 1 1 140px;
+  max-width: 200px;
+}
+.mn-proof-thumb-link img {
+  width: 100%;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: zoom-in;
+  display: block;
+  border: 1px solid rgba(214,158,46,0.2);
+  transition: border-color 0.15s;
+}
+.mn-proof-thumb-link:hover img { border-color: rgba(214,158,46,0.5); }
+.mn-proof-caption {
+  font-size: 0.72rem;
+  color: rgba(250,245,235,0.55);
+  font-style: italic;
+  margin: 0.3rem 0 0;
+  text-align: center;
+  line-height: 1.4;
+}
+
+/* v0.1.61.0 SEG-2: More → links */
+.mn-proof-more { margin: 0.5rem 0; font-size: 0.85em; }
+.mn-proof-more a { color: rgba(214,158,46,0.8); text-decoration: none; border-bottom: none !important; }
+.mn-proof-more a:hover { color: rgba(214,158,46,1); }
 </style>
 
 <div class="mn-hp-page">
@@ -581,46 +660,51 @@ html { scroll-behavior: smooth; }
        ═══════════════════════════════════════════════ -->
   <section class="mn-v2-hero" aria-label="MnemosyneC hero">
     <div class="mn-v2-hero-card">
-<!-- TOP ROW: heading + mascot side-by-side (v0.1.60.7 Layout 2: subtitle escapes to full-width below) -->
-<div class="mn-hero-top-row">
-  <div class="mn-hero-top-row__text">
-    <h1>Your AI has Amnesia. Dr.&nbsp;MnemosyneC has the Cure. <a href="#how-it-works" class="mn-hero-substrate-link">Substrate.</a></h1>
+<!-- mn-hero-block: 2-col grid — LEFT: h1+subtitle+button, RIGHT: mascot -->
+<div class="mn-hero-block">
+  <div class="mn-hero-left">
+    <h1>Your AI has Amnesia. Dr.&nbsp;MnemosyneC&trade; has the Cure. <a href="#how-it-works" class="mn-hero-substrate-link">Substrate.&trade;</a></h1>
+
+    <p class="mn-hero-pronunciation">Mnemosyne (neh-MOZ-uh-nee) is the Greek goddess of memory. <strong>Dr.&nbsp;MnemosyneC inherited her Memory.</strong></p>
+
+    <div class="mn-hero-download-block">
+      <a class="mn-v2-dl-btn"
+         id="mn-hero-dl-btn"
+         href="{{ .Site.Data.version.download_url }}"
+         download="MnemosyneC-Setup-{{ .Site.Data.version.version }}.exe"
+         data-version="{{ .Site.Data.version.version }}"
+         data-label-idle="&#8595;&nbsp; Download for Windows v{{ .Site.Data.version.version }}"
+         data-label-downloading="&#8987;&nbsp; DOWNLOADING... one moment please"
+         data-label-downloaded="&#10003;&nbsp; DOWNLOADED v{{ .Site.Data.version.version }}"
+         aria-label="Download MnemosyneC {{ .Site.Data.version.version }} for Windows">
+        &#8595;&nbsp; Download for Windows v{{ .Site.Data.version.version }}
+      </a>
+      <p class="dl-fallback" style="font-size:0.82em; color:rgba(250,245,235,0.45); margin:0.3rem 0 0.15rem;">
+        Download not starting? <a href="https://github.com/liana-banyan/mnemosyne/releases/download/v{{ .Site.Data.version.version }}/MnemosyneC-Setup-{{ .Site.Data.version.version }}.exe" style="color:rgba(214,158,46,0.7);">Try the GitHub mirror</a>
+      </p>
+      <p class="mn-v2-hero-tagline">Mac / Linux - <em>coming soon</em></p>
+    </div>
   </div>
-  <div class="mn-hero-top-row__mascot" aria-hidden="true">
+
+  <div class="mn-hero-right" aria-hidden="true">
     <img src="/img/mascots/dr-mnemosynec.png"
          alt="Dr. MnemosyneC, the gray elephant mascot in a white coat with stethoscope and half-moon spectacles"
          width="220" height="220"
          loading="eager">
     <p class="mn-hero-grid__mascot-caption">Dr.&nbsp;MnemosyneC<br>Memory specialist</p>
   </div>
-</div><!-- /mn-hero-top-row -->
+</div><!-- /mn-hero-block -->
 
-<!-- FULL-WIDTH body content (subtitle now full-width below the heading+mascot grid) -->
-<div class="mn-hero-body">
-  <p class="mn-hero-pronunciation">Mnemosyne (neh-MOZ-uh-nee) is the Greek goddess of memory. <strong>Dr.&nbsp;MnemosyneC inherited her Memory.</strong></p>
-
-  <!-- Download button centered below full-width subtitle (v0.1.60.7 Layout 2 alignment) -->
-  <div style="text-align:center; margin:0.5rem 0 0.2rem;">
-    <a class="mn-v2-dl-btn"
-       href="{{ .Site.Data.version.download_url }}"
-       download="MnemosyneC-Setup-{{ .Site.Data.version.version }}.exe"
-       aria-label="Download MnemosyneC {{ .Site.Data.version.version }} for Windows">
-      &#8595;&nbsp; Download for Windows v{{ .Site.Data.version.version }}
-    </a>
-  </div>
-  <p class="dl-fallback" style="font-size:0.82em; color:rgba(250,245,235,0.45); margin:0.25rem 0 0.15rem; text-align:center;">
-    Download not starting? <a href="https://github.com/liana-banyan/mnemosyne/releases/download/v{{ .Site.Data.version.version }}/MnemosyneC-Setup-{{ .Site.Data.version.version }}.exe" style="color:rgba(214,158,46,0.7);">Try the GitHub mirror</a>
-  </p>
-  <p class="mn-v2-hero-tagline" style="margin-bottom:1.1rem !important;">Mac / Linux - <em>coming soon</em></p>
-
+<!-- Full-width: body paragraph + bullets + nav -->
+<div class="mn-hero-body-fullwidth">
   <p>Every time you start a new session, your AI forgets everything. Your projects, your preferences, your past conversations, gone. Dr.&nbsp;MnemosyneC gives your AI a permanent, private memory that actually stays.</p>
 
-  <!-- SEG-1: Founder-ratified bullet text verbatim -->
+  <!-- Founder-ratified bullet text verbatim -->
   <ul class="mn-hero-bullets">
     <li>Works alongside ChatGPT, Claude, Gemini, or any AI you already use.</li>
     <li>All your data stays on your own computer. No cloud. No account required.</li>
     <li>FREE (SSPL license) to use FOREVER. No Ads. No Strings.</li>
-    <li>Optionally join the Cooperative Universal Substrate for $5 a year. Not required.</li>
+    <li>Optionally join the <a href="https://lianabanyan.com/papers/universal-prosperity/" target="_blank" rel="noopener">Cooperative Universal Substrate</a>&trade; for $5 a year. Not required.</li>
   </ul>
 
   <!-- Nav links stay at bottom of hero card (above first-session box) -->
@@ -633,9 +717,11 @@ html { scroll-behavior: smooth; }
     &nbsp;&middot;&nbsp;
     <a href="/proofs/">All proofs</a>
     &nbsp;&middot;&nbsp;
+    <a href="https://lianabanyan.com/proofs" target="_blank" rel="noopener">Obsessive Techie Proofs</a>
+    &nbsp;&middot;&nbsp;
     <a href="/community/">Community</a>
   </p>
-</div><!-- /mn-hero-body -->
+</div><!-- /mn-hero-body-fullwidth -->
 
       <!-- What your first session looks like (v0.1.60.6 SEG-2: collapsed click-expand) -->
       <details class="mn-first-session" aria-label="What your first session looks like">
@@ -750,7 +836,7 @@ html { scroll-behavior: smooth; }
        SEG-4: Good Fast Cheap — blue card with green checkmarks
        (Founder: "Replace the right side with the left side version")
        ═══════════════════════════════════════════════ -->
-  <section aria-label="Good Fast Cheap Private Free Yours" id="six-pillars" style="margin:0 0 2rem;">
+  <section aria-label="Good Fast Cheap Private Free Yours" id="six-pillars" style="margin:1.5rem 0;">
 <div style="max-width:760px;margin:0 auto;background:#11243a;border:1px solid #21527e;border-radius:14px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.35);">
   <div style="padding:26px 28px 18px;text-align:center;background:linear-gradient(180deg,#143456 0%,#11243a 100%);border-bottom:1px solid #21527e;">
     <div style="font-size:30px;font-weight:800;color:#ffffff;letter-spacing:.5px;line-height:1.15;">Good. Fast. Cheap.</div>
@@ -768,7 +854,7 @@ html { scroll-behavior: smooth; }
         <td style="padding:16px 22px;text-align:right;font-size:22px;color:#3ddc84;white-space:nowrap;">&#10004;</td>
       </tr>
       <tr style="border-top:1px solid #1c3f63;">
-        <td style="padding:16px 20px;line-height:1.5;"><strong style="color:#ffffff;">Cheap</strong> &mdash; That free local model answers at <strong>$0 a call.</strong> Our patent-pending Substrace Theorem means No new Data Centers needed &mdash; we make existing data centers 95% cheaper, more efficient, AND more accurate. For Us AND for Them. <a href="#how-it-works" class="mn-cheap-how-link">How?</a></td>
+        <td style="padding:16px 20px;line-height:1.5;"><strong style="color:#ffffff;">Cheap</strong> &mdash; That free local model answers at <strong>$0 a call.</strong> Our patent-pending Substrace Theorem&trade; means <a href="https://lianabanyan.com/papers/save-the-world/" target="_blank" rel="noopener" style="color:inherit; border-bottom-color:rgba(214,158,46,0.4);">No new Data Centers needed</a> &mdash; we make existing data centers 95% cheaper, more efficient, AND more accurate. For Us AND for Them. <a href="#how-it-works" class="mn-cheap-how-link">How?</a></td>
         <td style="padding:16px 22px;text-align:right;font-size:22px;color:#3ddc84;white-space:nowrap;">&#10004;</td>
       </tr>
       <tr style="border-top:1px solid #1c3f63;">
@@ -776,7 +862,7 @@ html { scroll-behavior: smooth; }
         <td style="padding:16px 22px;text-align:right;font-size:22px;color:#3ddc84;white-space:nowrap;">&#10004;</td>
       </tr>
       <tr style="border-top:1px solid #1c3f63;">
-        <td style="padding:16px 20px;line-height:1.5;"><strong style="color:#ffffff;">Free</strong> &mdash; <strong>SSPL Free Forever</strong>, Pledge&nbsp;#2260. No ads. No strings. No subscription.<br><span style="color:rgba(214,158,46,0.8);font-size:0.88em;">Patent-pending, 19 provisional filings, pledged to the member commons, never sold for extraction.</span></td>
+        <td style="padding:16px 20px;line-height:1.5;"><strong style="color:#ffffff;">Free</strong> &mdash; <strong>SSPL Free Forever</strong>, Pledge&nbsp;#2260. No ads. No strings. No subscription.<br><span style="color:rgba(214,158,46,0.8);font-size:0.88em;">Patent-pending, 21 provisional filings, pledged to the member commons, never sold for extraction.</span></td>
         <td style="padding:16px 22px;text-align:right;font-size:22px;color:#3ddc84;white-space:nowrap;">&#10004;</td>
       </tr>
       <tr style="border-top:1px solid #1c3f63;border-bottom:1px solid #1c3f63;">
@@ -811,22 +897,41 @@ html { scroll-behavior: smooth; }
         <p>A routine update wiped connectors. A hook-script deletion blocked every prompt. The AI service returned overload errors. Three simultaneous infrastructure failures. The substrate held.</p>
         <p>&#10003; Zero work lost</p>
 
-        <!-- Screenshots stacked vertically — NEVER sideways scroll -->
+        <!-- v0.1.61.0 SEG-1: Real storm test hero shots — 3-arc BEGIN/MIDDLE/END -->
         <div class="mn-proof-screenshots" role="list">
-          <div class="mn-proof-screenshot-placeholder" role="listitem">
-            <span style="font-size:1.5rem; color:rgba(214,158,46,0.4);">&#128247;</span>
-            <span class="mn-proof-screenshot-placeholder__caption">Screenshot 1 &middot; BP071 connector wipe receipt</span>
-          </div>
-          <div class="mn-proof-screenshot-placeholder" role="listitem">
-            <span style="font-size:1.5rem; color:rgba(214,158,46,0.4);">&#128247;</span>
-            <span class="mn-proof-screenshot-placeholder__caption">Screenshot 2 &middot; BP071 hook-script deletion log</span>
-          </div>
-          <div class="mn-proof-screenshot-placeholder" role="listitem">
-            <span style="font-size:1.5rem; color:rgba(214,158,46,0.4);">&#128247;</span>
-            <span class="mn-proof-screenshot-placeholder__caption">Screenshot 3 &middot; BP071 substrate-held confirmation</span>
-          </div>
+          <!-- BEGIN: Tornado Warning -->
+          <a class="mn-proof-thumb-link" href="javascript:void(0)"
+             data-zoom-src="/img/proofs/storm/01_begin_tornado_warning.jpg"
+             aria-label="Expand: Tornado warning radar — proof BEGIN"
+             role="listitem">
+            <img src="/img/proofs/storm/01_begin_tornado_warning.jpg"
+                 alt="A real tornado warning. Then three systems broke at once."
+                 loading="lazy" style="max-width:100%;border-radius:6px;">
+            <p class="mn-proof-caption">A real tornado warning. Then three systems broke at once.</p>
+          </a>
+          <!-- MIDDLE: Substrate held -->
+          <a class="mn-proof-thumb-link" href="javascript:void(0)"
+             data-zoom-src="/img/proofs/storm/02_middle_substrate_held.png"
+             aria-label="Expand: System broken, work continued — proof MIDDLE"
+             role="listitem">
+            <img src="/img/proofs/storm/02_middle_substrate_held.png"
+                 alt="System broken underneath. Work continued anyway."
+                 loading="lazy">
+            <p class="mn-proof-caption">System broken underneath. Work continued anyway.</p>
+          </a>
+          <!-- END: Zero work lost -->
+          <a class="mn-proof-thumb-link" href="javascript:void(0)"
+             data-zoom-src="/img/proofs/storm/03_end_zero_work_lost.png"
+             aria-label="Expand: Tally confirmed, zero work lost — proof END"
+             role="listitem">
+            <img src="/img/proofs/storm/03_end_zero_work_lost.png"
+                 alt="Tally confirmed. Everything recovered. Zero work lost."
+                 loading="lazy">
+            <p class="mn-proof-caption">Tally confirmed. Everything recovered. Zero work lost.</p>
+          </a>
         </div>
 
+        <p class="mn-proof-more"><a href="/proofs/storm/" target="_blank" rel="noopener">More — full audit trail &rarr;</a></p>
         <p class="mn-proof-accordion__receipt">Receipt: BP071 close stamp &rarr;</p>
       </div>
     </details>
@@ -857,6 +962,7 @@ html { scroll-behavior: smooth; }
           </div>
         </div>
 
+        <p class="mn-proof-more"><a href="/proofs/mesh/" target="_blank" rel="noopener">More — full audit trail &rarr;</a></p>
         <p class="mn-proof-accordion__receipt">Receipt: Asteroid-ProofVault/MESH_6_RECEIPT_BP063.md &rarr;</p>
       </div>
     </details>
@@ -887,6 +993,7 @@ html { scroll-behavior: smooth; }
           </div>
         </div>
 
+        <p class="mn-proof-more"><a href="/proofs/benchmark/" target="_blank" rel="noopener">More — full audit trail &rarr;</a></p>
         <p class="mn-proof-accordion__receipt">Receipt: Benchmark R10 &middot; BP065 &rarr;</p>
       </div>
     </details>
@@ -901,21 +1008,23 @@ html { scroll-behavior: smooth; }
     <h2 id="mn-substrate-title">HOW IT WORKS &mdash; The Substrate Persistent Memory Is the Asset &middot; How We Make Sure Things Are True &amp; Quickly &amp; Cheaply Accessed.</h2>
 
     <!-- v0.1.60.7 SEG-2: LONG preamble — Founder direct verbatim ("you're" → "you'll" typo corrected per Bishop Truth-Always flag) -->
-    <p>That free local model answers at $0 a call. With our Patented Substrace Theorem, you will get the correct answer, in time, and if you or anyone else in the Cooperative Substrate ever asked it before - you'll get the answer FAST and FREE. The Mesh Frontier runs on hardware every user already owns. No new data center needed, since this makes existing data centers 95% cheaper, more efficient, AND more accurate! A third option to the Data Center Dilemma.</p>
+    <p>That free local model answers at $0 a call. With our Patented Substrace Theorem, you will get the correct answer, in time, and if you or anyone else in the Cooperative Substrate ever asked it before - you'll get the answer FAST and FREE. The Mesh Frontier&trade; runs on hardware every user already owns. No new data center needed, since this makes existing data centers 95% cheaper, more efficient, AND more accurate! A third option to the Data Center Dilemma&trade;.</p>
 
     <p>MnemosyneC has three layers. Each does one thing well. Click any row to expand.</p>
 
     <details class="mn-layer-row">
-      <summary><strong>Reader</strong> &mdash; Answers your question &mdash; <em>Gemma 4 12B (local, free, private)</em></summary>
+      <summary><strong>Reader</strong> &mdash; Answers your question &mdash; <em>Gemma 4 12B (local, free, private) OR ADD your Paid AI of Choice.</em></summary>
       <div class="mn-layer-row__body">
         Gemma 4 12B is a 12-billion parameter open-source language model from Google, running locally on your machine via Ollama. No cloud account. No API key. $0/call. The Reader is interchangeable &mdash; you can swap in any compatible model. The substrate underneath is what makes the model smart.
+        <p style="margin:0.7rem 0 0;">We basically add a virtual Library of Alexandria &mdash; where the data you approve (answers) get copied for everyone to read, and you keep yours. And get access to theirs.</p>
       </div>
     </details>
 
     <details class="mn-layer-row">
-      <summary><strong>Verifier</strong> &mdash; Adjudicates whether the answer is correct &mdash; <em>Shadow E-Giant concordance (3+ parallel votes)</em></summary>
+      <summary><strong>Verifier</strong> &mdash; Adjudicates whether the answer is correct &mdash; <em>Shadow E-Giant&trade; concordance (3+ parallel votes)</em></summary>
       <div class="mn-layer-row__body">
-        Shadow E-Giant concordance fires three independent local-Gemma calls in parallel &mdash; each with a different perspective lens (correctness, consistency, coverage). Two-of-three must agree before an answer is written into the substrate. Failed answers re-plow until verified, or get quarantined. The verifier is the Andon discipline that keeps the substrate clean.
+        Shadow E-Giant concordance fires three independent local-Gemma calls in parallel &mdash; each with a different perspective lens (correctness, consistency, coverage). Two-of-three must agree before an answer is written into the substrate. Failed answers re-plow until verified, or get quarantined. The verifier is the Andon Cord discipline that keeps the substrate clean.
+        <p style="margin:0.7rem 0 0;">This combines with our <strong>Plow Loop&trade;</strong> process to loop as many times as it takes &mdash; at $0 per call &mdash; to get the right answer and STORE it for FAST ACCESS EVER AGAIN. Or, you can use your Paid AI of Choice to do it faster. Either way, the Plow Loop makes it 100% accurate. And faster. And Cheaper. And Stored. And Shared. And Shared WITH.</p>
       </div>
     </details>
 
@@ -923,10 +1032,11 @@ html { scroll-behavior: smooth; }
       <summary><strong>Accumulator</strong> &mdash; Stores verified knowledge for next time &mdash; <em>Eblet store (append-only JSONL, SHA256-stamped)</em></summary>
       <div class="mn-layer-row__body">
         Eblets are append-only knowledge entries. Each one is SHA256-stamped at write time &mdash; content-addressable, tamper-evident. The store is a JSONL file in your user-data directory. Append-only means nothing gets overwritten. Verified-correct only &mdash; failed answers never persist. Your substrate gets cleaner over time, not noisier.
+        <p style="margin:0.7rem 0 0;">A Vault of Anonymous Answers&trade;, so you can save on what others have paid to find &mdash; in return for providing the same.</p>
       </div>
     </details>
 
-    <p>Use Ask in MnemosyneC. Use Claude Desktop. Use Cursor. Use ChatGPT in your browser (browser extension coming v0.2). Whichever surface you use, the <strong>substrate underneath compounds</strong>. Your knowledge grows. The model is interchangeable. The substrate is what makes any AI smarter &mdash; for you, for your work, for the keep.</p>
+    <p>Use Ask in MnemosyneC. Use Claude Desktop. Use Cursor. Use ChatGPT in your browser (browser extension coming v0.2). Whichever surface you use, the <strong>substrate underneath compounds</strong>. Your knowledge grows. The model is interchangeable. The substrate is what makes any AI smarter &mdash; for you, for your work, for the keep&trade;.</p>
 
     <hr class="mn-substrate-divider">
 
@@ -936,13 +1046,13 @@ html { scroll-behavior: smooth; }
     <p>Every claim entering the substrate starts as a pheromone &mdash; a signal that something might be true. Pheromones have a half-life. If nothing refreshes them, they fade. Old guesses die naturally. The substrate doesn&rsquo;t accumulate noise &mdash; it lets noise wither.</p>
 
     <h3>Socceri triads confirm.</h3>
-    <p>When three independent verifications converge &mdash; three Shadow E-Giants from different perspective lenses (correctness &middot; consistency &middot; coverage) returning the same verdict &mdash; a pheromone becomes a <strong>socceri triad confirmation</strong>. Verified. But still subject to decay. Verification without continued use still fades.</p>
+    <p>When three independent verifications converge &mdash; three Shadow E-Giants from different perspective lenses (correctness &middot; consistency &middot; coverage) returning the same verdict &mdash; a pheromone becomes a <strong>Socceri Triad&trade; confirmation</strong>. Verified. But still subject to decay. Verification without continued use still fades.</p>
 
     <h3>Living connection buoys.</h3>
     <p>Confirmed claims survive only if the community keeps them alive &mdash; through use, through query, through federation. Every time another user&rsquo;s substrate concordance-aligns with yours, the claim is buoyed. Without that living connection, even verified truth withers on the vine.</p>
 
     <h3>Stone tablets are forever.</h3>
-    <p>When a claim has been buoyed by enough living connection over enough time, it gets promoted to a <strong>stone tablet</strong> &mdash; immutable, append-only, permanent. Stone tablets are the substrate&rsquo;s load-bearing canon. They don&rsquo;t decay. They are the truth the network has earned together.</p>
+    <p>When a claim has been buoyed by enough living connection over enough time, it gets promoted to a <strong>Stone Tablet&trade;</strong> &mdash; immutable, append-only, permanent. Stone tablets are the substrate&rsquo;s load-bearing canon. They don&rsquo;t decay. They are the truth the network has earned together.</p>
 
     <h3>This is the innovation itself.</h3>
     <p>Truth isn&rsquo;t asserted by authority. It&rsquo;s <strong>earned through use, hardened through verification, and preserved through community</strong>.</p>
@@ -953,7 +1063,7 @@ html { scroll-behavior: smooth; }
       <li><strong>Used-and-verified claims become permanent.</strong> Stone tablets compound the network&rsquo;s hardest-won knowledge.</li>
     </ul>
 
-    <p>The substrate gets cleaner over time, not noisier. It&rsquo;s how biological memory works. It&rsquo;s how scientific consensus works. It&rsquo;s how cooperative-class trust always worked, before extraction-class platforms tried to centralize it.</p>
+    <p>The substrate gets cleaner over time, not noisier. It&rsquo;s how biological memory works. It&rsquo;s how scientific consensus works. It&rsquo;s how cooperative-class&trade; trust always worked, before extraction-class platforms tried to centralize it.</p>
 
     <p>We&rsquo;re just naming the mechanism, building it into code, and giving you the keys.</p>
   </section>
@@ -965,7 +1075,7 @@ html { scroll-behavior: smooth; }
        SEG-7: "One quick thing" card — replaces Get Started
        Dr. MnemosyneC + Download button on right, content below
        ═══════════════════════════════════════════════ -->
-  <section aria-label="Install instructions" style="margin:2rem 0;">
+  <section aria-label="Install instructions" style="margin:1.5rem 0;">
     <div class="mn-install-card">
       <!-- TOP ROW: mascot on left, download button on right — button does NOT exceed mascot head height -->
       <div class="mn-install-card__top">
@@ -978,8 +1088,13 @@ html { scroll-behavior: smooth; }
         <div class="mn-install-card__dl">
           <div>
             <a class="mn-v2-dl-btn mn-v2-dl-btn--install"
+               id="mn-install-dl-btn"
                href="{{ .Site.Data.version.download_url }}"
                download="MnemosyneC-Setup-{{ .Site.Data.version.version }}.exe"
+               data-version="{{ .Site.Data.version.version }}"
+               data-label-idle="&#8595;&nbsp; Download for Windows v{{ .Site.Data.version.version }}"
+               data-label-downloading="&#8987;&nbsp; DOWNLOADING... one moment please"
+               data-label-downloaded="&#10003;&nbsp; DOWNLOADED v{{ .Site.Data.version.version }}"
                aria-label="Download MnemosyneC {{ .Site.Data.version.version }} for Windows">
               &#8595;&nbsp; Download for Windows v{{ .Site.Data.version.version }}
             </a>
@@ -1008,10 +1123,21 @@ html { scroll-behavior: smooth; }
 
   <hr class="mn-v2-divider" />
 
-  <section aria-label="About Liana Banyan" style="margin:2rem 0;">
+  <section aria-label="About Liana Banyan" style="margin:1.5rem 0;">
     <h2 style="color:#d69e2e; font-size:clamp(1.05rem,3vw,1.35rem); font-weight:700; margin:0 0 1rem;">About Liana Banyan</h2>
+    <p style="color:#faf5eb; font-size:1rem; line-height:1.78; margin:0 0 0.9rem; font-weight:600;">Liana Banyan is the <em>Capitalist Cooperative</em>. We do it fairly, for the benefit of all. <span style="font-style:italic; color:rgba(250,245,235,0.72);">For it rains on the just and the unjust.</span></p>
     <p style="color:rgba(250,245,235,0.82); font-size:0.92rem; line-height:1.78; margin:0 0 0.8rem;">Liana Banyan Corporation &mdash; the cooperative-class substrate behind MnemosyneC and 16 cooperative initiatives.</p>
     <p style="color:rgba(250,245,235,0.82); font-size:0.92rem; line-height:1.78; margin:0 0 0.9rem;"><strong style="color:#faf5eb;">83.3% of every dollar</strong> stays with the Workers, Builders, and Creators that make it. $5 a year. One vote. Everything we build is published under a Cooperative Defensive Patent Pledge so members &mdash; and any community on Earth &mdash; can fork it, run it, and keep it.</p>
+    <p style="color:rgba(250,245,235,0.75); font-size:0.92rem; line-height:1.78; margin:0 0 0.9rem;">
+      Read the papers that shape the work:
+      <a href="https://lianabanyan.com/papers/save-the-world/" target="_blank" rel="noopener"><em>How to Save the World in Six Easy Steps</em></a>
+      &middot;
+      <a href="https://lianabanyan.com/papers/universal-prosperity/" target="_blank" rel="noopener"><em>A Considered Approach to Universal Sustained Economic Prosperity</em></a>
+      &middot;
+      <a href="https://lianabanyan.com/papers/no-atomo-superman/" target="_blank" rel="noopener"><em>No Atomo. Superman!</em></a>
+      &middot;
+      <a href="https://lianabanyan.com/papers/invisible-tax/" target="_blank" rel="noopener"><em>The Invisible Tax</em></a>
+    </p>
     <p style="color:rgba(250,245,235,0.65); font-size:0.88rem;">
       <a href="/cooperative-compact/">Read the Cooperative Compact &rarr;</a>
       &nbsp;&middot;&nbsp;
@@ -1025,12 +1151,13 @@ html { scroll-behavior: smooth; }
 </div><!-- /mn-v2-wrap -->
 <!-- SEG-8: Footer rendered by extend_footer.html (applies to all pages). One occurrence. &copy; entity. No mojibake. -->
 
-<!-- Lightbox overlay (SEG-4) -->
+<!-- Lightbox overlay (SEG-4 + v0.1.61.0 SEG-3 updated for real images) -->
 <div class="mn-lightbox" id="mn-lightbox" role="dialog" aria-modal="true" aria-label="Screenshot preview">
   <div class="mn-lightbox__inner">
     <button class="mn-lightbox__close" onclick="document.getElementById('mn-lightbox').classList.remove('open')" aria-label="Close">&times;</button>
     <div class="mn-lightbox__img">
-      <div style="padding:2rem 3rem; background:rgba(10,22,40,0.9); border:1px dashed rgba(214,158,46,0.3); border-radius:8px; color:rgba(250,245,235,0.5); font-size:0.9rem; font-style:italic;">Screenshot pending — Founder to provide</div>
+      <img id="mn-lightbox-img" class="mn-lightbox__real-img" src="" alt="" style="max-width:100%;height:auto;border-radius:8px;display:none;">
+      <div id="mn-lightbox-placeholder" style="padding:2rem 3rem; background:rgba(10,22,40,0.9); border:1px dashed rgba(214,158,46,0.3); border-radius:8px; color:rgba(250,245,235,0.5); font-size:0.9rem; font-style:italic;">Screenshot pending — Founder to provide</div>
     </div>
     <p class="mn-lightbox__caption" id="mn-lightbox-caption"></p>
   </div>
@@ -1038,23 +1165,86 @@ html { scroll-behavior: smooth; }
 <script>
 (function(){
   var lightbox = document.getElementById('mn-lightbox');
+  var lbImg = document.getElementById('mn-lightbox-img');
+  var lbPlaceholder = document.getElementById('mn-lightbox-placeholder');
   if (!lightbox) return;
+
+  function openWithImage(src, caption) {
+    if (src) {
+      lbImg.src = src;
+      lbImg.alt = caption || '';
+      lbImg.style.display = 'block';
+      if (lbPlaceholder) lbPlaceholder.style.display = 'none';
+    } else {
+      lbImg.style.display = 'none';
+      if (lbPlaceholder) lbPlaceholder.style.display = '';
+    }
+    document.getElementById('mn-lightbox-caption').textContent = caption || '';
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+    lbImg.src = '';
+    lbImg.style.display = 'none';
+    if (lbPlaceholder) lbPlaceholder.style.display = '';
+    document.body.style.overflow = '';
+  }
+
+  // Handle real proof thumb links (SEG-1 images)
+  document.addEventListener('click', function(e) {
+    var link = e.target.closest('.mn-proof-thumb-link');
+    if (link) {
+      e.preventDefault();
+      var src = link.dataset.zoomSrc;
+      var imgEl = link.querySelector('img');
+      var caption = imgEl ? imgEl.alt : (link.getAttribute('aria-label') || '');
+      openWithImage(src, caption);
+      return;
+    }
+  });
+
+  // Handle legacy placeholder clicks
   document.querySelectorAll('.mn-proof-screenshot-placeholder').forEach(function(el){
     el.setAttribute('tabindex','0');
     el.setAttribute('role','button');
-    function openLightbox(){
+    function openPlaceholder(){
       var cap = el.querySelector('.mn-proof-screenshot-placeholder__caption');
-      document.getElementById('mn-lightbox-caption').textContent = cap ? cap.textContent : '';
-      lightbox.classList.add('open');
+      openWithImage(null, cap ? cap.textContent : '');
     }
-    el.addEventListener('click', openLightbox);
-    el.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openLightbox(); }});
+    el.addEventListener('click', openPlaceholder);
+    el.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openPlaceholder(); }});
   });
+
   lightbox.addEventListener('click', function(e){
-    if(e.target === lightbox){ lightbox.classList.remove('open'); }
+    if(e.target === lightbox){ closeLightbox(); }
   });
   document.addEventListener('keydown', function(e){
-    if(e.key==='Escape'){ lightbox.classList.remove('open'); }
+    if(e.key==='Escape'){ closeLightbox(); }
+  });
+})();
+</script>
+<script>
+/* Download button state machine — v0.1.60.11 */
+(function(){
+  var btns = document.querySelectorAll('.mn-v2-dl-btn');
+  if (!btns.length) return;
+  btns.forEach(function(btn){
+    if (!btn.dataset.labelIdle) return;
+    btn.addEventListener('click', function(){
+      if (btn.dataset.state === 'downloading' || btn.dataset.state === 'downloaded') return;
+      btn.dataset.state = 'downloading';
+      btn.innerHTML = btn.dataset.labelDownloading;
+      setTimeout(function(){
+        btn.dataset.state = 'downloaded';
+        btn.innerHTML = btn.dataset.labelDownloaded;
+        setTimeout(function(){
+          delete btn.dataset.state;
+          btn.innerHTML = btn.dataset.labelIdle;
+        }, 30000);
+      }, 8000);
+    });
   });
 })();
 </script>

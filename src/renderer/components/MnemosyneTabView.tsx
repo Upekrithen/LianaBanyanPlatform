@@ -192,9 +192,12 @@ export function MnemosyneTabView({
   // BP067 v0.1.24 -- one-spine first-run complete gate
   // SEG-R-1: also check LS_ONBOARDING_COMPLETE (WelcomeView two-doorway gate) --
   // if either key is set, skip the entire spine (user has seen the welcome screen).
+  // v0.1.61 hotfix: LS_ONBOARDING_COMPLETE uses truthy check (not === 'true') because
+  // pre-v0.1.51 installs wrote '1' rather than 'true'. Without this, users with old-format
+  // data see Bp067FirstRunSpine cover the entire window (no tab strip visible).
   const [bp067Complete, setBp067Complete] = useState(() =>
     localStorage.getItem(LS_BP067_FIRST_RUN_COMPLETE) === 'true' ||
-    localStorage.getItem(LS_ONBOARDING_COMPLETE) === 'true'
+    !!localStorage.getItem(LS_ONBOARDING_COMPLETE)
   );
 
   const [forTechies, setForTechies] = useState(() =>

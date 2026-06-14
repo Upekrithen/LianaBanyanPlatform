@@ -1,6 +1,6 @@
 {
-    "version":  "0.1.60",
-    "filename":  "MnemosyneC-Setup-0.1.60.exe",
-    "download_url":  "https://mnemosynec.ai/download/MnemosyneC-Setup-0.1.60.exe",
-    "release_notes":  "Real 3-voter Shadow E-Giant concordance. Plow the Field 14-domain UI. Substrate Stats Tab. LB Membership scaffold. MCP Bridge scaffold."
+    "version":  "0.1.61",
+    "filename":  "MnemosyneC-Setup-0.1.61.exe",
+    "download_url":  "https://mnemosynec.ai/download/MnemosyneC-Setup-0.1.61.exe",
+    "release_notes":  "P0 hotfix: tab strip now always visible on fresh install. Fixes blank/no-tab UI for users upgrading from pre-v0.1.51 installs."
 }

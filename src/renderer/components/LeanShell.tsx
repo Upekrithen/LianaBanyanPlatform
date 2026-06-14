@@ -54,7 +54,13 @@ function resolveInitialUiMode(): UiMode {
   if (stored !== null) {
     localStorage.removeItem(LS_UI_MODE);
   }
-  const isExistingUser = !!localStorage.getItem(LS_ONBOARDING_COMPLETE);
+  // Only treat as 'advanced' when onboarding was completed with the current 'true' value.
+  // Prior versions (pre-v0.1.51 LeanShell era) wrote '1' instead of 'true'. Those users
+  // get 'lean' on fresh install — prevents Bp067FirstRunSpine full-window overlay on the
+  // advanced path blocking the tab strip (P0 regression v0.1.60 → v0.1.61 hotfix).
+  const isExistingUser =
+    localStorage.getItem(LS_ONBOARDING_COMPLETE) === 'true' ||
+    localStorage.getItem('mnemosyne-bp067-first-run-complete') === 'true';
   const mode: UiMode = isExistingUser ? 'advanced' : 'lean';
   localStorage.setItem(LS_UI_MODE, mode);
   return mode;
