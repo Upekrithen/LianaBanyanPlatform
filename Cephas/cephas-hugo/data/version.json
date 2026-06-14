@@ -1,6 +1,6 @@
 {
-    "version":  "0.2.0",
-    "filename":  "MnemosyneC-Setup-0.2.0.exe",
-    "download_url":  "https://mnemosynec.ai/download/MnemosyneC-Setup-0.2.0.exe",
-    "release_notes":  "v0.2.0: Help tab — 4th tab in LeanShell. FAQ, Connect Discord + Reddit (OAuth, full read-write), Coming Soon tiles (Chrome, Pawn, Cue Deck), Guild Incentives with Marks tiers. Ask tab Clear + Save & Clear from v0.1.62 included."
+    "version":  "0.2.1",
+    "filename":  "MnemosyneC-Setup-0.2.1.exe",
+    "download_url":  "https://mnemosynec.ai/download/MnemosyneC-Setup-0.2.1.exe",
+    "release_notes":  "v0.2.1: Plow Loop cold-start fix — MMLU-Pro question banks now bundled in installer. Verbose Plow diagnostic logging added. All 4-machine 0/168 quarantine reproduced and resolved."
 }

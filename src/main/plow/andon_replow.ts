@@ -1,6 +1,7 @@
 /**
  * andon_replow.ts — Andon Re-Plow loop for per-domain MMLU-Pro Q banks.
  * BP081 v0.1.59 SEG-4 "Plow the Field"
+ * BP082 v0.2.1 SEG-2 diagnostic logging + DATA_ROOT fix
  *
  * Andon discipline: ONLY verified answers (model correct) are written to substrate.
  * Wrong answers are never written.
@@ -56,27 +57,39 @@ export interface PlowResult {
  *   4. Write a verified eblet if correct (Andon discipline).
  *   5. Return verdict: 'verified' | 'rejected' | 'quarantined'.
  */
+function promptHash(s: string): string {
+  return createHash('sha256').update(s).digest('hex').slice(0, 12);
+}
+
 export async function runAndonReplowLoop(question: string, domain: string): Promise<PlowResult> {
+  const qId = promptHash(question);
+  console.log(`[PlowLoop] Q ${qId} domain=${domain} attempt=1`);
+
   // ── Step 1: load domain bank + find entry ──────────────────────────────────
   let bank;
   try {
     bank = loadDomainBank(domain as Domain);
+    console.log(`[PlowLoop] Q ${qId} bank loaded count=${bank.length}`);
   } catch (err) {
+    const errMsg = `Bank load failed: ${(err as Error).message}`;
+    console.error(`[PlowLoop] Q ${qId} QUARANTINE bank-load-error: ${errMsg}`);
     return {
       ok: false,
       verdict: 'quarantined',
       ebletWritten: false,
-      error: `Bank load failed: ${(err as Error).message}`,
+      error: errMsg,
     };
   }
 
   const entry = bank.find((q) => q.question.trim() === question.trim());
   if (!entry) {
+    const errMsg = 'Question not found in domain bank';
+    console.error(`[PlowLoop] Q ${qId} QUARANTINE not-found — question length=${question.length} bank sample[0] length=${bank[0]?.question?.length ?? 'N/A'}`);
     return {
       ok: false,
       verdict: 'quarantined',
       ebletWritten: false,
-      error: 'Question not found in domain bank',
+      error: errMsg,
     };
   }
 
@@ -90,6 +103,8 @@ export async function runAndonReplowLoop(question: string, domain: string): Prom
     `Question: ${entry.question}\n\n${optionsText}\n\nAnswer:`;
 
   const model = resolveModel();
+  console.log(`[PlowLoop] lens=single model=${model} prompt-hash=${promptHash(prompt)}`);
+
   let modelAnswer = '';
 
   try {
@@ -107,20 +122,25 @@ export async function runAndonReplowLoop(question: string, domain: string): Prom
     if (resp.ok) {
       const data = (await resp.json()) as { response?: string };
       modelAnswer = data.response?.trim() ?? '';
+      console.log(`[PlowLoop] lens=single verdict=raw modelAnswer="${modelAnswer}"`);
     } else {
+      const errMsg = `Ollama HTTP ${resp.status}`;
+      console.error(`[PlowLoop] Q ${qId} QUARANTINE ollama-http: ${errMsg}`);
       return {
         ok: false,
         verdict: 'quarantined',
         ebletWritten: false,
-        error: `Ollama HTTP ${resp.status}`,
+        error: errMsg,
       };
     }
   } catch (err) {
+    const errMsg = `Model call failed: ${String(err).slice(0, 80)}`;
+    console.error(`[PlowLoop] Q ${qId} QUARANTINE model-call-error: ${errMsg}`);
     return {
       ok: false,
       verdict: 'quarantined',
       ebletWritten: false,
-      error: `Model call failed: ${String(err).slice(0, 80)}`,
+      error: errMsg,
     };
   }
 
@@ -129,7 +149,10 @@ export async function runAndonReplowLoop(question: string, domain: string): Prom
   const modelLetter = modelAnswer.toUpperCase().replace(/[^A-Z]/g, '').charAt(0);
   const isCorrect = correctLetter.length > 0 && correctLetter === modelLetter;
 
+  console.log(`[PlowLoop] concordance result: { verified: ${isCorrect}, correct: "${correctLetter}", modelLetter: "${modelLetter}", rawModel: "${modelAnswer}" }`);
+
   if (!isCorrect) {
+    console.log(`[PlowLoop] disposition: { questionId: "${qId}", verified: false, verdict: "rejected", attempts: 1 }`);
     return {
       ok: true,
       verdict: 'rejected',
@@ -156,9 +179,12 @@ export async function runAndonReplowLoop(question: string, domain: string): Prom
       timestamp: Date.now(),
     });
     ebletWritten = true;
+    console.log(`[PlowLoop] eblet written sha256=${sha256.slice(0, 12)}`);
   } catch (err) {
-    console.warn('[andon_replow] eblet write failed (non-fatal):', err);
+    console.warn('[PlowLoop] eblet write failed (non-fatal):', err);
   }
+
+  console.log(`[PlowLoop] disposition: { questionId: "${qId}", verified: true, verdict: "verified", ebletWritten: ${ebletWritten}, attempts: 1 }`);
 
   return {
     ok: true,

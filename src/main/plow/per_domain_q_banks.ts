@@ -65,10 +65,30 @@ const ALL_DOMAINS: Domain[] = [
   'other',
 ];
 
-const DATA_ROOT = path.join(
-  __dirname,
-  '../../../lb-reproducibility-pack/datasets/mmlu_pro_per_domain'
-);
+/**
+ * Resolve the MMLU-Pro data root.
+ *
+ * Packaged Electron app: data is bundled to {resources}/mmlu_pro/
+ *   (extraResources in package.json maps lb-reproducibility-pack/... → mmlu_pro)
+ * Dev mode: __dirname = dist/main/plow/ → three levels up hits the repo root.
+ *
+ * We try the packaged path first (it won't exist in dev, so existsSync falls
+ * through to the dev path).
+ */
+function resolveDataRoot(): string {
+  // process.resourcesPath is set by Electron in both modes but in dev it points
+  // to the Electron binary's resources — the mmlu_pro subdir won't exist there.
+  const packedPath = path.join(process.resourcesPath ?? '', 'mmlu_pro');
+  if (fs.existsSync(packedPath)) {
+    console.log('[per_domain_q_banks] DATA_ROOT → packed:', packedPath);
+    return packedPath;
+  }
+  const devPath = path.join(__dirname, '../../../lb-reproducibility-pack/datasets/mmlu_pro_per_domain');
+  console.log('[per_domain_q_banks] DATA_ROOT → dev fallback:', devPath);
+  return devPath;
+}
+
+const DATA_ROOT = resolveDataRoot();
 
 function domainDir(domain: Domain): string {
   return path.join(DATA_ROOT, domain);
@@ -105,12 +125,15 @@ export function getDomainList(): Domain[] {
 export function loadDomainBank(domain: Domain): Question[] {
   const cached = bankCache.get(domain);
   if (cached && isCacheValid(cached)) {
+    console.log(`[PlowDiag][BankLoad] domain=${domain} cache=HIT count=${cached.questions.length}`);
     return cached.questions;
   }
 
   const filePath = path.join(domainDir(domain), 'questions.json');
+  console.log(`[PlowDiag][BankLoad] domain=${domain} cache=MISS path=${filePath}`);
 
   if (!fs.existsSync(filePath)) {
+    console.error(`[PlowDiag][BankLoad] MISSING questions.json domain=${domain} path=${filePath}`);
     throw new Error(
       `[per_domain_q_banks] Missing questions.json for domain '${domain}' at ${filePath}`
     );
@@ -132,6 +155,7 @@ export function loadDomainBank(domain: Domain): Question[] {
   }
 
   bankCache.set(domain, { questions, loadedAt: Date.now() });
+  console.log(`[PlowDiag][BankLoad] domain=${domain} loaded count=${questions.length}`);
   return questions;
 }
 

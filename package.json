@@ -1,6 +1,6 @@
 {
   "name": "mnemosynec",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "MnemosyneC — Memory, powered by CAI · local inference + cooperative substrate OS overlay (SSPL · Pledge #2260)",
   "homepage": "https://lianabanyan.com",
   "private": true,
@@ -148,6 +148,15 @@
       {
         "from": "src/main/data/r10v3_substrate.txt",
         "to": "r10v3_substrate.txt"
+      },
+      {
+        "from": "lb-reproducibility-pack/datasets/mmlu_pro_per_domain",
+        "to": "mmlu_pro",
+        "filter": [
+          "*/questions.json",
+          "*/SEAL.sha256",
+          "*/META.json"
+        ]
       }
     ],
     "publish": {
