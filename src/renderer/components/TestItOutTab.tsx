@@ -1,13 +1,15 @@
-// TestItOutTab.tsx — SEG-2 v0.1.57 · SEG-4 v0.1.59 · BP079/BP081 · BP082 v0.2.2 · v0.2.3
+// TestItOutTab.tsx — SEG-2 v0.1.57 · SEG-4 v0.1.59 · BP079/BP081 · BP082 v0.2.2 · v0.2.3 · v0.3.1
 // Single Q: 5-question MMLU-Pro / R11 diagnostic workout.
 // Plow the Field: multi-domain parallel Plow run with per-domain progress.
 // Andon discipline: correct answers grow substrate; wrong answers never written.
 // v0.2.2: Substrate seed panel added (Settings → Substrate → Seed from Sealed Bank)
-// v0.2.3: Beat-Google Benchmark mode added (BP082 — 5-shot CoT, 3-voter concordance, receipt)
+// v0.2.3: Beat-Google Benchmark mode added (BP082 — apples-to-apples handicapped comparison)
+// v0.3.1: 3-Condition Mesh Comparison Test (BP082 Founder correction — Cold/Seeded/Loop)
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { SubstrateSeedPanel } from './SubstrateSeedPanel';
 import { BenchmarkModal } from './BenchmarkModal';
+import { MeshComparisonModal } from './MeshComparisonModal';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -317,8 +319,9 @@ export function TestItOutTab(): React.ReactElement {
   const [plowState, setPlowState] = useState<PlowRunState>({ id: 'idle' });
   const plowRunningRef = useRef(false);
 
-  // ── Beat-Google Benchmark state ────────────────────────────────────────────
+  // ── Benchmark / Mesh Comparison state ─────────────────────────────────────
   const [benchmarkModalOpen, setBenchmarkModalOpen] = useState(false);
+  const [meshModalOpen, setMeshModalOpen] = useState(false);
 
   // Load history on mount
   useEffect(() => {
@@ -557,19 +560,36 @@ export function TestItOutTab(): React.ReactElement {
                 <button
                   type="button"
                   style={{
-                    background: 'rgba(99,102,241,0.18)',
-                    border: '1px solid rgba(99,102,241,0.4)',
+                    background: 'rgba(110,231,183,0.12)',
+                    border: '1px solid rgba(110,231,183,0.35)',
                     borderRadius: 8,
-                    color: '#a5b4fc',
+                    color: '#6ee7b7',
                     padding: '7px 14px',
                     fontSize: 12,
                     fontWeight: 600,
                     cursor: 'pointer',
                     whiteSpace: 'nowrap' as const,
                   }}
+                  onClick={() => setMeshModalOpen(true)}
+                >
+                  🔬 Run Mesh Comparison Test
+                </button>
+                <button
+                  type="button"
+                  style={{
+                    background: 'rgba(99,102,241,0.08)',
+                    border: '1px solid rgba(99,102,241,0.2)',
+                    borderRadius: 8,
+                    color: '#64748b',
+                    padding: '7px 10px',
+                    fontSize: 10,
+                    cursor: 'pointer',
+                    whiteSpace: 'nowrap' as const,
+                  }}
+                  title="Apples-to-apples handicapped comparison (v0.2.3 methodology)"
                   onClick={() => setBenchmarkModalOpen(true)}
                 >
-                  🏁 Beat-Google
+                  🏁
                 </button>
               </div>
 
@@ -879,9 +899,14 @@ export function TestItOutTab(): React.ReactElement {
         <SubstrateSeedPanel />
       </div>
 
-      {/* Beat-Google Benchmark modal — rendered outside the scroll container */}
+      {/* Apples-to-apples handicapped comparison (v0.2.3 advanced mode) */}
       {benchmarkModalOpen && (
         <BenchmarkModal onClose={() => setBenchmarkModalOpen(false)} />
+      )}
+
+      {/* 3-Condition Mesh Comparison Test (v0.3.1 primary benchmark) */}
+      {meshModalOpen && (
+        <MeshComparisonModal onClose={() => setMeshModalOpen(false)} />
       )}
     </div>
   );

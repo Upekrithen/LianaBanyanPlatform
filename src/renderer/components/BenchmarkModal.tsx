@@ -295,9 +295,11 @@ export function BenchmarkModal({ onClose }: BenchmarkModalProps) {
     return (
       <div style={S.overlay} onClick={onClose}>
         <div style={S.modal} onClick={(e) => e.stopPropagation()}>
-          <div style={S.header}>🏁 Beat-Google Benchmark</div>
+          <div style={S.header}>🏁 Apples-to-Apples Handicapped Comparison</div>
           <div style={S.sub}>
-            Apples-to-apples comparison vs Google's published Gemma 4 12B MMLU-Pro baseline (77.2%)
+            Single-pass 3-voter concordance vs Google's published Gemma 4 12B MMLU-Pro baseline (77.2%).
+            This is the methodology-handicapped mode (v0.2.3). It does NOT measure the cooperative architecture's
+            full structural advantage. Use <strong style={{ color: '#6ee7b7' }}>🔬 Run Mesh Comparison Test</strong> for the publishable lift.
           </div>
 
           <label style={S.label}>Questions per domain</label>

@@ -479,6 +479,11 @@ declare global {
       membershipGetStatus?: () => Promise<{ tier: string; status: string; annualFeeUsd: number }>;
       membershipCancel?: () => Promise<{ success: boolean; reason?: string }>;
 
+      // BP082 v0.3.1 — 3-Condition Mesh Comparison
+      runMeshComparison?: (config: { nPerDomain: number; randomSeed: number; model: string; ollamaBaseUrl: string }) => Promise<{ ok: boolean; result?: unknown; error?: string }>;
+      cancelMeshComparison?: () => Promise<{ ok: boolean }>;
+      onMeshComparisonProgress?: (callback: (event: Record<string, unknown>) => void) => () => void;
+
       // BP060 Application 002 Step 1 — Caithedral Tools
       caithedralTools?: {
         soccerball_emit: (pearls: string[], bindings?: Record<string, string>) => Promise<{ ok: boolean; sid?: string; error?: string }>;

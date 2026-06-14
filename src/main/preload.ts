@@ -1309,6 +1309,27 @@ contextBridge.exposeInMainWorld('amplify', {
     return () => ipcRenderer.removeListener('plow:benchmark-progress', handler);
   },
 
+  // ── BP082 v0.3.1 — 3-condition Mesh Comparison ───────────────────────────
+
+  runMeshComparison: (config: {
+    nPerDomain: number;
+    randomSeed: number;
+    model: string;
+    ollamaBaseUrl: string;
+  }): Promise<{ ok: boolean; result?: unknown; error?: string }> =>
+    ipcRenderer.invoke('plow:run-mesh-comparison', config),
+
+  cancelMeshComparison: (): Promise<{ ok: boolean }> =>
+    ipcRenderer.invoke('plow:cancel-mesh-comparison'),
+
+  onMeshComparisonProgress: (
+    callback: (event: Record<string, unknown>) => void,
+  ): (() => void) => {
+    const handler = (_: unknown, data: Record<string, unknown>) => callback(data);
+    ipcRenderer.on('plow:mesh-comparison-progress', handler);
+    return () => ipcRenderer.removeListener('plow:mesh-comparison-progress', handler);
+  },
+
   // ── SEG-5 v0.1.59 — Clipboard capture IPC ────────────────────────────────
 
   readClipboard: (): Promise<string> =>
@@ -1755,12 +1776,16 @@ declare global {
       onPlowSeedProgress?: (
         callback: (data: { written: number; skipped: number; total: number; pct: number; done?: boolean }) => void,
       ) => () => void;
-      // BP082 v0.2.3 — Beat-Google Benchmark
+      // BP082 v0.2.3 — Beat-Google Benchmark (apples-to-apples handicapped comparison)
       getGoogleBaselines?: () => Promise<unknown>;
       runBenchmark?: (config: { nPerDomain: number; randomSeed: number; model: string; ollamaBaseUrl: string }) => Promise<{ ok: boolean; result?: unknown; error?: string }>;
       cancelBenchmark?: () => Promise<{ ok: boolean }>;
       writeBenchmarkReceipt?: (args: { receiptMarkdown: string; timestamp: number }) => Promise<{ ok: boolean; path?: string }>;
       onBenchmarkProgress?: (callback: (event: Record<string, unknown>) => void) => () => void;
+      // BP082 v0.3.1 — 3-Condition Mesh Comparison
+      runMeshComparison?: (config: { nPerDomain: number; randomSeed: number; model: string; ollamaBaseUrl: string }) => Promise<{ ok: boolean; result?: unknown; error?: string }>;
+      cancelMeshComparison?: () => Promise<{ ok: boolean }>;
+      onMeshComparisonProgress?: (callback: (event: Record<string, unknown>) => void) => () => void;
       // SEG-5 v0.1.59 — Clipboard capture
       readClipboard?: () => Promise<string>;
       onClipboardCaptureQA?: (callback: () => void) => () => void;

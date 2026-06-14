@@ -4455,6 +4455,70 @@ function registerIPCHandlers(): void {
     }
   });
 
+  // ── plow:mesh-comparison — BP082 v0.3.1 3-condition runner ──────────────
+  let _meshCancelToken = { cancelled: false };
+
+  safeHandle('plow:cancel-mesh-comparison', () => {
+    _meshCancelToken.cancelled = true;
+    console.log('[MeshComparison] Cancel requested via IPC');
+    return { ok: true };
+  });
+
+  safeHandle('plow:run-mesh-comparison', async (
+    _event,
+    config: { nPerDomain: number; randomSeed: number; model: string; ollamaBaseUrl: string },
+  ) => {
+    _meshCancelToken = { cancelled: false };
+    const { runMeshComparison, generateMeshComparisonReceipt } = await import('./plow/mesh_comparison_runner');
+    const { writeFileSync, mkdirSync, existsSync } = await import('fs');
+    const { join } = await import('path');
+
+    const broadcastProgress = (data: object) => {
+      for (const w of BrowserWindow.getAllWindows()) {
+        if (!w.isDestroyed()) w.webContents.send('plow:mesh-comparison-progress', data);
+      }
+    };
+
+    const writeMeshReceipt = (receiptMarkdown: string, timestamp: number): string | null => {
+      try {
+        const receiptsDir = join(app.getPath('userData'), 'benchmark_receipts');
+        if (!existsSync(receiptsDir)) mkdirSync(receiptsDir, { recursive: true });
+        const dateStr = new Date(timestamp).toISOString().slice(0, 10).replace(/-/g, '');
+        const filename = `BP082_MESH_COMPARISON_RECEIPT_${dateStr}_${timestamp}.md`;
+        const fullPath = join(receiptsDir, filename);
+        writeFileSync(fullPath, receiptMarkdown, 'utf-8');
+        console.log('[MeshComparison] Receipt written:', fullPath);
+        const vaultDir = join(app.getAppPath(), '../../../Asteroid-ProofVault');
+        if (existsSync(vaultDir)) {
+          try {
+            writeFileSync(join(vaultDir, `BP082_MESH_COMPARISON_RECEIPT_${dateStr}.md`), receiptMarkdown, 'utf-8');
+            console.log('[MeshComparison] Vault copy written');
+          } catch (vErr) {
+            console.warn('[MeshComparison] Vault copy failed:', vErr);
+          }
+        }
+        return fullPath;
+      } catch (rErr) {
+        console.error('[MeshComparison] Receipt write failed:', rErr);
+        return null;
+      }
+    };
+
+    try {
+      const result = await runMeshComparison(config, (progressEvent) => {
+        broadcastProgress(progressEvent);
+      }, _meshCancelToken);
+      const receiptMarkdown = generateMeshComparisonReceipt(result);
+      const receiptPath = writeMeshReceipt(receiptMarkdown, result.startedAt);
+      broadcastProgress({ type: 'complete', result, receiptPath });
+      return { ok: true, result, receiptPath };
+    } catch (err) {
+      console.error('[MeshComparison] Fatal error:', err);
+      broadcastProgress({ type: 'error', message: (err as Error).message });
+      return { ok: false, error: (err as Error).message };
+    }
+  });
+
   // ── SEG-5 v0.1.59 — Clipboard read IPC ────────────────────────────────────
 
   safeHandle('clipboard:read', async () => {
