@@ -28,6 +28,18 @@ export function GuildIncentivesFooter() {
           <span style={s.marks}>✦ +3 retroactive</span>
         </div>
         <div style={s.tableRow}>
+          <span style={s.action}>Install report (verified by 3-voter concordance)</span>
+          <span style={s.marks}>✦ +2 Marks</span>
+        </div>
+        <div style={s.tableRow}>
+          <span style={s.action}>Community thread captured to Catacombs</span>
+          <span style={s.marks}>✦ +3 Marks</span>
+        </div>
+        <div style={s.tableRow}>
+          <span style={s.action}>Issue eblet triggers version demotion (κ ≥ 0.85)</span>
+          <span style={s.marks}>✦ +10 Marks</span>
+        </div>
+        <div style={s.tableRow}>
           <span style={s.action}>First to capture a Stone-Tablet answer</span>
           <span style={s.marks}>✦ +25 champion bonus</span>
         </div>

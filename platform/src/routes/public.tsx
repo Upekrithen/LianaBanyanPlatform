@@ -56,6 +56,7 @@ const BusinessPlanPage = lazy(() => import("@/pages/BusinessPlanPage"));
 const SpeakFriendPage = lazy(() => import("@/pages/SpeakFriendPage"));
 const ProofsPage = lazy(() => import("@/pages/ProofsPage"));
 const BountyPosterPage = lazy(() => import("@/pages/BountyPosterPage"));
+const BountyPostersPage = lazy(() => import("@/pages/BountyPostersPage"));
 const CharacterRemakePostersPage = lazy(() =>
   import("@/components/bounties/CharacterRemakePosters").then((m) => ({
     default: m.CharacterRemakePostersPage,
@@ -172,6 +173,9 @@ export const publicRoutes = (
     <Route path="/business-plan" element={<LazyPage><BusinessPlanPage /></LazyPage>} />
     {/* Scope 26: Bounty Poster Generator */}
     <Route path="/bounty-poster-generator" element={<LazyPage><BountyPosterPage /></LazyPage>} />
+    {/* BP082: Bounty Posters public landing — Help Tab "See Bounty Posters" CTA destination */}
+    <Route path="/bounty" element={<LazyPage><BountyPostersPage /></LazyPage>} />
+    <Route path="/bounty/" element={<LazyPage><BountyPostersPage /></LazyPage>} />
     {/* Scope 27: Speak Friend language hub */}
     <Route path="/speak-friend" element={<LazyPage><SpeakFriendPage /></LazyPage>} />
     <Route path="/speak-friend/" element={<LazyPage><SpeakFriendPage /></LazyPage>} />
