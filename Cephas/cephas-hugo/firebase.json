@@ -71,17 +71,42 @@
           "headers": [{"key": "Cache-Control", "value": "max-age=86400"}]
         },
         {
+          "source": "/download/**.exe",
+          "headers": [
+            {"key": "Content-Disposition", "value": "attachment"},
+            {"key": "Content-Type", "value": "application/octet-stream"},
+            {"key": "Cache-Control", "value": "public, max-age=3600"},
+            {"key": "X-Content-Type-Options", "value": "nosniff"},
+            {"key": "X-LB-Version", "value": "v0.2.0"},
+            {"key": "X-LB-Phase", "value": "release"}
+          ]
+        },
+        {
+          "source": "/download/**.blockmap",
+          "headers": [
+            {"key": "Content-Type", "value": "application/octet-stream"},
+            {"key": "Cache-Control", "value": "public, max-age=3600"}
+          ]
+        },
+        {
+          "source": "/download/latest.yml",
+          "headers": [
+            {"key": "Content-Type", "value": "text/yaml; charset=utf-8"},
+            {"key": "Cache-Control", "value": "public, max-age=60"},
+            {"key": "X-LB-Version", "value": "v0.2.0"}
+          ]
+        },
+        {
           "source": "/download/**",
           "headers": [
-            {"key": "X-LB-Version", "value": "v0.1.60"},
-            {"key": "X-LB-Build-Hash", "value": "v0.1.60"},
-            {"key": "X-LB-Phase", "value": "alpha"}
+            {"key": "X-LB-Version", "value": "v0.2.0"},
+            {"key": "X-LB-Phase", "value": "release"}
           ]
         },
         {
           "source": "/changelog/**",
           "headers": [
-            {"key": "X-LB-Version", "value": "v0.1.60"},
+            {"key": "X-LB-Version", "value": "v0.2.0"},
             {"key": "Cache-Control", "value": "max-age=1800"}
           ]
         }
