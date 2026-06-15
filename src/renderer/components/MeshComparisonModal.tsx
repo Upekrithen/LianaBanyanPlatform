@@ -559,13 +559,32 @@ export function MeshComparisonModal({ onClose }: { onClose: () => void }) {
   // ── Error ──────────────────────────────────────────────────────────────────
 
   if (state.id === 'error') {
+    // Split message into headline and diagnostic lines (BP078 every-click-feedback canon)
+    const [headline, ...diagLines] = state.message.split('\n');
+    const hasDiag = diagLines.length > 0;
     return (
       <div style={S.overlay} onClick={onClose}>
         <div style={S.modal} onClick={(e) => e.stopPropagation()}>
           <div style={S.header}>❌ Mesh Comparison Error</div>
-          <div style={{ fontSize: 13, color: '#f87171', margin: '12px 0 20px', lineHeight: 1.5 }}>
-            {state.message}
+          <div style={{ fontSize: 13, color: '#f87171', margin: '12px 0 8px', lineHeight: 1.5 }}>
+            {headline}
           </div>
+          {hasDiag && (
+            <div style={{
+              background: 'rgba(248,113,113,0.06)',
+              border: '1px solid rgba(248,113,113,0.2)',
+              borderRadius: 8,
+              padding: '10px 14px',
+              marginBottom: 16,
+              fontSize: 11,
+              color: '#fca5a5',
+              lineHeight: 1.7,
+              whiteSpace: 'pre-wrap' as const,
+              fontFamily: 'monospace',
+            }}>
+              {diagLines.join('\n')}
+            </div>
+          )}
           <div style={S.btnRow}>
             <button style={S.cancelBtn} onClick={onClose}>Close</button>
           </div>

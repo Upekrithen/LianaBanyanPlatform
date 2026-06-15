@@ -148,13 +148,18 @@ function sampleQuestions(bank: Question[], n: number): Question[] {
 /**
  * Condition A: one bare Gemma call, no concordance, no retry.
  * Letter is extracted from the raw response.
+ *
+ * BP083 Deep RCA fix: aligned to canonical_pipeline.ts callOllama exactly.
+ * - Removed think: false (not in canonical_pipeline; caused HTTP 400 on some Ollama versions)
+ * - Upgraded [MeshA-DEEP-DIAG] logging prefix
+ * - Returns diagUrl/diagStatus/diagErrBody for user-visible smoke fail panel
  */
 async function runConditionA(
   question: Question,
   domain: Domain,
   model: string,
   ollamaBaseUrl: string,
-): Promise<{ letter: string | null; timeMs: number }> {
+): Promise<{ letter: string | null; timeMs: number; diagUrl: string; diagStatus: number | null; diagErrBody: string | null }> {
   const domainLabel = domain.replace(/_/g, ' ');
   const optText = question.options
     .map((o, i) => `${OPTION_LABELS[i] ?? i}. ${o}`)
@@ -166,53 +171,56 @@ async function runConditionA(
 
   const t0 = Date.now();
   const endpoint = '/api/generate';
+  const fullUrl = `${ollamaBaseUrl}${endpoint}`;
+
+  // Aligned to canonical_pipeline.ts callOllama: no think flag (think:false not in canonical
+  // and causes HTTP 400 on Ollama versions that don't support it).
+  // num_predict:256 prevents truncation inside gemma4:12b thinking blocks.
   const requestBody = {
     model,
     prompt,
     stream: false,
-    // num_predict: 256 — matches canonical_pipeline.ts; gemma4:12b is a thinking model
-    // that outputs <think>...</think> blocks. 16 tokens (old value) truncated inside
-    // the thinking block, causing extractLetterChoice to return null every time.
-    // think: false — suppresses thinking output for MCQ letter-only responses,
-    // ensuring clean single-letter answers without hitting the token budget.
-    options: { num_predict: 256, temperature: 0.0, think: false },
+    options: { num_predict: 256, temperature: 0.0 },
   };
 
-  console.log('[MeshA-DIAG] Ollama URL:', ollamaBaseUrl);
-  console.log('[MeshA-DIAG] Model name:', model);
-  console.log('[MeshA-DIAG] Endpoint:', endpoint);
-  console.log('[MeshA-DIAG] Timeout: 60000 ms');
-  console.log('[MeshA-DIAG] Request body:', JSON.stringify(requestBody));
+  console.log('[MeshA-DEEP-DIAG] === ENTERING runConditionA ===');
+  console.log('[MeshA-DEEP-DIAG] URL:', fullUrl);
+  console.log('[MeshA-DEEP-DIAG] model:', model);
+  console.log('[MeshA-DEEP-DIAG] num_predict:', 256);
+  console.log('[MeshA-DEEP-DIAG] think: NOT sent (aligned to canonical_pipeline.ts)');
+  console.log('[MeshA-DEEP-DIAG] request body:', JSON.stringify(requestBody));
+  console.log('[MeshA-DEEP-DIAG] fetch starting at', Date.now());
 
   try {
-    const resp = await fetch(`${ollamaBaseUrl}${endpoint}`, {
+    const resp = await fetch(fullUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(requestBody),
       signal: AbortSignal.timeout(60_000),
     });
 
-    console.log('[MeshA-DIAG] Response status:', resp.status);
+    console.log('[MeshA-DEEP-DIAG] fetch status:', resp.status);
 
     if (!resp.ok) {
       const errBody = await resp.text().catch(() => '(unreadable)');
-      console.log('[MeshA-DIAG] Error body:', errBody);
-      return { letter: null, timeMs: Date.now() - t0 };
+      console.log('[MeshA-DEEP-DIAG] HTTP error body (first 500):', errBody.slice(0, 500));
+      return { letter: null, timeMs: Date.now() - t0, diagUrl: fullUrl, diagStatus: resp.status, diagErrBody: errBody.slice(0, 200) };
     }
 
     const data = (await resp.json()) as { response?: string };
     const raw = (data.response ?? '').trim();
-    console.log('[MeshA-DIAG] Raw response (first 120):', raw.slice(0, 120).replace(/\n/g, '↵'));
+    console.log('[MeshA-DEEP-DIAG] response first 500 chars:', raw.slice(0, 500).replace(/\n/g, '↵'));
 
     const letter = raw.charAt(0).match(/[A-J]/i)
       ? raw.charAt(0).toUpperCase()
       : extractLetterChoice(raw);
 
-    console.log('[MeshA-DIAG] Extracted letter:', letter);
-    return { letter, timeMs: Date.now() - t0 };
+    console.log('[MeshA-DEEP-DIAG] extracted answer:', letter ?? 'NULL');
+    return { letter, timeMs: Date.now() - t0, diagUrl: fullUrl, diagStatus: resp.status, diagErrBody: null };
   } catch (err) {
-    console.log('[MeshA-DIAG] Fetch threw:', err instanceof Error ? err.message : String(err));
-    return { letter: null, timeMs: Date.now() - t0 };
+    const errMsg = err instanceof Error ? err.message : String(err);
+    console.log('[MeshA-DEEP-DIAG] EXCEPTION:', errMsg);
+    return { letter: null, timeMs: Date.now() - t0, diagUrl: fullUrl, diagStatus: null, diagErrBody: errMsg.slice(0, 200) };
   }
 }
 
@@ -591,6 +599,7 @@ export async function runMeshGraderSmokeTest(
   let keysResolved = 0;
   let aScore = 0, bScore = 0, cScore = 0;
   let totalNonEmpty = 0;
+  let lastADiag: { url: string; status: number | null; errBody: string | null } | null = null;
 
   for (const domain of smokeDomains) {
     let bank: Question[];
@@ -620,6 +629,11 @@ export async function runMeshGraderSmokeTest(
     if (bRes.correct) bScore++;
     if (cRes.correct) cScore++;
 
+    // Capture last diagnostic from condition A for user-visible error panel
+    if (!aRes.letter && (aRes.diagStatus !== null || aRes.diagErrBody !== null)) {
+      lastADiag = { url: aRes.diagUrl, status: aRes.diagStatus, errBody: aRes.diagErrBody };
+    }
+
     perQuestion.push({
       qId,
       domain,
@@ -637,10 +651,15 @@ export async function runMeshGraderSmokeTest(
   const hasFloor = aScore >= 1; // ≥1 correct on cold = sanity floor
   const ok = keysResolved === SMOKE_N && allNonEmpty;
 
+  // Build user-visible diagnostic detail for smoke fail (BP078 every-click-feedback canon)
+  const diagDetail = lastADiag
+    ? `\n• URL: ${lastADiag.url}\n• HTTP Status: ${lastADiag.status ?? 'N/A (fetch threw)'}\n• Response: ${lastADiag.errBody ?? 'none'}\n• Check DevTools Console for [MeshA-DEEP-DIAG] entries`
+    : `\n• URL: ${config.ollamaBaseUrl}/api/generate\n• Check DevTools Console for [MeshA-DEEP-DIAG] entries`;
+
   const message = !ok
     ? keysResolved < SMOKE_N
-      ? `Smoke FAIL: only ${keysResolved}/${SMOKE_N} answer keys resolved`
-      : `Smoke FAIL: model unreachable — 0 A answers returned`
+      ? `Smoke FAIL: only ${keysResolved}/${SMOKE_N} answer keys resolved${diagDetail}`
+      : `Smoke FAIL: model unreachable — 0 A answers returned${diagDetail}`
     : !hasFloor
     ? `Smoke YELLOW: A=${aScore}/${SMOKE_N} B=${bScore}/${SMOKE_N} C=${cScore}/${SMOKE_N} — cold floor=0 (model answers but all wrong on smoke sample)`
     : `Smoke PASS: A=${aScore}/${SMOKE_N} B=${bScore}/${SMOKE_N} C=${cScore}/${SMOKE_N} keys=${keysResolved}/${SMOKE_N} bGeA=${bGeA}`;
