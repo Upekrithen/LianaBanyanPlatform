@@ -1,6 +1,6 @@
 {
-  "version": "0.3.3",
-  "filename": "MnemosyneC-Setup-0.3.3.exe",
-  "download_url": "https://mnemosynec.ai/download/MnemosyneC-Setup-0.3.3.exe",
-  "release_notes": "v0.3.3: Plow Loop cooperative lift wired (BP083). Substrate RAG injection in B+C conditions. Adaptive re-fetch on Andon retries. Per-voter temperature diversity. Seed Q+A poisoning fix with Reset+Reseed Context-Class. 9-call pre-flight smoke test. Per-domain telemetry in receipt."
+  "version": "0.3.4",
+  "filename": "MnemosyneC-Setup-0.3.4.exe",
+  "download_url": "https://mnemosynec.ai/download/MnemosyneC-Setup-0.3.4.exe",
+  "release_notes": "v0.3.4: Canonical Plow pipeline — 9-specialist external swarm. TypeScript port of cooperative substrate grow loop. Domain specialists per MMLU-Pro domain (engineering, health, etc.). Progressive UI with per-domain progress + live eblet-growth counter."
 }
