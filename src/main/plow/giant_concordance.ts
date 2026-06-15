@@ -159,7 +159,10 @@ export async function runMMLUProConcordance(
             model,
             prompt,
             stream: false,
-            options: { num_predict: 48, temperature: voterTemps[i] },
+            // num_predict: 256 — gemma4:12b thinking model outputs <think> blocks;
+            // 48 tokens (old value) truncated mid-think, breaking letter extraction.
+            // think: false — suppresses thinking for MCQ letter-only responses.
+            options: { num_predict: 256, temperature: voterTemps[i], think: false },
           }),
           signal: AbortSignal.timeout(45_000),
         });

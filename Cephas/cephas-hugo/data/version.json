@@ -1,6 +1,6 @@
 {
-  "version": "0.3.5",
-  "filename": "MnemosyneC-Setup-0.3.5.exe",
-  "download_url": "https://mnemosynec.ai/download/MnemosyneC-Setup-0.3.5.exe",
-  "release_notes": "v0.3.5 (BP083): Self-context scaffold — MEMORY.md amnesia cure. 6-folder substrate at %APPDATA%\\MnemosyneC\\. Auto-generated MEMORY.md tells MnemosyneC who she is (Ollama + gemma4:12b + LB cooperative). System prompt injection on every Ask query. Settings → Test It Out → My Self-Context panel."
+  "version": "0.3.6",
+  "filename": "MnemosyneC-Setup-0.3.6.exe",
+  "download_url": "https://mnemosynec.ai/download/MnemosyneC-Setup-0.3.6.exe",
+  "release_notes": "v0.3.5.1 (BP083 hotfix): Mesh Comparison A (Cold) Ollama reachability fix. gemma4:12b is a thinking model — num_predict:16 truncated inside thinking blocks, causing 0 A answers. Fixed: num_predict raised to 256, think:false added to all MCQ letter-extraction calls (A Cold path + 3-voter concordance). Diagnostic [MeshA-DIAG] logging added."
 }
