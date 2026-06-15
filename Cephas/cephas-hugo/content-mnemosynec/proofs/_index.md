@@ -1,7 +1,7 @@
 ---
 title: "Proofs & Receipts — MnemosyneC"
-description: "Every benchmark, inter-rater reliability score, SHA-256 checksum, and test result. Hash-verified. Reproducible. For the skeptical reader."
-date: 2026-06-13
+description: "68/70 MMLU-Pro. 97.1%. Hash-verified. Reproducible. Truth-Always: we measured 68/70, not 70/70. The 2 Andon quarantines are the cooperative quality gate working correctly."
+date: 2026-06-15
 draft: false
 ---
 
@@ -17,7 +17,55 @@ MnemosyneC finds answers through a 3-layer salt architecture: Substrate Salt (lo
 
 We don't ask you to trust us. We give you the receipts.
 
-[← Back to homepage](/)
+[← Back to homepage](/) · [The Diagnosis](/diagnosis/) · [Constellation / MIC](/constellation/)
+
+---
+
+## Truth-Always: We Didn't Claim 70/70 {#truth-always}
+
+We measured **68/70 (97.1%)**. The 2 questions that did not produce a new verified fact were **quarantined by the Andon Cord** — the cooperative-class self-policing mechanism that refuses to write uncertain answers to the substrate.
+
+**We did not claim 70/70. We measured 68/70. The 2 quarantines are the Andon Cord working as designed.**
+
+This is the cooperative-class commitment: accurate measurement over vanity metrics. If the pipeline is uncertain, it says so. If it can't reach 3-voter concordance, it stops and quarantines rather than writing potentially wrong data. The substrate stays clean because we tell the truth about what we know.
+
+### What the Andon Cord quarantine means
+
+When the MnemosyneC Canonical Plow Pipeline reaches the Three Fates (concordance layer) and cannot achieve 3-voter consensus after all retry attempts, the question is **quarantined** — not answered, not written to substrate. The system:
+
+1. Logs the quarantine (visible in the Plow run summary)
+2. Does NOT write any new eblet for that question
+3. Does NOT increment the "success" count
+4. Reports it honestly: "2 Andon quarantines (correct behavior)"
+
+The Business and Economics domain quarantines in the BP083 MMLU-Pro run mean: the pipeline encountered questions where three independent verification passes could not converge on a single correct answer. The correct response was to stop, not to guess.
+
+**Quarantine rate: 2/70 = 2.9% — this is the cooperative quality gate, not a failure.**
+
+### Reproducibility
+
+Any MnemosyneC user with Ollama + `gemma4:12b` + v0.4.0+ and an internet connection can reproduce this benchmark:
+
+- Run **Plow the Field** with all 14 MMLU-Pro domains, Questions per domain = 5
+- Observe your own pass/quarantine split
+- Compare substrate eblet counts
+
+Reproducibility kit: [github.com/liana-banyan/lb-reproducibility-pack](https://github.com/liana-banyan/lb-reproducibility-pack)
+
+---
+
+## v0.4.0 Architectural Milestone Receipt {#v040-milestone}
+
+The BP083 MMLU-Pro run was performed on **v0.4.0** architecture — the first release with:
+
+- **MIC (Machine In Charge)** — any machine in the fleet can conduct a Plow
+- **Federated Andon Cord** — 3-tier escalation (local quarantine → Federation re-run → Human Salt / The Diagnosis)
+- **The Diagnosis primitive** — Human Salt layer, peer-reviewed answer surface
+- **Pinch / Seasoning / Preserved-in-Salt** persistence tiers live in substrate logic
+- **Salt taglines** live across all major UI surfaces
+- **Provisional 22 in flight** covering 17+ canonical Plow Cycle innovations
+
+v0.4.1 (current) adds WAN+LAN Constellation support and the Glow mechanic bounty-surfacing. Auto-update corrected (cephas latest.yml split-brain resolved).
 
 ---
 

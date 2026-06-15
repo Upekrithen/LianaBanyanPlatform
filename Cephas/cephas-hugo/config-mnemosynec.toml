@@ -1,6 +1,6 @@
 baseURL = "https://mnemosynec.ai/"
 languageCode = "en-us"
-title = "MnemosyneC — The AI that remembers"
+title = "MnemosyneC — Just Add Salt · How to Get the Right Answer"
 theme = "PaperMod"
 publishDir = "public-mnemosynec"
 contentDir = "content-mnemosynec"
@@ -18,7 +18,7 @@ buildFuture = true
 
 [params]
   hideFooter = true
-  description = "Your AI has Amnesia. MnemosyneC has the Cure. Private, permanent AI memory — runs locally, free forever. Workers, Builders, Creators keep 83.3%. No ads. No VC."
+  description = "Just Add Salt. How to Get the Right Answer. The cooperative-class architecture for local-first AI that works at 97.1% on MMLU-Pro · on consumer hardware · no paid API keys · empirically reproducible. Workers keep 83.3%. No ads. No VC."
   author = "Liana Banyan Corporation"
   defaultTheme = "dark"
   env = "production"
@@ -46,7 +46,31 @@ buildFuture = true
   weight = 0
 
 [[menu.main]]
+  identifier = "nav-proofs"
+  name = "Proofs"
+  url = "/proofs/"
+  weight = 1
+
+[[menu.main]]
+  identifier = "nav-diagnosis"
+  name = "Diagnosis"
+  url = "/diagnosis/"
+  weight = 2
+
+[[menu.main]]
+  identifier = "nav-constellation"
+  name = "Constellation"
+  url = "/constellation/"
+  weight = 3
+
+[[menu.main]]
+  identifier = "nav-about"
+  name = "About"
+  url = "/about/"
+  weight = 4
+
+[[menu.main]]
   identifier = "nav-join"
   name = "Join"
   url = "https://lianabanyan.com/join"
-  weight = 1
+  weight = 5

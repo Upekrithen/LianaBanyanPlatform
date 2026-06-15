@@ -1,6 +1,6 @@
 {
-  "version": "0.3.10",
-  "filename": "MnemosyneC-Setup-0.3.10.exe",
-  "download_url": "https://mnemosynec.ai/download/MnemosyneC-Setup-0.3.10.exe",
-  "release_notes": "v0.3.10 (BP083): Mesh A deep RCA — runConditionA aligned to canonical_pipeline.ts fetch config (removed think:false, added [MeshA-DEEP-DIAG] logging, user-visible smoke fail diagnostics in error modal). Cephas split-brain fix — v0.3.9 and v0.3.10 artifacts now deployed to both mnemosynec.ai and cephas.lianabanyan.com. Regression test suite added. Provisional 22 patent draft filed."
+  "version": "0.4.1",
+  "filename": "MnemosyneC-Setup-0.4.1.exe",
+  "download_url": "https://mnemosynec.ai/download/MnemosyneC-Setup-0.4.1.exe",
+  "release_notes": "v0.4.1 (BP083): MIC (Machine In Charge) — any machine in the fleet can Conduct a Plow. Federated Andon Cord 3-tier escalation. The Diagnosis primitive. Just Add Salt architecture — Substrate Salt + Federation Salt + Human Salt. Pinch/Seasoning/Preserved-in-Salt persistence tiers. Glow mechanic bounty-surfacing. WAN+LAN Constellation support. Auto-update fix (cephas latest.yml corrected to 0.4.1)."
 }

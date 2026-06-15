@@ -63,7 +63,9 @@ All 14 MMLU-Pro academic domains reached GREEN status — meaning the cooperativ
 
 ---
 
-## What the Andon Cord Quarantines Mean
+## What the Andon Cord Quarantines Mean — Truth-Always
+
+**We did not claim 70/70. We measured 68/70 (97.1%). The 2 quarantines are the Andon Cord working as designed** — cooperative-class self-policing.
 
 The 2 quarantines in Business and Economics are **not failures** — they are the Andon Cord working correctly.
 
@@ -117,10 +119,12 @@ Only concordance-verified answers are written to the substrate.
 
 Any MnemosyneC user with:
 - Ollama installed with `gemma4:12b` pulled
-- MnemosyneC v0.3.7+
+- MnemosyneC v0.4.0+
 - Internet connection (for specialist queries)
 
 ...can reproduce this benchmark by running **Plow the Field** with all 14 domains selected and Questions per domain = 5.
+
+**Reproducibility kit:** [github.com/liana-banyan/lb-reproducibility-pack](https://github.com/liana-banyan/lb-reproducibility-pack)
 
 Results will vary by substrate state, internet latency, and Ollama inference speed. The cooperative architecture's performance compounds over time as the substrate grows.
 
