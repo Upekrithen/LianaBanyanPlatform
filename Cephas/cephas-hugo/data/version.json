@@ -1,6 +1,6 @@
 {
-  "version": "0.3.6",
-  "filename": "MnemosyneC-Setup-0.3.6.exe",
-  "download_url": "https://mnemosynec.ai/download/MnemosyneC-Setup-0.3.6.exe",
-  "release_notes": "v0.3.5.1 (BP083 hotfix): Mesh Comparison A (Cold) Ollama reachability fix. gemma4:12b is a thinking model — num_predict:16 truncated inside thinking blocks, causing 0 A answers. Fixed: num_predict raised to 256, think:false added to all MCQ letter-extraction calls (A Cold path + 3-voter concordance). Diagnostic [MeshA-DIAG] logging added."
+  "version": "0.3.9",
+  "filename": "MnemosyneC-Setup-0.3.9.exe",
+  "download_url": "https://mnemosynec.ai/download/MnemosyneC-Setup-0.3.9.exe",
+  "release_notes": "v0.3.9 (BP083): Starter Chocolate Pack (280 verified eblets pre-seeded on install — eliminates first-Plow failure on fresh installs), MEMORY.md injection robustness cure (mkdirSync fix + fallback identity + Self-Context badge in Lean Ask), Plow questions-per-domain cap raised to 200 + stale-closure fix via useRef, Mesh Comparison free-form input (max 379/domain) + quick-pick buttons + stale-closure fix. Pinned Proofs: 68/70 MMLU-Pro 97.1% canonical receipt added to mnemosynec.ai/proofs/. (Note: v0.3.7 yoke work — v0.3.8 was an intermediate GPQA Diamond commit.)"
 }
