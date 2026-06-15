@@ -95,23 +95,23 @@ Write-Host "`n[AtomicDeploy] STEP 5 — Post-deploy verification" -ForegroundCol
 
 function Verify-Sharp {
     param([string]$Label, [string]$Url, [string]$ExpectedContent = "", [int]$ExpectedStatus = 200)
-    Write-Host "[Sharp $Label] curl -sI --max-time 30 $Url" -ForegroundColor Cyan
-    $result = & curl -sI --max-time 30 $Url 2>&1
+    Write-Host "[Sharp $Label] curl -sI --max-time 60 $Url" -ForegroundColor Cyan
+    $result = & C:\Windows\System32\curl.exe -sI --max-time 60 $Url 2>&1
     $statusLine = ($result | Select-String -Pattern "HTTP/").Line | Select-Object -First 1
     Write-Host $result
-    if ($statusLine -match "2\d\d") {
+    if ($statusLine -match " 200 ") {
         Write-Host "[Sharp $Label] GREEN ($statusLine)" -ForegroundColor Green
         return $true
     } else {
-        Write-Host "[Sharp $Label] RED — expected 200, got: $statusLine" -ForegroundColor Red
+        Write-Host "[Sharp $Label] RED — expected 200 OK, got: $statusLine" -ForegroundColor Red
         return $false
     }
 }
 
 function Verify-Sharp-Content {
     param([string]$Label, [string]$Url, [string]$ExpectedPrefix)
-    Write-Host "[Sharp $Label] curl -s --max-time 30 $Url | head -1" -ForegroundColor Cyan
-    $result = & curl -s --max-time 30 $Url 2>&1
+    Write-Host "[Sharp $Label] curl -s --max-time 60 $Url | head -1" -ForegroundColor Cyan
+    $result = & C:\Windows\System32\curl.exe -s --max-time 60 $Url 2>&1
     $firstLine = ($result -split "`n")[0].Trim()
     Write-Host $firstLine
     if ($firstLine -like "*$ExpectedPrefix*") {

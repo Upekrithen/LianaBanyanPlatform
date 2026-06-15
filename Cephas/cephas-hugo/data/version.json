@@ -1,6 +1,6 @@
 {
-  "version": "0.4.2",
-  "filename": "MnemosyneC-Setup-0.4.2.exe",
-  "download_url": "https://mnemosynec.ai/download/MnemosyneC-Setup-0.4.2.exe",
-  "release_notes": "v0.4.2 (BP083): Plow worker survival — true main-process worker decoupled from renderer state, never dies on UI changes. Plow Resume from Checkpoint — interrupted Plows can be resumed on next launch. Hardware-tier model auto-detection — 8 GB machines auto-select gemma2:2b instead of failing silently. Cephas split-brain permanent fix — atomic two-host deploy script, both hosts must pass verification. Onboarding lifecycle auto-advance — first-launch diagnostic banner + reset prompt for stuck-at-B machines. Post-install restart prompt carried forward."
+  "version": "0.4.3",
+  "filename": "MnemosyneC-Setup-0.4.3.exe",
+  "download_url": "/download/MnemosyneC-Setup-0.4.3.exe",
+  "release_notes": "v0.4.3 (BP083): BP081 distribution canon restored — binary self-hosted at mnemosynec.ai/download/ (primary), GitHub Release is mirror only. Homepage hero restored to Amnesia/Cure verbatim. Hardware-tier thresholds tuned — Premium gemma4:12b is default at 16+ GB, Heavy llama3.3:70b is opt-in only. Just Add Salt moved to Does It Actually Work section."
 }

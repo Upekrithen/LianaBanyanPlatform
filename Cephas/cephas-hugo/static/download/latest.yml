@@ -1,8 +1,8 @@
-version: 0.4.2
+version: 0.4.3
 files:
-  - url: https://github.com/liana-banyan/mnemosyne/releases/download/v0.4.2/MnemosyneC-Setup-0.4.2.exe
-    sha512: Z0gRL9+r2SNb0f6UMlg+oCr15Huo/YLPFqVcK9BvpVGdpe0GpjVns2BNLp37IvTptESQ1O25LyfjwFIuTa+miQ==
-    size: 539695957
-path: https://github.com/liana-banyan/mnemosyne/releases/download/v0.4.2/MnemosyneC-Setup-0.4.2.exe
-sha512: Z0gRL9+r2SNb0f6UMlg+oCr15Huo/YLPFqVcK9BvpVGdpe0GpjVns2BNLp37IvTptESQ1O25LyfjwFIuTa+miQ==
-releaseDate: '2026-06-15T20:25:26.913Z'
+  - url: MnemosyneC-Setup-0.4.3.exe
+    sha512: ZhrQEfz7AKhtZCx2/AFSxZaoSAxGox6ECjn55Ulehqda5Yuw8cCNNh4wDqO8H0Enzu4Weg10M9s6vOizi3MONg==
+    size: 539695966
+path: MnemosyneC-Setup-0.4.3.exe
+sha512: ZhrQEfz7AKhtZCx2/AFSxZaoSAxGox6ECjn55Ulehqda5Yuw8cCNNh4wDqO8H0Enzu4Weg10M9s6vOizi3MONg==
+releaseDate: '2026-06-15T22:40:05.799Z'

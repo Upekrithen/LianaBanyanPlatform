@@ -17,7 +17,7 @@ Mnemosyne (neh-MOZ-uh-nee) is the Greek goddess of memory. **Dr. MnemosyneC inhe
 Every time you start a new session, your AI forgets everything. Your projects, your preferences, your past conversations, gone. Dr. MnemosyneC gives your AI a permanent, private memory that actually stays.
 
 <div class="cta-row">
-<a href="https://mnemosynec.ai/download/MnemosyneC-Setup-0.4.2.exe" class="cta-primary"><strong>Download for Windows v0.4.2</strong></a>
+<a href="/download/MnemosyneC-Setup-0.4.3.exe" class="cta-primary"><strong>Download for Windows v0.4.3</strong></a>
 <a href="/install/" class="cta-secondary">Install guide &rarr;</a>
 </div>
 
@@ -29,7 +29,8 @@ Every time you start a new session, your AI forgets everything. Your projects, y
 
 | Version | Status | Notes |
 |---|---|---|
-| **v0.4.2** | 🟡 LATEST | Plow worker survival · Plow Resume from Checkpoint · Hardware-tier auto-detect · Cephas atomic deploy · Onboarding lifecycle auto-advance |
+| **v0.4.3** | 🟡 LATEST | BP081 canon restored — self-hosted binary (HTTP 200) · Amnesia/Cure hero · hardware-tier tuning |
+| v0.4.2 | 🔵 HISTORICAL | Plow worker survival · Plow Resume from Checkpoint · Hardware-tier auto-detect · Cephas atomic deploy |
 | v0.4.1 | 🔵 HISTORICAL | Salt tiers (Pinch · Seasoning · Preserved) + Glow mechanic + Canonical triplet BP083 |
 | v0.4.0 | 🔵 HISTORICAL | ⭐ Architecture milestone — MIC + Federation + The Diagnosis |
 | v0.1.60 | 🟢 STABLE | Ask cold-start heartbeat + token streaming |

@@ -40,7 +40,7 @@ const TIER_DEFS: Record<HardwareTier, Omit<HardwareTierInfo, 'tier' | 'ramGb'>> 
   heavy: {
     recommendedModel: 'llama3.3:70b-instruct-q4_K_M',
     displayName: 'Heavy (llama3.3:70b)',
-    description: 'For Steward-class hardware with 48+ GB RAM. Research-grade accuracy.',
+    description: 'Opt-in advanced tier for 48+ GB RAM. Research-grade accuracy. NOT auto-recommended — click to switch.',
     mmluProExpected: 'Research-grade (not yet benchmarked in cooperative)',
   },
 };
@@ -55,17 +55,19 @@ export function getTotalRamGb(): number {
 /**
  * Maps system RAM to a hardware tier.
  *
- * Thresholds (conservative — leave headroom for OS + other apps):
+ * Thresholds (BP083 SEG-5 tuning):
  *   < 12 GB  → lightweight (gemma2:2b, ~3 GB VRAM)
  *   12–15 GB → standard    (qwen2.5:7b, ~8 GB VRAM)
- *   16–47 GB → premium     (gemma4:12b, ~10 GB VRAM)
- *   48+ GB   → heavy       (llama3.3:70b, ~35 GB VRAM)
+ *   16+ GB   → premium     (gemma4:12b, ~10 GB VRAM) — DEFAULT for all 16+ GB machines
+ *
+ * NOTE: 'heavy' (llama3.3:70b) is NEVER auto-recommended.
+ * It is available as opt-in via Settings — user must explicitly switch.
+ * M0 at 61.6 GB maps to 'premium' by default.
  */
 export function getTierForRam(ramGb: number): HardwareTier {
   if (ramGb < 12) return 'lightweight';
   if (ramGb < 16) return 'standard';
-  if (ramGb < 48) return 'premium';
-  return 'heavy';
+  return 'premium'; // 16+ GB always gets premium as default; heavy is opt-in only
 }
 
 /**

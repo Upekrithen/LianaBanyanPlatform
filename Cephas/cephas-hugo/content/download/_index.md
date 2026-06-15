@@ -22,7 +22,7 @@ tldr: "Everything you need to get started with MnemosyneC, the offline-first coo
 
 **Step 1 — Download and install**
 
-[→ Download MnemosyneC for Windows v0.4.2](https://mnemosynec.ai/download/MnemosyneC-Setup-0.4.2.exe) *(Mac build: see bounty below — we need a Mac builder)*
+[→ Download MnemosyneC for Windows v0.4.3](/download/MnemosyneC-Setup-0.4.3.exe) *(Mac build: see bounty below — we need a Mac builder)*
 
 **Latest release:** v0.4.2 🟡 LATEST — Plow worker survival · Hardware-tier auto-detect · Cephas atomic deploy · Plow Resume from Checkpoint
 **SHA-256:** `See GitHub release page for verified hash`
