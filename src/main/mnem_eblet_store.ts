@@ -219,6 +219,72 @@ export async function queryVerifiedEblets(question: string, topK = 3): Promise<V
     .map((r) => r.entry);
 }
 
+/**
+ * Query verified eblets for TOPICAL context ONLY — excludes exact-match hits.
+ *
+ * This is the mesh-test-safe retrieval path. The exact-match path (question ===
+ * stored question) returns the direct answer and constitutes answer-key cheating
+ * for the mesh test. This function only returns keyword-scored hits from RELATED
+ * questions in the substrate, providing genuine domain-knowledge lift without
+ * short-circuiting the MCQ task.
+ *
+ * BP083 SEG-2/3: Use this function — never queryVerifiedEblets — in B/C conditions.
+ */
+export async function queryVerifiedEbletsTopical(
+  question: string,
+  domain: string,
+  topK = 3,
+): Promise<VerifiedEbletEntry[]> {
+  const ebletFile = resolve(app.getPath('userData'), 'substrate', 'verified_eblets.jsonl');
+  if (!existsSync(ebletFile)) return [];
+
+  let raw: string;
+  try {
+    raw = readFileSync(ebletFile, 'utf-8');
+  } catch {
+    return [];
+  }
+
+  const entries: VerifiedEbletEntry[] = [];
+  for (const line of raw.split('\n')) {
+    const trimmed = line.trim();
+    if (!trimmed) continue;
+    try {
+      const parsed = JSON.parse(trimmed) as Partial<VerifiedEbletEntry>;
+      if (parsed.question && parsed.answer && parsed.sha256 && parsed.verified === true) {
+        entries.push(parsed as VerifiedEbletEntry);
+      }
+    } catch { /* skip malformed */ }
+  }
+
+  if (entries.length === 0) return [];
+
+  const qNorm = question.trim().toLowerCase();
+
+  // Keyword scoring: domain name + question words (excluding exact match)
+  const qTokens = tokenizeQuestion(`${domain} ${question}`);
+  if (qTokens.length === 0) return [];
+  const qSet = new Set(qTokens);
+
+  const scored = entries
+    .filter((e) => e.question.trim().toLowerCase() !== qNorm) // exclude exact match
+    .map((e) => {
+      // Score on stored question text + answer (topical similarity, not exact answer lookup)
+      const corpus = tokenizeQuestion(e.question + ' ' + e.provenance);
+      let score = 0;
+      for (const tok of qSet) {
+        score += corpus.filter((t) => t === tok).length;
+      }
+      return { entry: e, score };
+    });
+
+  return scored
+    .filter((r) => r.score > 0)
+    .sort((a, b) => b.score - a.score || b.entry.timestamp - a.entry.timestamp)
+    .slice(0, topK)
+    .map((r) => r.entry);
+}
+
 // ─── SEG-A2 BP081: Substrate stats query ──────────────────────────────────────
 
 export interface SubstrateStats {

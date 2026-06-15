@@ -1279,6 +1279,25 @@ contextBridge.exposeInMainWorld('amplify', {
     return () => ipcRenderer.removeListener('plow:seed-progress', handler);
   },
 
+  // ── BP083 SEG-5 — Reset + Reseed Context-Class eblets ────────────────────
+
+  plowResetAndReseedContext: (): Promise<{
+    ok: boolean;
+    written: number;
+    total: number;
+    backupPath: string;
+  }> =>
+    ipcRenderer.invoke('plow:reset-and-reseed-context'),
+
+  onPlowResetReseedProgress: (
+    callback: (data: { written: number; total: number; pct: number; done?: boolean }) => void,
+  ): (() => void) => {
+    const handler = (_: unknown, data: { written: number; total: number; pct: number; done?: boolean }) =>
+      callback(data);
+    ipcRenderer.on('plow:reset-reseed-progress', handler);
+    return () => ipcRenderer.removeListener('plow:reset-reseed-progress', handler);
+  },
+
   // ── BP082 v0.2.3 — Beat-Google Benchmark ─────────────────────────────────
 
   getGoogleBaselines: (): Promise<unknown> =>
@@ -1775,6 +1794,11 @@ declare global {
       }>;
       onPlowSeedProgress?: (
         callback: (data: { written: number; skipped: number; total: number; pct: number; done?: boolean }) => void,
+      ) => () => void;
+      // BP083 SEG-5 — Reset + Reseed Context-Class
+      plowResetAndReseedContext?: () => Promise<{ ok: boolean; written: number; total: number; backupPath: string }>;
+      onPlowResetReseedProgress?: (
+        callback: (data: { written: number; total: number; pct: number; done?: boolean }) => void,
       ) => () => void;
       // BP082 v0.2.3 — Beat-Google Benchmark (apples-to-apples handicapped comparison)
       getGoogleBaselines?: () => Promise<unknown>;

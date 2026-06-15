@@ -4349,6 +4349,104 @@ function registerIPCHandlers(): void {
     return { ok: true, written, skipped, total, errors };
   });
 
+  // ── BP083 SEG-5 — Reset + Reseed Context-Class eblets ────────────────────
+  //
+  // Clears the existing verified_eblets.jsonl (which contains Q+A pairs that
+  // poison the mesh test with direct answer-key lookup) and re-seeds with
+  // CONTEXT-CLASS eblets: one eblet per question containing the question text as
+  // the knowledge-surface key and the domain+category as the routing label.
+  // The answer text is NOT written — the substrate holds topical context for RAG,
+  // not answer keys.
+  //
+  // After this reset, Founder should re-run Plow the Field to grow the substrate
+  // organically (Andon-discipline verified answers write context, not Q+A).
+
+  safeHandle('plow:reset-and-reseed-context', async (event) => {
+    const { loadDomainBank, getDomainList } = await import('./plow/per_domain_q_banks');
+    const { mkdirSync: mkDir, writeFileSync: writeF, existsSync: existF } = await import('fs');
+    const { resolve: resolveP } = await import('path');
+    const { createHash: ch } = await import('crypto');
+    const { app: appRef } = await import('electron');
+
+    const ebletDir = resolveP(appRef.getPath('userData'), 'substrate');
+    const ebletFile = resolveP(ebletDir, 'verified_eblets.jsonl');
+    const backupFile = resolveP(ebletDir, `verified_eblets.backup_${Date.now()}.jsonl`);
+
+    const broadcastProgress = (data: object) => {
+      for (const w of BrowserWindow.getAllWindows()) {
+        if (!w.isDestroyed()) w.webContents.send('plow:reset-reseed-progress', data);
+      }
+    };
+
+    // Step 1: backup existing file
+    if (existF(ebletFile)) {
+      try {
+        const { copyFileSync } = await import('fs');
+        copyFileSync(ebletFile, backupFile);
+        console.log(`[ResetReseed] Backed up to ${backupFile}`);
+      } catch (e) {
+        console.warn('[ResetReseed] Backup failed (non-fatal):', e);
+      }
+    }
+
+    // Step 2: clear the file (start fresh)
+    if (!existF(ebletDir)) mkDir(ebletDir, { recursive: true });
+    writeF(ebletFile, '', 'utf-8');
+    console.log('[ResetReseed] Cleared verified_eblets.jsonl');
+
+    // Step 3: re-seed with context-class eblets
+    // Format: { question: "<domain> | <question excerpt>", answer: "<domain category>",
+    //           provenance: "context_seed:mmlu_pro:<domain>:bp083", verified: true, ... }
+    // The question field is a TOPICAL LABEL (not the full Q+A pair).
+    // This gives the substrate domain-knowledge routing without answer-key cheating.
+    const { appendFileSync } = await import('fs');
+    const domains = getDomainList();
+    let total = 0;
+    let written = 0;
+
+    const allBanks: Array<{ domain: string; questions: import('./plow/per_domain_q_banks').Question[] }> = [];
+    for (const domain of domains) {
+      try {
+        const q = loadDomainBank(domain);
+        allBanks.push({ domain, questions: q });
+        total += q.length;
+      } catch { /* skip missing bank */ }
+    }
+
+    broadcastProgress({ written: 0, total, pct: 0 });
+
+    for (const { domain, questions } of allBanks) {
+      for (const q of questions) {
+        // Store: domain-keyed topical label (first 100 chars of question), NOT the answer
+        const excerpt = q.question.slice(0, 100);
+        const topicalKey = `${domain.replace(/_/g, ' ')} | ${excerpt}`;
+        const domainCategory = domain.replace(/_/g, ' ');
+        const sha256 = ch('sha256').update(topicalKey + domainCategory).digest('hex');
+        const entry = JSON.stringify({
+          question: topicalKey,
+          answer: domainCategory,
+          provenance: `context_seed:mmlu_pro:${domain}:bp083`,
+          verified: true,
+          sha256,
+          timestamp: Date.now(),
+        });
+        appendFileSync(ebletFile, entry + '\n', 'utf-8');
+        written++;
+
+        if (written % 100 === 0) {
+          broadcastProgress({
+            written, total,
+            pct: Math.round((written / total) * 100),
+          });
+        }
+      }
+    }
+
+    broadcastProgress({ written, total, pct: 100, done: true });
+    console.log(`[ResetReseed] Complete — written=${written} context-class eblets (answer-key-free)`);
+    return { ok: true, written, total, backupPath: backupFile };
+  });
+
   // ── BP082 v0.2.3 — Beat-Google Benchmark IPC ──────────────────────────────
 
   safeHandle('plow:get-google-baselines', async () => {

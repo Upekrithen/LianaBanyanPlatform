@@ -73,8 +73,16 @@ export function extractLetterChoice(text: string): string | null {
 
 const OPTION_LABELS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
 
-function buildMMLUVoterPrompt(question: string, optionsText: string, voterIndex: number): string {
-  const base = `Question: ${question}\n\n${optionsText}\n\n`;
+function buildMMLUVoterPrompt(
+  question: string,
+  optionsText: string,
+  voterIndex: number,
+  substrateContext?: string,
+): string {
+  const contextPrefix = substrateContext
+    ? `Relevant domain knowledge (use as background reasoning only):\n${substrateContext}\n\n`
+    : '';
+  const base = `${contextPrefix}Question: ${question}\n\n${optionsText}\n\n`;
   switch (voterIndex) {
     case 0:
       return (
@@ -109,11 +117,21 @@ export async function runMMLUProConcordance(
   question: string,
   options: string[],
   sealedLetter: string,
-  opts?: { model?: string; ollamaBaseUrl?: string; temperature?: number },
+  opts?: {
+    model?: string;
+    ollamaBaseUrl?: string;
+    temperature?: number;
+    /** Per-voter temperatures [voter0, voter1, voter2]. Falls back to temperature if not set. */
+    voterTemperatures?: [number, number, number];
+    /** Substrate context string to inject into voter prompts as background knowledge. */
+    substrateContext?: string;
+  },
 ): Promise<MMLUProConcordanceResult> {
   const model = opts?.model ?? 'gemma4:12b';
   const ollamaBaseUrl = opts?.ollamaBaseUrl ?? 'http://127.0.0.1:11434';
   const temperature = opts?.temperature ?? 0.0;
+  const voterTemps: [number, number, number] = opts?.voterTemperatures ?? [temperature, temperature, temperature];
+  const substrateContext = opts?.substrateContext;
 
   const optionsText = options
     .map((o, i) => `${OPTION_LABELS[i] ?? String(i)}. ${o}`)
@@ -122,9 +140,9 @@ export async function runMMLUProConcordance(
   const sealed = sealedLetter.toUpperCase();
 
   const voterPrompts = [
-    buildMMLUVoterPrompt(question, optionsText, 0),
-    buildMMLUVoterPrompt(question, optionsText, 1),
-    buildMMLUVoterPrompt(question, optionsText, 2),
+    buildMMLUVoterPrompt(question, optionsText, 0, substrateContext),
+    buildMMLUVoterPrompt(question, optionsText, 1, substrateContext),
+    buildMMLUVoterPrompt(question, optionsText, 2, substrateContext),
   ];
 
   const voterLetters: (string | null)[] = [];
@@ -141,7 +159,7 @@ export async function runMMLUProConcordance(
             model,
             prompt,
             stream: false,
-            options: { num_predict: 48, temperature },
+            options: { num_predict: 48, temperature: voterTemps[i] },
           }),
           signal: AbortSignal.timeout(45_000),
         });

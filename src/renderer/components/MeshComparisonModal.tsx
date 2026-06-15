@@ -249,10 +249,14 @@ export function MeshComparisonModal({ onClose }: { onClose: () => void }) {
       } else if (ev.type === 'smoke-test') {
         setState((prev) => {
           if (prev.id !== 'running') return prev;
-          return {
-            ...prev,
-            currentDomain: `Smoke test: ${(ev.message as string | undefined) ?? 'running…'}`,
-          };
+          const msg = (ev.message as string | undefined) ?? 'running…';
+          const aScore = ev.aScore as number | undefined;
+          const bScore = ev.bScore as number | undefined;
+          const cScore = ev.cScore as number | undefined;
+          const smokeLabel = (aScore !== undefined && bScore !== undefined && cScore !== undefined)
+            ? `Smoke: A=${aScore}/3 B=${bScore}/3 C=${cScore}/3 — ${msg}`
+            : `Smoke test: ${msg}`;
+          return { ...prev, currentDomain: smokeLabel };
         });
       } else if (ev.type === 'complete') {
         runningRef.current = false;

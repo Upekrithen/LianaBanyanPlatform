@@ -95,9 +95,18 @@ const S = {
   }),
 };
 
+type ReseedState =
+  | { id: 'idle' }
+  | { id: 'confirming' }
+  | { id: 'reseeding'; written: number; total: number; pct: number }
+  | { id: 'done'; written: number; total: number; backupPath?: string }
+  | { id: 'error'; message: string };
+
 export function SubstrateSeedPanel() {
   const [state, setState] = useState<SeedState>({ id: 'idle' });
   const unsubRef = useRef<(() => void) | null>(null);
+  const [reseedState, setReseedState] = useState<ReseedState>({ id: 'idle' });
+  const reseedUnsubRef = useRef<(() => void) | null>(null);
 
   // Subscribe to progress events when seeding starts
   useEffect(() => {
@@ -136,6 +145,36 @@ export function SubstrateSeedPanel() {
       // done state is set via progress event with done:true
     } catch (err) {
       setState({ id: 'error', message: String(err) });
+    }
+  }, []);
+
+  // Subscribe to reset-reseed progress
+  useEffect(() => {
+    if (reseedState.id !== 'reseeding') return;
+    const unsub = window.amplify?.onPlowResetReseedProgress?.((data) => {
+      if (data.done) {
+        setReseedState({ id: 'done', written: data.written, total: data.total });
+        reseedUnsubRef.current?.();
+        reseedUnsubRef.current = null;
+      } else {
+        setReseedState({ id: 'reseeding', written: data.written, total: data.total, pct: data.pct });
+      }
+    });
+    reseedUnsubRef.current = unsub ?? null;
+    return () => { reseedUnsubRef.current?.(); reseedUnsubRef.current = null; };
+  }, [reseedState.id]);
+
+  const handleReseedConfirm = useCallback(async () => {
+    setReseedState({ id: 'reseeding', written: 0, total: 0, pct: 0 });
+    try {
+      const result = await window.amplify?.plowResetAndReseedContext?.();
+      if (!result?.ok) {
+        setReseedState({ id: 'error', message: 'Reseed failed — check console' });
+      } else {
+        setReseedState({ id: 'done', written: result.written, total: result.total, backupPath: result.backupPath });
+      }
+    } catch (err) {
+      setReseedState({ id: 'error', message: String(err) });
     }
   }, []);
 
@@ -238,6 +277,87 @@ export function SubstrateSeedPanel() {
           </button>
         </>
       )}
+
+      {/* ── BP083 SEG-5: Reset + Reseed Context-Class ─────────────────── */}
+      <div style={{ marginTop: 12, borderTop: '1px solid rgba(100,116,139,0.12)', paddingTop: 12 }}>
+        <div style={{ ...S.title, color: '#f59e0b' }}>⚠ Reset + Reseed Context-Class</div>
+        <p style={{ ...S.desc, marginTop: 6 }}>
+          The original "Seed from Sealed Bank" wrote Q&amp;A pairs that poison mesh test
+          lift numbers (the grader can look up the exact answer). This action:
+          (1) backs up your current substrate, (2) clears it, (3) re-seeds with
+          topical-context eblets — domain labels without answer text — so Mesh Test
+          lift is genuine cooperative-architecture lift, not answer-key lookup.
+          Run Plow the Field afterward to grow the substrate organically.
+        </p>
+
+        {reseedState.id === 'idle' && (
+          <button
+            type="button"
+            style={{ ...S.btn('danger'), marginTop: 8 }}
+            onClick={() => setReseedState({ id: 'confirming' })}
+          >
+            Reset + Reseed Context-Class Substrate →
+          </button>
+        )}
+
+        {reseedState.id === 'confirming' && (
+          <div style={{ ...S.confirmBox, marginTop: 8 }}>
+            <p style={S.confirmText}>
+              This will CLEAR your substrate and re-seed with context-class eblets.
+              Your current substrate is backed up automatically. Mesh Test lift numbers
+              after this reset will be honest (not answer-key cheating).
+            </p>
+            <div style={S.row}>
+              <button type="button" style={S.btn('danger')} onClick={handleReseedConfirm}>
+                Confirm — Reset + Reseed
+              </button>
+              <button type="button" style={S.btn('ghost')} onClick={() => setReseedState({ id: 'idle' })}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
+
+        {reseedState.id === 'reseeding' && (
+          <>
+            <div style={{ fontSize: 12, color: '#f59e0b', marginTop: 8 }}>
+              ◌ Reseed in progress… {reseedState.written.toLocaleString()} / {reseedState.total > 0 ? reseedState.total.toLocaleString() : '?'} context eblets written
+            </div>
+            <div style={{ ...S.progressTrack, marginTop: 6 }}>
+              <div style={{ ...S.progressFill(reseedState.pct), background: 'linear-gradient(90deg, #f59e0b, #f97316)' }} />
+            </div>
+          </>
+        )}
+
+        {reseedState.id === 'done' && (
+          <>
+            <div style={{ fontSize: 13, fontWeight: 700, color: '#6ee7b7', marginTop: 8 }}>
+              ✓ Substrate reset + reseeded with context-class eblets
+            </div>
+            <div style={S.row}>
+              <span style={S.statChip('#6ee7b7')}>✓ {reseedState.written.toLocaleString()} context eblets</span>
+              <span style={S.statChip('#818cf8')}>{reseedState.total.toLocaleString()} total</span>
+            </div>
+            <p style={{ ...S.desc, marginTop: 6 }}>
+              Substrate is now answer-key-free. Run Plow the Field to build organic domain knowledge. Mesh Test lift numbers will now be honest.
+            </p>
+            <button type="button" style={{ ...S.btn('ghost'), marginTop: 4 }} onClick={() => setReseedState({ id: 'idle' })}>
+              Done
+            </button>
+          </>
+        )}
+
+        {reseedState.id === 'error' && (
+          <>
+            <div style={{ fontSize: 12, color: '#f87171', marginTop: 8 }}>
+              ✗ Reseed error: {reseedState.message}
+            </div>
+            <button type="button" style={S.btn('ghost')} onClick={() => setReseedState({ id: 'idle' })}>
+              Retry
+            </button>
+          </>
+        )}
+      </div>
     </div>
   );
 }
