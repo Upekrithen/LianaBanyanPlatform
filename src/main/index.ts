@@ -101,6 +101,9 @@ import { registerDispatchIPC } from './dispatch/dispatch_ipc';
 // BP060 Application 002 Steps 3+4 ? AI Dispatch IPC (UI-8 backend)
 import { registerAiDispatchIPC } from './ai_dispatch_ipc';
 
+// BP083 SEG-1/2/4/5 — 6-folder substrate scaffold + MEMORY.md amnesia cure + TestData seeds
+import { ensureMnemosyneCFolders, generateMemoryMd, populateTestDataSeeds, registerMemoryScaffoldIPC } from './memory_scaffold';
+
 // BP081 K-2 — MnemosyneC local MCP server
 import { startMcpServer, stopMcpServer, getMcpServerStatus } from './mcp_server';
 
@@ -2735,6 +2738,9 @@ function registerIPCHandlers(): void {
   // -- AI Dispatch IPC (BP060 Application 002 Steps 3+4 ? UI-8 backend) ----
   registerAiDispatchIPC();
 
+  // -- BP083 SEG-5: MEMORY.md IPC handlers (My Self-Context panel) ----------
+  registerMemoryScaffoldIPC();
+
   // -- Kitchen Table? + Atlas? + P2P (BP052 v0.1.8) ------------------------
   registerKitchenTableIpc(ipcMain);
 
@@ -4935,6 +4941,16 @@ app.whenReady().then(async () => {
 
   // SEG-V0148-P1-RENAME-USERDATA: migrate amplify-computer → mnemosynec on first launch after rename
   migrateUserDataIfNeeded();
+
+  // BP083 SEG-1/2/4: ensure 6-folder substrate scaffold + MEMORY.md + TestData seeds
+  try {
+    const mnemoBaseDir = ensureMnemosyneCFolders();
+    generateMemoryMd(mnemoBaseDir, app.getVersion());
+    populateTestDataSeeds(mnemoBaseDir);
+    console.log(`[BP083] MnemosyneC substrate scaffold ready at ${mnemoBaseDir}`);
+  } catch (err) {
+    console.error('[BP083] Scaffold failed (non-fatal):', err);
+  }
 
   // A-2 BP081 v0.1.59.1: Startup eblet store integrity check (non-fatal)
   try {

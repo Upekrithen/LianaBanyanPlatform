@@ -11,6 +11,8 @@ import { app } from 'electron';
 import { FLOOR_MODEL } from '../shared/floor-model';
 import { queryEbletStore, queryVerifiedEblets, substrateCounters } from './mnem_eblet_store';
 import { ollamaManager } from './ollama_manager';
+// BP083 SEG-3: MEMORY.md system-prompt injection (amnesia cure)
+import { getMemoryMd } from './memory_scaffold';
 
 const OLLAMA_API_BASE = 'http://127.0.0.1:11434';
 
@@ -208,8 +210,18 @@ export function registerAiDispatchIPC(): void {
         `[SubstrateHOT] hits=${verifiedHits.length} hotTotal=${substrateCounters.hotHits} coldTotal=${substrateCounters.coldCalls}`,
       );
 
+      // BP083 SEG-3: Load MEMORY.md self-context (amnesia cure — prepended before substrate).
+      // Cached in-memory, invalidated by fs.watch on edit. Graceful degrade: empty string if fails.
+      let memoryMdContent = '';
+      try {
+        memoryMdContent = getMemoryMd();
+      } catch (err) {
+        console.warn('[ai_dispatch] MEMORY.md load failed (non-fatal):', err);
+      }
+
       // Step 2: SKU gate -- determine if Mnem-DRT eblet compose should run.
-      let systemContent = verifiedContext + (substrateText ?? '');
+      // MEMORY.md is prepended first (self-identity), then r10v3 substrate, then eblet context.
+      let systemContent = (memoryMdContent ? memoryMdContent + '\n\n' : '') + verifiedContext + (substrateText ?? '');
 
       if (shouldRunMnemDrt(settings) && userMessage.length > 0) {
         // Step 3: Query local eblet store for context snippets.
@@ -222,11 +234,12 @@ export function registerAiDispatchIPC(): void {
         }
 
         if (ebletSnippets.length > 0) {
-          // Compose: substrate + eblet context + user message framing.
+          // Compose: MEMORY.md + substrate + eblet context + user message framing.
           const knownContext = ebletSnippets.join('\n\n');
-          systemContent = substrateText
+          const substrateLayer = substrateText
             ? `${substrateText}\n\n[Known context from local knowledge base]\n${knownContext}`
             : `[Known context from local knowledge base]\n${knownContext}`;
+          systemContent = (memoryMdContent ? memoryMdContent + '\n\n' : '') + substrateLayer;
         }
       }
 

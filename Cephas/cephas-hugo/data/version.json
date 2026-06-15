@@ -1,6 +1,6 @@
 {
-  "version": "0.3.4",
-  "filename": "MnemosyneC-Setup-0.3.4.exe",
-  "download_url": "https://mnemosynec.ai/download/MnemosyneC-Setup-0.3.4.exe",
-  "release_notes": "v0.3.4: Canonical Plow pipeline — 9-specialist external swarm. TypeScript port of cooperative substrate grow loop. Domain specialists per MMLU-Pro domain (engineering, health, etc.). Progressive UI with per-domain progress + live eblet-growth counter."
+  "version": "0.3.5",
+  "filename": "MnemosyneC-Setup-0.3.5.exe",
+  "download_url": "https://mnemosynec.ai/download/MnemosyneC-Setup-0.3.5.exe",
+  "release_notes": "v0.3.5 (BP083): Self-context scaffold — MEMORY.md amnesia cure. 6-folder substrate at %APPDATA%\\MnemosyneC\\. Auto-generated MEMORY.md tells MnemosyneC who she is (Ollama + gemma4:12b + LB cooperative). System prompt injection on every Ask query. Settings → Test It Out → My Self-Context panel."
 }

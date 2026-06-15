@@ -1426,6 +1426,19 @@ contextBridge.exposeInMainWorld('amplify', {
     ipcRenderer.on('dispatch:progress', handler);
     return () => ipcRenderer.removeListener('dispatch:progress', handler);
   },
+
+  // BP083 SEG-5: MEMORY.md self-context panel (My Self-Context in Test It Out)
+  mnemoGetMemoryMd: (): Promise<{ ok: boolean; content?: string; error?: string }> =>
+    ipcRenderer.invoke('mnemosynec:get-memory-md'),
+
+  mnemoReloadMemoryMd: (): Promise<{ ok: boolean; content?: string; error?: string }> =>
+    ipcRenderer.invoke('mnemosynec:reload-memory-md'),
+
+  mnemoResetMemoryMd: (): Promise<{ ok: boolean; content?: string; error?: string }> =>
+    ipcRenderer.invoke('mnemosynec:reset-memory-md'),
+
+  mnemoOpenMemoryEditor: (): Promise<{ ok: boolean; error?: string }> =>
+    ipcRenderer.invoke('mnemosynec:open-memory-editor'),
 });
 
 // ─── Global type extension ────────────────────────────────────────────────────
@@ -1861,6 +1874,11 @@ declare global {
       dispatchHistory?: () => Promise<unknown[]>;
       dispatchCredentialStatus?: () => Promise<{ substack: boolean; medium: boolean; gmail: boolean; cephas: boolean; lianabanyan: boolean; hackernews: boolean }>;
       onDispatchProgress?: (callback: (msg: string) => void) => () => void;
+      // BP083 SEG-5: MEMORY.md self-context panel
+      mnemoGetMemoryMd?: () => Promise<{ ok: boolean; content?: string; error?: string }>;
+      mnemoReloadMemoryMd?: () => Promise<{ ok: boolean; content?: string; error?: string }>;
+      mnemoResetMemoryMd?: () => Promise<{ ok: boolean; content?: string; error?: string }>;
+      mnemoOpenMemoryEditor?: () => Promise<{ ok: boolean; error?: string }>;
     };
     // SEG-V0150-P0-DIAGNOSE-BRIDGE: sentinel — set by preload before main bridge wires up
     __preloadLoaded?: boolean;

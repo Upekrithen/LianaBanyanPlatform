@@ -1,10 +1,11 @@
-// TestItOutTab.tsx — SEG-2 v0.1.57 · SEG-4 v0.1.59 · BP079/BP081 · BP082 v0.2.2 · v0.2.3 · v0.3.1
+// TestItOutTab.tsx — SEG-2 v0.1.57 · SEG-4 v0.1.59 · BP079/BP081 · BP082 v0.2.2 · v0.2.3 · v0.3.1 · BP083 v0.3.5
 // Single Q: 5-question MMLU-Pro / R11 diagnostic workout.
 // Plow the Field: multi-domain parallel Plow run with per-domain progress.
 // Andon discipline: correct answers grow substrate; wrong answers never written.
 // v0.2.2: Substrate seed panel added (Settings → Substrate → Seed from Sealed Bank)
 // v0.2.3: Beat-Google Benchmark mode added (BP082 — apples-to-apples handicapped comparison)
 // v0.3.1: 3-Condition Mesh Comparison Test (BP082 Founder correction — Cold/Seeded/Loop)
+// v0.3.5: My Self-Context panel added (BP083 — MEMORY.md amnesia cure)
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { SubstrateSeedPanel } from './SubstrateSeedPanel';
@@ -348,6 +349,12 @@ export function TestItOutTab(): React.ReactElement {
   const [benchmarkModalOpen, setBenchmarkModalOpen] = useState(false);
   const [meshModalOpen, setMeshModalOpen] = useState(false);
 
+  // ── BP083 My Self-Context state ────────────────────────────────────────────
+  const [selfCtxContent, setSelfCtxContent] = useState<string | null>(null);
+  const [selfCtxLoading, setSelfCtxLoading] = useState(false);
+  const [selfCtxStatus, setSelfCtxStatus] = useState<string>('');
+  const [resetConfirm, setResetConfirm] = useState(false);
+
   // Load history on mount
   useEffect(() => {
     window.amplify?.getTestItOutHistory?.()
@@ -413,6 +420,81 @@ export function TestItOutTab(): React.ReactElement {
     setState({ id: 'idle' });
     void handleRun();
   }, [handleRun]);
+
+  // ── BP083 My Self-Context handlers ─────────────────────────────────────────
+
+  const loadSelfCtx = useCallback(async () => {
+    setSelfCtxLoading(true);
+    setSelfCtxStatus('');
+    try {
+      const res = await window.amplify?.mnemoGetMemoryMd?.();
+      if (res?.ok && res.content !== undefined) {
+        setSelfCtxContent(res.content);
+        setSelfCtxStatus('Loaded.');
+      } else {
+        setSelfCtxStatus(`Error: ${res?.error ?? 'unknown'}`);
+      }
+    } catch (err) {
+      setSelfCtxStatus(`Error: ${String(err)}`);
+    } finally {
+      setSelfCtxLoading(false);
+    }
+  }, []);
+
+  // Load on mount
+  useEffect(() => { void loadSelfCtx(); }, [loadSelfCtx]);
+
+  const handleSelfCtxReload = useCallback(async () => {
+    setSelfCtxLoading(true);
+    setSelfCtxStatus('Reloading…');
+    try {
+      const res = await window.amplify?.mnemoReloadMemoryMd?.();
+      if (res?.ok && res.content !== undefined) {
+        setSelfCtxContent(res.content);
+        setSelfCtxStatus('Reloaded from disk.');
+      } else {
+        setSelfCtxStatus(`Reload failed: ${res?.error ?? 'unknown'}`);
+      }
+    } catch (err) {
+      setSelfCtxStatus(`Reload failed: ${String(err)}`);
+    } finally {
+      setSelfCtxLoading(false);
+    }
+  }, []);
+
+  const handleSelfCtxEdit = useCallback(async () => {
+    setSelfCtxStatus('Opening editor…');
+    try {
+      const res = await window.amplify?.mnemoOpenMemoryEditor?.();
+      setSelfCtxStatus(res?.ok ? 'Opened in default editor. Save and Reload to apply.' : `Open failed: ${res?.error ?? 'unknown'}`);
+    } catch (err) {
+      setSelfCtxStatus(`Open failed: ${String(err)}`);
+    }
+  }, []);
+
+  const handleSelfCtxReset = useCallback(async () => {
+    if (!resetConfirm) {
+      setResetConfirm(true);
+      setSelfCtxStatus('Click Reset again to confirm. This will overwrite your customizations.');
+      return;
+    }
+    setResetConfirm(false);
+    setSelfCtxLoading(true);
+    setSelfCtxStatus('Resetting to template…');
+    try {
+      const res = await window.amplify?.mnemoResetMemoryMd?.();
+      if (res?.ok && res.content !== undefined) {
+        setSelfCtxContent(res.content);
+        setSelfCtxStatus('Reset to template. MEMORY.md regenerated.');
+      } else {
+        setSelfCtxStatus(`Reset failed: ${res?.error ?? 'unknown'}`);
+      }
+    } catch (err) {
+      setSelfCtxStatus(`Reset failed: ${String(err)}`);
+    } finally {
+      setSelfCtxLoading(false);
+    }
+  }, [resetConfirm]);
 
   // ── Plow the Field handlers ───────────────────────────────────────────────
 
@@ -1045,6 +1127,101 @@ export function TestItOutTab(): React.ReactElement {
           Substrate Settings
         </div>
         <SubstrateSeedPanel />
+      </div>
+
+      {/* ── BP083 My Self-Context ─────────────────────────────────────────────── */}
+      <div style={{ marginTop: 8, paddingTop: 16, borderTop: '1px solid rgba(100,116,139,0.1)' }}>
+        <div style={{ fontSize: 11, color: '#475569', letterSpacing: '0.06em', textTransform: 'uppercase' as const, marginBottom: 10 }}>
+          My Self-Context
+        </div>
+        <div style={{ fontSize: 12, color: '#64748b', marginBottom: 10, lineHeight: 1.6 }}>
+          MEMORY.md is injected as a system prompt on every Ask query — it tells MnemosyneC who she is,
+          what runtime she's on, and her substrate layout. Edit to customize; Reload to apply live.
+        </div>
+
+        {/* Action buttons */}
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' as const, marginBottom: 10 }}>
+          <button
+            type="button"
+            style={{
+              padding: '7px 14px', background: 'rgba(110,231,183,0.1)',
+              border: '1px solid rgba(110,231,183,0.3)', borderRadius: 7,
+              color: '#6ee7b7', fontSize: 12, fontWeight: 600, cursor: selfCtxLoading ? 'not-allowed' : 'pointer',
+              fontFamily: 'inherit', opacity: selfCtxLoading ? 0.5 : 1,
+            }}
+            disabled={selfCtxLoading}
+            onClick={() => { void handleSelfCtxEdit(); }}
+          >
+            ✏️ Edit in Default Editor
+          </button>
+          <button
+            type="button"
+            style={{
+              padding: '7px 14px', background: 'rgba(99,102,241,0.08)',
+              border: '1px solid rgba(99,102,241,0.25)', borderRadius: 7,
+              color: '#818cf8', fontSize: 12, fontWeight: 600, cursor: selfCtxLoading ? 'not-allowed' : 'pointer',
+              fontFamily: 'inherit', opacity: selfCtxLoading ? 0.5 : 1,
+            }}
+            disabled={selfCtxLoading}
+            onClick={() => { void handleSelfCtxReload(); }}
+          >
+            🔄 Reload
+          </button>
+          <button
+            type="button"
+            style={{
+              padding: '7px 14px',
+              background: resetConfirm ? 'rgba(239,68,68,0.12)' : 'rgba(255,255,255,0.03)',
+              border: resetConfirm ? '1px solid rgba(239,68,68,0.4)' : '1px solid rgba(100,116,139,0.2)',
+              borderRadius: 7,
+              color: resetConfirm ? '#f87171' : '#64748b',
+              fontSize: 12, fontWeight: 600,
+              cursor: selfCtxLoading ? 'not-allowed' : 'pointer',
+              fontFamily: 'inherit', opacity: selfCtxLoading ? 0.5 : 1,
+            }}
+            disabled={selfCtxLoading}
+            onClick={() => { void handleSelfCtxReset(); }}
+          >
+            {resetConfirm ? '⚠️ Confirm Reset' : '↩ Reset to Template'}
+          </button>
+        </div>
+
+        {/* Status message */}
+        {selfCtxStatus && (
+          <div style={{ fontSize: 11, color: selfCtxStatus.startsWith('Error') || selfCtxStatus.startsWith('Reload failed') || selfCtxStatus.startsWith('Reset failed') || selfCtxStatus.startsWith('Open failed') ? '#f87171' : '#6ee7b7', marginBottom: 8 }}>
+            {selfCtxStatus}
+          </div>
+        )}
+
+        {/* MEMORY.md content preview (read-only) */}
+        {selfCtxContent !== null && (
+          <div style={{
+            background: 'rgba(0,0,0,0.35)',
+            border: '1px solid rgba(100,116,139,0.2)',
+            borderRadius: 8,
+            padding: '12px 14px',
+            maxHeight: 260,
+            overflowY: 'auto' as const,
+          }}>
+            <pre style={{
+              margin: 0, fontSize: 11, color: '#94a3b8',
+              fontFamily: 'monospace', whiteSpace: 'pre-wrap' as const,
+              wordBreak: 'break-word' as const, lineHeight: 1.6,
+            }}>
+              {selfCtxContent}
+            </pre>
+          </div>
+        )}
+
+        {selfCtxContent === null && selfCtxLoading && (
+          <div style={{ fontSize: 12, color: '#475569', fontStyle: 'italic' as const }}>
+            ◌ Loading MEMORY.md…
+          </div>
+        )}
+
+        <div style={{ fontSize: 11, color: '#334155', marginTop: 8 }}>
+          Install Chocolate Pack → Package Store → Confectionary (coming v0.3.6)
+        </div>
       </div>
 
       {/* Apples-to-apples handicapped comparison (v0.2.3 advanced mode) */}
