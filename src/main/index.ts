@@ -113,6 +113,11 @@ import { SubstratedFolderWatcher, registerWatcherIpc } from './services/Substrat
 // BP067 Correction 2 ? Folder?DAG bridge
 import { setDagBridgeMeshHook, getDagEmitCount } from './dag_bridge';
 
+// v0.4.0 BP083 — MIC Dispatcher + The Diagnosis + Peer Server
+import { registerMicIpc } from './federation/mic_ipc';
+import { registerDiagnosisIpc } from './diagnosis/diagnosis_ipc';
+import { startPeerServer, stopPeerServer } from './federation/peer_server';
+
 // SAGA 10 BP045 W1 ? mnemosyne:// + mnemo:// deep-link handler
 import { registerDeepLinkProtocol, handleStartupDeepLink } from './deep-link-handler';
 import type { DeepLinkPayload } from './deep-link-handler';
@@ -1515,6 +1520,11 @@ function registerIPCHandlers(): void {
     pulling: autoPrepareRunning,
   }));
 
+  // v0.4.0 BP083 SEG-5: request-app-quit IPC (renderer restart prompt)
+  ipcMain.on('request-app-quit', () => {
+    app.quit();
+  });
+
   // BP081 K-2 — MCP server status + auth token IPC
   safeHandle('mcp:get-status', async () => getMcpServerStatus());
   safeHandle('mcp:get-auth-token', async () => {
@@ -2740,6 +2750,10 @@ function registerIPCHandlers(): void {
 
   // -- BP083 SEG-5: MEMORY.md IPC handlers (My Self-Context panel) ----------
   registerMemoryScaffoldIPC();
+
+  // -- v0.4.0 BP083: MIC Dispatcher + The Diagnosis IPC handlers ------------
+  registerMicIpc();
+  registerDiagnosisIpc();
 
   // -- Kitchen Table? + Atlas? + P2P (BP052 v0.1.8) ------------------------
   registerKitchenTableIpc(ipcMain);
@@ -5330,6 +5344,39 @@ app.whenReady().then(async () => {
   // Uses fs.watch (chokidar would be more robust but is not in this project's dependencies).
   setupMeshResultsWatcher();
 
+  // v0.4.0 BP083 SEG-1: Start peer HTTP server on port 7474 (SCAFFOLD transport)
+  try {
+    await startPeerServer();
+    console.log('[BP083] Peer server started on port 7474 (SCAFFOLD v0.4.0)');
+  } catch (e) {
+    console.warn('[BP083] Peer server start failed (non-fatal):', e);
+  }
+
+  // v0.4.0 BP083 SEG-5: Post-install restart prompt (version-bump detection)
+  {
+    const lastVersionPath = join(app.getPath('appData'), 'MnemosyneC', '.last_version');
+    const currentVersion = app.getVersion();
+    const lastVersion = existsSync(lastVersionPath) ? readFileSync(lastVersionPath, 'utf8').trim() : null;
+    if (lastVersion && lastVersion !== currentVersion) {
+      writeFileSync(lastVersionPath, currentVersion, 'utf8');
+      // Send once window finishes loading
+      const sendRestartPrompt = () => {
+        for (const win of BrowserWindow.getAllWindows()) {
+          if (!win.isDestroyed()) {
+            win.webContents.send('show-restart-prompt', {
+              version: currentVersion,
+              message: `MnemosyneC v${currentVersion} installed. Please close and reopen once for full UI initialization. Federation features require a clean renderer state.`,
+            });
+          }
+        }
+      };
+      // Defer to ensure windows are ready
+      setTimeout(sendRestartPrompt, 3000);
+    } else if (!lastVersion) {
+      writeFileSync(lastVersionPath, currentVersion, 'utf8');
+    }
+  }
+
   app.on('activate', () => {
     // SAGA-1 BP055: macOS dock click ? open Dashboard (not overlay).
     openDashboard({ focus: true });
@@ -5350,4 +5397,5 @@ app.on('before-quit', async () => {
   await federationClient?.stop();
   await substrateServer?.stop();
   await stopMcpServer();
+  await stopPeerServer();
 });

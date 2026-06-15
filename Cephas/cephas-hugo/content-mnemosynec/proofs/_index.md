@@ -7,6 +7,10 @@ draft: false
 
 # Proofs & Receipts
 
+**Just Add Salt · How to Get the Right Answer**
+
+MnemosyneC finds answers through a 3-layer salt architecture: Substrate Salt (local verified eblets) · Federation Salt (Constellation peers) · Human Salt (The Diagnosis). The right answer lives somewhere in the constellation.
+
 **Every claim MnemosyneC makes is hash-verified and reproducible.**
 
 We don't ask you to trust us. We give you the receipts.

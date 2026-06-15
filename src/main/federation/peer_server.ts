@@ -1,0 +1,197 @@
+/**
+ * peer_server.ts — MnemosyneC v0.4.0 BP083 Peer HTTP Server
+ *
+ * Listens on port 7474, handles:
+ *   GET  /api/heartbeat      → 200 OK (liveness check)
+ *   GET  /api/info           → JSON peer info (installed domains, model, etc.)
+ *   POST /api/plow-domain    → runs canonical_pipeline for one domain, returns result JSON
+ *   POST /api/diagnosis/post → receives a Diagnosis post from Constellation
+ *   POST /api/diagnosis/answer → receives a Diagnosis answer
+ *
+ * SCAFFOLD v0.4.0 — plain HTTP, no auth.
+ * Full Thorax encryption + Socceri transport deferred to v0.4.1.
+ * All inter-machine communication is cooperative-class (Heart of Peace BP051).
+ */
+
+import http from 'http';
+import { app } from 'electron';
+import type { IncomingMessage, ServerResponse } from 'http';
+import type { MicStartPayload } from './mic_types';
+
+export const PEER_SERVER_PORT = 7474;
+
+let _server: http.Server | null = null;
+
+// Callback hooks (set by registerPeerServerHooks)
+let _onPlowDomain: ((domain: string, questions: string[], ollamaBaseUrl: string, model: string) => Promise<{ ebletsWritten: number; quarantined: number; andonEvents: number; status: string }>) | null = null;
+let _onDiagnosisPost: ((post: unknown) => Promise<void>) | null = null;
+let _onDiagnosisAnswer: ((answer: unknown) => Promise<void>) | null = null;
+let _onDiagnosisUpvote: ((data: unknown) => Promise<void>) | null = null;
+
+export function registerPeerServerHooks(hooks: {
+  onPlowDomain?: typeof _onPlowDomain;
+  onDiagnosisPost?: typeof _onDiagnosisPost;
+  onDiagnosisAnswer?: typeof _onDiagnosisAnswer;
+  onDiagnosisUpvote?: typeof _onDiagnosisUpvote;
+}): void {
+  if (hooks.onPlowDomain) _onPlowDomain = hooks.onPlowDomain;
+  if (hooks.onDiagnosisPost) _onDiagnosisPost = hooks.onDiagnosisPost;
+  if (hooks.onDiagnosisAnswer) _onDiagnosisAnswer = hooks.onDiagnosisAnswer;
+  if (hooks.onDiagnosisUpvote) _onDiagnosisUpvote = hooks.onDiagnosisUpvote;
+}
+
+function readBody(req: IncomingMessage): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const chunks: Buffer[] = [];
+    req.on('data', (c: Buffer) => chunks.push(c));
+    req.on('end', () => resolve(Buffer.concat(chunks).toString('utf8')));
+    req.on('error', reject);
+  });
+}
+
+function sendJson(res: ServerResponse, statusCode: number, data: unknown): void {
+  const body = JSON.stringify(data);
+  res.writeHead(statusCode, {
+    'Content-Type': 'application/json',
+    'Content-Length': Buffer.byteLength(body),
+  });
+  res.end(body);
+}
+
+async function handleRequest(req: IncomingMessage, res: ServerResponse): Promise<void> {
+  const url = req.url ?? '';
+  const method = req.method ?? 'GET';
+
+  // Heartbeat
+  if (url === '/api/heartbeat' && method === 'GET') {
+    sendJson(res, 200, { ok: true, version: app.getVersion(), ts: Date.now() });
+    return;
+  }
+
+  // Info
+  if (url === '/api/info' && method === 'GET') {
+    sendJson(res, 200, {
+      id: 'self',
+      name: 'MnemosyneC Peer',
+      version: app.getVersion(),
+      ollamaModel: null, // SCAFFOLD: populate from ollama_manager in v0.4.1
+      installedDomains: [], // SCAFFOLD: read from chocolates registry in v0.4.1
+    });
+    return;
+  }
+
+  // Plow domain
+  if (url === '/api/plow-domain' && method === 'POST') {
+    if (!_onPlowDomain) {
+      sendJson(res, 503, { error: 'Plow domain handler not registered' });
+      return;
+    }
+    try {
+      const body = await readBody(req);
+      const { domain, questions, ollamaBaseUrl, model } = JSON.parse(body) as {
+        domain: string;
+        questions: string[];
+        ollamaBaseUrl?: string;
+        model?: string;
+      };
+      const result = await _onPlowDomain(
+        domain,
+        questions,
+        ollamaBaseUrl ?? 'http://127.0.0.1:11434',
+        model ?? 'gemma4:12b',
+      );
+      sendJson(res, 200, result);
+    } catch (err) {
+      sendJson(res, 500, { error: String(err) });
+    }
+    return;
+  }
+
+  // Diagnosis: post
+  if (url === '/api/diagnosis/post' && method === 'POST') {
+    if (!_onDiagnosisPost) {
+      sendJson(res, 503, { error: 'Diagnosis post handler not registered' });
+      return;
+    }
+    try {
+      const body = await readBody(req);
+      await _onDiagnosisPost(JSON.parse(body));
+      sendJson(res, 200, { ok: true });
+    } catch (err) {
+      sendJson(res, 500, { error: String(err) });
+    }
+    return;
+  }
+
+  // Diagnosis: answer
+  if (url === '/api/diagnosis/answer' && method === 'POST') {
+    if (!_onDiagnosisAnswer) {
+      sendJson(res, 503, { error: 'Diagnosis answer handler not registered' });
+      return;
+    }
+    try {
+      const body = await readBody(req);
+      await _onDiagnosisAnswer(JSON.parse(body));
+      sendJson(res, 200, { ok: true });
+    } catch (err) {
+      sendJson(res, 500, { error: String(err) });
+    }
+    return;
+  }
+
+  // Diagnosis: upvote
+  if (url === '/api/diagnosis/upvote' && method === 'POST') {
+    if (!_onDiagnosisUpvote) {
+      sendJson(res, 503, { error: 'Diagnosis upvote handler not registered' });
+      return;
+    }
+    try {
+      const body = await readBody(req);
+      await _onDiagnosisUpvote(JSON.parse(body));
+      sendJson(res, 200, { ok: true });
+    } catch (err) {
+      sendJson(res, 500, { error: String(err) });
+    }
+    return;
+  }
+
+  sendJson(res, 404, { error: 'Not found' });
+}
+
+export function startPeerServer(): void {
+  if (_server) {
+    console.log('[PeerServer] Already running on port', PEER_SERVER_PORT);
+    return;
+  }
+
+  _server = http.createServer((req, res) => {
+    handleRequest(req, res).catch((err) => {
+      console.error('[PeerServer] Unhandled request error:', err);
+      try {
+        sendJson(res, 500, { error: 'Internal server error' });
+      } catch {
+        // Response may already be sent
+      }
+    });
+  });
+
+  _server.listen(PEER_SERVER_PORT, '0.0.0.0', () => {
+    console.log(`[PeerServer] v0.4.0 SCAFFOLD listening on :${PEER_SERVER_PORT}`);
+  });
+
+  _server.on('error', (err: NodeJS.ErrnoException) => {
+    if (err.code === 'EADDRINUSE') {
+      console.warn(`[PeerServer] Port ${PEER_SERVER_PORT} already in use — skipping start`);
+    } else {
+      console.error('[PeerServer] Server error:', err);
+    }
+    _server = null;
+  });
+}
+
+export function stopPeerServer(): void {
+  if (_server) {
+    _server.close(() => { console.log('[PeerServer] Stopped.'); });
+    _server = null;
+  }
+}

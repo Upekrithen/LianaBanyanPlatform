@@ -1,5 +1,5 @@
 /**
- * canonical_pipeline.ts — BP083 v0.3.4 Canonical Plow Pipeline
+ * canonical_pipeline.ts — BP083 v0.4.0 Canonical Plow Pipeline (Federated Andon)
  *
  * Implements the Founder-Invented 14-Domain Looping Methodology per §0 of
  * KNIGHT_YOKE_v0_3_4_CANONICAL_PLOW_PIPELINE_BP083.md
@@ -16,11 +16,14 @@
  *   6. Furnace     → Angel of Death (burn challenged/discordant candidates)
  *   7. Three Fates → final answer arbitration (3-voter, temps [0.0, 0.2, 0.4])
  *   8. Scribe      → record result + BMV score + concordance + gate outcomes
- *   9. Detective TEAM → root-cause on gate fail + Andon cord (stop line,
- *                       widen operators, restart from Q1, max 3 retries)
+ *   9. Detective TEAM → root-cause on gate fail + Federated Andon cord (v0.4.0):
+ *                       Tier 1: widen local specialist roster (backup adapters)
+ *                       Tier 2: cross-machine Constellation query
+ *                       Tier 3: The Diagnosis (human broadcast — ESCALATE not quarantine)
  *
+ * v0.4.0 change: ESCALATE not quarantine. Founder direct: "the goal is the right answer."
  * Truth-Always: if Sharp 7 shows zero growth, the caller must file YELLOW.
- * Caithedral spelling per BP081 blood statute.
+ * Caithedral™ spelling per BP081 blood statute.
  */
 
 import { createHash } from 'crypto';
@@ -62,6 +65,9 @@ export interface CanonicalPlowQuestionResult {
   gateOutcomes: GateOutcome[];
   andonTriggered: boolean;
   andonRetries: number;
+  andonTierResolved?: 1 | 2 | 3 | null; // v0.4.0: which tier resolved (null = unresolved)
+  diagnosisId?: string | null;           // v0.4.0: Tier 3 Diagnosis ID if escalated
+  pendingHuman?: boolean;                // v0.4.0: true if awaiting human Diagnosis answer
   specialistsUsed: string[];
   candidatesRaw: number;
   candidatesPostMiner: number;
@@ -76,6 +82,7 @@ export interface CanonicalPlowDomainResult {
   avgBmvScore: number;
   verifiedCount: number;
   quarantinedCount: number;
+  pendingHumanCount: number;   // v0.4.0: Tier 3 Diagnosis escalations (not quarantined)
   andonEvents: number;
   status: 'GREEN' | 'YELLOW' | 'RED';
 }
@@ -92,6 +99,9 @@ export interface CanonicalPlowProgressEvent {
     | 'three-fates-done'
     | 'scribe-done'
     | 'andon-trigger'
+    | 'andon-tier1'
+    | 'andon-tier2'
+    | 'andon-tier3-diagnosis'
     | 'andon-recovered'
     | 'andon-exhausted'
     | 'question-done'
@@ -649,9 +659,12 @@ async function runCanonicalQuestion(
   const gateOutcomes = evaluateGates(postFurnace.length, bmvScore, concordance, latencyMs);
   const anyGateFailed = gateOutcomes.some((g) => !g.passed);
 
-  // ── Stage 9: Detective TEAM + Andon cord ─────────────────────────────────
+  // ── Stage 9: Detective TEAM + Federated Andon cord (v0.4.0) ─────────────
   let andonTriggered = false;
   let finalRetries = andonRetry;
+  let andonTierResolved: 1 | 2 | 3 | null = null;
+  let diagnosisId: string | null = null;
+  let pendingHuman = false;
   let finalResult: CanonicalPlowQuestionResult;
 
   if (anyGateFailed && andonRetry < MAX_ANDON_RETRIES) {
@@ -691,8 +704,57 @@ async function runCanonicalQuestion(
       return retryResult;
     }
 
-    // Cannot widen — mark YELLOW
+    // v0.4.0: Cannot widen via Detective — escalate via Federated Andon (ESCALATE not quarantine)
     onProgress({ type: 'andon-exhausted', domain, questionIndex, totalQuestions, andonRetry: finalRetries });
+  }
+
+  // v0.4.0: If all gates failed AND all retries exhausted AND no candidates → Federated Andon
+  const allGatesFailed = gateOutcomes.every((g) => !g.passed);
+  const noSurvivors = postFurnace.length === 0 && postMiner.length === 0;
+
+  if (allGatesFailed && noSurvivors && andonRetry >= MAX_ANDON_RETRIES) {
+    // Federated Andon 3-tier escalation
+    try {
+      const { escalateAndon } = await import('../federation/federated_andon');
+      const resolution = await escalateAndon(
+        domain,
+        question,
+        (msg) => {
+          console.log(msg);
+          if (msg.includes('Tier 1')) onProgress({ type: 'andon-tier1', domain, questionIndex, totalQuestions });
+          else if (msg.includes('Tier 2')) onProgress({ type: 'andon-tier2', domain, questionIndex, totalQuestions });
+          else if (msg.includes('Tier 3')) onProgress({ type: 'andon-tier3-diagnosis', domain, questionIndex, totalQuestions });
+        },
+      );
+
+      if (resolution.status === 'resolved') {
+        andonTierResolved = resolution.tier;
+        // Use the escalation-recovered candidates
+        const recoveredCandidates = resolution.candidates;
+        const { ebletsWritten: recoveredEblets, record: recoveredRecord } = await runScribe(
+          domain, question, questionId, recoveredCandidates,
+          bmvScore, concordance, gateOutcomes, andonTriggered, finalRetries, writeEbletFn,
+        );
+        return {
+          questionId, domain,
+          ebletsWritten: recoveredEblets,
+          bmvScore, concordance, gateOutcomes,
+          andonTriggered: true, andonRetries: finalRetries,
+          andonTierResolved, diagnosisId: null, pendingHuman: false,
+          specialistsUsed, candidatesRaw,
+          candidatesPostMiner: postMiner.length, candidatesPostFurnace: postFurnace.length,
+          scribes: [recoveredRecord],
+        };
+      } else if (resolution.status === 'pending_human') {
+        andonTierResolved = 3;
+        diagnosisId = resolution.diagnosisId;
+        pendingHuman = true;
+        console.log(`[CanonicalPipeline] Tier 3 Diagnosis posted id=${diagnosisId} for Q "${question.slice(0, 60)}"`);
+      }
+      // status === 'no_answer': fall through to write zero eblets
+    } catch (escalateErr) {
+      console.error('[CanonicalPipeline] Federated Andon escalation error:', escalateErr);
+    }
   }
 
   // Write surviving facts to substrate
@@ -720,6 +782,9 @@ async function runCanonicalQuestion(
     gateOutcomes,
     andonTriggered,
     andonRetries: finalRetries,
+    andonTierResolved: andonTierResolved ?? null,
+    diagnosisId: diagnosisId ?? null,
+    pendingHuman,
     specialistsUsed,
     candidatesRaw,
     candidatesPostMiner: postMiner.length,
@@ -752,6 +817,7 @@ async function runDomainPipeline(
   const questionResults: CanonicalPlowQuestionResult[] = [];
   let domainEblets = 0;
   let domainAndonEvents = 0;
+  let domainPendingHuman = 0;
 
   onProgress({
     type: 'domain-start',
@@ -780,6 +846,7 @@ async function runDomainPipeline(
       questionResults.push(result);
       domainEblets += result.ebletsWritten;
       if (result.andonTriggered) domainAndonEvents++;
+      if (result.pendingHuman) domainPendingHuman++;
 
       onProgress({
         type: 'question-done',
@@ -819,7 +886,8 @@ async function runDomainPipeline(
   }
 
   const verifiedCount = questionResults.filter((r) => r.ebletsWritten > 0).length;
-  const quarantinedCount = questionResults.filter((r) => r.ebletsWritten === 0).length;
+  const quarantinedCount = questionResults.filter((r) => r.ebletsWritten === 0 && !r.pendingHuman).length;
+  const pendingHumanCount = domainPendingHuman;
   const avgBmv = questionResults.length > 0
     ? questionResults.reduce((s, r) => s + r.bmvScore, 0) / questionResults.length
     : 0;
@@ -834,6 +902,7 @@ async function runDomainPipeline(
     avgBmvScore: Math.round(avgBmv * 10) / 10,
     verifiedCount,
     quarantinedCount,
+    pendingHumanCount,
     andonEvents: domainAndonEvents,
     status,
   };
@@ -907,6 +976,7 @@ export async function runCanonicalPlow(
         avgBmvScore: 0,
         verifiedCount: 0,
         quarantinedCount: questions.length,
+        pendingHumanCount: 0,
         andonEvents: 0,
         status: 'RED',
       });

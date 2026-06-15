@@ -1458,6 +1458,100 @@ contextBridge.exposeInMainWorld('amplify', {
 
   mnemoOpenMemoryEditor: (): Promise<{ ok: boolean; error?: string }> =>
     ipcRenderer.invoke('mnemosynec:open-memory-editor'),
+
+  // ── MIC (Machine In Charge) v0.4.0 BP083 ─────────────────────────────────
+
+  micStartDistributedPlow: (config: {
+    domains: string[];
+    questionsPerDomain: number;
+    model?: string;
+    ollamaBaseUrl?: string;
+  }): Promise<{ ok: boolean; result?: unknown; error?: string }> =>
+    ipcRenderer.invoke('mic:start-distributed-plow', config),
+
+  micCancel: (): Promise<{ ok: boolean }> =>
+    ipcRenderer.invoke('mic:cancel'),
+
+  micGetPeers: (): Promise<unknown[]> =>
+    ipcRenderer.invoke('mic:get-peers'),
+
+  micAddPeer: (peer: unknown): Promise<{ ok: boolean }> =>
+    ipcRenderer.invoke('mic:add-peer', peer),
+
+  micRemovePeer: (peerId: string): Promise<{ ok: boolean }> =>
+    ipcRenderer.invoke('mic:remove-peer', peerId),
+
+  micDiscoverPeers: (): Promise<unknown[]> =>
+    ipcRenderer.invoke('mic:discover-peers'),
+
+  micEstimateWallclock: (config: { domains: string[]; questionsPerDomain: number }): Promise<{ estimatedMs: number; onlinePeers: number }> =>
+    ipcRenderer.invoke('mic:estimate-wallclock', config),
+
+  onMicStatusEvent: (callback: (event: Record<string, unknown>) => void): (() => void) => {
+    const handler = (_: unknown, data: Record<string, unknown>) => callback(data);
+    ipcRenderer.on('mic:status-event', handler);
+    return () => ipcRenderer.removeListener('mic:status-event', handler);
+  },
+
+  // ── The Diagnosis v0.4.0 BP083 ────────────────────────────────────────────
+
+  diagnosisPost: (input: {
+    question: string;
+    domain: string;
+    context: string;
+    priorAttempts: string;
+    bounty: { rail: string; amount: number; barterDescription?: string };
+    visibility: string;
+    source?: string;
+  }): Promise<{ ok: boolean; id?: string; error?: string }> =>
+    ipcRenderer.invoke('diagnosis:post', input),
+
+  diagnosisList: (filter?: { status?: string; domain?: string }): Promise<{ ok: boolean; posts?: unknown[]; error?: string }> =>
+    ipcRenderer.invoke('diagnosis:list', filter),
+
+  diagnosisGet: (id: string): Promise<{ ok: boolean; post?: unknown; error?: string }> =>
+    ipcRenderer.invoke('diagnosis:get', id),
+
+  diagnosisAnswer: (args: { diagnosisId: string; answerText: string; sources: string[]; credentials?: string }): Promise<{ ok: boolean; answerId?: string; error?: string }> =>
+    ipcRenderer.invoke('diagnosis:answer', args),
+
+  diagnosisUpvote: (args: { diagnosisId: string; answerId: string }): Promise<{ ok: boolean; error?: string }> =>
+    ipcRenderer.invoke('diagnosis:upvote', args),
+
+  diagnosisAccept: (args: { diagnosisId: string; answerId: string }): Promise<{ ok: boolean; error?: string }> =>
+    ipcRenderer.invoke('diagnosis:accept', args),
+
+  diagnosisMarksBalance: (): Promise<{ ok: boolean; balance: number; error?: string }> =>
+    ipcRenderer.invoke('diagnosis:marks-balance'),
+
+  onDiagnosisIncoming: (callback: (data: unknown) => void): (() => void) => {
+    const handler = (_: unknown, data: unknown) => callback(data);
+    ipcRenderer.on('diagnosis:incoming', handler);
+    return () => ipcRenderer.removeListener('diagnosis:incoming', handler);
+  },
+
+  onDiagnosisAnswerReceived: (callback: (data: { diagnosisId: string; answerId: string }) => void): (() => void) => {
+    const handler = (_: unknown, data: { diagnosisId: string; answerId: string }) => callback(data);
+    ipcRenderer.on('diagnosis:answer-received', handler);
+    return () => ipcRenderer.removeListener('diagnosis:answer-received', handler);
+  },
+
+  onDiagnosisResolved: (callback: (data: { diagnosisId: string; answerId: string }) => void): (() => void) => {
+    const handler = (_: unknown, data: { diagnosisId: string; answerId: string }) => callback(data);
+    ipcRenderer.on('diagnosis:resolved', handler);
+    return () => ipcRenderer.removeListener('diagnosis:resolved', handler);
+  },
+
+  // ── Post-install restart prompt v0.4.0 BP083 ─────────────────────────────
+
+  onShowRestartPrompt: (callback: (data: { version: string; message: string }) => void): (() => void) => {
+    const handler = (_: unknown, data: { version: string; message: string }) => callback(data);
+    ipcRenderer.on('show-restart-prompt', handler);
+    return () => ipcRenderer.removeListener('show-restart-prompt', handler);
+  },
+
+  requestAppQuit: (): Promise<void> =>
+    ipcRenderer.invoke('app:request-quit'),
 });
 
 // ─── Global type extension ────────────────────────────────────────────────────
@@ -1902,6 +1996,29 @@ declare global {
       runDiamond?: (config: { mode: 'bare' | 'cooperative'; count: number }) => Promise<{ ok: boolean; summary?: unknown; error?: string }>;
       cancelDiamond?: () => Promise<{ ok: boolean }>;
       onDiamondProgress?: (callback: (event: Record<string, unknown>) => void) => () => void;
+      // v0.4.0 BP083 — MIC (Machine In Charge) Constellation dispatcher
+      micStartDistributedPlow?: (config: { domains: string[]; questionsPerDomain: number; model?: string; ollamaBaseUrl?: string }) => Promise<{ ok: boolean; result?: unknown; error?: string }>;
+      micCancel?: () => Promise<{ ok: boolean }>;
+      micGetPeers?: () => Promise<unknown[]>;
+      micAddPeer?: (peer: unknown) => Promise<{ ok: boolean }>;
+      micRemovePeer?: (peerId: string) => Promise<{ ok: boolean }>;
+      micDiscoverPeers?: () => Promise<unknown[]>;
+      micEstimateWallclock?: (config: { domains: string[]; questionsPerDomain: number }) => Promise<{ estimatedMs: number; onlinePeers: number }>;
+      onMicStatusEvent?: (callback: (event: Record<string, unknown>) => void) => () => void;
+      // v0.4.0 BP083 — The Diagnosis
+      diagnosisPost?: (input: { question: string; domain: string; context: string; priorAttempts: string; bounty: { rail: string; amount: number; barterDescription?: string }; visibility: string; source?: string }) => Promise<{ ok: boolean; id?: string; error?: string }>;
+      diagnosisList?: (filter?: { status?: string; domain?: string }) => Promise<{ ok: boolean; posts?: unknown[]; error?: string }>;
+      diagnosisGet?: (id: string) => Promise<{ ok: boolean; post?: unknown; error?: string }>;
+      diagnosisAnswer?: (args: { diagnosisId: string; answerText: string; sources: string[]; credentials?: string }) => Promise<{ ok: boolean; answerId?: string; error?: string }>;
+      diagnosisUpvote?: (args: { diagnosisId: string; answerId: string }) => Promise<{ ok: boolean; error?: string }>;
+      diagnosisAccept?: (args: { diagnosisId: string; answerId: string }) => Promise<{ ok: boolean; error?: string }>;
+      diagnosisMarksBalance?: () => Promise<{ ok: boolean; balance: number; error?: string }>;
+      onDiagnosisIncoming?: (callback: (data: unknown) => void) => () => void;
+      onDiagnosisAnswerReceived?: (callback: (data: { diagnosisId: string; answerId: string }) => void) => () => void;
+      onDiagnosisResolved?: (callback: (data: { diagnosisId: string; answerId: string }) => void) => () => void;
+      // v0.4.0 BP083 — Post-install restart prompt
+      onShowRestartPrompt?: (callback: (data: { version: string; message: string }) => void) => () => void;
+      requestAppQuit?: () => Promise<void>;
     };
     // SEG-V0150-P0-DIAGNOSE-BRIDGE: sentinel — set by preload before main bridge wires up
     __preloadLoaded?: boolean;

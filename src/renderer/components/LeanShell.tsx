@@ -15,12 +15,14 @@ import { LeanAskTab } from './LeanAskTab';
 import { LeanHelpTab } from './LeanHelpTab';
 // BP082 v0.3.0 -- Battery Dispatch Publish Fan-Out
 import { BatteryPublishTab } from './BatteryPublishTab';
+// v0.4.0 BP083 -- The Diagnosis
+import { TheDiagnosisTab } from './TheDiagnosisTab';
 import type { FrameMode } from './FrameModeIndicator';
 import type { AuthState } from '../amplify.d';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type LeanTab = 'home' | 'gauntlet' | 'ask' | 'help' | 'publish';
+type LeanTab = 'home' | 'gauntlet' | 'ask' | 'help' | 'publish' | 'diagnosis';
 type UiMode = 'lean' | 'advanced';
 
 const LS_UI_MODE = 'mnemoUiMode';
@@ -145,11 +147,12 @@ function LeanModeNudge({ onSwitch }: { onSwitch: () => void }) {
 // ─── Tab bar ─────────────────────────────────────────────────────────────────
 
 const TABS: Array<{ id: LeanTab; label: string }> = [
-  { id: 'home',     label: 'Home' },
-  { id: 'gauntlet', label: 'Gauntlet' },
-  { id: 'ask',      label: 'Ask' },
-  { id: 'help',     label: 'Help' },
-  { id: 'publish',  label: '🔥 Publish' },
+  { id: 'home',      label: 'Home' },
+  { id: 'gauntlet',  label: 'Gauntlet' },
+  { id: 'ask',       label: 'Ask' },
+  { id: 'help',      label: 'Help' },
+  { id: 'publish',   label: '🔥 Publish' },
+  { id: 'diagnosis', label: '🩺 Diagnosis' },
 ];
 
 function TabBar({
@@ -404,6 +407,9 @@ export function LeanShell({ currentMode, onModeChange, onClose, authState }: Lea
         )}
         {activeTab === 'publish' && (
           <BatteryPublishTab />
+        )}
+        {activeTab === 'diagnosis' && (
+          <TheDiagnosisTab />
         )}
       </div>
     </div>

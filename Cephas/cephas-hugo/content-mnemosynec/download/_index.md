@@ -17,11 +17,21 @@ Mnemosyne (neh-MOZ-uh-nee) is the Greek goddess of memory. **Dr. MnemosyneC inhe
 Every time you start a new session, your AI forgets everything. Your projects, your preferences, your past conversations, gone. Dr. MnemosyneC gives your AI a permanent, private memory that actually stays.
 
 <div class="cta-row">
-<a href="https://mnemosynec.ai/download/MnemosyneC-Setup-0.1.60.exe" class="cta-primary"><strong>Download for Windows v0.1.60</strong></a>
+<a href="https://mnemosynec.ai/download/MnemosyneC-Setup-0.4.0.exe" class="cta-primary"><strong>Download for Windows v0.4.0</strong></a>
 <a href="/install/" class="cta-secondary">Install guide &rarr;</a>
 </div>
 
 <p><small><em>Mac / Linux — coming soon &middot; <a href="mailto:hello@lianabanyan.com">join waitlist &rarr;</a></em></small></p>
+
+---
+
+## Release Channel
+
+| Version | Status | Notes |
+|---|---|---|
+| **v0.4.0** | 🟡 LATEST | ⭐ Architecture milestone — MIC + Federation + The Diagnosis |
+| v0.3.10 | 🔵 HISTORICAL | Canonical Plow + MMLU-Pro 97.1% proof |
+| v0.1.60 | 🟢 STABLE | Ask cold-start heartbeat + token streaming |
 
 ---
 
@@ -69,9 +79,9 @@ When a claim has been buoyed by enough living connection over enough time, it ge
 
 **Step 1 — Download and install**
 
-[→ Download MnemosyneC for Windows](https://mnemosynec.ai/download/MnemosyneC-Setup-0.1.60.exe) *(Mac build: see bounty below — we need a Mac builder)*
+[→ Download MnemosyneC for Windows v0.4.0](https://mnemosynec.ai/download/MnemosyneC-Setup-0.4.0.exe) *(Mac build: see bounty below — we need a Mac builder)*
 
-**Latest release:** v0.1.60 — Ask cold-start heartbeat + token streaming · AbortController · differentiated errors
+**Latest release:** v0.4.0 — ⭐ Architecture milestone — MIC + Federated Andon + The Diagnosis · Just Add Salt
 **SHA-256:** `See GitHub release page for verified hash`
 
 MnemosyneC currently ships signed Windows builds. A macOS build requires a community member with a Mac + Apple Developer ID. [See the Mac bounty poster &darr;](#bounty-posters) — earn Marks for making it happen.

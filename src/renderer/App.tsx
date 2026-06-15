@@ -95,6 +95,8 @@ export default function App() {
   const [overlayActive, setOverlayActive] = useState<boolean>(() =>
     localStorage.getItem(LS_OVERLAY_ACTIVE) === 'true'
   );
+  // v0.4.0 BP083 SEG-5: post-install restart prompt state
+  const [restartPrompt, setRestartPrompt] = useState<{ version: string; message: string } | null>(null);
 
   // Sync mode from main process + check first-launch model
   useEffect(() => {
@@ -115,6 +117,11 @@ export default function App() {
     window.amplify.getAuthState().then(setAuthState);
     cleanupAuth = window.amplify.onAuthStateChanged((state) => {
       setAuthState(state);
+    });
+
+    // v0.4.0 BP083 SEG-5: listen for post-install restart prompt
+    window.amplify.onShowRestartPrompt?.((data) => {
+      setRestartPrompt(data as { version: string; message: string });
     });
 
     // First-launch model check deferred to BP067 Bp067FirstRunSpine (setupPrivateAI)
@@ -188,6 +195,40 @@ export default function App() {
         <UpdateModal />
         {/* SEG-5 v0.1.59: Clipboard Q+A capture modal — hidden until triggered via tray or Ctrl+Shift+M */}
         <ClipboardCaptureModal />
+        {/* v0.4.0 BP083 SEG-5: post-install restart prompt modal */}
+        {restartPrompt && (
+          <div style={{
+            position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.65)', zIndex: 9999,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            <div style={{
+              background: '#1e293b', border: '1px solid #334155', borderRadius: 12,
+              padding: 28, maxWidth: 440, color: '#e2e8f0', textAlign: 'center',
+            }}>
+              <p style={{ fontSize: 15, marginBottom: 16 }}>{restartPrompt.message}</p>
+              <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
+                <button
+                  onClick={() => window.amplify?.requestAppQuit?.()}
+                  style={{
+                    background: '#6366f1', color: '#fff', border: 'none', borderRadius: 8,
+                    padding: '8px 20px', cursor: 'pointer', fontSize: 14, fontWeight: 600,
+                  }}
+                >
+                  Close MnemosyneC now
+                </button>
+                <button
+                  onClick={() => setRestartPrompt(null)}
+                  style={{
+                    background: 'transparent', color: '#94a3b8', border: '1px solid #334155',
+                    borderRadius: 8, padding: '8px 20px', cursor: 'pointer', fontSize: 14,
+                  }}
+                >
+                  Later
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </ErrorBoundary>
     );
   }

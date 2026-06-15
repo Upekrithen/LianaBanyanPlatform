@@ -757,9 +757,12 @@ export function TestItOutTab(): React.ReactElement {
           <div style={S.header}>
             <h2 style={S.title}>Plow the Field 🌾</h2>
             <p style={S.subtitle}>
-              Canonical pipeline v0.3.4: Spider → 9 External Specialists (staggered) → Miner →
+              Canonical pipeline v0.4.0: Spider → 9 External Specialists (staggered) → Miner →
               Saladin → Furnace → Three Fates → Scribe. Fetches real domain knowledge from
               Wikipedia, arXiv, OpenAlex, PubMed and more — grows substrate with verified facts.
+            </p>
+            <p style={{ fontSize: 12, color: '#64748b', margin: 0 }}>
+              🧂 Substrate Salt + Federation Salt + Human Salt
             </p>
           </div>
 
@@ -813,6 +816,47 @@ export function TestItOutTab(): React.ReactElement {
                   onClick={() => { void handlePlow(); }}
                 >
                   Plow 🌾
+                </button>
+                <button
+                  type="button"
+                  style={{
+                    background: 'rgba(99,102,241,0.1)',
+                    border: '1px solid rgba(99,102,241,0.3)',
+                    borderRadius: 8,
+                    color: '#a5b4fc',
+                    padding: '9px 18px',
+                    fontSize: 13,
+                    fontWeight: 700,
+                    cursor: selectedDomains.length === 0 ? 'not-allowed' : 'pointer',
+                    whiteSpace: 'nowrap' as const,
+                    opacity: selectedDomains.length === 0 ? 0.4 : 1,
+                    fontFamily: 'inherit',
+                  }}
+                  disabled={selectedDomains.length === 0}
+                  onClick={async () => {
+                    try {
+                      const info = await window.amplify?.micEstimateWallclock?.({
+                        domains: selectedDomains,
+                        questionsPerDomain: qCountRef.current,
+                      });
+                      const peers = info?.onlinePeers ?? 0;
+                      const hrs = info?.estimatedMs ? (info.estimatedMs / 3600000).toFixed(1) : '?';
+                      const msg = peers > 0
+                        ? `🌌 ${peers} online peer${peers !== 1 ? 's' : ''} discovered\n\nEstimated wall-clock with Constellation: ~${hrs}h\nEstimated without: ~${(selectedDomains.length * 5 / 60).toFixed(1)}h\n\nStart Constellation Plow?`
+                        : `No online Constellation peers found.\n\nTo use MIC mode, add peers in Settings → Constellation.\n\nRun locally instead?`;
+                      if (window.confirm(msg)) {
+                        void window.amplify?.micStartDistributedPlow?.({
+                          domains: selectedDomains,
+                          questionsPerDomain: qCountRef.current,
+                        });
+                      }
+                    } catch (err) {
+                      window.alert(`MIC error: ${String(err)}`);
+                    }
+                  }}
+                  title="Distribute this Plow across your Constellation peers (Machine In Charge mode)"
+                >
+                  🌌 Plow with Constellation
                 </button>
                 <button
                   type="button"

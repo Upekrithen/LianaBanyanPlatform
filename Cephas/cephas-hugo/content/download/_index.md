@@ -22,10 +22,12 @@ tldr: "Everything you need to get started with MnemosyneC, the offline-first coo
 
 **Step 1 — Download and install**
 
-[→ Download MnemosyneC for Windows](https://github.com/liana-banyan/mnemosyne/releases/download/v0.1.60/MnemosyneC-Setup-0.1.60.exe) *(Mac build: see bounty below — we need a Mac builder)*
+[→ Download MnemosyneC for Windows v0.4.0](https://mnemosynec.ai/download/MnemosyneC-Setup-0.4.0.exe) *(Mac build: see bounty below — we need a Mac builder)*
 
-**Latest release:** v0.1.60 — Ask cold-start heartbeat + token streaming · AbortController · differentiated errors
+**Latest release:** v0.4.0 🟡 LATEST — ⭐ Architecture milestone — MIC + Federated Andon + The Diagnosis · Just Add Salt
 **SHA-256:** `See GitHub release page for verified hash`
+
+**Previous releases:** v0.3.10 🔵 HISTORICAL · v0.1.60 🟢 STABLE
 
 MnemosyneC currently ships signed Windows builds. A macOS build requires a community member with a Mac + Apple Developer ID. [See the Mac bounty poster &darr;](#bounty-posters) — earn Marks for making it happen.
 
