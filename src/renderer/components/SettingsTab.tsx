@@ -1213,6 +1213,14 @@ export function SettingsTab({
   const [diagRunning, setDiagRunning] = React.useState(false);
   const [diagError, setDiagError] = React.useState<string | null>(null);
 
+  // v0.4.2 BP083 SEG-3: Hardware tier detection + model selection
+  const [hwTier, setHwTier] = React.useState<{
+    tier: { tier: string; ramGb: number; recommendedModel: string; displayName: string; description: string };
+    allTiers: { tier: string; ramGb: number; recommendedModel: string; displayName: string; description: string }[];
+    activeModel: string;
+  } | null>(null);
+  const [hwModelSaving, setHwModelSaving] = React.useState(false);
+
   const handleRunDiagnostic = React.useCallback(async () => {
     setDiagRunning(true);
     setDiagError(null);
@@ -1267,6 +1275,18 @@ export function SettingsTab({
     }
     onScrollConsumed?.();
   }, [scrollTo, onScrollConsumed]);
+
+  // v0.4.2 BP083 SEG-3: Load hardware tier info on mount
+  useEffect(() => {
+    void (async () => {
+      try {
+        const result = await window.amplify?.hardwareGetTier?.();
+        if (result) setHwTier(result as typeof hwTier);
+      } catch {
+        // Non-fatal — hardware tier is best-effort
+      }
+    })();
+  }, []);
 
   const [updateStatus, setUpdateStatus] = useState<UpdateStatus>({
     checking: false,
@@ -1365,6 +1385,7 @@ export function SettingsTab({
     { key: 'membership',     label: 'Cooperative Membership', keywords: ['membership', 'cooperative', '$5', 'mirror clause', 'incentive'] },
     { key: 'ai-tier',        label: 'AI Power Tier',          keywords: ['ai power tier', 'ai tier', 'gemma', 'model', 'full', 'nano', 'upgrade', 'sku'] },
     { key: 'ai-model',       label: 'AI Model Assignment',    keywords: ['ai model', 'ollama', 'bishop', 'knight', 'pawn', 'rook', 'orchestrator', 'builder', 'researcher', 'primary assistant'] },
+    { key: 'hardware-tier',  label: 'Hardware Tier & Plow Model', keywords: ['hardware', 'ram', 'plow model', 'gemma2', 'qwen', 'lightweight', 'standard', 'premium', 'heavy', 'model select'] },
     { key: 'mnem-drt',       label: 'Memory Depth Tier',      keywords: ['mnem', 'drt', 'retrieval', 'specialist', 'wikipedia', 'wikidata', 'arxiv', 'wolfram', 'memory depth'] },
     { key: 'advanced',       label: 'Advanced',               keywords: ['devtools', 'developer tools', 'debugging', 'remote-debugging', 'advanced', 'inspect', 'diagnostic'] },
     { key: 'appearance',     label: 'Appearance',             keywords: ['appearance', 'theme', 'dark', 'light', 'zoom', 'interface zoom', 'scale'] },
@@ -1783,6 +1804,114 @@ export function SettingsTab({
             </div>
           ))}
         </div>
+      </section>
+
+      {/* v0.4.2 BP083 SEG-3: Hardware Tier & Plow Model Selection */}
+      <section style={s.section} id="settings-section-hardware-tier">
+        <div style={s.sectionHeader}>Hardware Tier & Plow Model</div>
+        <div style={{ fontSize: 10, color: '#475569', marginBottom: 10, lineHeight: 1.5 }}>
+          MnemosyneC detects your system RAM and recommends the best local model for the Canonical Plow.
+          Lightweight machines (≤11 GB) default to gemma2:2b — no more failed Plows on low-RAM hardware.
+        </div>
+        {!hwTier ? (
+          <div style={{ fontSize: 11, color: '#475569', padding: '8px 0' }}>Detecting hardware…</div>
+        ) : (
+          <>
+            {/* Detected info */}
+            <div style={{
+              background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(100,116,139,0.15)',
+              borderRadius: 8, padding: '10px 14px', marginBottom: 10,
+            }}>
+              <div style={{ fontSize: 10, color: '#64748b', fontWeight: 600, textTransform: 'uppercase' as const, letterSpacing: '0.06em', marginBottom: 4 }}>
+                Detected
+              </div>
+              <div style={{ fontSize: 12, color: '#e2e8f0', marginBottom: 2 }}>
+                {hwTier.tier.displayName} &middot; {hwTier.tier.ramGb} GB RAM
+              </div>
+              <div style={{ fontSize: 10, color: '#94a3b8', marginBottom: 4 }}>
+                {hwTier.tier.description}
+              </div>
+              <div style={{ fontSize: 10, color: '#64748b' }}>
+                Active Plow model: <span style={{ color: '#a78bfa', fontFamily: 'monospace' }}>{hwTier.activeModel}</span>
+              </div>
+            </div>
+
+            {/* Tier selector */}
+            <div style={{ fontSize: 10, color: '#64748b', fontWeight: 600, textTransform: 'uppercase' as const, letterSpacing: '0.06em', marginBottom: 6 }}>
+              Override Model
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column' as const, gap: 6 }}>
+              {hwTier.allTiers.map((t) => {
+                const isActive = hwTier.activeModel === t.recommendedModel;
+                const isRecommended = hwTier.tier.tier === t.tier;
+                return (
+                  <button
+                    key={t.tier}
+                    type="button"
+                    disabled={hwModelSaving}
+                    onClick={async () => {
+                      setHwModelSaving(true);
+                      try {
+                        await window.amplify?.hardwareSetModel?.(t.recommendedModel, t.tier);
+                        setHwTier((prev) => prev ? { ...prev, activeModel: t.recommendedModel } : prev);
+                      } finally {
+                        setHwModelSaving(false);
+                      }
+                    }}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 10,
+                      background: isActive ? 'rgba(167,139,250,0.1)' : 'rgba(255,255,255,0.02)',
+                      border: `1px solid ${isActive ? 'rgba(167,139,250,0.35)' : 'rgba(100,116,139,0.15)'}`,
+                      borderRadius: 7, padding: '8px 12px', cursor: hwModelSaving ? 'not-allowed' : 'pointer',
+                      textAlign: 'left' as const, width: '100%',
+                    }}
+                  >
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: 11, color: isActive ? '#a78bfa' : '#e2e8f0', fontWeight: isActive ? 600 : 400 }}>
+                        {t.displayName}
+                        {isRecommended && !isActive && (
+                          <span style={{ marginLeft: 6, fontSize: 9, color: '#4ade80', background: 'rgba(74,222,128,0.1)', padding: '1px 5px', borderRadius: 3 }}>
+                            RECOMMENDED
+                          </span>
+                        )}
+                        {isActive && (
+                          <span style={{ marginLeft: 6, fontSize: 9, color: '#a78bfa', background: 'rgba(167,139,250,0.1)', padding: '1px 5px', borderRadius: 3 }}>
+                            ACTIVE
+                          </span>
+                        )}
+                      </div>
+                      <div style={{ fontSize: 9, color: '#64748b', marginTop: 2 }}>{t.description}</div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Reset to auto-detect */}
+            <button
+              type="button"
+              disabled={hwModelSaving}
+              onClick={async () => {
+                setHwModelSaving(true);
+                try {
+                  const result = await window.amplify?.hardwareResetModel?.();
+                  if (result?.ok) {
+                    setHwTier((prev) => prev ? { ...prev, activeModel: result.model } : prev);
+                  }
+                } finally {
+                  setHwModelSaving(false);
+                }
+              }}
+              style={{
+                marginTop: 8, fontSize: 10, color: '#64748b',
+                background: 'none', border: '1px solid rgba(100,116,139,0.2)',
+                borderRadius: 5, padding: '4px 10px', cursor: hwModelSaving ? 'not-allowed' : 'pointer',
+              }}
+            >
+              Reset to auto-detected ({hwTier.tier.recommendedModel})
+            </button>
+          </>
+        )}
       </section>
 
       {/* Memory Depth Tier (SEG-R-4, SEG-R-5) */}

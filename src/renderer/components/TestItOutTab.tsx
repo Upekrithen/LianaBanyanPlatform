@@ -619,11 +619,39 @@ export function TestItOutTab(): React.ReactElement {
     let totalEbletsGrown = 0;
     let totalQuarantinedCount = 0;
 
+    // v0.4.2 SEG-1: Plow worker is a main-process singleton. Completion arrives
+    // via onCanonicalPlowProgress type:'complete' — NOT the await return value.
+    // This allows the plow to survive tab switches and Lean Mode toggles.
+    let unsubWorkerState: (() => void) | undefined;
+
     // Subscribe to live progress events from the canonical pipeline
     const unsubProgress = window.amplify?.onCanonicalPlowProgress?.((event) => {
       const ev = event as Record<string, unknown>;
       const type = ev.type as string;
       const domain = ev.domain as string | undefined;
+
+      // v0.4.2 SEG-1: Worker signals completion via type:'complete' broadcast
+      if (type === 'complete') {
+        const totalPlowed = Object.values(progress).reduce((s, p) => s + p.done, 0);
+        const totalVerified = Object.values(progress).reduce((s, p) => s + p.verified, 0);
+        const totalRejected = Object.values(progress).reduce((s, p) => s + p.rejected, 0);
+        const totalQuarantined2 = Object.values(progress).reduce((s, p) => s + p.quarantined, 0);
+        const overallStatus: 'GREEN' | 'YELLOW' = totalEbletsGrown >= 5 ? 'GREEN' : 'YELLOW';
+        setPlowState({
+          id: 'complete',
+          progress,
+          totalPlowed,
+          totalVerified,
+          totalRejected,
+          totalQuarantined: totalQuarantined2,
+          totalEbletsGrown,
+          overallStatus,
+        });
+        plowRunningRef.current = false;
+        unsubProgress?.();
+        unsubWorkerState?.();
+        return;
+      }
 
       if (domain && progress[domain]) {
         if (type === 'domain-start') {
@@ -679,8 +707,24 @@ export function TestItOutTab(): React.ReactElement {
       });
     });
 
+    // Also subscribe to worker state for error detection
+    unsubWorkerState = window.amplify?.onPlowWorkerState?.((state) => {
+      const status = state.status as string;
+      if (status === 'error') {
+        setPlowState({ id: 'error', message: (state.error as string) ?? 'Plow worker error' });
+        plowRunningRef.current = false;
+        unsubProgress?.();
+        unsubWorkerState?.();
+      } else if (status === 'cancelled') {
+        setPlowState({ id: 'idle' });
+        plowRunningRef.current = false;
+        unsubProgress?.();
+        unsubWorkerState?.();
+      }
+    });
+
     try {
-      // SEG-3.5 BP083: use ref so we always read the latest value, never a stale closure
+      // SEG-1 BP083: fire-and-forget start — plow runs in main process independent of renderer
       const res = await window.amplify?.runCanonicalPlow?.({
         domains: selectedDomains,
         questionsPerDomain: qCountRef.current,
@@ -690,31 +734,15 @@ export function TestItOutTab(): React.ReactElement {
         setPlowState({ id: 'error', message: res.error ?? 'Canonical plow failed' });
         plowRunningRef.current = false;
         unsubProgress?.();
+        unsubWorkerState?.();
         return;
       }
-
-      // Build final totals from progress
-      const totalPlowed = Object.values(progress).reduce((s, p) => s + p.done, 0);
-      const totalVerified = Object.values(progress).reduce((s, p) => s + p.verified, 0);
-      const totalRejected = Object.values(progress).reduce((s, p) => s + p.rejected, 0);
-      const totalQuarantined2 = Object.values(progress).reduce((s, p) => s + p.quarantined, 0);
-      const overallStatus: 'GREEN' | 'YELLOW' = totalEbletsGrown >= 5 ? 'GREEN' : 'YELLOW';
-
-      setPlowState({
-        id: 'complete',
-        progress,
-        totalPlowed,
-        totalVerified,
-        totalRejected,
-        totalQuarantined: totalQuarantined2,
-        totalEbletsGrown,
-        overallStatus,
-      });
+      // res.async === true → plow started; completion comes via type:'complete' progress event above
     } catch (err) {
       setPlowState({ id: 'error', message: String(err) });
-    } finally {
       plowRunningRef.current = false;
       unsubProgress?.();
+      unsubWorkerState?.();
     }
   // SEG-3.5 BP083: qCount removed from deps — read via qCountRef.current inside the callback
   }, [selectedDomains]);

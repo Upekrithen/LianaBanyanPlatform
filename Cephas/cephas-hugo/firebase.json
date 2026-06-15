@@ -4,6 +4,13 @@
       "target": "cephas",
       "public": "public",
       "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "redirects": [
+        {
+          "source": "/download/MnemosyneC-Setup-:version.exe",
+          "destination": "https://github.com/liana-banyan/mnemosyne/releases/download/v:version/MnemosyneC-Setup-:version.exe",
+          "type": 302
+        }
+      ],
       "headers": [
         {
           "source": "**/*.html",
@@ -57,6 +64,13 @@
       "target": "mnemosyne",
       "public": "public-mnemosynec",
       "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "redirects": [
+        {
+          "source": "/download/MnemosyneC-Setup-:version.exe",
+          "destination": "https://github.com/liana-banyan/mnemosyne/releases/download/v:version/MnemosyneC-Setup-:version.exe",
+          "type": 302
+        }
+      ],
       "headers": [
         {
           "source": "**/*.html",
