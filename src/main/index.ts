@@ -102,7 +102,7 @@ import { registerDispatchIPC } from './dispatch/dispatch_ipc';
 import { registerAiDispatchIPC } from './ai_dispatch_ipc';
 
 // BP083 SEG-1/2/4/5 — 6-folder substrate scaffold + MEMORY.md amnesia cure + TestData seeds
-import { ensureMnemosyneCFolders, generateMemoryMd, populateTestDataSeeds, registerMemoryScaffoldIPC } from './memory_scaffold';
+import { ensureMnemosyneCFolders, generateMemoryMd, populateTestDataSeeds, registerMemoryScaffoldIPC, installStarterChocolate } from './memory_scaffold';
 
 // BP081 K-2 — MnemosyneC local MCP server
 import { startMcpServer, stopMcpServer, getMcpServerStatus } from './mcp_server';
@@ -4739,6 +4739,46 @@ function registerIPCHandlers(): void {
     }
   });
 
+  // ── BP083 v0.3.8 — GPQA Diamond Benchmark IPC ────────────────────────────
+
+  let _diamondCancelToken = { cancelled: false };
+
+  safeHandle('diamond:cancel', () => {
+    _diamondCancelToken.cancelled = true;
+    return { ok: true };
+  });
+
+  safeHandle('diamond:run', async (
+    _event,
+    config: { mode: 'bare' | 'cooperative'; count: number },
+  ) => {
+    _diamondCancelToken = { cancelled: false };
+
+    const { runBareDiamond, runCooperativeDiamond } = await import('./plow/diamond_runner');
+
+    const broadcastProgress = (data: object) => {
+      for (const w of BrowserWindow.getAllWindows()) {
+        w.webContents.send('diamond:progress', data);
+      }
+    };
+
+    try {
+      const runner = config.mode === 'bare' ? runBareDiamond : runCooperativeDiamond;
+      const summary = await runner(
+        config.count ?? 50,
+        (event) => broadcastProgress(event),
+        _diamondCancelToken,
+      );
+
+      broadcastProgress({ type: 'complete', summary });
+      return { ok: true, summary };
+    } catch (err) {
+      console.error('[Diamond] Fatal error:', err);
+      broadcastProgress({ type: 'error', message: (err as Error).message });
+      return { ok: false, error: (err as Error).message };
+    }
+  });
+
   // ── SEG-5 v0.1.59 — Clipboard read IPC ────────────────────────────────────
 
   safeHandle('clipboard:read', async () => {
@@ -4951,6 +4991,15 @@ app.whenReady().then(async () => {
   } catch (err) {
     console.error('[BP083] Scaffold failed (non-fatal):', err);
   }
+
+  // SEG-1 v0.3.7: pre-seed substrate with Starter Chocolate Pack (idempotent)
+  installStarterChocolate((msg) => console.log(msg)).then(({ installed, skipped, error }) => {
+    if (error) {
+      console.warn('[StarterChocolate] Non-fatal install error:', error);
+    } else if (!skipped) {
+      console.log(`[StarterChocolate] First-launch seeding complete: ${installed} eblets written`);
+    }
+  }).catch((e) => console.warn('[StarterChocolate] Unexpected error (non-fatal):', e));
 
   // A-2 BP081 v0.1.59.1: Startup eblet store integrity check (non-fatal)
   try {

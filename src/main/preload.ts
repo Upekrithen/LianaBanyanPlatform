@@ -1375,6 +1375,25 @@ contextBridge.exposeInMainWorld('amplify', {
     return () => ipcRenderer.removeListener('plow:canonical-plow-progress', handler);
   },
 
+  // ── BP083 v0.3.8 — GPQA Diamond Benchmark IPC ────────────────────────────
+
+  runDiamond: (config: {
+    mode: 'bare' | 'cooperative';
+    count: number;
+  }): Promise<{ ok: boolean; summary?: unknown; error?: string }> =>
+    ipcRenderer.invoke('diamond:run', config),
+
+  cancelDiamond: (): Promise<{ ok: boolean }> =>
+    ipcRenderer.invoke('diamond:cancel'),
+
+  onDiamondProgress: (
+    callback: (event: Record<string, unknown>) => void,
+  ): (() => void) => {
+    const handler = (_: unknown, data: Record<string, unknown>) => callback(data);
+    ipcRenderer.on('diamond:progress', handler);
+    return () => ipcRenderer.removeListener('diamond:progress', handler);
+  },
+
   // ── SEG-5 v0.1.59 — Clipboard capture IPC ────────────────────────────────
 
   readClipboard: (): Promise<string> =>
@@ -1879,6 +1898,10 @@ declare global {
       mnemoReloadMemoryMd?: () => Promise<{ ok: boolean; content?: string; error?: string }>;
       mnemoResetMemoryMd?: () => Promise<{ ok: boolean; content?: string; error?: string }>;
       mnemoOpenMemoryEditor?: () => Promise<{ ok: boolean; error?: string }>;
+      // BP083 v0.3.8 — GPQA Diamond Benchmark
+      runDiamond?: (config: { mode: 'bare' | 'cooperative'; count: number }) => Promise<{ ok: boolean; summary?: unknown; error?: string }>;
+      cancelDiamond?: () => Promise<{ ok: boolean }>;
+      onDiamondProgress?: (callback: (event: Record<string, unknown>) => void) => () => void;
     };
     // SEG-V0150-P0-DIAGNOSE-BRIDGE: sentinel — set by preload before main bridge wires up
     __preloadLoaded?: boolean;

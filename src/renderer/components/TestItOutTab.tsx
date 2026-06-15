@@ -1,4 +1,4 @@
-// TestItOutTab.tsx — SEG-2 v0.1.57 · SEG-4 v0.1.59 · BP079/BP081 · BP082 v0.2.2 · v0.2.3 · v0.3.1 · BP083 v0.3.5 · v0.3.5.1
+// TestItOutTab.tsx — SEG-2 v0.1.57 · SEG-4 v0.1.59 · BP079/BP081 · BP082 v0.2.2 · v0.2.3 · v0.3.1 · BP083 v0.3.5 · v0.3.5.1 · v0.3.8 BP083
 // Single Q: 5-question MMLU-Pro / R11 diagnostic workout.
 // Plow the Field: multi-domain parallel Plow run with per-domain progress.
 // Andon discipline: correct answers grow substrate; wrong answers never written.
@@ -6,6 +6,7 @@
 // v0.2.3: Beat-Google Benchmark mode added (BP082 — apples-to-apples handicapped comparison)
 // v0.3.1: 3-Condition Mesh Comparison Test (BP082 Founder correction — Cold/Seeded/Loop)
 // v0.3.5: My Self-Context panel added (BP083 — MEMORY.md amnesia cure)
+// v0.3.8: GPQA Diamond Benchmark section (BP083 SEG-3)
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { SubstrateSeedPanel } from './SubstrateSeedPanel';
@@ -342,12 +343,35 @@ export function TestItOutTab(): React.ReactElement {
   const [activeMode, setActiveMode] = useState<'single' | 'plow'>('single');
   const [selectedDomains, setSelectedDomains] = useState<PlowDomain[]>([...ALL_DOMAINS]);
   const [qCount, setQCount] = useState<number>(5);
+  // SEG-3.5 BP083: always-current ref so handlePlow never captures stale qCount
+  const qCountRef = useRef(qCount);
+  qCountRef.current = qCount;
   const [plowState, setPlowState] = useState<PlowRunState>({ id: 'idle' });
   const plowRunningRef = useRef(false);
 
   // ── Benchmark / Mesh Comparison state ─────────────────────────────────────
   const [benchmarkModalOpen, setBenchmarkModalOpen] = useState(false);
   const [meshModalOpen, setMeshModalOpen] = useState(false);
+
+  // ── BP083 v0.3.8 — GPQA Diamond Benchmark state ───────────────────────────
+  type DiamondMode = 'bare' | 'cooperative';
+  type DiamondDomain = 'physics' | 'chemistry' | 'biology';
+  interface DiamondDomainSummary { domain: DiamondDomain; total: number; correct: number; score_pct: number }
+  interface DiamondSummary {
+    mode: DiamondMode; total: number; correct: number; score_pct: number;
+    by_domain: Record<DiamondDomain, DiamondDomainSummary>;
+  }
+  type DiamondRunState =
+    | { id: 'idle' }
+    | { id: 'running'; mode: DiamondMode; currentQ: number; total: number; currentDomain: string; stage: string; runningPct: number }
+    | { id: 'error'; message: string };
+
+  const [diamondCount, setDiamondCount] = useState<number>(50);
+  const [diamondRunning, setDiamondRunning] = useState<DiamondRunState>({ id: 'idle' });
+  const [bareResult, setBareResult] = useState<DiamondSummary | null>(null);
+  const [coopResult, setCoopResult] = useState<DiamondSummary | null>(null);
+  const [lastDiamondResult, setLastDiamondResult] = useState<DiamondSummary | null>(null);
+  const diamondRunningRef = useRef(false);
 
   // ── BP083 My Self-Context state ────────────────────────────────────────────
   const [selfCtxContent, setSelfCtxContent] = useState<string | null>(null);
@@ -496,6 +520,67 @@ export function TestItOutTab(): React.ReactElement {
     }
   }, [resetConfirm]);
 
+  // ── BP083 v0.3.8 — GPQA Diamond handlers ─────────────────────────────────
+
+  const handleRunDiamond = useCallback(async (mode: DiamondMode) => {
+    if (diamondRunningRef.current) return;
+    diamondRunningRef.current = true;
+
+    setDiamondRunning({ id: 'running', mode, currentQ: 0, total: diamondCount, currentDomain: '…', stage: 'starting', runningPct: 0 });
+
+    const unsubProgress = window.amplify?.onDiamondProgress?.((data) => {
+      const ev = data as Record<string, unknown>;
+      const type = ev.type as string;
+      if (type === 'question-start') {
+        setDiamondRunning((prev) => prev.id === 'running' ? {
+          ...prev,
+          currentQ: ((ev.questionIndex as number) ?? 0) + 1,
+          total: (ev.total as number) ?? diamondCount,
+          currentDomain: (ev.domain as string) ?? '…',
+          stage: (ev.mode as string) === 'cooperative' ? 'substrate + 3-voter' : '0-shot',
+        } : prev);
+      } else if (type === 'question-done') {
+        setDiamondRunning((prev) => prev.id === 'running' ? {
+          ...prev,
+          currentQ: ((ev.questionIndex as number) ?? 0) + 1,
+          runningPct: (ev.running_pct as number) ?? prev.runningPct,
+        } : prev);
+      } else if (type === 'andon-retry') {
+        setDiamondRunning((prev) => prev.id === 'running' ? { ...prev, stage: `Andon retry ${(ev.attempt as number) ?? ''}` } : prev);
+      }
+    });
+
+    try {
+      const res = await window.amplify?.runDiamond?.({ mode, count: diamondCount });
+      if (res?.ok === false) {
+        setDiamondRunning({ id: 'error', message: res.error ?? 'Diamond run failed' });
+        diamondRunningRef.current = false;
+        unsubProgress?.();
+        return;
+      }
+
+      if (res?.summary) {
+        const summary = res.summary as DiamondSummary;
+        setLastDiamondResult(summary);
+        if (mode === 'bare') setBareResult(summary);
+        else setCoopResult(summary);
+      }
+
+      setDiamondRunning({ id: 'idle' });
+    } catch (err) {
+      setDiamondRunning({ id: 'error', message: String(err) });
+    } finally {
+      diamondRunningRef.current = false;
+      unsubProgress?.();
+    }
+  }, [diamondCount]);
+
+  const handleCancelDiamond = useCallback(async () => {
+    await window.amplify?.cancelDiamond?.();
+    setDiamondRunning({ id: 'idle' });
+    diamondRunningRef.current = false;
+  }, []);
+
   // ── Plow the Field handlers ───────────────────────────────────────────────
 
   const handlePlowDomainToggle = useCallback((domain: PlowDomain) => {
@@ -595,9 +680,10 @@ export function TestItOutTab(): React.ReactElement {
     });
 
     try {
+      // SEG-3.5 BP083: use ref so we always read the latest value, never a stale closure
       const res = await window.amplify?.runCanonicalPlow?.({
         domains: selectedDomains,
-        questionsPerDomain: qCount,
+        questionsPerDomain: qCountRef.current,
       });
 
       if (res?.ok === false) {
@@ -630,7 +716,8 @@ export function TestItOutTab(): React.ReactElement {
       plowRunningRef.current = false;
       unsubProgress?.();
     }
-  }, [selectedDomains, qCount]);
+  // SEG-3.5 BP083: qCount removed from deps — read via qCountRef.current inside the callback
+  }, [selectedDomains]);
 
   // ── Computed ────────────────────────────────────────────────────────────────
 
@@ -710,11 +797,15 @@ export function TestItOutTab(): React.ReactElement {
                 <input
                   type="number"
                   min={1}
-                  max={20}
+                  max={200}
                   value={qCount}
-                  onChange={(e) => setQCount(Math.max(1, Math.min(20, Number(e.target.value))))}
+                  onChange={(e) => setQCount(Math.max(1, Math.min(200, Number(e.target.value))))}
                   style={S.qCountInput}
                 />
+                {/* SEG-3.5 BP083: visible total so user sees exact run size — no silent reverts */}
+                <span style={{ fontSize: 11, color: '#475569' }}>
+                  × {selectedDomains.length} domains = {qCount * selectedDomains.length} total q
+                </span>
                 <button
                   type="button"
                   style={S.primaryBtn(selectedDomains.length === 0)}
@@ -1120,6 +1211,203 @@ export function TestItOutTab(): React.ReactElement {
       )}
         </>
       )}
+
+      {/* ── BP083 v0.3.8 GPQA Diamond Benchmark ─────────────────────────────── */}
+      <div style={{ marginTop: 8, paddingTop: 16, borderTop: '1px solid rgba(100,116,139,0.1)' }}>
+        <div style={{ fontSize: 11, color: '#475569', letterSpacing: '0.06em', textTransform: 'uppercase' as const, marginBottom: 10 }}>
+          💎 GPQA Diamond Benchmark
+        </div>
+        <p style={{ fontSize: 12, color: '#64748b', lineHeight: 1.6, margin: '0 0 10px' }}>
+          198 graduate-level reasoning questions across biology, chemistry, physics.
+          The Google-Proof gold standard for AI reasoning — measures genuine expert-level understanding.
+          Compare Bare vs. Cooperative-Pipeline to see the cooperative-architecture lift.
+        </p>
+
+        {/* Question count selector */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12, flexWrap: 'wrap' as const }}>
+          <span style={{ fontSize: 12, color: '#94a3b8' }}>Questions to run:</span>
+          <select
+            value={diamondCount}
+            onChange={(e) => setDiamondCount(Number(e.target.value))}
+            style={{
+              padding: '5px 10px', background: 'rgba(255,255,255,0.04)',
+              border: '1px solid rgba(100,116,139,0.25)', borderRadius: 6,
+              color: '#e2e8f0', fontSize: 12, fontFamily: 'inherit', cursor: 'pointer',
+            }}
+            disabled={diamondRunning.id === 'running'}
+          >
+            <option value={15}>15 (quick smoke)</option>
+            <option value={50}>50 (default)</option>
+            <option value={99}>99 (half)</option>
+            <option value={198}>198 (full benchmark)</option>
+          </select>
+        </div>
+
+        {/* Two CTAs */}
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' as const, marginBottom: 12 }}>
+          <button
+            type="button"
+            title="Raw Gemma 4 12B · 0-shot · no substrate · the baseline"
+            disabled={diamondRunning.id === 'running'}
+            onClick={() => { void handleRunDiamond('bare'); }}
+            style={{
+              padding: '10px 18px',
+              background: diamondRunning.id === 'running' ? 'rgba(100,116,139,0.05)' : 'rgba(100,116,139,0.12)',
+              border: diamondRunning.id === 'running' ? '1px solid rgba(100,116,139,0.15)' : '1px solid rgba(100,116,139,0.4)',
+              borderRadius: 8, color: diamondRunning.id === 'running' ? '#475569' : '#94a3b8',
+              fontSize: 13, fontWeight: 700, cursor: diamondRunning.id === 'running' ? 'not-allowed' : 'pointer',
+              fontFamily: 'inherit', display: 'flex', flexDirection: 'column' as const, alignItems: 'flex-start', gap: 2,
+            }}
+          >
+            <span>🏆 Run Bare Diamond</span>
+            <span style={{ fontSize: 10, fontWeight: 400, color: '#475569' }}>
+              Raw Gemma 4 12B · 0-shot · no substrate · the baseline
+            </span>
+          </button>
+
+          <button
+            type="button"
+            title="Canonical pipeline + substrate + 3-voter concordance + Andon · the cooperative-architecture headline"
+            disabled={diamondRunning.id === 'running'}
+            onClick={() => { void handleRunDiamond('cooperative'); }}
+            style={{
+              padding: '10px 18px',
+              background: diamondRunning.id === 'running' ? 'rgba(110,231,183,0.04)' : 'rgba(110,231,183,0.13)',
+              border: diamondRunning.id === 'running' ? '1px solid rgba(110,231,183,0.15)' : '1px solid rgba(110,231,183,0.4)',
+              borderRadius: 8, color: diamondRunning.id === 'running' ? '#475569' : '#6ee7b7',
+              fontSize: 13, fontWeight: 700, cursor: diamondRunning.id === 'running' ? 'not-allowed' : 'pointer',
+              fontFamily: 'inherit', display: 'flex', flexDirection: 'column' as const, alignItems: 'flex-start', gap: 2,
+            }}
+          >
+            <span>🔬 Run Cooperative-Pipeline Diamond</span>
+            <span style={{ fontSize: 10, fontWeight: 400, color: '#475569' }}>
+              Substrate RAG + 3-voter concordance + Andon · the cooperative headline
+            </span>
+          </button>
+        </div>
+
+        {/* BP080 methodology lock disclosure */}
+        <p style={{ fontSize: 10, color: '#475569', margin: '0 0 10px', fontStyle: 'italic' as const }}>
+          Methodology: 0-shot · per BP080 canon ·{' '}
+          <span
+            title="GPQA Diamond uses 0-shot evaluation per Google's IT-model evaluation pattern. Do not change methodology without Founder re-ratify (BP080 methodology lock)."
+            style={{ cursor: 'help', borderBottom: '1px dotted #475569' }}
+          >
+            ⓘ locked
+          </span>
+        </p>
+
+        {/* Running state: live progress */}
+        {diamondRunning.id === 'running' && (
+          <div style={{ marginBottom: 12 }}>
+            <div style={{
+              padding: '10px 14px', background: 'rgba(110,231,183,0.05)',
+              border: '1px solid rgba(110,231,183,0.2)', borderRadius: 8, marginBottom: 8,
+            }}>
+              <div style={{ fontSize: 12, color: '#6ee7b7', animation: 'mnemo-pulse 1.5s ease-in-out infinite', marginBottom: 4 }}>
+                ◌ {diamondRunning.mode === 'cooperative' ? '🔬 Cooperative-Pipeline' : '🏆 Bare'} Diamond running…
+              </div>
+              <div style={{ fontSize: 11, color: '#94a3b8' }}>
+                Q{diamondRunning.currentQ}/{diamondRunning.total} ·{' '}
+                {diamondRunning.currentDomain} ·{' '}
+                {diamondRunning.stage} ·{' '}
+                {diamondRunning.runningPct.toFixed(1)}% running accuracy
+              </div>
+              <div style={{
+                height: 3, borderRadius: 2, marginTop: 6,
+                background: `linear-gradient(to right, #6ee7b7 ${diamondRunning.total > 0 ? (diamondRunning.currentQ / diamondRunning.total) * 100 : 0}%, rgba(110,231,183,0.1) ${diamondRunning.total > 0 ? (diamondRunning.currentQ / diamondRunning.total) * 100 : 0}%)`,
+              }} />
+            </div>
+            <button
+              type="button"
+              onClick={() => { void handleCancelDiamond(); }}
+              style={{
+                padding: '6px 14px', background: 'rgba(239,68,68,0.08)',
+                border: '1px solid rgba(239,68,68,0.2)', borderRadius: 6,
+                color: '#f87171', fontSize: 12, cursor: 'pointer', fontFamily: 'inherit',
+              }}
+            >
+              Cancel
+            </button>
+          </div>
+        )}
+
+        {/* Error state */}
+        {diamondRunning.id === 'error' && (
+          <div style={{ marginBottom: 10 }}>
+            <div style={{
+              padding: '10px 14px', background: 'rgba(239,68,68,0.05)',
+              border: '1px solid rgba(239,68,68,0.2)', borderRadius: 8,
+              fontSize: 12, color: '#f87171', marginBottom: 8,
+            }}>
+              {diamondRunning.message}
+            </div>
+            <button
+              type="button"
+              onClick={() => setDiamondRunning({ id: 'idle' })}
+              style={{
+                padding: '6px 14px', background: 'rgba(110,231,183,0.08)',
+                border: '1px solid rgba(110,231,183,0.25)', borderRadius: 6,
+                color: '#6ee7b7', fontSize: 12, cursor: 'pointer', fontFamily: 'inherit',
+              }}
+            >
+              Retry
+            </button>
+          </div>
+        )}
+
+        {/* Result panel */}
+        {lastDiamondResult && diamondRunning.id !== 'running' && (
+          <div style={{
+            padding: '14px 16px', background: 'rgba(110,231,183,0.04)',
+            border: '1px solid rgba(110,231,183,0.18)', borderRadius: 10, marginBottom: 12,
+          }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: '#6ee7b7', marginBottom: 8 }}>
+              {lastDiamondResult.mode === 'bare' ? '🏆 Bare Diamond' : '🔬 Cooperative-Pipeline Diamond'} Result
+            </div>
+
+            {/* Headline score */}
+            <div style={{ fontSize: 22, fontWeight: 800, color: '#e2e8f0', marginBottom: 4 }}>
+              {lastDiamondResult.correct}/{lastDiamondResult.total} correct = {lastDiamondResult.score_pct.toFixed(1)}%
+            </div>
+
+            {/* Lift score (shown when both results exist) */}
+            {bareResult && coopResult && (
+              <div style={{
+                fontSize: 13, fontWeight: 600, marginBottom: 10,
+                color: coopResult.score_pct > bareResult.score_pct ? '#6ee7b7' : '#fbbf24',
+              }}>
+                Cooperative-architecture lift: {coopResult.score_pct > bareResult.score_pct ? '+' : ''}{(coopResult.score_pct - bareResult.score_pct).toFixed(1)} pp
+                {' '}(Bare: {bareResult.score_pct.toFixed(1)}% → Coop: {coopResult.score_pct.toFixed(1)}%)
+              </div>
+            )}
+
+            {/* Per-domain breakdown */}
+            <table style={{ width: '100%', borderCollapse: 'collapse' as const, fontSize: 12 }}>
+              <thead>
+                <tr>
+                  {(['Domain', 'Score', 'Correct/Total'] as const).map((h) => (
+                    <th key={h} style={{ textAlign: 'left' as const, color: '#64748b', fontWeight: 600, paddingBottom: 4, paddingRight: 12 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {(['physics', 'chemistry', 'biology'] as const).map((domain) => {
+                  const s = lastDiamondResult?.by_domain?.[domain];
+                  if (!s || s.total === 0) return null;
+                  return (
+                    <tr key={domain}>
+                      <td style={{ color: '#94a3b8', paddingRight: 12, paddingBottom: 3 }}>{domain}</td>
+                      <td style={{ color: s.score_pct >= 50 ? '#6ee7b7' : '#fbbf24', fontWeight: 600, paddingRight: 12 }}>{s.score_pct.toFixed(1)}%</td>
+                      <td style={{ color: '#64748b' }}>{s.correct}/{s.total}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
 
       {/* ── Substrate Settings ────────────────────────────────────────────────── */}
       <div style={{ marginTop: 8, paddingTop: 16, borderTop: '1px solid rgba(100,116,139,0.1)' }}>
