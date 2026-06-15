@@ -58,12 +58,37 @@ interface PlowDomainProgress {
   verified: number;
   rejected: number;
   quarantined: number;
+  ebletsWritten: number;
+  status: 'pending' | 'running' | 'green' | 'yellow' | 'red';
+  currentSpecialist?: string;
+  currentQuestion?: number;
 }
 
 type PlowRunState =
   | { id: 'idle' }
-  | { id: 'running'; progress: Record<string, PlowDomainProgress>; currentDomain: string | null }
-  | { id: 'complete'; progress: Record<string, PlowDomainProgress>; totalPlowed: number; totalVerified: number; totalRejected: number; totalQuarantined: number }
+  | {
+      id: 'running';
+      progress: Record<string, PlowDomainProgress>;
+      currentDomain: string | null;
+      currentSpecialist: string | null;
+      totalEbletsGrown: number;
+      totalQuarantined: number;
+      andonBanner: string | null;
+      domainIndex: number;
+      totalDomains: number;
+      questionIndex: number;
+      totalQuestions: number;
+    }
+  | {
+      id: 'complete';
+      progress: Record<string, PlowDomainProgress>;
+      totalPlowed: number;
+      totalVerified: number;
+      totalRejected: number;
+      totalQuarantined: number;
+      totalEbletsGrown: number;
+      overallStatus: 'GREEN' | 'YELLOW';
+    }
   | { id: 'error'; message: string };
 
 // ─── Styles ───────────────────────────────────────────────────────────────────
@@ -401,70 +426,128 @@ export function TestItOutTab(): React.ReactElement {
     if (plowRunningRef.current || selectedDomains.length === 0) return;
     plowRunningRef.current = true;
 
+    // Initialize progress state for all selected domains
     const progress: Record<string, PlowDomainProgress> = {};
-    setPlowState({ id: 'running', progress: {}, currentDomain: selectedDomains[0] ?? null });
-
     for (const domain of selectedDomains) {
-      setPlowState((prev) => ({
-        ...prev,
-        id: 'running',
-        progress: { ...progress },
-        currentDomain: domain,
-      } as PlowRunState));
-
-      // Load Q bank for domain
-      let questions: Array<{ question: string; options: string[]; correct_answer: string; source_id: string; source_category: string }> = [];
-      try {
-        const res = await window.amplify?.loadDomainBank?.(domain);
-        questions = Array.isArray(res) ? res : [];
-      } catch { /* bank missing for this domain — skip silently */ }
-
-      const total = Math.min(qCount, questions.length > 0 ? questions.length : qCount);
-      progress[domain] = { done: 0, total, verified: 0, rejected: 0, quarantined: 0 };
-
-      if (questions.length === 0) {
-        // No bank available; quarantine the whole slot
-        progress[domain].quarantined = total;
-        progress[domain].done = total;
-        setPlowState((prev) => ({ ...prev, id: 'running', progress: { ...progress } } as PlowRunState));
-        continue;
-      }
-
-      // Shuffle + pick qCount questions (Fisher-Yates partial)
-      const pool = [...questions];
-      for (let i = pool.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [pool[i], pool[j]] = [pool[j], pool[i]];
-      }
-      const selected = pool.slice(0, total);
-      progress[domain].total = selected.length;
-      setPlowState((prev) => ({ ...prev, id: 'running', progress: { ...progress } } as PlowRunState));
-
-      for (const q of selected) {
-        try {
-          const res = await window.amplify?.runAndonReplowLoop?.(q.question, domain);
-          if (res?.verdict === 'verified') {
-            progress[domain].verified++;
-          } else if (res?.verdict === 'rejected') {
-            progress[domain].rejected++;
-          } else {
-            progress[domain].quarantined++;
-          }
-        } catch {
-          progress[domain].quarantined++;
-        }
-        progress[domain].done++;
-        setPlowState((prev) => ({ ...prev, id: 'running', progress: { ...progress } } as PlowRunState));
-      }
+      progress[domain] = {
+        done: 0, total: qCount, verified: 0, rejected: 0,
+        quarantined: 0, ebletsWritten: 0, status: 'pending',
+      };
     }
 
-    const totalPlowed = Object.values(progress).reduce((s, p) => s + p.done, 0);
-    const totalVerified = Object.values(progress).reduce((s, p) => s + p.verified, 0);
-    const totalRejected = Object.values(progress).reduce((s, p) => s + p.rejected, 0);
-    const totalQuarantined = Object.values(progress).reduce((s, p) => s + p.quarantined, 0);
+    setPlowState({
+      id: 'running',
+      progress: { ...progress },
+      currentDomain: selectedDomains[0] ?? null,
+      currentSpecialist: null,
+      totalEbletsGrown: 0,
+      totalQuarantined: 0,
+      andonBanner: null,
+      domainIndex: 0,
+      totalDomains: selectedDomains.length,
+      questionIndex: 0,
+      totalQuestions: qCount,
+    });
 
-    setPlowState({ id: 'complete', progress, totalPlowed, totalVerified, totalRejected, totalQuarantined });
-    plowRunningRef.current = false;
+    let totalEbletsGrown = 0;
+    let totalQuarantinedCount = 0;
+
+    // Subscribe to live progress events from the canonical pipeline
+    const unsubProgress = window.amplify?.onCanonicalPlowProgress?.((event) => {
+      const ev = event as Record<string, unknown>;
+      const type = ev.type as string;
+      const domain = ev.domain as string | undefined;
+
+      if (domain && progress[domain]) {
+        if (type === 'domain-start') {
+          progress[domain].status = 'running';
+        } else if (type === 'question-start') {
+          progress[domain].currentQuestion = ((ev.questionIndex as number | undefined) ?? 0) + 1;
+          progress[domain].status = 'running';
+        } else if (type === 'specialist-fire') {
+          progress[domain].currentSpecialist = ev.specialistName as string ?? null;
+        } else if (type === 'scribe-done') {
+          const written = (ev.ebletsWrittenThisQuestion as number | undefined) ?? 0;
+          progress[domain].ebletsWritten += written;
+          totalEbletsGrown += written;
+          progress[domain].done++;
+          if (written > 0) {
+            progress[domain].verified++;
+          } else {
+            progress[domain].quarantined++;
+            totalQuarantinedCount++;
+          }
+        } else if (type === 'andon-trigger') {
+          // Andon banner handled in setPlowState below
+        } else if (type === 'domain-done') {
+          const domResult = ev.domainResult as Record<string, unknown> | undefined;
+          if (domResult) {
+            const s = domResult.status as string | undefined;
+            progress[domain].status = s === 'GREEN' ? 'green' : s === 'YELLOW' ? 'yellow' : 'red';
+          }
+          progress[domain].currentSpecialist = undefined;
+        }
+      }
+
+      const andonBanner = type === 'andon-trigger'
+        ? `⚑ Andon cord pulled — domain ${domain ?? '?'} · retry ${(ev.andonRetry as number | undefined) ?? 1}/3`
+        : type === 'andon-recovered' ? null
+        : undefined; // undefined = no change
+
+      setPlowState((prev) => {
+        if (prev.id !== 'running') return prev;
+        return {
+          ...prev,
+          progress: { ...progress },
+          currentDomain: (domain ?? prev.currentDomain) as string | null,
+          currentSpecialist: domain ? (progress[domain]?.currentSpecialist ?? null) : prev.currentSpecialist,
+          totalEbletsGrown,
+          totalQuarantined: totalQuarantinedCount,
+          andonBanner: andonBanner !== undefined ? andonBanner : prev.andonBanner,
+          domainIndex: (ev.domainIndex as number | undefined) ?? prev.domainIndex,
+          totalDomains: (ev.totalDomains as number | undefined) ?? prev.totalDomains,
+          questionIndex: (ev.questionIndex as number | undefined) ?? prev.questionIndex,
+          totalQuestions: (ev.totalQuestions as number | undefined) ?? prev.totalQuestions,
+        };
+      });
+    });
+
+    try {
+      const res = await window.amplify?.runCanonicalPlow?.({
+        domains: selectedDomains,
+        questionsPerDomain: qCount,
+      });
+
+      if (res?.ok === false) {
+        setPlowState({ id: 'error', message: res.error ?? 'Canonical plow failed' });
+        plowRunningRef.current = false;
+        unsubProgress?.();
+        return;
+      }
+
+      // Build final totals from progress
+      const totalPlowed = Object.values(progress).reduce((s, p) => s + p.done, 0);
+      const totalVerified = Object.values(progress).reduce((s, p) => s + p.verified, 0);
+      const totalRejected = Object.values(progress).reduce((s, p) => s + p.rejected, 0);
+      const totalQuarantined2 = Object.values(progress).reduce((s, p) => s + p.quarantined, 0);
+      const overallStatus: 'GREEN' | 'YELLOW' = totalEbletsGrown >= 5 ? 'GREEN' : 'YELLOW';
+
+      setPlowState({
+        id: 'complete',
+        progress,
+        totalPlowed,
+        totalVerified,
+        totalRejected,
+        totalQuarantined: totalQuarantined2,
+        totalEbletsGrown,
+        overallStatus,
+      });
+    } catch (err) {
+      setPlowState({ id: 'error', message: String(err) });
+    } finally {
+      plowRunningRef.current = false;
+      unsubProgress?.();
+    }
   }, [selectedDomains, qCount]);
 
   // ── Computed ────────────────────────────────────────────────────────────────
@@ -505,8 +588,9 @@ export function TestItOutTab(): React.ReactElement {
           <div style={S.header}>
             <h2 style={S.title}>Plow the Field 🌾</h2>
             <p style={S.subtitle}>
-              Run a multi-domain parallel Plow across your selected knowledge domains.
-              Verified answers grow your substrate; wrong answers are never written.
+              Canonical pipeline v0.3.4: Spider → 9 External Specialists (staggered) → Miner →
+              Saladin → Furnace → Three Fates → Scribe. Fetches real domain knowledge from
+              Wikipedia, arXiv, OpenAlex, PubMed and more — grows substrate with verified facts.
             </p>
           </div>
 
@@ -605,60 +689,124 @@ export function TestItOutTab(): React.ReactElement {
                 <>
                   <div style={S.aggregatePanel}>
                     <div style={{ fontSize: 14, fontWeight: 700, color: '#6ee7b7' }}>
-                      Your substrate grew by {plowState.totalVerified} eblet{plowState.totalVerified !== 1 ? 's' : ''} this run 🌱
+                      Your substrate grew by {plowState.totalEbletsGrown} eblet{plowState.totalEbletsGrown !== 1 ? 's' : ''} this run 🌱
+                      {' '}<span style={{ fontSize: 12, color: plowState.overallStatus === 'GREEN' ? '#6ee7b7' : '#fbbf24', fontWeight: 600 }}>
+                        {plowState.overallStatus === 'GREEN' ? '● GREEN' : '● YELLOW'}
+                      </span>
                     </div>
                     <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap' as const }}>
-                      <div style={{ fontSize: 12, color: '#94a3b8' }}>Total plowed: <strong style={{ color: '#e2e8f0' }}>{plowState.totalPlowed}</strong></div>
-                      <div style={{ fontSize: 12, color: '#94a3b8' }}>Verified ✓: <strong style={{ color: '#6ee7b7' }}>{plowState.totalVerified}</strong></div>
-                      <div style={{ fontSize: 12, color: '#94a3b8' }}>Rejected ✗: <strong style={{ color: '#f87171' }}>{plowState.totalRejected}</strong></div>
+                      <div style={{ fontSize: 12, color: '#94a3b8' }}>Questions plowed: <strong style={{ color: '#e2e8f0' }}>{plowState.totalPlowed}</strong></div>
+                      <div style={{ fontSize: 12, color: '#94a3b8' }}>Q with new facts ✓: <strong style={{ color: '#6ee7b7' }}>{plowState.totalVerified}</strong></div>
                       <div style={{ fontSize: 12, color: '#94a3b8' }}>Quarantined: <strong style={{ color: '#fbbf24' }}>{plowState.totalQuarantined}</strong></div>
                     </div>
                   </div>
                   {/* Per-domain breakdown */}
                   <div style={{ fontSize: 11, color: '#475569', letterSpacing: '0.06em', textTransform: 'uppercase' as const }}>Per-domain results</div>
                   <div style={{ display: 'flex', flexDirection: 'column' as const, gap: 6 }}>
-                    {Object.entries(plowState.progress).map(([domain, prog]) => (
-                      <div key={domain} style={{ padding: '8px 12px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(100,116,139,0.12)', borderRadius: 7 }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
-                          <span style={{ fontSize: 12, color: '#94a3b8' }}>{DOMAIN_LABELS[domain as PlowDomain] ?? domain}</span>
-                          <span style={{ fontSize: 11, color: '#475569' }}>{prog.verified}/{prog.total} verified</span>
+                    {Object.entries(plowState.progress).map(([domain, prog]) => {
+                      const dot = prog.status === 'green' ? '🟢'
+                        : prog.status === 'yellow' ? '🟡'
+                        : prog.status === 'red' ? '🔴' : '⚪';
+                      return (
+                        <div key={domain} style={{ padding: '8px 12px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(100,116,139,0.12)', borderRadius: 7 }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+                            <span style={{ fontSize: 12, color: '#94a3b8' }}>{dot} {DOMAIN_LABELS[domain as PlowDomain] ?? domain}</span>
+                            <span style={{ fontSize: 11, color: '#475569' }}>
+                              {prog.ebletsWritten} eblets · {prog.verified}/{prog.total} Q
+                            </span>
+                          </div>
+                          <div style={S.domainProgressBar(prog.total > 0 ? (prog.ebletsWritten / Math.max(1, prog.total * 2)) * 100 : 0)} />
                         </div>
-                        <div style={S.domainProgressBar(prog.total > 0 ? (prog.verified / prog.total) * 100 : 0)} />
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </>
               )}
             </>
           )}
 
-          {/* Running state */}
+          {/* Running state — canonical pipeline live view */}
           {plowState.id === 'running' && (
             <>
-              <div style={{ fontSize: 13, color: '#6ee7b7', animation: 'mnemo-pulse 1.5s ease-in-out infinite' }}>
-                ◌ Plowing{plowState.currentDomain ? ` · ${DOMAIN_LABELS[plowState.currentDomain as PlowDomain] ?? plowState.currentDomain}` : ''}…
+              {/* Live status header */}
+              <div style={{ fontSize: 13, color: '#6ee7b7', animation: 'mnemo-pulse 1.5s ease-in-out infinite', display: 'flex', flexDirection: 'column' as const, gap: 3 }}>
+                <div>
+                  ◌ Domain {plowState.domainIndex + 1}/{plowState.totalDomains}
+                  {plowState.currentDomain ? ` · ${DOMAIN_LABELS[plowState.currentDomain as PlowDomain] ?? plowState.currentDomain}` : ''}
+                  {' · '}Q {plowState.questionIndex + 1}/{plowState.totalQuestions}
+                  {plowState.currentSpecialist ? ` · ${plowState.currentSpecialist}` : ''}
+                </div>
+                <div style={{ fontSize: 11, color: '#94a3b8', display: 'flex', gap: 16 }}>
+                  <span>🌱 Substrate grew by <strong style={{ color: '#6ee7b7' }}>{plowState.totalEbletsGrown}</strong> eblets</span>
+                  {plowState.totalQuarantined > 0 && (
+                    <span>⚑ <strong style={{ color: '#fbbf24' }}>{plowState.totalQuarantined}</strong> quarantined</span>
+                  )}
+                </div>
               </div>
+
+              {/* Andon cord banner */}
+              {plowState.andonBanner && (
+                <div style={{
+                  padding: '8px 14px',
+                  background: 'rgba(251,191,36,0.08)',
+                  border: '1px solid rgba(251,191,36,0.3)',
+                  borderRadius: 7,
+                  fontSize: 12,
+                  color: '#fbbf24',
+                  fontWeight: 600,
+                }}>
+                  {plowState.andonBanner}
+                </div>
+              )}
+
+              {/* Per-domain status grid */}
               <div style={{ display: 'flex', flexDirection: 'column' as const, gap: 6 }}>
-                {Object.entries(plowState.progress).map(([domain, prog]) => (
-                  <div key={domain} style={{ padding: '8px 12px', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(100,116,139,0.12)', borderRadius: 7 }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
-                      <span style={{ fontSize: 12, color: plowState.currentDomain === domain ? '#6ee7b7' : '#94a3b8' }}>
-                        {DOMAIN_LABELS[domain as PlowDomain] ?? domain}
-                        {plowState.currentDomain === domain && ' ◌'}
-                      </span>
-                      <span style={{ fontSize: 11, color: '#475569' }}>{prog.done}/{prog.total}</span>
+                {Object.entries(plowState.progress).map(([domain, prog]) => {
+                  const isActive = plowState.currentDomain === domain;
+                  const statusColor = prog.status === 'green' ? '#6ee7b7'
+                    : prog.status === 'yellow' ? '#fbbf24'
+                    : prog.status === 'red' ? '#f87171'
+                    : isActive ? '#6ee7b7' : '#94a3b8';
+                  const statusDot = prog.status === 'green' ? '🟢'
+                    : prog.status === 'yellow' ? '🟡'
+                    : prog.status === 'red' ? '🔴'
+                    : prog.status === 'running' ? '◌' : '⚪';
+                  return (
+                    <div key={domain} style={{
+                      padding: '8px 12px',
+                      background: isActive ? 'rgba(110,231,183,0.04)' : 'rgba(255,255,255,0.02)',
+                      border: `1px solid ${isActive ? 'rgba(110,231,183,0.2)' : 'rgba(100,116,139,0.12)'}`,
+                      borderRadius: 7,
+                    }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+                        <span style={{ fontSize: 12, color: statusColor, display: 'flex', alignItems: 'center', gap: 5 }}>
+                          <span>{statusDot}</span>
+                          {DOMAIN_LABELS[domain as PlowDomain] ?? domain}
+                          {isActive && prog.currentSpecialist && (
+                            <span style={{ fontSize: 10, color: '#64748b', fontStyle: 'italic' as const }}>· {prog.currentSpecialist}</span>
+                          )}
+                        </span>
+                        <span style={{ fontSize: 11, color: '#475569' }}>
+                          Q{prog.done}/{prog.total}
+                          {prog.ebletsWritten > 0 && <span style={{ color: '#6ee7b7', marginLeft: 6 }}>+{prog.ebletsWritten} eblets</span>}
+                        </span>
+                      </div>
+                      <div style={S.domainProgressBar(prog.total > 0 ? (prog.done / prog.total) * 100 : 0)} />
+                      <div style={{ fontSize: 10, color: '#475569', marginTop: 3 }}>
+                        {prog.verified > 0 && <span style={{ color: '#6ee7b7' }}>✓{prog.verified} </span>}
+                        {prog.quarantined > 0 && <span style={{ color: '#fbbf24' }}>⚑{prog.quarantined}</span>}
+                      </div>
                     </div>
-                    <div style={S.domainProgressBar(prog.total > 0 ? (prog.done / prog.total) * 100 : 0)} />
-                    <div style={{ fontSize: 10, color: '#475569', marginTop: 3 }}>
-                      {prog.verified > 0 && <span style={{ color: '#6ee7b7' }}>✓{prog.verified} </span>}
-                      {prog.rejected > 0 && <span style={{ color: '#f87171' }}>✗{prog.rejected} </span>}
-                      {prog.quarantined > 0 && <span style={{ color: '#fbbf24' }}>⚑{prog.quarantined}</span>}
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
-              <button type="button" style={S.primaryBtn(true)} disabled>
-                Plowing…
+
+              <button
+                type="button"
+                style={{ ...S.primaryBtn(false), background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', color: '#f87171' }}
+                onClick={() => { void window.amplify?.cancelCanonicalPlow?.(); }}
+              >
+                Cancel Plow
               </button>
             </>
           )}

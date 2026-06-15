@@ -1349,6 +1349,32 @@ contextBridge.exposeInMainWorld('amplify', {
     return () => ipcRenderer.removeListener('plow:mesh-comparison-progress', handler);
   },
 
+  // ── BP083 v0.3.4 — Canonical Plow Pipeline IPC ───────────────────────────
+
+  runCanonicalPlow: (config: {
+    domains: string[];
+    questionsPerDomain: number;
+    model?: string;
+    ollamaBaseUrl?: string;
+    specialistKeys?: {
+      wolframApiKey?: string;
+      stackExchangeKey?: string;
+      pubmedApiKey?: string;
+    };
+  }): Promise<{ ok: boolean; result?: unknown; error?: string }> =>
+    ipcRenderer.invoke('plow:run-canonical-plow', config),
+
+  cancelCanonicalPlow: (): Promise<{ ok: boolean }> =>
+    ipcRenderer.invoke('plow:cancel-canonical-plow'),
+
+  onCanonicalPlowProgress: (
+    callback: (event: Record<string, unknown>) => void,
+  ): (() => void) => {
+    const handler = (_: unknown, data: Record<string, unknown>) => callback(data);
+    ipcRenderer.on('plow:canonical-plow-progress', handler);
+    return () => ipcRenderer.removeListener('plow:canonical-plow-progress', handler);
+  },
+
   // ── SEG-5 v0.1.59 — Clipboard capture IPC ────────────────────────────────
 
   readClipboard: (): Promise<string> =>
@@ -1810,6 +1836,16 @@ declare global {
       runMeshComparison?: (config: { nPerDomain: number; randomSeed: number; model: string; ollamaBaseUrl: string }) => Promise<{ ok: boolean; result?: unknown; error?: string }>;
       cancelMeshComparison?: () => Promise<{ ok: boolean }>;
       onMeshComparisonProgress?: (callback: (event: Record<string, unknown>) => void) => () => void;
+      // BP083 v0.3.4 — Canonical Plow Pipeline
+      runCanonicalPlow?: (config: {
+        domains: string[];
+        questionsPerDomain: number;
+        model?: string;
+        ollamaBaseUrl?: string;
+        specialistKeys?: { wolframApiKey?: string; stackExchangeKey?: string; pubmedApiKey?: string };
+      }) => Promise<{ ok: boolean; result?: unknown; error?: string }>;
+      cancelCanonicalPlow?: () => Promise<{ ok: boolean }>;
+      onCanonicalPlowProgress?: (callback: (event: Record<string, unknown>) => void) => () => void;
       // SEG-5 v0.1.59 — Clipboard capture
       readClipboard?: () => Promise<string>;
       onClipboardCaptureQA?: (callback: () => void) => () => void;

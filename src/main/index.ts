@@ -4634,6 +4634,105 @@ function registerIPCHandlers(): void {
     }
   });
 
+  // ── BP083 v0.3.4 — Canonical Plow Pipeline IPC ────────────────────────────
+  // Runs the Founder-Invented 14-Domain Looping Methodology:
+  //   Spider → Sprite → 9 Specialists STAGGERED SWARM → Miner → Saladin →
+  //   Furnace → Three Fates → Scribe → Detective TEAM + Andon cord.
+  // Replaces the legacy andon_replow (which only queried local substrate,
+  // producing 0 eblets / 100% quarantine in v0.3.3).
+
+  let _canonicalPlowCancelToken = { cancelled: false };
+
+  safeHandle('plow:cancel-canonical-plow', () => {
+    _canonicalPlowCancelToken.cancelled = true;
+    console.log('[CanonicalPlow] Cancel requested via IPC');
+    return { ok: true };
+  });
+
+  safeHandle('plow:run-canonical-plow', async (
+    _event,
+    config: {
+      domains: string[];
+      questionsPerDomain: number;
+      model?: string;
+      ollamaBaseUrl?: string;
+      specialistKeys?: {
+        wolframApiKey?: string;
+        stackExchangeKey?: string;
+        pubmedApiKey?: string;
+      };
+    },
+  ) => {
+    _canonicalPlowCancelToken = { cancelled: false };
+
+    const { runCanonicalPlow } = await import('./plow/canonical_pipeline');
+    const { loadDomainBank, getDomainList } = await import('./plow/per_domain_q_banks');
+    const { writeVerifiedEblet } = await import('./mnem_eblet_store');
+
+    const broadcastProgress = (data: object) => {
+      for (const w of BrowserWindow.getAllWindows()) {
+        if (!w.isDestroyed()) w.webContents.send('plow:canonical-plow-progress', data);
+      }
+    };
+
+    // Per-domain question sampler: random sample from MMLU-Pro bank
+    const sampleQuestionsForDomain = (domain: string, n: number): string[] => {
+      let bank;
+      try {
+        bank = loadDomainBank(domain as import('./plow/per_domain_q_banks').Domain);
+      } catch {
+        // Try all known domains
+        const allDomains = getDomainList();
+        const closest = allDomains.find((d) => d.startsWith(domain) || domain.startsWith(d));
+        if (closest) {
+          try { bank = loadDomainBank(closest); } catch { return []; }
+        } else {
+          return [];
+        }
+      }
+      if (!bank || bank.length === 0) return [];
+
+      // Fisher-Yates partial shuffle for random sample
+      const pool = [...bank];
+      for (let i = pool.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [pool[i], pool[j]] = [pool[j], pool[i]];
+      }
+      return pool.slice(0, Math.min(n, pool.length)).map((q) => q.question);
+    };
+
+    // Write function that delegates to mnem_eblet_store
+    const writeEbletFn = async (eblet: {
+      question: string; answer: string; provenance: string;
+      verified: true; sha256: string; timestamp: number;
+    }) => {
+      await writeVerifiedEblet(eblet);
+    };
+
+    try {
+      const result = await runCanonicalPlow(
+        {
+          domains: config.domains,
+          questionsPerDomain: config.questionsPerDomain,
+          ollamaBaseUrl: config.ollamaBaseUrl ?? 'http://127.0.0.1:11434',
+          model: config.model ?? 'gemma4:12b',
+          specialistKeys: config.specialistKeys ?? {},
+        },
+        writeEbletFn,
+        (progressEvent) => { broadcastProgress(progressEvent); },
+        _canonicalPlowCancelToken,
+        sampleQuestionsForDomain,
+      );
+
+      broadcastProgress({ type: 'complete', result });
+      return { ok: true, result };
+    } catch (err) {
+      console.error('[CanonicalPlow] Fatal error:', err);
+      broadcastProgress({ type: 'error', message: (err as Error).message });
+      return { ok: false, error: (err as Error).message };
+    }
+  });
+
   // ── SEG-5 v0.1.59 — Clipboard read IPC ────────────────────────────────────
 
   safeHandle('clipboard:read', async () => {
