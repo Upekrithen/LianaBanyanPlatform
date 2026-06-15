@@ -1,4 +1,4 @@
-// ConstellationSwitchboard.tsx — v0.4.0 BP083
+// ConstellationSwitchboard.tsx — v0.4.1 BP083
 // MIC crown badge + per-peer live progress display
 //
 // NotCents shape mapping (BP083 Founder ratified):
@@ -9,7 +9,8 @@
 //
 // Placement: Plow the Field tab (when constellation mode active) + future Package Store tab.
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { getGlowTier } from '../utils/glow_tier';
 
 export interface PeerDisplay {
   id: string;
@@ -30,6 +31,8 @@ export interface ConstellationSwitchboardProps {
   selfEbletCount?: number;
   selfActive?: boolean;
   selfDomain?: string;
+  /** v0.4.1: peer IDs currently pulsing due to high-glow Diagnosis arrival */
+  pulsingPeerIds?: Set<string>;
 }
 
 const S = {
@@ -83,6 +86,7 @@ export function ConstellationSwitchboard({
   selfEbletCount = 0,
   selfActive = false,
   selfDomain,
+  pulsingPeerIds,
 }: ConstellationSwitchboardProps) {
   const [expanded, setExpanded] = useState(false);
 
@@ -115,9 +119,11 @@ export function ConstellationSwitchboard({
       {expanded && peers.map((peer) => {
         const isMicPeer = micId === peer.id;
         const shape = getPeerShape(peer, micId);
+        const isPulsing = pulsingPeerIds?.has(peer.id) ?? false;
         return (
           <div
             key={peer.id}
+            className={isPulsing ? 'peer-row-pulse' : undefined}
             style={S.peerRow}
             title={`${peer.name} · ${peer.address ?? 'unknown'} · ${peer.installedDomains?.join(', ') ?? 'no domains'}`}
           >
@@ -151,6 +157,24 @@ export function LiveMicSwitchboard() {
   const [selfEblets, setSelfEblets] = useState(0);
   const [selfActive, setSelfActive] = useState(false);
   const [selfDomain, setSelfDomain] = useState<string | undefined>(undefined);
+  // v0.4.1: per-peer pulse set for high-glow Diagnosis arrivals
+  const [pulsingPeerIds, setPulsingPeerIds] = useState<Set<string>>(new Set());
+  const pulseTimerRefs = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map());
+
+  const pulsePeer = useCallback((peerId: string) => {
+    setPulsingPeerIds((prev) => new Set([...prev, peerId]));
+    const existing = pulseTimerRefs.current.get(peerId);
+    if (existing) clearTimeout(existing);
+    const t = setTimeout(() => {
+      setPulsingPeerIds((prev) => {
+        const next = new Set(prev);
+        next.delete(peerId);
+        return next;
+      });
+      pulseTimerRefs.current.delete(peerId);
+    }, 1800);
+    pulseTimerRefs.current.set(peerId, t);
+  }, []);
 
   useEffect(() => {
     // Load initial peer list
@@ -168,6 +192,16 @@ export function LiveMicSwitchboard() {
         })));
       }
     }).catch(() => {});
+
+    // v0.4.1: listen for incoming high-glow Diagnoses → pulse originating peer node
+    const unsubDiagnosis = window.amplify?.onDiagnosisIncoming?.((data: unknown) => {
+      const post = data as { posterId?: string; bounty?: { amount?: number; rail?: string } };
+      const marks = post?.bounty?.amount ?? 0;
+      const tier = getGlowTier(marks);
+      if ((tier === 'bright' || tier === 'golden') && post.posterId) {
+        pulsePeer(post.posterId);
+      }
+    });
 
     // Listen for MIC status events
     const unsub = window.amplify?.onMicStatusEvent?.((event) => {
@@ -199,8 +233,11 @@ export function LiveMicSwitchboard() {
       }
     });
 
-    return () => { unsub?.(); };
-  }, []);
+    return () => {
+      unsub?.();
+      unsubDiagnosis?.();
+    };
+  }, [pulsePeer]);
 
   return (
     <ConstellationSwitchboard
@@ -210,6 +247,7 @@ export function LiveMicSwitchboard() {
       selfEbletCount={selfEblets}
       selfActive={selfActive}
       selfDomain={selfDomain}
+      pulsingPeerIds={pulsingPeerIds}
     />
   );
 }

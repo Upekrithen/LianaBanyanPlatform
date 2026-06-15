@@ -1,11 +1,62 @@
 /**
- * diagnosis_types.ts — The Diagnosis v0.4.0 BP083
+ * diagnosis_types.ts — The Diagnosis v0.4.1 BP083
  *
  * NYT-column model: persistent questions broadcast to human Members.
  * Bounty paid via Substitution Rails (Fiat/Marks/Barter).
  * REGULATORY HYGIENE (BP051 Saladin's Pattern — NON-NEGOTIABLE):
  *   medical/legal/financial domains MUST show informational-only disclaimer.
+ * v0.4.1: Salt Level persistence tiers (Pinch / Seasoning / Preserved).
  */
+
+// ─── Salt Level persistence tiers (v0.4.1) ───────────────────────────────────
+
+export type SaltLevel = 'pinch' | 'seasoning' | 'preserved_open' | 'preserved_forever';
+
+export interface SaltLevelConfig {
+  level: SaltLevel;
+  label: string;
+  icon: string;
+  description: string;
+  autoExpiry?: number;         // ms — undefined = no auto-expiry
+  networkScope: 'local' | 'constellation' | 'cross-cathedral';
+  autoEscalateAfter?: number;  // ms — Seasoning: escalate to Diagnosis after this window
+}
+
+export const SALT_LEVEL_CONFIGS: Record<SaltLevel, SaltLevelConfig> = {
+  pinch: {
+    level: 'pinch',
+    label: 'A Pinch of Salt',
+    icon: '🧂',
+    description: 'Quick local answer · ephemeral · no network',
+    networkScope: 'local',
+  },
+  seasoning: {
+    level: 'seasoning',
+    label: 'Seasoning',
+    icon: '🌿',
+    description: 'Ask + Linger · Constellation keeps working · 24h–1 week',
+    autoExpiry: 7 * 24 * 60 * 60 * 1000,        // 1 week max
+    autoEscalateAfter: 24 * 60 * 60 * 1000,      // 24h before auto-escalating to Diagnosis
+    networkScope: 'constellation',
+  },
+  preserved_open: {
+    level: 'preserved_open',
+    label: 'Preserved in Salt',
+    icon: '🫙',
+    description: 'Post as Diagnosis · open until answered · optional bounty',
+    networkScope: 'cross-cathedral',
+  },
+  preserved_forever: {
+    level: 'preserved_forever',
+    label: 'Preserved Forever',
+    icon: '♾️',
+    description: 'Canon-class archival · never auto-deletes · 1-year pheromone-fade → Catacomb',
+    autoExpiry: 365 * 24 * 60 * 60 * 1000,       // 1 year → Catacomb relocation
+    networkScope: 'cross-cathedral',
+  },
+};
+
+// ─── Domain types ─────────────────────────────────────────────────────────────
 
 export type DiagnosisDomain =
   | 'medical'
@@ -35,13 +86,15 @@ export interface DiagnosisPost {
   priorAttempts: string;
   bounty: DiagnosisBounty;
   visibility: 'lan' | 'constellation' | 'cross-cathedral';
+  saltLevel: SaltLevel;        // v0.4.1: persistence tier
+  noAutoExpiry?: boolean;      // v0.4.1: preserved_forever flag
   posterId: string;
   posterName?: string;
   timestamp: number;
   status: DiagnosisStatus;
   answers: DiagnosisAnswer[];
   acceptedAnswerId?: string;
-  source?: string; // 'manual' | 'andon_auto_escalation'
+  source?: string; // 'manual' | 'andon_auto_escalation' | 'seasoning_auto_escalation'
 }
 
 export interface DiagnosisAnswer {
@@ -63,6 +116,7 @@ export interface DiagnosisCreateInput {
   priorAttempts: string;
   bounty: DiagnosisBounty;
   visibility: DiagnosisPost['visibility'];
+  saltLevel?: SaltLevel;       // v0.4.1: defaults to 'preserved_open'
   posterName?: string;
   source?: string;
 }

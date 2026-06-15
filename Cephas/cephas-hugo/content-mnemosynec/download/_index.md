@@ -1,4 +1,4 @@
----
+﻿---
 title: "How to Use MnemosyneC — The Local AI You Actually Own"
 slug: "download"
 date: 2026-06-01
@@ -17,7 +17,7 @@ Mnemosyne (neh-MOZ-uh-nee) is the Greek goddess of memory. **Dr. MnemosyneC inhe
 Every time you start a new session, your AI forgets everything. Your projects, your preferences, your past conversations, gone. Dr. MnemosyneC gives your AI a permanent, private memory that actually stays.
 
 <div class="cta-row">
-<a href="https://mnemosynec.ai/download/MnemosyneC-Setup-0.4.0.exe" class="cta-primary"><strong>Download for Windows v0.4.0</strong></a>
+<a href="https://mnemosynec.ai/download/MnemosyneC-Setup-0.4.1.exe" class="cta-primary"><strong>Download for Windows v0.4.1</strong></a>
 <a href="/install/" class="cta-secondary">Install guide &rarr;</a>
 </div>
 
@@ -29,8 +29,8 @@ Every time you start a new session, your AI forgets everything. Your projects, y
 
 | Version | Status | Notes |
 |---|---|---|
-| **v0.4.0** | 🟡 LATEST | ⭐ Architecture milestone — MIC + Federation + The Diagnosis |
-| v0.3.10 | 🔵 HISTORICAL | Canonical Plow + MMLU-Pro 97.1% proof |
+| **v0.4.1** | 🟡 LATEST | Salt tiers (Pinch · Seasoning · Preserved) + Glow mechanic + Canonical triplet BP083 |
+| v0.4.0 | 🔵 HISTORICAL | ⭐ Architecture milestone — MIC + Federation + The Diagnosis |
 | v0.1.60 | 🟢 STABLE | Ask cold-start heartbeat + token streaming |
 
 ---
@@ -79,7 +79,7 @@ When a claim has been buoyed by enough living connection over enough time, it ge
 
 **Step 1 — Download and install**
 
-[→ Download MnemosyneC for Windows v0.4.0](https://mnemosynec.ai/download/MnemosyneC-Setup-0.4.0.exe) *(Mac build: see bounty below — we need a Mac builder)*
+[→ Download MnemosyneC for Windows v0.4.0](https://mnemosynec.ai/download/MnemosyneC-Setup-0.4.1.exe) *(Mac build: see bounty below — we need a Mac builder)*
 
 **Latest release:** v0.4.0 — ⭐ Architecture milestone — MIC + Federated Andon + The Diagnosis · Just Add Salt
 **SHA-256:** `See GitHub release page for verified hash`

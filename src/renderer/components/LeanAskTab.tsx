@@ -1,4 +1,4 @@
-// MnemosyneC · v0.1.62 · BP082 · 2026-06-13
+// MnemosyneC · v0.4.1 · BP083 · 2026-06-15
 // §2 Truth-Always · §3 Sonnet 4.6 · Founder-ratified
 //
 // LeanAskTab — Ask A Question tab for the 3-tab LeanShell.
@@ -12,6 +12,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 // SEG-1 v0.1.57: direct Ollama fetch replaced by window.amplify.aiDispatch.query IPC.
 import { ModelPullProgress } from './ModelPullProgress';
+// v0.4.1 BP083: Salt Level selector + upgrade suggestion
+import { SaltLevelSelector, type SaltLevel } from './SaltLevelSelector';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -27,6 +29,33 @@ interface ChatMessage {
 const LS_HISTORY_KEY = 'mnemo_ask_history';
 const MAX_HISTORY = 200;
 const MODEL = 'gemma4:12b';
+
+// ─── v0.4.1: Upgrade suggestion classifier (renderer-side heuristics) ─────────
+
+const DIAGNOSTIC_PATTERNS = [
+  /\bmy\s+\w+/i,
+  /\bthis\s+(rash|pain|issue|problem|error)\b/i,
+  /\bby\s+(friday|monday|today|tomorrow|tonight)\b/i,
+  /\bit'?s\s+doing\b/i,
+  /\bi\s+have\b/i,
+  /\bin\s+[A-Z][a-z]+/,
+  /\bdiagnos/i,
+  /\bundiagnosed\b/i,
+  /\bwhy\s+(won't|doesn't|isn't|can't)\b/i,
+];
+
+const BMV_UPGRADE_THRESHOLD = 70;
+
+function classifyForUpgrade(question: string, bmv: number): { show: boolean; reason: string | null; bmv?: number } {
+  if (bmv < BMV_UPGRADE_THRESHOLD) {
+    return { show: true, reason: 'low_bmv', bmv };
+  }
+  const isDiagnostic = DIAGNOSTIC_PATTERNS.some((p) => p.test(question));
+  if (isDiagnostic) {
+    return { show: true, reason: 'diagnostic_shape' };
+  }
+  return { show: false, reason: null };
+}
 
 // ─── Persistence helpers ──────────────────────────────────────────────────────
 
@@ -149,6 +178,11 @@ export function LeanAskTab({ onSwitchToHome }: LeanAskTabProps) {
   const [messages, setMessages] = useState<ChatMessage[]>(loadHistory);
   const [input, setInput] = useState('');
   const [thinking, setThinking] = useState(false);
+  // v0.4.1: Salt Level persistence selector
+  const [saltLevel, setSaltLevel] = useState<SaltLevel>('pinch');
+  // v0.4.1: upgrade suggestion — shown inline below last response when BMV < 70 or diagnostic shape
+  const [upgradeSuggestion, setUpgradeSuggestion] = useState<{ show: boolean; reason: string | null; bmv?: number } | null>(null);
+  const lastUserQuestionRef = useRef<string>('');
   const [modelMissing, setModelMissing] = useState(false);
   const [checkFailed, setCheckFailed] = useState(false);
   const [retrying, setRetrying] = useState(false);
@@ -319,9 +353,18 @@ export function LeanAskTab({ onSwitchToHome }: LeanAskTabProps) {
     currentAiIdRef.current = null;
   }, []);
 
+  const handleUpgrade = useCallback((level: SaltLevel) => {
+    setSaltLevel(level);
+    setUpgradeSuggestion(null);
+    // Auto-scroll to input
+    textareaRef.current?.focus();
+  }, []);
+
   const handleSend = useCallback(async () => {
     const text = input.trim();
     if (!text || thinking) return;
+    setUpgradeSuggestion(null); // clear prior suggestion on new question
+    lastUserQuestionRef.current = text;
 
     const userMsg: ChatMessage = { id: `u-${Date.now()}`, role: 'user', content: text, ts: Date.now() };
     const aiId = `a-${Date.now() + 1}`;
@@ -394,6 +437,17 @@ export function LeanAskTab({ onSwitchToHome }: LeanAskTabProps) {
         clearStream();
         setThinking(false);
         textareaRef.current?.focus();
+
+        // v0.4.1: check upgrade suggestion on Pinch Ask (inline footer, NOT popup)
+        // Only suggest when salt level is pinch and answer was successfully returned
+        if (saltLevel === 'pinch' && !data.error) {
+          const bmv = (data as Record<string, unknown>).bmv as number | undefined;
+          const question = lastUserQuestionRef.current;
+          const suggestion = classifyForUpgrade(question, bmv ?? 85);
+          if (suggestion.show) {
+            setUpgradeSuggestion(suggestion);
+          }
+        }
       });
     }
 
@@ -698,6 +752,89 @@ export function LeanAskTab({ onSwitchToHome }: LeanAskTabProps) {
         )}
         {messages.map((m) => <MsgBubble key={m.id} msg={m} />)}
         <div ref={bottomRef} />
+      </div>
+
+      {/* v0.4.1: Inline upgrade suggestion footer (NOT a popup — per BP078 every-click-feedback) */}
+      {upgradeSuggestion?.show && (
+        <div
+          role="note"
+          style={{
+            margin: '0 16px 4px',
+            background: 'rgba(99,102,241,0.07)',
+            border: '1px solid rgba(99,102,241,0.25)',
+            borderRadius: 8,
+            padding: '10px 14px',
+            fontSize: 12,
+            color: '#94a3b8',
+            lineHeight: 1.6,
+            flexShrink: 0,
+          }}
+        >
+          <div style={{ marginBottom: 8, color: '#a5b4fc', fontWeight: 600 }}>
+            💡 This question may benefit from the cooperative-class network.
+            {upgradeSuggestion.reason === 'low_bmv' && upgradeSuggestion.bmv !== undefined && (
+              <span style={{ color: '#64748b', fontWeight: 400 }}> (BMV: {upgradeSuggestion.bmv.toFixed(0)})</span>
+            )}
+          </div>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <button
+              type="button"
+              onClick={() => handleUpgrade('seasoning')}
+              style={{
+                background: 'rgba(134,239,172,0.1)',
+                border: '1px solid rgba(134,239,172,0.3)',
+                borderRadius: 6,
+                color: '#86efac',
+                fontSize: 11,
+                padding: '5px 10px',
+                cursor: 'pointer',
+                fontFamily: 'inherit',
+                outline: 'none',
+              }}
+            >
+              🌿 Ask + Linger (24h · Constellation keeps working) — free
+            </button>
+            <button
+              type="button"
+              onClick={() => handleUpgrade('preserved_open')}
+              style={{
+                background: 'rgba(110,231,183,0.08)',
+                border: '1px solid rgba(110,231,183,0.3)',
+                borderRadius: 6,
+                color: '#6ee7b7',
+                fontSize: 11,
+                padding: '5px 10px',
+                cursor: 'pointer',
+                fontFamily: 'inherit',
+                outline: 'none',
+              }}
+            >
+              🫙 Post as Diagnosis (open until answered · optional bounty) — free or add Marks for glow
+            </button>
+            <button
+              type="button"
+              onClick={() => setUpgradeSuggestion(null)}
+              style={{
+                background: 'none',
+                border: '1px solid rgba(100,116,139,0.2)',
+                borderRadius: 6,
+                color: '#475569',
+                fontSize: 11,
+                padding: '5px 8px',
+                cursor: 'pointer',
+                fontFamily: 'inherit',
+                outline: 'none',
+              }}
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* v0.4.1: Salt Level selector + Input row */}
+      <div style={{ padding: '4px 12px 0', flexShrink: 0 }}>
+        <SaltLevelSelector value={saltLevel} onChange={setSaltLevel} compact />
       </div>
 
       {/* Input row */}

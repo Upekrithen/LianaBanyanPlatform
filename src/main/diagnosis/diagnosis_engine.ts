@@ -1,5 +1,5 @@
 /**
- * diagnosis_engine.ts — The Diagnosis core logic v0.4.0 BP083
+ * diagnosis_engine.ts — The Diagnosis core logic v0.4.1 BP083
  *
  * createDiagnosis  → saves to %APPDATA%/MnemosyneC/substrate/diagnosis_{id}.json
  * broadcastDiagnosis → sends to Constellation peers via peer_server
@@ -22,6 +22,7 @@ import type {
   DiagnosisCreateInput,
   DiagnosisDomain,
 } from './diagnosis_types';
+import { SALT_LEVEL_CONFIGS } from './diagnosis_types';
 
 // ─── Storage paths ────────────────────────────────────────────────────────────
 
@@ -57,6 +58,10 @@ export async function createDiagnosis(input: DiagnosisCreateInput): Promise<stri
   const id = generateDiagnosisId();
   const posterId = getUserId();
 
+  const saltLevel = input.saltLevel ?? 'preserved_open';
+  const saltCfg = SALT_LEVEL_CONFIGS[saltLevel];
+  const noAutoExpiry = saltLevel === 'preserved_forever';
+
   const post: DiagnosisPost = {
     id,
     question: input.question,
@@ -65,6 +70,8 @@ export async function createDiagnosis(input: DiagnosisCreateInput): Promise<stri
     priorAttempts: input.priorAttempts,
     bounty: input.bounty,
     visibility: input.visibility,
+    saltLevel,
+    noAutoExpiry,
     posterId,
     posterName: input.posterName ?? 'Anonymous',
     timestamp: Date.now(),
@@ -74,7 +81,16 @@ export async function createDiagnosis(input: DiagnosisCreateInput): Promise<stri
   };
 
   writeFileSync(diagnosisPath(id), JSON.stringify(post, null, 2), 'utf8');
-  console.log(`[DiagnosisEngine] Created diagnosis id=${id} domain=${input.domain}`);
+  console.log(`[DiagnosisEngine] Created diagnosis id=${id} domain=${input.domain} saltLevel=${saltLevel}`);
+
+  // v0.4.1: schedule Catacomb relocation for preserved_forever
+  if (saltLevel === 'preserved_forever' && saltCfg.autoExpiry) {
+    import('./catacomb_migrator').then(({ scheduleCatacombRelocation }) => {
+      scheduleCatacombRelocation(id, saltCfg.autoExpiry!).catch((err) =>
+        console.error('[DiagnosisEngine] Catacomb schedule error:', err),
+      );
+    }).catch(() => { /* non-fatal */ });
+  }
 
   // Broadcast to Constellation peers (non-blocking)
   broadcastDiagnosis(post).catch((err) =>

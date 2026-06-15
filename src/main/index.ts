@@ -116,6 +116,7 @@ import { setDagBridgeMeshHook, getDagEmitCount } from './dag_bridge';
 // v0.4.0 BP083 — MIC Dispatcher + The Diagnosis + Peer Server
 import { registerMicIpc } from './federation/mic_ipc';
 import { registerDiagnosisIpc } from './diagnosis/diagnosis_ipc';
+import { runCatacombMigrationCheck } from './diagnosis/catacomb_migrator';
 import { startPeerServer, stopPeerServer } from './federation/peer_server';
 
 // SAGA 10 BP045 W1 ? mnemosyne:// + mnemo:// deep-link handler
@@ -2755,6 +2756,9 @@ function registerIPCHandlers(): void {
   registerMicIpc();
   registerDiagnosisIpc();
 
+  // -- app:request-quit (renderer-invokable graceful quit) --------------------
+  ipcMain.handle('app:request-quit', () => { app.quit(); });
+
   // -- Kitchen Table? + Atlas? + P2P (BP052 v0.1.8) ------------------------
   registerKitchenTableIpc(ipcMain);
 
@@ -4995,6 +4999,11 @@ app.whenReady().then(async () => {
 
   // SEG-V0148-P1-RENAME-USERDATA: migrate amplify-computer → mnemosynec on first launch after rename
   migrateUserDataIfNeeded();
+
+  // v0.4.1 BP083: Catacomb migration check (Preserved-Forever 1-year pheromone-fade)
+  runCatacombMigrationCheck().catch((err) =>
+    console.error('[Main] CatacombMigrationCheck error (non-fatal):', err),
+  );
 
   // BP083 SEG-1/2/4: ensure 6-folder substrate scaffold + MEMORY.md + TestData seeds
   try {

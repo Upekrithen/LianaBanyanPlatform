@@ -1,4 +1,4 @@
-// TheDiagnosisTab.tsx — The Diagnosis v0.4.0 BP083
+// TheDiagnosisTab.tsx — The Diagnosis v0.4.1 BP083
 // NYT-column model: broadcast unresolved questions to human Members.
 // "🧂 Just Add Salt · Ask the Network" — Human Salt is the 3rd layer.
 //
@@ -7,6 +7,8 @@
 // SUBSTITUTION CANON: Marks bounties only in v0.4.0 (Fiat deferred to v0.4.1).
 
 import React, { useState, useEffect, useCallback } from 'react';
+import { SaltLevelSelector, type SaltLevel, SALT_LEVEL_CONFIGS } from './SaltLevelSelector';
+import { getGlowTier, getGlowClass } from '../utils/glow_tier';
 
 // ─── Inline types (shared with diagnosis_types.ts in main process) ────────────
 
@@ -42,6 +44,8 @@ export interface DiagnosisPost {
   priorAttempts: string;
   bounty: DiagnosisBounty;
   visibility: 'lan' | 'constellation' | 'cross-cathedral';
+  saltLevel?: SaltLevel;
+  noAutoExpiry?: boolean;
   posterId: string;
   posterName?: string;
   timestamp: number;
@@ -212,6 +216,8 @@ function PostDiagnosisForm() {
   const [bountyRail, setBountyRail] = useState<DiagnosisBounty['rail']>('marks');
   const [barterDesc, setBarterDesc] = useState('');
   const [visibility, setVisibility] = useState<DiagnosisPost['visibility']>('constellation');
+  // v0.4.1: Salt Level — default preserved_open for Diagnosis form
+  const [saltLevel, setSaltLevel] = useState<SaltLevel>('preserved_open');
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -235,6 +241,7 @@ function PostDiagnosisForm() {
           barterDescription: bountyRail === 'barter' ? barterDesc : undefined,
         },
         visibility,
+        saltLevel,
         source: 'manual',
       }) as { ok: boolean; id?: string; error?: string } | undefined;
 
@@ -358,7 +365,25 @@ function PostDiagnosisForm() {
           )}
         </div>
 
-        {/* Visibility */}
+        {/* v0.4.1: Salt Level selector */}
+        <div>
+          <div style={S.label}>Persistence</div>
+          <SaltLevelSelector
+            value={saltLevel}
+            onChange={(lvl) => {
+              setSaltLevel(lvl);
+              // Auto-set visibility for preserved tiers
+              if (lvl === 'preserved_open' || lvl === 'preserved_forever') {
+                setVisibility('cross-cathedral');
+              } else if (lvl === 'seasoning') {
+                setVisibility('constellation');
+              }
+            }}
+            showPreservedSub={saltLevel === 'preserved_open' || saltLevel === 'preserved_forever'}
+          />
+        </div>
+
+        {/* Visibility (advanced override) */}
         <div>
           <div style={S.label}>Visibility</div>
           <select style={S.select} value={visibility} onChange={(e) => setVisibility(e.target.value as DiagnosisPost['visibility'])}>
@@ -537,40 +562,84 @@ function IncomingDiagnosisInbox() {
     );
   }
 
+  // v0.4.1: sort by glow tier descending (golden → bright → visible → dim → none)
+  const GLOW_TIER_ORDER_LOCAL: Record<string, number> = { golden: 5, bright: 4, visible: 3, dim: 2, none: 1 };
+  const sortedDiagnoses = [...diagnoses].sort((a, b) => {
+    const tierA = getGlowTier(a.bounty?.amount ?? 0);
+    const tierB = getGlowTier(b.bounty?.amount ?? 0);
+    return (GLOW_TIER_ORDER_LOCAL[tierB] ?? 1) - (GLOW_TIER_ORDER_LOCAL[tierA] ?? 1);
+  });
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-      <div style={S.label}>Open Diagnoses ({diagnoses.length})</div>
-      {diagnoses.map((d) => (
-        <div key={d.id} style={S.diagnosisItem} onClick={() => setSelected(d)}>
-          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-            <span style={S.tag('110,231,183')}>{DOMAIN_LABELS[d.domain]}</span>
-            <span style={{ fontSize: 11, color: '#64748b' }}>{new Date(d.timestamp).toLocaleDateString()}</span>
-            {d.answers.length > 0 && (
-              <span style={S.tag('251,191,36')}>💬 {d.answers.length} answer{d.answers.length !== 1 ? 's' : ''}</span>
-            )}
-          </div>
-          <p style={{ margin: 0, fontSize: 13, color: '#e2e8f0', lineHeight: 1.5 }}>
-            {d.question.slice(0, 120)}{d.question.length > 120 ? '…' : ''}
-          </p>
-          <p style={{ margin: 0, fontSize: 11, color: '#475569' }}>
-            💰 {d.bounty.amount} {d.bounty.rail} · {d.visibility}
-          </p>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={S.label}>Open Diagnoses ({diagnoses.length})</div>
+        {/* v0.4.1: Visibility canon — MUST be displayed per Heart of Peace BP051 */}
+        <div style={{ fontSize: 10, color: '#475569', fontStyle: 'italic' }}
+          title="All Diagnoses are visible regardless of glow. Glow surfaces attention, never restricts access.">
+          All visible · glow = attention ✦
         </div>
-      ))}
+      </div>
+      {sortedDiagnoses.map((d) => {
+        const glowTier = getGlowTier(d.bounty?.amount ?? 0);
+        const glowClass = getGlowClass(glowTier);
+        return (
+          <div
+            key={d.id}
+            className={`diagnosis-card ${glowClass}`}
+            style={S.diagnosisItem}
+            onClick={() => setSelected(d)}
+          >
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+              <span style={S.tag('110,231,183')}>{DOMAIN_LABELS[d.domain]}</span>
+              <span style={{ fontSize: 11, color: '#64748b' }}>{new Date(d.timestamp).toLocaleDateString()}</span>
+              {d.answers.length > 0 && (
+                <span style={S.tag('251,191,36')}>💬 {d.answers.length} answer{d.answers.length !== 1 ? 's' : ''}</span>
+              )}
+              {glowTier === 'golden' && (
+                <span style={{ fontSize: 11, color: '#fbbf24', fontWeight: 700 }}>🗝️ Golden Key</span>
+              )}
+              {d.saltLevel && d.saltLevel !== 'preserved_open' && (
+                <span style={{ fontSize: 10, color: '#64748b' }}>
+                  {SALT_LEVEL_CONFIGS[d.saltLevel]?.icon} {SALT_LEVEL_CONFIGS[d.saltLevel]?.label}
+                </span>
+              )}
+            </div>
+            <p style={{ margin: 0, fontSize: 13, color: '#e2e8f0', lineHeight: 1.5 }}>
+              {d.question.slice(0, 120)}{d.question.length > 120 ? '…' : ''}
+            </p>
+            <p style={{ margin: 0, fontSize: 11, color: '#475569' }}>
+              💰 {d.bounty.amount} {d.bounty.rail} · {d.visibility}
+            </p>
+          </div>
+        );
+      })}
     </div>
   );
 }
 
 // ─── TheDiagnosisTab ──────────────────────────────────────────────────────────
 
+// SEG-4 tagline rotation — alternates between canonical phrases
+const DIAGNOSIS_TAGLINES = [
+  '🧂 The Secret of Mnem... is Salt',
+  '🌐 Ask the Network · Human Salt is the 3rd layer',
+];
+
 export function TheDiagnosisTab() {
   const [mode, setMode] = useState<'ask' | 'answer'>('ask');
+  const [taglineIdx, setTaglineIdx] = useState(0);
+
+  useEffect(() => {
+    const t = setInterval(() => setTaglineIdx((i) => (i + 1) % DIAGNOSIS_TAGLINES.length), 6000);
+    return () => clearInterval(t);
+  }, []);
 
   return (
     <div style={S.container}>
       <div style={S.header}>
         <h2 style={S.title}>🩺 The Diagnosis</h2>
-        <p style={S.tagline}>🧂 Just Add Salt · Ask the Network · Human Salt is the 3rd layer</p>
+        <p style={S.tagline}>{DIAGNOSIS_TAGLINES[taglineIdx]}</p>
       </div>
 
       <div style={S.modeToggle}>

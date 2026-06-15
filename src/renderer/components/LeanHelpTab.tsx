@@ -50,12 +50,16 @@ export function LeanHelpTab() {
         <div style={{ flex: 1 }}>
           <h1 style={s.h1}>Help &amp; Community</h1>
           <p style={s.subtitle}>Get help. Join the Guild. Earn Marks for helping others.</p>
-          {/* v0.4.0 BP083 SEG-6: Just Add Salt architecture explainer */}
-          <p style={{ fontSize: 12, color: '#64748b', background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.15)', borderRadius: 8, padding: '10px 14px', lineHeight: 1.6, margin: '8px 0 4px' }}>
-            🧂 <strong style={{ color: '#a5b4fc' }}>Just Add Salt.</strong> MnemosyneC works on a 3-layer salt architecture:{' '}
-            <strong>(1) Substrate Salt</strong> — verified eblets grown locally via canonical pipeline;{' '}
-            <strong>(2) Federation Salt</strong> — Constellation peers share verified knowledge;{' '}
-            <strong>(3) Human Salt</strong> — The Diagnosis broadcasts to human Members when machines alone can&apos;t find the answer.
+          {/* v0.4.1 BP083 SEG-4: The Secret of Mnem... is Salt */}
+          <p style={{ fontSize: 13, color: '#a5b4fc', fontWeight: 700, margin: '6px 0 2px', letterSpacing: '0.01em' }}>
+            🧂 The Secret of Mnem... is Salt.
+          </p>
+          <p style={{ fontSize: 12, color: '#64748b', background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.15)', borderRadius: 8, padding: '10px 14px', lineHeight: 1.6, margin: '4px 0 4px' }}>
+            MnemosyneC finds answers through <strong style={{ color: '#e2e8f0' }}>three salt layers</strong>:{' '}
+            <strong>(1) Substrate Salt</strong> — verified eblets grown locally via canonical pipeline (what your machine already knows);{' '}
+            <strong>(2) Federation Salt</strong> — Constellation peers share verified knowledge across the mesh;{' '}
+            <strong>(3) Human Salt</strong> — The Diagnosis broadcasts to human Members when machines alone can&apos;t find the answer.{' '}
+            <em style={{ color: '#475569' }}>Substrate Salt + Federation Salt + Human Salt = Right Answer.</em>
           </p>
         </div>
         {marks > 0 && (

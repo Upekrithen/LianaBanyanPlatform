@@ -762,7 +762,7 @@ export function TestItOutTab(): React.ReactElement {
               Wikipedia, arXiv, OpenAlex, PubMed and more — grows substrate with verified facts.
             </p>
             <p style={{ fontSize: 12, color: '#64748b', margin: 0 }}>
-              🧂 Substrate Salt + Federation Salt + Human Salt
+              🧂 Substrate Salt + Federation Salt + Human Salt = Right Answer.
             </p>
           </div>
 
@@ -1553,6 +1553,10 @@ export function TestItOutTab(): React.ReactElement {
 
         <div style={{ fontSize: 11, color: '#334155', marginTop: 8 }}>
           Install Chocolate Pack → Package Store → Confectionary (coming v0.3.6)
+        </div>
+        {/* v0.4.1 SEG-4: Three salt-layers canonical tagline */}
+        <div style={{ fontSize: 11, color: '#475569', marginTop: 10, paddingTop: 8, borderTop: '1px solid rgba(100,116,139,0.12)' }}>
+          🧂 Three salt-layers: Substrate · Federation · Human.
         </div>
       </div>
 

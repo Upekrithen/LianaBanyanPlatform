@@ -9,6 +9,8 @@ draft: false
 
 **Just Add Salt · How to Get the Right Answer**
 
+*The Secret of Mnem... is Salt. Substrate Salt + Federation Salt + Human Salt = Right Answer.*
+
 MnemosyneC finds answers through a 3-layer salt architecture: Substrate Salt (local verified eblets) · Federation Salt (Constellation peers) · Human Salt (The Diagnosis). The right answer lives somewhere in the constellation.
 
 **Every claim MnemosyneC makes is hash-verified and reproducible.**
