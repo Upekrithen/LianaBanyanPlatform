@@ -63,11 +63,15 @@ type ModalState =
   | { id: 'complete'; result: MeshComparisonResult }
   | { id: 'error'; message: string };
 
-const N_OPTIONS = [
-  { label: '10 (quick ~1hr)', value: 10 },
-  { label: '30 (~4hr)', value: 30 },
-  { label: '100 (overnight ~12hr)', value: 100 },
-  { label: 'All questions (full run)', value: 0 },
+// SEG-3.5 BP083: free-form number input replaces the fixed select dropdown.
+// Max per domain is ~379 (smallest bank = history/384 minus 5 shot examples).
+// Old select options are preserved as quick-pick buttons below the input.
+const N_QUICK_PICKS = [
+  { label: '5', value: 5 },
+  { label: '10', value: 10 },
+  { label: '30', value: 30 },
+  { label: '100', value: 100 },
+  { label: 'All', value: 0 },
 ] as const;
 
 // ─── Styles ───────────────────────────────────────────────────────────────────
@@ -206,6 +210,9 @@ function estimateTime(n: number): string {
 
 export function MeshComparisonModal({ onClose }: { onClose: () => void }) {
   const [nPerDomain, setNPerDomain] = useState<number>(30);
+  // SEG-3.5 BP083: always-current ref prevents stale closure in handleStart
+  const nPerDomainRef = useRef(nPerDomain);
+  nPerDomainRef.current = nPerDomain;
   const [state, setState] = useState<ModalState>({ id: 'idle' });
   const [receiptPath, setReceiptPath] = useState<string | null>(null);
   const runningRef = useRef(false);
@@ -273,13 +280,15 @@ export function MeshComparisonModal({ onClose }: { onClose: () => void }) {
   const handleStart = useCallback(async () => {
     if (runningRef.current) return;
     runningRef.current = true;
+    // SEG-3.5 BP083: read via ref to avoid any stale closure race
+    const n = nPerDomainRef.current;
     setState({
       id: 'running',
       domainIndex: 0,
       totalDomains: 14,
       currentDomain: 'loading…',
       currentQ: 0,
-      currentN: nPerDomain,
+      currentN: n,
       aAccuracy: 0,
       bAccuracy: 0,
       cAccuracy: 0,
@@ -287,7 +296,7 @@ export function MeshComparisonModal({ onClose }: { onClose: () => void }) {
     });
     try {
       await window.amplify?.runMeshComparison?.({
-        nPerDomain,
+        nPerDomain: n,
         randomSeed: 42,
         model: 'gemma4:12b',
         ollamaBaseUrl: 'http://127.0.0.1:11434',
@@ -296,7 +305,8 @@ export function MeshComparisonModal({ onClose }: { onClose: () => void }) {
       runningRef.current = false;
       setState({ id: 'error', message: (err as Error).message });
     }
-  }, [nPerDomain]);
+  // SEG-3.5 BP083: nPerDomain removed from deps — read via nPerDomainRef.current
+  }, []);
 
   const handleCancel = useCallback(async () => {
     await window.amplify?.cancelMeshComparison?.();
@@ -348,16 +358,56 @@ export function MeshComparisonModal({ onClose }: { onClose: () => void }) {
             B − A shows concordance value alone · C − B shows loop value alone
           </div>
 
+          {/* SEG-3.5 BP083: free-form input so any value runs — no silent cap */}
           <label style={S.label}>Questions per domain (14 domains locked)</label>
-          <select
-            style={S.select}
-            value={nPerDomain}
-            onChange={(e) => setNPerDomain(Number(e.target.value))}
-          >
-            {N_OPTIONS.map((o) => (
-              <option key={o.value} value={o.value}>{o.label}</option>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+            <input
+              type="number"
+              min={1}
+              max={379}
+              value={nPerDomain === 0 ? '' : nPerDomain}
+              placeholder="e.g. 30"
+              onChange={(e) => {
+                const v = e.target.value === '' ? 0 : Math.max(1, Math.min(379, Number(e.target.value)));
+                setNPerDomain(v);
+              }}
+              style={{
+                background: '#111827',
+                border: '1px solid #1e2a38',
+                borderRadius: 6,
+                color: '#e2e8f0',
+                fontSize: 13,
+                padding: '6px 10px',
+                width: 90,
+                outline: 'none',
+              }}
+            />
+            <span style={{ fontSize: 11, color: '#475569' }}>
+              × 14 domains = {nPerDomain === 0 ? 'all' : nPerDomain * 14} total q
+            </span>
+          </div>
+          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 10 }}>
+            {N_QUICK_PICKS.map((o) => (
+              <button
+                key={o.value}
+                type="button"
+                onClick={() => setNPerDomain(o.value)}
+                style={{
+                  background: nPerDomain === o.value ? 'rgba(110,231,183,0.18)' : 'none',
+                  border: `1px solid ${nPerDomain === o.value ? '#10b981' : '#334155'}`,
+                  borderRadius: 5,
+                  color: nPerDomain === o.value ? '#6ee7b7' : '#94a3b8',
+                  fontSize: 11,
+                  padding: '3px 10px',
+                  cursor: 'pointer',
+                  outline: 'none',
+                  fontFamily: 'system-ui, sans-serif',
+                }}
+              >
+                {o.label}
+              </button>
             ))}
-          </select>
+          </div>
 
           <div style={{ fontSize: 11, color: '#475569', marginBottom: 18, lineHeight: 1.5 }}>
             Estimated wall-clock: {estimateTime(nPerDomain)}<br/>

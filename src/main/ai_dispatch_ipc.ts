@@ -211,12 +211,16 @@ export function registerAiDispatchIPC(): void {
       );
 
       // BP083 SEG-3: Load MEMORY.md self-context (amnesia cure — prepended before substrate).
-      // Cached in-memory, invalidated by fs.watch on edit. Graceful degrade: empty string if fails.
+      // Cached in-memory, invalidated by fs.watch on edit. Graceful degrade: fallback identity if fails.
+      // SEG-2 v0.3.7: diagnostic logging per BP078 every-click-visible-feedback canon.
       let memoryMdContent = '';
       try {
         memoryMdContent = getMemoryMd();
+        const memPath = join(app.getPath('appData'), 'MnemosyneC', 'MEMORY.md');
+        console.log(`[Ask] MEMORY.md loaded: ${memoryMdContent.length} bytes from ${memPath}`);
       } catch (err) {
-        console.warn('[ai_dispatch] MEMORY.md load failed (non-fatal):', err);
+        const memPath = join(app.getPath('appData'), 'MnemosyneC', 'MEMORY.md');
+        console.warn(`[Ask] MEMORY.md MISSING at ${memPath} — err:`, err);
       }
 
       // Step 2: SKU gate -- determine if Mnem-DRT eblet compose should run.
@@ -326,8 +330,13 @@ export function registerAiDispatchIPC(): void {
                   sessionInferenceCount++;
                   if (activeQueryController === queryController) activeQueryController = null;
                   if (!event.sender.isDestroyed()) {
-                    // substrate R1: write complete assembled content on done:true
-                    event.sender.send('ask-token-complete', { content: assembled, hotHits: substrateCounters?.hotHits });
+                  // substrate R1: write complete assembled content on done:true
+                  // SEG-2 v0.3.7: include selfContextLoaded for renderer feedback badge
+                  event.sender.send('ask-token-complete', {
+                    content: assembled,
+                    hotHits: substrateCounters?.hotHits,
+                    selfContextLoaded: memoryMdContent.length > 0,
+                  });
                   }
                 }
               } catch { /* skip malformed NDJSON line */ }

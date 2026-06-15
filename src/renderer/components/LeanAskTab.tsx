@@ -212,6 +212,9 @@ export function LeanAskTab({ onSwitchToHome }: LeanAskTabProps) {
     showToast('Saved to your Downloads folder. Ready for a fresh question.');
   }, [messages, showToast]);
 
+  // SEG-2 v0.3.7: self-context status badge — shows whether MEMORY.md loaded last Ask
+  const [selfCtxStatus, setSelfCtxStatus] = useState<'unknown' | 'loaded' | 'missing'>('unknown');
+
   // v0.1.57.1 (BP081): streaming state — refs only (no extra React state for per-second ticks)
   const currentAiIdRef = useRef<string | null>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -382,6 +385,11 @@ export function LeanAskTab({ onSwitchToHome }: LeanAskTabProps) {
           ? `⚠ Ask threw: ${data.error}. See Diagnostic.`
           : (data.content || '');
 
+        // SEG-2 v0.3.7: update self-context badge from completion event
+        if (typeof (data as Record<string, unknown>).selfContextLoaded === 'boolean') {
+          setSelfCtxStatus((data as Record<string, unknown>).selfContextLoaded ? 'loaded' : 'missing');
+        }
+
         updateMsgAndSave(id, finalContent);
         clearStream();
         setThinking(false);
@@ -458,6 +466,21 @@ export function LeanAskTab({ onSwitchToHome }: LeanAskTabProps) {
           <h2 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: '#f0fdf4', flex: 1, minWidth: 120 }}>
             Ask A Question
           </h2>
+          {/* SEG-2 v0.3.7: self-context status badge per BP078 every-click-visible-feedback */}
+          {selfCtxStatus !== 'unknown' && (
+            <span style={{
+              fontSize: 10,
+              fontWeight: 600,
+              padding: '2px 8px',
+              borderRadius: 4,
+              background: selfCtxStatus === 'loaded' ? 'rgba(16,185,129,0.12)' : 'rgba(239,68,68,0.12)',
+              border: `1px solid ${selfCtxStatus === 'loaded' ? '#10b981' : '#ef4444'}`,
+              color: selfCtxStatus === 'loaded' ? '#6ee7b7' : '#f87171',
+              whiteSpace: 'nowrap' as const,
+            }}>
+              {selfCtxStatus === 'loaded' ? 'Self-Context ✅' : 'Self-Context ⚠️ missing'}
+            </span>
+          )}
           {/* v0.1.62: Clear + Save & Clear buttons */}
           <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
             <button

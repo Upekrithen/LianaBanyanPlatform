@@ -1,12 +1,14 @@
-// memory_scaffold.ts — BP083 SEG-1/2/3/5 · v0.3.5 MnemosyneC self-context cure
+// memory_scaffold.ts — BP083 SEG-1/2/3/5 · v0.3.5 + v0.3.7 MnemosyneC self-context cure
 // Creates 6-folder substrate scaffold + MEMORY.md at first launch.
 // MEMORY.md is injected as system prompt on every Ask query (see ai_dispatch_ipc.ts).
+// SEG-1 v0.3.7: installStarterChocolate() pre-seeds substrate with 280 verified eblets.
 // IPC handlers: mnemosynec:get-memory-md, mnemosynec:reload-memory-md,
 //               mnemosynec:reset-memory-md, mnemosynec:open-memory-editor
 
 import { app, ipcMain, shell } from 'electron';
-import { existsSync, mkdirSync, writeFileSync, readFileSync, watch } from 'fs';
+import { existsSync, mkdirSync, writeFileSync, readFileSync, appendFileSync, watch } from 'fs';
 import { join } from 'path';
+import { createHash } from 'crypto';
 
 // ── Folder scaffold ───────────────────────────────────────────────────────────
 
@@ -49,10 +51,15 @@ function generateHexTip(): string {
 /**
  * Generates the MEMORY.md template and writes it to baseDir/MEMORY.md.
  * Idempotent — returns immediately if file already exists.
+ * SEG-2 BP083: ensures baseDir exists before writeFileSync (fresh-install robustness).
  */
 export function generateMemoryMd(baseDir: string, version: string): void {
   const memoryPath = join(baseDir, 'MEMORY.md');
   if (existsSync(memoryPath)) return;
+  // Ensure the parent directory exists (covers race conditions on fresh installs)
+  if (!existsSync(baseDir)) {
+    mkdirSync(baseDir, { recursive: true });
+  }
 
   const hexTip = generateHexTip();
   const timestamp = new Date().toISOString();
@@ -107,12 +114,30 @@ function getMemoryMdPath(): string {
   return join(app.getPath('appData'), 'MnemosyneC', 'MEMORY.md');
 }
 
+// SEG-2 BP083: fallback identity when MEMORY.md genuinely cannot be loaded.
+// Prevents generic-Gemma responses on machines where file write failed.
+const MEMORY_MD_FALLBACK = `# MnemosyneC Self-Context · MEMORY.md (fallback)
+I am MnemosyneC, running gemma4:12b via Ollama on this user's local machine.
+I am NOT a generic Gemma instance. I am cooperative-class AI infrastructure
+under the Liana Banyan cooperative architecture.
+If asked about Ollama, gemma4:12b, or the Liana Banyan platform, answer from this identity.
+(This is a fallback — MEMORY.md could not be loaded from disk.)
+`;
+
 function readMemoryMdFromDisk(): string {
   const memPath = getMemoryMdPath();
   if (!existsSync(memPath)) {
-    // Edge case: regenerate if missing
+    // Edge case: regenerate if missing — ensure parent dir exists first (fresh-install robustness)
     const baseDir = join(app.getPath('appData'), 'MnemosyneC');
+    if (!existsSync(baseDir)) {
+      mkdirSync(baseDir, { recursive: true });
+    }
     generateMemoryMd(baseDir, app.getVersion());
+  }
+  // If file still missing after regeneration (e.g. permissions failure), return fallback
+  if (!existsSync(memPath)) {
+    console.warn('[memory_scaffold] MEMORY.md still missing after regen — returning fallback identity');
+    return MEMORY_MD_FALLBACK;
   }
   return readFileSync(getMemoryMdPath(), 'utf8');
 }
@@ -251,4 +276,100 @@ export function registerMemoryScaffoldIPC(): void {
       return { ok: false, error: String(err) };
     }
   });
+}
+
+// ── SEG-1 v0.3.7: Starter Chocolate Pack ─────────────────────────────────────
+//
+// Pre-seeds the MnemosyneC substrate with 280 verified context-class eblets at
+// install time so fresh installs have a working substrate on first Plow.
+//
+// Install marker: {userData}/substrate/.starter_chocolates_v0.3.7
+// Idempotent — if marker exists, returns immediately (no double-write on restart).
+
+interface StarterEblet {
+  question: string;
+  answer: string;
+  provenance: string;
+  verified: true;
+  sha256: string;
+  timestamp: number;
+}
+
+export async function installStarterChocolate(onProgress?: (msg: string) => void): Promise<{
+  installed: number;
+  skipped: boolean;
+  error?: string;
+}> {
+  try {
+    const substrateDir = join(app.getPath('userData'), 'substrate');
+    const ebletFile = join(substrateDir, 'verified_eblets.jsonl');
+    const markerFile = join(substrateDir, '.starter_chocolates_v0.3.7');
+
+    // Idempotent check
+    if (existsSync(markerFile)) {
+      console.log('[StarterChocolate] Marker exists — already installed, skipping');
+      return { installed: 0, skipped: true };
+    }
+
+    // Ensure substrate dir
+    if (!existsSync(substrateDir)) {
+      mkdirSync(substrateDir, { recursive: true });
+    }
+
+    // Locate starter_chocolate.jsonl in extraResources or dev path
+    const packedPath = join(process.resourcesPath ?? '', 'chocolates', 'starter_chocolate.jsonl');
+    const devPath = join(app.getAppPath(), '../../resources/chocolates/starter_chocolate.jsonl');
+    const chocolatePath = existsSync(packedPath) ? packedPath : devPath;
+
+    if (!existsSync(chocolatePath)) {
+      const msg = `[StarterChocolate] starter_chocolate.jsonl not found at ${chocolatePath}`;
+      console.warn(msg);
+      return { installed: 0, skipped: false, error: msg };
+    }
+
+    const raw = readFileSync(chocolatePath, 'utf8');
+    const lines = raw.split('\n').filter(l => l.trim().length > 0);
+
+    let installed = 0;
+    const writeLines: string[] = [];
+
+    for (const line of lines) {
+      try {
+        const eblet = JSON.parse(line) as Partial<StarterEblet>;
+        if (!eblet.question || !eblet.answer || !eblet.verified) continue;
+
+        // Recompute sha256 for integrity
+        const sha256 = createHash('sha256').update(eblet.question + eblet.answer).digest('hex');
+        const entry: StarterEblet = {
+          question: eblet.question,
+          answer: eblet.answer,
+          provenance: eblet.provenance ?? `starter_chocolate:unknown:v0.3.7`,
+          verified: true,
+          sha256,
+          timestamp: eblet.timestamp ?? Date.now(),
+        };
+        writeLines.push(JSON.stringify(entry));
+        installed++;
+      } catch {
+        // skip malformed lines
+      }
+    }
+
+    if (writeLines.length > 0) {
+      appendFileSync(ebletFile, writeLines.join('\n') + '\n', 'utf8');
+    }
+
+    // Write marker so we never re-install
+    writeFileSync(markerFile, `installed=${installed} ts=${Date.now()} v=0.3.7\n`, 'utf8');
+
+    const msg = `[StarterChocolate] Installed ${installed} eblets from ${chocolatePath}`;
+    console.log(msg);
+    onProgress?.(msg);
+
+    return { installed, skipped: false };
+  } catch (err) {
+    const msg = `[StarterChocolate] install failed: ${String(err)}`;
+    console.error(msg);
+    return { installed: 0, skipped: false, error: msg };
+  }
 }
