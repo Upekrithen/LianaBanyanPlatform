@@ -1,11 +1,11 @@
-# deploy-atomic.ps1 — v0.4.2 BP083 SEG-2
+# deploy-atomic.ps1 -- v0.4.3 BP083 SEG-2
 # Atomic two-host deploy: BOTH mnemosynec.ai AND cephas.lianabanyan.com.
 # If EITHER fails verification, the entire deploy is flagged RED and no partial state is left.
 #
 # Usage:
 #   From workspace root: powershell -ExecutionPolicy Bypass -File scripts/deploy-atomic.ps1
 #
-# Standing order: Truth-Always · cephas Sharp 2 is THE gate · NO timeout swallowing
+# Standing order: Truth-Always - cephas Sharp 2 is THE gate - NO timeout swallowing
 
 param(
     [string]$Version = "",   # Auto-read from package.json if empty
@@ -19,15 +19,17 @@ $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $WorkspaceRoot = Split-Path -Parent $ScriptDir
 $CephasDir = Join-Path $WorkspaceRoot "Cephas\cephas-hugo"
 
-# ── Read version ───────────────────────────────────────────────────────────────
+# -- Read version -------------------------------------------------------------
 if (-not $Version) {
     $pkg = Get-Content (Join-Path $WorkspaceRoot "package.json") -Raw | ConvertFrom-Json
     $Version = $pkg.version
 }
-Write-Host "`n[AtomicDeploy] Version: $Version" -ForegroundColor Cyan
+Write-Host ""
+Write-Host "[AtomicDeploy] Version: $Version" -ForegroundColor Cyan
 
-# ── Step 1: Verify latest.yml and version.json are at target version ───────────
-Write-Host "`n[AtomicDeploy] STEP 1 — Verify static assets at v$Version" -ForegroundColor Yellow
+# -- Step 1: Verify latest.yml and version.json are at target version ---------
+Write-Host ""
+Write-Host "[AtomicDeploy] STEP 1 -- Verify static assets at v$Version" -ForegroundColor Yellow
 
 $latestYmlPath = Join-Path $CephasDir "static\download\latest.yml"
 $versionJsonPath = Join-Path $CephasDir "data\version.json"
@@ -47,11 +49,12 @@ Write-Host "[AtomicDeploy] latest.yml version check: $latestYmlVersion = $Versio
 
 if ($dataVersion -ne $Version) {
     Write-Host "[AtomicDeploy] WARN: data/version.json version=$dataVersion but expected $Version" -ForegroundColor Yellow
-    # Non-fatal warning — version.json drives display only
+    # Non-fatal warning -- version.json drives display only
 }
 
-# ── Step 2: Build Cephas Hugo ──────────────────────────────────────────────────
-Write-Host "`n[AtomicDeploy] STEP 2 — Hugo build (Cephas)" -ForegroundColor Yellow
+# -- Step 2: Build Cephas Hugo ------------------------------------------------
+Write-Host ""
+Write-Host "[AtomicDeploy] STEP 2 -- Hugo build (Cephas)" -ForegroundColor Yellow
 if (-not $DryRun) {
     Push-Location $CephasDir
     try {
@@ -63,8 +66,9 @@ if (-not $DryRun) {
     }
 }
 
-# ── Step 3: Build MnemosyneC Hugo ─────────────────────────────────────────────
-Write-Host "`n[AtomicDeploy] STEP 3 — Hugo build (MnemosyneC)" -ForegroundColor Yellow
+# -- Step 3: Build MnemosyneC Hugo --------------------------------------------
+Write-Host ""
+Write-Host "[AtomicDeploy] STEP 3 -- Hugo build (MnemosyneC)" -ForegroundColor Yellow
 if (-not $DryRun) {
     Push-Location $CephasDir
     try {
@@ -76,8 +80,9 @@ if (-not $DryRun) {
     }
 }
 
-# ── Step 4: Deploy BOTH hosts atomically ──────────────────────────────────────
-Write-Host "`n[AtomicDeploy] STEP 4 — Firebase deploy (BOTH hosts)" -ForegroundColor Yellow
+# -- Step 4: Deploy BOTH hosts atomically -------------------------------------
+Write-Host ""
+Write-Host "[AtomicDeploy] STEP 4 -- Firebase deploy (BOTH hosts)" -ForegroundColor Yellow
 if (-not $DryRun) {
     Push-Location $CephasDir
     try {
@@ -90,8 +95,9 @@ if (-not $DryRun) {
     }
 }
 
-# ── Step 5: Post-deploy verification (both hosts) ─────────────────────────────
-Write-Host "`n[AtomicDeploy] STEP 5 — Post-deploy verification" -ForegroundColor Yellow
+# -- Step 5: Post-deploy verification (both hosts) ----------------------------
+Write-Host ""
+Write-Host "[AtomicDeploy] STEP 5 -- Post-deploy verification" -ForegroundColor Yellow
 
 function Verify-Sharp {
     param([string]$Label, [string]$Url, [string]$ExpectedContent = "", [int]$ExpectedStatus = 200)
@@ -103,7 +109,7 @@ function Verify-Sharp {
         Write-Host "[Sharp $Label] GREEN ($statusLine)" -ForegroundColor Green
         return $true
     } else {
-        Write-Host "[Sharp $Label] RED — expected 200 OK, got: $statusLine" -ForegroundColor Red
+        Write-Host "[Sharp $Label] RED - expected 200 OK, got: $statusLine" -ForegroundColor Red
         return $false
     }
 }
@@ -118,7 +124,7 @@ function Verify-Sharp-Content {
         Write-Host "[Sharp $Label] GREEN ($firstLine)" -ForegroundColor Green
         return $true
     } else {
-        Write-Host "[Sharp $Label] RED — expected '$ExpectedPrefix', got: $firstLine" -ForegroundColor Red
+        Write-Host "[Sharp $Label] RED - expected '$ExpectedPrefix', got: $firstLine" -ForegroundColor Red
         return $false
     }
 }
@@ -126,10 +132,10 @@ function Verify-Sharp-Content {
 $v = $Version
 $allGreen = $true
 
-# Sharp 1: mnemo .exe reachable
+# Sharp 1: mnemo .exe reachable -- LITERAL 200 OK REQUIRED (not 302)
 $allGreen = (Verify-Sharp "1" "https://mnemosynec.ai/download/MnemosyneC-Setup-$v.exe") -and $allGreen
 
-# Sharp 2: cephas .exe reachable — THE CRITICAL GATE
+# Sharp 2: cephas .exe reachable -- THE CRITICAL GATE -- LITERAL 200 OK REQUIRED (not 302)
 $cephasExeGreen = Verify-Sharp "2 (CRITICAL GATE)" "https://cephas.lianabanyan.com/download/MnemosyneC-Setup-$v.exe"
 $allGreen = $cephasExeGreen -and $allGreen
 
@@ -139,17 +145,18 @@ $allGreen = (Verify-Sharp-Content "3a" "https://mnemosynec.ai/download/latest.ym
 # Sharp 3b: cephas latest.yml version
 $allGreen = (Verify-Sharp-Content "3b" "https://cephas.lianabanyan.com/download/latest.yml" "version: $v") -and $allGreen
 
-# ── Final verdict ──────────────────────────────────────────────────────────────
-Write-Host "`n═══════════════════════════════════════════════════════" -ForegroundColor Cyan
+# -- Final verdict ------------------------------------------------------------
+Write-Host ""
+Write-Host "=======================================================" -ForegroundColor Cyan
 if ($allGreen) {
-    Write-Host "[AtomicDeploy] OVERALL: GREEN — Both hosts verified at v$Version" -ForegroundColor Green
+    Write-Host "[AtomicDeploy] OVERALL: GREEN -- Both hosts verified at v$Version" -ForegroundColor Green
 } else {
-    Write-Host "[AtomicDeploy] OVERALL: RED — One or more hosts FAILED verification" -ForegroundColor Red
+    Write-Host "[AtomicDeploy] OVERALL: RED -- One or more hosts FAILED verification" -ForegroundColor Red
     if (-not $cephasExeGreen) {
-        Write-Host "[AtomicDeploy] CRITICAL: cephas Sharp 2 FAILED — split-brain detected" -ForegroundColor Red
+        Write-Host "[AtomicDeploy] CRITICAL: cephas Sharp 2 FAILED -- split-brain detected" -ForegroundColor Red
         Write-Host "[AtomicDeploy] RCA required: check Firebase deploy logs for cephas target" -ForegroundColor Red
     }
     Write-Host "[AtomicDeploy] Do NOT declare v$Version shipped until all Sharps are GREEN" -ForegroundColor Red
     exit 1
 }
-Write-Host "═══════════════════════════════════════════════════════" -ForegroundColor Cyan
+Write-Host "=======================================================" -ForegroundColor Cyan
