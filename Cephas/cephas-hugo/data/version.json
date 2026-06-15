@@ -1,6 +1,6 @@
 {
-  "version": "0.4.1",
-  "filename": "MnemosyneC-Setup-0.4.1.exe",
-  "download_url": "https://mnemosynec.ai/download/MnemosyneC-Setup-0.4.1.exe",
-  "release_notes": "v0.4.1 (BP083): MIC (Machine In Charge) — any machine in the fleet can Conduct a Plow. Federated Andon Cord 3-tier escalation. The Diagnosis primitive. Just Add Salt architecture — Substrate Salt + Federation Salt + Human Salt. Pinch/Seasoning/Preserved-in-Salt persistence tiers. Glow mechanic bounty-surfacing. WAN+LAN Constellation support. Auto-update fix (cephas latest.yml corrected to 0.4.1)."
+  "version": "0.4.2",
+  "filename": "MnemosyneC-Setup-0.4.2.exe",
+  "download_url": "https://mnemosynec.ai/download/MnemosyneC-Setup-0.4.2.exe",
+  "release_notes": "v0.4.2 (BP083): Plow worker survival — true main-process worker decoupled from renderer state, never dies on UI changes. Plow Resume from Checkpoint — interrupted Plows can be resumed on next launch. Hardware-tier model auto-detection — 8 GB machines auto-select gemma2:2b instead of failing silently. Cephas split-brain permanent fix — atomic two-host deploy script, both hosts must pass verification. Onboarding lifecycle auto-advance — first-launch diagnostic banner + reset prompt for stuck-at-B machines. Post-install restart prompt carried forward."
 }

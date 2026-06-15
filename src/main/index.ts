@@ -4658,21 +4658,20 @@ function registerIPCHandlers(): void {
     }
   });
 
-  // ── BP083 v0.3.4 — Canonical Plow Pipeline IPC ────────────────────────────
-  // Runs the Founder-Invented 14-Domain Looping Methodology:
-  //   Spider → Sprite → 9 Specialists STAGGERED SWARM → Miner → Saladin →
-  //   Furnace → Three Fates → Scribe → Detective TEAM + Andon cord.
-  // Replaces the legacy andon_replow (which only queried local substrate,
-  // producing 0 eblets / 100% quarantine in v0.3.3).
-
-  let _canonicalPlowCancelToken = { cancelled: false };
+  // ── BP083 v0.4.2 — Canonical Plow Pipeline IPC (Worker Service) ──────────
+  // v0.4.2 SEG-1: Plow worker is now a true main-process singleton decoupled
+  // from renderer state. NEVER dies on UI changes (Lean Mode toggle, tab switch,
+  // window minimize). Only dies on explicit Cancel OR app exit.
+  // SEG-5: Checkpoint written every N questions; Resume modal on next launch.
 
   safeHandle('plow:cancel-canonical-plow', () => {
-    _canonicalPlowCancelToken.cancelled = true;
+    const { cancelPlowWorker } = require('./plow/plow_worker_service') as typeof import('./plow/plow_worker_service');
+    cancelPlowWorker();
     console.log('[CanonicalPlow] Cancel requested via IPC');
     return { ok: true };
   });
 
+  // Fire-and-forget start — returns immediately, progress broadcast to all windows
   safeHandle('plow:run-canonical-plow', async (
     _event,
     config: {
@@ -4687,74 +4686,117 @@ function registerIPCHandlers(): void {
       };
     },
   ) => {
-    _canonicalPlowCancelToken = { cancelled: false };
+    const { startPlowWorker, getPlowWorkerState } = await import('./plow/plow_worker_service');
+    const { getActiveModel } = await import('./ollama_model/model_picker');
 
-    const { runCanonicalPlow } = await import('./plow/canonical_pipeline');
-    const { loadDomainBank, getDomainList } = await import('./plow/per_domain_q_banks');
-    const { writeVerifiedEblet } = await import('./mnem_eblet_store');
-
-    const broadcastProgress = (data: object) => {
-      for (const w of BrowserWindow.getAllWindows()) {
-        if (!w.isDestroyed()) w.webContents.send('plow:canonical-plow-progress', data);
-      }
-    };
-
-    // Per-domain question sampler: random sample from MMLU-Pro bank
-    const sampleQuestionsForDomain = (domain: string, n: number): string[] => {
-      let bank;
-      try {
-        bank = loadDomainBank(domain as import('./plow/per_domain_q_banks').Domain);
-      } catch {
-        // Try all known domains
-        const allDomains = getDomainList();
-        const closest = allDomains.find((d) => d.startsWith(domain) || domain.startsWith(d));
-        if (closest) {
-          try { bank = loadDomainBank(closest); } catch { return []; }
-        } else {
-          return [];
-        }
-      }
-      if (!bank || bank.length === 0) return [];
-
-      // Fisher-Yates partial shuffle for random sample
-      const pool = [...bank];
-      for (let i = pool.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [pool[i], pool[j]] = [pool[j], pool[i]];
-      }
-      return pool.slice(0, Math.min(n, pool.length)).map((q) => q.question);
-    };
-
-    // Write function that delegates to mnem_eblet_store
-    const writeEbletFn = async (eblet: {
-      question: string; answer: string; provenance: string;
-      verified: true; sha256: string; timestamp: number;
-    }) => {
-      await writeVerifiedEblet(eblet);
-    };
-
-    try {
-      const result = await runCanonicalPlow(
-        {
-          domains: config.domains,
-          questionsPerDomain: config.questionsPerDomain,
-          ollamaBaseUrl: config.ollamaBaseUrl ?? 'http://127.0.0.1:11434',
-          model: config.model ?? 'gemma4:12b',
-          specialistKeys: config.specialistKeys ?? {},
-        },
-        writeEbletFn,
-        (progressEvent) => { broadcastProgress(progressEvent); },
-        _canonicalPlowCancelToken,
-        sampleQuestionsForDomain,
-      );
-
-      broadcastProgress({ type: 'complete', result });
-      return { ok: true, result };
-    } catch (err) {
-      console.error('[CanonicalPlow] Fatal error:', err);
-      broadcastProgress({ type: 'error', message: (err as Error).message });
-      return { ok: false, error: (err as Error).message };
+    const state = getPlowWorkerState();
+    if (state.status === 'running') {
+      return { ok: false, error: 'Plow already running — cancel first' };
     }
+
+    const model = config.model ?? getActiveModel();
+    console.log(`[CanonicalPlow] Starting via worker service model=${model}`);
+
+    startPlowWorker({
+      domains: config.domains,
+      questionsPerDomain: config.questionsPerDomain,
+      ollamaBaseUrl: config.ollamaBaseUrl ?? 'http://127.0.0.1:11434',
+      model,
+      specialistKeys: config.specialistKeys ?? {},
+    });
+
+    // Return immediately — progress comes via plow:canonical-plow-progress broadcasts
+    return { ok: true, async: true };
+  });
+
+  // Renderer can reconnect after unmount/remount — get current worker state
+  safeHandle('plow:get-worker-state', async () => {
+    const { getPlowWorkerState } = await import('./plow/plow_worker_service');
+    return getPlowWorkerState();
+  });
+
+  // Check for interrupted plow checkpoint (for Resume modal)
+  safeHandle('plow:check-checkpoint', async () => {
+    const { readCheckpoint } = await import('./plow/plow_checkpoint');
+    const cp = readCheckpoint();
+    if (!cp || cp.status !== 'interrupted') return { hasCheckpoint: false };
+    return {
+      hasCheckpoint: true,
+      sessionId: cp.sessionId,
+      startedAt: cp.startedAt,
+      lastUpdatedAt: cp.lastUpdatedAt,
+      totalQuestionsCompleted: cp.totalQuestionsCompleted,
+      totalQuestionsTarget: cp.totalQuestionsTarget,
+      config: cp.config,
+      completedQuestions: cp.completedQuestions,
+    };
+  });
+
+  // Resume plow from checkpoint
+  safeHandle('plow:resume-from-checkpoint', async () => {
+    const { readCheckpoint, clearCheckpoint } = await import('./plow/plow_checkpoint');
+    const { startPlowWorker, getPlowWorkerState } = await import('./plow/plow_worker_service');
+
+    const state = getPlowWorkerState();
+    if (state.status === 'running') return { ok: false, error: 'Plow already running' };
+
+    const cp = readCheckpoint();
+    if (!cp || cp.status !== 'interrupted') return { ok: false, error: 'No interrupted checkpoint found' };
+
+    // Clear interrupted status so we can resume
+    clearCheckpoint();
+
+    startPlowWorker(
+      {
+        domains: cp.config.domains,
+        questionsPerDomain: cp.config.questionsPerDomain,
+        ollamaBaseUrl: 'http://127.0.0.1:11434',
+        model: cp.config.model,
+      },
+      { completedQuestions: cp.completedQuestions, sessionId: cp.sessionId },
+    );
+
+    return { ok: true };
+  });
+
+  // Discard checkpoint (user chose not to resume)
+  safeHandle('plow:discard-checkpoint', async () => {
+    const { clearCheckpoint } = await import('./plow/plow_checkpoint');
+    clearCheckpoint();
+    return { ok: true };
+  });
+
+  // Hardware tier detection — for Settings UI + onboarding
+  safeHandle('hardware:get-tier', async () => {
+    const { detectHardwareTier, getAllTiers } = await import('./hardware/ram_detector');
+    const { getActiveModel } = await import('./ollama_model/model_picker');
+    const tier = detectHardwareTier();
+    const allTiers = getAllTiers();
+    const activeModel = getActiveModel();
+    return { tier, allTiers, activeModel };
+  });
+
+  safeHandle('hardware:set-model', async (_event, { model, tier }: { model: string; tier: string }) => {
+    const { setActiveModel } = await import('./ollama_model/model_picker');
+    setActiveModel(model, tier as import('./hardware/ram_detector').HardwareTier);
+    return { ok: true };
+  });
+
+  safeHandle('hardware:reset-model', async () => {
+    const { resetToDetectedModel } = await import('./ollama_model/model_picker');
+    const model = resetToDetectedModel();
+    return { ok: true, model };
+  });
+
+  // ── v0.4.2 BP083 SEG-3.5 — Lifecycle / Onboarding IPC ───────────────────
+  // Handles server-side lifecycle operations; client-side localStorage is managed by renderer.
+
+  // Reset onboarding (clears lifecycle flags from persisted config — full profile is in AppData)
+  safeHandle('lifecycle:get-profile-path', async () => {
+    return {
+      appData: app.getPath('appData'),
+      mnemosyneCPath: join(app.getPath('appData'), 'MnemosyneC'),
+    };
   });
 
   // ── BP083 v0.3.8 — GPQA Diamond Benchmark IPC ────────────────────────────
@@ -5361,7 +5403,7 @@ app.whenReady().then(async () => {
     console.warn('[BP083] Peer server start failed (non-fatal):', e);
   }
 
-  // v0.4.0 BP083 SEG-5: Post-install restart prompt (version-bump detection)
+  // v0.4.0 BP083 SEG-5 (carried forward v0.4.2): Post-install restart prompt (version-bump detection)
   {
     const lastVersionPath = join(app.getPath('appData'), 'MnemosyneC', '.last_version');
     const currentVersion = app.getVersion();
@@ -5386,6 +5428,40 @@ app.whenReady().then(async () => {
     }
   }
 
+  // v0.4.2 BP083 SEG-5: Surface Plow Resume modal if an interrupted checkpoint exists
+  {
+    setTimeout(async () => {
+      try {
+        const { readCheckpoint } = await import('./plow/plow_checkpoint');
+        const cp = readCheckpoint();
+        if (cp && cp.status === 'interrupted') {
+          const completedPct = cp.totalQuestionsTarget > 0
+            ? Math.round((cp.totalQuestionsCompleted / cp.totalQuestionsTarget) * 100)
+            : 0;
+          const lastUpdated = new Date(cp.lastUpdatedAt).toLocaleString();
+          for (const win of BrowserWindow.getAllWindows()) {
+            if (!win.isDestroyed()) {
+              win.webContents.send('plow:resume-prompt', {
+                sessionId: cp.sessionId,
+                startedAt: cp.startedAt,
+                lastUpdatedAt: cp.lastUpdatedAt,
+                totalQuestionsCompleted: cp.totalQuestionsCompleted,
+                totalQuestionsTarget: cp.totalQuestionsTarget,
+                completedPct,
+                lastUpdated,
+                config: cp.config,
+                completedQuestions: cp.completedQuestions,
+              });
+            }
+          }
+          console.log(`[Main] Plow resume prompt sent: ${cp.totalQuestionsCompleted}/${cp.totalQuestionsTarget} Q completed (${completedPct}%) last=${lastUpdated}`);
+        }
+      } catch (err) {
+        console.warn('[Main] Plow resume check error (non-fatal):', err);
+      }
+    }, 4000);
+  }
+
   app.on('activate', () => {
     // SAGA-1 BP055: macOS dock click ? open Dashboard (not overlay).
     openDashboard({ focus: true });
@@ -5397,6 +5473,11 @@ app.on('window-all-closed', () => {
 });
 
 app.on('before-quit', async () => {
+  // v0.4.2: Mark running Plow as interrupted before exit so Resume is offered next launch
+  try {
+    const { onAppQuit } = await import('./plow/plow_worker_service');
+    onAppQuit();
+  } catch { /* non-fatal */ }
   stopOverlayWatchdog();
   if (connectivityTimer) clearInterval(connectivityTimer);
   pairedFrameManager?.stop();

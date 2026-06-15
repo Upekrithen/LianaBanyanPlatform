@@ -1552,6 +1552,50 @@ contextBridge.exposeInMainWorld('amplify', {
 
   requestAppQuit: (): Promise<void> =>
     ipcRenderer.invoke('app:request-quit'),
+
+  // ── v0.4.2 BP083 SEG-1: Plow Worker Service ──────────────────────────────
+
+  // Renderer subscribes to worker state (reconnect after unmount/remount)
+  getPlowWorkerState: (): Promise<unknown> =>
+    ipcRenderer.invoke('plow:get-worker-state'),
+
+  onPlowWorkerState: (callback: (state: Record<string, unknown>) => void): (() => void) => {
+    const handler = (_: unknown, data: Record<string, unknown>) => callback(data);
+    ipcRenderer.on('plow:worker-state', handler);
+    return () => ipcRenderer.removeListener('plow:worker-state', handler);
+  },
+
+  // v0.4.2 SEG-5: Plow Resume from Checkpoint
+  plowCheckCheckpoint: (): Promise<unknown> =>
+    ipcRenderer.invoke('plow:check-checkpoint'),
+
+  plowResumeFromCheckpoint: (): Promise<{ ok: boolean; error?: string }> =>
+    ipcRenderer.invoke('plow:resume-from-checkpoint'),
+
+  plowDiscardCheckpoint: (): Promise<{ ok: boolean }> =>
+    ipcRenderer.invoke('plow:discard-checkpoint'),
+
+  onPlowResumePrompt: (callback: (data: Record<string, unknown>) => void): (() => void) => {
+    const handler = (_: unknown, data: Record<string, unknown>) => callback(data);
+    ipcRenderer.on('plow:resume-prompt', handler);
+    return () => ipcRenderer.removeListener('plow:resume-prompt', handler);
+  },
+
+  // ── v0.4.2 BP083 SEG-3: Hardware Tier Detection ───────────────────────────
+
+  hardwareGetTier: (): Promise<{ tier: unknown; allTiers: unknown[]; activeModel: string }> =>
+    ipcRenderer.invoke('hardware:get-tier'),
+
+  hardwareSetModel: (model: string, tier: string): Promise<{ ok: boolean }> =>
+    ipcRenderer.invoke('hardware:set-model', { model, tier }),
+
+  hardwareResetModel: (): Promise<{ ok: boolean; model: string }> =>
+    ipcRenderer.invoke('hardware:reset-model'),
+
+  // ── v0.4.2 BP083 SEG-3.5: Lifecycle profile path ─────────────────────────
+
+  lifecycleGetProfilePath: (): Promise<{ appData: string; mnemosyneCPath: string }> =>
+    ipcRenderer.invoke('lifecycle:get-profile-path'),
 });
 
 // ─── Global type extension ────────────────────────────────────────────────────
@@ -2019,6 +2063,20 @@ declare global {
       // v0.4.0 BP083 — Post-install restart prompt
       onShowRestartPrompt?: (callback: (data: { version: string; message: string }) => void) => () => void;
       requestAppQuit?: () => Promise<void>;
+      // v0.4.2 BP083 SEG-1: Plow Worker Service
+      getPlowWorkerState?: () => Promise<unknown>;
+      onPlowWorkerState?: (callback: (state: Record<string, unknown>) => void) => () => void;
+      // v0.4.2 BP083 SEG-5: Plow Resume from Checkpoint
+      plowCheckCheckpoint?: () => Promise<unknown>;
+      plowResumeFromCheckpoint?: () => Promise<{ ok: boolean; error?: string }>;
+      plowDiscardCheckpoint?: () => Promise<{ ok: boolean }>;
+      onPlowResumePrompt?: (callback: (data: Record<string, unknown>) => void) => () => void;
+      // v0.4.2 BP083 SEG-3: Hardware Tier Detection
+      hardwareGetTier?: () => Promise<{ tier: unknown; allTiers: unknown[]; activeModel: string }>;
+      hardwareSetModel?: (model: string, tier: string) => Promise<{ ok: boolean }>;
+      hardwareResetModel?: () => Promise<{ ok: boolean; model: string }>;
+      // v0.4.2 BP083 SEG-3.5: Lifecycle profile path
+      lifecycleGetProfilePath?: () => Promise<{ appData: string; mnemosyneCPath: string }>;
     };
     // SEG-V0150-P0-DIAGNOSE-BRIDGE: sentinel — set by preload before main bridge wires up
     __preloadLoaded?: boolean;

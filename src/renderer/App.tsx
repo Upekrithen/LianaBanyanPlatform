@@ -97,6 +97,10 @@ export default function App() {
   );
   // v0.4.0 BP083 SEG-5: post-install restart prompt state
   const [restartPrompt, setRestartPrompt] = useState<{ version: string; message: string } | null>(null);
+  // v0.4.2 BP083 SEG-3.5: lifecycle diagnostic banner
+  const [lifecycleBanner, setLifecycleBanner] = useState<string | null>(null);
+  // v0.4.2 BP083 SEG-5: Plow resume modal
+  const [plowResumeData, setPlowResumeData] = useState<Record<string, unknown> | null>(null);
 
   // Sync mode from main process + check first-launch model
   useEffect(() => {
@@ -123,6 +127,30 @@ export default function App() {
     window.amplify.onShowRestartPrompt?.((data) => {
       setRestartPrompt(data as { version: string; message: string });
     });
+
+    // v0.4.2 BP083 SEG-5: listen for Plow resume prompt
+    window.amplify.onPlowResumePrompt?.((data) => {
+      setPlowResumeData(data);
+    });
+
+    // v0.4.2 BP083 SEG-3.5: Lifecycle diagnostic banner
+    // Check if onboarding is stuck (stage A/B/C, last-modified > 24h ago)
+    try {
+      const stage = localStorage.getItem('mnemosynec_lifecycle_stage');
+      const onboardingComplete = localStorage.getItem('mnemosynec_onboarding_complete');
+      const stageTs = localStorage.getItem('mnemosynec_lifecycle_stage_ts');
+      if (stage && !onboardingComplete && ['A', 'B', 'C'].includes(stage)) {
+        const ageMs = stageTs ? Date.now() - parseInt(stageTs, 10) : Infinity;
+        const ageDays = ageMs / (1000 * 60 * 60 * 24);
+        if (ageDays > 14) {
+          // Auto-advance: offer Reset (14+ days stuck)
+          setLifecycleBanner(`reset-offer:${stage}`);
+        } else if (ageDays > 1) {
+          // Diagnostic banner: visible reminder (> 24h stuck)
+          setLifecycleBanner(`stuck:${stage}`);
+        }
+      }
+    } catch { /* non-fatal */ }
 
     // First-launch model check deferred to BP067 Bp067FirstRunSpine (setupPrivateAI)
 
@@ -227,6 +255,102 @@ export default function App() {
                 </button>
               </div>
             </div>
+          </div>
+        )}
+        {/* v0.4.2 BP083 SEG-5: Plow Resume modal */}
+        {plowResumeData && (
+          <div style={{
+            position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.72)', zIndex: 9998,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            <div style={{
+              background: '#1e293b', border: '1px solid #6ee7b7', borderRadius: 14,
+              padding: 28, maxWidth: 460, color: '#e2e8f0', textAlign: 'center',
+              boxShadow: '0 0 30px rgba(110,231,183,0.15)',
+            }}>
+              <div style={{ fontSize: 20, marginBottom: 8 }}>🌾 Resume Plow?</div>
+              <p style={{ fontSize: 13, color: '#94a3b8', marginBottom: 4 }}>
+                We detected an interrupted Plow from {String(plowResumeData.lastUpdated ?? '')}
+              </p>
+              <p style={{ fontSize: 15, color: '#6ee7b7', marginBottom: 4, fontWeight: 600 }}>
+                {String(plowResumeData.totalQuestionsCompleted ?? 0)} / {String(plowResumeData.totalQuestionsTarget ?? 0)} questions complete
+                ({String(plowResumeData.completedPct ?? 0)}%)
+              </p>
+              <p style={{ fontSize: 12, color: '#64748b', marginBottom: 20 }}>
+                Model: {String((plowResumeData.config as Record<string, unknown>)?.model ?? 'unknown')} ·
+                Domains: {((plowResumeData.config as Record<string, unknown>)?.domains as string[] | undefined)?.length ?? 0}
+              </p>
+              <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
+                <button
+                  onClick={() => {
+                    window.amplify?.plowResumeFromCheckpoint?.();
+                    setPlowResumeData(null);
+                  }}
+                  style={{
+                    background: '#6ee7b7', color: '#0a0f1a', border: 'none', borderRadius: 8,
+                    padding: '8px 22px', cursor: 'pointer', fontSize: 14, fontWeight: 700,
+                  }}
+                >
+                  Resume Plow
+                </button>
+                <button
+                  onClick={() => {
+                    window.amplify?.plowDiscardCheckpoint?.();
+                    setPlowResumeData(null);
+                  }}
+                  style={{
+                    background: 'transparent', color: '#94a3b8', border: '1px solid #334155',
+                    borderRadius: 8, padding: '8px 18px', cursor: 'pointer', fontSize: 14,
+                  }}
+                >
+                  Start Fresh
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+        {/* v0.4.2 BP083 SEG-3.5: Lifecycle diagnostic banner */}
+        {lifecycleBanner && (
+          <div style={{
+            position: 'fixed', bottom: 16, left: '50%', transform: 'translateX(-50%)',
+            background: lifecycleBanner.startsWith('reset-offer') ? '#854d0e' : '#1e3a5f',
+            border: `1px solid ${lifecycleBanner.startsWith('reset-offer') ? '#fbbf24' : '#3b82f6'}`,
+            borderRadius: 10, padding: '10px 20px', zIndex: 9997,
+            display: 'flex', alignItems: 'center', gap: 14, maxWidth: 520,
+            boxShadow: '0 4px 20px rgba(0,0,0,0.4)',
+          }}>
+            <span style={{ fontSize: 12, color: '#e2e8f0', flex: 1 }}>
+              {lifecycleBanner.startsWith('reset-offer')
+                ? `MnemosyneC setup has been stuck for 14+ days. Reset onboarding to continue.`
+                : `MnemosyneC didn't finish setting up · click here to continue.`}
+            </span>
+            <button
+              onClick={() => {
+                if (lifecycleBanner.startsWith('reset-offer')) {
+                  if (confirm('Reset onboarding state? Your substrate and settings will be preserved.')) {
+                    localStorage.removeItem('mnemosynec_lifecycle_stage');
+                    localStorage.removeItem('mnemosynec_onboarding_complete');
+                    localStorage.removeItem('mnemosynec_lifecycle_stage_ts');
+                    localStorage.removeItem('mnemosyne-bp067-first-run-complete');
+                    window.location.reload();
+                  }
+                } else {
+                  localStorage.setItem('mnemosyne-bp067-first-run-complete', 'false');
+                  window.location.reload();
+                }
+              }}
+              style={{
+                background: lifecycleBanner.startsWith('reset-offer') ? '#fbbf24' : '#3b82f6',
+                color: '#0a0f1a', border: 'none', borderRadius: 6,
+                padding: '5px 14px', cursor: 'pointer', fontSize: 12, fontWeight: 600, whiteSpace: 'nowrap',
+              }}
+            >
+              {lifecycleBanner.startsWith('reset-offer') ? 'Reset Onboarding' : 'Continue Setup'}
+            </button>
+            <button
+              onClick={() => setLifecycleBanner(null)}
+              style={{ background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer', fontSize: 16, padding: '0 4px' }}
+            >×</button>
           </div>
         )}
       </ErrorBoundary>
