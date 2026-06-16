@@ -1,0 +1,29 @@
+{
+  "event": "Substrate Awakens",
+  "event_date": "2026-06-20",
+  "event_url": "https://mnemosynec.ai/live/SubstrateAwakens/",
+  "bp_session": "BP084",
+  "achievements": [
+    {
+      "slug": "crow-feather-first-live-mesh-SubstrateAwakens",
+      "display_name": "Crow Feather · First Live Mesh",
+      "subtitle": "Substrate Awakens · 2026-06-20",
+      "description": "Awarded to replicators who contributed heartbeat-attested benchmark results during the first live Substrate Awakens cooperative mesh event.",
+      "icon": "🪶",
+      "tier": "founding",
+      "trigger": "replicator heartbeat-attested result stream appears in event dashboard with ≥1 verified-correct answer",
+      "marks_awarded": 100,
+      "founding_replicator_slots": 100,
+      "founding_replicator_basis": "arrival order — slot number assigned on first verified result",
+      "permanent_attribution": true,
+      "notes": [
+        "Founding Replicator status: first 100 to contribute (slot # in arrival order)",
+        "Crow Feather is non-transferable and permanently tied to email + node_id",
+        "Marks credit applied to account within 24h of event close",
+        "Truth-Always: Andon-Cord quarantines do NOT prevent award if ≥1 correct before quarantine"
+      ]
+    }
+  ],
+  "last_updated": "2026-06-15",
+  "status": "PENDING_EVENT"
+}

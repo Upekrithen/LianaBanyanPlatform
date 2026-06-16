@@ -1,0 +1,643 @@
+{{- define "main" }}
+{{/* Substrate Awakens · Live Dashboard · BP084 */}}
+{{- $supaFnUrl := .Site.Params.supabaseFunctionsUrl | default "https://ruuxzilgmuwddcofqecc.supabase.co/functions/v1" -}}
+
+<style>
+/* ================================================================
+   SUBSTRATE AWAKENS · LIVE DASHBOARD · BP084
+   Pure HTML/CSS/vanilla JS. NO video. NO narration.
+   WebSocket-subscribed to Supabase peer_presence realtime channel.
+   Mobile-responsive. No horizontal scroll.
+   ================================================================ */
+.main { max-width:100% !important; padding:0 !important; margin:0 !important; overflow-x:hidden !important; }
+html, body { overflow-x:hidden !important; max-width:100% !important; background:#070e1c; }
+
+.sa-page {
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color: #e2eaf8;
+  min-height: 100vh;
+  padding: 0 0 4rem;
+  background: #070e1c;
+}
+.sa-wrap { max-width: 1100px; margin: 0 auto; padding: 0 1rem; }
+
+/* ---- Header ---- */
+.sa-header {
+  padding: 2rem 0 1.2rem;
+  border-bottom: 1px solid rgba(99,179,237,.15);
+  margin-bottom: 1.5rem;
+}
+.sa-header h1 {
+  font-size: clamp(1.5rem,4vw,2.2rem);
+  font-weight: 900;
+  color: #7fd1ff;
+  margin: 0 0 .3rem;
+  letter-spacing: -.02em;
+}
+.sa-header-sub {
+  font-size: .92rem;
+  color: rgba(226,234,248,.5);
+  margin: 0;
+}
+.sa-live-dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  background: #68d391;
+  border-radius: 50%;
+  margin-right: 6px;
+  animation: sa-pulse 1.4s ease-in-out infinite;
+}
+@keyframes sa-pulse {
+  0%,100% { opacity:1; transform:scale(1); }
+  50%      { opacity:.5; transform:scale(.7); }
+}
+
+/* ---- Aggregate score banner ---- */
+.sa-agg-banner {
+  background: linear-gradient(90deg,rgba(99,179,237,.08),rgba(7,14,28,.9));
+  border: 1px solid rgba(99,179,237,.3);
+  border-radius: 12px;
+  padding: 1.2rem 1.5rem;
+  margin: 0 0 1.5rem;
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.sa-agg-stat { text-align: center; }
+.sa-agg-num  { font-size: 1.8rem; font-weight: 900; color: #7fd1ff; display: block; font-variant-numeric: tabular-nums; }
+.sa-agg-lbl  { font-size: .72rem; text-transform: uppercase; letter-spacing: .09em; color: rgba(226,234,248,.45); }
+
+/* ---- Failure banners ---- */
+.sa-failure-banner {
+  display: none;
+  background: rgba(245,101,101,.12);
+  border: 1px solid rgba(245,101,101,.45);
+  border-radius: 8px;
+  padding: .75rem 1.2rem;
+  margin: 0 0 1.2rem;
+  font-size: .88rem;
+  color: #fc8181;
+}
+.sa-failure-banner.sa-visible { display: block; }
+
+/* ---- Grid: left = constellation, right = roster ---- */
+.sa-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+  margin: 0 0 1.5rem;
+}
+@media (max-width: 720px) { .sa-grid { grid-template-columns: 1fr; } }
+
+/* ---- Constellation map ---- */
+.sa-constellation {
+  background: rgba(5,11,20,.9);
+  border: 1px solid rgba(99,179,237,.18);
+  border-radius: 12px;
+  padding: 1.2rem;
+}
+.sa-constellation h2 {
+  font-size: .85rem;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: rgba(99,179,237,.7);
+  margin: 0 0 1rem;
+}
+#sa-constellation-map {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem;
+  min-height: 80px;
+}
+.sa-peer-node {
+  width: 38px; height: 38px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem;
+  border-radius: 6px;
+  border: 1px solid rgba(99,179,237,.2);
+  background: rgba(10,22,40,.8);
+  transition: box-shadow .2s, opacity .2s;
+  cursor: default;
+  position: relative;
+}
+.sa-peer-node[data-state="active"]     { border-color: rgba(99,179,237,.6); box-shadow: 0 0 10px rgba(99,179,237,.35); }
+.sa-peer-node[data-state="glow"]       { border-color: rgba(104,211,145,.8); box-shadow: 0 0 14px rgba(104,211,145,.5); }
+.sa-peer-node[data-state="quarantine"] { opacity: .45; border-color: rgba(245,101,101,.4); }
+.sa-peer-node[data-state="dropped"]    { opacity: .15; border-color: rgba(99,99,99,.3); }
+.sa-peer-tooltip {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #0d1a2e;
+  border: 1px solid rgba(99,179,237,.3);
+  border-radius: 6px;
+  padding: .45rem .7rem;
+  font-size: .72rem;
+  color: #e2eaf8;
+  white-space: nowrap;
+  z-index: 20;
+  pointer-events: none;
+}
+.sa-peer-node:hover .sa-peer-tooltip { display: block; }
+
+/* ---- Per-peer ticker ---- */
+.sa-ticker {
+  background: rgba(5,11,20,.9);
+  border: 1px solid rgba(99,179,237,.18);
+  border-radius: 12px;
+  padding: 1.2rem;
+  overflow-y: auto;
+  max-height: 420px;
+}
+.sa-ticker h2 {
+  font-size: .85rem;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: rgba(99,179,237,.7);
+  margin: 0 0 .8rem;
+  position: sticky;
+  top: 0;
+  background: rgba(5,11,20,.95);
+  padding-bottom: .4rem;
+}
+#sa-ticker-list { display: flex; flex-direction: column; gap: .5rem; }
+.sa-ticker-row {
+  background: rgba(10,22,40,.7);
+  border: 1px solid rgba(99,179,237,.1);
+  border-radius: 8px;
+  padding: .55rem .85rem;
+  font-size: .8rem;
+  font-family: 'JetBrains Mono', Consolas, monospace;
+  color: rgba(226,234,248,.8);
+  line-height: 1.5;
+  transition: border-color .2s;
+}
+.sa-ticker-row[data-state="active"]     { border-color: rgba(99,179,237,.3); }
+.sa-ticker-row[data-state="quarantine"] { border-color: rgba(245,101,101,.3); opacity: .65; }
+.sa-ticker-row[data-state="dropped"]    { opacity: .3; }
+.sa-ticker-node-id { color: #7fd1ff; font-weight: 700; }
+.sa-ticker-domain  { color: rgba(246,173,85,.8); }
+
+/* ---- Replicator roster ---- */
+.sa-roster {
+  background: rgba(5,11,20,.9);
+  border: 1px solid rgba(99,179,237,.18);
+  border-radius: 12px;
+  padding: 1.2rem;
+  margin: 0 0 1.5rem;
+}
+.sa-roster h2 {
+  font-size: .85rem;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: rgba(99,179,237,.7);
+  margin: 0 0 .8rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+#sa-roster-body { display: flex; flex-direction: column; gap: .4rem; }
+.sa-roster-row {
+  background: rgba(10,22,40,.6);
+  border: 1px solid rgba(99,179,237,.08);
+  border-radius: 6px;
+  padding: .5rem .85rem;
+  font-size: .8rem;
+  color: rgba(226,234,248,.75);
+  display: flex;
+  gap: .6rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.sa-roster-name  { color: #7fd1ff; font-weight: 700; }
+.sa-roster-slot  { color: rgba(246,173,85,.7); font-size: .72rem; }
+.sa-roster-time  { color: rgba(226,234,248,.35); font-size: .72rem; margin-left: auto; }
+.sa-roster-perm  { font-size: .68rem; color: rgba(104,211,145,.65); font-style: italic; }
+
+/* ---- Truth-Always footer ---- */
+.sa-truth-footer {
+  position: sticky;
+  bottom: 0;
+  background: rgba(7,14,28,.96);
+  border-top: 1px solid rgba(99,179,237,.18);
+  padding: .65rem 1rem;
+  font-size: .78rem;
+  color: rgba(226,234,248,.5);
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  z-index: 30;
+}
+.sa-truth-footer span { white-space: nowrap; }
+.sa-truth-cord { color: #fc8181; }
+.sa-truth-connected { color: #68d391; }
+.sa-truth-dropped { color: rgba(226,234,248,.4); }
+
+/* ---- CTA nav ---- */
+.sa-cta-bar {
+  display: flex;
+  gap: .75rem;
+  flex-wrap: wrap;
+  margin: 0 0 1.5rem;
+}
+.sa-cta-btn {
+  display: inline-block;
+  padding: .55rem 1.2rem;
+  border-radius: 7px;
+  font-size: .88rem;
+  font-weight: 700;
+  text-decoration: none;
+  border: none;
+}
+.sa-cta-btn--primary { background: #1a4a8a; color: #7fd1ff; border: 2px solid #5a9ae0; }
+.sa-cta-btn--secondary { background: rgba(99,179,237,.08); color: rgba(226,234,248,.75); border: 1px solid rgba(99,179,237,.3); }
+.sa-cta-btn--primary:hover  { background: #1e5299; }
+.sa-cta-btn--secondary:hover { background: rgba(99,179,237,.14); }
+</style>
+
+<div class="sa-page">
+<div class="sa-wrap">
+
+  <!-- ── Header ── -->
+  <header class="sa-header">
+    <h1><span class="sa-live-dot"></span> Substrate Awakens · Live</h1>
+    <p class="sa-header-sub">First live cooperative mesh benchmark &mdash; <strong>Saturday 2026-06-20</strong> &mdash; Event-driven, not time-driven.</p>
+  </header>
+
+  <!-- ── CTA bar ── -->
+  <div class="sa-cta-bar">
+    <a class="sa-cta-btn sa-cta-btn--primary" href="/live/SubstrateAwakens/register/">Register → Get my token</a>
+    <a class="sa-cta-btn sa-cta-btn--secondary" href="/live/SubstrateAwakens/kit/">Watch &amp; Replicate guide</a>
+    <a class="sa-cta-btn sa-cta-btn--secondary" href="/download/">Download v0.5.0</a>
+  </div>
+
+  <!-- ── Failure banners ── -->
+  <div id="sa-banner-relay"    class="sa-failure-banner">⚠ Relay degraded — reconnecting…</div>
+  <div id="sa-banner-stall"    class="sa-failure-banner">⚠ Aggregate stalled (&gt;2 min) — investigating</div>
+  <div id="sa-banner-dropout"  class="sa-failure-banner">⚠ Peer count dropped &gt;20% in 60 s — handling</div>
+
+  <!-- ── Aggregate score banner ── -->
+  <div class="sa-agg-banner" aria-label="Aggregate benchmark progress">
+    <div class="sa-agg-stat">
+      <span class="sa-agg-num" id="sa-agg-answered">—</span>
+      <span class="sa-agg-lbl">Answered</span>
+    </div>
+    <div class="sa-agg-stat">
+      <span class="sa-agg-num" id="sa-agg-total">—</span>
+      <span class="sa-agg-lbl">Total</span>
+    </div>
+    <div class="sa-agg-stat">
+      <span class="sa-agg-num" id="sa-agg-accuracy">—</span>
+      <span class="sa-agg-lbl">Accuracy</span>
+    </div>
+    <div class="sa-agg-stat">
+      <span class="sa-agg-num" id="sa-agg-quarantined">0</span>
+      <span class="sa-agg-lbl">Self-quarantined</span>
+    </div>
+    <div class="sa-agg-stat">
+      <span class="sa-agg-num" id="sa-agg-peers">0</span>
+      <span class="sa-agg-lbl">Peers connected</span>
+    </div>
+  </div>
+
+  <!-- ── Constellation + Ticker grid ── -->
+  <div class="sa-grid">
+
+    <div class="sa-constellation" role="region" aria-label="Peer constellation map">
+      <h2>Constellation</h2>
+      <div id="sa-constellation-map">
+        <span style="color:rgba(226,234,248,.3);font-size:.82rem;font-style:italic;">Waiting for peers to connect…</span>
+      </div>
+    </div>
+
+    <div class="sa-ticker" role="region" aria-label="Per-peer progress">
+      <h2>Per-Peer Progress</h2>
+      <div id="sa-ticker-list">
+        <span style="color:rgba(226,234,248,.3);font-size:.82rem;font-style:italic;">No peers yet.</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── Replicator Roster ── -->
+  <div class="sa-roster" role="region" aria-label="Replicator roster">
+    <h2>
+      Replicator Roster
+      <span style="font-size:.72rem;color:rgba(226,234,248,.4);font-weight:400;">Founding slots 1–100 · attribution permanent</span>
+    </h2>
+    <div id="sa-roster-body">
+      <span style="color:rgba(226,234,248,.3);font-size:.82rem;font-style:italic;">No replicators yet. Be the first → <a href="/live/SubstrateAwakens/register/" style="color:#7fd1ff;">Register</a></span>
+    </div>
+  </div>
+
+</div><!-- /sa-wrap -->
+
+<!-- ── Truth-Always footer (always visible) ── -->
+<div class="sa-truth-footer" role="status" aria-live="polite">
+  <span>Andon-Cord active</span>
+  <span class="sa-truth-cord">✕ <span id="sa-footer-quarantined">0</span> quarantined</span>
+  <span class="sa-truth-connected">● <span id="sa-footer-connected">0</span> peers connected</span>
+  <span class="sa-truth-dropped"><span id="sa-footer-dropped">0</span> dropped (handled)</span>
+  <span style="margin-left:auto;">Truth-Always · Substrate Awakens · BP084</span>
+</div>
+
+</div><!-- /sa-page -->
+
+<!-- ── Supabase Realtime subscription ── -->
+<script>
+(function () {
+  "use strict";
+
+  /* ── Supabase config (anon key is public) ── */
+  var SUPABASE_URL   = "https://ruuxzilgmuwddcofqecc.supabase.co";
+  /* FOUNDER: replace SUPABASE_ANON_KEY with your project's public anon key */
+  var SUPABASE_ANON  = (typeof window.__SA_ANON !== "undefined") ? window.__SA_ANON : "FOUNDER_SET_ANON_KEY";
+
+  /* ── State ── */
+  var peers = {};      /* node_id → {domain,current,total,accuracy,quarantined,state,joined,display_name,slot} */
+  var roster = [];     /* [{display_name,slot,shard_id,domain,joined,total}] sorted newest-first */
+  var totalDropped = 0;
+  var lastAggAnswered = 0;
+  var lastAggTs = Date.now();
+  var prevPeerCount = 0;
+  var prevPeerCountTs = Date.now();
+
+  /* Peer shape symbols */
+  var SHAPES = ["▢","△","◯","⬡","◇","⬟","▷","⬕"];
+  function shapeFor(node_id) {
+    var h = 0;
+    for (var i = 0; i < node_id.length; i++) h = (h * 31 + node_id.charCodeAt(i)) & 0xffff;
+    return SHAPES[h % SHAPES.length];
+  }
+
+  /* ── DOM helpers ── */
+  function qs(id) { return document.getElementById(id); }
+
+  function renderConstellation() {
+    var map = qs("sa-constellation-map");
+    if (!map) return;
+    var ids = Object.keys(peers);
+    if (!ids.length) {
+      map.innerHTML = '<span style="color:rgba(226,234,248,.3);font-size:.82rem;font-style:italic;">Waiting for peers…</span>';
+      return;
+    }
+    map.innerHTML = "";
+    ids.forEach(function(id) {
+      var p = peers[id];
+      var node = document.createElement("div");
+      node.className = "sa-peer-node";
+      node.setAttribute("data-state", p.state || "active");
+      node.textContent = shapeFor(id);
+      var tip = document.createElement("div");
+      tip.className = "sa-peer-tooltip";
+      tip.textContent = id.slice(0,8) + " · " + (p.domain||"?") + " " + (p.current||0) + "/" + (p.total||0);
+      node.appendChild(tip);
+      node.setAttribute("aria-label", "Peer " + id.slice(0,8) + " " + (p.state||"active"));
+      map.appendChild(node);
+    });
+  }
+
+  function renderTicker() {
+    var list = qs("sa-ticker-list");
+    if (!list) return;
+    var ids = Object.keys(peers);
+    if (!ids.length) {
+      list.innerHTML = '<span style="color:rgba(226,234,248,.3);font-size:.82rem;font-style:italic;">No peers yet.</span>';
+      return;
+    }
+    list.innerHTML = "";
+    ids.forEach(function(id) {
+      var p = peers[id];
+      var row = document.createElement("div");
+      row.className = "sa-ticker-row";
+      row.setAttribute("data-state", p.state || "active");
+      row.innerHTML =
+        '<span class="sa-ticker-node-id">' + escHtml(id.slice(0,8)) + '</span> · ' +
+        '<span class="sa-ticker-domain">' + escHtml(p.domain||"?") + '</span> ' +
+        escHtml(String(p.current||0)) + '/' + escHtml(String(p.total||0)) + ' · ' +
+        escHtml(String((p.accuracy||0).toFixed(1))) + '% · ' +
+        escHtml(String(p.quarantined||0)) + ' quarantined' +
+        (p.eta ? ' · ETA ' + escHtml(p.eta) : '');
+      list.appendChild(row);
+    });
+  }
+
+  function renderRoster() {
+    var body = qs("sa-roster-body");
+    if (!body) return;
+    if (!roster.length) {
+      body.innerHTML = '<span style="color:rgba(226,234,248,.3);font-size:.82rem;font-style:italic;">No replicators yet. Be the first → <a href="/live/SubstrateAwakens/register/" style="color:#7fd1ff;">Register</a></span>';
+      return;
+    }
+    body.innerHTML = "";
+    roster.forEach(function(r) {
+      var row = document.createElement("div");
+      row.className = "sa-roster-row";
+      row.innerHTML =
+        '<span class="sa-roster-name">Welcome ' + escHtml(r.display_name||"replicator") + '</span>' +
+        (r.slot ? '<span class="sa-roster-slot">· shard ' + escHtml(String(r.slot)) + ' assigned</span>' : '') +
+        '<span>· ' + escHtml(r.domain||"?") + ' 0/' + escHtml(String(r.total||0)) + '</span>' +
+        '<span>· joined ' + escHtml(relTime(r.joined)) + '</span>' +
+        '<span class="sa-roster-perm">· attribution permanent</span>' +
+        '<span class="sa-roster-time">' + escHtml(r.joined||"") + '</span>';
+      body.appendChild(row);
+    });
+  }
+
+  function renderAgg() {
+    var activePeers = Object.values(peers).filter(function(p){ return p.state !== "dropped"; });
+    var totalAnswered = activePeers.reduce(function(s,p){ return s + (p.current||0); }, 0);
+    var totalQ        = activePeers.reduce(function(s,p){ return s + (p.total||0); }, 0);
+    var nonQ          = activePeers.filter(function(p){ return p.state !== "quarantine"; });
+    var sumAcc        = nonQ.reduce(function(s,p){ return s + (p.accuracy||0) * (p.current||0); }, 0);
+    var sumAns        = nonQ.reduce(function(s,p){ return s + (p.current||0); }, 0);
+    var avgAcc        = sumAns > 0 ? (sumAcc / sumAns) : 0;
+    var totalQua      = activePeers.reduce(function(s,p){ return s + (p.quarantined||0); }, 0);
+    var connected     = activePeers.length;
+
+    setText("sa-agg-answered",   totalAnswered || "—");
+    setText("sa-agg-total",      totalQ        || "—");
+    setText("sa-agg-accuracy",   sumAns > 0 ? avgAcc.toFixed(1) + "%" : "—");
+    setText("sa-agg-quarantined",totalQua);
+    setText("sa-agg-peers",      connected);
+    setText("sa-footer-quarantined", totalQua);
+    setText("sa-footer-connected",   connected);
+    setText("sa-footer-dropped",     totalDropped);
+
+    /* Stall check: aggregate answered hasn't moved in 2 min */
+    if (totalAnswered !== lastAggAnswered) {
+      lastAggAnswered = totalAnswered;
+      lastAggTs = Date.now();
+    }
+    banner("sa-banner-stall", Date.now() - lastAggTs > 120000 && connected > 0);
+
+    /* Dropout check: >20% drop in 60s */
+    if (prevPeerCountTs === 0 || Date.now() - prevPeerCountTs > 60000) {
+      prevPeerCount    = connected;
+      prevPeerCountTs  = Date.now();
+    }
+    banner("sa-banner-dropout", prevPeerCount > 5 && connected < prevPeerCount * 0.8);
+  }
+
+  function banner(id, show) {
+    var el = document.getElementById(id);
+    if (el) el.classList.toggle("sa-visible", !!show);
+  }
+
+  function setText(id, val) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = String(val);
+  }
+
+  function escHtml(s) {
+    return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+
+  function relTime(ts) {
+    if (!ts) return "just now";
+    var diff = Math.floor((Date.now() - new Date(ts)) / 1000);
+    if (diff < 60) return diff + "s ago";
+    if (diff < 3600) return Math.floor(diff/60) + "m ago";
+    return Math.floor(diff/3600) + "h ago";
+  }
+
+  /* ── Handle realtime update ── */
+  function handleUpdate(payload) {
+    var rec = payload.new || payload.record || payload;
+    var id  = rec.node_id || rec.id;
+    if (!id) return;
+
+    if (payload.eventType === "DELETE" || rec.state === "dropped") {
+      if (peers[id]) { peers[id].state = "dropped"; totalDropped++; }
+    } else {
+      var isNew = !peers[id];
+      peers[id] = Object.assign(peers[id] || {}, rec);
+      if (peers[id].state !== "quarantine" && peers[id].state !== "dropped") {
+        peers[id].state = "active";
+      }
+      /* Glow animation for 1s on new answer */
+      if (!isNew && rec.current > (peers[id]._lastCurrent||0)) {
+        peers[id].state = "glow";
+        peers[id]._lastCurrent = rec.current;
+        setTimeout(function() {
+          if (peers[id] && peers[id].state === "glow") peers[id].state = "active";
+          render();
+        }, 1000);
+      }
+    }
+    render();
+  }
+
+  /* ── Handle replicator registration event ── */
+  function handleReplicator(payload) {
+    var rec = payload.new || payload.record || payload;
+    if (!rec) return;
+    roster.unshift({
+      display_name: rec.display_name || rec.email_prefix || "replicator",
+      slot:  rec.slot_number,
+      shard_id: rec.shard_id || "?",
+      domain: rec.domain || "?",
+      total:  rec.total  || 0,
+      joined: rec.created_at || new Date().toISOString()
+    });
+    if (roster.length > 100) roster = roster.slice(0, 100);
+    renderRoster();
+  }
+
+  function render() {
+    renderConstellation();
+    renderTicker();
+    renderAgg();
+  }
+
+  /* ── Connect to Supabase Realtime ── */
+  function connect() {
+    if (SUPABASE_ANON === "FOUNDER_SET_ANON_KEY") {
+      banner("sa-banner-relay", true);
+      qs("sa-banner-relay").textContent = "⚠ Dashboard in preview mode — Supabase anon key not configured.";
+      return;
+    }
+
+    try {
+      /* Load Supabase JS from CDN */
+      var script = document.createElement("script");
+      script.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js";
+      script.onload = function () {
+        try {
+          var client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+          client.channel("peer_presence")
+            .on("postgres_changes", {
+              event: "*",
+              schema: "public",
+              table: "peer_presence"
+            }, handleUpdate)
+            .subscribe(function(status) {
+              banner("sa-banner-relay", status === "CHANNEL_ERROR" || status === "TIMED_OUT");
+            });
+
+          client.channel("replicator_roster")
+            .on("postgres_changes", {
+              event: "INSERT",
+              schema: "public",
+              table: "substrate_awakens_registrations"
+            }, handleReplicator)
+            .subscribe();
+
+          /* Initial fetch of existing peers */
+          client.from("peer_presence").select("*").then(function(res) {
+            if (res.data) res.data.forEach(function(rec) {
+              peers[rec.node_id || rec.id] = rec;
+              if (!peers[rec.node_id || rec.id].state) peers[rec.node_id || rec.id].state = "active";
+            });
+            render();
+          });
+
+          /* Initial roster fetch */
+          client.from("substrate_awakens_registrations")
+            .select("*")
+            .order("created_at", { ascending: false })
+            .limit(100)
+            .then(function(res) {
+              if (res.data) res.data.forEach(function(rec) {
+                roster.push({
+                  display_name: rec.display_name || rec.email_prefix || "replicator",
+                  slot: rec.slot_number,
+                  domain: "?",
+                  total: 0,
+                  joined: rec.created_at
+                });
+              });
+              renderRoster();
+            });
+
+        } catch(err) {
+          console.warn("[SA] Supabase init error:", err);
+          banner("sa-banner-relay", true);
+        }
+      };
+      script.onerror = function () { banner("sa-banner-relay", true); };
+      document.head.appendChild(script);
+    } catch(err) {
+      console.warn("[SA] connect error:", err);
+      banner("sa-banner-relay", true);
+    }
+  }
+
+  /* ── Boot ── */
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", connect);
+  } else {
+    connect();
+  }
+
+  /* Update relative timestamps every 30s */
+  setInterval(function() { renderRoster(); }, 30000);
+
+})();
+</script>
+
+{{- end }}

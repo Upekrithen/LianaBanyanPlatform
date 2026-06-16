@@ -7,6 +7,7 @@ contentDir = "content-mnemosynec"
 refLinksErrorLevel = "warning"
 enableRobotsTXT = true
 buildFuture = true
+disablePathToLower = true
 
 [markup]
   [markup.goldmark]
@@ -40,6 +41,10 @@ buildFuture = true
 
   # BP084: Supabase edge functions base URL (public, safe to embed)
   supabaseFunctionsUrl = "https://ruuxzilgmuwddcofqecc.supabase.co/functions/v1"
+
+  # BP084: Supabase anon key (public — safe to embed in client-side JS)
+  # FOUNDER: replace with your project's anon key from Supabase dashboard → Settings → API
+  supabaseAnonKey = "FOUNDER_SET_SUPABASE_ANON_KEY"
 
   [params.label]
     text = "MnemosyneC"
@@ -83,7 +88,13 @@ buildFuture = true
   weight = 4
 
 [[menu.main]]
+  identifier = "nav-live"
+  name = "Live Event"
+  url = "/live/SubstrateAwakens/"
+  weight = 5
+
+[[menu.main]]
   identifier = "nav-join"
   name = "Join"
   url = "https://lianabanyan.com/join"
-  weight = 5
+  weight = 6

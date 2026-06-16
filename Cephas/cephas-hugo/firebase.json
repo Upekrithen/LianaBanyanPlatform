@@ -110,6 +110,38 @@
             {"key": "Cache-Control", "value": "max-age=1800"}
           ]
         }
+      ],
+      "redirects": [
+        {
+          "source": "/live/SubstrateAwakens",
+          "destination": "/live/substrateawakens/",
+          "type": 301
+        },
+        {
+          "source": "/live/SubstrateAwakens/",
+          "destination": "/live/substrateawakens/",
+          "type": 301
+        },
+        {
+          "source": "/live/SubstrateAwakens/kit",
+          "destination": "/live/substrateawakens/kit/",
+          "type": 301
+        },
+        {
+          "source": "/live/SubstrateAwakens/kit/",
+          "destination": "/live/substrateawakens/kit/",
+          "type": 301
+        },
+        {
+          "source": "/live/SubstrateAwakens/register",
+          "destination": "/live/substrateawakens/register/",
+          "type": 301
+        },
+        {
+          "source": "/live/SubstrateAwakens/register/",
+          "destination": "/live/substrateawakens/register/",
+          "type": 301
+        }
       ]
     }
   ]
