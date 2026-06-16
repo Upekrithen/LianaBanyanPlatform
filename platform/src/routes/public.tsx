@@ -70,6 +70,9 @@ const FounderStory = lazy(() => import("@/pages/museum/FounderStory"));
 // BP082 -- Op-Ed: Thou Art the Man
 const OpEdThouArtTheMan = lazy(() => import("@/pages/OpEdThouArtTheMan"));
 
+// BP084 -- Canada 40K Rescue Fleet cue card
+const Canada40K = lazy(() => import("@/pages/cue-cards/Canada40K"));
+
 // BP072 Wave 3 routes
 const ProgressReport1Page = lazy(() => import("@/pages/ProgressReport1Page"));
 const AnthologyPage = lazy(() => import("@/pages/AnthologyPage"));
@@ -211,6 +214,10 @@ export const publicRoutes = (
     {/* BP082 -- Op-Ed: Thou Art the Man */}
     <Route path="/op-eds/thou-art-the-man" element={<LazyPage><OpEdThouArtTheMan /></LazyPage>} />
     <Route path="/op-eds/thou-art-the-man/" element={<LazyPage><OpEdThouArtTheMan /></LazyPage>} />
+
+    {/* BP084 -- Canada 40K Rescue Fleet */}
+    <Route path="/canada40k" element={<LazyPage><Canada40K /></LazyPage>} />
+    <Route path="/canada40k/" element={<LazyPage><Canada40K /></LazyPage>} />
 
   </>
 );
