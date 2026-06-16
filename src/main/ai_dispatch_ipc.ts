@@ -6,10 +6,15 @@
 
 import { ipcMain } from 'electron';
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
-import { join } from 'path';
+import { join, resolve } from 'path';
 import { app } from 'electron';
 import { FLOOR_MODEL } from '../shared/floor-model';
-import { queryEbletStore, queryVerifiedEblets, substrateCounters } from './mnem_eblet_store';
+import {
+  queryEbletStore,
+  queryVerifiedEblets,
+  substrateCounters,
+  getEbletIndexStats,
+} from './mnem_eblet_store';
 import { ollamaManager } from './ollama_manager';
 // BP083 SEG-3: MEMORY.md system-prompt injection (amnesia cure)
 import { getMemoryMd } from './memory_scaffold';
@@ -357,4 +362,23 @@ export function registerAiDispatchIPC(): void {
       return { ok: true, streaming: true };
     },
   );
+
+  // ── ai-dispatch:eblet-index-stats (SEG-6 / SEG-5) ───────────────────────
+  // Returns EbletIndexStats for the substrate counter UI panel.
+  ipcMain.handle('ai-dispatch:eblet-index-stats', () => {
+    try {
+      const stats = getEbletIndexStats();
+      const verifiedFile = resolve(app.getPath('userData'), 'substrate', 'verified_eblets.jsonl');
+      let verifiedCount = 0;
+      if (existsSync(verifiedFile)) {
+        try {
+          const raw = readFileSync(verifiedFile, 'utf-8');
+          verifiedCount = raw.split('\n').filter((l) => l.trim()).length;
+        } catch { /* graceful */ }
+      }
+      return { ok: true, stats, verifiedCount };
+    } catch (err) {
+      return { ok: false, error: String(err), stats: null, verifiedCount: 0 };
+    }
+  });
 }

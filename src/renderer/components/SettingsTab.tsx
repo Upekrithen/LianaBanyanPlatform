@@ -2134,6 +2134,9 @@ export function SettingsTab({
       {/* Auto-Prepare FULL Upgrade */}
       <AutoPreparePullPanel />
 
+      {/* Substrate Index Counter (BP084 SEG-6) */}
+      <SubstrateCounterPanel />
+
       {/* MCP Substrate Bridge */}
       <McpSubstrateBridgePanel />
 
@@ -2680,6 +2683,123 @@ function McpSubstrateBridgePanel() {
               letterSpacing: 0.3,
             }}>
               http://127.0.0.1:{status?.port ?? 11456}/mcp — add to Claude Desktop or Cursor MCP config
+            </div>
+          </>
+        )}
+      </div>
+    </section>
+  );
+}
+
+// ─── BP084 SEG-6: Substrate Index Counter Panel ────────────────────────────────
+
+interface EbletIndexStatsPayload {
+  totalIndexed: number;
+  byCategory: Record<string, number>;
+  lastRefreshTimestamp: number | null;
+}
+
+function SubstrateCounterPanel() {
+  const [stats, setStats] = React.useState<EbletIndexStatsPayload | null>(null);
+  const [verifiedCount, setVerifiedCount] = React.useState(0);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    let mounted = true;
+
+    async function fetchStats() {
+      try {
+        const result = await (window.amplify as any)?.ipcInvoke?.('ai-dispatch:eblet-index-stats');
+        if (!mounted) return;
+        if (result?.ok && result.stats) {
+          setStats(result.stats as EbletIndexStatsPayload);
+          setVerifiedCount(result.verifiedCount ?? 0);
+          setError(null);
+        } else if (result?.error) {
+          setError(result.error);
+        }
+      } catch (e) {
+        if (mounted) setError(String(e));
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    }
+
+    fetchStats();
+    const interval = setInterval(fetchStats, 30_000);
+    return () => {
+      mounted = false;
+      clearInterval(interval);
+    };
+  }, []);
+
+  const lastRefresh = stats?.lastRefreshTimestamp
+    ? new Date(stats.lastRefreshTimestamp).toLocaleString()
+    : 'not yet indexed';
+
+  const canonCount = stats?.byCategory?.['canon'] ?? 0;
+  const activeCount = stats?.byCategory?.['active'] ?? 0;
+  const pixieCount = stats?.byCategory?.['pixie-dust'] ?? 0;
+  const snapshotCount = stats?.byCategory?.['snapshot-canon'] ?? 0;
+  const totalCanon = canonCount + snapshotCount;
+
+  return (
+    <section style={{ marginBottom: 16 }}>
+      <div style={{ fontSize: 11, fontWeight: 600, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: 0.8, marginBottom: 8 }}>
+        Substrate Index
+      </div>
+      <div style={{
+        background: 'rgba(15,23,42,0.7)',
+        border: '1px solid rgba(51,65,85,0.5)',
+        borderRadius: 8,
+        padding: '12px 14px',
+      }}>
+        {loading ? (
+          <div style={{ fontSize: 10, color: '#64748b', fontStyle: 'italic' }}>Loading index stats…</div>
+        ) : error ? (
+          <div style={{ fontSize: 10, color: '#f87171' }}>Index unavailable: {error}</div>
+        ) : (
+          <>
+            <div style={{ fontSize: 12, color: '#e2e8f0', fontWeight: 600, marginBottom: 6 }}>
+              {totalCanon.toLocaleString()} canon eblets
+              {verifiedCount > 0 && (
+                <span style={{ color: '#34d399', marginLeft: 6 }}>
+                  + {verifiedCount.toLocaleString()} verified-runtime eblets
+                </span>
+              )}{' '}
+              indexed.
+            </div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 6 }}>
+              {[
+                { label: 'canon', value: canonCount, color: '#818cf8' },
+                { label: 'active', value: activeCount, color: '#38bdf8' },
+                { label: 'snapshot', value: snapshotCount, color: '#a78bfa' },
+                { label: 'pixie-dust', value: pixieCount, color: '#fb923c' },
+                { label: 'verified', value: verifiedCount, color: '#34d399' },
+              ].filter((b) => b.value > 0).map((badge) => (
+                <span
+                  key={badge.label}
+                  style={{
+                    fontSize: 9,
+                    padding: '2px 6px',
+                    borderRadius: 4,
+                    background: 'rgba(30,41,59,0.8)',
+                    border: `1px solid ${badge.color}44`,
+                    color: badge.color,
+                    fontWeight: 600,
+                  }}
+                >
+                  {badge.label}: {badge.value.toLocaleString()}
+                </span>
+              ))}
+            </div>
+            <div style={{ fontSize: 9, color: '#475569' }}>
+              Last refresh: {lastRefresh}
+            </div>
+            <div style={{ fontSize: 9, color: '#334155', marginTop: 4 }}>
+              BM25 priority: verified › canon › active › snapshot › trail › pixie-dust.{' '}
+              Use <code style={{ color: '#7dd3fc' }}>category:pixie-dust</code> prefix to query historical-mine.
             </div>
           </>
         )}

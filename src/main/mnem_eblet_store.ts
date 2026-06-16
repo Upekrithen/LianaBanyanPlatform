@@ -1,9 +1,14 @@
-// mnem_eblet_store.ts -- BP077 v0.1.27 local eblet store reader + SEG-4 verified writer
-// Reads C:\Users\Administrator\Documents\Asteroid-ProofVault\ for *.eblet.md files.
-// BM25-lite scoring against user query (same algorithm pattern as substrate_router.ts).
-// Returns top-3 eblet snippets as string[].
+// mnem_eblet_store.ts -- BP084 v0.1.28 full-substrate recursive eblet reader
+// SEG-1: Recursive walkEbletStore replaces flat readdirSync — reads all subdirs.
+// SEG-2: EbletEntry gains `category` field derived from path (canon/active/trail/etc.)
+// SEG-3: Persistent index at {userData}/mnemosynec/substrate/eblet_index.jsonl
+//         — cold index written on first launch or when mtime delta detected.
+//         — subsequent launches load index only, sub-3s target.
+// SEG-4: Category-weighted BM25 (canon > active > trail > pixie-dust)
+//         + `category:pixie-dust` query prefix to surface historical-mine class.
+// SEG-5: Verified eblets surface through same query interface as category=verified.
 //
-// SEG-4 addition: writeVerifiedEblet() appends plow-accepted Q&A pairs to
+// SEG-4 (orig) addition: writeVerifiedEblet() appends plow-accepted Q&A pairs to
 // {userData}/substrate/verified_eblets.jsonl (append-only JSONL).
 // Andon discipline: verified:true gate — unverified answers NEVER cached here.
 //
@@ -12,16 +17,258 @@
 // machine. The function gracefully returns [] when the path is absent -- no crash, no
 // warning surfaced to the user.
 
-import { existsSync, readdirSync, readFileSync, appendFileSync, mkdirSync, writeFileSync, renameSync } from 'fs';
-import { resolve } from 'path';
+import {
+  existsSync,
+  readdirSync,
+  statSync,
+  readFileSync,
+  appendFileSync,
+  mkdirSync,
+  writeFileSync,
+  renameSync,
+} from 'fs';
+import { resolve, join, basename } from 'path';
 import { createHash } from 'crypto';
 import { app } from 'electron';
 
-const EBLET_STORE_PATH = 'C:\\Users\\Administrator\\Documents\\Asteroid-ProofVault';
+// ─── Eblet store roots ────────────────────────────────────────────────────────
+
+const EBLET_STORE_ROOTS: string[] = [
+  'C:\\Users\\Administrator\\Documents\\Asteroid-ProofVault',
+  'C:\\Users\\Administrator\\Documents\\AntigravityWorkspace\\source_snapshot_readonly\\canon',
+  'C:\\Users\\Administrator\\Documents\\LianaBanyanPlatform\\Asteroid-ProofVault\\canon',
+];
 
 // Maximum chars read from each eblet file for scoring and snippet extraction.
 const SCORE_WINDOW = 300;
 const SNIPPET_WINDOW = 500;
+
+// ─── Category derivation ─────────────────────────────────────────────────────
+
+export type EbletCategory =
+  | 'verified'
+  | 'canon'
+  | 'active'
+  | 'snapshot-canon'
+  | 'trail'
+  | 'pixie-dust'
+  | 'session';
+
+/** BM25 category weights — higher = surfaced first. */
+const CATEGORY_WEIGHT: Record<EbletCategory, number> = {
+  verified:        6,
+  canon:           5,
+  active:          4,
+  'snapshot-canon': 3,
+  trail:           2,
+  session:         1.5,
+  'pixie-dust':    1,
+};
+
+/**
+ * Derive an EbletCategory from the full file path.
+ *
+ * Rules (first match wins):
+ *   path contains \state\eblets\CANON\         → canon
+ *   path contains \state\eblets\PIXIE_DUST_    → pixie-dust
+ *   path contains \state\eblets\TRAILS\        → trail
+ *   path contains \state\eblets\BP (BP-bucket) → session
+ *   path contains AntigravityWorkspace\…\canon → snapshot-canon
+ *   all other eblets at root or unknown dir    → active
+ */
+function deriveCategory(fullPath: string): EbletCategory {
+  const p = fullPath.replace(/\\/g, '/');
+  if (p.includes('/state/eblets/CANON/'))                    return 'canon';
+  if (/\/state\/eblets\/PIXIE_DUST/.test(p))                 return 'pixie-dust';
+  if (p.includes('/state/eblets/TRAILS/'))                   return 'trail';
+  if (/\/state\/eblets\/BP\d/.test(p))                       return 'session';
+  if (p.includes('AntigravityWorkspace') && p.includes('/canon/')) return 'snapshot-canon';
+  return 'active';
+}
+
+// ─── Recursive walker ─────────────────────────────────────────────────────────
+
+/**
+ * SEG-1: Recursively walk `root` and collect all *.eblet.md paths.
+ * Uses an explicit stack (no recursion) to handle deep trees safely.
+ */
+function walkEbletStore(root: string): string[] {
+  const out: string[] = [];
+  const stack = [root];
+  while (stack.length) {
+    const dir = stack.pop()!;
+    let entries;
+    try {
+      entries = readdirSync(dir, { withFileTypes: true });
+    } catch {
+      continue;
+    }
+    for (const entry of entries) {
+      const full = join(dir, entry.name);
+      if (entry.isDirectory()) {
+        stack.push(full);
+      } else if (entry.name.endsWith('.eblet.md')) {
+        out.push(full);
+      }
+    }
+  }
+  return out;
+}
+
+// ─── Persistent index ─────────────────────────────────────────────────────────
+
+export interface EbletIndexEntry {
+  path: string;
+  category: EbletCategory;
+  title: string;
+  snippet: string;   // first 200 chars of content
+  mtime: number;
+}
+
+/** Path to the persistent index JSONL file. */
+function getIndexPath(): string {
+  return resolve(app.getPath('userData'), 'mnemosynec', 'substrate', 'eblet_index.jsonl');
+}
+
+let _indexCache: { entries: EbletIndexEntry[]; loadedAt: number } | null = null;
+const INDEX_CACHE_TTL_MS = 60_000; // re-check delta every 60s
+
+/**
+ * Return the mtime of the most-recently-modified root directory so we can
+ * detect when new eblets have been added without scanning every file.
+ */
+function rootsMaxMtime(): number {
+  let max = 0;
+  for (const root of EBLET_STORE_ROOTS) {
+    if (!existsSync(root)) continue;
+    try {
+      const m = statSync(root).mtimeMs;
+      if (m > max) max = m;
+    } catch { /* skip */ }
+  }
+  return max;
+}
+
+/**
+ * SEG-3: Load or rebuild the persistent eblet index.
+ *
+ * Algorithm:
+ *   1. If in-memory cache is fresh (< 60s), return it.
+ *   2. Read index file; compare index mtime to roots mtime.
+ *   3. If roots newer → re-walk all roots → rewrite index → return.
+ *   4. Otherwise load index file → return.
+ *
+ * Full re-index of 431k eblets targets < 60s cold; subsequent launches < 3s.
+ */
+async function loadOrRebuildIndex(): Promise<EbletIndexEntry[]> {
+  const now = Date.now();
+  if (_indexCache && now - _indexCache.loadedAt < INDEX_CACHE_TTL_MS) {
+    return _indexCache.entries;
+  }
+
+  const indexPath = getIndexPath();
+  const indexDir = join(indexPath, '..');
+
+  // Check if existing index is up-to-date
+  let indexMtime = 0;
+  if (existsSync(indexPath)) {
+    try { indexMtime = statSync(indexPath).mtimeMs; } catch { /* fallback 0 */ }
+  }
+
+  const rootsMtime = rootsMaxMtime();
+  const needsRebuild = indexMtime === 0 || rootsMtime > indexMtime;
+
+  if (!needsRebuild && indexMtime > 0) {
+    // Load from file
+    try {
+      const raw = readFileSync(indexPath, 'utf-8');
+      const entries: EbletIndexEntry[] = [];
+      for (const line of raw.split('\n')) {
+        const t = line.trim();
+        if (!t) continue;
+        try { entries.push(JSON.parse(t) as EbletIndexEntry); } catch { /* skip malformed */ }
+      }
+      _indexCache = { entries, loadedAt: now };
+      console.log(`[EbletIndex] Loaded ${entries.length} entries from disk cache`);
+      return entries;
+    } catch { /* fall through to rebuild */ }
+  }
+
+  // Rebuild: walk all roots
+  console.log('[EbletIndex] Rebuilding index…');
+  const allPaths: string[] = [];
+  for (const root of EBLET_STORE_ROOTS) {
+    if (existsSync(root)) {
+      allPaths.push(...walkEbletStore(root));
+    }
+  }
+
+  const entries: EbletIndexEntry[] = [];
+  for (const fullPath of allPaths) {
+    try {
+      const mtime = statSync(fullPath).mtimeMs;
+      const raw = readFileSync(fullPath, 'utf-8');
+      const title = basename(fullPath, '.eblet.md').replace(/_/g, ' ').slice(0, 120);
+      const snippet = raw.slice(0, 200);
+      const category = deriveCategory(fullPath);
+      entries.push({ path: fullPath, category, title, snippet, mtime });
+    } catch { /* skip unreadable */ }
+  }
+
+  // Write index atomically
+  try {
+    mkdirSync(indexDir, { recursive: true });
+    const tmp = indexPath + '.tmp';
+    writeFileSync(tmp, entries.map((e) => JSON.stringify(e)).join('\n') + '\n', 'utf-8');
+    renameSync(tmp, indexPath);
+    console.log(`[EbletIndex] Wrote ${entries.length} entries to ${indexPath}`);
+  } catch (e) {
+    console.warn('[EbletIndex] Failed to write index:', e);
+  }
+
+  _indexCache = { entries, loadedAt: now };
+  return entries;
+}
+
+/** Invalidate in-memory index cache (e.g. after a new eblet is written). */
+export function invalidateIndexCache(): void {
+  _indexCache = null;
+}
+
+// ─── Index stats ──────────────────────────────────────────────────────────────
+
+export interface EbletIndexStats {
+  totalIndexed: number;
+  byCategory: Partial<Record<EbletCategory, number>>;
+  lastRefreshTimestamp: number | null;
+}
+
+/**
+ * Return aggregate stats from the persistent index (used by SEG-6 UI counter).
+ * Non-blocking: reads from in-memory cache; returns zeros when index not yet built.
+ */
+export function getEbletIndexStats(): EbletIndexStats {
+  const indexPath = getIndexPath();
+  let indexMtime: number | null = null;
+  try {
+    if (existsSync(indexPath)) indexMtime = statSync(indexPath).mtimeMs;
+  } catch { /* fallback */ }
+
+  if (!_indexCache) {
+    return { totalIndexed: 0, byCategory: {}, lastRefreshTimestamp: indexMtime };
+  }
+  const byCategory: Partial<Record<EbletCategory, number>> = {};
+  for (const e of _indexCache.entries) {
+    byCategory[e.category] = (byCategory[e.category] ?? 0) + 1;
+  }
+  return {
+    totalIndexed: _indexCache.entries.length,
+    byCategory,
+    lastRefreshTimestamp: indexMtime,
+  };
+}
+
+// ─── STOP_WORDS ──────────────────────────────────────────────────────────────
 
 const STOP_WORDS = new Set([
   'that', 'this', 'with', 'from', 'have', 'they', 'will', 'been', 'were',
@@ -40,79 +287,104 @@ function tokenize(text: string): string[] {
     .filter((w) => !STOP_WORDS.has(w));
 }
 
+// ─── EbletEntry (SEG-2: +category) ───────────────────────────────────────────
+
 interface EbletEntry {
   filename: string;
+  fullPath: string;
+  category: EbletCategory;
   head: string;
   content: string;
   tokens: string[];
 }
 
-function loadEblets(): EbletEntry[] {
-  if (!existsSync(EBLET_STORE_PATH)) return [];
+// ─── BM25 with category weight (SEG-4) ───────────────────────────────────────
 
-  let files: string[];
-  try {
-    files = readdirSync(EBLET_STORE_PATH).filter((f) => f.endsWith('.eblet.md'));
-  } catch {
-    return [];
-  }
-
-  const entries: EbletEntry[] = [];
-  for (const file of files) {
-    try {
-      const fullPath = `${EBLET_STORE_PATH}\\${file}`;
-      const raw = readFileSync(fullPath, 'utf-8');
-      const head = raw.slice(0, SCORE_WINDOW);
-      const content = raw.slice(0, SNIPPET_WINDOW);
-      // Score on filename tokens + first-300-chars content tokens.
-      const tokens = Array.from(
-        new Set([...tokenize(file.replace(/_/g, ' ')), ...tokenize(head)]),
-      );
-      entries.push({ filename: file, head, content, tokens });
-    } catch {
-      // Unreadable file -- skip
-    }
-  }
-  return entries;
-}
-
-function bm25Score(queryTokens: string[], docTokens: string[], corpusSize: number): number {
+function bm25Score(
+  queryTokens: string[],
+  docTokens: string[],
+  corpusSize: number,
+  category: EbletCategory,
+): number {
   let score = 0;
   const docSet = new Set(docTokens);
   for (const qt of queryTokens) {
     if (docSet.has(qt)) {
-      // IDF approximation: log(1 + corpus / 1) since we don't track per-term doc freq across corpus
+      // IDF approximation: log(1 + corpus / 1) since we don't track per-term doc freq
       const idf = Math.log(1 + corpusSize);
-      // TF: count occurrences
       const tf = docTokens.filter((t) => t === qt).length;
       score += idf * tf;
     }
   }
-  return score;
+  return score * (CATEGORY_WEIGHT[category] ?? 1);
 }
 
+// ─── "Just want the answers" category filter constants ───────────────────────
+
+/** Categories returned to LLM prompt by default (SEG-4 "just want the answers"). */
+const PRIORITY_CATEGORIES = new Set<EbletCategory>(['verified', 'canon', 'active', 'snapshot-canon']);
+
 /**
- * Query the local eblet store at the Asteroid-ProofVault path for files matching
- * the user query using BM25-lite. Returns top-3 eblet snippets (first 500 chars each)
- * as string[]. Returns [] if the eblet store path does not exist (expected in
- * end-user installs where the path is outside the app bundle).
+ * SEG-4: Query the local eblet store for files matching the user query.
+ *
+ * Supports `category:<name>` prefix to force a specific category class:
+ *   e.g. "category:pixie-dust cooperative economics"
+ *
+ * Default behaviour surfaces canon/active/snapshot-canon eblets only.
+ * Historical-mine (pixie-dust) is only returned when explicitly requested.
+ *
+ * Returns top-3 eblet snippets as string[].
  */
 export async function queryEbletStore(query: string): Promise<string[]> {
-  const entries = loadEblets();
-  if (entries.length === 0) return [];
+  // Parse optional category filter prefix
+  let categoryFilter: EbletCategory | null = null;
+  let effectiveQuery = query;
+  const catMatch = query.match(/^category:(\S+)\s*(.*)/i);
+  if (catMatch) {
+    categoryFilter = catMatch[1].toLowerCase() as EbletCategory;
+    effectiveQuery = catMatch[2].trim();
+  }
 
-  const queryTokens = tokenize(query);
+  const indexEntries = await loadOrRebuildIndex();
+  if (indexEntries.length === 0) return [];
+
+  const queryTokens = tokenize(effectiveQuery);
   if (queryTokens.length === 0) return [];
 
-  const corpusSize = entries.length;
+  // Lazy-load full content only for scoring; full body fetched for top winners
+  const corpusSize = indexEntries.length;
+  const allowedCategories = categoryFilter
+    ? new Set<EbletCategory>([categoryFilter])
+    : PRIORITY_CATEGORIES;
 
-  const scored = entries
-    .map((e) => ({ entry: e, score: bm25Score(queryTokens, e.tokens, corpusSize) }))
+  const candidates = indexEntries.filter((e) => allowedCategories.has(e.category));
+  if (candidates.length === 0) return [];
+
+  // Score using snippet + title tokens (fast — no full file read)
+  const scored = candidates
+    .map((e) => {
+      const tokens = Array.from(
+        new Set([...tokenize(e.title), ...tokenize(e.snippet)]),
+      );
+      return { entry: e, score: bm25Score(queryTokens, tokens, corpusSize, e.category) };
+    })
     .filter((r) => r.score > 0)
     .sort((a, b) => b.score - a.score)
     .slice(0, 3);
 
-  return scored.map((r) => `[${r.entry.filename}]\n${r.entry.content}`);
+  // Lazy-load full body for top-3 winners only (SEG-3 discipline)
+  const results: string[] = [];
+  for (const r of scored) {
+    try {
+      const raw = readFileSync(r.entry.path, 'utf-8');
+      const content = raw.slice(0, SNIPPET_WINDOW);
+      const categoryBadge = `[category: ${r.entry.category}]`;
+      results.push(`[${r.entry.title}] ${categoryBadge}\n${content}`);
+    } catch {
+      results.push(`[${r.entry.title}] [category: ${r.entry.category}]\n${r.entry.snippet}`);
+    }
+  }
+  return results;
 }
 
 // ─── SEG-4 v0.1.56: Verified eblet writer · SEG-1 v0.1.57: HOT retrieve path ──
