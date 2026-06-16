@@ -77,6 +77,12 @@ buildFuture = true
   weight = 4
 
 [[menu.main]]
+  identifier = "nav-tools"
+  name = "Tools"
+  url = "/tools/"
+  weight = 4
+
+[[menu.main]]
   identifier = "nav-join"
   name = "Join"
   url = "https://lianabanyan.com/join"
