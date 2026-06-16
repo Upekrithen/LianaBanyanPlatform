@@ -1,11 +1,12 @@
 ﻿---
-title: "How to Use MnemosyneC — The Local AI You Actually Own"
+title: "Tower of Peace — MnemosyneC Version Archive"
 slug: "download"
-date: 2026-06-01
+date: 2026-06-15
 draft: false
-class: "member-facing · how-to-hub · faq · bp071"
-composing_hints: ["mnemosyne", "cai", "caithedral", "sspl-free-forever", "how-to", "faq"]
-tldr: "Everything you need to get started with MnemosyneC, the offline-first cooperative AI tool. Works without internet after setup. Free forever. SSPL + Pledge #2260."
+class: "version-archive · tower-of-peace · bp084"
+composing_hints: ["mnemosyne", "download", "version-history", "trust-accumulator"]
+tldr: "Every version of MnemosyneC with trust scores, tier badges, and receipts. Pick the rung that fits."
+description: "Every version of MnemosyneC with trust scores, tier badges, and receipts. Tower of Peace — the canonical version archive. Self-hosted on Firebase."
 ---
 
 # Your AI has Amnesia.
