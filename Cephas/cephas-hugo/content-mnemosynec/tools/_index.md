@@ -4,6 +4,7 @@ slug: "tools"
 date: 2026-06-15
 draft: false
 description: "Standalone CLI tools and benchmark utilities for MnemosyneC. Download and run — no UI required."
+mimic-trunk-eligible: true
 ---
 
 # Developer Tools &amp; CLI Utilities
@@ -38,6 +39,25 @@ Check Node version: <code>node --version</code> &nbsp;&middot;&nbsp; Pull model:
 <p style="color:#7a9ab8;font-size:13px;margin:0;"><strong>BP084</strong> &middot; June 2026 &middot; Liana Banyan Platform</p>
 
 </div>
+
+---
+
+### 🛰️ MnemosyneC Plow CLI — LAN Mesh Bundle {#mnemosynec-plow-cli-lan-mesh-bundle}
+
+For running the mesh benchmark across multiple LAN machines.
+Contains: plow-cli.js · aggregate.js · all 5 node shards · setup-helper.ps1 · README.md
+
+**[Download MnemosyneC-Plow-CLI-Mesh-LAN.zip](/download/MnemosyneC-Plow-CLI-Mesh-LAN.zip)** (~250 KB)
+
+1. Unzip on each LAN machine
+2. Run `setup-helper.ps1` once per machine — checks Node + Ollama + recommends your shard
+3. Run `node plow-cli.js shards\mX_shard.json --model gemma4:12b --out mX_results.jsonl`
+4. Send `mX_results.jsonl` back to M0
+5. M0 runs `aggregate.js` over all returned files
+
+→ Need paste cards for each LAN node? Open the [LAN Mesh Cards](/tools/lan-mesh-cards/) page.
+
+See [Son's bootstrap card](#mnemosynec-plow-cli-son-m5) for the single-node WAN pattern.
 
 ---
 
