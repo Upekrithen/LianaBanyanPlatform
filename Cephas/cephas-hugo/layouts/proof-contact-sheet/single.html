@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ .Title }} | MnemosyneC</title>
+  <meta name="description" content="{{ .Description }}">
+  <meta name="robots" content="noindex">
+  <!-- BP084: Stripe.js loaded unconditionally for embedded Checkout -->
+  <script src="https://js.stripe.com/v3/"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { background: #0a0c0f; color: #faf5eb; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; line-height: 1.7; }
+    a { color: #d69e2e; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .mn-proof-page { max-width: 1100px; margin: 0 auto; padding: 2rem 1rem 4rem; }
+    .mn-back-link { font-size: 0.85rem; color: rgba(93,188,209,0.8); display: inline-block; margin-bottom: 1rem; }
+    h1 { font-size: clamp(1.3rem, 4vw, 1.8rem); font-weight: 800; margin: 0 0 0.25rem; color: #faf5eb; }
+    .mn-proof-subtitle { color: rgba(250,245,235,0.6); margin-top: 0; margin-bottom: 2rem; font-size: 0.95rem; }
+    .mn-section-header { font-size: 0.82rem; font-weight: 700; color: rgba(93,188,209,0.9); text-transform: uppercase; letter-spacing: 0.1em; margin: 2rem 0 0.75rem; padding-bottom: 0.4rem; border-bottom: 1px solid rgba(93,188,209,0.2); }
+    .mn-contact-sheet { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 0.5rem; }
+    .mn-contact-sheet figure { margin: 0; cursor: zoom-in; }
+    .mn-contact-sheet img { width: 100%; height: 110px; object-fit: cover; border-radius: 4px; display: block; border: 1px solid rgba(214,158,46,0.15); transition: border-color 0.15s; }
+    .mn-contact-sheet figure:hover img { border-color: rgba(214,158,46,0.45); }
+    .mn-contact-sheet figcaption { font-size: 0.62rem; color: rgba(250,245,235,0.35); margin-top: 0.2rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .mn-coming-soon { background: rgba(10,22,40,0.7); border: 1px solid rgba(214,158,46,0.2); border-radius: 10px; padding: 2rem; color: rgba(250,245,235,0.7); font-size: 0.95rem; }
+
+    /* ── GATE MODAL ──────────────────────────────────────────────── */
+    .mn-member-modal {
+      position: fixed; inset: 0; z-index: 999;
+      background: rgba(10,12,15,0.92);
+      display: flex; align-items: center; justify-content: center;
+      transition: opacity 0.2s ease;
+    }
+    .mn-member-modal.mn-modal--hidden { display: none; }
+    .mn-member-modal__box {
+      background: #1a1e24;
+      border: 1px solid rgba(93,188,209,0.25);
+      border-radius: 12px;
+      padding: 2.5rem;
+      max-width: 480px; width: 90%;
+      text-align: center;
+      display: flex; flex-direction: column; gap: 1rem;
+      position: relative;
+    }
+    .mn-member-modal__headline { font-size: 1.15rem; color: #faf5eb; font-weight: 600; margin: 0; line-height: 1.5; }
+    .mn-member-modal__sub { font-size: 0.92rem; color: rgba(250,245,235,0.65); margin: 0; }
+
+    /* ── STEP PANELS ────────────────────────────────────────────── */
+    .mn-modal-step { display: none; }
+    .mn-modal-step--active { display: block; }
+
+    /* ── INTENT PICKER (Step 1) ─────────────────────────────────── */
+    .mn-intent-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.55rem; text-align: left; }
+    .mn-intent-item { display: block; }
+    .mn-intent-item label {
+      display: flex; align-items: flex-start; gap: 0.75rem;
+      cursor: pointer; padding: 0.7rem 0.9rem;
+      border: 1px solid rgba(93,188,209,0.2); border-radius: 8px;
+      background: rgba(10,22,40,0.5); transition: border-color 0.15s, background 0.15s;
+      font-size: 0.9rem; color: rgba(250,245,235,0.88); line-height: 1.45;
+    }
+    .mn-intent-item input[type="radio"] { accent-color: #38a169; flex-shrink: 0; margin-top: 0.15rem; }
+    .mn-intent-item label:hover { border-color: rgba(93,188,209,0.5); background: rgba(10,22,40,0.8); }
+    .mn-intent-item input[type="radio"]:checked + span { color: #faf5eb; }
+    .mn-intent-item:has(input:checked) label { border-color: rgba(56,161,105,0.55); background: rgba(56,161,105,0.08); }
+
+    /* ── CTA BUTTON ─────────────────────────────────────────────── */
+    .mn-cta-btn {
+      display: block; width: 100%;
+      background: #2e7d32; color: #fff;
+      padding: 0.8rem 1.5rem; border-radius: 6px;
+      text-decoration: none; font-weight: 700; font-size: 1rem;
+      border: none; cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      position: relative;
+    }
+    .mn-cta-btn:hover:not(:disabled) { background: #388e3c; }
+    .mn-cta-btn:active:not(:disabled) { transform: scale(0.98); }
+    .mn-cta-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .mn-cta-btn__spinner {
+      display: none;
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: mn-spin 0.7s linear infinite;
+      position: absolute; right: 1rem; top: 50%; transform: translateY(-50%);
+    }
+    .mn-cta-btn--loading .mn-cta-btn__spinner { display: inline-block; }
+    @keyframes mn-spin { to { transform: translateY(-50%) rotate(360deg); } }
+
+    /* ── "MAYBE LATER" LINK ─────────────────────────────────────── */
+    .mn-modal-later {
+      background: none; border: none;
+      color: rgba(250,245,235,0.35); font-size: 0.82rem;
+      cursor: pointer; padding: 0; transition: color 0.15s;
+    }
+    .mn-modal-later:hover { color: rgba(250,245,235,0.6); }
+
+    /* ── STRIPE CHECKOUT CONTAINER (Step 2) ──────────────────────── */
+    #mn-stripe-container { min-height: 300px; }
+    .mn-stripe-loading {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 0.75rem; min-height: 200px;
+      color: rgba(250,245,235,0.55); font-size: 0.9rem;
+    }
+    .mn-stripe-loading__spinner {
+      width: 28px; height: 28px;
+      border: 3px solid rgba(93,188,209,0.25);
+      border-top-color: rgba(93,188,209,0.85);
+      border-radius: 50%;
+      animation: mn-spin 0.8s linear infinite;
+    }
+
+    /* ── ERROR TOAST ─────────────────────────────────────────────── */
+    .mn-error-toast {
+      display: none;
+      background: rgba(220,38,38,0.15);
+      border: 1px solid rgba(220,38,38,0.5);
+      border-radius: 6px;
+      padding: 0.6rem 0.9rem;
+      font-size: 0.85rem;
+      color: #fca5a5;
+      text-align: left;
+      margin-top: 0.25rem;
+    }
+    .mn-error-toast--visible { display: block; }
+
+    /* ── BACK BUTTON (Step 2 → Step 1) ─────────────────────────── */
+    .mn-modal-back {
+      background: none; border: none;
+      color: rgba(93,188,209,0.7); font-size: 0.82rem;
+      cursor: pointer; padding: 0; text-align: left; transition: color 0.15s;
+    }
+    .mn-modal-back:hover { color: rgba(93,188,209,1); }
+
+    /* ── LIGHTBOX ────────────────────────────────────────────────── */
+    .mn-lightbox-overlay { display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; cursor: zoom-out; }
+    .mn-lightbox-overlay.active { display: flex; }
+    .mn-lightbox-overlay img { max-width: 92vw; max-height: 92vh; object-fit: contain; border-radius: 6px; box-shadow: 0 8px 40px rgba(0,0,0,0.8); cursor: default; }
+    @media (max-width: 600px) {
+      .mn-contact-sheet { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
+      .mn-member-modal__box { padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="mn-proof-page">
+  <a class="mn-back-link" href="https://mnemosynec.ai/">← MnemosyneC</a>
+  <h1>{{ .Title }}</h1>
+  <p class="mn-proof-subtitle">{{ .Description }}</p>
+
+  <!-- ── GATE MODAL (BP084) ──────────────────────────────────────────
+       Violation 1 FIX: "Maybe later" now dismisses inline — no navigation.
+       Violation 2 FIX: "Join" opens Stripe embedded modal — no external link.
+       Violation 3 FIX: Every click shows spinner within 200ms (BP078).
+       ──────────────────────────────────────────────────────────────── -->
+  <div class="mn-member-modal" id="mn-member-modal" role="dialog" aria-modal="true" aria-labelledby="mn-modal-title">
+    <div class="mn-member-modal__box">
+
+      <!-- STEP 1: Gate prompt + intent picker -->
+      <div class="mn-modal-step mn-modal-step--active" id="mn-step-1">
+        <p id="mn-modal-title" class="mn-member-modal__headline">The receipts are public.<br>The full audit trail is for members.</p>
+        <p class="mn-member-modal__sub">$5/year. Funds the substrate.<br>Your membership is the cooperative.</p>
+
+        <ul class="mn-intent-list" aria-label="How do you plan to use MnemosyneC?">
+          <li class="mn-intent-item">
+            <label>
+              <input type="radio" name="mn-intent" value="storm_test">
+              <span><strong>Use it</strong> — I want to use Mnemosyne for my own work</span>
+            </label>
+          </li>
+          <li class="mn-intent-item">
+            <label>
+              <input type="radio" name="mn-intent" value="lean_ask">
+              <span><strong>Build with it</strong> — I'm a developer / engineer</span>
+            </label>
+          </li>
+          <li class="mn-intent-item">
+            <label>
+              <input type="radio" name="mn-intent" value="other">
+              <span><strong>Contribute</strong> — I want to add knowledge to the substrate</span>
+            </label>
+          </li>
+        </ul>
+
+        <div class="mn-error-toast" id="mn-intent-error" role="alert">Please select one option to continue.</div>
+
+        <!-- BP078: click → spinner within 200ms -->
+        <button class="mn-cta-btn" id="mn-continue-btn" type="button" aria-live="polite">
+          Join the Cooperative →
+          <span class="mn-cta-btn__spinner" aria-hidden="true"></span>
+        </button>
+
+        <!-- FIX: inline dismiss, ZERO navigation -->
+        <button class="mn-modal-later" id="mn-modal-later" type="button">Maybe later</button>
+      </div>
+
+      <!-- STEP 2: Stripe embedded Checkout -->
+      <div class="mn-modal-step" id="mn-step-2">
+        <p style="font-size:0.8rem; color:rgba(93,188,209,0.7); text-align:left; margin:0 0 0.75rem;">
+          <button class="mn-modal-back" id="mn-back-btn" type="button">← Back</button>
+        </p>
+        <p class="mn-member-modal__sub" style="margin-bottom:0.5rem;">$5/year · Cooperative membership · Cancel anytime</p>
+        <div id="mn-stripe-container">
+          <div class="mn-stripe-loading" id="mn-stripe-loading" aria-live="polite">
+            <div class="mn-stripe-loading__spinner" aria-hidden="true"></div>
+            Opening checkout…
+          </div>
+        </div>
+        <div class="mn-error-toast" id="mn-stripe-error" role="alert"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Contact body (hidden until member verified or "maybe later" clicked) -->
+  <div id="mn-contact-body" style="display:none;">
+    {{ if .Params.stub }}
+    <div class="mn-coming-soon">
+      {{ .Content }}
+      <p style="margin-top:1rem;"><a href="#" id="mn-stub-join">Join the Cooperative →</a></p>
+    </div>
+    {{ else }}
+    <p class="mn-section-header">The Storm — Real-World Context</p>
+    <div class="mn-contact-sheet" id="mn-sheet-context"></div>
+
+    <p class="mn-section-header">The Code — What Survived</p>
+    <div class="mn-contact-sheet" id="mn-sheet-forensic"></div>
+    {{ end }}
+  </div>
+</div>
+
+<div class="mn-lightbox-overlay" id="mn-lightbox" role="dialog" aria-modal="true" aria-label="Image preview">
+  <img id="mn-lightbox-img" src="" alt="">
+</div>
+
+<script>
+/* ================================================================
+   BP084 Join Flow Collapse — Gate + Stripe Embedded Checkout
+   Sonnet 4.6 · All 3 violations resolved
+   ================================================================ */
+(function () {
+  'use strict';
+
+  /* ── CONFIG ─────────────────────────────────────────────────── */
+  var STRIPE_PK = '{{ .Site.Params.stripePk | default "" }}';
+  var FN_BASE = '{{ .Site.Params.supabaseFunctionsUrl | default "https://ruuxzilgmuwddcofqecc.supabase.co/functions/v1" }}';
+  var PAGE_URL = window.location.origin + window.location.pathname;
+
+  /* ── DOM ─────────────────────────────────────────────────────── */
+  var modal       = document.getElementById('mn-member-modal');
+  var body        = document.getElementById('mn-contact-body');
+  var step1       = document.getElementById('mn-step-1');
+  var step2       = document.getElementById('mn-step-2');
+  var continueBtn = document.getElementById('mn-continue-btn');
+  var laterBtn    = document.getElementById('mn-modal-later');
+  var backBtn     = document.getElementById('mn-back-btn');
+  var intentError = document.getElementById('mn-intent-error');
+  var stripeError = document.getElementById('mn-stripe-error');
+  var stripeLoading = document.getElementById('mn-stripe-loading');
+  var stripeContainer = document.getElementById('mn-stripe-container');
+  var stubJoin    = document.getElementById('mn-stub-join');
+
+  /* ── REVEAL ─────────────────────────────────────────────────── */
+  function reveal() {
+    if (modal) modal.classList.add('mn-modal--hidden');
+    if (body) body.style.display = 'block';
+  }
+
+  /* ── GATE CHECK ─────────────────────────────────────────────── */
+  function isMember() {
+    return !!localStorage.getItem('member_token');
+  }
+
+  /* ── POST-PAYMENT: verify Stripe session from URL ──────────── */
+  var params = new URLSearchParams(window.location.search);
+  var incomingSessionId = params.get('session');
+
+  if (isMember()) {
+    reveal();
+  } else if (incomingSessionId) {
+    /* User returned from Stripe redirect — verify server-side */
+    showVerifyingState();
+    fetch(FN_BASE + '/verify-mnemosynec-checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ session_id: incomingSessionId }),
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (data.success) {
+          localStorage.setItem('member_token', incomingSessionId);
+          /* Clean URL, then reveal */
+          var cleanUrl = window.location.pathname;
+          window.history.replaceState({}, '', cleanUrl);
+          reveal();
+        } else {
+          /* Payment not confirmed — show gate with error */
+          hideVerifyingState();
+          showStripeError('Payment could not be confirmed. Please try again.');
+        }
+      })
+      .catch(function () {
+        hideVerifyingState();
+        showStripeError('Verification failed. Please refresh and try again.');
+      });
+  }
+  /* else: no token, no session → gate modal stays visible (default) */
+
+  function showVerifyingState() {
+    if (step1) { step1.classList.remove('mn-modal-step--active'); }
+    if (step2) { step2.classList.add('mn-modal-step--active'); }
+    if (stripeLoading) stripeLoading.textContent = 'Verifying payment…';
+  }
+  function hideVerifyingState() {
+    if (step2) { step2.classList.remove('mn-modal-step--active'); }
+    if (step1) { step1.classList.add('mn-modal-step--active'); }
+  }
+
+  /* ── "MAYBE LATER" — inline dismiss, ZERO navigation (FIX VIOLATION 1) */
+  if (laterBtn) {
+    laterBtn.addEventListener('click', function () {
+      reveal();
+      /* Mark session as "later" so modal stays hidden this session */
+      try { sessionStorage.setItem('mn_gate_later', '1'); } catch (e) { /* ok */ }
+    });
+  }
+
+  /* ── STUB JOIN LINK ──────────────────────────────────────────── */
+  if (stubJoin) {
+    stubJoin.addEventListener('click', function (e) {
+      e.preventDefault();
+      if (modal) modal.classList.remove('mn-modal--hidden');
+      if (body) body.style.display = 'none';
+      showStep1();
+    });
+  }
+
+  /* ── STEP NAVIGATION ─────────────────────────────────────────── */
+  function showStep1() {
+    if (step1) step1.classList.add('mn-modal-step--active');
+    if (step2) step2.classList.remove('mn-modal-step--active');
+    setBtnIdle();
+  }
+  function showStep2() {
+    if (step1) step1.classList.remove('mn-modal-step--active');
+    if (step2) step2.classList.add('mn-modal-step--active');
+  }
+
+  if (backBtn) {
+    backBtn.addEventListener('click', function () {
+      /* Destroy embedded checkout if mounted */
+      if (window._mnCheckout) {
+        try { window._mnCheckout.destroy(); } catch (e) { /* ok */ }
+        window._mnCheckout = null;
+      }
+      /* Reset stripe container */
+      if (stripeContainer) {
+        stripeContainer.innerHTML = '';
+        var loadDiv = document.createElement('div');
+        loadDiv.className = 'mn-stripe-loading';
+        loadDiv.id = 'mn-stripe-loading';
+        loadDiv.setAttribute('aria-live', 'polite');
+        loadDiv.innerHTML = '<div class="mn-stripe-loading__spinner" aria-hidden="true"></div>Opening checkout\u2026';
+        stripeContainer.appendChild(loadDiv);
+      }
+      if (stripeError) hideError(stripeError);
+      showStep1();
+    });
+  }
+
+  /* ── CONTINUE BUTTON (Step 1 → Step 2 + launch Stripe) ──────── */
+  function getSelectedIntent() {
+    var radios = document.querySelectorAll('input[name="mn-intent"]');
+    for (var i = 0; i < radios.length; i++) {
+      if (radios[i].checked) return radios[i].value;
+    }
+    return null;
+  }
+
+  function setBtnLoading(text) {
+    if (!continueBtn) return;
+    continueBtn.disabled = true;
+    continueBtn.classList.add('mn-cta-btn--loading');
+    continueBtn.childNodes[0].textContent = text || 'Opening checkout\u2026 ';
+  }
+  function setBtnIdle() {
+    if (!continueBtn) return;
+    continueBtn.disabled = false;
+    continueBtn.classList.remove('mn-cta-btn--loading');
+    continueBtn.childNodes[0].textContent = 'Join the Cooperative \u2192 ';
+  }
+
+  function showError(el, msg) {
+    if (!el) return;
+    el.textContent = msg;
+    el.classList.add('mn-error-toast--visible');
+  }
+  function hideError(el) {
+    if (!el) return;
+    el.textContent = '';
+    el.classList.remove('mn-error-toast--visible');
+  }
+  function showStripeError(msg) {
+    showError(stripeError, msg);
+  }
+
+  if (continueBtn) {
+    continueBtn.addEventListener('click', function () {
+      var intent = getSelectedIntent();
+      if (!intent) {
+        showError(intentError, 'Please select one option to continue.');
+        return;
+      }
+      hideError(intentError);
+
+      /* BP078: visible feedback within 200ms */
+      setBtnLoading('Opening checkout\u2026 ');
+
+      showStep2();
+      mountStripeCheckout(intent);
+    });
+  }
+
+  /* ── STRIPE EMBEDDED CHECKOUT ────────────────────────────────── */
+  function mountStripeCheckout(intent) {
+    if (!STRIPE_PK || STRIPE_PK === 'pk_live_FOUNDER_SET_IN_CONFIG' || STRIPE_PK === '') {
+      showStripeError('Checkout is not configured yet. Please contact support.');
+      setBtnIdle();
+      return;
+    }
+
+    var stripe;
+    try {
+      stripe = Stripe(STRIPE_PK);
+    } catch (e) {
+      showStripeError('Failed to initialize payment. Please refresh and try again.');
+      setBtnIdle();
+      return;
+    }
+
+    stripe.initEmbeddedCheckout({
+      fetchClientSecret: function () {
+        return fetch(FN_BASE + '/create-mnemosynec-checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ intent: intent, return_url: PAGE_URL }),
+        })
+          .then(function (r) {
+            if (!r.ok) throw new Error('HTTP ' + r.status);
+            return r.json();
+          })
+          .then(function (data) {
+            if (!data.client_secret) throw new Error('No client_secret returned');
+            return data.client_secret;
+          });
+      },
+    }).then(function (checkout) {
+      window._mnCheckout = checkout;
+      /* Remove loading indicator */
+      var loadingEl = document.getElementById('mn-stripe-loading');
+      if (loadingEl) loadingEl.style.display = 'none';
+      checkout.mount('#mn-stripe-container');
+      setBtnIdle();
+    }).catch(function (err) {
+      console.error('[mn-checkout] failed:', err);
+      showStripeError('Could not open checkout: ' + (err.message || 'unknown error') + '. Please try again.');
+      showStep1();
+      setBtnIdle();
+    });
+  }
+
+  /* ── CONTACT SHEET ────────────────────────────────────────────── */
+  var allFiles = {{ if $.Site.Data.proofs_storm_contact }}{{ $.Site.Data.proofs_storm_contact | jsonify }}{{ else }}[]{{ end }};
+  var ctxSheet = document.getElementById('mn-sheet-context');
+  var forSheet = document.getElementById('mn-sheet-forensic');
+
+  if (allFiles && allFiles.length && ctxSheet && forSheet) {
+    allFiles.forEach(function (f) {
+      var fig = document.createElement('figure');
+      var img = document.createElement('img');
+      img.src = '/img/proofs/storm/contact/' + f;
+      img.alt = f.replace(/\.(png|jpg|jpeg)$/i, '').replace(/_/g, ' ');
+      img.loading = 'lazy';
+      var cap = document.createElement('figcaption');
+      cap.textContent = f;
+      fig.appendChild(img);
+      fig.appendChild(cap);
+      if (f.startsWith('00_context')) {
+        ctxSheet.appendChild(fig);
+      } else {
+        forSheet.appendChild(fig);
+      }
+    });
+  }
+
+  /* ── LIGHTBOX ─────────────────────────────────────────────────── */
+  var lb    = document.getElementById('mn-lightbox');
+  var lbImg = document.getElementById('mn-lightbox-img');
+  if (lb && lbImg) {
+    document.addEventListener('click', function (e) {
+      var fig = e.target.closest('.mn-contact-sheet figure');
+      if (fig) {
+        var t = fig.querySelector('img');
+        lbImg.src = t.src;
+        lbImg.alt = t.alt;
+        lb.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        return;
+      }
+      if (e.target === lb) {
+        lb.classList.remove('active');
+        lbImg.src = '';
+        document.body.style.overflow = '';
+      }
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        lb.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+  }
+
+})();
+</script>
+</body>
+</html>

@@ -34,6 +34,13 @@ buildFuture = true
   # BP081: conditional for mnemosynec homepage partial
   isMnemosynec = true
 
+  # BP084: Stripe publishable key for embedded Checkout on gate pages
+  # FOUNDER: replace with your live pk from https://dashboard.stripe.com/apikeys
+  stripePk = "pk_live_FOUNDER_SET_IN_CONFIG"
+
+  # BP084: Supabase edge functions base URL (public, safe to embed)
+  supabaseFunctionsUrl = "https://ruuxzilgmuwddcofqecc.supabase.co/functions/v1"
+
   [params.label]
     text = "MnemosyneC"
     icon = "/LianaBanyanLogo.png"

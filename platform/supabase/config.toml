@@ -1,5 +1,12 @@
 project_id = "ruuxzilgmuwddcofqecc"
 
+# BP084 Join Flow Collapse — public endpoints, no JWT required
+[functions.create-mnemosynec-checkout]
+verify_jwt = false
+
+[functions.verify-mnemosynec-checkout]
+verify_jwt = false
+
 [functions.kickstarter-webhook]
 verify_jwt = false
 
