@@ -121,6 +121,25 @@ Every Plow run adds verified eblets. HOT retrieval on the next Ask costs $0 and 
 
 ---
 
+## The Gemma Reader {#gemma}
+
+The **Reader** layer in MnemosyneC runs Google's **Gemma** — an open-weight large language model released under a license compatible with cooperative redistribution and our Defensive Patent Pledge #2260.
+
+Two variants ship with MnemosyneC:
+- **gemma2:2b** (~1.5 GB) — lightweight tier, M5 Son's hardware tier, fast local responses
+- **gemma4:12b** (~7 GB) — premium tier, M0 Founder's hardware tier — the model behind the 68/70 MMLU-Pro result (97.1%)
+
+Gemma runs locally via Ollama. No cloud account. No API key. No token egress. $0 per call.
+
+**Without the substrate, Gemma 4 12B scores ~6–8% on our benchmark. With the substrate: 97.1%.** The model is interchangeable. The substrate is the variable.
+
+→ [Read more about Gemma](/gemma/)
+
+<div data-comments-thread="how-it-works-gemma-section" data-supabase-url="https://rkmyijnxlsjmrnsezjlb.supabase.co" data-supabase-anon-key="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJrbXlpam54bHNqbXJuc2V6amxiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTE2NjI4MDUsImV4cCI6MjAyNzIzODgwNX0.placeholder"></div>
+<script src="/js/comments.js" defer></script>
+
+---
+
 *How It Works · MnemosyneC · Liana Banyan Corporation*
 
-*[← Back to homepage](/) · [Proofs & Receipts](/proofs/) · [The Diagnosis](/diagnosis/) · [Constellation](/constellation/) · [Download v0.4.1](/download/)*
+*[← Back to homepage](/) · [Proofs & Receipts](/proofs/) · [The Diagnosis](/diagnosis/) · [Constellation](/constellation/) · [Gemma](/gemma/) · [Download v0.4.1](/download/)*
