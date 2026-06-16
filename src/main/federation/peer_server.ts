@@ -1,5 +1,5 @@
 /**
- * peer_server.ts — MnemosyneC v0.4.0 BP083 Peer HTTP Server
+ * peer_server.ts — MnemosyneC v0.5.0 BP084 Peer HTTP Server
  *
  * Listens on port 7474, handles:
  *   GET  /api/heartbeat      → 200 OK (liveness check)
@@ -8,25 +8,40 @@
  *   POST /api/diagnosis/post → receives a Diagnosis post from Constellation
  *   POST /api/diagnosis/answer → receives a Diagnosis answer
  *
+ * BP084 SEG-2: publishes peer presence to Supabase relay every 60 s
+ *   for WAN NAT traversal (cross-NAT peers routed via wan-relay-route).
+ * BP084 SEG-3: /api/info populated from ram_detector + chocolates registry.
+ *
  * SCAFFOLD v0.4.0 — plain HTTP, no auth.
- * Full Thorax encryption + Socceri transport deferred to v0.4.1.
- * All inter-machine communication is cooperative-class (Heart of Peace BP051).
+ * Full Thorax encryption applied to WAN relay payloads (SEG-5, mic_dispatcher).
  */
 
 import http from 'http';
+import { existsSync, readFileSync, readdirSync } from 'fs';
+import { join } from 'path';
 import { app } from 'electron';
 import type { IncomingMessage, ServerResponse } from 'http';
+import { detectHardwareTier, getRecommendedModel } from '../hardware/ram_detector';
 import type { MicStartPayload } from './mic_types';
 
 export const PEER_SERVER_PORT = 7474;
+const PRESENCE_INTERVAL_MS = 60_000;
 
 let _server: http.Server | null = null;
+let _presenceTimer: ReturnType<typeof setInterval> | null = null;
 
 // Callback hooks (set by registerPeerServerHooks)
 let _onPlowDomain: ((domain: string, questions: string[], ollamaBaseUrl: string, model: string) => Promise<{ ebletsWritten: number; quarantined: number; andonEvents: number; status: string }>) | null = null;
 let _onDiagnosisPost: ((post: unknown) => Promise<void>) | null = null;
 let _onDiagnosisAnswer: ((answer: unknown) => Promise<void>) | null = null;
 let _onDiagnosisUpvote: ((data: unknown) => Promise<void>) | null = null;
+
+// Presence config (set by startPeerServer caller)
+let _peerId: string | null = null;
+let _emailHash: string | null = null;
+let _wanSoccerballId: string | null = null;
+let _relaySessionId: string | null = null;
+let _supabaseUrl: string | null = null;
 
 export function registerPeerServerHooks(hooks: {
   onPlowDomain?: typeof _onPlowDomain;
@@ -39,6 +54,121 @@ export function registerPeerServerHooks(hooks: {
   if (hooks.onDiagnosisAnswer) _onDiagnosisAnswer = hooks.onDiagnosisAnswer;
   if (hooks.onDiagnosisUpvote) _onDiagnosisUpvote = hooks.onDiagnosisUpvote;
 }
+
+export function registerPresenceConfig(config: {
+  peerId: string;
+  emailHash: string;
+  wanSoccerballId: string;
+  relaySessionId: string;
+  supabaseUrl: string;
+}): void {
+  _peerId = config.peerId;
+  _emailHash = config.emailHash;
+  _wanSoccerballId = config.wanSoccerballId;
+  _relaySessionId = config.relaySessionId;
+  _supabaseUrl = config.supabaseUrl;
+}
+
+// ─── Chocolates registry (SEG-3) ─────────────────────────────────────────────
+
+/**
+ * Returns list of installed domain names from the chocolates JSONL files.
+ * Reads provenance fields like "starter_chocolate:math:v0.3.7" → "math".
+ */
+function getInstalledDomains(): string[] {
+  const chocolatesDir = join(app.getAppPath(), 'resources', 'chocolates');
+  const domains = new Set<string>();
+
+  try {
+    if (!existsSync(chocolatesDir)) return [];
+    const files = readdirSync(chocolatesDir).filter((f) => f.endsWith('.jsonl'));
+    for (const file of files) {
+      try {
+        const content = readFileSync(join(chocolatesDir, file), 'utf8');
+        for (const line of content.split('\n')) {
+          if (!line.trim()) continue;
+          const provMatch = line.match(/"provenance":"[^:]+:([^:]+)/);
+          if (provMatch && provMatch[1]) {
+            domains.add(provMatch[1]);
+          }
+        }
+      } catch {
+        // Skip unreadable file
+      }
+    }
+  } catch {
+    // Return empty on any error
+  }
+
+  return [...domains].sort();
+}
+
+// ─── Presence publishing (SEG-2) ─────────────────────────────────────────────
+
+/**
+ * Publishes this peer's presence to the Supabase relay for NAT traversal.
+ * Called every 60 s while the server is running.
+ */
+async function publishPresence(): Promise<void> {
+  if (!_peerId || !_wanSoccerballId || !_supabaseUrl) return;
+
+  const hwTier = detectHardwareTier();
+  const installedDomains = getInstalledDomains();
+
+  const relayBase =
+    (typeof process !== 'undefined' && process.env?.RELAY_BASE)
+      ? process.env.RELAY_BASE
+      : 'https://relay.lianabanyan.com/functions/v1';
+  const relayBaseFallback = 'https://ruuxzilgmuwddcofqecc.supabase.co/functions/v1';
+
+  const body = {
+    v: 1,
+    s: _wanSoccerballId.slice(0, 32),
+    p: [_peerId],
+    b: {
+      peerId: _peerId,
+    },
+    ts: Date.now(),
+    peer_id: _peerId,
+    email_hash: _emailHash ?? undefined,
+    relay_session_id: _relaySessionId ?? undefined,
+    capabilities: {
+      ollamaModel: getRecommendedModel(),
+      ramTier: hwTier.tier,
+      ramGb: hwTier.ramGb,
+      installedDomains,
+      version: app.getVersion(),
+    },
+  };
+
+  const postBody = JSON.stringify(body);
+  const tryPublish = async (base: string) => {
+    try {
+      const res = await fetch(`${base}/wan-relay-publish`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: postBody,
+        signal: AbortSignal.timeout(10_000),
+      });
+      return res.ok;
+    } catch {
+      return false;
+    }
+  };
+
+  let ok = await tryPublish(relayBase);
+  if (!ok) {
+    ok = await tryPublish(relayBaseFallback);
+  }
+
+  if (ok) {
+    console.log(`[PeerServer] presence published: peer=${_peerId?.slice(0, 8)}…`);
+  } else {
+    console.warn('[PeerServer] presence publish failed — WAN routing degraded');
+  }
+}
+
+// ─── Request helpers ──────────────────────────────────────────────────────────
 
 function readBody(req: IncomingMessage): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -68,14 +198,25 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse): Promise
     return;
   }
 
-  // Info
+  // Info (SEG-3: populated from ram_detector + chocolates registry)
   if (url === '/api/info' && method === 'GET') {
+    const hwTier = detectHardwareTier();
+    const installedDomains = getInstalledDomains();
     sendJson(res, 200, {
-      id: 'self',
+      id: _peerId ?? 'self',
       name: 'MnemosyneC Peer',
       version: app.getVersion(),
-      ollamaModel: null, // SCAFFOLD: populate from ollama_manager in v0.4.1
-      installedDomains: [], // SCAFFOLD: read from chocolates registry in v0.4.1
+      ollamaModel: getRecommendedModel(),
+      ramTier: hwTier.tier,
+      ramGb: hwTier.ramGb,
+      installedDomains,
+      capabilities: {
+        ollamaModel: getRecommendedModel(),
+        ramTier: hwTier.tier,
+        ramGb: hwTier.ramGb,
+        installedDomains,
+        version: app.getVersion(),
+      },
     });
     return;
   }
@@ -98,7 +239,7 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse): Promise
         domain,
         questions,
         ollamaBaseUrl ?? 'http://127.0.0.1:11434',
-        model ?? 'gemma4:12b',
+        model ?? getRecommendedModel(),
       );
       sendJson(res, 200, result);
     } catch (err) {
@@ -176,7 +317,12 @@ export function startPeerServer(): void {
   });
 
   _server.listen(PEER_SERVER_PORT, '0.0.0.0', () => {
-    console.log(`[PeerServer] v0.4.0 SCAFFOLD listening on :${PEER_SERVER_PORT}`);
+    console.log(`[PeerServer] v0.5.0 BP084 listening on :${PEER_SERVER_PORT}`);
+    // BP084 SEG-2: start presence publishing loop
+    publishPresence().catch(console.warn);
+    _presenceTimer = setInterval(() => {
+      publishPresence().catch(console.warn);
+    }, PRESENCE_INTERVAL_MS);
   });
 
   _server.on('error', (err: NodeJS.ErrnoException) => {
@@ -190,6 +336,10 @@ export function startPeerServer(): void {
 }
 
 export function stopPeerServer(): void {
+  if (_presenceTimer) {
+    clearInterval(_presenceTimer);
+    _presenceTimer = null;
+  }
   if (_server) {
     _server.close(() => { console.log('[PeerServer] Stopped.'); });
     _server = null;

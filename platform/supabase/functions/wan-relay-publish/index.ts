@@ -1,21 +1,32 @@
 // BP080 · SEG-WAN-2 · wan-relay-publish
+// BP084 · SEG-2 · extends to write peer_presence + capabilities (2026-06-15)
 // ============================================================
 // POST /functions/v1/wan-relay-publish
-// Accepts a PeanutRoll JSON body, validates SID (32-char hex),
-// upserts into wan_relay_records keyed by SID + cooperative_epoch.
+// Accepts a PeanutRoll JSON body (extended with optional presence fields),
+// validates SID (32-char hex), upserts into wan_relay_records keyed by
+// SID + cooperative_epoch AND upserts peer_presence for NAT traversal.
 // --no-verify-jwt: SID is the auth token (intentionally anonymous).
 //
 // Rate limits (in-process per Deno isolate):
 //   - 10 publishes per IP per hour
 //   - 3 publishes per SID per hour
 //
-// Request: PeanutRoll { v:1, s:string, p:string[], b:Record<string,string>, ts:number }
+// Request: PeanutRoll extended {
+//   v:1, s:string, p:string[], b:Record<string,string>, ts:number,
+//   // BP084 SEG-2 extensions (all optional):
+//   peer_id?: string,
+//   email_hash?: string,
+//   lan_addresses?: string[],
+//   relay_session_id?: string,
+//   capabilities?: Record<string,unknown>
+// }
 // Response 202: { ok:true, sid:string }
 // Response 400: { ok:false, error:string }
 // Response 429: { ok:false, error:string }
 // Response 500: { ok:false, error:string }
 //
 // Authored: 2026-06-11 · Bishop SEG-WAN-2 (Option A ratify)
+// Extended: 2026-06-15 · Knight BP084 SEG-2
 // ============================================================
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
@@ -47,6 +58,12 @@ interface PeanutRoll {
   p: string[];
   b: Record<string, string>;
   ts: number;
+  // BP084 SEG-2 extensions — optional presence fields
+  peer_id?: string;
+  email_hash?: string;
+  lan_addresses?: string[];
+  relay_session_id?: string;
+  capabilities?: Record<string, unknown>;
 }
 
 function isValidPeanutRoll(body: unknown): body is PeanutRoll {
@@ -182,6 +199,28 @@ Deno.serve(async (req) => {
   if (error) {
     console.error("[wan-relay-publish] supabase error:", error.message);
     return json({ ok: false, error: "storage error" }, 500);
+  }
+
+  // BP084 SEG-2: upsert peer_presence if presence fields are included
+  if (roll.peer_id) {
+    const presencePayload: Record<string, unknown> = {
+      peer_id: roll.peer_id,
+      wan_soccerball_id: roll.s,
+      last_seen_at: new Date(nowMs).toISOString(),
+    };
+    if (roll.email_hash) presencePayload.email_hash = roll.email_hash;
+    if (roll.lan_addresses) presencePayload.lan_addresses = roll.lan_addresses;
+    if (roll.relay_session_id) presencePayload.relay_session_id = roll.relay_session_id;
+    if (roll.capabilities) presencePayload.capabilities = roll.capabilities;
+
+    const { error: presenceError } = await supabase
+      .from("peer_presence")
+      .upsert(presencePayload, { onConflict: "peer_id" });
+
+    if (presenceError) {
+      // Non-fatal: relay still works without presence; log and continue
+      console.warn("[wan-relay-publish] peer_presence upsert warning:", presenceError.message);
+    }
   }
 
   return json({ ok: true, sid: roll.s }, 202);

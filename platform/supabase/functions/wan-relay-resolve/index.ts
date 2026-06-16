@@ -1,7 +1,9 @@
 // BP080 · SEG-WAN-2 · wan-relay-resolve
+// BP084 · SEG-2 · includes capabilities from peer_presence (2026-06-15)
 // ============================================================
 // GET /functions/v1/wan-relay-resolve/:sid
-// Resolves a SID to its latest PeanutRoll from wan_relay_records.
+// Resolves a SID to its latest PeanutRoll from wan_relay_records,
+// enriched with capabilities from peer_presence (BP084 SEG-2).
 // Returns 404 if not found or expired.
 // --no-verify-jwt: SID is the auth token (intentionally anonymous).
 //
@@ -9,13 +11,14 @@
 //   - 60 resolves per IP per minute
 //
 // Request: GET /wan-relay-resolve/<32-char-hex-sid>
-// Response 200: PeanutRoll { v, s, p, b, ts }
+// Response 200: PeanutRoll + { capabilities?, peer_id? }
 // Response 400: { error:string }
 // Response 404: { error:string }
 // Response 429: { error:string }
 // Response 500: { error:string }
 //
 // Authored: 2026-06-11 · Bishop SEG-WAN-2 (Option A ratify)
+// Extended: 2026-06-15 · Knight BP084 SEG-2
 // ============================================================
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
@@ -132,5 +135,26 @@ Deno.serve(async (req) => {
     return json({ error: "not found" }, 404);
   }
 
-  return peanutRollResponse(data.peanut_roll);
+  const roll = data.peanut_roll as Record<string, unknown>;
+
+  // BP084 SEG-2: enrich with peer_presence capabilities if available
+  if (roll && typeof roll.peer_id === "string") {
+    const { data: presence } = await supabase
+      .from("peer_presence")
+      .select("capabilities, peer_id, lan_addresses")
+      .eq("peer_id", roll.peer_id as string)
+      .maybeSingle();
+
+    if (presence) {
+      const enriched = {
+        ...roll,
+        capabilities: presence.capabilities ?? null,
+        peer_id: presence.peer_id,
+        lan_addresses: presence.lan_addresses ?? [],
+      };
+      return peanutRollResponse(enriched);
+    }
+  }
+
+  return peanutRollResponse(roll);
 });

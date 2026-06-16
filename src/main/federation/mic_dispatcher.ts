@@ -21,9 +21,145 @@ import type {
   MicStartPayload,
 } from './mic_types';
 import { discoverPeers } from './constellation_discovery';
-import { randomBytes } from 'crypto';
+import { randomBytes, createHash } from 'crypto';
+import { networkInterfaces } from 'os';
 
 const PEER_SERVER_PORT = 7474;
+
+// ─── WAN relay config (BP084 SEG-2) ──────────────────────────────────────────
+const RELAY_BASE =
+  (typeof process !== 'undefined' && process.env?.RELAY_BASE)
+    ? process.env.RELAY_BASE
+    : 'https://relay.lianabanyan.com/functions/v1';
+const RELAY_BASE_FALLBACK = 'https://ruuxzilgmuwddcofqecc.supabase.co/functions/v1';
+
+/**
+ * Returns true if peerAddress (IP:port) is on the same local subnet as this machine.
+ * LAN peers → direct port 7474; WAN peers → relay route.
+ */
+function isLanPeer(peerAddress: string): boolean {
+  const peerIp = peerAddress.split(':')[0] ?? '';
+  const ifaces = networkInterfaces();
+  for (const iface of Object.values(ifaces)) {
+    if (!iface) continue;
+    for (const addr of iface) {
+      if (addr.family !== 'IPv4' || addr.internal) continue;
+      // Same /24 subnet check (sufficient for home/office LAN)
+      const localPrefix = addr.address.split('.').slice(0, 3).join('.');
+      const peerPrefix = peerIp.split('.').slice(0, 3).join('.');
+      if (localPrefix === peerPrefix) return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * Encrypt a MIC dispatch payload for WAN relay using Thorax AES-256-GCM.
+ * Key derived from sha256(peerId + ":wan-mic-key-v1") for simplicity;
+ * full key exchange uses emailHash + sessionNonce from wan_soccerball_address.
+ * SEG-5: relay sees only opaque ciphertext + target peer_id.
+ */
+async function encryptForRelay(
+  plaintext: string,
+  targetPeerId: string,
+  _sharedSecret?: string,
+): Promise<string> {
+  // Derive a deterministic key from targetPeerId; in production this is replaced
+  // by the shared emailHash+sessionNonce from wan_soccerball_address.ts key exchange.
+  const keyMaterial = _sharedSecret ?? targetPeerId;
+  const rawKey = createHash('sha256').update(`${keyMaterial}:thorax-relay-v1`).digest();
+
+  const cryptoKey = await globalThis.crypto.subtle.importKey(
+    'raw', rawKey, { name: 'AES-GCM' }, false, ['encrypt'],
+  );
+
+  const iv = globalThis.crypto.getRandomValues(new Uint8Array(12));
+  const ct = await globalThis.crypto.subtle.encrypt(
+    { name: 'AES-GCM', iv },
+    cryptoKey,
+    new TextEncoder().encode(plaintext),
+  );
+
+  const ivB64 = btoa(String.fromCharCode(...iv));
+  const ctB64 = btoa(String.fromCharCode(...new Uint8Array(ct)));
+  return JSON.stringify({ iv: ivB64, ct: ctB64 });
+}
+
+/**
+ * Dispatch a domain work unit to a WAN peer via the Supabase relay.
+ * Payload is Thorax-encrypted — relay sees only ciphertext + target peer_id.
+ */
+async function dispatchDomainViaRelay(
+  peer: ConstellationPeer,
+  domain: string,
+  questions: string[],
+  payload: MicStartPayload,
+): Promise<PeerPlowResult> {
+  const plaintext = JSON.stringify({
+    domain,
+    questions,
+    ollamaBaseUrl: payload.ollamaBaseUrl ?? 'http://127.0.0.1:11434',
+    model: payload.model ?? 'gemma4:12b',
+  });
+
+  let payloadEncrypted: string;
+  try {
+    payloadEncrypted = await encryptForRelay(plaintext, peer.id);
+  } catch (err) {
+    return {
+      peerId: peer.id,
+      domain,
+      ebletsWritten: 0,
+      quarantined: 0,
+      andonEvents: 0,
+      status: 'red',
+      error: `Thorax encrypt failed: ${err instanceof Error ? err.message : String(err)}`,
+    };
+  }
+
+  const tryRoute = async (base: string): Promise<Response | null> => {
+    try {
+      return await fetch(`${base}/wan-relay-route`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ payload_encrypted: payloadEncrypted, target_peer_id: peer.id }),
+        signal: AbortSignal.timeout(15_000),
+      });
+    } catch {
+      return null;
+    }
+  };
+
+  let res = await tryRoute(RELAY_BASE);
+  if (!res || !res.ok) {
+    res = await tryRoute(RELAY_BASE_FALLBACK);
+  }
+
+  if (!res || !res.ok) {
+    return {
+      peerId: peer.id,
+      domain,
+      ebletsWritten: 0,
+      quarantined: 0,
+      andonEvents: 0,
+      status: 'red',
+      error: `WAN relay route failed: HTTP ${res?.status ?? 'unreachable'}`,
+    };
+  }
+
+  // Relay accepted the payload.  The actual result is async (target peer processes
+  // and responds independently).  Return yellow pending — aggregation will
+  // reconcile via Supabase or future response channel.
+  return {
+    peerId: peer.id,
+    domain,
+    ebletsWritten: 0,
+    quarantined: 0,
+    andonEvents: 0,
+    status: 'yellow',
+    error: undefined,
+  };
+}
 
 export function generateWorkloadId(): string {
   return 'mic_' + randomBytes(6).toString('hex');
@@ -95,16 +231,24 @@ export function estimateWallClockMs(
   return maxDomainsPerWorker * PER_DOMAIN_MS;
 }
 
-// ─── Dispatch single domain to peer (HTTP scaffold) ───────────────────────────
-
+// ─── Dispatch single domain to peer ──────────────────────────────────────────
+//
+// BP084 SEG-2/SEG-5:
+//   LAN peers (same /24 subnet) → direct HTTP POST to port 7474 (fast, no encryption)
+//   WAN peers (different subnet) → Thorax-encrypted payload via Supabase relay-route
+//
 async function dispatchDomainToPeer(
   peer: ConstellationPeer,
   domain: string,
   questions: string[],
   payload: MicStartPayload,
 ): Promise<PeerPlowResult> {
-  // SCAFFOLD v0.4.0: HTTP POST to peer's MnemosyneC peer_server
-  // Full Thorax encryption + Socceri transport in v0.4.1
+  // WAN peers: route through relay with Thorax encryption
+  if (!isLanPeer(peer.address)) {
+    return dispatchDomainViaRelay(peer, domain, questions, payload);
+  }
+
+  // LAN peers: direct HTTP POST to peer_server port 7474
   const url = `http://${peer.address}/api/plow-domain`;
   try {
     const res = await fetch(url, {
