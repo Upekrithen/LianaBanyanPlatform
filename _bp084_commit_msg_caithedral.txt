@@ -1,0 +1,13 @@
+feat(BP084 SEG-1/SEG-5): relay.lianabanyan.com fallback chain + Thorax relay encryption
+
+SEG-1: RELAY_BASE now uses relay.lianabanyan.com/functions/v1 (custom domain),
+with RELAY_BASE_FALLBACK=ruuxzilgmuwddcofqecc.supabase.co as automatic 5xx/DNS failover.
+fetchWithRelayFallback() tries primary first, falls back on network error or 5xx.
+DNS-PENDING: Founder must add CNAME + Supabase custom domain (tracked SEG-7 checklist).
+
+SEG-5: thoraxRelayEncrypt/thoraxRelayDecrypt added (AES-256-GCM via Web Crypto).
+Key derivation: sha256(emailHash + sessionNonce + 'thorax-relay-v1').
+WAN relay payloads opaque to relay -- relay sees ciphertext + target_peer_id only.
+LAN-direct (port 7474) skips encryption for speed.
+
+Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>

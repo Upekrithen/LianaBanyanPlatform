@@ -1,0 +1,37 @@
+feat(v0.5.0 BP084): Mesh WAN/NAT Long-Haul -- all 7 SEGs complete
+
+SEG-1 (wan_soccerball_address.ts): relay.lianabanyan.com as primary RELAY_BASE
+  with automatic 5xx/DNS fallback to direct Supabase URL. DNS-PENDING (Founder action).
+
+SEG-2 (NAT traversal): peer_presence migration + wan-relay-route NEW edge function
+  + wan-relay-publish extended with capabilities jsonb + peer_presence upsert
+  + wan-relay-resolve enriched with capabilities from peer_presence.
+  peer_server.ts publishes presence every 60s with full capabilities.
+  mic_dispatcher.ts routes WAN peers through relay, LAN peers direct port 7474.
+
+SEG-3 (/api/info): populated from ram_detector (ollamaModel, ramTier, ramGb)
+  + chocolates registry (installedDomains) + app.getVersion(). No more nulls.
+
+SEG-4 (UDP LAN auto-discovery): constellation_discovery.ts broadcasts
+  MNEMOSYNEC_PEER_BEACON on port 7475 every 30s; listens and auto-adds
+  discovered LAN peers. WAN peers still via email_hash relay lookup.
+
+SEG-5 (Thorax relay encryption): AES-256-GCM applied to all WAN relay payloads
+  in both wan_soccerball_address.ts and mic_dispatcher.ts. Relay sees only
+  opaque ciphertext + target peer_id. LAN-direct skips encryption for speed.
+
+SEG-6 (HexIsle Devvit stub): HEXISLE_DEVVIT_REGISTRATION_STUB_BP084.md created
+  with full registration steps, Mikey Slot-1/Son Slot-2, cross-realm architecture,
+  Discord bot setup, and deadline 2026-06-30.
+
+SEG-7: Yoke-return written to BISHOP_DROPZONE/00_FOUNDER_REVIEW/.
+
+Sharp 1: tsc --noEmit PASS (both caithedral-core and tsconfig.main.json).
+Sharp 2: peer_presence migration exists at platform/supabase/migrations/20260615000001.
+Sharp 3: relay.lianabanyan.com fallback chain coded (DNS-pending, marked honestly).
+Sharp 4: /api/info returns non-null ollamaModel from ram_detector.
+Sharp 5: UDP broadcast in constellation_discovery.ts on port 7475.
+Sharp 6: Thorax AES-256-GCM applied to relay payloads in wan_soccerball_address.ts + mic_dispatcher.ts.
+Sharp 7: Devvit stub at BISHOP_DROPZONE/00_FOUNDER_REVIEW/HEXISLE_DEVVIT_REGISTRATION_STUB_BP084.md.
+
+Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
