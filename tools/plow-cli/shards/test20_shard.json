@@ -1,0 +1,408 @@
+{
+  "node_id": "test20",
+  "model_tier": "gemma4:12b",
+  "domains": [
+    "math",
+    "psychology"
+  ],
+  "total_questions": 20,
+  "generated_at": "2026-06-16T00:59:45.883Z",
+  "seed_version": "bp084-v1",
+  "questions": [
+    {
+      "question_id": "8042",
+      "domain": "math",
+      "question": "A total of x feet of fencing is to form three sides of a level rectangular yard. What is the maximum possible area of the yard, in terms of x ?",
+      "options": [
+        "2x^2",
+        "x^2/6",
+        "x^3/8",
+        "x^2/8",
+        "x^2/4",
+        "x^2/9",
+        "x^2/16",
+        "x^2/12",
+        "x^2",
+        "x^2/2"
+      ],
+      "correct_answer": "x^2/8",
+      "answer_letter": "D",
+      "source_category": "math"
+    },
+    {
+      "question_id": "7823",
+      "domain": "math",
+      "question": "Last weekend Sanjay watched 3 television shows that were each 30 minutes long. He also watched 1 movie on television that was 90 minutes long. What is the total number of minutes Sanjay watched television last weekend?",
+      "options": [
+        "140",
+        "150",
+        "160",
+        "180",
+        "100",
+        "130",
+        "120",
+        "200",
+        "90",
+        "170"
+      ],
+      "correct_answer": "180",
+      "answer_letter": "D",
+      "source_category": "math"
+    },
+    {
+      "question_id": "8166",
+      "domain": "math",
+      "question": "How many numbers are in the list $25, 26, 27, \\ldots, 99, 100 ?$",
+      "options": [
+        "90",
+        "50",
+        "22",
+        "77",
+        "80",
+        "74",
+        "100",
+        "23",
+        "76",
+        "75"
+      ],
+      "correct_answer": "76",
+      "answer_letter": "I",
+      "source_category": "math"
+    },
+    {
+      "question_id": "7837",
+      "domain": "math",
+      "question": "If $f(x) = 8x^3 - 6x^2 - 4x + 5$, find the value of $f( -2)$.",
+      "options": [
+        "64",
+        "5",
+        "-85",
+        "24",
+        "-64",
+        "75",
+        "-24",
+        "85",
+        "-75",
+        "-65"
+      ],
+      "correct_answer": "-75",
+      "answer_letter": "I",
+      "source_category": "math"
+    },
+    {
+      "question_id": "7893",
+      "domain": "math",
+      "question": "Find the maximum possible order for some element of Z_8 x Z_10 x Z_24.",
+      "options": [
+        "12",
+        "360",
+        "60",
+        "8",
+        "72",
+        "120",
+        "24",
+        "30",
+        "240",
+        "480"
+      ],
+      "correct_answer": "120",
+      "answer_letter": "F",
+      "source_category": "math"
+    },
+    {
+      "question_id": "8789",
+      "domain": "math",
+      "question": "Find the value of 6 • 24 ÷ (8 − 5).",
+      "options": [
+        "48",
+        "13",
+        "36",
+        "−13",
+        "60",
+        "-48",
+        "18",
+        "72",
+        "54",
+        "24"
+      ],
+      "correct_answer": "48",
+      "answer_letter": "A",
+      "source_category": "math"
+    },
+    {
+      "question_id": "9024",
+      "domain": "math",
+      "question": "suppose the 10-by-10 matrix A has the form: if i \\neq j, A_{i,j}=a_i*b_j; if i=j,  A_{i,j}=1+a_i*b_j for all 1<=i,j<=10. Here a_i = 1/i, b_i=1/(i+1). Find the determinant of A. return the numeric.",
+      "options": [
+        "2.2",
+        "2.1",
+        "2.0",
+        "1.8",
+        "1.6",
+        "1.9",
+        "3.0",
+        "2.5",
+        "2.3",
+        "1.7"
+      ],
+      "correct_answer": "1.9",
+      "answer_letter": "F",
+      "source_category": "math"
+    },
+    {
+      "question_id": "8103",
+      "domain": "math",
+      "question": "Statement 1 | If T: V -> W is a linear transformation and dim(V ) < dim(W) < 1, then T must be injective. Statement 2 | Let dim(V) = n and suppose that T: V -> V is linear. If T is injective, then it is a bijection.",
+      "options": [
+        "Neither True nor False, Neither True nor False",
+        "Neither True nor False, False",
+        "True, False",
+        "False, True",
+        "True, True but not always",
+        "Neither True nor False, True",
+        "True, Neither True nor False",
+        "False, Neither True nor False",
+        "False, False",
+        "True, True"
+      ],
+      "correct_answer": "True, True",
+      "answer_letter": "J",
+      "source_category": "math"
+    },
+    {
+      "question_id": "8303",
+      "domain": "math",
+      "question": "Coloring the edges of a complete graph with n vertices in 2 colors (red and blue), what is the smallest n that guarantees there is either a 4-clique in red or a 4-clique in blue?",
+      "options": [
+        "12",
+        "15",
+        "14",
+        "16",
+        "22",
+        "8",
+        "10",
+        "20",
+        "19",
+        "18"
+      ],
+      "correct_answer": "18",
+      "answer_letter": "J",
+      "source_category": "math"
+    },
+    {
+      "question_id": "7980",
+      "domain": "math",
+      "question": "Suppose V is a finite-dimensional vector space on F. $M1={a_1,a_2,a_3}$ is a basis of V, $M2={b_1,b_2,b_3}$ is another basis of V. Suppose the coordinates of b_1,b_2,b_3 under M1 are $c_1=(1,1,-1),c_2=(1,-1,1),c_3=(-1,1,1)$. Suppose the coordinate of $d\\in V$ under M1 is (1,3,5). What is the coordinate of d under M2? Return the three coordinate values as a list.",
+      "options": [
+        "[2, 3, 4]",
+        "[3, 4, 5]",
+        "[3, 1, 4]",
+        "[1, 3, 5]",
+        "[0, 1, 2]",
+        "[1, 2, 3]",
+        "[6, 7, 8]",
+        "[5, 6, 7]",
+        "[4, 5, 6]",
+        "[2, 4, 6]"
+      ],
+      "correct_answer": "[2, 3, 4]",
+      "answer_letter": "A",
+      "source_category": "math"
+    },
+    {
+      "question_id": "2598",
+      "domain": "psychology",
+      "question": "Discuss the advantages and disadvantages of doing field researchand laboratory research with human subjects.",
+      "options": [
+        "Laboratory research results are less valid than field research because they are always artificial.",
+        "Laboratory research is always preferable over field research",
+        "Field research is always better than laboratory research",
+        "Field research is less ethical than laboratory research because it involves real-world scenarios.",
+        "Field research yields quicker results than laboratory research.",
+        "Field research focuses on real people in real-world situations offering more impact but less control and laboratory research provides controlled situations with less impact but more control. There is a basic tradeoff between impact and control in these two methods.",
+        "Field research provides more control than laboratory research",
+        "Laboratory research can be conducted in any environment, while field research is limited to specific settings.",
+        "Field research typically requires more resources than laboratory research.",
+        "Laboratory research allows for studying larger groups than field research does."
+      ],
+      "correct_answer": "Field research focuses on real people in real-world situations offering more impact but less control and laboratory research provides controlled situations with less impact but more control. There is a basic tradeoff between impact and control in these two methods.",
+      "answer_letter": "F",
+      "source_category": "psychology"
+    },
+    {
+      "question_id": "2546",
+      "domain": "psychology",
+      "question": "What data support the theory that short-term memory is essentially auditory?",
+      "options": [
+        "The theory is supported by the fact that people can remember music better than words.",
+        "Experiments that reveal short-term memory performs equally well with auditory, visual, and kinesthetic information.",
+        "Short-term memory does not involve auditory processes.",
+        "Findings that suggest short-term memory is linked primarily to tactile sensations and the ability to remember textures.",
+        "Studies indicating that individuals recall visual patterns with higher accuracy than auditory information.",
+        "Observations that people with better spatial awareness have superior short-term memory.",
+        "Short-term memory is visual.",
+        "Research demonstrating that short-term memory capacity is significantly increased when information is presented visually rather than auditorily.",
+        "Experiments showing auditory recoding in recall process and the detrimental effects of interruptions in rhythmic sequence on recall.",
+        "Evidence showing a correlation between short-term memory and olfactory senses."
+      ],
+      "correct_answer": "Experiments showing auditory recoding in recall process and the detrimental effects of interruptions in rhythmic sequence on recall.",
+      "answer_letter": "I",
+      "source_category": "psychology"
+    },
+    {
+      "question_id": "2318",
+      "domain": "psychology",
+      "question": "How does the study of stereotyping relate to attribution theory?",
+      "options": [
+        "Stereotyping and attribution theory are equivalent concepts.",
+        "Attribution theory contradicts the principles of stereotyping.",
+        "Attribution theory rests on a specialized type of stereotyping.",
+        "Attribution theory has nothing to do with stereotyping.",
+        "Stereotyping is a fundamental aspect of attribution theory.",
+        "Attribution theory suggests that stereotyping is always inaccurate.",
+        "Attribution theory is a branch of the study of stereotyping.",
+        "Attribution theory explains stereotyping as a form of social learning.",
+        "Attribution theory provides methods for eliminating stereotyping.",
+        "Stereotyping is a consequence of attribution theory."
+      ],
+      "correct_answer": "Attribution theory rests on a specialized type of stereotyping.",
+      "answer_letter": "C",
+      "source_category": "psychology"
+    },
+    {
+      "question_id": "2226",
+      "domain": "psychology",
+      "question": "Which of the following kinds of brain scans would be most useful in disproving the statement: \"Most people only use 10 percent of their brains\"?",
+      "options": [
+        "CAT",
+        "X-ray",
+        "EEG",
+        "PET",
+        "MRI",
+        "SPECT",
+        "MRA",
+        "Ultrasound",
+        "DTI",
+        "fMRI"
+      ],
+      "correct_answer": "PET",
+      "answer_letter": "D",
+      "source_category": "psychology"
+    },
+    {
+      "question_id": "2740",
+      "domain": "psychology",
+      "question": "A common criticism of social psychological research is that it isnot externally valid. Explain.",
+      "options": [
+        "It is suggested that social psychological findings are not externally valid because they rely on outdated theoretical frameworks",
+        "The criticism stems from the belief that social psychological research is overly deterministic, ignoring the role of free will",
+        "The issue is that social psychological studies often have small sample sizes that are not representative of the population",
+        "Social psychological research lacks external validity due to its heavy reliance on statistical analysis",
+        "Critics argue that social psychological research overemphasizes the role of social influence and underestimates biological factors",
+        "The criticism is due to the lack of internal validity in social psychological research",
+        "Social psychology is criticized for focusing too much on cultural specificity, neglecting universal aspects of human behavior",
+        "Many social psychological experiments are not externally valid because they are often conducted in artificial settings, which may not accurately represent 'natural' human behavior.",
+        "Social psychological research is criticized because it often fails to consider individual differences"
+      ],
+      "correct_answer": "Many social psychological experiments are not externally valid because they are often conducted in artificial settings, which may not accurately represent 'natural' human behavior.",
+      "answer_letter": "H",
+      "source_category": "psychology"
+    },
+    {
+      "question_id": "2231",
+      "domain": "psychology",
+      "question": "Discuss Murray's theory of motivation and what influence it had on McClelland's development of the Achievement Motivation model.",
+      "options": [
+        "McClelland's model was influenced by Hull's theory of survival instincts",
+        "McClelland's model expanded on Murray's theory by introducing the idea that motivation is primarily driven by social comparison, which wasn't a focus in Murray's work.",
+        "Murray's theory had no influence on McClelland's model",
+        "McClelland's model was a direct copy of Murray's ideas",
+        "McClelland's Achievement Motivation model was influenced by Murray's theory of motivation that human behavior is a reflection of individual needs and motives, and that anything leading to positive affect produces approach behavior and anything leading to negative affect produces avoidance behavior.",
+        "McClelland's Achievement Motivation model was influenced by Murray's emphasis on psychosocial stages of development, which is not actually a part of Murray's theory.",
+        "McClelland's model disregarded Murray's focus on individual needs and instead proposed that environmental factors are the only determinants of human motivation.",
+        "McClelland's model was based on the premise that motivation is solely a product of external rewards and punishments, without any influence from Murray's theory.",
+        "McClelland's model was influenced by Murray's hierarchy of needs, which is a confusion with Maslow's theory, not Murray's.",
+        "Murray's theory suggested that motivation is derived from subconscious sexual and aggressive drives, which McClelland incorporated directly into his model."
+      ],
+      "correct_answer": "McClelland's Achievement Motivation model was influenced by Murray's theory of motivation that human behavior is a reflection of individual needs and motives, and that anything leading to positive affect produces approach behavior and anything leading to negative affect produces avoidance behavior.",
+      "answer_letter": "E",
+      "source_category": "psychology"
+    },
+    {
+      "question_id": "2165",
+      "domain": "psychology",
+      "question": "According to Erikson, a young adult's developmental crisis centers around",
+      "options": [
+        "autonomy vs. shame and guilt",
+        "integrity vs. despair",
+        "identity vs. role confusion",
+        "empathy vs. apathy",
+        "initiative vs. guilt",
+        "generativity vs. stagnation",
+        "intimacy vs. isolation",
+        "trust vs. mistrust",
+        "independence vs. dependence",
+        "industry vs. inferiority"
+      ],
+      "correct_answer": "intimacy vs. isolation",
+      "answer_letter": "G",
+      "source_category": "psychology"
+    },
+    {
+      "question_id": "2377",
+      "domain": "psychology",
+      "question": "After World War II there was much speculation about the personalities of those who had committed atrocities. What do the findings of Milgram's studies imply about the personalities of Nazi war criminals?",
+      "options": [
+        "Nazi war criminals were forced to commit atrocities against their will",
+        "Nazi war criminals had unique and rare personality traits that predisposed them to commit such crimes",
+        "The personalities of Nazi war criminals were distinctly different from average citizens",
+        "The Milgram studies suggest that education level was the primary factor in predicting who would commit atrocities",
+        "Nazi war criminals were inherently evil",
+        "Nazi war criminals were exclusively psychopathic personalities",
+        "The Milgram studies show that obedience to authority does not significantly influence behavior",
+        "The atrocities were committed by a small group of Nazi war criminals with unique psychological disorders",
+        "Only those with a strong ideological alignment with Nazi beliefs committed atrocities",
+        "Individuals involved in the atrocities of the German concentration camps were likely of a personality structure not unlike the average citizen in America today"
+      ],
+      "correct_answer": "Individuals involved in the atrocities of the German concentration camps were likely of a personality structure not unlike the average citizen in America today",
+      "answer_letter": "J",
+      "source_category": "psychology"
+    },
+    {
+      "question_id": "2498",
+      "domain": "psychology",
+      "question": "Discuss the relationship between arousal and motivation.",
+      "options": [
+        "Motivation can exist without any form of arousal.",
+        "Arousal level is a central aspect of motivation.",
+        "Motivation is the cause of arousal.",
+        "Motivation is a by-product of arousal.",
+        "High arousal always maximizes motivation.",
+        "Arousal is the same as motivation.",
+        "Motivation decreases with increased arousal.",
+        "Arousal and motivation are not related.",
+        "Arousal only affects motivation in physical tasks."
+      ],
+      "correct_answer": "Arousal level is a central aspect of motivation.",
+      "answer_letter": "B",
+      "source_category": "psychology"
+    },
+    {
+      "question_id": "2216",
+      "domain": "psychology",
+      "question": "According to Howard et al.’s (1996) phase model, which of the following is most likely to be affected during the first few sessions of psychotherapy?",
+      "options": [
+        "family dynamics",
+        "career satisfaction",
+        "communication skills",
+        "emotional intelligence",
+        "insight",
+        "coping skills",
+        "feelings of hopelessness"
+      ],
+      "correct_answer": "feelings of hopelessness",
+      "answer_letter": "G",
+      "source_category": "psychology"
+    }
+  ]
+}
