@@ -848,25 +848,25 @@ The Truth Integrity Chain and Code Breakers Guild mechanisms are being prepared 
 
 **Claim language (from canon eblet specification, formal patent prose pending counsel review):**
 
-**TIC Claims 1-5 (per `[[canon-truth-integrity-chain-dependency-argument-eblet-chronos-bp084]]`):**
+**TIC Claims 1-5 (per `[[canon-truth-integrity-chain-dependency-argument-eblet-chronos-bp084]]` — verbatim from canon):**
 
-> **Claim 1:** A computer-implemented method for managing epistemic status of claims in a knowledge base, comprising: (a) maintaining for each claim a structured record including at minimum a KNOWN field for verified facts, a THEORIES_OPEN field for uneliminated competing hypotheses, and an ELIMINATED field for falsified claims; (b) enforcing mutual exclusivity invariants across the three fields; (c) attributing each ELIMINATED field entry to an identifiable verification event with timestamp and verification chain.
+> **Claim 1:** A computer-implemented method for representing knowledge claims in a verified-knowledge accumulator, the method comprising: maintaining for each knowledge artifact (eblet) a structured truth-integrity record comprising (a) a known-propositions set; (b) an open-theories set wherein each open theory is associated with a consequence chain of derivable claims; (c) an eliminated-propositions set wherein each eliminated proposition is associated with a contradiction trail referencing observed empirical evidence; (d) upstream-dependency edges referencing prior knowledge artifacts; and (e) downstream-application edges referencing knowledge artifacts that depend on the present artifact.
 
-> **Claim 2:** The method of Claim 1, further comprising a dependency tracking mechanism including a DEPENDENCIES_UPSTREAM field identifying claims on which the subject claim depends and an APPLICATIONS_DOWNSTREAM field identifying claims that depend on the subject claim, wherein changes to a claim's epistemic status are automatically propagated through the dependency structure.
+> **Claim 2:** The method of claim 1, wherein upon update to a known-proposition the system automatically traverses the downstream-application edges and flags each downstream artifact for re-evaluation in a queue accessible to a cooperative network of verification agents.
 
-> **Claim 3:** The method of Claim 2, wherein propagation through the dependency structure implements an elimination propagation procedure that, when a load-bearing upstream claim is moved to the ELIMINATED field, triggers re-evaluation of all downstream claims that designated the upstream claim as load_bearing: true.
+> **Claim 3:** The method of claim 1, further comprising: a hasty-generalization detection step wherein any universal-quantified claim ("all X are Y") is rejected from the known-propositions set unless accompanied by a declared sample size meeting a configurable adequacy threshold, and a declared counter-evidence search radius.
 
-> **Claim 4:** The method of Claim 1, further comprising a hasty-generalization guard that requires any universal-quantified claim in the KNOWN field to pass both a minimum sample size threshold and a documented counter-evidence search before admission.
+> **Claim 4:** The method of claim 1, wherein the consequence chain of each open theory is automatically probed by a distributed plow loop that spawns child queries about the consequences and updates a survival score for the theory based on accumulated empirical-consistency evidence.
 
-> **Claim 5:** A consequence-tracing procedure that, when a new theory is added to the THEORIES_OPEN field, derives the theory's logical consequences to a bounded depth and checks each consequence against the KNOWN and ELIMINATED fields, escalating to an elimination verification procedure upon detecting a contradiction.
+> **Claim 5:** The method of claim 1, wherein elimination of a theory is logged as a first-class artifact in the verified-knowledge accumulator with associated marks-token reward to the contributing member, such that the cooperative's economic system pays members to demonstrate what is NOT true as well as what IS true.
 
-**Code Breakers Claims 6-8 (per `[[canon-code-breakers-guild-gold-refined-by-fire-elimination-marks-bp084]]`):**
+**Code Breakers Claims 6-8 (per `[[canon-code-breakers-guild-gold-refined-by-fire-elimination-marks-bp084]]` — verbatim from canon):**
 
-> **Claim 6:** A cooperative economic mechanism for incentivizing falsification of claims in a knowledge base, comprising: (a) a guild structure with member tier progression; (b) a challenge submission and verification procedure; (c) issuance of a tagged currency denomination (elimination-Marks) to members who successfully demonstrate that a claim is false, at a redemption rate at par with the denomination issued for affirmation work (confirmation-Marks).
+> **Claim 6:** The method of claim 1, further comprising: a guild-member registry wherein members are designated as adversarial verifiers and are compensated with elimination-class tokens for successful falsification of unverified knowledge claims, wherein successful falsification mints a new knowledge artifact recording the contradiction trail.
 
-> **Claim 7:** The mechanism of Claim 6, further comprising a four-tier claim certification system (UNTESTED, TESTED, FORGED, GOLD_REFINED_BY_FIRE) with defined advancement criteria including minimum challenge counts, minimum challenger diversity, and for the highest tier, an institutional vote; and a reversal process for the highest tier requiring both new structurally unavailable evidence and institutional majority vote.
+> **Claim 7:** The method of claim 6, wherein the knowledge accumulator tracks for each claim the number of independent adversarial verifiers that have attempted falsification, the elapsed time, and the cumulative fire-rounds survived; and assigns an immutability status to claims that exceed configurable threshold values on all three dimensions.
 
-> **Claim 8:** The mechanism of Claims 6-7, wherein the highest member honor (Refiner of Gold) is awarded to members who document a minimum number of honorable failures on claims that subsequently achieved the highest certification tier — creating an incentive for rigorous falsification attempts even when those attempts do not succeed in elimination.
+> **Claim 8:** The method of claim 6, wherein the highest-reputation tier of adversarial verifier is awarded specifically for unsuccessful falsification attempts against claims that subsequently achieved immutability status, such that the system honors verifiers proportionally to the quality of attacks they brought to claims that nevertheless survived.
 
 *Note: Above claim language is draft for technical description purposes. Patent counsel must finalize formal claim language before PROV_22 filing.*
 

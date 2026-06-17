@@ -30,7 +30,7 @@ My parents were missionaries. Africa was home. I remember being near a litter of
 
 Her reasoning was correct. Her conclusion was wrong.
 
-This is the distinction that matters. Correct reasoning from incomplete data can still reach a catastrophically wrong conclusion. The mother dog had no way to represent "this specific toddler is not a threat." She had no ELIMINATED category. She could only work with what she knew, and what she didn't know she didn't know was the variable that mattered.
+This is the distinction that matters. Correct reasoning from incomplete data can still reach a catastrophically wrong conclusion. The mother dog had never seen a white person before in her life — she did not categorize me as a child she could choose to spare; she categorized me as an alien being, not human at all. She had no way to represent "pale-skinned creatures near my puppies can be harmless." She had no ELIMINATED category. She could only work with what she knew, and what she didn't know she didn't know was the variable that mattered.
 
 I spent years puzzling over that dog. Not about the attack — that healed. About the epistemology. She was a perfect Bayesian reasoner operating on an incomplete hypothesis space. She had no structural way to distinguish "I don't know this creature is safe" from "I have confirmed this creature is dangerous." Those are not the same thing. Treating them as the same thing is a category error that can get a toddler bitten and a mother dog beaten for doing her job.
 

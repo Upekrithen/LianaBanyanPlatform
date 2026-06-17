@@ -19,19 +19,11 @@ cross_reference: "See Innovation Area 36 (Code Breakers Guild + Gold Refined by 
 
 ## Anecdote — Founder Voice (verbatim from canon: founders_anecdote_africa_mother_dog_bp084)
 
-When I was 3 years old, I was attacked by a dog in Africa.
+> "When I was 3, in Africa, I saw a mother dog with a litter of days old puppies, only a few with their eyes opened and mewling about. When I went to pet them, the mother dog attacked me viciously. I was saved, no real harm done, but Abraham, who owned the dog, and his wife, who was holding me against her shoulder as I sobbed, told my parents and sister and I that the dog had never seen a white person before in her life. So she had NO IDEA that I was just a human child and meant no harm. To her, I was an alien being come to snatch her children. So she protected them. She was logical. But incorrect."
 
-We were missionaries' children, and Africa was home for a season. I don't remember everything about that day, but I remember the dog — a mother protecting her puppies. She didn't know me. She only knew that a small creature was moving toward what she loved most. From every piece of evidence available to her, I was a threat.
+— Founder, BP084 (verbatim)
 
-She was not wrong to reason that way. She was wrong about me.
-
-Here is the thing I spent decades thinking about: that mother dog was a perfect reasoner. She had good instincts, good data, good reflexes. Her logic was airtight. *Small creature approaches puppies → small creatures can be threats → attack.* Everything she knew told her the same story. She acted with total confidence.
-
-And she was catastrophically wrong.
-
-Not because her reasoning was broken. Because her data was incomplete. She didn't know what was NOT true. She didn't know I was not a threat. She had no mechanism for "toddlers from missionary families in Africa are non-threatening." She had no ELIMINATED category. She could only work with what she knew — and what she didn't know she didn't know was the thing that mattered most.
-
-I have been thinking about that mother dog ever since. Not with resentment. With something closer to admiration, and a lot of sympathy. Because I have met her logic everywhere I go.
+The anecdote illustrates the core problem the TIC is designed to solve. The mother dog was a perfect Bayesian reasoner operating on an incomplete hypothesis space. Her lifetime sample of "humans" was exclusively dark-skinned; from her data, no logical agent would have classified a pale-skinned creature as human. Her KNOWN field contained a hasty generalization — "all humans are dark-skinned" — built on a limited sample with no counter-evidence search. She had no ELIMINATED category. She had no structural way to represent "this pale creature is a harmless child." She acted with complete confidence on incomplete data. She was logical. But incorrect.
 
 ---
 

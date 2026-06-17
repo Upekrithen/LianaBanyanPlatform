@@ -26,7 +26,7 @@ Here is the thing I spent decades thinking about: that mother dog was a perfect 
 
 And she was catastrophically wrong.
 
-Not because her reasoning was broken. Because her data was incomplete. She didn't know what was NOT true. She didn't know I was not a threat. She had no mechanism for "toddlers from missionary families in Africa are non-threatening." She had no ELIMINATED category. She could only work with what she knew — and what she didn't know she didn't know was the thing that mattered most.
+Not because her reasoning was broken. Because her data was incomplete. She didn't know what was NOT true. She didn't know I was not a threat. She had never seen a white person before in her life — to her, I was not a human child at all, I was an alien being come to snatch her children. She had no mechanism for "pale-skinned creatures near my puppies can be harmless." She had no ELIMINATED category. She could only work with what she knew — and what she didn't know she didn't know was the thing that mattered most.
 
 I have been thinking about that mother dog ever since. Not with resentment. With something closer to admiration, and a lot of sympathy. Because I have met her logic everywhere I go.
 
