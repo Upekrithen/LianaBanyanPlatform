@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-17T02:19:03.867Z",
-  "plow_version": "12blade-bp084-corrected",
+  "generated_at": "2026-06-17T02:39:54.960Z",
+  "plow_version": "12blade-bp084-corrected-v2",
   "blade_names": {
     "1": "Spider",
     "2": "Sprite",
@@ -11,9 +11,9 @@
     "7": "Three Fates",
     "8": "Scribe",
     "9": "Detective TEAM",
-    "10": "Psionic",
-    "11": "Auditor",
-    "12": "Sentinel"
+    "10": "CONSEQUENCE_TRACE",
+    "11": "ELIMINATION_VERIFY",
+    "12": "DEPENDENCY_PROPAGATION"
   },
   "model": "gemma4:12b",
   "questions_processed": 3,
@@ -47,8 +47,8 @@
         {
           "blade": 1,
           "name": "Spider",
-          "start_ms": 1781662447914,
-          "end_ms": 1781662447915,
+          "start_ms": 1781663675599,
+          "end_ms": 1781663675601,
           "success": true,
           "error": null,
           "downstream_count": 1
@@ -56,8 +56,8 @@
         {
           "blade": 2,
           "name": "Sprite",
-          "start_ms": 1781662447915,
-          "end_ms": 1781662447915,
+          "start_ms": 1781663675601,
+          "end_ms": 1781663675601,
           "success": true,
           "error": null,
           "downstream_count": 1
@@ -65,8 +65,8 @@
         {
           "blade": 3,
           "name": "Specialists",
-          "start_ms": 1781662447915,
-          "end_ms": 1781662472831,
+          "start_ms": 1781663675601,
+          "end_ms": 1781663700042,
           "success": true,
           "error": null,
           "downstream_count": 6
@@ -74,35 +74,35 @@
         {
           "blade": 4,
           "name": "Miner",
-          "start_ms": 1781662472832,
-          "end_ms": 1781662472832,
+          "start_ms": 1781663700043,
+          "end_ms": 1781663700043,
           "success": true,
           "error": null,
-          "downstream_count": 6
+          "downstream_count": 7
         },
         {
           "blade": 5,
           "name": "Saladin",
-          "start_ms": 1781662472832,
-          "end_ms": 1781662528287,
+          "start_ms": 1781663700043,
+          "end_ms": 1781663760584,
           "success": true,
           "error": null,
-          "downstream_count": 6
+          "downstream_count": 5
         },
         {
           "blade": 6,
           "name": "Furnace",
-          "start_ms": 1781662528288,
-          "end_ms": 1781662528288,
+          "start_ms": 1781663760585,
+          "end_ms": 1781663760585,
           "success": true,
           "error": null,
-          "downstream_count": 6
+          "downstream_count": 5
         },
         {
           "blade": 7,
           "name": "Three Fates",
-          "start_ms": 1781662528288,
-          "end_ms": 1781662551831,
+          "start_ms": 1781663760585,
+          "end_ms": 1781663785372,
           "success": true,
           "error": null,
           "downstream_count": 3
@@ -110,8 +110,8 @@
         {
           "blade": 8,
           "name": "Scribe",
-          "start_ms": 1781662551831,
-          "end_ms": 1781662551834,
+          "start_ms": 1781663785372,
+          "end_ms": 1781663785374,
           "success": true,
           "error": null,
           "downstream_count": 1
@@ -119,17 +119,17 @@
         {
           "blade": 9,
           "name": "Detective TEAM",
-          "start_ms": 1781662551834,
-          "end_ms": 1781662551834,
+          "start_ms": 1781663785374,
+          "end_ms": 1781663785374,
           "success": true,
           "error": null,
           "downstream_count": 0
         },
         {
           "blade": 10,
-          "name": "Psionic",
-          "start_ms": 1781662551834,
-          "end_ms": 1781662551834,
+          "name": "CONSEQUENCE_TRACE",
+          "start_ms": 1781663785374,
+          "end_ms": 1781663785374,
           "success": true,
           "error": null,
           "downstream_count": 0,
@@ -138,9 +138,9 @@
         },
         {
           "blade": 11,
-          "name": "Auditor",
-          "start_ms": 1781662551834,
-          "end_ms": 1781662551834,
+          "name": "ELIMINATION_VERIFY",
+          "start_ms": 1781663785374,
+          "end_ms": 1781663785374,
           "success": true,
           "error": null,
           "downstream_count": 0,
@@ -149,9 +149,9 @@
         },
         {
           "blade": 12,
-          "name": "Sentinel",
-          "start_ms": 1781662551834,
-          "end_ms": 1781662551836,
+          "name": "DEPENDENCY_PROPAGATION",
+          "start_ms": 1781663785374,
+          "end_ms": 1781663785375,
           "success": true,
           "error": null,
           "downstream_count": 1
@@ -165,8 +165,8 @@
         {
           "blade": 1,
           "name": "Spider",
-          "start_ms": 1781662551836,
-          "end_ms": 1781662551837,
+          "start_ms": 1781663785376,
+          "end_ms": 1781663785378,
           "success": true,
           "error": null,
           "downstream_count": 0
@@ -174,8 +174,8 @@
         {
           "blade": 2,
           "name": "Sprite",
-          "start_ms": 1781662551837,
-          "end_ms": 1781662551837,
+          "start_ms": 1781663785378,
+          "end_ms": 1781663785378,
           "success": true,
           "error": null,
           "downstream_count": 0
@@ -183,8 +183,8 @@
         {
           "blade": 3,
           "name": "Specialists",
-          "start_ms": 1781662551837,
-          "end_ms": 1781662566179,
+          "start_ms": 1781663785378,
+          "end_ms": 1781663798998,
           "success": true,
           "error": null,
           "downstream_count": 5
@@ -192,8 +192,8 @@
         {
           "blade": 4,
           "name": "Miner",
-          "start_ms": 1781662566179,
-          "end_ms": 1781662566179,
+          "start_ms": 1781663798999,
+          "end_ms": 1781663798999,
           "success": true,
           "error": null,
           "downstream_count": 5
@@ -201,35 +201,35 @@
         {
           "blade": 5,
           "name": "Saladin",
-          "start_ms": 1781662566179,
-          "end_ms": 1781662611769,
+          "start_ms": 1781663798999,
+          "end_ms": 1781663846060,
           "success": true,
           "error": null,
-          "downstream_count": 4
+          "downstream_count": 5
         },
         {
           "blade": 6,
           "name": "Furnace",
-          "start_ms": 1781662611769,
-          "end_ms": 1781662611769,
+          "start_ms": 1781663846060,
+          "end_ms": 1781663846060,
           "success": true,
           "error": null,
-          "downstream_count": 4
+          "downstream_count": 5
         },
         {
           "blade": 7,
           "name": "Three Fates",
-          "start_ms": 1781662611769,
-          "end_ms": 1781662633377,
+          "start_ms": 1781663846060,
+          "end_ms": 1781663875629,
           "success": true,
           "error": null,
-          "downstream_count": 3
+          "downstream_count": 2
         },
         {
           "blade": 8,
           "name": "Scribe",
-          "start_ms": 1781662633377,
-          "end_ms": 1781662633378,
+          "start_ms": 1781663875629,
+          "end_ms": 1781663875629,
           "success": true,
           "error": null,
           "downstream_count": 1
@@ -237,26 +237,26 @@
         {
           "blade": 9,
           "name": "Detective TEAM",
-          "start_ms": 1781662633378,
-          "end_ms": 1781662633378,
+          "start_ms": 1781663875629,
+          "end_ms": 1781663875630,
           "success": true,
           "error": null,
           "downstream_count": 0
         },
         {
           "blade": 10,
-          "name": "Psionic",
-          "start_ms": 1781662633379,
-          "end_ms": 1781662643291,
+          "name": "CONSEQUENCE_TRACE",
+          "start_ms": 1781663875630,
+          "end_ms": 1781663885459,
           "success": true,
           "error": null,
           "downstream_count": 0
         },
         {
           "blade": 11,
-          "name": "Auditor",
-          "start_ms": 1781662643291,
-          "end_ms": 1781662643291,
+          "name": "ELIMINATION_VERIFY",
+          "start_ms": 1781663885459,
+          "end_ms": 1781663885459,
           "success": true,
           "error": null,
           "downstream_count": 0,
@@ -265,9 +265,9 @@
         },
         {
           "blade": 12,
-          "name": "Sentinel",
-          "start_ms": 1781662643291,
-          "end_ms": 1781662643291,
+          "name": "DEPENDENCY_PROPAGATION",
+          "start_ms": 1781663885459,
+          "end_ms": 1781663885459,
           "success": true,
           "error": null,
           "downstream_count": 0,
@@ -283,26 +283,26 @@
         {
           "blade": 1,
           "name": "Spider",
-          "start_ms": 1781662643292,
-          "end_ms": 1781662643293,
+          "start_ms": 1781663885460,
+          "end_ms": 1781663885461,
           "success": true,
           "error": null,
-          "downstream_count": 0
+          "downstream_count": 1
         },
         {
           "blade": 2,
           "name": "Sprite",
-          "start_ms": 1781662643293,
-          "end_ms": 1781662643293,
+          "start_ms": 1781663885461,
+          "end_ms": 1781663885461,
           "success": true,
           "error": null,
-          "downstream_count": 0
+          "downstream_count": 1
         },
         {
           "blade": 3,
           "name": "Specialists",
-          "start_ms": 1781662643293,
-          "end_ms": 1781662657157,
+          "start_ms": 1781663885461,
+          "end_ms": 1781663899755,
           "success": true,
           "error": null,
           "downstream_count": 7
@@ -310,26 +310,26 @@
         {
           "blade": 4,
           "name": "Miner",
-          "start_ms": 1781662657157,
-          "end_ms": 1781662657157,
+          "start_ms": 1781663899755,
+          "end_ms": 1781663899755,
           "success": true,
           "error": null,
-          "downstream_count": 7
+          "downstream_count": 8
         },
         {
           "blade": 5,
           "name": "Saladin",
-          "start_ms": 1781662657157,
-          "end_ms": 1781662718484,
+          "start_ms": 1781663899755,
+          "end_ms": 1781663968445,
           "success": true,
           "error": null,
-          "downstream_count": 6
+          "downstream_count": 8
         },
         {
           "blade": 6,
           "name": "Furnace",
-          "start_ms": 1781662718484,
-          "end_ms": 1781662718484,
+          "start_ms": 1781663968445,
+          "end_ms": 1781663968445,
           "success": true,
           "error": null,
           "downstream_count": 6
@@ -337,8 +337,8 @@
         {
           "blade": 7,
           "name": "Three Fates",
-          "start_ms": 1781662718484,
-          "end_ms": 1781662743863,
+          "start_ms": 1781663968445,
+          "end_ms": 1781663994956,
           "success": true,
           "error": null,
           "downstream_count": 3
@@ -346,8 +346,8 @@
         {
           "blade": 8,
           "name": "Scribe",
-          "start_ms": 1781662743863,
-          "end_ms": 1781662743864,
+          "start_ms": 1781663994956,
+          "end_ms": 1781663994956,
           "success": true,
           "error": null,
           "downstream_count": 1
@@ -355,17 +355,17 @@
         {
           "blade": 9,
           "name": "Detective TEAM",
-          "start_ms": 1781662743864,
-          "end_ms": 1781662743864,
+          "start_ms": 1781663994957,
+          "end_ms": 1781663994957,
           "success": true,
           "error": null,
           "downstream_count": 0
         },
         {
           "blade": 10,
-          "name": "Psionic",
-          "start_ms": 1781662743864,
-          "end_ms": 1781662743864,
+          "name": "CONSEQUENCE_TRACE",
+          "start_ms": 1781663994957,
+          "end_ms": 1781663994957,
           "success": true,
           "error": null,
           "downstream_count": 0,
@@ -374,18 +374,18 @@
         },
         {
           "blade": 11,
-          "name": "Auditor",
-          "start_ms": 1781662743864,
-          "end_ms": 1781662743866,
+          "name": "ELIMINATION_VERIFY",
+          "start_ms": 1781663994957,
+          "end_ms": 1781663994959,
           "success": true,
           "error": null,
           "downstream_count": 2
         },
         {
           "blade": 12,
-          "name": "Sentinel",
-          "start_ms": 1781662743866,
-          "end_ms": 1781662743866,
+          "name": "DEPENDENCY_PROPAGATION",
+          "start_ms": 1781663994959,
+          "end_ms": 1781663994959,
           "success": true,
           "error": null,
           "downstream_count": 0,

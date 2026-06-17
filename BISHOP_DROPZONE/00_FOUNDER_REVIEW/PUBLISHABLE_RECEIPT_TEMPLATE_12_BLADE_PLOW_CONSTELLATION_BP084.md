@@ -1,143 +1,148 @@
 ---
-title: "Substrate Awakens Constellation Receipt — 12-Blade Plow"
-status: "founder-ratify-pending"
-session: "BP084"
-plow_version: "12blade-bp084"
-question_bank_sha: "e79142cf"
-date: "[DATE TBD — fill after constellation run]"
-note: "AWAITS LIVE RECEIPT NUMBERS — placeholders below"
+title: Publishable Receipt Template — 12-Blade Column Plow Constellation
+session: BP084
+status: founder-ratify-pending
+plow_version: 12blade-bp084-corrected-v2
+note: PLACEHOLDER — awaiting live constellation run numbers. 68/70 canonical receipt NOT modified (BP083 BLOOD).
 ---
 
-# SUBSTRATE AWAKENS CONSTELLATION RECEIPT · BP084
+# 12-Blade Epistemic Plow Constellation — Publishable Receipt
 
-**Status: `founder-ratify-pending`**  
-This template AWAITS the live receipt numbers from the mesh constellation run.  
-DO NOT publish until Founder ratifies after constellation completes.
+**[TEMPLATE — FILL AFTER CONSTELLATION RUN]**
 
 ---
 
 ## Headline
 
-> **[X_CORRECT] / [Y_ANSWERED] on [Z_TOTAL] questions across [N_PEERS] peers**
+> **[X] / [Y] questions answered with verified knowledge  
+> [N] KNOWN · [N] THEORY_OPEN · [N] ELIMINATED  
+> across [Z] domains · [N] peers · [N] hours**
 
-- Accuracy: `[ACCURACY_PCT]%` (answered only, quarantine excluded)
-- Constellation date: `[DATE TBD]`
-- Runtime: `[TOTAL_WALL_TIME]`
+*TIC-distinguished result: [X] questions have substrate-anchored KNOWN facts; [Y] have enumerated competing theories with consequence trails; [Z] hypotheses were eliminated with contradiction proofs.*
 
 ---
 
 ## TIC-Distinguished Results
 
-| Category | Count | % of Total |
-|----------|-------|-----------|
-| **KNOWN** entries minted | `[N_KNOWN]` | `[N_KNOWN / Z_TOTAL * 100]%` |
-| **THEORIES_OPEN** with consequence-trail survival scores | `[N_OPEN]` | — |
-| **ELIMINATED** with contradiction trails | `[N_ELIM]` | — |
-| **Quarantined** (Andon-Cord self-policing) | `[N_QUAR]` | `[N_QUAR / Z_TOTAL * 100]%` |
-| **Consequence probes** minted (blade 10) | `[N_CONSEQ_PROBES]` | — |
-| **Contradiction trail eblets** (blade 11) | `[N_CONTRA_EBLETS]` | — |
-| **Downstream flags** (blade 12) | `[N_DOWNSTREAM]` | — |
+| Classification | Count | % | Notes |
+|---------------|-------|---|-------|
+| **KNOWN** — verified, Scribe-minted | `[N]` | `[X%]` | Survived Spider→Sprite→Specialists→Miner→Saladin→Furnace→Three Fates (CONCORDANT) |
+| **THEORY_OPEN** — contested, CONSEQUENCE_TRACE run | `[N]` | `[X%]` | Multiple theories with survival scores; CONSEQUENCE_TRACE probes logged |
+| **ELIMINATED** — verified false, contradiction trail minted | `[N]` | `[X%]` | Code Breakers Guild queue populated; contradiction eblets archived |
+| **ANDON-ESCALATED** — Detective TEAM Tier 1/2 | `[N]` | `[X%]` | Gate failures escalated; widening attempted; some pending re-run |
+| Total questions processed | `[N]` | 100% | |
+
+---
+
+## Comparison to 68/70 Canonical Receipt
+
+| Metric | 68/70 Receipt | 12-Blade Constellation |
+|--------|---------------|----------------------|
+| Questions | 70 | `[N]` |
+| Verified | 68 | `[N]` (TIC:KNOWN class) |
+| Scope | benchmark_subset (5 domains) | 14 domains |
+| TIC fields | N/A (prior format) | known/theories_open/eliminated/dep_upstream/dep_downstream |
+| Code Breakers queue | N/A | `[N]` entries |
+| Consequence probes | N/A | `[N]` |
+
+**Honest scope difference:** The 68/70 receipt used a targeted benchmark question bank with curated questions. The constellation uses the Substrate Awakens bank (SHA e79142cf) — broader scope, less curated, lower expected CONCORDANT rate. Direct comparison is inappropriate; treat as parallel tracks.
 
 ---
 
 ## Per-Domain Breakdown
 
-| Domain | Correct / Total | Accuracy | KNOWN | THEORY_OPEN | ELIMINATED | Quarantined |
-|--------|----------------|----------|-------|-------------|------------|-------------|
-| math | [X/Y] | [N]% | [N] | [N] | [N] | [N] |
-| chemistry | [X/Y] | [N]% | [N] | [N] | [N] | [N] |
-| law | [X/Y] | [N]% | [N] | [N] | [N] | [N] |
-| physics | [X/Y] | [N]% | [N] | [N] | [N] | [N] |
-| engineering | [X/Y] | [N]% | [N] | [N] | [N] | [N] |
-| cs | [X/Y] | [N]% | [N] | [N] | [N] | [N] |
-| biology | [X/Y] | [N]% | [N] | [N] | [N] | [N] |
-| business | [X/Y] | [N]% | [N] | [N] | [N] | [N] |
-| economics | [X/Y] | [N]% | [N] | [N] | [N] | [N] |
-| philosophy | [X/Y] | [N]% | [N] | [N] | [N] | [N] |
-| history | [X/Y] | [N]% | [N] | [N] | [N] | [N] |
-| psychology | [X/Y] | [N]% | [N] | [N] | [N] | [N] |
-| **TOTAL** | **[X/Y]** | **[N]%** | **[N]** | **[N]** | **[N]** | **[N]** |
+| Domain | Questions | KNOWN | THEORY_OPEN | ELIMINATED | Avg BMV | Andon Events |
+|--------|-----------|-------|-------------|------------|---------|--------------|
+| math | `[N]` | `[N]` | `[N]` | `[N]` | `[N]` | `[N]` |
+| chemistry | `[N]` | `[N]` | `[N]` | `[N]` | `[N]` | `[N]` |
+| law | `[N]` | `[N]` | `[N]` | `[N]` | `[N]` | `[N]` |
+| physics | `[N]` | `[N]` | `[N]` | `[N]` | `[N]` | `[N]` |
+| engineering | `[N]` | `[N]` | `[N]` | `[N]` | `[N]` | `[N]` |
+| computer_science | `[N]` | `[N]` | `[N]` | `[N]` | `[N]` | `[N]` |
+| biology | `[N]` | `[N]` | `[N]` | `[N]` | `[N]` | `[N]` |
+| business | `[N]` | `[N]` | `[N]` | `[N]` | `[N]` | `[N]` |
+| economics | `[N]` | `[N]` | `[N]` | `[N]` | `[N]` | `[N]` |
+| philosophy | `[N]` | `[N]` | `[N]` | `[N]` | `[N]` | `[N]` |
+| history | `[N]` | `[N]` | `[N]` | `[N]` | `[N]` | `[N]` |
+| psychology | `[N]` | `[N]` | `[N]` | `[N]` | `[N]` | `[N]` |
+| other | `[N]` | `[N]` | `[N]` | `[N]` | `[N]` | `[N]` |
+| **TOTAL** | `[N]` | `[N]` | `[N]` | `[N]` | `[N]` | `[N]` |
 
 ---
 
 ## Per-Peer Breakdown
 
-| Peer | Model | Questions | Correct | Quarantined | Accuracy | Runtime | KNOWN | THEORY_OPEN | ELIMINATED |
-|------|-------|-----------|---------|-------------|----------|---------|-------|-------------|------------|
-| M0 (Founder) | gemma4:12b | ~500 | [N] | [N] | [N]% | [Nh Nm] | [N] | [N] | [N] |
-| M1 | gemma4:12b | ~250 | [N] | [N] | [N]% | [Nh Nm] | [N] | [N] | [N] |
-| M2 | gemma4:12b | ~350 | [N] | [N] | [N]% | [Nh Nm] | [N] | [N] | [N] |
-| M3 | gemma4:12b | ~250 | [N] | [N] | [N]% | [Nh Nm] | [N] | [N] | [N] |
-| M5 | gemma2:2b ⚠️ | ~250 | [N] | [N] | [N]% ⚠️ | [Nh Nm] | [N] | [N] | [N] |
-| Reserve | gemma4:12b | ~150 | [N] | [N] | [N]% | [Nh Nm] | [N] | [N] | [N] |
-
-⚠️ M5 uses gemma2:2b — model substitution AMBER. Accuracy figures for M5 are not directly
-comparable to gemma4:12b peers.
+| Peer | Model | Domains | Questions | Eblets | Andon | Conseq.Probes | Elim. | DepFlags |
+|------|-------|---------|-----------|--------|-------|---------------|-------|---------|
+| M0 | gemma4:12b | math/chem/law/phys | `[N]` | `[N]` | `[N]` | `[N]` | `[N]` | `[N]` |
+| M1 | gemma4:12b | eng/CS | `[N]` | `[N]` | `[N]` | `[N]` | `[N]` | `[N]` |
+| M2 | gemma4:12b | bio/biz/econ | `[N]` | `[N]` | `[N]` | `[N]` | `[N]` | `[N]` |
+| M3 | gemma4:12b | phil/hist | `[N]` | `[N]` | `[N]` | `[N]` | `[N]` | `[N]` |
+| M5 | gemma2:2b | psych/other | `[N]` | `[N]` | `[N]` | `[N]` | `[N]` | `[N]` |
+| **TOTAL** | — | 14 | `[N]` | `[N]` | `[N]` | `[N]` | `[N]` | `[N]` |
 
 ---
 
-## Code Breakers Guild
+## Code Breakers Guild — Engagement Stats
 
 | Metric | Count |
 |--------|-------|
-| Claims advanced to Code Breakers queue | `[N_CB]` |
-| Eliminations confirmed (Negative-Knowledge Tokens earned) | `[N_NEG]` |
-| Code Breaker eblets written to vault | `[N_CB_EBLETS]` |
+| Code Breaker queue entries created | `[N]` |
+| Unique theories queued for adversarial review | `[N]` |
+| Contradiction eblets minted (negative-knowledge tokens issued) | `[N]` |
+| CLAIM_UNTESTED entries awaiting Guild fire | `[N]` |
+| Domains with most elimination activity | `[N]` |
+
+*Gold Refined by Fire principle applies: claims will advance from CLAIM_UNTESTED → CLAIM_TESTED → CLAIM_FORGED → CLAIM_GOLD_REFINED_BY_FIRE as Code Breakers run adversarial attacks.*
 
 ---
 
-## Comparison to 68/70 Canonical
+## Gate Summary
 
-**IMPORTANT: These are NOT directly comparable figures.**
-
-| Dimension | 68/70 Canonical | This Constellation |
-|-----------|----------------|-------------------|
-| Question bank | 1,400-q distributed-eval bank | Substrate Awakens fresh bank (SHA e79142cf) |
-| Blade count | 1-blade (dispatch + adjudicate) | 12-blade (full TIC pipeline) |
-| TIC output | None | KNOWN / THEORY_OPEN / ELIMINATED distinguished |
-| Consequence tracing | None | Blade 10 survival scores |
-| Elimination verification | None | Blade 11 BM25 contradiction search |
-| Dependency propagation | None | Blade 12 review queue |
-| Honest delta (if computable) | — | `[DELTA]` (scope-adjusted, not raw accuracy) |
-
-The 68/70 receipt is the canonical accuracy benchmark for its question bank.
-This constellation adds epistemic depth (TIC output) that 68/70 did not produce.
-The comparison is honest: different bank, different blade depth.
+| Gate | Passed | Failed | % Pass |
+|------|--------|--------|--------|
+| G1_FACT (candidates survived Furnace) | `[N]` | `[N]` | `[X%]` |
+| G2_CONC (Three Fates concordance) | `[N]` | `[N]` | `[X%]` |
+| G3_BMV (BMV score >= 40) | `[N]` | `[N]` | `[X%]` |
+| G4_LAT (latency < 120s) | `[N]` | `[N]` | `[X%]` |
 
 ---
 
-## Reproducibility Block
+## Blade-by-Blade Summary
+
+| Blade | Name | Fires | Success | Notes |
+|-------|------|-------|---------|-------|
+| 1 | Spider | `[N]` | `[N]` | Substrate hits grow with each run |
+| 2 | Sprite | `[N]` | `[N]` | Direct retrieval from Spider |
+| 3 | Specialists | `[N]` | `[N]` | Wikipedia + arXiv + Wikidata + Ollama-synth |
+| 4 | Miner | `[N]` | `[N]` | Pass rate ~50–65% expected |
+| 5 | Saladin | `[N]` | `[N]` | Challenge rate ~20–35% expected |
+| 6 | Furnace | `[N]` | `[N]` | Burns Saladin-challenged |
+| 7 | Three Fates | `[N]` | `[N]` | CONCORDANT/PARTIAL/DISCORDANT breakdown |
+| 8 | Scribe | `[N]` | `[N]` | 1 TIC eblet per question |
+| 9 | Detective TEAM | `[N]` | `[N]` | Andon events; tier breakdown |
+| 10 | CONSEQUENCE_TRACE | `[N]` | `[N]` | Fires on THEORY_OPEN only |
+| 11 | ELIMINATION_VERIFY | `[N]` | `[N]` | Fires on ELIMINATED; Code Breakers queue |
+| 12 | DEPENDENCY_PROPAGATION | `[N]` | `[N]` | Fires on KNOWN + downstream_seed |
+
+---
+
+## Reproducibility Receipt
 
 ```
-SHA             : e79142cf  (Substrate Awakens question bank)
-Plow version    : 12blade-bp084
-Model versions  : gemma4:12b (M0/M1/M2/M3/Reserve) · gemma2:2b (M5)
-Ollama version  : [ollama --version output TBD]
-Chronos         : [CONSTELLATION_TIMESTAMP]
-Aggregate file  : constellation_12blade_aggregate.json
-Vault path      : Asteroid-ProofVault/state/eblets/active/
-Blade telemetry : [peer]_12blade_telemetry.json (per peer)
-```
-
----
-
-## Bedside Read
-
-*[FILL AFTER CONSTELLATION — 2-3 sentences describing the human story of the run:
-what the mesh did together, what was discovered, what moved from THEORY_OPEN to KNOWN
-or ELIMINATED, and what the Code Breakers now hold.]*
-
----
-
-## Ratification Block
-
-```
-Founder review   : [ ] PENDING
-Founder ratified : [ ] — [SIGNATURE / DATE]
-Canon eblet minted: [ ] canon_12_blade_plow_constellation_bp084.eblet.md
+plow_version      : 12blade-bp084-corrected-v2
+question_bank_sha : e79142cf
+model_M0_M1_M2_M3 : gemma4:12b
+model_M5          : gemma2:2b
+run_date          : [DATE]
+constellation_sha : [sha256 of concatenated result files]
+canonical_names   : Spider,Sprite,Specialists,Miner,Saladin,Furnace,Three Fates,Scribe,Detective TEAM,CONSEQUENCE_TRACE,ELIMINATION_VERIFY,DEPENDENCY_PROPAGATION
+tic_schema_ref    : canon_truth_integrity_chain_dependency_argument_eblet_chronos_bp084
+code_breakers_ref : canon_code_breakers_guild_gold_refined_by_fire_elimination_marks_bp084
 ```
 
 ---
 
-*Template authored BP084 · Sonnet 4.6 · Knight (Cursor AI)*  
-*DO NOT PUBLISH before Founder ratification.*
+*BP084 · Sonnet 4.6 · FOR THE KEEP.*  
+*Status: founder-ratify-pending — this is a TEMPLATE, not a published result.*  
+*NOTHING publishes (BP078 BLOOD) until Founder ratifies the constellation run.*
