@@ -7,7 +7,7 @@
 
 import { ipcMain, app } from 'electron';
 import { existsSync, readdirSync, readFileSync } from 'fs';
-import { join } from 'path';
+import { join, basename } from 'path';
 import { homedir } from 'os';
 import { createHash, randomUUID } from 'crypto';
 import type {
@@ -108,18 +108,37 @@ function buildReceipt(
   };
 }
 
+// ─── Recursive .md file discovery ────────────────────────────────────────────
+// Recurses into subdirectories so Wave-1 letters and Substrate Awakens drafts
+// stored in subdirs of 00_FOUNDER_REVIEW/ are visible to the dispatch queue.
+
+function getAllMdFilePaths(dir: string): string[] {
+  if (!existsSync(dir)) return [];
+  const results: string[] = [];
+  const entries = readdirSync(dir, { withFileTypes: true });
+  for (const entry of entries) {
+    const fullPath = join(dir, entry.name);
+    if (entry.isDirectory()) {
+      results.push(...getAllMdFilePaths(fullPath));
+    } else if (entry.name.endsWith('.md')) {
+      results.push(fullPath);
+    }
+  }
+  return results;
+}
+
 // ─── IPC Registration ─────────────────────────────────────────────────────────
 
 export function registerDispatchIPC(): void {
 
-  // List ratified content files from BISHOP_DROPZONE/00_FOUNDER_REVIEW/
+  // List ratified content files from BISHOP_DROPZONE/00_FOUNDER_REVIEW/ (recursive)
   ipcMain.handle('dispatch:list-content-files', async () => {
     const dir = FOUNDER_REVIEW_DIR;
     if (!existsSync(dir)) return [];
     try {
-      const files = readdirSync(dir).filter((f) => f.endsWith('.md'));
-      const metas: ContentFileMeta[] = files.map((fileName) => {
-        const filePath = join(dir, fileName);
+      const filePaths = getAllMdFilePaths(dir);
+      const metas: ContentFileMeta[] = filePaths.map((filePath) => {
+        const fileName = basename(filePath);
         const content = readFileSync(filePath, 'utf8');
         const { frontmatter: fm, body: _body } = parseFrontmatter(content);
         const cls = detectContentClass(fm, fileName);

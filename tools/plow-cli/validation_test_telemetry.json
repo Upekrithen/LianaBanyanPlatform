@@ -1,0 +1,358 @@
+{
+  "generated_at": "2026-06-17T01:59:52.214Z",
+  "plow_version": "12blade-bp084",
+  "model": "gemma4:12b",
+  "questions_processed": 3,
+  "summary": {
+    "total": 3,
+    "correct": 2,
+    "quarantined": 1,
+    "incorrect": 0,
+    "eblets_minted": 3,
+    "consequence_probes": 3,
+    "eliminations": 1,
+    "downstream_flags": 1,
+    "blades_fired": {
+      "blade_1": 3,
+      "blade_2": 3,
+      "blade_3": 3,
+      "blade_4": 3,
+      "blade_5": 3,
+      "blade_6": 3,
+      "blade_7": 3,
+      "blade_8": 3,
+      "blade_9": 3,
+      "blade_10": 1,
+      "blade_11": 1,
+      "blade_12": 1
+    }
+  },
+  "reputation": {
+    "gemma4_12b": {
+      "correct": 2,
+      "total": 3,
+      "quarantined": 1,
+      "incorrect": 0
+    }
+  },
+  "per_question": [
+    {
+      "question_id": "q1-known",
+      "blade_count": 12,
+      "blades": [
+        {
+          "blade": 1,
+          "start_ms": 1781661464399,
+          "end_ms": 1781661464399,
+          "success": true,
+          "error": null,
+          "downstream_count": 0
+        },
+        {
+          "blade": 2,
+          "start_ms": 1781661464399,
+          "end_ms": 1781661464399,
+          "success": true,
+          "error": null,
+          "downstream_count": 1
+        },
+        {
+          "blade": 3,
+          "start_ms": 1781661464399,
+          "end_ms": 1781661478614,
+          "success": true,
+          "error": null,
+          "downstream_count": 0
+        },
+        {
+          "blade": 4,
+          "start_ms": 1781661478615,
+          "end_ms": 1781661478615,
+          "success": true,
+          "error": null,
+          "downstream_count": 0
+        },
+        {
+          "blade": 5,
+          "start_ms": 1781661478615,
+          "end_ms": 1781661478615,
+          "success": true,
+          "error": null,
+          "downstream_count": 0
+        },
+        {
+          "blade": 6,
+          "start_ms": 1781661478615,
+          "end_ms": 1781661478616,
+          "success": true,
+          "error": null,
+          "downstream_count": 1
+        },
+        {
+          "blade": 7,
+          "start_ms": 1781661478616,
+          "end_ms": 1781661478616,
+          "success": true,
+          "error": null,
+          "downstream_count": 0
+        },
+        {
+          "blade": 8,
+          "start_ms": 1781661478616,
+          "end_ms": 1781661478618,
+          "success": true,
+          "error": null,
+          "downstream_count": 1
+        },
+        {
+          "blade": 9,
+          "start_ms": 1781661478618,
+          "end_ms": 1781661478618,
+          "success": true,
+          "error": null,
+          "downstream_count": 2
+        },
+        {
+          "blade": 10,
+          "start_ms": 1781661478618,
+          "end_ms": 1781661478618,
+          "success": true,
+          "error": null,
+          "downstream_count": 0,
+          "skipped": true,
+          "reason": "not-theory-open"
+        },
+        {
+          "blade": 11,
+          "start_ms": 1781661478618,
+          "end_ms": 1781661478618,
+          "success": true,
+          "error": null,
+          "downstream_count": 0,
+          "skipped": true,
+          "reason": "not-eliminated-class"
+        },
+        {
+          "blade": 12,
+          "start_ms": 1781661478618,
+          "end_ms": 1781661478619,
+          "success": true,
+          "error": null,
+          "downstream_count": 1
+        }
+      ]
+    },
+    {
+      "question_id": "q2-theory-open",
+      "blade_count": 12,
+      "blades": [
+        {
+          "blade": 1,
+          "start_ms": 1781661478620,
+          "end_ms": 1781661478620,
+          "success": true,
+          "error": null,
+          "downstream_count": 0
+        },
+        {
+          "blade": 2,
+          "start_ms": 1781661478620,
+          "end_ms": 1781661478620,
+          "success": true,
+          "error": null,
+          "downstream_count": 1
+        },
+        {
+          "blade": 3,
+          "start_ms": 1781661478620,
+          "end_ms": 1781661484199,
+          "success": true,
+          "error": null,
+          "downstream_count": 0
+        },
+        {
+          "blade": 4,
+          "start_ms": 1781661484199,
+          "end_ms": 1781661484199,
+          "success": true,
+          "error": null,
+          "downstream_count": 0
+        },
+        {
+          "blade": 5,
+          "start_ms": 1781661484199,
+          "end_ms": 1781661484199,
+          "success": true,
+          "error": null,
+          "downstream_count": 0
+        },
+        {
+          "blade": 6,
+          "start_ms": 1781661484199,
+          "end_ms": 1781661484199,
+          "success": true,
+          "error": null,
+          "downstream_count": 1
+        },
+        {
+          "blade": 7,
+          "start_ms": 1781661484199,
+          "end_ms": 1781661484199,
+          "success": true,
+          "error": null,
+          "downstream_count": 0
+        },
+        {
+          "blade": 8,
+          "start_ms": 1781661484199,
+          "end_ms": 1781661484200,
+          "success": true,
+          "error": null,
+          "downstream_count": 1
+        },
+        {
+          "blade": 9,
+          "start_ms": 1781661484200,
+          "end_ms": 1781661484200,
+          "success": true,
+          "error": null,
+          "downstream_count": 3
+        },
+        {
+          "blade": 10,
+          "start_ms": 1781661484200,
+          "end_ms": 1781661588443,
+          "success": true,
+          "error": null,
+          "downstream_count": 3
+        },
+        {
+          "blade": 11,
+          "start_ms": 1781661588444,
+          "end_ms": 1781661588444,
+          "success": true,
+          "error": null,
+          "downstream_count": 0,
+          "skipped": true,
+          "reason": "not-eliminated-class"
+        },
+        {
+          "blade": 12,
+          "start_ms": 1781661588444,
+          "end_ms": 1781661588444,
+          "success": true,
+          "error": null,
+          "downstream_count": 0,
+          "skipped": true,
+          "reason": "not-known-or-no-downstream"
+        }
+      ]
+    },
+    {
+      "question_id": "q3-eliminated",
+      "blade_count": 12,
+      "blades": [
+        {
+          "blade": 1,
+          "start_ms": 1781661588444,
+          "end_ms": 1781661588444,
+          "success": true,
+          "error": null,
+          "downstream_count": 0
+        },
+        {
+          "blade": 2,
+          "start_ms": 1781661588444,
+          "end_ms": 1781661588444,
+          "success": true,
+          "error": null,
+          "downstream_count": 1
+        },
+        {
+          "blade": 3,
+          "start_ms": 1781661588444,
+          "end_ms": 1781661592211,
+          "success": true,
+          "error": null,
+          "downstream_count": 0
+        },
+        {
+          "blade": 4,
+          "start_ms": 1781661592211,
+          "end_ms": 1781661592211,
+          "success": true,
+          "error": null,
+          "downstream_count": 0
+        },
+        {
+          "blade": 5,
+          "start_ms": 1781661592211,
+          "end_ms": 1781661592211,
+          "success": true,
+          "error": null,
+          "downstream_count": 0
+        },
+        {
+          "blade": 6,
+          "start_ms": 1781661592211,
+          "end_ms": 1781661592211,
+          "success": true,
+          "error": null,
+          "downstream_count": 2
+        },
+        {
+          "blade": 7,
+          "start_ms": 1781661592211,
+          "end_ms": 1781661592211,
+          "success": true,
+          "error": null,
+          "downstream_count": 0
+        },
+        {
+          "blade": 8,
+          "start_ms": 1781661592211,
+          "end_ms": 1781661592212,
+          "success": true,
+          "error": null,
+          "downstream_count": 1
+        },
+        {
+          "blade": 9,
+          "start_ms": 1781661592212,
+          "end_ms": 1781661592212,
+          "success": true,
+          "error": null,
+          "downstream_count": 3
+        },
+        {
+          "blade": 10,
+          "start_ms": 1781661592212,
+          "end_ms": 1781661592212,
+          "success": true,
+          "error": null,
+          "downstream_count": 0,
+          "skipped": true,
+          "reason": "not-theory-open"
+        },
+        {
+          "blade": 11,
+          "start_ms": 1781661592213,
+          "end_ms": 1781661592213,
+          "success": true,
+          "error": null,
+          "downstream_count": 2
+        },
+        {
+          "blade": 12,
+          "start_ms": 1781661592213,
+          "end_ms": 1781661592213,
+          "success": true,
+          "error": null,
+          "downstream_count": 0,
+          "skipped": true,
+          "reason": "not-known-or-no-downstream"
+        }
+      ]
+    }
+  ]
+}
