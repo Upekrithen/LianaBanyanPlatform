@@ -14,14 +14,14 @@
  *   7  Three Fates          — 3-voter arbitration (temps 0.0 / 0.2 / 0.4 via Ollama)
  *   8  Scribe               — record BMV / concordance / gate outcomes / TIC eblet mint
  *   9  Detective TEAM       — root-cause gate fails + Federated Andon cord (3-tier)
- *  10  CONSEQUENCE_TRACE    — spawn consequence probes for every THEORY_OPEN
- *  11  ELIMINATION_VERIFY   — walk substrate for contradictions; move to ELIMINATED
- *  12  DEPENDENCY_PROPAGATION — when KNOWN updates, flag downstream eblets for re-eval
+ *  10  Psionic    — spawn consequence probes for every THEORY_OPEN
+ *  11  Auditor   — walk substrate for contradictions; move to ELIMINATED
+ *  12  Sentinel — when KNOWN updates, flag downstream eblets for re-eval
  *
  * TIC 5-field schema (canon_truth_integrity_chain_dependency_argument_eblet_chronos_bp084):
  *   known, theories_open, eliminated, dependencies_upstream, applications_downstream
  *
- * Code Breakers Guild = operational arm of Loop 11 ELIMINATION_VERIFY.
+ * Code Breakers Guild = operational arm of Loop 11 Auditor.
  * Negative-Knowledge Tokens = Marks denomination for elimination work.
  *
  * Usage:
@@ -489,14 +489,14 @@ async function blade_scribe(question, domain, questionId, candidateBundle, conco
       if (downstreamSeed) {
         eblet.applications_downstream.push({
           ref: downstreamSeed, needs_reeval: false,
-          note: 'Downstream application seed — blade 12 DEPENDENCY_PROPAGATION target',
+          note: 'Downstream application seed — blade 12 Sentinel target',
         });
       }
     } else if (ticClass === 'THEORY_OPEN') {
       eblet.theories_open.push({
         id: 'T-F1', statement: question, domain, status: 'open',
         survival_score: null, consequence_chain: [], unknown_count: null,
-        note: 'Epistemic status: contested — requires CONSEQUENCE_TRACE (blade 10)',
+        note: 'Epistemic status: contested — requires Psionic (blade 10)',
         counter_evidence_search: 'TBD by Code Breakers Guild',
       });
     } else if (ticClass === 'ELIMINATED') {
@@ -575,11 +575,11 @@ function blade_detective_team(gateOutcomes, candidatesRaw, postMiner, postFurnac
 }
 
 // ═════════════════════════════════════════════════════════════════════════════
-// BLADE 10 — CONSEQUENCE_TRACE
+// BLADE 10 — Psionic
 // ═════════════════════════════════════════════════════════════════════════════
 
 async function blade_consequence_trace(eblet, vaultPath, maxDepth) {
-  const t = makeTelem(10, 'CONSEQUENCE_TRACE');
+  const t = makeTelem(10, 'Psionic');
   try {
     const theories = eblet.theories_open ?? [];
     if (theories.length === 0) {
@@ -667,7 +667,7 @@ async function blade_consequence_trace(eblet, vaultPath, maxDepth) {
 }
 
 // ═════════════════════════════════════════════════════════════════════════════
-// BLADE 11 — ELIMINATION_VERIFY
+// BLADE 11 — Auditor
 // ═════════════════════════════════════════════════════════════════════════════
 
 function bm25Score(query, document) {
@@ -679,7 +679,7 @@ function bm25Score(query, document) {
 }
 
 async function blade_elimination_verify(eblet, substrateIndex, vaultPath) {
-  const t = makeTelem(11, 'ELIMINATION_VERIFY');
+  const t = makeTelem(11, 'Auditor');
   try {
     const substrate           = substrateIndex ?? [];
     const confirmedEliminated = [];
@@ -773,11 +773,11 @@ async function blade_elimination_verify(eblet, substrateIndex, vaultPath) {
 }
 
 // ═════════════════════════════════════════════════════════════════════════════
-// BLADE 12 — DEPENDENCY_PROPAGATION
+// BLADE 12 — Sentinel
 // ═════════════════════════════════════════════════════════════════════════════
 
 async function blade_dependency_propagation(eblet, vaultPath) {
-  const t = makeTelem(12, 'DEPENDENCY_PROPAGATION');
+  const t = makeTelem(12, 'Sentinel');
   try {
     const downstream = eblet.applications_downstream ?? [];
     const knownFacts = eblet.known ?? [];
@@ -793,7 +793,7 @@ async function blade_dependency_propagation(eblet, vaultPath) {
         eblet_id:       eblet.id,
         downstream_ref: dep.ref ?? String(dep),
         needs_reeval:   true,
-        flagged_by:     'blade_12_DEPENDENCY_PROPAGATION',
+        flagged_by:     'blade_12_Sentinel',
         reason:         'upstream KNOWN entry updated — downstream eblet requires re-evaluation',
         known_update:   knownFacts[0]?.statement ?? knownFacts[0]?.fact ?? 'unknown',
         domain:         eblet.domain,
@@ -988,22 +988,22 @@ async function runPlow12Blade(questions, config) {
         writeToVault(eblet, vaultPath);
       }
 
-      // ── BLADE 10: CONSEQUENCE_TRACE ─────────────────────────────────────────
+      // ── BLADE 10: Psionic ─────────────────────────────────────────
       if (effectiveClass === 'THEORY_OPEN' || eblet.theories_open.length > 0) {
-        console.log(`  B10 CONSEQUENCE_TRACE   → running...`);
+        console.log(`  B10 Psionic   → running...`);
         const b10 = await blade_consequence_trace(eblet, vaultPath, maxConsequenceDepth);
         bladeTelems.push(b10.telemetry); stats.blades_fired.blade_10++;
         if (b10.telemetry.success) result.blades_fired.push(10);
         result.consequence_count = b10.consequence_eblets.length;
         stats.consequence_probes += b10.consequence_eblets.length;
         eblet.consequence_eblets = b10.consequence_eblets.map(ce => ce.id);
-        console.log(`  B10 CONSEQUENCE_TRACE   → ${b10.consequence_eblets.length} probes  ${b10.telemetry.success ? '✓' : '✗'}`);
+        console.log(`  B10 Psionic   → ${b10.consequence_eblets.length} probes  ${b10.telemetry.success ? '✓' : '✗'}`);
       } else {
-        bladeTelems.push(skipTelem(10, 'CONSEQUENCE_TRACE', 'not-theory-open'));
-        console.log(`  B10 CONSEQUENCE_TRACE   → SKIPPED (not THEORY_OPEN)`);
+        bladeTelems.push(skipTelem(10, 'Psionic', 'not-theory-open'));
+        console.log(`  B10 Psionic   → SKIPPED (not THEORY_OPEN)`);
       }
 
-      // ── BLADE 11: ELIMINATION_VERIFY ───────────────────────────────────────
+      // ── BLADE 11: Auditor ───────────────────────────────────────
       const localSubstrate = [...substrateIndex];
       if (q.pre_loaded_contradiction) {
         localSubstrate.push({ fact: q.pre_loaded_contradiction.known_fact ?? '', contradicts_theory: q.pre_loaded_contradiction.contradicts_theory ?? '', domain: q.domain });
@@ -1016,23 +1016,23 @@ async function runPlow12Blade(questions, config) {
         if (b11.telemetry.success) result.blades_fired.push(11);
         result.elimination_count = b11.eliminated.length;
         stats.eliminations += b11.eliminated.length;
-        console.log(`  B11 ELIMINATION_VERIFY  → ${b11.eliminated.length} confirmed  k_survived=${b11.k_survived}  codeBreakers=${b11.code_breaker_queue.length}  ${b11.telemetry.success ? '✓' : '✗'}`);
+        console.log(`  B11 Auditor  → ${b11.eliminated.length} confirmed  k_survived=${b11.k_survived}  codeBreakers=${b11.code_breaker_queue.length}  ${b11.telemetry.success ? '✓' : '✗'}`);
       } else {
-        bladeTelems.push(skipTelem(11, 'ELIMINATION_VERIFY', 'not-eliminated-class'));
-        console.log(`  B11 ELIMINATION_VERIFY  → SKIPPED (not ELIMINATED class)`);
+        bladeTelems.push(skipTelem(11, 'Auditor', 'not-eliminated-class'));
+        console.log(`  B11 Auditor  → SKIPPED (not ELIMINATED class)`);
       }
 
-      // ── BLADE 12: DEPENDENCY_PROPAGATION ───────────────────────────────────
+      // ── BLADE 12: Sentinel ───────────────────────────────────
       if (effectiveClass === 'KNOWN' && eblet.applications_downstream.length > 0) {
         const b12 = await blade_dependency_propagation(eblet, vaultPath);
         bladeTelems.push(b12.telemetry); stats.blades_fired.blade_12++;
         if (b12.telemetry.success) result.blades_fired.push(12);
         result.downstream_flags = b12.flagged_count;
         stats.downstream_flags  += b12.flagged_count;
-        console.log(`  B12 DEPENDENCY_PROPAGATION → ${b12.flagged_count} flags  ${b12.telemetry.success ? '✓' : '✗'}`);
+        console.log(`  B12 Sentinel → ${b12.flagged_count} flags  ${b12.telemetry.success ? '✓' : '✗'}`);
       } else {
-        bladeTelems.push(skipTelem(12, 'DEPENDENCY_PROPAGATION', 'not-known-or-no-downstream'));
-        console.log(`  B12 DEPENDENCY_PROPAGATION → SKIPPED (not KNOWN / no downstream)`);
+        bladeTelems.push(skipTelem(12, 'Sentinel', 'not-known-or-no-downstream'));
+        console.log(`  B12 Sentinel → SKIPPED (not KNOWN / no downstream)`);
       }
 
       writeToVault(eblet, vaultPath);
@@ -1065,7 +1065,7 @@ async function runPlow12Blade(questions, config) {
   const telemOut = {
     generated_at:        new Date().toISOString(),
     plow_version:        '12blade-bp084-corrected-v2',
-    blade_names:         { 1:'Spider', 2:'Sprite', 3:'Specialists', 4:'Miner', 5:'Saladin', 6:'Furnace', 7:'Three Fates', 8:'Scribe', 9:'Detective TEAM', 10:'CONSEQUENCE_TRACE', 11:'ELIMINATION_VERIFY', 12:'DEPENDENCY_PROPAGATION' },
+    blade_names:         { 1:'Spider', 2:'Sprite', 3:'Specialists', 4:'Miner', 5:'Saladin', 6:'Furnace', 7:'Three Fates', 8:'Scribe', 9:'Detective TEAM', 10:'Psionic', 11:'Auditor', 12:'Sentinel' },
     model:               MODEL,
     questions_processed: questions.length,
     summary:             stats,
@@ -1091,7 +1091,7 @@ async function main() {
   console.log('╚══════════════════════════════════════════════════════════╝');
   console.log('Blades 1-9: Spider · Sprite · Specialists · Miner · Saladin');
   console.log('            Furnace · Three Fates · Scribe · Detective TEAM');
-  console.log('Blades 10-12: CONSEQUENCE_TRACE · ELIMINATION_VERIFY · DEPENDENCY_PROPAGATION');
+  console.log('Blades 10-12: Psionic · Auditor · Sentinel');
   console.log(`\nShard     : ${shardFile}  (${questions.length} questions)`);
   console.log(`Model     : ${MODEL}`);
   console.log(`Ollama    : ${OLLAMA_URL}`);
@@ -1126,7 +1126,7 @@ async function main() {
   console.log(`Eliminations    : ${stats.eliminations}`);
   console.log(`Downstream flags: ${stats.downstream_flags}`);
   console.log('\nBlade fire counts:');
-  const bladeNames = { 1:'Spider', 2:'Sprite', 3:'Specialists', 4:'Miner', 5:'Saladin', 6:'Furnace', 7:'Three Fates', 8:'Scribe', 9:'Detective TEAM', 10:'CONSEQUENCE_TRACE', 11:'ELIMINATION_VERIFY', 12:'DEPENDENCY_PROPAGATION' };
+  const bladeNames = { 1:'Spider', 2:'Sprite', 3:'Specialists', 4:'Miner', 5:'Saladin', 6:'Furnace', 7:'Three Fates', 8:'Scribe', 9:'Detective TEAM', 10:'Psionic', 11:'Auditor', 12:'Sentinel' };
   for (let i = 1; i <= 12; i++) {
     const cnt    = stats.blades_fired[`blade_${i}`] ?? 0;
     const status = cnt > 0 ? '✓' : '○';

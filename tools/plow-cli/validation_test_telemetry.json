@@ -11,9 +11,9 @@
     "7": "Three Fates",
     "8": "Scribe",
     "9": "Detective TEAM",
-    "10": "CONSEQUENCE_TRACE",
-    "11": "ELIMINATION_VERIFY",
-    "12": "DEPENDENCY_PROPAGATION"
+    "10": "Psionic",
+    "11": "Auditor",
+    "12": "Sentinel"
   },
   "model": "gemma4:12b",
   "questions_processed": 3,
@@ -127,7 +127,7 @@
         },
         {
           "blade": 10,
-          "name": "CONSEQUENCE_TRACE",
+          "name": "Psionic",
           "start_ms": 1781663785374,
           "end_ms": 1781663785374,
           "success": true,
@@ -138,7 +138,7 @@
         },
         {
           "blade": 11,
-          "name": "ELIMINATION_VERIFY",
+          "name": "Auditor",
           "start_ms": 1781663785374,
           "end_ms": 1781663785374,
           "success": true,
@@ -149,7 +149,7 @@
         },
         {
           "blade": 12,
-          "name": "DEPENDENCY_PROPAGATION",
+          "name": "Sentinel",
           "start_ms": 1781663785374,
           "end_ms": 1781663785375,
           "success": true,
@@ -245,7 +245,7 @@
         },
         {
           "blade": 10,
-          "name": "CONSEQUENCE_TRACE",
+          "name": "Psionic",
           "start_ms": 1781663875630,
           "end_ms": 1781663885459,
           "success": true,
@@ -254,7 +254,7 @@
         },
         {
           "blade": 11,
-          "name": "ELIMINATION_VERIFY",
+          "name": "Auditor",
           "start_ms": 1781663885459,
           "end_ms": 1781663885459,
           "success": true,
@@ -265,7 +265,7 @@
         },
         {
           "blade": 12,
-          "name": "DEPENDENCY_PROPAGATION",
+          "name": "Sentinel",
           "start_ms": 1781663885459,
           "end_ms": 1781663885459,
           "success": true,
@@ -363,7 +363,7 @@
         },
         {
           "blade": 10,
-          "name": "CONSEQUENCE_TRACE",
+          "name": "Psionic",
           "start_ms": 1781663994957,
           "end_ms": 1781663994957,
           "success": true,
@@ -374,7 +374,7 @@
         },
         {
           "blade": 11,
-          "name": "ELIMINATION_VERIFY",
+          "name": "Auditor",
           "start_ms": 1781663994957,
           "end_ms": 1781663994959,
           "success": true,
@@ -383,7 +383,7 @@
         },
         {
           "blade": 12,
-          "name": "DEPENDENCY_PROPAGATION",
+          "name": "Sentinel",
           "start_ms": 1781663994959,
           "end_ms": 1781663994959,
           "success": true,
