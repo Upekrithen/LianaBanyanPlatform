@@ -1,15 +1,27 @@
 {
-  "generated_at": "2026-06-17T01:59:52.214Z",
-  "plow_version": "12blade-bp084",
+  "generated_at": "2026-06-17T02:19:03.867Z",
+  "plow_version": "12blade-bp084-corrected",
+  "blade_names": {
+    "1": "Spider",
+    "2": "Sprite",
+    "3": "Specialists",
+    "4": "Miner",
+    "5": "Saladin",
+    "6": "Furnace",
+    "7": "Three Fates",
+    "8": "Scribe",
+    "9": "Detective TEAM",
+    "10": "Psionic",
+    "11": "Auditor",
+    "12": "Sentinel"
+  },
   "model": "gemma4:12b",
   "questions_processed": 3,
   "summary": {
     "total": 3,
-    "correct": 2,
-    "quarantined": 1,
-    "incorrect": 0,
+    "andon_triggered": 0,
     "eblets_minted": 3,
-    "consequence_probes": 3,
+    "consequence_probes": 0,
     "eliminations": 1,
     "downstream_flags": 1,
     "blades_fired": {
@@ -27,95 +39,97 @@
       "blade_12": 1
     }
   },
-  "reputation": {
-    "gemma4_12b": {
-      "correct": 2,
-      "total": 3,
-      "quarantined": 1,
-      "incorrect": 0
-    }
-  },
   "per_question": [
     {
-      "question_id": "q1-known",
+      "question_id": "q1-known-boiling-point",
       "blade_count": 12,
       "blades": [
         {
           "blade": 1,
-          "start_ms": 1781661464399,
-          "end_ms": 1781661464399,
+          "name": "Spider",
+          "start_ms": 1781662447914,
+          "end_ms": 1781662447915,
           "success": true,
           "error": null,
-          "downstream_count": 0
+          "downstream_count": 1
         },
         {
           "blade": 2,
-          "start_ms": 1781661464399,
-          "end_ms": 1781661464399,
+          "name": "Sprite",
+          "start_ms": 1781662447915,
+          "end_ms": 1781662447915,
           "success": true,
           "error": null,
           "downstream_count": 1
         },
         {
           "blade": 3,
-          "start_ms": 1781661464399,
-          "end_ms": 1781661478614,
+          "name": "Specialists",
+          "start_ms": 1781662447915,
+          "end_ms": 1781662472831,
           "success": true,
           "error": null,
-          "downstream_count": 0
+          "downstream_count": 6
         },
         {
           "blade": 4,
-          "start_ms": 1781661478615,
-          "end_ms": 1781661478615,
+          "name": "Miner",
+          "start_ms": 1781662472832,
+          "end_ms": 1781662472832,
           "success": true,
           "error": null,
-          "downstream_count": 0
+          "downstream_count": 6
         },
         {
           "blade": 5,
-          "start_ms": 1781661478615,
-          "end_ms": 1781661478615,
+          "name": "Saladin",
+          "start_ms": 1781662472832,
+          "end_ms": 1781662528287,
           "success": true,
           "error": null,
-          "downstream_count": 0
+          "downstream_count": 6
         },
         {
           "blade": 6,
-          "start_ms": 1781661478615,
-          "end_ms": 1781661478616,
+          "name": "Furnace",
+          "start_ms": 1781662528288,
+          "end_ms": 1781662528288,
           "success": true,
           "error": null,
-          "downstream_count": 1
+          "downstream_count": 6
         },
         {
           "blade": 7,
-          "start_ms": 1781661478616,
-          "end_ms": 1781661478616,
+          "name": "Three Fates",
+          "start_ms": 1781662528288,
+          "end_ms": 1781662551831,
           "success": true,
           "error": null,
-          "downstream_count": 0
+          "downstream_count": 3
         },
         {
           "blade": 8,
-          "start_ms": 1781661478616,
-          "end_ms": 1781661478618,
+          "name": "Scribe",
+          "start_ms": 1781662551831,
+          "end_ms": 1781662551834,
           "success": true,
           "error": null,
           "downstream_count": 1
         },
         {
           "blade": 9,
-          "start_ms": 1781661478618,
-          "end_ms": 1781661478618,
+          "name": "Detective TEAM",
+          "start_ms": 1781662551834,
+          "end_ms": 1781662551834,
           "success": true,
           "error": null,
-          "downstream_count": 2
+          "downstream_count": 0
         },
         {
           "blade": 10,
-          "start_ms": 1781661478618,
-          "end_ms": 1781661478618,
+          "name": "Psionic",
+          "start_ms": 1781662551834,
+          "end_ms": 1781662551834,
           "success": true,
           "error": null,
           "downstream_count": 0,
@@ -124,8 +138,9 @@
         },
         {
           "blade": 11,
-          "start_ms": 1781661478618,
-          "end_ms": 1781661478618,
+          "name": "Auditor",
+          "start_ms": 1781662551834,
+          "end_ms": 1781662551834,
           "success": true,
           "error": null,
           "downstream_count": 0,
@@ -134,8 +149,9 @@
         },
         {
           "blade": 12,
-          "start_ms": 1781661478618,
-          "end_ms": 1781661478619,
+          "name": "Sentinel",
+          "start_ms": 1781662551834,
+          "end_ms": 1781662551836,
           "success": true,
           "error": null,
           "downstream_count": 1
@@ -143,93 +159,104 @@
       ]
     },
     {
-      "question_id": "q2-theory-open",
+      "question_id": "q2-theory-open-anesthesia",
       "blade_count": 12,
       "blades": [
         {
           "blade": 1,
-          "start_ms": 1781661478620,
-          "end_ms": 1781661478620,
+          "name": "Spider",
+          "start_ms": 1781662551836,
+          "end_ms": 1781662551837,
           "success": true,
           "error": null,
           "downstream_count": 0
         },
         {
           "blade": 2,
-          "start_ms": 1781661478620,
-          "end_ms": 1781661478620,
+          "name": "Sprite",
+          "start_ms": 1781662551837,
+          "end_ms": 1781662551837,
           "success": true,
           "error": null,
-          "downstream_count": 1
+          "downstream_count": 0
         },
         {
           "blade": 3,
-          "start_ms": 1781661478620,
-          "end_ms": 1781661484199,
+          "name": "Specialists",
+          "start_ms": 1781662551837,
+          "end_ms": 1781662566179,
           "success": true,
           "error": null,
-          "downstream_count": 0
+          "downstream_count": 5
         },
         {
           "blade": 4,
-          "start_ms": 1781661484199,
-          "end_ms": 1781661484199,
+          "name": "Miner",
+          "start_ms": 1781662566179,
+          "end_ms": 1781662566179,
           "success": true,
           "error": null,
-          "downstream_count": 0
+          "downstream_count": 5
         },
         {
           "blade": 5,
-          "start_ms": 1781661484199,
-          "end_ms": 1781661484199,
+          "name": "Saladin",
+          "start_ms": 1781662566179,
+          "end_ms": 1781662611769,
           "success": true,
           "error": null,
-          "downstream_count": 0
+          "downstream_count": 4
         },
         {
           "blade": 6,
-          "start_ms": 1781661484199,
-          "end_ms": 1781661484199,
+          "name": "Furnace",
+          "start_ms": 1781662611769,
+          "end_ms": 1781662611769,
           "success": true,
           "error": null,
-          "downstream_count": 1
+          "downstream_count": 4
         },
         {
           "blade": 7,
-          "start_ms": 1781661484199,
-          "end_ms": 1781661484199,
+          "name": "Three Fates",
+          "start_ms": 1781662611769,
+          "end_ms": 1781662633377,
           "success": true,
           "error": null,
-          "downstream_count": 0
+          "downstream_count": 3
         },
         {
           "blade": 8,
-          "start_ms": 1781661484199,
-          "end_ms": 1781661484200,
+          "name": "Scribe",
+          "start_ms": 1781662633377,
+          "end_ms": 1781662633378,
           "success": true,
           "error": null,
           "downstream_count": 1
         },
         {
           "blade": 9,
-          "start_ms": 1781661484200,
-          "end_ms": 1781661484200,
+          "name": "Detective TEAM",
+          "start_ms": 1781662633378,
+          "end_ms": 1781662633378,
           "success": true,
           "error": null,
-          "downstream_count": 3
+          "downstream_count": 0
         },
         {
           "blade": 10,
-          "start_ms": 1781661484200,
-          "end_ms": 1781661588443,
+          "name": "Psionic",
+          "start_ms": 1781662633379,
+          "end_ms": 1781662643291,
           "success": true,
           "error": null,
-          "downstream_count": 3
+          "downstream_count": 0
         },
         {
           "blade": 11,
-          "start_ms": 1781661588444,
-          "end_ms": 1781661588444,
+          "name": "Auditor",
+          "start_ms": 1781662643291,
+          "end_ms": 1781662643291,
           "success": true,
           "error": null,
           "downstream_count": 0,
@@ -238,8 +265,9 @@
         },
         {
           "blade": 12,
-          "start_ms": 1781661588444,
-          "end_ms": 1781661588444,
+          "name": "Sentinel",
+          "start_ms": 1781662643291,
+          "end_ms": 1781662643291,
           "success": true,
           "error": null,
           "downstream_count": 0,
@@ -249,85 +277,95 @@
       ]
     },
     {
-      "question_id": "q3-eliminated",
+      "question_id": "q3-eliminated-aether",
       "blade_count": 12,
       "blades": [
         {
           "blade": 1,
-          "start_ms": 1781661588444,
-          "end_ms": 1781661588444,
+          "name": "Spider",
+          "start_ms": 1781662643292,
+          "end_ms": 1781662643293,
           "success": true,
           "error": null,
           "downstream_count": 0
         },
         {
           "blade": 2,
-          "start_ms": 1781661588444,
-          "end_ms": 1781661588444,
+          "name": "Sprite",
+          "start_ms": 1781662643293,
+          "end_ms": 1781662643293,
           "success": true,
           "error": null,
-          "downstream_count": 1
+          "downstream_count": 0
         },
         {
           "blade": 3,
-          "start_ms": 1781661588444,
-          "end_ms": 1781661592211,
+          "name": "Specialists",
+          "start_ms": 1781662643293,
+          "end_ms": 1781662657157,
           "success": true,
           "error": null,
-          "downstream_count": 0
+          "downstream_count": 7
         },
         {
           "blade": 4,
-          "start_ms": 1781661592211,
-          "end_ms": 1781661592211,
+          "name": "Miner",
+          "start_ms": 1781662657157,
+          "end_ms": 1781662657157,
           "success": true,
           "error": null,
-          "downstream_count": 0
+          "downstream_count": 7
         },
         {
           "blade": 5,
-          "start_ms": 1781661592211,
-          "end_ms": 1781661592211,
+          "name": "Saladin",
+          "start_ms": 1781662657157,
+          "end_ms": 1781662718484,
           "success": true,
           "error": null,
-          "downstream_count": 0
+          "downstream_count": 6
         },
         {
           "blade": 6,
-          "start_ms": 1781661592211,
-          "end_ms": 1781661592211,
+          "name": "Furnace",
+          "start_ms": 1781662718484,
+          "end_ms": 1781662718484,
           "success": true,
           "error": null,
-          "downstream_count": 2
+          "downstream_count": 6
         },
         {
           "blade": 7,
-          "start_ms": 1781661592211,
-          "end_ms": 1781661592211,
+          "name": "Three Fates",
+          "start_ms": 1781662718484,
+          "end_ms": 1781662743863,
           "success": true,
           "error": null,
-          "downstream_count": 0
+          "downstream_count": 3
         },
         {
           "blade": 8,
-          "start_ms": 1781661592211,
-          "end_ms": 1781661592212,
+          "name": "Scribe",
+          "start_ms": 1781662743863,
+          "end_ms": 1781662743864,
           "success": true,
           "error": null,
           "downstream_count": 1
         },
         {
           "blade": 9,
-          "start_ms": 1781661592212,
-          "end_ms": 1781661592212,
+          "name": "Detective TEAM",
+          "start_ms": 1781662743864,
+          "end_ms": 1781662743864,
           "success": true,
           "error": null,
-          "downstream_count": 3
+          "downstream_count": 0
         },
         {
           "blade": 10,
-          "start_ms": 1781661592212,
-          "end_ms": 1781661592212,
+          "name": "Psionic",
+          "start_ms": 1781662743864,
+          "end_ms": 1781662743864,
           "success": true,
           "error": null,
           "downstream_count": 0,
@@ -336,16 +374,18 @@
         },
         {
           "blade": 11,
-          "start_ms": 1781661592213,
-          "end_ms": 1781661592213,
+          "name": "Auditor",
+          "start_ms": 1781662743864,
+          "end_ms": 1781662743866,
           "success": true,
           "error": null,
           "downstream_count": 2
         },
         {
           "blade": 12,
-          "start_ms": 1781661592213,
-          "end_ms": 1781661592213,
+          "name": "Sentinel",
+          "start_ms": 1781662743866,
+          "end_ms": 1781662743866,
           "success": true,
           "error": null,
           "downstream_count": 0,

@@ -86,8 +86,8 @@ After item 34 (Substitution Rail Cooperative Marketplace), add:
 35. Truth Integrity Chain — Five-field epistemic knowledge record with KNOWN, 
     THEORIES_OPEN, ELIMINATED, DEPENDENCIES_UPSTREAM, and APPLICATIONS_DOWNSTREAM; 
     hasty-generalization guard; chronos-linked dependency graph; Loop 10 
-    CONSEQUENCE_TRACE; Loop 11 ELIMINATION_VERIFICATION; Loop 12 
-    DEPENDENCY_PROPAGATION
+    Psionic; Loop 11 Auditor; Loop 12 
+    Sentinel
 36. Code Breakers Guild and Gold Refined by Fire — Four-tier claim progression 
     (UNTESTED → TESTED → FORGED → GOLD_REFINED_BY_FIRE/Immutable); Code Breaker 
     member tier progression (Initiate → Journeyman → Master → Refiner of Gold); 
@@ -165,10 +165,10 @@ knowledge record (KNOWN / THEORIES_OPEN / ELIMINATED / DEPENDENCIES_UPSTREAM /
 APPLICATIONS_DOWNSTREAM) extending the cooperative eblet substrate with first-class 
 representation of falsified hypotheses and open theories; hasty-generalization 
 structural guard requiring minimum sample size and counter-evidence search for 
-universal-quantified claims; 12-Loop Plow extension — Loop 10 CONSEQUENCE_TRACE 
+universal-quantified claims; 12-Loop Plow extension — Loop 10 Psionic 
 (child queries testing theory predictions, survival-score updates), Loop 11 
-ELIMINATION_VERIFICATION (substrate search for contradicting facts, Code Breaker 
-queue surfacing), Loop 12 DEPENDENCY_PROPAGATION (upstream KNOWN update triggers 
+Auditor (substrate search for contradicting facts, Code Breaker 
+queue surfacing), Loop 12 Sentinel (upstream KNOWN update triggers 
 downstream needs-reeval flagging across N-hop dependency graph); Code Breakers 
 Guild four-tier claim verification progression (UNTESTED → TESTED [K=20] → FORGED 
 [M=10 adversarial challenges / 90 days] → GOLD_REFINED_BY_FIRE [Immutable]); 

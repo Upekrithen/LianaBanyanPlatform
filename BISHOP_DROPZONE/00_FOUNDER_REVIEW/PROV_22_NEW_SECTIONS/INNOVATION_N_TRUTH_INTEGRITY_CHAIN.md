@@ -1,4 +1,4 @@
-﻿---
+---
 title: "Innovation Area 35: Truth Integrity Chain (TIC)"
 status: founder-ratify-pending
 class: provisional-patent-section
@@ -96,12 +96,12 @@ ELIMINATED:
     contradicting_evidence:
       source: "Cavendish-1798-torsion-balance"
       excerpt: "Gravitational attraction between separated lead spheres"
-    eliminated_by: "Loop-11-ELIMINATION_VERIFICATION"
+    eliminated_by: "Loop-11-Auditor"
     chronos: "2026-06-16T00:00:00Z"
   - hypothesis: "Gravity propagates instantaneously"
     contradicting_evidence:
       source: "LIGO-2017-GW170817"
-    eliminated_by: "Loop-11-ELIMINATION_VERIFICATION"
+    eliminated_by: "Loop-11-Auditor"
     chronos: "2026-06-16T00:00:00Z"
 ```
 
@@ -141,19 +141,19 @@ DEPENDENCIES_UPSTREAM and APPLICATIONS_DOWNSTREAM collectively constitute a dire
 
 The canonical nine-stage plow pipeline (Claim Group 1) is extended with three loops that operate after the Scribe stage (element (h)) on each successfully minted eblet.
 
-**Loop 10 — CONSEQUENCE_TRACE**
+**Loop 10 — Psionic**
 
 For each entry T in the eblet's THEORIES_OPEN field, Loop 10 identifies a configurable number of immediate logical consequences of T (default: k=3 consequences). For each consequence C, Loop 10 executes the canonical plow pipeline as a child query. If the child eblet's KNOWN field contains a proposition consistent with C, T's survival_score is incremented (default: +0.05). If the child eblet's ELIMINATED field contains a proposition contradicting C, T's survival_score is decremented (default: -0.10). The child eblet is linked to the parent via APPLICATIONS_DOWNSTREAM. If T's survival_score falls below a configurable elimination threshold (default: 0.20), T is migrated from THEORIES_OPEN to ELIMINATED. Total recursion depth across all ancestor Loop 10 calls is bounded by a configurable maximum (default: depth N=3).
 
 Complexity: O(|THEORIES_OPEN| × k × P) where P is single-question pipeline cost.
 
-**Loop 11 — ELIMINATION_VERIFICATION**
+**Loop 11 — Auditor**
 
 For each entry T in the eblet's THEORIES_OPEN field, Loop 11 executes a substrate search for KNOWN propositions in other eblets that contradict T. The search applies BM25 plus category-weighted scoring (canon tier > active tier > pixie-dust tier) per the substrate-verified-knowledge-accumulator canon. If the highest-confidence contradiction result exceeds the configurable threshold (default: 0.70), T is migrated from THEORIES_OPEN to ELIMINATED, recording the contradicting eblet. A contradiction-trail eblet is minted linking T and the contradicting fact. The eliminated hypothesis is surfaced as a candidate for the Code Breaker Guild queue (Claim Group 29).
 
 Complexity: O(|THEORIES_OPEN| × S) where S is substrate search cost.
 
-**Loop 12 — DEPENDENCY_PROPAGATION**
+**Loop 12 — Sentinel**
 
 For each KNOWN entry updated during the current plow cycle, Loop 12 traverses APPLICATIONS_DOWNSTREAM edges in breadth-first order, flagging each reachable downstream eblet within N_depth hops with needs_reeval: true and a chronos-stamp. All flagged eblets are surfaced in the cooperative review queue. If the traversal reaches depth N_depth before exhausting the downstream graph, remaining downstream eblets are escalated to human-network review.
 
@@ -249,7 +249,7 @@ wherein total recursion depth across all ancestor Consequence Trace invocations 
 | - proposition   |  scores)             |  contradiction trail)   |
 | - evidence_trail| - theory             | - hypothesis            |
 | - confidence    | - survival_score     | - contradicting_evidence|
-| - chronos       | - consequence_trace  | - eliminated_by         |
+| - chronos       | - Psionic  | - eliminated_by         |
 |                 | - chronos            | - chronos               |
 +-----------------+----------------------+-------------------------+
 |              DEPENDENCY GRAPH FIELDS                             |

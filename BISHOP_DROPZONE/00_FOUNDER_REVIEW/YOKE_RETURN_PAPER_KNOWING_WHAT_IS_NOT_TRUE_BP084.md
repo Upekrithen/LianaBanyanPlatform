@@ -71,7 +71,7 @@ Three independent, audience-tiered papers written and committed to `BISHOP_DROPZ
 >
 > **Claim 1 (Structural):** A five-field epistemic status schema where ELIMINATED is populated through a verifiable, attributable process — not inferred from absence.
 >
-> **Claim 2 (Algorithmic):** Three verification loops (CONSEQUENCE_TRACE, ELIMINATION_VERIFICATION, DEPENDENCY_PROPAGATION) that maintain consistency across a dependency-structured knowledge graph with bounded depth.
+> **Claim 2 (Algorithmic):** Three verification loops (Psionic, Auditor, Sentinel) that maintain consistency across a dependency-structured knowledge graph with bounded depth.
 >
 > **Claim 3 (Economic):** A cooperative economic mechanism that prices falsification work (elimination-Marks) at par with affirmation work (confirmation-Marks) — a tagged denomination within an existing multi-currency system.
 >

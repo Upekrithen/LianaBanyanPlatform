@@ -106,7 +106,7 @@ Alchourrón, Gärdenfors, and Makinson ("On the Logic of Theory Change: Partial 
 - **Contraction K−φ**: removing φ from K (and all beliefs that logically entail φ)
 - **Revision K*φ**: adding φ to K when φ is inconsistent with K (requires contraction followed by expansion)
 
-The AGM rationality postulates constrain which belief revision functions are acceptable. The TIC's Loop 12 (DEPENDENCY_PROPAGATION) is functionally analogous to AGM contraction applied to a dependency-structured knowledge base: when a KNOWN item is updated or eliminated, Loop 12 performs the equivalent of contraction on all APPLICATIONS_DOWNSTREAM that logically entailed the updated item.
+The AGM rationality postulates constrain which belief revision functions are acceptable. The TIC's Loop 12 (Sentinel) is functionally analogous to AGM contraction applied to a dependency-structured knowledge base: when a KNOWN item is updated or eliminated, Loop 12 performs the equivalent of contraction on all APPLICATIONS_DOWNSTREAM that logically entailed the updated item.
 
 The TIC system is not a formal implementation of AGM. AGM operates over arbitrary belief sets with no schema; the TIC operates over a structured five-field schema. The dependency structure (DEPENDENCIES_UPSTREAM, APPLICATIONS_DOWNSTREAM) provides explicit direction for propagation that AGM's abstract framework leaves unspecified.
 
@@ -150,7 +150,7 @@ The TIC + Code Breakers system makes four load-bearing claims of novelty that ar
 
 **Claim 1 (Structural):** A five-field epistemic status schema (KNOWN, THEORIES_OPEN, ELIMINATED, DEPENDENCIES_UPSTREAM, APPLICATIONS_DOWNSTREAM) as a first-class data structure for knowledge records, where ELIMINATED is populated through a verifiable, attributable process and not merely inferred from absence.
 
-**Claim 2 (Algorithmic):** Three verification loops (CONSEQUENCE_TRACE, ELIMINATION_VERIFICATION, DEPENDENCY_PROPAGATION) that maintain consistency across a dependency-structured knowledge graph when any field is updated, with bounded depth to prevent runaway propagation.
+**Claim 2 (Algorithmic):** Three verification loops (Psionic, Auditor, Sentinel) that maintain consistency across a dependency-structured knowledge graph when any field is updated, with bounded depth to prevent runaway propagation.
 
 **Claim 3 (Economic):** A cooperative economic mechanism that prices falsification work (elimination-Marks) at par with affirmation work (confirmation-Marks), using a tagged-denomination model within an existing multi-currency system, such that elimination work is compensated at a rate that makes sustained professional falsification activity economically viable.
 
@@ -381,7 +381,7 @@ TIC_Record:
 
 ## 6. Algorithm Specification: Loops 10, 11, and 12
 
-### 6.1 Loop 10: CONSEQUENCE_TRACE
+### 6.1 Loop 10: Psionic
 
 **Purpose:** When a new theory T is added to THEORIES_OPEN, trace its logical consequences and check for contradictions with KNOWN or ELIMINATED.
 
@@ -390,12 +390,12 @@ TIC_Record:
 **Pseudocode:**
 
 ```
-FUNCTION loop_10_consequence_trace(
+FUNCTION loop_10_Psionic(
     tic_record R,
     theory T,
     depth_limit N,
     current_depth D = 0
-) → consequence_trace_result:
+) → Psionic_result:
 
   IF D > N:
     RETURN {status: "depth_limit_reached", consequences_traced: []}
@@ -427,12 +427,12 @@ FUNCTION loop_10_consequence_trace(
     traced_consequences.append(C)
     
     // Recurse
-    sub_result ← loop_10_consequence_trace(R, C, N, D + 1)
+    sub_result ← loop_10_Psionic(R, C, N, D + 1)
     traced_consequences.extend(sub_result.consequences_traced)
     flagged_contradictions.extend(sub_result.flagged_contradictions)
   
   IF LENGTH(flagged_contradictions) > 0:
-    ESCALATE to loop_11_elimination_verification(
+    ESCALATE to loop_11_Auditor(
       tic_record = R,
       theory = T,
       trigger = "loop_10_contradiction",
@@ -459,7 +459,7 @@ FUNCTION loop_10_consequence_trace(
 | Medical/clinical | 3 | Balance between rigor and practicality for clinical evidence chains |
 | Historical/interpretive | 1 | Causal consequences of historical claims are too uncertain for deep tracing |
 
-### 6.2 Loop 11: ELIMINATION_VERIFICATION
+### 6.2 Loop 11: Auditor
 
 **Purpose:** Formally verify whether a proposed elimination is valid — whether the challenge evidence E formally contradicts theory T.
 
@@ -468,7 +468,7 @@ FUNCTION loop_10_consequence_trace(
 **Pseudocode:**
 
 ```
-FUNCTION loop_11_elimination_verification(
+FUNCTION loop_11_Auditor(
     tic_record R,
     theory T,
     challenge_evidence E,
@@ -515,7 +515,7 @@ FUNCTION loop_11_elimination_verification(
     )
     
     // Trigger Loop 12 on downstream applications
-    loop_12_dependency_propagation(R, T, change_type: "theory_eliminated")
+    loop_12_Sentinel(R, T, change_type: "theory_eliminated")
     
     RETURN {
       status: "eliminated",
@@ -552,14 +552,14 @@ FUNCTION loop_11_elimination_verification(
 - Experimental contradiction: detected by comparing quantitative claims against experimental bounds
 - Requires human verification for complex cases — Loop 11 returns `{status: "requires_human_review"}` when automated contradiction detection fails
 
-### 6.3 Loop 12: DEPENDENCY_PROPAGATION
+### 6.3 Loop 12: Sentinel
 
 **Purpose:** When a claim's status changes, propagate the update to all dependent claims (both upstream and downstream).
 
 **Pseudocode:**
 
 ```
-FUNCTION loop_12_dependency_propagation(
+FUNCTION loop_12_Sentinel(
     tic_record R,
     claim C,
     change_type: enum {ELIMINATED, STRENGTHENED, WEAKENED, PROMOTED},
@@ -593,7 +593,7 @@ FUNCTION loop_12_dependency_propagation(
           })
         
         // Recurse
-        sub_result ← loop_12_dependency_propagation(
+        sub_result ← loop_12_Sentinel(
           downstream_record, C, ELIMINATED, propagation_path)
         affected_claims.extend(sub_result.affected_claims)
       

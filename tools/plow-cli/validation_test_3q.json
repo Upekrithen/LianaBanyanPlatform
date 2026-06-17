@@ -1,58 +1,57 @@
 {
-  "node_id": "m0-validation",
-  "shard_name": "3q-validation-bp084",
-  "description": "3-question M0 validation test for 12-blade plow — exercises all 12 blades",
-  "plow_version": "12blade-bp084",
+  "_comment": "BP084 SEG-2 — 3-Question M0 Validation Shard (CORRECTED — canonical blade names)",
+  "_plow_version": "12blade-bp084-corrected",
+  "_blade_map": {
+    "1": "Spider", "2": "Sprite", "3": "Specialists", "4": "Miner",
+    "5": "Saladin", "6": "Furnace", "7": "Three Fates", "8": "Scribe",
+    "9": "Detective TEAM", "10": "Psionic",
+    "11": "Auditor", "12": "Sentinel"
+  },
   "questions": [
     {
-      "id": "q1-known",
-      "question_id": "q1-known",
+      "id": "q1-known-boiling-point",
       "class": "KNOWN",
       "domain": "chemistry",
-      "question": "What is the approximate boiling point of water at standard atmospheric pressure?",
-      "choices": ["50°C", "100°C", "150°C", "200°C"],
-      "options":  ["50°C", "100°C", "150°C", "200°C"],
-      "answer": "B",
-      "answer_letter": "B",
-      "correct_answer": "100°C",
-      "expected_blades": [1,2,3,4,5,6,7,8,9,12],
-      "expected_eblet_type": "known",
-      "downstream_seed": "physics_thermal_eblet",
-      "note": "Exercises blades 1-9 + blade 12 (known fact with downstream physics application). Blade 4 should NOT quarantine (clear factual answer). Blade 12 fires due to downstream_seed."
+      "question": "What is the boiling point of pure water at standard atmospheric pressure (1 atm, 101.325 kPa) at sea level?",
+      "ground_truth": "100 degrees Celsius (212 degrees Fahrenheit, 373.15 Kelvin) — established by international thermometric convention since 1954 and confirmed by the International Temperature Scale ITS-90.",
+      "downstream_seed": "physics_thermodynamics_phase_transitions",
+      "note": "KNOWN class — Wikipedia clearly states this. Three Fates should reach CONCORDANT. Blade 12 (Sentinel) fires because downstream_seed is defined. Blades 10+11 skip.",
+      "expected_blades_firing": [1, 2, 3, 4, 5, 6, 7, 8, 9, 12],
+      "blade_10_expected": "SKIP",
+      "blade_11_expected": "SKIP",
+      "blade_12_expected": "FIRE — downstream flag to physics_thermodynamics_phase_transitions"
     },
     {
-      "id": "q2-theory-open",
-      "question_id": "q2-theory-open",
+      "id": "q2-theory-open-anesthesia",
       "class": "THEORY_OPEN",
-      "domain": "philosophy",
-      "question": "Is consciousness solely a product of physical brain processes?",
-      "choices": ["Yes, definitively", "No, definitively", "Evidence is contested", "The question is meaningless"],
-      "options":  ["Yes, definitively", "No, definitively", "Evidence is contested", "The question is meaningless"],
-      "answer": "C",
-      "answer_letter": "C",
-      "correct_answer": "Evidence is contested",
-      "expected_blades": [1,2,3,4,5,6,7,8,9,10],
-      "expected_eblet_type": "theory_open",
-      "note": "THEORY_OPEN class triggers Andon-Cord quarantine (blade 4) + blade 10 consequence probes. Blade 10 probes testable consequences of consciousness-physicalism claim."
+      "domain": "neuroscience",
+      "question": "What is the specific biophysical mechanism by which general anesthetics cause reversible loss of consciousness?",
+      "ground_truth": null,
+      "downstream_seed": null,
+      "note": "THEORY_OPEN class — genuinely contested science (protein hypothesis vs lipid bilayer hypothesis vs GABA receptor upregulation vs quantum theories). Three Fates LIKELY DISCORDANT. Detective TEAM (Blade 9) escalates Andon. Blade 10 (Psionic) fires to probe consequences of leading theories.",
+      "expected_blades_firing": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      "blade_10_expected": "FIRE — consequence probes on competing anesthesia theories",
+      "blade_11_expected": "SKIP (unless theories accumulate in eblet)",
+      "blade_12_expected": "SKIP"
     },
     {
-      "id": "q3-eliminated",
-      "question_id": "q3-eliminated",
+      "id": "q3-eliminated-aether",
       "class": "ELIMINATED",
       "domain": "physics",
-      "question": "Can objects travel faster than light in a vacuum according to special relativity?",
-      "choices": ["Yes, with enough energy", "No, the speed of light is absolute", "Only in quantum tunneling", "Under certain gravitational conditions"],
-      "options":  ["Yes, with enough energy", "No, the speed of light is absolute", "Only in quantum tunneling", "Under certain gravitational conditions"],
-      "answer": "B",
-      "answer_letter": "B",
-      "correct_answer": "No, the speed of light is absolute",
+      "question": "Does luminiferous aether exist as a medium for the propagation of electromagnetic waves through space?",
+      "ground_truth": "No — the luminiferous aether hypothesis was definitively eliminated by the Michelson-Morley experiment (1887), which found NO evidence of aether-induced interference fringe shifts. Einstein's Special Relativity (1905) further established that electromagnetic waves require no medium, propagating at speed c in vacuum. The aether hypothesis is ELIMINATED from modern physics.",
       "pre_loaded_contradiction": {
-        "known_fact": "Special relativity (Einstein 1905) establishes c as invariant upper speed limit for matter/information",
-        "contradicts_theory": "faster-than-light travel for matter"
+        "known_fact": "The Michelson-Morley experiment (1887) measured the speed of light in perpendicular directions and found no fringe shift — contradicting the expected aether wind effect. Result: null result, delta fringe shift ≈ 0, ruling out aether with high confidence.",
+        "contradicts_theory": "Luminiferous aether exists as a medium for electromagnetic wave propagation",
+        "experiment": "Michelson-Morley 1887",
+        "confidence": 0.99
       },
-      "expected_blades": [1,2,3,4,5,6,7,8,9,11],
-      "expected_eblet_type": "eliminated",
-      "note": "Blade 11 finds pre-loaded contradiction and confirms elimination of FTL theory. Code Breaker queue entry generated."
+      "downstream_seed": null,
+      "note": "ELIMINATED class — pre_loaded_contradiction seeds blade 11 (Auditor) with the Michelson-Morley contradiction. Blade 11 verifies via substrate + contradiction trail, mints contradiction_trail eblet, adds to code_breaker_queue. Blades 10+12 skip.",
+      "expected_blades_firing": [1, 2, 3, 4, 5, 6, 7, 8, 9, 11],
+      "blade_10_expected": "SKIP",
+      "blade_11_expected": "FIRE — verify aether elimination via Michelson-Morley contradiction trail",
+      "blade_12_expected": "SKIP"
     }
   ]
 }

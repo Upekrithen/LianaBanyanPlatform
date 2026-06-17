@@ -134,14 +134,14 @@ The guard is not perfect — no guard is. But it is structural. It is built into
 
 The Truth Integrity Chain doesn't just hold data statically. It operates dynamically through three verification loops — numbered 10, 11, and 12 in the extended Plow sequence. (Loops 1-9 are the existing substrate accumulation and retrieval loops; 10-12 are the TIC-specific extensions.)
 
-### Loop 10: CONSEQUENCE_TRACE
+### Loop 10: Psionic
 
 **Purpose:** When a new claim enters THEORIES_OPEN, spawn its downstream logical consequences and check them against KNOWN and ELIMINATED.
 
 **Mechanism:**
 
 ```
-PROCEDURE loop_10_consequence_trace(theory T, depth_limit N):
+PROCEDURE loop_10_Psionic(theory T, depth_limit N):
   FOR each logical consequence C of T (derived via deduction):
     IF C contradicts any item in KNOWN:
       mark T as "self-contradicting with KNOWN — escalate to Loop 11"
@@ -150,7 +150,7 @@ PROCEDURE loop_10_consequence_trace(theory T, depth_limit N):
       mark T as "contradicts eliminated claim — escalate to Loop 11"
       BREAK
     IF depth < N:
-      recurse: consequence_trace(C, depth - 1)
+      recurse: Psionic(C, depth - 1)
   RETURN: consequence_map for T
 ```
 
@@ -164,14 +164,14 @@ Consequence 1: Gravitational wave events should be detectable simultaneously wit
 Check against KNOWN: "Gravitational effects propagate at c (LIGO 2017 GW170817)" — this observation showed a 1.7-second delay between gravitational and electromagnetic signals, consistent with propagation at c over 130 million light years.
 Result: Theory T is contradicted by KNOWN → escalate to Loop 11.
 
-### Loop 11: ELIMINATION_VERIFICATION
+### Loop 11: Auditor
 
 **Purpose:** When Loop 10 flags a contradiction, or when a Code Breaker submits a challenge, formally verify that the theory should move to ELIMINATED.
 
 **Mechanism:**
 
 ```
-PROCEDURE loop_11_elimination_verification(theory T, challenge evidence E):
+PROCEDURE loop_11_Auditor(theory T, challenge evidence E):
   
   Step 1: Verify E is new (not already in ELIMINATED or KNOWN)
   Step 2: Verify E is independent (not derived from T itself)
@@ -193,14 +193,14 @@ Challenge E: "Electrically opposite charges attract electrostatically, while gra
 
 Loop 11 check: Does E formally contradict T? Yes — if gravity were electromagnetic, its attractive/repulsive behavior should mirror electromagnetic sign rules. It doesn't. T is eliminated.
 
-### Loop 12: DEPENDENCY_PROPAGATION
+### Loop 12: Sentinel
 
 **Purpose:** When a KNOWN claim is updated (strengthened, weakened, or eliminated), propagate the update through APPLICATIONS_DOWNSTREAM.
 
 **Mechanism:**
 
 ```
-PROCEDURE loop_12_dependency_propagation(updated_claim K, change_type C):
+PROCEDURE loop_12_Sentinel(updated_claim K, change_type C):
   
   FOR each claim A in K.APPLICATIONS_DOWNSTREAM:
     IF change_type is ELIMINATED:
