@@ -1,5 +1,5 @@
 ---
-title: "PROV_22 Integration Plan — New Sections (TIC + Code Breakers)"
+title: "PROV_22 Integration Plan — New Sections (TIC + Code Breakers + Unseen Tax)"
 status: founder-ratify-pending
 class: integration-plan
 prov_target: PROV_22
@@ -8,11 +8,12 @@ model: Sonnet 4.6
 date: 2026-06-16
 ---
 
-# PROV_22 Integration Plan — TIC + Code Breakers (BP084)
+# PROV_22 Integration Plan — TIC + Code Breakers + Unseen Tax (BP084)
 
 **Target file:** `Asteroid-ProofVault\PATENTS\PROVISIONAL_22_BP083\PROV_22_DRAFT_v02.md`
 **Current state:** v02 · 27 Claim Groups · 34 Innovation Areas · ~649 lines
-**After integration:** v03 · 29 Claim Groups · 36 Innovation Areas
+**After integration (v03, TIC + Code Breakers):** v03 · 29 Claim Groups · 36 Innovation Areas
+**After integration (v04, + Unseen Tax):** v04 · 30 Claim Groups · 37 Innovation Areas
 
 ---
 
@@ -41,14 +42,19 @@ To:
 
 ## Step 3: Update the Version Line
 
-Change:
+Change (after TIC + Code Breakers integration):
 ```
 **Version:** v02 · Claim Groups 1-27 · June 15, 2026
 ```
 
-To:
+To (v03 — TIC + Code Breakers):
 ```
 **Version:** v03 · Claim Groups 1-29 · June 16, 2026
+```
+
+To (v04 — + Unseen Tax):
+```
+**Version:** v04 · Claim Groups 1-30 · June 16, 2026
 ```
 
 ---
@@ -92,6 +98,13 @@ After item 34 (Substitution Rail Cooperative Marketplace), add:
     (UNTESTED → TESTED → FORGED → GOLD_REFINED_BY_FIRE/Immutable); Code Breaker 
     member tier progression (Initiate → Journeyman → Master → Refiner of Gold); 
     Negative-Knowledge denomination Marks with 1.0x redemption parity
+37. Unseen Tax — Real-Time AI Cost Transparency — Per-call marginal cost surface 
+    at moment of inference; running session total; comparison delta on model 
+    escalation with reason annotation; structural default-to-cheapest enforcement; 
+    itemized post-session receipt; cross-vendor monthly aggregate via Personal 
+    Subscription Steward; six Hard-Banned behaviors (default-to-expensive, 
+    hide-per-call, aggregate-only-billing, escalate-without-delta, bury-in-settings, 
+    cost-obfuscation-marketing)
 ```
 
 ---
@@ -116,6 +129,35 @@ Then paste the full content of:
 
 ---
 
+## Step 6b: Add Innovation 37 (Unseen Tax) — v04 addition
+
+After Step 6 above (v03 integration complete), add another new section header:
+
+```markdown
+## EXTENDED INNOVATIONS (v04 ADDITIONS — CLAIM GROUP 30)
+
+The following claim group discloses a novel and non-obvious innovation developed 
+during the BP084 Plow Cycle, composing with and extending the disclosures of Claim 
+Groups 1-29 above, and specifically composing with Claim Groups 28 (TIC) and 29 
+(Code Breakers) as the financial-transparency layer of the Truth-Always architecture.
+```
+
+Then paste the full content of:
+3. `INNOVATION_37_UNSEEN_TAX_AI_COST_TRANSPARENCY.md` (reformatted as Claim Group 30, using `### Claim Group 30:` header)
+
+**Reformatting note:** Same convention as above — "Anecdote" → `#### Background and Problem Statement`; "Application" → `#### Detailed Description`. TOC insertion: after item 36 in SUMMARY OF THE INVENTION.
+
+**Insert location:** After the v03 additions block (Claim Groups 28-29), within the same EXTENDED INNOVATIONS section structure.
+
+**TOC entry for SUMMARY OF THE INVENTION (add after item 36):**
+```
+37. Unseen Tax — Real-Time AI Cost Transparency — Per-call marginal cost surface 
+    (Claim 30.1); cross-vendor aggregate via Personal Subscription Steward (Claim 30.2); 
+    structural default-to-cheapest enforcement (Claim 30.3); six Hard-Banned behaviors
+```
+
+---
+
 ## Step 7: Update CLAIMS Section
 
 Add after the existing dependent claims list:
@@ -128,6 +170,10 @@ Add after the existing dependent claims list:
 - Innovation Area 36 (Code Breakers Guild): Independent Claims CG29.1 (four-tier 
   progression), CG29.3 (Negative-Knowledge Marks); Dependent Claim CG29.2 
   (Code Breaker member tier progression, dependent on CG29.1)
+- Innovation Area 37 (Unseen Tax — AI Cost Transparency): Independent Claims 
+  CG30.1 (per-call real-time cost surface + running total + escalation delta), 
+  CG30.2 (cross-vendor aggregate via Personal Subscription Steward, dependent on CG30.1), 
+  CG30.3 (structural default-to-cheapest enforcement, dependent on CG30.1)
 ```
 
 ---
@@ -151,6 +197,15 @@ Add after Figure 19:
   (Initiate → Journeyman → Master → Refiner of Gold)
 - Figure 26: Negative-Knowledge Tokens Dashboard 
   (per-member ratio visualization; aggregate cooperative dashboard)
+- Figure 27: Per-Call Cost Surface — Interaction Flow (task arrives → cheapest-capable 
+  selection → escalation delta disclosure if escalated → per-call cost surface → 
+  running session total update → session receipt entry)
+- Figure 28: Cross-Vendor Aggregate Dashboard — Personal Subscription Steward 
+  (multiple vendor APIs → aggregator → by-vendor / by-purpose / by-user-category 
+  breakdown → running monthly total → substitution recommendations)
+- Figure 29: Model Selection Decision Flowchart (task-class classification → 
+  cheapest-capable model → demonstrated insufficiency check → escalation with 
+  delta disclosure → member approval → cost surface at all paths)
 ```
 
 ---
@@ -183,7 +238,18 @@ validity ≠ factual soundness; ELIMINATED category); Bob-is-a-dog formalization
 (foundational claim verification); Gravity claims TIC worked example (KNOWN: 
 gravity attracts mass to mass, propagates at c; THEORIES_OPEN: graviton-mediated, 
 emergent, MOND; ELIMINATED: proximity-only, electromagnetic-origin, instantaneous). 
-Composes with Provisional Application Series 1-22.
+v04 additional innovations: Unseen Tax — Real-Time AI Cost Transparency — 
+cooperative-class architecture enforcing per-call marginal cost surface at moment 
+of inference; running session total visible throughout session; comparison-delta-on-
+escalation disclosure with machine-generated reason annotation; structural 
+default-to-cheapest model selection requiring demonstrated insufficiency or explicit 
+override for escalation; itemized post-session receipt; cross-vendor monthly 
+aggregate via Personal Subscription Steward across Claude / Cursor / Google / 
+Perplexity / ChatGPT and other providers; six Hard-Banned behaviors 
+(default-to-expensive, hide-per-call, aggregate-only-billing, escalate-without-delta, 
+bury-in-settings, cost-obfuscation-marketing). Composes with TIC (financial form 
+of dirty data) and Code Breakers Guild (cooperative shows what it charges, not just 
+what it delivers). Composes with Provisional Application Series 1-22.
 ```
 
 ---
@@ -196,11 +262,12 @@ Change:
 *v02: +12 Claim Groups · +11 Innovation Areas · +~9,400 words over v01*
 ```
 
-To:
+To (after v03 + v04 full integration):
 ```
-*29 Claim Groups · 36 Innovation Areas · Incremental over Provisional Applications 1-21*
+*30 Claim Groups · 37 Innovation Areas · Incremental over Provisional Applications 1-21*
 *v02: +12 Claim Groups · +11 Innovation Areas · +~9,400 words over v01*
 *v03: +2 Claim Groups · +2 Innovation Areas · +~8,000 words over v02 (est.)*
+*v04: +1 Claim Group · +1 Innovation Area · +~4,500 words over v03 (est.)*
 ```
 
 ---
@@ -229,6 +296,8 @@ The following cross-references have been validated between the two new sections:
 |------|----------|
 | TIC Innovation Draft | `Asteroid-ProofVault\PATENTS\PROVISIONAL_22_BP083\sections\INNOVATION_N_TRUTH_INTEGRITY_CHAIN.md` |
 | Code Breakers Draft | `Asteroid-ProofVault\PATENTS\PROVISIONAL_22_BP083\sections\INNOVATION_N1_CODE_BREAKERS_GOLD_REFINED.md` |
+| **Unseen Tax Draft (canonical)** | `PATENTS\PROVISIONAL_22_BP083\sections\INNOVATION_37_UNSEEN_TAX_AI_COST_TRANSPARENCY.md` |
+| **Unseen Tax Draft (staging copy)** | `BISHOP_DROPZONE\00_FOUNDER_REVIEW\PROV_22_NEW_SECTIONS\INNOVATION_37_UNSEEN_TAX_AI_COST_TRANSPARENCY.md` |
 | Style Guide | `BISHOP_DROPZONE\00_FOUNDER_REVIEW\PROV_22_NEW_SECTIONS\STYLE_GUIDE_USED.md` |
 | Integration Plan | `BISHOP_DROPZONE\00_FOUNDER_REVIEW\PROV_22_NEW_SECTIONS\INTEGRATION_PLAN.md` (this file) |
 | Staging copies | `BISHOP_DROPZONE\00_FOUNDER_REVIEW\PROV_22_NEW_SECTIONS\` |
@@ -238,12 +307,12 @@ The following cross-references have been validated between the two new sections:
 
 ## Recommended Next Step
 
-1. **Founder reads** the two draft sections and this integration plan.
+1. **Founder reads** the three draft sections and this integration plan.
 2. **Counsel review** — draft sections use "founder-ratify-pending" patent-prose; counsel finalizes formal claim language for non-provisional.
 3. **Integration** — after Founder ratify, Knight integrates via follow-up yoke OR Founder pastes directly per the 10-step plan above.
-4. **Page count** — estimate ~32 additional pages (8,000 words / 250 words per page) bringing PROV_22 from ~50 pages to ~82 pages, closer to the 100-page filing target.
+4. **Page count** — estimate ~50 additional pages total (TIC + Code Breakers ~32 pages + Unseen Tax ~18 pages / 4,500 words) bringing PROV_22 from ~50 pages to ~100 pages — hitting the 100-page filing target.
 
 ---
 
-*INTEGRATION_PLAN.md · BP084 · Sonnet 4.6 · 2026-06-16*
+*INTEGRATION_PLAN.md · BP084 · Sonnet 4.6 · 2026-06-16 · Updated BP084 to add Innovation 37 (Unseen Tax)*
 *status: founder-ratify-pending*
