@@ -1,0 +1,786 @@
+---
+title: "Provisional Patent Application 22 — Liana Banyan Corporation"
+subtitle: "Cooperative-Architecture Substrate Pipeline — Full Integration v05 FINAL — 37 Claim Groups"
+author: "Jonathan Jones, Sole Inventor"
+date: "June 2026"
+filing_status: "PROVISIONAL — NOT YET FILED AT USPTO"
+pledge: "Cooperative Defensive Patent Pledge #2260"
+---
+
+# PROVISIONAL PATENT APPLICATION
+
+**Title:** Cooperative-Architecture Substrate Pipeline System and Method for Local-First Artificial Intelligence with Verified-Cooperative Knowledge Growth via Multi-Specialist Staggered Swarm, Adversarial Fence, Three-Fates Arbitration, Andon-Cord Self-Policing, Per-Domain Isolation Mechanisms, Machine-In-Charge Conductor Orchestration, Federated Andon Escalation, Persistent Diagnosis Broadcast, Salt-Level Persistence Selection, Glow-Mechanic Bounty Surfacing, Three-Salt-Layer Architecture, Hardware-Tier Model Selection, Plow Resume from Checkpoint, Onboarding Lifecycle Auto-Advance, Constellation Switchboard Shape Mapping, and Substitution Rail Cooperative Marketplace
+
+**Applicant:** LIANA BANYAN CORPORATION
+**Inventor:** J. Jones
+**Application Type:** Provisional Patent Application
+**Related Applications:** Continuation-in-Part of Provisional Application Series 1-21 (filed 2024-2026)
+**A&A Class:** Analytical Anticipatory (TS-069 · Toolsmith_908 · BP083-BP084 Plow Cycle)
+**Filing Date:** [to be completed by Applicant at USPTO PatentCenter]
+**Version:** v03 · Claim Groups 1-27 · June 2026
+
+---
+
+## TITLE
+
+**Cooperative-Architecture Substrate Pipeline System and Method for Local-First Artificial Intelligence with Verified-Cooperative Knowledge Growth via Multi-Specialist Staggered Swarm, Adversarial Fence, Three-Fates Arbitration, Andon-Cord Self-Policing, Per-Domain Isolation Mechanisms, Machine-In-Charge Conductor Orchestration, Federated Andon Escalation, Persistent Diagnosis Broadcast, Salt-Level Persistence Selection, Glow-Mechanic Bounty Surfacing, Three-Salt-Layer Architecture, Hardware-Tier Model Selection, Plow Resume from Checkpoint, Onboarding Lifecycle Auto-Advance, Constellation Switchboard Shape Mapping, and Substitution Rail Cooperative Marketplace**
+
+---
+
+
+---
+
+## Filing Manifest — Innovation Cluster Summary
+
+| # | Claim Group | Short Description | Priority |
+|---|-------------|-------------------|----------|
+| CG1  | Canonical Plow Pipeline | Nine-stage sequential knowledge growth pipeline | CROWN JEWEL |
+| CG2  | FireGuard Staggered Swarm | Rate-limit-aware multi-specialist parallel query | HIGH |
+| CG3  | Andon Cord Self-Policing | Six Sigma stop-the-line quality enforcement | CROWN JEWEL |
+| CG4  | BMV 10-Dimension Scoring | Ten-dimensional weighted quality function | HIGH |
+| CG5  | Per-Domain Isolation | Fourteen independent parallel domain tracks | HIGH |
+| CG6  | MEMORY.md Auto-Loading | AI identity injection at every inference call | HIGH |
+| CG7  | Six-Folder Substrate Layout | Local-first structured knowledge storage | HIGH |
+| CG8  | Starter Chocolate | Idempotent cooperative onboarding seeding | MEDIUM |
+| CG9  | Federation Node Frontier | Thorax-encrypted capsule rental and work-and-pay | HIGH |
+| CG10 | MemoryWallPyramid Addressing | Soccerball-DAG recursive pocket-universe pyramid | HIGH |
+| CG11 | Package Store Confectionary | Three-stall cooperative knowledge marketplace | HIGH |
+| CG12 | Substitution Rail Exchange | Fiat/Marks/Barter with fiat-conversion prohibition | CROWN JEWEL |
+| CG13 | GPQA Diamond Benchmark | Bare vs Cooperative-Pipeline Diamond comparison | MEDIUM |
+| CG14 | EAC Pheromone Decay | Recency-decay with elevation on access | HIGH |
+| CG15 | MMLU-Pro Benchmark | Sealed question bank, deterministic sampling, SHA-256 receipt | HIGH |
+| CG16 | MIC Conductor Orchestration | Greedy domain partition, parallel dispatch, failure recovery | CROWN JEWEL |
+| CG17 | Federated Andon 3-Tier | Never-Give-Up: local to constellation to human network | CROWN JEWEL |
+| CG18 | The Diagnosis Broadcast | Marks-bounty persistent question broadcast with substrate write-back | HIGH |
+| CG19 | Salt-Level Persistence Selector | A Pinch of Salt / Seasoning / Preserved in Salt | HIGH |
+| CG20 | Glow Mechanic | Five-tier visual attention surfacing without access gating | HIGH |
+| CG21 | Three-Salt-Layer Architecture | Composite self-improving three-layer answer architecture | CROWN JEWEL |
+| CG22 | Hardware-Tier Model Selection | RAM detection to tier recommendation preventing OOM | HIGH |
+| CG23 | Plow Resume from Checkpoint | SHA-256 periodic checkpoint and interrupt-resilient resume | HIGH |
+| CG24 | Onboarding Auto-Advance | Stage A/B/C with stuck-stage detection and reset-diagnostic | HIGH |
+| CG25 | Constellation Switchboard | Square/Triangle/Circle x filled/outline x Conductor crown | HIGH |
+| CG26 | Substitution Rail Marketplace | Three-rail payment, XP/RP, Medallion IP, 83.3% distribution | CROWN JEWEL |
+| CG27 | Tab UX + Test-Net by Design | Single-row toggle with pin/hide; protocol-isolated Test-Net ledger | HIGH |
+| CG28 | Truth Integrity Chain (TIC) | Five-field epistemic record; Loops 10/11/12 | CROWN JEWEL |
+| CG29 | Code Breakers + Gold Refined | Four-tier verification UNTESTED to IMMUTABLE; Negative-Knowledge Marks | CROWN JEWEL |
+| CG30 | Unseen Tax Cost Transparency | Per-call cost surface; default-to-cheapest; six Hard-Bans | CROWN JEWEL |
+| CG31 | MnemosyneC Persistent Host | Vendor-resilient workspace; Continuity-Lift | CROWN JEWEL |
+| CG32 | MedLab / Concoctions / Reins | Eblet-stored AI-fix recipes; dynamic domain assignment | HIGH |
+| CG33 | NetLinkWebNode / Consult-Dont-Rent | Peer AI-connection borrowing; cheapest-capable routing | HIGH |
+| CG34 | Many Doors / Cue Deck Card | Multi-entrance unified membership; personalized invitations | HIGH |
+| CG35 | Hexadecimal Machine Code | Compact binary wire format for AI-to-AI dispatch | HIGH |
+| CG36 | Brain-Swap Hot-Swap Cognitive Core | CCI contract; substrate re-weave state preservation | CROWN JEWEL |
+| CG37 | Mimic Trunks Gate-and-Tunnel | Partner fork-redesign-tunnel-merge; Thorax sovereignty; Volume Pricing | HIGH |
+
+**Total: 37 Claim Groups — 44 Innovation Areas — Pledge #2260**
+
+---
+
+## Cooperative Defensive Patent Pledge (#2260) — Filing Posture
+
+All innovations in this provisional are filed under the **LB Cooperative Defensive Patent Pledge** (originated B098). The Pledge's operating principle:
+
+> *"We file the IP so no one can lock it away, and we pledge to never use it offensively against anyone building on the cooperative substrate."*
+
+Every nonprofit, cooperative, and academic institution receives use rights to every architecture in this filing **free, forever**, on nothing more than an IRS-verified EIN or international equivalent. No membership required, no fee, no approval gate. The Pledge is administered by Liana Banyan Corporation governance per the Structural Bylaws.
+
+**Claim framing discipline:** Every independent claim is drafted to be maximally broad while remaining defensible on Path B empirical-receipt grounds. The cooperative-sector use exemption attaches at the Pledge layer; the claims protect the full architecture including commercial implementations.
+
+---
+
+## Path B Discipline (Proof Before Claim)
+
+All claims are grounded in empirical receipts (Path B, B130 Founder-ratified): build the reduction-to-practice artifact first; file the provisional with the working build as Section 2 evidence. No claim in this filing is a glorified pitch deck.
+
+| Claim Group | Empirical Anchor |
+|-------------|------------------|
+| CG1-CG15 (v01) | 97.1% (68/70 MMLU-Pro) on consumer hardware, no paid API keys; 316 eblets; 14/14 domains GREEN |
+| CG16 MIC | 5-machine Constellation (M0-M4); 4x speedup empirical projection |
+| CG17 Federated Andon | 16 quarantine events on Founder M0; projection 16 to 0-3 via 3-tier |
+| CG18-CG21 | Cooperative substrate architecture sessions BP083 |
+| CG22 Hardware-Tier | Founder-direct: 8 GB machine OOM on gemma4:12b; manual alias required |
+| CG23-CG26 | BP083 Plow Cycle architecture ratification |
+| CG27 Tab UX + Test-Net | BP083 Founder ratify |
+| CG28 TIC | Africa mother-dog anecdote; Bob-is-a-dog formalization; Gravity TIC worked example |
+| CG29 Code Breakers | Ioannidis 2005 replication crisis; bug bounty adversarial incentive model |
+| CG30 Unseen Tax | Cursor default-to-Composer-2.5; Founder: "YES mint the unseen tax canon" |
+| CG31-CG36 | MnemosyneC-as-Interface roadmap A1-A9; Tasks 72-73 eblets BP085 |
+| CG35 Hex Machine Code | Founder direct BP085: hex encoding confirmed; SSPS composition confirmed; Soccerball DAG confirmed |
+| CG36 Brain-Swap | Founder direct BP085: CCI contract canonical; all swap policies confirmed; substrate re-weave confirmed |
+| CG37 Mimic Trunks | Founder: "Biggest Bounty Poster, that is." BP084 direct ratify |
+
+---
+
+
+## BACKGROUND OF THE INVENTION
+
+### Field of the Invention
+
+The present invention relates to artificial intelligence systems, and more particularly to cooperative-architecture methods and systems for growing, verifying, and managing local-first knowledge substrates on consumer hardware without dependence on paid cloud API services. This version (v02) extends the prior disclosure (v01, 15 claim groups, 23 innovation areas) with twelve additional claim groups addressing federated orchestration, escalation hierarchies, persistent human-network question broadcast, user-facing persistence tier selection, cooperative-network attention surfacing, layered architecture composition, hardware-aware model selection, checkpoint-resumable pipeline execution, onboarding lifecycle automation, visual constellation state representation, and cooperative marketplace exchange mechanics.
+
+### Background and Problem Statement
+
+The cooperative-class AI architecture presented herein addresses a fundamental limitation in current large language model deployment: the absence of verified, locally-grown, domain-specific knowledge substrate that can be empirically measured, grown, and validated on consumer hardware without dependence on paid cloud API services.
+
+Prior approaches to improving LLM accuracy rely on: (1) larger model parameter counts requiring expensive cloud infrastructure; (2) retrieval-augmented generation (RAG) from static knowledge bases that cannot grow or self-correct; (3) fine-tuning that modifies model weights rather than growing external verified knowledge; and (4) multi-model ensemble approaches requiring simultaneous access to multiple large models, incurring prohibitive per-token costs.
+
+None of the foregoing approaches provides: (a) a self-policing quality gate that stops substrate growth on quality failure and restarts with wider knowledge sources; (b) a staggered multi-specialist swarm distributing external API rate-limit risk across nine parallel knowledge domains; (c) an adversarial fence that challenges each candidate knowledge unit before substrate entry; (d) a three-voter concordance arbitration mechanism operating on surviving candidates; (e) a per-domain isolation guarantee preventing cross-domain contamination; (f) a local-first substrate layout enabling full functionality on consumer hardware with no cloud dependency after initial setup; (g) a conductor-class orchestration mechanism distributing domain workloads across a cooperative peer fleet; (h) a three-tier federated escalation ladder for substrate questions that cannot be answered locally; (i) a persistent human-network broadcast mechanism for questions that exceed automated resolution; (j) a user-facing persistence tier selector communicating ephemeral, medium-term, and permanent question lifetimes; (k) a visual bounty-attention surfacing mechanism that surfaces high-value cooperative questions without gating access; (l) a hardware-tier model selection system preventing silent out-of-memory failures on consumer hardware; (m) a checkpoint-resumable pipeline execution architecture preventing work loss on interruption; or (n) an onboarding lifecycle auto-advance system detecting and resolving stuck onboarding stages.
+
+### Empirical Receipt
+
+The canonical plow pipeline architecture claimed herein has been empirically demonstrated to achieve 97.1% (68/70) on the MMLU-Pro canonical 70-question benchmark using consumer hardware with no paid API keys. Receipt: 316 verified eblets grown across 14 academic domains, 14/14 domains GREEN, 2 Andon-correct quarantines. Additional empirical motivation for v02 innovations: 5-machine Constellation fleet architecture with 4x speedup empirical projection; 16-Andon-quarantine reduction projected to 0-3 via federated escalation; Founder-direct report of son's machine stuck at Stage B onboarding for multiple days not resolved by reinstall; 8GB consumer hardware silent OOM failure on gemma4:12b without hardware-tier gating. This receipt constitutes a reduction to practice for the claims herein.
+
+---
+
+## SUMMARY OF THE INVENTION
+
+The present invention discloses innovations in the following areas, each constituting a novel and non-obvious contribution to the art of cooperative-architecture artificial intelligence:
+
+1. Canonical Plow Pipeline Architecture - a nine-stage sequential knowledge growth pipeline
+2. FireGuard Staggered Swarm Dispatch - a rate-limit-aware multi-specialist parallel query mechanism
+3. Anti-Popularity Miner Filter - a dual-threshold cooperative-class quality gate
+4. Saladin Adversarial Fence - a challenger-based candidate validation mechanism
+5. Furnace / Angel of Death Burn Layer - a hard filter eliminating adversarially-challenged candidates
+6. Three Fates Concordance Arbitration - a three-voter consensus mechanism with temperature diversity
+7. Banyan Metric Value (BMV) 10-Dimension Scoring - a composite quality measurement system
+8. Detective TEAM Four-Gate Root-Cause Analysis - a systematic failure diagnosis mechanism
+9. Andon Cord Re-Plow Loop - Six Sigma stop-the-line applied to cooperative AI substrate growth
+10. Per-Domain Isolation Architecture - fourteen independent domain processing tracks
+11. Starter Chocolate Pre-Seeded Substrate - a cooperative-class onboarding mechanism
+12. MEMORY.md Self-Context Auto-Loading - AI identity injection at every inference call
+13. Six-Folder Substrate Layout - a structured local-first AI knowledge storage architecture
+14. Federation Node Frontier - a cooperative capsule rental and work-and-pay architecture
+15. MemoryWallPyramid Addressing - a recursive soccerball-DAG pocket-universe-pyramid addressing system
+16. Package Store Confectionary Architecture - a tiered cooperative knowledge marketplace
+17. Substitution Rail Triple-Mode Exchange - fiat/marks/barter with structural fiat-conversion prohibition
+18. Cross-Pollination Reciprocity (XP/RP) - at-risk acquisition for high-tier cooperative knowledge packs
+19. Excalibur Active Currents (EAC) Pheromone Decay - substrate priority management function
+20. Catacombs Cold Archive - threshold-based archival with dual-period grace
+21. MMLU-Pro Cooperative-Pipeline Benchmark - reproducible empirical measurement framework
+22. Tab UX Option B with Per-Tab Pin/Hide - single-row Regular/Advanced-toggle interface architecture
+23. Test-Net by Design Ledger Architecture - cooperative-class ledger design with fiat-conversion prohibition
+24. Machine In Charge (MIC) Conductor-Class Orchestration - distributed domain workload allocation across cooperative peer fleet
+25. Federated Andon Cord 3-Tier Escalation - cooperative-class never-give-up question resolution ladder
+26. The Diagnosis Persistent Question Broadcast - human-network bounty-priced question broadcast with substrate write-back
+27. Salt-Level Persistence-Tier Selector - three-tier user-facing persistence selection with auto-suggest
+28. Glow Mechanic Bounty-Attention Surfacing - visual intensity scaling for cooperative inbox priority without access gating
+29. Three-Salt-Layer Architecture - composite local/constellation/human-network answer-finding architecture
+30. Hardware-Tier Model Selection - RAM-detection-based automatic model tier recommendation for consumer hardware
+31. Plow Resume from Checkpoint - periodic state persistence and interrupt-resilient pipeline resumption
+32. Onboarding Lifecycle Auto-Advance - stuck-stage detection and reset-diagnostic surfacing for cooperative onboarding
+33. Constellation Switchboard NotCents Shape Mapping - three-shape four-state visual constellation status primitive with Conductor crown overlay
+34. Substitution Rail Cooperative Marketplace - three-payment-rail cooperative substrate-eblet pack marketplace with fiat-pipeline prohibition
+
+---
+
+## DETAILED DESCRIPTION OF THE PREFERRED EMBODIMENTS
+
+### Claim Group 1: Canonical Plow Pipeline Architecture
+
+**1.1** A computer-implemented method for growing a cooperative-class local-first artificial intelligence knowledge substrate comprising:
+(a) a Spider stage that locates topic-relevant knowledge units in a local substrate index using topical keyword matching against a domain-scoped eblet store;
+(b) a Sprite stage that retrieves located knowledge units from substrate storage;
+(c) a staggered swarm dispatch stage that queries nine external specialist data sources with a FireGuard time delay of approximately 1.0 seconds between each sequential specialist dispatch;
+(d) a Miner filter stage applying a weight threshold of >= 0.6 AND content length threshold of >= 100 characters, rejecting any candidate failing either threshold;
+(e) a Saladin adversarial fence stage submitting each Miner-passing candidate to a local AI model with a challenge prompt requesting PASS or CHALLENGE verdict on factual accuracy;
+(f) a Furnace burn stage eliminating all CHALLENGE-verdict candidates from further processing;
+(g) a Three Fates concordance arbitration stage employing three independent voter prompts at temperatures 0.0, 0.2, and 0.4 to synthesize a final answer from Furnace-surviving candidates;
+(h) a Scribe stage recording the result with a ten-dimensional Banyan Metric Value quality score, concordance classification (CONCORDANT, PARTIAL, or DISCORDANT), and outcomes for four quality gates; and
+(i) a Detective TEAM stage performing root-cause analysis on quality gate failures and activating an Andon Cord re-plow loop when any gate fails.
+
+**1.2** The method of 1.1 wherein the nine external specialist data sources comprise Wikipedia, Wikidata, StackExchange, arXiv, Wolfram Alpha, OpenAlex, NIST, PubMed, and Common Crawl, each accessed via a dedicated specialist adapter.
+
+**1.3** The method of 1.1 wherein the staggered swarm dispatch selects a domain-specific operator subset using a per-domain operator map assigning relevance weights per specialist per academic domain.
+
+**1.4** The method of 1.1 wherein Spider-stage knowledge units are injected as additional context into Three Fates voter prompts, enabling arbitration over both external specialist evidence and prior verified substrate knowledge.
+
+**1.5** The method of 1.1 wherein the Spider stage uses topical-only query excluding exact-match hits on the current question text, ensuring substrate context enriches domain knowledge without providing direct answer-key lookup.
+
+### Claim Group 2: FireGuard Staggered Swarm Dispatch
+
+**2.1** A computer-implemented mechanism for rate-limit-aware multi-specialist knowledge acquisition comprising:
+(a) a sequential dispatch loop over an ordered list of specialist data source adapters;
+(b) a configurable FireGuard inter-dispatch delay applied between each pair of sequential specialist dispatches;
+(c) non-blocking parallel collection of specialist responses within each dispatch window; and
+(d) a per-domain operator map selecting specialist subsets based on domain-relevance weights, wherein mathematics/engineering domains receive different subsets than history/law domains.
+
+**2.2** The mechanism of 2.1 wherein the FireGuard inter-dispatch delay is approximately 1,000 milliseconds.
+
+**2.3** The mechanism of 2.1 wherein specialist adapter failure is non-fatal: the failed adapter's candidates are omitted and processing continues with remaining specialists.
+
+### Claim Group 3: Andon Cord Self-Policing Mechanism
+
+**3.1** A computer-implemented system for cooperative AI substrate quality enforcement comprising:
+(a) a Detective TEAM component monitoring four quality gates: G1_FACT (any candidates surviving Furnace), G2_CONC (concordance not DISCORDANT), G3_BMV (BMV score meets minimum threshold), and G4_LAT (processing latency within time budget);
+(b) an Andon cord trigger initiating a re-plow loop upon any quality gate failure;
+(c) an operator-widening mechanism expanding the specialist set with additional specialists identified by Detective TEAM as root-cause-relevant;
+(d) a restart-from-question mechanism replaying the full pipeline for the current question with the widened operator set; and
+(e) a retry cap of a configurable maximum (default: three) Andon activations before marking the question PARTIAL.
+
+**3.2** The system of 3.1 wherein Detective TEAM applies differentiated widening logic per gate: G1_FACT failure adds wikipedia + commoncrawl; Miner-all-filtered adds arxiv + openalex; Furnace-all-burned adds nist + pubmed; G2_CONC failure adds wikipedia + openalex.
+
+**3.3** The system of 3.1 wherein the Andon cord mechanism is modeled after Six Sigma stop-the-line manufacturing discipline applied to cooperative AI substrate growth.
+
+### Claim Group 4: BMV 10-Dimension Scoring
+
+**4.1** A computer-implemented method for measuring cooperative-class knowledge unit quality comprising a ten-dimensional weighted scoring function evaluating: (a) specialist count score; (b) miner pass-rate; (c) furnace pass-rate; (d) eblet count score; (e) concordance class score (CONCORDANT=100, PARTIAL=60, DISCORDANT=0); (f) latency score; (g) source diversity score; (h) completeness score; (i) quality survival score; and (j) Andon-free score; wherein the composite weighted sum is the Banyan Metric Value (BMV) ranging 0.0-100.0.
+
+**4.2** The method of 4.1 wherein CONCORDANT is determined by shared-term ratio >= 0.15 across tokenized Three Fates voter answers, PARTIAL by ratio >= 0.05, DISCORDANT otherwise.
+
+### Claim Group 5: Per-Domain Isolation Architecture
+
+**5.1** A computer-implemented system for parallel cooperative AI knowledge growth comprising fourteen independent domain processing tracks wherein: (a) each domain track maintains no shared mutable state with any other domain track; (b) processing errors, rate limit events, Andon activations, or pipeline failures in one domain do not affect any other domain; (c) each domain track receives an independent specialist operator map; and (d) each domain track writes to a domain-scoped substrate partition.
+
+**5.2** The system of 5.1 wherein the fourteen academic domains comprise: Mathematics, Physics, Chemistry, Biology, Engineering, Computer Science, History, Law, Economics, Psychology, Health, Philosophy, Business, and Other.
+
+**5.3** The system of 5.1 wherein domain status GREEN is assigned at >= configurable minimum verified eblets, YELLOW at >= 1 eblet below GREEN threshold, RED at 0 eblets.
+
+### Claim Group 6: MEMORY.md Self-Context Auto-Loading Architecture
+
+**6.1** A computer-implemented method for cooperative AI identity injection comprising:
+(a) generation of a MEMORY.md self-context document at first application launch containing AI instance identity, local substrate layout paths, pocket-universe-pyramid tip address, cooperative architecture affiliation, and Truth-Always discipline declaration;
+(b) automatic loading of the MEMORY.md document as a system prompt prepended to every inference query submitted to the local AI model; and
+(c) file-system watch invalidation of the cached system prompt upon any modification to MEMORY.md, ensuring most-current self-context is used at every inference call without application restart.
+
+**6.2** The method of 6.1 wherein the cooperative architecture affiliation declaration specifies: Liana Banyan cooperative architecture identity; Substitution canon prohibiting fiat conversion of cooperative credits; Truth-Always discipline requiring explicit uncertainty acknowledgment; and canonical substrate layout paths enabling the AI instance to locate its own knowledge base.
+
+### Claim Group 7: Six-Folder Substrate Layout Architecture
+
+**7.1** A computer-implemented data storage architecture for local-first cooperative AI comprising six named directories:
+(a) Substrate - active hot-layer storage for current verified knowledge units;
+(b) Catacomb - cold archive storage for knowledge units whose EAC pheromone decay score has fallen below a configurable minimum threshold;
+(c) Capsules - Federation Node Frontier rental storage for cooperative network participation;
+(d) Vault - user backup storage and IP ledger replica for cooperative canonical hashes;
+(e) MemoryWallPyramid - recursive soccerball-DAG pocket-universe-pyramid addressing storage; and
+(f) TestData - pre-propagated benchmark seed storage.
+
+**7.2** The architecture of 7.1 wherein the Catacomb cold archive applies a primary threshold period and a configurable grace period (default 90 + 30 days) before permanent archival.
+
+### Claim Group 8: Starter Chocolate Pre-Seeded Substrate
+
+**8.1** A computer-implemented method for cooperative AI onboarding comprising:
+(a) packaging a pre-verified set of cooperative-class knowledge units designated Starter Chocolate as an extra resource within the application installer;
+(b) automatically extracting and installing Starter Chocolate to the active Substrate directory upon first application launch, detected via absence of substrate directory or idempotency marker; and
+(c) preventing duplicate installation via an idempotency marker file written upon successful first installation.
+
+**8.2** The method of 8.1 wherein each Starter Chocolate knowledge unit is tagged with source identifier "starter_chocolate" for provenance tracking, distinguishing it from dynamically-grown substrate knowledge units.
+
+### Claim Group 9: Federation Node Frontier Architecture
+
+**9.1** A computer-implemented system for cooperative AI network participation comprising:
+(a) a Capsule rental mechanism enabling cooperative node owners to rent substrate processing capacity to cooperative participants, denominated in cooperative Marks credits;
+(b) a Thorax-encrypted transport layer securing inter-node communication;
+(c) a work-and-pay mechanism wherein participants earn Marks for knowledge units contributed and expend Marks to access capsule rental capacity; and
+(d) a Medallion provenance stamp on each knowledge unit identifying its originating cooperative node.
+
+### Claim Group 10: MemoryWallPyramid Addressing
+
+**10.1** A computer-implemented addressing system for distributed cooperative AI knowledge comprising:
+(a) a pocket-universe-pyramid structure organized as a recursive soccerball-directed acyclic graph with branching factor six;
+(b) a nine-hexadecimal-digit tip address uniquely identifying each user's pyramid instance;
+(c) a 6^N reach property enabling navigation to any knowledge unit within N hops from the pyramid tip; and
+(d) lazy resolution of pyramid nodes upon first access.
+
+### Claim Group 11: Package Store Confectionary Architecture
+
+**11.1** A computer-implemented cooperative knowledge marketplace comprising:
+(a) a Bakery stall offering full-corpus knowledge packs (Breads);
+(b) a Confectionary stall offering curated domain-specific knowledge packs (Chocolates);
+(c) a Kitchen stall offering custom knowledge preparation services; and
+(d) a cross-pollination reciprocity mechanism requiring exchange points at risk for high-tier pack acquisition.
+
+**11.2** The marketplace of 11.1 wherein each knowledge pack is stamped with an immutable Medallion provenance identifier linking to the originating cooperative node and IP ledger.
+
+### Claim Group 12: Substitution Rail Triple-Mode Exchange
+
+**12.1** A computer-implemented cooperative exchange system comprising three substitution modes:
+(a) Fiat mode for conventional currency transactions at Cost+20% rates;
+(b) Marks mode for cooperative credit transactions without fiat conversion, wherein Marks circulate exclusively within the cooperative; and
+(c) Barter mode for direct goods-and-services exchange between cooperative members;
+wherein cooperative credits (Marks, Joules, Credits) are prohibited from fiat conversion by structural cooperative bylaw enforced at the transaction validation layer.
+
+### Claim Group 13: GPQA Diamond Cooperative-Pipeline Benchmark
+
+**13.1** A computer-implemented benchmarking method comprising:
+(a) a Bare Diamond mode executing zero-shot inference without substrate enrichment on the GPQA Diamond 198-question graduate-level reasoning benchmark;
+(b) a Cooperative-Pipeline Diamond mode executing the canonical plow pipeline with substrate enrichment on the same benchmark; and
+(c) a cooperative-architecture lift metric computed as the percentage-point difference between Cooperative-Pipeline and Bare Diamond accuracy.
+
+**13.2** The method of 13.1 wherein the MMLU-Pro 70-question canonical benchmark is additionally used for empirical receipt generation, with 97.1% (68/70) on consumer hardware with no paid API keys constituting a reduction-to-practice receipt.
+
+### Claim Group 14: Excalibur Active Currents Pheromone Decay
+
+**14.1** A computer-implemented method for substrate knowledge priority management comprising:
+(a) an EAC pheromone decay function assigning a recency score to each substrate knowledge unit based on elapsed time since last access or verification;
+(b) periodic recalculation of decay scores across the active Substrate partition with units below a configurable minimum threshold marked for Catacomb migration;
+(c) automatic elevation of a knowledge unit decay score upon each access, query hit, or successful concordance arbitration use; and
+(d) a configurable primary threshold period and grace period before permanent archival (default: 90 days primary + 30 days grace).
+
+### Claim Group 15: MMLU-Pro Disk-Backed Benchmark Architecture
+
+**15.1** A computer-implemented benchmark execution architecture comprising:
+(a) a sealed question bank from TIGER-Lab MMLU-Pro stored as disk-backed JSON partitioned by fourteen academic domains;
+(b) a deterministic stride-sampling algorithm ensuring reproducible question selection across benchmark runs;
+(c) per-domain result isolation enabling partial reruns without affecting other domains; and
+(d) a SHA-256-hashed receipt file written to disk upon completion containing per-domain accuracy, aggregate accuracy, substrate growth count, and machine identification.
+
+---
+
+## EXTENDED INNOVATIONS (v02 ADDITIONS — CLAIM GROUPS 16-27)
+
+The following twelve claim groups disclose novel and non-obvious innovations developed during the BP083 Plow Cycle architecture development, composing with and extending the disclosures of Claim Groups 1-15 above and of Provisional Application Series 1-21.
+
+---
+
+### Claim Group 16: Machine In Charge (MIC) Conductor-Class Orchestration
+
+#### Background and Problem Statement
+
+Prior cooperative AI systems treat all participating machines as equivalent workers or require manual assignment of work to individual machines. No prior system provides an automated conductor-class orchestration layer that detects the composition of a cooperative peer fleet, partitions domain-class workloads across fleet members using a greedy domain-to-peer partition algorithm, monitors per-machine health during execution, and dynamically reassigns domain workloads from failed peers to healthy peers without interrupting in-flight work on other domains.
+
+The empirical motivation is a 5-machine Constellation fleet (M0 through M4) running 14 MMLU-Pro domains, wherein sequential single-machine execution requires approximately N units of time for N domain questions, while MIC-orchestrated parallel execution achieves approximately N/4 units of time (4x speedup empirical projection) by routing non-overlapping domain sets to peer machines simultaneously. No prior system provides this domain-parallel cooperative orchestration with failure recovery.
+
+#### Detailed Description
+
+**16.1** A computer-implemented system for Conductor-class cooperative AI orchestration comprising:
+(a) a fleet discovery phase polling each peer address in a configured Constellation peer list via a health-check endpoint, recording response latency and available capacity for each responding peer;
+(b) a greedy domain-to-peer partition algorithm that assigns domain workload groups to peers in descending order of peer capacity, filling each peer's capacity slot before advancing to the next peer, producing a partition table mapping each of the fourteen academic domains to exactly one peer machine;
+(c) a parallel dispatch phase initiating domain plow pipeline execution on each assigned peer machine via an authenticated inter-node RPC call, carrying the domain identifier, question bank slice, and per-domain operator map;
+(d) a health-monitor loop polling each dispatched peer at a configurable interval (default: 30 seconds) for in-flight status, detecting peer failure via configurable timeout (default: 3 missed polls);
+(e) a failure-recovery mechanism that upon detecting a peer failure: marks the failed peer's domain assignments as REASSIGNED, selects the lowest-loaded healthy peer from the fleet, dispatches the reassigned domains to that peer with a checkpoint resume directive if a checkpoint file exists for the domain, and updates the partition table to reflect the new assignment;
+(f) a result collection phase aggregating per-domain plow results from all peer machines into a unified benchmark receipt upon completion of all domain assignments; and
+(g) a MIC crown designation identifying the orchestrating machine in the Constellation Switchboard UI as the current Conductor peer.
+
+**16.2** The system of 16.1 wherein the greedy domain-to-peer partition algorithm operates as follows: (i) sort peers by available slot capacity descending; (ii) sort domains by estimated question count descending; (iii) assign domains round-robin across peers in capacity-descending order until all domains are assigned; (iv) record the partition table as a disk-backed JSON file for checkpoint and audit purposes.
+
+**16.3** The system of 16.1 wherein the authenticated inter-node RPC call uses the Thorax-encrypted transport layer disclosed in Claim Group 9, ensuring no domain workload or question bank content transits the inter-node channel in plaintext.
+
+**16.4** The system of 16.1 wherein per-domain isolation (Claim Group 5) composes with MIC orchestration such that a peer failure affecting one domain does not interrupt pipeline execution on any other domain executing on any other healthy peer.
+
+**16.5** A method for cooperative AI speedup measurement comprising: (a) executing the full 14-domain canonical plow pipeline sequentially on a single machine and recording wall-clock duration T_seq; (b) executing the same pipeline on a MIC-orchestrated N-machine fleet and recording wall-clock duration T_par; (c) computing speedup ratio S = T_seq / T_par; (d) recording S in the benchmark receipt as a MIC-speedup empirical metric.
+
+**16.6** The system of 16.1 wherein the MIC crown designation is conveyed to the Constellation Switchboard UI via a cooperative-architecture status message containing the peer identifier, the role designation "CONDUCTOR", and the current partition table, displayed as a filled-star modifier or crown overlay on the Conductor machine's shape element per Claim Group 28.
+
+#### Empirical Receipt and Reduction to Practice
+
+MIC Conductor-class orchestration was architected for a 5-machine Constellation fleet (M0/M1/M2/M3/M4) during BP083 Plow Cycle. Empirical projection: 14 domains / 4 active peers = approximately 3-4 domains per peer in parallel, yielding 4x wall-clock speedup over sequential single-machine execution. Composes with 14/14 domain GREEN receipt (68/70 MMLU-Pro, 316 eblets, BP083 canonical plow run).
+
+---
+
+### Claim Group 17: Federated Andon Cord 3-Tier Escalation
+
+#### Background and Problem Statement
+
+The Andon Cord mechanism disclosed in Claim Group 3 addresses local pipeline quality failures by widening the specialist operator set and re-plowing. However, certain questions cannot be resolved by any available external specialist data source at any retry count—either because the question is too narrow, the relevant knowledge is not indexed in accessible public sources, or the question requires synthesis across domains that exceeds the local AI model's capability at the available hardware tier.
+
+Prior cooperative AI systems provide no mechanism for escalating a persistently unresolved question beyond the local machine and its directly accessible data sources. The cooperative-class doctrine governing this architecture holds that a question should never be abandoned; instead, the escalation ladder should widen until either a human cooperative member provides the resolution or the question is permanently archived awaiting future resolution. This doctrine is designated Never-Give-Up in the cooperative canon.
+
+The empirical motivation is 16 Andon-quarantine events observed on the Founder M0 machine during BP083 Plow Cycle benchmark runs. The 3-Tier Federated Andon architecture projects reduction of persistent quarantines from 16 to 0-3 by providing two additional resolution tiers beyond the local retry cap.
+
+#### Detailed Description
+
+**17.1** A computer-implemented method for cooperative-class federated question escalation comprising three escalation tiers activated sequentially when the prior tier fails to produce a CONCORDANT result within a configurable retry cap:
+
+**Tier 1 — Widened Local Specialist Roster:** Upon Andon activation on a local machine that has exhausted the default specialist set, Tier 1 expands the specialist roster to include all available specialist adapters regardless of per-domain operator map assignment, re-runs the full canonical plow pipeline (Claim Group 1) with the widened roster, and applies the standard concordance arbitration (Claim Group 6). If Tier 1 achieves CONCORDANT result, the question is resolved locally and no further escalation occurs.
+
+**Tier 2 — Cross-Machine Constellation Query:** If Tier 1 fails after a configurable retry cap (default: 2 Tier-1 attempts), Tier 2 broadcasts the question text, domain classification, and current best-candidate answer to all healthy peers in the Constellation fleet via the Thorax-encrypted transport layer. Each receiving peer executes the canonical plow pipeline for the question against its local substrate and returns its highest-BMV candidate answer. The originating machine applies Three Fates concordance arbitration (Claim Group 6) across the set of peer-returned candidates plus its own Tier-1 best candidate. If any 3-voter concordance is achieved, the CONCORDANT answer is written to the originating machine's substrate and the question is marked resolved.
+
+**Tier 3 — Human Network Broadcast (The Diagnosis):** If Tier 2 fails to achieve concordance after exhausting available Constellation peers, Tier 3 activates The Diagnosis mechanism (Claim Group 18), posting the question as a persistent bounty-priced broadcast to the cooperative human network with the cooperative member's configured notification preferences and a Salt-Level persistence tier (Claim Group 19) of Preserved in Salt.
+
+**17.2** The method of 17.1 wherein each tier transition is recorded in the question's substrate record as a lifecycle event with timestamp, tier number, triggering condition, and outcome, enabling audit of escalation history per question.
+
+**17.3** The method of 17.1 wherein Tier 2 peer selection applies the MIC health-monitor peer list (Claim Group 16) to exclude unhealthy peers from the Constellation query broadcast.
+
+**17.4** The method of 17.1 wherein a question that activates Tier 3 is marked ESCALATED-TO-DIAGNOSIS in the local substrate and removed from the active Andon quarantine list, preventing repeated local re-plow attempts after human-network broadcast has been initiated.
+
+**17.5** A method for cooperative-class quarantine reduction measurement comprising: (a) recording the count of questions reaching the local Andon retry cap without CONCORDANT resolution as Q_quarantine_baseline; (b) operating the 3-Tier Federated Andon mechanism and recording the count of questions remaining unresolved after all three tiers as Q_quarantine_post; (c) computing quarantine reduction ratio R = (Q_quarantine_baseline - Q_quarantine_post) / Q_quarantine_baseline; and (d) recording R in the benchmark receipt as a federated-andon-efficacy metric.
+
+#### Empirical Receipt and Reduction to Practice
+
+Federated Andon 3-Tier Escalation was designed in response to 16 Andon-quarantine events observed on Founder M0 during BP083 Plow Cycle canonical benchmark. Architecture projection: Tier 1 (widened roster) resolves approximately 8-10 of 16 quarantines based on specialist coverage analysis; Tier 2 (constellation query) resolves approximately 4-6 of remaining; Tier 3 (human broadcast) captures remaining 0-3. Projected net quarantine reduction: 16 → 0-3.
+
+---
+
+### Claim Group 18: The Diagnosis — Persistent Question Broadcast System
+
+#### Background and Problem Statement
+
+No prior cooperative AI system provides a mechanism for a user to post an unresolved AI question as a persistent, bounty-priced broadcast to a human cooperative network—where cooperative members can earn Marks by providing verified answers—with automatic substrate write-back of resolved answers as verified context-class eblets.
+
+Prior systems either (a) silently fail when a question cannot be resolved, (b) surface the failure only in a local log, or (c) require manual user action to seek answers through external channels without any cooperative incentive structure, provenance tracking, or automatic substrate integration.
+
+The Diagnosis mechanism is motivated by the NYT Diagnosis column model, wherein a persistent difficult-to-diagnose question is broadcast to a wide expert audience, and the first correct diagnosis is recognized and recorded. Applied to cooperative AI substrate growth, The Diagnosis creates a cooperative-incentivized human-in-the-loop mechanism that grows the local AI's substrate with answers that exceeded automated resolution capability.
+
+#### Detailed Description
+
+**18.1** A computer-implemented system for cooperative-class persistent question broadcast comprising:
+(a) a Diagnosis post interface that accepts a question text, domain classification, associated context (current best-candidate answer and BMV score), and a bounty denomination in Marks or alternative Substitution Rail currency (Fiat-Pipeline at Cost+20% or Barter);
+(b) a persistent post storage mechanism that stores the Diagnosis post in a cooperative-network-accessible registry with status OPEN-UNTIL-ANSWERED unless the posting member designates a maximum-age or alternative Salt-Level persistence tier;
+(c) a human response interface enabling any cooperative member to submit a candidate answer to a posted Diagnosis question, with submission recorded alongside the responder's cooperative member identifier and reputation weight;
+(d) a 3-voter cooperative concordance mechanism applying upvote/downvote weighted voting across cooperative member responses, wherein responses achieving a configurable concordance threshold (default: 3 independent member votes with positive net vote score) are designated HUMAN-CONCORDANT;
+(e) a substrate write-back mechanism that upon HUMAN-CONCORDANT determination: packages the question, the concordant human answer, and the voter provenance identifiers as a verified context-class eblet; writes the eblet to the originating member's active Substrate directory; tags the eblet with source classification DIAGNOSIS-RESOLVED; and returns a Marks bounty to the member(s) whose response contributed to the concordant answer; and
+(f) a regulatory hygiene layer prepending all Diagnosis broadcast posts with an informational-only disclaimer prohibiting interpretation as medical, legal, or financial advice, irrespective of domain classification of the question.
+
+**18.2** The system of 18.1 wherein the bounty denomination is processed through the Substitution Rail triple-mode exchange (Claim Group 12): Fiat-Pipeline mode routes the Fiat equivalent through the Liana Banyan pipeline at Cost+20% without the cooperative holding fiat; Marks mode transfers the denominated Marks directly from the posting member's cooperative account to the responding member's account upon HUMAN-CONCORDANT determination; Barter mode records an equal-or-greater-value exchange obligation between the posting and responding cooperative members.
+
+**18.3** The system of 18.1 wherein the cooperative member reputation weight applied in the 3-voter concordance computation is computed as 1 + log10(Marks + 1), wherein Marks is the responding member's total lifetime cooperative Marks balance, ensuring reputation weighting without gating access to the response mechanism.
+
+**18.4** The system of 18.1 wherein DIAGNOSIS-RESOLVED eblets are additionally submitted to the cooperative Catacombs Memory Wall (per Catacombs Cold Archive Claim Group 20) for trust-score recomputation and badge assignment, recognizing Diagnosis-sourced knowledge as premium-provenance cooperative substrate.
+
+**18.5** The system of 18.1 wherein the Diagnosis post registry composes with the Glow Mechanic (Claim Group 20) such that each posted Diagnosis question displays a glow intensity proportional to its Marks bounty value in the cooperative member inbox, surfacing high-bounty questions for attention without gating access to low-bounty questions.
+
+**18.6** A method for cooperative human-network question broadcast comprising: (a) detecting Tier 3 activation in the Federated Andon 3-Tier Escalation (Claim Group 17); (b) automatically generating a Diagnosis post from the question's substrate record including question text, domain, current best-candidate answer, BMV score, escalation history, and a default Marks bounty computed as a function of question age and Andon retry count; (c) presenting the auto-generated post to the user for bounty adjustment and confirmation before broadcast; and (d) upon user confirmation, submitting the post to the cooperative-network registry.
+
+#### Empirical Receipt and Reduction to Practice
+
+The Diagnosis system was architected during BP083 Plow Cycle as the human-network resolution layer for the Federated Andon 3-Tier Escalation. The NYT Diagnosis column model provides a prior-art conceptual reference for persistent-question human-broadcast; the novel contribution is the cooperative-incentive structure (Marks bounty), 3-voter concordance verification, automatic substrate write-back, Substitution Rail payment processing, and integration with the canonical plow pipeline quality infrastructure.
+
+---
+
+### Claim Group 19: Salt-Level Persistence-Tier Selector
+
+#### Background and Problem Statement
+
+Cooperative AI questions vary widely in the appropriate persistence scope for their answers. A quick lookup question (e.g., today's weather) should not permanently consume cooperative substrate storage; a complex diagnostic question (e.g., identifying a rare hardware compatibility failure) should persist open until answered, regardless of time elapsed. No prior cooperative AI system provides a user-facing persistence tier selector that communicates these lifetime semantics in human-comprehensible terms, automatically suggests the appropriate tier based on question shape, and inline-presents the selection without modal interruption.
+
+#### Detailed Description
+
+**19.1** A computer-implemented system for cooperative-class answer persistence selection comprising three named persistence tiers:
+(a) A Pinch of Salt — ephemeral tier: answer is stored in memory only and discarded upon session termination; no substrate write; no Constellation broadcast; Diagnosis not available;
+(b) Seasoning — medium-persistence tier: answer is written to the local active Substrate layer with a configurable auto-expire duration (default range: 24 hours to 1 week); if BMV score falls below the configurable substrate threshold at any point within the persistence window, automatic escalation to Federated Andon Tier 2 (Constellation Query, Claim Group 17) is initiated without user action;
+(c) Preserved in Salt — maximum-persistence tier: answer is written to the local active Substrate layer with no auto-expire; if BMV score falls below threshold or the question has been marked ESCALATED-TO-DIAGNOSIS, the Diagnosis persistent broadcast (Claim Group 18) is activated; question remains open until HUMAN-CONCORDANT resolution is achieved or the user manually closes the question.
+
+**19.2** The system of 19.1 further comprising an auto-suggest mechanism that presents a recommended persistence tier to the user prior to question submission based on the following detection heuristics:
+(a) if the question text contains investigation-class keywords (diagnose, troubleshoot, identify, why is, what is wrong, how to fix) or diagnostic question shape, the auto-suggest mechanism recommends Preserved in Salt;
+(b) if the question text contains time-bounded keywords (today, right now, current, latest) or the question domain is classified as current-events, the auto-suggest mechanism recommends A Pinch of Salt;
+(c) otherwise, the auto-suggest mechanism recommends Seasoning as the default tier;
+wherein the recommendation is displayed inline in the question submission UI as a footer-level prompt, not a modal pop-up, per cooperative-class every-click-visible-feedback discipline.
+
+**19.3** The system of 19.1 wherein the Seasoning tier's auto-escalation mechanism composes with the Federated Andon 3-Tier Escalation (Claim Group 17): BMV-below-threshold detection triggers Tier 2 (Constellation Query) without user interaction, and any Tier 2 result that improves BMV above threshold cancels the auto-escalation and updates the substrate record in place.
+
+**19.4** The system of 19.1 wherein the three-tier Salt-Level selector is rendered as an inline segmented control with three labeled segments (A Pinch of Salt / Seasoning / Preserved in Salt) positioned below the question input field, with the auto-suggested tier pre-selected and a brief plain-text explanation of each tier's lifetime semantics presented on hover or tap.
+
+**19.5** The system of 19.1 wherein the cooperative Salt-Level persistence selector composes with the Catacombs Cold Archive (Claim Group 20) as follows: Preserved in Salt questions are exempt from EAC pheromone decay migration to the Catacomb until HUMAN-CONCORDANT resolution is achieved, ensuring open questions are never cold-archived before a human answer is received.
+
+#### Empirical Receipt and Reduction to Practice
+
+Salt-Level Persistence-Tier Selector was designed during BP083 Plow Cycle architecture session as the user-facing interface to the three-layer escalation architecture (Local → Constellation → Human-Network). The three-salt metaphor (A Pinch of Salt / Seasoning / Preserved in Salt) was ratified by Founder as the canonical naming convention for cooperative persistence lifetime communication.
+
+---
+
+### Claim Group 20: Glow Mechanic — Bounty-Attention Surfacing
+
+#### Background and Problem Statement
+
+Cooperative network inboxes containing many simultaneously open Diagnosis questions (Claim Group 18) present an attention allocation problem: a member scanning the inbox cannot quickly identify which questions carry high cooperative value (high Marks bounty) without reading each item individually. Conventional notification priority systems gate access by tier—lower-tier items are hidden, demoted, or require payment to unlock. This access-gating model is inconsistent with the cooperative-class Heart of Peace doctrine, which requires equal access to all cooperative activities regardless of economic participation level.
+
+The Glow Mechanic resolves this tension by scaling visual prominence—not access rights—proportionally to bounty Marks value. Every question is equally accessible; high-bounty questions are more visually prominent.
+
+#### Detailed Description
+
+**20.1** A computer-implemented system for cooperative-class bounty-attention surfacing comprising a five-tier visual glow intensity scale applied to Diagnosis question items in the cooperative member inbox, wherein glow intensity is determined solely by the question's Marks bounty value and no glow tier gates, restricts, or deprioritizes access to any question:
+(a) Tier 0 — No Glow: 0 Marks bounty; standard visual presentation with no luminance enhancement;
+(b) Tier 1 — Dim Glow: 1-9 Marks bounty; subtle luminance halo in the cooperative brand color at reduced opacity;
+(c) Tier 2 — Visible Glow: 10-99 Marks bounty; moderate luminance halo in the cooperative brand color at standard opacity;
+(d) Tier 3 — Bright Glow: 100-999 Marks bounty; high luminance halo with animated pulse cycle at configurable interval (default: 3 seconds);
+(e) Tier 4 — Golden Glow: 1,000+ Marks bounty; golden luminance halo with continuous animated pulse and optional cooperative-network notification to all members with inbox notification preferences enabled.
+
+**20.2** The system of 20.1 wherein glow intensity is recomputed in real time upon any bounty modification event (member augments bounty, partial bounty award upon partial concordance, bounty expiration) and applied to the inbox item display without page reload.
+
+**20.3** The system of 20.1 wherein the glow visual implementation uses CSS box-shadow or equivalent rendering primitive with color, blur-radius, and opacity parameters corresponding to each tier, ensuring the glow effect is purely additive (composites over standard item rendering) and does not affect item position, size, or tap/click target area.
+
+**20.4** The system of 20.1 wherein the cooperative-class Heart of Peace access guarantee is enforced at the data layer: inbox query returns all OPEN questions to all members regardless of bounty tier; glow tier assignment is a presentation-layer transformation applied after data retrieval, ensuring that any presentation-layer failure (e.g., CSS rendering error) degrades gracefully to standard non-glowing inbox presentation without hiding any questions.
+
+**20.5** A method for cooperative attention-surfacing measurement comprising: (a) presenting two cohorts of cooperative members with identical question sets, one cohort using the Glow Mechanic and one using standard flat-list presentation; (b) measuring mean time-to-first-response for questions grouped by Marks bounty tier in each cohort; (c) computing response-acceleration ratio per tier as (flat-list mean TTR) / (glow-mechanic mean TTR); and (d) recording the ratio per tier in the cooperative network analytics substrate as a glow-efficacy metric.
+
+#### Empirical Receipt and Reduction to Practice
+
+Glow Mechanic was ratified during BP083 Plow Cycle as the cooperative-class attention-surfacing primitive for the Package Store and Diagnosis cooperative inbox. Five-tier scale (0 / 1-9 / 10-99 / 100-999 / 1000+ Marks) was ratified by Founder. The access-preservation guarantee distinguishes this mechanism from conventional notification tier systems that gate visibility.
+
+---
+
+### Claim Group 21: Three-Salt-Layer Architecture
+
+#### Background and Problem Statement
+
+Prior cooperative AI systems treat knowledge retrieval as a single-layer operation: query the local knowledge base or query the cloud API. No prior system provides a named, composable three-layer architecture that routes an unanswered question through progressively broader knowledge sources—local verified substrate, cross-machine constellation, and human cooperative network—with each layer providing a distinct answer quality guarantee and escalating automatically when the prior layer cannot achieve concordance.
+
+#### Detailed Description
+
+**21.1** A computer-implemented three-layer cooperative AI answer-finding architecture comprising:
+(a) Layer 1 — Substrate Salt: the local verified-facts layer, implemented as the active Substrate directory (Claim Group 7) populated by the canonical plow pipeline (Claim Group 1); queries are resolved at this layer if a CONCORDANT or PARTIAL eblet with BMV above the configurable minimum threshold exists for the question domain and topic; Layer 1 resolution produces an answer with provenance class LOCAL-VERIFIED;
+(b) Layer 2 — Federation Salt: the cross-machine constellation query layer, implemented as Tier 2 of the Federated Andon 3-Tier Escalation (Claim Group 17); queries escalate to this layer when Layer 1 fails to produce a CONCORDANT result within the Andon retry cap; Layer 2 resolution involves distributing the question to available Constellation peers (Claim Group 16 fleet) and applying concordance arbitration across peer-returned candidates; Layer 2 resolution produces an answer with provenance class CONSTELLATION-CONCORDANT;
+(c) Layer 3 — Human Salt: the cooperative human-network query layer, implemented as The Diagnosis persistent broadcast system (Claim Group 18); queries escalate to this layer when Layer 2 fails to achieve concordance across all available Constellation peers; Layer 3 resolution produces an answer with provenance class HUMAN-CONCORDANT and writes the resolved answer back to Layer 1 (Substrate) for future local resolution.
+
+**21.2** The architecture of 21.1 wherein layer escalation is automatic and does not require user action at any escalation boundary; the Salt-Level persistence tier (Claim Group 19) configured by the user at question submission governs whether Layer 2 and Layer 3 escalation are permitted (A Pinch of Salt: Layer 1 only; Seasoning: Layers 1-2; Preserved in Salt: Layers 1-3).
+
+**21.3** The architecture of 21.1 wherein Layer 3 Human Salt write-back (HUMAN-CONCORDANT answer to Substrate) ensures that the three-layer architecture is self-improving: each human-resolved Diagnosis reduces future Layer 3 escalation frequency for similar questions, progressively strengthening the Layer 1 substrate.
+
+**21.4** The architecture of 21.1 wherein each layer's answer provenance class (LOCAL-VERIFIED / CONSTELLATION-CONCORDANT / HUMAN-CONCORDANT) is stored in the eblet metadata and surfaced in the AI model's response attribution, enabling the user to assess the epistemic source of each answer.
+
+**21.5** A method for three-layer cooperative architecture efficacy measurement comprising: (a) recording per-question resolution layer (L1/L2/L3) and provenance class in the substrate receipt; (b) computing the L1-resolution rate as the fraction of questions resolved at Layer 1 across a canonical benchmark run; (c) computing the L2-escalation rate and L3-escalation rate correspondingly; and (d) tracking L1-resolution rate trend across successive benchmark runs, wherein an increasing L1-resolution rate demonstrates substrate self-improvement via Human Salt write-back.
+
+#### Empirical Receipt and Reduction to Practice
+
+Three-Salt-Layer Architecture was ratified during BP083 Plow Cycle as the canonical composite architecture combining the Local Substrate (BP083 Plow Pipeline receipt: 68/70 MMLU-Pro), the Constellation Federation (MIC 5-machine fleet), and The Diagnosis human network. The three-salt naming convention (Substrate Salt / Federation Salt / Human Salt) directly maps to the Salt-Level Persistence-Tier Selector (Claim Group 19) nomenclature, creating a unified metaphor across the user-facing selection interface and the system-internal architecture.
+
+---
+
+### Claim Group 22: Hardware-Tier Model Selection
+
+#### Background and Problem Statement
+
+Consumer hardware available in the 2024-2026 era exhibits a wide range of RAM capacities—commonly 8 GB, 16 GB, 32 GB, and 48+ GB—that directly determines which local AI model weight classes can be loaded without triggering silent out-of-memory failure or operating system memory pressure events. No prior cooperative AI deployment system provides an automated RAM detection mechanism that maps detected RAM to a recommended model tier, presents this recommendation to the user at first launch, and enforces the recommendation as a default model selection to prevent silent OOM failure.
+
+The empirical motivation is a confirmed Founder incident wherein 8 GB consumer hardware silently OOM-failed when loading gemma4:12b, requiring a manual workaround alias redirect to a lower-parameter model. The Hardware-Tier Model Selection system obsoletes the workaround alias by making the appropriate model selection automatic and transparent.
+
+#### Detailed Description
+
+**22.1** A computer-implemented method for cooperative-class AI hardware-tier model selection comprising:
+(a) a RAM detection phase executed at application first launch and model selection UI open, querying the operating system for total installed physical RAM via platform-appropriate system API (Windows: GlobalMemoryStatusEx; macOS: sysctl hw.memsize; Linux: /proc/meminfo MemTotal);
+(b) a tier classification function mapping detected RAM to one of four model tiers:
+  — Lightweight (~6 GB VRAM/RAM footprint): recommended at detected RAM < 10 GB; default model: gemma2:2b or equivalent sub-6B-parameter quantized model;
+  — Standard (~12 GB footprint): recommended at detected RAM >= 10 GB and < 20 GB; default model: gemma4:12b or equivalent 10-13B-parameter model;
+  — Premium (~14 GB footprint): recommended at detected RAM >= 20 GB and < 40 GB; default model: gemma4:14b or equivalent 13-16B-parameter model;
+  — Heavy (~48 GB footprint): recommended at detected RAM >= 40 GB; default model: gemma3:27b or equivalent 27B+ parameter model;
+(c) a recommendation display that presents the detected RAM value, computed tier classification, recommended model identifier, and estimated RAM footprint to the user at first-launch model selection with a plain-English explanation of why this tier is recommended;
+(d) a user-override mechanism allowing the user to select a higher or lower tier than recommended, with a displayed warning if the user selects a tier whose RAM footprint exceeds 80% of detected RAM; and
+(e) an automatic model-pull directive issuing the appropriate Ollama pull command (or equivalent local model manager command) for the recommended or user-selected model tier, displaying a progress indicator per cooperative-class long-running progress discipline.
+
+**22.2** The method of 22.1 wherein the RAM detection result is stored in the application configuration alongside the user's tier selection and model identifier, enabling the application to detect post-reinstall hardware changes by comparing stored vs. current RAM and re-presenting the tier recommendation if a material change (default: >= 4 GB delta) is detected.
+
+**22.3** The method of 22.1 wherein the tier classification function composes with the Onboarding Lifecycle Auto-Advance mechanism (Claim Group 23) such that a first-launch hardware-tier recommendation is presented as part of the onboarding Stage A flow, and successful model pull completion advances the onboarding stage machine from A to B without user action.
+
+**22.4** The method of 22.1 wherein the workaround-alias antipattern—manually redirecting model requests from a requested model identifier to a lower-parameter model alias—is replaced by the tier classification function: if a user-requested model identifier's estimated RAM footprint exceeds 80% of detected RAM, the application presents a tier-downgrade recommendation before initiating the model pull, rather than silently redirecting at inference time.
+
+#### Empirical Receipt and Reduction to Practice
+
+Hardware-Tier Model Selection was motivated by Founder-direct empirical observation: 8 GB machine silently OOM-failed on gemma4:12b; manual workaround alias was required to redirect to a lower-tier model. The tier boundaries (Lightweight/Standard/Premium/Heavy) were derived from typical quantized model RAM footprints for the 2024-2026 consumer hardware era. Reduction to practice: tier classification function implemented as cooperative-class first-launch flow during BP083 Plow Cycle development.
+
+---
+
+### Claim Group 23: Plow Resume from Checkpoint
+
+#### Background and Problem Statement
+
+The canonical plow pipeline (Claim Group 1) executed on a full 14-domain MMLU-Pro benchmark may require hours of wall-clock time on consumer hardware. Prior plow pipeline implementations restart from question 1 upon any interruption: application crash, system reboot, user-initiated termination, or power event. This produces total work loss proportional to pipeline progress at time of interruption, with no mechanism for partial result preservation or selective restart.
+
+No prior cooperative AI substrate pipeline provides periodic checkpoint state persistence, interrupt detection at relaunch, or automatic resume from the last persisted checkpoint.
+
+#### Detailed Description
+
+**23.1** A computer-implemented method for interrupt-resilient cooperative AI substrate pipeline execution comprising:
+(a) a periodic checkpoint writer that, at a configurable interval (default: after every N questions, where N = 5), writes the current pipeline state to a named checkpoint file in the TestData directory, wherein the checkpoint file contains: current question index within the domain question bank, current domain identifier, per-domain question results accumulated to date (answer, BMV score, concordance class, Andon count, and eblet count), Andon state for the current question (retry count, widened operator set), and a SHA-256 hash of the checkpoint content for integrity verification;
+(b) a checkpoint presence detector executed at every pipeline run launch that scans the TestData directory for checkpoint files matching the current domain and benchmark run identifier;
+(c) a checkpoint resume prompt that, upon detecting a valid checkpoint file (hash verification passes), presents to the user: the interrupted domain, the question index at interruption, the elapsed questions count and remaining questions count, and a binary choice (Resume from checkpoint / Restart from question 1);
+(d) a resume-from-checkpoint execution path that, if the user selects resume: reads the checkpoint's accumulated results into the in-memory pipeline state, sets the starting question index to checkpoint_question_index + 1, and begins pipeline execution at that index without replaying prior questions; and
+(e) a checkpoint cleanup mechanism that deletes the checkpoint file upon successful completion of the domain pipeline run, preventing stale checkpoints from interfering with subsequent runs.
+
+**23.2** The method of 23.1 wherein checkpoint file naming encodes the domain identifier, benchmark run timestamp, and question count to enable disambiguation of multiple interrupted runs across domains in the same TestData directory.
+
+**23.3** The method of 23.1 wherein the checkpoint writer composes with the Per-Domain Isolation Architecture (Claim Group 5) such that each domain maintains an independent checkpoint file; a system interruption during multi-domain parallel MIC-orchestrated execution (Claim Group 16) produces per-domain checkpoint files enabling selective resume of interrupted domains without re-running already-completed domains.
+
+**23.4** The method of 23.1 wherein the SHA-256 checkpoint integrity verification detects file corruption, partial writes (from power-loss mid-write), and unauthorized modification; a checkpoint failing hash verification is treated as absent and the user is prompted to restart from question 1 with a notification that the checkpoint was corrupted.
+
+**23.5** The method of 23.1 wherein the Andon state preservation in the checkpoint enables correct Andon retry count restoration upon resume: if the interrupted question had consumed K of the maximum Andon retry count, the resumed pipeline applies the remaining (max_retry - K) retries, preventing an interrupted Andon sequence from receiving more total retries than a non-interrupted sequence.
+
+#### Empirical Receipt and Reduction to Practice
+
+Plow Resume from Checkpoint was designed during BP083 Plow Cycle to address total-work-loss risk on multi-hour canonical benchmark runs. The cooperative-class waste-avoidance discipline (Substitution canon: prior work should be made more valuable, not discarded) motivates checkpoint persistence as a structural architecture primitive rather than an optional recovery feature.
+
+---
+
+### Claim Group 24: Onboarding Lifecycle Auto-Advance
+
+#### Background and Problem Statement
+
+Cooperative AI application onboarding involves multiple sequential stages that require distinct user actions (model pull, substrate seeding, first inference test) and may be interrupted by system events (restart, network loss, model download failure) at any stage. Prior cooperative AI onboarding implementations provide no mechanism for detecting that a user is persistently stuck at a given stage, surfacing a recovery diagnostic, or automatically advancing a stage that completed without user awareness.
+
+The empirical motivation is a Founder-direct report: the Founder's son's machine was stuck at Stage B of the cooperative onboarding flow for multiple days. Reinstallation did not cure the stuck state. The root cause was profile-persistence across reinstall: the onboarding state was stored in a location (e.g., user profile directory or registry key) that survived application reinstall, causing the reinstalled application to re-read a corrupt or incomplete Stage B state and re-present Stage B without explaining why or offering recovery.
+
+#### Detailed Description
+
+**24.1** A computer-implemented system for cooperative-class onboarding lifecycle management comprising:
+(a) a three-stage onboarding lifecycle model: Stage A (hardware detection and model tier selection, culminating in successful model pull completion); Stage B (Starter Chocolate substrate installation and first substrate query verification); Stage C (first successful user question with substrate-enriched response, confirming end-to-end pipeline operation);
+(b) a stage state persistence mechanism storing the current stage identifier, stage entry timestamp, and stage completion status in a clearly named application data file separate from user profile or system registry, such that reinstall of the application binary replaces the state file with a fresh Stage A state without reading prior stage state from surviving locations;
+(c) a stuck-stage detector that at each application launch computes the elapsed time since stage entry for the current incomplete stage and compares it to a per-stage configurable threshold (default: Stage A 30 minutes; Stage B 60 minutes; Stage C 120 minutes);
+(d) a reset-diagnostic surfacing mechanism that upon detecting a stuck stage: presents an inline (non-modal) notification at the top of the onboarding view stating the current stage, elapsed time, and a plain-English description of the most likely cause of the stuck state per stage; and presents a Reset and Retry button that clears the current stage state and re-initiates stage entry actions from the beginning of the current stage without reverting prior stages;
+(e) an auto-advance mechanism that polls for stage completion conditions at a configurable interval (default: 30 seconds) during active application runtime: Stage A completion condition = successful Ollama model list response containing the recommended model identifier; Stage B completion condition = successful substrate directory creation and eblet count > 0; Stage C completion condition = successful inference response with substrate context injected; upon detecting any completion condition, the lifecycle advances to the next stage and the onboarding view updates without user action; and
+(f) a profile-persistence-across-reinstall detection mechanism that at Stage A entry checks for surviving onboarding state from a prior installation in known persistence locations (user home directory, registry, AppData) and, if found, presents a notification: "We found a previous installation state. Would you like to start fresh or resume?" with Resume and Start Fresh options.
+
+**24.2** The system of 24.1 wherein Stage B's Starter Chocolate installation (Claim Group 8) is the primary completion action, and the auto-advance polling verifies both (i) the idempotency marker file presence and (ii) an eblet count query returning > 0 results, confirming successful substrate seeding before advancing to Stage C.
+
+**24.3** The system of 24.1 wherein the reset-diagnostic surfacing mechanism composes with the Hardware-Tier Model Selection (Claim Group 22) at Stage A: a Stage A stuck state longer than the threshold triggers a re-presentation of the hardware tier recommendation, checking whether the model pull may have silently OOM-failed, and offering to switch to the Lightweight tier model as a recovery option.
+
+**24.4** The system of 24.1 wherein all onboarding lifecycle UI state transitions produce visible cooperative-class feedback per every-click-visible-feedback discipline: stage advance produces a brief celebratory confirmation notification; stuck-stage detection produces the inline warning notification; reset produces a progress indicator for re-initiating stage actions.
+
+**24.5** The system of 24.1 wherein Stage C completion produces a first-inference receipt: the question text, the substrate eblets consulted, the answer produced, and the inference latency are recorded to a first-inference-receipt file in the Vault directory, timestamped and SHA-256 hashed, providing the user with a permanent record of cooperative AI substrate operation.
+
+#### Empirical Receipt and Reduction to Practice
+
+Onboarding Lifecycle Auto-Advance was designed in direct response to Founder-direct empirical report: son's machine stuck at Stage B for multiple days; reinstall did not cure. Root cause: profile-persistence of onboarding state across reinstall. Reduction to practice: three-stage lifecycle model with per-stage thresholds, reset-diagnostic surfacing, auto-advance polling, and profile-persistence-across-reinstall detection implemented during BP083 Plow Cycle architecture session.
+
+---
+
+### Claim Group 25: Constellation Switchboard NotCents Shape Mapping
+
+#### Background and Problem Statement
+
+Prior cooperative network status displays use single-dimension indicators (online/offline, green/red) that cannot communicate the combination of connectivity state, activity state, and role assignment in a compact at-a-glance visual primitive. A cooperative peer fleet display requires communicating at minimum four distinct states (connected-idle, connected-active, offline, and unknown/connecting) plus a Conductor-role designation for the MIC-assigned orchestrating machine, all within the compact confines of a constellation network topology view.
+
+No prior system provides a named three-shape four-state visual primitive with a composable Conductor-role modifier specifically designed for cooperative AI peer fleet status communication.
+
+#### Detailed Description
+
+**25.1** A computer-implemented visual system for cooperative peer fleet status display comprising a three-shape four-state visual primitive applied per-peer in a Constellation Switchboard UI view:
+(a) Square shape (□) — represents the connected-idle state: the peer is reachable via health-check, is a registered Constellation member, and has no active domain pipeline workload assigned;
+(b) Triangle shape (△) — represents the connected-active state: the peer is reachable and currently executing an assigned domain pipeline workload (MIC partition assignment active, or local plow pipeline running);
+(c) Circle shape (○) — represents the offline state: the peer's last health-check response exceeded the configurable timeout threshold (default: 3 missed polls) or the peer has not yet been reached since application launch;
+wherein each shape is further modified by a fill state:
+(d) Filled shape (solid interior, e.g., ■ ▲ ●) — represents the lit state: the peer's most recent health-check succeeded within the current polling cycle;
+(e) Outline shape (border only, e.g., □ △ ○) — represents the unlit state: the peer has not responded to the most recent health-check cycle (but has not exceeded the offline threshold).
+
+**25.2** The visual system of 25.1 further comprising a Conductor-role modifier applied to the shape of the peer currently designated as the MIC Conductor-class orchestrator (Claim Group 16):
+(a) a crown overlay rendered above the shape's bounding box; or
+(b) a filled-star (★) modifier replacing the fill indicator of the shape;
+wherein only one peer may display the Conductor-role modifier at any time, reflecting the single active MIC Conductor designation.
+
+**25.3** The visual system of 25.1 wherein the full four-state two-shape-modifier matrix produces eight distinct visual states per peer: connected-idle-lit (■□ filled square), connected-idle-unlit (□ outline square), connected-active-lit (▲ filled triangle), connected-active-unlit (△ outline triangle), offline-lit (● filled circle), offline-unlit (○ outline circle), connecting-lit (■ filled square with animated border), connecting-unlit (□ outline square with animated border); with the Conductor modifier compositing over any of the eight states.
+
+**25.4** The visual system of 25.1 wherein shape selection (square/triangle/circle) is determined by the most recent activity state reported in the peer's health-check response payload, and fill state (filled/outline) is determined by health-check recency within the current polling cycle, ensuring that connectivity events (peer goes offline) are reflected in shape change and polling recency events (poll missed but peer not yet timed out) are reflected in fill change, providing two independent visual channels for two independent status dimensions.
+
+**25.5** The visual system of 25.1 wherein peer shape and fill state are recomputed at each health-check polling cycle and applied to the Constellation Switchboard view via a reactive UI binding, ensuring the display reflects current fleet status without page reload or manual refresh.
+
+**25.6** A method for cooperative fleet status communication comprising: rendering the three-shape four-state visual primitive for each configured Constellation peer in a grid or topology view; compositing the Conductor-role modifier on the designated MIC peer; updating fill state at each polling cycle; updating shape state upon activity-state change events received from peer health-check payloads; and providing a legend view accessible via tap/click on any shape explaining the full eight-state matrix in plain language.
+
+#### Empirical Receipt and Reduction to Practice
+
+Constellation Switchboard NotCents Shape Mapping was ratified during BP083 Plow Cycle by Founder direct: Square=idle-connected, Triangle=active, Circle=offline, filled/outline=lit/unlit, Conductor-crown overlay. The four-state two-modifier design was validated against a 5-machine Constellation fleet (M0-M4) providing sufficient state expressiveness for cooperative peer fleet operational awareness.
+
+---
+
+### Claim Group 26: Substitution Rail Cooperative Marketplace
+
+#### Background and Problem Statement
+
+Prior digital knowledge marketplaces (a) require fiat currency for all transactions, gating access to users with payment methods; (b) provide no cooperative alternative currency exchange mechanism; (c) do not integrate provenance-tracking medallion stamps on purchased knowledge units; or (d) impose a platform take-rate that extracts value from creators without cooperative distribution to all participants.
+
+The Substitution Rail Cooperative Marketplace extends the Substitution Rail Triple-Mode Exchange (Claim Group 12) with a full cooperative substrate-eblet pack marketplace architecture implementing three payment rails operating simultaneously on the same catalog, cooperative-class creator distribution, Cross-Pollination Reciprocity at-risk acquisition for high-tier packs, and Medallion IP provenance stamps on every installed pack unit.
+
+#### Detailed Description
+
+**26.1** A computer-implemented cooperative substrate-eblet pack marketplace comprising:
+(a) a catalog layer indexing available knowledge packs by domain, tier (Bread full-corpus / Chocolate curated / Kitchen custom), creator cooperative node identifier, reputation score, and Marks price;
+(b) a three-rail payment dispatch that at transaction time routes payment through exactly one of three Substitution Rails selected by the purchasing member:
+  — Fiat Pipeline Rail: conventional currency transaction at Cost+20%; the Liana Banyan cooperative pipeline collects the Fiat transaction and distributes to the creator cooperative node at the cooperative's creator-distribution ratio (83.3% to creators per cooperative bylaw), with the pipeline earning Cost+20% minus the creator distribution as operating margin; at no point does the cooperative hold Fiat funds beyond the transaction settlement window;
+  — Marks Rail: cooperative credit transaction wherein the purchasing member's Marks balance is decremented by the listed Marks price and the creator cooperative node's Marks balance is incremented by the same amount; no fiat exchange occurs; cooperative currency circulates exclusively within the cooperative;
+  — Barter Rail: direct peer-to-peer exchange recorded as a barter contract wherein the purchasing member pledges goods, services, or knowledge units of equal or greater cooperative-assessed value; the barter contract is written to the cooperative ledger with both parties' signatures and a cooperative-assessed valuation;
+(c) a Cross-Pollination Reciprocity (XP/RP) mechanism applying to packs priced at or above a configurable Marks threshold (default: 5,000 Marks): the purchasing member must place a Marks stake of equal value at risk in the cooperative ledger at transaction time; the stake is held for a configurable escrow period (default: 30 days); if the purchasing member publishes a cooperative knowledge pack within the escrow period with reputation-weighted reception above the configurable minimum, the stake is returned; otherwise the stake is distributed to the cooperative general fund;
+(d) a Medallion IP provenance stamp mechanism that at pack installation time: generates a unique Medallion identifier for each installed pack unit; writes the Medallion identifier, originating cooperative node identifier, installation timestamp, and purchasing member identifier to the cooperative IP ledger; and tags each eblet installed from the pack with the Medallion identifier in the eblet metadata; and
+(e) a proximity and reputation tier display in the catalog view presenting each pack creator's cooperative reputation score, distance (in Constellation topology hops) from the purchasing member's node, and verified install count.
+
+**26.2** The marketplace of 26.1 wherein the Fiat Pipeline Rail's structural prohibition on fiat holding is enforced at the transaction validation layer: if the cooperative ledger detects a Fiat balance accumulation above a configurable maximum hold duration (default: 24 hours), the ledger flags the transaction for immediate settlement processing, ensuring the cooperative pipeline operates as a pass-through, not a financial institution holding member funds.
+
+**26.3** The marketplace of 26.1 wherein cooperative currency (Marks, Joules, Credits) received through any of the three Substitution Rails is prohibited from fiat conversion at the transaction validation layer: any transaction that would result in cooperative currency being exchanged for fiat currency is rejected with an error referencing the Substitution canon and cooperative bylaw.
+
+**26.4** The marketplace of 26.1 wherein the Medallion provenance stamp composes with the Catacombs Cold Archive (Claim Group 20) and Excalibur Active Currents pheromone decay (Claim Group 14): Medallion-stamped eblets receive a provenance-premium in EAC decay scoring, decaying more slowly than non-Medallion eblets of equal age and access frequency, reflecting the higher cooperative investment represented by a purchased pack unit.
+
+**26.5** The marketplace of 26.1 wherein the Package Store Confectionary Architecture (Claim Group 11) provides the stall taxonomy (Bakery/Confectionary/Kitchen) and the Substitution Rail Cooperative Marketplace provides the payment and provenance infrastructure, composing into a complete cooperative knowledge distribution and exchange system.
+
+#### Empirical Receipt and Reduction to Practice
+
+Substitution Rail Cooperative Marketplace was ratified during BP083 Plow Cycle as the payment architecture for the Package Store Confectionary. Three payment rails (Fiat-Pipeline / Marks / Barter), 83.3% creator distribution ratio, Cross-Pollination Reciprocity at 5,000 Marks threshold, and Medallion IP provenance stamp were all ratified by Founder. The structural fiat-conversion prohibition (cooperative currencies never convert to fiat) is enforced at the transaction validation layer per Substitution canon.
+
+---
+
+
+---
+
+### Claim Group 27: Tab UX Cooperative Interface Architecture and Test-Net by Design Ledger Architecture
+
+#### Background and Problem Statement
+
+Cooperative AI substrate applications present two distinct user populations: Regular cooperative members who consume cooperative services, and Advanced members who configure and extend the substrate infrastructure. Prior tabbed UI architectures provide no mechanism for toggling between a Regular tab subset and an Advanced tab subset within a single persistent navigation row, with per-tab pin and hide controls that persist across sessions, without triggering a context reload.
+
+Additionally, cooperative ledger systems require a structurally isolated test environment enforcing fiat-conversion prohibitions and cooperative currency segregation at the protocol layer — not merely by deployment convention. Prior test-ledger implementations relying on deployment flags cannot demonstrate that the structural fiat-conversion prohibition is architecturally enforced rather than policy-enforced.
+
+#### Detailed Description
+
+**27.1** A computer-implemented cooperative-class tabbed interface system comprising:
+(a) a single-row tab bar rendering all cooperative application tabs in a persistent horizontal row without vertical expansion;
+(b) a Regular/Advanced toggle control switching between a Regular tab subset and an Advanced tab subset within the same horizontal row;
+(c) a per-tab pin mechanism enabling any member to designate any tab as persistently pinned, wherein pinned tabs remain visible regardless of toggle state, and pin state persists across sessions in the member's cooperative account preferences;
+(d) a per-tab hide mechanism enabling any member to mark any tab as hidden, removing it from the visible tab bar without deleting the underlying tab state, with a hidden-tab count indicator providing a restore pathway;
+(e) a toggle-state persistence mechanism that records the member's most recent toggle selection and applies it at session start; and
+(f) a tab context preservation guarantee wherein switching between Regular and Advanced states does not reload any currently displayed tab, preserving in-flight substrate queries, open forms, and accumulated session state.
+
+**27.2** The system of 27.1 wherein the Regular tab subset presents member-facing cooperative participation tabs for substrate query, marketplace, account management, and diagnosis inbox, and the Advanced tab subset extends the Regular subset with infrastructure tabs for pipeline monitoring, Constellation fleet view, Andon cord diagnostics, and substrate administration, such that a Regular member operates within a simplified four-to-six-tab interface while an Advanced member accesses the full twelve-to-eighteen-tab interface in the same single-row bar.
+
+**27.3** The system of 27.1 wherein the per-tab pin and hide state is recorded in a cooperative member interface audit log enabling the cooperative to identify interface improvement opportunities: persistent hide events on any tab by greater than or equal to 5% of active members trigger a relevance-mismatch recommendation; persistent pin events on any non-default tab by greater than or equal to 10% of active members trigger a promotion recommendation.
+
+**27.4** A computer-implemented cooperative-class ledger architecture for structurally isolated test-environment verification of cooperative currency mechanics comprising:
+(a) a Test-Net ledger partition whose cooperative currency units carry a structural prefix distinguishing them from production units at the protocol layer, wherein the production ledger rejects any Test-Net-denominated currency in a production transaction regardless of deployment configuration or operator override;
+(b) a fiat-conversion-prohibition structural enforcement layer in the Test-Net partition enforcing the same structural prohibition as in the production ledger, such that fiat-conversion prohibition testing validates the structural mechanism rather than merely the policy declaration;
+(c) a Test-Net reset mechanism enabling authorized operators to reset Test-Net balances and records to a configurable initial state without affecting any production record; and
+(d) a cryptographic namespace segregation mechanism assigning Test-Net record identifiers a structurally distinct namespace from production identifiers, preventing any Test-Net record from being referenced in a production context.
+
+**27.5** The architecture of 27.4 wherein the cryptographic namespace segregation composes with the Substitution Rail Triple-Mode Exchange (Claim Group 12) such that Test-Net cooperative currency may traverse the Fiat Pipeline Rail, Marks Rail, and Barter Rail test pathways, and the Fiat Pipeline Rail structural prohibition on fiat holding is enforced identically in both partitions, ensuring structural prohibition testing generates empirical receipts demonstrating the prohibition as an architectural constraint.
+
+**27.6** The architecture of 27.4 wherein the Test-Net partition composes with the Substitution Rail Cooperative Marketplace (Claim Group 26) by providing a structurally isolated test marketplace in which the Cross-Pollination Reciprocity stake-and-escrow mechanism, the Medallion IP provenance stamp generation, and the 83.3% creator distribution calculation can each be end-to-end verified before production deployment.
+
+#### Empirical Receipt and Reduction to Practice
+
+Tab UX Option B (Summary Item 22) and Test-Net by Design (Summary Item 23) were both ratified during BP083 Plow Cycle. The per-tab pin/hide mechanism resolves the attention-overload conflict in multi-initiative cooperative deployments. The Test-Net by Design ensures that fiat-conversion-prohibition coverage extends to architectural verification.
+
+
+## CLAIMS
+
+The detailed description above presents the claims framework for this provisional patent application. Formal independent and dependent claims will be crystallized in the corresponding non-provisional application. The applicant reserves the right to file a non-provisional application claiming priority to this provisional application for all innovations disclosed herein.
+
+The innovations disclosed in Claim Groups 1-15 (v01) and Claim Groups 16-27 (v02 additions) collectively constitute a cooperative-architecture local-first AI substrate platform composing the following independent and dependent claim families in the non-provisional application:
+
+- Independent Claims: Canonical Plow Pipeline (CG1), Andon Cord Self-Policing (CG3), BMV Scoring (CG4), Per-Domain Isolation (CG5), MEMORY.md Auto-Loading (CG6), Six-Folder Layout (CG7), MIC Conductor Orchestration (CG16), Federated Andon 3-Tier Escalation (CG17), The Diagnosis Broadcast (CG18), Salt-Level Persistence Selector (CG19), Glow Mechanic (CG20), Three-Salt-Layer Architecture (CG21), Hardware-Tier Model Selection (CG22), Plow Resume from Checkpoint (CG23), Onboarding Lifecycle Auto-Advance (CG24), Constellation Switchboard Shape Mapping (CG25), Substitution Rail Cooperative Marketplace (CG26).
+
+- Claim Group 27 (Tab UX + Test-Net by Design): Independent Claims CG27.1, CG27.4; Dependent Claims CG27.2, CG27.3, CG27.5, CG27.6
+
+- Dependent Claims: FireGuard Staggered Swarm (CG2, dependent on CG1), Starter Chocolate (CG8, dependent on CG7), Federation Node Frontier (CG9, dependent on CG7/CG12), MemoryWallPyramid (CG10, dependent on CG7), Package Store Confectionary (CG11, dependent on CG12), Substitution Rail Triple-Mode Exchange (CG12, independent and compositional), GPQA Diamond Benchmark (CG13, dependent on CG1), EAC Pheromone Decay (CG14, dependent on CG7), MMLU-Pro Benchmark (CG15, dependent on CG1/CG5).
+
+---
+
+## BRIEF DESCRIPTION OF DRAWINGS
+
+Drawings to be submitted with non-provisional application:
+
+- Figure 1: Canonical Plow Pipeline Architecture (nine-stage sequential flow)
+- Figure 2: Andon Cord Re-Plow Loop (state machine with three-retry cap)
+- Figure 3: Per-Domain Isolation Architecture (fourteen parallel tracks)
+- Figure 4: Six-Folder Substrate Layout (directory hierarchy)
+- Figure 5: MemoryWallPyramid Addressing (soccerball-DAG recursive structure)
+- Figure 6: Package Store Confectionary (three-stall marketplace)
+- Figure 7: Substitution Rail Triple-Mode Exchange
+- Figure 8: MEMORY.md Self-Context Auto-Loading cycle
+- Figure 9: MIC Conductor-Class Orchestration (fleet discovery, greedy partition, parallel dispatch, failure recovery)
+- Figure 10: Federated Andon 3-Tier Escalation (Tier 1 widened roster → Tier 2 constellation → Tier 3 Diagnosis state machine)
+- Figure 11: The Diagnosis Persistent Question Broadcast (post lifecycle, 3-voter concordance, Marks bounty, substrate write-back)
+- Figure 12: Salt-Level Persistence-Tier Selector (three-tier segmented control with auto-suggest heuristics)
+- Figure 13: Glow Mechanic Five-Tier Scale (0 / 1-9 / 10-99 / 100-999 / 1000+ Marks visual intensity)
+- Figure 14: Three-Salt-Layer Architecture (L1 Substrate Salt → L2 Federation Salt → L3 Human Salt escalation flow)
+- Figure 15: Hardware-Tier Model Selection (RAM detection → tier classification → model pull flow)
+- Figure 16: Plow Resume from Checkpoint (checkpoint write cycle, interrupt detection, resume decision, cleanup)
+- Figure 17: Onboarding Lifecycle Auto-Advance (Stage A/B/C state machine, stuck-stage detector, reset-diagnostic, auto-advance polling)
+- Figure 18: Constellation Switchboard NotCents Shape Mapping (three-shape four-state matrix with Conductor crown overlay)
+- Figure 19: Substitution Rail Cooperative Marketplace (three-rail payment dispatch, XP/RP, Medallion provenance stamp, creator distribution)
+
+---
+
+## ABSTRACT
+
+A cooperative-architecture AI system and method for local-first knowledge substrate growth on consumer hardware. The system employs a nine-stage canonical plow pipeline (Spider, Sprite, FireGuard-staggered swarm, Miner filter, Saladin adversarial fence, Furnace burn, Three Fates concordance arbitration, Scribe BMV scoring, Detective TEAM with Andon cord stop-the-line re-plow loop) across fourteen isolated academic domains. Additional v01 innovations: MEMORY.md self-context auto-loading; six-folder substrate layout (Substrate/Catacomb/Capsules/Vault/MemoryWallPyramid/TestData); Starter Chocolate cooperative onboarding; Federation Node Frontier capsule rental; MemoryWallPyramid soccerball-DAG addressing; Package Store Confectionary three-stall marketplace; Substitution Rail triple-mode exchange (Fiat/Marks/Barter) with structural fiat-conversion prohibition; Excalibur Active Currents pheromone decay; MMLU-Pro disk-backed benchmark. v02 additional innovations: Machine In Charge (MIC) Conductor-class fleet orchestration with greedy domain partition and failure recovery; Federated Andon Cord 3-Tier Escalation (widened local → constellation → human network) implementing Never-Give-Up cooperative doctrine; The Diagnosis persistent human-network question broadcast with Marks bounty, 3-voter concordance, and substrate write-back; Salt-Level Persistence-Tier Selector (A Pinch of Salt / Seasoning / Preserved in Salt) with auto-suggest; Glow Mechanic five-tier bounty-attention surfacing without access gating; Three-Salt-Layer Architecture (Substrate Salt / Federation Salt / Human Salt) with self-improving write-back; Hardware-Tier Model Selection (RAM detection → Lightweight/Standard/Premium/Heavy tiers) preventing silent OOM failure; Plow Resume from Checkpoint with SHA-256-verified periodic state persistence and interrupt-resilient resume; Onboarding Lifecycle Auto-Advance (Stage A/B/C) with stuck-stage detection, reset-diagnostic surfacing, auto-advance polling, and profile-persistence-across-reinstall detection; Constellation Switchboard NotCents Shape Mapping (Square/Triangle/Circle × filled/outline × Conductor crown) for cooperative fleet status; Substitution Rail Cooperative Marketplace with three-rail payment dispatch, Cross-Pollination Reciprocity, Medallion IP provenance stamps, and 83.3% creator distribution. Empirical receipt: 97.1% (68/70 MMLU-Pro) on consumer hardware, no paid API keys, 316 verified eblets, 14/14 domains GREEN, 2 Andon-correct quarantines. Capitalist Cooperative framing: cooperative-class architecture operated as a capitalist enterprise earning margin at Cost+20% on Fiat Rail while distributing 83.3% of creator-tier revenue to cooperative members. Composes with Provisional Application Series 1-21.
+
+---
+
+*Liana Banyan Corporation · Inventor: J. Jones · Provisional Patent Application*
+*BP083 Plow Cycle · Sonnet 4.6 · June 15, 2026*
+*27 Claim Groups · 34 Innovation Areas · Incremental over Provisional Applications 1-21*
+*v02: +12 Claim Groups · +11 Innovation Areas · +~9,400 words over v01*
+*v03: +CG27 (Tab UX + Test-Net) · +Filing Manifest · +Pledge · +Path B · style normalized*
