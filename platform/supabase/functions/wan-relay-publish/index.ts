@@ -163,6 +163,11 @@ Deno.serve(async (req) => {
 
   const roll = body as PeanutRoll;
 
+  // BP086: determine tier — anon is 'base', authenticated JWT is 'member'
+  // Service role handles DB write; tier is metadata for the client UI
+  const authHeader = req.headers.get('authorization');
+  const presenceTier = authHeader && authHeader.startsWith('Bearer ') ? 'member' : 'base';
+
   // SID rate limit: 3 publishes per SID per hour
   if (!checkWindow(sidWindows, `publish:sid:${roll.s}`, 3, 60 * 60 * 1000)) {
     return json({ ok: false, error: "rate limited: too many publishes for this SID" }, 429);
@@ -207,6 +212,7 @@ Deno.serve(async (req) => {
       peer_id: roll.peer_id,
       wan_soccerball_id: roll.s,
       last_seen_at: new Date(nowMs).toISOString(),
+      tier: presenceTier,
     };
     if (roll.email_hash) presencePayload.email_hash = roll.email_hash;
     if (roll.lan_addresses) presencePayload.lan_addresses = roll.lan_addresses;
@@ -218,10 +224,10 @@ Deno.serve(async (req) => {
       .upsert(presencePayload, { onConflict: "peer_id" });
 
     if (presenceError) {
-      // Non-fatal: relay still works without presence; log and continue
-      console.warn("[wan-relay-publish] peer_presence upsert warning:", presenceError.message);
+      console.error("[wan-relay-publish] peer_presence upsert FAILED:", presenceError.message, presenceError.details ?? "");
+      return json({ ok: false, error: "peer_presence storage error" }, 500);
     }
   }
 
-  return json({ ok: true, sid: roll.s }, 202);
+  return json({ ok: true, sid: roll.s, tier: presenceTier, peer_id: roll.peer_id ?? null, last_seen_at: new Date(nowMs).toISOString() }, 202);
 });
