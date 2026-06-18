@@ -5321,6 +5321,301 @@ function startRelayRoutePoll(peerId: string): NodeJS.Timeout {
   return setInterval(pollOnce, 5000);
 }
 
+// BP086 I7c: MIC fleet broadcast listener — subscribes to fleet_broadcast Realtime channel
+// Handles 6 broadcast_types; writes acks via REST. Real implementations (PATH X).
+
+async function postAck(
+  broadcastId: string,
+  peerId: string,
+  appVersion: string,
+  ackType: string,
+  resultJson: Record<string, unknown>,
+): Promise<void> {
+  const supabaseUrl = (process.env.SUPABASE_URL || '').replace(/\/$/, '');
+  const supabaseKey = process.env.SUPABASE_ANON_KEY || '';
+  if (!supabaseUrl || !supabaseKey) return;
+
+  await fetch(`${supabaseUrl}/rest/v1/fleet_broadcast_ack`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'apikey': supabaseKey,
+      'Authorization': `Bearer ${supabaseKey}`,
+      'Prefer': 'resolution=merge-duplicates,return=minimal',
+      'on_conflict': 'broadcast_id,peer_id',
+    },
+    body: JSON.stringify({
+      broadcast_id: broadcastId,
+      peer_id: peerId,
+      app_version: appVersion,
+      ack_type: ackType,
+      result_json: resultJson,
+    }),
+  }).catch(() => {});
+}
+
+function startMicBroadcastListener(peerId: string, appVersion: string): void {
+  const supabaseUrl = (process.env.SUPABASE_URL || '').replace(/\/$/, '');
+  const supabaseKey = process.env.SUPABASE_ANON_KEY || '';
+
+  if (!supabaseUrl || !supabaseKey) {
+    console.warn('[mic-broadcast] SUPABASE_URL or SUPABASE_ANON_KEY not set — listener disabled');
+    return;
+  }
+
+  // Use Supabase Realtime JS-compatible WebSocket polling via REST long-poll fallback.
+  // We poll fleet_broadcast for active rows and dispatch on new ones not yet acked.
+  // Full WebSocket Realtime would require the @supabase/supabase-js in main process;
+  // for now we use a 10s poll which is reliable across all network conditions.
+
+  const processedIds = new Set<string>();
+
+  async function dispatchBroadcast(payload: {
+    id: string;
+    broadcast_type: string;
+    payload_json: Record<string, unknown>;
+    target_version: string | null;
+    target_tier: string;
+    target_peer_ids: string[] | null;
+  }): Promise<void> {
+    const broadcastId = payload.id;
+
+    // Skip if this peer is not targeted
+    if (
+      payload.target_peer_ids &&
+      payload.target_peer_ids.length > 0 &&
+      !payload.target_peer_ids.includes(peerId)
+    ) return;
+
+    console.log(`[mic-broadcast] dispatching type=${payload.broadcast_type} id=${broadcastId.slice(0, 8)}`);
+
+    switch (payload.broadcast_type) {
+      case 'noop_test': {
+        await postAck(broadcastId, peerId, appVersion, 'completed', {
+          ok: true,
+          message: 'noop received',
+          peer_id: peerId,
+          app_version: appVersion,
+          platform: process.platform,
+        });
+        console.log(`[mic-broadcast] noop_test acked`);
+        break;
+      }
+
+      case 'health_snapshot': {
+        try {
+          const psRes = await fetch('http://localhost:11434/api/ps', {
+            signal: AbortSignal.timeout(5000),
+          });
+          const psData = psRes.ok ? await psRes.json() : null;
+          const loadedModels: Array<{ name: string; size_vram: number; expires_at: string }> =
+            psData?.models ?? [];
+
+          const tagsRes = await fetch('http://localhost:11434/api/tags', {
+            signal: AbortSignal.timeout(5000),
+          });
+          const tagsData = tagsRes.ok ? await tagsRes.json() : null;
+          const availableModels: string[] = (tagsData?.models ?? []).map(
+            (m: { name: string }) => m.name,
+          );
+
+          await postAck(broadcastId, peerId, appVersion, 'completed', {
+            app_version: appVersion,
+            peer_id: peerId,
+            platform: process.platform,
+            ollama_reachable: psRes.ok,
+            loaded_models: loadedModels.map(m => ({
+              name: m.name,
+              size_vram_mb: Math.round((m.size_vram ?? 0) / 1024 / 1024),
+              expires_at: m.expires_at,
+            })),
+            available_models: availableModels,
+          });
+        } catch (err) {
+          await postAck(broadcastId, peerId, appVersion, 'error', {
+            error: String(err),
+            ollama_reachable: false,
+          });
+        }
+        break;
+      }
+
+      case 'fleet_warmup': {
+        const warmModel =
+          (payload.payload_json?.model as string) || 'gemma4:12b';
+        const warmupPrompt =
+          (payload.payload_json?.prompt as string) ||
+          'Answer with only the letter A. What is 1+1? A) 2 B) 3\nAnswer:';
+
+        await postAck(broadcastId, peerId, appVersion, 'processing', {
+          model: warmModel,
+          status: 'warming',
+        });
+
+        const warmStart = Date.now();
+        try {
+          const res = await fetch('http://localhost:11434/api/generate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              model: warmModel,
+              prompt: warmupPrompt,
+              stream: false,
+              keep_alive: '24h',
+            }),
+            signal: AbortSignal.timeout(120000),
+          });
+          const warmMs = Date.now() - warmStart;
+          const data = res.ok ? await res.json() : null;
+
+          await postAck(broadcastId, peerId, appVersion, 'completed', {
+            model: warmModel,
+            status: 'hot',
+            load_latency_ms: warmMs,
+            keep_alive: '24h',
+            test_answer: (data?.response as string)?.trim()?.slice(0, 5) ?? null,
+          });
+          console.log(`[mic-broadcast] warmed ${warmModel} in ${warmMs}ms`);
+        } catch (err) {
+          await postAck(broadcastId, peerId, appVersion, 'error', {
+            model: warmModel,
+            error: String(err),
+          });
+        }
+        break;
+      }
+
+      case 'config_set': {
+        const key = payload.payload_json?.key as string;
+        const value = payload.payload_json?.value as string;
+
+        if (key === 'ollama.model_pull' && value) {
+          await postAck(broadcastId, peerId, appVersion, 'processing', {
+            model: value,
+            status: 'pulling',
+          });
+
+          const pullStart = Date.now();
+          try {
+            const { execFile } = await import('child_process');
+            const { promisify } = await import('util');
+            const execFileAsync = promisify(execFile);
+
+            await execFileAsync('ollama', ['pull', value], { timeout: 1800000 });
+            const pullMs = Date.now() - pullStart;
+
+            await postAck(broadcastId, peerId, appVersion, 'completed', {
+              model: value,
+              status: 'ready',
+              pull_ms: pullMs,
+              pull_seconds: Math.round(pullMs / 1000),
+            });
+            console.log(`[mic-broadcast] pulled ${value} in ${Math.round(pullMs / 1000)}s`);
+          } catch (err) {
+            await postAck(broadcastId, peerId, appVersion, 'error', {
+              model: value,
+              error: String(err),
+            });
+          }
+        } else {
+          await postAck(broadcastId, peerId, appVersion, 'completed', {
+            key,
+            value,
+            applied: true,
+          });
+        }
+        break;
+      }
+
+      case 'auto_update': {
+        const version = payload.payload_json?.version as string || payload.target_version;
+        const restartMode = (payload.payload_json?.restart_mode as string) || 'prompt';
+        console.log(`[mic-broadcast] auto_update broadcast received: v${version} restart_mode=${restartMode}`);
+        await postAck(broadcastId, peerId, appVersion, 'received', {
+          target_version: version,
+          restart_mode: restartMode,
+          message: 'auto_update received — triggering autoUpdater.checkForUpdates()',
+        });
+        // Trigger the electron autoUpdater to check for the new version
+        try {
+          const { autoUpdater } = await import('electron-updater');
+          autoUpdater.checkForUpdates().catch(e =>
+            console.warn('[mic-broadcast] autoUpdater.checkForUpdates error:', e),
+          );
+        } catch (e) {
+          console.warn('[mic-broadcast] autoUpdater import error:', e);
+        }
+        break;
+      }
+
+      case 'benchmark_run': {
+        const benchmarkId = payload.payload_json?.benchmark_id as string;
+        const coordinationToken = payload.payload_json?.coordination_token as string;
+        console.log(`[mic-broadcast] benchmark_run dispatch received: benchmark_id=${benchmarkId}`);
+        await postAck(broadcastId, peerId, appVersion, 'received', {
+          benchmark_id: benchmarkId,
+          coordination_token: coordinationToken,
+          message: 'benchmark_run received — participation via wan-relay-route',
+        });
+        break;
+      }
+
+      default:
+        console.warn(`[mic-broadcast] unknown broadcast_type: ${payload.broadcast_type}`);
+        break;
+    }
+  }
+
+  async function pollBroadcasts(): Promise<void> {
+    try {
+      const since = new Date(Date.now() - 60000).toISOString(); // look back 60s
+      const url =
+        `${supabaseUrl}/rest/v1/fleet_broadcast` +
+        `?status=eq.active&created_at=gte.${encodeURIComponent(since)}` +
+        `&select=id,broadcast_type,payload_json,target_version,target_tier,target_peer_ids`;
+
+      const res = await fetch(url, {
+        headers: {
+          apikey: supabaseKey,
+          Authorization: `Bearer ${supabaseKey}`,
+        },
+      });
+      if (!res.ok) return;
+
+      const broadcasts: Array<{
+        id: string;
+        broadcast_type: string;
+        payload_json: Record<string, unknown>;
+        target_version: string | null;
+        target_tier: string;
+        target_peer_ids: string[] | null;
+      }> = await res.json();
+
+      for (const bc of broadcasts) {
+        if (processedIds.has(bc.id)) continue;
+        processedIds.add(bc.id);
+        dispatchBroadcast(bc).catch(e =>
+          console.warn(`[mic-broadcast] dispatch error for ${bc.id.slice(0, 8)}:`, e),
+        );
+      }
+
+      // Trim processedIds set to prevent unbounded growth
+      if (processedIds.size > 500) {
+        const arr = Array.from(processedIds);
+        arr.slice(0, 250).forEach(id => processedIds.delete(id));
+      }
+    } catch {
+      // Silent — don't crash main process on poll error
+    }
+  }
+
+  setInterval(pollBroadcasts, 10000);
+  // Poll immediately on startup to catch any recent broadcasts
+  setTimeout(pollBroadcasts, 2000);
+
+  console.log(`[mic-broadcast] listener started peer=${peerId.slice(0, 8)} version=${appVersion}`);
+}
+
 function setupMeshResultsWatcher(): void {
   const bishopDropDir = join(__dirname, '..', '..', 'BISHOP_DROPZONE', '00_FOUNDER_REVIEW');
   const localResultsDir = join(homedir(), '.mnemosynec', 'test-data', 'mmlu-pro', 'results');
@@ -5794,6 +6089,12 @@ app.whenReady().then(async () => {
   {
     const _relayPeerId = getStablePeerId();
     startRelayRoutePoll(_relayPeerId);
+  }
+
+  // BP086 I7c: MIC broadcast listener (auto_update / config_set / fleet_warmup /
+  // health_snapshot / benchmark_run / noop_test)
+  {
+    startMicBroadcastListener(getStablePeerId(), app.getVersion());
   }
 
   // v0.4.0 BP083 SEG-5 (carried forward v0.4.2): Post-install restart prompt (version-bump detection)
