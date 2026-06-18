@@ -190,14 +190,62 @@ The Substrate+Plow pipeline (BP083, 97.1% on 68/70) adds:
 
 ---
 
+## 5-Machine Run Prerequisites (Updated BP086 · Sonnet 4.6)
+
+### Fleet Status (polled 2026-06-18 ~20:15 UTC — v0.5.6 deployed)
+
+```
+ c532e74069e137bc | base |  | 2026-06-18 20:14:35+00
+ d0b47bd08633385b | base |  | 2026-06-18 20:14:34+00
+ 88cbf6bdd6f74587 | base |  | 2026-06-18 20:14:21+00
+ 49f3e5971518a064 | base |  | 2026-06-18 20:14:20+00
+ cb4ef450cc4a18c3 | base |  | 2026-06-18 20:11:37+00
+(5 rows — FLEET READY on poll 1/20)
+```
+
+**5 active peers registered within 10 minutes.** `lan_addresses` column is empty for all — v0.5.6 client does not yet populate this field. Son cannot be distinguished from LAN peers by IP at this time. Son identification will require app-side peer_id labeling or lan_addresses population in a future patch.
+
+### Peer Hardware + Model Roster
+
+| Machine | IP | RAM | Model | Status |
+|---------|-----|-----|-------|--------|
+| M0 | 127.0.0.1 | — | gemma4:12b | LAN-local orchestrator |
+| M1 | 192.168.86.45 | — | gemma4:12b ✅ (+ gemma2:2b available) | Confirmed via /api/tags |
+| M2 | 192.168.86.64 | — | gemma4:12b ✅ (+ gemma2:2b available) | Confirmed via /api/tags |
+| M3 | 192.168.86.156 | — | gemma4:12b ✅ keep_alive=24h applied | Hot in VRAM |
+| Son | WAN (non-192.168.86.*) | **16 GB RAM** ✅ (corrected from 8GB) | **qwen2.5:7b** ✅ | Different ISP |
+
+### Cross-Vendor Model Family Note
+
+**This is a CROSS-VENDOR MODEL FAMILY test.**
+
+- `gemma4:12b` (M0, M1, M2, M3) — Google DeepMind Gemma 4 family, 11.9B Q4_K_M
+- `qwen2.5:7b` (Son) — Alibaba Qwen 2.5 family, 7B
+
+**Model diversity breakdown:** 4 × Gemma4 + 1 × Qwen2.5 = 5-peer heterogeneous cooperative substrate. Ensemble diversity is meaningful — different training data, different architectures, different vendors. Even 1 cross-vendor peer creates genuine ensemble independence for the questions where vendor-specific biases diverge.
+
+**Note:** Neither M1 (192.168.86.45) nor M2 (192.168.86.64) runs qwen2.5:7b. Both confirmed running gemma4:12b only (gemma2:2b also available as fallback). Son is the sole Qwen peer.
+
+### LAN Model Detection Results (BP086)
+
+```
+Peer 192.168.86.45 models: gemma4:12b, gemma2:2b
+Peer 192.168.86.64 models: gemma4:12b, gemma2:2b
+```
+
+M1 and M2 identity (which IP = which label) is TBD per Founder's machine labeling. Model family TBD confirmed: both are Gemma. Detect active model at runtime via `/api/tags` — use `models[0].name` (sorted by last modified, gemma4:12b appears first on both).
+
+---
+
 ## Action Items Before 5-Peer Run
 
 1. **I5 wan-relay-route yoke** — peer table dispatch architecture (parallel session)
-2. **Enroll M0–M3** in `peer_presence` with actual `lan_addresses` and model info
-3. **Apply keep_alive=24h** to M1 (.45) and M2 (.64) at run time
-4. **Son's IP** — confirm model pulled + Ollama running; Son registers via client enrollment flow
+2. **Enroll M0–M3** in `peer_presence` with actual `lan_addresses` and model info (v0.5.6 does not yet populate lan_addresses)
+3. **Apply keep_alive=24h** to M1 (.45) and M2 (.64) at run time (M3 already applied)
+4. **Son's peer_id** — identify via app-side labeling once lan_addresses is populated, or by process of elimination
 5. **M0 empty-response mitigation** — tighten prompt to force single-letter compliance
 6. **Confirm M1/M2 identity** — which of .45/.64 is which machine per Founder's labeling
+7. **validate-relay.mjs** — relay orchestrator created ✅ (tools/mesh-validation/validate-relay.mjs)
 
 ---
 
