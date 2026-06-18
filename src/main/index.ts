@@ -4898,7 +4898,7 @@ function registerIPCHandlers(): void {
   // Lazily-created Supabase admin client for help IPC handlers.
   // Using service-role key from main process — bypasses RLS, Electron main is trust boundary.
   let _helpSupabase: import('@supabase/supabase-js').SupabaseClient | null = null;
-  let _helpRealtimeSubscribed = false;
+  let _helpPollingStarted = false;
 
   function getHelpSupabase(): import('@supabase/supabase-js').SupabaseClient | null {
     if (_helpSupabase) return _helpSupabase;
@@ -5041,40 +5041,69 @@ function registerIPCHandlers(): void {
     }
   });
 
-  safeHandle('help:start-realtime-sub', async (event) => {
-    if (_helpRealtimeSubscribed) return { ok: true };
+  safeHandle('help:start-realtime-sub', async (_event) => {
+    // BP086 I9: replaced Supabase Realtime WebSocket subscription with REST polling.
+    // Realtime silently fails in Electron main process (Node.js has no global WebSocket).
+    // Polling every 5s is the proven pattern (same as relay_routes + fleet_broadcast).
+    if (_helpPollingStarted) return { ok: true };
+    _helpPollingStarted = true;
 
-    try {
-      const sb = getHelpSupabase();
-      if (!sb) return { error: 'Platform database not configured' };
+    const supabaseUrl = (process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || '').replace(/\/$/, '');
+    const supabaseKey =
+      process.env.SUPABASE_ANON_KEY ||
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+      '';
 
-      const channel = sb
-        .channel('help_messages_feed')
-        .on(
-          'postgres_changes',
-          { event: 'INSERT', schema: 'public', table: 'help_messages' },
-          (payload) => {
-            // Forward new message to all renderer windows
+    if (!supabaseUrl || !supabaseKey) {
+      console.warn('[help-poll] SUPABASE_URL or key not set — help message polling disabled');
+      return { ok: true };
+    }
+
+    const headers = {
+      'apikey': supabaseKey,
+      'Authorization': `Bearer ${supabaseKey}`,
+    };
+
+    let lastChecked = new Date().toISOString();
+
+    async function pollHelpMessages(): Promise<void> {
+      try {
+        const url =
+          `${supabaseUrl}/rest/v1/help_messages` +
+          `?created_at=gt.${encodeURIComponent(lastChecked)}` +
+          `&select=id,from_peer,to_peer,content_text,content_image_url,created_at` +
+          `&order=created_at.asc`;
+
+        const res = await fetch(url, { headers });
+        if (!res.ok) return;
+
+        const msgs: Array<{
+          id: string;
+          from_peer: string;
+          to_peer: string | null;
+          content_text: string;
+          content_image_url: string | null;
+          created_at: string;
+        }> = await res.json();
+
+        if (msgs.length > 0) {
+          lastChecked = msgs[msgs.length - 1].created_at;
+          for (const msg of msgs) {
             for (const w of BrowserWindow.getAllWindows()) {
               if (!w.isDestroyed()) {
-                w.webContents.send('help:new-message', payload.new);
+                w.webContents.send('help:new-message', msg);
               }
             }
-          },
-        )
-        .subscribe((status) => {
-          if (status === 'SUBSCRIBED') {
-            _helpRealtimeSubscribed = true;
           }
-        });
-
-      // Give the subscribe a moment to establish (non-blocking return)
-      void channel;
-      return { ok: true };
-    } catch (err) {
-      console.error('[help] start-realtime-sub error:', (err as Error).message);
-      return { error: (err as Error).message };
+        }
+      } catch {
+        // Silent — don't crash main process on poll error
+      }
     }
+
+    setInterval(pollHelpMessages, 5000);
+    console.log('[help-poll] polling started for help_messages (5s interval)');
+    return { ok: true };
   });
 
   // ── BP083 v0.3.8 — GPQA Diamond Benchmark IPC ────────────────────────────
