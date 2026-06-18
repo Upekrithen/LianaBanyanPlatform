@@ -5237,6 +5237,90 @@ async function mintGenesisIfAbsent(): Promise<void> {
   }
 }
 
+// BP086 I5c: relay_routes poll loop — answers questions dispatched by orchestrator
+// Polls every 5s; handles cross-WAN peers without IP-to-IP routing
+function startRelayRoutePoll(peerId: string): NodeJS.Timeout {
+  const supabaseUrl = (process.env.SUPABASE_URL || '').replace(/\/$/, '');
+  const supabaseKey = process.env.SUPABASE_ANON_KEY || '';
+
+  if (!supabaseUrl || !supabaseKey) {
+    console.warn('[relay-poll] SUPABASE_URL or SUPABASE_ANON_KEY not set — relay poll disabled');
+    return setInterval(() => {}, 999999);
+  }
+
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+    'apikey': supabaseKey,
+    'Authorization': `Bearer ${supabaseKey}`,
+  };
+
+  async function pollOnce() {
+    try {
+      const url = `${supabaseUrl}/rest/v1/relay_routes?target_peer_id=eq.${encodeURIComponent(peerId)}&status=eq.pending&select=id,hex_frame,payload_json,session_id`;
+      const res = await fetch(url, { headers });
+      if (!res.ok) return;
+      const routes: Array<{ id: string; hex_frame: string; payload_json: Record<string, unknown> | null; session_id: string | null }> = await res.json();
+
+      for (const route of routes) {
+        // Mark processing
+        await fetch(`${supabaseUrl}/rest/v1/relay_routes?id=eq.${route.id}`, {
+          method: 'PATCH',
+          headers,
+          body: JSON.stringify({ status: 'processing' }),
+        });
+
+        const startMs = Date.now();
+        try {
+          const prompt: string = ((route.payload_json as Record<string, unknown>)?.prompt as string) || route.hex_frame;
+          const model = 'gemma4:12b';
+
+          const ollamaRes = await fetch('http://localhost:11434/api/generate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ model, prompt, stream: false, keep_alive: '24h' }),
+            signal: AbortSignal.timeout(120000),
+          });
+
+          const ollamaData = ollamaRes.ok ? await ollamaRes.json() : null;
+          const answer = ollamaData?.response ?? null;
+          const processingMs = Date.now() - startMs;
+
+          await fetch(`${supabaseUrl}/rest/v1/relay_route_replies`, {
+            method: 'POST',
+            headers: { ...headers, 'Prefer': 'return=minimal' },
+            body: JSON.stringify({
+              route_id: route.id,
+              peer_id: peerId,
+              answer_json: { answer },
+              processing_ms: processingMs,
+            }),
+          });
+
+          await fetch(`${supabaseUrl}/rest/v1/relay_routes?id=eq.${route.id}`, {
+            method: 'PATCH',
+            headers,
+            body: JSON.stringify({ status: 'answered' }),
+          });
+
+          console.log(`[relay-poll] answered route ${route.id.slice(0, 8)} in ${processingMs}ms`);
+        } catch (err) {
+          await fetch(`${supabaseUrl}/rest/v1/relay_routes?id=eq.${route.id}`, {
+            method: 'PATCH',
+            headers,
+            body: JSON.stringify({ status: 'error' }),
+          });
+          console.warn(`[relay-poll] error on route ${route.id.slice(0, 8)}:`, err);
+        }
+      }
+    } catch {
+      // Silent — don't crash main process on poll error
+    }
+  }
+
+  console.log(`[relay-poll] started for peer=${peerId.slice(0, 8)}`);
+  return setInterval(pollOnce, 5000);
+}
+
 function setupMeshResultsWatcher(): void {
   const bishopDropDir = join(__dirname, '..', '..', 'BISHOP_DROPZONE', '00_FOUNDER_REVIEW');
   const localResultsDir = join(homedir(), '.mnemosynec', 'test-data', 'mmlu-pro', 'results');
@@ -5704,6 +5788,12 @@ app.whenReady().then(async () => {
       supabaseUrl: _presenceSupabaseUrl,
     });
     console.log('[presence] registered tier=base default, peer=' + _presencePeerId.slice(0, 8));
+  }
+
+  // BP086 I5c: start relay poll (answers cross-WAN questions from orchestrator)
+  {
+    const _relayPeerId = getStablePeerId();
+    startRelayRoutePoll(_relayPeerId);
   }
 
   // v0.4.0 BP083 SEG-5 (carried forward v0.4.2): Post-install restart prompt (version-bump detection)
