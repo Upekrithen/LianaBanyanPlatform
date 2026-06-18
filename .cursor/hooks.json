@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "hooks": {
+    "afterShellExecution": [
+      {
+        "command": "powershell -File \"C:\\Users\\Administrator\\.claude\\hooks\\bp086_post_deploy_health_check.ps1\"",
+        "matcher": "firebase deploy.*hosting:",
+        "timeout": 30
+      }
+    ]
+  }
+}
