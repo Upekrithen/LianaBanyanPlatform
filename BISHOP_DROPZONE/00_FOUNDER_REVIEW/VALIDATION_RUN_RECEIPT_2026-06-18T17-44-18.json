@@ -1,0 +1,161 @@
+{
+  "run_type": "2-machine-pre-canonical-validation",
+  "canonical": false,
+  "topology": "LAN-direct (NOT LAN-as-WAN)",
+  "run_timestamp": "2026-06-18T17:44:18.270Z",
+  "mode": "smoke",
+  "question_count": 5,
+  "machines": {
+    "M0": {
+      "ip": "127.0.0.1",
+      "model": "gemma4:12b",
+      "correct": 5,
+      "total": 5
+    },
+    "M3": {
+      "ip": "192.168.86.156",
+      "model": "gemma4:12b",
+      "correct": 1,
+      "total": 5
+    }
+  },
+  "ensemble_score": {
+    "correct": 5,
+    "total": 5,
+    "pct": 100,
+    "contested": 0
+  },
+  "questions": [
+    {
+      "index": 1,
+      "source_id": "2804",
+      "domain": "biology",
+      "question_preview": "Which of the following would most likely provide examples of mitotic cell divisions?",
+      "num_options": 8,
+      "correct_letter": "B",
+      "correct_answer_text": "longitudinal section of a shoot tip",
+      "m0": {
+        "raw_response": "B",
+        "extracted_letter": "B",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": null,
+        "extracted_letter": null,
+        "correct": false,
+        "error": "TIMEOUT (60s)"
+      },
+      "ensemble": {
+        "answer": "B",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 2,
+      "source_id": "70",
+      "domain": "business",
+      "question_preview": "Typical advertising regulatory bodies suggest, for example that adverts must not: encourage _________, cause unnecessary...",
+      "num_options": 9,
+      "correct_letter": "I",
+      "correct_answer_text": "Unsafe practices, Distress, Fear, Serious",
+      "m0": {
+        "raw_response": "I",
+        "extracted_letter": "I",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": null,
+        "extracted_letter": null,
+        "correct": false,
+        "error": "TIMEOUT (60s)"
+      },
+      "ensemble": {
+        "answer": "I",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 3,
+      "source_id": "3526",
+      "domain": "chemistry",
+      "question_preview": "An unknown substance is found to have a high melting point. In addition, it is a poor conductor of electricity and does ...",
+      "num_options": 10,
+      "correct_letter": "C",
+      "correct_answer_text": "covalent network bonding",
+      "m0": {
+        "raw_response": "C",
+        "extracted_letter": "C",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": null,
+        "extracted_letter": null,
+        "correct": false,
+        "error": "TIMEOUT (60s)"
+      },
+      "ensemble": {
+        "answer": "C",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 4,
+      "source_id": "10356",
+      "domain": "computer_science",
+      "question_preview": "A method is to be written to search an array for a value that is larger than a given item and return its index. The prob...",
+      "num_options": 8,
+      "correct_letter": "B",
+      "correct_answer_text": "The specification should be modified to indicate what should be done if there is more than one index of larger values.",
+      "m0": {
+        "raw_response": "B",
+        "extracted_letter": "B",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": "B",
+        "extracted_letter": "B",
+        "correct": true,
+        "error": null
+      },
+      "ensemble": {
+        "answer": "B",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 5,
+      "source_id": "6826",
+      "domain": "economics",
+      "question_preview": "Which of the following would be classified under C when calculating GDP?",
+      "num_options": 8,
+      "correct_letter": "G",
+      "correct_answer_text": "$50.00 spent eating out at a restaurant",
+      "m0": {
+        "raw_response": "G",
+        "extracted_letter": "G",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": null,
+        "extracted_letter": null,
+        "correct": false,
+        "error": "TIMEOUT (60s)"
+      },
+      "ensemble": {
+        "answer": "G",
+        "contested": false,
+        "correct": true
+      }
+    }
+  ],
+  "truth_always_note": "This is a pre-canonical 2-machine validation run using direct LAN Ollama dispatch. The canonical 4-machine THUNDERCLAP run uses LAN-as-WAN routing via relay.lianabanyan.com."
+}

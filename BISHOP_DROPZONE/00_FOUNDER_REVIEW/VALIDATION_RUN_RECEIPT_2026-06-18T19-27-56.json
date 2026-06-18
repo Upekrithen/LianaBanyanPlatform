@@ -1,0 +1,1851 @@
+{
+  "run_type": "2-machine-pre-canonical-validation",
+  "canonical": false,
+  "topology": "LAN-direct (NOT LAN-as-WAN)",
+  "run_timestamp": "2026-06-18T19:27:56.423Z",
+  "mode": "full",
+  "question_count": 70,
+  "machines": {
+    "M0": {
+      "ip": "127.0.0.1",
+      "model": "gemma4:12b",
+      "correct": 46,
+      "total": 70
+    },
+    "M3": {
+      "ip": "192.168.86.156",
+      "model": "gemma4:12b",
+      "correct": 32,
+      "total": 70
+    }
+  },
+  "ensemble_score": {
+    "correct": 45,
+    "total": 70,
+    "pct": 64.3,
+    "contested": 17
+  },
+  "questions": [
+    {
+      "index": 1,
+      "source_id": "2804",
+      "domain": "biology",
+      "question_preview": "Which of the following would most likely provide examples of mitotic cell divisions?",
+      "num_options": 8,
+      "correct_letter": "B",
+      "correct_answer_text": "longitudinal section of a shoot tip",
+      "m0": {
+        "raw_response": "B",
+        "extracted_letter": "B",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": "B",
+        "extracted_letter": "B",
+        "correct": true,
+        "error": null
+      },
+      "ensemble": {
+        "answer": "B",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 2,
+      "source_id": "70",
+      "domain": "business",
+      "question_preview": "Typical advertising regulatory bodies suggest, for example that adverts must not: encourage _________, cause unnecessary...",
+      "num_options": 9,
+      "correct_letter": "I",
+      "correct_answer_text": "Unsafe practices, Distress, Fear, Serious",
+      "m0": {
+        "raw_response": "Answer: I",
+        "extracted_letter": "I",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": null,
+        "extracted_letter": null,
+        "correct": false,
+        "error": "TIMEOUT (120s)"
+      },
+      "ensemble": {
+        "answer": "I",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 3,
+      "source_id": "3526",
+      "domain": "chemistry",
+      "question_preview": "An unknown substance is found to have a high melting point. In addition, it is a poor conductor of electricity and does ...",
+      "num_options": 10,
+      "correct_letter": "C",
+      "correct_answer_text": "covalent network bonding",
+      "m0": {
+        "raw_response": "C",
+        "extracted_letter": "C",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": "C",
+        "extracted_letter": "C",
+        "correct": true,
+        "error": null
+      },
+      "ensemble": {
+        "answer": "C",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 4,
+      "source_id": "10356",
+      "domain": "computer_science",
+      "question_preview": "A method is to be written to search an array for a value that is larger than a given item and return its index. The prob...",
+      "num_options": 8,
+      "correct_letter": "B",
+      "correct_answer_text": "The specification should be modified to indicate what should be done if there is more than one index of larger values.",
+      "m0": {
+        "raw_response": "B",
+        "extracted_letter": "B",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": "B",
+        "extracted_letter": "B",
+        "correct": true,
+        "error": null
+      },
+      "ensemble": {
+        "answer": "B",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 5,
+      "source_id": "6826",
+      "domain": "economics",
+      "question_preview": "Which of the following would be classified under C when calculating GDP?",
+      "num_options": 8,
+      "correct_letter": "G",
+      "correct_answer_text": "$50.00 spent eating out at a restaurant",
+      "m0": {
+        "raw_response": "G",
+        "extracted_letter": "G",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": "G",
+        "extracted_letter": "G",
+        "correct": true,
+        "error": null
+      },
+      "ensemble": {
+        "answer": "G",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 6,
+      "source_id": "11285",
+      "domain": "engineering",
+      "question_preview": "What will be the number of lamps, each having 300 lumens, required to obtain an average illuminance of 50 lux on a 4m * ...",
+      "num_options": 10,
+      "correct_letter": "C",
+      "correct_answer_text": "2",
+      "m0": {
+        "raw_response": "C",
+        "extracted_letter": "C",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": "C",
+        "extracted_letter": "C",
+        "correct": true,
+        "error": null
+      },
+      "ensemble": {
+        "answer": "C",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 7,
+      "source_id": "6001",
+      "domain": "health",
+      "question_preview": "Polio can be eradicated by which of the following?",
+      "num_options": 7,
+      "correct_letter": "E",
+      "correct_answer_text": "Attention to sewage control and hygiene",
+      "m0": {
+        "raw_response": "E",
+        "extracted_letter": "E",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": "E",
+        "extracted_letter": "E",
+        "correct": true,
+        "error": null
+      },
+      "ensemble": {
+        "answer": "E",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 8,
+      "source_id": "4669",
+      "domain": "history",
+      "question_preview": "One of the less obvious reasons for the Inca to fight so many wars may have been:",
+      "num_options": 5,
+      "correct_letter": "D",
+      "correct_answer_text": "to identify and cultivate talented leaders.",
+      "m0": {
+        "raw_response": "D",
+        "extracted_letter": "D",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": "C",
+        "extracted_letter": "C",
+        "correct": false,
+        "error": null
+      },
+      "ensemble": {
+        "answer": null,
+        "contested": true,
+        "correct": false
+      }
+    },
+    {
+      "index": 9,
+      "source_id": "866",
+      "domain": "law",
+      "question_preview": "A woman was standing in the aisle of a subway car and put her purse on the seat next to her. A man approached the woman ...",
+      "num_options": 10,
+      "correct_letter": "D",
+      "correct_answer_text": "Robbery, because he used force in leaving with the purse.",
+      "m0": {
+        "raw_response": "",
+        "extracted_letter": null,
+        "correct": false,
+        "error": null
+      },
+      "m3": {
+        "raw_response": null,
+        "extracted_letter": null,
+        "correct": false,
+        "error": "TIMEOUT (120s)"
+      },
+      "ensemble": {
+        "answer": null,
+        "contested": true,
+        "correct": false
+      }
+    },
+    {
+      "index": 10,
+      "source_id": "7687",
+      "domain": "math",
+      "question_preview": "Statement 1 | A ring homomorphism is one to one if and only if the kernel is {0}. Statement 2 | Q is an ideal in R.",
+      "num_options": 9,
+      "correct_letter": "H",
+      "correct_answer_text": "False, True",
+      "m0": {
+        "raw_response": "",
+        "extracted_letter": null,
+        "correct": false,
+        "error": null
+      },
+      "m3": {
+        "raw_response": null,
+        "extracted_letter": null,
+        "correct": false,
+        "error": "TIMEOUT (120s)"
+      },
+      "ensemble": {
+        "answer": null,
+        "contested": true,
+        "correct": false
+      }
+    },
+    {
+      "index": 11,
+      "source_id": "5059",
+      "domain": "other",
+      "question_preview": "What was the significance of the Gulf of Tonkin resolution?",
+      "num_options": 10,
+      "correct_letter": "C",
+      "correct_answer_text": "It allowed the US to intensify its involvement in Vietnam",
+      "m0": {
+        "raw_response": "C",
+        "extracted_letter": "C",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": "C",
+        "extracted_letter": "C",
+        "correct": true,
+        "error": null
+      },
+      "ensemble": {
+        "answer": "C",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 12,
+      "source_id": "10774",
+      "domain": "philosophy",
+      "question_preview": "Select the best translation into predicate logic. David teaches Chris. (c: Chris; d: David; Txy: x teaches y)",
+      "num_options": 10,
+      "correct_letter": "A",
+      "correct_answer_text": "Tdc",
+      "m0": {
+        "raw_response": "A",
+        "extracted_letter": "A",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": "A",
+        "extracted_letter": "A",
+        "correct": true,
+        "error": null
+      },
+      "ensemble": {
+        "answer": "A",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 13,
+      "source_id": "9044",
+      "domain": "physics",
+      "question_preview": "What is the significance of the 1:2:4 resonance in the Jupiter's moons system?",
+      "num_options": 9,
+      "correct_letter": "I",
+      "correct_answer_text": "It makes the orbit of Io slightly elliptical.",
+      "m0": {
+        "raw_response": "The 1:2:4 resonance, also known as the Laplace resonance, involves the orbits of Io, Europa, and Ganymede. In orbital mechanics, this type of mean-motion resonance is significant because it creates a ",
+        "extracted_letter": "C",
+        "correct": false,
+        "error": null
+      },
+      "m3": {
+        "raw_response": null,
+        "extracted_letter": null,
+        "correct": false,
+        "error": "TIMEOUT (120s)"
+      },
+      "ensemble": {
+        "answer": "C",
+        "contested": false,
+        "correct": false
+      }
+    },
+    {
+      "index": 14,
+      "source_id": "1986",
+      "domain": "psychology",
+      "question_preview": "A person who received a Level 4 rating on the Rancho Los Amigos Scale of Cognitive Functioning:",
+      "num_options": 8,
+      "correct_letter": "E",
+      "correct_answer_text": "is confused and incoherent, may exhibit bizarre behavior, and is unable to care for him/herself.",
+      "m0": {
+        "raw_response": "E",
+        "extracted_letter": "E",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": "E",
+        "extracted_letter": "E",
+        "correct": true,
+        "error": null
+      },
+      "ensemble": {
+        "answer": "E",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 15,
+      "source_id": "2805",
+      "domain": "biology",
+      "question_preview": "The light reactions of photosynthesis supply the Calvin cycle with which of the following?",
+      "num_options": 10,
+      "correct_letter": "D",
+      "correct_answer_text": "ATP and NADPH provide the power and raw materials for the Calvin cycle.",
+      "m0": {
+        "raw_response": "D",
+        "extracted_letter": "D",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": "D",
+        "extracted_letter": "D",
+        "correct": true,
+        "error": null
+      },
+      "ensemble": {
+        "answer": "D",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 16,
+      "source_id": "71",
+      "domain": "business",
+      "question_preview": "Managers are entrusted to run the company in the best interest of ________. Specifically, they have a duty to act for th...",
+      "num_options": 10,
+      "correct_letter": "F",
+      "correct_answer_text": "Shareholders, Care and Skill, Diligence",
+      "m0": {
+        "raw_response": "F",
+        "extracted_letter": "F",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": null,
+        "extracted_letter": null,
+        "correct": false,
+        "error": "TIMEOUT (120s)"
+      },
+      "ensemble": {
+        "answer": "F",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 17,
+      "source_id": "3527",
+      "domain": "chemistry",
+      "question_preview": "Which of the following has an octet of electrons around the central atom?",
+      "num_options": 5,
+      "correct_letter": "D",
+      "correct_answer_text": "NH4+",
+      "m0": {
+        "raw_response": "D",
+        "extracted_letter": "D",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": "D",
+        "extracted_letter": "D",
+        "correct": true,
+        "error": null
+      },
+      "ensemble": {
+        "answer": "D",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 18,
+      "source_id": "10357",
+      "domain": "computer_science",
+      "question_preview": "In the program below, y is a positive integer (e.g. l, 2, 3, ...).\n result ← 0\n REPEAT 3 TIMES {\n REPEAT y TIMES {\n resu...",
+      "num_options": 10,
+      "correct_letter": "A",
+      "correct_answer_text": "3y",
+      "m0": {
+        "raw_response": "A",
+        "extracted_letter": "A",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": "A",
+        "extracted_letter": "A",
+        "correct": true,
+        "error": null
+      },
+      "ensemble": {
+        "answer": "A",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 19,
+      "source_id": "6827",
+      "domain": "economics",
+      "question_preview": "The aggregate demand curve is",
+      "num_options": 10,
+      "correct_letter": "A",
+      "correct_answer_text": "not found by adding product demand curves horizontally or vertically",
+      "m0": {
+        "raw_response": "I",
+        "extracted_letter": "I",
+        "correct": false,
+        "error": null
+      },
+      "m3": {
+        "raw_response": null,
+        "extracted_letter": null,
+        "correct": false,
+        "error": "TIMEOUT (120s)"
+      },
+      "ensemble": {
+        "answer": "I",
+        "contested": false,
+        "correct": false
+      }
+    },
+    {
+      "index": 20,
+      "source_id": "11286",
+      "domain": "engineering",
+      "question_preview": "Stack is also known as",
+      "num_options": 4,
+      "correct_letter": "C",
+      "correct_answer_text": "LIFO memory",
+      "m0": {
+        "raw_response": "C",
+        "extracted_letter": "C",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": "C",
+        "extracted_letter": "C",
+        "correct": true,
+        "error": null
+      },
+      "ensemble": {
+        "answer": "C",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 21,
+      "source_id": "6002",
+      "domain": "health",
+      "question_preview": "Which disease do polyomaviruses predominantly cause?",
+      "num_options": 4,
+      "correct_letter": "C",
+      "correct_answer_text": "No disease at all",
+      "m0": {
+        "raw_response": "A",
+        "extracted_letter": "A",
+        "correct": false,
+        "error": null
+      },
+      "m3": {
+        "raw_response": null,
+        "extracted_letter": null,
+        "correct": false,
+        "error": "TIMEOUT (120s)"
+      },
+      "ensemble": {
+        "answer": "A",
+        "contested": false,
+        "correct": false
+      }
+    },
+    {
+      "index": 22,
+      "source_id": "4670",
+      "domain": "history",
+      "question_preview": "The most obvious material symbols of ancient state societies are:",
+      "num_options": 10,
+      "correct_letter": "D",
+      "correct_answer_text": "monumental works.",
+      "m0": {
+        "raw_response": "D",
+        "extracted_letter": "D",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": "D",
+        "extracted_letter": "D",
+        "correct": true,
+        "error": null
+      },
+      "ensemble": {
+        "answer": "D",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 23,
+      "source_id": "867",
+      "domain": "law",
+      "question_preview": "A federal grand jury was investigating a corporation whose tanker ship had spilled crude oil into environmentally sensit...",
+      "num_options": 10,
+      "correct_letter": "B",
+      "correct_answer_text": "Yes, because a corporation has no Fifth Amendment privilege.",
+      "m0": {
+        "raw_response": "",
+        "extracted_letter": null,
+        "correct": false,
+        "error": null
+      },
+      "m3": {
+        "raw_response": null,
+        "extracted_letter": null,
+        "correct": false,
+        "error": "TIMEOUT (120s)"
+      },
+      "ensemble": {
+        "answer": null,
+        "contested": true,
+        "correct": false
+      }
+    },
+    {
+      "index": 24,
+      "source_id": "7688",
+      "domain": "math",
+      "question_preview": "Statement 1 | R is a splitting field of some polynomial over Q. Statement 2 | There is a field with 60 elements.",
+      "num_options": 10,
+      "correct_letter": "H",
+      "correct_answer_text": "False, False",
+      "m0": {
+        "raw_response": "",
+        "extracted_letter": null,
+        "correct": false,
+        "error": null
+      },
+      "m3": {
+        "raw_response": null,
+        "extracted_letter": null,
+        "correct": false,
+        "error": "TIMEOUT (120s)"
+      },
+      "ensemble": {
+        "answer": null,
+        "contested": true,
+        "correct": false
+      }
+    },
+    {
+      "index": 25,
+      "source_id": "5060",
+      "domain": "other",
+      "question_preview": "Which statement is true about focus group research?",
+      "num_options": 10,
+      "correct_letter": "C",
+      "correct_answer_text": "The findings generate qualitative data that can be used to develop surveys.",
+      "m0": {
+        "raw_response": "C",
+        "extracted_letter": "C",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": "C",
+        "extracted_letter": "C",
+        "correct": true,
+        "error": null
+      },
+      "ensemble": {
+        "answer": "C",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 26,
+      "source_id": "10775",
+      "domain": "philosophy",
+      "question_preview": " Construct a complete truth table for the following pairs of propositions. Then, using the truth tables, determine wheth...",
+      "num_options": 10,
+      "correct_letter": "D",
+      "correct_answer_text": "Contradictory",
+      "m0": {
+        "raw_response": "",
+        "extracted_letter": null,
+        "correct": false,
+        "error": null
+      },
+      "m3": {
+        "raw_response": null,
+        "extracted_letter": null,
+        "correct": false,
+        "error": "TIMEOUT (120s)"
+      },
+      "ensemble": {
+        "answer": null,
+        "contested": true,
+        "correct": false
+      }
+    },
+    {
+      "index": 27,
+      "source_id": "9045",
+      "domain": "physics",
+      "question_preview": "We were first able to accurately measure the diameter of Pluto from:",
+      "num_options": 10,
+      "correct_letter": "D",
+      "correct_answer_text": "brightness measurements made during mutual eclipses of Pluto and Charon",
+      "m0": {
+        "raw_response": "Answer: D",
+        "extracted_letter": "D",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": null,
+        "extracted_letter": null,
+        "correct": false,
+        "error": "TIMEOUT (120s)"
+      },
+      "ensemble": {
+        "answer": "D",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 28,
+      "source_id": "1987",
+      "domain": "psychology",
+      "question_preview": "You receive a phone call from Hermann H., age 28, who says he is “totally miserable” because of the recent breakup with ...",
+      "num_options": 9,
+      "correct_letter": "I",
+      "correct_answer_text": "provide Hermann with appropriate referrals.",
+      "m0": {
+        "raw_response": "The ethical course of action when a therapist identifies that their own values, beliefs, or feelings (countertransference) are hindering their ability to provide objective and effective care is to ref",
+        "extracted_letter": "I",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": null,
+        "extracted_letter": null,
+        "correct": false,
+        "error": "TIMEOUT (120s)"
+      },
+      "ensemble": {
+        "answer": "I",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 29,
+      "source_id": "2806",
+      "domain": "biology",
+      "question_preview": "In minks, the gene for brown fur (B) is dominant over the gene for silver fur (b). Which set of genotypes represents a c...",
+      "num_options": 9,
+      "correct_letter": "C",
+      "correct_answer_text": "Bb Bb",
+      "m0": {
+        "raw_response": "C",
+        "extracted_letter": "C",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": "C",
+        "extracted_letter": "C",
+        "correct": true,
+        "error": null
+      },
+      "ensemble": {
+        "answer": "C",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 30,
+      "source_id": "72",
+      "domain": "business",
+      "question_preview": "There are two main issues associated with _____ sizing. _______ is a key issue as due to the information policy of the c...",
+      "num_options": 10,
+      "correct_letter": "J",
+      "correct_answer_text": "Down, Involvement, Remuneration, Compensation",
+      "m0": {
+        "raw_response": "",
+        "extracted_letter": null,
+        "correct": false,
+        "error": null
+      },
+      "m3": {
+        "raw_response": null,
+        "extracted_letter": null,
+        "correct": false,
+        "error": "TIMEOUT (120s)"
+      },
+      "ensemble": {
+        "answer": null,
+        "contested": true,
+        "correct": false
+      }
+    },
+    {
+      "index": 31,
+      "source_id": "3528",
+      "domain": "chemistry",
+      "question_preview": "How many milliliters of 0.250 M KOH does it take to neutralize completely 50.0 mL of 0.150 M H3PO4?",
+      "num_options": 10,
+      "correct_letter": "B",
+      "correct_answer_text": "90.0 mL",
+      "m0": {
+        "raw_response": "B",
+        "extracted_letter": "B",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": null,
+        "extracted_letter": null,
+        "correct": false,
+        "error": "TIMEOUT (120s)"
+      },
+      "ensemble": {
+        "answer": "B",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 32,
+      "source_id": "10358",
+      "domain": "computer_science",
+      "question_preview": "Which of the following has the greatest potential for compromising a user's personal privacy?",
+      "num_options": 10,
+      "correct_letter": "A",
+      "correct_answer_text": "A group of cookies stored by the user's Web browser",
+      "m0": {
+        "raw_response": "C",
+        "extracted_letter": "C",
+        "correct": false,
+        "error": null
+      },
+      "m3": {
+        "raw_response": null,
+        "extracted_letter": null,
+        "correct": false,
+        "error": "TIMEOUT (120s)"
+      },
+      "ensemble": {
+        "answer": "C",
+        "contested": false,
+        "correct": false
+      }
+    },
+    {
+      "index": 33,
+      "source_id": "6828",
+      "domain": "economics",
+      "question_preview": "Which of the following is a tool used by the Fed to increase the money supply?",
+      "num_options": 10,
+      "correct_letter": "B",
+      "correct_answer_text": "A lower discount rate.",
+      "m0": {
+        "raw_response": "B",
+        "extracted_letter": "B",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": "B",
+        "extracted_letter": "B",
+        "correct": true,
+        "error": null
+      },
+      "ensemble": {
+        "answer": "B",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 34,
+      "source_id": "11287",
+      "domain": "engineering",
+      "question_preview": "The errors mainly caused by human mistakes are",
+      "num_options": 3,
+      "correct_letter": "A",
+      "correct_answer_text": "gross error.",
+      "m0": {
+        "raw_response": "A",
+        "extracted_letter": "A",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": "A",
+        "extracted_letter": "A",
+        "correct": true,
+        "error": null
+      },
+      "ensemble": {
+        "answer": "A",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 35,
+      "source_id": "6003",
+      "domain": "health",
+      "question_preview": "Who discovered the first virus?",
+      "num_options": 10,
+      "correct_letter": "I",
+      "correct_answer_text": "The botanist Dmitri Iwanowsky",
+      "m0": {
+        "raw_response": "I",
+        "extracted_letter": "I",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": "I",
+        "extracted_letter": "I",
+        "correct": true,
+        "error": null
+      },
+      "ensemble": {
+        "answer": "I",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 36,
+      "source_id": "4671",
+      "domain": "history",
+      "question_preview": "The ancient city of Cahokia contained more than _______ and a population of around _______.",
+      "num_options": 10,
+      "correct_letter": "C",
+      "correct_answer_text": "120 earthen mounds; 10,000",
+      "m0": {
+        "raw_response": "C",
+        "extracted_letter": "C",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": null,
+        "extracted_letter": null,
+        "correct": false,
+        "error": "TIMEOUT (120s)"
+      },
+      "ensemble": {
+        "answer": "C",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 37,
+      "source_id": "868",
+      "domain": "law",
+      "question_preview": "A state has recently enacted a statute requiring all prospective voters in state elections who wish to write-in a candid...",
+      "num_options": 10,
+      "correct_letter": "F",
+      "correct_answer_text": "It unreasonably discriminates against write-in candidates for public office.",
+      "m0": {
+        "raw_response": "",
+        "extracted_letter": null,
+        "correct": false,
+        "error": null
+      },
+      "m3": {
+        "raw_response": null,
+        "extracted_letter": null,
+        "correct": false,
+        "error": "TIMEOUT (120s)"
+      },
+      "ensemble": {
+        "answer": null,
+        "contested": true,
+        "correct": false
+      }
+    },
+    {
+      "index": 38,
+      "source_id": "7689",
+      "domain": "math",
+      "question_preview": "Statement 1 | Any set of two vectors in R^2 is linearly independent. Statement 2 | If V = span(v1, ... , vk) and {v1, .....",
+      "num_options": 10,
+      "correct_letter": "C",
+      "correct_answer_text": "False, True",
+      "m0": {
+        "raw_response": "C",
+        "extracted_letter": "C",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": "C",
+        "extracted_letter": "C",
+        "correct": true,
+        "error": null
+      },
+      "ensemble": {
+        "answer": "C",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 39,
+      "source_id": "5061",
+      "domain": "other",
+      "question_preview": "As the single-person public relations staff of a public transit agency, you are tasked with increasing the number of peo...",
+      "num_options": 3,
+      "correct_letter": "B",
+      "correct_answer_text": "Consider how riding the bus could similarly affect all of the target audiences.",
+      "m0": {
+        "raw_response": "C",
+        "extracted_letter": "C",
+        "correct": false,
+        "error": null
+      },
+      "m3": {
+        "raw_response": null,
+        "extracted_letter": null,
+        "correct": false,
+        "error": "TIMEOUT (120s)"
+      },
+      "ensemble": {
+        "answer": "C",
+        "contested": false,
+        "correct": false
+      }
+    },
+    {
+      "index": 40,
+      "source_id": "10776",
+      "domain": "philosophy",
+      "question_preview": " Which of the following propositions is an immediate (one-step) consequence in PL of the given premises?\nU ⊃ W\nW ⊃ (X ≡ ...",
+      "num_options": 10,
+      "correct_letter": "I",
+      "correct_answer_text": "~(X ≡ ~Y)",
+      "m0": {
+        "raw_response": "I",
+        "extracted_letter": "I",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": null,
+        "extracted_letter": null,
+        "correct": false,
+        "error": "TIMEOUT (120s)"
+      },
+      "ensemble": {
+        "answer": "I",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 41,
+      "source_id": "9046",
+      "domain": "physics",
+      "question_preview": "What about asteroids makes them stand out in sky surveys searching for them?",
+      "num_options": 9,
+      "correct_letter": "D",
+      "correct_answer_text": "Asteroids have substantial motion relative to the background stars",
+      "m0": {
+        "raw_response": "D",
+        "extracted_letter": "D",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": "D",
+        "extracted_letter": "D",
+        "correct": true,
+        "error": null
+      },
+      "ensemble": {
+        "answer": "D",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 42,
+      "source_id": "1988",
+      "domain": "psychology",
+      "question_preview": "During the second stage of Kohlberg’s preconventional level of moral development, children obey rules because:",
+      "num_options": 10,
+      "correct_letter": "E",
+      "correct_answer_text": "doing so helps them satisfy their personal needs.",
+      "m0": {
+        "raw_response": "",
+        "extracted_letter": null,
+        "correct": false,
+        "error": null
+      },
+      "m3": {
+        "raw_response": null,
+        "extracted_letter": null,
+        "correct": false,
+        "error": "TIMEOUT (120s)"
+      },
+      "ensemble": {
+        "answer": null,
+        "contested": true,
+        "correct": false
+      }
+    },
+    {
+      "index": 43,
+      "source_id": "2807",
+      "domain": "biology",
+      "question_preview": "In reference to a segment of DNA, which of the following molecules contains the fewest number of nucleotides?",
+      "num_options": 10,
+      "correct_letter": "I",
+      "correct_answer_text": "a single strand of complementary DNA (cDNA) made from the original DNA",
+      "m0": {
+        "raw_response": "",
+        "extracted_letter": null,
+        "correct": false,
+        "error": null
+      },
+      "m3": {
+        "raw_response": null,
+        "extracted_letter": null,
+        "correct": false,
+        "error": "TIMEOUT (120s)"
+      },
+      "ensemble": {
+        "answer": null,
+        "contested": true,
+        "correct": false
+      }
+    },
+    {
+      "index": 44,
+      "source_id": "73",
+      "domain": "business",
+      "question_preview": "_______ locate morality beyond the sphere of rationality in an emotional 'moral impulse' towards others.",
+      "num_options": 10,
+      "correct_letter": "C",
+      "correct_answer_text": "Postmodern ethics",
+      "m0": {
+        "raw_response": "H",
+        "extracted_letter": "H",
+        "correct": false,
+        "error": null
+      },
+      "m3": {
+        "raw_response": "H",
+        "extracted_letter": "H",
+        "correct": false,
+        "error": null
+      },
+      "ensemble": {
+        "answer": "H",
+        "contested": false,
+        "correct": false
+      }
+    },
+    {
+      "index": 45,
+      "source_id": "3529",
+      "domain": "chemistry",
+      "question_preview": "Consider the Lewis structures for the following molecules: CO2, CO32-, NO2-, and NO3-. Which molecule or molecules exhib...",
+      "num_options": 10,
+      "correct_letter": "J",
+      "correct_answer_text": "CO32-, NO2- and NO3-",
+      "m0": {
+        "raw_response": "J",
+        "extracted_letter": "J",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": null,
+        "extracted_letter": null,
+        "correct": false,
+        "error": "TIMEOUT (120s)"
+      },
+      "ensemble": {
+        "answer": "J",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 46,
+      "source_id": "10359",
+      "domain": "computer_science",
+      "question_preview": "Which of the following is NOT a property of bitmap graphics?",
+      "num_options": 7,
+      "correct_letter": "F",
+      "correct_answer_text": "All line segments can be displayed as straight.",
+      "m0": {
+        "raw_response": "F",
+        "extracted_letter": "F",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": "F",
+        "extracted_letter": "F",
+        "correct": true,
+        "error": null
+      },
+      "ensemble": {
+        "answer": "F",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 47,
+      "source_id": "6829",
+      "domain": "economics",
+      "question_preview": "If the world price of copper exceeds the domestic (U.S.) price of copper we would expect",
+      "num_options": 10,
+      "correct_letter": "I",
+      "correct_answer_text": "the United States to be a net exporter of copper.",
+      "m0": {
+        "raw_response": "I",
+        "extracted_letter": "I",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": null,
+        "extracted_letter": null,
+        "correct": false,
+        "error": "TIMEOUT (120s)"
+      },
+      "ensemble": {
+        "answer": "I",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 48,
+      "source_id": "11288",
+      "domain": "engineering",
+      "question_preview": "Power dissipation in ideal inductor is",
+      "num_options": 10,
+      "correct_letter": "H",
+      "correct_answer_text": "Zero",
+      "m0": {
+        "raw_response": "H",
+        "extracted_letter": "H",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": "H",
+        "extracted_letter": "H",
+        "correct": true,
+        "error": null
+      },
+      "ensemble": {
+        "answer": "H",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 49,
+      "source_id": "6004",
+      "domain": "health",
+      "question_preview": "Poliovirus can most easily become more virulent by which of the following processes?",
+      "num_options": 10,
+      "correct_letter": "F",
+      "correct_answer_text": "Mutation of the RNA genome at only a few positions",
+      "m0": {
+        "raw_response": "Answer: F",
+        "extracted_letter": "F",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": null,
+        "extracted_letter": null,
+        "correct": false,
+        "error": "TIMEOUT (120s)"
+      },
+      "ensemble": {
+        "answer": "F",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 50,
+      "source_id": "4672",
+      "domain": "history",
+      "question_preview": "What did the Moche build at the heart of their urban center?",
+      "num_options": 10,
+      "correct_letter": "E",
+      "correct_answer_text": "the Pyramid of the Sun",
+      "m0": {
+        "raw_response": "B",
+        "extracted_letter": "B",
+        "correct": false,
+        "error": null
+      },
+      "m3": {
+        "raw_response": null,
+        "extracted_letter": null,
+        "correct": false,
+        "error": "TIMEOUT (120s)"
+      },
+      "ensemble": {
+        "answer": "B",
+        "contested": false,
+        "correct": false
+      }
+    },
+    {
+      "index": 51,
+      "source_id": "869",
+      "domain": "law",
+      "question_preview": "The defendant was walking down the street when he saw a woman struggling with a man over a briefcase. Unbeknownst to the...",
+      "num_options": 10,
+      "correct_letter": "A",
+      "correct_answer_text": "Not knowing the true facts, the defendant was not justified in using force to protect the woman because the man was privileged to recapture his briefcase.",
+      "m0": {
+        "raw_response": "",
+        "extracted_letter": null,
+        "correct": false,
+        "error": null
+      },
+      "m3": {
+        "raw_response": null,
+        "extracted_letter": null,
+        "correct": false,
+        "error": "TIMEOUT (120s)"
+      },
+      "ensemble": {
+        "answer": null,
+        "contested": true,
+        "correct": false
+      }
+    },
+    {
+      "index": 52,
+      "source_id": "7690",
+      "domain": "math",
+      "question_preview": "Statement 1 | Every permutation is a cycle. Statement 2 | Every cycle is a permutation.",
+      "num_options": 10,
+      "correct_letter": "H",
+      "correct_answer_text": "False, True",
+      "m0": {
+        "raw_response": "H",
+        "extracted_letter": "H",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": "H",
+        "extracted_letter": "H",
+        "correct": true,
+        "error": null
+      },
+      "ensemble": {
+        "answer": "H",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 53,
+      "source_id": "5062",
+      "domain": "other",
+      "question_preview": "Newsletters generally fall in to which writing category?",
+      "num_options": 7,
+      "correct_letter": "G",
+      "correct_answer_text": "Promotional writing",
+      "m0": {
+        "raw_response": "E",
+        "extracted_letter": "E",
+        "correct": false,
+        "error": null
+      },
+      "m3": {
+        "raw_response": null,
+        "extracted_letter": null,
+        "correct": false,
+        "error": "TIMEOUT (120s)"
+      },
+      "ensemble": {
+        "answer": "E",
+        "contested": false,
+        "correct": false
+      }
+    },
+    {
+      "index": 54,
+      "source_id": "10777",
+      "domain": "philosophy",
+      "question_preview": "Select the best translation into predicate logic. Holly loves Frances. (f: Frances; h: Holly; Lxy: x loves y)",
+      "num_options": 10,
+      "correct_letter": "A",
+      "correct_answer_text": "Lhf",
+      "m0": {
+        "raw_response": "A",
+        "extracted_letter": "A",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": "A",
+        "extracted_letter": "A",
+        "correct": true,
+        "error": null
+      },
+      "ensemble": {
+        "answer": "A",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 55,
+      "source_id": "9047",
+      "domain": "physics",
+      "question_preview": "Approximately how far away is the Andromeda Galaxy?",
+      "num_options": 10,
+      "correct_letter": "B",
+      "correct_answer_text": "2.5 million light years",
+      "m0": {
+        "raw_response": "B",
+        "extracted_letter": "B",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": "B",
+        "extracted_letter": "B",
+        "correct": true,
+        "error": null
+      },
+      "ensemble": {
+        "answer": "B",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 56,
+      "source_id": "1989",
+      "domain": "psychology",
+      "question_preview": "The mental retardation associated with PKU is preventable with:",
+      "num_options": 9,
+      "correct_letter": "F",
+      "correct_answer_text": "removal of environmental toxins.",
+      "m0": {
+        "raw_response": "",
+        "extracted_letter": null,
+        "correct": false,
+        "error": null
+      },
+      "m3": {
+        "raw_response": null,
+        "extracted_letter": null,
+        "correct": false,
+        "error": "TIMEOUT (120s)"
+      },
+      "ensemble": {
+        "answer": null,
+        "contested": true,
+        "correct": false
+      }
+    },
+    {
+      "index": 57,
+      "source_id": "2808",
+      "domain": "biology",
+      "question_preview": "Which group is composed entirely of individuals who maintained that species are fixed (i.e., unchanging)?",
+      "num_options": 10,
+      "correct_letter": "C",
+      "correct_answer_text": "Aristotle, Linnaeus, and Cuvier",
+      "m0": {
+        "raw_response": "Answer: C",
+        "extracted_letter": "C",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": "C",
+        "extracted_letter": "C",
+        "correct": true,
+        "error": null
+      },
+      "ensemble": {
+        "answer": "C",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 58,
+      "source_id": "74",
+      "domain": "business",
+      "question_preview": " Some of key differences between Islamic finance and conventional finance include - prohibition of charging and paying _...",
+      "num_options": 10,
+      "correct_letter": "G",
+      "correct_answer_text": "Interest, Uncertain, Speculative, Tangible assets",
+      "m0": {
+        "raw_response": "G",
+        "extracted_letter": "G",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": null,
+        "extracted_letter": null,
+        "correct": false,
+        "error": "TIMEOUT (120s)"
+      },
+      "ensemble": {
+        "answer": "G",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 59,
+      "source_id": "3530",
+      "domain": "chemistry",
+      "question_preview": "Which net ionic equation below represents a possible reaction that takes place when a strip of magnesium metal is oxidiz...",
+      "num_options": 10,
+      "correct_letter": "E",
+      "correct_answer_text": "3Mg(s) + 2Cr3+ → 3Mg2+ + 2Cr(s)",
+      "m0": {
+        "raw_response": "E",
+        "extracted_letter": "E",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": null,
+        "extracted_letter": null,
+        "correct": false,
+        "error": "TIMEOUT (120s)"
+      },
+      "ensemble": {
+        "answer": "E",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 60,
+      "source_id": "10360",
+      "domain": "computer_science",
+      "question_preview": "Two expressions E and F are said to be unifiable if there are substitutions for the variables of E and F that make the e...",
+      "num_options": 10,
+      "correct_letter": "C",
+      "correct_answer_text": "(I, II) and (I, III) only",
+      "m0": {
+        "raw_response": "C",
+        "extracted_letter": "C",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": null,
+        "extracted_letter": null,
+        "correct": false,
+        "error": "TIMEOUT (120s)"
+      },
+      "ensemble": {
+        "answer": "C",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 61,
+      "source_id": "6830",
+      "domain": "economics",
+      "question_preview": "The natural rate of unemployment",
+      "num_options": 10,
+      "correct_letter": "A",
+      "correct_answer_text": "includes structural and frictional unemployment",
+      "m0": {
+        "raw_response": "A",
+        "extracted_letter": "A",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": "A",
+        "extracted_letter": "A",
+        "correct": true,
+        "error": null
+      },
+      "ensemble": {
+        "answer": "A",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 62,
+      "source_id": "11289",
+      "domain": "engineering",
+      "question_preview": "In force-current analogy, electrical analogous quantity for displacement (x) is",
+      "num_options": 10,
+      "correct_letter": "G",
+      "correct_answer_text": "charge.",
+      "m0": {
+        "raw_response": "",
+        "extracted_letter": null,
+        "correct": false,
+        "error": null
+      },
+      "m3": {
+        "raw_response": null,
+        "extracted_letter": null,
+        "correct": false,
+        "error": "TIMEOUT (120s)"
+      },
+      "ensemble": {
+        "answer": null,
+        "contested": true,
+        "correct": false
+      }
+    },
+    {
+      "index": 63,
+      "source_id": "6005",
+      "domain": "health",
+      "question_preview": "How do viruses of the calcivirus family replicate?",
+      "num_options": 10,
+      "correct_letter": "D",
+      "correct_answer_text": "As positive strand RNA viruses",
+      "m0": {
+        "raw_response": "D",
+        "extracted_letter": "D",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": "D",
+        "extracted_letter": "D",
+        "correct": true,
+        "error": null
+      },
+      "ensemble": {
+        "answer": "D",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 64,
+      "source_id": "4673",
+      "domain": "history",
+      "question_preview": "The Shang Dynasty laid the foundation for a coherent development of Chinese civilization that lasted well into the:",
+      "num_options": 10,
+      "correct_letter": "G",
+      "correct_answer_text": "20th century.",
+      "m0": {
+        "raw_response": "C",
+        "extracted_letter": "C",
+        "correct": false,
+        "error": null
+      },
+      "m3": {
+        "raw_response": "G",
+        "extracted_letter": "G",
+        "correct": true,
+        "error": null
+      },
+      "ensemble": {
+        "answer": null,
+        "contested": true,
+        "correct": false
+      }
+    },
+    {
+      "index": 65,
+      "source_id": "870",
+      "domain": "law",
+      "question_preview": "Two college students were members of the same fraternity. During a fraternity party, the defendant pulled out a gun, poi...",
+      "num_options": 10,
+      "correct_letter": "E",
+      "correct_answer_text": "guilty of manslaughter.",
+      "m0": {
+        "raw_response": "",
+        "extracted_letter": null,
+        "correct": false,
+        "error": null
+      },
+      "m3": {
+        "raw_response": null,
+        "extracted_letter": null,
+        "correct": false,
+        "error": "TIMEOUT (120s)"
+      },
+      "ensemble": {
+        "answer": null,
+        "contested": true,
+        "correct": false
+      }
+    },
+    {
+      "index": 66,
+      "source_id": "7691",
+      "domain": "math",
+      "question_preview": "Find all c in Z_3 such that Z_3[x]/(x^3 + x^2 + c) is a field.",
+      "num_options": 10,
+      "correct_letter": "B",
+      "correct_answer_text": "2",
+      "m0": {
+        "raw_response": "",
+        "extracted_letter": null,
+        "correct": false,
+        "error": null
+      },
+      "m3": {
+        "raw_response": null,
+        "extracted_letter": null,
+        "correct": false,
+        "error": "TIMEOUT (120s)"
+      },
+      "ensemble": {
+        "answer": null,
+        "contested": true,
+        "correct": false
+      }
+    },
+    {
+      "index": 67,
+      "source_id": "5063",
+      "domain": "other",
+      "question_preview": "You seek the counsel of one of your peers who designed and implemented a communication program that resulted in the succ...",
+      "num_options": 10,
+      "correct_letter": "F",
+      "correct_answer_text": "Solve their problems",
+      "m0": {
+        "raw_response": "F",
+        "extracted_letter": "F",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": "F",
+        "extracted_letter": "F",
+        "correct": true,
+        "error": null
+      },
+      "ensemble": {
+        "answer": "F",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 68,
+      "source_id": "10778",
+      "domain": "philosophy",
+      "question_preview": "Select the best translation into predicate logic. Earth isn't bigger than Jupiter. (e: Earth; j: Jupiter; Bxy: x is bigg...",
+      "num_options": 10,
+      "correct_letter": "E",
+      "correct_answer_text": "~Bej",
+      "m0": {
+        "raw_response": "E",
+        "extracted_letter": "E",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": null,
+        "extracted_letter": null,
+        "correct": false,
+        "error": "TIMEOUT (120s)"
+      },
+      "ensemble": {
+        "answer": "E",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 69,
+      "source_id": "9048",
+      "domain": "physics",
+      "question_preview": "What is the source of the material that causes meteor showers?",
+      "num_options": 10,
+      "correct_letter": "J",
+      "correct_answer_text": "The nuclei of comets gradually disintegrate and spread out along their orbital paths. When the Earth passes through the orbit of an comet we are bombarded by sand-sized particles that cause a meteor shower.",
+      "m0": {
+        "raw_response": "",
+        "extracted_letter": null,
+        "correct": false,
+        "error": null
+      },
+      "m3": {
+        "raw_response": null,
+        "extracted_letter": null,
+        "correct": false,
+        "error": "TIMEOUT (120s)"
+      },
+      "ensemble": {
+        "answer": null,
+        "contested": true,
+        "correct": false
+      }
+    },
+    {
+      "index": 70,
+      "source_id": "1990",
+      "domain": "psychology",
+      "question_preview": "Which of the following item difficulty (p) levels maximizes the differentiation of examinees into high- and low-performi...",
+      "num_options": 10,
+      "correct_letter": "B",
+      "correct_answer_text": "0.5",
+      "m0": {
+        "raw_response": "B",
+        "extracted_letter": "B",
+        "correct": true,
+        "error": null
+      },
+      "m3": {
+        "raw_response": "B",
+        "extracted_letter": "B",
+        "correct": true,
+        "error": null
+      },
+      "ensemble": {
+        "answer": "B",
+        "contested": false,
+        "correct": true
+      }
+    }
+  ],
+  "truth_always_note": "This is a pre-canonical 2-machine validation run using direct LAN Ollama dispatch. The canonical 4-machine THUNDERCLAP run uses LAN-as-WAN routing via relay.lianabanyan.com."
+}
