@@ -35,6 +35,7 @@ import { AutoUpdateManager, type UpdateState } from './auto_updater';
 import { PeerDiscovery, getStablePeerId } from './federation/peer-discovery';
 import { RelayClient } from './federation/relay-client';
 import { performCommunityConnectHandshake } from './federation/community-connect';
+import { registerSubstrateAwakensIPC } from './federation/substrate_awakens_ipc';
 import { AuthManager, registerCustomScheme } from './auth_manager';
 import {
   runHearthBuild,
@@ -1466,6 +1467,64 @@ function scheduleAutoPrepareIdle(): void {
   }, AUTO_PREPARE_IDLE_MS);
 }
 
+// BP085 — handleMembershipReturn (called from mnemosynec:// deep-link).
+// NEVER logs token value (BP085 BLOOD).
+async function handleMembershipReturn(memberId: string, token: string): Promise<void> {
+  const supabaseUrl = process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_ANON_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  const notifyRenderer = (payload: { ok: boolean; member_id?: string; error?: string }) => {
+    const wins = [dashboardWindow, hearthConjunctionWindow, overlayWindow];
+    for (const win of wins) {
+      if (win && !win.isDestroyed()) {
+        win.webContents.send('membership:activation-result', payload);
+      }
+    }
+  };
+
+  if (!supabaseUrl || !supabaseKey) {
+    console.warn('[membership-return] Supabase not configured — cannot validate token');
+    notifyRenderer({ ok: false, error: 'Supabase not configured — verify at lianabanyan.com' });
+    return;
+  }
+
+  try {
+    const resp = await globalThis.fetch(
+      `${supabaseUrl}/functions/v1/membership-callback-mnemosynec`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${supabaseKey}`,
+          'apikey': supabaseKey,
+        },
+        body: JSON.stringify({ member_id: memberId, token }),
+      },
+    );
+
+    const json = await resp.json() as { valid?: boolean; error?: string };
+
+    if (resp.ok && json.valid === true) {
+      const { writeFileSync } = await import('fs');
+      const { join: pathJoin } = await import('path');
+      const statusFile = pathJoin(app.getPath('userData'), 'member_status.json');
+      writeFileSync(
+        statusFile,
+        JSON.stringify({ is_member: true, member_id: memberId, activated_at: new Date().toISOString() }),
+        'utf8',
+      );
+      console.log('[membership-return] Membership activated for member_id:', memberId);
+      notifyRenderer({ ok: true, member_id: memberId });
+    } else {
+      console.warn('[membership-return] Token validation failed:', json.error ?? 'unknown');
+      notifyRenderer({ ok: false, error: json.error ?? 'Token validation failed' });
+    }
+  } catch (err) {
+    console.error('[membership-return] Exception:', err);
+    notifyRenderer({ ok: false, error: String(err) });
+  }
+}
+
 function registerIPCHandlers(): void {
   // Guard against duplicate handle registrations -- ipcMain.handle throws on dups.
   // safeHandle wraps every call so accidental future duplicates fail loudly (console.error)
@@ -2740,6 +2799,9 @@ function registerIPCHandlers(): void {
   // -- Caithedral Tools IPC (BP060 Application 002 Step 1) -----------------
   registerCaithedralToolsIPC();
 
+  // -- BP084 SEG-3: Substrate Awakens join-live-mesh flow -------------------
+  registerSubstrateAwakensIPC();
+
   // -- Bridge IPC (BP060 Application 002 Steps 3+4 ? UI-7 live Yoke wire) --
   registerBridgeIPC();
 
@@ -3924,6 +3986,35 @@ function registerIPCHandlers(): void {
     return { success: false, reason: 'not_implemented_until_v0.1.61' };
   });
 
+  // --- BP085 — membership:open-checkout (direct join URL with peer_id) ----------
+  safeHandle('membership:open-checkout', async () => {
+    try {
+      const peerId = getStablePeerId();
+      if (!peerId) throw new Error('peer_id not found in local store');
+      const url = new URL('https://lianabanyan.com/join');
+      url.searchParams.set('source', 'mnemosynec-app');
+      url.searchParams.set('user_id', peerId);
+      await shell.openExternal(url.toString());
+      return { ok: true };
+    } catch (err) {
+      return { ok: false, error: err instanceof Error ? err.message : String(err) };
+    }
+  });
+
+  // --- BP085 — membership:check-local-status (reads userData/member_status.json) --
+  safeHandle('membership:check-local-status', async () => {
+    try {
+      const { readFileSync } = await import('fs');
+      const { join: pathJoin } = await import('path');
+      const statusFile = pathJoin(app.getPath('userData'), 'member_status.json');
+      const raw = readFileSync(statusFile, 'utf8');
+      const data = JSON.parse(raw) as { is_member?: boolean; member_id?: string; activated_at?: string };
+      return { ok: true, is_member: data.is_member === true, member_id: data.member_id };
+    } catch {
+      return { ok: true, is_member: false, member_id: null };
+    }
+  });
+
   // --- SKU IPC handlers (BP078 Scope 6.5) --------------------------------------
 
   safeHandle('sku-check-model', async (_event, modelName: string) => {
@@ -4799,6 +4890,183 @@ function registerIPCHandlers(): void {
     };
   });
 
+  // ── v0.5.1 BP085 — Help Tab peer pipeline IPC ────────────────────────────
+
+  // Lazily-created Supabase admin client for help IPC handlers.
+  // Using service-role key from main process — bypasses RLS, Electron main is trust boundary.
+  let _helpSupabase: import('@supabase/supabase-js').SupabaseClient | null = null;
+  let _helpRealtimeSubscribed = false;
+
+  function getHelpSupabase(): import('@supabase/supabase-js').SupabaseClient | null {
+    if (_helpSupabase) return _helpSupabase;
+    const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+    if (!url || !serviceKey) {
+      console.warn('[help] SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY not set — help pipeline unavailable');
+      return null;
+    }
+    try {
+      const { createClient } = require('@supabase/supabase-js') as typeof import('@supabase/supabase-js');
+      _helpSupabase = createClient(url, serviceKey, { auth: { persistSession: false } });
+      return _helpSupabase;
+    } catch (err) {
+      console.error('[help] Failed to create Supabase client:', (err as Error).message);
+      return null;
+    }
+  }
+
+  async function ensureHelpScreenshotsBucket(): Promise<void> {
+    const sb = getHelpSupabase();
+    if (!sb) return;
+    try {
+      const { error } = await sb.storage.createBucket('help_screenshots', {
+        public: false,
+        fileSizeLimit: 10 * 1024 * 1024,
+        allowedMimeTypes: ['image/png', 'image/jpeg', 'image/webp', 'image/gif'],
+      });
+      if (error && !error.message?.toLowerCase().includes('already exists')) {
+        console.error('[help] Failed to create help_screenshots bucket:', error.message);
+      }
+    } catch (err) {
+      console.error('[help] ensureHelpScreenshotsBucket error:', (err as Error).message);
+    }
+  }
+
+  // Ensure bucket exists at startup (non-blocking, non-fatal)
+  ensureHelpScreenshotsBucket().catch(() => {});
+
+  safeHandle('help:get-peer-id', async () => {
+    try {
+      const peerId = await getStablePeerId();
+      return { peerId };
+    } catch (err) {
+      console.error('[help] get-peer-id error:', (err as Error).message);
+      return { peerId: 'unknown' };
+    }
+  });
+
+  safeHandle('help:send-message', async (_event, args: {
+    text: string;
+    imageUrl: string | null;
+    fromPeer: string;
+    toPeer: string | null;
+  }) => {
+    try {
+      const sb = getHelpSupabase();
+      if (!sb) return { success: false, error: 'Platform database not configured' };
+
+      const { data, error } = await sb
+        .from('help_messages')
+        .insert({
+          from_peer: args.fromPeer,
+          to_peer: args.toPeer ?? null,
+          content_text: args.text ?? '',
+          content_image_url: args.imageUrl ?? null,
+        })
+        .select('id')
+        .single();
+
+      if (error) return { success: false, error: error.message };
+      return { success: true, id: (data as { id: string }).id };
+    } catch (err) {
+      console.error('[help] send-message error:', (err as Error).message);
+      return { success: false, error: (err as Error).message };
+    }
+  });
+
+  safeHandle('help:load-messages', async (_event, args: { limit: number }) => {
+    try {
+      const sb = getHelpSupabase();
+      if (!sb) return { error: 'Platform database not configured' };
+
+      const limit = Math.min(args?.limit ?? 50, 200);
+      const { data, error } = await sb
+        .from('help_messages')
+        .select('id, from_peer, to_peer, content_text, content_image_url, created_at')
+        .order('created_at', { ascending: false })
+        .limit(limit);
+
+      if (error) return { error: error.message };
+      return data ?? [];
+    } catch (err) {
+      console.error('[help] load-messages error:', (err as Error).message);
+      return { error: (err as Error).message };
+    }
+  });
+
+  safeHandle('help:upload-screenshot', async (_event, args: { base64Data: string; mimeType: string }) => {
+    try {
+      const sb = getHelpSupabase();
+      if (!sb) return { error: 'Platform database not configured' };
+
+      await ensureHelpScreenshotsBucket();
+
+      const peerId = await getStablePeerId();
+      const ext = args.mimeType.split('/')[1] ?? 'png';
+      const filename = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+      const path = `${peerId}/${filename}`;
+
+      // Decode base64 to Buffer for upload
+      const buffer = Buffer.from(args.base64Data, 'base64');
+
+      const { error: uploadError } = await sb.storage
+        .from('help_screenshots')
+        .upload(path, buffer, { contentType: args.mimeType, upsert: false });
+
+      if (uploadError) return { error: uploadError.message };
+
+      // Generate signed URL (bucket is private)
+      const { data: signedData, error: signedError } = await sb.storage
+        .from('help_screenshots')
+        .createSignedUrl(path, 60 * 60 * 24 * 7); // 7 days
+
+      if (signedError || !signedData?.signedUrl) {
+        return { error: signedError?.message ?? 'Failed to generate signed URL' };
+      }
+
+      return { url: signedData.signedUrl };
+    } catch (err) {
+      console.error('[help] upload-screenshot error:', (err as Error).message);
+      return { error: (err as Error).message };
+    }
+  });
+
+  safeHandle('help:start-realtime-sub', async (event) => {
+    if (_helpRealtimeSubscribed) return { ok: true };
+
+    try {
+      const sb = getHelpSupabase();
+      if (!sb) return { error: 'Platform database not configured' };
+
+      const channel = sb
+        .channel('help_messages_feed')
+        .on(
+          'postgres_changes',
+          { event: 'INSERT', schema: 'public', table: 'help_messages' },
+          (payload) => {
+            // Forward new message to all renderer windows
+            for (const w of BrowserWindow.getAllWindows()) {
+              if (!w.isDestroyed()) {
+                w.webContents.send('help:new-message', payload.new);
+              }
+            }
+          },
+        )
+        .subscribe((status) => {
+          if (status === 'SUBSCRIBED') {
+            _helpRealtimeSubscribed = true;
+          }
+        });
+
+      // Give the subscribe a moment to establish (non-blocking return)
+      void channel;
+      return { ok: true };
+    } catch (err) {
+      console.error('[help] start-realtime-sub error:', (err as Error).message);
+      return { error: (err as Error).message };
+    }
+  });
+
   // ── BP083 v0.3.8 — GPQA Diamond Benchmark IPC ────────────────────────────
 
   let _diamondCancelToken = { cancelled: false };
@@ -5281,6 +5549,13 @@ app.whenReady().then(async () => {
               });
             }
           }
+        })();
+      } else if (payload.type === 'membership-activated') {
+        // BP085 — mnemosynec://membership-active?member_id=...&token=...
+        // NEVER log token value (BP085 BLOOD)
+        console.log('[deep-link] membership-activated received for member_id:', payload.memberId);
+        void (async () => {
+          await handleMembershipReturn(payload.memberId, payload.token);
         })();
       }
     },

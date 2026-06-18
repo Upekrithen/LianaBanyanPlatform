@@ -479,6 +479,11 @@ declare global {
       membershipGetStatus?: () => Promise<{ tier: string; status: string; annualFeeUsd: number }>;
       membershipCancel?: () => Promise<{ success: boolean; reason?: string }>;
 
+      // BP085 — open-checkout direct URL + activation listener
+      openMembershipCheckout?: () => Promise<{ ok: boolean; error?: string }>;
+      checkLocalMembershipStatus?: () => Promise<{ ok: boolean; is_member: boolean; member_id: string | null }>;
+      onMembershipActivated?: (cb: (result: { ok: boolean; member_id?: string; error?: string }) => void) => () => void;
+
       // BP082 v0.3.1 — 3-Condition Mesh Comparison
       runMeshComparison?: (config: { nPerDomain: number; randomSeed: number; model: string; ollamaBaseUrl: string }) => Promise<{ ok: boolean; result?: unknown; error?: string }>;
       cancelMeshComparison?: () => Promise<{ ok: boolean }>;

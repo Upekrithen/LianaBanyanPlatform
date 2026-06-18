@@ -405,6 +405,16 @@ contextBridge.exposeInMainWorld('amplify', {
   communityConnectHandshake: (): Promise<{ success: boolean; peerName?: string; error?: string }> =>
     ipcRenderer.invoke('community-connect-handshake'),
 
+  // BP084 SEG-3 — Substrate Awakens join flow
+  substrateAwakensRegister: (email: string, displayName: string, ramTier: string): Promise<{ success: boolean; message?: string; error?: string }> =>
+    ipcRenderer.invoke('substrate-awakens:register', { email, displayName, ramTier }),
+
+  substrateAwakensHandshake: (token: string, email: string, displayName: string): Promise<{ success: boolean; peerId?: string; displayName?: string; error?: string }> =>
+    ipcRenderer.invoke('substrate-awakens:handshake', { token, email, displayName }),
+
+  substrateAwakensGetState: (): Promise<{ joined: boolean; peerId?: string; displayName?: string; joinedAt?: string } | null> =>
+    ipcRenderer.invoke('substrate-awakens:get-state'),
+
   // SEG-5 v0.1.56 — silent email stub (infrastructure-only; no credentials wired)
   sendSilentEmail: (args?: unknown): Promise<{ success: boolean; reason: string }> =>
     ipcRenderer.invoke('send-silent-email', args),
@@ -975,6 +985,21 @@ contextBridge.exposeInMainWorld('amplify', {
       ipcRenderer.invoke('membership:create-checkout', autoRenew),
     verifyStatus: (): Promise<{ ok: boolean; membership_active: boolean; error?: string }> =>
       ipcRenderer.invoke('membership-verify-status'),
+  },
+
+  // ── BP085 — open-checkout direct URL + activation listener ────────────────
+  openMembershipCheckout: (): Promise<{ ok: boolean; error?: string }> =>
+    ipcRenderer.invoke('membership:open-checkout'),
+
+  checkLocalMembershipStatus: (): Promise<{ ok: boolean; is_member: boolean; member_id: string | null }> =>
+    ipcRenderer.invoke('membership:check-local-status'),
+
+  onMembershipActivated: (
+    cb: (result: { ok: boolean; member_id?: string; error?: string }) => void,
+  ): (() => void) => {
+    const handler = (_e: Electron.IpcRendererEvent, result: { ok: boolean; member_id?: string; error?: string }) => cb(result);
+    ipcRenderer.on('membership:activation-result', handler);
+    return () => ipcRenderer.removeListener('membership:activation-result', handler);
   },
 
   // ── runMeshTest (BP078 Scope 1) ──────────────────────────────────────────────
@@ -1596,6 +1621,59 @@ contextBridge.exposeInMainWorld('amplify', {
 
   lifecycleGetProfilePath: (): Promise<{ appData: string; mnemosyneCPath: string }> =>
     ipcRenderer.invoke('lifecycle:get-profile-path'),
+
+  // ── v0.5.1 BP085 — Help Tab peer pipeline ────────────────────────────────
+
+  /** Returns the stable peer ID for this machine */
+  helpGetPeerId: (): Promise<{ peerId: string }> =>
+    ipcRenderer.invoke('help:get-peer-id'),
+
+  /** Send a help message (text + optional image URL) to Supabase help_messages */
+  helpSendMessage: (args: {
+    text: string;
+    imageUrl: string | null;
+    fromPeer: string;
+    toPeer: string | null;
+  }): Promise<{ success: true; id: string } | { success: false; error: string }> =>
+    ipcRenderer.invoke('help:send-message', args),
+
+  /** Load recent help messages from Supabase */
+  helpLoadMessages: (args: {
+    limit: number;
+  }): Promise<Array<{
+    id: string;
+    from_peer: string;
+    to_peer: string | null;
+    content_text: string;
+    content_image_url: string | null;
+    created_at: string;
+  }> | { error: string }> =>
+    ipcRenderer.invoke('help:load-messages', args),
+
+  /** Upload a screenshot blob (base64) to Supabase help_screenshots bucket */
+  helpUploadScreenshot: (args: {
+    base64Data: string;
+    mimeType: string;
+  }): Promise<{ url: string } | { error: string }> =>
+    ipcRenderer.invoke('help:upload-screenshot', args),
+
+  /** Start realtime subscription for help_messages in main process */
+  helpStartRealtimeSub: (): Promise<{ ok: true } | { error: string }> =>
+    ipcRenderer.invoke('help:start-realtime-sub'),
+
+  /** Register a callback for new help messages pushed from the main process */
+  onHelpMessageReceived: (callback: (msg: {
+    id: string;
+    from_peer: string;
+    to_peer: string | null;
+    content_text: string;
+    content_image_url: string | null;
+    created_at: string;
+  }) => void): (() => void) => {
+    const handler = (_event: Electron.IpcRendererEvent, msg: unknown) => callback(msg as Parameters<typeof callback>[0]);
+    ipcRenderer.on('help:new-message', handler);
+    return () => ipcRenderer.removeListener('help:new-message', handler);
+  },
 });
 
 // ─── Global type extension ────────────────────────────────────────────────────
@@ -1655,6 +1733,10 @@ declare global {
       sendSilentEmail?: (args?: unknown) => Promise<{ success: boolean; reason: string }>;
       // SEG-3 v0.1.55 — COMMUNITY-CONNECT first-launch seed peer handshake
       communityConnectHandshake?: () => Promise<{ success: boolean; peerName?: string; error?: string }>;
+      // BP084 SEG-3 — Substrate Awakens join flow
+      substrateAwakensRegister?: (email: string, displayName: string, ramTier: string) => Promise<{ success: boolean; message?: string; error?: string }>;
+      substrateAwakensHandshake?: (token: string, email: string, displayName: string) => Promise<{ success: boolean; peerId?: string; displayName?: string; error?: string }>;
+      substrateAwakensGetState?: () => Promise<{ joined: boolean; peerId?: string; displayName?: string; joinedAt?: string } | null>;
       // MoneyPenny
       getMoneyPennyUrl: () => Promise<{ url: string; ips: string[]; port: number }>;
       // Auth (Phase 7)
@@ -2077,6 +2159,13 @@ declare global {
       hardwareResetModel?: () => Promise<{ ok: boolean; model: string }>;
       // v0.4.2 BP083 SEG-3.5: Lifecycle profile path
       lifecycleGetProfilePath?: () => Promise<{ appData: string; mnemosyneCPath: string }>;
+      // v0.5.1 BP085 — Help Tab peer pipeline
+      helpGetPeerId?: () => Promise<{ peerId: string }>;
+      helpSendMessage?: (args: { text: string; imageUrl: string | null; fromPeer: string; toPeer: string | null }) => Promise<{ success: true; id: string } | { success: false; error: string }>;
+      helpLoadMessages?: (args: { limit: number }) => Promise<Array<{ id: string; from_peer: string; to_peer: string | null; content_text: string; content_image_url: string | null; created_at: string }> | { error: string }>;
+      helpUploadScreenshot?: (args: { base64Data: string; mimeType: string }) => Promise<{ url: string } | { error: string }>;
+      helpStartRealtimeSub?: () => Promise<{ ok: true } | { error: string }>;
+      onHelpMessageReceived?: (callback: (msg: { id: string; from_peer: string; to_peer: string | null; content_text: string; content_image_url: string | null; created_at: string }) => void) => () => void;
     };
     // SEG-V0150-P0-DIAGNOSE-BRIDGE: sentinel — set by preload before main bridge wires up
     __preloadLoaded?: boolean;

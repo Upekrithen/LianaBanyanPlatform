@@ -1,11 +1,12 @@
-// MnemosyneC · v0.2.0 · BP082 · 2026-06-13
+// MnemosyneC · v0.5.1 · BP082+BP085 · 2026-06-18
 // §2 Truth-Always · §3 Sonnet 4.6 · Founder-ratified
 //
-// LeanShell — 4-tab wrapper (Home / Gauntlet / Ask / Help) for first-time users.
+// LeanShell — tab wrapper for first-time users.
 // Feature-flag driven: localStorage 'mnemoUiMode' = 'lean' | 'advanced'
 // New users default to 'lean'; existing users (mnemosynec_onboarding_complete) default to 'advanced'.
 // Advanced mode passes through to MnemosyneTabView unchanged.
 // v0.2.0 (BP082): added 4th "Help" tab — community + OAuth + eblet capture.
+// v0.5.1 (BP085): added "Pipeline" tab — Founder↔Son peer copy/paste + screenshot pipeline.
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { MnemosyneTabView } from './MnemosyneTabView';
@@ -17,12 +18,33 @@ import { LeanHelpTab } from './LeanHelpTab';
 import { BatteryPublishTab } from './BatteryPublishTab';
 // v0.4.0 BP083 -- The Diagnosis
 import { TheDiagnosisTab } from './TheDiagnosisTab';
+// v0.5.1 BP085 -- Help Tab peer pipeline
+import { HelpTab } from './HelpTab';
 import type { FrameMode } from './FrameModeIndicator';
 import type { AuthState } from '../amplify.d';
 
+// ─── BP085 — openMembershipCheckout (shared by all 3 button surfaces) ────────
+
+async function openMembershipCheckout(
+  onError?: (msg: string) => void,
+): Promise<void> {
+  try {
+    const result = await window.amplify?.openMembershipCheckout?.();
+    if (!result) {
+      window.open('https://lianabanyan.com/join?source=mnemosynec-app', '_blank', 'noopener');
+      return;
+    }
+    if (!result.ok) {
+      onError?.(`Couldn't open membership page: ${result.error ?? 'unknown error'}`);
+    }
+  } catch {
+    onError?.('Membership page could not open. Please visit lianabanyan.com/join');
+  }
+}
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type LeanTab = 'home' | 'gauntlet' | 'ask' | 'help' | 'publish' | 'diagnosis';
+type LeanTab = 'home' | 'gauntlet' | 'ask' | 'help' | 'publish' | 'diagnosis' | 'pipeline';
 type UiMode = 'lean' | 'advanced';
 
 const LS_UI_MODE = 'mnemoUiMode';
@@ -153,16 +175,21 @@ const TABS: Array<{ id: LeanTab; label: string }> = [
   { id: 'help',      label: 'Help' },
   { id: 'publish',   label: '🔥 Publish' },
   { id: 'diagnosis', label: '🩺 Diagnosis' },
+  { id: 'pipeline',  label: '📋 Pipeline' },
 ];
 
 function TabBar({
   active,
   onSelect,
   onSwitchAdvanced,
+  isMember,
+  onMemberCta,
 }: {
   active: LeanTab;
   onSelect: (t: LeanTab) => void;
   onSwitchAdvanced: () => void;
+  isMember: boolean;
+  onMemberCta: () => void;
 }) {
   return (
     <div style={{
@@ -201,6 +228,30 @@ function TabBar({
         );
       })}
       <div style={{ flex: 1 }} />
+      {/* BP085 — Persistent member CTA, hidden for existing members */}
+      {!isMember && (
+        <button
+          className="member-cta-topbar"
+          onClick={onMemberCta}
+          title="Join the Cooperative — $5/yr"
+          style={{
+            background: 'linear-gradient(135deg, #065f46 0%, #047857 100%)',
+            border: '1px solid #059669',
+            borderRadius: 4,
+            color: '#6ee7b7',
+            fontSize: 11,
+            fontWeight: 700,
+            padding: '3px 10px',
+            cursor: 'pointer',
+            fontFamily: 'system-ui, sans-serif',
+            outline: 'none',
+            marginRight: 6,
+            whiteSpace: 'nowrap',
+          }}
+        >
+          Become a Member · $5/yr
+        </button>
+      )}
       <button
         onClick={onSwitchAdvanced}
         title="Switch to advanced mode (all tabs)"
@@ -256,6 +307,46 @@ export function LeanShell({ currentMode, onModeChange, onClose, authState }: Lea
   const [activeTab, setActiveTab] = useState<LeanTab>('home');
   const [bgStatus, setBgStatus] = useState<string | null>(null);
   const setupFiredRef = useRef(false);
+
+  // BP085 — membership state
+  const [isMember, setIsMember] = useState<boolean>(
+    authState?.member?.is_member === true,
+  );
+  const [memberToast, setMemberToast] = useState<string | null>(null);
+
+  const showMemberToast = useCallback((msg: string) => {
+    setMemberToast(msg);
+    setTimeout(() => setMemberToast(null), 4000);
+  }, []);
+
+  const handleMemberCta = useCallback(() => {
+    void openMembershipCheckout((err) => showMemberToast(err));
+  }, [showMemberToast]);
+
+  // Sync isMember from authState changes
+  useEffect(() => {
+    setIsMember(authState?.member?.is_member === true);
+  }, [authState]);
+
+  // Check local membership status on mount (persisted by deep-link return)
+  useEffect(() => {
+    window.amplify?.checkLocalMembershipStatus?.().then((result) => {
+      if (result?.is_member) setIsMember(true);
+    }).catch(() => {});
+  }, []);
+
+  // Listen for membership activation result from mnemosynec:// deep-link
+  useEffect(() => {
+    const unsub = window.amplify?.onMembershipActivated?.((result) => {
+      if (result.ok) {
+        setIsMember(true);
+        showMemberToast('Welcome to the Cooperative! You are now a member.');
+      } else {
+        showMemberToast(`Membership activation failed: ${result.error ?? 'unknown error'}`);
+      }
+    });
+    return () => { unsub?.(); };
+  }, [showMemberToast]);
 
   // Sync uiMode with localStorage changes from SettingsTab (advanced mode)
   useEffect(() => {
@@ -387,10 +478,29 @@ export function LeanShell({ currentMode, onModeChange, onClose, authState }: Lea
       overflow: 'hidden',
     }}>
       <BgStatusBar msg={bgStatus} />
+      {/* BP085 — membership toast notification */}
+      {memberToast && (
+        <div style={{
+          position: 'fixed', top: 48, right: 12, zIndex: 9999,
+          background: isMember ? '#065f46' : '#7f1d1d',
+          border: `1px solid ${isMember ? '#059669' : '#991b1b'}`,
+          borderRadius: 6,
+          padding: '8px 14px',
+          fontSize: 12,
+          color: isMember ? '#6ee7b7' : '#fca5a5',
+          fontFamily: 'system-ui, sans-serif',
+          maxWidth: 320,
+          boxShadow: '0 4px 12px rgba(0,0,0,0.4)',
+        }}>
+          {memberToast}
+        </div>
+      )}
       <TabBar
         active={activeTab}
         onSelect={setActiveTab}
         onSwitchAdvanced={switchToAdvanced}
+        isMember={isMember}
+        onMemberCta={handleMemberCta}
       />
       <div style={{ flex: 1, overflow: 'hidden', position: 'relative' }}>
         {activeTab === 'home' && (
@@ -410,6 +520,9 @@ export function LeanShell({ currentMode, onModeChange, onClose, authState }: Lea
         )}
         {activeTab === 'diagnosis' && (
           <TheDiagnosisTab />
+        )}
+        {activeTab === 'pipeline' && (
+          <HelpTab />
         )}
       </div>
     </div>

@@ -32,7 +32,13 @@ export interface DeepLinkFocusPayload {
   tabId: string;
 }
 
-export type DeepLinkPayload = DeepLinkAcceptPayload | DeepLinkAuthPayload | DeepLinkFocusPayload;
+export interface DeepLinkMembershipActivatedPayload {
+  type: 'membership-activated';
+  memberId: string;
+  token: string;
+}
+
+export type DeepLinkPayload = DeepLinkAcceptPayload | DeepLinkAuthPayload | DeepLinkFocusPayload | DeepLinkMembershipActivatedPayload;
 
 export type DeepLinkHandler = (payload: DeepLinkPayload) => void;
 
@@ -40,6 +46,7 @@ export type DeepLinkHandler = (payload: DeepLinkPayload) => void;
 
 const PROTOCOL = 'mnemosyne';
 const MNEMO_PROTOCOL = 'mnemo';
+const MNEMOSYNEC_PROTOCOL = 'mnemosynec';
 
 // ─── URL parser ───────────────────────────────────────────────────────────────
 
@@ -99,6 +106,19 @@ export function parseDeepLink(url: string): DeepLinkPayload | null {
       return null;
     }
 
+    // ── mnemosynec:// — membership return callback (BP085) ───────────────────
+    // mnemosynec://membership-active?member_id=...&token=...
+    if (proto === `${MNEMOSYNEC_PROTOCOL}:`) {
+      const host = parsed.hostname;
+      if (host === 'membership-active') {
+        const memberId = parsed.searchParams.get('member_id') ?? '';
+        const token = parsed.searchParams.get('token') ?? '';
+        if (!memberId || !token) return null;
+        return { type: 'membership-activated', memberId, token };
+      }
+      return null;
+    }
+
     return null;
   } catch {
     return null;
@@ -132,6 +152,16 @@ export function registerDeepLinkProtocol(
     }
   }
 
+  // Register mnemosynec:// (membership return — BP085) — idempotent
+  if (!app.isDefaultProtocolClient(MNEMOSYNEC_PROTOCOL)) {
+    const registered = app.setAsDefaultProtocolClient(MNEMOSYNEC_PROTOCOL);
+    if (!registered) {
+      console.warn('[deep-link] Failed to register mnemosynec:// protocol client');
+    } else {
+      console.log('[deep-link] Registered mnemosynec:// protocol');
+    }
+  }
+
   // macOS / Linux: open-url event fires when app is already running
   app.on('open-url', (event, url) => {
     event.preventDefault();
@@ -142,7 +172,10 @@ export function registerDeepLinkProtocol(
   app.on('second-instance', (_event, argv) => {
     // On Windows, the deep-link URL is the last argv item
     const url = argv.find(
-      (arg) => arg.startsWith(`${PROTOCOL}://`) || arg.startsWith(`${MNEMO_PROTOCOL}://`),
+      (arg) =>
+        arg.startsWith(`${PROTOCOL}://`) ||
+        arg.startsWith(`${MNEMO_PROTOCOL}://`) ||
+        arg.startsWith(`${MNEMOSYNEC_PROTOCOL}://`),
     );
     if (url) {
       handleDeepLink(url, mainWindow, handler);
@@ -192,7 +225,10 @@ export function handleStartupDeepLink(
   handler?: DeepLinkHandler,
 ): void {
   const url = argv.find(
-    (arg) => arg.startsWith(`${PROTOCOL}://`) || arg.startsWith(`${MNEMO_PROTOCOL}://`),
+    (arg) =>
+      arg.startsWith(`${PROTOCOL}://`) ||
+      arg.startsWith(`${MNEMO_PROTOCOL}://`) ||
+      arg.startsWith(`${MNEMOSYNEC_PROTOCOL}://`),
   );
   if (url) {
     handleDeepLink(url, mainWindow, handler);

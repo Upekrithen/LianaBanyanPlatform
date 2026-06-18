@@ -8,7 +8,22 @@
 // SEG-V0150-P0-FIX-BRIDGE-OR-FALLBACK: immediate button feedback + 5s fallback + Skip path
 // SEG-V0150-P0-PROACTIVE: adaptive CTA based on Ollama + gemma4:12b probe at mount
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+
+async function openMembershipCheckout(onError?: (msg: string) => void): Promise<void> {
+  try {
+    const result = await window.amplify?.openMembershipCheckout?.();
+    if (!result) {
+      window.open('https://lianabanyan.com/join?source=mnemosynec-app', '_blank', 'noopener');
+      return;
+    }
+    if (!result.ok) {
+      onError?.(`Couldn't open membership page: ${result.error ?? 'unknown error'}`);
+    }
+  } catch {
+    onError?.('Membership page could not open. Please visit lianabanyan.com/join');
+  }
+}
 
 interface Props {
   onComplete: () => void;
@@ -38,6 +53,19 @@ function ctaLabelFor(probeState: OllamaProbeState, ctaActive: boolean): string {
 
 export function LeanWelcomeView({ onComplete }: Props): React.ReactElement {
   const [screen, setScreen] = useState<1 | 2>(1);
+  const [onboardingMemberNudgeDismissed, setOnboardingMemberNudgeDismissed] = useState(
+    () => localStorage.getItem('mnemo_onboarding_member_nudge_dismissed') === '1',
+  );
+
+  const handleMemberNudgeClick = useCallback(() => {
+    void openMembershipCheckout();
+  }, []);
+
+  const handleMemberNudgeDismiss = useCallback(() => {
+    localStorage.setItem('mnemo_onboarding_member_nudge_dismissed', '1');
+    setOnboardingMemberNudgeDismissed(true);
+    onComplete();
+  }, [onComplete]);
 
   // Install progress state
   const [installStep, setInstallStep] = useState<string | null>(null);
@@ -444,6 +472,60 @@ export function LeanWelcomeView({ onComplete }: Props): React.ReactElement {
           {installStatusBlock}
 
           <p style={tagline}>Free forever · No ads · No strings · Data stays on your computer</p>
+
+          {/* BP085 — Membership nudge on onboarding final step */}
+          {!onboardingMemberNudgeDismissed && (
+            <div className="onboarding-member-nudge" style={{
+              background: 'rgba(6,95,70,0.12)',
+              border: '1px solid rgba(5,150,105,0.3)',
+              borderRadius: 8,
+              padding: '12px 14px',
+              marginBottom: 14,
+              textAlign: 'center',
+            }}>
+              <p style={{ margin: '0 0 8px', fontSize: 12, color: '#6ee7b7', lineHeight: 1.5 }}>
+                Want to do more? Join the cooperative for $5/yr.
+              </p>
+              <button
+                type="button"
+                className="member-cta-secondary"
+                onClick={handleMemberNudgeClick}
+                style={{
+                  background: 'linear-gradient(135deg, #065f46 0%, #047857 100%)',
+                  border: '1px solid #059669',
+                  borderRadius: 6,
+                  color: '#6ee7b7',
+                  fontSize: 12,
+                  fontWeight: 700,
+                  padding: '6px 14px',
+                  cursor: 'pointer',
+                  fontFamily: 'system-ui, sans-serif',
+                  outline: 'none',
+                  marginRight: 8,
+                }}
+              >
+                Become a Member · $5/yr
+              </button>
+              <button
+                type="button"
+                className="skip-link"
+                onClick={handleMemberNudgeDismiss}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#475569',
+                  fontSize: 11,
+                  cursor: 'pointer',
+                  fontFamily: 'system-ui, sans-serif',
+                  padding: 0,
+                  textDecoration: 'underline',
+                  textDecorationColor: 'rgba(71,85,105,0.4)',
+                }}
+              >
+                Maybe later
+              </button>
+            </div>
+          )}
 
           {/* Proof ghost link */}
           <div style={{ textAlign: 'center', borderTop: '1px solid rgba(100,116,139,0.12)', paddingTop: 14 }}>

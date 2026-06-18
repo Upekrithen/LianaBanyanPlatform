@@ -15,7 +15,7 @@
 // SEG-8: Guild Incentives footer with Marks tiers table.
 // SEG-9: Privacy — tokens via safeStorage (main process), never localStorage or renderer.
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { FAQCard } from './help/FAQCard';
 import { ConnectDiscordCard } from './help/ConnectDiscordCard';
 import { ConnectRedditCard } from './help/ConnectRedditCard';
@@ -23,6 +23,21 @@ import { ComingSoonCard } from './help/ComingSoonCard';
 import { GuildIncentivesFooter } from './help/GuildIncentivesFooter';
 
 const LS_MARKS_KEY = 'mnemo_help_marks_earned';
+
+async function openMembershipCheckout(onError?: (msg: string) => void): Promise<void> {
+  try {
+    const result = await window.amplify?.openMembershipCheckout?.();
+    if (!result) {
+      window.open('https://lianabanyan.com/join?source=mnemosynec-app', '_blank', 'noopener');
+      return;
+    }
+    if (!result.ok) {
+      onError?.(`Couldn't open membership page: ${result.error ?? 'unknown error'}`);
+    }
+  } catch {
+    onError?.('Membership page could not open. Please visit lianabanyan.com/join');
+  }
+}
 
 function loadLocalMarks(): number {
   return parseInt(localStorage.getItem(LS_MARKS_KEY) ?? '0', 10) || 0;
@@ -34,6 +49,27 @@ function saveLocalMarks(n: number) {
 
 export function LeanHelpTab() {
   const [marks, setMarks] = useState<number>(loadLocalMarks);
+  const [isMember, setIsMember] = useState<boolean>(false);
+  const [memberCtaToast, setMemberCtaToast] = useState<string | null>(null);
+
+  // Check local membership status
+  useEffect(() => {
+    window.amplify?.checkLocalMembershipStatus?.().then((r) => {
+      if (r?.is_member) setIsMember(true);
+    }).catch(() => {});
+    // Also listen for activation events
+    const unsub = window.amplify?.onMembershipActivated?.((result) => {
+      if (result.ok) setIsMember(true);
+    });
+    return () => { unsub?.(); };
+  }, []);
+
+  const handleMemberCtaClick = useCallback(() => {
+    void openMembershipCheckout((err) => {
+      setMemberCtaToast(err);
+      setTimeout(() => setMemberCtaToast(null), 4000);
+    });
+  }, []);
 
   const handleMarksAccrued = useCallback((delta: number) => {
     setMarks((prev) => {
@@ -119,6 +155,60 @@ export function LeanHelpTab() {
           why="Turn captured eblets into shareable Cue Cards. Move to the Advanced tab when you're ready to publish your knowledge."
           eta="v0.3.x"
         />
+
+        {/* BP085 — Membership CTA (hidden for existing members) */}
+        {!isMember && (
+          <section className="membership-cta-section" style={{
+            background: 'linear-gradient(135deg, #0a1f14 0%, #0f2318 100%)',
+            border: '1px solid #166534',
+            borderRadius: 8,
+            padding: '14px 16px',
+            marginBottom: 12,
+          }}>
+            <h3 style={{ margin: '0 0 6px', fontSize: 14, fontWeight: 700, color: '#d1fae5' }}>
+              Become a Member
+            </h3>
+            <p style={{ margin: '0 0 10px', fontSize: 12, color: '#6ee7b7', lineHeight: 1.5 }}>
+              Join the cooperative for <strong style={{ color: '#a7f3d0' }}>$5/yr</strong>. Members earn Marks,
+              vote on Guild decisions, and help each other help ourselves.
+            </p>
+            <button
+              className="member-cta-primary"
+              onClick={handleMemberCtaClick}
+              style={{
+                background: 'linear-gradient(135deg, #065f46 0%, #047857 100%)',
+                border: '1px solid #059669',
+                borderRadius: 6,
+                color: '#6ee7b7',
+                fontSize: 13,
+                fontWeight: 700,
+                padding: '8px 16px',
+                cursor: 'pointer',
+                fontFamily: 'system-ui, sans-serif',
+                outline: 'none',
+                width: '100%',
+              }}
+            >
+              Become a Member · $5/yr
+            </button>
+            {memberCtaToast && (
+              <p style={{ margin: '8px 0 0', fontSize: 11, color: '#fca5a5' }}>{memberCtaToast}</p>
+            )}
+          </section>
+        )}
+        {isMember && (
+          <section className="membership-status-section" style={{
+            background: 'rgba(6,95,70,0.15)',
+            border: '1px solid #065f46',
+            borderRadius: 8,
+            padding: '10px 14px',
+            marginBottom: 12,
+          }}>
+            <p style={{ margin: 0, fontSize: 12, color: '#6ee7b7' }}>
+              ✓ You are a member of the cooperative.
+            </p>
+          </section>
+        )}
 
         {/* Guild Incentives footer — SEG-8 */}
         <GuildIncentivesFooter />
