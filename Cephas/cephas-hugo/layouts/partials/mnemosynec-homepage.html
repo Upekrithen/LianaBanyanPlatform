@@ -1,18 +1,18 @@
-{{/* ═══════════════════════════════════════════════════════
-     MNEMOSYNEC HOMEPAGE — v0.1.60.3
+﻿{{/* ═══════════════════════════════════════════════════════
+     MNEMOSYNEC HOMEPAGE · v0.1.60.3
      BP081 SEG-1 through SEG-8 all applied here.
      Dispatcher: layouts/index.html (isMnemosynec guard)
      ═══════════════════════════════════════════════════════ */}}
 <style>
 /* ════════════════════════════════════════════════════════
-   HOMEPAGE SHELL — full-bleed dark page, no horizontal scroll
+   HOMEPAGE SHELL · full-bleed dark page, no horizontal scroll
    BP081 UX CANON: NEVER SCROLL SIDEWAYS
    ════════════════════════════════════════════════════════ */
 :root { --mn-card-gap: 1.5rem; }
 .main { max-width:100% !important; padding:0 !important; margin:0 !important; overflow-x:hidden !important; }
 html, body { overflow-x:hidden !important; max-width:100% !important; background:#0a1628 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.06'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat; }
 
-/* Hide PaperMod default footer — custom footer below handles copyright (SEG-8) */
+/* Hide PaperMod default footer · custom footer below handles copyright (SEG-8) */
 footer.footer { display: none !important; }
 
 .mn-hp-page {
@@ -78,7 +78,7 @@ footer.footer { display: none !important; }
   .mn-hero-grid__mascot { order: -1; margin-bottom: 0.5rem; }
   .mn-hero-grid__mascot img { width: 110px; }
 }
-/* SEG-2: Hero top row — heading + mascot */
+/* SEG-2: Hero top row · heading + mascot */
 .mn-hero-top-row {
   display: grid;
   grid-template-columns: 1fr auto;
@@ -101,7 +101,7 @@ footer.footer { display: none !important; }
   .mn-hero-top-row__mascot img { width: 110px; }
 }
 .mn-hero-body { width: 100%; }
-/* v0.1.60.8 SEG-1: mn-hero-block — subtitle+button in LEFT col, mascot in RIGHT col */
+/* v0.1.60.8 SEG-1: mn-hero-block · subtitle+button in LEFT col, mascot in RIGHT col */
 .mn-hero-block {
   display: grid;
   grid-template-columns: 1fr auto;
@@ -178,7 +178,7 @@ footer.footer { display: none !important; }
   transform: translateY(-2px);
   box-shadow: 0 10px 32px rgba(56,161,105,0.5);
 }
-/* Download button state machine — v0.1.60.11 */
+/* Download button state machine · v0.1.60.11 */
 .mn-v2-dl-btn[data-state="downloading"] {
   background: #c9a84c !important;
   border-color: #c9a84c !important;
@@ -197,13 +197,7 @@ footer.footer { display: none !important; }
   0%, 100% { box-shadow: 0 6px 24px rgba(201, 168, 76, 0.35); }
   50%      { box-shadow: 0 10px 40px rgba(201, 168, 76, 0.7); }
 }
-.mn-hp-nav-links {
-  text-align: center;
-  font-size: 0.9rem;
-  margin: 0.7rem 0 0.3rem !important;
-  color: rgba(250,245,235,0.65) !important;
-}
-.mn-hp-nav-links a { color: #d69e2e !important; font-size: 0.88rem; }
+
 .mn-v2-hero-tagline {
   margin-top: 0.5rem !important;
   font-size: 0.82rem !important;
@@ -212,7 +206,7 @@ footer.footer { display: none !important; }
   letter-spacing: 0.03em;
 }
 
-/* First-session explainer — collapsed click-expand (v0.1.60.6 SEG-2) */
+/* First-session explainer · collapsed click-expand (v0.1.60.6 SEG-2) */
 .mn-first-session {
   background: rgba(56,161,105,0.07);
   border: 1px solid rgba(56,161,105,0.28);
@@ -322,7 +316,7 @@ footer.footer { display: none !important; }
 /* ── DIVIDER ── */
 .mn-v2-divider { border: none; border-top: 1px solid rgba(214,158,46,0.12); margin: 1.8rem 0; }
 
-/* ── SEG-6: PINNED PROOFS ACCORDIONS — NEVER SCROLL SIDEWAYS ── */
+/* ── SEG-6: PINNED PROOFS ACCORDIONS · NEVER SCROLL SIDEWAYS ── */
 .mn-proofs-accordion-section {
   margin: var(--mn-card-gap) 0;
   padding: 1.5rem 1.8rem 1.5rem;
@@ -342,7 +336,7 @@ footer.footer { display: none !important; }
   font-style: italic;
   margin: 0 0 1.1rem;
 }
-/* Accordion rows — vertical only, no horizontal scroll ever */
+/* Accordion rows · vertical only, no horizontal scroll ever */
 .mn-proof-accordion {
   border: 1px solid rgba(214,158,46,0.2);
   border-radius: 10px;
@@ -395,11 +389,11 @@ footer.footer { display: none !important; }
 }
 .mn-proof-accordion__body p { margin: 0 0 0.7rem; }
 .mn-proof-accordion__body p:last-child { margin-bottom: 0; }
-/* Thumbnails — horizontal wrap, NEVER scroll sideways (BP081 HARD BINDING) */
+/* Thumbnails · horizontal wrap, NEVER scroll sideways (BP081 HARD BINDING) */
 .mn-proof-screenshots {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;  /* wraps to next line on small screens — NEVER overflow-x: scroll */
+  flex-wrap: wrap;  /* wraps to next line on small screens · NEVER overflow-x: scroll */
   gap: 0.8rem;
   margin: 1rem 0;
 }
@@ -596,7 +590,7 @@ footer.footer { display: none !important; }
   .mn-install-card__mascot img { width: 70px; }
 }
 
-/* v0.1.60.7 SEG-3: Substrate Teal — consistent click-discovery color for anchor jumps to HOW IT WORKS */
+/* v0.1.60.7 SEG-3: Substrate Teal · consistent click-discovery color for anchor jumps to HOW IT WORKS */
 .mn-hero-substrate-link,
 .mn-cheap-how-link {
   color: #5DBCD1 !important;
@@ -616,7 +610,35 @@ footer.footer { display: none !important; }
 /* v0.1.60.6: Smooth scroll for anchor navigation */
 html { scroll-behavior: smooth; }
 
-/* ── Footer (SEG-8) — single copyright via extend_footer.html for all pages ── */
+/* Hero join CTA · subordinate to download button, stacks vertically on mobile */
+.mn-hero-join-cta-wrap {
+  margin-top: 0.6rem;
+}
+.hero-join-cta {
+  display: inline-block;
+  background: transparent;
+  color: #d69e2e !important;
+  border: 1px solid rgba(214,158,46,0.5) !important;
+  border-bottom: 1px solid rgba(214,158,46,0.5) !important;
+  border-radius: 8px;
+  padding: 0.5rem 1.4rem;
+  font-size: clamp(0.85rem, 2vw, 0.95rem);
+  font-weight: 600;
+  text-decoration: none !important;
+  letter-spacing: 0.01em;
+  transition: background 0.15s ease, border-color 0.15s ease;
+  white-space: nowrap;
+}
+.hero-join-cta:hover {
+  background: rgba(214,158,46,0.1);
+  border-color: rgba(214,158,46,0.85) !important;
+  color: #d69e2e !important;
+}
+@media (max-width: 720px) {
+  .hero-join-cta { display: block; text-align: center; white-space: normal; }
+}
+
+/* ── Footer (SEG-8) · single copyright via extend_footer.html for all pages ── */
 
 /* v0.1.61.0 SEG-1: Real proof thumbnails */
 .mn-proof-thumb-link {
@@ -656,29 +678,29 @@ html { scroll-behavior: smooth; }
 <div class="mn-v2-wrap">
 
   <!-- ═══════════════════════════════════════════════
-       HERO — Amnesia/Cure + SEG-1 bullets + SEG-2 green Download + nav
+       HERO · Amnesia/Cure + SEG-1 bullets + SEG-2 green Download + nav
        ═══════════════════════════════════════════════ -->
   <section class="mn-v2-hero" aria-label="MnemosyneC hero">
     <div class="mn-v2-hero-card">
-<!-- mn-hero-block: 2-col grid — LEFT: h1+subtitle+button, RIGHT: mascot -->
+<!-- mn-hero-block: 2-col grid · LEFT: h1+subtitle+button, RIGHT: mascot -->
 <div class="mn-hero-block">
   <div class="mn-hero-left">
-    <h1>Your AI has Amnesia.<br>Dr.&nbsp;MnemosyneC&trade; has the Cure.<br><a href="/how-to-read-the-substrate/" class="mn-hero-substrate-link">Substrate.</a></h1>
+    <h1>Your AI has Amnesia.<br>Dr.&nbsp;MnemosyneC has the Cure.&nbsp;<a href="/how-to-read-the-substrate/" class="mn-hero-substrate-link">Substrate.</a></h1>
 
     <p>Every time you start a new session, your AI forgets everything. Your projects, your preferences, your past conversations, gone. Dr.&nbsp;MnemosyneC gives your AI a permanent, private memory that actually stays.</p>
 
     <div class="mn-hero-download-block">
-      <a class="mn-v2-dl-btn"
+      <button class="mn-v2-dl-btn"
          id="mn-hero-dl-btn"
-         href="{{ .Site.Data.version.download_url }}"
-         download="MnemosyneC-Setup-{{ .Site.Data.version.version }}.exe"
+         data-installer-url="{{ .Site.Data.version.download_url }}"
          data-version="{{ .Site.Data.version.version }}"
          data-label-idle="&#8595;&nbsp; Download for Windows v{{ .Site.Data.version.version }}"
          data-label-downloading="&#8987;&nbsp; DOWNLOADING... one moment please"
          data-label-downloaded="&#10003;&nbsp; DOWNLOADED v{{ .Site.Data.version.version }}"
+         aria-live="polite"
          aria-label="Download MnemosyneC {{ .Site.Data.version.version }} for Windows">
         &#8595;&nbsp; Download for Windows v{{ .Site.Data.version.version }}
-      </a>
+      </button>
       <p class="dl-fallback" style="font-size:0.82em; color:rgba(250,245,235,0.45); margin:0.3rem 0 0.15rem;">
         Download not starting? <a href="https://github.com/liana-banyan/mnemosyne/releases/download/v{{ .Site.Data.version.version }}/MnemosyneC-Setup-{{ .Site.Data.version.version }}.exe" style="color:rgba(214,158,46,0.7);">Try the GitHub mirror</a>
       </p>
@@ -692,6 +714,54 @@ html { scroll-behavior: smooth; }
          width="220" height="220"
          loading="eager">
     <p class="mn-hero-grid__mascot-caption">Dr.&nbsp;MnemosyneC<br>Memory specialist</p>
+    <div class="mn-share-widget" style="margin-top:1rem;text-align:center;">
+  <h4 style="font-size:1rem;font-weight:600;margin-bottom:0.5rem;color:var(--mn-text,#e2e8f0);">Share This</h4>
+  <form id="mn-share-form" onsubmit="mnShareSubmit(event)" style="display:flex;flex-direction:column;gap:0.5rem;align-items:center;max-width:280px;margin:0 auto;">
+    <input
+      id="mn-share-email"
+      type="text"
+      placeholder="Enter Email to Share To"
+      aria-label="Email address to share to"
+      autocomplete="email"
+      style="width:100%;padding:0.5rem 0.75rem;border-radius:6px;border:1px solid var(--mn-border,#334155);background:var(--mn-input-bg,#1e293b);color:var(--mn-text,#e2e8f0);font-size:0.875rem;"
+      oninput="if(this.value.includes('@')){this.type='email';}"
+    />
+    <button type="submit" style="padding:0.5rem 1.25rem;background:#22c55e;color:#000;border:none;border-radius:6px;font-weight:600;cursor:pointer;font-size:0.875rem;">Share &rarr;</button>
+    <small style="color:var(--mn-muted,#64748b);font-size:0.75rem;">(Sends from Dr. Mnemosynec)</small>
+    <div id="mn-share-status" style="font-size:0.8rem;min-height:1.2em;"></div>
+  </form>
+</div>
+<script>
+function mnShareSubmit(e) {
+  e.preventDefault();
+  var email = document.getElementById('mn-share-email').value.trim();
+  var status = document.getElementById('mn-share-status');
+  if (!email || !email.includes('@')) {
+    status.textContent = 'Please enter a valid email address.';
+    status.style.color = '#f87171';
+    return;
+  }
+  status.textContent = 'Sending\u2026';
+  status.style.color = '#94a3b8';
+  fetch('https://ruuxzilgmuwddcofqecc.supabase.co/functions/v1/share-from-mnemosynec', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({recipient_email: email})
+  }).then(function(r){ return r.json(); }).then(function(data){
+    if (data.ok) {
+      status.textContent = '\u2713 Sent! Check their inbox.';
+      status.style.color = '#22c55e';
+      document.getElementById('mn-share-email').value = '';
+    } else {
+      status.textContent = 'Error: ' + (data.error || 'try again');
+      status.style.color = '#f87171';
+    }
+  }).catch(function(){
+    status.textContent = 'Network error \u2014 try again';
+    status.style.color = '#f87171';
+  });
+}
+</script>
   </div>
 </div><!-- /mn-hero-block -->
 
@@ -702,22 +772,6 @@ html { scroll-behavior: smooth; }
   FREE (SSPL license) to use FOREVER. No Ads. No Strings.<br>
   Optionally join the <a href="https://lianabanyan.com/papers/universal-prosperity/" target="_blank" rel="noopener">Cooperative Universal Substrate</a>&trade; for $5 a year. Not required.</p>
 
-  <!-- Nav links stay at bottom of hero card (above first-session box) -->
-  <p class="mn-hp-nav-links">
-    <a href="/install/">Install guide</a>
-    &nbsp;&middot;&nbsp;
-    <a href="/how-it-works/">How it works</a>
-    &nbsp;&middot;&nbsp;
-    <a href="/proofs/">All proofs</a>
-    &nbsp;&middot;&nbsp;
-    <a href="/diagnosis/">The Diagnosis</a>
-    &nbsp;&middot;&nbsp;
-    <a href="/constellation/">Constellation</a>
-    &nbsp;&middot;&nbsp;
-    <a href="/about/">About</a>
-    &nbsp;&middot;&nbsp;
-    <a href="/community/">Community</a>
-  </p>
 
 </div><!-- /mn-hero-body-fullwidth -->
 
@@ -738,16 +792,16 @@ html { scroll-behavior: smooth; }
   </section>
 
   <!-- ═══════════════════════════════════════════════
-       SEG-3: Does It Actually Work? — SECOND (moved up)
+       SEG-3: Does It Actually Work? · SECOND (moved up)
        ═══════════════════════════════════════════════ -->
   <section class="mn-v2-chart-section" aria-labelledby="mn-hp-chart-title" id="does-it-actually-work">
-    <!-- SEG-4 BP083: Just Add Salt — sub-headline placed here per Founder direct (not full hero) -->
+    <!-- SEG-4 BP083: Just Add Salt · sub-headline placed here per Founder direct (not full hero) -->
     <p style="font-weight:700; font-size:1rem; color:#faf5eb; margin:0 0 0.4rem;">Just Add Salt. How to Get the Right Answer.</p>
     <p style="font-size:0.92rem; color:rgba(250,245,235,0.75); margin:0 0 1.1rem; line-height:1.75;">The cooperative-class architecture for local-first AI that works at <strong>97.1%</strong> on the canonical 70-question MMLU-Pro benchmark &middot; on consumer hardware &middot; with no paid API keys &middot; empirically reproducible.</p>
     <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem; margin:0 0 0.3rem;">
       <h2 id="mn-hp-chart-title" style="margin:0;">Does It Actually Work?</h2>
-      <a href="https://github.com/liana-banyan/lb-reproducibility-pack#quick-start"
-         class="prove-it-pill" target="_blank" rel="noopener">PROVE IT YOURSELF</a>
+      <!-- removed: private repo link -->
+      <span class="prove-it-pill">PROVE IT YOURSELF</span>
     </div>
     <p class="mn-v2-chart-subtitle">75 questions &middot; 4 AI vendors &middot; real test run 2026-05-30. No tricks.</p>
 
@@ -834,7 +888,7 @@ html { scroll-behavior: smooth; }
   </section>
 
   <!-- ═══════════════════════════════════════════════
-       SEG-4: Good Fast Cheap — blue card with green checkmarks
+       SEG-4: Good Fast Cheap · blue card with green checkmarks
        (Founder: "Replace the right side with the left side version")
        ═══════════════════════════════════════════════ -->
   <section aria-label="Good Fast Cheap Private Free Yours" id="six-pillars" style="margin:1.5rem 0;">
@@ -879,7 +933,7 @@ html { scroll-behavior: smooth; }
   </section>
 
   <!-- ═══════════════════════════════════════════════
-       SEG-6: Pinned Proofs — expandable accordions
+       SEG-6: Pinned Proofs · expandable accordions
        HARD BINDING: NEVER SCROLL SIDEWAYS (BP081)
        Screenshots stack VERTICALLY
        ═══════════════════════════════════════════════ -->
@@ -898,12 +952,12 @@ html { scroll-behavior: smooth; }
         <p>A routine update wiped connectors. A hook-script deletion blocked every prompt. The AI service returned overload errors. Three simultaneous infrastructure failures. The substrate held.</p>
         <p>&#10003; Zero work lost</p>
 
-        <!-- v0.1.61.0 SEG-1: Real storm test hero shots — 3-arc BEGIN/MIDDLE/END -->
+        <!-- v0.1.61.0 SEG-1: Real storm test hero shots · 3-arc BEGIN/MIDDLE/END -->
         <div class="mn-proof-screenshots" role="list">
           <!-- BEGIN: Tornado Warning -->
           <a class="mn-proof-thumb-link" href="javascript:void(0)"
              data-zoom-src="/img/proofs/storm/01_begin_tornado_warning.jpg"
-             aria-label="Expand: Tornado warning radar — proof BEGIN"
+             aria-label="Expand: Tornado warning radar · proof BEGIN"
              role="listitem">
             <img src="/img/proofs/storm/01_begin_tornado_warning.jpg"
                  alt="A real tornado warning. Then three systems broke at once."
@@ -913,7 +967,7 @@ html { scroll-behavior: smooth; }
           <!-- MIDDLE: Substrate held -->
           <a class="mn-proof-thumb-link" href="javascript:void(0)"
              data-zoom-src="/img/proofs/storm/02_middle_substrate_held.png"
-             aria-label="Expand: System broken, work continued — proof MIDDLE"
+             aria-label="Expand: System broken, work continued · proof MIDDLE"
              role="listitem">
             <img src="/img/proofs/storm/02_middle_substrate_held.png"
                  alt="System broken underneath. Work continued anyway."
@@ -923,7 +977,7 @@ html { scroll-behavior: smooth; }
           <!-- END: Zero work lost -->
           <a class="mn-proof-thumb-link" href="javascript:void(0)"
              data-zoom-src="/img/proofs/storm/03_end_zero_work_lost.png"
-             aria-label="Expand: Tally confirmed, zero work lost — proof END"
+             aria-label="Expand: Tally confirmed, zero work lost · proof END"
              role="listitem">
             <img src="/img/proofs/storm/03_end_zero_work_lost.png"
                  alt="Tally confirmed. Everything recovered. Zero work lost."
@@ -932,7 +986,7 @@ html { scroll-behavior: smooth; }
           </a>
         </div>
 
-        <p class="mn-proof-more"><a href="/proofs/storm/" target="_blank" rel="noopener">More — full audit trail &rarr;</a></p>
+        <p class="mn-proof-more"><a href="/proofs/storm/" target="_blank" rel="noopener">More · full audit trail &rarr;</a></p>
         <p class="mn-proof-accordion__receipt">Receipt: BP071 close stamp &rarr;</p>
       </div>
     </details>
@@ -963,7 +1017,7 @@ html { scroll-behavior: smooth; }
           </div>
         </div>
 
-        <p class="mn-proof-more"><a href="/proofs/mesh/" target="_blank" rel="noopener">More — full audit trail &rarr;</a></p>
+        <p class="mn-proof-more"><a href="/proofs/mesh/" target="_blank" rel="noopener">More · full audit trail &rarr;</a></p>
         <p class="mn-proof-accordion__receipt">Receipt: Asteroid-ProofVault/MESH_6_RECEIPT_BP063.md &rarr;</p>
       </div>
     </details>
@@ -994,7 +1048,7 @@ html { scroll-behavior: smooth; }
           </div>
         </div>
 
-        <p class="mn-proof-more"><a href="/proofs/benchmark/" target="_blank" rel="noopener">More — full audit trail &rarr;</a></p>
+        <p class="mn-proof-more"><a href="/proofs/benchmark/" target="_blank" rel="noopener">More · full audit trail &rarr;</a></p>
         <p class="mn-proof-accordion__receipt">Receipt: Benchmark R10 &middot; BP065 &rarr;</p>
       </div>
     </details>
@@ -1002,13 +1056,13 @@ html { scroll-behavior: smooth; }
   </section>
 
   <!-- ═══════════════════════════════════════════════
-       SEG-5 + SEG-7: HOW IT WORKS — Combined card
+       SEG-5 + SEG-7: HOW IT WORKS · Combined card
        "The Substrate Is the Asset" + "How We Make Sure Things Are True"
        ═══════════════════════════════════════════════ -->
   <section class="mn-substrate-card" id="how-it-works" aria-labelledby="mn-substrate-title">
     <h2 id="mn-substrate-title">HOW IT WORKS &mdash; The Substrate Persistent Memory Is the Asset &middot; How We Make Sure Things Are True &amp; Quickly &amp; Cheaply Accessed.</h2>
 
-    <!-- v0.1.60.7 SEG-2: LONG preamble — Founder direct verbatim ("you're" → "you'll" typo corrected per Bishop Truth-Always flag) -->
+    <!-- v0.1.60.7 SEG-2: LONG preamble · Founder direct verbatim ("you're" → "you'll" typo corrected per Bishop Truth-Always flag) -->
     <p>That free local model answers at $0 a call. With our Patented Substrace Theorem, you will get the correct answer, in time, and if you or anyone else in the Cooperative Substrate ever asked it before - you'll get the answer FAST and FREE. The Mesh Frontier&trade; runs on hardware every user already owns. No new data center needed, since this makes existing data centers 95% cheaper, more efficient, AND more accurate! A third option to the Data Center Dilemma&trade;.</p>
 
     <p>MnemosyneC has three layers. Each does one thing well. Click any row to expand.</p>
@@ -1073,12 +1127,12 @@ html { scroll-behavior: smooth; }
        Economy + Get Started + About
        ═══════════════════════════════════════════════ -->
   <!-- ═══════════════════════════════════════════════
-       SEG-7: "One quick thing" card — replaces Get Started
+       SEG-7: "One quick thing" card · replaces Get Started
        Dr. MnemosyneC + Download button on right, content below
        ═══════════════════════════════════════════════ -->
   <section aria-label="Install instructions" style="margin:1.5rem 0;">
     <div class="mn-install-card">
-      <!-- TOP ROW: mascot on left, download button on right — button does NOT exceed mascot head height -->
+      <!-- TOP ROW: mascot on left, download button on right · button does NOT exceed mascot head height -->
       <div class="mn-install-card__top">
         <div class="mn-install-card__mascot" aria-hidden="true">
           <img src="/img/mascots/dr-mnemosynec.png"
@@ -1088,17 +1142,17 @@ html { scroll-behavior: smooth; }
         </div>
         <div class="mn-install-card__dl">
           <div>
-            <a class="mn-v2-dl-btn mn-v2-dl-btn--install"
+            <button class="mn-v2-dl-btn mn-v2-dl-btn--install"
                id="mn-install-dl-btn"
-               href="{{ .Site.Data.version.download_url }}"
-               download="MnemosyneC-Setup-{{ .Site.Data.version.version }}.exe"
+               data-installer-url="{{ .Site.Data.version.download_url }}"
                data-version="{{ .Site.Data.version.version }}"
                data-label-idle="&#8595;&nbsp; Download for Windows v{{ .Site.Data.version.version }}"
                data-label-downloading="&#8987;&nbsp; DOWNLOADING... one moment please"
                data-label-downloaded="&#10003;&nbsp; DOWNLOADED v{{ .Site.Data.version.version }}"
+               aria-live="polite"
                aria-label="Download MnemosyneC {{ .Site.Data.version.version }} for Windows">
               &#8595;&nbsp; Download for Windows v{{ .Site.Data.version.version }}
-            </a>
+            </button>
             <p class="dl-fallback" style="font-size:0.78em; color:rgba(250,245,235,0.4); margin:0.3rem 0 0; text-align:center;">
               Download not starting? <a href="https://github.com/liana-banyan/mnemosyne/releases/download/v{{ .Site.Data.version.version }}/MnemosyneC-Setup-{{ .Site.Data.version.version }}.exe" style="color:rgba(214,158,46,0.65);">Try the GitHub mirror</a>
             </p>
@@ -1158,7 +1212,7 @@ html { scroll-behavior: smooth; }
     <button class="mn-lightbox__close" onclick="document.getElementById('mn-lightbox').classList.remove('open')" aria-label="Close">&times;</button>
     <div class="mn-lightbox__img">
       <img id="mn-lightbox-img" class="mn-lightbox__real-img" src="" alt="" style="max-width:100%;height:auto;border-radius:8px;display:none;">
-      <div id="mn-lightbox-placeholder" style="padding:2rem 3rem; background:rgba(10,22,40,0.9); border:1px dashed rgba(214,158,46,0.3); border-radius:8px; color:rgba(250,245,235,0.5); font-size:0.9rem; font-style:italic;">Screenshot pending — Founder to provide</div>
+      <div id="mn-lightbox-placeholder" style="padding:2rem 3rem; background:rgba(10,22,40,0.9); border:1px dashed rgba(214,158,46,0.3); border-radius:8px; color:rgba(250,245,235,0.5); font-size:0.9rem; font-style:italic;">Screenshot pending · Founder to provide</div>
     </div>
     <p class="mn-lightbox__caption" id="mn-lightbox-caption"></p>
   </div>
@@ -1227,43 +1281,88 @@ html { scroll-behavior: smooth; }
 })();
 </script>
 <script>
-/* Download button state machine — v0.1.60.11 */
-(function(){
-  var btns = document.querySelectorAll('.mn-v2-dl-btn');
-  if (!btns.length) return;
-  btns.forEach(function(btn){
-    if (!btn.dataset.labelIdle) return;
-    btn.addEventListener('click', function(e){
-      if (btn.dataset.state === 'downloading' || btn.dataset.state === 'downloaded') return;
-      btn.dataset.state = 'downloading';
-      btn.textContent = '';
-      var span = document.createElement('span');
-      span.innerHTML = btn.dataset.labelDownloading;
-      btn.appendChild(span);
-      /* Preserve href + download attr so native browser download fires */
-      if (window.__mnDiag) {
-        window.__mnDiag.lastClick = new Date().toISOString();
-        window.__mnDiag.lastHref = btn.href;
-        window.__mnDiag.stateMachineBound = true;
-        window.__mnDiag.render && window.__mnDiag.render();
+/* Download button state machine · v0.2.0 fetch+Blob (BP086 SEG-D1) */
+function triggerDownload(btn, installerUrl) {
+  if (btn.dataset.state === 'downloading') return;
+  btn.dataset.state = 'downloading';
+  btn.textContent = '';
+  var span = document.createElement('span');
+  span.innerHTML = btn.dataset.labelDownloading;
+  btn.appendChild(span);
+  if (window.__mnDiag) {
+    window.__mnDiag.lastClick = new Date().toISOString();
+    window.__mnDiag.lastHref = installerUrl;
+    window.__mnDiag.stateMachineBound = true;
+    window.__mnDiag.render && window.__mnDiag.render();
+  }
+  fetch(installerUrl)
+    .then(function(response) {
+      var contentLength = response.headers.get('Content-Length');
+      var total = contentLength ? parseInt(contentLength, 10) : null;
+      var loaded = 0;
+      var chunks = [];
+      var reader = response.body.getReader();
+      function read() {
+        return reader.read().then(function(result) {
+          if (result.done) {
+            var blob = new Blob(chunks);
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url;
+            a.download = installerUrl.split('/').pop();
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            btn.dataset.state = 'downloaded';
+            btn.textContent = '';
+            var span2 = document.createElement('span');
+            span2.innerHTML = btn.dataset.labelDownloaded;
+            btn.appendChild(span2);
+            btn.setAttribute('aria-live', 'polite');
+            setTimeout(function() {
+              delete btn.dataset.state;
+              btn.textContent = '';
+              var s = document.createElement('span');
+              s.innerHTML = btn.dataset.labelIdle;
+              btn.appendChild(s);
+            }, 30000);
+            return;
+          }
+          chunks.push(result.value);
+          loaded += result.value.length;
+          if (total) {
+            var pct = Math.round(loaded / total * 100);
+            btn.textContent = 'Downloading\u2026 ' + pct + '%';
+          } else {
+            var mb = (loaded / 1048576).toFixed(1);
+            btn.textContent = 'Downloading\u2026 ' + mb + ' MB';
+          }
+          return read();
+        });
       }
-      setTimeout(function(){
-        btn.dataset.state = 'downloaded';
-        btn.textContent = '';
-        var span2 = document.createElement('span');
-        span2.innerHTML = btn.dataset.labelDownloaded;
-        btn.appendChild(span2);
-        setTimeout(function(){
-          delete btn.dataset.state;
-          btn.textContent = '';
-          var span3 = document.createElement('span');
-          span3.innerHTML = btn.dataset.labelIdle;
-          btn.appendChild(span3);
-        }, 30000);
-      }, 8000);
+      return read();
+    })
+    .catch(function(err) {
+      console.error('Download failed:', err);
+      btn.dataset.state = '';
+      btn.textContent = '';
+      var span3 = document.createElement('span');
+      span3.textContent = 'Download failed \u2014 retry';
+      btn.appendChild(span3);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  ['mn-hero-dl-btn', 'mn-install-dl-btn'].forEach(function(id) {
+    var btn = document.getElementById(id);
+    if (!btn) return;
+    btn.setAttribute('aria-live', 'polite');
+    btn.addEventListener('click', function() {
+      triggerDownload(btn, btn.dataset.installerUrl);
     });
   });
-})();
+});
 </script>
 
 <!-- SEG-4 BP082: ?diag=1 download diagnostic console -->
@@ -1274,12 +1373,12 @@ html { scroll-behavior: smooth; }
   </div>
   <div id="mn-diag-body">Loading...</div>
   <hr style="border-color:#1e2a38; margin:8px 0;">
-  <div style="color:#94a3b8; margin-bottom:6px;">Static fallback (no JS — pure anchor):</div>
+  <div style="color:#94a3b8; margin-bottom:6px;">Static fallback (no JS · pure anchor):</div>
   <a id="mn-diag-fallback-link"
      href="{{ .Site.Data.version.download_url }}"
      download="MnemosyneC-Setup-{{ .Site.Data.version.version }}.exe"
      style="color:#6ee7b7; text-decoration:underline;">
-    ↓ Direct download link (no JavaScript — if this works, the issue is the state machine)
+    ↓ Direct download link (no JavaScript · if this works, the issue is the state machine)
   </a>
 </div>
 
@@ -1299,8 +1398,8 @@ html { scroll-behavior: smooth; }
       el.innerHTML = [
         '<div>Browser: ' + navigator.userAgent.substring(0,80) + '...</div>',
         '<div>Page version: v' + this.version + '</div>',
-        '<div>Button href: ' + (btn ? (btn.href || '<em>EMPTY — template may not have resolved</em>') : '<em>button not found</em>') + '</div>',
-        '<div>download attr: ' + (btn ? (btn.getAttribute('download') || '<em>missing</em>') : '<em>n/a</em>') + '</div>',
+        '<div>Button installer-url: ' + (btn ? (btn.dataset.installerUrl || '<em>EMPTY · template may not have resolved</em>') : '<em>button not found</em>') + '</div>',
+        '<div>fetch+Blob mode: <span style="color:#6ee7b7">BP086 SEG-D1</span></div>',
         '<div>State machine bound: ' + (this.stateMachineBound ? '<span style="color:#6ee7b7">YES</span>' : '<span style="color:#f87171">NO</span>') + '</div>',
         '<div>Last click: ' + (this.lastClick ? this.lastClick + ' → href was: ' + (this.lastHref||'n/a') : '<em>never clicked</em>') + '</div>',
         '<div>Content-Disposition fix: deployed v0.2.0-diag (BP082 SEG-5)</div>',

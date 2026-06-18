@@ -92,9 +92,9 @@ export function LeanHelpTab() {
           </p>
           <p style={{ fontSize: 12, color: '#64748b', background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.15)', borderRadius: 8, padding: '10px 14px', lineHeight: 1.6, margin: '4px 0 4px' }}>
             MnemosyneC finds answers through <strong style={{ color: '#e2e8f0' }}>three salt layers</strong>:{' '}
-            <strong>(1) Substrate Salt</strong> — verified eblets grown locally via canonical pipeline (what your machine already knows);{' '}
-            <strong>(2) Federation Salt</strong> — Constellation peers share verified knowledge across the mesh;{' '}
-            <strong>(3) Human Salt</strong> — The Diagnosis broadcasts to human Members when machines alone can&apos;t find the answer.{' '}
+            <strong>(1) Substrate Salt</strong> · verified eblets grown locally via canonical pipeline (what your machine already knows);{' '}
+            <strong>(2) Federation Salt</strong> · Constellation peers share verified knowledge across the mesh;{' '}
+            <strong>(3) Human Salt</strong> · The Diagnosis broadcasts to human Members when machines alone can&apos;t find the answer.{' '}
             <em style={{ color: '#475569' }}>Substrate Salt + Federation Salt + Human Salt = Right Answer.</em>
           </p>
         </div>
@@ -140,13 +140,13 @@ export function LeanHelpTab() {
         <ComingSoonCard
           icon="🌐"
           name="Chrome Browser Extension"
-          why="Use ChatGPT, Claude.ai, Gemini, or any AI you already use in your browser — MnemosyneC adds a Save-to-Substrate button to every response. Your Marks accrue as you capture."
+          why="Use ChatGPT, Claude.ai, Gemini, or any AI you already use in your browser · MnemosyneC adds a Save-to-Substrate button to every response. Your Marks accrue as you capture."
           eta="v0.2.x"
         />
         <ComingSoonCard
           icon="🦅"
           name="Perplexity (Pawn) Filter"
-          why="Pawn has no MCP. We built the filter as a content-script overlay — same pattern as Discord and Reddit. Capture the answers worth keeping."
+          why="Pawn has no MCP. We built the filter as a content-script overlay · same pattern as Discord and Reddit. Capture the answers worth keeping."
           eta="v0.2.x"
         />
         <ComingSoonCard

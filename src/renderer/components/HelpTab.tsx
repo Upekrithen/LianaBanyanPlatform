@@ -120,7 +120,7 @@ function HelpTabInner() {
         // Load existing messages
         const loadResult = await window.amplify?.helpLoadMessages?.({ limit: 50 });
         if (loadResult && 'error' in loadResult) {
-          setState(prev => ({ ...prev, loadError: `Could not load messages — ${loadResult.error}`, peerStatus: 'disconnected' }));
+          setState(prev => ({ ...prev, loadError: `Could not load messages · ${loadResult.error}`, peerStatus: 'disconnected' }));
         } else if (loadResult && Array.isArray(loadResult)) {
           setState(prev => ({
             ...prev,
@@ -134,7 +134,7 @@ function HelpTabInner() {
         if (subResult && 'error' in subResult) {
           setState(prev => ({
             ...prev,
-            error: 'Realtime connection failed — messages may be delayed',
+            error: 'Realtime reconnecting · messages may be delayed',
           }));
         } else {
           setState(prev => ({ ...prev, peerStatus: 'connected' }));
@@ -152,7 +152,7 @@ function HelpTabInner() {
         console.error('[HelpTab] init error:', err);
         setState(prev => ({
           ...prev,
-          loadError: `Initialization error — ${err instanceof Error ? err.message : String(err)}`,
+          loadError: `Initialization error · ${err instanceof Error ? err.message : String(err)}`,
           peerStatus: 'disconnected',
         }));
       }
@@ -203,7 +203,7 @@ function HelpTabInner() {
             setState(prev => ({
               ...prev,
               uploadingImage: false,
-              error: `Could not upload screenshot — ${reason}`,
+              error: `Could not upload screenshot · ${reason}`,
             }));
             return;
           }
@@ -218,7 +218,7 @@ function HelpTabInner() {
           setState(prev => ({
             ...prev,
             uploadingImage: false,
-            error: `Could not upload screenshot — ${err instanceof Error ? err.message : 'Upload failed'}`,
+              error: `Could not upload screenshot · ${err instanceof Error ? err.message : 'Upload failed'}`,
           }));
         }
         return; // Only handle first image per paste event
@@ -248,7 +248,7 @@ function HelpTabInner() {
         setState(prev => ({
           ...prev,
           sending: false,
-          error: `Could not send message — ${reason ?? 'check connection'}`,
+          error: `Could not send message · ${reason ?? 'check connection'}`,
         }));
         return;
       }
@@ -278,7 +278,7 @@ function HelpTabInner() {
       setState(prev => ({
         ...prev,
         sending: false,
-        error: `Could not send message — ${err instanceof Error ? err.message : 'check connection'}`,
+          error: `Could not send message · ${err instanceof Error ? err.message : 'check connection'}`,
       }));
     }
   }, [state]);
@@ -386,7 +386,7 @@ function HelpTabInner() {
               if (canSend) handleSend();
             }
           }}
-          placeholder="Type a message — or paste a screenshot (Ctrl+V)"
+          placeholder="Type a message · or paste a screenshot (Ctrl+V)"
           rows={4}
           disabled={sending}
         />

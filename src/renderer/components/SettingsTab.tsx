@@ -12,6 +12,7 @@ import { LocFaqModal } from './LocFaqPanel';
 import { SkuUpgradePanel } from './SkuUpgradePanel';
 import { useLifecycleStage } from '../hooks/useLifecycleStage';
 import { ShareMnemosyneC } from './ShareMnemosyneC';
+import { SubstrateAwakensJoinPanel } from './SubstrateAwakensJoinPanel';
 
 interface SettingsTabProps {
   authState: AuthState | null;
@@ -116,7 +117,7 @@ function ChronosResearchPanel() {
           updated.consentEbletPath = result.ebletPath;
         }
       } catch (e) {
-        setWriteError('Could not write consent Eblet — check permissions.');
+        setWriteError('Could not write consent Eblet · check permissions.');
       }
       setConsent(updated);
       saveChronosConsent(updated);
@@ -136,7 +137,7 @@ function ChronosResearchPanel() {
         originalConsentTs: consent.consentTimestamp,
       });
     } catch (e) {
-      setWriteError('Revocation write failed — check permissions.');
+      setWriteError('Revocation write failed · check permissions.');
     }
     const cleared: ChronosConsent = {
       ...DEFAULT_CHRONOS_CONSENT,
@@ -171,7 +172,7 @@ function ChronosResearchPanel() {
               Chronos Research
             </div>
             <div style={cs.desc}>
-              Chronos Research lets your MnemosyneC help everyone — anonymously. You keep control. The cooperative gets smarter.{' '}
+              Chronos Research lets your MnemosyneC help everyone · anonymously. You keep control. The cooperative gets smarter.{' '}
               <button onClick={() => setShowModal(true)} style={{ ...cs.learnMoreBtn, display: 'inline' }}>
                 [Learn more]
               </button>
@@ -259,7 +260,7 @@ function ChronosResearchPanel() {
               <p>
                 <strong>Chronos</strong> is the Liana Banyan cooperative's research telemetry layer.
                 Every action you take (stamping, voting, composing recipes, etc.) carries a
-                timestamped, sha256-signed observation — the Chronos tab.
+                timestamped, sha256-signed observation · the Chronos tab.
               </p>
               <p>
                 When you opt in, anonymized versions of these observations are contributed to
@@ -1350,7 +1351,7 @@ export function SettingsTab({
         setUpdateStatus((s) => ({ ...s, checking: false }));
       }, 2500);
     } catch {
-      setUpdateStatus((s) => ({ ...s, checking: false, error: 'Update check failed — try again later.' }));
+      setUpdateStatus((s) => ({ ...s, checking: false, error: 'Update check failed · try again later.' }));
     }
   }
 
@@ -1811,7 +1812,7 @@ export function SettingsTab({
         <div style={s.sectionHeader}>Hardware Tier & Plow Model</div>
         <div style={{ fontSize: 10, color: '#475569', marginBottom: 10, lineHeight: 1.5 }}>
           MnemosyneC detects your system RAM and recommends the best local model for the Canonical Plow.
-          Lightweight machines (≤11 GB) default to gemma2:2b — no more failed Plows on low-RAM hardware.
+          Lightweight machines (≤11 GB) default to gemma2:2b · no more failed Plows on low-RAM hardware.
         </div>
         {!hwTier ? (
           <div style={{ fontSize: 11, color: '#475569', padding: '8px 0' }}>Detecting hardware…</div>
@@ -2139,6 +2140,9 @@ export function SettingsTab({
 
       {/* MCP Substrate Bridge */}
       <McpSubstrateBridgePanel />
+
+      {/* BP084 SEG-3 — Substrate Awakens Join Panel */}
+      <SubstrateAwakensJoinPanel />
 
       {/* Substrate Mode */}
       <section ref={setSectionRef('substrate') as React.RefCallback<HTMLElement>} style={s.section} id="settings-section-substrate">

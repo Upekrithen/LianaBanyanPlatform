@@ -362,7 +362,7 @@ export function LeanWelcomeView({ onComplete }: Props): React.ReactElement {
                 borderRadius: 6, color: '#94a3b8', cursor: 'pointer', fontSize: '0.8rem' }}
               onClick={handleSkip}
             >
-              Skip — I have Ollama already
+              Skip · I have Ollama already
             </button>
           </div>
         </div>
@@ -422,13 +422,13 @@ export function LeanWelcomeView({ onComplete }: Props): React.ReactElement {
             Dr. MnemosyneC has the Cure.
           </h2>
           <p style={{ ...mutedText, textAlign: 'center', marginBottom: 24 }}>
-            <em>(neh-MOZ-uh-nee)</em> — the Greek goddess of memory
+            <em>(neh-MOZ-uh-nee)</em> · the Greek goddess of memory
           </p>
 
           {/* Body */}
           <p style={bodyText}>
             Every time you start a new session, your AI forgets everything. Your projects, your
-            preferences, your past conversations — gone. Dr. MnemosyneC gives your AI a permanent,
+            preferences, your past conversations · gone. Dr. MnemosyneC gives your AI a permanent,
             private memory that actually stays.
           </p>
 
@@ -645,7 +645,7 @@ export function LeanWelcomeView({ onComplete }: Props): React.ReactElement {
           marginBottom: 24,
         }}>
           <div style={{ fontSize: 11, fontWeight: 600, color: '#6ee7b7', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 8 }}>
-            Banyan Metric™ — How We Measure
+            Banyan Metric™: How We Measure
           </div>
           <p style={{ ...mutedText, margin: 0 }}>
             <strong style={{ color: '#94a3b8' }}>Accuracy</strong> = percentage of 75 factual questions

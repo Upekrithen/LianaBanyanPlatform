@@ -381,6 +381,10 @@ contextBridge.exposeInMainWorld('amplify', {
   getMeshState: (): Promise<{ peers: unknown[]; relayConnected: boolean; ownPeerId: string }> =>
     ipcRenderer.invoke('get-mesh-state'),
 
+  // BP086 F4b: relay tier from wan-relay-publish
+  getRelayTier: (): Promise<{ tier: string }> =>
+    ipcRenderer.invoke('get-relay-tier'),
+
   // ── MESH-6: Federation invite/accept/leave + SID fetch ───────────────────
   federationGenerateInvite: (): Promise<{ token: string; expiresAt: string }> =>
     ipcRenderer.invoke('federation:generate-invite'),
@@ -1719,6 +1723,7 @@ declare global {
       onUpdateStateChanged: (cb: (state: UpdateState) => void) => () => void;
       // MV-CN Peer Mesh (SAGA 3 BP045 W1)
       getMeshState: () => Promise<{ peers: unknown[]; relayConnected: boolean; ownPeerId: string }>;
+      getRelayTier: () => Promise<{ tier: string }>;
       onRelayStateChanged: (cb: (state: { relayConnected: boolean }) => void) => () => void;
       onMeshStateChanged: (cb: (state: unknown) => void) => () => void;
       // MESH-6: Federation invite/accept/leave + SID fetch

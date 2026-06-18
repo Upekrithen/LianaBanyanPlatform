@@ -43,6 +43,14 @@ let _wanSoccerballId: string | null = null;
 let _relaySessionId: string | null = null;
 let _supabaseUrl: string | null = null;
 
+// Tier returned by wan-relay-publish response ('base' | 'member' | 'unknown')
+let _currentTier: string = 'unknown';
+
+/** Returns the membership tier last received from the WAN relay publish endpoint. */
+export function getCurrentTier(): string {
+  return _currentTier;
+}
+
 export function registerPeerServerHooks(hooks: {
   onPlowDomain?: typeof _onPlowDomain;
   onDiagnosisPost?: typeof _onDiagnosisPost;
@@ -142,7 +150,7 @@ async function publishPresence(): Promise<void> {
   };
 
   const postBody = JSON.stringify(body);
-  const tryPublish = async (base: string) => {
+  const tryPublish = async (base: string): Promise<{ ok: boolean; tier?: string }> => {
     try {
       const res = await fetch(`${base}/wan-relay-publish`, {
         method: 'POST',
@@ -150,21 +158,28 @@ async function publishPresence(): Promise<void> {
         body: postBody,
         signal: AbortSignal.timeout(10_000),
       });
-      return res.ok;
+      if (!res.ok) return { ok: false };
+      try {
+        const data = await res.json() as { ok?: boolean; tier?: string; peer_id?: string };
+        return { ok: true, tier: data.tier };
+      } catch {
+        return { ok: true };
+      }
     } catch {
-      return false;
+      return { ok: false };
     }
   };
 
-  let ok = await tryPublish(relayBase);
-  if (!ok) {
-    ok = await tryPublish(relayBaseFallback);
+  let result = await tryPublish(relayBase);
+  if (!result.ok) {
+    result = await tryPublish(relayBaseFallback);
   }
 
-  if (ok) {
-    console.log(`[PeerServer] presence published: peer=${_peerId?.slice(0, 8)}…`);
+  if (result.ok) {
+    if (result.tier) _currentTier = result.tier;
+    console.log(`[PeerServer] presence published: peer=${_peerId?.slice(0, 8)}… tier=${_currentTier}`);
   } else {
-    console.warn('[PeerServer] presence publish failed — WAN routing degraded');
+    console.warn('[PeerServer] presence publish failed · WAN routing degraded');
   }
 }
 

@@ -118,7 +118,7 @@ import { setDagBridgeMeshHook, getDagEmitCount } from './dag_bridge';
 import { registerMicIpc } from './federation/mic_ipc';
 import { registerDiagnosisIpc } from './diagnosis/diagnosis_ipc';
 import { runCatacombMigrationCheck } from './diagnosis/catacomb_migrator';
-import { startPeerServer, stopPeerServer } from './federation/peer_server';
+import { startPeerServer, stopPeerServer, getCurrentTier } from './federation/peer_server';
 
 // SAGA 10 BP045 W1 ? mnemosyne:// + mnemo:// deep-link handler
 import { registerDeepLinkProtocol, handleStartupDeepLink } from './deep-link-handler';
@@ -3074,6 +3074,9 @@ function registerIPCHandlers(): void {
     ownPeerId: peerDiscovery ? (() => { const { getStablePeerId: gsp } = require('./federation/peer-discovery'); return gsp(); })() : '',
   }));
 
+  // BP086 F4b: relay tier returned by wan-relay-publish
+  safeHandle('get-relay-tier', () => ({ tier: getCurrentTier() }));
+
   // -- BP072 ? Paired-Frame Mutual-Aid IPC ----------------------------------
 
   safeHandle('paired-frame:get-status', () => {
@@ -4900,14 +4903,21 @@ function registerIPCHandlers(): void {
   function getHelpSupabase(): import('@supabase/supabase-js').SupabaseClient | null {
     if (_helpSupabase) return _helpSupabase;
     const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
-    if (!url || !serviceKey) {
-      console.warn('[help] SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY not set — help pipeline unavailable');
+    // Prefer service-role key (bypasses RLS for storage ops); fall back to anon key
+    // so Realtime subscriptions work in the packaged Electron app where service-role
+    // key is intentionally absent.
+    const key =
+      process.env.SUPABASE_SERVICE_ROLE_KEY ||
+      process.env.SUPABASE_ANON_KEY ||
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+      '';
+    if (!url || !key) {
+      console.warn('[help] SUPABASE_URL or Supabase key not set · help pipeline unavailable');
       return null;
     }
     try {
       const { createClient } = require('@supabase/supabase-js') as typeof import('@supabase/supabase-js');
-      _helpSupabase = createClient(url, serviceKey, { auth: { persistSession: false } });
+      _helpSupabase = createClient(url, key, { auth: { persistSession: false } });
       return _helpSupabase;
     } catch (err) {
       console.error('[help] Failed to create Supabase client:', (err as Error).message);

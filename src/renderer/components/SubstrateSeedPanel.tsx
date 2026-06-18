@@ -169,7 +169,7 @@ export function SubstrateSeedPanel() {
     try {
       const result = await window.amplify?.plowResetAndReseedContext?.();
       if (!result?.ok) {
-        setReseedState({ id: 'error', message: 'Reseed failed — check console' });
+        setReseedState({ id: 'error', message: 'Reseed failed · check console' });
       } else {
         setReseedState({ id: 'done', written: result.written, total: result.total, backupPath: result.backupPath });
       }
@@ -209,7 +209,7 @@ export function SubstrateSeedPanel() {
           </p>
           <div style={S.row}>
             <button type="button" style={S.btn('danger')} onClick={handleSeedConfirm}>
-              Confirm — Seed Substrate
+              Confirm: Seed Substrate
             </button>
             <button
               type="button"
@@ -309,7 +309,7 @@ export function SubstrateSeedPanel() {
             </p>
             <div style={S.row}>
               <button type="button" style={S.btn('danger')} onClick={handleReseedConfirm}>
-                Confirm — Reset + Reseed
+                Confirm: Reset + Reseed
               </button>
               <button type="button" style={S.btn('ghost')} onClick={() => setReseedState({ id: 'idle' })}>
                 Cancel

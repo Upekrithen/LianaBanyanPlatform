@@ -462,7 +462,7 @@ export function LeanAskTab({ onSwitchToHome }: LeanAskTabProps) {
     // v0.1.57.1 differentiated error: check for preload bridge before invoking
     if (!window.amplify?.aiDispatch?.query) {
       // v0.1.57.1 differentiated error
-      updateMsgAndSave(aiId, '⚠ Preload bridge missing — reinstall MnemosyneC.');
+      updateMsgAndSave(aiId, '⚠ Preload bridge missing · reinstall MnemosyneC.');
       clearStream();
       setThinking(false);
       textareaRef.current?.focus();

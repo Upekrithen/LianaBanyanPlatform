@@ -29,12 +29,12 @@ export function UpdateModal() {
 
   const handleInstallNow = useCallback(() => {
     window.amplify?.downloadUpdate?.();
-    showToast('Download started — progress shown below.');
+    showToast('Download started · progress shown below.');
   }, [showToast]);
 
   const handleLater = useCallback(() => {
     setDeferred(true);
-    showToast('Update deferred — click Check for Updates anytime in Settings.');
+    showToast('Update deferred · click Check for Updates anytime in Settings.');
   }, [showToast]);
 
   const handleRestart = useCallback(() => {
@@ -154,7 +154,7 @@ export function UpdateModal() {
                   />
                 </div>
                 <div style={{ fontSize: 11, color: '#6ee7b7', fontWeight: 600 }}>
-                  {pct}% complete — do not close the app
+                  {pct}% complete · do not close the app
                 </div>
               </>
             )}
