@@ -140,9 +140,9 @@ If ≥2 rows (target 4) with `tier='base'` and `last_seen_at` within 5 min → A
 Yoke: `BISHOP_DROPZONE/00_FOUNDER_REVIEW/KNIGHT_YOKE_PROV_22_REFORMAT_A_AND_A_STYLE_BP086.md`
 Source: `PROV_22_DRAFT_v05_FINAL.md` (214,639 bytes, 37 CGs, 99-page PDF already rendered)
 
-### Priority 3 — CT Bounty Copy + Hooks Gap
-Yoke: `BISHOP_DROPZONE/00_FOUNDER_REVIEW/KNIGHT_YOKE_QUEUED_AMENDMENT_CT_BOUNTY_COPY_PLUS_HOOKS_GAP_BP086.md`
-Scope: G1-G3 (CT bounty copy apply) + H1-H2 (hooks gap — `.cursor/hooks/hooks.json` needs to be created with firebase deploy health-check hook)
+### Priority 3 — CT Bounty Copy + Hooks Gap — ✅ COMPLETE (landed this session)
+G1-G3: All 7 CT bounty cards live on cerostechnology.com. `become-boss.html` + `bounties.html` updated. Hugo + Firebase exit 0. Live 200 verified. Local git commit `4149f6d` in `C:\Users\Administrator\Documents\CerosTechnology\` — **no remote configured, CerosTechnology is standalone local repo.**
+H1-H2: `hooks.json` + `bp086_post_deploy_health_check.ps1` written and committed to main (`582b0d1`). 11 hosting targets mapped. Dry-run pipe test passes.
 
 ### Priority 4 — Resend flush (after DNS propagation)
 Once Resend domain `mnemosynec.org` verifies:
