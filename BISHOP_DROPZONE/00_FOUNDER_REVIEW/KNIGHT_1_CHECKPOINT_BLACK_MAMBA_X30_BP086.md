@@ -89,9 +89,9 @@
 | F2 TIER_COLUMN_LIVE | ✅ GREEN | Migration `20260618000005_peer_presence_tier_base.sql` applied. `tier text NOT NULL DEFAULT 'base'` confirmed. 4 RLS policies: anon_select, anon_insert_base, anon_update_own, member_upgrade. |
 | F3 EDGE_FN_ACCEPTS_ANON | ✅ GREEN | wan-relay-publish patched + deployed. Smoke: HTTP 202 → `{"ok":true,"tier":"base","peer_id":null}`. Committed `08dfec1`. |
 | F4 V0_5_3_SHIPPED | ✅ GREEN | `MnemosyneC-Setup-0.5.3.exe` = 539,908,059 bytes. `latest.yml` v0.5.3 live. HelpTab.tsx patched to use anon key; em-dash sweep complete; `"Connected · Base"` green dot UI added. Committed `966282f`. Live: `https://mnemosynec.ai/download/MnemosyneC-Setup-0.5.3.exe` → 200 OK. |
-| F5 HERO_HOTFIX_LIVE | ⏳ IN-FLIGHT | [F5/F6/F7 SEG](00482a6b-d036-4532-be02-06a8570366c6) running at session close. Email share widget + GitHub link removal + em-dash sweep. |
-| F6 SHARE_FN_LIVE | ⏳ IN-FLIGHT | Same SEG. `share-from-mnemosynec` Edge Function with deferred-queue architecture for domain-verifying state. DrM@mnemosynec.org · https://mnemosynec.org/. RESEND_API_KEY confirmed in Supabase secrets (47 total). Resend DNS records added at Squarespace — VERIFYING at close. |
-| F7 WEB_DEPLOYED | ⏳ IN-FLIGHT | Same SEG. Hugo + Firebase deploy pending SEG completion. |
+| F5 HERO_HOTFIX_LIVE | ✅ GREEN | `mn-share-form` share widget live under Dr. M image on mnemosynec.ai + mnemosynec.org. GitHub `lb-reproducibility` private repo link removed (commented out). 36 em-dashes swept to ` · `. |
+| F6 SHARE_FN_LIVE | ✅ GREEN | `share-from-mnemosynec` (deferred-queue) + `flush-deferred-shares` deployed. `email_send_attempts` migration applied. RESEND_API_KEY present. Resend DNS propagated before close — smoke returned `{"ok":true,"status":"sent"}` (live sending confirmed). Sender: DrM@mnemosynec.org · link: https://mnemosynec.org/. **Infra gap:** `flush-deferred-shares` not yet wired to Supabase cron — wire when ready. |
+| F7 WEB_DEPLOYED | ✅ GREEN | Hugo (`--config config-mnemosynec.toml`) + Firebase `hosting:mnemosyne` exit 0. Live checks on both mnemosynec.org AND mnemosynec.ai: share form PRESENT · GitHub link ABSENT · fetch( PRESENT. |
 | F8 FLEET_REGISTERED | 🔴 NOT_FIRED | `peer_presence` = 0 rows at close. A3 Founder-gated. Knight #2 fires F8→A3→A6→A7 after machines launch v0.5.3. |
 
 ---
@@ -101,10 +101,10 @@
 | Item | Value |
 |---|---|
 | `peer_presence` rows | **0** (machines not yet running v0.5.3; A3 not yet GREEN) |
-| Resend domain `mnemosynec.org` | **VERIFYING** — DNS records added at Squarespace; propagation in progress (5-30 min) |
+| Resend domain `mnemosynec.org` | **LIVE** — DNS propagated before session close; smoke test returned `{"ok":true,"status":"sent"}` |
 | v0.5.3 installer live | **YES** — `mnemosynec.ai/download/MnemosyneC-Setup-0.5.3.exe` → 200 OK, 539,908,059 bytes |
 | `latest.yml` channel | **v0.5.3** (auto-update advertised; machines will pull on next launch) |
-| F5/F6/F7 SEG | **IN-FLIGHT** at close — web hero + share Edge Function + deploy |
+| F5/F6/F7 SEG | **ALL GREEN** — landed before checkpoint finalized |
 | A6/A7 cascade | **NOT FIRED** — gated on A3 (fleet wake) |
 | Last git commit | `966282f` — v0.5.3 |
 
@@ -112,11 +112,12 @@
 
 ## In-Flight at Close (Knight #2 must NOT duplicate)
 
-| SEG | Agent ID | What it's doing |
-|---|---|---|
-| F5/F6/F7 | `00482a6b-d036-4532-be02-06a8570366c6` | Hero share widget edit + `share-from-mnemosynec` + `flush-deferred-shares` Edge Fns + Hugo + Firebase deploy. Will self-commit on completion. |
+**NONE** — all SEGs landed GREEN before checkpoint was finalized.
 
-**Knight #2 action:** Check if the F5/F6/F7 commit landed on main (`git log --oneline -3`). If yes, mark F5/F6/F7 GREEN. Then proceed to F8 (fleet check) once Founder powers on machines.
+- [F4 SEG](17d39f22-eac7-4ede-81bb-0c16935c695e): v0.5.3 — all 6 sharps GREEN, commit `966282f`.
+- [F5/F6/F7 SEG](00482a6b-d036-4532-be02-06a8570366c6): Hero share + Edge Fns + deploy — all 4 sharps GREEN. Resend DNS propagated; live send confirmed.
+
+**Knight #2 action:** Proceed directly to F8 fleet check once Founder powers on machines.
 
 ---
 
