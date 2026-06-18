@@ -18,16 +18,20 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { homedir } from 'node:os';
+import { app } from 'electron';
 
 function loadWorkingKeysEnv(): void {
   const candidates: string[] = [
     // 1. Explicit operator override
     process.env.LB_WORKING_KEYS_PATH,
-    // 2. Canonical LockBox vault (BP038 Founder-ratified path)
+    // 2. Packaged Electron app: supabase_public.env beside app.asar (BP086 I4b)
+    //    Only checked on packaged builds — dev builds skip this and use LockBox
+    app.isPackaged ? resolve(process.resourcesPath, 'supabase_public.env') : undefined,
+    // 3. Canonical LockBox vault (BP038 Founder-ratified path)
     resolve(homedir(), 'Documents', 'LianaBanyanPlatform', 'Asteroid-ProofVault', 'LockBox', 'WORKING_KEYS.env'),
-    // 3. Project-local fallback (amplify-computer/.env)
+    // 4. Project-local fallback (amplify-computer/.env)
     resolve(process.cwd(), '.env'),
-    // 4. User home fallback (~/.lb_substrate/WORKING_KEYS.env)
+    // 5. User home fallback (~/.lb_substrate/WORKING_KEYS.env)
     resolve(homedir(), '.lb_substrate', 'WORKING_KEYS.env'),
   ].filter((p): p is string => Boolean(p));
 

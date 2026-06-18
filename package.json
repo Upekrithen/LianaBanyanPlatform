@@ -171,7 +171,8 @@
         "from": "resources/chocolates",
         "to": "chocolates",
         "filter": ["**/*"]
-      }
+      },
+      { "from": "resources/supabase_public.env", "to": "supabase_public.env" }
     ],
     "publish": {
       "provider": "generic",
