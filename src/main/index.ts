@@ -118,7 +118,7 @@ import { setDagBridgeMeshHook, getDagEmitCount } from './dag_bridge';
 import { registerMicIpc } from './federation/mic_ipc';
 import { registerDiagnosisIpc } from './diagnosis/diagnosis_ipc';
 import { runCatacombMigrationCheck } from './diagnosis/catacomb_migrator';
-import { startPeerServer, stopPeerServer, getCurrentTier } from './federation/peer_server';
+import { startPeerServer, stopPeerServer, getCurrentTier, registerPresenceConfig } from './federation/peer_server';
 
 // SAGA 10 BP045 W1 ? mnemosyne:// + mnemo:// deep-link handler
 import { registerDeepLinkProtocol, handleStartupDeepLink } from './deep-link-handler';
@@ -5686,6 +5686,24 @@ app.whenReady().then(async () => {
     console.log('[BP083] Peer server started on port 7474 (SCAFFOLD v0.4.0)');
   } catch (e) {
     console.warn('[BP083] Peer server start failed (non-fatal):', e);
+  }
+
+  // BP086 I3a: Wire presence config so publishPresence() passes its null-guard
+  // wanSoccerballId: stable 32-char hex derived from peerId (no soccerball session yet)
+  // emailHash: stable non-PII identifier; updated to real hash after LB auth wires in
+  // relaySessionId: per-launch UUID (clears on restart, which is intentional)
+  {
+    const { randomUUID } = require('crypto') as typeof import('crypto');
+    const _presencePeerId = getStablePeerId();
+    const _presenceSupabaseUrl = (process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || '').replace(/\/$/, '');
+    registerPresenceConfig({
+      peerId: _presencePeerId,
+      emailHash: _presencePeerId,
+      wanSoccerballId: (_presencePeerId + _presencePeerId).slice(0, 32),
+      relaySessionId: randomUUID().replace(/-/g, ''),
+      supabaseUrl: _presenceSupabaseUrl,
+    });
+    console.log('[presence] registered tier=base default, peer=' + _presencePeerId.slice(0, 8));
   }
 
   // v0.4.0 BP083 SEG-5 (carried forward v0.4.2): Post-install restart prompt (version-bump detection)
