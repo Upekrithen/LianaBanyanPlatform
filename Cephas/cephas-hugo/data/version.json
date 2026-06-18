@@ -1,6 +1,12 @@
 {
-  "version": "0.4.3",
-  "filename": "MnemosyneC-Setup-0.4.3.exe",
-  "download_url": "/download/MnemosyneC-Setup-0.4.3.exe",
-  "release_notes": "v0.4.3 (BP083): BP081 distribution canon restored — binary self-hosted at mnemosynec.ai/download/ (primary), GitHub Release is mirror only. Homepage hero restored to Amnesia/Cure verbatim. Hardware-tier thresholds tuned — Premium gemma4:12b is default at 16+ GB, Heavy llama3.3:70b is opt-in only. Just Add Salt moved to Does It Actually Work section."
+  "version": "0.5.1",
+  "filename": "MnemosyneC-Setup-0.5.1.exe",
+  "download_url": "/download/MnemosyneC-Setup-0.5.1.exe",
+  "release_notes": "v0.5.1 (BP085): Help Pipeline — Founder↔Son peer copy/paste + screenshot pipeline · realtime via Supabase · Ctrl+V image paste support.",
+  "previous": {
+    "version": "0.5.0",
+    "filename": "MnemosyneC-Setup-0.5.0.exe",
+    "download_url": "/download/MnemosyneC-Setup-0.5.0.exe",
+    "status": "HISTORICAL"
+  }
 }
