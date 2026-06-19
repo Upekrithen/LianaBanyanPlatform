@@ -5380,7 +5380,14 @@ async function postAck(
       ack_type: ackType,
       result_json: resultJson,
     }),
-  }).catch(() => {});
+  }).then(async (res) => {
+    if (!res.ok) {
+      const body = await res.text().catch(() => '');
+      console.warn(`[mic-broadcast] ack POST failed HTTP ${res.status}: ${body.slice(0, 200)}`);
+    }
+  }).catch((e) => {
+    console.warn(`[mic-broadcast] ack POST threw: ${String(e).slice(0, 200)}`);
+  });
 }
 
 function startMicBroadcastListener(peerId: string, appVersion: string): void {
@@ -5597,7 +5604,8 @@ function startMicBroadcastListener(peerId: string, appVersion: string): void {
 
   async function pollBroadcasts(): Promise<void> {
     try {
-      const since = new Date(Date.now() - 60000).toISOString(); // look back 60s
+      // BP087 I10: 600s lookback = 2× default TTL (was 60s — missed broadcasts issued before relaunch)
+      const since = new Date(Date.now() - 600000).toISOString();
       const url =
         `${supabaseUrl}/rest/v1/fleet_broadcast` +
         `?status=eq.active&created_at=gte.${encodeURIComponent(since)}` +
@@ -5608,8 +5616,12 @@ function startMicBroadcastListener(peerId: string, appVersion: string): void {
           apikey: supabaseKey,
           Authorization: `Bearer ${supabaseKey}`,
         },
-      });
-      if (!res.ok) return;
+        });
+      if (!res.ok) {
+        const body = await res.text().catch(() => '');
+        console.warn(`[mic-broadcast] poll HTTP ${res.status}: ${body.slice(0, 200)}`);
+        return;
+      }
 
       const broadcasts: Array<{
         id: string;
@@ -5633,8 +5645,8 @@ function startMicBroadcastListener(peerId: string, appVersion: string): void {
         const arr = Array.from(processedIds);
         arr.slice(0, 250).forEach(id => processedIds.delete(id));
       }
-    } catch {
-      // Silent — don't crash main process on poll error
+    } catch (e) {
+      console.warn(`[mic-broadcast] poll failed: ${String(e).slice(0, 200)}`);
     }
   }
 
