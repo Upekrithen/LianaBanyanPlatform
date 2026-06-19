@@ -1,6 +1,6 @@
 {
   "name": "mnemosynec",
-  "version": "0.5.9",
+  "version": "0.5.10",
   "description": "MnemosyneC — Memory, powered by CAI · local inference + cooperative substrate OS overlay (SSPL · Pledge #2260)",
   "homepage": "https://lianabanyan.com",
   "private": true,
@@ -50,6 +50,7 @@
     "@supabase/supabase-js": "^2.107.0",
     "allotment": "^1.20.5",
     "caithedral-core": "file:caithedral-core",
+    "electron-log": "^5.4.4",
     "electron-updater": "^6.1.7",
     "qrcode": "^1.5.4",
     "qrcode.react": "^4.2.0",
@@ -165,14 +166,21 @@
       {
         "from": "resources/seeds",
         "to": "seeds",
-        "filter": ["**/*"]
+        "filter": [
+          "**/*"
+        ]
       },
       {
         "from": "resources/chocolates",
         "to": "chocolates",
-        "filter": ["**/*"]
+        "filter": [
+          "**/*"
+        ]
       },
-      { "from": "resources/supabase_public.env", "to": "supabase_public.env" }
+      {
+        "from": "resources/supabase_public.env",
+        "to": "supabase_public.env"
+      }
     ],
     "publish": {
       "provider": "generic",

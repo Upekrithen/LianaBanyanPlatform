@@ -6,6 +6,12 @@
 // Implements Blood Rule R16 (R-NO-API-KEY-EXPOSURE) ? values never logged.
 
 import './env_loader';
+import log from 'electron-log/main';
+log.initialize({ preload: true });
+log.transports.file.level = 'info';
+log.transports.file.maxSize = 10 * 1024 * 1024; // 10 MB rotation
+// Pipe ALL main-process console.* through electron-log
+Object.assign(console, log.functions);
 import { probeSubstrateApiPort } from './port_guard';
 import { probeRendererHealth } from './renderer_guard';
 
@@ -5269,8 +5275,15 @@ async function mintGenesisIfAbsent(): Promise<void> {
 // BP086 I5c: relay_routes poll loop — answers questions dispatched by orchestrator
 // Polls every 5s; handles cross-WAN peers without IP-to-IP routing
 function startRelayRoutePoll(peerId: string): NodeJS.Timeout {
-  const supabaseUrl = (process.env.SUPABASE_URL || '').replace(/\/$/, '');
-  const supabaseKey = process.env.SUPABASE_ANON_KEY || '';
+  const supabaseUrl = (
+    process.env.SUPABASE_URL ||
+    process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    ''
+  ).replace(/\/$/, '');
+  const supabaseKey =
+    process.env.SUPABASE_ANON_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+    '';
 
   if (!supabaseUrl || !supabaseKey) {
     console.warn('[relay-poll] SUPABASE_URL or SUPABASE_ANON_KEY not set — relay poll disabled');
@@ -5360,8 +5373,15 @@ async function postAck(
   ackType: string,
   resultJson: Record<string, unknown>,
 ): Promise<void> {
-  const supabaseUrl = (process.env.SUPABASE_URL || '').replace(/\/$/, '');
-  const supabaseKey = process.env.SUPABASE_ANON_KEY || '';
+  const supabaseUrl = (
+    process.env.SUPABASE_URL ||
+    process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    ''
+  ).replace(/\/$/, '');
+  const supabaseKey =
+    process.env.SUPABASE_ANON_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+    '';
   if (!supabaseUrl || !supabaseKey) return;
 
   await fetch(`${supabaseUrl}/rest/v1/fleet_broadcast_ack`, {
@@ -5391,8 +5411,15 @@ async function postAck(
 }
 
 function startMicBroadcastListener(peerId: string, appVersion: string): void {
-  const supabaseUrl = (process.env.SUPABASE_URL || '').replace(/\/$/, '');
-  const supabaseKey = process.env.SUPABASE_ANON_KEY || '';
+  const supabaseUrl = (
+    process.env.SUPABASE_URL ||
+    process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    ''
+  ).replace(/\/$/, '');
+  const supabaseKey =
+    process.env.SUPABASE_ANON_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+    '';
 
   if (!supabaseUrl || !supabaseKey) {
     console.warn('[mic-broadcast] SUPABASE_URL or SUPABASE_ANON_KEY not set — listener disabled');
