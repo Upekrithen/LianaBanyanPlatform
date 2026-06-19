@@ -1,5 +1,12 @@
 # MnemosyneC Changelog
 
+## v0.5.12 · 2026-06-19 · BP087
+**env_loader strips inline `#` comments — fixes bundled anon key polluted with `# gitleaks:allow` trailing comment**
+
+- Root cause: `env_loader.ts` loaded `SUPABASE_ANON_KEY` as `eyJ…ngk  # gitleaks:allow` — the trailing gitleaks suppression comment was included in `process.env`, causing Supabase REST to return 401 on every `fleet_broadcast` poll.
+- Fix: standard dotenv parser behavior — unquoted values now strip inline `#` comments; quoted values preserve `#` verbatim. (BP087 I11 · empirically gadget-verified on M0)
+- Build-time invariant `assert-supabase-anon-key.mjs` (v0.5.11) continues to guard the source `eyJ` prefix and carries forward.
+
 ## v0.5.2 · 2026-06-18 · BP085
 **In-App Membership Purchase — Become a Member from inside MnemosyneC**
 

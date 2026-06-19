@@ -59,13 +59,21 @@ function loadWorkingKeysEnv(): void {
       const key = line.slice(0, eq).trim();
       let val = line.slice(eq + 1).trim();
 
-      // Strip surrounding quotes if present
+      // Standard dotenv parsing (BP087 I11):
+      //   Quoted values  → strip surrounding quotes; # inside quotes is NOT a comment
+      //   Unquoted values → strip inline # comment (e.g., "eyJ…ngk  # gitleaks:allow")
       if (val.length >= 2) {
         const first = val[0];
-        const last = val[val.length - 1];
+        const last  = val[val.length - 1];
         if ((first === '"' && last === '"') || (first === "'" && last === "'")) {
-          val = val.slice(1, -1);
+          val = val.slice(1, -1); // quoted — preserve content verbatim
+        } else {
+          const hashIdx = val.indexOf('#');
+          if (hashIdx > -1) val = val.slice(0, hashIdx).trim();
         }
+      } else {
+        const hashIdx = val.indexOf('#');
+        if (hashIdx > -1) val = val.slice(0, hashIdx).trim();
       }
 
       // Respect explicit overrides — don't clobber a key already set in the environment
