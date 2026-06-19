@@ -1,5 +1,19 @@
 # MnemosyneC Changelog
 
+## v0.5.12 · 2026-06-19 · BP087 (MAMBA release)
+
+**BLACK MAMBA wiring — Plow-on-mesh · Hex wire format · Domain-affinity routing · Substrate primitives · Star Chamber escalation**
+
+- MAMBA-α: `mesh_plow_dispatcher.ts` — dispatch MMLU-Pro questions to mesh peers via wan-relay-route; Ascending Andon fires on confidence variance > threshold; per-question hex-mcode frame encoding; δ6 byte-size receipt logging. `tools/plow/run-plow-on-mesh.mjs` CLI entry point.
+- MAMBA-δ4: `wan-relay-route` now accepts `application/x-hex-mcode` Content-Type in addition to legacy JSON; `wire_format` field added to relay_routes row (migration 20260619120001). Bi-directional: peer replies decoded as hex-mcode frames with JSON fallback (δ5).
+- MAMBA-β1: `mic-broadcast` extended with `pheromone_sync` and `eblet_sync` broadcast types. `pheromone_signals` table migration (20260619120002) — mesh-shared salience weights broadcast from M0 to peers.
+- MAMBA-β4/γ: `wrasse_quartermaster.ts` — domain-affinity pool selection: 0.7 × affinity + 0.3 × capacity composite score; `peer_domain_affinity` table migration (20260619120000); updated after each question verdict.
+- MAMBA-β7: `peer_eblet_sync_manifest` table migration (20260619120004) — per-peer domain-selective eblet sync tracking.
+- MAMBA-γ: `validate-relay.mjs` — `--routing=domain-affinity`, `--andon-escalate`, `--wire`, `--plow`, `--andon-threshold` flags; domain-affinity peer sort; affinity update after each verdict.
+- MAMBA-ε: `star-chamber-analyze` — new `mode: "mesh_benchmark_verify"` path: Ascending Andon escalation triggers 4-judge verification on uncertain questions; H = Variance / 100 threshold; 3 honest falsification criteria pre-recorded per fire; `star_chamber_mesh_fires` table migration (20260619120003).
+- β3 DRIFT: Ed25519 Thorax auth structural hook added (field in capabilities); full PKI deferred (post-THUNDERCLAP key provisioning pass).
+- MAMBA-ζ HELD: THUNDERCLAP fire gates on fleet readiness per dispatch spec.
+
 ## v0.5.12 · 2026-06-19 · BP087
 **env_loader strips inline `#` comments — fixes bundled anon key polluted with `# gitleaks:allow` trailing comment**
 

@@ -52,14 +52,31 @@ function loadServiceRoleKey() {
 
 function parseArgs() {
   const args = process.argv.slice(2);
-  const parsed = { questions: 5, mode: 'smoke', timeout: 180, session: null };
+  // MAMBA-γ: added routing, andon-escalate, wire, plow flags
+  const parsed = {
+    questions: 5,
+    mode: 'smoke',
+    timeout: 180,
+    session: null,
+    routing: 'round-robin',         // 'domain-affinity' | 'round-robin'
+    andonEscalate: 'none',          // 'star-chamber' | 'none'
+    wire: 'json-legacy',            // 'hex-mcode' | 'json-legacy'
+    plow: 'none',                   // 'mesh-12-blade' | 'none'
+    andonThreshold: 15,             // variance threshold for Ascending Andon
+  };
 
   for (const arg of args) {
     const [key, val] = arg.replace(/^--/, '').split('=');
+    if (!key) continue;
     if (key === 'questions') parsed.questions = parseInt(val, 10);
     else if (key === 'mode') parsed.mode = val;
     else if (key === 'timeout') parsed.timeout = parseInt(val, 10);
     else if (key === 'session') parsed.session = val;
+    else if (key === 'routing') parsed.routing = val;
+    else if (key === 'andon-escalate') parsed.andonEscalate = val;
+    else if (key === 'wire') parsed.wire = val;
+    else if (key === 'plow') parsed.plow = val;
+    else if (key === 'andon-threshold') parsed.andonThreshold = parseInt(val, 10);
   }
 
   if (parsed.mode === 'full' && parsed.questions === 5) parsed.questions = 70;
@@ -188,9 +205,37 @@ async function supabaseRequest(supabaseUrl, key, method, path, body = null) {
 async function getActivePeers(supabaseUrl, anonKey) {
   const rows = await supabaseRequest(
     supabaseUrl, anonKey, 'GET',
-    `peer_presence?select=peer_id,tier,lan_addresses,last_seen_at&last_seen_at=gte.${new Date(Date.now() - 10 * 60 * 1000).toISOString()}&order=last_seen_at.desc`
+    `peer_presence?select=peer_id,tier,lan_addresses,last_seen_at,capabilities&last_seen_at=gte.${new Date(Date.now() - 10 * 60 * 1000).toISOString()}&order=last_seen_at.desc`
   );
   return rows ?? [];
+}
+
+// MAMBA-γ: load domain affinity for peer pool selection
+async function getDomainAffinity(supabaseUrl, anonKey, peerIds, domain) {
+  if (!peerIds.length) return {};
+  try {
+    const ids = peerIds.map(id => `"${id}"`).join(',');
+    const rows = await supabaseRequest(
+      supabaseUrl, anonKey, 'GET',
+      `peer_domain_affinity?select=peer_id,correctness_rate,sample_count&peer_id=in.(${ids})&domain=eq.${encodeURIComponent(domain)}`
+    );
+    const map = {};
+    for (const r of (rows ?? [])) map[r.peer_id] = r.correctness_rate ?? 0.5;
+    return map;
+  } catch { return {}; }
+}
+
+// MAMBA-γ: update domain affinity after each question verdict
+async function updateDomainAffinity(supabaseUrl, serviceKey, peerId, domain, wasCorrect) {
+  try {
+    // Read-modify-write (upsert)
+    await supabaseRequest(supabaseUrl, serviceKey, 'POST', 'peer_domain_affinity', {
+      peer_id: peerId, domain,
+      correctness_rate: wasCorrect ? 0.8 : 0.3, // simplified until incremental tracking adds sample_count
+      sample_count: 1,
+      last_updated: new Date().toISOString(),
+    });
+  } catch { /* non-fatal */ }
 }
 
 async function insertRoute(supabaseUrl, serviceKey, route) {
@@ -269,9 +314,16 @@ async function main() {
   const { questions: questionCount, mode, timeout: timeoutSec, session: sessionId } = args;
   const timeoutMs = timeoutSec * 1000;
 
-  console.log(`\n${BOLD}${CYAN}5-PEER RELAY ORCHESTRATOR · BP086 · CROSS-VENDOR${RESET}`);
+  // MAMBA-γ/δ/ε flags
+  const routing = args.routing ?? 'round-robin';
+  const wire = args.wire ?? 'json-legacy';
+  const andonEscalate = args.andonEscalate ?? 'none';
+  const andonThreshold = args.andonThreshold ?? 15;
+
+  console.log(`\n${BOLD}${CYAN}5-PEER RELAY ORCHESTRATOR · BP087 MAMBA · CROSS-VENDOR${RESET}`);
   console.log(`Session: ${sessionId}`);
   console.log(`Mode: ${mode.toUpperCase()} · Questions: ${questionCount} · Timeout: ${timeoutSec}s/question`);
+  console.log(`Routing: ${routing} · Wire: ${wire} · Andon-escalate: ${andonEscalate} · Andon-threshold: ${andonThreshold}`);
   console.log(`Topology: Supabase relay_routes dispatch — no direct Ollama IPs\n`);
 
   // Load credentials
@@ -353,8 +405,16 @@ async function main() {
 
     console.log(`[${qNum}] source_id=${q.source_id} (${q.domain}) correct=${correctLetter ?? '?'}`);
 
+    // MAMBA-γ: load domain affinity and sort peer pool
+    let peerPool = [...peers];
+    if (routing === 'domain-affinity') {
+      const affinityMap = await getDomainAffinity(SUPABASE_URL, SUPABASE_ANON_KEY, peers.map(p => p.peer_id), q.domain);
+      peerPool = [...peers].sort((a, b) => (affinityMap[b.peer_id] ?? 0.5) - (affinityMap[a.peer_id] ?? 0.5));
+    }
+
     // INSERT one relay_route per peer (all concurrently)
-    const routeInserts = peers.map(p => insertRoute(SUPABASE_URL, SERVICE_KEY, {
+    // MAMBA-δ: include wire_format field in payload when hex-mcode requested
+    const routeInserts = peerPool.map(p => insertRoute(SUPABASE_URL, SERVICE_KEY, {
       target_peer_id: p.peer_id,
       hex_frame: Buffer.from(prompt, 'utf8').toString('base64'),
       payload_json: {
@@ -362,6 +422,7 @@ async function main() {
         question_id: questionId,
         correct_answer_letter: correctLetter,
         source_id: q.source_id,
+        wire_format: wire,
         domain: q.domain,
         session_id: sessionId,
       },

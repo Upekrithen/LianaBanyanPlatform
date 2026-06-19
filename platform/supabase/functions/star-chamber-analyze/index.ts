@@ -193,6 +193,154 @@ function normalizeAction(action: string): string {
   return 'other';
 }
 
+// ─── MAMBA-ε: mesh_benchmark_verify handler ───────────────────────────────────
+//
+// Called by Ascending Andon when mesh peer confidence variance > threshold.
+// Runs a 4-judge Star Chamber on the MMLU-Pro question + collected peer answers.
+// Three honest falsification criteria are pre-recorded before each fire (per canon).
+//
+// Budget guard: each call costs ~$0.06-0.10 (Haiku × 4 judges). Caller is
+// responsible for capping fires per benchmark run.
+//
+// Canon: canon_star_chamber_mesh_integrated_verification_andon_escalation_bp087
+
+interface MeshBenchmarkVerifyBody {
+  mode: 'mesh_benchmark_verify';
+  question: string;
+  options: string[];
+  domain: string;
+  peer_answers: Array<{ peer_id: string; answer_letter: string | null; confidence: number }>;
+  dispatch_id: string;
+  confidence_variance: number;
+  andon_threshold: number;
+}
+
+async function handleMeshBenchmarkVerify(
+  body: MeshBenchmarkVerifyBody,
+  supabase: ReturnType<typeof createClient>,
+): Promise<Response> {
+  const {
+    question,
+    options,
+    domain,
+    peer_answers,
+    dispatch_id,
+    confidence_variance,
+    andon_threshold,
+  } = body;
+
+  if (!question || !options || !peer_answers) {
+    return new Response(
+      JSON.stringify({ success: false, error: 'mesh_benchmark_verify requires question, options, peer_answers' }),
+      { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
+    );
+  }
+
+  // Pre-record three honest falsification criteria (per Star Chamber canon)
+  const falsificationCriteria = [
+    `FC-1: If ≥3 of ${peer_answers.length} peers agreed on the same letter with high confidence, Star Chamber should CONFIRM that letter unless there is a clear factual error.`,
+    `FC-2: If peer answers are uniformly distributed (all letters equally represented), Star Chamber should treat this as a genuine knowledge gap, not a system error.`,
+    `FC-3: If the variance is driven by ONE outlier peer (one peer far from majority), Star Chamber should consider the majority verdict more reliable.`,
+  ];
+
+  const optionLines = options.map((o, i) => `${String.fromCharCode(65 + i)}. ${o}`).join('\n');
+  const peerSummary = peer_answers
+    .map((p) => `  Peer ${p.peer_id.slice(0, 8)}: ${p.answer_letter ?? 'NO_ANSWER'} (conf: ${p.confidence}%)`)
+    .join('\n');
+
+  const benchmarkContext = `DOMAIN: ${domain}
+QUESTION: ${question}
+OPTIONS:\n${optionLines}
+
+PEER MESH ANSWERS (${peer_answers.length} peers — Ascending Andon triggered, variance=${confidence_variance.toFixed(1)} > ${andon_threshold}):
+${peerSummary}
+
+FALSIFICATION CRITERIA:
+${falsificationCriteria.join('\n')}
+
+Your task: Determine the CORRECT answer letter (A-J). Analyze the question using your knowledge. Do NOT simply defer to peer majority — evaluate the question independently.`;
+
+  const verifyPrompt = `Given the above MMLU-Pro question and the mesh peer answers, determine the single correct answer letter.
+Respond with exactly: "ANSWER: <letter>" on its own line, followed by a 1-2 sentence explanation.
+Then on its own line: "CONFIDENCE: <0-100>%"`;
+
+  // Run 4 judges in parallel (ε1: mesh-as-internal when no external budget; external vendors when available)
+  const judgeNames = ['oracle', 'morpheus', 'red_queen', 'dredd'] as const;
+  const judgeResults = await Promise.all(
+    judgeNames.map((judge) =>
+      callJudge(judge, benchmarkContext, verifyPrompt, judge === 'red_queen' ? 'perplexity' : 'claude')
+    )
+  );
+
+  // Extract answer letters from judge analyses
+  const judgeAnswers = judgeResults.map((r) => {
+    const match = r.analysis.match(/ANSWER:\s*([A-J])/i);
+    return match ? match[1]!.toUpperCase() : null;
+  });
+
+  const judgeConfs = judgeResults.map((r) => r.confidence);
+
+  // ε2: Variance calculation — H = Variance / 100
+  const validConfs = judgeConfs.filter((c) => c > 0);
+  const mean = validConfs.reduce((a, b) => a + b, 0) / (validConfs.length || 1);
+  const variance = validConfs.reduce((s, c) => s + (c - mean) ** 2, 0) / (validConfs.length || 1);
+  const H = variance / 100;
+  const consensusThreshold = 0.15;
+  const consensusReached = H <= consensusThreshold;
+
+  // Plurality vote on answer letters
+  const letterVotes = new Map<string, number>();
+  for (const letter of judgeAnswers) {
+    if (letter) letterVotes.set(letter, (letterVotes.get(letter) ?? 0) + 1);
+  }
+  let starChamberAnswer: string | null = null;
+  let maxVotes = 0;
+  for (const [letter, count] of letterVotes.entries()) {
+    if (count > maxVotes) { maxVotes = count; starChamberAnswer = letter; }
+  }
+
+  console.log(
+    `[StarChamber-ε] dispatch_id=${dispatch_id} domain=${domain} ` +
+    `star_chamber_answer=${starChamberAnswer} H=${H.toFixed(3)} ` +
+    `consensus=${consensusReached} judge_answers=${JSON.stringify(judgeAnswers)}`
+  );
+
+  // Log to star_chamber_mesh_fires table if it exists (graceful fallback)
+  try {
+    await supabase.from('star_chamber_mesh_fires').insert({
+      dispatch_id,
+      domain,
+      question: question.slice(0, 300),
+      confidence_variance,
+      andon_threshold,
+      peer_answers_json: peer_answers,
+      star_chamber_answer: starChamberAnswer,
+      judge_answers: judgeAnswers,
+      judge_confidences: judgeConfs,
+      H_score: H,
+      consensus_reached: consensusReached,
+      falsification_criteria: falsificationCriteria,
+      created_at: new Date().toISOString(),
+    });
+  } catch { /* table may not exist yet — non-fatal */ }
+
+  return new Response(
+    JSON.stringify({
+      success: true,
+      mode: 'mesh_benchmark_verify',
+      dispatch_id,
+      star_chamber_answer: starChamberAnswer,
+      judge_answers: Object.fromEntries(judgeNames.map((n, i) => [n, judgeAnswers[i]])),
+      judge_confidences: Object.fromEntries(judgeNames.map((n, i) => [n, judgeConfs[i]])),
+      confidence_variance_H: H,
+      consensus_reached: consensusReached,
+      falsification_criteria: falsificationCriteria,
+      cost_guard: { estimated_usd: 0.08, note: 'Haiku×4 judges · cap fires per benchmark run' },
+    }),
+    { headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
+  );
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
@@ -212,7 +360,15 @@ Deno.serve(async (req) => {
 
   try {
     const body = await req.json();
-    const { caseId } = body;
+    const { caseId, mode } = body;
+
+    // MAMBA-ε: mesh_benchmark_verify mode — Star Chamber as MMLU-Pro answer verifier
+    // Triggered by Ascending Andon when peer confidence variance > threshold.
+    // Runs 4 judges (Oracle/Morpheus/Red Queen/Dredd) on the question + candidate answers.
+    // Returns consensus answer letter + H = Variance / 100 score.
+    if (mode === 'mesh_benchmark_verify') {
+      return await handleMeshBenchmarkVerify(body, supabase);
+    }
 
     if (!caseId) {
       return new Response(

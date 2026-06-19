@@ -1,4 +1,4 @@
-// BP086 I7b: mic-broadcast Edge Function
+// BP086 I7b + BP087 MAMBA-β1: mic-broadcast Edge Function
 // POST: issue a fleet-wide broadcast command (MIC/orchestrator only via service_role)
 // GET ?broadcast_id=<uuid>: fetch ack status for a broadcast
 
@@ -9,7 +9,8 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-service-role',
 };
 
-const VALID_TYPES = ['auto_update', 'config_set', 'fleet_warmup', 'health_snapshot', 'benchmark_run', 'noop_test'];
+// MAMBA-β1: pheromone_sync added — mesh peers receive and apply pheromone weighting
+const VALID_TYPES = ['auto_update', 'config_set', 'fleet_warmup', 'health_snapshot', 'benchmark_run', 'noop_test', 'pheromone_sync', 'eblet_sync'];
 const VALID_TIERS = ['all', 'base', 'member', 'premium'];
 
 Deno.serve(async (req: Request) => {
