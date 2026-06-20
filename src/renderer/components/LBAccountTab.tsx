@@ -12,6 +12,8 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { NotCentsGlyph } from './NotCentsGlyph';
+// BP087 Wave 3 SEG-G2 -- Preference Inference
+import { PreferenceInferencePanel } from './PreferenceInferencePanel';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -441,6 +443,9 @@ export function LBAccountTab() {
           )}
         </div>
       )}
+
+      {/* BP087 Wave 3 SEG-G2 -- Preference Inference */}
+      <PreferenceInferencePanel />
     </div>
   );
 }

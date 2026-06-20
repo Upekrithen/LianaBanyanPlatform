@@ -11,7 +11,8 @@ const corsHeaders = {
 
 // MAMBA-beta1: pheromone_sync added -- mesh peers receive and apply pheromone weighting
 // MAMBA-beta2: pearl_sync added -- mesh peers upsert pearl_share on receive
-const VALID_TYPES = ['auto_update', 'config_set', 'fleet_warmup', 'health_snapshot', 'benchmark_run', 'noop_test', 'pheromone_sync', 'eblet_sync', 'pearl_sync'];
+// BP087 Wave 3: eblit_emit added -- fans eblit payload to peers via fleet_broadcast record
+const VALID_TYPES = ['auto_update', 'config_set', 'fleet_warmup', 'health_snapshot', 'benchmark_run', 'noop_test', 'pheromone_sync', 'eblet_sync', 'pearl_sync', 'eblit_emit'];
 const VALID_TIERS = ['all', 'base', 'member', 'premium'];
 
 Deno.serve(async (req: Request) => {
@@ -124,6 +125,13 @@ Deno.serve(async (req: Request) => {
         } else {
           console.warn('[mic-broadcast] pearl_sync missing required fields -- skipping upsert');
         }
+      }
+
+      // BP087 Wave 3: eblit_emit handler - fans eblit payload to peers via broadcast record
+      if (broadcast_type === 'eblit_emit') {
+        console.log('[mic-broadcast] eblit_emit broadcast received, fanning to peers via fleet_broadcast record');
+        // The fleet_broadcast insert already records the broadcast; peers will receive it on next poll
+        // No special upsert needed - eblit_emit is purely record-and-fan
       }
 
       return new Response(

@@ -71,6 +71,10 @@ import { TestItOutTab } from './TestItOutTab';
 import { SubstrateStatsTab } from './SubstrateStatsTab';
 // BP081 K-1 SEG-K1-3 -- Membership tab
 import { MembershipTab } from './MembershipTab';
+// BP087 Wave 3 SEG-C3 -- Trial 02 Mesh Validation
+import { TrialFirePanel } from './TrialFirePanel';
+// BP087 Wave 3 SEG-F2 -- Companies Joining In
+import { CompaniesJoiningInTab } from './CompaniesJoiningInTab';
 
 // ─── Local-storage keys ───────────────────────────────────────────────────────
 
@@ -127,7 +131,10 @@ type TabId =
   | 'broadcast-schedule'
   | 'test-it-out'
   | 'substrate-stats'
-  | 'membership';
+  | 'membership'
+  | 'battery-publish'
+  | 'trial-fire'
+  | 'companies';
 
 interface TabDef {
   id: TabId;
@@ -159,6 +166,10 @@ const TABS: TabDef[] = [
   { id: 'membership',        label: '💎 Membership',    icon: '',   tooltip: 'Tab 19 · Membership -- $5/year · 83.3% creator-keep · Cost+20% · join or fork' },
   // BP082 v0.3.0 -- Battery Dispatch Publish Fan-Out
   { id: 'battery-publish',   label: '🔥 Publish',       icon: '',   tooltip: 'Tab 20 · Battery Publish -- One-click fan-out to Cephas · lianabanyan.com · Substack · Medium · HN · Gmail editorial · Crown Letters' },
+  // BP087 Wave 3 SEG-C3 -- Trial 02 Mesh Validation
+  { id: 'trial-fire',        label: 'Trial 02',         icon: '🧨', tooltip: 'Trial 02 · Mesh Validation -- 70Q paired Pass A + Pass B · thunderclap dispatch' },
+  // BP087 Wave 3 SEG-F2 -- Companies Joining In
+  { id: 'companies',         label: 'Companies',        icon: '🏢', tooltip: 'Companies -- cooperative businesses joining the Liana Banyan platform' },
 ];
 
 // ─── Props ───────────────────────────────────────────────────────────────────
@@ -257,7 +268,7 @@ export function MnemosyneTabView({
       'frame', 'helm', 'gauntlet', 'settings', 'faq', 'developer', 'atlas',
       'kitchen-table', 'pearls', 'substrate', 'console', 'ai-selector',
       'caithedral-core', 'lb-account', 'battery-dispatch', 'broadcast-schedule', 'test-it-out',
-      'substrate-stats', 'membership',
+      'substrate-stats', 'membership', 'trial-fire', 'companies',
     ];
     if (
       saved &&
@@ -320,7 +331,7 @@ export function MnemosyneTabView({
       'frame', 'helm', 'gauntlet', 'settings', 'faq', 'developer',
       'atlas', 'kitchen-table', 'pearls', 'substrate', 'console', 'ai-selector',
       'caithedral-core', 'lb-account', 'battery-dispatch', 'broadcast-schedule', 'test-it-out',
-      'substrate-stats', 'membership',
+      'substrate-stats', 'membership', 'trial-fire', 'companies',
     ];
     if (validTabs.includes(tabId as TabId)) setActiveTab(tabId as TabId);
     });
@@ -1485,6 +1496,30 @@ export function MnemosyneTabView({
                 style={{ height: '100%', overflowY: 'auto' }}
               >
                 <MembershipTab />
+              </div>
+            )}
+
+            {/* BP087 Wave 3 SEG-C3 -- Trial 02 Mesh Validation */}
+            {activeTab === 'trial-fire' && (
+              <div
+                id="panel-trial-fire"
+                role="tabpanel"
+                aria-labelledby="tab-trial-fire"
+                style={{ height: '100%', overflowY: 'auto' }}
+              >
+                <TrialFirePanel />
+              </div>
+            )}
+
+            {/* BP087 Wave 3 SEG-F2 -- Companies Joining In */}
+            {activeTab === 'companies' && (
+              <div
+                id="panel-companies"
+                role="tabpanel"
+                aria-labelledby="tab-companies"
+                style={{ height: '100%', overflowY: 'auto' }}
+              >
+                <CompaniesJoiningInTab />
               </div>
             )}
           </div>

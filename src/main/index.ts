@@ -108,6 +108,10 @@ import { registerDispatchIPC } from './dispatch/dispatch_ipc';
 // BP060 Application 002 Steps 3+4 ? AI Dispatch IPC (UI-8 backend)
 import { registerAiDispatchIPC } from './ai_dispatch_ipc';
 
+// BP087 Wave 3 SEG-C1 + SEG-E1 - Thunderclap trial fire + Gemma multi-seg dispatch
+import { registerThunderclapFireIPC } from './thunderclap_fire_ipc';
+import { registerGemmaMultiSegIPC } from './gemma_multi_seg_ipc';
+
 // BP083 SEG-1/2/4/5 — 6-folder substrate scaffold + MEMORY.md amnesia cure + TestData seeds
 import { ensureMnemosyneCFolders, generateMemoryMd, populateTestDataSeeds, registerMemoryScaffoldIPC, installStarterChocolate } from './memory_scaffold';
 
@@ -2848,6 +2852,12 @@ function registerIPCHandlers(): void {
 
   // -- AI Dispatch IPC (BP060 Application 002 Steps 3+4 ? UI-8 backend) ----
   registerAiDispatchIPC();
+
+  // -- BP087 Wave 3 SEG-C1: Thunderclap trial fire IPC ----------------------
+  registerThunderclapFireIPC();
+
+  // -- BP087 Wave 3 SEG-E1: Gemma multi-seg dispatch IPC --------------------
+  registerGemmaMultiSegIPC();
 
   // -- BP083 SEG-5: MEMORY.md IPC handlers (My Self-Context panel) ----------
   registerMemoryScaffoldIPC();

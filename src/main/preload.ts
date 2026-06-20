@@ -1690,6 +1690,32 @@ contextBridge.exposeInMainWorld('amplify', {
     ipcRenderer.on('help:new-message', handler);
     return () => ipcRenderer.removeListener('help:new-message', handler);
   },
+  // BP087 Wave 3 - Thunderclap trial fire IPC bridge
+  thunderclap: {
+    fireTrial02: (options: { flagshipTier: 'claude' | 'gemma' }): Promise<{ status: string; accuracy?: string; receiptPath?: string }> =>
+      ipcRenderer.invoke('thunderclap:fire-trial-02', options),
+    checkGates: (): Promise<{ allGreen: boolean; output: string }> =>
+      ipcRenderer.invoke('thunderclap:check-gates'),
+    onLog: (callback: (line: string) => void): void => {
+      ipcRenderer.on('thunderclap:log', (_event, line: string) => callback(line));
+    },
+    onComplete: (callback: (result: { accuracy: string; receiptPath: string; exitCode: number }) => void): void => {
+      ipcRenderer.on('thunderclap:complete', (_event, result: { accuracy: string; receiptPath: string; exitCode: number }) => callback(result));
+    },
+    onGatesFailed: (callback: (output: string) => void): void => {
+      ipcRenderer.on('thunderclap:gates-failed', (_event, output: string) => callback(output));
+    },
+    removeAllListeners: (): void => {
+      ipcRenderer.removeAllListeners('thunderclap:log');
+      ipcRenderer.removeAllListeners('thunderclap:complete');
+      ipcRenderer.removeAllListeners('thunderclap:gates-failed');
+    },
+  },
+  // BP087 Wave 3 - Gemma multi-seg dispatch IPC bridge
+  gemma: {
+    multiSegDispatch: (options: { question: string; workerCount?: number; model?: string }): Promise<{ synthesized: string; variance: number; workerResponses: string[]; model: string; workerCount: number }> =>
+      ipcRenderer.invoke('gemma:multi-seg-dispatch', options),
+  },
 });
 
 // ─── Global type extension ────────────────────────────────────────────────────
@@ -2183,6 +2209,19 @@ declare global {
       helpUploadScreenshot?: (args: { base64Data: string; mimeType: string }) => Promise<{ url: string } | { error: string }>;
       helpStartRealtimeSub?: () => Promise<{ ok: true } | { error: string }>;
       onHelpMessageReceived?: (callback: (msg: { id: string; from_peer: string; to_peer: string | null; content_text: string; content_image_url: string | null; created_at: string }) => void) => () => void;
+      // BP087 Wave 3 - Thunderclap
+      thunderclap: {
+        fireTrial02: (options: { flagshipTier: 'claude' | 'gemma' }) => Promise<{ status: string; accuracy?: string; receiptPath?: string }>;
+        checkGates: () => Promise<{ allGreen: boolean; output: string }>;
+        onLog: (callback: (line: string) => void) => void;
+        onComplete: (callback: (result: { accuracy: string; receiptPath: string; exitCode: number }) => void) => void;
+        onGatesFailed: (callback: (output: string) => void) => void;
+        removeAllListeners: () => void;
+      };
+      // BP087 Wave 3 - Gemma
+      gemma: {
+        multiSegDispatch: (options: { question: string; workerCount?: number; model?: string }) => Promise<{ synthesized: string; variance: number; workerResponses: string[]; model: string; workerCount: number }>;
+      };
     };
     // SEG-V0150-P0-DIAGNOSE-BRIDGE: sentinel — set by preload before main bridge wires up
     __preloadLoaded?: boolean;

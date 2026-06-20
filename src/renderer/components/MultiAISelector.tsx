@@ -19,6 +19,8 @@
 // decay_class: BETWEEN on substrate emissions. DOCTRINE on §4.6.
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+// BP087 Wave 3 SEG-E2 -- Multi-Segment Gemma panel
+import { MultiSegGemmaPanel } from './MultiSegGemmaPanel';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -203,7 +205,7 @@ function DoctrineBanner({ activeIsLocal }: { activeIsLocal: boolean }) {
 // ─── Main Component ───────────────────────────────────────────────────────────
 
 export function MultiAISelector() {
-  const [activeSection, setActiveSection] = useState<'quick' | 'court' | 'single-use' | 'rules' | 'parallel'>('quick');
+  const [activeSection, setActiveSection] = useState<'quick' | 'court' | 'single-use' | 'rules' | 'parallel' | 'multi-seg-gemma'>('quick');
 
   // §4.6 — active model (default: Ollama local, DOCTRINE)
   const [activeModel, setActiveModel] = useState<AIModelId>(() => {
@@ -334,6 +336,7 @@ export function MultiAISelector() {
         <button style={sectionBtn('single-use', 'Single-Use')} onClick={() => setActiveSection('single-use')}>§4.3 Single-Use</button>
         <button style={sectionBtn('rules', 'Rules')} onClick={() => setActiveSection('rules')}>§4.4 Rules</button>
         <button style={sectionBtn('parallel', 'Parallel')} onClick={() => setActiveSection('parallel')}>§4.5 Parallel</button>
+        <button style={sectionBtn('multi-seg-gemma', 'Multi-Seg Gemma')} onClick={() => setActiveSection('multi-seg-gemma')}>Multi-Seg Gemma</button>
       </div>
 
       <div style={{ flex: 1, overflow: 'auto', padding: '10px 14px' }}>
@@ -556,6 +559,13 @@ export function MultiAISelector() {
                 </div>
               ))
             )}
+          </div>
+        )}
+
+        {/* ── Multi-Seg Gemma Panel (BP087 Wave 3 SEG-E2) ──────────────── */}
+        {activeSection === 'multi-seg-gemma' && (
+          <div>
+            <MultiSegGemmaPanel />
           </div>
         )}
 
