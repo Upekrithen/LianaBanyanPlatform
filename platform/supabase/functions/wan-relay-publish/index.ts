@@ -218,6 +218,7 @@ Deno.serve(async (req) => {
     if (roll.lan_addresses) presencePayload.lan_addresses = roll.lan_addresses;
     if (roll.relay_session_id) presencePayload.relay_session_id = roll.relay_session_id;
     if (roll.capabilities) presencePayload.capabilities = roll.capabilities;
+    if (roll.capabilities?.version) presencePayload.version = roll.capabilities.version;
 
     const { error: presenceError } = await supabase
       .from("peer_presence")

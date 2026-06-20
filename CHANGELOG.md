@@ -1,5 +1,7 @@
 # MnemosyneC Changelog
 
+## [0.5.13] - 2026-06-20 / Heartbeat version propagation: presencePayload now carries capabilities.version for homogeneity-gated health_snapshot and auto-update targeting.
+
 ## v0.5.12 · 2026-06-19 · BP087 (MAMBA release)
 
 **BLACK MAMBA wiring — Plow-on-mesh · Hex wire format · Domain-affinity routing · Substrate primitives · Star Chamber escalation**
