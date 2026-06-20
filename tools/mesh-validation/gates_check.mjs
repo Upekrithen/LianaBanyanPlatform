@@ -32,6 +32,24 @@ function loadPublicEnv() {
   return out;
 }
 
+function loadSecretsEnv() {
+  const p = 'C:\\Users\\Administrator\\.claude\\state\\secrets\\22May2026.env';
+  try {
+    const lines = readFileSync(p, 'utf8').split('\n');
+    for (const rawLine of lines) {
+      const line = rawLine.replace(/\r$/, '');
+      const m = line.match(/^([A-Za-z0-9_]+)=(.+)$/);
+      if (m) {
+        const key = m[1];
+        let val = m[2].trim();
+        const hashIdx = val.indexOf('#');
+        if (hashIdx > -1) val = val.slice(0, hashIdx).trim();
+        if (!process.env[key]) process.env[key] = val;
+      }
+    }
+  } catch { /* absent */ }
+}
+
 async function supabaseGet(url, anonKey, path) {
   const fullUrl = `${url}/rest/v1/${path}`;
   const headers = {
@@ -169,8 +187,10 @@ async function gate5(url, anonKey) {
   return { status: 'AMBER', msg: 'no migration table found (schema_migrations / _migrations / migrations); confirm manually' };
 }
 
-// Gate 6: relay.lianabanyan.com reachable
+// Gate 6: relay.lianabanyan.com reachable (requires service-role apikey header)
 async function gate6() {
+  const serviceKey = process.env.Supabase_Secret_Key || process.env.SUPABASE_SERVICE_ROLE || '';
+  const headers = serviceKey ? { apikey: serviceKey } : {};
   const candidates = [
     'https://relay.lianabanyan.com/health',
     'https://relay.lianabanyan.com/',
@@ -179,7 +199,7 @@ async function gate6() {
     try {
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), 8000);
-      const res = await fetch(u, { method: 'GET', signal: controller.signal });
+      const res = await fetch(u, { method: 'GET', headers, signal: controller.signal });
       clearTimeout(timer);
       if (res.ok) return { status: 'GREEN', msg: `HTTP ${res.status} from ${u}` };
       return { status: 'RED', msg: `HTTP ${res.status} from ${u}` };
@@ -217,6 +237,7 @@ function printGate(n, result) {
 }
 
 async function main() {
+  loadSecretsEnv();
   const pub = loadPublicEnv();
   const url = SUPABASE_URL || pub.SUPABASE_URL || '';
   const anonKey = SUPABASE_ANON_KEY || pub.SUPABASE_ANON_KEY || '';
