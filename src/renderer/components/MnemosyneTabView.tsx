@@ -75,6 +75,8 @@ import { MembershipTab } from './MembershipTab';
 import { TrialFirePanel } from './TrialFirePanel';
 // BP087 Wave 3 SEG-F2 -- Companies Joining In
 import { CompaniesJoiningInTab } from './CompaniesJoiningInTab';
+// BP087 Wave 5 -- Alexandrian Catacombs 16-folder substrate default
+import { CatacombsTab } from './CatacombsTab';
 
 // ─── Local-storage keys ───────────────────────────────────────────────────────
 
@@ -134,7 +136,8 @@ type TabId =
   | 'membership'
   | 'battery-publish'
   | 'trial-fire'
-  | 'companies';
+  | 'companies'
+  | 'catacombs';
 
 interface TabDef {
   id: TabId;
@@ -170,6 +173,8 @@ const TABS: TabDef[] = [
   { id: 'trial-fire',        label: 'Trial 02',         icon: '🧨', tooltip: 'Trial 02 · Mesh Validation -- 70Q paired Pass A + Pass B · thunderclap dispatch' },
   // BP087 Wave 3 SEG-F2 -- Companies Joining In
   { id: 'companies',         label: 'Companies',        icon: '🏢', tooltip: 'Companies -- cooperative businesses joining the Liana Banyan platform' },
+  // BP087 Wave 5 -- Alexandrian Catacombs 16-folder substrate default
+  { id: 'catacombs',         label: 'Catacombs',        icon: '📚', tooltip: 'Alexandrian Catacombs -- 16-folder cooperative knowledge library (MMLU-Pro + USER + LB)' },
 ];
 
 // ─── Props ───────────────────────────────────────────────────────────────────
@@ -268,7 +273,7 @@ export function MnemosyneTabView({
       'frame', 'helm', 'gauntlet', 'settings', 'faq', 'developer', 'atlas',
       'kitchen-table', 'pearls', 'substrate', 'console', 'ai-selector',
       'caithedral-core', 'lb-account', 'battery-dispatch', 'broadcast-schedule', 'test-it-out',
-      'substrate-stats', 'membership', 'trial-fire', 'companies',
+      'substrate-stats', 'membership', 'trial-fire', 'companies', 'catacombs',
     ];
     if (
       saved &&
@@ -331,7 +336,7 @@ export function MnemosyneTabView({
       'frame', 'helm', 'gauntlet', 'settings', 'faq', 'developer',
       'atlas', 'kitchen-table', 'pearls', 'substrate', 'console', 'ai-selector',
       'caithedral-core', 'lb-account', 'battery-dispatch', 'broadcast-schedule', 'test-it-out',
-      'substrate-stats', 'membership', 'trial-fire', 'companies',
+      'substrate-stats', 'membership', 'trial-fire', 'companies', 'catacombs',
     ];
     if (validTabs.includes(tabId as TabId)) setActiveTab(tabId as TabId);
     });
@@ -1520,6 +1525,18 @@ export function MnemosyneTabView({
                 style={{ height: '100%', overflowY: 'auto' }}
               >
                 <CompaniesJoiningInTab />
+              </div>
+            )}
+
+            {/* BP087 Wave 5 -- Alexandrian Catacombs 16-folder substrate default */}
+            {activeTab === 'catacombs' && (
+              <div
+                id="panel-catacombs"
+                role="tabpanel"
+                aria-labelledby="tab-catacombs"
+                style={{ height: '100%' }}
+              >
+                <CatacombsTab />
               </div>
             )}
           </div>

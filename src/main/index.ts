@@ -1,4 +1,4 @@
-// AMPLIFY Computer ? Electron Main Process
+﻿// AMPLIFY Computer ? Electron Main Process
 // B37 Phase 1-3 ? BP025 / Bushel 37
 // Phase 3 additions: connectivity polling, auto-mode transitions, substrate/federation IPC
 // BP038 addition: env_loader MUST be the first import so its side-effects populate
@@ -2853,6 +2853,36 @@ function registerIPCHandlers(): void {
   // -- AI Dispatch IPC (BP060 Application 002 Steps 3+4 ? UI-8 backend) ----
   registerAiDispatchIPC();
 
+  // -- BP087 Wave 5: Alexandrian Catacombs IPC ----------------------------------
+  {
+    const {
+      bootstrapCatacombs,
+      getManifest,
+      listEblets,
+    } = await import('./catacombs/folder_bootstrap');
+    const { fetchCategoryPackage, prefetchAll } = await import('./catacombs/eblet_package_fetcher');
+    const { contributeToCategory } = await import('./catacombs/contribute_to_category');
+    const { checkAccess } = await import('./catacombs/license_gate');
+
+    // Bootstrap on registration (idempotent -- sentinel prevents re-run)
+    bootstrapCatacombs().catch((err) => console.warn('[Catacombs] Bootstrap non-fatal:', err));
+
+    safeHandle('catacombs:bootstrap', async () => bootstrapCatacombs());
+    safeHandle('catacombs:fetch-package', async (_e: unknown, slug: string) => fetchCategoryPackage(slug));
+    safeHandle('catacombs:prefetch-all', async () => prefetchAll());
+    safeHandle('catacombs:get-manifest', async (_e: unknown, slug: string) => getManifest(slug));
+    safeHandle('catacombs:list-eblets', async (_e: unknown, slug: string) => listEblets(slug));
+    safeHandle('catacombs:contribute', async (_e: unknown, slug: string, content: string, memberId: string) =>
+      contributeToCategory(slug, content, memberId)
+    );
+    safeHandle('catacombs:check-access', async (_e: unknown, memberId: string, operation: string) =>
+      checkAccess(memberId, operation as 'read' | 'contribute')
+    );
+    safeHandle('catacombs:search', async (_e: unknown, params: { slug: string; query: string }) =>
+      listEblets(params.slug)
+    );
+  }
+
   // -- BP087 Wave 3 SEG-C1: Thunderclap trial fire IPC ----------------------
   registerThunderclapFireIPC();
 
@@ -4018,9 +4048,10 @@ function registerIPCHandlers(): void {
 
   // --- BP081 K-1: Membership IPC handlers (stub tier) --------------------------
 
-  safeHandle('membership:start-checkout', async () => {
+  safeHandle('membership:start-checkout', async (_event: unknown, args: { userJwt?: string } = {}) => {
     const { createMembershipCheckoutSession } = await import('./membership/checkout_session');
-    const result = await createMembershipCheckoutSession();
+    const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+    const result = await createMembershipCheckoutSession(supabaseUrl, args.userJwt ?? '');
     if (result.checkoutUrl) {
       shell.openExternal(result.checkoutUrl).catch(() => {});
     }
