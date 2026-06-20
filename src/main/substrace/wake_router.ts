@@ -18,13 +18,16 @@ const RELAY_BASE_PRIMARY =
 
 const RELAY_BASE_FALLBACK = 'https://ruuxzilgmuwddcofqecc.supabase.co/functions/v1';
 
+// PRE-FLIGHT-1 (BP087): dual-fallback -- picks up NEXT_PUBLIC_* keys used by the rest of the codebase
 const SUPABASE_URL =
   process.env.SUPABASE_URL ??
+  process.env.NEXT_PUBLIC_SUPABASE_URL ??
   process.env.LB_SUPABASE_URL ??
   'https://ruuxzilgmuwddcofqecc.supabase.co';
 
 const SUPABASE_ANON_KEY =
   process.env.SUPABASE_ANON_KEY ??
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ??
   process.env.LB_SUPABASE_ANON_KEY ??
   '';
 
