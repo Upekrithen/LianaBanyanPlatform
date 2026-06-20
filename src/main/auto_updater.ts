@@ -13,6 +13,9 @@
 
 import { autoUpdater, type UpdateInfo } from 'electron-updater';
 import { ipcMain, BrowserWindow, Notification, app } from 'electron';
+import { runQuorumCheck } from './keys_engines/quorum_check';
+import { getCircleMembership } from './keys_engines/circle_membership';
+import { verifySocceriKey } from './keys_engines/key_verifier';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -91,9 +94,13 @@ export class AutoUpdateManager {
 
   downloadNow(): void {
     if (this.state.status === 'available') {
-      autoUpdater.downloadUpdate().catch((err) => {
-        this._setState({ status: 'error', errorMessage: String(err) });
-      });
+      const version = this.state.version ?? '';
+      this._runTrustGate(version, '').then((trusted) => {
+        if (!trusted) return;
+        autoUpdater.downloadUpdate().catch((err: Error) => {
+          this._setState({ status: 'error', errorMessage: err.message });
+        });
+      }).catch(() => {});
     }
   }
 
@@ -269,5 +276,64 @@ export class AutoUpdateManager {
         .slice(0, 500);
     }
     return undefined;
+  }
+
+  private async _runTrustGate(version: string, payloadHash: string): Promise<boolean> {
+    try {
+      const circle = await getCircleMembership();
+      if (circle.peers.length < 2) {
+        console.warn('[AutoUpdater] Trust gate: fewer than 2 Circle peers available, bypassing quorum (AMBER)');
+        return true;
+      }
+      const peerAddresses = circle.peers.map((p) => p.address);
+
+      const ledgerUrl = `${process.env.SUPABASE_URL}/rest/v1/frontier_reputation_log?update_version=eq.${encodeURIComponent(version)}&select=claimed_hash&order=timestamp.desc&limit=1`;
+      let ledgerHash = '';
+      try {
+        const ledgerRes = await fetch(ledgerUrl, {
+          headers: { apikey: process.env.SUPABASE_ANON_KEY ?? '' },
+        });
+        const rows = await ledgerRes.json() as Array<{ claimed_hash: string }>;
+        ledgerHash = rows[0]?.claimed_hash ?? payloadHash;
+      } catch {
+        ledgerHash = payloadHash;
+      }
+
+      const quorum = await runQuorumCheck(version, ledgerHash, peerAddresses);
+
+      if (!quorum.passed) {
+        const frameId = process.env.LB_FRAME_ID ?? 'unknown';
+        await fetch(
+          `${process.env.SUPABASE_URL}/rest/v1/frontier_reputation_log`,
+          {
+            method: 'POST',
+            headers: {
+              apikey: process.env.SUPABASE_ANON_KEY ?? '',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              source_frame_id: quorum.peerResponses[0]?.peerId ?? 'unknown',
+              claimed_hash: payloadHash,
+              ledger_hash: ledgerHash,
+              mismatch_delta: quorum.mismatchDelta ? JSON.parse(quorum.mismatchDelta) : null,
+              requesting_frame_id: frameId,
+              update_version: version,
+              severity: 'quorum_fail',
+              resolved: false,
+            }),
+          },
+        ).catch((e: Error) => console.error('[AutoUpdater] Ledger emit failed:', e.message));
+
+        this._setState({
+          status: 'error',
+          errorMessage: 'Update blocked · trust verification failed · check Reputation Log',
+        });
+        return false;
+      }
+      return true;
+    } catch (err) {
+      console.error('[AutoUpdater] Trust gate error:', err);
+      return true;
+    }
   }
 }
