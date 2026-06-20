@@ -11,12 +11,13 @@
 //   --mode: 'smoke' (5Q) or 'full' (70Q); default 'smoke'
 //   --timeout: seconds to wait per question across all peers (default 180)
 //   --session: override session ID (default: auto-generated ISO timestamp)
+//   --exclude-peer: peer_id prefix or full peer_id to exclude from active pool (can be repeated)
 
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
 import { join, resolve } from 'path';
 import { fileURLToPath } from 'url';
-import { dirname, homedir } from 'path';
-import { homedir as getHomedir } from 'os';
+import { dirname } from 'path';
+import { homedir } from 'os';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -26,10 +27,17 @@ const __dirname = dirname(__filename);
 function loadEnvFile(filePath) {
   const out = {};
   try {
+    // BP087 fix: strip CRLF + inline # comments at parse time (matches env_loader.ts I11)
     const lines = readFileSync(filePath, 'utf8').split('\n');
-    for (const line of lines) {
+    for (const rawLine of lines) {
+      const line = rawLine.replace(/\r$/, '');
       const m = line.match(/^([A-Z_]+)=(.+)$/);
-      if (m) out[m[1]] = m[2].trim();
+      if (m) {
+        let val = m[2].trim();
+        const hashIdx = val.indexOf('#');
+        if (hashIdx > -1) val = val.slice(0, hashIdx).trim();
+        out[m[1]] = val;
+      }
     }
   } catch {
     // file absent — caller handles
@@ -43,9 +51,30 @@ function loadPublicEnv() {
 }
 
 function loadServiceRoleKey() {
-  const secretsPath = resolve(getHomedir(), '.claude', 'state', 'secrets', '22May2026.env');
-  const env = loadEnvFile(secretsPath);
-  return env['SUPABASE_SERVICE_ROLE_KEY'] || process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+  const secretsPath = resolve(homedir(), '.claude', 'state', 'secrets', '22May2026.env');
+  // BP087 fix: secrets file uses mixed-case keys; loadEnvFile only matches ALL_CAPS.
+  // Read raw + match all variants the Founder-canonical secrets file uses.
+  let raw = '';
+  try {
+    raw = readFileSync(secretsPath, 'utf8');
+  } catch { /* file absent */ }
+  const findKey = (name) => {
+    const re = new RegExp('^' + name + '=(.+)$', 'm');
+    const m = raw.match(re);
+    if (!m) return '';
+    let v = m[1].replace(/\r$/, '').trim();
+    const hashIdx = v.indexOf('#');
+    if (hashIdx > -1) v = v.slice(0, hashIdx).trim();
+    return v;
+  };
+  return (
+    findKey('SUPABASE_SERVICE_ROLE_KEY') ||
+    findKey('Supabase_Secret_Key') ||
+    findKey('Supabase_Service_Role_Key') ||
+    process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    process.env.Supabase_Secret_Key ||
+    ''
+  );
 }
 
 // ─── CLI Argument Parsing ────────────────────────────────────────────────────
@@ -53,6 +82,7 @@ function loadServiceRoleKey() {
 function parseArgs() {
   const args = process.argv.slice(2);
   // MAMBA-γ: added routing, andon-escalate, wire, plow flags
+  // BP087 Trial-02: added exclude-peer flag for fleet-management discipline
   const parsed = {
     questions: 5,
     mode: 'smoke',
@@ -63,6 +93,7 @@ function parseArgs() {
     wire: 'json-legacy',            // 'hex-mcode' | 'json-legacy'
     plow: 'none',                   // 'mesh-12-blade' | 'none'
     andonThreshold: 15,             // variance threshold for Ascending Andon
+    excludePeers: [],               // array of peer_id prefixes/full IDs to exclude from pool
   };
 
   for (const arg of args) {
@@ -77,6 +108,8 @@ function parseArgs() {
     else if (key === 'wire') parsed.wire = val;
     else if (key === 'plow') parsed.plow = val;
     else if (key === 'andon-threshold') parsed.andonThreshold = parseInt(val, 10);
+    // --exclude-peer may appear multiple times; each val is a full peer_id or unambiguous prefix
+    else if (key === 'exclude-peer' && val) parsed.excludePeers.push(val.trim());
   }
 
   if (parsed.mode === 'full' && parsed.questions === 5) parsed.questions = 70;
@@ -319,6 +352,7 @@ async function main() {
   const wire = args.wire ?? 'json-legacy';
   const andonEscalate = args.andonEscalate ?? 'none';
   const andonThreshold = args.andonThreshold ?? 15;
+  const excludePeers = args.excludePeers ?? [];
 
   console.log(`\n${BOLD}${CYAN}5-PEER RELAY ORCHESTRATOR · BP087 MAMBA · CROSS-VENDOR${RESET}`);
   console.log(`Session: ${sessionId}`);
@@ -359,6 +393,23 @@ async function main() {
     console.log(`  ${p.peer_id} | ${p.tier} | ${lanTag} | last_seen: ${p.last_seen_at}`);
   }
 
+  // BP087 Trial-02: apply --exclude-peer filter before routing logic
+  // Matches on full peer_id or any unambiguous prefix (e.g. c532e740 matches c532e74069e137bc)
+  if (excludePeers.length > 0) {
+    const beforeCount = peers.length;
+    peers = peers.filter(p => !excludePeers.some(ex => p.peer_id.startsWith(ex)));
+    const removed = beforeCount - peers.length;
+    if (removed > 0) {
+      console.log(`\n${YELLOW}EXCLUDE-PEER filter: removed ${removed} peer(s) — ${excludePeers.join(', ')}${RESET}`);
+    } else {
+      console.log(`\n${YELLOW}EXCLUDE-PEER filter: no matching peers found for — ${excludePeers.join(', ')} (continuing with all ${beforeCount} peers)${RESET}`);
+    }
+    if (peers.length === 0) {
+      console.error('ERROR: --exclude-peer filter removed ALL peers. Aborting.');
+      process.exit(2);
+    }
+  }
+
   // Identify Son: peer whose lan_addresses does NOT contain 192.168.86.
   // When lan_addresses is empty for all (v0.5.6 gap), note it and proceed anyway.
   const lanPeers = peers.filter(p => p.lan_addresses && p.lan_addresses.includes('192.168.86.'));
@@ -387,6 +438,98 @@ async function main() {
 
   // Pre-warm: send a keep_alive ping via relay to ensure models stay loaded
   // (relay-based — peers handle on their end; orchestrator just dispatches)
+
+  // MAMBA-zeta: staggered-then-connected routing -- Phase 1 staggered, Phase 2 connected
+  // When routing === 'staggered-then-connected': run Phase 1 (one domain at a time, sequentially),
+  // then fall through to existing loop as Phase 2 (connected, all domains simultaneously).
+  const staggeredPhaseResults = {};
+  if (routing === 'staggered-then-connected') {
+    console.log(`\n${BOLD}${CYAN}ROUTING: staggered-then-connected -- Phase 1: Staggered (domain-by-domain)${RESET}\n`);
+
+    // Group loaded questions by domain for sequential domain testing
+    const byDomain = {};
+    for (const q of questions) {
+      if (!byDomain[q.domain]) byDomain[q.domain] = [];
+      byDomain[q.domain].push(q);
+    }
+
+    for (const domain of DOMAINS) {
+      const domainQs = byDomain[domain] || [];
+      if (domainQs.length === 0) {
+        staggeredPhaseResults[domain] = { status: 'AMBER', score: 0, total: 0, latencyMs: 0 };
+        console.log(`  ${domain}: ${YELLOW}AMBER${RESET} -- no questions loaded for this domain`);
+        continue;
+      }
+
+      const domainStart = Date.now();
+      let domainCorrect = 0;
+
+      for (const q of domainQs) {
+        const correctLetter = getCorrectLetter(q);
+        const prompt = buildPrompt(q);
+        const questionId = `${sessionId}-stagger-${domain}-${domainCorrect}`;
+
+        const routeInserts = peers.map(p => insertRoute(SUPABASE_URL, SERVICE_KEY, {
+          target_peer_id: p.peer_id,
+          hex_frame: Buffer.from(prompt, 'utf8').toString('base64'),
+          payload_json: {
+            prompt, question_id: questionId,
+            correct_answer_letter: correctLetter,
+            source_id: q.source_id,
+            wire_format: wire,
+            domain: q.domain,
+            session_id: sessionId,
+          },
+          status: 'pending',
+          session_id: sessionId,
+          ttl_seconds: timeoutSec + 60,
+        }));
+
+        let insertedRoutes;
+        try {
+          insertedRoutes = await Promise.all(routeInserts);
+        } catch (err) {
+          console.error(`  Stagger [${domain}] route insert failed: ${err.message}`);
+          continue;
+        }
+
+        const routeIds = insertedRoutes.map(r => r.id);
+        const routeToPeerS = {};
+        for (let j = 0; j < peers.length; j++) routeToPeerS[routeIds[j]] = peers[j].peer_id;
+
+        const repliesByRouteId = await pollReplies(SUPABASE_URL, SUPABASE_ANON_KEY, routeIds, timeoutMs);
+
+        const peerAnswers = {};
+        for (const p of peers) peerAnswers[p.peer_id] = null;
+        for (const [routeId, reply] of Object.entries(repliesByRouteId)) {
+          const peerId = routeToPeerS[routeId];
+          if (!peerId) continue;
+          let rawText = null;
+          if (reply.hex_reply) {
+            try { rawText = Buffer.from(reply.hex_reply, 'base64').toString('utf8'); } catch { rawText = reply.hex_reply; }
+          }
+          if (!rawText && reply.answer_json) {
+            rawText = typeof reply.answer_json === 'string'
+              ? reply.answer_json
+              : (reply.answer_json.response ?? reply.answer_json.answer ?? JSON.stringify(reply.answer_json));
+          }
+          peerAnswers[peerId] = extractLetter(rawText, q.options.length);
+        }
+        const { answer: ensembleAnswer } = ensembleVote(peerAnswers);
+        if (ensembleAnswer !== null && ensembleAnswer === correctLetter) domainCorrect++;
+      }
+
+      const domainLatency = Date.now() - domainStart;
+      const domainTotal = domainQs.length;
+      const domainStatus = domainCorrect >= Math.ceil(domainTotal * 0.6) ? 'GREEN'
+        : domainCorrect >= Math.ceil(domainTotal * 0.4) ? 'AMBER' : 'RED';
+      const statusColor = domainStatus === 'GREEN' ? GREEN : domainStatus === 'AMBER' ? YELLOW : RED;
+      staggeredPhaseResults[domain] = { status: domainStatus, score: domainCorrect, total: domainTotal, latencyMs: domainLatency };
+      console.log(`  ${domain}: ${statusColor}${domainStatus}${RESET} -- ${domainCorrect}/${domainTotal} correct -- ${domainLatency}ms`);
+    }
+
+    console.log(`\n${BOLD}${CYAN}ROUTING: staggered-then-connected -- Phase 1 complete -- starting Phase 2: Connected${RESET}\n`);
+  }
 
   // Run questions
   const results = [];
@@ -547,6 +690,17 @@ async function main() {
   }
   console.log(border);
 
+  // MAMBA-zeta: staggered-then-connected marker line + per-domain breakdown
+  if (routing === 'staggered-then-connected') {
+    console.log(`\nROUTING: staggered-then-connected -- Phase 1 complete -- Phase 2 complete`);
+    console.log('\nPhase 1 per-domain breakdown:');
+    for (const [domain, res] of Object.entries(staggeredPhaseResults)) {
+      const statusColor = res.status === 'GREEN' ? GREEN : res.status === 'AMBER' ? YELLOW : RED;
+      console.log(`  ${domain}: ${statusColor}${res.status}${RESET} -- ${res.score}/${res.total} -- ${res.latencyMs}ms`);
+    }
+    console.log('');
+  }
+
   // Write JSON receipt
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
   const receiptDir = 'C:\\Users\\Administrator\\Documents\\LianaBanyanPlatform\\BISHOP_DROPZONE\\00_FOUNDER_REVIEW';
@@ -573,10 +727,12 @@ async function main() {
     session_id: sessionId,
     run_timestamp: new Date().toISOString(),
     mode,
+    routing,
     question_count: questions.length,
     peer_count: peers.length,
     son_peer_id: sonPeerId,
     peers: peerSummary,
+    staggered_phase_results: Object.keys(staggeredPhaseResults).length > 0 ? staggeredPhaseResults : null,
     ensemble_score: {
       correct: ensembleCorrect,
       total: questions.length,
