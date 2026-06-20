@@ -2854,7 +2854,7 @@ function registerIPCHandlers(): void {
   registerAiDispatchIPC();
 
   // -- BP087 Wave 5: Alexandrian Catacombs IPC ----------------------------------
-  {
+  void (async () => {
     const {
       bootstrapCatacombs,
       getManifest,
@@ -2881,7 +2881,7 @@ function registerIPCHandlers(): void {
     safeHandle('catacombs:search', async (_e: unknown, params: { slug: string; query: string }) =>
       listEblets(params.slug)
     );
-  }
+  })();
 
   // -- BP087 Wave 3 SEG-C1: Thunderclap trial fire IPC ----------------------
   registerThunderclapFireIPC();
