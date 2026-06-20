@@ -1,5 +1,12 @@
 # MnemosyneC Changelog
 
+## v0.5.14 · 2026-06-20 · BP087 P0 EMERGENCY
+**Fixes white-screen on install (v0.5.13 regression)**
+- src/renderer/lib/supabase.ts now lazy-initializes the Supabase client via a Proxy pattern. The previous module-load-time createClient() call threw "Node.js 20 no native WebSocket" in the Electron renderer, crashing the static import chain through CompaniesJoiningInTab + PreferenceInferencePanel + MnemosyneTabView + App.tsx + main.tsx -- React root never mounted -- blank white window.
+- Added .env at repo root with VITE_SUPABASE_URL + VITE_SUPABASE_PUBLISHABLE_KEY (gitignored -- sourced from resources/supabase_public.env). vite.renderer.config.ts envDir extended to read repo-root .env.
+- No functional changes to Wave 3 + Wave 4 features (TrialFirePanel -- MultiSegGemmaPanel -- CompaniesJoiningInTab -- PreferenceInferencePanel -- Keys & Engines -- BrainSwapSelector -- all preserved as wired).
+- Detected and patched per §15 Bishop-Direct-Supabase BLOOD -- Founder NOT asked to fix renderer code.
+
 ## [0.5.13] - 2026-06-20 / Heartbeat version propagation: presencePayload now carries capabilities.version for homogeneity-gated health_snapshot and auto-update targeting.
 
 ## v0.5.12 · 2026-06-19 · BP087 (MAMBA release)
