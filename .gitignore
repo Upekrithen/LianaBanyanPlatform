@@ -39,3 +39,8 @@ Thumbs.db
 # MMLU-Pro and mesh benchmark data cache
 .mnemosynec/
 ~/.mnemosynec/
+
+# Python bytecode — never commit compiled artifacts
+__pycache__/
+*.pyc
+*.pyo

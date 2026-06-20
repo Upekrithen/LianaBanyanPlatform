@@ -24,7 +24,7 @@ export interface PeerCapability {
   gpu?: boolean;
   last_seen_at: string;
   /** Ed25519 public key hex — populated when β3 Thorax auth is active */
-  pub_key_hex?: string;
+  public_key_hex?: string;
   /** Thorax attestation status — 'attested' | 'unattested' | 'unknown' */
   thorax_status?: 'attested' | 'unattested' | 'unknown';
 }
@@ -99,7 +99,7 @@ async function fetchActivePeers(
       gpu: r.capabilities?.['gpu'] as boolean | undefined,
       last_seen_at: r.last_seen_at,
       // β3: Thorax attestation — populated when peer submits signed heartbeat
-      pub_key_hex: r.capabilities?.['pub_key_hex'] as string | undefined,
+      public_key_hex: r.capabilities?.['public_key_hex'] as string | undefined,
       thorax_status: (r.capabilities?.['thorax_status'] as PeerCapability['thorax_status']) ?? 'unknown',
     }));
   } catch {
