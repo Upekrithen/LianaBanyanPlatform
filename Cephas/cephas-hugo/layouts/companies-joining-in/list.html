@@ -1,0 +1,271 @@
+{{- define "main" }}
+{{/* Companies Joining In -- BP087 MAMBA-SM-epsilon */}}
+{{/* Public page. No auth required. Fetches from Supabase REST (anon key). */}}
+{{/* Data: entity_memberships WHERE node_type='food' AND status='live' */}}
+{{/* Sort: alphabetical. No sponsored placement. No boosted listings. No ranking-by-spend. EVER. */}}
+
+<style>
+.main { max-width: 100% !important; }
+.cji-page {
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color: #1a202c;
+  min-height: 100vh;
+  padding: 0 0 4rem;
+}
+.cji-wrap { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+
+.cji-header {
+  padding: 3rem 0 2rem;
+  border-bottom: 2px solid #e2e8f0;
+  margin-bottom: 2rem;
+}
+.cji-header h1 {
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 900;
+  color: #2b6cb0;
+  margin: 0 0 0.5rem;
+  letter-spacing: -0.02em;
+}
+.cji-header p {
+  font-size: 1.05rem;
+  color: #4a5568;
+  margin: 0;
+  max-width: 640px;
+}
+
+.cji-loading {
+  color: #718096;
+  font-size: 1rem;
+  padding: 2rem 0;
+}
+
+.cji-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.cji-card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: box-shadow 0.15s, border-color 0.15s;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.cji-card:hover {
+  box-shadow: 0 4px 20px rgba(43, 108, 176, 0.12);
+  border-color: #90cdf4;
+}
+
+.cji-card-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #ebf8ff;
+  color: #2b6cb0;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.2rem 0.7rem;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  width: fit-content;
+}
+
+.cji-card-name {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #1a202c;
+  margin: 0;
+}
+
+.cji-card-location {
+  font-size: 0.9rem;
+  color: #718096;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.cji-card-link {
+  display: inline-block;
+  margin-top: auto;
+  background: #2b6cb0;
+  color: #fff;
+  text-decoration: none;
+  padding: 0.45rem 1rem;
+  border-radius: 6px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  width: fit-content;
+  transition: background 0.15s;
+}
+.cji-card-link:hover { background: #2c5282; }
+
+.cji-empty {
+  color: #718096;
+  font-size: 1rem;
+  padding: 2rem 0;
+  font-style: italic;
+}
+
+.cji-footer-strapline {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e2e8f0;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #2b6cb0;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.cji-pilot-tag {
+  font-size: 0.72rem;
+  color: #68d391;
+  font-weight: 700;
+  background: #f0fff4;
+  border: 1px solid #c6f6d5;
+  border-radius: 999px;
+  padding: 0.1rem 0.5rem;
+  margin-left: 0.4rem;
+  vertical-align: middle;
+}
+</style>
+
+<div class="cji-page">
+  <div class="cji-wrap">
+
+    <header class="cji-header">
+      <h1>{{ .Title }}</h1>
+      <p>{{ .Description }}</p>
+    </header>
+
+    <div id="cji-status" class="cji-loading">Loading businesses...</div>
+    <div id="cji-grid" class="cji-grid" aria-live="polite" aria-label="Business listings"></div>
+
+    <footer class="cji-footer-strapline">Help Each Other Help Ourselves</footer>
+
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var SUPABASE_URL = "https://ruuxzilgmuwddcofqecc.supabase.co";
+  var SUPABASE_ANON = (typeof window.__LB_ANON !== "undefined") ? window.__LB_ANON : "";
+
+  var INITIATIVE_BADGE = {
+    food: "Let's Make Dinner",
+    goods: "Let's Go Shopping",
+    services: "Household Concierge",
+    knowledge: "Didasko",
+    gaming: "HexIsle",
+    other: "Liana Banyan"
+  };
+
+  function initiateBadge(nodeType) {
+    return INITIATIVE_BADGE[nodeType] || "Liana Banyan";
+  }
+
+  function locationLabel(entity) {
+    if (!entity.service_area_geojson) return null;
+    var g = entity.service_area_geojson;
+    if (g.properties && g.properties.label) return g.properties.label;
+    if (g.properties && g.properties.name) return g.properties.name;
+    return null;
+  }
+
+  function renderCards(entities) {
+    var grid = document.getElementById("cji-grid");
+    var status = document.getElementById("cji-status");
+    if (!entities || entities.length === 0) {
+      status.textContent = "";
+      grid.innerHTML = '<p class="cji-empty">No businesses are live yet. Check back soon.</p>';
+      return;
+    }
+
+    status.textContent = "";
+
+    // Sort alphabetically by entity_name (Pilot Kitchen #1 first as canonical seed)
+    var sorted = entities.slice().sort(function (a, b) {
+      // Pilot Kitchen #1 pinned first
+      var aIsPilot = a.entity_name === "Pilot Kitchen #1";
+      var bIsPilot = b.entity_name === "Pilot Kitchen #1";
+      if (aIsPilot && !bIsPilot) return -1;
+      if (!aIsPilot && bIsPilot) return 1;
+      return a.entity_name.localeCompare(b.entity_name);
+    });
+
+    var html = "";
+    for (var i = 0; i < sorted.length; i++) {
+      var e = sorted[i];
+      var badge = initiateBadge(e.node_type);
+      var loc = locationLabel(e);
+      var isPilot = e.entity_name === "Pilot Kitchen #1";
+      var offeringUrl = "https://lianabanyan.com/business/" + encodeURIComponent(e.id);
+
+      html += '<article class="cji-card">';
+      html += '  <span class="cji-card-badge">&#127860; ' + escHtml(badge) + '</span>';
+      html += '  <p class="cji-card-name">' + escHtml(e.entity_name);
+      if (isPilot) {
+        html += ' <span class="cji-pilot-tag">PILOT</span>';
+      }
+      html += '</p>';
+      if (loc) {
+        html += '  <p class="cji-card-location">&#128205; ' + escHtml(loc) + '</p>';
+      }
+      html += '  <a class="cji-card-link" href="' + escHtml(offeringUrl) + '" rel="noopener">View Offerings</a>';
+      html += '</article>';
+    }
+
+    grid.innerHTML = html;
+  }
+
+  function escHtml(str) {
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function loadBusinesses() {
+    var url = SUPABASE_URL + "/rest/v1/entity_memberships" +
+      "?select=id,entity_name,node_type,service_area_geojson" +
+      "&node_type=eq.food" +
+      "&status=eq.live" +
+      "&order=entity_name.asc";
+
+    var headers = {
+      "apikey": SUPABASE_ANON,
+      "Accept": "application/json"
+    };
+
+    fetch(url, { headers: headers })
+      .then(function (res) {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.json();
+      })
+      .then(function (data) {
+        renderCards(data);
+      })
+      .catch(function (err) {
+        console.error("[companies-joining-in] fetch error:", err);
+        var status = document.getElementById("cji-status");
+        status.textContent = "Unable to load businesses. Please try again later.";
+      });
+  }
+
+  loadBusinesses();
+})();
+</script>
+
+{{- end }}
