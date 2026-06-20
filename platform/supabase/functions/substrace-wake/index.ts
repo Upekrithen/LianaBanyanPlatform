@@ -124,7 +124,7 @@ Deno.serve(async (req: Request) => {
         session_id: wake_id,
         ttl_seconds: 300,
         status: 'pending',
-        wire_format: 'substrace-wake-v1',
+        wire_format: 'hex-mcode-v1',
       });
 
     if (relayError) {
