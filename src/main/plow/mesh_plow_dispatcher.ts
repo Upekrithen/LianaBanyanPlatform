@@ -19,6 +19,8 @@
 
 import { encodeFrame, decodeFrame } from '../wire/hex-encode';
 import { randomUUID, createHash } from 'crypto';
+import { signFrame, verifyFrame } from '../thorax/sign_verify';
+import { fetchPearlFromMesh } from '../pearl/pearl_mesh_sync';
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
@@ -26,6 +28,8 @@ export interface MeshPeerTarget {
   peer_id: string;
   /** Optional domain affinity score for this peer on the question domain (0-1) */
   domain_affinity?: number;
+  /** MAMBA-beta3: Ed25519 public key hex for Thorax frame verification */
+  public_key_hex?: string;
 }
 
 export interface MeshPlowQuestion {
@@ -87,6 +91,10 @@ export interface MeshPlowConfig {
   routing?: 'domain-affinity' | 'round-robin';
   /** If set, only dispatch to peers with top-N affinity scores */
   pool_size?: number;
+  /** REST base URLs for peer nodes used during MAMBA-beta2 pearl mesh fan-out */
+  pearl_peer_endpoints?: string[];
+  /** MAMBA-beta3: local Ed25519 private key hex for signing outbound frames (PKCS8 DER) */
+  local_private_key_hex?: string;
 }
 
 // ─── Helpers ───────────────────────────────────────────────────────────────────
@@ -148,7 +156,47 @@ export async function dispatchQuestionToMesh(
     peerPool = peerPool.slice(0, config.pool_size);
   }
 
+  // MAMBA-beta2: pearl resolution -- local substrate first, then attested 2-attempt mesh fan-out
+  const pearlId = sha256hex(question.domain + ':' + question.question).slice(0, 16);
+  let pearlContext: string | null = null;
+
+  // 1. Attempt local substrate pearl lookup
+  try {
+    const localRes = await fetch(
+      `${config.supabase_url}/rest/v1/pearl_share?pearl_id=eq.${pearlId}&select=payload_b64&limit=1`,
+      {
+        headers: {
+          'apikey': config.supabase_anon_key,
+          'Authorization': `Bearer ${config.supabase_anon_key}`,
+        },
+        signal: AbortSignal.timeout(5_000),
+      },
+    );
+    if (localRes.ok) {
+      const rows = (await localRes.json()) as Array<{ payload_b64: string }>;
+      if (rows.length > 0 && rows[0]) {
+        pearlContext = rows[0].payload_b64;
+      }
+    }
+  } catch {
+    // local lookup failed -- fall through to mesh fan-out
+  }
+
+  // 2. On null: attested 2-attempt fan-out from peer nodes
+  if (pearlContext === null) {
+    const peerEndpoints = config.pearl_peer_endpoints ?? [];
+    pearlContext = await fetchPearlFromMesh(pearlId, peerEndpoints);
+    if (pearlContext !== null) {
+      // MAMBA-beta2: pearl resolved from mesh peer
+      console.log(`[MeshPlow] MAMBA-beta2: pearl resolved from mesh peer pearl_id=${pearlId}`);
+    } else {
+      // MAMBA-beta2: pearl null after attested 2-attempt fan-out -- pearl_id=${pearlId}
+      console.log(`[MeshPlow] MAMBA-beta2: pearl null after attested 2-attempt fan-out -- pearl_id=${pearlId}`);
+    }
+  }
+
   // Build question payload (peer sees options + domain, NOT sealed_letter)
+  // pearl_id is included regardless of resolution result; pearl_context is null if unresolved
   const questionPayload: Record<string, unknown> = {
     question: question.question,
     options: question.options,
@@ -156,15 +204,19 @@ export async function dispatchQuestionToMesh(
     dispatch_id: dispatchId,
     requested_at: new Date().toISOString(),
     frame_version: 'hex-mcode-v1',
-    // β2 pearl_id: peer may optionally fetch a pearl for context (graceful fallback if absent)
-    pearl_id: sha256hex(question.domain + ':' + question.question).slice(0, 16),
+    pearl_id: pearlId,
+    pearl_context: pearlContext,
   };
 
   const jsonPayload = JSON.stringify(questionPayload);
   const jsonByteSize = Buffer.byteLength(jsonPayload, 'utf8');
 
-  // Encode as hex-mcode frame (MAMBA-δ)
-  const hexFrame = encodeFrame(dispatchId, 'question', questionPayload);
+  // Encode as hex-mcode frame (MAMBA-delta)
+  const rawHexFrame = encodeFrame(dispatchId, 'question', questionPayload);
+  // MAMBA-beta3: Ed25519 sign -- sign outbound frame with local private key (noop if key absent)
+  const hexFrame = config.local_private_key_hex
+    ? signFrame(rawHexFrame, config.local_private_key_hex)
+    : rawHexFrame;
   const hexByteSize = Buffer.byteLength(hexFrame, 'ascii'); // each char is 1 byte of ASCII hex
 
   // Dispatch to each peer via wan-relay-route
@@ -271,15 +323,57 @@ export async function dispatchQuestionToMesh(
         const row = rows[0]!;
         pending.delete(peerId);
 
-        // Decode reply frame (hex-mcode or plain JSON fallback — δ5 bi-directional)
+        // Decode reply frame (hex-mcode or plain JSON fallback -- delta5 bi-directional)
         let replyPayload: Record<string, unknown> = {};
         let replyHexFrame = '';
         let replyHexBytes = 0;
         let replyJsonBytes = 0;
 
         if (row.hex_frame && row.hex_frame.length > 0) {
+          // MAMBA-beta3: Ed25519 verify -- verify inbound frame signature before processing
+          const senderPeer = peerPool.find((p) => p.peer_id === peerId);
+          const senderPubKey = senderPeer?.public_key_hex;
+          let verifiedHexFrame = row.hex_frame;
+
+          if (senderPubKey) {
+            const verifyResult = verifyFrame(row.hex_frame, senderPubKey);
+            if (!verifyResult.valid) {
+              console.warn(
+                `[Thorax] VIOLATION: invalid signature from peer=${peerId} ` +
+                `frame_prefix=${row.hex_frame.slice(0, 32)} dispatch_id=${dispatchId}`
+              );
+              // Insert thorax_violation row (fire-and-forget)
+              fetch(
+                `${config.supabase_url}/rest/v1/thorax_violations`,
+                {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${config.supabase_service_key}`,
+                    'apikey': config.supabase_service_key,
+                    'Prefer': 'return=minimal',
+                  },
+                  body: JSON.stringify({
+                    peer_id: peerId,
+                    frame_hex_prefix: row.hex_frame.slice(0, 64),
+                    violation_type: 'invalid_signature',
+                    detected_at: new Date().toISOString(),
+                  }),
+                  signal: AbortSignal.timeout(5_000),
+                }
+              ).catch((err) => {
+                console.warn('[Thorax] thorax_violations insert failed:', err);
+              });
+              // Drop the frame
+              pending.delete(peerId);
+              continue;
+            }
+            // Signature valid -- use unsigned frame for decoding
+            verifiedHexFrame = verifyResult.frameHex;
+          }
+
           try {
-            const decoded = decodeFrame(row.hex_frame);
+            const decoded = decodeFrame(verifiedHexFrame);
             replyPayload = decoded.payload;
             replyHexFrame = row.hex_frame;
             replyHexBytes = Buffer.byteLength(row.hex_frame, 'ascii');

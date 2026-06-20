@@ -9,8 +9,9 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-service-role',
 };
 
-// MAMBA-β1: pheromone_sync added — mesh peers receive and apply pheromone weighting
-const VALID_TYPES = ['auto_update', 'config_set', 'fleet_warmup', 'health_snapshot', 'benchmark_run', 'noop_test', 'pheromone_sync', 'eblet_sync'];
+// MAMBA-beta1: pheromone_sync added -- mesh peers receive and apply pheromone weighting
+// MAMBA-beta2: pearl_sync added -- mesh peers upsert pearl_share on receive
+const VALID_TYPES = ['auto_update', 'config_set', 'fleet_warmup', 'health_snapshot', 'benchmark_run', 'noop_test', 'pheromone_sync', 'eblet_sync', 'pearl_sync'];
 const VALID_TIERS = ['all', 'base', 'member', 'premium'];
 
 Deno.serve(async (req: Request) => {
@@ -93,6 +94,37 @@ Deno.serve(async (req: Request) => {
         .single();
 
       if (error) throw error;
+
+      // MAMBA-beta2: pearl_sync handler -- upsert received pearl into pearl_share for local caching
+      if (broadcast_type === 'pearl_sync') {
+        const ps = payload_json as {
+          pearl_id?: string;
+          soccerball_sid?: string;
+          payload_b64?: string;
+          authored_at?: string;
+          origin_peer_id?: string;
+        };
+        if (ps.pearl_id && ps.soccerball_sid && ps.payload_b64 && ps.origin_peer_id) {
+          const { error: pearlErr } = await supabase
+            .from('pearl_share')
+            .upsert(
+              {
+                pearl_id: ps.pearl_id,
+                soccerball_sid: ps.soccerball_sid,
+                payload_b64: ps.payload_b64,
+                authored_at: ps.authored_at ?? new Date().toISOString(),
+                last_synced_at: new Date().toISOString(),
+                origin_peer_id: ps.origin_peer_id,
+              },
+              { onConflict: 'pearl_id' },
+            );
+          if (pearlErr) {
+            console.error('[mic-broadcast] pearl_sync upsert error:', pearlErr);
+          }
+        } else {
+          console.warn('[mic-broadcast] pearl_sync missing required fields -- skipping upsert');
+        }
+      }
 
       return new Response(
         JSON.stringify({ ok: true, broadcast_id: data.id, created_at: data.created_at, status: 'active' }),

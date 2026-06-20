@@ -23,6 +23,7 @@ import { app } from 'electron';
 import type { IncomingMessage, ServerResponse } from 'http';
 import { detectHardwareTier, getRecommendedModel } from '../hardware/ram_detector';
 import type { MicStartPayload } from './mic_types';
+import { getOrCreateKeypair } from '../thorax/ed25519_keypair';
 
 export const PEER_SERVER_PORT = 7474;
 const PRESENCE_INTERVAL_MS = 60_000;
@@ -123,6 +124,14 @@ async function publishPresence(): Promise<void> {
   const hwTier = detectHardwareTier();
   const installedDomains = getInstalledDomains();
 
+  // MAMBA-beta3: Ed25519 Thorax PKI -- inject public_key_hex into peer capabilities
+  let thoraxPublicKeyHex: string | undefined;
+  try {
+    thoraxPublicKeyHex = getOrCreateKeypair().public_key_hex;
+  } catch {
+    console.warn('[PeerServer] Thorax keypair unavailable -- publishing without public_key_hex');
+  }
+
   const relayBase =
     (typeof process !== 'undefined' && process.env?.RELAY_BASE)
       ? process.env.RELAY_BASE
@@ -146,6 +155,7 @@ async function publishPresence(): Promise<void> {
       ramGb: hwTier.ramGb,
       installedDomains,
       version: app.getVersion(),
+      ...(thoraxPublicKeyHex !== undefined ? { public_key_hex: thoraxPublicKeyHex } : {}),
     },
   };
 
