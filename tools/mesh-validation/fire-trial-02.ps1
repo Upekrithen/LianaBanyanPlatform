@@ -11,6 +11,13 @@
 #
 # PowerShell 7+ syntax. Use ';' to chain commands.
 
+# SCRAMBLER HOOK -- session_start (Row 2h close)
+# Call before first peer dispatch to enforce deterministic blade ordering
+# MCP tool: scrambler_session_start agent=THUNDERCLAP_TRIAL_02
+$sessionId = (Get-Date -Format 'yyyyMMdd_HHmmssZ')
+# node "C:\Users\Administrator\Documents\LianaBanyanPlatform\tools\mesh-validation\scrambler-mesh-hook.mjs" start $sessionId
+# (uncomment above line when librarian-mcp-client.mjs is wired)
+
 $timestamp = Get-Date -Format 'yyyyMMdd_HHmmss'
 $receiptDir = "C:\Users\Administrator\Documents\Asteroid-ProofVault\receipts\THUNDERCLAP\Trial_02"
 $gatesScript = "C:\Users\Administrator\Documents\LianaBanyanPlatform\tools\mesh-validation\gates_check.mjs"
@@ -79,3 +86,7 @@ if ($validateExitCode -eq 0) {
 } else {
     Write-Host "THUNDERCLAP Trial 02 fire complete -- validate-relay FAILED (exit $validateExitCode) -- review output above"
 }
+
+# SCRAMBLER HOOK -- session_closeout (Row 2h close)
+# node "C:\Users\Administrator\Documents\LianaBanyanPlatform\tools\mesh-validation\scrambler-mesh-hook.mjs" closeout $sessionId "TRIAL_02_COMPLETE"
+# (uncomment above line when librarian-mcp-client.mjs is wired)
