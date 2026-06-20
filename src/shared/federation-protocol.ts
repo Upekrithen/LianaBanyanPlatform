@@ -57,7 +57,10 @@ export type FedMsgType =
   | 'pair_unpair'          // A→B: dissolve current pairing
   | 'assist_substrate_serve'  // PF-3a: healthy→deaf: serve SIDs from warm replica
   | 'assist_inference_lend'   // PF-3b: route deaf frame's ask→answer (STUBBED)
-  | 'assist_state_mirror';    // PF-3c: replicate new Eblets to partner (STUBBED)
+  | 'assist_state_mirror'     // PF-3c: replicate new Eblets to partner (STUBBED)
+  // BP087 MAMBA-Row3: Substrace theorem mesh routing re-weave dispatch
+  | 'substrace_wake'          // Origin→target: re-weave wake with manifest
+  | 'substrace_wake_complete';// Target→origin: manifest fully resolved + items returned
 
 export interface FedMsg {
   type: FedMsgType;

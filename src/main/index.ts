@@ -130,6 +130,9 @@ import { startPeerServer, stopPeerServer, getCurrentTier, registerPresenceConfig
 import { registerDeepLinkProtocol, handleStartupDeepLink } from './deep-link-handler';
 import type { DeepLinkPayload } from './deep-link-handler';
 
+// BP087 MAMBA-Row3: Substrace theorem mesh routing re-weave dispatch
+import { handleSubstraceWakeReceive, setRelayEmitHook } from './substrace/wake_router';
+
 // BP072 ? Paired-Frame Mutual-Aid Layer
 import { PairedFrameManager } from './federation/paired-frame-manager';
 
@@ -507,6 +510,35 @@ function _handleInboundMeshMsg(msg: FedMsg): void {
   // BP072: forward pair_* and assist_* to PairedFrameManager
   if (msg.type.startsWith('pair_') || msg.type.startsWith('assist_')) {
     pairedFrameManager?.handleInbound(msg);
+  }
+
+  // BP087 MAMBA-Row3: substrace wake receive + complete handler
+  if (msg.type === 'substrace_wake') {
+    const payload = msg.payload as {
+      wake_id?: string;
+      origin_peer_id?: string;
+      manifest?: Array<{ type: 'pearl_id' | 'eblet_slug' | 'substrate_address'; ref: string }>;
+    };
+    if (Array.isArray(payload.manifest)) {
+      handleSubstraceWakeReceive(payload.manifest, payload.wake_id, payload.origin_peer_id)
+        .then(({ resolved_items }) => {
+          console.log(
+            `[MAMBA-Row3] substrace_wake handled wake_id=${payload.wake_id ?? 'unknown'} items=${resolved_items.length}`,
+          );
+        })
+        .catch((err) => console.warn('[MAMBA-Row3] handleSubstraceWakeReceive error:', err));
+    }
+  }
+
+  if (msg.type === 'substrace_wake_complete') {
+    const payload = msg.payload as {
+      wake_id?: string;
+      resolved_items?: unknown[];
+    };
+    // MAMBA-Row3: substrace_wake_complete received wake_id={wake_id} items={N}
+    console.log(
+      `[MAMBA-Row3] substrace_wake_complete received wake_id=${payload.wake_id ?? 'unknown'} items=${Array.isArray(payload.resolved_items) ? payload.resolved_items.length : 0}`,
+    );
   }
 }
 
@@ -5866,6 +5898,11 @@ app.whenReady().then(async () => {
 
   // MESH-6: Wire relay inbound hook for sid_fetch_*, pointer_advance
   relayClient.setInboundHook(_handleInboundMeshMsg);
+
+  // BP087 MAMBA-Row3: wire relay emit hook for substrace_wake_complete outbound
+  setRelayEmitHook((msg, toPeerId) => {
+    relayClient?.sendToPeer(toPeerId, msg as import('../shared/federation-protocol').FedMsg);
+  });
 
   // BP072: Initialize Paired-Frame Mutual-Aid layer
   pairedFrameManager = new PairedFrameManager(peerId, peerDiscovery, relayClient);
