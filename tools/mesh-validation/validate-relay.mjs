@@ -83,6 +83,7 @@ function parseArgs() {
   const args = process.argv.slice(2);
   // MAMBA-γ: added routing, andon-escalate, wire, plow flags
   // BP087 Trial-02: added exclude-peer flag for fleet-management discipline
+  // BP087 MAMBA-GEMMA: added flagship-tier, trial-id, pass flags
   const parsed = {
     questions: 5,
     mode: 'smoke',
@@ -94,10 +95,15 @@ function parseArgs() {
     plow: 'none',                   // 'mesh-12-blade' | 'none'
     andonThreshold: 15,             // variance threshold for Ascending Andon
     excludePeers: [],               // array of peer_id prefixes/full IDs to exclude from pool
+    flagshipTier: 'claude',         // 'claude' | 'gemma' | 'qwen' | 'mistral' -- brain override
+    trialId: null,                  // paired trial ID (THUNDERCLAP receipt)
+    pass: null,                     // 'A' | 'B' -- which pass in the paired trial
   };
 
   for (const arg of args) {
-    const [key, val] = arg.replace(/^--/, '').split('=');
+    const eqIdx = arg.indexOf('=');
+    const key = eqIdx === -1 ? arg.replace(/^--/, '') : arg.slice(2, eqIdx);
+    const val = eqIdx === -1 ? null : arg.slice(eqIdx + 1);
     if (!key) continue;
     if (key === 'questions') parsed.questions = parseInt(val, 10);
     else if (key === 'mode') parsed.mode = val;
@@ -110,6 +116,10 @@ function parseArgs() {
     else if (key === 'andon-threshold') parsed.andonThreshold = parseInt(val, 10);
     // --exclude-peer may appear multiple times; each val is a full peer_id or unambiguous prefix
     else if (key === 'exclude-peer' && val) parsed.excludePeers.push(val.trim());
+    // BP087 MAMBA-GEMMA flags
+    else if (key === 'flagship-tier' && val) parsed.flagshipTier = val.toLowerCase().trim();
+    else if (key === 'trial-id' && val) parsed.trialId = val.trim();
+    else if (key === 'pass' && val) parsed.pass = val.toUpperCase().trim();
   }
 
   if (parsed.mode === 'full' && parsed.questions === 5) parsed.questions = 70;
@@ -354,11 +364,22 @@ async function main() {
   const andonThreshold = args.andonThreshold ?? 15;
   const excludePeers = args.excludePeers ?? [];
 
+  // BP087 MAMBA-GEMMA: flagship-tier flag
+  const flagshipTier = args.flagshipTier ?? 'claude';
+  const trialId = args.trialId ?? null;
+  const passLabel = args.pass ?? null;
+  const isGemmaMode = flagshipTier !== 'claude';
+
   console.log(`\n${BOLD}${CYAN}5-PEER RELAY ORCHESTRATOR · BP087 MAMBA · CROSS-VENDOR${RESET}`);
   console.log(`Session: ${sessionId}`);
   console.log(`Mode: ${mode.toUpperCase()} · Questions: ${questionCount} · Timeout: ${timeoutSec}s/question`);
   console.log(`Routing: ${routing} · Wire: ${wire} · Andon-escalate: ${andonEscalate} · Andon-threshold: ${andonThreshold}`);
-  console.log(`Topology: Supabase relay_routes dispatch — no direct Ollama IPs\n`);
+  if (trialId) console.log(`Trial ID: ${trialId} · Pass: ${passLabel ?? 'unset'}`);
+  if (isGemmaMode) {
+    console.log(`${YELLOW}flagship-tier=${flagshipTier}: Anthropic API DISABLED -- all calls routed local${RESET}`);
+    console.log(`[flagship-tier=${flagshipTier}] Anthropic API SKIPPED`);
+  }
+  console.log(`Topology: Supabase relay_routes dispatch -- no direct Ollama IPs\n`);
 
   // Load credentials
   const pub = loadPublicEnv();
@@ -370,7 +391,11 @@ async function main() {
   if (!SUPABASE_ANON_KEY) { console.error('ERROR: SUPABASE_ANON_KEY not found'); process.exit(2); }
   if (!SERVICE_KEY) { console.error('ERROR: SUPABASE_SERVICE_ROLE_KEY not found'); process.exit(2); }
   console.log(`Supabase URL loaded (${SUPABASE_URL.length > 0 ? 'OK' : 'MISSING'})`);
-  console.log(`Service key loaded (length=${SERVICE_KEY.length})\n`);
+  console.log(`Service key loaded (length=${SERVICE_KEY.length})`);
+  if (isGemmaMode) {
+    console.log(`[flagship-tier=${flagshipTier}] Anthropic API SKIPPED -- using local model via peer Ollama`);
+  }
+  console.log('');
 
   // Discover active peers
   console.log('Querying peer_presence for active peers (last 10 min)...');
@@ -547,6 +572,9 @@ async function main() {
     const questionId = `${sessionId}-q${pad2(i + 1)}`;
 
     console.log(`[${qNum}] source_id=${q.source_id} (${q.domain}) correct=${correctLetter ?? '?'}`);
+    if (isGemmaMode) {
+      console.log(`[flagship-tier=${flagshipTier}] Anthropic API SKIPPED`);
+    }
 
     // MAMBA-γ: load domain affinity and sort peer pool
     let peerPool = [...peers];
@@ -721,13 +749,17 @@ async function main() {
   const receipt = {
     run_type: '5-peer-relay-orchestrator',
     canonical: false,
-    topology: 'Supabase relay_routes table dispatch · 4 LAN-adjacent + 1 real-WAN-hop (Son)',
+    topology: 'Supabase relay_routes table dispatch -- 4 LAN-adjacent + 1 real-WAN-hop (Son)',
     dispatch_method: 'wan-relay-route (no direct IP routing)',
-    model_families: 'gemma4:12b (M0, M1, M2, M3) × qwen2.5:7b (Son) — CROSS-VENDOR HETEROGENEOUS',
+    model_families: 'gemma4:12b (M0, M1, M2, M3) x qwen2.5:7b (Son) -- CROSS-VENDOR HETEROGENEOUS',
     session_id: sessionId,
     run_timestamp: new Date().toISOString(),
     mode,
     routing,
+    flagship_tier: flagshipTier,
+    trial_id: trialId,
+    pass: passLabel,
+    anthropic_api_skipped: isGemmaMode,
     question_count: questions.length,
     peer_count: peers.length,
     son_peer_id: sonPeerId,

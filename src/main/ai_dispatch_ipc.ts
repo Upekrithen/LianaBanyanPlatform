@@ -3,6 +3,8 @@
 // Routes local queries through Ollama /api/chat with r10v3 substrate system-prompt layer.
 // SKU gate: nano skips Mnem-DRT pipeline; core/lite use mnem_drt_enabled flag; full always runs.
 // Eblet compose: top-3 local eblet snippets prepended to user message when Mnem-DRT active.
+// BP087 Brain Swap: brain-registry:list, brain-registry:get-active, brain-registry:set-active,
+//   brain-registry:smoke-test -- routing bifurcation for local vs flagship brains.
 
 import { ipcMain } from 'electron';
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
@@ -18,8 +20,113 @@ import {
 import { ollamaManager } from './ollama_manager';
 // BP083 SEG-3: MEMORY.md system-prompt injection (amnesia cure)
 import { getMemoryMd } from './memory_scaffold';
+// BP087 Brain Swap: brain registry for routing bifurcation
+import {
+  getBrainRegistry,
+  getActiveBrainId,
+  setActiveBrainId,
+  getActiveBrain,
+  DEFAULT_BRAINS,
+  type BrainEntry,
+} from './brain_registry/brain_registry';
 
 const OLLAMA_API_BASE = 'http://127.0.0.1:11434';
+
+// BP087 SEGResultEnvelope -- unified return type for brain-aware dispatch.
+// Existing callers that destructure only `content` are unaffected (content is always present).
+export interface SEGResultEnvelope {
+  brain_id: string;
+  kind: 'flagship' | 'local';
+  model_id: string;
+  content: string;
+  input_tokens: number | null;  // null for local Ollama
+  output_tokens: number | null; // null for local Ollama
+  latency_ms: number;
+  error: string | null;
+}
+
+// BP087 Brain Swap: dispatch a single question via the configured brain (local or flagship).
+// local path: POST to Ollama /api/chat with stream:false
+// flagship path: POST to Anthropic /v1/messages (requires ANTHROPIC_API_KEY in env)
+async function dispatchViaBrain(
+  brain: BrainEntry,
+  messages: Array<{ role: string; content: string }>,
+): Promise<SEGResultEnvelope> {
+  const t0 = Date.now();
+  const envelope: SEGResultEnvelope = {
+    brain_id: brain.brain_id,
+    kind: brain.kind,
+    model_id: brain.model_id,
+    content: '',
+    input_tokens: null,
+    output_tokens: null,
+    latency_ms: 0,
+    error: null,
+  };
+
+  try {
+    if (brain.kind === 'local') {
+      // Local Ollama path
+      const res = await fetch(`${brain.api_endpoint}/api/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ model: brain.model_id, messages, stream: false }),
+        signal: AbortSignal.timeout(60_000),
+      });
+      if (!res.ok) {
+        envelope.error = `Ollama HTTP ${res.status}: ${res.statusText}`;
+      } else {
+        const data = await res.json() as { message?: { content?: string }; done?: boolean };
+        envelope.content = data.message?.content ?? '';
+      }
+    } else {
+      // Flagship (Anthropic) path
+      const apiKey = process.env.ANTHROPIC_API_KEY ?? '';
+      if (!apiKey) {
+        envelope.error = 'ANTHROPIC_API_KEY not set -- cannot dispatch flagship brain';
+      } else {
+        // Convert messages: Anthropic API expects role "user"/"assistant", system separate
+        const systemMsg = messages.find((m) => m.role === 'system');
+        const chatMsgs = messages.filter((m) => m.role !== 'system');
+        const body: Record<string, unknown> = {
+          model: brain.model_id,
+          max_tokens: 1024,
+          messages: chatMsgs,
+        };
+        if (systemMsg) body['system'] = systemMsg.content;
+
+        const res = await fetch(`${brain.api_endpoint}/v1/messages`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': apiKey,
+            'anthropic-version': '2023-06-01',
+          },
+          body: JSON.stringify(body),
+          signal: AbortSignal.timeout(60_000),
+        });
+        if (!res.ok) {
+          const errText = await res.text().catch(() => res.statusText);
+          envelope.error = `Anthropic HTTP ${res.status}: ${errText.slice(0, 200)}`;
+        } else {
+          const data = await res.json() as {
+            content?: Array<{ type: string; text?: string }>;
+            usage?: { input_tokens?: number; output_tokens?: number };
+          };
+          const textBlock = (data.content ?? []).find((b) => b.type === 'text');
+          envelope.content = textBlock?.text ?? '';
+          envelope.input_tokens = data.usage?.input_tokens ?? null;
+          envelope.output_tokens = data.usage?.output_tokens ?? null;
+        }
+      }
+    }
+  } catch (err) {
+    envelope.error = String(err);
+  }
+
+  envelope.latency_ms = Date.now() - t0;
+  return envelope;
+}
 
 // v0.1.57.1: module-scope streaming state — AbortController for in-flight stream,
 // inference counter for cold-start detection.
@@ -379,6 +486,70 @@ export function registerAiDispatchIPC(): void {
       return { ok: true, stats, verifiedCount };
     } catch (err) {
       return { ok: false, error: String(err), stats: null, verifiedCount: 0 };
+    }
+  });
+
+  // ── BP087 Brain Registry IPC ──────────────────────────────────────────────
+
+  // brain-registry:list -- returns all brains + active brain id
+  ipcMain.handle('brain-registry:list', () => {
+    try {
+      const brains = getBrainRegistry();
+      const active_brain_id = getActiveBrainId();
+      return { ok: true, brains, active_brain_id };
+    } catch (err) {
+      return { ok: false, error: String(err), brains: DEFAULT_BRAINS, active_brain_id: 'claude-sonnet-4-6' };
+    }
+  });
+
+  // brain-registry:get-active -- returns active brain id
+  ipcMain.handle('brain-registry:get-active', () => {
+    try {
+      return { ok: true, brain_id: getActiveBrainId() };
+    } catch (err) {
+      return { ok: false, error: String(err), brain_id: 'claude-sonnet-4-6' };
+    }
+  });
+
+  // brain-registry:set-active -- sets active brain id, persists to userData
+  ipcMain.handle('brain-registry:set-active', (_event, brain_id: string) => {
+    try {
+      setActiveBrainId(brain_id);
+      return { ok: true };
+    } catch (err) {
+      return { ok: false, error: String(err) };
+    }
+  });
+
+  // brain-registry:smoke-test -- fires one fixed question through the specified brain
+  // Hardcoded smoke question: speed of light
+  ipcMain.handle('brain-registry:smoke-test', async (_event, brain_id: string) => {
+    try {
+      const brains = getBrainRegistry();
+      const brain: BrainEntry | undefined = brains.find((b) => b.brain_id === brain_id) ?? getActiveBrain();
+      if (!brain) {
+        return { ok: false, error: `Brain not found: ${brain_id}` };
+      }
+      const smokeQuestion = [
+        {
+          role: 'user',
+          content:
+            'What is the speed of light in a vacuum? ' +
+            'A) 3x10^8 m/s B) 3x10^6 m/s C) 3x10^10 m/s D) 3x10^4 m/s. ' +
+            'Reply with only the letter.',
+        },
+      ];
+      const result = await dispatchViaBrain(brain, smokeQuestion);
+      return {
+        ok: result.error === null,
+        content: result.content,
+        brain_id: result.brain_id,
+        kind: result.kind,
+        latency_ms: result.latency_ms,
+        error: result.error ?? undefined,
+      };
+    } catch (err) {
+      return { ok: false, error: String(err) };
     }
   });
 }

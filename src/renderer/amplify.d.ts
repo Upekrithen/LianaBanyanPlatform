@@ -504,8 +504,15 @@ declare global {
         areopagus_query: (query: string) => Promise<{ ok: boolean; matches?: Array<{ sid: string; pearls: string[]; score: number }>; query?: string; searched_at?: number; error?: string }>;
       };
     };
-    // SEG-V0150-P0-DIAGNOSE-BRIDGE: sentinel — set by preload before main bridge wires up
+    // SEG-V0150-P0-DIAGNOSE-BRIDGE: sentinel -- set by preload before main bridge wires up
     __preloadLoaded?: boolean;
+    // BP087 Brain Swap -- brain registry hot-swap
+    brainRegistry?: {
+      list: () => Promise<{ ok: boolean; brains?: unknown[]; active_brain_id?: string; error?: string }>;
+      getActive: () => Promise<{ ok: boolean; brain_id?: string; error?: string }>;
+      setActive: (brain_id: string) => Promise<{ ok: boolean; error?: string }>;
+      smokeTest: (brain_id: string) => Promise<{ ok: boolean; content?: string; brain_id?: string; kind?: string; latency_ms?: number; error?: string }>;
+    };
   }
 }
 

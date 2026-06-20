@@ -901,6 +901,18 @@ contextBridge.exposeInMainWorld('amplify', {
     },
   },
 
+  // ── BP087 Brain Registry (Brain Swap) ────────────────────────────────────
+  brainRegistry: {
+    list: (): Promise<{ ok: boolean; brains?: unknown[]; active_brain_id?: string; error?: string }> =>
+      ipcRenderer.invoke('brain-registry:list'),
+    getActive: (): Promise<{ ok: boolean; brain_id?: string; error?: string }> =>
+      ipcRenderer.invoke('brain-registry:get-active'),
+    setActive: (brain_id: string): Promise<{ ok: boolean; error?: string }> =>
+      ipcRenderer.invoke('brain-registry:set-active', brain_id),
+    smokeTest: (brain_id: string): Promise<{ ok: boolean; content?: string; brain_id?: string; kind?: string; latency_ms?: number; error?: string }> =>
+      ipcRenderer.invoke('brain-registry:smoke-test', brain_id),
+  },
+
   // ── LB Account (BP065 Part A · SEG-C2a) ─────────────────────────────────
 
   lbStartAuth: (email: string): Promise<{ ok: boolean; error?: string }> =>
