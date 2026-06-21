@@ -103,7 +103,12 @@ const ANTHROPIC_API_VERSION = '2023-06-01';
 const CLAUDE_MODEL = 'claude-sonnet-4-6';
 
 function buildSubstrateSystemPrompt(context: SubstrateContextBundle): string {
-  return [
+  // MOUNTAIN_1b_ADDITION: prepend domain-primed context if present (set by runPlowLoop)
+  const primedSection = context.primed_advantage_context
+    ? context.primed_advantage_context + '\n\n'
+    : '';
+
+  const baseSection = [
     '## Substrate Context',
     `Timestamp: ${context.timestamp}`,
     `Peers online: ${context.peer_count}`,
@@ -120,6 +125,8 @@ function buildSubstrateSystemPrompt(context: SubstrateContextBundle): string {
       ? `Active pheromones: ${context.active_pheromones.map((p) => p.domain + '(' + p.salience.toFixed(2) + ')').join(', ')}`
       : 'No active pheromones.',
   ].join('\n');
+
+  return primedSection + baseSection; // MOUNTAIN_1b_ADDITION
 }
 
 export class ClaudeBrainAdapter implements CCI {

@@ -59,6 +59,11 @@ export interface DispatchResult {
   latency_ms: number;
   hex_frame_size_bytes: number;
   peer_id?: string;
+  // MOUNTAIN_1b_ADDITION: PLOW LOOP metadata (pure additions · not breaking)
+  plow_confidence?: number;     // from PlowLoopResult.confidence
+  plow_iterations?: number;     // from PlowLoopResult.iterations
+  plow_domain?: string;         // from PlowLoopResult.domain
+  plow_advantage_size?: number; // from PlowLoopResult.advantage_used.bundle_size_bytes
 }
 
 // ─── DispatchLoop interface ───────────────────────────────────────────────────────
@@ -166,12 +171,26 @@ export function createDispatchLoop(
         member_count: councilSelection.members.length,
       });
 
-      // Step 5: minorCouncil fan-out
-      const councilResult = await minorCouncil(req.prompt, packageName, {
-        substrate_context: substrateContext,
-        timeout_ms: Math.max(pkg.estimated_latency_s * 1000 * 2, 90000),
-        min_members: 2,
-      });
+      // Step 5: MOUNTAIN_1b_ADDITION — runPlowLoop replaces raw minorCouncil fan-out
+      // Default Council path now flows through the PLOW LOOP:
+      //   classifyQueryDomain → plowDomainAdvantage → primed minorCouncil → scoreConfidence
+      // The single-brain path is UNCHANGED (speed-critical / known-low-variance special case).
+      const plowResult = await runPlowLoop(req.prompt, packageName, reader, {
+        maxIterations: 3,
+        confidenceThreshold: 0.75,
+        db: db,
+      }); // MOUNTAIN_1b_ADDITION
+
+      // Map PlowLoopResult → MinorCouncilResult shape for downstream logging compatibility
+      const councilResult = {
+        result: plowResult.answer,
+        variance: plowResult.council_variance,
+        escalated: plowResult.escalated,
+        member_answers: [] as Array<{ brain_id: string; answer: string; tokens_used: number; latency_ms: number }>,
+        council_package: packageName,
+        members_fired: 0,
+        latency_ms: plowResult.total_latency_ms,
+      };
 
       // Step 6+7: scoreConvergence + escalation handled inside minorCouncil
 
@@ -268,6 +287,11 @@ export function createDispatchLoop(
         latency_ms: latencyMs,
         hex_frame_size_bytes: resultFrame.length / 2,
         peer_id: req.target_peer,
+        // MOUNTAIN_1b_ADDITION: PLOW LOOP metadata
+        plow_confidence: plowResult.confidence,
+        plow_iterations: plowResult.iterations,
+        plow_domain: String(plowResult.domain),
+        plow_advantage_size: plowResult.advantage_used.bundle_size_bytes,
       };
 
     } else {
