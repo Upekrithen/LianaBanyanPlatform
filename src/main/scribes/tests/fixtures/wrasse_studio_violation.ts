@@ -52,7 +52,9 @@ export const FALSE_POSITIVE_DISPATCH: Dispatch = {
 export const CONVERGENCE_DISPATCH: Dispatch = {
   id: 'test:convergence:001',
   agentId: 'test_combined_agent',
-  text: 'Members pay $10/year, please open Studio to check, and run grep -r to find the config.',
+  // Contains: pricing violation (Reminder 3-of-3) + "open Studio" (Wrasse §15) +
+  // "grep -r" (Toolsmith Alpha) + "Select-String" (Toolsmith Beta) → Toolsmith 2-of-3
+  text: 'Members pay $10/year, please open Studio to check, and run grep -r to find the config, or use Select-String as a fallback.',
   createdAt: new Date().toISOString(),
   channel: 'convergence_test',
   meta: {

@@ -9,7 +9,7 @@
  * Statute §16: scribe identity rows MUST be registered before any dispatch.
  */
 
-import type { ScribeIdentityRow } from '../../scribes/types';
+import type { ScribeIdentityRow } from '../scribes/types';
 
 const _registry: Map<string, ScribeIdentityRow & { registeredAt: number }> = new Map();
 
