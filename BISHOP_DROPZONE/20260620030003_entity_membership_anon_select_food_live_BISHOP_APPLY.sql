@@ -21,4 +21,4 @@ CREATE POLICY "entity_memberships_anon_select_food_live"
   ON entity_memberships
   FOR SELECT
   TO anon
-  USING (node_type = 'food' AND status = 'live');
+  USING (entity_type = 'food' AND status = 'live');
