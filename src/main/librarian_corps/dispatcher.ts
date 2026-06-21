@@ -18,6 +18,7 @@
 import { encodeFrame } from '../wire/hex-encode';
 import {
   buildPyramidIndex,
+  bootstrapFromDb,
   resolveByTopic,
   resolveByAddress,
   type PyramidLayer,
@@ -372,6 +373,74 @@ export async function dispatch(req: DispatchRequest): Promise<DispatchResponse> 
   // 8. Cache and return
   storeCache(cacheKey, response);
   return response;
+}
+
+// ── Cold-start bootstrap ──────────────────────────────────────────────────────
+
+let _corpsDirBootstrapped = false;
+
+/**
+ * Cold-start bootstrap: loads librarian_corps_directory and pyramid_index_canonical
+ * from Supabase to reconstruct in-memory routing state without re-registration calls.
+ * Call once at process startup before the first dispatch().
+ * Idempotent: second call is a no-op.
+ *
+ * Phase 1 — corps directory: reads all rows, pre-populates _librarianPool.
+ * Phase 2 — pyramid index:   calls bootstrapFromDb(); seeds _pyramidIndex if DB is non-empty.
+ */
+export async function initLibrarianCorps(): Promise<void> {
+  if (_corpsDirBootstrapped) return;
+  _corpsDirBootstrapped = true;
+
+  // Phase 1: reconstruct librarian pool from persisted directory rows
+  if (SUPABASE_URL && SUPABASE_ANON_KEY) {
+    try {
+      const resp = await fetch(
+        `${SUPABASE_URL}/rest/v1/librarian_corps_directory?select=path,librarian_role,council_package`,
+        {
+          headers: supabaseHeaders(),
+          signal: AbortSignal.timeout(8_000),
+        },
+      );
+      if (resp.ok) {
+        const rows: Array<{ path: string; librarian_role: string; council_package: string }> =
+          await resp.json();
+        let loadedCount = 0;
+        for (const row of rows) {
+          const role = row.librarian_role as LibrarianRole;
+          if (!_librarianPool.has(role)) {
+            _librarianPool.set(role, createLibrarian(role));
+            loadedCount++;
+          }
+        }
+        console.info(
+          `[LibrarianCorps] bootstrap: ${loadedCount} librarian(s) loaded from directory` +
+          ` (${rows.length} row(s) in DB)`,
+        );
+      }
+    } catch {
+      console.info('[LibrarianCorps] bootstrap: directory load failed (non-fatal; will lazy-init on first dispatch)');
+    }
+  } else {
+    console.info('[LibrarianCorps] bootstrap: SUPABASE_URL/ANON_KEY not set; skipping directory load');
+  }
+
+  // Phase 2: seed pyramid index from DB (bootstrapFromDb returns null if table is empty)
+  try {
+    const dbIndex = await bootstrapFromDb();
+    if (dbIndex !== null && dbIndex.length > 0) {
+      _pyramidIndex = dbIndex;
+      const total = dbIndex.reduce((sum, l) => sum + l.topicIndex.size, 0);
+      console.info(
+        `[LibrarianCorps] bootstrap: pyramid index seeded from DB` +
+        ` (${total} topic-tag entries across ${dbIndex.length} layers)`,
+      );
+    } else {
+      console.info('[LibrarianCorps] bootstrap: pyramid_index_canonical empty; will build in-memory on first dispatch');
+    }
+  } catch {
+    console.info('[LibrarianCorps] bootstrap: pyramid index DB load failed (non-fatal; will build in-memory)');
+  }
 }
 
 // ── Cache management utilities ────────────────────────────────────────────────
