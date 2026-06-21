@@ -21,6 +21,21 @@ import {
   type PyramidHit,
 } from './pyramid_index';
 
+// ── Supabase (directory persistence) ─────────────────────────────────────────
+
+const _LIB_SUPABASE_URL: string =
+  process.env['SUPABASE_URL'] ?? process.env['NEXT_PUBLIC_SUPABASE_URL'] ?? '';
+const _LIB_SUPABASE_ANON_KEY: string =
+  process.env['SUPABASE_ANON_KEY'] ?? process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY'] ?? '';
+
+function _librarianSupabaseHeaders(): Record<string, string> {
+  return {
+    'Content-Type': 'application/json',
+    'apikey': _LIB_SUPABASE_ANON_KEY,
+    'Authorization': `Bearer ${_LIB_SUPABASE_ANON_KEY}`,
+  };
+}
+
 // ── Types ─────────────────────────────────────────────────────────────────────
 
 export type LibrarianRole =
@@ -273,6 +288,38 @@ export abstract class BaseLibrarian {
       librarianRole: this.role,
       councilPackage: COUNCIL_PACKAGE_MAP[this.role],
     };
+  }
+
+  /**
+   * Register this Librarian in the persistent corps directory (librarian_corps_directory).
+   * Upserts a row: ON CONFLICT path DO UPDATE updated_at, so re-registration on hot-restart
+   * updates the timestamp without duplicating the row.
+   * Non-fatal: best-effort persistence; in-memory registration via _librarianPool is canonical.
+   */
+  async registerInDirectory(): Promise<void> {
+    if (!_LIB_SUPABASE_URL || !_LIB_SUPABASE_ANON_KEY) return;
+    const path = `librarian_corps/${this.role}`;
+    const councilPackage = COUNCIL_PACKAGE_MAP[this.role];
+    try {
+      await fetch(`${_LIB_SUPABASE_URL}/rest/v1/librarian_corps_directory`, {
+        method: 'POST',
+        headers: {
+          ..._librarianSupabaseHeaders(),
+          'Prefer': 'resolution=merge-duplicates,return=minimal',
+        },
+        body: JSON.stringify({
+          path,
+          librarian_role: this.role,
+          council_package: councilPackage,
+          ip_ledger_row: `ip::librarian_corps::${this.role}`,
+          ed25519_sig: `sig_placeholder::${this.role}::${councilPackage}`,
+          updated_at: new Date().toISOString(),
+        }),
+        signal: AbortSignal.timeout(8_000),
+      });
+    } catch {
+      // Non-fatal: directory registration is best-effort
+    }
   }
 
   /** Release all 3 cabinet handles and mark as torn down. */

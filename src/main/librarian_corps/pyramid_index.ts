@@ -142,7 +142,14 @@ export async function buildPyramidIndex(): Promise<PyramidLayer[]> {
         }
         if (addresses.length > 0) {
           const existing = layer.topicIndex.get(tag) ?? [];
-          layer.topicIndex.set(tag, [...new Set([...existing, ...addresses])]);
+          const merged = [...new Set([...existing, ...addresses])];
+          layer.topicIndex.set(tag, merged);
+          // Persist the first canonical address for this (tier, tag) pair — fire-and-forget
+          // ON CONFLICT DO NOTHING ensures first-write wins across restarts
+          const firstNew = addresses[0];
+          if (firstNew) {
+            void persist(tier, tag, firstNew, layer.defaultCouncilPackage);
+          }
         }
       }),
     );
@@ -297,7 +304,7 @@ export async function resolveByAddress(
   };
 }
 
-// ── Supabase persistence (optional — for index survival across restarts) ───────
+// ── Supabase persistence (M3b · pyramid_index_canonical) ──────────────────────
 
 const SUPABASE_URL: string =
   process.env['SUPABASE_URL'] ?? process.env['NEXT_PUBLIC_SUPABASE_URL'] ?? '';
@@ -312,10 +319,123 @@ function supabaseHeaders(): Record<string, string> {
   };
 }
 
+/** Maps tier string to the SMALLINT layer column value stored in pyramid_index_canonical. */
+const TIER_TO_LAYER: Record<'canon' | 'pearl' | 'eblet', number> = {
+  canon: 0,
+  pearl: 1,
+  eblet: 2,
+};
+
+/** Reverse map: SMALLINT layer column value back to tier string. */
+const LAYER_TO_TIER: Record<number, 'canon' | 'pearl' | 'eblet'> = {
+  0: 'canon',
+  1: 'pearl',
+  2: 'eblet',
+};
+
 /**
- * Persist a built PyramidLayer to Supabase `pyramid_index_canonical` table.
- * Bishop applies the schema. Knight writes records; Bishop reads them.
- * No-op if SUPABASE_URL or SUPABASE_ANON_KEY is not set.
+ * Persist a single pyramid index entry to Supabase pyramid_index_canonical.
+ * ON CONFLICT (layer, topic_tag) DO NOTHING — first-write wins; canonical entries are immutable
+ * unless superseded via a separate flow.
+ * Non-fatal if Supabase is unavailable; in-memory index is canonical.
+ *
+ * M3b SEG I-B · BP089
+ */
+export async function persist(
+  tier: 'canon' | 'pearl' | 'eblet',
+  topicTag: string,
+  address: string,
+  defaultCouncilPackage: string | null = null,
+): Promise<void> {
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) return;
+  try {
+    await fetch(`${SUPABASE_URL}/rest/v1/pyramid_index_canonical`, {
+      method: 'POST',
+      headers: {
+        ...supabaseHeaders(),
+        'Prefer': 'resolution=ignore-duplicates,return=minimal',
+      },
+      body: JSON.stringify({
+        layer: TIER_TO_LAYER[tier],
+        topic_tag: topicTag,
+        address,
+        default_council_package: defaultCouncilPackage,
+      }),
+      signal: AbortSignal.timeout(8_000),
+    });
+  } catch {
+    // Non-fatal: in-memory index is canonical
+  }
+}
+
+/**
+ * Bootstrap the pyramid index from Supabase pyramid_index_canonical.
+ * Returns a fully-populated PyramidLayer[] if the table has rows; returns null if the table
+ * is empty or Supabase is unavailable (caller falls back to in-memory buildPyramidIndex()).
+ * Called by dispatcher.initLibrarianCorps() at process startup.
+ *
+ * M3b SEG I-B · BP089
+ */
+export async function bootstrapFromDb(): Promise<PyramidLayer[] | null> {
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) return null;
+  try {
+    const resp = await fetch(
+      `${SUPABASE_URL}/rest/v1/pyramid_index_canonical` +
+      `?select=layer,topic_tag,address,default_council_package&order=layer.asc`,
+      {
+        headers: supabaseHeaders(),
+        signal: AbortSignal.timeout(10_000),
+      },
+    );
+    if (!resp.ok) return null;
+
+    const rows: Array<{
+      layer: number;
+      topic_tag: string;
+      address: string;
+      default_council_package: string | null;
+    }> = await resp.json();
+
+    if (!Array.isArray(rows) || rows.length === 0) return null;
+
+    // Reconstruct PyramidLayer[] — one PyramidLayer per tier, topicIndex rebuilt from rows
+    const layers: PyramidLayer[] = [
+      { tier: 'canon', topicIndex: new Map(), defaultCouncilPackage: DEFAULT_COUNCIL_PACKAGE.canon },
+      { tier: 'pearl', topicIndex: new Map(), defaultCouncilPackage: DEFAULT_COUNCIL_PACKAGE.pearl },
+      { tier: 'eblet', topicIndex: new Map(), defaultCouncilPackage: DEFAULT_COUNCIL_PACKAGE.eblet },
+    ];
+
+    let entryCount = 0;
+    for (const row of rows) {
+      const tier = LAYER_TO_TIER[row.layer];
+      if (!tier) continue;
+      const layer = layers.find(l => l.tier === tier);
+      if (!layer) continue;
+      const existing = layer.topicIndex.get(row.topic_tag) ?? [];
+      if (!existing.includes(row.address)) {
+        layer.topicIndex.set(row.topic_tag, [...existing, row.address]);
+      }
+      // Row-level council package overrides layer default if present
+      if (row.default_council_package) {
+        layer.defaultCouncilPackage = row.default_council_package;
+      }
+      entryCount++;
+    }
+
+    console.info(`[PyramidIndex] bootstrapFromDb: ${entryCount} row(s) loaded from pyramid_index_canonical`);
+    return layers;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Legacy layer-level persist helper (pre-M3b schema placeholder).
+ * Column names did not match the M3b schema; kept for backwards compatibility
+ * but writes will no-op against the live table (columns mismatch → 400, non-fatal).
+ * Use persist() for new writes.
+ *
+ * @deprecated Use persist() instead (M3b BP089).
  */
 export async function persistPyramidLayer(layer: PyramidLayer): Promise<void> {
   if (!SUPABASE_URL || !SUPABASE_ANON_KEY) return;
