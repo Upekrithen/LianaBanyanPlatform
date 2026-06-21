@@ -26,6 +26,8 @@ import type { FrameType } from './hex_mcode';
 import { minorCouncil } from './minor_star_chamber';
 import type { CourtPackageLibrary, CouncilPackageName } from './court_packages';
 import type { RelayClient } from '../federation/relay-client';
+// MOUNTAIN_1b_ADDITION: PLOW LOOP default Council path
+import { runPlowLoop } from './plow/plow_loop';
 
 // ─── Dispatch mode ────────────────────────────────────────────────────────────────
 
