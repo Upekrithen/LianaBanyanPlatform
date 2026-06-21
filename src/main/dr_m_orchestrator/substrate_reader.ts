@@ -73,6 +73,10 @@ export interface SubstrateContextBundle {
   active_pheromones: PheromoneSignal[];
   context_size_bytes: number;
   query_latency_ms: number;
+  // MOUNTAIN_1b_ADDITION: optional primed domain context string injected by PLOW LOOP.
+  // Set by runPlowLoop before passing bundle to minorCouncil. Consumed by brain adapters.
+  // Empty string or absent = no domain priming (Day 1 empty bundles, non-council paths).
+  primed_advantage_context?: string;
 }
 
 // ─── Interface ────────────────────────────────────────────────────────────────────
@@ -80,6 +84,8 @@ export interface SubstrateContextBundle {
 export interface SubstrateReader {
   read(): Promise<SubstrateContextBundle>;
   readSince(timestamp: string): Promise<SubstrateContextBundle>;
+  // MOUNTAIN_1b_ADDITION: exposes db config for domain-specific substrate pulls
+  db?: DatabaseConfig;
 }
 
 // ─── Internal: Supabase REST fetch helpers ────────────────────────────────────────
@@ -238,6 +244,8 @@ async function buildBundle(
 
 export function createSubstrateReader(db: DatabaseConfig): SubstrateReader {
   return {
+    // MOUNTAIN_1b_ADDITION: db exposed for plowDomainAdvantage domain-specific pulls
+    db,
     async read(): Promise<SubstrateContextBundle> {
       return buildBundle(db);
     },
@@ -246,3 +254,16 @@ export function createSubstrateReader(db: DatabaseConfig): SubstrateReader {
     },
   };
 }
+
+// ─── MOUNTAIN_1b_ADDITION: re-exports from plow/ sub-module ──────────────────────
+// Consumers import from substrate_reader.ts; plow/ is an internal sub-module.
+
+export { DomainTag } from './plow/domain_classifier';
+export type { ClassifierModel, ClassifyResult } from './plow/domain_classifier';
+export { classifyQueryDomain, loadClassifier } from './plow/domain_classifier';
+
+export type { PheromoneHit, UnfairAdvantageBundle } from './plow/unfair_advantage';
+export { plowDomainAdvantage, bundleToSystemContext } from './plow/unfair_advantage';
+
+export type { PlowLoopOptions, PlowLoopResult } from './plow/plow_loop';
+export { runPlowLoop } from './plow/plow_loop';
