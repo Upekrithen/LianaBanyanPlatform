@@ -1148,6 +1148,14 @@ contextBridge.exposeInMainWorld('amplify', {
   ipLedgerExecuteGenesisMint: () => ipcRenderer.invoke('ip-ledger:execute-genesis-mint'),
   ipLedgerGenesisMintFull: () => ipcRenderer.invoke('ip-ledger:genesis-mint-full'),
 
+  // ── BP089 I-C: §16 ip_ledger entries + peer keypair ──────────────────────
+  ipLedgerGetEntries: (ringBearerId: string): Promise<{ ok: boolean; entries: unknown[]; error?: string }> =>
+    ipcRenderer.invoke('ip-ledger:get-entries', ringBearerId),
+  peerKeyRead: (): Promise<{ ok: boolean; publicKeyHex?: string; generated?: boolean; peerId?: string; error?: string }> =>
+    ipcRenderer.invoke('peer-key:read'),
+  peerKeyRegenerate: (): Promise<{ ok: boolean; publicKeyHex?: string; generated?: boolean; peerId?: string; error?: string }> =>
+    ipcRenderer.invoke('peer-key:regenerate'),
+
   // SEG-2 v0.1.56 — first-launch progressive auto-pull (gemma4:12b)
   firstLaunchModelPull: {
     check: (modelName: string): Promise<{ exists: boolean; modelName: string }> =>

@@ -1,16 +1,14 @@
 /**
- * MyIPLedger.tsx -- IP Ledger display component (UI stub)
- * BP089 Marathon Session 2 -- Item D (I12)
+ * MyIPLedger.tsx -- IP Ledger display component
+ * BP089 Marathon Session 2 -- Item D (I12) / I-C wire-up
  *
  * Displays ip_ledger rows for the current peer/member.
- * Data fetched via IPC from main process (post-I12 migration and §16 ip_ledger table).
+ * Data fetched via IPC: ip-ledger:get-entries handler wired in BP089 I-C.
  *
- * NOTE: This is a stub pending I12 migration apply by Bishop.
- * TODO: Wire ipcRenderer.invoke('ip-ledger:get-entries', peerId) once main IPC handler
- *       is added in index.ts.
+ * NOTE: Requires Bishop I12 migration for live data. Shows empty state until applied.
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -122,7 +120,33 @@ interface MyIPLedgerProps {
   error?: string;
 }
 
-export function MyIPLedger({ peerId, entries = [], loading = false, error }: MyIPLedgerProps) {
+export function MyIPLedger({ peerId, entries: propEntries, loading: propLoading = false, error: propError }: MyIPLedgerProps) {
+  const [fetchedEntries, setFetchedEntries] = useState<IPLedgerRow[]>([]);
+  const [fetchLoading, setFetchLoading] = useState(false);
+  const [fetchError, setFetchError] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    if (propEntries !== undefined) return; // parent is managing entries; skip self-fetch
+    if (!peerId) return;
+    const api = (window as unknown as { electronAPI?: { ipLedgerGetEntries?: (id: string) => Promise<{ ok: boolean; entries: IPLedgerRow[]; error?: string }> } }).electronAPI;
+    if (!api?.ipLedgerGetEntries) return;
+    setFetchLoading(true);
+    api.ipLedgerGetEntries(peerId)
+      .then((result) => {
+        if (result.ok) {
+          setFetchedEntries(result.entries);
+        } else {
+          setFetchError(result.error ?? 'Unknown error');
+        }
+      })
+      .catch((e: unknown) => setFetchError(String(e)))
+      .finally(() => setFetchLoading(false));
+  }, [peerId, propEntries]);
+
+  const entries = propEntries ?? fetchedEntries;
+  const loading = propLoading || fetchLoading;
+  const error = propError ?? fetchError;
+
   return (
     <div style={{ fontFamily: 'system-ui, sans-serif' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>

@@ -117,11 +117,19 @@ async function dispatchDomainViaRelay(
     };
   }
 
+  const anonKey =
+    process.env.SUPABASE_ANON_KEY ??
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ??
+    '';
+
   const tryRoute = async (base: string): Promise<Response | null> => {
     try {
       return await fetch(`${base}/wan-relay-route`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(anonKey ? { 'Authorization': `Bearer ${anonKey}` } : {}),
+        },
         body: JSON.stringify({ payload_encrypted: payloadEncrypted, target_peer_id: peer.id }),
         signal: AbortSignal.timeout(15_000),
       });

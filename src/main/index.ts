@@ -4460,6 +4460,65 @@ function registerIPCHandlers(): void {
     };
   });
 
+  // ── BP089 I-C: ip-ledger:get-entries + peer-key handlers ──────────────────
+  // Adds §16 Supabase ip_ledger read + peer keypair IPC surface.
+  // Bishop applies I12 migration before these handlers have live data.
+
+  safeHandle('ip-ledger:get-entries', async (_event, ringBearerId: string) => {
+    const supabaseUrl = (process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL ?? '').replace(/\/$/, '');
+    const anonKey = process.env.SUPABASE_ANON_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '';
+    if (!supabaseUrl || !anonKey) return { ok: false, error: 'Supabase config not available', entries: [] };
+    try {
+      const qs = ringBearerId ? `ring_bearer_id=eq.${encodeURIComponent(ringBearerId)}&` : '';
+      const res = await fetch(
+        `${supabaseUrl}/rest/v1/ip_ledger?${qs}order=stamp_seq.asc&limit=200`,
+        { headers: { apikey: anonKey, Authorization: `Bearer ${anonKey}` } },
+      );
+      if (!res.ok) return { ok: false, error: `HTTP ${res.status}`, entries: [] };
+      const entries = await res.json();
+      return { ok: true, entries };
+    } catch (err) {
+      return { ok: false, error: (err as Error).message, entries: [] };
+    }
+  });
+
+  safeHandle('peer-key:read', async () => {
+    const supabaseUrl = (process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL ?? '').replace(/\/$/, '');
+    const anonKey = process.env.SUPABASE_ANON_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '';
+    const peerId = getStablePeerId();
+    if (!supabaseUrl || !anonKey) return { ok: false, error: 'Supabase config not available' };
+    try {
+      const { ensurePeerKeypair } = await import('../substrate/peerKeyGen');
+      const result = await ensurePeerKeypair(peerId, { supabaseUrl, anonKey });
+      return { ok: true, publicKeyHex: result.publicKeyHex, generated: result.generated, peerId };
+    } catch (err) {
+      return { ok: false, error: (err as Error).message };
+    }
+  });
+
+  safeHandle('peer-key:regenerate', async () => {
+    const supabaseUrl = (process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL ?? '').replace(/\/$/, '');
+    const anonKey = process.env.SUPABASE_ANON_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '';
+    const peerId = getStablePeerId();
+    if (!supabaseUrl || !anonKey) return { ok: false, error: 'Supabase config not available' };
+    try {
+      // Clear existing key so ensurePeerKeypair re-generates
+      await fetch(
+        `${supabaseUrl}/rest/v1/peer_presence?peer_id=eq.${encodeURIComponent(peerId)}`,
+        {
+          method: 'PATCH',
+          headers: { apikey: anonKey, Authorization: `Bearer ${anonKey}`, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+          body: JSON.stringify({ public_key_hex: null, private_key_hex_encrypted: null }),
+        },
+      );
+      const { ensurePeerKeypair } = await import('../substrate/peerKeyGen');
+      const result = await ensurePeerKeypair(peerId, { supabaseUrl, anonKey });
+      return { ok: true, publicKeyHex: result.publicKeyHex, generated: true, peerId };
+    } catch (err) {
+      return { ok: false, error: (err as Error).message };
+    }
+  });
+
   // ── SEG-4 v0.1.59 — Plow the Field IPC handlers ───────────────────────────
 
   safeHandle('plow:load-domain-bank', async (_, domain: string) => {

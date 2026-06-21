@@ -46,8 +46,14 @@
 
 import { createServer, IncomingMessage, ServerResponse } from 'http';
 import { mkdirSync, existsSync, appendFileSync, readFileSync, writeFileSync, watch } from 'fs';
-import { resolve, dirname } from 'path';
+import { resolve, dirname, join } from 'path';
 import { homedir, networkInterfaces } from 'os';
+import { createRequire } from 'module';
+
+// Dynamic version read from package.json (backlog #27 — never hardcode version here)
+const _pkgRequire = createRequire(import.meta.url);
+const _pkg = _pkgRequire(join(__dirname, '../../package.json')) as { version: string };
+const APP_VERSION: string = _pkg.version;
 import { randomUUID, createHash } from 'crypto';
 import {
   logGatewayRequest as passiveSurveillanceLog,
@@ -470,7 +476,7 @@ export class SubstrateAPIServer {
     if (req.method === 'GET' && url === '/health') {
       res.end(JSON.stringify({
         ok: true,
-        version: '0.4.0',
+        version: APP_VERSION,
         port: API_PORT,
         index_size: this.index.size,
         mode: this.router.getEffectiveMode(),
@@ -2187,7 +2193,7 @@ export class SubstrateAPIServer {
       const snap = this.getAMPLIFYSnapshot() as Record<string, unknown>;
       res.end(JSON.stringify({
         ok: true,
-        version: '0.4.0',
+        version: APP_VERSION,
         port: API_PORT,
         index_size: this.index.size,
         mode: this.router.getEffectiveMode(),
