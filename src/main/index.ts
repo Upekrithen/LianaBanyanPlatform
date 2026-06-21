@@ -5445,18 +5445,83 @@ function startRelayRoutePoll(peerId: string): NodeJS.Timeout {
 
         const startMs = Date.now();
         try {
-          const prompt: string = ((route.payload_json as Record<string, unknown>)?.prompt as string) || route.hex_frame;
-          const model = 'gemma4:12b';
+          const payload = (route.payload_json as Record<string, unknown>) ?? {};
+          const prompt: string = (payload.prompt as string) || route.hex_frame;
+          const plowMaxIter: number = typeof payload.plow_max_iterations === 'number'
+            ? (payload.plow_max_iterations as number) : 0;
 
-          const ollamaRes = await fetch('http://localhost:11434/api/generate', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ model, prompt, stream: false, keep_alive: '24h' }),
-            signal: AbortSignal.timeout(120000),
-          });
+          let answer: string | null = null;
+          let plowIterations = 0;
+          let councilVariance = 0;
 
-          const ollamaData = ollamaRes.ok ? await ollamaRes.json() : null;
-          const answer = ollamaData?.response ?? null;
+          if (plowMaxIter > 0) {
+            // BP090 Plow Loop 12 + Minor Council Star Chamber
+            // Fires 3 local judges per iteration; plurality-votes for answer letter;
+            // iterates until confidence >= 0.75 (variance <= 0.25) or maxIterations reached.
+            const COUNCIL_MODELS = ['gemma4:12b', 'llama3.1:8b', 'mistral:7b'];
+            const CONF_THRESHOLD = 0.75;
+
+            for (let iter = 1; iter <= plowMaxIter; iter++) {
+              plowIterations = iter;
+
+              const memberResults = await Promise.allSettled(
+                COUNCIL_MODELS.map(async (m) => {
+                  const r = await fetch('http://localhost:11434/api/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ model: m, prompt, stream: false, keep_alive: '24h' }),
+                    signal: AbortSignal.timeout(90000),
+                  });
+                  if (!r.ok) return { model: m, text: null as string | null };
+                  const d = await r.json() as { response?: string };
+                  return { model: m, text: d?.response ?? null };
+                })
+              );
+
+              // Extract MMLU-Pro answer letter (A-J) from each member response
+              const letterVotes: Array<{ letter: string; text: string }> = [];
+              for (const res of memberResults) {
+                if (res.status !== 'fulfilled' || !res.value?.text) continue;
+                const t = res.value.text;
+                const lm = t.match(/^\s*([A-J])\b/i)
+                  || t.match(/Answer[:\s]+([A-J])\b/i)
+                  || t.match(/\b([A-J])\s*\)/i)
+                  || t.match(/\b([A-J])\./i)
+                  || t.match(/^\s*([A-J])/im);
+                if (lm) letterVotes.push({ letter: lm[1].toUpperCase(), text: t });
+              }
+
+              if (letterVotes.length === 0) break; // no valid responses — stop iterating
+
+              // Plurality vote across judges
+              const counts: Record<string, number> = {};
+              for (const v of letterVotes) counts[v.letter] = (counts[v.letter] ?? 0) + 1;
+              const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+              const topLetter = sorted[0]![0];
+              const topCount = sorted[0]![1];
+              councilVariance = 1.0 - (topCount / letterVotes.length);
+
+              // Use the full response text of a judge that voted for the plurality letter
+              answer = letterVotes.find((v) => v.letter === topLetter)?.text ?? letterVotes[0]!.text;
+
+              // Early stop when confidence (1 - variance) >= threshold
+              if (councilVariance <= (1.0 - CONF_THRESHOLD)) break;
+            }
+            console.log(`[relay-poll] plow-council: route=${route.id.slice(0, 8)} iter=${plowIterations}/${plowMaxIter} variance=${councilVariance.toFixed(3)}`);
+
+          } else {
+            // Baseline path: single-shot gemma4:12b (pre-BP090 behaviour)
+            const model = 'gemma4:12b';
+            const ollamaRes = await fetch('http://localhost:11434/api/generate', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ model, prompt, stream: false, keep_alive: '24h' }),
+              signal: AbortSignal.timeout(120000),
+            });
+            const ollamaData = ollamaRes.ok ? await ollamaRes.json() as { response?: string } : null;
+            answer = ollamaData?.response ?? null;
+          }
+
           const processingMs = Date.now() - startMs;
 
           await fetch(`${supabaseUrl}/rest/v1/relay_route_replies`, {
@@ -5465,7 +5530,11 @@ function startRelayRoutePoll(peerId: string): NodeJS.Timeout {
             body: JSON.stringify({
               route_id: route.id,
               peer_id: peerId,
-              answer_json: { answer },
+              answer_json: {
+                answer,
+                plow_loop_iterations: plowIterations,
+                council_variance: councilVariance,
+              },
               processing_ms: processingMs,
             }),
           });

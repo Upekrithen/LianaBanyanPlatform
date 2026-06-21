@@ -370,6 +370,10 @@ async function main() {
   const passLabel = args.pass ?? null;
   const isGemmaMode = flagshipTier !== 'claude';
 
+  // BP090 Plow Loop wiring: derive plow_max_iterations from --plow flag
+  // 'mesh-12-blade' → 12 iterations; any other value or 'none' → 0 (baseline single-shot)
+  const plowMaxIterations = args.plow === 'mesh-12-blade' ? 12 : 0;
+
   console.log(`\n${BOLD}${CYAN}5-PEER RELAY ORCHESTRATOR · BP087 MAMBA · CROSS-VENDOR${RESET}`);
   console.log(`Session: ${sessionId}`);
   console.log(`Mode: ${mode.toUpperCase()} · Questions: ${questionCount} · Timeout: ${timeoutSec}s/question`);
@@ -378,6 +382,12 @@ async function main() {
   if (isGemmaMode) {
     console.log(`${YELLOW}flagship-tier=${flagshipTier}: Anthropic API DISABLED -- all calls routed local${RESET}`);
     console.log(`[flagship-tier=${flagshipTier}] Anthropic API SKIPPED`);
+  }
+  // BP090: log plow configuration so it appears in orchestrator output
+  if (plowMaxIterations > 0) {
+    console.log(`${BOLD}Plow: ${args.plow} · maxIterations=${plowMaxIterations} · peer Minor Council active (3 judges per iteration)${RESET}`);
+  } else {
+    console.log(`Plow: ${args.plow ?? 'none'} · peer inference = single-shot baseline`);
   }
   console.log(`Topology: Supabase relay_routes dispatch -- no direct Ollama IPs\n`);
 
@@ -585,6 +595,7 @@ async function main() {
 
     // INSERT one relay_route per peer (all concurrently)
     // MAMBA-δ: include wire_format field in payload when hex-mcode requested
+    // BP090: include plow_max_iterations so peer relay-poll handler activates Minor Council loop
     const routeInserts = peerPool.map(p => insertRoute(SUPABASE_URL, SERVICE_KEY, {
       target_peer_id: p.peer_id,
       hex_frame: Buffer.from(prompt, 'utf8').toString('base64'),
@@ -596,6 +607,7 @@ async function main() {
         wire_format: wire,
         domain: q.domain,
         session_id: sessionId,
+        plow_max_iterations: plowMaxIterations,
       },
       status: 'pending',
       session_id: sessionId,
