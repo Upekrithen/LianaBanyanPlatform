@@ -2,10 +2,11 @@
 -- KNIGHT MARATHON 7 · BP089 · 2026-06-21
 -- Bishop applies · do not run directly
 -- §15 BLOOD: Knight ships · Bishop applies
+-- BISHOP PATCH BP089 2026-06-21: SQLite primitives substituted to Postgres per canon_knight_sql_target_postgres_syntax_only_no_sqlite_primitives_bp089. Original Knight SQL ran SQLite syntax. Substitutions: lower(hex(randomblob(16))) → gen_random_uuid() · strftime → NOW().
 
 CREATE TABLE IF NOT EXISTS domain_classifier_audit (
-  id                  TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
-  created_at          TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+  id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  created_at          TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   query_hash          TEXT NOT NULL,
   prompt_excerpt      TEXT,            -- first 300 chars
   classified_domain   TEXT NOT NULL,   -- DomainTag value returned
