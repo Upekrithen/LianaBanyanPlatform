@@ -1,12 +1,12 @@
 {
-  "version": "0.5.1",
-  "filename": "MnemosyneC-Setup-0.5.1.exe",
-  "download_url": "/download/MnemosyneC-Setup-0.5.1.exe",
-  "release_notes": "v0.5.1 (BP085): Help Pipeline — Founder↔Son peer copy/paste + screenshot pipeline · realtime via Supabase · Ctrl+V image paste support.",
+  "version": "0.5.15",
+  "filename": "MnemosyneC-Setup-0.5.15.exe",
+  "download_url": "/download/MnemosyneC-Setup-0.5.15.exe",
+  "release_notes": "v0.5.15 (BP090): Mountains 1/1b/2/3/3b ship — dr_m_orchestrator (substrate_reader · brain_swap · hex_mcode · dispatch_loop) · PLOW LOOP (domain_classifier · unfair_advantage) · Scribes Wave I (reminder · wrasse · toolsmith · scribe_runner) · Librarian Corps (pyramid_index · librarian · file_cabinet · dispatcher) · persistence wire-up.",
   "previous": {
-    "version": "0.5.0",
-    "filename": "MnemosyneC-Setup-0.5.0.exe",
-    "download_url": "/download/MnemosyneC-Setup-0.5.0.exe",
+    "version": "0.5.14",
+    "filename": "MnemosyneC-Setup-0.5.14.exe",
+    "download_url": "/download/MnemosyneC-Setup-0.5.14.exe",
     "status": "HISTORICAL"
   }
 }
