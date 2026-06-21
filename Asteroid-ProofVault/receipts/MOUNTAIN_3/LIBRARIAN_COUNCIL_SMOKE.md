@@ -182,3 +182,37 @@ mountain_3_complete pearl WITHHELD pending Bishop ratification of II-C/II-E gap.
 mountain_3_smoke_complete -- READY TO EMIT pending Bishop ratification.
 
 *Liana Banyan Corporation · BP089 · 2026-06-21*
+
+
+---
+
+## BISHOP RATIFICATION · BP089 · 2026-06-21
+
+**Mountain 3 Wave I: CLOSED**
+
+Bishop ratify decisions — all gates closed:
+
+### Decision 1 · II-C/II-E Speedup Ratio — RATIFIED as Truth-Always WIN
+SSD baseline at 119ms IS the truth. Spec's 2,000-5,000ms anticipation is superseded.
+Absolute latency targets met:
+  p50 = 166ms < 300ms: PASS
+  p95 = 222ms < 500ms: PASS
+Architecture is sound. Speedup ratio gap documented and closed.
+
+### Decision 2 · SQL Schema (file_cabinet_seal_log + librarian_council_vote_log) — RATIFIED
+Bishop authored and applied both tables via Supabase gadget from Knight's TS REST call bodies.
+10/12 Mountain 3 tables live. No RLS policies (consistent with M1/M2 precedent).
+
+### Decision 3 · IN-MEMORY Routing (librarian_corps_directory + pyramid_index_canonical) — RATIFIED
+Both tables were in spec ss7 but had neither TS implementation nor SQL application in Wave I.
+Production Supabase persistence designated M3b follow-on.
+In-memory routing via buildPyramidIndex() is canonical for this mountain.
+
+---
+
+## mountain_3_complete Pearl
+
+Pearl ID: 83bd0612-c383-4883-8453-a9ce1e14c928
+Status: EMITTED 2026-06-21 (queued for substrate replay)
+
+Mountain 3 Wave I: CLOSED.
