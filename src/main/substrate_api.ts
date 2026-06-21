@@ -51,7 +51,7 @@ import { homedir, networkInterfaces } from 'os';
 import { createRequire } from 'module';
 
 // Dynamic version read from package.json (backlog #27 — never hardcode version here)
-const _pkgRequire = createRequire(import.meta.url);
+const _pkgRequire = createRequire(__filename);
 const _pkg = _pkgRequire(join(__dirname, '../../package.json')) as { version: string };
 const APP_VERSION: string = _pkg.version;
 import { randomUUID, createHash } from 'crypto';
