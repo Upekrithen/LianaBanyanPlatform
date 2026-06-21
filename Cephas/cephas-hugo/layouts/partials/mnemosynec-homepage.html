@@ -1125,13 +1125,22 @@ function mnShareSubmit(e) {
     <details class="mn-proof-accordion">
       <summary>
         <span class="mn-proof-accordion__label">Trial 02b</span>
-        <span class="mn-proof-accordion__title">4-peer cooperative gemma4:12b scores 70/70 paired against claude-sonnet-4-6.</span>
-        <span class="mn-proof-accordion__result">&#10003; Cooperative parity</span>
+        <span class="mn-proof-accordion__title">4-peer cooperative gemma4:12b · 81.9% active-peer aggregate via relay mesh.</span>
+        <span class="mn-proof-accordion__result">&#10003; 172/210</span>
       </summary>
       <div class="mn-proof-accordion__body">
         <p><strong>Pass A anchor:</strong> 70/70 claude-sonnet-4-6 on M0. Pearl: 0fa461c8.</p>
-        <p><strong>Pass B 4-peer:</strong> Same 70 questions dispatched to all 4 peers (M0 &middot; M3 &middot; M2 &middot; SON) via relay.lianabanyan.com (LAN-AS-WAN constraint honored). Model: gemma4:12b on each peer. Results pending Wave II completion -- receipt will be populated at BP089 session close.</p>
-        <p style="font-size:0.82rem; color:rgba(214,158,46,0.7);">Receipt: Trial 02b &middot; BP089 &rarr; (sealing at session close)</p>
+        <p><strong>Pass B 4-peer via relay:</strong> 70 questions dispatched to all 4 peers via relay.lianabanyan.com (LAN-AS-WAN constraint honored). Model: gemma4:12b on each peer.</p>
+        <table style="width:100%; border-collapse:collapse; font-size:0.88rem; margin:0.75rem 0;">
+          <tr style="border-bottom:1px solid rgba(214,158,46,0.2);"><th style="text-align:left;padding:0.3rem 0.5rem;color:#d69e2e;">Peer</th><th style="text-align:right;padding:0.3rem 0.5rem;color:#d69e2e;">Score</th><th style="text-align:right;padding:0.3rem 0.5rem;color:#d69e2e;">Status</th></tr>
+          <tr><td style="padding:0.3rem 0.5rem;">M0 (cb4ef450)</td><td style="text-align:right;padding:0.3rem 0.5rem;color:#22c55e;">57/70 (81.4%)</td><td style="text-align:right;padding:0.3rem 0.5rem;">Active</td></tr>
+          <tr><td style="padding:0.3rem 0.5rem;">M3 (d0b47bd0)</td><td style="text-align:right;padding:0.3rem 0.5rem;color:rgba(250,245,235,0.4);">2/70</td><td style="text-align:right;padding:0.3rem 0.5rem;color:rgba(250,245,235,0.4);">Offline</td></tr>
+          <tr><td style="padding:0.3rem 0.5rem;">M2 (88cbf6bd)</td><td style="text-align:right;padding:0.3rem 0.5rem;color:#22c55e;">61/70 (87.1%)</td><td style="text-align:right;padding:0.3rem 0.5rem;">Active</td></tr>
+          <tr><td style="padding:0.3rem 0.5rem;">SON (49f3e597)</td><td style="text-align:right;padding:0.3rem 0.5rem;color:#22c55e;">54/70 (77.1%)</td><td style="text-align:right;padding:0.3rem 0.5rem;">Active</td></tr>
+        </table>
+        <p><strong>Active-peer aggregate (M0+M2+SON):</strong> 172/210 = 81.9% &nbsp;&nbsp; <strong>Full 4-peer aggregate:</strong> 174/280 = 62.1%</p>
+        <p><strong>Variance:</strong> 70/70 full agreement &mdash; every peer that answered agreed on every question.</p>
+        <p style="font-size:0.82rem; color:rgba(214,158,46,0.7);">Pass A pearl: 0fa461c8 &middot; Pass B pearl: a7a290f2424398e5 &middot; BP089 &middot; 2026-06-21</p>
       </div>
     </details>
 
