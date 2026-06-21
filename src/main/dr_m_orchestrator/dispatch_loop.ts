@@ -195,7 +195,7 @@ export function createDispatchLoop(
 
         await Promise.allSettled([
           supabaseInsert(db, 'dr_m_dispatch_log', {
-            id: randomUUID().replace(/-/g, ''),
+            id: randomUUID(),
             task_id: req.task_id,
             created_at: new Date().toISOString(),
             category: req.category,
@@ -217,7 +217,7 @@ export function createDispatchLoop(
             status: 'ok',
           }),
           supabaseInsert(db, 'brain_swap_audit', {
-            id: randomUUID().replace(/-/g, ''),
+            id: randomUUID(),
             task_id: req.task_id,
             created_at: new Date().toISOString(),
             category: req.category,
@@ -228,7 +228,7 @@ export function createDispatchLoop(
             cost_per_1k_tokens: 0,
           }),
           supabaseInsert(db, 'council_dispatch_log', {
-            id: randomUUID().replace(/-/g, ''),
+            id: randomUUID(),
             task_id: req.task_id,
             created_at: new Date().toISOString(),
             council_package: packageName,
@@ -297,7 +297,7 @@ export function createDispatchLoop(
       if (db) {
         await Promise.allSettled([
           supabaseInsert(db, 'dr_m_dispatch_log', {
-            id: randomUUID().replace(/-/g, ''),
+            id: randomUUID(),
             task_id: req.task_id,
             created_at: new Date().toISOString(),
             category: req.category,
@@ -319,7 +319,7 @@ export function createDispatchLoop(
             status: 'ok',
           }),
           supabaseInsert(db, 'brain_swap_audit', {
-            id: randomUUID().replace(/-/g, ''),
+            id: randomUUID(),
             task_id: req.task_id,
             created_at: new Date().toISOString(),
             category: req.category,

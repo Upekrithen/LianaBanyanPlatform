@@ -1,40 +1,34 @@
--- Mountain 1 Â· Dr. M Dispatch Log
--- Bishop applies Â· do not run directly
--- KNIGHT MARATHON 4 Â· BP089 Â· BLACK MAMBA
+-- Mountain 1 · Dr. M Dispatch Log
+-- Bishop applies · do not run directly
+-- KNIGHT MARATHON 4 · BP089 · BLACK MAMBA
+-- SYNTAX: PostgreSQL (Supabase). No SQLite syntax. See MOUNTAIN_1_SYNTAX_DISCIPLINE.md.
 
 CREATE TABLE IF NOT EXISTS dr_m_dispatch_log (
-  id                      TEXT PRIMARY KEY DEFAULT (lower(hex(randomblob(16)))),
+  id                      UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   task_id                 TEXT NOT NULL,
-  created_at              TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%SZ', 'now')),
+  created_at              TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   category                TEXT NOT NULL,
-  prompt_excerpt          TEXT,            -- first 500 chars
-  brain_used              TEXT NOT NULL,   -- brain_id (single) OR council_package_name (council)
+  prompt_excerpt          TEXT,
+  brain_used              TEXT NOT NULL,
   brain_vendor            TEXT NOT NULL,
-  dispatch_mode           TEXT NOT NULL,   -- 'council' | 'single_brain'
-  brain_fallback          INTEGER NOT NULL DEFAULT 0,  -- 0=no fallback 1=fallback used
+  dispatch_mode           TEXT NOT NULL,
+  brain_fallback          INTEGER NOT NULL DEFAULT 0,
   fallback_reason         TEXT,
-  council_package_name    TEXT,            -- null if single_brain mode
-  council_variance        REAL,            -- null if single_brain mode
-  council_escalated       INTEGER,         -- 0/1 Â· null if single_brain mode
-  council_member_count    INTEGER,         -- null if single_brain mode
-  target_peer_id          TEXT,            -- null = local
+  council_package_name    TEXT,
+  council_variance        REAL,
+  council_escalated       INTEGER,
+  council_member_count    INTEGER,
+  target_peer_id          TEXT,
   substrate_context_bytes INTEGER,
   hex_frame_size_bytes    INTEGER,
   crc_valid               INTEGER NOT NULL DEFAULT 1,
   latency_ms              INTEGER,
-  response_excerpt        TEXT,            -- first 500 chars
-  status                  TEXT NOT NULL,   -- 'ok' | 'substrate_read_error' | 'brain_error' | 'peer_error'
+  response_excerpt        TEXT,
+  status                  TEXT NOT NULL,
   error_detail            TEXT
 );
 
-CREATE INDEX IF NOT EXISTS idx_dr_m_dispatch_log_created_at
-  ON dr_m_dispatch_log(created_at DESC);
-
-CREATE INDEX IF NOT EXISTS idx_dr_m_dispatch_log_brain_used
-  ON dr_m_dispatch_log(brain_used);
-
-CREATE INDEX IF NOT EXISTS idx_dr_m_dispatch_log_status
-  ON dr_m_dispatch_log(status);
-
-CREATE INDEX IF NOT EXISTS idx_dr_m_dispatch_log_dispatch_mode
-  ON dr_m_dispatch_log(dispatch_mode);
+CREATE INDEX IF NOT EXISTS idx_dr_m_dispatch_log_created_at ON dr_m_dispatch_log(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_dr_m_dispatch_log_brain_used ON dr_m_dispatch_log(brain_used);
+CREATE INDEX IF NOT EXISTS idx_dr_m_dispatch_log_status ON dr_m_dispatch_log(status);
+CREATE INDEX IF NOT EXISTS idx_dr_m_dispatch_log_dispatch_mode ON dr_m_dispatch_log(dispatch_mode);
