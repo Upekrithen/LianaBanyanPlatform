@@ -1002,11 +1002,39 @@ async function main() {
 
       // ── EXIT CHECK — runs AFTER escalation so escalation always gets first shot ──
       // All original + escalation routes must have replied, AND either:
-      //   (a) escalation already fired (waiting for escalation routes to reply), or
-      //   (b) we've passed the approach threshold (so escalation had its chance)
+      //   (a) escalation already fired AND all escalation routes replied, or
+      //   (b) we've passed the approach threshold (so escalation had its chance), or
+      //   (c) BP091 fast-consensus: all original routes replied + variance below threshold (early exit)
       const allRouteIdsPost = [...routeIds, ...escalationRouteIds];
       const allReplied = allRouteIdsPost.every(id => !!collectedReplies[id]);
       if (allReplied && (escalationFired || elapsed >= approachThresholdMs)) break;
+      // BP091 fast-consensus early exit: if all original routes replied before approach threshold,
+      // check variance — if consensus reached (low variance), exit without waiting for threshold.
+      // Preserves escalation: if variance is above threshold, continue to approach threshold.
+      if (!escalationFired && allReplied && elapsed < approachThresholdMs) {
+        const fastAnswers = {};
+        for (const p of peerPool) {
+          const rid = routeIds[peerPool.indexOf(p)];
+          if (rid && collectedReplies[rid]) {
+            const r = collectedReplies[rid];
+            let raw = null;
+            if (r.hex_reply) try { raw = Buffer.from(r.hex_reply, 'base64').toString('utf8'); } catch { raw = r.hex_reply; }
+            if (!raw && r.answer_json) {
+              const aj4 = r.answer_json;
+              raw = typeof aj4 === 'string' ? aj4 : (aj4.response ?? aj4.answer ?? JSON.stringify(aj4));
+            }
+            fastAnswers[p.peer_id] = extractLetter(raw, q.options.length);
+          } else {
+            fastAnswers[p.peer_id] = null;
+          }
+        }
+        const fastVariancePct = computeAnswerVariancePct(fastAnswers);
+        if (fastVariancePct <= andonThreshold) {
+          console.log(`  [fast-consensus] all routes replied · variance=${fastVariancePct.toFixed(1)}% ≤ ${andonThreshold}% · exiting early (elapsed=${Math.floor(elapsed/1000)}s)`);
+          break;
+        }
+        // High variance even though all replied — wait for approach threshold to fire escalation
+      }
 
       await new Promise(r => setTimeout(r, pollIntervalMs));
     }
