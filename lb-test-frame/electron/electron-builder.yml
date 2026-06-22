@@ -62,13 +62,14 @@ msi:
   createDesktopShortcut: always
 
 nsis:
-  oneClick: true
+  oneClick: false
   allowToChangeInstallationDirectory: false
   deleteAppDataOnUninstall: false
   installerHeaderIcon: build-resources/icon.ico
   installerIcon: build-resources/icon.ico
   uninstallerIcon: build-resources/icon.ico
-  shortcutName: "LB Test Frame"
+  shortcutName: "MnemosyneC"
+  license: build-resources/LICENSE_SCREEN_BP087.rtf
 
 # ── Linux ─────────────────────────────────────────────────────────────────────
 linux:
