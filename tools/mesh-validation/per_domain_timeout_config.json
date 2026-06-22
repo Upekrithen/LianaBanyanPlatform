@@ -1,0 +1,14 @@
+{
+  "high_disagreement": {
+    "domains": ["math", "physics", "chemistry", "law", "philosophy"],
+    "timeout_s": 1500
+  },
+  "medium_disagreement": {
+    "domains": ["computer_science", "engineering", "psychology"],
+    "timeout_s": 900
+  },
+  "low_disagreement": {
+    "domains": ["biology", "business", "health", "history", "economics", "other"],
+    "timeout_s": 600
+  }
+}

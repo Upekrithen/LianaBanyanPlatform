@@ -5449,10 +5449,15 @@ function startRelayRoutePoll(peerId: string): NodeJS.Timeout {
           const prompt: string = (payload.prompt as string) || route.hex_frame;
           const plowMaxIter: number = typeof payload.plow_max_iterations === 'number'
             ? (payload.plow_max_iterations as number) : 0;
+          // BP090 TRIPLE-MAMBA: allotted_timeout_ms for approaching_timeout signal emission
+          const allottedTimeoutMs: number = typeof payload.allotted_timeout_ms === 'number'
+            ? (payload.allotted_timeout_ms as number) : 0;
+          const isStarChamber: boolean = payload.is_star_chamber === true;
 
           let answer: string | null = null;
           let plowIterations = 0;
           let councilVariance = 0;
+          let approachingTimeoutSignalSent = false;
 
           if (plowMaxIter > 0) {
             // BP090 Plow Loop 12 + Minor Council Star Chamber
@@ -5460,9 +5465,49 @@ function startRelayRoutePoll(peerId: string): NodeJS.Timeout {
             // iterates until confidence >= 0.75 (variance <= 0.25) or maxIterations reached.
             const COUNCIL_MODELS = ['gemma4:12b', 'llama3.1:8b', 'mistral:7b'];
             const CONF_THRESHOLD = 0.75;
+            const APPROACH_THRESHOLD = 0.80; // 80% of allotted timeout triggers signal
 
             for (let iter = 1; iter <= plowMaxIter; iter++) {
               plowIterations = iter;
+
+              // BP090: approaching_timeout signal — emit once when >80% allotted time elapsed AND variance > 15%
+              if (
+                !approachingTimeoutSignalSent &&
+                allottedTimeoutMs > 0 &&
+                (Date.now() - startMs) > (allottedTimeoutMs * APPROACH_THRESHOLD) &&
+                councilVariance > 0.15 &&
+                answer !== null
+              ) {
+                approachingTimeoutSignalSent = true;
+                // Build partial council votes from current best answer
+                const partialVotes = [{ peer_id: peerId, answer: (() => {
+                  const lm = answer?.match(/^\s*([A-J])\b/i)
+                    || answer?.match(/Answer[:\s]+([A-J])\b/i)
+                    || answer?.match(/\b([A-J])\s*\)/i);
+                  return lm ? lm[1].toUpperCase() : null;
+                })(), confidence: 1 - councilVariance }];
+                // Write approaching_timeout signal to relay_route_replies (I8 MIC open-relay)
+                fetch(`${supabaseUrl}/rest/v1/relay_route_replies`, {
+                  method: 'POST',
+                  headers: { ...headers, 'Prefer': 'return=minimal' },
+                  body: JSON.stringify({
+                    route_id: route.id,
+                    peer_id: peerId,
+                    answer_json: {
+                      reply_type: 'approaching_timeout',
+                      question_id: payload.question_id ?? route.id,
+                      partial_council_votes: partialVotes,
+                      best_guess_answer: partialVotes[0]?.answer ?? null,
+                      plow_loop_iteration: iter,
+                      elapsed_ms: Date.now() - startMs,
+                      allotted_timeout_ms: allottedTimeoutMs,
+                      council_variance: councilVariance,
+                    },
+                    processing_ms: Date.now() - startMs,
+                  }),
+                }).catch(() => { /* non-fatal — signal is best-effort */ });
+                console.log(`[relay-poll] approaching_timeout signal sent: route=${route.id.slice(0, 8)} iter=${iter} variance=${councilVariance.toFixed(3)} elapsed=${Date.now()-startMs}ms`);
+              }
 
               const memberResults = await Promise.allSettled(
                 COUNCIL_MODELS.map(async (m) => {
@@ -5507,7 +5552,11 @@ function startRelayRoutePoll(peerId: string): NodeJS.Timeout {
               // Early stop when confidence (1 - variance) >= threshold
               if (councilVariance <= (1.0 - CONF_THRESHOLD)) break;
             }
-            console.log(`[relay-poll] plow-council: route=${route.id.slice(0, 8)} iter=${plowIterations}/${plowMaxIter} variance=${councilVariance.toFixed(3)}`);
+            if (isStarChamber) {
+              console.log(`[relay-poll] star-chamber-council: route=${route.id.slice(0, 8)} iter=${plowIterations}/${plowMaxIter} variance=${councilVariance.toFixed(3)}`);
+            } else {
+              console.log(`[relay-poll] plow-council: route=${route.id.slice(0, 8)} iter=${plowIterations}/${plowMaxIter} variance=${councilVariance.toFixed(3)}`);
+            }
 
           } else {
             // Baseline path: single-shot gemma4:12b (pre-BP090 behaviour)
@@ -5534,6 +5583,8 @@ function startRelayRoutePoll(peerId: string): NodeJS.Timeout {
                 answer,
                 plow_loop_iterations: plowIterations,
                 council_variance: councilVariance,
+                approaching_timeout_signal_sent: approachingTimeoutSignalSent,
+                is_star_chamber: isStarChamber,
               },
               processing_ms: processingMs,
             }),

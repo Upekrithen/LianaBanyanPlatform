@@ -84,10 +84,11 @@ function parseArgs() {
   // MAMBA-γ: added routing, andon-escalate, wire, plow flags
   // BP087 Trial-02: added exclude-peer flag for fleet-management discipline
   // BP087 MAMBA-GEMMA: added flagship-tier, trial-id, pass flags
+  // BP090 TRIPLE-MAMBA: added per-domain-timeout, question-bank flags; default timeout 180→900
   const parsed = {
     questions: 5,
     mode: 'smoke',
-    timeout: 180,
+    timeout: 900,                   // BP090: raised from 180→900 for backwards compat
     session: null,
     routing: 'round-robin',         // 'domain-affinity' | 'round-robin'
     andonEscalate: 'none',          // 'star-chamber' | 'none'
@@ -98,6 +99,8 @@ function parseArgs() {
     flagshipTier: 'claude',         // 'claude' | 'gemma' | 'qwen' | 'mistral' -- brain override
     trialId: null,                  // paired trial ID (THUNDERCLAP receipt)
     pass: null,                     // 'A' | 'B' -- which pass in the paired trial
+    perDomainTimeout: null,         // BP090: path to per_domain_timeout_config.json
+    questionBank: null,             // BP090: path to custom question bank JSON
   };
 
   for (const arg of args) {
@@ -120,6 +123,9 @@ function parseArgs() {
     else if (key === 'flagship-tier' && val) parsed.flagshipTier = val.toLowerCase().trim();
     else if (key === 'trial-id' && val) parsed.trialId = val.trim();
     else if (key === 'pass' && val) parsed.pass = val.toUpperCase().trim();
+    // BP090 TRIPLE-MAMBA flags
+    else if (key === 'per-domain-timeout' && val) parsed.perDomainTimeout = val.trim();
+    else if (key === 'question-bank' && val) parsed.questionBank = val.trim();
   }
 
   if (parsed.mode === 'full' && parsed.questions === 5) parsed.questions = 70;
@@ -319,6 +325,103 @@ async function pollReplies(supabaseUrl, anonKey, routeIds, timeoutMs, pollInterv
   return collected;
 }
 
+// ─── BP090: Per-Domain Timeout Config ────────────────────────────────────────
+
+/**
+ * Load and validate per_domain_timeout_config.json.
+ * Tries path as-is, then relative to __dirname, then relative to cwd.
+ * Returns null if file absent or invalid.
+ */
+function loadPerDomainTimeoutConfig(configPath) {
+  const candidates = [
+    configPath,
+    join(__dirname, configPath),
+    join(process.cwd(), configPath),
+    resolve(configPath),
+  ];
+  for (const candidate of candidates) {
+    try {
+      const raw = readFileSync(candidate, 'utf8');
+      const parsed = JSON.parse(raw);
+      // Validate shape: each key must have { domains: string[], timeout_s: number }
+      for (const [cat, data] of Object.entries(parsed)) {
+        if (!Array.isArray(data.domains) || typeof data.timeout_s !== 'number') {
+          throw new Error(`Invalid category "${cat}" in per-domain timeout config`);
+        }
+      }
+      return parsed;
+    } catch {
+      continue;
+    }
+  }
+  return null;
+}
+
+/**
+ * Look up the timeout for a given domain in the per-domain config.
+ * Case-insensitive match. Falls back to low_disagreement, then fallbackSec.
+ * @param {string} domain - question domain
+ * @param {object|null} perDomainConfig - loaded config or null
+ * @param {number} fallbackSec - global --timeout value to use when config absent
+ * @returns {number} timeout in seconds
+ */
+function getDomainTimeout(domain, perDomainConfig, fallbackSec) {
+  if (!perDomainConfig) return fallbackSec;
+  const domainLower = (domain || '').toLowerCase().trim();
+  for (const [, categoryData] of Object.entries(perDomainConfig)) {
+    if (Array.isArray(categoryData.domains) && categoryData.domains.includes(domainLower)) {
+      return categoryData.timeout_s;
+    }
+  }
+  // Domain not found in any category → use low_disagreement as default per spec
+  return perDomainConfig.low_disagreement?.timeout_s ?? fallbackSec;
+}
+
+// ─── BP090: Custom Question Bank ─────────────────────────────────────────────
+
+/**
+ * Load a custom question bank from a JSON file.
+ * Tries path as-is, then relative to __dirname, then cwd.
+ * Expected format: array of { domain, question, options, correct_answer, source_id }
+ * @param {string} bankPath
+ * @returns {Array} questions array
+ */
+function loadQuestionBank(bankPath) {
+  const candidates = [
+    bankPath,
+    join(__dirname, bankPath),
+    join(process.cwd(), bankPath),
+    resolve(bankPath),
+  ];
+  for (const candidate of candidates) {
+    try {
+      const raw = readFileSync(candidate, 'utf8');
+      const qs = JSON.parse(raw);
+      if (!Array.isArray(qs)) throw new Error('Question bank must be a JSON array');
+      return qs;
+    } catch {
+      continue;
+    }
+  }
+  throw new Error(`Could not load question bank from any candidate path for: ${bankPath}`);
+}
+
+// ─── BP090: Variance Helper ───────────────────────────────────────────────────
+
+/**
+ * Compute vote variance as a percentage (0–100).
+ * peerAnswers: { peer_id: letter|null }
+ * Returns 0 when all answered peers agree; 100 when maximally contested.
+ */
+function computeAnswerVariancePct(peerAnswers) {
+  const answered = Object.values(peerAnswers).filter(a => a !== null);
+  if (answered.length === 0) return 100;
+  const counts = {};
+  for (const letter of answered) counts[letter] = (counts[letter] ?? 0) + 1;
+  const maxCount = Math.max(...Object.values(counts));
+  return (1 - maxCount / answered.length) * 100;
+}
+
 // ─── Ensemble Logic ──────────────────────────────────────────────────────────
 
 function ensembleVote(peerAnswers) {
@@ -370,14 +473,25 @@ async function main() {
   const passLabel = args.pass ?? null;
   const isGemmaMode = flagshipTier !== 'claude';
 
+  // BP090 TRIPLE-MAMBA: per-domain timeout config
+  let perDomainConfig = null;
+  if (args.perDomainTimeout) {
+    perDomainConfig = loadPerDomainTimeoutConfig(args.perDomainTimeout);
+    if (perDomainConfig) {
+      console.log(`Per-domain timeout config loaded from: ${args.perDomainTimeout}`);
+    } else {
+      console.warn(`${YELLOW}WARNING: Could not load per-domain timeout config from "${args.perDomainTimeout}" — falling back to global --timeout=${timeoutSec}s${RESET}`);
+    }
+  }
+
   // BP090 Plow Loop wiring: derive plow_max_iterations from --plow flag
   // 'mesh-12-blade' → 12 iterations; any other value or 'none' → 0 (baseline single-shot)
   const plowMaxIterations = args.plow === 'mesh-12-blade' ? 12 : 0;
 
-  console.log(`\n${BOLD}${CYAN}5-PEER RELAY ORCHESTRATOR · BP087 MAMBA · CROSS-VENDOR${RESET}`);
+  console.log(`\n${BOLD}${CYAN}5-PEER RELAY ORCHESTRATOR · BP090 TRIPLE-MAMBA · CROSS-VENDOR${RESET}`);
   console.log(`Session: ${sessionId}`);
-  console.log(`Mode: ${mode.toUpperCase()} · Questions: ${questionCount} · Timeout: ${timeoutSec}s/question`);
-  console.log(`Routing: ${routing} · Wire: ${wire} · Andon-escalate: ${andonEscalate} · Andon-threshold: ${andonThreshold}`);
+  console.log(`Mode: ${mode.toUpperCase()} · Questions: ${questionCount} · DefaultTimeout: ${timeoutSec}s · PerDomainTimeout: ${perDomainConfig ? 'ACTIVE' : 'off'}`);
+  console.log(`Routing: ${routing} · Wire: ${wire} · Andon-escalate: ${andonEscalate} · Andon-threshold: ${andonThreshold}%`);
   if (trialId) console.log(`Trial ID: ${trialId} · Pass: ${passLabel ?? 'unset'}`);
   if (isGemmaMode) {
     console.log(`${YELLOW}flagship-tier=${flagshipTier}: Anthropic API DISABLED -- all calls routed local${RESET}`);
@@ -460,16 +574,25 @@ async function main() {
     console.log(`\n${YELLOW}NOTE: All peers are LAN-addressed (or lan_addresses empty). Son not yet distinguishable.${RESET}`);
   }
 
-  // Load questions
-  console.log(`\nLoading ${questionCount} questions spread across domains...`);
+  // Load questions — custom bank takes precedence over default domain dataset
+  console.log(`\nLoading ${questionCount} questions...`);
   let questions;
   try {
-    questions = selectQuestionsSpreadAcrossDomains(questionCount);
+    if (args.questionBank) {
+      console.log(`Custom question bank: ${args.questionBank}`);
+      const bankAll = loadQuestionBank(args.questionBank);
+      questions = bankAll.slice(0, questionCount);
+      if (questions.length < questionCount) {
+        console.warn(`${YELLOW}WARNING: question bank has ${bankAll.length} questions, requested ${questionCount}${RESET}`);
+      }
+    } else {
+      questions = selectQuestionsSpreadAcrossDomains(questionCount);
+    }
   } catch (err) {
     console.error(`ERROR loading questions: ${err.message}`);
     process.exit(2);
   }
-  console.log(`Loaded ${questions.length} questions from ${[...new Set(questions.map(q => q.domain))].join(', ')}\n`);
+  console.log(`Loaded ${questions.length} questions from domains: ${[...new Set(questions.map(q => q.domain))].join(', ')}\n`);
 
   // Pre-warm: send a keep_alive ping via relay to ensure models stay loaded
   // (relay-based — peers handle on their end; orchestrator just dispatches)
@@ -574,6 +697,9 @@ async function main() {
   let ensembleCorrect = 0;
   let ensembleContested = 0;
 
+  // BP090: track total escalation counts across all questions
+  let totalEscalationFired = 0;
+
   for (let i = 0; i < questions.length; i++) {
     const q = questions[i];
     const qNum = `Q${pad2(i + 1)}/${pad2(questions.length)}`;
@@ -581,7 +707,12 @@ async function main() {
     const prompt = buildPrompt(q);
     const questionId = `${sessionId}-q${pad2(i + 1)}`;
 
-    console.log(`[${qNum}] source_id=${q.source_id} (${q.domain}) correct=${correctLetter ?? '?'}`);
+    // BP090: per-domain timeout — getDomainTimeout falls back to global timeoutSec if no config
+    const qTimeoutSec = getDomainTimeout(q.domain, perDomainConfig, timeoutSec);
+    const qTimeoutMs = qTimeoutSec * 1000;
+    const approachThresholdMs = Math.floor(qTimeoutMs * 0.8);
+
+    console.log(`[${qNum}] source_id=${q.source_id} (${q.domain}) correct=${correctLetter ?? '?'} timeout=${qTimeoutSec}s`);
     if (isGemmaMode) {
       console.log(`[flagship-tier=${flagshipTier}] Anthropic API SKIPPED`);
     }
@@ -595,7 +726,7 @@ async function main() {
 
     // INSERT one relay_route per peer (all concurrently)
     // MAMBA-δ: include wire_format field in payload when hex-mcode requested
-    // BP090: include plow_max_iterations so peer relay-poll handler activates Minor Council loop
+    // BP090: include plow_max_iterations + allotted_timeout_ms for peer-side approaching_timeout detection
     const routeInserts = peerPool.map(p => insertRoute(SUPABASE_URL, SERVICE_KEY, {
       target_peer_id: p.peer_id,
       hex_frame: Buffer.from(prompt, 'utf8').toString('base64'),
@@ -608,10 +739,11 @@ async function main() {
         domain: q.domain,
         session_id: sessionId,
         plow_max_iterations: plowMaxIterations,
+        allotted_timeout_ms: qTimeoutMs,           // BP090: for peer-side 80% threshold detection
       },
       status: 'pending',
       session_id: sessionId,
-      ttl_seconds: timeoutSec + 60,
+      ttl_seconds: qTimeoutSec + 60,
     }));
 
     let insertedRoutes;
@@ -619,42 +751,164 @@ async function main() {
       insertedRoutes = await Promise.all(routeInserts);
     } catch (err) {
       console.error(`  ERROR inserting relay_routes: ${err.message}`);
-      results.push({ index: i + 1, source_id: q.source_id, domain: q.domain, error: 'insert_failed' });
+      results.push({ index: i + 1, source_id: q.source_id, domain: q.domain, error: 'insert_failed',
+        escalation_fired: false, escalation_peer_count: 0, final_answer_source: 'insert_failed' });
       continue;
     }
 
     const routeIds = insertedRoutes.map(r => r.id);
     const routeToPeer = {};
-    for (let j = 0; j < peers.length; j++) {
-      routeToPeer[routeIds[j]] = peers[j].peer_id;
+    for (let j = 0; j < peerPool.length; j++) {
+      routeToPeer[routeIds[j]] = peerPool[j].peer_id;
     }
 
-    console.log(`  Dispatched ${routeIds.length} routes — polling replies (timeout ${timeoutSec}s)...`);
+    console.log(`  Dispatched ${routeIds.length} routes — polling replies (timeout ${qTimeoutSec}s · approach@${Math.floor(qTimeoutSec * 0.8)}s)...`);
 
-    // Poll for replies
-    const repliesByRouteId = await pollReplies(SUPABASE_URL, SUPABASE_ANON_KEY, routeIds, timeoutMs);
+    // ── BP090 TRIPLE-MAMBA: escalation-aware polling loop ──────────────────────
+    const qStartMs = Date.now();
+    const qDeadline = qStartMs + qTimeoutMs;
+    const pollIntervalMs = 3000;
+    const collectedReplies = {};    // routeId → reply row
+    let escalationFired = false;
+    let escalationPeerCount = 0;
+    let escalationRouteIds = [];
+    const routeToPeerEsc = {};      // escalation routeId → peer_id
 
-    // Collect per-peer answers
+    while (Date.now() < qDeadline) {
+      const allRouteIds = [...routeIds, ...escalationRouteIds];
+      const pending = allRouteIds.filter(id => !collectedReplies[id]);
+      if (pending.length === 0) break;
+
+      const idList = pending.map(id => `"${id}"`).join(',');
+      let rows = [];
+      try {
+        rows = (await supabaseRequest(
+          SUPABASE_URL, SUPABASE_ANON_KEY, 'GET',
+          `relay_route_replies?select=route_id,peer_id,answer_json,hex_reply,processing_ms&route_id=in.(${idList})`
+        )) ?? [];
+      } catch { /* poll error — continue */ }
+
+      for (const row of rows) {
+        // Skip approaching_timeout signal rows (reply_type marker from peer-side index.ts)
+        const aj = (row.answer_json && typeof row.answer_json === 'object') ? row.answer_json : {};
+        if (aj.reply_type === 'approaching_timeout') continue;
+        if (!collectedReplies[row.route_id]) {
+          collectedReplies[row.route_id] = row;
+        }
+      }
+
+      // Check if all original routes replied
+      const allOriginalReplied = routeIds.every(id => !!collectedReplies[id]);
+      if (allOriginalReplied && escalationRouteIds.every(id => !!collectedReplies[id])) break;
+
+      // BP090 Block 2: approaching_timeout detection — orchestrator side
+      const elapsed = Date.now() - qStartMs;
+      if (!escalationFired && elapsed >= approachThresholdMs && andonEscalate === 'star-chamber') {
+        // Build partial answer map from what we've collected so far
+        const partialAnswers = {};
+        for (const p of peerPool) {
+          partialAnswers[p.peer_id] = null;
+          const rid = routeIds[peerPool.indexOf(p)];
+          if (rid && collectedReplies[rid]) {
+            const reply = collectedReplies[rid];
+            let rawText = null;
+            if (reply.hex_reply) {
+              try { rawText = Buffer.from(reply.hex_reply, 'base64').toString('utf8'); } catch { rawText = reply.hex_reply; }
+            }
+            if (!rawText && reply.answer_json) {
+              const aj2 = reply.answer_json;
+              rawText = typeof aj2 === 'string' ? aj2 : (aj2.response ?? aj2.answer ?? JSON.stringify(aj2));
+            }
+            partialAnswers[p.peer_id] = extractLetter(rawText, q.options.length);
+          }
+        }
+
+        const variancePct = computeAnswerVariancePct(partialAnswers);
+        if (variancePct > andonThreshold) {
+          escalationFired = true;
+          totalEscalationFired++;
+          const partialCouncilVotes = peerPool
+            .filter(p => partialAnswers[p.peer_id] !== null)
+            .map(p => ({ peer_id: p.peer_id, answer: partialAnswers[p.peer_id], confidence: 0.5 }));
+          const { answer: bestGuessAnswer } = ensembleVote(partialAnswers);
+          const remainingMs = qDeadline - Date.now();
+
+          console.log(`  ${YELLOW}ANDON: elapsed=${Math.floor(elapsed/1000)}s ≥ 80% of ${qTimeoutSec}s · variance=${variancePct.toFixed(1)}% > ${andonThreshold}% · firing Star Chamber escalation${RESET}`);
+          console.log(`  partial_council_votes: [${partialCouncilVotes.map(v => `${v.peer_id.slice(0,8)}:${v.answer}`).join(', ')}] best_guess=${bestGuessAnswer ?? 'null'}`);
+
+          // Dispatch escalation routes to all peers with priming context
+          const escInserts = peerPool.map(p => insertRoute(SUPABASE_URL, SERVICE_KEY, {
+            target_peer_id: p.peer_id,
+            hex_frame: Buffer.from(prompt, 'utf8').toString('base64'),
+            payload_json: {
+              prompt,
+              question_id: `${questionId}-esc`,
+              correct_answer_letter: correctLetter,
+              source_id: q.source_id,
+              wire_format: wire,
+              domain: q.domain,
+              session_id: sessionId,
+              plow_max_iterations: Math.min(plowMaxIterations, 4), // shorter pass for escalation
+              allotted_timeout_ms: remainingMs,
+              is_star_chamber: true,
+              priming_context: {
+                partial_council_votes: partialCouncilVotes,
+                best_guess_answer: bestGuessAnswer,
+                plow_loop_iteration: -1,     // escalation context
+                elapsed_ms: elapsed,
+                allotted_timeout_ms: qTimeoutMs,
+              },
+            },
+            status: 'pending',
+            session_id: sessionId,
+            ttl_seconds: Math.ceil(remainingMs / 1000) + 30,
+          }));
+
+          try {
+            const escRoutes = await Promise.all(escInserts);
+            escalationRouteIds = escRoutes.map(r => r.id);
+            escalationPeerCount = escalationRouteIds.length;
+            for (let ej = 0; ej < peerPool.length; ej++) {
+              routeToPeerEsc[escalationRouteIds[ej]] = peerPool[ej].peer_id;
+            }
+            console.log(`  Star Chamber escalation: dispatched ${escalationPeerCount} routes — ${escalationRouteIds.map(id => id.slice(0,8)).join(', ')}`);
+          } catch (escErr) {
+            console.error(`  Escalation dispatch failed: ${escErr.message}`);
+            escalationFired = false; // revert flag since dispatch failed
+          }
+        }
+      }
+
+      await new Promise(r => setTimeout(r, pollIntervalMs));
+    }
+
+    // ── Collect per-peer answers from all collected replies ───────────────────
     const peerAnswers = {};
     for (const p of peers) peerAnswers[p.peer_id] = null;
 
-    for (const [routeId, reply] of Object.entries(repliesByRouteId)) {
-      const peerId = routeToPeer[routeId];
+    const repliesByRouteId = collectedReplies;
+
+    // Original routes
+    for (const [routeId, reply] of Object.entries(collectedReplies)) {
+      const peerId = routeToPeer[routeId] ?? routeToPeerEsc[routeId];
       if (!peerId) continue;
 
-      // Answer may be in hex_reply (base64-decoded) or answer_json
       let rawText = null;
       if (reply.hex_reply) {
         try { rawText = Buffer.from(reply.hex_reply, 'base64').toString('utf8'); } catch { rawText = reply.hex_reply; }
       }
       if (!rawText && reply.answer_json) {
-        rawText = typeof reply.answer_json === 'string'
-          ? reply.answer_json
-          : (reply.answer_json.response ?? reply.answer_json.answer ?? JSON.stringify(reply.answer_json));
+        const aj3 = reply.answer_json;
+        rawText = typeof aj3 === 'string' ? aj3 : (aj3.response ?? aj3.answer ?? JSON.stringify(aj3));
       }
 
       const letter = extractLetter(rawText, q.options.length);
-      peerAnswers[peerId] = letter;
+      // Escalation routes may update a peer's answer; last write wins
+      if (routeToPeerEsc[routeId]) {
+        peerAnswers[peerId] = letter; // escalation always overwrites
+      } else if (peerAnswers[peerId] === null) {
+        peerAnswers[peerId] = letter;
+      }
 
       if (letter !== null) {
         peerAnswered[peerId]++;
@@ -663,26 +917,43 @@ async function main() {
 
       const isCorrect = letter !== null && letter === correctLetter;
       const shortId = peerId.slice(0, 8);
-      console.log(`  [${shortId}] ${letter ?? 'TIMEOUT/EMPTY'} [${mark(isCorrect)}]`);
+      const escTag = routeToPeerEsc[routeId] ? `${CYAN}[ESC]${RESET}` : '';
+      console.log(`  [${shortId}]${escTag} ${letter ?? 'TIMEOUT/EMPTY'} [${mark(isCorrect)}]`);
     }
 
-    // Peers that got no reply
+    // Peers that got no reply from any route
     for (const p of peers) {
-      const rid = routeIds[peers.indexOf(p)];
-      if (!repliesByRouteId[rid]) {
-        console.log(`  [${p.peer_id.slice(0, 8)}] TIMEOUT — no reply within ${timeoutSec}s`);
+      const rid = routeIds[peerPool.indexOf(p)];
+      const escRid = escalationRouteIds[peerPool.indexOf(p)];
+      if (!collectedReplies[rid] && (!escRid || !collectedReplies[escRid])) {
+        console.log(`  [${p.peer_id.slice(0, 8)}] TIMEOUT — no reply within ${qTimeoutSec}s`);
       }
     }
 
-    // Ensemble vote
+    // Determine final_answer_source
+    const answeredCount = Object.values(peerAnswers).filter(a => a !== null).length;
     const { answer: ensembleAnswer, contested } = ensembleVote(peerAnswers);
+    let finalAnswerSource;
+    if (answeredCount === 0) {
+      finalAnswerSource = 'no_answers';
+    } else if (answeredCount === 1) {
+      finalAnswerSource = 'single_peer_fallback';
+    } else if (escalationFired) {
+      finalAnswerSource = contested ? 'escalation_consensus' : 'escalation_consensus';
+    } else if (!contested) {
+      const allSame = new Set(Object.values(peerAnswers).filter(a => a !== null)).size === 1;
+      finalAnswerSource = allSame ? 'council_unanimous' : 'council_majority';
+    } else {
+      finalAnswerSource = 'council_majority';
+    }
+
     const ensembleIsCorrect = ensembleAnswer !== null && ensembleAnswer === correctLetter;
     if (contested) {
       ensembleContested++;
-      console.log(`  Ensemble: ${YELLOW}CONTESTED${RESET}`);
+      console.log(`  Ensemble: ${YELLOW}CONTESTED${RESET} | escalation_fired=${escalationFired} | source=${finalAnswerSource}`);
     } else {
       if (ensembleIsCorrect) ensembleCorrect++;
-      console.log(`  Ensemble: ${ensembleAnswer ?? 'NULL'} [${mark(ensembleIsCorrect)}]`);
+      console.log(`  Ensemble: ${ensembleAnswer ?? 'NULL'} [${mark(ensembleIsCorrect)}] | escalation_fired=${escalationFired} | source=${finalAnswerSource}`);
     }
     console.log('');
 
@@ -694,12 +965,18 @@ async function main() {
       num_options: q.options.length,
       correct_letter: correctLetter,
       correct_answer_text: q.correct_answer,
+      allotted_timeout_s: qTimeoutSec,
       route_ids: routeIds,
+      escalation_fired: escalationFired,
+      escalation_peer_count: escalationPeerCount,
+      escalation_route_ids: escalationRouteIds,
+      final_answer_source: finalAnswerSource,
       per_peer: Object.fromEntries(
-        peers.map((p, j) => [p.peer_id, {
+        peerPool.map((p, j) => [p.peer_id, {
           route_id: routeIds[j],
+          escalation_route_id: escalationRouteIds[j] ?? null,
           answer: peerAnswers[p.peer_id],
-          replied: !!repliesByRouteId[routeIds[j]],
+          replied: !!collectedReplies[routeIds[j]] || !!collectedReplies[escalationRouteIds[j]],
           correct: peerAnswers[p.peer_id] !== null && peerAnswers[p.peer_id] === correctLetter,
         }])
       ),
@@ -712,10 +989,11 @@ async function main() {
   const border = '══════════════════════════════════════════════════════════════';
 
   console.log(border);
-  console.log(`${BOLD}5-PEER RELAY ORCHESTRATOR · BP086 · CROSS-VENDOR${RESET}`);
+  console.log(`${BOLD}5-PEER RELAY ORCHESTRATOR · BP090 TRIPLE-MAMBA · CROSS-VENDOR${RESET}`);
   console.log(border);
   console.log(`Ensemble Score:  ${ensembleCorrect}/${questions.length} = ${ensemblePct}%`);
   console.log(`Contested:       ${ensembleContested}`);
+  console.log(`Escalation fired: ${totalEscalationFired}/${questions.length} questions`);
   console.log(`Topology:        Supabase relay_routes table dispatch · 4 LAN-adjacent + 1 real-WAN-hop (Son)`);
   console.log(`Dispatch method: wan-relay-route (no direct IP routing)`);
   console.log(`Model families:  gemma4:12b (M0, M1, M2, M3) × qwen2.5:7b (Son) — CROSS-VENDOR`);
@@ -777,6 +1055,14 @@ async function main() {
     son_peer_id: sonPeerId,
     peers: peerSummary,
     staggered_phase_results: Object.keys(staggeredPhaseResults).length > 0 ? staggeredPhaseResults : null,
+    // BP090 TRIPLE-MAMBA: per-domain timeout + escalation metadata
+    per_domain_timeout_config: perDomainConfig ?? null,
+    escalation_summary: {
+      andon_threshold_pct: andonThreshold,
+      andon_escalate: andonEscalate,
+      total_escalation_fired: totalEscalationFired,
+      escalation_fired_pct: questions.length > 0 ? parseFloat(((totalEscalationFired / questions.length) * 100).toFixed(1)) : 0,
+    },
     ensemble_score: {
       correct: ensembleCorrect,
       total: questions.length,
