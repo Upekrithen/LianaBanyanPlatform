@@ -1,13 +1,15 @@
-// SkuUpgradePanel.tsx -- BP078 Scope 6.5
+// SkuUpgradePanel.tsx -- BP078 Scope 6.5 / M18b
 // In-app SKU upgrade panel. Settings surface (NOT fullscreen overlay).
-// Shows NANO / CORE / LITE / FULL tiers; "Upgrade to FULL" pulls gemma4:12b via IPC.
+// Shows NANO / LITE / CORE / FULL / ULTRA tiers.
+// M18b: right-size.json override wiring; getTileState; dynamic model names; Caithedral sweep.
 
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import type { SkuPullProgress } from '../amplify.d';
 
 // ── Types ───────────────────────────────────────────────────────────────────
 
-type SkuTierId = 'nano' | 'core' | 'lite' | 'full';
+type SkuTierId = 'nano' | 'lite' | 'core' | 'full' | 'ultra';
+type TileState = 'active' | 'available' | 'challenge-destiny' | 'insufficient';
 
 type UpgradePhase =
   | 'checking'   // loading tier + model existence
@@ -47,24 +49,22 @@ const SKU_TIERS: SkuTierDef[] = [
     downloadSize: null,
   },
   {
-    id: 'core',
-    name: 'CORE',
-    tagline: 'Enhanced local intelligence.',
-    model: '',
-    modelSize: '',
-    features: [],
-    downloadSize: null,
-    comingSoon: true,
-  },
-  {
     id: 'lite',
     name: 'LITE',
     tagline: 'Balanced power and speed.',
-    model: '',
-    modelSize: '',
-    features: [],
-    downloadSize: null,
-    comingSoon: true,
+    model: 'gemma2:2b',
+    modelSize: '~2 GB download',
+    features: ['gemma2:2b model', 'Fast local inference', 'Substrate search'],
+    downloadSize: '~2 GB',
+  },
+  {
+    id: 'core',
+    name: 'CORE',
+    tagline: 'Enhanced local intelligence.',
+    model: 'gemma2:9b',
+    modelSize: '~6 GB download',
+    features: ['gemma2:9b model', 'Mnem-DRT enabled', 'Substrate depth'],
+    downloadSize: '~6 GB',
   },
   {
     id: 'full',
@@ -75,7 +75,41 @@ const SKU_TIERS: SkuTierDef[] = [
     features: ["Google's Gemma 4 12B model", 'Mnem-DRT enabled', 'All 10 specialists', 'Full substrate depth'],
     downloadSize: '~7 GB',
   },
+  {
+    id: 'ultra',
+    name: 'ULTRA',
+    tagline: 'Maximum local intelligence.',
+    model: 'llama3.3:70b',
+    modelSize: '~42 GB download',
+    features: ['llama3.3:70b model', 'Top-tier local AI', 'Full Caithedral depth', '64GB+ RAM required'],
+    downloadSize: '~42 GB',
+  },
 ];
+
+// ── M18b: Tier ordering and model map ────────────────────────────────────────
+
+const TIER_ORDER: SkuTierId[] = ['nano', 'lite', 'core', 'full', 'ultra'];
+
+const TIER_MODEL_MAP: Record<SkuTierId, string> = {
+  nano:  'qwen2.5:0.5b (bundled)',
+  lite:  'gemma2:2b',
+  core:  'gemma2:9b',
+  full:  'gemma4:12b',
+  ultra: 'llama3.3:70b',
+};
+
+function getTileState(
+  tileTier: SkuTierId,
+  effectiveTier: SkuTierId,
+  autoDetectedTier: SkuTierId,
+): TileState {
+  if (tileTier === effectiveTier) return 'active';
+  const tileIdx = TIER_ORDER.indexOf(tileTier);
+  const hwIdx = TIER_ORDER.indexOf(autoDetectedTier);
+  if (tileIdx <= hwIdx) return 'available';
+  if (tileIdx === hwIdx + 1) return 'challenge-destiny';
+  return 'insufficient';
+}
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -313,6 +347,70 @@ const S = {
     gap: 10,
     marginTop: 8,
   } as React.CSSProperties,
+
+  tierBanner: {
+    fontSize: 11,
+    color: '#94a3b8',
+    background: 'rgba(100,116,139,0.1)',
+    border: '1px solid rgba(100,116,139,0.2)',
+    borderRadius: 6,
+    padding: '6px 10px',
+    marginBottom: 12,
+  } as React.CSSProperties,
+
+  overrideWarningChip: {
+    fontSize: 11,
+    color: '#fbbf24',
+    background: 'rgba(251,191,36,0.08)',
+    border: '1px solid rgba(251,191,36,0.3)',
+    borderRadius: 6,
+    padding: '7px 10px',
+    marginBottom: 10,
+    display: 'flex',
+    alignItems: 'center',
+    gap: 8,
+    flexWrap: 'wrap' as const,
+  } as React.CSSProperties,
+
+  challengeDestinyBadge: {
+    display: 'inline-block',
+    fontSize: 10,
+    fontWeight: 700,
+    color: '#fbbf24',
+    background: 'rgba(251,191,36,0.1)',
+    border: '1px solid rgba(251,191,36,0.35)',
+    borderRadius: 4,
+    padding: '2px 7px',
+    letterSpacing: '0.06em',
+    textTransform: 'uppercase' as const,
+    marginBottom: 8,
+  } as React.CSSProperties,
+
+  challengeDestinyBtn: {
+    marginTop: 10,
+    width: '100%',
+    padding: '8px 12px',
+    background: 'rgba(251,191,36,0.1)',
+    border: '1px solid rgba(251,191,36,0.4)',
+    borderRadius: 7,
+    color: '#fbbf24',
+    fontSize: 12,
+    fontWeight: 700,
+    cursor: 'pointer',
+    textAlign: 'center' as const,
+  } as React.CSSProperties,
+
+  restoreAutoBtn: {
+    fontSize: 10,
+    padding: '3px 8px',
+    background: 'rgba(251,191,36,0.12)',
+    border: '1px solid rgba(251,191,36,0.4)',
+    borderRadius: 4,
+    color: '#fbbf24',
+    cursor: 'pointer',
+    fontWeight: 600,
+    flexShrink: 0,
+  } as React.CSSProperties,
 };
 
 // ── Component ────────────────────────────────────────────────────────────────
@@ -331,6 +429,13 @@ export function SkuUpgradePanel({
   const [flipped, setFlipped] = useState(false);
   const [clickedTile, setClickedTile] = useState<SkuTierId | null>(null);
 
+  // M18b: effective tier/model state (honors right-size.json override)
+  const [effectiveTier, setEffectiveTier] = useState<SkuTierId>('nano');
+  const [autoDetectedTier, setAutoDetectedTier] = useState<SkuTierId>('nano');
+  const [overrideActive, setOverrideActive] = useState(false);
+  const [effectiveModel, setEffectiveModel] = useState<string>('');
+  const [autoDetectedModel, setAutoDetectedModel] = useState<string>('');
+
   const upgradeActiveRef = useRef(false);
   // Holds cleanup callbacks for IPC listeners registered during upgrade
   const listenerCleanupRef = useRef<(() => void) | null>(null);
@@ -344,13 +449,39 @@ export function SkuUpgradePanel({
 
     void (async (): Promise<void> => {
       try {
-        const [tierResult, modelResult] = await Promise.all([
+        const [tierResult, modelResult, hwResult] = await Promise.all([
           window.amplify.sku?.currentTier() ?? Promise.resolve({ tier: 'nano' as const }),
           window.amplify.sku?.checkModel('gemma4:12b') ?? Promise.resolve({ exists: false, modelName: 'gemma4:12b' }),
+          (window.amplify as unknown as { invoke?: (ch: string) => Promise<unknown> }).invoke?.('hardware:get-tier') ?? Promise.resolve(null),
         ]);
         if (cancelled) return;
         setCurrentTier(tierResult.tier);
         setModelExists(modelResult.exists);
+
+        // M18b: populate effective tier/model from hardware IPC result
+        if (hwResult && typeof hwResult === 'object' && 'effectiveModelResult' in (hwResult as Record<string, unknown>)) {
+          const emr = (hwResult as Record<string, unknown>).effectiveModelResult as {
+            tier?: string; model?: string | null; overrideActive?: boolean; autoDetectedModel?: string | null;
+          };
+          if (emr) {
+            const effTierRaw = (emr.tier ?? 'nano').toLowerCase() as SkuTierId;
+            const autoTierRaw = (() => {
+              if (!emr.autoDetectedModel) return effTierRaw;
+              const m = emr.autoDetectedModel;
+              if (m.includes('70b')) return 'ultra' as SkuTierId;
+              if (m.includes('12b')) return 'full' as SkuTierId;
+              if (m.includes('9b')) return 'core' as SkuTierId;
+              if (m.includes('2b')) return 'lite' as SkuTierId;
+              return 'nano' as SkuTierId;
+            })();
+            setEffectiveTier(TIER_ORDER.includes(effTierRaw) ? effTierRaw : 'nano');
+            setAutoDetectedTier(TIER_ORDER.includes(autoTierRaw) ? autoTierRaw : 'nano');
+            setOverrideActive(emr.overrideActive ?? false);
+            setEffectiveModel(emr.model ?? '');
+            setAutoDetectedModel(emr.autoDetectedModel ?? '');
+          }
+        }
+
         setPhase('ready');
       } catch {
         if (cancelled) return;
@@ -448,6 +579,19 @@ export function SkuUpgradePanel({
     upgradeActiveRef.current = false;
     startUpgrade();
   }, [startUpgrade]);
+
+  // ── M18b: Restore auto (delete right-size.json override) ──────────────────
+
+  const handleRestoreAuto = useCallback((): void => {
+    void (async (): Promise<void> => {
+      try {
+        await (window.amplify as unknown as { invoke?: (ch: string) => Promise<unknown> }).invoke?.('hardware:reset-model');
+        setOverrideActive(false);
+        setEffectiveTier(autoDetectedTier);
+        setEffectiveModel(autoDetectedModel);
+      } catch { /* Non-fatal */ }
+    })();
+  }, [autoDetectedTier, autoDetectedModel]);
 
   // ── Tile click: scale-flash feedback then flip to back face ───────────────
 
@@ -563,7 +707,25 @@ export function SkuUpgradePanel({
       <div style={S.panel}>
 
         {/* Header */}
-        <div style={S.sectionLabel}>AI Tier</div>
+        <div style={S.sectionLabel}>Caithedral AI Tier</div>
+
+        {/* M18b: Tier banner */}
+        <div style={S.tierBanner}>
+          Current AI tier: <strong>{effectiveTier.toUpperCase()}</strong>
+          {overrideActive
+            ? ` (Override: ${effectiveModel})`
+            : effectiveModel ? ` (${effectiveModel})` : ''}
+        </div>
+
+        {/* M18b: Override warning chip */}
+        {overrideActive && (
+          <div style={S.overrideWarningChip}>
+            <span>⚠ Override active · right-size.json → <strong>{effectiveModel}</strong> · Auto: {autoDetectedModel}</span>
+            <button type="button" style={S.restoreAutoBtn} onClick={handleRestoreAuto}>
+              Restore auto
+            </button>
+          </div>
+        )}
 
         {/* Tier grid — 3D flip scene (curiosity-reward UX, SEG-V0145-3) */}
         <div style={{ perspective: '1200px', marginBottom: 20 }}>
@@ -579,95 +741,67 @@ export function SkuUpgradePanel({
             <div style={{ backfaceVisibility: 'hidden' }}>
               <div style={{ ...S.tiersGrid, marginBottom: 0 }}>
                 {SKU_TIERS.map((tier) => {
-                  const isActive = currentTier === tier.id;
-                  const isDimmed = isUpgrading && tier.id !== 'full';
+                  const tileState = getTileState(tier.id, effectiveTier, autoDetectedTier);
+                  const isActive = tileState === 'active';
+                  const isDimmed = tileState === 'insufficient' || (isUpgrading && !isActive);
                   const isClicked = clickedTile === tier.id;
+                  const isInsufficient = tileState === 'insufficient';
+                  const isChallengeDestiny = tileState === 'challenge-destiny';
+
+                  // M18b: dynamic model name for tile
+                  const displayModel = (isActive && overrideActive)
+                    ? `${effectiveModel} (Override active)`
+                    : TIER_MODEL_MAP[tier.id];
 
                   const tileClickStyle: React.CSSProperties = {
-                    cursor: 'pointer',
+                    cursor: isInsufficient ? 'not-allowed' : 'pointer',
                     transition: 'transform 0.15s ease, box-shadow 0.15s ease, opacity 0.2s',
                     transform: isClicked ? 'scale(0.96)' : 'scale(1)',
                     boxShadow: isClicked ? '0 0 0 2px rgba(110,231,183,0.5)' : 'none',
                     opacity: isDimmed ? 0.45 : 1,
                   };
 
-                  if (tier.comingSoon) {
-                    return (
-                      <div
-                        key={tier.id}
-                        style={{
-                          ...S.tierCard(false, false),
-                          ...tileClickStyle,
-                        }}
-                        onClick={() => handleTileClick(tier.id)}
-                      >
-                        <div style={S.comingSoonBadge}>Coming soon</div>
-                        <div style={S.tierName}>{tier.name}</div>
-                        <div style={S.tierTagline}>{tier.tagline}</div>
-                      </div>
-                    );
-                  }
-
-                  if (tier.id === 'nano') {
-                    return (
-                      <div
-                        key={tier.id}
-                        style={{
-                          ...S.tierCard(isActive, false),
-                          ...tileClickStyle,
-                        }}
-                        onClick={() => handleTileClick(tier.id)}
-                      >
-                        {isActive && <div style={S.activeBadge}>Active</div>}
-                        <div style={S.tierName}>{tier.name}</div>
-                        <div style={S.tierTagline}>{tier.tagline}</div>
-                        <div>
-                          {tier.features.map((f) => (
-                            <div key={f} style={S.tierFeature}>
-                              <span style={{ color: '#475569', flexShrink: 0 }}>+</span>
-                              <span>{f}</span>
-                            </div>
-                          ))}
-                        </div>
-                        <div style={S.modelSizeLabel}>{tier.modelSize}</div>
-                      </div>
-                    );
-                  }
-
-                  // FULL tier card
-                  const fullIsActive = currentTier === 'full';
                   return (
                     <div
                       key={tier.id}
+                      title={isInsufficient ? 'Hardware limit — insufficient RAM/VRAM' : undefined}
                       style={{
-                        ...S.tierCard(fullIsActive, false),
+                        ...S.tierCard(isActive, isDimmed),
                         ...tileClickStyle,
                       }}
-                      onClick={() => handleTileClick(tier.id)}
+                      onClick={() => !isInsufficient && handleTileClick(tier.id)}
                     >
-                      {fullIsActive && <div style={S.activeBadge}>Active</div>}
+                      {/* Badge row */}
+                      {isActive && <div style={S.activeBadge}>Active</div>}
+                      {isChallengeDestiny && <div style={S.challengeDestinyBadge}>⚠ Override available</div>}
+
                       <div style={S.tierName}>{tier.name}</div>
                       <div style={S.tierTagline}>{tier.tagline}</div>
-                      <div>
-                        {tier.features.map((f) => (
-                          <div key={f} style={S.tierFeature}>
-                            <span style={{ color: '#4ade80', flexShrink: 0 }}>+</span>
-                            <span style={{ color: '#94a3b8' }}>{f}</span>
-                          </div>
-                        ))}
-                      </div>
-                      {!modelExists && <div style={S.modelSizeLabel}>{tier.modelSize}</div>}
 
-                      {!fullIsActive && phase === 'ready' && (
+                      {/* Features */}
+                      {tier.features.length > 0 && (
+                        <div>
+                          {tier.features.map((f) => (
+                            <div key={f} style={S.tierFeature}>
+                              <span style={{ color: isActive ? '#4ade80' : '#475569', flexShrink: 0 }}>+</span>
+                              <span style={{ color: isActive ? '#94a3b8' : undefined }}>{f}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* M18b: dynamic model name */}
+                      <div style={{ ...S.modelSizeLabel, color: isActive ? '#6ee7b7' : '#334155' }}>
+                        {displayModel}
+                      </div>
+
+                      {/* Action buttons */}
+                      {!isActive && !isInsufficient && phase === 'ready' && tier.id === 'full' && (
                         modelExists ? (
                           <button
                             type="button"
                             style={S.activateBtn}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleTileClick(tier.id);
-                              activateFull();
-                            }}
+                            onClick={(e) => { e.stopPropagation(); handleTileClick(tier.id); activateFull(); }}
                           >
                             Activate FULL
                           </button>
@@ -675,15 +809,20 @@ export function SkuUpgradePanel({
                           <button
                             type="button"
                             style={S.upgradeBtn}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleTileClick(tier.id);
-                              startUpgrade();
-                            }}
+                            onClick={(e) => { e.stopPropagation(); handleTileClick(tier.id); startUpgrade(); }}
                           >
-                            Upgrade to FULL -- ~7 GB download
+                            Upgrade to FULL — ~7 GB
                           </button>
                         )
+                      )}
+                      {isChallengeDestiny && phase === 'ready' && (
+                        <button
+                          type="button"
+                          style={S.challengeDestinyBtn}
+                          onClick={(e) => { e.stopPropagation(); handleTileClick(tier.id); }}
+                        >
+                          Challenge Destiny ⚠
+                        </button>
                       )}
                     </div>
                   );

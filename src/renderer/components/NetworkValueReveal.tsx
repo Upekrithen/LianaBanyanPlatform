@@ -1,5 +1,5 @@
 // NetworkValueReveal.tsx -- BP078 Scope 3
-// Side-by-side "Cathedral Alone" vs "Yoked AI" comparison card.
+// Side-by-side "Caithedral Alone" vs "Yoked AI" comparison card.
 // Receives live grading result or static canonical numbers (pearl_88a8c069).
 
 import React from 'react';
@@ -99,9 +99,9 @@ export function NetworkValueReveal({ data }: Props): React.ReactElement {
       )}
 
       <div style={{ display: 'flex', gap: 12 }}>
-        {/* Cathedral Alone column */}
+        {/* Caithedral Alone column */}
         <div style={cell}>
-          <div style={label}>Cathedral Alone</div>
+          <div style={label}>Caithedral Alone</div>
           <div>
             <div style={{ ...valueStyle, color: '#94a3b8' }}>~60%</div>
             <div style={subValue}>local substrate only</div>

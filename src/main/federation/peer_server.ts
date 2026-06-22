@@ -21,7 +21,19 @@ import { existsSync, readFileSync, readdirSync } from 'fs';
 import { join } from 'path';
 import { app } from 'electron';
 import type { IncomingMessage, ServerResponse } from 'http';
-import { detectHardwareTier, getRecommendedModel } from '../hardware/ram_detector';
+import { detectHardwareTier, getRecommendedModel, getCachedEffectiveModel } from '../hardware/ram_detector';
+
+/** Returns effective ollama model (honors right-size.json override if set). */
+function getEffectiveOllamaModel(): string | null {
+  const cached = getCachedEffectiveModel();
+  if (cached) return cached.model;
+  return getRecommendedModel();
+}
+
+/** Returns whether an override is currently active. */
+function isOverrideActive(): boolean {
+  return getCachedEffectiveModel()?.overrideActive ?? false;
+}
 import type { MicStartPayload } from './mic_types';
 import { getOrCreateKeypair } from '../thorax/ed25519_keypair';
 
@@ -150,7 +162,8 @@ async function publishPresence(): Promise<void> {
     email_hash: _emailHash ?? undefined,
     relay_session_id: _relaySessionId ?? undefined,
     capabilities: {
-      ollamaModel: getRecommendedModel(),
+      ollamaModel: getEffectiveOllamaModel(),
+      overrideActive: isOverrideActive(),
       ramTier: hwTier.tier,
       ramGb: hwTier.ramGb,
       installedDomains,
@@ -231,12 +244,13 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse): Promise
       id: _peerId ?? 'self',
       name: 'MnemosyneC Peer',
       version: app.getVersion(),
-      ollamaModel: getRecommendedModel(),
+      ollamaModel: getEffectiveOllamaModel(),
       ramTier: hwTier.tier,
       ramGb: hwTier.ramGb,
       installedDomains,
       capabilities: {
-        ollamaModel: getRecommendedModel(),
+        ollamaModel: getEffectiveOllamaModel(),
+        overrideActive: isOverrideActive(),
         ramTier: hwTier.tier,
         ramGb: hwTier.ramGb,
         installedDomains,
@@ -264,7 +278,7 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse): Promise
         domain,
         questions,
         ollamaBaseUrl ?? 'http://127.0.0.1:11434',
-        model ?? getRecommendedModel(),
+        model ?? getEffectiveOllamaModel() ?? getRecommendedModel(),
       );
       sendJson(res, 200, result);
     } catch (err) {

@@ -1,8 +1,23 @@
 {
   "versions": [
     {
-      "version": "0.5.17",
+      "version": "0.5.18",
       "tier": "latest",
+      "release_date": "2026-06-22",
+      "install_reports": 0,
+      "verified_eblets": 0,
+      "zero_issue_days": 0,
+      "open_issues": 0,
+      "trust_score": 1,
+      "filename": "MnemosyneC-Setup-0.5.18.exe",
+      "size_bytes": 539998160,
+      "size_display": "515.0 MB",
+      "notes": "M18b • right-size.json override wired through (Consumer A/B/C/D) • multi-ACTIVE-tile fix (getTileState) • ULTRA tier added • dynamic model names • Caithedral sweep • BP091 M18b",
+      "sha256": "2ede81d55edaf5c23e2cc457032251d95ad4f39ab35630c097a47b82962eded0"
+    },
+    {
+      "version": "0.5.17",
+      "tier": "historical",
       "release_date": "2026-06-22",
       "install_reports": 0,
       "verified_eblets": 0,

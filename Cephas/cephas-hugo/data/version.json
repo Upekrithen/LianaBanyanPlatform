@@ -1,12 +1,12 @@
 {
-  "version": "0.5.15",
-  "filename": "MnemosyneC-Setup-0.5.15.exe",
-  "download_url": "/download/MnemosyneC-Setup-0.5.15.exe",
-  "release_notes": "v0.5.15 (BP090): Mountains 1/1b/2/3/3b ship — dr_m_orchestrator (substrate_reader · brain_swap · hex_mcode · dispatch_loop) · PLOW LOOP (domain_classifier · unfair_advantage) · Scribes Wave I (reminder · wrasse · toolsmith · scribe_runner) · Librarian Corps (pyramid_index · librarian · file_cabinet · dispatcher) · persistence wire-up.",
+  "version": "0.5.18",
+  "filename": "MnemosyneC-Setup-0.5.18.exe",
+  "download_url": "/download/MnemosyneC-Setup-0.5.18.exe",
+  "release_notes": "v0.5.18 (M18b): right-size.json override wired through all consumers · multi-ACTIVE-tile bug fixed (getTileState) · ULTRA tier added · dynamic model names · Caithedral Federation sweep.",
   "previous": {
-    "version": "0.5.14",
-    "filename": "MnemosyneC-Setup-0.5.14.exe",
-    "download_url": "/download/MnemosyneC-Setup-0.5.14.exe",
+    "version": "0.5.17",
+    "filename": "MnemosyneC-Setup-0.5.17.exe",
+    "download_url": "/download/MnemosyneC-Setup-0.5.17.exe",
     "status": "HISTORICAL"
   }
 }

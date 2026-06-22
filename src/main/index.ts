@@ -2831,7 +2831,7 @@ function registerIPCHandlers(): void {
       return {
         ok: true,
         pearl,
-        content: `# ${pearl.canonical_ref}\n\n**Pearl ID:** ${pearl.pearl_id}\n**Class:** ${pearl.class}\n**Cathedral:** ${pearl.cathedral}\n**Wave:** ${pearl.wave}\n\n*Eblet source not found on local substrate ? canonical_ref: ${pearl.canonical_ref}*`,
+        content: `# ${pearl.canonical_ref}\n\n**Pearl ID:** ${pearl.pearl_id}\n**Class:** ${pearl.class}\n**Caithedral:** ${pearl.cathedral}\n**Wave:** ${pearl.wave}\n\n*Eblet source not found on local substrate ? canonical_ref: ${pearl.canonical_ref}*`,
       };
     } catch (e) {
       return { ok: false, error: String(e) };
@@ -5000,12 +5000,14 @@ function registerIPCHandlers(): void {
 
   // Hardware tier detection — for Settings UI + onboarding
   safeHandle('hardware:get-tier', async () => {
-    const { detectHardwareTier, getAllTiers } = await import('./hardware/ram_detector');
+    const { detectHardwareTier, getAllTiers, resolveEffectiveModel, getCachedEffectiveModel } = await import('./hardware/ram_detector');
     const { getActiveModel } = await import('./ollama_model/model_picker');
     const tier = detectHardwareTier();
     const allTiers = getAllTiers();
     const activeModel = getActiveModel();
-    return { tier, allTiers, activeModel };
+    // M18b: Return cached effective model result (honors right-size.json override)
+    const effectiveModelResult = getCachedEffectiveModel() ?? await resolveEffectiveModel();
+    return { tier, allTiers, activeModel, effectiveModelResult };
   });
 
   safeHandle('hardware:set-model', async (_event, { model, tier }: { model: string; tier: string }) => {
@@ -6088,6 +6090,23 @@ app.whenReady().then(async () => {
         `[SKU] Full tier active but targetModel=${skuPromo.targetModel} not in ollama list — ` +
         `mesh test results will NOT be comparable to published benchmarks.`,
       );
+    }
+  }
+
+  // M18b: Resolve effective model (honors right-size.json override) once at startup
+  {
+    const { resolveEffectiveModel, setCachedEffectiveModel } = await import('./hardware/ram_detector');
+    try {
+      const effectiveResult = await resolveEffectiveModel();
+      setCachedEffectiveModel(effectiveResult);
+      if (effectiveResult.overrideActive) {
+        console.log(`[M18b] Override active: ${effectiveResult.model} (auto was ${effectiveResult.autoDetectedModel})`);
+      }
+      if (effectiveResult.warning) {
+        console.warn(`[M18b] ${effectiveResult.warning}`);
+      }
+    } catch (e) {
+      console.error('[M18b] resolveEffectiveModel failed (non-fatal):', e);
     }
   }
 

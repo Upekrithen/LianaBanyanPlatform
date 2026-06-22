@@ -73,7 +73,7 @@ The platform's history is best visualized as a **rope** along which **knots** ar
 
 **2026-05-22 — BP053 Eyewitness Benchmark · Stratospheric Class · Sound Barrier First Crossing**
 - 935 replicates · 8 models · Haiku-Opus 0.883 "almost perfect agreement"
-- Cathedral-runs-on-Haiku empirical receipt
+- Caithedral-runs-on-Haiku empirical receipt
 - Stratospheric class (first crossing of the Sound Barrier)
 - Eyewitness Benchmark canonical
 - Fix-as-we-go meta-immutable (BP053)
@@ -110,7 +110,7 @@ The platform's history is best visualized as a **rope** along which **knots** ar
 
 **2026-04-23 — K461/B121**
 - KNIGHT_QUEUE.md Phase 2 LIVE
-- Cathedral-derived rendering activated
+- Caithedral-derived rendering activated
 - Eyewitness score: 0.92 ✅
 
 ---

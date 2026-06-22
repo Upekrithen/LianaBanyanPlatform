@@ -27,8 +27,8 @@ The Catacombs of the Tower of Peace is the substrate layer of the Liana Banyan c
 |-------|--------|----------|
 | Public Canon | This portal | Foundational principles, economics, cooperative law |
 | Member Canon | Mnemosyne app | Initiative canon, operational protocols, member tools |
-| KNIGHT Cathedral | AI substrate | Knight Queue, Handoffs, Architecture, BRIDLE Memory |
-| BISHOP Cathedral | AI substrate | Scribe corpus, session records, Founder voice anchors |
+| KNIGHT Caithedral | AI substrate | Knight Queue, Handoffs, Architecture, BRIDLE Memory |
+| BISHOP Caithedral | AI substrate | Scribe corpus, session records, Founder voice anchors |
 
 ## The Caithedral Effect
 

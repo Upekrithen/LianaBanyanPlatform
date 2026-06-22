@@ -4,7 +4,7 @@
 // §4.2 Court Preset Management: named role→AI mappings · default "Solo Ollama"
 // §4.3 On-the-fly Single-Use: one-shot override · auto-revert after
 // §4.4 User-Defined Rules: IF-THEN form · opt-in · default no rules
-// §4.5 Multi-Select Parallel Cathedrals: checkbox list · cost warning
+// §4.5 Multi-Select Parallel Caithedrals: checkbox list · cost warning
 // §4.6 Default Discipline (DOCTRINE-CLASS): Ollama ALWAYS default
 //      Cloud-AI = explicit opt-in. Cost transparency displayed.
 //      NO silent cloud default. This is DOCTRINE not UX preference.
@@ -569,10 +569,10 @@ export function MultiAISelector() {
           </div>
         )}
 
-        {/* ── §4.5 Multi-Select Parallel Cathedrals ─────────────────────── */}
+        {/* ── §4.5 Multi-Select Parallel Caithedrals ─────────────────────── */}
         {activeSection === 'parallel' && (
           <div>
-            <SectionHeader icon="⚡⚡" title="§4.5 Multi-Select Parallel Cathedrals" subtitle="Side-by-side results · cost warning for cloud" />
+            <SectionHeader icon="⚡⚡" title="§4.5 Multi-Select Parallel Caithedrals" subtitle="Side-by-side results · cost warning for cloud" />
             {hasCloudInParallel && (
               <div style={{
                 padding: '7px 10px', marginBottom: 10, borderRadius: 6,

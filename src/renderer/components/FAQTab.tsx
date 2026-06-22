@@ -19,25 +19,25 @@ const FAQ_ENTRIES: FaqEntry[] = [
     id: 'what-is-mnemosyne',
     question: 'What is MnemosyneC™?',
     tldr: 'A substrate layer that makes any AI faster and cheaper by caching what it knows locally.',
-    full: 'MnemosyneC is a local AI substrate — a Cathedral — that stores compressed semantic knowledge on your own hardware. Every query gets routed through the Cathedral first, dramatically reducing how much work any external AI model has to do. Speed increases, cost drops, and accuracy improves because the model is starting from a richer, pre-loaded context. Works with any AI model, or none at all.',
+    full: 'MnemosyneC is a local AI substrate — a Caithedral — that stores compressed semantic knowledge on your own hardware. Every query gets routed through the Caithedral first, dramatically reducing how much work any external AI model has to do. Speed increases, cost drops, and accuracy improves because the model is starting from a richer, pre-loaded context. Works with any AI model, or none at all.',
   },
   {
     id: 'internet-required',
     question: 'Does it require an internet connection?',
     tldr: 'No. Stages 1 and 2 run fully offline.',
-    full: 'MnemosyneC is designed to run on any hardware, any network — or no network at all. Stage 1 (Baseline) and Stage 2 (Cathedral Alone) are fully offline. Stage 3+ bring in AI models, which may require network access depending on whether you are using a local model (Ollama) or a cloud model (Anthropic, etc.). Local Ollama runs entirely offline.',
+    full: 'MnemosyneC is designed to run on any hardware, any network — or no network at all. Stage 1 (Baseline) and Stage 2 (Caithedral Alone) are fully offline. Stage 3+ bring in AI models, which may require network access depending on whether you are using a local model (Ollama) or a cloud model (Anthropic, etc.). Local Ollama runs entirely offline.',
   },
   {
     id: 'what-is-gauntlet',
     question: 'What is the Gauntlet?',
     tldr: 'A 6-stage empirical test that proves MnemosyneC works on your hardware.',
-    full: 'The Gauntlet is the core validation framework:\n• Stage 1: Baseline — raw AI or no-AI, no MnemosyneC\n• Stage 2: Cathedral Alone — substrate only, no LLM, proves "or NONE AT ALL"\n• Stage 3: + Any AI — Cathedral + AI model of your choice (Pioneer Bonus fires here)\n• Stage 4: Yoked AI — cross-vendor symmetric AI yoke\n• Stage 5: Orchestration — Wave / Drekaskip / Novacula / AutoBaton\n• Stage 6: Federation — cross-Cathedral peer-mesh (requires membership)\nEach stage produces a Banyan Metric score. Running the Gauntlet earns marks.',
+    full: 'The Gauntlet is the core validation framework:\n• Stage 1: Baseline — raw AI or no-AI, no MnemosyneC\n• Stage 2: Caithedral Alone — substrate only, no LLM, proves "or NONE AT ALL"\n• Stage 3: + Any AI — Caithedral + AI model of your choice (Pioneer Bonus fires here)\n• Stage 4: Yoked AI — cross-vendor symmetric AI yoke\n• Stage 5: Orchestration — Wave / Drekaskip / Novacula / AutoBaton\n• Stage 6: Federation — cross-Caithedral peer-mesh (requires membership)\nEach stage produces a Banyan Metric score. Running the Gauntlet earns marks.',
   },
   {
     id: 'cost',
     question: 'Do I need to pay?',
     tldr: 'Free forever. $5/year optional cooperative membership unlocks Helm and Stage 6.',
-    full: 'MnemosyneC is free to use forever. No credit card, no trial that expires, no hidden limits. The cooperative membership ($5/year) unlocks:\n• Tab 2 — Helm (the LB platform bridge)\n• Stage 6 — Federation (cross-Cathedral peer-mesh)\n• Banyan Metric sharing + Code Breakers marks\nThe $5 goes toward the cooperative, not to a corporation. "Free to use. Better to join."',
+    full: 'MnemosyneC is free to use forever. No credit card, no trial that expires, no hidden limits. The cooperative membership ($5/year) unlocks:\n• Tab 2 — Helm (the LB platform bridge)\n• Stage 6 — Federation (cross-Caithedral peer-mesh)\n• Banyan Metric sharing + Code Breakers marks\nThe $5 goes toward the cooperative, not to a corporation. "Free to use. Better to join."',
   },
   {
     id: 'what-is-ollama',
@@ -55,7 +55,7 @@ const FAQ_ENTRIES: FaqEntry[] = [
     id: 'any-hardware',
     question: 'What does "any hardware, any network, any AI, or NONE AT ALL" mean?',
     tldr: 'MnemosyneC works without a GPU, without internet, without any AI model. Stage 2 proves it.',
-    full: 'This is the core empirical claim. MnemosyneC\'s substrate (the Cathedral) runs the same on:\n• Any hardware — laptop, desktop, server, low-spec machine. No GPU required.\n• Any network — fast fiber, slow WiFi, cellular, air-gapped. Stage 2 is fully offline.\n• Any AI — Ollama local, Anthropic cloud, OpenAI, any compatible endpoint.\n• NONE AT ALL — Stage 2 (Cathedral Alone) produces measurable results with zero AI involvement.\nThe Gauntlet exists specifically to prove these claims on your hardware, not in a lab.',
+    full: 'This is the core empirical claim. MnemosyneC\'s substrate (the Caithedral) runs the same on:\n• Any hardware — laptop, desktop, server, low-spec machine. No GPU required.\n• Any network — fast fiber, slow WiFi, cellular, air-gapped. Stage 2 is fully offline.\n• Any AI — Ollama local, Anthropic cloud, OpenAI, any compatible endpoint.\n• NONE AT ALL — Stage 2 (Caithedral Alone) produces measurable results with zero AI involvement.\nThe Gauntlet exists specifically to prove these claims on your hardware, not in a lab.',
   },
   {
     id: 'notcents',
