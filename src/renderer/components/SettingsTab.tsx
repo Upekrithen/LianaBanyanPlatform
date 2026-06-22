@@ -1632,6 +1632,9 @@ export function SettingsTab({
         </div>
       </section>
 
+      {/* M21: Card 1b: Automatic Updates — below App Version */}
+      <AutomaticUpdatesSection />
+
       {/* Card 2: AI Capability (SEG-R-2) */}
       <section
         ref={setSectionRef('ai-capability') as React.RefCallback<HTMLElement>}
@@ -2360,6 +2363,340 @@ function AutoInstallToggle() {
         {enabled ? 'ON' : 'OFF'}
       </button>
     </div>
+  );
+}
+
+// ─── M21: Update History Modal ────────────────────────────────────────────────
+
+function UpdateHistoryModal({ onClose }: { onClose: () => void }) {
+  const [entries, setEntries] = React.useState<Record<string, unknown>[]>([]);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    (window.amplify as any)?.getUpdateHistory?.()
+      .then((rows: Record<string, unknown>[]) => { setEntries(rows); setLoading(false); })
+      .catch(() => setLoading(false));
+  }, []);
+
+  const EVENT_COLORS: Record<string, string> = {
+    check: '#60a5fa',
+    download_started: '#fb923c',
+    download_complete: '#4ade80',
+    install_scheduled: '#a78bfa',
+    check_error: '#f87171',
+    download_error: '#f87171',
+    install_error: '#f87171',
+    'n/a': '#64748b',
+  };
+
+  return (
+    <div style={{
+      position: 'fixed', inset: 0, zIndex: 9999,
+      background: 'rgba(0,0,0,0.75)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+    }}>
+      <div style={{
+        background: 'rgba(15,23,42,0.97)', border: '1px solid rgba(100,116,139,0.25)',
+        borderRadius: 10, padding: '16px 20px', width: 520, maxHeight: '70vh',
+        display: 'flex', flexDirection: 'column', gap: 12,
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: '#e2e8f0', letterSpacing: '0.04em' }}>
+            UPDATE HISTORY
+          </div>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer', fontSize: 16 }}>✕</button>
+        </div>
+        {loading ? (
+          <div style={{ fontSize: 10, color: '#64748b', fontStyle: 'italic' }}>Loading…</div>
+        ) : entries.length === 0 ? (
+          <div style={{ fontSize: 10, color: '#64748b' }}>No history yet — history is recorded once automatic updates are active.</div>
+        ) : (
+          <div style={{ overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 4 }}>
+            {[...entries].reverse().map((entry, i) => {
+              const event = String(entry.event ?? '');
+              const color = EVENT_COLORS[event] ?? '#94a3b8';
+              const ts = typeof entry.ts === 'string' ? new Date(entry.ts).toLocaleString() : '';
+              const extra = Object.entries(entry)
+                .filter(([k]) => k !== 'ts' && k !== 'event')
+                .map(([k, v]) => `${k}: ${String(v)}`)
+                .join(' · ');
+              return (
+                <div key={i} style={{
+                  display: 'flex', gap: 10, padding: '5px 8px',
+                  background: 'rgba(30,41,59,0.5)', borderRadius: 5,
+                  borderLeft: `3px solid ${color}`,
+                }}>
+                  <div style={{ fontSize: 9, color: '#64748b', whiteSpace: 'nowrap', minWidth: 120 }}>{ts}</div>
+                  <div style={{ fontSize: 9, fontWeight: 700, color, whiteSpace: 'nowrap', minWidth: 110 }}>{event}</div>
+                  <div style={{ fontSize: 9, color: '#94a3b8', wordBreak: 'break-all' }}>{extra}</div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ─── M21: Automatic Updates Section (Block 1) ─────────────────────────────────
+
+type InstallTiming = 'launch' | 'quit' | 'scheduled' | 'approve';
+
+interface AutoUpdateConfig {
+  autoUpdates: boolean;
+  installTiming: InstallTiming;
+  scheduledTime: string;
+  majorVersionRequiresApproval: boolean;
+}
+
+const DEFAULT_AU_CONFIG: AutoUpdateConfig = {
+  autoUpdates: false,
+  installTiming: 'quit',
+  scheduledTime: '03:00',
+  majorVersionRequiresApproval: true,
+};
+
+function AutomaticUpdatesSection() {
+  const [cfg, setCfg] = React.useState<AutoUpdateConfig>(DEFAULT_AU_CONFIG);
+  const [loaded, setLoaded] = React.useState(false);
+  const [showConsentModal, setShowConsentModal] = React.useState(false);
+  const [showHistoryModal, setShowHistoryModal] = React.useState(false);
+  const [pendingApproveVersion, setPendingApproveVersion] = React.useState<{ version: string; readyPath: string } | null>(null);
+
+  // Load config from main process on mount + migrate legacy key
+  React.useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const remote = await (window.amplify as any)?.getAutoUpdateConfig?.();
+        if (!mounted) return;
+        if (remote) {
+          // Block 6: migrate legacy 'mnemo_auto_install_on_quit' if new config is at default
+          const legacyOnQuit = localStorage.getItem('mnemo_auto_install_on_quit');
+          if (legacyOnQuit === 'true' && !remote.autoUpdates && remote.installTiming === 'quit') {
+            // Already correct default — no migration action needed
+          }
+          setCfg({ ...DEFAULT_AU_CONFIG, ...remote });
+        }
+      } catch { /* not available in web / dev */ }
+      if (mounted) setLoaded(true);
+    })();
+    return () => { mounted = false; };
+  }, []);
+
+  // Subscribe to approve-required events from main
+  React.useEffect(() => {
+    const cleanup = (window.amplify as any)?.onAutoUpdateApproveRequired?.((data: { version: string; readyPath: string }) => {
+      setPendingApproveVersion(data);
+    });
+    return cleanup ?? undefined;
+  }, []);
+
+  async function persistCfg(updates: Partial<AutoUpdateConfig>): Promise<void> {
+    const next = { ...cfg, ...updates };
+    setCfg(next);
+    try {
+      await (window.amplify as any)?.setAutoUpdateConfig?.(updates);
+    } catch { /* dev mode noop */ }
+  }
+
+  function handleToggle1Click() {
+    if (cfg.autoUpdates) {
+      // Turn OFF — no modal needed
+      persistCfg({ autoUpdates: false });
+    } else {
+      // Turn ON — show consent modal first
+      setShowConsentModal(true);
+    }
+  }
+
+  async function handleEnableConfirm() {
+    setShowConsentModal(false);
+    // Block 6: read legacy toggle before enabling
+    const legacyOnQuit = localStorage.getItem('mnemo_auto_install_on_quit');
+    const timing: InstallTiming = legacyOnQuit === 'false' ? cfg.installTiming : 'quit';
+    await persistCfg({ autoUpdates: true, installTiming: timing });
+  }
+
+  function handleEnableCancel() {
+    setShowConsentModal(false);
+    // Toggle stays OFF — no state change
+  }
+
+  const s = styles;
+
+  const timingOptions: Array<{ value: InstallTiming; label: string }> = [
+    { value: 'launch',    label: 'On next launch' },
+    { value: 'quit',      label: 'On quit (default)' },
+    { value: 'scheduled', label: 'At a scheduled time' },
+    { value: 'approve',   label: 'Approve each update' },
+  ];
+
+  if (!loaded) return null;
+
+  return (
+    <>
+      <section style={s.section} id="settings-section-automatic-updates">
+        <div style={s.sectionHeader}>Automatic Updates</div>
+        <div style={s.card}>
+
+          {/* Toggle 1: Enable Automatic Updates */}
+          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: 11, fontWeight: 600, color: '#cbd5e1' }}>Automatic Updates</div>
+              <div style={{ fontSize: 9, color: '#475569', marginTop: 2, lineHeight: 1.5 }}>
+                {cfg.autoUpdates
+                  ? 'MnemosyneC checks for new versions every 6 hours and downloads them in the background. All updates are signed by Liana Banyan Corporation.'
+                  : 'Enable to let MnemosyneC check and download updates automatically. You control the install schedule.'}
+              </div>
+            </div>
+            <button
+              onClick={handleToggle1Click}
+              style={{
+                padding: '3px 10px', borderRadius: 6, fontSize: 10, fontWeight: 700,
+                cursor: 'pointer', whiteSpace: 'nowrap' as const, flexShrink: 0,
+                border: cfg.autoUpdates ? '1px solid rgba(110,231,183,0.4)' : '1px solid rgba(100,116,139,0.3)',
+                background: cfg.autoUpdates ? 'rgba(110,231,183,0.1)' : 'rgba(100,116,139,0.06)',
+                color: cfg.autoUpdates ? '#6ee7b7' : '#64748b',
+              }}
+            >
+              {cfg.autoUpdates ? 'ON' : 'OFF'}
+            </button>
+          </div>
+
+          {/* Toggle 2 + Toggle 3 + History — visible only when autoUpdates is ON */}
+          {cfg.autoUpdates && (
+            <>
+              <div style={{ marginTop: 12, paddingTop: 10, borderTop: '1px solid rgba(100,116,139,0.12)' }}>
+                <div style={{ fontSize: 10, fontWeight: 600, color: '#94a3b8', marginBottom: 6 }}>
+                  Install timing
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column' as const, gap: 5 }}>
+                  {timingOptions.map(({ value, label }) => (
+                    <label
+                      key={value}
+                      style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}
+                    >
+                      <input
+                        type="radio"
+                        name="install-timing"
+                        value={value}
+                        checked={cfg.installTiming === value}
+                        onChange={() => persistCfg({ installTiming: value })}
+                        style={{ accentColor: '#6ee7b7' }}
+                      />
+                      <span style={{ fontSize: 10, color: cfg.installTiming === value ? '#e2e8f0' : '#64748b', fontWeight: cfg.installTiming === value ? 600 : 400 }}>
+                        {label}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+                {cfg.installTiming === 'scheduled' && (
+                  <div style={{ marginTop: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <span style={{ fontSize: 10, color: '#64748b' }}>Daily at</span>
+                    <input
+                      type="time"
+                      value={cfg.scheduledTime}
+                      onChange={(e) => persistCfg({ scheduledTime: e.target.value })}
+                      style={{
+                        background: 'rgba(30,41,59,0.8)', border: '1px solid rgba(100,116,139,0.25)',
+                        borderRadius: 4, color: '#e2e8f0', fontSize: 10, padding: '2px 6px',
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
+
+              {/* Toggle 3: Major version requires approval */}
+              <div style={{ marginTop: 10, paddingTop: 8, borderTop: '1px solid rgba(100,116,139,0.12)' }}>
+                <label style={{ display: 'flex', alignItems: 'flex-start', gap: 8, cursor: 'pointer' }}>
+                  <input
+                    type="checkbox"
+                    checked={cfg.majorVersionRequiresApproval}
+                    onChange={(e) => persistCfg({ majorVersionRequiresApproval: e.target.checked })}
+                    style={{ accentColor: '#6ee7b7', marginTop: 1 }}
+                  />
+                  <div>
+                    <div style={{ fontSize: 10, fontWeight: 600, color: '#cbd5e1' }}>
+                      Major version jumps (e.g. v0.5 → v1.0) always require approval
+                    </div>
+                    <div style={{ fontSize: 9, color: '#475569', marginTop: 2, lineHeight: 1.5 }}>
+                      When enabled, major version updates are announced but not downloaded automatically — you approve each one.
+                    </div>
+                  </div>
+                </label>
+              </div>
+
+              {/* Pending approve notification */}
+              {cfg.installTiming === 'approve' && pendingApproveVersion && (
+                <div style={{ marginTop: 10, padding: '8px 10px', borderRadius: 6, background: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.3)' }}>
+                  <div style={{ fontSize: 10, color: '#fbbf24', fontWeight: 600, marginBottom: 4 }}>
+                    Update v{pendingApproveVersion.version} ready to install
+                  </div>
+                  <button
+                    onClick={() => {
+                      (window.amplify as any)?.approveAutoUpdateInstall?.(pendingApproveVersion.readyPath);
+                      setPendingApproveVersion(null);
+                    }}
+                    style={{ ...s.btn, background: 'rgba(245,158,11,0.15)', borderColor: 'rgba(245,158,11,0.4)', color: '#fbbf24', fontWeight: 700 }}
+                  >
+                    Install Now
+                  </button>
+                </div>
+              )}
+
+              {/* View Update History */}
+              <div style={{ marginTop: 10, paddingTop: 8, borderTop: '1px solid rgba(100,116,139,0.12)' }}>
+                <button
+                  onClick={() => setShowHistoryModal(true)}
+                  style={{ ...s.btn }}
+                >
+                  View Update History
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+      </section>
+
+      {/* Consent Modal */}
+      {showConsentModal && (
+        <div style={{
+          position: 'fixed', inset: 0, zIndex: 9999,
+          background: 'rgba(0,0,0,0.75)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}>
+          <div style={{
+            background: 'rgba(15,23,42,0.97)', border: '1px solid rgba(100,116,139,0.25)',
+            borderRadius: 10, padding: '20px 24px', width: 420, display: 'flex', flexDirection: 'column', gap: 14,
+          }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: '#e2e8f0' }}>Enable Automatic Updates?</div>
+            <p style={{ fontSize: 10, color: '#94a3b8', lineHeight: 1.65, margin: 0 }}>
+              MnemosyneC will check for new versions every 6 hours and download them in the background.
+              Updates will install on your chosen schedule. All updates are cryptographically signed by
+              Liana Banyan Corporation — no third party can push updates to your machine. You can disable
+              this at any time.
+            </p>
+            <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
+              <button
+                onClick={handleEnableCancel}
+                style={{ ...s.btn, color: '#64748b' }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleEnableConfirm}
+                style={{ ...s.btn, background: 'rgba(110,231,183,0.12)', borderColor: 'rgba(110,231,183,0.4)', color: '#6ee7b7', fontWeight: 700 }}
+              >
+                Enable
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Update History Modal */}
+      {showHistoryModal && <UpdateHistoryModal onClose={() => setShowHistoryModal(false)} />}
+    </>
   );
 }
 

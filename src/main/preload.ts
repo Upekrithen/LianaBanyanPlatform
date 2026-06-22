@@ -371,6 +371,31 @@ contextBridge.exposeInMainWorld('amplify', {
   setAutoInstallOnQuit: (enabled: boolean): void =>
     ipcRenderer.send('set-auto-install-on-quit', enabled),
 
+  // M21: Automatic update scheduler config (Block 1-6)
+  getAutoUpdateConfig: (): Promise<import('../main/auto_update_scheduler').AutoUpdateConfig> =>
+    ipcRenderer.invoke('get-auto-update-config'),
+  setAutoUpdateConfig: (cfg: Partial<import('../main/auto_update_scheduler').AutoUpdateConfig>): Promise<import('../main/auto_update_scheduler').AutoUpdateConfig> =>
+    ipcRenderer.invoke('set-auto-update-config', cfg),
+  getUpdateHistory: (): Promise<Record<string, unknown>[]> =>
+    ipcRenderer.invoke('get-update-history'),
+  approveAutoUpdateInstall: (readyPath: string): void =>
+    ipcRenderer.send('auto-update-approve-install', readyPath),
+  onAutoUpdatePatchReady: (cb: (data: { version: string }) => void): (() => void) => {
+    const handler = (_event: Electron.IpcRendererEvent, data: { version: string }) => cb(data);
+    ipcRenderer.on('auto-update-patch-ready', handler);
+    return () => ipcRenderer.removeListener('auto-update-patch-ready', handler);
+  },
+  onAutoUpdateMajorAvailable: (cb: (data: { version: string }) => void): (() => void) => {
+    const handler = (_event: Electron.IpcRendererEvent, data: { version: string }) => cb(data);
+    ipcRenderer.on('auto-update-major-available', handler);
+    return () => ipcRenderer.removeListener('auto-update-major-available', handler);
+  },
+  onAutoUpdateApproveRequired: (cb: (data: { version: string; readyPath: string }) => void): (() => void) => {
+    const handler = (_event: Electron.IpcRendererEvent, data: { version: string; readyPath: string }) => cb(data);
+    ipcRenderer.on('auto-update-approve-required', handler);
+    return () => ipcRenderer.removeListener('auto-update-approve-required', handler);
+  },
+
   onUpdateStateChanged: (cb: (state: UpdateState) => void): (() => void) => {
     const handler = (_event: Electron.IpcRendererEvent, state: UpdateState) => cb(state);
     ipcRenderer.on('update-state-changed', handler);

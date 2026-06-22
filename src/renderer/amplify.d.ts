@@ -11,6 +11,14 @@ export interface UpdateState {
   errorMessage?: string;
 }
 
+// M21: Automatic update scheduler config
+export interface AutoUpdateConfig {
+  autoUpdates: boolean;
+  installTiming: 'launch' | 'quit' | 'scheduled' | 'approve';
+  scheduledTime: string;
+  majorVersionRequiresApproval: boolean;
+}
+
 export interface FrameModePayload {
   mode: FrameMode;
   forced_mode: FrameMode | null;
@@ -208,6 +216,14 @@ declare global {
       downloadUpdate: () => void;  // BP067 Phase 1D — safe tier: user-triggered download
       setAutoInstallOnQuit: (enabled: boolean) => void;  // 1D-FIX: opt-out toggle
       onUpdateStateChanged: (cb: (state: UpdateState) => void) => () => void;
+      // M21: Automatic update scheduler (Block 1-6)
+      getAutoUpdateConfig: () => Promise<AutoUpdateConfig>;
+      setAutoUpdateConfig: (cfg: Partial<AutoUpdateConfig>) => Promise<AutoUpdateConfig>;
+      getUpdateHistory: () => Promise<Record<string, unknown>[]>;
+      approveAutoUpdateInstall: (readyPath: string) => void;
+      onAutoUpdatePatchReady: (cb: (data: { version: string }) => void) => () => void;
+      onAutoUpdateMajorAvailable: (cb: (data: { version: string }) => void) => () => void;
+      onAutoUpdateApproveRequired: (cb: (data: { version: string; readyPath: string }) => void) => () => void;
       // MoneyPenny
       getMoneyPennyUrl: () => Promise<{ url: string; ips: string[]; port: number }>;
       // Auth (Phase 7)

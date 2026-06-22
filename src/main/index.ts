@@ -38,6 +38,15 @@ import { SubstrateAPIServer, API_PORT } from './substrate_api';
 import { FederationClient } from './federation_client';
 import { getMoneyPennyURL, getLocalIPs } from './mobile_pwa';
 import { AutoUpdateManager, type UpdateState } from './auto_updater';
+// M21: Automatic update scheduler (Block 2-6)
+import {
+  registerAutoUpdateIPC,
+  startAutoUpdateLoop,
+  checkAndTriggerPendingInstall,
+  migrateAutoInstallConfig,
+  registerWindowForAutoUpdate,
+  getAutoUpdateConfig,
+} from './auto_update_scheduler';
 import { PeerDiscovery, getStablePeerId } from './federation/peer-discovery';
 import { RelayClient } from './federation/relay-client';
 import { performCommunityConnectHandshake } from './federation/community-connect';
@@ -985,6 +994,7 @@ function createOverlayWindow(): void {
   // Register with auto-updater and auth manager so events can be broadcast
   if (autoUpdater) autoUpdater.registerWindow(overlayWindow);
   if (authManager) authManager.registerWindow(overlayWindow);
+  registerWindowForAutoUpdate(overlayWindow); // M21: scheduler notifications
 
   startOverlayWatchdog(overlayWindow);
 }
@@ -1295,6 +1305,7 @@ function openDashboard(opts?: { focus?: boolean }): void {
 
   if (autoUpdater) autoUpdater.registerWindow(dashboardWindow);
   if (authManager) authManager.registerWindow(dashboardWindow);
+  registerWindowForAutoUpdate(dashboardWindow); // M21
   if (folderWatcher && dashboardWindow) folderWatcher.setMainWindow(dashboardWindow);
 }
 
@@ -1428,6 +1439,7 @@ function openHearthConjunctionWindow(): void {
 
   if (autoUpdater) autoUpdater.registerWindow(hearthConjunctionWindow);
   if (authManager) authManager.registerWindow(hearthConjunctionWindow);
+  registerWindowForAutoUpdate(hearthConjunctionWindow); // M21
 }
 
 // --- IPC Handlers ------------------------------------------------------------
@@ -2446,6 +2458,9 @@ function registerIPCHandlers(): void {
   safeHandle('get-update-state', () => autoUpdater?.getState() ?? { status: 'idle' });
   ipcMain.on('check-for-updates', () => autoUpdater?.checkNow());
   ipcMain.on('install-update', () => autoUpdater?.installNow());
+
+  // M21: Automatic update scheduler IPC (Block 2-6)
+  registerAutoUpdateIPC();
 
   ipcMain.on('watchdog-pong', () => {
     rendererResponsive = true;
@@ -6127,6 +6142,15 @@ app.whenReady().then(async () => {
   autoUpdater.init();
   // KniPr026: reflect update state in tray tooltip (available / downloading / ready)
   autoUpdater.onStateChanged((state) => updateTrayTooltip(state.status));
+
+  // M21: Automatic update scheduler startup (Block 2, 4, 6)
+  migrateAutoInstallConfig();
+  checkAndTriggerPendingInstall().catch((e) =>
+    console.error('[auto-update] checkAndTriggerPendingInstall error:', e),
+  );
+  if (getAutoUpdateConfig().autoUpdates) {
+    startAutoUpdateLoop();
+  }
 
   // MV-CN: Peer discovery + WAN relay (SAGA 3 BP045 W1)
   const peerId = getStablePeerId();
