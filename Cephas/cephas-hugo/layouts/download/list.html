@@ -449,6 +449,57 @@ body { background: #0a1628; background-image: url("data:image/svg+xml,%3Csvg xml
     </div>
   </section>
 
+  <!-- ── M20: Join Invite Panel (non-gate — invitation alongside download) ── -->
+  {{- $island := site.Data.mnemo_island }}
+  {{- $latestVersion := "" }}
+  {{- range .Site.Data.version_trust.versions }}
+    {{- if eq .tier "latest" }}{{- $latestVersion = .version }}{{- end }}
+  {{- end }}
+  <link rel="stylesheet" href="/css/{{ $island.css }}" id="mnemo-join-css">
+  <div id="download-join-invite" class="tp-section" style="display:none; margin-bottom:1.5rem;" aria-label="Join the cooperative">
+    <h2 style="color:#d69e2e; font-size:1.05rem; font-weight:700; margin:0 0 0.5rem;">Join the Cooperative — $5/year</h2>
+    <p style="color:rgba(250,245,235,0.75); font-size:0.88rem; margin:0 0 1rem;">Download is always free. Members unlock benefits: 83.3% revenue share, one vote, all 16 initiative folders.</p>
+    <div id="mnemo-join-root"
+         data-door="download"
+         data-door-ref-version="{{ $latestVersion }}"
+         data-price-id="price_1TlDLIRlWRgRXQ3YHfH6Jjmi"
+         data-supabase-url="{{ site.Params.supabaseUrl }}"
+         data-supabase-anon-key="{{ site.Params.supabaseAnonKey }}">Loading…</div>
+  </div>
+  <script type="module" src="/js/{{ $island.js }}" id="mnemo-join-js"></script>
+
+  <script>
+  (function() {
+    var isMember = localStorage.getItem("lb_member") === "1"
+                || document.cookie.indexOf("lb_member=1") !== -1;
+
+    var params = new URLSearchParams(window.location.search);
+    if (params.get("member_unlock") === "1") {
+      localStorage.setItem("lb_member", "1");
+      isMember = true;
+
+      var version = params.get("version") || "";
+      var dlBtns = document.querySelectorAll(".tp-dl-btn--latest, .tp-dl-btn--stable");
+      if (dlBtns.length > 0) {
+        var btn = dlBtns[0];
+        var originalHref = btn.getAttribute("data-original-href") || btn.getAttribute("href") || "";
+        if (originalHref) {
+          var a = document.createElement("a");
+          a.href = originalHref;
+          a.download = "";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+        }
+      }
+      window.history.replaceState({}, "", "/download/");
+    }
+
+    var joinInvite = document.getElementById("download-join-invite");
+    if (joinInvite) joinInvite.style.display = isMember ? "none" : "block";
+  })();
+  </script>
+
   <!-- ── The Tower ── -->
   <section aria-labelledby="tp-tower-title">
     <h2 class="tp-tower-heading" id="tp-tower-title">The Tower &mdash; all 19 versions</h2>

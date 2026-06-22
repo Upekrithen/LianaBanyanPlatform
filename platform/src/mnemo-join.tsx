@@ -9,6 +9,84 @@ declare global {
   }
 }
 
+// M20: Door-aware post-payment routing
+type DoorId = "direct" | "download" | "order" | "invite" | "bounty" | "crown";
+
+interface DoorContext {
+  door: DoorId;
+  refs?: {
+    download_version?: string;
+    order_ref?: string;
+    inviter_user_id?: string;
+    bounty_id?: string;
+    crown_id?: string;
+  };
+}
+
+function readDoorContext(root: HTMLElement): DoorContext {
+  const door = (root.dataset.door ?? "direct") as DoorId;
+  return {
+    door,
+    refs: {
+      download_version: root.dataset.doorRefVersion,
+      order_ref: root.dataset.doorRefOrder,
+      inviter_user_id: root.dataset.doorRefInviter,
+      bounty_id: root.dataset.doorRefBounty,
+      crown_id: root.dataset.doorRefCrown,
+    },
+  };
+}
+
+const BASE_MNEMO = "https://mnemosynec.org";
+const BASE_LB    = "https://lianabanyan.com";
+
+function computeSuccessUrl(ctx: DoorContext): string {
+  switch (ctx.door) {
+    case "direct":
+      return `${BASE_LB}/pathways/?just_joined=1`;
+    case "download": {
+      const v = ctx.refs?.download_version ?? "";
+      return `${BASE_MNEMO}/download/?member_unlock=1${v ? `&version=${v}` : ""}`;
+    }
+    case "order": {
+      const ref = ctx.refs?.order_ref ?? "";
+      return ref
+        ? `${BASE_MNEMO}/order/${ref}/?member_unlock=1`
+        : `${BASE_MNEMO}/order/?member_unlock=1`;
+    }
+    case "invite": {
+      const uid = ctx.refs?.inviter_user_id ?? "";
+      return `${BASE_LB}/welcome/?inviter=${uid}`;
+    }
+    case "bounty": {
+      const bid = ctx.refs?.bounty_id ?? "";
+      return `${BASE_LB}/bounty/${bid}/?member_unlock=1`;
+    }
+    case "crown": {
+      const cid = ctx.refs?.crown_id ?? "";
+      return `${BASE_LB}/welcome/?crown=${cid}`;
+    }
+    default:
+      return `${BASE_MNEMO}/join/success/`;
+  }
+}
+
+function computeCancelUrl(ctx: DoorContext): string {
+  switch (ctx.door) {
+    case "direct":   return `${BASE_MNEMO}/join/`;
+    case "download": return `${BASE_MNEMO}/download/`;
+    case "order":    return ctx.refs?.order_ref
+                       ? `${BASE_MNEMO}/order/${ctx.refs.order_ref}/`
+                       : `${BASE_MNEMO}/order/`;
+    case "invite":   return `${BASE_LB}/`;
+    case "bounty":   return ctx.refs?.bounty_id
+                       ? `${BASE_LB}/bounty/${ctx.refs.bounty_id}/`
+                       : `${BASE_LB}/`;
+    case "crown":    return `${BASE_LB}/`;
+    default:         return `${BASE_MNEMO}/join/`;
+  }
+}
+
 function MnemoJoin() {
   const [email, setEmail] = React.useState('');
   const [loading, setLoading] = React.useState(false);
@@ -17,9 +95,13 @@ function MnemoJoin() {
   const rootEl = document.getElementById('mnemo-join-root');
   const supabaseUrl = rootEl?.getAttribute('data-supabase-url') || '';
   const supabaseAnonKey = rootEl?.getAttribute('data-supabase-anon-key') || '';
-  const successUrl = rootEl?.getAttribute('data-success-url') || 'https://mnemosynec.org/join/success/';
-  const cancelUrl = rootEl?.getAttribute('data-cancel-url') || 'https://mnemosynec.org/join/';
-  const priceId = rootEl?.getAttribute('data-price-id') || 'price_1SIXWsDMOngHJB3UxKPFmXZE';
+  const priceId = rootEl?.getAttribute('data-price-id') || 'price_1TlDLIRlWRgRXQ3YHfH6Jjmi';
+
+  // M20: derive success/cancel URLs from door context
+  // data-success-url / data-cancel-url act as manual overrides if present
+  const doorCtx = rootEl ? readDoorContext(rootEl) : { door: "direct" as DoorId };
+  const successUrl = rootEl?.getAttribute('data-success-url') || computeSuccessUrl(doorCtx);
+  const cancelUrl  = rootEl?.getAttribute('data-cancel-url')  || computeCancelUrl(doorCtx);
 
   const handleJoin = async (e: React.FormEvent) => {
     e.preventDefault();

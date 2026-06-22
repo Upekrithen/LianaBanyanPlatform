@@ -1,13 +1,13 @@
 {{- define "main" }}
 {{ $island := site.Data.mnemo_island }}
 <link rel="stylesheet" href="/css/{{ $island.css }}">
-<main class="mnemo-join-host" style="min-height: 60vh; padding: 4rem 1rem;">
+<script>window.process=window.process||{env:{NODE_ENV:"production"}};</script>
+<section class="mnemo-join-host" style="min-height: 60vh; padding: 4rem 1rem; display: block;">
   <div id="mnemo-join-root"
-       data-success-url="https://mnemosynec.org/join/success/"
-       data-cancel-url="https://mnemosynec.org/join/"
-       data-price-id="price_1SIXWsDMOngHJB3UxKPFmXZE"
+       data-door="direct"
+       data-price-id="price_1TlDLIRlWRgRXQ3YHfH6Jjmi"
        data-supabase-url="{{ site.Params.supabaseUrl }}"
-       data-supabase-anon-key="{{ site.Params.supabaseAnonKey }}"></div>
-</main>
+       data-supabase-anon-key="{{ site.Params.supabaseAnonKey }}">Loading join form…</div>
+</section>
 <script type="module" src="/js/{{ $island.js }}"></script>
 {{- end }}

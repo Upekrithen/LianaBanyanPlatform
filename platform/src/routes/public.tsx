@@ -73,6 +73,9 @@ const OpEdThouArtTheMan = lazy(() => import("@/pages/OpEdThouArtTheMan"));
 // BP084 -- Canada 40K Rescue Fleet cue card
 const Canada40K = lazy(() => import("@/pages/cue-cards/Canada40K"));
 
+// M20: Direct-door post-payment landing
+const PathwaysPage = lazy(() => import("@/pages/PathwaysPage"));
+
 // BP072 Wave 3 routes
 const ProgressReport1Page = lazy(() => import("@/pages/ProgressReport1Page"));
 const AnthologyPage = lazy(() => import("@/pages/AnthologyPage"));
@@ -218,6 +221,10 @@ export const publicRoutes = (
     {/* BP084 -- Canada 40K Rescue Fleet */}
     <Route path="/canada40k" element={<LazyPage><Canada40K /></LazyPage>} />
     <Route path="/canada40k/" element={<LazyPage><Canada40K /></LazyPage>} />
+
+    {/* M20: Direct-door post-payment landing — ?just_joined=1 triggers welcome overlay */}
+    <Route path="/pathways" element={<LazyPage><PathwaysPage /></LazyPage>} />
+    <Route path="/pathways/" element={<LazyPage><PathwaysPage /></LazyPage>} />
 
   </>
 );
