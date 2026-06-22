@@ -1,8 +1,23 @@
 {
   "versions": [
     {
-      "version": "0.5.16",
+      "version": "0.5.17",
       "tier": "latest",
+      "release_date": "2026-06-22",
+      "install_reports": 0,
+      "verified_eblets": 0,
+      "zero_issue_days": 0,
+      "open_issues": 0,
+      "trust_score": 1,
+      "filename": "MnemosyneC-Setup-0.5.17.exe",
+      "size_bytes": 539995661,
+      "size_display": "515.0 MB",
+      "notes": "Ah Hayelped • Right-sized auto-detect per peer hardware • VRAM-aware tier routing • gemma2:9b auto-selected for 12-24GB/weak-VRAM • hardware lock in Settings UI • BP091",
+      "sha256": "f5d7eac8d7ea6173f8544747185ba627c8046fbc0aa348efebd7217d28bd4278"
+    },
+    {
+      "version": "0.5.16",
+      "tier": "historical",
       "release_date": "2026-06-21",
       "install_reports": 0,
       "verified_eblets": 0,

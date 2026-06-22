@@ -1,4 +1,4 @@
----
+﻿---
 title: "Developer Tools & CLI Utilities"
 slug: "tools"
 date: 2026-06-15
@@ -28,7 +28,7 @@ Executes the <strong>M5 psychology + other domains</strong> shard (200 questions
 Check Node version: <code>node --version</code> &nbsp;&middot;&nbsp; Pull model: <code>ollama pull gemma2:2b</code>
 </p>
 
-<a href="https://mnemosynec.ai/download/MnemosyneC-Plow-CLI-Son-M5.zip"
+<a href="https://mnemosynec.org/download/MnemosyneC-Plow-CLI-Son-M5.zip"
    style="display:inline-block;background:#1a4a8a;color:#7fd1ff;border:2px solid #5a9ae0;border-radius:8px;padding:12px 28px;font-size:16px;font-weight:700;text-decoration:none;margin-bottom:20px;">
   &#8595; Download ZIP (47.8 KB) &rarr;
 </a>
@@ -84,7 +84,7 @@ ollama run gemma2:2b "Hello"
 Click the Download ZIP button above, or go directly to:
 
 ```
-https://mnemosynec.ai/download/MnemosyneC-Plow-CLI-Son-M5.zip
+https://mnemosynec.org/download/MnemosyneC-Plow-CLI-Son-M5.zip
 ```
 
 Unzip to any folder (e.g. `C:\MeshTest\` or `~/meshtest/`).

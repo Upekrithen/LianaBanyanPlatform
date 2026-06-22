@@ -82,7 +82,7 @@ When a claim has been buoyed by enough living connection over enough time, it ge
 
 **Step 1 — Download and install**
 
-[→ Download MnemosyneC for Windows v0.4.0](https://mnemosynec.ai/download/MnemosyneC-Setup-0.4.1.exe) *(Mac build: see bounty below — we need a Mac builder)*
+[→ Download MnemosyneC for Windows v0.4.0](https://mnemosynec.org/download/MnemosyneC-Setup-0.4.1.exe) *(Mac build: see bounty below — we need a Mac builder)*
 
 **Latest release:** v0.4.0 — ⭐ Architecture milestone — MIC + Federated Andon + The Diagnosis · Just Add Salt
 **SHA-256:** `See GitHub release page for verified hash`

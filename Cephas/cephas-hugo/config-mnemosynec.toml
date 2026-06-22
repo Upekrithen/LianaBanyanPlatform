@@ -1,4 +1,4 @@
-baseURL = "https://mnemosynec.ai/"
+baseURL = "https://mnemosynec.org/"
 languageCode = "en-us"
 title = "Dr. Mnemosynec REMEMBERS for your AI"
 theme = "PaperMod"
@@ -19,7 +19,7 @@ disablePathToLower = true
 
 [params]
   hideFooter = true
-  description = "Just Add Salt. How to Get the Right Answer. The cooperative-class architecture for local-first AI that works at 97.1% on MMLU-Pro · on consumer hardware · no paid API keys · empirically reproducible. Workers keep 83.3%. No ads. No VC."
+  description = "Just Add Salt. How to Get the Right Answer. The cooperative-class architecture for local-first AI that works at 97.1% on MMLU-Pro Â· on consumer hardware Â· no paid API keys Â· empirically reproducible. Workers keep 83.3%. No ads. No VC."
   author = "Liana Banyan Corporation"
   defaultTheme = "dark"
   env = "production"
@@ -43,8 +43,8 @@ disablePathToLower = true
   supabaseUrl = "https://ruuxzilgmuwddcofqecc.supabase.co"
   supabaseFunctionsUrl = "https://ruuxzilgmuwddcofqecc.supabase.co/functions/v1"
 
-  # BP084: Supabase anon key (public — safe to embed in client-side JS)
-  # FOUNDER: replace with your project's anon key from Supabase dashboard → Settings → API
+  # BP084: Supabase anon key (public â€” safe to embed in client-side JS)
+  # FOUNDER: replace with your project's anon key from Supabase dashboard â†’ Settings â†’ API
   supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ1dXh6aWxnbXV3ZGRjb2ZxZWNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM0MjU3MTUsImV4cCI6MjA3OTAwMTcxNX0.b5cLd8_PphlA-MM0zAhe0-Qj5b4GbqReO6cT8tA0ngk'
 
   [params.label]

@@ -1,7 +1,7 @@
 {{ define "main" }}
 <style>
   /* ================================================================
-     /licensing PAGE — Marathon 11 · BP090
+     /licensing PAGE â€” Marathon 11 Â· BP090
      Components: A (flip cards), F (callout boxes), G (offer card)
      ================================================================ */
   :root {
@@ -566,7 +566,7 @@
 
 <!-- ================================================================
      SECTION 2: THE 4-LAYER TABLE
-     Source: Android-of-AI canon §2 (four layers)
+     Source: Android-of-AI canon Â§2 (four layers)
      Columns: Layer, License, Who it serves, What it requires
      ================================================================ -->
 <section class="page-section--wide" aria-label="Four-layer license table">
@@ -710,7 +710,7 @@
 
 <!-- ================================================================
      SECTION 5: COMMERCIAL OFFER CARD (Component G)
-     THREE MUTUALLY EXCLUSIVE PHASES — JS gate controls visibility.
+     THREE MUTUALLY EXCLUSIVE PHASES â€” JS gate controls visibility.
      Phase A: Soft-Launch Banner (2026-06-22 through 2026-06-30 AND users < 10,000)
      Phase B: 5-Window Decay Table (2026-07-01 through 2026-11-27 AND users < 10,000)
      Phase C: FRAND-Only (2026-11-28+ OR users >= 10,000)
@@ -723,7 +723,7 @@
     contact Upekrithen LLC. Founding Licensee terms apply during the program window.
   </p>
 
-  <!-- PHASE A: Soft-Launch Banner — display:none by default; JS gate shows when active -->
+  <!-- PHASE A: Soft-Launch Banner â€” display:none by default; JS gate shows when active -->
   <div id="component-g-soft-launch" class="component-g-phase offer-card-soft-launch" aria-label="Soft-launch commercial offer">
     <div class="offer-eyebrow">SOFT-LAUNCH EXCLUSIVE &#8212; Available 2026-06-22 to 2026-06-30 only.</div>
     <div class="offer-headline">60 percent off commercial licensing, 5-year term.</div>
@@ -802,7 +802,7 @@
   </div>
 
 
-  <!-- PHASE B: 5-Window Decay Table — display:none by default; JS gate shows when active -->
+  <!-- PHASE B: 5-Window Decay Table â€” display:none by default; JS gate shows when active -->
   <div id="component-g-decay-table" class="component-g-phase offer-card-decay" aria-label="5-window decay commercial offer">
     <div class="decay-eyebrow">OFFER WINDOW</div>
     <div class="decay-headline">50 percent off commercial licensing.</div>
@@ -863,7 +863,7 @@
   </div>
 
 
-  <!-- PHASE C: FRAND-Only — display:none by default; JS gate shows when active -->
+  <!-- PHASE C: FRAND-Only â€” display:none by default; JS gate shows when active -->
   <div id="component-g-frand-only" class="component-g-phase offer-card-frand" aria-label="FRAND-only commercial offer">
     <p>
       Commercial licensing is available at full FRAND rate.
@@ -938,7 +938,7 @@
 
 <!-- ================================================================
      SECTION 8: FAQ (3 Component A flip cards)
-     Questions and answers from SEG-Y T1 §7C Section 8.
+     Questions and answers from SEG-Y T1 Â§7C Section 8.
      All three flip cards must flip and return correctly on click.
      ================================================================ -->
 <section class="page-section" aria-label="Licensing FAQ">
@@ -1115,7 +1115,7 @@ function flipCard(cardId) {
    ================================================================ */
 (function() {
   // T19: platform_user_count injected by Hugo build + edge function (both must agree)
-  var PLATFORM_USER_COUNT = {{ .Site.Data.platform_user_count | default 0 }};  // Hugo template injection
+  var PLATFORM_USER_COUNT = {{ .Site.Data.platform_user_count.count | default 0 }};  // Hugo template injection
   var PROGRAM_CLOSED_USER_THRESHOLD = 10000;
 
   // Phase date boundaries (Central time offsets: -05:00 CDT / -06:00 CST)
