@@ -1,0 +1,21 @@
+[
+  {
+    "question": "Statement 1 | There exists a free abelian group of every positive integer rank. Statement 2 | A finitely generated abelian group is free abelian if its Betti number equals the number of elements in some generating set.",
+    "options": [
+      "False, False",
+      "True, Cannot be determined",
+      "False, True",
+      "Cannot be determined, True",
+      "False, Cannot be determined",
+      "Statement 1 is false for certain positive integers, Statement 2 is false",
+      "True, False",
+      "Statement 1 is true only for certain positive integers, Statement 2 is true",
+      "Cannot be determined, False",
+      "True, True"
+    ],
+    "correct_answer": "True, True",
+    "source_id": "7694",
+    "source_category": "math",
+    "domain": "math"
+  }
+]

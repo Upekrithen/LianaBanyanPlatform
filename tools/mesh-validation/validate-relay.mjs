@@ -101,6 +101,10 @@ function parseArgs() {
     pass: null,                     // 'A' | 'B' -- which pass in the paired trial
     perDomainTimeout: null,         // BP090: path to per_domain_timeout_config.json
     questionBank: null,             // BP090: path to custom question bank JSON
+    // BP091 Ah Hayelped tier-aware routing
+    tierConfig: null,               // 'ultra:cb4ef450,full:d0b47bd0+88cbf6bd,core:c532e740+49f3e597'
+    questionDifficultyRouting: null, // 'hard:ultra+full,medium:ultra+full+core,short:all'
+    tier2Flagship: false,           // M14 Block 3: enable Tier 2 flagship fallback for contested questions
   };
 
   for (const arg of args) {
@@ -126,6 +130,10 @@ function parseArgs() {
     // BP090 TRIPLE-MAMBA flags
     else if (key === 'per-domain-timeout' && val) parsed.perDomainTimeout = val.trim();
     else if (key === 'question-bank' && val) parsed.questionBank = val.trim();
+    // BP091 Ah Hayelped tier-aware routing flags
+    else if (key === 'tier-config' && val) parsed.tierConfig = val.trim();
+    else if (key === 'question-difficulty-routing' && val) parsed.questionDifficultyRouting = val.trim();
+    else if (key === 'tier2-flagship') parsed.tier2Flagship = val === 'true';
   }
 
   if (parsed.mode === 'full' && parsed.questions === 5) parsed.questions = 70;
@@ -404,7 +412,11 @@ function loadQuestionBank(bankPath) {
       const raw = readFileSync(candidate, 'utf8');
       const qs = JSON.parse(raw);
       if (!Array.isArray(qs)) throw new Error('Question bank must be a JSON array');
-      return qs;
+      // BP091: normalize domain field — MMLU-Pro per-domain banks use source_category; ensure domain is populated
+      return qs.map(q => ({
+        ...q,
+        domain: q.domain ?? q.source_category ?? 'other',
+      }));
     } catch {
       continue;
     }
@@ -478,6 +490,22 @@ async function main() {
   const trialId = args.trialId ?? null;
   const passLabel = args.pass ?? null;
   const isGemmaMode = flagshipTier !== 'claude';
+
+  // BP091 Ah Hayelped: tier-aware routing flags
+  const isTierAwareRouting = routing === 'tier-aware';
+  const tier2Flagship = args.tier2Flagship === true;
+
+  // BP091 Ah Hayelped: classify domain difficulty for tier-aware routing
+  // HARD  → intense multi-step quantitative reasoning (ULTRA + FULL handles primary)
+  // MEDIUM → mixed conceptual + factual (all tiers participate)
+  // SHORT  → factual retrieval, shorter reasoning (CORE handles well)
+  function classifyDomainDifficulty(domain) {
+    const HARD_DOMAINS = new Set(['math', 'physics', 'engineering', 'chemistry']);
+    const SHORT_DOMAINS = new Set(['business', 'history', 'other']);
+    if (HARD_DOMAINS.has(domain)) return 'hard';
+    if (SHORT_DOMAINS.has(domain)) return 'short';
+    return 'medium';
+  }
 
   // BP090 TRIPLE-MAMBA: per-domain timeout config
   let perDomainConfig = null;
@@ -564,6 +592,56 @@ async function main() {
       process.exit(2);
     }
   }
+
+  // BP091 Ah Hayelped: build tier → peer_id maps from --tier-config
+  // tierPeerMap: { 'ultra': ['cb4ef450'], 'full': ['d0b47bd0','88cbf6bd'], 'core': ['c532e740','49f3e597'] }
+  // peerTierMap: { 'cb4ef450...': 'ultra', 'd0b47bd0...': 'full', ... }
+  const tierPeerMap = {};  // tier label → array of peer_id prefixes
+  const peerTierMap = {};  // full peer_id → tier label
+  if (args.tierConfig) {
+    for (const segment of args.tierConfig.split(',')) {
+      const colonIdx = segment.indexOf(':');
+      if (colonIdx < 0) continue;
+      const tierLabel = segment.slice(0, colonIdx).toLowerCase().trim();
+      const peerPrefixes = segment.slice(colonIdx + 1).split('+').map(p => p.trim()).filter(Boolean);
+      tierPeerMap[tierLabel] = peerPrefixes;
+      for (const peer of peers) {
+        if (peerPrefixes.some(prefix => peer.peer_id.startsWith(prefix))) {
+          peerTierMap[peer.peer_id] = tierLabel;
+        }
+      }
+    }
+    console.log(`\nBP091 Tier-aware routing — tier config parsed:`);
+    for (const [tier, prefixes] of Object.entries(tierPeerMap)) {
+      const tierPeers = peers.filter(p => peerTierMap[p.peer_id] === tier);
+      const models = [...new Set(tierPeers.map(p => p.capabilities?.ollamaModel ?? 'unknown'))].join('+');
+      console.log(`  ${tier.toUpperCase()}: ${prefixes.join('+')} → ${tierPeers.length} peer(s) · model=${models}`);
+    }
+  }
+
+  // BP091 Ah Hayelped: build difficulty → tier list map from --question-difficulty-routing
+  // difficultyTierMap: { 'hard': ['ultra','full'], 'medium': ['ultra','full','core'], 'short': ['ultra','full','core'] }
+  const difficultyTierMap = {};
+  if (args.questionDifficultyRouting) {
+    for (const segment of args.questionDifficultyRouting.split(',')) {
+      const colonIdx = segment.indexOf(':');
+      if (colonIdx < 0) continue;
+      const diffLabel = segment.slice(0, colonIdx).toLowerCase().trim();
+      const tierListStr = segment.slice(colonIdx + 1).trim();
+      const tiers = tierListStr === 'all'
+        ? Object.keys(tierPeerMap)
+        : tierListStr.split('+').map(t => t.trim()).filter(Boolean);
+      difficultyTierMap[diffLabel] = tiers;
+    }
+    console.log(`\nDifficulty routing: ${JSON.stringify(difficultyTierMap)}`);
+  }
+
+  // BP091: Identify M0 (ULTRA tier orchestrator peer) for escalation exclusion (M14 Block 1 prep)
+  const orchestratorLanPrefix = '192.168.86.';
+  const m0Peer = peers.find(p => p.lan_addresses && p.lan_addresses.includes(orchestratorLanPrefix) && peerTierMap[p.peer_id] === 'ultra')
+    ?? peers.find(p => peerTierMap[p.peer_id] === 'ultra');
+  const m0PeerId = m0Peer?.peer_id ?? null;
+  if (m0PeerId) console.log(`\nM0 orchestrator peer identified: ${m0PeerId.slice(0,8)} (ramTier=ULTRA · model=${m0Peer?.capabilities?.ollamaModel ?? 'unknown'})`);
 
   // Identify Son: peer whose lan_addresses does NOT contain 192.168.86.
   // When lan_addresses is empty for all (v0.5.6 gap), note it and proceed anyway.
@@ -699,7 +777,8 @@ async function main() {
   const results = [];
   const peerCorrect = {};
   const peerAnswered = {};
-  for (const p of peers) { peerCorrect[p.peer_id] = 0; peerAnswered[p.peer_id] = 0; }
+  const peerRouted = {};   // BP091 Ah Hayelped: questions dispatched per peer (may differ from answered)
+  for (const p of peers) { peerCorrect[p.peer_id] = 0; peerAnswered[p.peer_id] = 0; peerRouted[p.peer_id] = 0; }
   let ensembleCorrect = 0;
   let ensembleContested = 0;
 
@@ -728,6 +807,28 @@ async function main() {
     if (routing === 'domain-affinity') {
       const affinityMap = await getDomainAffinity(SUPABASE_URL, SUPABASE_ANON_KEY, peers.map(p => p.peer_id), q.domain);
       peerPool = [...peers].sort((a, b) => (affinityMap[b.peer_id] ?? 0.5) - (affinityMap[a.peer_id] ?? 0.5));
+    }
+
+    // BP091 Ah Hayelped: tier-aware routing — filter peer pool by question difficulty
+    if (isTierAwareRouting && Object.keys(tierPeerMap).length > 0) {
+      const difficulty = classifyDomainDifficulty(q.domain);
+      const allowedTiers = difficultyTierMap[difficulty] ?? Object.keys(tierPeerMap);
+      const tierFiltered = peers.filter(p => {
+        const peerTier = peerTierMap[p.peer_id];
+        return allowedTiers.includes(peerTier);
+      });
+      if (tierFiltered.length > 0) {
+        peerPool = tierFiltered;
+        console.log(`  [tier-routing] ${q.domain} → difficulty=${difficulty} → tiers=[${allowedTiers.join('+')}] → ${peerPool.map(p => (peerTierMap[p.peer_id]??'?').toUpperCase()+':'+p.peer_id.slice(0,8)).join(', ')}`);
+      } else {
+        // Fallback — use all peers (config mismatch; should not happen)
+        console.warn(`  [tier-routing] WARNING: no peers matched tiers=[${allowedTiers.join('+')}] for difficulty=${difficulty} — falling back to full pool`);
+      }
+    }
+
+    // Track routing per peer for fleet_composition receipt (BP091)
+    for (const p of peerPool) {
+      if (peerRouted[p.peer_id] !== undefined) peerRouted[p.peer_id]++;
     }
 
     // INSERT one relay_route per peer (all concurrently)
@@ -1024,15 +1125,33 @@ async function main() {
   console.log(`Escalation fired: ${totalEscalationFired}/${questions.length} questions`);
   console.log(`Topology:        Supabase relay_routes table dispatch · 4 LAN-adjacent + 1 real-WAN-hop (Son)`);
   console.log(`Dispatch method: wan-relay-route (no direct IP routing)`);
-  console.log(`Model families:  gemma4:12b (M0, M1, M2, M3) × qwen2.5:7b (Son) — CROSS-VENDOR`);
+  // BP091 Ah Hayelped: dynamic model_families string
+  const modelFamiliesStr = isTierAwareRouting && Object.keys(peerTierMap).length > 0
+    ? (() => {
+        const groups = {};
+        for (const peer of peers) {
+          const tier = (peerTierMap[peer.peer_id] ?? 'unknown').toUpperCase();
+          const model = peer.capabilities?.ollamaModel ?? 'unknown';
+          if (!groups[tier]) groups[tier] = { model, peers: [] };
+          groups[tier].peers.push(peer.peer_id.slice(0,8));
+        }
+        return Object.entries(groups).map(([tier, g]) => `${g.model} (${g.peers.join('+')} ${tier})`).join(' + ')
+          + ' — TIERED BY CAPACITY · Ah Hayelped BP091';
+      })()
+    : 'gemma4:12b (M0, M1, M2, M3) × qwen2.5:7b (Son) — CROSS-VENDOR HETEROGENEOUS';
+
+  console.log(`Model families:  ${modelFamiliesStr}`);
   console.log('');
-  console.log('Per-peer accuracy:');
+  console.log('Per-peer accuracy (BP091 fleet_composition):');
   for (const p of peers) {
+    const routed = peerRouted[p.peer_id] ?? 0;
     const ans = peerAnswered[p.peer_id];
     const cor = peerCorrect[p.peer_id];
     const pct = ans > 0 ? ((cor / ans) * 100).toFixed(1) : '—';
-    const sonTag = p.peer_id === sonPeerId ? ' ← Son (WAN/qwen2.5:7b)' : '';
-    console.log(`  ${p.peer_id.slice(0, 16)} | answered=${ans} | correct=${cor} | ${pct}%${sonTag}`);
+    const tierLabel = (peerTierMap[p.peer_id] ?? p.tier ?? '?').toUpperCase();
+    const modelLabel = p.capabilities?.ollamaModel ?? 'unknown';
+    const sonTag = p.peer_id === sonPeerId ? ' ← Son (WAN)' : '';
+    console.log(`  ${p.peer_id.slice(0, 16)} | ${tierLabel}/${modelLabel} | routed=${routed} answered=${ans} correct=${cor} | ${pct}%${sonTag}`);
   }
   console.log(border);
 
@@ -1049,8 +1168,15 @@ async function main() {
 
   // Write JSON receipt
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
-  const receiptDir = 'C:\\Users\\Administrator\\Documents\\LianaBanyanPlatform\\BISHOP_DROPZONE\\00_FOUNDER_REVIEW';
-  const receiptPath = join(receiptDir, `VALIDATION_RUN_RECEIPT_RELAY_${timestamp}.json`);
+  // BP091 Ah Hayelped: write to THUNDERCLAP receipt dir when trial-id is set, else BISHOP_DROPZONE
+  const THUNDERCLAP_BASE = 'C:\\Users\\Administrator\\Documents\\Asteroid-ProofVault\\receipts\\THUNDERCLAP';
+  const DROPZONE_DIR = 'C:\\Users\\Administrator\\Documents\\LianaBanyanPlatform\\BISHOP_DROPZONE\\00_FOUNDER_REVIEW';
+  const receiptDir = trialId
+    ? join(THUNDERCLAP_BASE, trialId)
+    : DROPZONE_DIR;
+  const receiptPath = trialId
+    ? join(receiptDir, `${trialId}_RECEIPT_${timestamp}.json`)
+    : join(receiptDir, `VALIDATION_RUN_RECEIPT_RELAY_${timestamp}.json`);
 
   const peerSummary = {};
   for (const p of peers) {
@@ -1064,12 +1190,52 @@ async function main() {
     };
   }
 
+  // BP091 Ah Hayelped: fleet_composition block — per-peer model + accuracy (binding §3.3)
+  const fleetComposition = (() => {
+    const hasTierConfig = Object.keys(tierPeerMap).length > 0;
+    const peerEntries = peers.map(peer => {
+      const tierLabel = (peerTierMap[peer.peer_id] ?? peer.capabilities?.ramTier ?? peer.tier ?? 'unknown').toUpperCase();
+      const model = peer.capabilities?.ollamaModel ?? 'unknown';
+      const routed = peerRouted[peer.peer_id] ?? 0;
+      const correct = peerCorrect[peer.peer_id] ?? 0;
+      const answered = peerAnswered[peer.peer_id] ?? 0;
+      return {
+        peer_id: peer.peer_id.slice(0, 8),
+        ramTier: tierLabel,
+        ollamaModel: model,
+        questions_routed: routed,
+        questions_answered: answered,
+        questions_correct: correct,
+        accuracy_pct: answered > 0 ? parseFloat(((correct / answered) * 100).toFixed(1)) : null,
+      };
+    });
+
+    // Per-tier aggregate accuracy
+    const perTierAccuracy = {};
+    for (const [tier, prefixes] of Object.entries(tierPeerMap)) {
+      const tierLabel = tier.toUpperCase();
+      const tierPeers = peers.filter(p => peerTierMap[p.peer_id] === tier);
+      const tierAnswered = tierPeers.reduce((s, p) => s + (peerAnswered[p.peer_id] ?? 0), 0);
+      const tierCorrect = tierPeers.reduce((s, p) => s + (peerCorrect[p.peer_id] ?? 0), 0);
+      perTierAccuracy[tierLabel] = `${tierCorrect}/${tierAnswered} (${tierAnswered > 0 ? ((tierCorrect/tierAnswered)*100).toFixed(1) : '0.0'}%)`;
+    }
+
+    return {
+      peers: peerEntries,
+      per_tier_accuracy: Object.keys(perTierAccuracy).length > 0 ? perTierAccuracy : null,
+      fleet_ensemble_accuracy: `${ensembleCorrect}/${questions.length} (${ensemblePct}%)`,
+      model_families: modelFamiliesStr,
+      tier_aware_routing: hasTierConfig,
+      ah_hayelped_bp091: hasTierConfig,
+    };
+  })();
+
   const receipt = {
     run_type: '5-peer-relay-orchestrator',
-    canonical: false,
+    canonical: isTierAwareRouting,
     topology: 'Supabase relay_routes table dispatch -- 4 LAN-adjacent + 1 real-WAN-hop (Son)',
     dispatch_method: 'wan-relay-route (no direct IP routing)',
-    model_families: 'gemma4:12b (M0, M1, M2, M3) x qwen2.5:7b (Son) -- CROSS-VENDOR HETEROGENEOUS',
+    model_families: modelFamiliesStr,
     session_id: sessionId,
     run_timestamp: new Date().toISOString(),
     mode,
@@ -1077,10 +1243,11 @@ async function main() {
     flagship_tier: flagshipTier,
     trial_id: trialId,
     pass: passLabel,
-    anthropic_api_skipped: isGemmaMode,
+    anthropic_api_skipped: isGemmaMode || isTierAwareRouting,
     question_count: questions.length,
     peer_count: peers.length,
     son_peer_id: sonPeerId,
+    fleet_composition: fleetComposition,   // BP091 §3.3 binding — per-peer model + accuracy
     peers: peerSummary,
     staggered_phase_results: Object.keys(staggeredPhaseResults).length > 0 ? staggeredPhaseResults : null,
     // BP090 TRIPLE-MAMBA: per-domain timeout + escalation metadata
@@ -1098,9 +1265,9 @@ async function main() {
       contested: ensembleContested,
     },
     questions: results,
-    truth_always_note:
-      'Pre-canonical relay diagnostic run. Canonical 5-peer cooperative substrate run ' +
-      'requires lan_addresses population and verified peer identity mapping.',
+    truth_always_note: isTierAwareRouting
+      ? 'BP091 Ah Hayelped tiered cooperative substrate · per-peer-tier-aware routing · llama3.3:70b ULTRA + gemma4:12b FULL + gemma2:9b CORE · fleet_composition block is canonical per-peer receipt.'
+      : 'Pre-canonical relay diagnostic run. Canonical 5-peer cooperative substrate run requires lan_addresses population and verified peer identity mapping.',
   };
 
   try {

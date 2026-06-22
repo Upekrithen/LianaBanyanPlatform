@@ -1,0 +1,21 @@
+[
+  {
+    "question": "What did the Moche build at the heart of their urban center?",
+    "options": [
+      "the Temple of the Feathered Serpent",
+      "an enormous walled-in precinct of elite residences",
+      "the Palace of the Painted Walls",
+      "a complex irrigation system",
+      "the Pyramid of the Sun",
+      "the Tower of Moche",
+      "an extensive library of their written records",
+      "a central marketplace for trade",
+      "a vast complex of temples and artisan workshops",
+      "an amphitheater for gladiatorial combats"
+    ],
+    "correct_answer": "the Pyramid of the Sun",
+    "source_id": "4672",
+    "source_category": "history",
+    "domain": "history"
+  }
+]
