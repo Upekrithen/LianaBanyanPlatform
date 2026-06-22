@@ -572,6 +572,8 @@ body { background: #0a1628; background-image: url("data:image/svg+xml,%3Csvg xml
 <footer class="mn-global-footer" style="text-align: center; padding: 1.5rem 1rem; font-size: 0.85rem; color: rgba(255,255,255,0.6); border-top: 1px solid rgba(255,255,255,0.08); margin-top: 2rem;">
   Copyright 2026 Liana Banyan Corporation
   &nbsp;|&nbsp;
+  <a href="/licensing/" style="color: inherit; text-decoration: underline dotted; text-underline-offset: 3px;">Licensing</a>
+  &nbsp;|&nbsp;
   <a href="/" style="color: inherit; text-decoration: underline dotted; text-underline-offset: 3px;">&#8592; Back to MnemosyneC</a>
 </footer>
 </div><!-- /tp-page -->
@@ -592,6 +594,182 @@ body { background: #0a1628; background-image: url("data:image/svg+xml,%3Csvg xml
       }
     }
   } catch(e) {}
+})();
+</script>
+
+<!-- License Acceptance Modal — M11 Block 3 -->
+<div id="license-modal" style="position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.8); align-items:center; justify-content:center;" class="license-modal-hidden">
+  <div style="background:#0f172a; border:1.5px solid rgba(34,211,238,0.35); border-radius:0.875rem; padding:2rem; max-width:520px; width:90%; color:#e2e8f0; max-height:90vh; overflow-y:auto;">
+    <h2 style="font-size:1.25rem; font-weight:700; color:#f1f5f9; margin:0 0 0.5rem;">Before you download -- choose your path</h2>
+    <p style="font-size:0.875rem; color:#94a3b8; margin:0 0 1.5rem;">Your choice is logged for our records. You can re-read both licenses at <a href="/licensing" style="color:#22d3ee;">mnemosynec.org/licensing</a>.</p>
+
+    <div style="margin-bottom:1.25rem;">
+      <label style="display:flex; gap:0.75rem; padding:1rem; border:1px solid rgba(100,116,139,0.3); border-radius:0.5rem; cursor:pointer; margin-bottom:0.75rem;" id="sspl-label">
+        <input type="radio" name="license-path" value="SSPL" id="radio-sspl" style="margin-top:0.25rem; accent-color:#22d3ee;">
+        <div>
+          <p style="font-weight:700; color:#f1f5f9; margin:0 0 0.25rem;">Cooperative path -- SSPL v1 + Pledge #2260</p>
+          <p style="font-size:0.8rem; color:#94a3b8; margin:0;">Free to use, free to share. If you modify MnemosyneC and run it as a public service, you open-source the full modified stack. <a href="https://www.mongodb.com/licensing/server-side-public-license" target="_blank" rel="noopener" style="color:#22d3ee;">Read SSPL v1</a></p>
+        </div>
+      </label>
+      <label style="display:flex; gap:0.75rem; padding:1rem; border:1px solid rgba(100,116,139,0.3); border-radius:0.5rem; cursor:pointer;" id="apache-label">
+        <input type="radio" name="license-path" value="Apache" id="radio-apache" style="margin-top:0.25rem; accent-color:#22d3ee;">
+        <div>
+          <p style="font-weight:700; color:#f1f5f9; margin:0 0 0.25rem;">Enterprise / fork path -- Apache 2.0</p>
+          <p style="font-size:0.8rem; color:#94a3b8; margin:0;">Free to use and modify. No open-source obligation. For commercial deployments, enterprise integrations, and forks outside the cooperative. <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank" rel="noopener" style="color:#22d3ee;">Read Apache 2.0</a></p>
+        </div>
+      </label>
+    </div>
+
+    <label style="display:flex; gap:0.75rem; align-items:flex-start; margin-bottom:1.25rem; cursor:pointer;">
+      <input type="checkbox" id="license-checkbox" style="margin-top:0.25rem; accent-color:#22d3ee;">
+      <span style="font-size:0.875rem; color:#cbd5e1;">I have read and accept the terms above.</span>
+    </label>
+
+    <div id="license-error" style="display:none; color:#f87171; font-size:0.875rem; margin-bottom:0.75rem;"></div>
+
+    <div style="display:flex; gap:0.75rem;">
+      <button id="accept-btn" disabled style="flex:1; padding:0.875rem; border-radius:0.5rem; border:none; background:#94a3b8; color:#1e293b; font-weight:700; cursor:not-allowed; font-size:1rem;" onclick="onAcceptLicense()">Accept and Download</button>
+      <button onclick="closeLicenseModal()" style="padding:0.875rem 1.25rem; border-radius:0.5rem; border:1px solid rgba(100,116,139,0.4); background:transparent; color:#94a3b8; cursor:pointer; font-size:0.875rem;">Cancel</button>
+    </div>
+    <p style="font-size:0.75rem; color:#475569; margin:0.75rem 0 0; text-align:center;">Fine print: Your choice is logged. Both licenses available at <a href="/licensing" style="color:#475569; text-decoration:underline;">mnemosynec.org/licensing</a>.</p>
+  </div>
+</div>
+
+<style>
+.license-modal-hidden { display: none !important; }
+.license-modal-visible { display: flex !important; }
+#radio-sspl:checked + div, #radio-apache:checked + div { color: #22d3ee; }
+</style>
+
+<script>
+(function() {
+  var SUPABASE_URL = '{{ site.Params.supabaseUrl | default "https://ruuxzilgmuwddcofqecc.supabase.co" }}';
+  var SUPABASE_ANON_KEY = '{{ site.Params.supabaseAnonKey }}';
+  var pendingHref = null;
+  var pendingFilename = null;
+
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.tp-dl-btn, .tp-dl-link, [data-download]').forEach(function(link) {
+      var originalHref = link.getAttribute('href') || link.getAttribute('data-href');
+      var originalDownload = link.getAttribute('download') || link.getAttribute('data-filename');
+      link.removeAttribute('href');
+      link.style.cursor = 'pointer';
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        openLicenseModal(originalHref, originalDownload);
+      });
+    });
+
+    ['radio-sspl', 'radio-apache', 'license-checkbox'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.addEventListener('change', updateAcceptBtn);
+    });
+  });
+
+  function openLicenseModal(href, filename) {
+    pendingHref = href;
+    pendingFilename = filename;
+    var modal = document.getElementById('license-modal');
+    if (modal) {
+      modal.classList.remove('license-modal-hidden');
+      modal.classList.add('license-modal-visible');
+    }
+    document.getElementById('radio-sspl').checked = false;
+    document.getElementById('radio-apache').checked = false;
+    document.getElementById('license-checkbox').checked = false;
+    updateAcceptBtn();
+  }
+
+  window.closeLicenseModal = function() {
+    var modal = document.getElementById('license-modal');
+    if (modal) {
+      modal.classList.add('license-modal-hidden');
+      modal.classList.remove('license-modal-visible');
+    }
+  };
+
+  function updateAcceptBtn() {
+    var radioSelected = document.querySelector('input[name="license-path"]:checked');
+    var checkboxChecked = document.getElementById('license-checkbox').checked;
+    var btn = document.getElementById('accept-btn');
+    if (radioSelected && checkboxChecked) {
+      btn.disabled = false;
+      btn.style.background = '#22d3ee';
+      btn.style.color = '#0f172a';
+      btn.style.cursor = 'pointer';
+    } else {
+      btn.disabled = true;
+      btn.style.background = '#94a3b8';
+      btn.style.color = '#1e293b';
+      btn.style.cursor = 'not-allowed';
+    }
+  }
+
+  window.onAcceptLicense = async function() {
+    var radioSelected = document.querySelector('input[name="license-path"]:checked');
+    var checkbox = document.getElementById('license-checkbox');
+    if (!radioSelected || !checkbox.checked) return;
+
+    var pathChosen = radioSelected.value;
+    var phaseAtAcceptance = computeCurrentPhase();
+    var errorEl = document.getElementById('license-error');
+    var btn = document.getElementById('accept-btn');
+
+    btn.disabled = true;
+    btn.textContent = 'Processing...';
+    errorEl.style.display = 'none';
+
+    try {
+      var resp = await fetch(SUPABASE_URL + '/rest/v1/rpc/log_license_acceptance', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+        },
+        body: JSON.stringify({
+          p_path_chosen: pathChosen,
+          p_phase_at_acceptance: phaseAtAcceptance,
+          p_user_agent: navigator.userAgent,
+          p_referrer_url: document.referrer,
+          p_notes: 'tower_download'
+        })
+      });
+      if (!resp.ok) throw new Error('RPC failed: ' + resp.status);
+      var acceptanceId = await resp.json();
+
+      closeLicenseModal();
+      var a = document.createElement('a');
+      a.href = pendingHref;
+      if (pendingFilename) a.download = pendingFilename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } catch(e) {
+      errorEl.textContent = 'Could not log acceptance. Please try again. (' + e.message + ')';
+      errorEl.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Accept and Download';
+    }
+  };
+
+  function computeCurrentPhase() {
+    var now = new Date();
+    var ranges = [
+      ['2026-06-22', '2026-06-30', 'soft_launch'],
+      ['2026-07-01', '2026-07-30', 'window_1'],
+      ['2026-07-31', '2026-08-29', 'window_2'],
+      ['2026-08-30', '2026-09-28', 'window_3'],
+      ['2026-09-29', '2026-10-28', 'window_4'],
+      ['2026-10-29', '2026-11-27', 'window_5']
+    ];
+    for (var i = 0; i < ranges.length; i++) {
+      var start = new Date(ranges[i][0] + 'T00:00:00-05:00');
+      var end = new Date(ranges[i][1] + 'T23:59:59-05:00');
+      if (now >= start && now <= end) return ranges[i][2];
+    }
+    return 'frand_only';
+  }
 })();
 </script>
 
