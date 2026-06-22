@@ -117,8 +117,15 @@ async function handleCheckoutCompleted(admin: SupabaseAdmin, session: any) {
   const userId = session.metadata?.user_id;
   const paymentType = session.metadata?.payment_type;
 
+  // lb_custom_order — anon buyers allowed, no user_id required
+  if (paymentType === "lb_custom_order") {
+    await handleCustomOrderCompleted(admin, session);
+    return;
+  }
+
+  // All other payment types require user_id
   if (!userId) {
-    console.warn("[webhook] checkout.session.completed missing user_id");
+    console.warn("[webhook] checkout.session.completed missing user_id for paymentType:", paymentType);
     return;
   }
 
@@ -347,4 +354,35 @@ async function handleTransferCreated(admin: SupabaseAdmin, transfer: any) {
   } as never).eq("user_id", userId).eq("status", "processing");
 
   console.log(`[webhook] Transfer ${transfer.id} recorded for ${userId}`);
+}
+
+// ─── Custom Order Webhook Handler (BP091 M19) ────────────────────────────────
+
+async function handleCustomOrderCompleted(admin: SupabaseAdmin, session: any) {
+  const orderId = session.metadata?.order_id;
+  const paymentIntent = session.payment_intent;
+
+  if (!orderId) {
+    console.error("[webhook] lb_custom_order: missing order_id in metadata");
+    return;
+  }
+
+  console.log(`[webhook] lb_custom_order: completing order ${orderId}, pi=${paymentIntent}`);
+
+  const { error } = await admin
+    .from("custom_orders" as never)
+    .update({
+      status: "completed",
+      stripe_payment_intent: paymentIntent ?? null,
+      completed_at: new Date().toISOString(),
+    } as never)
+    .eq("id", parseInt(orderId, 10))
+    .eq("status", "pending");
+
+  if (error) {
+    console.error(`[webhook] lb_custom_order: failed to update order ${orderId}:`, (error as any).message);
+    throw error;
+  }
+
+  console.log(`[webhook] lb_custom_order: order ${orderId} marked completed`);
 }

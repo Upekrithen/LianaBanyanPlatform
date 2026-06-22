@@ -1,5 +1,9 @@
 project_id = "ruuxzilgmuwddcofqecc"
 
+# BP091 M19 — custom order checkout, anon buyers allowed
+[functions.create-custom-order-checkout]
+verify_jwt = false
+
 # BP084 Join Flow Collapse — public endpoints, no JWT required
 [functions.create-mnemosynec-checkout]
 verify_jwt = false

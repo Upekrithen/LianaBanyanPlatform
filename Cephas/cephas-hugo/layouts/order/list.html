@@ -1,0 +1,182 @@
+{{ define "main" }}
+<section class="order-page">
+  <div class="order-container">
+    <h1>Place a Custom Order</h1>
+    <p class="order-subtitle">Single payment &middot; any amount &middot; 83.3% to your creator</p>
+
+    <form id="order-form" class="order-form" novalidate>
+      <div class="form-group">
+        <label for="order-email">Your email</label>
+        <input type="email" id="order-email" name="email" required
+               placeholder="you@example.com" autocomplete="email" />
+      </div>
+
+      <div class="form-group">
+        <label for="creator-id">Creator User ID</label>
+        <input type="text" id="creator-id" name="creator_user_id" required
+               placeholder="Paste creator UUID here" />
+        <span class="field-hint">Your creator will give you this when they invoice you.</span>
+      </div>
+
+      <div class="form-group">
+        <label for="product-label">Product / Order name</label>
+        <input type="text" id="product-label" name="product_label" required
+               placeholder="e.g. Production Run — Wave 3" maxlength="200" />
+      </div>
+
+      <div id="items-container">
+        <div class="item-row" data-index="0">
+          <h3>Item 1</h3>
+          <div class="form-group">
+            <label>Item name</label>
+            <input type="text" name="item_name_0" required placeholder="e.g. Custom T-shirt" />
+          </div>
+          <div class="form-group">
+            <label>Unit price ($)</label>
+            <input type="number" name="item_price_0" required min="0.01" step="0.01" placeholder="25.00" />
+          </div>
+          <div class="form-group">
+            <label>Quantity</label>
+            <input type="number" name="item_qty_0" required min="1" step="1" value="1" />
+          </div>
+        </div>
+      </div>
+
+      <button type="button" id="add-item-btn" class="btn-secondary">+ Add another item</button>
+
+      <div class="order-summary" id="order-summary" style="display:none;">
+        <strong>Order total: <span id="total-display">$0.00</span></strong>
+        <small>Platform: 16.7% &middot; Creator receives: 83.3%</small>
+      </div>
+
+      <div class="form-group" id="form-error" style="display:none; color: var(--color-error, #dc2626);">
+      </div>
+
+      <button type="submit" id="submit-btn" class="btn-primary">
+        Proceed to secure payment
+      </button>
+    </form>
+  </div>
+</section>
+
+<script>
+(function() {
+  var EDGE_FN = "https://ruuxzilgmuwddcofqecc.supabase.co/functions/v1/create-custom-order-checkout";
+  var SUCCESS_URL = "{{ .Site.BaseURL }}order/success/?session_id={CHECKOUT_SESSION_ID}";
+  var CANCEL_URL  = "{{ .Site.BaseURL }}order/";
+
+  var itemCount = 1;
+
+  document.getElementById("add-item-btn").addEventListener("click", function() {
+    var idx = itemCount++;
+    var container = document.getElementById("items-container");
+    var row = document.createElement("div");
+    row.className = "item-row";
+    row.dataset.index = String(idx);
+    row.innerHTML = '<h3>Item ' + (idx + 1) + ' <button type="button" class="remove-item" data-idx="' + idx + '">Remove</button></h3>' +
+      '<div class="form-group"><label>Item name</label><input type="text" name="item_name_' + idx + '" required placeholder="Item name" /></div>' +
+      '<div class="form-group"><label>Unit price ($)</label><input type="number" name="item_price_' + idx + '" required min="0.01" step="0.01" placeholder="0.00" /></div>' +
+      '<div class="form-group"><label>Quantity</label><input type="number" name="item_qty_' + idx + '" required min="1" step="1" value="1" /></div>';
+    container.appendChild(row);
+    row.querySelector(".remove-item").addEventListener("click", function() {
+      row.remove();
+      updateTotal();
+    });
+    updateTotal();
+  });
+
+  function updateTotal() {
+    var rows = document.querySelectorAll(".item-row");
+    var total = 0;
+    rows.forEach(function(row) {
+      var idx = row.dataset.index;
+      var priceEl = row.querySelector('[name="item_price_' + idx + '"]');
+      var qtyEl = row.querySelector('[name="item_qty_' + idx + '"]');
+      var price = priceEl ? (parseFloat(priceEl.value) || 0) : 0;
+      var qty = qtyEl ? (parseInt(qtyEl.value, 10) || 1) : 1;
+      total += price * qty;
+    });
+    var summary = document.getElementById("order-summary");
+    var display = document.getElementById("total-display");
+    if (total > 0) {
+      summary.style.display = "block";
+      display.textContent = "$" + total.toFixed(2);
+    } else {
+      summary.style.display = "none";
+    }
+  }
+  document.getElementById("items-container").addEventListener("input", updateTotal);
+
+  document.getElementById("order-form").addEventListener("submit", async function(e) {
+    e.preventDefault();
+    var errEl = document.getElementById("form-error");
+    var submitBtn = document.getElementById("submit-btn");
+    errEl.style.display = "none";
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Opening payment\u2026";
+
+    var email        = document.getElementById("order-email").value.trim();
+    var creatorId    = document.getElementById("creator-id").value.trim();
+    var productLabel = document.getElementById("product-label").value.trim();
+
+    var rows = document.querySelectorAll(".item-row");
+    var items = [];
+    for (var i = 0; i < rows.length; i++) {
+      var row = rows[i];
+      var idx = row.dataset.index;
+      var nameEl  = row.querySelector('[name="item_name_' + idx + '"]');
+      var priceEl = row.querySelector('[name="item_price_' + idx + '"]');
+      var qtyEl   = row.querySelector('[name="item_qty_' + idx + '"]');
+      var name  = nameEl ? nameEl.value.trim() : "";
+      var price = priceEl ? (parseFloat(priceEl.value) || 0) : 0;
+      var qty   = qtyEl ? (parseInt(qtyEl.value, 10) || 1) : 1;
+      if (!name) { showError("Each item needs a name."); return; }
+      if (price <= 0) { showError('Item "' + name + '": price must be greater than $0.'); return; }
+      items.push({ name: name, unit_cost_cents: Math.round(price * 100), quantity: qty });
+    }
+
+    if (items.length === 0) { showError("Add at least one item."); return; }
+    var totalCents = items.reduce(function(s, i) { return s + i.unit_cost_cents * i.quantity; }, 0);
+    if (totalCents < 100) { showError("Order total must be at least $1.00."); return; }
+
+    try {
+      var res = await fetch(EDGE_FN, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Origin": window.location.origin,
+        },
+        body: JSON.stringify({
+          email: email,
+          items: items,
+          creator_user_id: creatorId,
+          product_label: productLabel,
+          success_url: SUCCESS_URL,
+          cancel_url: CANCEL_URL,
+        }),
+      });
+
+      var data = await res.json();
+      if (!res.ok || !data.url) {
+        showError(data.error || "Could not create checkout session. Please try again.");
+        return;
+      }
+      window.location.href = data.url;
+    } catch (err) {
+      showError("Network error. Please check your connection and try again.");
+      console.error("[order] fetch error:", err);
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Proceed to secure payment";
+    }
+
+    function showError(msg) {
+      errEl.textContent = msg;
+      errEl.style.display = "block";
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Proceed to secure payment";
+    }
+  });
+})();
+</script>
+{{ end }}
