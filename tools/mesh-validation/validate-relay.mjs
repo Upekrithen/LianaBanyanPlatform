@@ -781,35 +781,50 @@ async function main() {
     const routeToPeerEsc = {};      // escalation routeId → peer_id
 
     while (Date.now() < qDeadline) {
+      // BP090 FIX v2: Compute elapsed FIRST.  Poll ONLY if pending routes exist.
+      // Escalation check runs BEFORE any exit-point guard so it always gets a chance
+      // at the 80% threshold even when all original routes have already replied.
+      const elapsed = Date.now() - qStartMs;
+
       const allRouteIds = [...routeIds, ...escalationRouteIds];
       const pending = allRouteIds.filter(id => !collectedReplies[id]);
-      if (pending.length === 0) break;
 
-      const idList = pending.map(id => `"${id}"`).join(',');
-      let rows = [];
-      try {
-        rows = (await supabaseRequest(
-          SUPABASE_URL, SUPABASE_ANON_KEY, 'GET',
-          `relay_route_replies?select=route_id,peer_id,answer_json,hex_reply,processing_ms&route_id=in.(${idList})`
-        )) ?? [];
-      } catch { /* poll error — continue */ }
+      // Poll pending routes (skip query if nothing pending — avoids empty IN() error)
+      if (pending.length > 0) {
+        const idList = pending.map(id => `"${id}"`).join(',');
+        let rows = [];
+        try {
+          rows = (await supabaseRequest(
+            SUPABASE_URL, SUPABASE_ANON_KEY, 'GET',
+            `relay_route_replies?select=route_id,peer_id,answer_json,hex_reply,processing_ms&route_id=in.(${idList})`
+          )) ?? [];
+        } catch { /* poll error — continue */ }
 
-      for (const row of rows) {
-        // Skip approaching_timeout signal rows (reply_type marker from peer-side index.ts)
-        const aj = (row.answer_json && typeof row.answer_json === 'object') ? row.answer_json : {};
-        if (aj.reply_type === 'approaching_timeout') continue;
-        if (!collectedReplies[row.route_id]) {
-          collectedReplies[row.route_id] = row;
+        for (const row of rows) {
+          // Skip approaching_timeout signal rows (reply_type marker from peer-side index.ts)
+          const aj = (row.answer_json && typeof row.answer_json === 'object') ? row.answer_json : {};
+          if (aj.reply_type === 'approaching_timeout') continue;
+          if (!collectedReplies[row.route_id]) {
+            collectedReplies[row.route_id] = row;
+          }
         }
       }
 
-      // Check if all original routes replied
-      const allOriginalReplied = routeIds.every(id => !!collectedReplies[id]);
-      if (allOriginalReplied && escalationRouteIds.every(id => !!collectedReplies[id])) break;
-
       // BP090 Block 2: approaching_timeout detection — orchestrator side
-      const elapsed = Date.now() - qStartMs;
+      // BP090 diagnostic: log approach check every ~30s to trace escalation path
+      if (!escalationFired && elapsed > 0 && elapsed % 30000 < 3500) {
+        const _dbgAnswered = Object.keys(collectedReplies).filter(id => routeIds.includes(id) || escalationRouteIds.includes(id));
+        console.log(`  [approach-dbg] elapsed=${Math.floor(elapsed/1000)}s threshold=${Math.floor(approachThresholdMs/1000)}s answered=${_dbgAnswered.length}/${routeIds.length} escalate=${andonEscalate}`);
+      }
+      // explicit per-iter debug (brief)
+      if (elapsed > 0 && elapsed < qTimeoutMs) {
+        const _pa = Object.keys(collectedReplies).filter(id => routeIds.includes(id));
+        process.stdout.write(`[iter e=${Math.floor(elapsed/1000)}s ans=${_pa.length}/${routeIds.length} esc=${escalationFired}] `);
+      }
+
+      // ── ESCALATION CHECK — runs before any exit so it always executes at threshold ──
       if (!escalationFired && elapsed >= approachThresholdMs && andonEscalate === 'star-chamber') {
+        console.log(`\n  [escalation-trigger] elapsed=${Math.floor(elapsed/1000)}s >= ${Math.floor(approachThresholdMs/1000)}s — building partial answers`);
         // Build partial answer map from what we've collected so far
         const partialAnswers = {};
         for (const p of peerPool) {
@@ -829,7 +844,18 @@ async function main() {
           }
         }
 
-        const variancePct = computeAnswerVariancePct(partialAnswers);
+        // BP090 escalation trigger: fire on variance OR quorum shortfall.
+        // If fewer than 50% of peers have answered at 80% elapsed, treat as
+        // maximum uncertainty — escalate even without inter-peer disagreement.
+        const answeredCountAtApproach = Object.values(partialAnswers).filter(a => a !== null).length;
+        const minQuorumPeers = Math.ceil(peerPool.length / 2);
+        let variancePct;
+        if (answeredCountAtApproach < minQuorumPeers) {
+          variancePct = 100; // quorum shortfall → maximum uncertainty
+          console.log(`  [escalation-check] quorum shortfall: ${answeredCountAtApproach}/${peerPool.length} peers answered at ${Math.floor(elapsed/1000)}s (< ${minQuorumPeers} quorum) → treating variance as 100%`);
+        } else {
+          variancePct = computeAnswerVariancePct(partialAnswers);
+        }
         if (variancePct > andonThreshold) {
           escalationFired = true;
           totalEscalationFired++;
@@ -884,6 +910,14 @@ async function main() {
           }
         }
       }
+
+      // ── EXIT CHECK — runs AFTER escalation so escalation always gets first shot ──
+      // All original + escalation routes must have replied, AND either:
+      //   (a) escalation already fired (waiting for escalation routes to reply), or
+      //   (b) we've passed the approach threshold (so escalation had its chance)
+      const allRouteIdsPost = [...routeIds, ...escalationRouteIds];
+      const allReplied = allRouteIdsPost.every(id => !!collectedReplies[id]);
+      if (allReplied && (escalationFired || elapsed >= approachThresholdMs)) break;
 
       await new Promise(r => setTimeout(r, pollIntervalMs));
     }
