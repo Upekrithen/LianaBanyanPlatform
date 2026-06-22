@@ -10,10 +10,10 @@
       "open_issues": 0,
       "trust_score": 1,
       "filename": "MnemosyneC-Setup-0.5.16.exe",
-      "size_bytes": 0,
-      "size_display": "~515 MB",
+      "size_bytes": 539992124,
+      "size_display": "515.0 MB",
       "notes": "Plow Loop 12 mesh wiring · Minor Council loop in relay poll · startRelayRoutePoll wire-up · 42Q mesh fire · BP090",
-      "sha256": "PLACEHOLDER_REPLACE_WITH_ACTUAL_SHA256_AFTER_BUILD"
+      "sha256": "37b75cce4bc496d182019043c3360d97112b73496cb8f5e406b18d42ae02b22f"
     },
     {
       "version": "0.5.15",
