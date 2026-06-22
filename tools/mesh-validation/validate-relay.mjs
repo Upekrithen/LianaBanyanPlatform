@@ -343,13 +343,19 @@ function loadPerDomainTimeoutConfig(configPath) {
     try {
       const raw = readFileSync(candidate, 'utf8');
       const parsed = JSON.parse(raw);
-      // Validate shape: each key must have { domains: string[], timeout_s: number }
+      // Validate shape: skip comment/meta keys (starting with _); each real key must have
+      // { domains: string[], timeout_s: number }
+      const validConfig = {};
       for (const [cat, data] of Object.entries(parsed)) {
+        if (cat.startsWith('_')) continue; // skip meta/comment keys
+        if (typeof data !== 'object' || data === null) continue;
         if (!Array.isArray(data.domains) || typeof data.timeout_s !== 'number') {
           throw new Error(`Invalid category "${cat}" in per-domain timeout config`);
         }
+        validConfig[cat] = data;
       }
-      return parsed;
+      if (Object.keys(validConfig).length === 0) throw new Error('No valid categories in config');
+      return validConfig;
     } catch {
       continue;
     }

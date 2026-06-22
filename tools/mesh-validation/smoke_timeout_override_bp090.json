@@ -1,0 +1,15 @@
+{
+  "_note": "Smoke test override: shortened timeouts to exercise escalation code path in reasonable time. NOT for production use.",
+  "high_disagreement": {
+    "domains": ["math", "physics", "chemistry", "law", "philosophy"],
+    "timeout_s": 120
+  },
+  "medium_disagreement": {
+    "domains": ["computer_science", "engineering", "psychology"],
+    "timeout_s": 90
+  },
+  "low_disagreement": {
+    "domains": ["biology", "business", "health", "history", "economics", "other"],
+    "timeout_s": 60
+  }
+}

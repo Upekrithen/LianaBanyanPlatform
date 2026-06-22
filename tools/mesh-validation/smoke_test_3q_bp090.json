@@ -1,0 +1,56 @@
+[
+  {
+    "domain": "biology",
+    "question": "Which of the following would most likely provide examples of mitotic cell divisions?",
+    "options": [
+      "cross section of muscle tissue",
+      "longitudinal section of a shoot tip",
+      "longitudinal section of a leaf vein",
+      "cross section of a fruit",
+      "cross section of a leaf",
+      "longitudinal section of a petal",
+      "longitudinal section of a seed",
+      "cross section of an anther (site of pollen production in a flower)"
+    ],
+    "correct_answer": "longitudinal section of a shoot tip",
+    "source_id": "smoke_bio_01",
+    "source_category": "biology"
+  },
+  {
+    "domain": "math",
+    "question": "Statement 1 | A ring homomorphism is one to one if and only if the kernel is {0}. Statement 2 | Q is an ideal in R.",
+    "options": [
+      "True, False",
+      "Not Given, Not Given",
+      "False, False",
+      "Not Given, True",
+      "True, Not Given",
+      "Not Given, False",
+      "True, True",
+      "False, True",
+      "False, Not Given"
+    ],
+    "correct_answer": "False, True",
+    "source_id": "smoke_math_01",
+    "source_category": "math"
+  },
+  {
+    "domain": "law",
+    "question": "A woman was standing in the aisle of a subway car and put her purse on the seat next to her. A man approached the woman from behind and grabbed the purse off the seat. He then pushed the woman out of the way and ran out of the subway car while carrying the purse. The man was apprehended on the subway platform while in possession of the purse. In a jurisdiction that follows the common law with respect to criminal offenses, of what crime can the man properly be convicted?",
+    "options": [
+      "Fraud, because he took the purse without the woman's consent.",
+      "Larceny, because he took the purse without the woman's permission.",
+      "Burglary, because he entered the subway car with the intention of committing a theft.",
+      "Robbery, because he used force in leaving with the purse.",
+      "Robbery, because he used force to take possession of the purse.",
+      "Robbery, because he used force to remove the woman from the purse's vicinity.",
+      "Larceny, because force was not used until after he took the purse.",
+      "Assault, because he pushed the woman out of the way.",
+      "Larceny, because he made no threat to use force.",
+      "Robbery, because he physically took the purse from the woman's presence."
+    ],
+    "correct_answer": "Robbery, because he used force in leaving with the purse.",
+    "source_id": "smoke_law_01",
+    "source_category": "law"
+  }
+]
