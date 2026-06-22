@@ -62,6 +62,78 @@ async function verifyStripeSignature(
 
 // ─── Event handlers ───────────────────────────────────────────────────────────
 
+async function resolveOrCreateUserId(
+  session: Record<string, unknown>,
+  meta: Record<string, string>,
+  adminClient: ReturnType<typeof createClient>,
+): Promise<string | null> {
+  if (meta.user_id) return meta.user_id;
+
+  const customerEmail =
+    (session.customer_email as string) ||
+    ((session.customer_details as Record<string, unknown> | undefined)?.email as string) ||
+    meta.customer_email ||
+    "";
+
+  if (!customerEmail) {
+    log("No user_id or customer email — cannot activate");
+    return null;
+  }
+
+  log(`Anonymous membership path for ${customerEmail}`);
+
+  const { data: listData, error: listErr } = await adminClient.auth.admin.listUsers({
+    page: 1,
+    perPage: 1000,
+  });
+
+  if (listErr) {
+    log(`listUsers failed: ${listErr.message}`);
+    return null;
+  }
+
+  const existing = listData?.users?.find(
+    (u) => u.email?.toLowerCase() === customerEmail.toLowerCase(),
+  );
+
+  let userId: string;
+  if (existing) {
+    userId = existing.id;
+    log(`Found existing auth user ${userId}`);
+  } else {
+    const { data: newUser, error: createErr } = await adminClient.auth.admin.createUser({
+      email: customerEmail,
+      email_confirm: true,
+    });
+    if (createErr || !newUser.user) {
+      log(`Failed to create auth user: ${createErr?.message}`);
+      return null;
+    }
+    userId = newUser.user.id;
+    log(`Created auth user ${userId}`);
+  }
+
+  const { data: profile } = await adminClient
+    .from("member_profiles")
+    .select("id, user_id")
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  if (!profile) {
+    const usernameBase = customerEmail.split("@")[0].replace(/[^a-zA-Z0-9_]/g, "_").slice(0, 30);
+    const username = `${usernameBase}_${userId.slice(0, 8)}`;
+    await adminClient.from("member_profiles").insert({
+      user_id: userId,
+      username,
+      display_name: customerEmail.split("@")[0],
+      membership_status: "inactive",
+    });
+    log(`Created member_profiles for ${userId}`);
+  }
+
+  return userId;
+}
+
 async function handleCheckoutCompleted(
   session: Record<string, unknown>,
   adminClient: ReturnType<typeof createClient>,
@@ -73,15 +145,19 @@ async function handleCheckoutCompleted(
     return;
   }
 
-  const userId = meta.user_id;
+  const userId = await resolveOrCreateUserId(session, meta, adminClient);
+  if (!userId) {
+    log("Could not resolve user for membership activation");
+    return;
+  }
+
   const inviteCode = meta.invite_code ?? "";
   const sessionId = session.id as string;
-  // BP079: Red Carpet introducer tracking
   const introducer_user_id = meta.introducer_user_id || null;
 
   log(`Processing membership activation for user ${userId}`);
 
-  // T6: Update payment record to completed
+  // T6: Update payment record to completed (or insert if anon path had no pending row)
   const { data: paymentData } = await adminClient
     .from("membership_payments")
     .update({
@@ -92,10 +168,30 @@ async function handleCheckoutCompleted(
     })
     .eq("stripe_session_id", sessionId)
     .select("id")
-    .single();
+    .maybeSingle();
 
-  const paymentRowId = paymentData?.id;
-  log("Payment record updated (T6)");
+  let paymentRowId = paymentData?.id;
+
+  if (!paymentRowId) {
+    const { data: inserted } = await adminClient
+      .from("membership_payments")
+      .insert({
+        member_id: userId,
+        amount: 5.00,
+        stripe_session_id: sessionId,
+        stripe_payment_intent: (session.payment_intent as string) || null,
+        status: "completed",
+        is_renewal: meta.is_renewal === "true",
+        completed_at: new Date().toISOString(),
+        introducer_user_id: introducer_user_id,
+      })
+      .select("id")
+      .single();
+    paymentRowId = inserted?.id;
+    log("Payment record inserted (anon path)");
+  } else {
+    log("Payment record updated (T6)");
+  }
 
   // T7a: Activate membership in member_profiles
   const oneYearFromNow = new Date();

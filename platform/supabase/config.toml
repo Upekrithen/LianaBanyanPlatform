@@ -4,6 +4,9 @@ project_id = "ruuxzilgmuwddcofqecc"
 [functions.create-mnemosynec-checkout]
 verify_jwt = false
 
+[functions.create-membership-checkout]
+verify_jwt = false
+
 [functions.verify-mnemosynec-checkout]
 verify_jwt = false
 

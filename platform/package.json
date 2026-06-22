@@ -17,7 +17,9 @@
     "mint:cue-cards": "node scripts/mint_letter_cue_cards.cjs --generate",
     "ops:xlsx": "node --experimental-strip-types scripts/xlsx-to-cephas-html.ts",
     "ops:kickstarter1": "node --experimental-strip-types scripts/xlsx-to-cephas-html.ts --input ../ops_workbooks/PAWN_B45_CAMPAIGN1_OPS_WORKBOOK.xlsx --slug kickstarter-campaign-1 --title \"Kickstarter Campaign 1 Ops Workbook\" --description \"Kickstarter Campaign 1 Ladder Campaign operational workbook export for public transparency.\" --tags ops,documentation-as-democracy,kickstarter",
-    "analyze": "vite build --mode analyze"
+    "analyze": "vite build --mode analyze",
+    "build:island": "vite build --config vite.config.island.ts",
+    "copy:island": "node scripts/copy-island.mjs"
   },
   "dependencies": {
     "@fullcalendar/daygrid": "^6.1.20",

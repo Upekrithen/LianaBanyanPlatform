@@ -1,6 +1,6 @@
 baseURL = "https://mnemosynec.ai/"
 languageCode = "en-us"
-title = "MnemosyneC — Just Add Salt · How to Get the Right Answer"
+title = "Dr. Mnemosynec REMEMBERS for your AI"
 theme = "PaperMod"
 publishDir = "public-mnemosynec"
 contentDir = "content-mnemosynec"
@@ -37,14 +37,15 @@ disablePathToLower = true
 
   # BP084: Stripe publishable key for embedded Checkout on gate pages
   # FOUNDER: replace with your live pk from https://dashboard.stripe.com/apikeys
-  stripePk = "pk_live_FOUNDER_SET_IN_CONFIG"
+  stripePk = 'pk_live_51SIIjqRlWRgRXQ3YETxMxB2mXXAZPuM9A9ttoQkzRFFMqUIkvImCHjHaKr8PpdS9BT1sUxML7iILhRGlpGSBLe6e00eatT1QcR'
 
   # BP084: Supabase edge functions base URL (public, safe to embed)
+  supabaseUrl = "https://ruuxzilgmuwddcofqecc.supabase.co"
   supabaseFunctionsUrl = "https://ruuxzilgmuwddcofqecc.supabase.co/functions/v1"
 
   # BP084: Supabase anon key (public — safe to embed in client-side JS)
   # FOUNDER: replace with your project's anon key from Supabase dashboard → Settings → API
-  supabaseAnonKey = "FOUNDER_SET_SUPABASE_ANON_KEY"
+  supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ1dXh6aWxnbXV3ZGRjb2ZxZWNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM0MjU3MTUsImV4cCI6MjA3OTAwMTcxNX0.b5cLd8_PphlA-MM0zAhe0-Qj5b4GbqReO6cT8tA0ngk'
 
   [params.label]
     text = "MnemosyneC"

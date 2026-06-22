@@ -1,0 +1,49 @@
+/* MnemoJoin island styles — scoped to .mnemo-join-widget so they don't bleed into Hugo */
+.mnemo-join-widget {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  display: flex;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+.mnemo-join-card {
+  background: #0f172a;
+  border: 1.5px solid rgba(34, 211, 238, 0.35);
+  border-radius: 0.875rem;
+  padding: 2rem;
+  max-width: 400px;
+  width: 100%;
+  color: #e2e8f0;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+.mnemo-join-header { text-align: center; margin-bottom: 1.25rem; }
+.mnemo-join-title { font-size: 1.5rem; font-weight: 700; color: #f1f5f9; margin: 0 0 0.25rem; }
+.mnemo-join-price { font-size: 2rem; font-weight: 800; color: #22d3ee; margin: 0; }
+.mnemo-join-benefits { list-style: none; padding: 0; margin: 0 0 1.5rem; }
+.mnemo-join-benefits li { padding: 0.375rem 0; color: #94a3b8; font-size: 0.875rem; }
+.mnemo-join-benefits li::before { content: '✓ '; color: #22d3ee; }
+.mnemo-join-form { display: flex; flex-direction: column; gap: 0.75rem; }
+.mnemo-join-input {
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(100,116,139,0.5);
+  background: rgba(15,23,42,0.8);
+  color: #f1f5f9;
+  font-size: 1rem;
+  outline: none;
+}
+.mnemo-join-input:focus { border-color: #22d3ee; }
+.mnemo-join-error { color: #f87171; font-size: 0.875rem; margin: 0; }
+.mnemo-join-btn {
+  padding: 0.875rem 1.5rem;
+  border-radius: 0.5rem;
+  border: none;
+  background: #22d3ee;
+  color: #0f172a;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.mnemo-join-btn:hover:not(:disabled) { background: #06b6d4; }
+.mnemo-join-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.mnemo-join-fine-print { font-size: 0.75rem; color: #475569; text-align: center; margin: 0.5rem 0 0; }
