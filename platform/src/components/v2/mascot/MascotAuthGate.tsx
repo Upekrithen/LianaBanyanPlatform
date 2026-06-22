@@ -14,7 +14,7 @@
  * Introduced B080.
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -38,7 +38,7 @@ export interface MascotAuthGateProps {
   onAuthed?: () => void;
 }
 
-type Step = 'email' | 'signin-password' | 'signup-password';
+type Step = 'email' | 'signin-password' | 'signup-password' | 'email-sent';
 
 const emailSchema = z.string().email('That email does not look right yet.');
 const passwordSchema = z.string().min(6, 'Passwords need at least 6 characters.');
@@ -56,6 +56,33 @@ export const MascotAuthGate: React.FC<MascotAuthGateProps> = ({
   const [loading, setLoading] = useState(false);
   const [showForgotPasswordPrompt, setShowForgotPasswordPrompt] = useState(false);
   const [sendingReset, setSendingReset] = useState(false);
+  const [emailSentTo, setEmailSentTo] = useState('');
+  const [resendCountdown, setResendCountdown] = useState(0);
+
+  // Countdown timer for "Resend email" button
+  useEffect(() => {
+    if (resendCountdown <= 0) return;
+    const t = setTimeout(() => setResendCountdown(c => c - 1), 1000);
+    return () => clearTimeout(t);
+  }, [resendCountdown]);
+
+  const handleResendEmail = async () => {
+    if (resendCountdown > 0) return;
+    setLoading(true);
+    const redirectUrl = `${window.location.origin}/welcome`;
+    const { error } = await supabase.auth.resend({
+      type: 'signup',
+      email: emailSentTo,
+      options: { emailRedirectTo: redirectUrl },
+    });
+    setLoading(false);
+    if (error) {
+      toast.error('Could not resend. Please try again.');
+      return;
+    }
+    toast.success('Confirmation email resent.');
+    setResendCountdown(30);
+  };
 
   const bubbleMessage =
     customMessage ??
@@ -176,7 +203,7 @@ export const MascotAuthGate: React.FC<MascotAuthGateProps> = ({
       return;
     }
     setLoading(true);
-    const redirectUrl = `${window.location.origin}/dashboard`;
+    const redirectUrl = `${window.location.origin}/welcome`;
     const { error } = await supabase.auth.signUp({
       email,
       password,
@@ -187,8 +214,11 @@ export const MascotAuthGate: React.FC<MascotAuthGateProps> = ({
       toast.error('Sign-up failed. Please try again.');
       return;
     }
-    toast.success('Check your email to finish signing up.');
-    onAuthed?.();
+    // Email confirmation required — show explicit success state.
+    // Do NOT call onAuthed(); user must click email link first.
+    setEmailSentTo(email);
+    setStep('email-sent');
+    setResendCountdown(30);
   };
 
   // Shared "dark speech bubble" styling — matches MascotBubble so the form
@@ -206,10 +236,76 @@ export const MascotAuthGate: React.FC<MascotAuthGateProps> = ({
 
   return (
     <div className="flex flex-col items-center">
-      {/* 3D flip container — front = sign in, back = sign up.
-          The bubble IS the form: title, message, inputs, CTAs all live inside one
-          dark speech-bubble panel emanating from the mascot (tail bottom-right). */}
-      <div
+      {step === 'email-sent' ? (
+        /* ── Email-sent success panel ── */
+        <div
+          className="relative p-5 space-y-4 w-full"
+          style={{
+            maxWidth: 360,
+            background: 'rgba(15, 23, 42, 0.97)',
+            border: '1.5px solid rgba(34, 211, 238, 0.45)',
+            color: '#e2e8f0',
+            boxShadow: '0 4px 24px rgba(0,0,0,0.5)',
+            borderRadius: '0.75rem',
+          }}
+        >
+          <div className="flex items-center gap-2 mb-1">
+            <Glasses className="h-4 w-4 text-cyan-400 shrink-0" />
+            <span className="font-bold text-cyan-300 text-[13px]">Check your email</span>
+          </div>
+          <div className="text-slate-300 text-[12px] leading-snug space-y-2">
+            <p>
+              We sent a confirmation link to{' '}
+              <span className="font-medium text-slate-100">{emailSentTo}</span>.
+            </p>
+            <p>Click the link to finish signing up — you can close this tab.</p>
+          </div>
+          <Button
+            type="button"
+            onClick={handleResendEmail}
+            disabled={loading || resendCountdown > 0}
+            variant="outline"
+            className="w-full border-slate-500 text-slate-200 hover:bg-slate-700 text-[12px]"
+          >
+            {resendCountdown > 0
+              ? `Resend email (${resendCountdown}s)`
+              : loading
+              ? 'Sending…'
+              : 'Resend email'}
+          </Button>
+          <button
+            type="button"
+            className="text-[11px] text-slate-500 hover:text-slate-300 underline w-full text-center"
+            onClick={() => {
+              setStep('email');
+              setFlipped(false);
+              setPassword('');
+              setConfirm('');
+              setEmailSentTo('');
+              setResendCountdown(0);
+            }}
+          >
+            Use a different email
+          </button>
+          {/* Tail */}
+          <div
+            style={{
+              position: 'absolute',
+              bottom: -6,
+              left: '50%',
+              marginLeft: -6,
+              width: 12,
+              height: 12,
+              transform: 'rotate(45deg)',
+              background: 'rgba(15, 23, 42, 0.97)',
+              borderRight: '1.5px solid rgba(34, 211, 238, 0.45)',
+              borderBottom: '1.5px solid rgba(34, 211, 238, 0.45)',
+            }}
+          />
+        </div>
+      ) : (
+        /* ── Existing 3D flip card (unchanged) ── */
+        <div
         className="relative"
         style={{
           perspective: '1200px',
@@ -431,6 +527,7 @@ export const MascotAuthGate: React.FC<MascotAuthGateProps> = ({
           </form>
         </div>
       </div>
+      )}
     </div>
   );
 };
