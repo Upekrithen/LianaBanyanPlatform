@@ -810,18 +810,6 @@ async function main() {
         }
       }
 
-      // BP090 Block 2: approaching_timeout detection — orchestrator side
-      // BP090 diagnostic: log approach check every ~30s to trace escalation path
-      if (!escalationFired && elapsed > 0 && elapsed % 30000 < 3500) {
-        const _dbgAnswered = Object.keys(collectedReplies).filter(id => routeIds.includes(id) || escalationRouteIds.includes(id));
-        console.log(`  [approach-dbg] elapsed=${Math.floor(elapsed/1000)}s threshold=${Math.floor(approachThresholdMs/1000)}s answered=${_dbgAnswered.length}/${routeIds.length} escalate=${andonEscalate}`);
-      }
-      // explicit per-iter debug (brief)
-      if (elapsed > 0 && elapsed < qTimeoutMs) {
-        const _pa = Object.keys(collectedReplies).filter(id => routeIds.includes(id));
-        process.stdout.write(`[iter e=${Math.floor(elapsed/1000)}s ans=${_pa.length}/${routeIds.length} esc=${escalationFired}] `);
-      }
-
       // ── ESCALATION CHECK — runs before any exit so it always executes at threshold ──
       if (!escalationFired && elapsed >= approachThresholdMs && andonEscalate === 'star-chamber') {
         console.log(`\n  [escalation-trigger] elapsed=${Math.floor(elapsed/1000)}s >= ${Math.floor(approachThresholdMs/1000)}s — building partial answers`);
