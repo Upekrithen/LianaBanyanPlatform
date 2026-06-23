@@ -47,11 +47,11 @@ export async function decomposeQuestion(
     payload_json: {
       prompt: decompositionPrompt,
       question_id: `${questionId}-posse-decompose`,
-      wire_format: 'json-legacy',
+      wire_format: 'hex-mcode',
       domain,
       session_id: `posse-decomp-${questionId}`,
-      plow: 'mesh-12-blade',
-      plow_max_iterations: 4,
+      // NO plow/plow_max_iterations — decompose is a generation task, not a
+      // council-vote task. mesh-12-blade ABSTAINs on non-MMLU prompts.
       allotted_timeout_ms: timeoutMs,
       is_posse_decomposition: true,
     },
@@ -78,15 +78,17 @@ export async function decomposeQuestion(
       }
       if (!rawReply && r.answer_json) {
         const aj = r.answer_json;
-        // Peer returned a structured error — propagate as thrown error, not as raw text.
+        // Infrastructure-level error (peer rejected the request) — throw so caller
+        // gets decompose_failed, not "ERROR" stored as sub_claim_text.
         if (aj && typeof aj === 'object' && aj.error_reason) {
           throw new Error(`peer_relay_error: ${aj.error_reason} — ${aj.message ?? JSON.stringify(aj)}`);
         }
-        rawReply = typeof aj === 'string' ? aj : (aj.response ?? aj.answer ?? JSON.stringify(aj));
-        // Sanity-check: if rawReply is literally "ERROR", treat as error not as content.
-        if (rawReply === 'ERROR') {
-          throw new Error(`peer_relay_error: peer returned bare ERROR answer`);
+        const candidate = typeof aj === 'string' ? aj : (aj.response ?? aj.answer ?? JSON.stringify(aj));
+        // Guard: bare "ERROR" or "ABSTAIN" from a council path means wrong wire_format used.
+        if (candidate === 'ERROR' || candidate === 'ABSTAIN') {
+          throw new Error(`peer_relay_error: peer returned '${candidate}' — decompose must use hex-mcode wire_format (not plow path)`);
         }
+        rawReply = candidate;
       }
       break;
     }
