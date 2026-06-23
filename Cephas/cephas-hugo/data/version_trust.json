@@ -1,8 +1,23 @@
 {
   "versions": [
     {
-      "version": "0.6.0",
+      "version": "0.6.1",
       "tier": "latest",
+      "release_date": "2026-06-22",
+      "install_reports": 0,
+      "verified_eblets": 0,
+      "zero_issue_days": 0,
+      "open_issues": 0,
+      "trust_score": 1,
+      "filename": "MnemosyneC-Setup-0.6.1.exe",
+      "size_bytes": 0,
+      "size_display": "~515 MB",
+      "notes": "M22 v0.6.1 · WS transport fix (Node 20 RealtimeClient) · Coop Mesh Activity panel restored · BP092",
+      "sha256": "PENDING_BUILD"
+    },
+    {
+      "version": "0.6.0",
+      "tier": "historical",
       "release_date": "2026-06-22",
       "install_reports": 0,
       "verified_eblets": 0,

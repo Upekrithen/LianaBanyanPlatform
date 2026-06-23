@@ -5072,7 +5072,12 @@ function registerIPCHandlers(): void {
     }
     try {
       const { createClient } = require('@supabase/supabase-js') as typeof import('@supabase/supabase-js');
-      _helpSupabase = createClient(url, key, { auth: { persistSession: false } });
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const ws = require('ws') as typeof import('ws');
+      _helpSupabase = createClient(url, key, {
+        auth: { persistSession: false },
+        realtime: { transport: ws as unknown as typeof WebSocket },
+      });
       return _helpSupabase;
     } catch (err) {
       console.error('[help] Failed to create Supabase client:', (err as Error).message);
@@ -5333,7 +5338,12 @@ function registerIPCHandlers(): void {
       if (!supabaseUrl || !supabaseKey) return { status: 'error', error: 'Supabase not configured' };
 
       const { createClient } = require('@supabase/supabase-js') as typeof import('@supabase/supabase-js');
-      const sb = createClient(supabaseUrl, supabaseKey, { auth: { persistSession: false } });
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const ws = require('ws') as typeof import('ws');
+      const sb = createClient(supabaseUrl, supabaseKey, {
+        auth: { persistSession: false },
+        realtime: { transport: ws as unknown as typeof WebSocket },
+      });
 
       // Get active peers
       const { data: peers } = await sb.from('peer_presence').select('peer_id, wan_soccerball_id, machine_label, capabilities, last_seen_at, role').eq('status', 'active');
