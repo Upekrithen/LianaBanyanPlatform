@@ -104,7 +104,7 @@ function parseArgs() {
     // BP091 Ah Hayelped tier-aware routing
     tierConfig: null,               // 'ultra:cb4ef450,full:d0b47bd0+88cbf6bd,core:c532e740+49f3e597'
     questionDifficultyRouting: null, // 'hard:ultra+full,medium:ultra+full+core,short:all'
-    tier2Flagship: false,           // M14 Block 3: enable Tier 2 flagship fallback for contested questions
+    tier2Flagship: true,            // BP092 M24 Block 3: ENABLED by default -- use --tier2-flagship=false to disable
   };
 
   for (const arg of args) {
@@ -791,6 +791,19 @@ async function main() {
   // BP090: track total escalation counts across all questions
   let totalEscalationFired = 0;
 
+  // BP092 M24 Block 4: joulesRemainingRef -- shared mutable Joules budget across all questions
+  const joulesRemainingRef = { value: 5000 }; // 5000 Joules = $5 USD default
+
+  // BP092 M24 Block 4: logEscalation -- persist tier escalation to escalation_log
+  async function logEscalation(supaUrl, svcKey, row) {
+    try {
+      await supabaseRequest(supaUrl, svcKey, 'POST', 'escalation_log', {
+        ...row,
+        escalated_at: new Date().toISOString(),
+      });
+    } catch { /* non-fatal */ }
+  }
+
   for (let i = 0; i < questions.length; i++) {
     const q = questions[i];
     const qNum = `Q${pad2(i + 1)}/${pad2(questions.length)}`;
@@ -917,6 +930,24 @@ async function main() {
           }
         }
       }
+
+      // -- BP092 M24 Block 4: ABSTAIN PRE-SCAN (runs each poll iteration) --
+      // Fix: _abstainForcedEscalation set BEFORE escalation threshold check fires.
+      for (const [_scanRouteId, _scanReply] of Object.entries(collectedReplies)) {
+        if (!_abstainForcedEscalation && !escalationFired) {
+          const ajScan = (_scanReply.answer_json && typeof _scanReply.answer_json === 'object')
+            ? _scanReply.answer_json : {};
+          const isAbstainScan = ajScan.answer === 'ABSTAIN';
+          const isLegacyNullScan = !isAbstainScan
+            && (ajScan.answer === null || ajScan.answer === undefined)
+            && !_scanReply.hex_reply;
+          if ((isAbstainScan && ajScan.escalation_eligible === true) || isLegacyNullScan) {
+            _abstainForcedEscalation = true;
+            console.log(`  [ABSTAIN-PRE-SCAN] routeId=${_scanRouteId.slice(0,8)} set _abstainForcedEscalation=true`);
+          }
+        }
+      }
+      // -- END ABSTAIN PRE-SCAN --
 
       // ── ESCALATION CHECK — runs before any exit so it always executes at threshold ──
       if (!escalationFired && elapsed >= approachThresholdMs && andonEscalate === 'star-chamber') {
@@ -1233,15 +1264,131 @@ async function main() {
         console.warn(`  [TIER1] tiebreaker dispatch failed: ${tier1Err.message}`);
       }
 
-      // ── Tier 2: flagship API — DISABLED unless --tier2-flagship=true ──
-      if (tier2Flagship) {
-        tier2FallbackFired = true;
-        console.log(`  [TIER2] flagship fallback: requires Founder budget-ratify — BLOCKED`);
+      // -- BP092 M24 Step 2: POSSE decompose + swarm (if Tier 1 did not resolve) --
+      let posseAnswerLetter = null;
+      if (!contestedResolutionTier || contestedResolutionTier === 'pending') {
+        try {
+          console.log(`  [POSSE] decomposing question ${questionId} -> sub-claims...`);
+          const { decomposeQuestion } = await import('../../src/main/army_ants/posse_decompose.js');
+          const { swarmDispatch } = await import('../../src/main/army_ants/posse_swarm.js');
+          const decomp = await decomposeQuestion(
+            questionId, q.question, q.options, q.domain,
+            SUPABASE_URL, SERVICE_KEY,
+            m0PeerId,
+            Math.min(90000, qDeadline - Date.now()),
+          );
+          if (decomp.sub_claims.length > 0) {
+            const swarmResult = await swarmDispatch(
+              decomp.sub_claims, questionId, q.question, q.options,
+              {
+                supabaseUrl: SUPABASE_URL, serviceKey: SERVICE_KEY, anonKey: SUPABASE_ANON_KEY,
+                sessionId, domain: q.domain, wireFormat: wire,
+                tierPeerMap, peerTierMap, peers: peerPool,
+                timeoutMs: Math.min(120000, qDeadline - Date.now()),
+                maxDepth: 2, varianceThreshold: andonThreshold,
+              }
+            );
+            posseAnswerLetter = swarmResult.aggregate_answer;
+            if (posseAnswerLetter !== null && !swarmResult.contested_after_swarm) {
+              contestedResolutionTier = 'posse';
+              const posseCorrect = posseAnswerLetter === correctLetter;
+              if (posseCorrect) ensembleCorrect++;
+              ensembleContested++;
+              await logEscalation(SUPABASE_URL, SERVICE_KEY, {
+                session_id: sessionId, question_id: questionId, domain: q.domain,
+                tier: 'posse', answer: posseAnswerLetter, correct: posseCorrect,
+                detail: `swarm run_id=${swarmResult.run_id}`,
+              });
+              console.log(`  [CONTESTED -> POSSE RESOLVED] answer=${posseAnswerLetter} correct=${posseCorrect}`);
+              results.push({
+                index: i + 1, source_id: q.source_id, domain: q.domain,
+                question_preview: q.question.slice(0, 120) + (q.question.length > 120 ? '...' : ''),
+                num_options: q.options.length, correct_letter: correctLetter,
+                correct_answer_text: q.correct_answer, allotted_timeout_s: qTimeoutSec,
+                route_ids: routeIds, escalation_fired: escalationFired,
+                escalation_peer_count: escalationPeerCount, escalation_route_ids: escalationRouteIds,
+                final_answer_source: 'posse_swarm',
+                per_peer: Object.fromEntries(peerPool.map((p, j) => [p.peer_id, {
+                  route_id: routeIds[j], escalation_route_id: escalationRouteIds[j] ?? null,
+                  answer: peerAnswers[p.peer_id],
+                  replied: !!collectedReplies[routeIds[j]] || !!collectedReplies[escalationRouteIds[j]],
+                  correct: peerAnswers[p.peer_id] !== null && peerAnswers[p.peer_id] === correctLetter,
+                }])),
+                ensemble: { answer: posseAnswerLetter, contested: false, correct: posseCorrect },
+                contested_resolution_tier: 'posse',
+                tier_1_fallback_fired: tier1FallbackFired, tier_2_fallback_fired: false,
+              });
+              continue; // next question
+            }
+            console.log(`  [POSSE] swarm did not converge -- escalating to Tier 2`);
+          }
+        } catch (posseErr) {
+          console.warn(`  [POSSE] dispatch failed: ${posseErr.message} -- escalating to Tier 2`);
+        }
       }
 
-      // ── Tier 3: mark contested with full breakdown ──
+      // -- BP092 M24 Step 3: Tier 2 flagship escalation --
+      if (tier2Flagship && (!contestedResolutionTier || contestedResolutionTier === 'pending')) {
+        try {
+          tier2FallbackFired = true;
+          const { tier2FlagshipEscalate } = await import('../../src/main/tier2/flagship_escalate.js');
+          const t2Result = await tier2FlagshipEscalate(
+            questionId, prompt, q.options.length, q.domain,
+            {
+              anthropicApiKey: process.env.ANTHROPIC_API_KEY ?? '',
+              openaiApiKey: process.env.OPENAI_API_KEY ?? '',
+              joulesRemainingRef,
+              joulesCapPerRun: 5000,
+              joulesPerQuestion: 120,
+              supabaseUrl: SUPABASE_URL,
+              serviceKey: SERVICE_KEY,
+              sessionId,
+            }
+          );
+          if (t2Result.answer !== null && t2Result.vendor !== 'skipped') {
+            contestedResolutionTier = 'tier_2';
+            const t2Correct = t2Result.answer === correctLetter;
+            if (t2Correct) ensembleCorrect++;
+            ensembleContested++;
+            await logEscalation(SUPABASE_URL, SERVICE_KEY, {
+              session_id: sessionId, question_id: questionId, domain: q.domain,
+              tier: 'tier_2', answer: t2Result.answer, correct: t2Correct,
+              detail: `${t2Result.vendor}/${t2Result.model} cost=${t2Result.cost_joules}J`,
+            });
+            console.log(`  [CONTESTED -> TIER2 RESOLVED] vendor=${t2Result.vendor} answer=${t2Result.answer} correct=${t2Correct}`);
+            results.push({
+              index: i + 1, source_id: q.source_id, domain: q.domain,
+              question_preview: q.question.slice(0, 120) + (q.question.length > 120 ? '...' : ''),
+              num_options: q.options.length, correct_letter: correctLetter,
+              correct_answer_text: q.correct_answer, allotted_timeout_s: qTimeoutSec,
+              route_ids: routeIds, escalation_fired: escalationFired,
+              escalation_peer_count: escalationPeerCount, escalation_route_ids: escalationRouteIds,
+              final_answer_source: 'tier_2_flagship',
+              per_peer: Object.fromEntries(peerPool.map((p, j) => [p.peer_id, {
+                route_id: routeIds[j], escalation_route_id: escalationRouteIds[j] ?? null,
+                answer: peerAnswers[p.peer_id],
+                replied: !!collectedReplies[routeIds[j]] || !!collectedReplies[escalationRouteIds[j]],
+                correct: peerAnswers[p.peer_id] !== null && peerAnswers[p.peer_id] === correctLetter,
+              }])),
+              ensemble: { answer: t2Result.answer, contested: false, correct: t2Correct },
+              contested_resolution_tier: 'tier_2',
+              tier_1_fallback_fired: tier1FallbackFired, tier_2_fallback_fired: true,
+            });
+            continue; // next question
+          }
+        } catch (t2Err) {
+          console.warn(`  [TIER2] flagship escalation threw: ${t2Err.message}`);
+        }
+      }
+
+      // -- BP092 M24 Step 4: Tier 3 -- record + flag for human review --
       contestedResolutionTier = 'tier_3_contested';
-      console.log(`  [CONTESTED → TIER3] no resolution — recording with full per-peer breakdown`);
+      await logEscalation(SUPABASE_URL, SERVICE_KEY, {
+        session_id: sessionId, question_id: questionId, domain: q.domain,
+        tier: 'tier_3_human', answer: null, correct: false,
+        detail: 'all tiers exhausted -- requires human review',
+      });
+      console.log(`  [CONTESTED -> TIER3] all tiers exhausted -- flagged for human review`);
 
       ensembleContested++;
       console.log(`  Ensemble: ${YELLOW}CONTESTED${RESET} | escalation_fired=${escalationFired} | source=${finalAnswerSource} | resolution=${contestedResolutionTier}`);

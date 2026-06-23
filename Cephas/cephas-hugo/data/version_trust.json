@@ -1,49 +1,34 @@
 {
   "versions": [
     {
-      "version": "0.5.18",
+      "version": "0.7.0",
       "tier": "latest",
-      "release_date": "2026-06-22",
+      "release_date": "2026-06-23",
       "install_reports": 0,
       "verified_eblets": 0,
       "zero_issue_days": 0,
       "open_issues": 0,
       "trust_score": 1,
-      "filename": "MnemosyneC-Setup-0.5.18.exe",
-      "size_bytes": 539998160,
-      "size_display": "515.0 MB",
-      "notes": "M18b • right-size.json override wired through (Consumer A/B/C/D) • multi-ACTIVE-tile fix (getTileState) • ULTRA tier added • dynamic model names • Caithedral sweep • BP091 M18b",
-      "sha256": "2ede81d55edaf5c23e2cc457032251d95ad4f39ab35630c097a47b82962eded0"
+      "filename": "MnemosyneC-Setup-0.7.0.exe",
+      "size_bytes": 0,
+      "size_display": "__FILL_AFTER_BUILD__",
+      "notes": "BP092 M24: Army Ants Posse Decomposition · Tier 2 Flagship Unblock · ABSTAIN Auto-Re-Fire cascade · empirical target >=90% on 42Q",
+      "sha256": "__FILL_AFTER_BUILD__"
     },
     {
-      "version": "0.5.17",
+      "version": "0.6.2",
       "tier": "historical",
-      "release_date": "2026-06-22",
+      "release_date": "2026-06-23",
       "install_reports": 0,
       "verified_eblets": 0,
       "zero_issue_days": 0,
       "open_issues": 0,
       "trust_score": 1,
-      "filename": "MnemosyneC-Setup-0.5.17.exe",
-      "size_bytes": 539995661,
-      "size_display": "515.0 MB",
-      "notes": "Ah Hayelped • Right-sized auto-detect per peer hardware • VRAM-aware tier routing • gemma2:9b auto-selected for 12-24GB/weak-VRAM • hardware lock in Settings UI • BP091",
-      "sha256": "f5d7eac8d7ea6173f8544747185ba627c8046fbc0aa348efebd7217d28bd4278"
-    },
-    {
-      "version": "0.5.16",
-      "tier": "historical",
-      "release_date": "2026-06-21",
-      "install_reports": 0,
-      "verified_eblets": 0,
-      "zero_issue_days": 0,
-      "open_issues": 0,
-      "trust_score": 1,
-      "filename": "MnemosyneC-Setup-0.5.16.exe",
-      "size_bytes": 539992124,
-      "size_display": "515.0 MB",
-      "notes": "Plow Loop 12 mesh wiring · Minor Council loop in relay poll · startRelayRoutePoll wire-up · 42Q mesh fire · BP090",
-      "sha256": "37b75cce4bc496d182019043c3360d97112b73496cb8f5e406b18d42ae02b22f"
+      "filename": "MnemosyneC-Setup-0.6.2.exe",
+      "size_bytes": 154383354,
+      "size_display": "147.2 MB",
+      "notes": "M23b v0.6.2 · UI Citadel: QuickstartCard, CitadelAdvancedPanel, CitadelDiagnostics · relay status · BP092",
+      "sha256": "7e1525d5f9dbfe30b38ed5d615d60a2434e9c59c39cb54693625c3b24a561205"
     },
     {
       "version": "0.5.15",
