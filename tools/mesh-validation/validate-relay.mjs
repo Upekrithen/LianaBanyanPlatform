@@ -593,12 +593,6 @@ async function main() {
     }
   }
 
-  // M14 Block 1 structural residual: identify M0 as orchestrator peer
-  const orchestratorLanPrefix = '192.168.86.';
-  const m0Peer = peers?.find(p => p.lan_addresses && p.lan_addresses.some(addr => addr.startsWith(orchestratorLanPrefix)));
-  const m0PeerId = m0Peer?.peer_id ?? 'cb4ef450';
-  console.log(`[M14] Orchestrator peer identified: ${m0PeerId.slice(0,8)}`);
-
   // BP091 Ah Hayelped: build tier → peer_id maps from --tier-config
   // tierPeerMap: { 'ultra': ['cb4ef450'], 'full': ['d0b47bd0','88cbf6bd'], 'core': ['c532e740','49f3e597'] }
   // peerTierMap: { 'cb4ef450...': 'ultra', 'd0b47bd0...': 'full', ... }
@@ -642,12 +636,12 @@ async function main() {
     console.log(`\nDifficulty routing: ${JSON.stringify(difficultyTierMap)}`);
   }
 
-  // BP091: Identify M0 (ULTRA tier orchestrator peer) for escalation exclusion (M14 Block 1 prep)
+  // M14 Block 1 / BP091: Identify M0 (ULTRA tier orchestrator peer) for escalation exclusion
   const orchestratorLanPrefix = '192.168.86.';
-  const m0Peer = peers.find(p => p.lan_addresses && p.lan_addresses.includes(orchestratorLanPrefix) && peerTierMap[p.peer_id] === 'ultra')
+  const m0Peer = peers.find(p => p.lan_addresses && p.lan_addresses.some(addr => addr.startsWith(orchestratorLanPrefix)) && peerTierMap[p.peer_id] === 'ultra')
     ?? peers.find(p => peerTierMap[p.peer_id] === 'ultra');
-  const m0PeerId = m0Peer?.peer_id ?? null;
-  if (m0PeerId) console.log(`\nM0 orchestrator peer identified: ${m0PeerId.slice(0,8)} (ramTier=ULTRA · model=${m0Peer?.capabilities?.ollamaModel ?? 'unknown'})`);
+  const m0PeerId = m0Peer?.peer_id ?? 'cb4ef450';
+  console.log(`\nM0 orchestrator peer identified: ${m0PeerId.slice(0, 8)} (ramTier=ULTRA · model=${m0Peer?.capabilities?.ollamaModel ?? 'unknown'})`);
 
   // Identify Son: peer whose lan_addresses does NOT contain 192.168.86.
   // When lan_addresses is empty for all (v0.5.6 gap), note it and proceed anyway.
