@@ -1396,6 +1396,7 @@ export function SettingsTab({
     { key: 'research',       label: 'Research Participation', keywords: ['chronos', 'research', 'consent'] },
     { key: 'contribution',   label: 'My Contribution',        keywords: ['contribution', 'marks', 'stamps'] },
     { key: 'grand-projects', label: 'Grand Projects',         keywords: ['grand projects', 'project'] },
+    { key: 'coop-mesh',      label: 'Cooperative Mesh Activity', keywords: ['mesh', 'cooperative', 'marks', 'peer', 'mic', 'fireguard', 'fleet'] },
     { key: 'substrate-folders', label: 'Substrate Folders',  keywords: ['folders', 'index', 'watcher'] },
   ];
 
@@ -1928,6 +1929,9 @@ export function SettingsTab({
       >
         <MnemDrtPanel />
       </div>
+
+      {/* Cooperative Mesh Activity — M22 §6 · BP091 · v0.6.0 */}
+      <CoopMeshActivityPanel />
 
       {/* Advanced collapsible -- collapsed by default (SEG-R-5, SEG-R-6, SEG-R-7) */}
       <section style={s.section} id="settings-section-advanced">
@@ -3041,6 +3045,172 @@ interface EbletIndexStatsPayload {
   totalIndexed: number;
   byCategory: Record<string, number>;
   lastRefreshTimestamp: number | null;
+}
+
+// ─── Cooperative Mesh Activity Panel — M22 §6 · BP091 · v0.6.0 ────────────────
+
+interface MeshPeer {
+  peer_id: string;
+  machine_label: string;
+  ram_tier: string;
+  role: string;
+  marks_total: number;
+  last_task_at: string | null;
+}
+
+interface MeshSummary {
+  status: string;
+  peers?: MeshPeer[];
+  total_marks?: number;
+  error?: string;
+}
+
+declare global {
+  interface Window {
+    amplify?: {
+      mesh?: {
+        getActivitySummary: () => Promise<MeshSummary>;
+      };
+    };
+  }
+}
+
+function formatMeshRelative(iso: string | null): string {
+  if (!iso) return '—';
+  const diff = (Date.now() - new Date(iso).getTime()) / 1000;
+  if (diff < 60) return `${Math.round(diff)}s ago`;
+  if (diff < 3600) return `${Math.round(diff / 60)}m ago`;
+  return `${Math.round(diff / 3600)}h ago`;
+}
+
+const MESH_TIER_COLORS: Record<string, string> = {
+  ULTRA: '#a78bfa',
+  FULL:  '#60a5fa',
+  CORE:  '#34d399',
+  LITE:  '#fbbf24',
+  NANO:  '#94a3b8',
+};
+
+function CoopMeshActivityPanel() {
+  const [summary, setSummary] = React.useState<MeshSummary | null>(null);
+  const [loading, setLoading] = React.useState(false);
+
+  const refresh = React.useCallback(async () => {
+    setLoading(true);
+    try {
+      const result = await (window as Window & { amplify?: { mesh?: { getActivitySummary: () => Promise<MeshSummary> } } })
+        .amplify?.mesh?.getActivitySummary();
+      setSummary(result ?? { status: 'error', error: 'IPC bridge unavailable' });
+    } catch (err) {
+      setSummary({ status: 'error', error: String(err) });
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  React.useEffect(() => { void refresh(); }, [refresh]);
+
+  const peers = summary?.peers ?? [];
+  const primary = peers.find(p => p.role === 'MIC');
+  const shadows = peers.filter(p => p.role === 'SHADOW');
+
+  return (
+    <section style={{ margin: '8px 0 12px', background: '#1e293b', border: '1px solid #334155', borderRadius: 10, padding: '14px 16px' }}>
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ fontSize: 12, color: '#34d399' }}>◈</span>
+          <span style={{ fontSize: 11, fontWeight: 700, color: '#e2e8f0', letterSpacing: '0.08em' }}>
+            COOPERATIVE MESH ACTIVITY
+          </span>
+        </div>
+        <button
+          onClick={() => void refresh()}
+          disabled={loading}
+          style={{ background: 'none', border: 'none', cursor: loading ? 'default' : 'pointer', color: '#64748b', fontSize: 13, opacity: loading ? 0.5 : 1 }}
+          title="Refresh"
+        >
+          ↻
+        </button>
+      </div>
+
+      {summary?.status === 'error' && (
+        <p style={{ color: '#f87171', fontSize: 11, margin: '0 0 8px' }}>{summary.error}</p>
+      )}
+
+      {loading && !summary && (
+        <p style={{ color: '#64748b', fontSize: 11 }}>Loading peer roster…</p>
+      )}
+
+      {peers.length > 0 && (
+        <>
+          {/* Peer roster */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 5, marginBottom: 12 }}>
+            {peers.map(peer => {
+              const tier = (peer.ram_tier ?? '').toUpperCase();
+              return (
+                <div key={peer.peer_id} style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                  background: '#0f172a', border: '1px solid #1e293b', borderRadius: 7, padding: '7px 10px',
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+                    <span style={{ fontSize: 11, fontWeight: 600, color: '#cbd5e1' }}>{peer.machine_label}</span>
+                    <span style={{ fontSize: 10, fontFamily: 'monospace', color: MESH_TIER_COLORS[tier] ?? '#94a3b8', fontWeight: 700 }}>{tier}</span>
+                    {peer.role === 'MIC' && (
+                      <span style={{ fontSize: 9, background: 'rgba(167,139,250,0.15)', color: '#a78bfa', border: '1px solid rgba(167,139,250,0.3)', borderRadius: 4, padding: '1px 5px', fontWeight: 700 }}>
+                        MIC PRIMARY
+                      </span>
+                    )}
+                    {peer.role === 'SHADOW' && (
+                      <span style={{ fontSize: 9, background: 'rgba(96,165,250,0.12)', color: '#60a5fa', border: '1px solid rgba(96,165,250,0.25)', borderRadius: 4, padding: '1px 5px', fontWeight: 700 }}>
+                        SHADOW
+                      </span>
+                    )}
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <span style={{ fontSize: 10, color: '#475569' }}>{formatMeshRelative(peer.last_task_at)}</span>
+                    <span style={{ fontSize: 11, fontWeight: 700, color: '#fbbf24' }}>
+                      {peer.marks_total}<span style={{ fontSize: 9, fontWeight: 400, color: '#64748b', marginLeft: 2 }}>Marks</span>
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Fleet summary row */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, borderTop: '1px solid #1e293b', paddingTop: 10 }}>
+            <div style={{ textAlign: 'center' }}>
+              <p style={{ fontSize: 20, fontWeight: 800, color: '#e2e8f0', margin: 0 }}>{peers.length}</p>
+              <p style={{ fontSize: 9, color: '#475569', margin: 0, letterSpacing: '0.05em' }}>PEERS ONLINE</p>
+            </div>
+            <div style={{ textAlign: 'center' }}>
+              <p style={{ fontSize: 20, fontWeight: 800, color: '#fbbf24', margin: 0 }}>{summary?.total_marks ?? 0}</p>
+              <p style={{ fontSize: 9, color: '#475569', margin: 0, letterSpacing: '0.05em' }}>TOTAL MARKS</p>
+            </div>
+            <div style={{ textAlign: 'center' }}>
+              <p style={{ fontSize: 11, fontWeight: 700, color: primary ? '#a78bfa' : '#475569', margin: '2px 0 0' }}>
+                {primary ? primary.machine_label : 'None'}
+              </p>
+              <p style={{ fontSize: 9, color: '#475569', margin: 0, letterSpacing: '0.05em' }}>MIC PRIMARY</p>
+              {shadows.length > 0 && (
+                <p style={{ fontSize: 9, color: '#60a5fa', margin: 0 }}>+{shadows.length} shadow{shadows.length > 1 ? 's' : ''}</p>
+              )}
+            </div>
+          </div>
+        </>
+      )}
+
+      {summary?.status === 'ok' && peers.length === 0 && (
+        <div style={{ textAlign: 'center', padding: '16px 0' }}>
+          <p style={{ fontSize: 11, color: '#475569', margin: 0 }}>No active peers in mesh.</p>
+          <p style={{ fontSize: 10, color: '#334155', margin: '4px 0 0', lineHeight: 1.4 }}>
+            Install MnemosyneC on other machines to join the cooperative.
+          </p>
+        </div>
+      )}
+    </section>
+  );
 }
 
 function SubstrateCounterPanel() {

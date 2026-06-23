@@ -1749,6 +1749,37 @@ contextBridge.exposeInMainWorld('amplify', {
     multiSegDispatch: (options: { question: string; workerCount?: number; model?: string }): Promise<{ synthesized: string; variance: number; workerResponses: string[]; model: string; workerCount: number }> =>
       ipcRenderer.invoke('gemma:multi-seg-dispatch', options),
   },
+  // M22 · BP091 · v0.6.0 — Cooperative Mesh dispatcher IPC bridge
+  mesh: {
+    dispatchTask: (task: {
+      task_id: string;
+      difficulty: 'HARD' | 'MEDIUM' | 'SHORT';
+      modality: 'REASONING' | 'VERIFICATION' | 'VOTING';
+      urgency: 'REALTIME' | 'BATCH';
+      payload: string;
+      source: string;
+      timeout_ms?: number;
+      domain_difficulty_hint?: 'math' | 'physics' | null;
+    }): Promise<{ status: string; task_id: string; results?: unknown[]; assignments?: unknown[]; error?: string }> =>
+      ipcRenderer.invoke('mesh:dispatch-task', task),
+    getActivitySummary: (): Promise<{
+      status: string;
+      peers?: Array<{
+        peer_id: string;
+        wan_soccerball_id: string;
+        machine_label: string;
+        ram_tier: string;
+        model: string;
+        last_seen_at: string;
+        role: string;
+        marks_total: number;
+        last_task_at: string | null;
+      }>;
+      total_marks?: number;
+      error?: string;
+    }> =>
+      ipcRenderer.invoke('mesh:get-activity-summary'),
+  },
 });
 
 // ─── Global type extension ────────────────────────────────────────────────────
@@ -2254,6 +2285,35 @@ declare global {
       // BP087 Wave 3 - Gemma
       gemma: {
         multiSegDispatch: (options: { question: string; workerCount?: number; model?: string }) => Promise<{ synthesized: string; variance: number; workerResponses: string[]; model: string; workerCount: number }>;
+      };
+      // M22 · BP091 · v0.6.0 — Cooperative Mesh
+      mesh: {
+        dispatchTask: (task: {
+          task_id: string;
+          difficulty: 'HARD' | 'MEDIUM' | 'SHORT';
+          modality: 'REASONING' | 'VERIFICATION' | 'VOTING';
+          urgency: 'REALTIME' | 'BATCH';
+          payload: string;
+          source: string;
+          timeout_ms?: number;
+          domain_difficulty_hint?: 'math' | 'physics' | null;
+        }) => Promise<{ status: string; task_id: string; results?: unknown[]; assignments?: unknown[]; error?: string }>;
+        getActivitySummary: () => Promise<{
+          status: string;
+          peers?: Array<{
+            peer_id: string;
+            wan_soccerball_id: string;
+            machine_label: string;
+            ram_tier: string;
+            model: string;
+            last_seen_at: string;
+            role: string;
+            marks_total: number;
+            last_task_at: string | null;
+          }>;
+          total_marks?: number;
+          error?: string;
+        }>;
       };
     };
     // SEG-V0150-P0-DIAGNOSE-BRIDGE: sentinel — set by preload before main bridge wires up
