@@ -22,6 +22,7 @@ import { join } from 'path';
 import { app } from 'electron';
 import type { IncomingMessage, ServerResponse } from 'http';
 import { detectHardwareTier, getRecommendedModel, getCachedEffectiveModel } from '../hardware/ram_detector';
+import { FLOOR_MODEL } from '../../shared/floor-model';
 
 /** Returns effective ollama model (honors right-size.json override if set). */
 function getEffectiveOllamaModel(): string | null {
@@ -278,7 +279,7 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse): Promise
         domain,
         questions,
         ollamaBaseUrl ?? 'http://127.0.0.1:11434',
-        model ?? getEffectiveOllamaModel() ?? getRecommendedModel(),
+        model ?? getEffectiveOllamaModel() ?? getRecommendedModel() ?? FLOOR_MODEL,
       );
       sendJson(res, 200, result);
     } catch (err) {

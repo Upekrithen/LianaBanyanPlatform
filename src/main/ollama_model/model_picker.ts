@@ -13,6 +13,7 @@ import { join } from 'path';
 import { app } from 'electron';
 import { detectHardwareTier, getRecommendedModel } from '../hardware/ram_detector';
 import type { HardwareTier } from '../hardware/ram_detector';
+import { FLOOR_MODEL } from '../../shared/floor-model';
 
 const CONFIG_FILE = () => join(app.getPath('appData'), 'MnemosyneC', 'config.json');
 
@@ -59,7 +60,7 @@ export function getActiveModel(): string {
     return cfg.selectedModel;
   }
   // First run: auto-detect and persist
-  const recommended = getRecommendedModel();
+  const recommended = getRecommendedModel() ?? FLOOR_MODEL;
   const tier = detectHardwareTier();
   writeConfig({
     selectedModel: recommended,
@@ -89,7 +90,7 @@ export function setActiveModel(model: string, tier: HardwareTier): void {
  * Resets to hardware-detected default.
  */
 export function resetToDetectedModel(): string {
-  const recommended = getRecommendedModel();
+  const recommended = getRecommendedModel() ?? FLOOR_MODEL;
   const tier = detectHardwareTier();
   writeConfig({
     selectedModel: recommended,
