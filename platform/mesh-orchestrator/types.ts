@@ -32,6 +32,9 @@ export interface QuestionResult {
   is_correct: boolean;
   disagreement_flag: boolean;
   contested: boolean;
+  contested_resolution_tier?: 'tier_1' | 'tier_3_contested' | null;
+  tier_1_fallback_fired?: boolean;
+  tier_2_fallback_fired?: boolean;
 }
 
 export interface MeshReceiptEblet {
@@ -48,6 +51,8 @@ export interface MeshReceiptEblet {
   unfair_advantages_exercised: string[];
   hex_wire_stats: {total_frames: number; avg_bytes: number; avg_parse_ms: number};
   single_node_comparison: string;
+  fleet_composition?: FleetPeerEntry[];
+  fleet_summary?: FleetSummary;
   tic_schema: {
     known: string[];
     theories_open: string[];
@@ -55,4 +60,24 @@ export interface MeshReceiptEblet {
     dependencies_upstream: string[];
     applications_downstream: string[];
   };
+}
+
+// M22 · fleet_composition per-peer contribution block
+export interface FleetPeerEntry {
+  peer_id:              string;   // SHORT form (first 16 hex chars of Soccerball L1)
+  ramTier:              string;   // 'ultra' | 'full' | 'core' | 'lite' | 'nano'
+  model:                string;
+  questions_handled:    number;
+  questions_correct:    number;
+  escalations_received: number;   // escalated FROM this peer to higher tier
+  escalations_solved:   number;   // escalated INTO this peer that were solved
+  marks_earned:         number;   // = questions_handled per Marks canon
+}
+
+export interface FleetSummary {
+  total_peers:         number;
+  tier_breakdown:      Record<string, number>;  // { ultra: 1, full: 2, core: 2, lite: 0, nano: 0 }
+  fleet_accuracy:      number;   // 0-1
+  per_tier_accuracy:   Record<string, number>;  // { ultra: 0.889, full: 0.821, core: 0.708 }
+  total_marks_accrued: number;
 }

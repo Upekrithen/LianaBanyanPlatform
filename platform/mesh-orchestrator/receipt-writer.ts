@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { MeshReceiptEblet, QuestionResult } from './types.js';
+import { MeshReceiptEblet, QuestionResult, FleetPeerEntry, FleetSummary } from './types.js';
 
 const VAULT_PATH = 'C:\\Users\\Administrator\\.claude\\state\\Vault\\receipts';
 
@@ -42,7 +42,8 @@ export function buildReceiptEblet(
   results: QuestionResult[],
   startUtc: string,
   endUtc: string,
-  hexStats: { total_frames: number; avg_bytes: number; avg_parse_ms: number }
+  hexStats: { total_frames: number; avg_bytes: number; avg_parse_ms: number },
+  fleetComposition?: FleetPeerEntry[]
 ): MeshReceiptEblet {
   const correct = results.filter(r => r.is_correct).length;
   const pct = Math.round(correct / results.length * 1000) / 10;
@@ -61,6 +62,40 @@ export function buildReceiptEblet(
         bladeSummary[blade.blade_name].latency_sum += blade.blade_latency_ms;
       }
     }
+  }
+
+  // Compute fleet_summary from fleetComposition if provided
+  let fleet_summary: FleetSummary | undefined;
+  if (fleetComposition && fleetComposition.length > 0) {
+    const tier_breakdown: Record<string, number> = {};
+    const tier_correct: Record<string, number> = {};
+    const tier_handled: Record<string, number> = {};
+    let total_correct = 0;
+    let total_handled = 0;
+    let total_marks = 0;
+
+    for (const peer of fleetComposition) {
+      const t = peer.ramTier.toLowerCase();
+      tier_breakdown[t] = (tier_breakdown[t] ?? 0) + 1;
+      tier_correct[t] = (tier_correct[t] ?? 0) + peer.questions_correct;
+      tier_handled[t] = (tier_handled[t] ?? 0) + peer.questions_handled;
+      total_correct += peer.questions_correct;
+      total_handled += peer.questions_handled;
+      total_marks += peer.marks_earned;
+    }
+
+    const per_tier_accuracy: Record<string, number> = {};
+    for (const [t, handled] of Object.entries(tier_handled)) {
+      per_tier_accuracy[t] = handled > 0 ? Math.round((tier_correct[t] / handled) * 1000) / 1000 : 0;
+    }
+
+    fleet_summary = {
+      total_peers: fleetComposition.length,
+      tier_breakdown,
+      fleet_accuracy: total_handled > 0 ? Math.round((total_correct / total_handled) * 1000) / 1000 : 0,
+      per_tier_accuracy,
+      total_marks_accrued: total_marks,
+    };
   }
 
   return {
@@ -82,6 +117,8 @@ export function buildReceiptEblet(
     unfair_advantages_exercised: UNFAIR_ADVANTAGES_28,
     hex_wire_stats: hexStats,
     single_node_comparison: 'Single-node baseline: 68/70 (97.1%) on M0 per 2026-06-15 receipt',
+    fleet_composition: fleetComposition,
+    fleet_summary,
     tic_schema: {
       known: [
         'Ensemble scoring confirmed — Option A full-on-each-node',
@@ -136,6 +173,29 @@ export function writeReceiptEblet(receipt: MeshReceiptEblet, filename: string): 
     `- Avg frame bytes: ${receipt.hex_wire_stats.avg_bytes}`,
     `- Avg parse latency: ${receipt.hex_wire_stats.avg_parse_ms}ms`,
     ``,
+  ];
+
+  if (receipt.fleet_composition && receipt.fleet_composition.length > 0) {
+    lines.push(`## Fleet Composition`);
+    lines.push(`| peer_id | ramTier | model | handled | correct | marks |`);
+    lines.push(`|---------|---------|-------|---------|---------|-------|`);
+    for (const p of receipt.fleet_composition) {
+      lines.push(`| \`${p.peer_id}\` | ${p.ramTier} | ${p.model} | ${p.questions_handled} | ${p.questions_correct} | ${p.marks_earned} |`);
+    }
+    lines.push(``);
+
+    if (receipt.fleet_summary) {
+      const fs = receipt.fleet_summary;
+      lines.push(`**Fleet Summary:** ${fs.total_peers} peers · fleet accuracy ${(fs.fleet_accuracy * 100).toFixed(1)}% · ${fs.total_marks_accrued} marks accrued`);
+      const tierStr = Object.entries(fs.tier_breakdown).map(([t, n]) => `${t}×${n}`).join(', ');
+      lines.push(`**Tier breakdown:** ${tierStr}`);
+      const perTierStr = Object.entries(fs.per_tier_accuracy).map(([t, a]) => `${t}: ${(a * 100).toFixed(1)}%`).join(' · ');
+      lines.push(`**Per-tier accuracy:** ${perTierStr}`);
+      lines.push(``);
+    }
+  }
+
+  lines.push(...[
     `## TIC Schema`,
     `**KNOWN:** ${receipt.tic_schema.known.join('; ')}`,
     `**THEORIES_OPEN:** ${receipt.tic_schema.theories_open.join('; ')}`,
@@ -145,7 +205,7 @@ export function writeReceiptEblet(receipt: MeshReceiptEblet, filename: string): 
     ``,
     `## Per-Question Results`,
     ``
-  ];
+  ]);
 
   for (const q of receipt.per_question) {
     const flags = [
