@@ -2,7 +2,7 @@
   "versions": [
     {
       "version": "0.7.0",
-      "tier": "latest",
+      "tier": "staged",
       "release_date": "2026-06-23",
       "install_reports": 0,
       "verified_eblets": 0,
@@ -16,8 +16,23 @@
       "sha256": "__FILL_AFTER_BUILD__"
     },
     {
+      "version": "0.6.1",
+      "tier": "latest",
+      "release_date": "2026-06-23",
+      "install_reports": 0,
+      "verified_eblets": 0,
+      "zero_issue_days": 0,
+      "open_issues": 0,
+      "trust_score": 1,
+      "filename": "MnemosyneC-Setup-0.6.1.exe",
+      "size_bytes": 540009782,
+      "size_display": "515.0 MB",
+      "notes": "M23b UI Citadel: QuickstartCard · CitadelAdvancedPanel · CitadelDiagnostics · relay status · BP092",
+      "sha256": "4a1253e43f0308b431f052010976d175487a81fe573d2144e8102587d4960ded"
+    },
+    {
       "version": "0.6.2",
-      "tier": "historical",
+      "tier": "reverted",
       "release_date": "2026-06-23",
       "install_reports": 0,
       "verified_eblets": 0,
@@ -27,7 +42,7 @@
       "filename": "MnemosyneC-Setup-0.6.2.exe",
       "size_bytes": 154383354,
       "size_display": "147.2 MB",
-      "notes": "M23b v0.6.2 · UI Citadel: QuickstartCard, CitadelAdvancedPanel, CitadelDiagnostics · relay status · BP092",
+      "notes": "REVERTED — ollama bundle missing from build (147 MB vs 515 MB expected); do not use for fleet update",
       "sha256": "7e1525d5f9dbfe30b38ed5d615d60a2434e9c59c39cb54693625c3b24a561205"
     },
     {
