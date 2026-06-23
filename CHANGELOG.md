@@ -1,5 +1,20 @@
 # MnemosyneC Changelog
 
+## v0.6.1 · 2026-06-22 · BP092
+
+### Ghost World UX Fix (BP092)
+- MembershipGate.tsx now Ghost World compliant: "Maybe later" dismiss added, BP085-ratified copy applied
+- Unauthenticated join flow: inline email capture (no /auth redirect) — anonymous Stripe checkout via `create-membership-checkout` edge function
+- ProtectedRoute: already redirects to `/join` (not `/auth`) — confirmed pre-existing Ghost World fix
+- Auth-gate audit CSV generated: AUTH_GATE_AUDIT_GHOST_WORLD_BP092.csv (B2 output)
+- Platform .firebaseignore added: excludes non-web binary types (.obj/.backup) from deploy
+- Firebase hash cache CRLF bug resolved: 150 locale files normalized to LF
+
+### WS Transport Fix (BP092)
+- M22 WS transport fix: Node 20 RealtimeClient patched, Coop Mesh Activity panel restored
+- v0.6.1 installer shipped to mnemosynec.org/download/ (540009782 bytes, SHA256 4a1253e4)
+- latest.yml updated on CDN: version 0.6.1
+
 ## v0.5.14 · 2026-06-20 · BP087 P0 EMERGENCY
 **Fixes white-screen on install (v0.5.13 regression)**
 - src/renderer/lib/supabase.ts now lazy-initializes the Supabase client via a Proxy pattern. The previous module-load-time createClient() call threw "Node.js 20 no native WebSocket" in the Electron renderer, crashing the static import chain through CompaniesJoiningInTab + PreferenceInferencePanel + MnemosyneTabView + App.tsx + main.tsx -- React root never mounted -- blank white window.

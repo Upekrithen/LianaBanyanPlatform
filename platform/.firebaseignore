@@ -1,0 +1,9 @@
+# Firebase deploy ignore — non-web binary types that cause mime-type failures in firebase-tools
+**/*.obj
+**/*.backup
+**/*.m4a
+**/*.mp3
+**/*.mp4
+**/*.wav
+**/*.avif
+**/*.md

@@ -1,27 +1,58 @@
 import { useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { useAuth } from '@/contexts/AuthContext';
 
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { Check, Key, Loader2 } from 'lucide-react';
+import { Check, Key, Loader2, Mail } from 'lucide-react';
 
 export default function MembershipGate() {
-  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { user } = useAuth();
 
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [anonEmail, setAnonEmail] = useState('');
+  const [showEmailCapture, setShowEmailCapture] = useState(false);
 
   const inviteCode = searchParams.get('invite') || '';
 
   const handlePayment = async () => {
+    // Ghost World canon: unauthenticated users get inline email capture — no /auth redirect
     if (!user) {
-      navigate(`/auth?redirect=/join${inviteCode ? `?invite=${inviteCode}` : ''}`);
+      if (!showEmailCapture) {
+        setShowEmailCapture(true);
+        return;
+      }
+      if (!anonEmail || !anonEmail.includes('@')) {
+        setError('Please enter a valid email address.');
+        return;
+      }
+      setLoading(true);
+      setError(null);
+      try {
+        const { data, error: fnError } = await supabase.functions.invoke('create-membership-checkout', {
+          body: { email: anonEmail.trim() },
+        });
+        if (fnError) throw new Error(fnError.message);
+        if (data?.error) throw new Error(data.error);
+        if (data?.url) {
+          localStorage.setItem('lb_pending_membership', 'true');
+          window.location.href = data.url;
+        } else {
+          throw new Error('No checkout URL returned');
+        }
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : 'Payment failed';
+        setError(msg);
+        toast({ title: 'Payment Error', description: msg, variant: 'destructive' });
+      } finally {
+        setLoading(false);
+      }
       return;
     }
 
@@ -31,7 +62,8 @@ export default function MembershipGate() {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session?.access_token) {
-        navigate(`/auth?redirect=/join${inviteCode ? `?invite=${inviteCode}` : ''}`);
+        setShowEmailCapture(true);
+        setLoading(false);
         return;
       }
 
@@ -58,16 +90,20 @@ export default function MembershipGate() {
   };
 
   const benefits = [
-    'Your own storefront (first one is free — costs LB $0.06/month)',
-    'Ghost World island placement',
-    'Design Arena submissions',
-    'Crew Table participation',
-    'Full calendar with 6 plug types',
-    'Housing & vehicle listings',
-    'Political Expedition tools',
-    'Member Vacation Network access',
-    '5 starter Credits upon joining',
+    'Full audit trail — member-only access to the deep /proofs/ archive',
+    'Vote in the cooperative — governance, realm-name decisions, leader confirms',
+    'Earn Marks — adversarial testing, knowledge contributions, eblet mints (Code Breakers Guild eligible)',
+    'Co-authorship eligibility on the next patent bag (PROV_23 — real attribution, not gestural credit)',
+    'Mesh Test access — live when we hit 1,000 members, shooting for this week',
   ];
+
+  const handleMaybeLater = () => {
+    if (document.referrer && document.referrer !== window.location.href) {
+      window.history.back();
+    } else {
+      window.location.href = 'https://mnemosynec.org';
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted/30 flex items-center justify-center p-4">
@@ -76,9 +112,10 @@ export default function MembershipGate() {
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
             <Key className="h-8 w-8 text-primary" />
           </div>
-          <h1 className="text-3xl font-bold tracking-tight mb-2">Your Access Key</h1>
+          <h1 className="text-3xl font-bold tracking-tight mb-2">Join the Cooperative — $5/year</h1>
           <p className="text-muted-foreground">
-            For $5 a year, you become a cooperative member with full access to every service.
+            The receipts are public. The full audit trail is for members.
+            $5/year. Funds the substrate. Your membership is the cooperative.
           </p>
         </div>
 
@@ -94,6 +131,24 @@ export default function MembershipGate() {
         </Card>
 
         <div className="space-y-3">
+          {showEmailCapture && !user && (
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-foreground">
+                <Mail className="inline h-4 w-4 mr-1 mb-0.5" />
+                Your email — we'll send your receipt here
+              </label>
+              <Input
+                type="email"
+                placeholder="you@example.com"
+                value={anonEmail}
+                onChange={e => setAnonEmail(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && handlePayment()}
+                autoFocus
+                className="text-base"
+              />
+            </div>
+          )}
+
           <Button
             size="lg"
             className="w-full text-lg py-6"
@@ -102,13 +157,23 @@ export default function MembershipGate() {
           >
             {loading ? (
               <><Loader2 className="h-5 w-5 animate-spin mr-2" /> Processing...</>
+            ) : showEmailCapture && !user ? (
+              'Continue to Payment →'
             ) : (
-              'Join for $5/year'
+              'Join the Cooperative →'
             )}
           </Button>
-          <p className="text-center text-sm text-muted-foreground">
-            Your Access Key to the cooperative.
+          <p className="text-center text-sm text-muted-foreground mt-1">
+            Your access key. $5/year funds the substrate.
           </p>
+
+          <button
+            type="button"
+            className="w-full text-center text-sm text-muted-foreground hover:text-foreground transition-colors py-2 mt-2"
+            onClick={handleMaybeLater}
+          >
+            Maybe later
+          </button>
 
           {error && (
             <div className="text-sm text-destructive text-center p-3 bg-destructive/10 rounded-lg">
