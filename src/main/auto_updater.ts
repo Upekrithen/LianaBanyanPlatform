@@ -134,6 +134,12 @@ export class AutoUpdateManager {
     // doing so would require keeping two URLs in sync. If the release URL ever changes,
     // update package.json `build.publish.url` (single source of truth) and rebuild.
     //
+    // M22 §A.8 / canon_hugo_tower_version_data_source_is_version_trust_json_bp090:
+    // version_trust.json at https://mnemosynec.org/download/version_trust.json is the
+    // human-readable version-of-record. The electron-updater generic provider reads
+    // latest.yml from the same base URL. Both must be updated in lockstep on release.
+    // Current feedURL verified: https://mnemosynec.ai/download/ (package.json publish.url).
+    //
     // BP067 Phase 1D — SAFE TIER: notify + one-click apply, NOT silent auto-install.
     // DO NOT change autoDownload to true on an unsigned binary (malware vector risk:
     // compromised feed/DNS → unsigned exe executes with no OS warning).

@@ -5306,6 +5306,68 @@ function registerIPCHandlers(): void {
   safeHandle('clipboard:read', async () => {
     return clipboard.readText();
   });
+
+  // M22 §5 — Mesh dispatcher IPC handlers
+  safeHandle('mesh:dispatch-task', async (_event: Electron.IpcMainInvokeEvent, task: import('./mesh-dispatcher').CooperativeTask) => {
+    try {
+      const { routeTask, dispatchToAssignedPeers, accrueMarks } = require('./mesh-dispatcher') as typeof import('./mesh-dispatcher');
+      const assignments = await routeTask(task);
+      if (assignments.length === 0) {
+        return { status: 'no_eligible_peers', task_id: task.task_id, assignments: [] };
+      }
+      const results = await dispatchToAssignedPeers(assignments, task);
+      for (const r of results) {
+        await accrueMarks(r, task.source);
+      }
+      return { status: 'ok', task_id: task.task_id, results };
+    } catch (err) {
+      console.error('[mesh:dispatch-task] error:', (err as Error).message);
+      return { status: 'error', error: (err as Error).message };
+    }
+  });
+
+  safeHandle('mesh:get-activity-summary', async () => {
+    try {
+      const supabaseUrl = (process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || '').replace(/\/$/, '');
+      const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+      if (!supabaseUrl || !supabaseKey) return { status: 'error', error: 'Supabase not configured' };
+
+      const { createClient } = require('@supabase/supabase-js') as typeof import('@supabase/supabase-js');
+      const sb = createClient(supabaseUrl, supabaseKey, { auth: { persistSession: false } });
+
+      // Get active peers
+      const { data: peers } = await sb.from('peer_presence').select('peer_id, wan_soccerball_id, machine_label, capabilities, last_seen_at, role').eq('status', 'active');
+
+      // Get per-peer marks totals
+      const { data: marksData } = await sb.from('peer_marks_log').select('peer_id, marks_earned, completed_at').order('completed_at', { ascending: false }).limit(1000);
+
+      // Aggregate marks per peer
+      const marksByPeer: Record<string, number> = {};
+      const lastTaskByPeer: Record<string, string> = {};
+      for (const row of (marksData ?? [])) {
+        marksByPeer[row.peer_id] = (marksByPeer[row.peer_id] ?? 0) + row.marks_earned;
+        if (!lastTaskByPeer[row.peer_id]) lastTaskByPeer[row.peer_id] = row.completed_at;
+      }
+
+      const peerSummary = (peers ?? []).map((p: Record<string, unknown>) => ({
+        peer_id: p.peer_id,
+        wan_soccerball_id: p.wan_soccerball_id,
+        machine_label: p.machine_label ?? p.wan_soccerball_id,
+        ram_tier: (p.capabilities as Record<string, unknown>)?.ramTier ?? 'unknown',
+        model: (p.capabilities as Record<string, unknown>)?.ollamaModel ?? 'unknown',
+        last_seen_at: p.last_seen_at,
+        role: p.role ?? 'worker',
+        marks_total: marksByPeer[p.peer_id as string] ?? 0,
+        last_task_at: lastTaskByPeer[p.peer_id as string] ?? null,
+      }));
+
+      const totalMarks = Object.values(marksByPeer).reduce((a, b) => a + b, 0);
+
+      return { status: 'ok', peers: peerSummary, total_marks: totalMarks };
+    } catch (err) {
+      return { status: 'error', error: (err as Error).message };
+    }
+  });
 }
 
 // --- Mesh Results Watcher (SEG-U-7 BP078) ------------------------------------
@@ -5466,10 +5528,35 @@ function startRelayRoutePoll(peerId: string): NodeJS.Timeout {
           const prompt: string = (payload.prompt as string) || route.hex_frame;
           const plowMaxIter: number = typeof payload.plow_max_iterations === 'number'
             ? (payload.plow_max_iterations as number) : 0;
+
+          // M14 Block 2 R1: plow=none hard-reject — incompatible with v0.5.17+ peers
+          if (plowMaxIter === 0 || (payload.plow_max_iterations !== undefined && payload.plow_max_iterations === null)) {
+            console.warn('[relay-poll] R1 HARD-REJECT: plow_max_iterations=0 received — returning error to orchestrator (plow=none incompatible with v0.5.17+)');
+            await fetch(`${supabaseUrl}/rest/v1/relay_route_replies`, {
+              method: 'POST',
+              headers: { ...headers, 'Prefer': 'return=minimal' },
+              body: JSON.stringify({
+                route_id: route.id,
+                peer_id: peerId,
+                answer_json: { answer: 'ERROR', error_reason: 'plow_none_rejected', message: 'plow_max_iterations=0 is incompatible with v0.5.17+ peers. Use plow=mesh-12-blade (plow_max_iterations >= 4).' },
+                processing_ms: 0,
+              }),
+            });
+            await fetch(`${supabaseUrl}/rest/v1/relay_routes?id=eq.${route.id}`, {
+              method: 'PATCH',
+              headers,
+              body: JSON.stringify({ status: 'answered' }),
+            });
+            continue;
+          }
+
           // BP090 TRIPLE-MAMBA: allotted_timeout_ms for approaching_timeout signal emission
           const allottedTimeoutMs: number = typeof payload.allotted_timeout_ms === 'number'
             ? (payload.allotted_timeout_ms as number) : 0;
           const isStarChamber: boolean = payload.is_star_chamber === true;
+          const isTiebreaker: boolean = payload.is_tiebreaker === true;
+          const tiebreakerModel: string = typeof payload.tiebreaker_model === 'string'
+            ? (payload.tiebreaker_model as string) : 'qwen2.5:7b';
 
           let answer: string | null = null;
           let plowIterations = 0;
@@ -5576,8 +5663,8 @@ function startRelayRoutePoll(peerId: string): NodeJS.Timeout {
             }
 
           } else {
-            // Baseline path: single-shot gemma4:12b (pre-BP090 behaviour)
-            const model = 'gemma4:12b';
+            // Baseline path: single-shot (pre-BP090 behaviour); tiebreaker model override per M14 Block 3
+            const model = isTiebreaker ? tiebreakerModel : 'gemma4:12b';
             const ollamaRes = await fetch('http://localhost:11434/api/generate', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -5590,13 +5677,32 @@ function startRelayRoutePoll(peerId: string): NodeJS.Timeout {
 
           const processingMs = Date.now() - startMs;
 
+          // M14 Block 2: structured ABSTAIN when answer is null
+          let abstainReason: string | null = null;
+          if (answer === null) {
+            if (plowMaxIter > 0 && plowIterations >= plowMaxIter) {
+              abstainReason = 'max_iterations_reached';
+            } else if (plowMaxIter > 0) {
+              abstainReason = 'council_did_not_converge';
+            } else {
+              abstainReason = 'model_empty_response';
+            }
+          }
+
           await fetch(`${supabaseUrl}/rest/v1/relay_route_replies`, {
             method: 'POST',
             headers: { ...headers, 'Prefer': 'return=minimal' },
             body: JSON.stringify({
               route_id: route.id,
               peer_id: peerId,
-              answer_json: {
+              answer_json: abstainReason !== null ? {
+                answer: 'ABSTAIN',
+                abstain_reason: abstainReason,
+                correct: false,
+                escalation_eligible: true,
+                plow_loop_iterations: plowIterations,
+                legacy_null: null,
+              } : {
                 answer,
                 plow_loop_iterations: plowIterations,
                 council_variance: councilVariance,

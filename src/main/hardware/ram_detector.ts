@@ -104,6 +104,29 @@ export function detectVramGb(): number | null {
       const lines = output.split('\n').map(l => l.trim()).filter(Boolean);
       // First line is "AdapterRAM", rest are values
       const values = lines.slice(1).map(v => parseInt(v, 10)).filter(n => !isNaN(n) && n > 0);
+      if (values.length === 0 || Math.max(...values) === 0) {
+        // M18c AMD fix: if wmic returned 0 or empty, try PowerShell Get-WmiObject fallback
+        // AMD RDNA4 (RX 9070 XT) reports AdapterRAM=0 via raw wmic; PowerShell parses correctly
+        try {
+          const psOutput = execSync(
+            'powershell -NoProfile -Command "Get-WmiObject Win32_VideoController | Select-Object -ExpandProperty AdapterRAM"',
+            { encoding: 'utf8', timeout: 8000, windowsHide: true }
+          );
+          const psLines = psOutput.split('\n').map(l => l.trim()).filter(Boolean);
+          const psValues = psLines.map(v => parseInt(v, 10)).filter(n => !isNaN(n) && n > 0);
+          if (psValues.length > 0) {
+            const psMaxBytes = Math.max(...psValues);
+            const psGb = psMaxBytes / (1024 * 1024 * 1024);
+            const result = Math.round(psGb * 10) / 10;
+            console.log(`[ram_detector] AMD VRAM fallback (PowerShell): ${result} GB`);
+            return result;
+          }
+        } catch {
+          // PowerShell fallback also failed — return null
+          console.warn('[ram_detector] AMD VRAM: both wmic and PowerShell fallback failed — returning null');
+          return null;
+        }
+      }
       if (values.length === 0) return null;
       // Return the LARGEST VRAM value found
       const maxBytes = Math.max(...values);

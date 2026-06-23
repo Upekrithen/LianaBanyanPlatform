@@ -1219,6 +1219,7 @@ export function SettingsTab({
     tier: { tier: string; ramGb: number; recommendedModel: string; displayName: string; description: string };
     allTiers: { tier: string; ramGb: number; recommendedModel: string; displayName: string; description: string }[];
     activeModel: string;
+    effectiveModelResult?: { tier: string; model: string | null; overrideActive: boolean; autoDetectedModel: string | null; warning?: string };
   } | null>(null);
   const [hwModelSaving, setHwModelSaving] = React.useState(false);
 
@@ -1830,7 +1831,9 @@ export function SettingsTab({
                 Detected
               </div>
               <div style={{ fontSize: 12, color: '#e2e8f0', marginBottom: 2 }}>
-                {hwTier.tier.displayName} &middot; {hwTier.tier.ramGb} GB RAM
+                {hwTier.effectiveModelResult?.overrideActive
+                  ? `${hwTier.effectiveModelResult.tier} (Override: ${hwTier.effectiveModelResult.model})`
+                  : hwTier.tier.displayName} &middot; {hwTier.tier.ramGb} GB RAM
               </div>
               <div style={{ fontSize: 10, color: '#94a3b8', marginBottom: 4 }}>
                 {hwTier.tier.description}
