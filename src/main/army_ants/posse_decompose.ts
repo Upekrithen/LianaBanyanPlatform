@@ -50,7 +50,8 @@ export async function decomposeQuestion(
       wire_format: 'json-legacy',
       domain,
       session_id: `posse-decomp-${questionId}`,
-      plow_max_iterations: 0,
+      plow: 'mesh-12-blade',
+      plow_max_iterations: 4,
       allotted_timeout_ms: timeoutMs,
       is_posse_decomposition: true,
     },
@@ -77,7 +78,15 @@ export async function decomposeQuestion(
       }
       if (!rawReply && r.answer_json) {
         const aj = r.answer_json;
+        // Peer returned a structured error — propagate as thrown error, not as raw text.
+        if (aj && typeof aj === 'object' && aj.error_reason) {
+          throw new Error(`peer_relay_error: ${aj.error_reason} — ${aj.message ?? JSON.stringify(aj)}`);
+        }
         rawReply = typeof aj === 'string' ? aj : (aj.response ?? aj.answer ?? JSON.stringify(aj));
+        // Sanity-check: if rawReply is literally "ERROR", treat as error not as content.
+        if (rawReply === 'ERROR') {
+          throw new Error(`peer_relay_error: peer returned bare ERROR answer`);
+        }
       }
       break;
     }

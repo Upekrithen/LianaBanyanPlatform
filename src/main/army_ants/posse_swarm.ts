@@ -65,35 +65,35 @@ export async function swarmDispatch(
 
   const subResults: SwarmSubResult[] = [];
 
-  const dispatchPromises = subClaims.map(async (sc) => {
-    const targetPeer = selectTierPeer(sc.difficulty_class, config);
-    if (!targetPeer) return;
-
+  const dispatchPromises = subClaims.flatMap((sc) => {
+    const targetPeers = selectTierPeers(sc.difficulty_class, config);
     const subPrompt = buildSubClaimPrompt(sc, originalQuestion, originalOptions, config.domain);
-    try {
-      const answer = await dispatchSubClaim(
-        sc, subPrompt, targetPeer, parentQuestionId, runId, config, currentDepth
-      );
-      subResults.push({
-        sub_claim_id: sc.sub_claim_id,
-        sub_claim_text: sc.sub_claim_text,
-        peer_id: targetPeer,
-        answer,
-        confidence: answer !== null ? 0.8 : 0.2,
-        completed_at: new Date().toISOString(),
-        depth: currentDepth,
-      });
-    } catch {
-      subResults.push({
-        sub_claim_id: sc.sub_claim_id,
-        sub_claim_text: sc.sub_claim_text,
-        peer_id: targetPeer,
-        answer: null,
-        confidence: 0.0,
-        completed_at: new Date().toISOString(),
-        depth: currentDepth,
-      });
-    }
+    return targetPeers.map(async (targetPeer) => {
+      try {
+        const answer = await dispatchSubClaim(
+          sc, subPrompt, targetPeer, parentQuestionId, runId, config, currentDepth
+        );
+        subResults.push({
+          sub_claim_id: sc.sub_claim_id,
+          sub_claim_text: sc.sub_claim_text,
+          peer_id: targetPeer,
+          answer,
+          confidence: answer !== null ? 0.8 : 0.2,
+          completed_at: new Date().toISOString(),
+          depth: currentDepth,
+        });
+      } catch {
+        subResults.push({
+          sub_claim_id: sc.sub_claim_id,
+          sub_claim_text: sc.sub_claim_text,
+          peer_id: targetPeer,
+          answer: null,
+          confidence: 0.0,
+          completed_at: new Date().toISOString(),
+          depth: currentDepth,
+        });
+      }
+    });
   });
 
   await Promise.all(dispatchPromises);
@@ -159,16 +159,23 @@ export async function swarmDispatch(
 }
 
 function selectTierPeer(difficultyClass: string, config: SwarmConfig): string | null {
+  return selectTierPeers(difficultyClass, config)[0] ?? null;
+}
+
+/** Returns ALL peers whose tier matches the difficulty class (multi-peer fan-out). */
+function selectTierPeers(difficultyClass: string, config: SwarmConfig): string[] {
   const allowedTiers = DIFFICULTY_TO_TIER[difficultyClass] ?? ['ultra', 'full', 'core'];
+  const matched: string[] = [];
   for (const tier of allowedTiers) {
     const prefixes = config.tierPeerMap[tier] ?? [];
     for (const p of config.peers) {
       if (prefixes.some(prefix => p.peer_id.startsWith(prefix))) {
-        return p.peer_id;
+        matched.push(p.peer_id);
       }
     }
   }
-  return config.peers[0]?.peer_id ?? null;
+  // Fallback: use all known peers if no tier mapping matched
+  return matched.length > 0 ? matched : config.peers.map(p => p.peer_id);
 }
 
 function buildSubClaimPrompt(
@@ -208,7 +215,8 @@ async function dispatchSubClaim(
       wire_format: config.wireFormat,
       domain: config.domain,
       session_id: config.sessionId,
-      plow_max_iterations: 0,
+      plow: 'mesh-12-blade',
+      plow_max_iterations: 4,
       allotted_timeout_ms: config.timeoutMs,
       is_posse_swarm: true,
       posse_run_id: runId,
