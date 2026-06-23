@@ -128,7 +128,7 @@ route_path,gate_type,page_component,ghost_world_disposition,action_required
 /character-remake-bounties,OPEN,public.tsx,OPEN,NONE
 /cities,ExplorerRoute,commerce.tsx,OPEN,NONE
 /cities/:city,ExplorerRoute,commerce.tsx,OPEN,NONE
-/clans,ProtectedRoute,social.tsx,REVIEW,OPEN_AFTER_FOUNDER_RATIFY
+/clans,ProtectedRoute,social.tsx,REVIEW,KEEP
 /classroom,ExplorerRoute,initiatives.tsx,OPEN,NONE
 /classroom/setup,ProtectedRoute,initiatives.tsx,KEEP,NONE
 /client-api-manager,ProtectedRoute,admin.tsx,KEEP,NONE
@@ -331,11 +331,11 @@ route_path,gate_type,page_component,ghost_world_disposition,action_required
 /guided-discovery,OPEN,onboarding.tsx,OPEN,NONE
 /guild-phases,OPEN,social.tsx,OPEN,NONE
 /guild-stake-success,ProtectedRoute,commerce.tsx,KEEP,NONE
-/guilds,ProtectedRoute,social.tsx,REVIEW,OPEN_AFTER_FOUNDER_RATIFY
+/guilds,ProtectedRoute,social.tsx,REVIEW,KEEP
 /guilds/:slug,ExplorerRoute,social.tsx,OPEN,NONE
 /guilds/create,ProtectedRoute,social.tsx,KEEP,NONE
 /guilds/hub,ExplorerRoute,social.tsx,OPEN,NONE
-/guilds/legacy,ProtectedRoute,social.tsx,REVIEW,OPEN_AFTER_FOUNDER_RATIFY
+/guilds/legacy,ProtectedRoute,social.tsx,REVIEW,KEEP
 /hall-of-innovations,ExplorerRoute,captain.tsx,OPEN,NONE
 /hall-of-records,OPEN,tools.tsx,OPEN,NONE
 /hard-knocks,OPEN,cephas.tsx,OPEN,NONE
@@ -742,10 +742,10 @@ route_path,gate_type,page_component,ghost_world_disposition,action_required
 /treasure-maps,OPEN,tools.tsx,OPEN,NONE
 /treasure-maps/:mapId,OPEN,tools.tsx,OPEN,NONE
 /treasure-maps/builder,ProtectedRoute,tools.tsx,KEEP,NONE
-/tribes,ProtectedRoute,social.tsx,REVIEW,OPEN_AFTER_FOUNDER_RATIFY
+/tribes,ProtectedRoute,social.tsx,REVIEW,KEEP
 /tribes/:slug,ExplorerRoute,social.tsx,OPEN,NONE
 /tribes/create,ProtectedRoute,social.tsx,KEEP,NONE
-/tribes/legacy,ProtectedRoute,social.tsx,REVIEW,OPEN_AFTER_FOUNDER_RATIFY
+/tribes/legacy,ProtectedRoute,social.tsx,REVIEW,KEEP
 /untech-onboarding,OPEN,public.tsx,OPEN,NONE
 /updates/crown/:slug,OPEN,cephas.tsx,OPEN,NONE
 /v2/governance/harper-review,ProtectedRoute,dashboard.tsx,KEEP,NONE
