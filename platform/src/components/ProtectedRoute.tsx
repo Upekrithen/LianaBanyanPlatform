@@ -37,7 +37,7 @@ export const ProtectedRoute = ({
     } else {
       sessionStorage.removeItem(AUTH_GATE_CONTEXT_KEY);
     }
-    return <Navigate to="/auth" replace />;
+    return <Navigate to="/join" replace />;
   }
 
   return <>{children}</>;
@@ -153,7 +153,7 @@ export const CaptainRoute = ({
     } else {
       sessionStorage.removeItem(AUTH_GATE_CONTEXT_KEY);
     }
-    return <Navigate to="/auth" replace />;
+    return <Navigate to="/join" replace />;
   }
 
   if (!isCaptain) {
