@@ -593,6 +593,12 @@ async function main() {
     }
   }
 
+  // M14 Block 1 structural residual: identify M0 as orchestrator peer
+  const orchestratorLanPrefix = '192.168.86.';
+  const m0Peer = peers?.find(p => p.lan_addresses && p.lan_addresses.some(addr => addr.startsWith(orchestratorLanPrefix)));
+  const m0PeerId = m0Peer?.peer_id ?? 'cb4ef450';
+  console.log(`[M14] Orchestrator peer identified: ${m0PeerId.slice(0,8)}`);
+
   // BP091 Ah Hayelped: build tier → peer_id maps from --tier-config
   // tierPeerMap: { 'ultra': ['cb4ef450'], 'full': ['d0b47bd0','88cbf6bd'], 'core': ['c532e740','49f3e597'] }
   // peerTierMap: { 'cb4ef450...': 'ultra', 'd0b47bd0...': 'full', ... }
@@ -880,6 +886,7 @@ async function main() {
     let escalationPeerCount = 0;
     let escalationRouteIds = [];
     const routeToPeerEsc = {};      // escalation routeId → peer_id
+    let _abstainForcedEscalation = false;  // M14 Block 2: set true when ABSTAIN reply forces escalation
 
     while (Date.now() < qDeadline) {
       // BP090 FIX v2: Compute elapsed FIRST.  Poll ONLY if pending routes exist.
@@ -945,6 +952,8 @@ async function main() {
         } else {
           variancePct = computeAnswerVariancePct(partialAnswers);
         }
+        // M14 Block 2: ABSTAIN-forced escalation
+        if (_abstainForcedEscalation) variancePct = 100;
         if (variancePct > andonThreshold) {
           escalationFired = true;
           totalEscalationFired++;
@@ -1059,6 +1068,24 @@ async function main() {
         rawText = typeof aj3 === 'string' ? aj3 : (aj3.response ?? aj3.answer ?? JSON.stringify(aj3));
       }
 
+      // M14 Block 2: detect structured ABSTAIN response
+      const aj3 = typeof reply.answer_json === 'object' && reply.answer_json !== null
+        ? reply.answer_json : {};
+      const isAbstain = aj3.answer === 'ABSTAIN';
+      const isLegacyNull = !isAbstain && (aj3.answer === null || aj3.answer === undefined) && !rawText;
+
+      if (isAbstain || isLegacyNull) {
+        peerAnswers[peerId] = null;
+        const abstainTag = isAbstain
+          ? `ABSTAIN(${aj3.abstain_reason ?? 'unknown'})`
+          : 'ABSTAIN(null_protocol_violation)';
+        console.log(`  [${peerId.slice(0,8)}] ${abstainTag} — escalation_eligible=${aj3.escalation_eligible ?? false}`);
+        if ((aj3.escalation_eligible === true || isLegacyNull) && !escalationFired) {
+          _abstainForcedEscalation = true;
+        }
+        continue;
+      }
+
       const letter = extractLetter(rawText, q.options.length);
       // Escalation routes may update a peer's answer; last write wins
       if (routeToPeerEsc[routeId]) {
@@ -1105,9 +1132,119 @@ async function main() {
     }
 
     const ensembleIsCorrect = ensembleAnswer !== null && ensembleAnswer === correctLetter;
+
+    // M14 Block 3: Contested resolution tiers
+    let contestedResolutionTier = null;
+    let tier1FallbackFired = false;
+    let tier2FallbackFired = false;
+
     if (contested) {
+      contestedResolutionTier = 'pending';
+
+      // ── Tier 1: extended council — tiebreaker via qwen2.5:7b ──
+      try {
+        const tiebreakerPeerId = m0PeerId ?? 'cb4ef450';
+        const tier1Route = await insertRoute(SUPABASE_URL, SERVICE_KEY, {
+          target_peer_id: tiebreakerPeerId,
+          hex_frame: Buffer.from(prompt, 'utf8').toString('base64'),
+          payload_json: {
+            prompt,
+            question_id: `${questionId}-tier1`,
+            correct_answer_letter: correctLetter,
+            source_id: q.source_id,
+            wire_format: wire,
+            domain: q.domain,
+            session_id: sessionId,
+            plow_max_iterations: 4,
+            allotted_timeout_ms: Math.min(120000, qDeadline - Date.now()),
+            is_tiebreaker: true,
+            tiebreaker_model: 'qwen2.5:7b',
+            priming_context: {
+              contested_answers: Object.values(peerAnswers).filter(a => a !== null),
+              per_peer_breakdown: peerAnswers,
+            },
+          },
+          status: 'pending',
+          session_id: sessionId,
+          ttl_seconds: 180,
+        });
+        tier1FallbackFired = true;
+
+        const tier1RepliesMap = await pollReplies(
+          SUPABASE_URL, SUPABASE_ANON_KEY,
+          [tier1Route.id],
+          Math.min(120000, qDeadline - Date.now())
+        );
+        const tier1Reply = tier1RepliesMap[tier1Route.id];
+
+        if (tier1Reply) {
+          let tier1Raw = null;
+          if (tier1Reply.hex_reply) {
+            try { tier1Raw = Buffer.from(tier1Reply.hex_reply, 'base64').toString('utf8'); } catch { tier1Raw = tier1Reply.hex_reply; }
+          }
+          if (!tier1Raw && tier1Reply.answer_json) {
+            const aj4 = tier1Reply.answer_json;
+            tier1Raw = typeof aj4 === 'string' ? aj4 : (aj4.response ?? aj4.answer ?? JSON.stringify(aj4));
+          }
+
+          const tier1Letter = extractLetter(tier1Raw, q.options.length);
+          if (tier1Letter !== null && tier1Letter !== 'ABSTAIN') {
+            peerAnswers[`${tiebreakerPeerId}-tier1`] = tier1Letter;
+            const { answer: resolvedAnswer, contested: stillContested } = ensembleVote(peerAnswers);
+            if (!stillContested && resolvedAnswer !== null) {
+              contestedResolutionTier = 'tier_1';
+              const tier1Correct = resolvedAnswer === correctLetter;
+              if (tier1Correct) ensembleCorrect++;
+              ensembleContested++;
+              console.log(`  [CONTESTED → TIER1 RESOLVED] tiebreaker=${tier1Letter} qwen2.5:7b | correct=${tier1Correct}`);
+              results.push({
+                index: i + 1,
+                source_id: q.source_id,
+                domain: q.domain,
+                question_preview: q.question.slice(0, 120) + (q.question.length > 120 ? '...' : ''),
+                num_options: q.options.length,
+                correct_letter: correctLetter,
+                correct_answer_text: q.correct_answer,
+                allotted_timeout_s: qTimeoutSec,
+                route_ids: routeIds,
+                escalation_fired: escalationFired,
+                escalation_peer_count: escalationPeerCount,
+                escalation_route_ids: escalationRouteIds,
+                final_answer_source: 'tier_1_tiebreaker',
+                per_peer: Object.fromEntries(
+                  peerPool.map((p, j) => [p.peer_id, {
+                    route_id: routeIds[j],
+                    escalation_route_id: escalationRouteIds[j] ?? null,
+                    answer: peerAnswers[p.peer_id],
+                    replied: !!collectedReplies[routeIds[j]] || !!collectedReplies[escalationRouteIds[j]],
+                    correct: peerAnswers[p.peer_id] !== null && peerAnswers[p.peer_id] === correctLetter,
+                  }])
+                ),
+                ensemble: { answer: resolvedAnswer, contested: false, correct: tier1Correct },
+                contested_resolution_tier: 'tier_1',
+                tier_1_fallback_fired: true,
+                tier_2_fallback_fired: false,
+              });
+              continue;  // next question
+            }
+          }
+        }
+      } catch (tier1Err) {
+        console.warn(`  [TIER1] tiebreaker dispatch failed: ${tier1Err.message}`);
+      }
+
+      // ── Tier 2: flagship API — DISABLED unless --tier2-flagship=true ──
+      if (tier2Flagship) {
+        tier2FallbackFired = true;
+        console.log(`  [TIER2] flagship fallback: requires Founder budget-ratify — BLOCKED`);
+      }
+
+      // ── Tier 3: mark contested with full breakdown ──
+      contestedResolutionTier = 'tier_3_contested';
+      console.log(`  [CONTESTED → TIER3] no resolution — recording with full per-peer breakdown`);
+
       ensembleContested++;
-      console.log(`  Ensemble: ${YELLOW}CONTESTED${RESET} | escalation_fired=${escalationFired} | source=${finalAnswerSource}`);
+      console.log(`  Ensemble: ${YELLOW}CONTESTED${RESET} | escalation_fired=${escalationFired} | source=${finalAnswerSource} | resolution=${contestedResolutionTier}`);
     } else {
       if (ensembleIsCorrect) ensembleCorrect++;
       console.log(`  Ensemble: ${ensembleAnswer ?? 'NULL'} [${mark(ensembleIsCorrect)}] | escalation_fired=${escalationFired} | source=${finalAnswerSource}`);
@@ -1138,6 +1275,9 @@ async function main() {
         }])
       ),
       ensemble: { answer: ensembleAnswer, contested, correct: ensembleIsCorrect },
+      contested_resolution_tier: contestedResolutionTier,
+      tier_1_fallback_fired: tier1FallbackFired,
+      tier_2_fallback_fired: tier2FallbackFired,
     });
   }
 
