@@ -36,11 +36,76 @@ export async function decomposeQuestion(
   serviceKey: string,
   ultraPeerId: string,
   timeoutMs = 90000,
+  ollamaUrl = 'http://localhost:11434',
+  ollamaModel = 'llama3.3:70b',
 ): Promise<DecompositionResult> {
   const t0 = Date.now();
 
   const decompositionPrompt = buildDecompositionPrompt(question, options, domain);
 
+  // v0.5.17+ relay peers only support council-vote mode (plow=mesh-12-blade).
+  // Council ABSTAINs on non-MMLU generation tasks. Decompose is a generation
+  // task — bypass relay entirely and call Ollama direct on the ULTRA peer host.
+  // The sweep runs on M0 (the same host as the ULTRA peer), so localhost:11434
+  // reaches llama3.3:70b directly. LAN-AS-WAN canon satisfied: the host IS M0.
+  let rawReply: string | null = null;
+  let decompositionModel = `${ollamaModel} (direct Ollama on ULTRA peer)`;
+  try {
+    rawReply = await ollamaGenerate(ollamaUrl, ollamaModel, decompositionPrompt, timeoutMs);
+  } catch (ollamaErr) {
+    // Ollama direct call failed — fall back to relay with error-aware guard.
+    console.warn(`posse_decompose: Ollama direct failed (${(ollamaErr as Error).message}), falling back to relay`);
+    decompositionModel = 'llama3.3:70b (ULTRA relay fallback)';
+    rawReply = await decomposeViaRelay(
+      questionId, decompositionPrompt, domain, supabaseUrl, serviceKey, ultraPeerId, timeoutMs
+    );
+  }
+
+  const subClaims = parseSubClaims(questionId, rawReply ?? '', domain);
+
+  for (const sc of subClaims) {
+    try {
+      await supabasePost(supabaseUrl, serviceKey, 'posse_sub_claims', sc);
+    } catch { /* non-fatal — receipt traceability only */ }
+  }
+
+  return {
+    parent_question_id: questionId,
+    sub_claims: subClaims,
+    decomposition_model: decompositionModel,
+    elapsed_ms: Date.now() - t0,
+  };
+}
+
+async function ollamaGenerate(
+  baseUrl: string,
+  model: string,
+  prompt: string,
+  timeoutMs: number,
+): Promise<string> {
+  const res = await fetch(`${baseUrl}/api/generate`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ model, prompt, stream: false }),
+    signal: AbortSignal.timeout(timeoutMs),
+  });
+  const text = await res.text();
+  if (!res.ok) throw new Error(`Ollama HTTP ${res.status}: ${text.slice(0, 200)}`);
+  const parsed = JSON.parse(text);
+  const response = parsed.response ?? '';
+  if (!response) throw new Error('Ollama returned empty response');
+  return response;
+}
+
+async function decomposeViaRelay(
+  questionId: string,
+  decompositionPrompt: string,
+  domain: string,
+  supabaseUrl: string,
+  serviceKey: string,
+  ultraPeerId: string,
+  timeoutMs: number,
+): Promise<string | null> {
   const routePayload = {
     target_peer_id: ultraPeerId,
     hex_frame: Buffer.from(decompositionPrompt, 'utf8').toString('base64'),
@@ -50,8 +115,6 @@ export async function decomposeQuestion(
       wire_format: 'hex-mcode',
       domain,
       session_id: `posse-decomp-${questionId}`,
-      // plow_max_iterations required by v0.5.17+ peers (rejects 0).
-      // hex-mcode wire_format keeps this as generation, not council letter-vote.
       plow_max_iterations: 4,
       allotted_timeout_ms: timeoutMs,
       is_posse_decomposition: true,
@@ -66,7 +129,6 @@ export async function decomposeQuestion(
   if (!routeId) throw new Error('posse_decompose: relay_routes INSERT returned no id');
 
   const deadline = Date.now() + timeoutMs;
-  let rawReply: string | null = null;
   while (Date.now() < deadline) {
     const rows = await supabaseGet(
       supabaseUrl, serviceKey,
@@ -74,42 +136,26 @@ export async function decomposeQuestion(
     );
     if (rows && rows.length > 0) {
       const r = rows[0];
+      let raw: string | null = null;
       if (r.hex_reply) {
-        try { rawReply = Buffer.from(r.hex_reply, 'base64').toString('utf8'); } catch { rawReply = r.hex_reply; }
+        try { raw = Buffer.from(r.hex_reply, 'base64').toString('utf8'); } catch { raw = r.hex_reply; }
       }
-      if (!rawReply && r.answer_json) {
+      if (!raw && r.answer_json) {
         const aj = r.answer_json;
-        // Infrastructure-level error (peer rejected the request) — throw so caller
-        // gets decompose_failed, not "ERROR" stored as sub_claim_text.
         if (aj && typeof aj === 'object' && aj.error_reason) {
           throw new Error(`peer_relay_error: ${aj.error_reason} — ${aj.message ?? JSON.stringify(aj)}`);
         }
         const candidate = typeof aj === 'string' ? aj : (aj.response ?? aj.answer ?? JSON.stringify(aj));
-        // Guard: bare "ERROR" or "ABSTAIN" from a council path means wrong wire_format used.
         if (candidate === 'ERROR' || candidate === 'ABSTAIN') {
-          throw new Error(`peer_relay_error: peer returned '${candidate}' — decompose must use hex-mcode wire_format (not plow path)`);
+          throw new Error(`peer_relay_error: peer returned '${candidate}' — relay council cannot handle generation tasks`);
         }
-        rawReply = candidate;
+        raw = candidate;
       }
-      break;
+      return raw;
     }
     await sleep(2000);
   }
-
-  const subClaims = parseSubClaims(questionId, rawReply ?? '', domain);
-
-  for (const sc of subClaims) {
-    try {
-      await supabasePost(supabaseUrl, serviceKey, 'posse_sub_claims', sc);
-    } catch { /* non-fatal — receipt traceability only */ }
-  }
-
-  return {
-    parent_question_id: questionId,
-    sub_claims: subClaims,
-    decomposition_model: 'llama3.3:70b (ULTRA relay)',
-    elapsed_ms: Date.now() - t0,
-  };
+  return null;
 }
 
 function buildDecompositionPrompt(question: string, options: string[], domain: string): string {
