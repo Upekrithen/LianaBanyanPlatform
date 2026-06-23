@@ -1,11 +1,11 @@
-﻿/**
- * posse_decompose.ts ΓÇö Army Ants / Posse Decomposition Primitive
- * BP091 HARD CANON ┬╖ BP092 HOTFIX Round-Up Implementation
- * CaithedralΓäó ┬╖ Substrate Cure framing
+/**
+ * posse_decompose.ts — Army Ants / Posse Decomposition Primitive
+ * BP091 HARD CANON · BP092 HOTFIX Round-Up Implementation
+ * Caithedral™ · Substrate Cure framing
  *
- * Decomposes a hard question into Γëñ5 atomically verifiable sub-claims.
+ * Decomposes a hard question into ≤5 atomically verifiable sub-claims.
  * Routes decomposition LLM call to ULTRA peer (llama3.3:70b via Supabase relay).
- * Persists sub-claims to posse_sub_claims table (┬º15 BLOOD: pre-applied by Bishop).
+ * Persists sub-claims to posse_sub_claims table (§15 BLOOD: pre-applied by Bishop).
  */
 
 import { randomUUID } from 'crypto';
@@ -89,7 +89,7 @@ export async function decomposeQuestion(
   for (const sc of subClaims) {
     try {
       await supabasePost(supabaseUrl, serviceKey, 'posse_sub_claims', sc);
-    } catch { /* non-fatal ΓÇö receipt traceability only */ }
+    } catch { /* non-fatal — receipt traceability only */ }
   }
 
   return {

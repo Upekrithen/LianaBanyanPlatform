@@ -1,11 +1,11 @@
-﻿/**
- * posse_swarm.ts ΓÇö Army Ants Swarm Dispatch
- * BP091 HARD CANON ┬╖ BP092 HOTFIX Round-Up Implementation
- * CaithedralΓäó
+/**
+ * posse_swarm.ts — Army Ants Swarm Dispatch
+ * BP091 HARD CANON · BP092 HOTFIX Round-Up Implementation
+ * Caithedral™
  *
  * Fan-out each sub-claim to a tier-appropriate peer via Supabase relay.
  * Aggregate weighted vote. Recurse on contested sub-claims (max depth 2).
- * Persists run rows to posse_swarm_runs (┬º15 BLOOD: pre-applied by Bishop).
+ * Persists run rows to posse_swarm_runs (§15 BLOOD: pre-applied by Bishop).
  */
 
 import { randomUUID } from 'crypto';
@@ -186,7 +186,7 @@ ${optText}
 
 Your specific sub-task: ${sc.sub_claim_text}
 
-Based on this sub-task, which answer letter (AΓÇô${String.fromCharCode(64 + options.length)}) is best supported?
+Based on this sub-task, which answer letter (A–${String.fromCharCode(64 + options.length)}) is best supported?
 Reply with ONLY the letter. No explanation.`;
 }
 
