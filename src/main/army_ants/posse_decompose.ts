@@ -50,8 +50,9 @@ export async function decomposeQuestion(
       wire_format: 'hex-mcode',
       domain,
       session_id: `posse-decomp-${questionId}`,
-      // NO plow/plow_max_iterations — decompose is a generation task, not a
-      // council-vote task. mesh-12-blade ABSTAINs on non-MMLU prompts.
+      // plow_max_iterations required by v0.5.17+ peers (rejects 0).
+      // hex-mcode wire_format keeps this as generation, not council letter-vote.
+      plow_max_iterations: 4,
       allotted_timeout_ms: timeoutMs,
       is_posse_decomposition: true,
     },
