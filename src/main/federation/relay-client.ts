@@ -52,6 +52,8 @@ class RelayClient extends EventEmitter {
   private pingTimer: ReturnType<typeof setInterval> | null = null;
   private reconnectAttempts = 0;
   private connected = false;
+  /** M23b: last ping/pong timestamp for Citadel diagnostics compose-in */
+  private lastHeartbeat: string | null = null;
 
   private static readonly MAX_RECONNECT_DELAY_MS = 30_000;
   private static readonly PING_INTERVAL_MS = 30_000;
@@ -81,6 +83,23 @@ class RelayClient extends EventEmitter {
   }
 
   isConnected(): boolean { return this.connected; }
+
+  /** M23b: relay diagnostics for Citadel diagnostic panel (display-only) */
+  getDiagnostics(): {
+    url: string;
+    state: 'connected' | 'disconnected' | 'reconnecting';
+    lastHeartbeat: string | null;
+  } {
+    let state: 'connected' | 'disconnected' | 'reconnecting';
+    if (this.connected) {
+      state = 'connected';
+    } else if (this.reconnectTimer) {
+      state = 'reconnecting';
+    } else {
+      state = 'disconnected';
+    }
+    return { url: RELAY_URL, state, lastHeartbeat: this.lastHeartbeat };
+  }
 
   sendToPeer(toPeerId: string, innerMsg: FedMsg): void {
     if (!this.connected || !this.ws) return;
@@ -118,7 +137,9 @@ class RelayClient extends EventEmitter {
         });
 
         this.pingTimer = setInterval(() => {
-          this._send({ type: 'ping', peerId: this.peerId, ts: new Date().toISOString() });
+          const ts = new Date().toISOString();
+          this.lastHeartbeat = ts;
+          this._send({ type: 'ping', peerId: this.peerId, ts });
         }, RelayClient.PING_INTERVAL_MS);
 
         this._broadcastState({ relayConnected: true });
@@ -150,7 +171,10 @@ class RelayClient extends EventEmitter {
   }
 
   private _handleMessage(msg: FedMsg): void {
-    if (msg.type === 'pong') return;
+    if (msg.type === 'pong') {
+      this.lastHeartbeat = msg.ts ?? new Date().toISOString();
+      return;
+    }
 
     if (msg.type === 'relay_broadcast') {
       const payload = msg.payload as RelayBroadcastPayload;

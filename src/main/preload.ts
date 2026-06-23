@@ -1666,6 +1666,30 @@ contextBridge.exposeInMainWorld('amplify', {
   hardwareResetModel: (): Promise<{ ok: boolean; model: string }> =>
     ipcRenderer.invoke('hardware:reset-model'),
 
+  // ── M23b Citadel diagnostics ─────────────────────────────────────────────
+
+  citadelTailMainLog: (): Promise<{ ok: boolean; path: string; content: string; lineCount: number }> =>
+    ipcRenderer.invoke('citadel:tail-main-log'),
+
+  citadelGetProcessList: (): Promise<{
+    ok: boolean;
+    processes: Array<{ name: string; status: string; detail?: string; pid?: number }>;
+    refreshedAt: string;
+  }> =>
+    ipcRenderer.invoke('citadel:get-process-list'),
+
+  citadelReadConfig: (): Promise<{ ok: boolean; path: string; exists: boolean; content: string }> =>
+    ipcRenderer.invoke('citadel:read-config'),
+
+  citadelGetRelayStatus: (): Promise<{
+    ok: boolean;
+    relayUrl: string;
+    connectionState: 'connected' | 'disconnected' | 'reconnecting';
+    lastHeartbeat: string | null;
+    relayConnected: boolean;
+  }> =>
+    ipcRenderer.invoke('citadel:get-relay-status'),
+
   // ── v0.4.2 BP083 SEG-3.5: Lifecycle profile path ─────────────────────────
 
   lifecycleGetProfilePath: (): Promise<{ appData: string; mnemosyneCPath: string }> =>
@@ -2264,6 +2288,20 @@ declare global {
       hardwareGetTier?: () => Promise<{ tier: unknown; allTiers: unknown[]; activeModel: string }>;
       hardwareSetModel?: (model: string, tier: string) => Promise<{ ok: boolean }>;
       hardwareResetModel?: () => Promise<{ ok: boolean; model: string }>;
+      citadelTailMainLog?: () => Promise<{ ok: boolean; path: string; content: string; lineCount: number }>;
+      citadelGetProcessList?: () => Promise<{
+        ok: boolean;
+        processes: Array<{ name: string; status: string; detail?: string; pid?: number }>;
+        refreshedAt: string;
+      }>;
+      citadelReadConfig?: () => Promise<{ ok: boolean; path: string; exists: boolean; content: string }>;
+      citadelGetRelayStatus?: () => Promise<{
+        ok: boolean;
+        relayUrl: string;
+        connectionState: 'connected' | 'disconnected' | 'reconnecting';
+        lastHeartbeat: string | null;
+        relayConnected: boolean;
+      }>;
       // v0.4.2 BP083 SEG-3.5: Lifecycle profile path
       lifecycleGetProfilePath?: () => Promise<{ appData: string; mnemosyneCPath: string }>;
       // v0.5.1 BP085 — Help Tab peer pipeline

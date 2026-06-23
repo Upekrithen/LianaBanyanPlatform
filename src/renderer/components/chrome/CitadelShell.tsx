@@ -4,7 +4,7 @@
 // §2c: mode state wired from localStorage → top chrome → SidebarNav → content area
 // §2d: sidebar collapse state handled in SidebarNav.tsx (localStorage key: mnemosyne_sidebar_collapsed)
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { ModeToggle, readCitadelMode, writeCitadelMode } from './ModeToggle';
 import { SidebarNav } from './SidebarNav';
 import type { UiCitadelMode } from './ModeToggle';
@@ -14,6 +14,9 @@ import type { AuthState } from '../../amplify.d';
 import { SkuUpgradePanel } from '../SkuUpgradePanel';
 import { FrameTab } from '../FrameTab';
 import { GauntletTab } from '../GauntletTab';
+import { QuickstartCard } from '../QuickstartCard';
+import { CitadelAdvancedPanel } from '../CitadelAdvancedPanel';
+import { CitadelDiagnostics } from '../CitadelDiagnostics';
 
 interface CitadelShellProps {
   currentMode: FrameMode;
@@ -23,12 +26,43 @@ interface CitadelShellProps {
   appVersion?: string | null;
 }
 
-// Home content: mesh status + basic welcome
-function HomeContent({ currentMode, onModeChange, authState }: {
+// Home content: mesh status + basic welcome + QuickstartCard for disconnected peers
+function HomeContent({
+  currentMode,
+  onModeChange,
+  authState,
+  onNavigate,
+}: {
   currentMode: FrameMode;
   onModeChange: (mode: FrameMode) => void;
   authState: AuthState | null;
+  onNavigate: (item: CitadelNavItem) => void;
 }): React.ReactElement {
+  const [ownPeerId, setOwnPeerId] = useState('');
+  const [relayConnected, setRelayConnected] = useState(false);
+  const [syncedPeerCount, setSyncedPeerCount] = useState(0);
+
+  useEffect(() => {
+    let cancelled = false;
+    const refresh = async () => {
+      try {
+        const state = await window.amplify?.getMeshState?.();
+        if (cancelled || !state) return;
+        setOwnPeerId(state.ownPeerId ?? '');
+        setRelayConnected(state.relayConnected ?? false);
+        const synced = (state.peers ?? []).filter(
+          (p) => (p as { phase?: string }).phase === 'synced',
+        ).length;
+        setSyncedPeerCount(synced);
+      } catch { /* non-fatal */ }
+    };
+    void refresh();
+    const unsub = window.amplify?.onRelayStateChanged?.(() => { void refresh(); });
+    return () => { cancelled = true; unsub?.(); };
+  }, []);
+
+  const showQuickstart = !relayConnected && syncedPeerCount === 0;
+
   return (
     <div style={{ padding: 24, height: '100%', overflowY: 'auto' as const }}>
       <div style={{ fontSize: 20, fontWeight: 700, color: '#e2e8f0', marginBottom: 8 }}>
@@ -37,6 +71,14 @@ function HomeContent({ currentMode, onModeChange, authState }: {
       <div style={{ fontSize: 12, color: '#64748b', marginBottom: 24 }}>
         The Substrate Cure to AI Amnesia
       </div>
+      {showQuickstart && (
+        <QuickstartCard
+          ownPeerId={ownPeerId}
+          relayConnected={relayConnected}
+          syncedPeerCount={syncedPeerCount}
+          onNavigate={onNavigate}
+        />
+      )}
       <FrameTab
         currentMode={currentMode}
         onModeChange={onModeChange}
@@ -93,46 +135,14 @@ function AppearanceContent(): React.ReactElement {
   );
 }
 
-// Advanced content: stub (M23b §3b)
+// Advanced content: M23b collapsible panel (Power mode only)
 function AdvancedContent(): React.ReactElement {
-  return (
-    <div style={{ padding: 24 }}>
-      <div style={{ fontSize: 16, fontWeight: 600, color: '#e2e8f0', marginBottom: 8 }}>Advanced</div>
-      <div style={{ fontSize: 12, color: '#64748b', marginBottom: 16 }}>
-        Power-user settings — relay endpoint, startup behavior, debug logging, reset.
-      </div>
-      <div style={{
-        padding: 16, borderRadius: 10,
-        background: 'rgba(110,231,183,0.04)',
-        border: '1px solid rgba(110,231,183,0.12)',
-        fontSize: 12, color: '#475569',
-      }}>
-        Advanced settings panel ships in M23b. Auto-update toggle, relay endpoint override,
-        startup behavior, debug logging level, and reset-to-defaults.
-      </div>
-    </div>
-  );
+  return <CitadelAdvancedPanel />;
 }
 
-// Diagnostics content: stub (M23b §3c) — Power mode only (T18)
+// Diagnostics content: M23b four surfaces + M22 mesh compose-in (Power mode only)
 function DiagnosticsContent(): React.ReactElement {
-  return (
-    <div style={{ padding: 24 }}>
-      <div style={{ fontSize: 16, fontWeight: 600, color: '#e2e8f0', marginBottom: 8 }}>Diagnostics</div>
-      <div style={{ fontSize: 12, color: '#64748b', marginBottom: 16 }}>
-        Raw logs · process list · config JSON editor · inference override sliders
-      </div>
-      <div style={{
-        padding: 16, borderRadius: 10,
-        background: 'rgba(110,231,183,0.04)',
-        border: '1px solid rgba(110,231,183,0.12)',
-        fontSize: 12, color: '#475569',
-      }}>
-        Diagnostics surfaces ship in M23b: raw logs viewer (last 500 lines), active process
-        list, config JSON editor, and inference override sliders with pin state.
-      </div>
-    </div>
-  );
+  return <CitadelDiagnostics />;
 }
 
 export function CitadelShell({
@@ -145,6 +155,28 @@ export function CitadelShell({
   // §2c: mode state from localStorage, default 'peer'
   const [citadelMode, setCitadelMode] = useState<UiCitadelMode>(readCitadelMode);
   const [activeItem, setActiveItem] = useState<CitadelNavItem>('home');
+  const [connectionStatus, setConnectionStatus] = useState<'connected' | 'connecting' | 'offline'>('offline');
+
+  useEffect(() => {
+    let cancelled = false;
+    const refresh = async () => {
+      try {
+        const state = await window.amplify?.getMeshState?.();
+        if (cancelled || !state) return;
+        if (state.relayConnected) {
+          setConnectionStatus('connected');
+        } else {
+          const relay = await window.amplify?.citadelGetRelayStatus?.();
+          setConnectionStatus(relay?.connectionState === 'reconnecting' ? 'connecting' : 'offline');
+        }
+      } catch {
+        if (!cancelled) setConnectionStatus('offline');
+      }
+    };
+    void refresh();
+    const unsubRelay = window.amplify?.onRelayStateChanged?.(() => { void refresh(); });
+    return () => { cancelled = true; unsubRelay?.(); };
+  }, []);
 
   const handleModeChange = useCallback((mode: UiCitadelMode) => {
     writeCitadelMode(mode);
@@ -162,7 +194,14 @@ export function CitadelShell({
   function renderContent(): React.ReactElement {
     switch (activeItem) {
       case 'home':
-        return <HomeContent currentMode={currentMode} onModeChange={onModeChange} authState={authState} />;
+        return (
+          <HomeContent
+            currentMode={currentMode}
+            onModeChange={onModeChange}
+            authState={authState}
+            onNavigate={setActiveItem}
+          />
+        );
       case 'models':
         return <ModelsContent />;
       case 'tasks':
@@ -174,7 +213,14 @@ export function CitadelShell({
       case 'diagnostics':
         return <DiagnosticsContent />;
       default:
-        return <HomeContent currentMode={currentMode} onModeChange={onModeChange} authState={authState} />;
+        return (
+          <HomeContent
+            currentMode={currentMode}
+            onModeChange={onModeChange}
+            authState={authState}
+            onNavigate={setActiveItem}
+          />
+        );
     }
   }
 
@@ -264,6 +310,7 @@ export function CitadelShell({
             activeItem={activeItem}
             onNavigate={setActiveItem}
             appVersion={appVersion ?? null}
+            connectionStatus={connectionStatus}
             onClose={onClose}
             onQuit={handleQuit}
           />
@@ -280,6 +327,7 @@ export function CitadelShell({
               activeItem={activeItem}
               onNavigate={setActiveItem}
               appVersion={appVersion ?? null}
+              connectionStatus={connectionStatus}
               onClose={onClose}
               onQuit={handleQuit}
             />

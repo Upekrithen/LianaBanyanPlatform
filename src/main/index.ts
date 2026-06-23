@@ -5042,6 +5042,91 @@ function registerIPCHandlers(): void {
     return { ok: true, model };
   });
 
+  // ── M23b Citadel diagnostics IPC ───────────────────────────────────────────
+
+  safeHandle('citadel:tail-main-log', async () => {
+    try {
+      const logPath = log.transports.file.getFile().path;
+      if (!existsSync(logPath)) {
+        return { ok: true, path: logPath, content: '(log file not yet created)', lineCount: 0 };
+      }
+      const raw = readFileSync(logPath, 'utf-8');
+      const lines = raw.split(/\r?\n/);
+      const tail = lines.slice(-500).join('\n');
+      return { ok: true, path: logPath, content: tail, lineCount: Math.min(lines.length, 500) };
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      return { ok: false, path: '', content: message, lineCount: 0 };
+    }
+  });
+
+  safeHandle('citadel:get-process-list', async () => {
+    const processes: Array<{ name: string; status: string; detail?: string; pid?: number }> = [];
+    try {
+      const ollamaStatus = ollamaManager ? ollamaManager.getStatus() : { running: false, model: null };
+      processes.push({
+        name: 'ollama',
+        status: ollamaStatus.running ? 'running' : 'stopped',
+        detail: ollamaStatus.model ?? undefined,
+      });
+    } catch {
+      processes.push({ name: 'ollama', status: 'unknown' });
+    }
+    try {
+      const { getPlowWorkerState } = await import('./plow/plow_worker_service');
+      const plow = getPlowWorkerState();
+      processes.push({
+        name: 'plow-worker',
+        status: plow.status,
+        detail: plow.currentDomain ? `domain=${plow.currentDomain}` : undefined,
+      });
+    } catch {
+      processes.push({ name: 'plow-worker', status: 'unknown' });
+    }
+    if (process.platform === 'win32') {
+      try {
+        const { execSync } = await import('child_process');
+        const out = execSync('tasklist /FI "IMAGENAME eq ollama.exe" /FO CSV /NH', { encoding: 'utf-8', timeout: 3000 });
+        for (const line of out.split(/\r?\n/).filter(Boolean)) {
+          const parts = line.split(',').map((p) => p.replace(/^"|"$/g, ''));
+          if (parts[0]?.toLowerCase() === 'ollama.exe' && parts[1]) {
+            processes.push({ name: 'ollama.exe (OS)', status: 'running', pid: parseInt(parts[1], 10) || undefined });
+          }
+        }
+      } catch { /* non-fatal */ }
+    }
+    return { ok: true, processes, refreshedAt: new Date().toISOString() };
+  });
+
+  safeHandle('citadel:read-config', async () => {
+    try {
+      const configPath = join(app.getPath('appData'), 'MnemosyneC', 'config.json');
+      if (!existsSync(configPath)) {
+        return { ok: true, path: configPath, exists: false, content: '{}' };
+      }
+      const content = readFileSync(configPath, 'utf-8');
+      return { ok: true, path: configPath, exists: true, content };
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      return { ok: false, path: '', exists: false, content: message };
+    }
+  });
+
+  safeHandle('citadel:get-relay-status', async () => {
+    const diag = relayClient?.getDiagnostics() ?? {
+      url: 'wss://relay.mnemosynec.ai',
+      state: 'disconnected' as const,
+      lastHeartbeat: null,
+    };
+    return {
+      ok: true,
+      relayUrl: diag.url,
+      connectionState: diag.state,
+      lastHeartbeat: diag.lastHeartbeat,
+      relayConnected: relayClient?.isConnected() ?? false,
+    };
+  });
+
   // ── v0.4.2 BP083 SEG-3.5 — Lifecycle / Onboarding IPC ───────────────────
   // Handles server-side lifecycle operations; client-side localStorage is managed by renderer.
 

@@ -359,10 +359,43 @@ declare global {
       // SEG-V0151-P0-AUTOMATIC-BACKGROUND: lean background status events
       onLeanBgStatus?: (cb: (payload: { type: string; msg: string; pct?: number }) => void) => () => void;
       // MV-CN Peer Mesh (SAGA 3 BP045 W1) — mesh state
-      getMeshState?: () => Promise<{ peers: Array<{ peerId: string; displayName?: string }>; relayConnected: boolean; ownPeerId: string }>;
+      getMeshState?: () => Promise<{ peers: Array<{ peerId: string; displayName?: string; phase?: string }>; relayConnected: boolean; ownPeerId: string }>;
       onMeshStateChanged?: (cb: (state: unknown) => void) => () => void;
       onRelayStateChanged?: (cb: (state: { relayConnected: boolean }) => void) => () => void;
       onWanStatusUpdate?: (cb: (payload: { status: string; ts: string }) => void) => () => void;
+      federationConnectPeer?: (peerId: string, relayUrl?: string) => Promise<{ success: boolean; error?: string }>;
+      // M23b Citadel diagnostics IPC
+      citadelTailMainLog?: () => Promise<{ ok: boolean; path: string; content: string; lineCount: number }>;
+      citadelGetProcessList?: () => Promise<{
+        ok: boolean;
+        processes: Array<{ name: string; status: string; detail?: string; pid?: number }>;
+        refreshedAt: string;
+      }>;
+      citadelReadConfig?: () => Promise<{ ok: boolean; path: string; exists: boolean; content: string }>;
+      citadelGetRelayStatus?: () => Promise<{
+        ok: boolean;
+        relayUrl: string;
+        connectionState: 'connected' | 'disconnected' | 'reconnecting';
+        lastHeartbeat: string | null;
+        relayConnected: boolean;
+      }>;
+      // v0.4.2 BP083 SEG-3: Hardware tier detection
+      hardwareGetTier?: () => Promise<{
+        tier: { tier: string; ramGb: number; recommendedModel: string; displayName: string; description: string };
+        allTiers: Array<{ tier: string; ramGb: number; recommendedModel: string; displayName: string; description: string }>;
+        activeModel: string;
+        effectiveModelResult?: {
+          tier: string;
+          model: string | null;
+          overrideActive: boolean;
+          autoDetectedModel: string | null;
+          warning?: string;
+        };
+      }>;
+      hardwareSetModel?: (model: string, tier: string) => Promise<{ ok: boolean }>;
+      hardwareResetModel?: () => Promise<{ ok: boolean; model: string }>;
+      // R3: QUIT = full exit
+      requestAppQuit?: () => void;
       // MESH-6: Federation invite/accept/leave
       federationGenerateInvite?: () => Promise<{ token: string; expiresAt: string }>;
       federationAcceptInvite?: (token: string) => Promise<{ success: boolean; peerName?: string; error?: string }>;
