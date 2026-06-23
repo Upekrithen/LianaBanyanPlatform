@@ -278,7 +278,7 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse): Promise
         domain,
         questions,
         ollamaBaseUrl ?? 'http://127.0.0.1:11434',
-        model ?? getEffectiveOllamaModel() ?? getRecommendedModel(),
+        model ?? getEffectiveOllamaModel() ?? getRecommendedModel() ?? 'llama3.3:70b',
       );
       sendJson(res, 200, result);
     } catch (err) {

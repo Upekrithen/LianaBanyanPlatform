@@ -2,7 +2,7 @@
   "versions": [
     {
       "version": "0.7.0",
-      "tier": "staged",
+      "tier": "latest",
       "release_date": "2026-06-23",
       "install_reports": 0,
       "verified_eblets": 0,
@@ -10,14 +10,14 @@
       "open_issues": 0,
       "trust_score": 1,
       "filename": "MnemosyneC-Setup-0.7.0.exe",
-      "size_bytes": 0,
-      "size_display": "__FILL_AFTER_BUILD__",
+      "size_bytes": 540640393,
+      "size_display": "515.6 MB",
       "notes": "BP092 M24: Army Ants Posse Decomposition · Tier 2 Flagship Unblock · ABSTAIN Auto-Re-Fire cascade · empirical target >=90% on 42Q",
-      "sha256": "__FILL_AFTER_BUILD__"
+      "sha256": "d70aa26327657842e0790b3bd5fed1695d338a54a348673b93873589a803ad5c"
     },
     {
       "version": "0.6.1",
-      "tier": "latest",
+      "tier": "historical",
       "release_date": "2026-06-23",
       "install_reports": 0,
       "verified_eblets": 0,

@@ -59,7 +59,7 @@ export function getActiveModel(): string {
     return cfg.selectedModel;
   }
   // First run: auto-detect and persist
-  const recommended = getRecommendedModel();
+  const recommended = getRecommendedModel() ?? 'llama3.3:70b';
   const tier = detectHardwareTier();
   writeConfig({
     selectedModel: recommended,
@@ -75,7 +75,7 @@ export function getActiveModel(): string {
  * Sets a user-chosen model (override).
  */
 export function setActiveModel(model: string, tier: HardwareTier): void {
-  const recommended = getRecommendedModel();
+  const recommended = getRecommendedModel() ?? 'llama3.3:70b';
   writeConfig({
     selectedModel: model,
     hardwareTierOverride: model !== recommended,
@@ -89,7 +89,7 @@ export function setActiveModel(model: string, tier: HardwareTier): void {
  * Resets to hardware-detected default.
  */
 export function resetToDetectedModel(): string {
-  const recommended = getRecommendedModel();
+  const recommended = getRecommendedModel() ?? 'llama3.3:70b';
   const tier = detectHardwareTier();
   writeConfig({
     selectedModel: recommended,
