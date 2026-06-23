@@ -1181,6 +1181,14 @@ contextBridge.exposeInMainWorld('amplify', {
   peerKeyRegenerate: (): Promise<{ ok: boolean; publicKeyHex?: string; generated?: boolean; peerId?: string; error?: string }> =>
     ipcRenderer.invoke('peer-key:regenerate'),
 
+  // ── BP092 I12: Ring Bearer identity + Postgres ip_ledger_entries ──────────
+  ipLedgerGetIdentity: (): Promise<{ ok: boolean; peer_id?: string; public_key_hex?: string; error?: string }> =>
+    ipcRenderer.invoke('ip-ledger:get-identity'),
+  ipLedgerGetPgEntries: (): Promise<{ ok: boolean; entries: unknown[]; error?: string }> =>
+    ipcRenderer.invoke('ip-ledger:get-pg-entries'),
+  ipLedgerGetEntryProof: (entryId: string): Promise<{ ok: boolean; proof?: unknown; error?: string }> =>
+    ipcRenderer.invoke('ip-ledger:get-entry-proof', entryId),
+
   // SEG-2 v0.1.56 — first-launch progressive auto-pull (gemma4:12b)
   firstLaunchModelPull: {
     check: (modelName: string): Promise<{ exists: boolean; modelName: string }> =>

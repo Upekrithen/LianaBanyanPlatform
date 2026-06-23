@@ -1,8 +1,23 @@
 {
   "versions": [
     {
-      "version": "0.7.0",
+      "version": "0.7.1",
       "tier": "latest",
+      "release_date": "2026-06-23",
+      "install_reports": 0,
+      "verified_eblets": 0,
+      "zero_issue_days": 0,
+      "open_issues": 0,
+      "trust_score": 1,
+      "filename": "MnemosyneC-Setup-0.7.1.exe",
+      "size_bytes": 540639032,
+      "size_display": "515.6 MB",
+      "notes": "M25: Alpha Banner (both sites) · Bounties Page (mnemosynec.org/bounties/) · I12 IP Ledger Postgres schema + Stamp-Certify + Ring Bearer + Mesh Diff Loop (15min) · My IP Ledger UI tab",
+      "sha256": "7cb983022d2fcc91d6f1240c467dc02374a1aeba92b2711296eb5629854da845"
+    },
+    {
+      "version": "0.7.0",
+      "tier": "historical",
       "release_date": "2026-06-23",
       "install_reports": 0,
       "verified_eblets": 0,

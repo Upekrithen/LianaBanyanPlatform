@@ -77,6 +77,8 @@ import { TrialFirePanel } from './TrialFirePanel';
 import { CompaniesJoiningInTab } from './CompaniesJoiningInTab';
 // BP087 Wave 5 -- Alexandrian Catacombs 16-folder substrate default
 import { CatacombsTab } from './CatacombsTab';
+// BP092 I12 -- My IP Ledger: Ring Bearer + Stamp-Certify UI
+import { MyIPLedgerTab } from './MyIPLedgerTab';
 
 // ─── Local-storage keys ───────────────────────────────────────────────────────
 
@@ -137,7 +139,8 @@ type TabId =
   | 'battery-publish'
   | 'trial-fire'
   | 'companies'
-  | 'catacombs';
+  | 'catacombs'
+  | 'my-ip-ledger';
 
 interface TabDef {
   id: TabId;
@@ -175,6 +178,8 @@ const TABS: TabDef[] = [
   { id: 'companies',         label: 'Companies',        icon: '🏢', tooltip: 'Companies -- cooperative businesses joining the Liana Banyan platform' },
   // BP087 Wave 5 -- Alexandrian Catacombs 16-folder substrate default
   { id: 'catacombs',         label: 'Catacombs',        icon: '📚', tooltip: 'Alexandrian Catacombs -- 16-folder cooperative knowledge library (MMLU-Pro + USER + LB)' },
+  // BP092 I12 -- My IP Ledger: Ring Bearer identity + Stamp-Certified contributions
+  { id: 'my-ip-ledger',      label: 'My IP Ledger',     icon: '🔏', tooltip: 'My IP Ledger -- Ring Bearer public key · Stamp-Certified contributions · verifiable proofs · M25b' },
 ];
 
 // ─── Props ───────────────────────────────────────────────────────────────────
@@ -1537,6 +1542,16 @@ export function MnemosyneTabView({
                 style={{ height: '100%' }}
               >
                 <CatacombsTab />
+              </div>
+            )}
+            {activeTab === 'my-ip-ledger' && (
+              <div
+                id="panel-my-ip-ledger"
+                role="tabpanel"
+                aria-labelledby="tab-my-ip-ledger"
+                style={{ height: '100%', overflowY: 'auto' }}
+              >
+                <MyIPLedgerTab />
               </div>
             )}
           </div>

@@ -4534,6 +4534,98 @@ function registerIPCHandlers(): void {
     }
   });
 
+  // ── BP092 I12 — Marketplace plugin registration with IP Ledger stamp ─────────
+
+  safeHandle('marketplace:register-plugin', async (_event, req: import('./marketplace/marketplace_registry').PluginRegistrationRequest) => {
+    try {
+      const { registerPlugin } = await import('./marketplace/marketplace_registry');
+      const { stampCertify } = await import('./ip_ledger/stamp_certify');
+      const { getRingBearerIdentity } = await import('./ip_ledger/ring_bearer_keygen');
+      const identity = getRingBearerIdentity();
+      const manifest = registerPlugin(req, 'pending_stamp');
+      // Stamp-Certify hook: member_business_listing_created (fire-and-forget)
+      stampCertify({
+        contribution_type: 'member_business_listing_created',
+        payload: JSON.stringify({ event: 'member_business_listing_created', entity_id: manifest.plugin_id, member_id: identity.peer_id, timestamp: Date.now() }),
+      }).catch((e: Error) => console.error('[ip_ledger hook] member_business_listing_created:', e));
+      return { ok: true, manifest };
+    } catch (err) {
+      return { ok: false, error: (err as Error).message };
+    }
+  });
+
+  // ── BP092 I12: Ring Bearer identity + Postgres ip_ledger_entries IPC ────────
+
+  safeHandle('ip-ledger:get-identity', async () => {
+    try {
+      const { getRingBearerIdentity } = await import('./ip_ledger/ring_bearer_keygen');
+      const identity = getRingBearerIdentity();
+      return { ok: true, peer_id: identity.peer_id, public_key_hex: identity.public_key_hex };
+    } catch (err) {
+      return { ok: false, error: (err as Error).message };
+    }
+  });
+
+  safeHandle('ip-ledger:get-pg-entries', async () => {
+    try {
+      const { getRingBearerIdentity } = await import('./ip_ledger/ring_bearer_keygen');
+      const identity = getRingBearerIdentity();
+      const supabaseUrl = (process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || '').replace(/\/$/, '');
+      const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+      if (!supabaseUrl || !supabaseKey) return { ok: false, error: 'Supabase config not available', entries: [] };
+      const { createClient } = require('@supabase/supabase-js') as typeof import('@supabase/supabase-js');
+      const sb = createClient(supabaseUrl, supabaseKey, { auth: { persistSession: false } });
+      const { data, error } = await sb
+        .from('ip_ledger_entries')
+        .select('entry_id, contribution_type, stamped_at, mesh_replicated, payload_url')
+        .eq('ring_bearer_peer_id', identity.peer_id)
+        .order('stamped_at', { ascending: false })
+        .limit(50);
+      if (error) return { ok: false, error: error.message, entries: [] };
+      return { ok: true, entries: data ?? [] };
+    } catch (err) {
+      return { ok: false, error: (err as Error).message, entries: [] };
+    }
+  });
+
+  safeHandle('ip-ledger:get-entry-proof', async (_event, entryId: string) => {
+    try {
+      const { getRingBearerIdentity } = await import('./ip_ledger/ring_bearer_keygen');
+      const identity = getRingBearerIdentity();
+      const supabaseUrl = (process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || '').replace(/\/$/, '');
+      const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+      if (!supabaseUrl || !supabaseKey) return { ok: false, error: 'Supabase config not available' };
+      const { createClient } = require('@supabase/supabase-js') as typeof import('@supabase/supabase-js');
+      const sb = createClient(supabaseUrl, supabaseKey, { auth: { persistSession: false } });
+      const { data, error } = await sb
+        .from('ip_ledger_entries')
+        .select('*')
+        .eq('entry_id', entryId)
+        .single();
+      if (error) return { ok: false, error: error.message };
+      const row = data as Record<string, unknown> | null;
+      const payloadHashHex = typeof row?.payload_hash === 'string'
+        ? row.payload_hash.replace(/^\\x/, '')
+        : '';
+      const signatureHex = typeof row?.signature_ed25519 === 'string'
+        ? row.signature_ed25519.replace(/^\\x/, '')
+        : '';
+      const proof = {
+        entry_id: row?.entry_id,
+        ring_bearer_peer_id: row?.ring_bearer_peer_id,
+        ring_bearer_public_key_hex: identity.public_key_hex,
+        contribution_type: row?.contribution_type,
+        payload_hash_hex: payloadHashHex,
+        signature_ed25519_hex: signatureHex,
+        stamped_at: row?.stamped_at,
+        verify_with: `node -e "const c=require('node:crypto');const h=Buffer.from('${payloadHashHex}','hex');const k=c.createPublicKey({key:Buffer.from('${identity.public_key_hex}','hex'),format:'der',type:'spki'});const s=Buffer.from('${signatureHex}','hex');console.log(c.verify(null,h,k,s))"`,
+      };
+      return { ok: true, proof };
+    } catch (err) {
+      return { ok: false, error: (err as Error).message };
+    }
+  });
+
   // ── SEG-4 v0.1.59 — Plow the Field IPC handlers ───────────────────────────
 
   safeHandle('plow:load-domain-bank', async (_, domain: string) => {
@@ -5319,6 +5411,17 @@ function registerIPCHandlers(): void {
       for (const r of results) {
         await accrueMarks(r, task.source);
       }
+      // BP092 I12 — Stamp-Certify hook: battery_dispatch_submission (fire-and-forget)
+      void Promise.all([
+        import('./ip_ledger/stamp_certify'),
+        import('./ip_ledger/ring_bearer_keygen'),
+      ]).then(([{ stampCertify }, { getRingBearerIdentity }]) => {
+        const identity = getRingBearerIdentity();
+        return stampCertify({
+          contribution_type: 'battery_dispatch_submission',
+          payload: JSON.stringify({ event: 'battery_dispatch_submission', dispatch_id: task.task_id, member_id: identity.peer_id, timestamp: Date.now() }),
+        });
+      }).catch((e: Error) => console.error('[ip_ledger hook] battery_dispatch_submission:', e));
       return { status: 'ok', task_id: task.task_id, results };
     } catch (err) {
       console.error('[mesh:dispatch-task] error:', (err as Error).message);
@@ -5949,6 +6052,17 @@ function startMicBroadcastListener(peerId: string, appVersion: string): void {
               pull_seconds: Math.round(pullMs / 1000),
             });
             console.log(`[mic-broadcast] pulled ${value} in ${Math.round(pullMs / 1000)}s`);
+            // BP092 I12 — Stamp-Certify hook: config_set model pull (fire-and-forget)
+            void Promise.all([
+              import('./ip_ledger/stamp_certify'),
+              import('./ip_ledger/ring_bearer_keygen'),
+            ]).then(([{ stampCertify }, { getRingBearerIdentity }]) => {
+              const identity = getRingBearerIdentity();
+              return stampCertify({
+                contribution_type: 'config_set_model_pull',
+                payload: JSON.stringify({ event: 'config_set_model_pull', model_id: value, peer_id: identity.peer_id, timestamp: Date.now() }),
+              });
+            }).catch((e: Error) => console.error('[ip_ledger hook] config_set_model_pull:', e));
           } catch (err) {
             await postAck(broadcastId, peerId, appVersion, 'error', {
               model: value,
@@ -6434,6 +6548,12 @@ app.whenReady().then(async () => {
     // BP067: first_run.flag is set only after launch-walk completes (mark-bp067-first-run-complete IPC).
   }
 
+  // BP092 I12 — Start IP Ledger Mesh Diff Loop (battery-aware · LAN-as-WAN · 15min)
+  // Close keeps mesh alive; loop stops only on Quit (canon_close_keeps_mesh_alive).
+  import('./ip_ledger/mesh_diff_loop').then(({ startMeshDiffLoop }) => {
+    startMeshDiffLoop();
+  }).catch((e: Error) => console.error('[mesh_diff_loop] start failed:', e));
+
   const okQuit = globalShortcut.register('CommandOrControl+Shift+Alt+Q', () => {
     app.quit();
   });
@@ -6645,6 +6765,11 @@ app.on('before-quit', async () => {
   try {
     const { onAppQuit } = await import('./plow/plow_worker_service');
     onAppQuit();
+  } catch { /* non-fatal */ }
+  // BP092 I12 — Stop IP Ledger Mesh Diff Loop on Quit (not on Close per close-keeps-alive canon)
+  try {
+    const { stopMeshDiffLoop } = await import('./ip_ledger/mesh_diff_loop');
+    stopMeshDiffLoop();
   } catch { /* non-fatal */ }
   stopOverlayWatchdog();
   if (connectivityTimer) clearInterval(connectivityTimer);
