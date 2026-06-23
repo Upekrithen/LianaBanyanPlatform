@@ -98,7 +98,7 @@ export function ShareMnemosyneC({ onClose }: ShareMnemosyneCProps): React.ReactE
 
         {/* Tagline */}
         <p style={tagline}>
-          Share the AI that remembers — free forever, runs locally, belongs to you.
+          The Substrate Cure to AI Amnesia — free forever, runs locally, belongs to you.
         </p>
 
         {/* URL display */}

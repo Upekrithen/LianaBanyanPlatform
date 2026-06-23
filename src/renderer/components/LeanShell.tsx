@@ -10,6 +10,8 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { MnemosyneTabView } from './MnemosyneTabView';
+// M23 §2c — CitadelShell: Peer/Power mode navigation (replaces raw MnemosyneTabView for advanced users)
+import { CitadelShell } from './chrome/CitadelShell';
 import { LeanHomeTab } from './LeanHomeTab';
 import { LeanGauntletTab } from './LeanGauntletTab';
 import { LeanAskTab } from './LeanAskTab';
@@ -448,13 +450,15 @@ export function LeanShell({ currentMode, onModeChange, onClose, authState }: Lea
     return () => { unsub?.(); };
   }, []);
 
-  // Pass-through to full MnemosyneTabView for advanced users
+  // M23 §2c — Advanced users: CitadelShell (Peer/Power navigation).
+  // The lean/advanced toggle (LeanModeNudge) persists above for users who want to return to lean.
+  // CitadelShell internally manages Peer/Power via 'mnemosyne_ui_mode' localStorage key.
   if (uiMode === 'advanced') {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
         <LeanModeNudge onSwitch={switchToLean} />
         <div style={{ flex: 1, overflow: 'hidden' }}>
-          <MnemosyneTabView
+          <CitadelShell
             currentMode={currentMode}
             onModeChange={onModeChange}
             onClose={onClose}

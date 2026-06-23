@@ -77,6 +77,8 @@ import { TrialFirePanel } from './TrialFirePanel';
 import { CompaniesJoiningInTab } from './CompaniesJoiningInTab';
 // BP087 Wave 5 -- Alexandrian Catacombs 16-folder substrate default
 import { CatacombsTab } from './CatacombsTab';
+// M23 §1a — Models tab: SkuUpgradePanel promoted to top-level nav
+import { SkuUpgradePanel } from './SkuUpgradePanel';
 
 // ─── Local-storage keys ───────────────────────────────────────────────────────
 
@@ -106,6 +108,7 @@ migrateLegacyFlags();
 
 const PRIORITY_TAB_IDS: TabId[] = [
   'frame',
+  'models',
   'ai-selector',
   'faq',
   'kitchen-table',
@@ -116,6 +119,7 @@ const PRIORITY_TAB_IDS: TabId[] = [
 
 type TabId =
   | 'frame'
+  | 'models'
   | 'helm'
   | 'gauntlet'
   | 'settings'
@@ -149,7 +153,9 @@ interface TabDef {
 
 const TABS: TabDef[] = [
   { id: 'frame',     label: 'Frame',     icon: '🪟', tooltip: 'Tab 1 · Frame -- Transparent Outlining Window (your daily driver)' },
-  { id: 'helm',      label: 'Helm',      icon: '🧭', tooltip: 'Tab 2 · Helm -- LB platform · Beacons · cooperative peer-mesh' },
+  // M23 §1a — Models tab at position 2 (R5: nav label "Models")
+  { id: 'models',    label: 'Models',    icon: '🧠', tooltip: 'Tab 2 · Models -- AI Power Tier selection · NANO/LITE/CORE/FULL/ULTRA · ≤ 2 clicks from launch' },
+  { id: 'helm',      label: 'Helm',      icon: '🧭', tooltip: 'Tab 3 · Helm -- LB platform · Beacons · cooperative peer-mesh' },
   { id: 'gauntlet',  label: 'Gauntlet',  icon: '⚔️', tooltip: 'Tab 3 · Gauntlet -- 6-stage testing framework · stage selection · Pioneer Bonus' },
   { id: 'settings',  label: 'Settings',  icon: '⚙️', tooltip: 'Tab 4 · Settings -- update MnemosyneC · AI model assignment · appearance · preferences' },
   { id: 'faq',       label: 'FAQ',       icon: '❓',  tooltip: 'Tab 5 · FAQ -- common questions · tl;dr answers' },
@@ -1019,13 +1025,30 @@ export function MnemosyneTabView({
                 </button>
               )}
 
+              {/* M23 §1b — R3 RESOLVED: CLOSE = close to background (mesh stays alive) */}
               <button
                 style={styles.closeBtn}
                 onClick={onClose}
-                title="Close"
-                aria-label="Close MnemosyneC"
+                title="Close window — app continues running in the background. Mesh participation stays active."
+                aria-label="Close MnemosyneC window (app stays running)"
               >
-                x
+                ×
+              </button>
+              {/* M23 §1b — R3 RESOLVED: QUIT = full exit (mesh ends) */}
+              <button
+                style={{
+                  ...styles.closeBtn,
+                  fontSize: 10,
+                  padding: '3px 8px',
+                  color: '#94a3b8',
+                  border: '1px solid rgba(100,116,139,0.2)',
+                  borderRadius: 5,
+                }}
+                onClick={() => window.amplify?.requestAppQuit?.()}
+                title="Quit — exits the application. Mesh participation ends."
+                aria-label="Quit MnemosyneC (exits application)"
+              >
+                Quit
               </button>
             </div>
           </div>
@@ -1300,6 +1323,25 @@ export function MnemosyneTabView({
                   authState={authState}
                   onFirstComplete={handleGauntletFirstComplete}
                 />
+              </div>
+            )}
+
+            {/* M23 §1a — Models tab: SkuUpgradePanel as first-class nav destination */}
+            {activeTab === 'models' && (
+              <div
+                id="panel-models"
+                role="tabpanel"
+                aria-labelledby="tab-models"
+                style={{ height: '100%', overflowY: 'auto', padding: '16px 20px' }}
+              >
+                <div style={{
+                  fontSize: 13, fontWeight: 600, color: '#94a3b8',
+                  letterSpacing: '0.06em', textTransform: 'uppercase' as const,
+                  marginBottom: 12,
+                }}>
+                  AI Power Tier
+                </div>
+                <SkuUpgradePanel analytics={undefined} />
               </div>
             )}
 

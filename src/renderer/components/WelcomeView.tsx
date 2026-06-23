@@ -200,7 +200,7 @@ export function WelcomeView({ onComplete }: WelcomeViewProps): React.ReactElemen
         <ul style={bulletList}>
           <li style={bulletItem}>
             <span style={bulletDot} />
-            <span>Free AI that remembers, runs locally, belongs to you.</span>
+            <span>The Substrate Cure to AI Amnesia — runs locally, belongs to you.</span>
           </li>
           <li style={bulletItem}>
             <span style={bulletDot} />

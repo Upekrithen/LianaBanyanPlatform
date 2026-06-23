@@ -1639,6 +1639,11 @@ function registerIPCHandlers(): void {
     app.quit();
   });
 
+  // M23 §1b — app:request-quit handle (R3 RESOLVED: QUIT = full exit, mesh ends)
+  safeHandle('app:request-quit', () => {
+    app.quit();
+  });
+
   // BP081 K-2 — MCP server status + auth token IPC
   safeHandle('mcp:get-status', async () => getMcpServerStatus());
   safeHandle('mcp:get-auth-token', async () => {
