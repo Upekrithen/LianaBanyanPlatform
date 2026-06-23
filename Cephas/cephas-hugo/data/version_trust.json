@@ -10,10 +10,10 @@
       "open_issues": 0,
       "trust_score": 1,
       "filename": "MnemosyneC-Setup-0.6.1.exe",
-      "size_bytes": 0,
-      "size_display": "~515 MB",
+      "size_bytes": 540009781,
+      "size_display": "515.0 MB",
       "notes": "M22 v0.6.1 · WS transport fix (Node 20 RealtimeClient) · Coop Mesh Activity panel restored · BP092",
-      "sha256": "PENDING_BUILD"
+      "sha256": "19889a5128ad32073b4ffa8ce3e7d7fbc1b94cf0c5c082967b3327e29906bf52"
     },
     {
       "version": "0.6.0",
