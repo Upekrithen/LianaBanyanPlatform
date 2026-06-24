@@ -1,0 +1,726 @@
+{{- /* ===================================================
+     GOLDEN BAR + WHY YOU WANT OVERLAY - BP094 Mamba 1
+     Placement: below alpha-banner, above nav (in mnemosynec-homepage.html)
+     CSS class: .golden-bar-why-you-want
+     Brand gold: #C9A84C
+     NO EM-DASHES anywhere in this file
+     =================================================== */ -}}
+{{- if .Site.Params.isMnemosynec -}}
+
+<style>
+/* ---- GOLDEN BAR ---- */
+.golden-bar-why-you-want {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  background: #C9A84C;
+  color: #1a1209;
+  padding: 0.45rem 1rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  position: relative;
+  z-index: 9998;
+  border-bottom: 2px solid #a8872e;
+  flex-wrap: wrap;
+}
+.golden-bar-why-you-want code {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 0.82rem;
+  letter-spacing: 0.03em;
+  background: transparent;
+  color: #1a1209;
+  padding: 0;
+}
+.golden-bar-why-you-want .gbwy-btn {
+  background: #1a1209;
+  color: #C9A84C;
+  border: 2px solid #1a1209;
+  border-radius: 9999px;
+  padding: 0.25rem 0.9rem;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+  transition: background 150ms, color 150ms;
+}
+.golden-bar-why-you-want .gbwy-btn:hover {
+  background: #C9A84C;
+  color: #1a1209;
+  border-color: #1a1209;
+}
+.golden-bar-why-you-want .gbwy-btn:focus-visible {
+  outline: 2px solid #1a1209;
+  outline-offset: 3px;
+}
+
+/* ---- OVERLAY ---- */
+#why-you-want-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(0,0,0,0.72);
+  backdrop-filter: blur(5px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms ease;
+}
+#why-you-want-overlay.wyw-open {
+  opacity: 1;
+  pointer-events: all;
+}
+.wyw-dialog {
+  background: var(--surface, #131517);
+  border: 1px solid var(--border, #2f3439);
+  border-radius: 1rem;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  max-width: 780px;
+  width: 100%;
+  max-height: 90dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: scale(0.96) translateY(14px);
+  transition: transform 260ms cubic-bezier(0.16,1,0.3,1);
+}
+#why-you-want-overlay.wyw-open .wyw-dialog {
+  transform: scale(1) translateY(0);
+}
+.wyw-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.1rem 1.5rem 0.6rem;
+  border-bottom: 1px solid var(--divider, #252a2e);
+  flex-shrink: 0;
+}
+.wyw-title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #C9A84C;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+.wyw-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 9999px;
+  border: 1px solid var(--border, #2f3439);
+  background: transparent;
+  cursor: pointer;
+  color: var(--textMuted, #7a8088);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 1.1rem;
+  line-height: 1;
+  transition: color 150ms, background 150ms;
+}
+.wyw-close:hover { color: var(--text, #d8dce0); background: var(--surfaceOff, #1f2327); }
+.wyw-close:focus-visible { outline: 2px solid #C9A84C; outline-offset: 2px; }
+
+/* TABS */
+.wyw-tabs {
+  display: flex;
+  gap: 0;
+  padding: 0 1.5rem;
+  border-bottom: 1px solid var(--divider, #252a2e);
+  flex-shrink: 0;
+}
+.wyw-tab {
+  padding: 0.65rem 1.2rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--textMuted, #7a8088);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 150ms, border-color 150ms;
+  font-family: 'IBM Plex Mono', monospace;
+}
+.wyw-tab:hover { color: var(--text, #d8dce0); }
+.wyw-tab.wyw-tab-active {
+  color: #C9A84C;
+  border-bottom-color: #C9A84C;
+}
+.wyw-tab:focus-visible { outline: 2px solid #C9A84C; outline-offset: -2px; }
+
+/* TAB PANELS */
+.wyw-panels {
+  overflow-y: auto;
+  flex: 1;
+  padding: 1.5rem;
+}
+.wyw-panel { display: none; }
+.wyw-panel.wyw-panel-active { display: block; }
+
+/* SHARED INNER STYLES */
+.wyw-h2 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text, #d8dce0);
+  margin-bottom: 0.5rem;
+  line-height: 1.25;
+}
+.wyw-sub {
+  font-size: 0.88rem;
+  color: var(--textMuted, #7a8088);
+  margin-bottom: 1.2rem;
+  line-height: 1.6;
+}
+.wyw-gold { color: #C9A84C; }
+.wyw-divider { height: 1px; background: var(--divider, #252a2e); border: none; margin: 1.2rem 0; }
+
+/* CHART WRAPPER */
+.wyw-chart-wrap { position: relative; height: 230px; margin-bottom: 1rem; }
+
+/* FLIP CARD */
+.wyw-fp { perspective: 1200px; margin-bottom: 1.2rem; }
+.wyw-fc {
+  position: relative;
+  min-height: 130px;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.16,1,0.3,1);
+}
+.wyw-fc.wyw-flipped { transform: rotateY(180deg); }
+.wyw-ff {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border, #2f3439);
+  padding: 1rem 1.2rem;
+  background: var(--surfaceOff, #1f2327);
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.wyw-ff-back {
+  transform: rotateY(180deg);
+  background: var(--surface2, #191c1f);
+}
+.wyw-flip-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text, #d8dce0);
+}
+.wyw-flip-sub { font-size: 0.78rem; color: var(--textMuted, #7a8088); line-height: 1.5; }
+.wyw-flip-btn {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  color: #C9A84C;
+  font-weight: 700;
+  background: transparent;
+  border: 1px solid #C9A84C;
+  border-radius: 9999px;
+  padding: 0.2rem 0.6rem;
+  cursor: pointer;
+  width: fit-content;
+  font-family: inherit;
+  transition: background 150ms, color 150ms;
+}
+.wyw-flip-btn:hover { background: #C9A84C; color: #1a1209; }
+.wyw-flip-btn:focus-visible { outline: 2px solid #C9A84C; outline-offset: 2px; }
+.wyw-receipts-list { list-style: none; display: flex; flex-direction: column; gap: 0.4rem; }
+.wyw-receipts-list li {
+  font-size: 0.78rem;
+  color: var(--textMuted, #7a8088);
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+.wyw-receipts-list li::before { content: '\2713'; color: #C9A84C; font-weight: 700; flex-shrink: 0; }
+
+/* STAT BLOCK */
+.wyw-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 1px;
+  background: var(--divider, #252a2e);
+  border: 1px solid var(--border, #2f3439);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  margin-bottom: 1.2rem;
+}
+.wyw-stat {
+  background: var(--surface, #131517);
+  padding: 0.75rem 1rem;
+}
+.wyw-stat-v {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #C9A84C;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+.wyw-stat-l { font-size: 0.72rem; color: var(--textMuted, #7a8088); margin-top: 0.15rem; }
+
+/* LICENSE TABLE */
+.wyw-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  margin-bottom: 0.6rem;
+}
+.wyw-table th {
+  text-align: left;
+  font-size: 0.7rem;
+  color: var(--textFaint, #484e55);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--divider, #252a2e);
+}
+.wyw-table td {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--divider, #252a2e);
+  vertical-align: top;
+}
+.wyw-table tr:last-child td { border-bottom: none; }
+.wyw-table td:first-child { font-weight: 700; color: var(--text, #d8dce0); padding-right: 1rem; width: 40%; }
+.wyw-table td:last-child { color: var(--textMuted, #7a8088); }
+.wyw-table .wyw-tier-note td {
+  font-size: 0.72rem;
+  color: var(--textFaint, #484e55);
+  font-style: italic;
+  padding-top: 0.4rem;
+}
+
+/* UIP SECTION */
+.wyw-uip-box {
+  background: var(--surfaceOff, #1f2327);
+  border: 1px solid var(--border, #2f3439);
+  border-radius: 0.75rem;
+  padding: 1rem 1.2rem;
+  margin-bottom: 1.2rem;
+}
+.wyw-uip-headline {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #C9A84C;
+  margin-bottom: 0.5rem;
+}
+.wyw-uip-body { font-size: 0.8rem; color: var(--textMuted, #7a8088); line-height: 1.7; margin-bottom: 0.6rem; }
+.wyw-bilateral {
+  font-size: 0.82rem;
+  color: var(--text, #d8dce0);
+  font-weight: 600;
+  border-left: 3px solid #C9A84C;
+  padding-left: 0.8rem;
+  margin: 0.6rem 0;
+  line-height: 1.5;
+}
+.wyw-math-callout {
+  font-size: 0.78rem;
+  color: var(--amber, #f5b942);
+  font-family: 'IBM Plex Mono', monospace;
+  background: var(--amberDim, #3a2e10);
+  border: 1px solid rgba(245,185,66,0.2);
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.8rem;
+  margin: 0.6rem 0;
+}
+.wyw-blockquote {
+  font-size: 0.88rem;
+  color: var(--textMuted, #7a8088);
+  font-style: italic;
+  border-left: 3px solid #C9A84C;
+  padding-left: 0.8rem;
+  margin: 0.8rem 0 0;
+  line-height: 1.6;
+}
+.wyw-blockquote cite { font-style: normal; font-size: 0.72rem; display: block; margin-top: 0.3rem; color: var(--textFaint, #484e55); }
+
+/* INVITATION TAB */
+.wyw-invite-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.2rem;
+}
+.wyw-invite-list li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  font-size: 0.88rem;
+  color: var(--text, #d8dce0);
+  line-height: 1.5;
+}
+.wyw-invite-num {
+  min-width: 26px;
+  height: 26px;
+  border-radius: 9999px;
+  background: #C9A84C;
+  color: #1a1209;
+  font-size: 0.7rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.wyw-taglines {
+  border-top: 1px solid var(--divider, #252a2e);
+  padding-top: 1.2rem;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.wyw-tagline-empress {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #C9A84C;
+  line-height: 1.35;
+  letter-spacing: 0.01em;
+}
+.wyw-tagline-oar {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--textMuted, #7a8088);
+  font-style: italic;
+  line-height: 1.5;
+}
+
+/* VIEW PROOFS LINK */
+.wyw-proofs-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #C9A84C;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(201,168,76,0.4);
+  padding-bottom: 1px;
+}
+.wyw-proofs-link:hover { border-bottom-color: #C9A84C; }
+
+/* MOBILE */
+@media (max-width: 540px) {
+  .wyw-dialog { max-height: 95dvh; border-radius: 0.75rem; }
+  .wyw-tab { padding: 0.5rem 0.7rem; font-size: 0.72rem; letter-spacing: 0.07em; }
+  .wyw-panels { padding: 1rem; }
+  .wyw-header { padding: 0.9rem 1rem 0.5rem; }
+  .wyw-tabs { padding: 0 1rem; }
+  .wyw-stats { grid-template-columns: repeat(2,1fr); }
+}
+</style>
+
+{{- /* GOLDEN BAR */ -}}
+<div class="golden-bar-why-you-want" id="gbwy-bar">
+  <code>Substrate Replaces New Data Centers.</code>
+  <button
+    class="gbwy-btn"
+    onclick="wyWantOpen()"
+    aria-haspopup="dialog"
+    aria-controls="why-you-want-overlay"
+  >Why YOU Want to be Part of This</button>
+</div>
+
+{{- /* OVERLAY DIALOG */ -}}
+<div
+  id="why-you-want-overlay"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Why YOU Want to be Part of This"
+  tabindex="-1"
+  onclick="wyWantBackdrop(event)"
+>
+  <div class="wyw-dialog" id="wyw-dialog-inner">
+    <div class="wyw-header">
+      <div class="wyw-title">Why YOU Want to be Part of This</div>
+      <button class="wyw-close" onclick="wyWantClose()" aria-label="Close overlay" id="wyw-close-btn">&times;</button>
+    </div>
+    <div class="wyw-tabs" role="tablist" aria-label="Why YOU Want overlay tabs">
+      <button class="wyw-tab wyw-tab-active" role="tab" aria-selected="true"  id="wyw-tab-0" aria-controls="wyw-panel-0" onclick="wyWantTab(0)">PROOF</button>
+      <button class="wyw-tab"               role="tab" aria-selected="false" id="wyw-tab-1" aria-controls="wyw-panel-1" onclick="wyWantTab(1)">ECONOMICS</button>
+      <button class="wyw-tab"               role="tab" aria-selected="false" id="wyw-tab-2" aria-controls="wyw-panel-2" onclick="wyWantTab(2)">INVITATION</button>
+    </div>
+
+    <div class="wyw-panels">
+
+      {{- /* ---- TAB 1: PROOF ---- */ -}}
+      <div class="wyw-panel wyw-panel-active" id="wyw-panel-0" role="tabpanel" aria-labelledby="wyw-tab-0">
+        <div class="wyw-h2">Substrate + Free AI outperforms Flagship AI without Substrate.</div>
+        <div class="wyw-sub">Two sealed trials. Methodology public. Run it yourself.</div>
+
+        <div class="wyw-chart-wrap">
+          <canvas id="wyw-proof-chart" aria-label="Bar chart comparing Free AI plus Substrate vs Flagship AI without Substrate performance"></canvas>
+        </div>
+
+        <hr class="wyw-divider">
+
+        <div class="wyw-fp">
+          <div class="wyw-fc" id="wyw-flip">
+            <div class="wyw-ff wyw-ff-front">
+              <div class="wyw-flip-label">See the Receipts</div>
+              <div class="wyw-flip-sub">Two sealed trials. Every number below is from a locked receipt - not a claim.</div>
+              <button class="wyw-flip-btn" onclick="wyWantFlip()" aria-label="Flip card to see receipt sources">See Sources &#x21BB;</button>
+            </div>
+            <div class="wyw-ff wyw-ff-back">
+              <div class="wyw-flip-label">Receipt Sources</div>
+              <ul class="wyw-receipts-list">
+                <li>Trial_01 - 68/70 sealed (97.1%) - MMLU-Pro controlled benchmark, BP065</li>
+                <li>Trial_02 PREVIEW - 59.5% - 4-peer cooperative relay mesh, BP089</li>
+                <li>MMLU-Pro baseline receipt - Flagship models 75-86% without substrate</li>
+              </ul>
+              <button class="wyw-flip-btn" onclick="wyWantFlip()" aria-label="Flip card back">&larr; Back</button>
+            </div>
+          </div>
+        </div>
+
+        <a href="/proofs/" class="wyw-proofs-link">View full proofs &#x2192;</a>
+      </div>
+
+      {{- /* ---- TAB 2: ECONOMICS ---- */ -}}
+      <div class="wyw-panel" id="wyw-panel-1" role="tabpanel" aria-labelledby="wyw-tab-1">
+        <div class="wyw-h2">Resolves the Political Problem of AI and Data Centers.</div>
+        <div class="wyw-sub" style="font-size:1rem;font-weight:700;color:var(--text,#d8dce0)">97% faster. 96% cheaper.</div>
+
+        <div class="wyw-stats">
+          <div class="wyw-stat">
+            <div class="wyw-stat-v">$4.49B/yr</div>
+            <div class="wyw-stat-l">Aggregate industry savings</div>
+          </div>
+          <div class="wyw-stat">
+            <div class="wyw-stat-v">95%</div>
+            <div class="wyw-stat-l">MORE capacity on existing infrastructure</div>
+          </div>
+          <div class="wyw-stat">
+            <div class="wyw-stat-v">0</div>
+            <div class="wyw-stat-l">New data centers required</div>
+          </div>
+        </div>
+
+        <table class="wyw-table" aria-label="License tier comparison">
+          <thead>
+            <tr><th>Tier</th><th>Terms</th><th>Revenue Share</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Tier 1</td>
+              <td>Apache license + Endorsement</td>
+              <td class="wyw-gold">20% of measured savings</td>
+            </tr>
+            <tr>
+              <td>Tier 2 (Sanders-Fork)</td>
+              <td>SSPL + Pledge</td>
+              <td class="wyw-gold">50% split: 20pp cooperative + 30pp Public Sovereign Fund</td>
+            </tr>
+            <tr class="wyw-tier-note">
+              <td colspan="3">Companies choose at signing. Switch at renewal with 30d notice.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="wyw-uip-box">
+          <div class="wyw-uip-headline">The Universal Innovation Pipeline</div>
+          <div class="wyw-uip-body">
+            The Pipeline layers on top of either Tier 1 or Tier 2 license. No exclusivity. All 8 AI companies participate in the same marketplace, competing on attractiveness to innovators. Members route disclosures to their preferred receiver at the time of disclosure. The IP Ledger records pickup. The constraint is popularity, not time.
+          </div>
+          <div class="wyw-bilateral">LB does not lock in to any single AI partner; the pipeline runs both ways.</div>
+          <div class="wyw-math-callout">Innovation pipeline value &gt; $58M/yr breakeven - cleared by a single MnemosyneC-class disclosure.</div>
+          <blockquote class="wyw-blockquote">
+            "no time constraints, just popularity constraints"
+            <cite>- Founder direct, BP094</cite>
+          </blockquote>
+        </div>
+      </div>
+
+      {{- /* ---- TAB 3: INVITATION ---- */ -}}
+      <div class="wyw-panel" id="wyw-panel-2" role="tabpanel" aria-labelledby="wyw-tab-2">
+        <div class="wyw-h2">Be part of the Proof.</div>
+        <div class="wyw-sub">Not a promise. An open invitation backed by receipts.</div>
+
+        <ul class="wyw-invite-list">
+          <li>
+            <span class="wyw-invite-num">1</span>
+            <span><strong>Your Name Etched in the Founding Foundation.</strong> First 10,000 members lock founding status permanently. You were here before it mattered to everyone else.</span>
+          </li>
+          <li>
+            <span class="wyw-invite-num">2</span>
+            <span><strong>Employ the World Bounties:</strong> earn Marks for verified work across 16 Initiatives. Every bounty completion is a receipt in the cooperative ledger.</span>
+          </li>
+          <li>
+            <span class="wyw-invite-num">3</span>
+            <span><strong>Cold Start Business Plans:</strong> the cooperative co-designs your business plan from the first day. You don't start alone.</span>
+          </li>
+        </ul>
+
+        <div class="wyw-sub" style="margin-bottom:0.5rem">
+          16 Initiatives. Self-funding design. A cooperative model built so that the people doing the work keep 83.3% of every dollar. No venture capital. No extraction. Help each other help ourselves.
+        </div>
+
+        <div class="wyw-taglines">
+          <div class="wyw-tagline-empress">Name the Empress. Stop the Nothing. Be a Bastion, in a Time of Storms.</div>
+          <div class="wyw-tagline-oar">Grab an Oar. We're rowing as we Build the Sails.</div>
+        </div>
+      </div>
+
+    </div>{{- /* end .wyw-panels */ -}}
+  </div>{{- /* end .wyw-dialog */ -}}
+</div>{{- /* end #why-you-want-overlay */ -}}
+
+<script>
+(function () {
+  var OVERLAY = document.getElementById('why-you-want-overlay');
+  var DIALOG  = document.getElementById('wyw-dialog-inner');
+  var CLOSE   = document.getElementById('wyw-close-btn');
+  var CHART_INST = null;
+  var focusBefore = null;
+
+  /* --- Focus Trap --- */
+  function getFocusable() {
+    return Array.from(DIALOG.querySelectorAll(
+      'button:not([disabled]),a[href],[tabindex]:not([tabindex="-1"]),[role="tab"]'
+    ));
+  }
+  function trapFocus(e) {
+    var els = getFocusable();
+    if (!els.length) return;
+    var first = els[0], last = els[els.length - 1];
+    if (e.shiftKey) {
+      if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+    } else {
+      if (document.activeElement === last)  { e.preventDefault(); first.focus(); }
+    }
+  }
+
+  /* --- Open / Close --- */
+  window.wyWantOpen = function () {
+    focusBefore = document.activeElement;
+    OVERLAY.classList.add('wyw-open');
+    OVERLAY.setAttribute('aria-hidden', 'false');
+    CLOSE.focus();
+    OVERLAY.addEventListener('keydown', wyWantKeydown);
+    initChart();
+  };
+  window.wyWantClose = function () {
+    OVERLAY.classList.remove('wyw-open');
+    OVERLAY.setAttribute('aria-hidden', 'true');
+    OVERLAY.removeEventListener('keydown', wyWantKeydown);
+    if (focusBefore) focusBefore.focus();
+  };
+  window.wyWantBackdrop = function (e) {
+    if (e.target === OVERLAY) wyWantClose();
+  };
+  function wyWantKeydown(e) {
+    if (e.key === 'Escape') { wyWantClose(); return; }
+    if (e.key === 'Tab') trapFocus(e);
+  }
+
+  /* --- Tabs --- */
+  window.wyWantTab = function (idx) {
+    var tabs   = document.querySelectorAll('.wyw-tab');
+    var panels = document.querySelectorAll('.wyw-panel');
+    tabs.forEach(function(t,i) {
+      t.classList.toggle('wyw-tab-active', i === idx);
+      t.setAttribute('aria-selected', i === idx ? 'true' : 'false');
+    });
+    panels.forEach(function(p,i) {
+      p.classList.toggle('wyw-panel-active', i === idx);
+    });
+    if (idx === 0) initChart();
+  };
+
+  /* --- Flip Card --- */
+  window.wyWantFlip = function () {
+    var fc = document.getElementById('wyw-flip');
+    if (fc) fc.classList.toggle('wyw-flipped');
+  };
+
+  /* --- Chart (Tab 1) --- */
+  function initChart() {
+    if (CHART_INST) return; // already initialized
+    var canvas = document.getElementById('wyw-proof-chart');
+    if (!canvas || !window.Chart) return;
+    var isDark = document.documentElement.getAttribute('data-theme') !== 'light';
+    var gridC  = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
+    var tickC  = isDark ? '#7a8088' : '#6b7280';
+    var bgC    = isDark ? '#131517' : '#ffffff';
+    var borC   = isDark ? '#2f3439' : '#cdd0d5';
+    var txtC   = isDark ? '#d8dce0' : '#1a1d21';
+    CHART_INST = new Chart(canvas.getContext('2d'), {
+      type: 'bar',
+      data: {
+        labels: ['Free AI + Substrate (Trial_01)', 'Flagship AI, no Substrate (baseline)', 'Free AI + Substrate (Trial_02 PREVIEW)'],
+        datasets: [{
+          label: 'Performance Score (%)',
+          data: [97.1, 80.5, 59.5],
+          backgroundColor: ['#C9A84C', '#3a4046', '#C9A84C'],
+          borderRadius: 5,
+          borderSkipped: false,
+          barPercentage: 0.55,
+          categoryPercentage: 0.75
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: { duration: 700, easing: 'easeOutQuart' },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: bgC, borderColor: borC, borderWidth: 1,
+            titleColor: txtC, bodyColor: tickC, padding: 12, cornerRadius: 8,
+            callbacks: {
+              label: function(i) { return ' ' + i.parsed.x + '%'; },
+              afterLabel: function(i) {
+                var lbl = i.label;
+                if (lbl.indexOf('Trial_01') >= 0) return 'Source: 68/70 sealed - MMLU-Pro (BP065)';
+                if (lbl.indexOf('Trial_02') >= 0) return 'Source: Trial_02 PREVIEW - 4-peer mesh (BP089)';
+                return 'Source: Flagship models average - MMLU-Pro published';
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            min: 0, max: 100,
+            grid: { color: gridC },
+            ticks: { color: tickC, callback: function(v) { return v + '%'; }, maxTicksLimit: 6 },
+            border: { display: false }
+          },
+          y: {
+            grid: { display: false },
+            ticks: { color: tickC },
+            border: { display: false }
+          }
+        }
+      }
+    });
+  }
+
+  /* --- Keyboard tab arrow navigation --- */
+  document.addEventListener('keydown', function(e) {
+    if (!OVERLAY.classList.contains('wyw-open')) return;
+    var tabs = document.querySelectorAll('.wyw-tab');
+    var active = document.activeElement;
+    var idx = Array.from(tabs).indexOf(active);
+    if (idx < 0) return;
+    if (e.key === 'ArrowRight') { e.preventDefault(); wyWantTab((idx + 1) % 3); tabs[(idx + 1) % 3].focus(); }
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); wyWantTab((idx + 2) % 3); tabs[(idx + 2) % 3].focus(); }
+  });
+})();
+</script>
+{{- end -}}

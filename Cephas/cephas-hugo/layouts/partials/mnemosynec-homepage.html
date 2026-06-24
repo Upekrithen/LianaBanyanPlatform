@@ -302,6 +302,9 @@ footer.footer{display:none!important}
   </div>
 </div>
 
+{{/* ======= GOLDEN BAR + WHY YOU WANT OVERLAY - BP094 Mamba 1 ======= */}}
+{{- partial "golden-bar-why-you-want.html" . -}}
+
 {{/* ======= NAV ======= */}}
 <nav class="nav" aria-label="MnemosyneC main navigation">
   <a href="/" class="logo">
@@ -316,6 +319,8 @@ footer.footer{display:none!important}
     <button class="tog" id="mn-theme-tog" aria-label="Toggle theme">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
     </button>
+    <!-- T15: Single Join CTA in header -- BP094 M11 -->
+    <a href="https://lianabanyan.com/join" class="btn-dl join-cta" style="background:#22c55e;color:#0c0d0e;">Join &middot; $5/year</a>
     <button class="btn-dl" onclick="openMnModal(event)">Download</button>
   </div>
 </nav>
@@ -354,6 +359,8 @@ footer.footer{display:none!important}
           Download Installer v{{ $ver.version }}
         </button>
         <a href="/how-to-read-the-substrate/" class="btn-s">Read the Substrate &rarr;</a>
+        <!-- T15/Block5: In-body homepage join CTA -- BP094 M11 -->
+        <a href="https://lianabanyan.com/join" class="btn-s join-cta-hero" style="background:#22c55e;color:#0c0d0e;font-weight:700;border:none;">Join the Cooperative &middot; $5/year</a>
       </div>
     </div>
 
@@ -675,6 +682,11 @@ footer.footer{display:none!important}
     </div>
   </div>
 </section>
+
+{{/* ======= CUE DECK CARD - BP094 Mamba 2 ======= */}}
+{{- partial "cue-deck-card-homepage.html" . -}}
+
+<hr class="div">
 
 {{/* ======= FOOTER ======= */}}
 <footer class="mn-v2-footer">

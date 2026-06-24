@@ -1,0 +1,296 @@
+{{- /* ===================================================
+     CUE DECK CARD - HOMEPAGE SECTION - BP094 Mamba 2
+     Canon: canon_cue_deck_card_unified_system_facets_join_my_crew_socceri_network_join_bp093
+     Placement: after #proofs section, before footer
+     NO EM-DASHES anywhere in this file
+     =================================================== */ -}}
+{{- if .Site.Params.isMnemosynec -}}
+
+<style>
+/* ---- CUE DECK CARD HOMEPAGE SECTION ---- */
+.cdc-section {
+  background: var(--bg);
+  padding-block: clamp(var(--space-8, 2rem), 4vw, var(--space-16, 4rem));
+}
+.cdc-eyebrow {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #C9A84C;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+.cdc-eyebrow::before {
+  content: '';
+  width: 20px;
+  height: 1px;
+  background: #C9A84C;
+}
+.cdc-headline {
+  font-size: clamp(1.25rem, 2vw + 0.5rem, 1.8rem);
+  font-weight: 800;
+  color: var(--text, #d8dce0);
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+}
+.cdc-sub {
+  font-size: 0.95rem;
+  color: var(--textMuted, #7a8088);
+  max-width: 58ch;
+  line-height: 1.65;
+  margin-bottom: 2rem;
+}
+/* CARD GRID */
+.cdc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1px;
+  background: var(--divider, #252a2e);
+  border: 1px solid var(--border, #2f3439);
+  border-radius: 0.875rem;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+.cdc-facet {
+  background: var(--surface, #131517);
+  padding: 1.1rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  transition: background 150ms;
+}
+.cdc-facet:hover { background: var(--surfaceOff, #1f2327); }
+.cdc-facet-icon { font-size: 1.4rem; line-height: 1; }
+.cdc-facet-name {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--text, #d8dce0);
+  letter-spacing: 0.02em;
+}
+.cdc-facet-desc { font-size: 0.75rem; color: var(--textMuted, #7a8088); line-height: 1.55; }
+.cdc-facet-tag {
+  font-size: 0.68rem;
+  font-weight: 700;
+  font-family: 'IBM Plex Mono', monospace;
+  color: #C9A84C;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 0.2rem;
+}
+
+/* THRESHOLD LADDER */
+.cdc-ladder-wrap {
+  background: var(--surfaceOff, #1f2327);
+  border: 1px solid var(--border, #2f3439);
+  border-radius: 0.875rem;
+  padding: 1.2rem 1.5rem;
+  margin-bottom: 2rem;
+}
+.cdc-ladder-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--textFaint, #484e55);
+  margin-bottom: 0.75rem;
+}
+.cdc-ladder {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1px;
+  background: var(--divider, #252a2e);
+  border: 1px solid var(--border, #2f3439);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+.cdc-rung {
+  background: var(--surface, #131517);
+  padding: 0.6rem 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.cdc-rung-name {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--text, #d8dce0);
+}
+.cdc-rung-range { font-size: 0.68rem; color: var(--textMuted, #7a8088); font-family: 'IBM Plex Mono', monospace; }
+.cdc-rung-marks { font-size: 0.72rem; font-weight: 700; color: #C9A84C; margin-top: 0.15rem; }
+.cdc-ladder-note {
+  font-size: 0.72rem;
+  color: var(--textFaint, #484e55);
+  margin-top: 0.75rem;
+  line-height: 1.55;
+}
+
+/* STRUCTURAL RULE */
+.cdc-rule-box {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  background: var(--surface, #131517);
+  border: 1px solid var(--border, #2f3439);
+  border-left: 3px solid #C9A84C;
+  border-radius: 0.5rem;
+  padding: 0.8rem 1rem;
+  margin-bottom: 2rem;
+}
+.cdc-rule-icon { font-size: 1.1rem; flex-shrink: 0; line-height: 1.4; }
+.cdc-rule-text { font-size: 0.8rem; color: var(--textMuted, #7a8088); line-height: 1.6; }
+.cdc-rule-text strong { color: var(--text, #d8dce0); }
+
+/* CTA ROW */
+.cdc-cta-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.cdc-btn-join {
+  background: #C9A84C;
+  color: #1a1209;
+  padding: 0.65rem 1.5rem;
+  border-radius: 9999px;
+  font-size: 0.88rem;
+  font-weight: 800;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: filter 150ms, transform 150ms;
+}
+.cdc-btn-join:hover { filter: brightness(1.1); transform: translateY(-1px); }
+.cdc-btn-learn {
+  font-size: 0.85rem;
+  color: var(--primary, #4fc3d0);
+  text-decoration: none;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(79,195,208,0.3);
+  padding-bottom: 1px;
+}
+.cdc-btn-learn:hover { border-bottom-color: var(--primary, #4fc3d0); }
+
+@media (max-width: 540px) {
+  .cdc-grid { grid-template-columns: repeat(2,1fr); }
+  .cdc-ladder { grid-template-columns: repeat(3,1fr); }
+}
+</style>
+
+<section class="cdc-section" id="cue-deck-cards" aria-label="Cue Deck Cards - Join the Crew">
+  <div class="c">
+    <div class="cdc-eyebrow">Cooperative Seeding</div>
+    <h2 class="cdc-headline">Join My Crew: The Cue Deck Card System</h2>
+    <p class="cdc-sub">
+      One unified seed-loop. Seven facets. Every member can grow the cooperative - and earns Marks for doing it.
+      One level of separation only. No chains. No MLM mechanics. Popularity-driven, not time-gated.
+    </p>
+
+    {{- /* 7 Facets Grid */ -}}
+    <div class="cdc-grid" role="list" aria-label="Cue Deck Card facets">
+      <div class="cdc-facet" role="listitem">
+        <div class="cdc-facet-icon">&#x1F9E0;</div>
+        <div class="cdc-facet-name">Dr. MnemosyneC Invite</div>
+        <div class="cdc-facet-desc">Share the installer. Recipient downloads and installs substrate. Attribution locked at first install.</div>
+        <div class="cdc-facet-tag">Facet (a)</div>
+      </div>
+      <div class="cdc-facet" role="listitem">
+        <div class="cdc-facet-icon">&#x1F947;</div>
+        <div class="cdc-facet-name">Medallion Unlock</div>
+        <div class="cdc-facet-desc">Your referral unlocks a medallion for the new member. Medallion holders get 2x voting power and 50 unlock slots.</div>
+        <div class="cdc-facet-tag">Facet (b)</div>
+      </div>
+      <div class="cdc-facet" role="listitem">
+        <div class="cdc-facet-icon">&#x1F33B;</div>
+        <div class="cdc-facet-name">Johnny Appleseed Sponsor</div>
+        <div class="cdc-facet-desc">Seed memberships in a locale, requirements pool, or general pool. Up to 50 allocations per sponsor session.</div>
+        <div class="cdc-facet-tag">Facet (c)</div>
+      </div>
+      <div class="cdc-facet" role="listitem">
+        <div class="cdc-facet-icon">&#x1F3A5;</div>
+        <div class="cdc-facet-name">Influencer Challenge</div>
+        <div class="cdc-facet-desc">Content contest. Prizes: 1st $500, 2nd $300, 3rd $200, category $100. Every contestant drives referral volume.</div>
+        <div class="cdc-facet-tag">Facet (d)</div>
+      </div>
+      <div class="cdc-facet" role="listitem">
+        <div class="cdc-facet-icon">&#x1F511;</div>
+        <div class="cdc-facet-name">Early Access Tier</div>
+        <div class="cdc-facet-desc">Preview-tier members unlock 5 memberships. Early Backers unlock 10. Founders unlock 100. Tiers compound with attribution count.</div>
+        <div class="cdc-facet-tag">Facet (e)</div>
+      </div>
+      <div class="cdc-facet" role="listitem">
+        <div class="cdc-facet-icon">&#x1F30A;</div>
+        <div class="cdc-facet-name">Substrate Compounding</div>
+        <div class="cdc-facet-desc">Every new peer adds to the substrate. More members means more verified knowledge, faster context amortization, lower cost per MAMBA.</div>
+        <div class="cdc-facet-tag">Facet (f)</div>
+      </div>
+      <div class="cdc-facet" role="listitem">
+        <div class="cdc-facet-icon">&#x1FAA2;</div>
+        <div class="cdc-facet-name">Join My Crew (SOCCERI)</div>
+        <div class="cdc-facet-desc">Toggle ON: embed your SOCCERI node address. New peer joins your Substrate Network as initial MIC. One hop only - no cascade.</div>
+        <div class="cdc-facet-tag">Facet (g) - SOCCERI Network</div>
+      </div>
+    </div>
+
+    {{- /* Threshold Ladder */ -}}
+    <div class="cdc-ladder-wrap">
+      <div class="cdc-ladder-title">Marks Threshold Ladder - Cumulative across all 7 Facets</div>
+      <div class="cdc-ladder" role="list" aria-label="Referral tier threshold ladder">
+        <div class="cdc-rung" role="listitem">
+          <div class="cdc-rung-name">Pioneer</div>
+          <div class="cdc-rung-range">1 - 100</div>
+          <div class="cdc-rung-marks">10 Marks/ref</div>
+        </div>
+        <div class="cdc-rung" role="listitem">
+          <div class="cdc-rung-name">Vanguard</div>
+          <div class="cdc-rung-range">101 - 500</div>
+          <div class="cdc-rung-marks">5 Marks/ref</div>
+        </div>
+        <div class="cdc-rung" role="listitem">
+          <div class="cdc-rung-name">Pathfinder</div>
+          <div class="cdc-rung-range">501 - 2,000</div>
+          <div class="cdc-rung-marks">3 Marks/ref</div>
+        </div>
+        <div class="cdc-rung" role="listitem">
+          <div class="cdc-rung-name">Trailblazer</div>
+          <div class="cdc-rung-range">2,001 - 10,000</div>
+          <div class="cdc-rung-marks">2 Marks/ref</div>
+        </div>
+        <div class="cdc-rung" role="listitem">
+          <div class="cdc-rung-name">Guide</div>
+          <div class="cdc-rung-range">10,001 - 50,000</div>
+          <div class="cdc-rung-marks">1.5 Marks/ref</div>
+        </div>
+        <div class="cdc-rung" role="listitem">
+          <div class="cdc-rung-name">Ambassador</div>
+          <div class="cdc-rung-range">50,001+</div>
+          <div class="cdc-rung-marks">1 Mark/ref</div>
+        </div>
+      </div>
+      <div class="cdc-ladder-note">Threshold counts are cumulative across all 7 facets. Marks are earned per conversion, not per send. Popularity-constrained, not time-constrained.</div>
+    </div>
+
+    {{- /* Structural Rule */ -}}
+    <div class="cdc-rule-box" aria-label="Anti-MLM structural guarantee">
+      <div class="cdc-rule-icon">&#x1F6E1;&#xFE0F;</div>
+      <div class="cdc-rule-text">
+        <strong>One level of separation. Structurally enforced.</strong>
+        The Marks award goes to the direct referrer only. There is no upstream walk, no ancestor lookup, no recursive chain. This is architecturally enforced in the RPC - not a policy statement. Cooperative growth without pyramid mechanics.
+      </div>
+    </div>
+
+    {{- /* CTA */ -}}
+    <div class="cdc-cta-row">
+      <a href="https://lianabanyan.com/join" class="cdc-btn-join">
+        Get Your Cue Deck Card
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+      <a href="/how-it-works/" class="cdc-btn-learn">How the substrate works &#x2192;</a>
+    </div>
+  </div>
+</section>
+
+{{- end -}}
