@@ -1,312 +1,312 @@
 {
-    "name": "mnemosynec",
-    "version": "0.7.1",
-    "description": "MnemosyneC â€” Memory, powered by CAI Â· local inference + cooperative substrate OS overlay (SSPL Â· Pledge #2260)",
-    "homepage": "https://lianabanyan.com",
-    "private": true,
-    "main": "dist/main/index.js",
-    "scripts": {
-        "dev": "concurrently -k \"npm run dev:renderer\" \"wait-on http://127.0.0.1:5173 && npm run dev:main\"",
-        "dev:renderer": "vite --config vite.renderer.config.ts",
-        "dev:main": "tsc -p tsconfig.main.json && electron .",
-        "build": "node scripts/unicode-check.mjs && npm run build:caithedral-core && npm run build:renderer && npm run build:main",
-        "build:renderer": "vite build --config vite.renderer.config.ts",
-        "build:caithedral-core": "npm --prefix caithedral-core run build:main && powershell -NoProfile -Command \"Get-ChildItem -Path 'caithedral-core/dist' -Recurse -File | ForEach-Object { $src=$_.FullName; $dst=$src.Replace('caithedral-core\\dist','node_modules\\caithedral-core\\dist'); $null=New-Item -ItemType Directory -Path (Split-Path $dst) -Force -EA SilentlyContinue; try { Copy-Item -Path $src -Destination $dst -Force -EA Stop } catch { Write-Warning \"Skipped locked: $dst\" } }; exit 0\"",
-        "build:main": "tsc -p tsconfig.main.json",
-        "build:hugo": "node scripts/copy-hugo-bundle.mjs",
-        "catacombs:build": "node scripts/catacombs-indexer.mjs",
-        "dist": "node scripts/assert-floor-model.mjs && node scripts/assert-supabase-anon-key.mjs && npm run prepare:ollama-binary && npm run build && electron-builder",
-        "prepare:vcredist": "node scripts/download-vcredist.mjs",
-        "dist:win": "node scripts/assert-floor-model.mjs && node scripts/assert-supabase-anon-key.mjs && node scripts/assert-preload-source-no-declare-const.mjs && npm run prepare:ollama-binary && npm run prepare:vcredist && npm run build && node scripts/assert-ipc-handlers.mjs && node scripts/assert-preload-sandbox.mjs && electron-builder --win && node scripts/assert-bundled-ollama-in-installer.mjs",
-        "dist:mac": "node scripts/assert-supabase-anon-key.mjs && npm run build && electron-builder --mac",
-        "dist:linux": "node scripts/assert-supabase-anon-key.mjs && npm run build && electron-builder --linux",
-        "prepare:floor-model": "node scripts/prepare-floor-model.mjs",
-        "prepare:ollama-binary": "node scripts/download-ollama-binary.mjs",
-        "prepare:all": "npm run prepare:ollama-binary && npm run prepare:floor-model",
-        "publish:win": "node scripts/assert-floor-model.mjs && node scripts/assert-supabase-anon-key.mjs && node scripts/assert-preload-source-no-declare-const.mjs && npm run prepare:ollama-binary && npm run prepare:vcredist && npm run build && node scripts/assert-ipc-handlers.mjs && node scripts/assert-preload-sandbox.mjs && electron-builder --win --publish always && node scripts/assert-bundled-ollama-in-installer.mjs",
-        "publish:mac": "node scripts/assert-supabase-anon-key.mjs && npm run build && electron-builder --mac --publish always",
-        "publish:linux": "node scripts/assert-supabase-anon-key.mjs && npm run build && electron-builder --linux --publish always",
-        "sync:letters": "node scripts/sync-letters-full.mjs"
-    },
-    "keywords": [
-        "mnemosyne",
-        "cai-hearth",
-        "memory-overlay",
-        "liana-banyan",
-        "cooperative-ai"
+  "name": "mnemosynec",
+  "version": "0.7.2",
+  "description": "MnemosyneC â€” Memory, powered by CAI Â· local inference + cooperative substrate OS overlay (SSPL Â· Pledge #2260)",
+  "homepage": "https://lianabanyan.com",
+  "private": true,
+  "main": "dist/main/index.js",
+  "scripts": {
+    "dev": "concurrently -k \"npm run dev:renderer\" \"wait-on http://127.0.0.1:5173 && npm run dev:main\"",
+    "dev:renderer": "vite --config vite.renderer.config.ts",
+    "dev:main": "tsc -p tsconfig.main.json && electron .",
+    "build": "node scripts/unicode-check.mjs && npm run build:caithedral-core && npm run build:renderer && npm run build:main",
+    "build:renderer": "vite build --config vite.renderer.config.ts",
+    "build:caithedral-core": "npm --prefix caithedral-core run build:main && powershell -NoProfile -Command \"Get-ChildItem -Path 'caithedral-core/dist' -Recurse -File | ForEach-Object { $src=$_.FullName; $dst=$src.Replace('caithedral-core\\dist','node_modules\\caithedral-core\\dist'); $null=New-Item -ItemType Directory -Path (Split-Path $dst) -Force -EA SilentlyContinue; try { Copy-Item -Path $src -Destination $dst -Force -EA Stop } catch { Write-Warning \"Skipped locked: $dst\" } }; exit 0\"",
+    "build:main": "tsc -p tsconfig.main.json",
+    "build:hugo": "node scripts/copy-hugo-bundle.mjs",
+    "catacombs:build": "node scripts/catacombs-indexer.mjs",
+    "dist": "node scripts/assert-floor-model.mjs && node scripts/assert-supabase-anon-key.mjs && npm run prepare:ollama-binary && npm run build && electron-builder",
+    "prepare:vcredist": "node scripts/download-vcredist.mjs",
+    "dist:win": "node scripts/assert-floor-model.mjs && node scripts/assert-supabase-anon-key.mjs && node scripts/assert-preload-source-no-declare-const.mjs && npm run prepare:ollama-binary && npm run prepare:vcredist && npm run build && node scripts/assert-ipc-handlers.mjs && node scripts/assert-preload-sandbox.mjs && electron-builder --win && node scripts/assert-bundled-ollama-in-installer.mjs",
+    "dist:mac": "node scripts/assert-supabase-anon-key.mjs && npm run build && electron-builder --mac",
+    "dist:linux": "node scripts/assert-supabase-anon-key.mjs && npm run build && electron-builder --linux",
+    "prepare:floor-model": "node scripts/prepare-floor-model.mjs",
+    "prepare:ollama-binary": "node scripts/download-ollama-binary.mjs",
+    "prepare:all": "npm run prepare:ollama-binary && npm run prepare:floor-model",
+    "publish:win": "node scripts/assert-floor-model.mjs && node scripts/assert-supabase-anon-key.mjs && node scripts/assert-preload-source-no-declare-const.mjs && npm run prepare:ollama-binary && npm run prepare:vcredist && npm run build && node scripts/assert-ipc-handlers.mjs && node scripts/assert-preload-sandbox.mjs && electron-builder --win --publish always && node scripts/assert-bundled-ollama-in-installer.mjs",
+    "publish:mac": "node scripts/assert-supabase-anon-key.mjs && npm run build && electron-builder --mac --publish always",
+    "publish:linux": "node scripts/assert-supabase-anon-key.mjs && npm run build && electron-builder --linux --publish always",
+    "sync:letters": "node scripts/sync-letters-full.mjs"
+  },
+  "keywords": [
+    "mnemosyne",
+    "cai-hearth",
+    "memory-overlay",
+    "liana-banyan",
+    "cooperative-ai"
+  ],
+  "author": {
+    "name": "Liana Banyan Corporation",
+    "email": "support@lianabanyan.com",
+    "url": "https://lianabanyan.com"
+  },
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.105.0",
+    "@google/generative-ai": "^0.24.1",
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "@peculiar/asn1-schema": "^2.7.0",
+    "@peculiar/asn1-tsp": "^2.7.0",
+    "@peculiar/asn1-x509": "^2.7.0",
+    "@supabase/supabase-js": "^2.107.0",
+    "allotment": "^1.20.5",
+    "caithedral-core": "file:caithedral-core",
+    "electron-log": "^5.4.4",
+    "electron-updater": "^6.1.7",
+    "qrcode": "^1.5.4",
+    "qrcode.react": "^4.2.0",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
+    "ws": "^8.20.1",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.59.1",
+    "@types/node": "^20.14.0",
+    "@types/qrcode": "^1.5.6",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@types/ws": "^8.18.1",
+    "@vitejs/plugin-react": "^4.3.1",
+    "concurrently": "^8.2.2",
+    "electron": "^31.0.1",
+    "electron-builder": "^24.13.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "typescript": "^5.4.5",
+    "vite": "^5.3.1",
+    "vitest": "^4.1.9",
+    "wait-on": "^7.2.0"
+  },
+  "build": {
+    "appId": "com.lianabanyan.mnemosyne",
+    "productName": "MnemosyneC",
+    "icon": "assets/app-icon",
+    "copyright": "Copyright Â© 2026 Liana Banyan Corporation",
+    "protocols": [
+      {
+        "name": "MnemosyneC",
+        "schemes": [
+          "mnemo"
+        ]
+      },
+      {
+        "name": "MnemosyneC Federation",
+        "schemes": [
+          "mnemosyne"
+        ]
+      }
     ],
-    "author": {
-        "name": "Liana Banyan Corporation",
-        "email": "support@lianabanyan.com",
-        "url": "https://lianabanyan.com"
+    "asar": true,
+    "asarUnpack": [
+      "resources/ollama/**",
+      "resources/vcredist/**"
+    ],
+    "directories": {
+      "output": "release",
+      "buildResources": "assets"
     },
-    "license": "UNLICENSED",
-    "dependencies": {
-        "@anthropic-ai/sdk": "^0.105.0",
-        "@google/generative-ai": "^0.24.1",
-        "@modelcontextprotocol/sdk": "^1.29.0",
-        "@peculiar/asn1-schema": "^2.7.0",
-        "@peculiar/asn1-tsp": "^2.7.0",
-        "@peculiar/asn1-x509": "^2.7.0",
-        "@supabase/supabase-js": "^2.107.0",
-        "allotment": "^1.20.5",
-        "caithedral-core": "file:caithedral-core",
-        "electron-log": "^5.4.4",
-        "electron-updater": "^6.1.7",
-        "qrcode": "^1.5.4",
-        "qrcode.react": "^4.2.0",
-        "react-markdown": "^10.1.0",
-        "remark-gfm": "^4.0.1",
-        "ws": "^8.20.1",
-        "zod": "^4.4.3"
+    "files": [
+      "dist/**/*",
+      "!dist/**/*.map",
+      "assets/tray-icon.png",
+      "assets/app-icon.ico",
+      "assets/app-icon.png",
+      "assets/app-icon-*.png",
+      "src/renderer/public/**/*",
+      "static/**/*",
+      "!static/cephas/**",
+      "!static/**/*.map",
+      "node_modules/**/*",
+      "!node_modules/.cache/**",
+      "!node_modules/**/{test,__tests__,tests,powered-test,example,examples}/**",
+      "!node_modules/caithedral-core/release/**",
+      "!node_modules/caithedral-core/node_modules/**",
+      "!node_modules/caithedral-core/win-unpacked/**",
+      "resources/ollama/ollama.exe",
+      "resources/ollama/ollama",
+      "resources/vcredist/vc_redist.x64.exe"
+    ],
+    "extraFiles": [
+      {
+        "from": "assets/post_install_message.txt",
+        "to": "README_INSTALL.txt"
+      }
+    ],
+    "extraResources": [
+      {
+        "from": "resources/ollama",
+        "to": "ollama",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
+        "from": "resources/vcredist",
+        "to": "vcredist",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
+        "from": "src/main/data/r10v3_substrate.txt",
+        "to": "r10v3_substrate.txt"
+      },
+      {
+        "from": "lb-reproducibility-pack/datasets/mmlu_pro_per_domain",
+        "to": "mmlu_pro",
+        "filter": [
+          "*/questions.json",
+          "*/SEAL.sha256",
+          "*/META.json"
+        ]
+      },
+      {
+        "from": "resources/google_baselines.json",
+        "to": "google_baselines.json"
+      },
+      {
+        "from": "resources/seeds",
+        "to": "seeds",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
+        "from": "resources/chocolates",
+        "to": "chocolates",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
+        "from": "resources/supabase_public.env",
+        "to": "supabase_public.env"
+      }
+    ],
+    "publish": {
+      "provider": "generic",
+      "url": "https://mnemosynec.ai/download/",
+      "channel": "latest"
     },
-    "devDependencies": {
-        "@playwright/test": "^1.59.1",
-        "@types/node": "^20.14.0",
-        "@types/qrcode": "^1.5.6",
-        "@types/react": "^18.3.3",
-        "@types/react-dom": "^18.3.0",
-        "@types/ws": "^8.18.1",
-        "@vitejs/plugin-react": "^4.3.1",
-        "concurrently": "^8.2.2",
-        "electron": "^31.0.1",
-        "electron-builder": "^24.13.3",
-        "react": "^18.3.1",
-        "react-dom": "^18.3.1",
-        "typescript": "^5.4.5",
-        "vite": "^5.3.1",
-        "vitest": "^4.1.9",
-        "wait-on": "^7.2.0"
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "signingHashAlgorithms": [
+        "sha256"
+      ],
+      "signDlls": false,
+      "signAndEditExecutable": false,
+      "verifyUpdateCodeSignature": false
     },
-    "build": {
-        "appId": "com.lianabanyan.mnemosyne",
-        "productName": "MnemosyneC",
-        "icon": "assets/app-icon",
-        "copyright": "Copyright Â© 2026 Liana Banyan Corporation",
-        "protocols": [
-            {
-                "name": "MnemosyneC",
-                "schemes": [
-                    "mnemo"
-                ]
-            },
-            {
-                "name": "MnemosyneC Federation",
-                "schemes": [
-                    "mnemosyne"
-                ]
-            }
-        ],
-        "asar": true,
-        "asarUnpack": [
-            "resources/ollama/**",
-            "resources/vcredist/**"
-        ],
-        "directories": {
-            "output": "release",
-            "buildResources": "assets"
+    "nsis": {
+      "artifactName": "MnemosyneC-Setup-${version}.${ext}",
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "MnemosyneC",
+      "include": "assets/installer.nsh",
+      "license": "assets/LICENSE.rtf",
+      "deleteAppDataOnUninstall": false,
+      "runAfterFinish": true
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
         },
-        "files": [
-            "dist/**/*",
-            "!dist/**/*.map",
-            "assets/tray-icon.png",
-            "assets/app-icon.ico",
-            "assets/app-icon.png",
-            "assets/app-icon-*.png",
-            "src/renderer/public/**/*",
-            "static/**/*",
-            "!static/cephas/**",
-            "!static/**/*.map",
-            "node_modules/**/*",
-            "!node_modules/.cache/**",
-            "!node_modules/**/{test,__tests__,tests,powered-test,example,examples}/**",
-            "!node_modules/caithedral-core/release/**",
-            "!node_modules/caithedral-core/node_modules/**",
-            "!node_modules/caithedral-core/win-unpacked/**",
-            "resources/ollama/ollama.exe",
-            "resources/ollama/ollama",
-            "resources/vcredist/vc_redist.x64.exe"
-        ],
-        "extraFiles": [
-            {
-                "from": "assets/post_install_message.txt",
-                "to": "README_INSTALL.txt"
-            }
-        ],
-        "extraResources": [
-            {
-                "from": "resources/ollama",
-                "to": "ollama",
-                "filter": [
-                    "**/*"
-                ]
-            },
-            {
-                "from": "resources/vcredist",
-                "to": "vcredist",
-                "filter": [
-                    "**/*"
-                ]
-            },
-            {
-                "from": "src/main/data/r10v3_substrate.txt",
-                "to": "r10v3_substrate.txt"
-            },
-            {
-                "from": "lb-reproducibility-pack/datasets/mmlu_pro_per_domain",
-                "to": "mmlu_pro",
-                "filter": [
-                    "*/questions.json",
-                    "*/SEAL.sha256",
-                    "*/META.json"
-                ]
-            },
-            {
-                "from": "resources/google_baselines.json",
-                "to": "google_baselines.json"
-            },
-            {
-                "from": "resources/seeds",
-                "to": "seeds",
-                "filter": [
-                    "**/*"
-                ]
-            },
-            {
-                "from": "resources/chocolates",
-                "to": "chocolates",
-                "filter": [
-                    "**/*"
-                ]
-            },
-            {
-                "from": "resources/supabase_public.env",
-                "to": "supabase_public.env"
-            }
-        ],
-        "publish": {
-            "provider": "generic",
-            "url": "https://mnemosynec.ai/download/",
-            "channel": "latest"
+        {
+          "target": "zip",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ],
+      "category": "public.app-category.productivity",
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "assets/entitlements.mac.plist",
+      "entitlementsInherit": "assets/entitlements.mac.plist",
+      "notarize": false,
+      "identity": null
+    },
+    "dmg": {
+      "title": "MnemosyneC ${version}",
+      "window": {
+        "width": 540,
+        "height": 380
+      },
+      "contents": [
+        {
+          "x": 130,
+          "y": 220
         },
-        "win": {
-            "target": [
-                {
-                    "target": "nsis",
-                    "arch": [
-                        "x64"
-                    ]
-                }
-            ],
-            "signingHashAlgorithms": [
-                "sha256"
-            ],
-            "signDlls": false,
-            "signAndEditExecutable": false,
-            "verifyUpdateCodeSignature": false
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ],
+      "internetEnabled": false
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "deb",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
         },
-        "nsis": {
-            "artifactName": "MnemosyneC-Setup-${version}.${ext}",
-            "oneClick": false,
-            "perMachine": false,
-            "allowElevation": true,
-            "allowToChangeInstallationDirectory": true,
-            "createDesktopShortcut": true,
-            "createStartMenuShortcut": true,
-            "shortcutName": "MnemosyneC",
-            "include": "assets/installer.nsh",
-            "license": "assets/LICENSE.rtf",
-            "deleteAppDataOnUninstall": false,
-            "runAfterFinish": true
+        {
+          "target": "rpm",
+          "arch": [
+            "x64"
+          ]
         },
-        "mac": {
-            "target": [
-                {
-                    "target": "dmg",
-                    "arch": [
-                        "x64",
-                        "arm64"
-                    ]
-                },
-                {
-                    "target": "zip",
-                    "arch": [
-                        "x64",
-                        "arm64"
-                    ]
-                }
-            ],
-            "category": "public.app-category.productivity",
-            "hardenedRuntime": true,
-            "gatekeeperAssess": false,
-            "entitlements": "assets/entitlements.mac.plist",
-            "entitlementsInherit": "assets/entitlements.mac.plist",
-            "notarize": false,
-            "identity": null
-        },
-        "dmg": {
-            "title": "MnemosyneC ${version}",
-            "window": {
-                "width": 540,
-                "height": 380
-            },
-            "contents": [
-                {
-                    "x": 130,
-                    "y": 220
-                },
-                {
-                    "x": 410,
-                    "y": 220,
-                    "type": "link",
-                    "path": "/Applications"
-                }
-            ],
-            "internetEnabled": false
-        },
-        "linux": {
-            "target": [
-                {
-                    "target": "deb",
-                    "arch": [
-                        "x64",
-                        "arm64"
-                    ]
-                },
-                {
-                    "target": "rpm",
-                    "arch": [
-                        "x64"
-                    ]
-                },
-                {
-                    "target": "AppImage",
-                    "arch": [
-                        "x64"
-                    ]
-                }
-            ],
-            "category": "Office",
-            "maintainer": "Liana Banyan Corporation <support@lianabanyan.com>",
-            "synopsis": "MnemosyneC â€” Memory, powered by CAI Â· local inference + cooperative substrate OS overlay",
-            "description": "MnemosyneC runs CAI â€” local AI inference via Ollama, cooperative substrate index, HELM VIEW workspace, IP Attribution Ledger, and Battery Dispatch Universal Remote. AGPL Free Forever. No Ads. No Strings. Members pay $5/year."
-        },
-        "deb": {
-            "packageCategory": "utils",
-            "priority": "optional",
-            "depends": [
-                "libgtk-3-0",
-                "libnotify4",
-                "libnss3",
-                "libxss1",
-                "libxtst6",
-                "xdg-utils"
-            ]
-        },
-        "rpm": {
-            "packageCategory": "Applications/Internet"
-        },
-        "afterPack": "scripts/after-pack.mjs",
-        "afterSign": "scripts/notarize.cjs"
-    }
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "category": "Office",
+      "maintainer": "Liana Banyan Corporation <support@lianabanyan.com>",
+      "synopsis": "MnemosyneC â€” Memory, powered by CAI Â· local inference + cooperative substrate OS overlay",
+      "description": "MnemosyneC runs CAI â€” local AI inference via Ollama, cooperative substrate index, HELM VIEW workspace, IP Attribution Ledger, and Battery Dispatch Universal Remote. AGPL Free Forever. No Ads. No Strings. Members pay $5/year."
+    },
+    "deb": {
+      "packageCategory": "utils",
+      "priority": "optional",
+      "depends": [
+        "libgtk-3-0",
+        "libnotify4",
+        "libnss3",
+        "libxss1",
+        "libxtst6",
+        "xdg-utils"
+      ]
+    },
+    "rpm": {
+      "packageCategory": "Applications/Internet"
+    },
+    "afterPack": "scripts/after-pack.mjs",
+    "afterSign": "scripts/notarize.cjs"
+  }
 }

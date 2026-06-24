@@ -1,8 +1,23 @@
 {
   "versions": [
     {
-      "version": "0.7.1",
+      "version": "0.7.2",
       "tier": "latest",
+      "release_date": "2026-06-24",
+      "install_reports": 0,
+      "verified_eblets": 0,
+      "zero_issue_days": 0,
+      "open_issues": 0,
+      "trust_score": 1,
+      "filename": "MnemosyneC-Setup-0.7.2.exe",
+      "size_bytes": 540636318,
+      "size_display": "~515.6 MB",
+      "notes": "BP093 Phase 3: 12-blade Plow loop + 3-judge Minor Council receipt wired into Electron peer-side · iterations_run + council_votes_per_iteration now written to relay_route_replies.answer_json · unlocks 42Q THUNDERCLAP",
+      "sha256": "13a73af1c4823442ebb7aea68e213c59378c19d9deb281d826aa4342f8722fcf"
+    },
+    {
+      "version": "0.7.1",
+      "tier": "historical",
       "release_date": "2026-06-23",
       "install_reports": 0,
       "verified_eblets": 0,
