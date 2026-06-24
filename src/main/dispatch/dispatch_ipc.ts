@@ -20,6 +20,8 @@ import type {
   ContentClass,
 } from './types';
 import { appendDispatchHistory, loadDispatchHistory, appendReceiptEblet } from './dispatch_history';
+import { stampCertify } from '../ip_ledger/stamp_certify';
+import { getRingBearerIdentity } from '../ip_ledger/ring_bearer_keygen';
 import { dispatchToCephas } from './cephas_adapter';
 import { dispatchToPlatform } from './platform_adapter';
 import { dispatchToSubstack } from './substack_adapter';
@@ -283,6 +285,26 @@ export function registerDispatchIPC(): void {
         .map((r) => buildReceipt(meta, r)),
     };
     appendDispatchHistory(historyEntry);
+
+    // BP092 I12 Hook 2 — Stamp-Certify: battery_dispatch_submission (fire-and-forget)
+    void (async () => {
+      try {
+        const identity = getRingBearerIdentity();
+        await stampCertify({
+          contribution_type: 'battery_dispatch_submission',
+          payload: JSON.stringify({
+            event: 'battery_dispatch_submission',
+            dispatch_id: historyEntry.id,
+            member_id: identity.peer_id,
+            timestamp: Date.now(),
+            platforms: results.map((r) => r.platform),
+            title: meta.title,
+          }),
+        });
+      } catch (e) {
+        console.error('[ip_ledger hook] battery_dispatch_submission:', e);
+      }
+    })();
 
     return { ok: true, results };
   });

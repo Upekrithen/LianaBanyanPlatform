@@ -12,6 +12,40 @@ import { createHash } from 'node:crypto';
 import { powerMonitor } from 'electron';
 import { getRingBearerIdentity } from './ring_bearer_keygen';
 
+const RELAY_BASE = process.env.SUBSTRATE_AWAKENS_RELAY ?? 'https://relay.lianabanyan.com/functions/v1';
+const RELAY_PEER_LIST_TIMEOUT_MS = 8_000;
+
+/**
+ * Resolve a known WAN peer ID via relay.lianabanyan.com.
+ * LAN-as-WAN canon: ALL peer traffic routes via relay — no LAN shortcuts.
+ * canon_lan_as_wan_test_mode_4_machine_mesh_bp085 — HARD CONSTRAINT.
+ * Returns null if relay unreachable or no peers known.
+ */
+async function resolveFirstRelayPeer(localPeerId: string): Promise<string | null> {
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), RELAY_PEER_LIST_TIMEOUT_MS);
+    try {
+      const resp = await fetch(`${RELAY_BASE}/wan-relay-list-peers`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ peer_id: localPeerId }),
+        signal: controller.signal,
+      });
+      if (resp.ok) {
+        const data = (await resp.json()) as { peers?: Array<{ peer_id: string }> };
+        const first = data.peers?.find((p) => p.peer_id !== localPeerId);
+        return first?.peer_id ?? null;
+      }
+    } finally {
+      clearTimeout(timer);
+    }
+  } catch {
+    // Relay unreachable — peer_b_id remains null (will be retried on next sweep)
+  }
+  return null;
+}
+
 const DIFF_INTERVAL_MS = 15 * 60 * 1000; // 15 minutes
 let diffLoopTimer: ReturnType<typeof setInterval> | null = null;
 
@@ -88,11 +122,14 @@ async function runDiffSweep(): Promise<void> {
   const supabase = getSupabaseClient();
   const now = new Date().toISOString();
 
+  // Resolve first known relay peer (LAN-as-WAN: relay.lianabanyan.com, never LAN-shortcut)
+  const peer_b = await resolveFirstRelayPeer(identity.peer_id);
+
   await supabase.from('ip_ledger_merkle_diff').insert({
     diff_root_hash: `\\x${localRoot}`,
     peer_a_id:      identity.peer_id,
-    peer_b_id:      'PENDING_PEER_DISCOVERY',
-    diff_payload:   { entry_ids: localEntryIds, sweep_at: now },
+    peer_b_id:      peer_b,
+    diff_payload:   { entry_ids: localEntryIds, sweep_at: now, relay_endpoint: RELAY_BASE },
     replicated_at:  now,
   });
 
