@@ -1,0 +1,52 @@
+{{- /* ALPHA BANNER — BP092 — dismissible via localStorage · amber/yellow stripe */ -}}
+<div id="lb-alpha-banner" style="
+  display: block;
+  background: #f59e0b;
+  color: #1c1917;
+  text-align: center;
+  padding: 0.55rem 3rem 0.55rem 1rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  position: relative;
+  z-index: 9999;
+  border-bottom: 2px solid #d97706;
+">
+  {{ if .Site.Params.isMnemosynec }}
+    Public Alpha v{{ with (index .Site.Data.version_trust.versions 0) }}{{ .version }}{{ end }}
+    &nbsp;&middot;&nbsp;
+    <code style="font-family:monospace;font-weight:700;font-size:0.82rem;letter-spacing:0.02em;">Substrate Replaces New Data Centers</code>
+    &nbsp;-&nbsp;
+    <a href="/how-it-works/" style="color:#1c1917;text-decoration:underline;">How it works</a>
+  {{ else }}
+    Cooperative Substrate &middot; ALPHA &middot; Members Welcome
+    &nbsp;-&nbsp;
+    <a href="https://mnemosynec.org/" style="color:#1c1917;text-decoration:underline;">Learn More</a>
+  {{ end }}
+  <button
+    id="lb-alpha-banner-close"
+    aria-label="Dismiss alpha banner"
+    onclick="(function(){localStorage.setItem('lb_alpha_dismissed','1');document.getElementById('lb-alpha-banner').style.display='none';})()"
+    style="
+      position: absolute;
+      right: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 1.1rem;
+      color: #1c1917;
+      line-height: 1;
+      padding: 0.2rem 0.4rem;
+    "
+  >&times;</button>
+</div>
+<script>
+  (function(){
+    if(localStorage.getItem('lb_alpha_dismissed')==='1'){
+      var b=document.getElementById('lb-alpha-banner');
+      if(b) b.style.display='none';
+    }
+  })();
+</script>
