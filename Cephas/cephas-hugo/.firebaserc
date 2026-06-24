@@ -5,11 +5,20 @@
   "targets": {
     "lianabanyan-403dc": {
       "hosting": {
-        "cephas": ["cephas-lianabanyan"],
-        "museum": ["lianabanyan-museum"],
-        "mnemosyne": ["mnemosyne-lianabanyan"],
-        "mnemosynec-ai": ["mnemosynec-ai-lianabanyan"]
+        "cephas": [
+          "cephas-lianabanyan"
+        ],
+        "museum": [
+          "lianabanyan-museum"
+        ],
+        "mnemosyne": [
+          "mnemosyne-lianabanyan"
+        ],
+        "mnemosynec-ai": [
+          "mnemosynec-ai-lianabanyan"
+        ]
       }
     }
-  }
+  },
+  "etags": {}
 }
