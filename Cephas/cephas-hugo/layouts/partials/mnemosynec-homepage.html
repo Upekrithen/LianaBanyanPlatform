@@ -90,6 +90,14 @@ code{font-family:var(--font-mono);font-size:.88em;background:var(--surfaceDyn);p
 .hero h1{font-size:var(--text-2xl);font-weight:800;letter-spacing:-.03em;margin-bottom:var(--space-5);line-height:1.1}
 .hero h1 em{font-style:normal;color:var(--primary)}
 .hero-sub{font-size:var(--text-lg);color:var(--textMuted);max-width:52ch;margin-bottom:var(--space-8)}
+/* BP093 SEG-AT: aggressive hero compress */
+.hero{padding-block:clamp(0.5rem,1.5vw,1rem)!important}
+.hero h1{font-size:clamp(1.5rem,3vw,2rem)!important;line-height:1.1!important;margin:0 0 0.3rem!important}
+.hero-sub{font-size:clamp(0.9rem,1.2vw,1rem)!important;line-height:1.3!important;margin:0.3rem 0!important}
+.eyebrow{padding:0.1rem 0.5rem!important;font-size:0.68rem!important;margin-bottom:0.4rem!important}
+.hero figure{flex-shrink:0!important;align-self:flex-start!important}
+.hero figure img{max-width:80px!important;max-height:80px!important;width:80px!important;height:80px!important}
+.hero figure figcaption{font-size:0.65rem!important;margin:0.15rem 0!important}
 .acts{display:flex;align-items:center;flex-wrap:wrap;gap:var(--space-3)}
 .btn-p{background:var(--primary);color:var(--textInv);padding:var(--space-3) var(--space-6);border-radius:var(--radius-full);font-size:var(--text-sm);font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:var(--space-2)}
 .btn-p:hover{background:var(--primaryHov);transform:translateY(-1px);box-shadow:var(--shadowMd)}
