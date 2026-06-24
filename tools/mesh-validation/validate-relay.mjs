@@ -642,14 +642,7 @@ async function main() {
     console.log(`\nDifficulty routing: ${JSON.stringify(difficultyTierMap)}`);
   }
 
-  // BP091: Identify M0 (ULTRA tier orchestrator peer) for escalation exclusion (M14 Block 1 prep)
-  const orchestratorLanPrefix = '192.168.86.';
-  const m0Peer = peers.find(p => p.lan_addresses && p.lan_addresses.includes(orchestratorLanPrefix) && peerTierMap[p.peer_id] === 'ultra')
-    ?? peers.find(p => peerTierMap[p.peer_id] === 'ultra');
-  const m0PeerId = m0Peer?.peer_id ?? null;
-  if (m0PeerId) console.log(`\nM0 orchestrator peer identified: ${m0PeerId.slice(0,8)} (ramTier=ULTRA · model=${m0Peer?.capabilities?.ollamaModel ?? 'unknown'})`);
-
-  // Identify Son: peer whose lan_addresses does NOT contain 192.168.86.
+  // Identify Son: peer whose lan_addresses does NOT contain 192.168.
   // When lan_addresses is empty for all (v0.5.6 gap), note it and proceed anyway.
   const lanPeers = peers.filter(p => p.lan_addresses && p.lan_addresses.includes('192.168.86.'));
   const nonLanPeers = peers.filter(p => !p.lan_addresses || !p.lan_addresses.includes('192.168.86.'));
@@ -1413,13 +1406,21 @@ async function main() {
       escalation_route_ids: escalationRouteIds,
       final_answer_source: finalAnswerSource,
       per_peer: Object.fromEntries(
-        peerPool.map((p, j) => [p.peer_id, {
-          route_id: routeIds[j],
-          escalation_route_id: escalationRouteIds[j] ?? null,
-          answer: peerAnswers[p.peer_id],
-          replied: !!collectedReplies[routeIds[j]] || !!collectedReplies[escalationRouteIds[j]],
-          correct: peerAnswers[p.peer_id] !== null && peerAnswers[p.peer_id] === correctLetter,
-        }])
+        peerPool.map((p, j) => {
+          const replyRow = collectedReplies[routeIds[j]] || collectedReplies[escalationRouteIds[j]] || null;
+          const replyAj = (replyRow && typeof replyRow.answer_json === 'object' && replyRow.answer_json !== null)
+            ? replyRow.answer_json : {};
+          return [p.peer_id, {
+            route_id: routeIds[j],
+            escalation_route_id: escalationRouteIds[j] ?? null,
+            answer: peerAnswers[p.peer_id],
+            replied: !!collectedReplies[routeIds[j]] || !!collectedReplies[escalationRouteIds[j]],
+            correct: peerAnswers[p.peer_id] !== null && peerAnswers[p.peer_id] === correctLetter,
+            // BP093 Phase 3: Minor Council receipt fields
+            iterations_run: replyAj.iterations_run ?? null,
+            council_votes_per_iteration: replyAj.council_votes_per_iteration ?? null,
+          }];
+        })
       ),
       ensemble: { answer: ensembleAnswer, contested, correct: ensembleIsCorrect },
       contested_resolution_tier: contestedResolutionTier,

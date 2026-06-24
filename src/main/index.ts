@@ -5665,6 +5665,8 @@ function startRelayRoutePoll(peerId: string): NodeJS.Timeout {
           let plowIterations = 0;
           let councilVariance = 0;
           let approachingTimeoutSignalSent = false;
+          // BP093 Phase 3: Minor Council receipt per iteration
+          const councilVotesPerIteration: Array<{ iter: number; valid: number; invalid: number; refine: number }> = [];
 
           if (plowMaxIter > 0) {
             // BP090 Plow Loop 12 + Minor Council Star Chamber
@@ -5756,6 +5758,16 @@ function startRelayRoutePoll(peerId: string): NodeJS.Timeout {
               // Use the full response text of a judge that voted for the plurality letter
               answer = letterVotes.find((v) => v.letter === topLetter)?.text ?? letterVotes[0]!.text;
 
+              // BP093 Phase 3: record per-iteration Minor Council vote receipt
+              // Maps letter-vote plurality to VALID/INVALID/NEEDS_REFINEMENT semantics:
+              //   valid  = judges that voted for the plurality (consensus) letter
+              //   refine = judges that voted for a different letter (disagreement)
+              //   invalid = council models that gave no parseable letter response
+              const validVotes = topCount;
+              const refineVotes = letterVotes.length - topCount;
+              const invalidVotes = COUNCIL_MODELS.length - letterVotes.length;
+              councilVotesPerIteration.push({ iter, valid: validVotes, invalid: invalidVotes, refine: refineVotes });
+
               // Early stop when confidence (1 - variance) >= threshold
               if (councilVariance <= (1.0 - CONF_THRESHOLD)) break;
             }
@@ -5808,7 +5820,9 @@ function startRelayRoutePoll(peerId: string): NodeJS.Timeout {
               } : {
                 answer,
                 plow_loop_iterations: plowIterations,
+                iterations_run: plowIterations,
                 council_variance: councilVariance,
+                council_votes_per_iteration: councilVotesPerIteration,
                 approaching_timeout_signal_sent: approachingTimeoutSignalSent,
                 is_star_chamber: isStarChamber,
               },
