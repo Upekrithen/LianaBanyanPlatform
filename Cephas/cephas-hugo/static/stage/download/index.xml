@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Tower of Peace — MnemosyneC Version Archive on Dr. Mnemosynec REMEMBERS for your AI</title><link>https://mnemosynec.org/download/</link><description>Recent content in Tower of Peace — MnemosyneC Version Archive on Dr. Mnemosynec REMEMBERS for your AI</description><generator>Hugo -- 0.152.2</generator><language>en-us</language><lastBuildDate>Mon, 01 Jan 0001 00:00:00 +0000</lastBuildDate><atom:link href="https://mnemosynec.org/download/index.xml" rel="self" type="application/rss+xml"/><item><title/><link>https://mnemosynec.org/download/_index_AUGUR_AUGUR_PRICING_VIOLATION_SUPERSEDE/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://mnemosynec.org/download/_index_AUGUR_AUGUR_PRICING_VIOLATION_SUPERSEDE/</guid><description>&lt;h1 id="augur-post-audit-violation-supersede"&gt;Augur Post-Audit Violation Supersede&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;Augur:&lt;/strong&gt; Augur-Pricing&lt;br&gt;
+&lt;strong&gt;Violating file:&lt;/strong&gt; &lt;code&gt;C:\Users\Administrator\Documents\LianaBanyanPlatform\Cephas\cephas-hugo\content-mnemosynec\download\_index.md&lt;/code&gt;&lt;br&gt;
+&lt;strong&gt;Detected:&lt;/strong&gt; 2026-06-21T01:50:19Z&lt;/p&gt;
+&lt;h2 id="violation-signal"&gt;Violation Signal&lt;/h2&gt;
+&lt;p&gt;WARN [Augur-Pricing] (PostToolUse audit — not blocking): Membership pricing ≠ $5/year detected.
+LB membership is $5/year, identical for every member from day one through year fifty.
+No tiers, no early-adopter pricing, no entry fees. Lifetime guarantee at signup price.
+Note: API spend, compute cost, Pawn run budgets, &amp;lsquo;Member count&amp;rsquo;, and &amp;rsquo;threshold&amp;rsquo; (canonical Amplifier naming) do NOT trigger this Augur (K514.5/K527 tuned).
+Context exemptions: &amp;lsquo;$5/year membership unchanged&amp;rsquo;, &amp;lsquo;membership-orthogonal&amp;rsquo;, &amp;lsquo;pricing identical for all&amp;rsquo;, &amp;lsquo;(industry term)&amp;rsquo; suppress false positives when present in the diff.
+Path exemptions: Amplifier AA Formals (#2318-2320), project_amplifier_program_*, voucher_tiers/, BRIDLE_RULES/, sentinel_severity_tiers/.
+See: project_membership_pricing_identical_for_all.md&lt;/p&gt;</description></item></channel></rss>
