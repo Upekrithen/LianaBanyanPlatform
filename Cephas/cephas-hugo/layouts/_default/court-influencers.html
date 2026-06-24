@@ -1,0 +1,86 @@
+{{- define "main" -}}
+<style>
+:root { --ci-gold: #d69e2e; }
+.ci-page {
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color: #faf5eb;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 1.2rem 4rem;
+  line-height: 1.7;
+}
+.ci-page a { color: var(--ci-gold); }
+.empress-mythic-header {
+  text-align: center;
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  font-weight: 800;
+  color: var(--ci-gold);
+  margin: 2rem 0 1rem;
+}
+.ci-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.92rem; }
+.ci-table th { background: rgba(214,158,46,0.08); color: rgba(250,245,235,0.6); font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; padding: 0.6rem 1rem; text-align: left; border-bottom: 1px solid rgba(214,158,46,0.2); }
+.ci-table td { padding: 0.65rem 1rem; border-bottom: 1px solid rgba(214,158,46,0.08); }
+.ci-table tr:hover td { background: rgba(214,158,46,0.04); }
+.ci-empty { text-align: center; color: rgba(250,245,235,0.35); font-style: italic; padding: 2rem; }
+.empress-founding-footer { text-align: center; font-size: 1rem; font-weight: 700; color: rgba(250,245,235,0.55); margin: 2.5rem 0 0.5rem; }
+</style>
+
+<div class="ci-page">
+  <h1 class="empress-mythic-header">Name the Empress. Stop the Nothing. Be a Bastion, in a Time of Storms.</h1>
+  <h2 style="margin:0 0 0.5rem; font-size:1.2rem; color: var(--ci-gold);">Empress Campaign — Influence Leaderboard</h2>
+  <p style="color:rgba(250,245,235,0.65); font-size:0.9rem;">Track influencer referrals for the Empress Naming Campaign. Share your unique link from <a href="/court/">The Court</a> to climb the board.</p>
+
+  <div id="ci-table-wrap">
+    <table class="ci-table" id="ci-table">
+      <thead>
+        <tr>
+          <th>Influencer</th>
+          <th>Proposals</th>
+          <th>Referral Clicks</th>
+          <th>Members Converted</th>
+        </tr>
+      </thead>
+      <tbody id="ci-tbody">
+        <tr><td colspan="4" class="ci-empty">Loading…</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p style="text-align:center; margin:1.5rem 0;"><a href="/court/">← Back to The Court</a></p>
+  <p class="empress-founding-footer">Your Name Etched in the Founding Foundation. First 10,000.</p>
+</div>
+
+<script>
+(function(){
+  var SUPABASE_URL = '{{ .Site.Params.supabaseUrl }}';
+  var SUPABASE_ANON = '{{ .Site.Params.supabaseAnonKey }}';
+
+  function escapeHtml(s) {
+    if (!s) return '—';
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  fetch(SUPABASE_URL + '/rest/v1/referral_codes?campaign_id=eq.empress_bp092&order=conversion_count.desc&limit=50&select=member_id,click_count,conversion_count', {
+    headers: { 'apikey': SUPABASE_ANON, 'Accept': 'application/json' }
+  }).then(function(r){ return r.ok ? r.json() : []; }).then(function(rows) {
+    var tbody = document.getElementById('ci-tbody');
+    if (!tbody) return;
+    if (!rows || !rows.length) {
+      tbody.innerHTML = '<tr><td colspan="4" class="ci-empty">No influencer data yet — <a href="/court/">share from The Court →</a></td></tr>';
+      return;
+    }
+    var html = '';
+    rows.forEach(function(r) {
+      html += '<tr><td>' + escapeHtml(r.member_id ? r.member_id.slice(0,8)+'…' : '—') + '</td>' +
+        '<td>—</td>' +
+        '<td>' + (r.click_count || 0) + '</td>' +
+        '<td>' + (r.conversion_count || 0) + '</td></tr>';
+    });
+    tbody.innerHTML = html;
+  }).catch(function(){
+    var tbody = document.getElementById('ci-tbody');
+    if (tbody) tbody.innerHTML = '<tr><td colspan="4" class="ci-empty">Error loading data — please refresh.</td></tr>';
+  });
+})();
+</script>
+{{- end -}}

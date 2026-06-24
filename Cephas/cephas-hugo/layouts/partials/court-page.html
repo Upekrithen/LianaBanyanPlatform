@@ -1,0 +1,568 @@
+{{/* ═══════════════════════════════════════════════════════
+     THE COURT — LEADERBOARD PAGE PARTIAL · BP092
+     18-row layout · 30-second auto-rotate · vanilla JS
+     Buckets: newest (rows 1-3, 7-9, 13-15) + day-top (4-6) + week-top (10-12) + overall-top (16-18)
+     All 4 tagline zones required.
+     Caithedral (not Cathedral). VERBATIM taglines — never paraphrase.
+     ═══════════════════════════════════════════════════════ */}}
+<style>
+:root { --ct-gold: #d69e2e; --ct-bg: #0a1628; --ct-text: #faf5eb; --ct-border: rgba(214,158,46,0.3); }
+
+.ct-page {
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color: var(--ct-text);
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 1.2rem 4rem;
+  line-height: 1.7;
+  background: transparent;
+}
+.ct-page a { color: var(--ct-gold); text-decoration: none; border-bottom: 1px solid rgba(214,158,46,0.35); }
+.ct-page a:hover { border-bottom-color: var(--ct-gold); }
+
+/* Zone 1 — above-fold mythic (tagline-header above leaderboard) */
+.court-tagline-header {
+  text-align: center;
+  font-size: clamp(1.4rem, 3.5vw, 2.2rem);
+  font-weight: 800;
+  line-height: 1.25;
+  color: var(--ct-gold);
+  margin: 2rem 0 0.75rem;
+  letter-spacing: -0.01em;
+}
+
+.ct-hero-crown { font-size: 2.5rem; text-align: center; margin: 0.5rem 0; }
+.ct-hero-sub {
+  text-align: center;
+  font-size: 1.05rem;
+  color: rgba(250,245,235,0.72);
+  max-width: 620px;
+  margin: 0 auto 1.5rem;
+  line-height: 1.7;
+}
+
+.ct-ghost-notice {
+  font-size: 0.88rem;
+  color: rgba(250,245,235,0.55);
+  background: rgba(100,116,139,0.12);
+  border: 1px solid rgba(100,116,139,0.25);
+  border-radius: 6px;
+  padding: 0.6rem 1rem;
+  margin: 0.75rem 0 1.5rem;
+  text-align: center;
+}
+
+/* Zone 2 — mid-fold operational oar CTA (above submit form) */
+.court-oar-cta {
+  text-align: center;
+  font-size: clamp(1rem, 2.3vw, 1.2rem);
+  font-weight: 700;
+  color: var(--ct-text);
+  background: rgba(214,158,46,0.06);
+  border: 1px solid var(--ct-border);
+  border-radius: 8px;
+  padding: 0.9rem 1.5rem;
+  margin: 2.5rem 0 1.2rem;
+}
+
+/* Leaderboard */
+.ct-leaderboard {
+  margin: 1.5rem 0;
+  border: 1px solid var(--ct-border);
+  border-radius: 12px;
+  overflow: hidden;
+  background: rgba(5,14,30,0.6);
+}
+
+.ct-lb-header {
+  display: grid;
+  grid-template-columns: 3fr 2fr 1fr 1fr 1.2fr;
+  gap: 0;
+  background: rgba(214,158,46,0.07);
+  padding: 0.65rem 1rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: rgba(250,245,235,0.55);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-bottom: 1px solid var(--ct-border);
+}
+
+.ct-row {
+  display: grid;
+  grid-template-columns: 3fr 2fr 1fr 1fr 1.2fr;
+  gap: 0;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(214,158,46,0.1);
+  align-items: center;
+  transition: background 0.15s;
+  min-height: 56px;
+}
+.ct-row:last-child { border-bottom: none; }
+.ct-row:hover { background: rgba(214,158,46,0.04); }
+
+/* Highlighted rows: day-top (4-6), week-top (10-12), overall-top (16-18) */
+.court-top-row {
+  background: rgba(214,158,46,0.07);
+  border-left: 3px solid var(--ct-gold);
+}
+.court-top-row:hover { background: rgba(214,158,46,0.12); }
+
+.court-new-row { /* standard newest rows — default styling */ }
+
+.ct-row-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ct-row-submitter {
+  font-size: 0.82rem;
+  color: rgba(250,245,235,0.55);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ct-row-img {
+  width: 38px;
+  height: 38px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 1px solid var(--ct-border);
+  background: rgba(214,158,46,0.08);
+}
+.ct-row-img-placeholder {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(214,158,46,0.08);
+  border: 1px solid var(--ct-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+.ct-row-votes {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+.ct-row-ghost {
+  font-size: 0.82rem;
+  color: rgba(250,245,235,0.4);
+  font-style: italic;
+}
+
+.ct-vote-btn {
+  background: transparent;
+  border: 1px solid var(--ct-border);
+  color: var(--ct-gold);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.3rem 0.75rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  font-family: inherit;
+  white-space: nowrap;
+}
+.ct-vote-btn:hover { background: rgba(214,158,46,0.1); border-color: var(--ct-gold); }
+.ct-vote-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.ct-empty-row {
+  padding: 1rem;
+  text-align: center;
+  color: rgba(250,245,235,0.3);
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+.ct-refresh-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  color: rgba(250,245,235,0.4);
+  margin: 0.75rem 0 0;
+  justify-content: flex-end;
+}
+.ct-refresh-timer {
+  font-weight: 700;
+  color: rgba(214,158,46,0.6);
+  min-width: 1.4em;
+  text-align: right;
+}
+
+/* Court oar footer (static below leaderboard) */
+.court-oar-footer {
+  text-align: center;
+  font-size: 0.95rem;
+  font-style: italic;
+  color: rgba(250,245,235,0.4);
+  margin: 1.5rem 0 0.5rem;
+}
+
+/* Zone 3 — below-mid network-effect */
+.empress-one-of-us-stack {
+  text-align: center;
+  margin: 2.5rem 0;
+  padding: 2rem 1.5rem;
+  border: 1px solid var(--ct-border);
+  border-radius: 12px;
+  background: rgba(214,158,46,0.04);
+}
+.empress-one-of-us-stack .ous-headline {
+  font-size: clamp(1.4rem, 3.5vw, 2rem);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  color: var(--ct-gold);
+  margin: 0 0 0.75rem;
+}
+.empress-one-of-us-stack .ous-sub {
+  font-size: 1rem;
+  color: rgba(250,245,235,0.78);
+  max-width: 520px;
+  margin: 0 auto 1.2rem;
+  line-height: 1.7;
+}
+.empress-one-of-us-stack .ous-cta {
+  display: inline-block;
+  background: var(--ct-gold);
+  color: #1c1917;
+  font-weight: 700;
+  padding: 0.65rem 1.8rem;
+  border-radius: 7px;
+  text-decoration: none;
+  border-bottom: none !important;
+  font-size: 0.98rem;
+  transition: opacity 0.15s;
+}
+.empress-one-of-us-stack .ous-cta:hover { opacity: 0.85; }
+
+/* Zone 4 — footer scarcity */
+.empress-founding-footer {
+  text-align: center;
+  font-size: clamp(0.95rem, 2.2vw, 1.15rem);
+  font-weight: 700;
+  color: rgba(250,245,235,0.65);
+  margin: 2.5rem 0 0.5rem;
+  letter-spacing: 0.02em;
+}
+
+.ct-submit-panel {
+  background: linear-gradient(135deg, rgba(10,22,40,0.97) 0%, rgba(5,14,30,0.99) 100%);
+  border: 1px solid var(--ct-border);
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
+  margin: 1.5rem 0;
+  position: relative;
+}
+.ct-submit-panel::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(214,158,46,0.5), transparent);
+  border-radius: 12px 12px 0 0;
+}
+
+.ct-propose-btn {
+  display: inline-block;
+  background: var(--ct-gold);
+  color: #1c1917;
+  font-weight: 800;
+  font-size: 1rem;
+  padding: 0.7rem 2rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  border-bottom: none !important;
+  transition: opacity 0.15s;
+}
+.ct-propose-btn:hover { opacity: 0.88; }
+
+.ct-influencer-link {
+  text-align: right;
+  font-size: 0.82rem;
+  color: rgba(250,245,235,0.4);
+  margin-top: 0.5rem;
+}
+.ct-influencer-link a { color: rgba(250,245,235,0.5); font-size: 0.82rem; }
+
+/* Bucket section dividers */
+.ct-bucket-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(214,158,46,0.5);
+  padding: 0.4rem 1rem 0.2rem;
+  background: rgba(214,158,46,0.03);
+  border-bottom: 1px solid rgba(214,158,46,0.08);
+}
+
+/* Scroll links */
+.scroll-link {
+  font-size: 1.05em;
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+  color: inherit;
+  border-bottom: none !important;
+}
+
+@media (max-width: 620px) {
+  .ct-lb-header, .ct-row { grid-template-columns: 2fr 1.5fr 0.8fr 0.8fr 1fr; font-size: 0.82rem; }
+  .ct-row-img, .ct-row-img-placeholder { width: 28px; height: 28px; font-size: 0.9rem; }
+  .ct-submit-panel { padding: 1rem; }
+}
+</style>
+
+<div class="ct-page">
+
+  <!-- Zone 1: Above-fold mythic tagline-header -->
+  <div class="ct-hero-crown" aria-hidden="true">👑</div>
+  <h1 class="court-tagline-header">Name the Empress. Stop the Nothing. Be a Bastion, in a Time of Storms.</h1>
+  <p class="ct-hero-sub">The Empress MnemosyneC needs a New Name. Be a Bastion. Name the Empress. STOP the Nothing. This is the Caithedral™ naming campaign.</p>
+
+  <div class="ct-ghost-notice">
+    👻 <strong>Ghost World:</strong> Anyone can vote — no sign-in required. Members' proposals win prizes. <a href="/join/">Join for $5/yr →</a>
+  </div>
+
+  <!-- Zone 2: Oar CTA (above submit section) -->
+  <div class="court-oar-cta">Grab an Oar. We're rowing as we Build the Sails.</div>
+
+  <!-- Submit panel -->
+  <div class="ct-submit-panel">
+    <h2 style="margin-top:0; font-size:1.1rem; color:var(--ct-gold);">Submit Your Proposal</h2>
+    <p style="font-size:0.92rem; color:rgba(250,245,235,0.7); margin:0 0 1rem;">Members only. <a href="/empress/">Full submission form →</a></p>
+    <a href="/empress/" class="ct-propose-btn">Name the Empress →</a>
+    <div class="ct-influencer-link"><a href="/court-influencers/">Influencer Board →</a></div>
+  </div>
+
+  <!-- Leaderboard -->
+  <div id="ct-lb-wrap">
+    <div class="ct-leaderboard" id="ct-leaderboard">
+      <div class="ct-lb-header">
+        <span>Proposed Name</span>
+        <span>Submitted by</span>
+        <span>Votes</span>
+        <span>👻</span>
+        <span>Cast Vote</span>
+      </div>
+      <div id="ct-lb-body">
+        <div class="ct-empty-row">Loading proposals…</div>
+      </div>
+    </div>
+    <!-- Court oar footer — static, below leaderboard -->
+    <p class="court-oar-footer">Grab an Oar. We're rowing as we Build the Sails.</p>
+    <div class="ct-refresh-badge">
+      Auto-refreshes in <span class="ct-refresh-timer" id="ct-countdown">30</span>s
+    </div>
+  </div>
+
+  <!-- Zone 3: Below-mid network-effect -->
+  <div class="empress-one-of-us-stack">
+    <div class="ous-headline">ONE OF US. ALL OF US.</div>
+    <p class="ous-sub">Every peer who joins makes the cooperative smarter — not just for themselves, but for every other member's questions.</p>
+    <a href="/join/" class="ous-cta">Join for $5/year →</a>
+  </div>
+
+  <!-- Zone 4: Footer scarcity -->
+  <p class="empress-founding-footer">Your Name Etched in the Founding Foundation. First 10,000.</p>
+
+</div><!-- /ct-page -->
+
+<script>
+(function(){
+  var SUPABASE_URL = '{{ .Site.Params.supabaseUrl }}';
+  var SUPABASE_ANON = '{{ .Site.Params.supabaseAnonKey }}';
+  var FUNCTIONS_URL = '{{ .Site.Params.supabaseFunctionsUrl }}';
+  var ROTATE_MS = 30000;
+  var countdownInterval = null;
+  var refreshInterval = null;
+  var countdown = 30;
+
+  /* Read URL params for proposal highlight + referral */
+  var urlParams = new URLSearchParams(window.location.search);
+  var highlightProposalId = urlParams.get('proposal') || '';
+  var refMemberId = urlParams.get('ref') || '';
+
+  if (refMemberId) {
+    try { sessionStorage.setItem('em_ref', refMemberId); } catch(e){}
+    fetch(SUPABASE_URL + '/rest/v1/referral_codes?member_id=eq.' + refMemberId + '&campaign_id=eq.empress_bp092', {
+      method: 'PATCH',
+      headers: { 'apikey': SUPABASE_ANON, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ click_count: 0 })
+    }).catch(function(){});
+  }
+
+  function getJwt() {
+    try {
+      var raw = localStorage.getItem('supabase.auth.token') ||
+                localStorage.getItem('sb-ruuxzilgmuwddcofqecc-auth-token');
+      if (!raw) return null;
+      var parsed = JSON.parse(raw);
+      return (parsed && parsed.access_token) ? parsed.access_token : null;
+    } catch(e) { return null; }
+  }
+
+  function ghostSessionId() {
+    try {
+      var k = 'em_ghost_session';
+      var v = sessionStorage.getItem(k);
+      if (!v) { v = 'ghost_' + Math.random().toString(36).slice(2) + '_' + Date.now(); sessionStorage.setItem(k, v); }
+      return v;
+    } catch(e) { return 'ghost_fallback_' + Date.now(); }
+  }
+
+  /* ── Fetch buckets ── */
+  function fetchBucket(params) {
+    var qs = Object.entries(params).map(function(kv){ return kv[0]+'='+encodeURIComponent(kv[1]); }).join('&');
+    return fetch(SUPABASE_URL + '/rest/v1/empress_proposals?' + qs + '&select=id,proposed_name,appearance_image_url,real_votes,ghost_votes,country_local,member_id', {
+      headers: { 'apikey': SUPABASE_ANON, 'Accept': 'application/json' }
+    }).then(function(r){ return r.ok ? r.json() : []; }).catch(function(){ return []; });
+  }
+
+  function isoNow(minusDays) {
+    var d = new Date();
+    d.setDate(d.getDate() - minusDays);
+    return d.toISOString();
+  }
+
+  function todayStart() {
+    var d = new Date();
+    d.setUTCHours(0,0,0,0);
+    return d.toISOString();
+  }
+
+  function fetchAllBuckets() {
+    return Promise.all([
+      fetchBucket({ 'order': 'created_at.desc', 'status': 'eq.approved', 'limit': '9' }),
+      fetchBucket({ 'order': 'real_votes.desc', 'status': 'eq.approved', 'created_at': 'gte.' + todayStart(), 'limit': '3' }),
+      fetchBucket({ 'order': 'real_votes.desc', 'status': 'eq.approved', 'created_at': 'gte.' + isoNow(7), 'limit': '3' }),
+      fetchBucket({ 'order': 'real_votes.desc', 'status': 'eq.approved', 'limit': '3' })
+    ]);
+  }
+
+  /* ── Render ── */
+  function makeRow(proposal, cssClass, bucketLabel) {
+    var isHighlight = highlightProposalId && proposal.id === highlightProposalId;
+    var rowClass = cssClass + (isHighlight ? ' ct-row-highlight' : '');
+    var imgHtml = proposal.appearance_image_url
+      ? '<img class="ct-row-img" src="' + proposal.appearance_image_url + '" alt="' + escapeHtml(proposal.proposed_name) + '" loading="lazy" onerror="this.style.display=\'none\'">'
+      : '<div class="ct-row-img-placeholder">👑</div>';
+    return '<div class="ct-row ' + rowClass + '" data-id="' + proposal.id + '">' +
+      '<div><div class="ct-row-name">' + escapeHtml(proposal.proposed_name) + '</div></div>' +
+      '<div>' + imgHtml + '</div>' +
+      '<div class="ct-row-votes">' + (proposal.real_votes || 0) + '</div>' +
+      '<div class="ct-row-ghost">👻 ' + (proposal.ghost_votes || 0) + '</div>' +
+      '<div><button class="ct-vote-btn" onclick="emCastVote(\'' + proposal.id + '\')" aria-label="Vote for ' + escapeHtml(proposal.proposed_name) + '">Cast Vote</button></div>' +
+      '</div>';
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function bucketDivider(label) {
+    return '<div class="ct-bucket-label">' + label + '</div>';
+  }
+
+  function renderLeaderboard(newest, dayTop, weekTop, overallTop) {
+    var body = document.getElementById('ct-lb-body');
+    if (!body) return;
+    var html = '';
+    var n = newest.slice();
+
+    if (dayTop.length || weekTop.length || overallTop.length || n.length) {
+      /* Rows 1-3: newest */
+      html += bucketDivider('Newest');
+      [0,1,2].forEach(function(i){ if(n[i]) html += makeRow(n[i], 'court-new-row'); });
+      /* Rows 4-6: day-top */
+      if (dayTop.length) {
+        html += bucketDivider('Today\'s Top');
+        dayTop.forEach(function(p){ html += makeRow(p, 'court-top-row'); });
+      }
+      /* Rows 7-9: newest cont */
+      html += bucketDivider('Recently Added');
+      [3,4,5].forEach(function(i){ if(n[i]) html += makeRow(n[i], 'court-new-row'); });
+      /* Rows 10-12: week-top */
+      if (weekTop.length) {
+        html += bucketDivider('This Week\'s Top');
+        weekTop.forEach(function(p){ html += makeRow(p, 'court-top-row'); });
+      }
+      /* Rows 13-15: newest cont */
+      html += bucketDivider('More Newest');
+      [6,7,8].forEach(function(i){ if(n[i]) html += makeRow(n[i], 'court-new-row'); });
+      /* Rows 16-18: overall-top */
+      if (overallTop.length) {
+        html += bucketDivider('All-Time Top');
+        overallTop.forEach(function(p){ html += makeRow(p, 'court-top-row'); });
+      }
+    } else {
+      html = '<div class="ct-empty-row">No proposals yet — <a href="/empress/">be the first to name the Empress →</a></div>';
+    }
+    body.innerHTML = html;
+  }
+
+  function refreshCourt() {
+    fetchAllBuckets().then(function(results) {
+      renderLeaderboard(results[0], results[1], results[2], results[3]);
+    });
+  }
+
+  function startCountdown() {
+    countdown = 30;
+    var el = document.getElementById('ct-countdown');
+    if (countdownInterval) clearInterval(countdownInterval);
+    countdownInterval = setInterval(function() {
+      countdown--;
+      if (el) el.textContent = countdown;
+      if (countdown <= 0) {
+        countdown = 30;
+        if (el) el.textContent = countdown;
+        refreshCourt();
+      }
+    }, 1000);
+  }
+
+  /* ── Vote handler ── */
+  window.emCastVote = function(proposalId) {
+    var jwt = getJwt();
+    var payload = { proposal_id: proposalId, marks_amount: 1 };
+    if (!jwt) {
+      payload.ghost_session_id = ghostSessionId();
+    }
+    fetch(FUNCTIONS_URL + '/vote-empress', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_ANON,
+        Authorization: jwt ? ('Bearer ' + jwt) : ('Bearer ' + SUPABASE_ANON)
+      },
+      body: JSON.stringify(payload)
+    }).then(function(r){ return r.json(); }).then(function(data) {
+      if (data.success) {
+        refreshCourt();
+      } else if (data.error === 'already_voted') {
+        alert('You already voted on this proposal.');
+      } else if (data.error === 'insufficient_marks') {
+        alert('Insufficient marks to vote.');
+      } else if (data.error === 'ghost_limit_reached') {
+        alert('Daily ghost vote limit reached. Join for $5/year to get full voting power.');
+      } else {
+        alert('Vote error: ' + (data.error || 'please try again'));
+      }
+    }).catch(function(err) {
+      console.error('[court] vote error:', err);
+      alert('Network error — please try again.');
+    });
+  };
+
+  document.addEventListener('DOMContentLoaded', function() {
+    refreshCourt();
+    startCountdown();
+  });
+})();
+</script>

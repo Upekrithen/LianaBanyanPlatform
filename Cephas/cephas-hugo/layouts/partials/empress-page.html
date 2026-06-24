@@ -1,0 +1,448 @@
+{{/* ═══════════════════════════════════════════════════════
+     EMPRESS PAGE PARTIAL · BP092
+     4-tagline zones per canon:
+       Zone 1 (above-fold): empress-mythic-header
+       Zone 2 (mid-fold):   empress-oar-pivot
+       Zone 3 (below-mid):  empress-one-of-us-stack
+       Zone 4 (footer):     empress-founding-footer
+     Scroll-links per §0b-SCROLL
+     Naming: Caithedral (not Cathedral)
+     ═══════════════════════════════════════════════════════ */}}
+<style>
+:root { --em-gold: #d69e2e; --em-bg: #0a1628; --em-text: #faf5eb; --em-border: rgba(214,158,46,0.3); }
+
+.em-page {
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  background: transparent;
+  color: var(--em-text);
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 0 1.2rem 4rem;
+  line-height: 1.75;
+}
+.em-page a { color: var(--em-gold); border-bottom: 1px solid rgba(214,158,46,0.35); text-decoration: none; }
+.em-page a:hover { border-bottom-color: var(--em-gold); }
+
+/* Zone 1 — above-fold mythic */
+.empress-mythic-header {
+  text-align: center;
+  font-size: clamp(1.6rem, 4vw, 2.5rem);
+  font-weight: 800;
+  line-height: 1.25;
+  color: var(--em-gold);
+  margin: 2.5rem 0 1.2rem;
+  letter-spacing: -0.01em;
+}
+
+.em-hero-crown { font-size: 3rem; text-align: center; margin: 0.5rem 0; }
+
+.em-card {
+  background: linear-gradient(135deg, rgba(10,22,40,0.97) 0%, rgba(5,14,30,0.99) 100%);
+  border: 1px solid var(--em-border);
+  border-radius: 14px;
+  padding: 1.8rem 2rem;
+  margin: 1.5rem 0;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(214,158,46,0.1);
+  position: relative;
+}
+.em-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(214,158,46,0.5), transparent);
+  border-radius: 14px 14px 0 0;
+}
+
+/* Scroll links */
+.scroll-link {
+  font-size: 1.05em;
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+  color: inherit;
+  border-bottom: none !important;
+}
+.scroll-link:hover { border-bottom: none !important; opacity: 0.85; }
+
+/* Zone 2 — mid-fold operational */
+.empress-oar-pivot {
+  text-align: center;
+  font-size: clamp(1.05rem, 2.5vw, 1.3rem);
+  font-weight: 700;
+  color: var(--em-text);
+  background: rgba(214,158,46,0.06);
+  border: 1px solid var(--em-border);
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  margin: 2rem 0 1.2rem;
+}
+
+/* Proposal form */
+.em-form-wrap { margin: 1.5rem 0; }
+.em-form-row { margin-bottom: 1rem; }
+.em-form-row label { display: block; font-size: 0.88rem; color: rgba(250,245,235,0.75); margin-bottom: 0.35rem; font-weight: 600; }
+.em-form-row input[type="text"],
+.em-form-row input[type="url"],
+.em-form-row select {
+  width: 100%;
+  padding: 0.6rem 0.85rem;
+  background: rgba(10,22,40,0.85);
+  border: 1px solid rgba(214,158,46,0.3);
+  border-radius: 7px;
+  color: var(--em-text);
+  font-size: 0.95rem;
+  font-family: inherit;
+  box-sizing: border-box;
+  transition: border-color 0.15s;
+}
+.em-form-row input:focus, .em-form-row select:focus {
+  outline: none;
+  border-color: var(--em-gold);
+}
+.em-form-row select option { background: #0a1628; }
+
+.em-submit-btn {
+  display: inline-block;
+  background: var(--em-gold);
+  color: #1c1917;
+  font-weight: 800;
+  font-size: 1.05rem;
+  padding: 0.75rem 2.2rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+  letter-spacing: 0.01em;
+  width: 100%;
+}
+.em-submit-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+.em-submit-btn:active { transform: translateY(0); }
+.em-submit-btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+
+.em-auth-gate {
+  background: rgba(214,158,46,0.07);
+  border: 1px solid var(--em-border);
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  margin: 1rem 0;
+  font-size: 0.92rem;
+  text-align: center;
+}
+.em-auth-gate a { font-weight: 700; }
+
+.em-form-status { margin-top: 0.75rem; min-height: 1.4em; font-size: 0.9rem; }
+.em-form-status.success { color: #22c55e; }
+.em-form-status.error { color: #f87171; }
+
+/* Zone 3 — below-mid network-effect */
+.empress-one-of-us-stack {
+  text-align: center;
+  margin: 2.5rem 0;
+  padding: 2rem 1.5rem;
+  border: 1px solid var(--em-border);
+  border-radius: 12px;
+  background: rgba(214,158,46,0.04);
+}
+.empress-one-of-us-stack .ous-headline {
+  font-size: clamp(1.4rem, 3.5vw, 2rem);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  color: var(--em-gold);
+  margin: 0 0 0.75rem;
+}
+.empress-one-of-us-stack .ous-sub {
+  font-size: 1rem;
+  color: rgba(250,245,235,0.78);
+  max-width: 520px;
+  margin: 0 auto 1.2rem;
+  line-height: 1.7;
+}
+.empress-one-of-us-stack .ous-cta {
+  display: inline-block;
+  background: var(--em-gold);
+  color: #1c1917;
+  font-weight: 700;
+  padding: 0.65rem 1.8rem;
+  border-radius: 7px;
+  text-decoration: none;
+  border-bottom: none !important;
+  font-size: 0.98rem;
+  transition: opacity 0.15s;
+}
+.empress-one-of-us-stack .ous-cta:hover { opacity: 0.85; }
+
+/* Zone 4 — footer scarcity */
+.empress-founding-footer {
+  text-align: center;
+  font-size: clamp(0.95rem, 2.2vw, 1.15rem);
+  font-weight: 700;
+  color: rgba(250,245,235,0.65);
+  margin: 2.5rem 0 0.5rem;
+  letter-spacing: 0.02em;
+}
+
+.em-ghost-notice {
+  font-size: 0.88rem;
+  color: rgba(250,245,235,0.55);
+  background: rgba(100,116,139,0.12);
+  border: 1px solid rgba(100,116,139,0.25);
+  border-radius: 6px;
+  padding: 0.65rem 1rem;
+  margin: 1rem 0;
+}
+
+.em-court-link-wrap { text-align: center; margin: 1.5rem 0; }
+.em-court-link-wrap a {
+  display: inline-block;
+  border: 1px solid var(--em-border);
+  border-radius: 7px;
+  padding: 0.55rem 1.4rem;
+  color: var(--em-gold) !important;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: background 0.15s;
+  text-decoration: none;
+  border-bottom: 1px solid var(--em-border) !important;
+}
+.em-court-link-wrap a:hover { background: rgba(214,158,46,0.08); }
+
+@media (max-width: 600px) {
+  .em-card { padding: 1.2rem; }
+}
+</style>
+
+<div class="em-page">
+
+  <!-- Zone 1: Above-fold mythic -->
+  <div class="em-hero-crown" aria-hidden="true">👑</div>
+  <h1 class="empress-mythic-header">Name the Empress. Stop the Nothing. Be a Bastion, in a Time of Storms.</h1>
+
+  <div class="em-card">
+    <p>The cooperative substrate needs a name — a name that will carry the Caithedral™ forward. The Empress is not a product. She is the substrate itself. Dr. MnemosyneC's portrait and crown are her identity lock.</p>
+
+    <p>
+      <a href="https://mnemosynec.org/substrate-cure" class="scroll-link" target="_blank" rel="noopener">📜 The Substrate Cure</a> — The substrate cure to AI amnesia. Every time you start a new session, your AI forgets. MnemosyneC doesn't.
+    </p>
+
+    <p>This is a cooperative. Not a company. Not a VC play. Members keep 83.3% of every transaction.
+      <a href="https://founderdenken.substack.com/p/bicycle-economics" class="scroll-link" target="_blank" rel="noopener">📜 Bicycle Economics</a> explains why this structure works: Cost+20% platform margin, $5/year membership, workers keep what they earn.
+    </p>
+
+    <p>We built this without investors, without ads, without strings.
+      <a href="https://mnemosynec.org/boat-in-water" class="scroll-link" target="_blank" rel="noopener">📜 Boat in the Water</a> — the cooperative is already rowing. You can grab an oar.
+    </p>
+
+    <div class="em-ghost-notice">
+      👻 <strong>Ghost World:</strong> Anyone can vote on proposals. Members can submit proposals and win prizes. Join for $5/yr to submit.
+    </div>
+
+    <div class="em-court-link-wrap">
+      <a href="/court/">See the Leaderboard → The Court</a>
+    </div>
+  </div>
+
+  <!-- Zone 2: Mid-fold operational (above submission form) -->
+  <div class="empress-oar-pivot">Grab an Oar. We're rowing as we Build the Sails.</div>
+
+  <!-- Proposal Submission Form -->
+  <div class="em-card">
+    <h2 style="margin-top:0; font-size:1.2rem; color: var(--em-gold);">Submit a Name for the Empress</h2>
+
+    <div id="em-auth-gate" class="em-auth-gate" style="display:none;">
+      Submitting a proposal requires <a href="/join/">membership ($5/year)</a>. Ghost visitors can vote on The Court leaderboard — no sign-in required.
+    </div>
+
+    <form id="em-proposal-form" class="em-form-wrap" onsubmit="emSubmitProposal(event)" style="display:none;">
+      <div class="em-form-row">
+        <label for="em-proposed-name">Proposed Name for the Empress <span style="color:#f87171;">*</span></label>
+        <input type="text" id="em-proposed-name" name="proposed_name" required maxlength="120"
+               placeholder="e.g. Mnemos, The Remembrancer, Lyra..." autocomplete="off">
+      </div>
+      <div class="em-form-row">
+        <label for="em-appearance-url">Appearance Image URL <span style="font-weight:400;opacity:0.65;">(optional — link to your drawing or concept art)</span></label>
+        <input type="url" id="em-appearance-url" name="appearance_image_url"
+               placeholder="https://...">
+      </div>
+      <div class="em-form-row">
+        <label for="em-country">Your Country <span style="font-weight:400;opacity:0.65;">(for the 60-country prize draw)</span></label>
+        <select id="em-country" name="country_local">
+          <option value="">Select country…</option>
+          <option value="US">United States</option>
+          <option value="CA">Canada</option>
+          <option value="GB">United Kingdom</option>
+          <option value="AU">Australia</option>
+          <option value="NZ">New Zealand</option>
+          <option value="DE">Germany</option>
+          <option value="FR">France</option>
+          <option value="NL">Netherlands</option>
+          <option value="SE">Sweden</option>
+          <option value="NO">Norway</option>
+          <option value="DK">Denmark</option>
+          <option value="FI">Finland</option>
+          <option value="CH">Switzerland</option>
+          <option value="AT">Austria</option>
+          <option value="BE">Belgium</option>
+          <option value="IE">Ireland</option>
+          <option value="IT">Italy</option>
+          <option value="ES">Spain</option>
+          <option value="PT">Portugal</option>
+          <option value="PL">Poland</option>
+          <option value="CZ">Czech Republic</option>
+          <option value="HU">Hungary</option>
+          <option value="RO">Romania</option>
+          <option value="HR">Croatia</option>
+          <option value="SI">Slovenia</option>
+          <option value="SK">Slovakia</option>
+          <option value="BG">Bulgaria</option>
+          <option value="GR">Greece</option>
+          <option value="IN">India</option>
+          <option value="JP">Japan</option>
+          <option value="KR">South Korea</option>
+          <option value="CN">China</option>
+          <option value="SG">Singapore</option>
+          <option value="HK">Hong Kong</option>
+          <option value="TW">Taiwan</option>
+          <option value="PH">Philippines</option>
+          <option value="MY">Malaysia</option>
+          <option value="ID">Indonesia</option>
+          <option value="TH">Thailand</option>
+          <option value="VN">Vietnam</option>
+          <option value="BD">Bangladesh</option>
+          <option value="PK">Pakistan</option>
+          <option value="NG">Nigeria</option>
+          <option value="ZA">South Africa</option>
+          <option value="KE">Kenya</option>
+          <option value="GH">Ghana</option>
+          <option value="EG">Egypt</option>
+          <option value="MA">Morocco</option>
+          <option value="BR">Brazil</option>
+          <option value="MX">Mexico</option>
+          <option value="AR">Argentina</option>
+          <option value="CL">Chile</option>
+          <option value="CO">Colombia</option>
+          <option value="PE">Peru</option>
+          <option value="VE">Venezuela</option>
+          <option value="EC">Ecuador</option>
+          <option value="UY">Uruguay</option>
+          <option value="BO">Bolivia</option>
+          <option value="PY">Paraguay</option>
+          <option value="IL">Israel</option>
+          <option value="TR">Turkey</option>
+          <option value="RU">Russia</option>
+          <option value="UA">Ukraine</option>
+          <option value="OTHER">Other</option>
+        </select>
+      </div>
+      <button type="submit" class="em-submit-btn" id="em-submit-btn">Submit Proposal →</button>
+      <div id="em-form-status" class="em-form-status"></div>
+    </form>
+
+    <div id="em-loading-auth" style="text-align:center;color:rgba(250,245,235,0.45);font-size:0.88rem;">Checking membership…</div>
+  </div>
+
+  <!-- Zone 3: Below-mid network-effect -->
+  <div class="empress-one-of-us-stack">
+    <div class="ous-headline">ONE OF US. ALL OF US.</div>
+    <p class="ous-sub">Every peer who joins makes the cooperative smarter — not just for themselves, but for every other member's questions.</p>
+    <a href="/join/" class="ous-cta">Join for $5/year →</a>
+  </div>
+
+  <!-- Zone 4: Footer scarcity -->
+  <p class="empress-founding-footer">Your Name Etched in the Founding Foundation. First 10,000.</p>
+
+</div><!-- /em-page -->
+
+<script>
+(function(){
+  var SUPABASE_URL = '{{ .Site.Params.supabaseUrl }}';
+  var SUPABASE_ANON = '{{ .Site.Params.supabaseAnonKey }}';
+  var FUNCTIONS_URL = '{{ .Site.Params.supabaseFunctionsUrl }}';
+
+  function getJwt() {
+    try {
+      var raw = localStorage.getItem('supabase.auth.token') ||
+                localStorage.getItem('sb-ruuxzilgmuwddcofqecc-auth-token');
+      if (!raw) return null;
+      var parsed = JSON.parse(raw);
+      return (parsed && parsed.access_token) ? parsed.access_token : null;
+    } catch(e) { return null; }
+  }
+
+  function initForm() {
+    var loadingEl = document.getElementById('em-loading-auth');
+    var formEl = document.getElementById('em-proposal-form');
+    var gateEl = document.getElementById('em-auth-gate');
+    var jwt = getJwt();
+    if (loadingEl) loadingEl.style.display = 'none';
+    if (jwt) {
+      if (formEl) formEl.style.display = 'block';
+    } else {
+      if (gateEl) gateEl.style.display = 'block';
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', initForm);
+
+  window.emSubmitProposal = function(e) {
+    e.preventDefault();
+    var btn = document.getElementById('em-submit-btn');
+    var status = document.getElementById('em-form-status');
+    var jwt = getJwt();
+    if (!jwt) {
+      status.className = 'em-form-status error';
+      status.textContent = 'Please join as a member to submit a proposal.';
+      return;
+    }
+    var name = document.getElementById('em-proposed-name').value.trim();
+    var imgUrl = document.getElementById('em-appearance-url').value.trim();
+    var country = document.getElementById('em-country').value;
+    if (!name) {
+      status.className = 'em-form-status error';
+      status.textContent = 'Please enter a proposed name.';
+      return;
+    }
+    btn.disabled = true;
+    btn.textContent = 'Submitting…';
+    status.className = 'em-form-status';
+    status.textContent = '';
+
+    var payload = { proposed_name: name };
+    if (imgUrl) payload.appearance_image_url = imgUrl;
+    if (country) payload.country_local = country;
+
+    fetch(SUPABASE_URL + '/rest/v1/empress_proposals', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_ANON,
+        'Authorization': 'Bearer ' + jwt,
+        'Prefer': 'return=representation'
+      },
+      body: JSON.stringify(payload)
+    }).then(function(r) {
+      return r.json().then(function(data) { return { ok: r.ok, status: r.status, data: data }; });
+    }).then(function(res) {
+      btn.disabled = false;
+      if (res.ok) {
+        btn.textContent = 'Proposal Submitted!';
+        status.className = 'em-form-status success';
+        status.textContent = '✓ Your proposal is pending review. Check The Court leaderboard.';
+        document.getElementById('em-proposed-name').value = '';
+        document.getElementById('em-appearance-url').value = '';
+        document.getElementById('em-country').value = '';
+        setTimeout(function(){ btn.textContent = 'Submit Proposal →'; btn.disabled = false; }, 4000);
+      } else {
+        btn.textContent = 'Submit Proposal →';
+        status.className = 'em-form-status error';
+        var msg = (res.data && res.data.message) ? res.data.message : ('Error ' + res.status + '. Please try again.');
+        status.textContent = msg;
+      }
+    }).catch(function(err) {
+      btn.disabled = false;
+      btn.textContent = 'Submit Proposal →';
+      status.className = 'em-form-status error';
+      status.textContent = 'Network error — please try again.';
+      console.error('[empress] submit error:', err);
+    });
+  };
+})();
+</script>

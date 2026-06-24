@@ -1,0 +1,48 @@
+{{/* ═══════════════════════════════════════════════════════
+     WILDFIRE EMPRESS CARD PARTIAL · BP092
+     Renders a Wildfire Cue Deck Card for empress_proposal card_type.
+     Includes share URL with proposal + referral params.
+     ═══════════════════════════════════════════════════════ */}}
+{{- $card := .card -}}
+{{- $data := $card.card_data -}}
+<div class="wildfire-empress-card" data-proposal-id="{{ $card.subject_id }}" style="
+  border: 1px solid rgba(214,158,46,0.3);
+  border-radius: 10px;
+  padding: 1.2rem;
+  background: linear-gradient(135deg, rgba(10,22,40,0.97), rgba(5,14,30,0.99));
+  max-width: 320px;
+  font-family: system-ui, sans-serif;
+  color: #faf5eb;
+  position: relative;
+">
+  <div style="text-align:center; font-size:1.8rem; margin-bottom:0.5rem;">👑</div>
+
+  {{- if $data.appearance_image_url }}
+  <img src="{{ $data.appearance_image_url }}" alt="{{ $data.proposed_name }}"
+       style="width:100%; height:140px; object-fit:cover; border-radius:7px; margin-bottom:0.75rem; border:1px solid rgba(214,158,46,0.2);"
+       loading="lazy">
+  {{- end }}
+
+  <h3 style="font-size:1.1rem; font-weight:800; color:#d69e2e; margin:0 0 0.3rem; text-align:center;">
+    {{ $data.proposed_name | default "Unnamed Proposal" }}
+  </h3>
+  <p style="font-size:0.78rem; color:rgba(250,245,235,0.5); text-align:center; margin:0 0 0.75rem;">
+    Proposed by {{ $data.member_display_name | default "a member" }}
+  </p>
+
+  <p style="font-size:0.82rem; font-weight:700; color:rgba(250,245,235,0.85); text-align:center; margin:0 0 1rem; line-height:1.4;">
+    {{ $data.campaign_headline | default "Name the Empress. STOP the Nothing." }}
+  </p>
+
+  {{- if $card.member_share_url }}
+  <a href="{{ $card.member_share_url }}"
+     style="display:block; text-align:center; background:#d69e2e; color:#1c1917; font-weight:700; font-size:0.88rem; padding:0.55rem 1rem; border-radius:6px; text-decoration:none;"
+     target="_blank" rel="noopener">
+    Vote on The Court →
+  </a>
+  {{- end }}
+
+  <p style="font-size:0.68rem; color:rgba(250,245,235,0.3); text-align:center; margin:0.75rem 0 0; font-style:italic;">
+    Caithedral™ · Cooperative Substrate
+  </p>
+</div>
