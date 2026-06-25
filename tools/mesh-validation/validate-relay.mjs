@@ -105,7 +105,7 @@ function parseArgs() {
     tierConfig: null,               // 'ultra:cb4ef450,full:d0b47bd0+88cbf6bd,core:c532e740+49f3e597'
     answerTierConfig: null,         // BP094: 'ultra:cb4ef450,full:d0b47bd0+88cbf6bd' -- answer-tier peers only
     micTierConfig: null,            // BP094: 'core:c532e740+49f3e597' -- MIC judge peers only
-    tierWeights: { ULTRA: 3, FULL: 2, CORE: 1 }, // BP094 §1: capability-weighted vote weights (config-driven)
+    tierWeights: { ULTRA: 2, FULL: 2, CORE: 1 }, // BP094 §1: capability-weighted vote weights (config-driven) -- BP094 S9: ULTRA rebalanced 3->2 for democratic robustness
     questionDifficultyRouting: null, // 'hard:ultra+full,medium:ultra+full+core,short:all'
     tier2Flagship: true,            // BP092 M24 Block 3: ENABLED by default -- use --tier2-flagship=false to disable
   };
@@ -493,6 +493,58 @@ function ensembleVote(peerAnswers, tierWeights, peerTierMap) {
   }
 }
 
+// ─── Mountain 1 Substrate Priming (BP094 Session 9) ─────────────────────────
+//
+// Stub implementations wired in before peer dispatch.
+// substrate_reader full integration is BATCHECK pending Cathedral DB wire.
+// These stubs provide domain classification and placeholder bundle injection.
+
+/**
+ * classify_domain: map question domain to a substrate family label.
+ * Keyword-based classification matching MMLU-Pro domain names.
+ */
+function classify_domain(domain) {
+  if (!domain) return 'general';
+  const d = domain.toLowerCase();
+  if (d === 'math' || d === 'physics' || d === 'engineering' || d === 'chemistry') return 'stem_hard';
+  if (d === 'biology' || d === 'health' || d === 'psychology') return 'life_science';
+  if (d === 'business' || d === 'economics') return 'business';
+  if (d === 'law' || d === 'philosophy') return 'humanities';
+  if (d === 'history' || d === 'other') return 'general';
+  if (d === 'computer_science') return 'stem_hard';
+  return 'general';
+}
+
+/**
+ * fetch_unfair_advantage_bundle: returns domain-specific priming context string.
+ * Stub returns static primers per family.
+ * Full substrate_reader wire-in is BATCHECK -- this stub returns fixed priming.
+ */
+function fetch_unfair_advantage_bundle(domainFamily) {
+  const PRIMERS = {
+    stem_hard: 'Apply rigorous step-by-step reasoning. Eliminate wrong answers by dimensional analysis and boundary checks.',
+    life_science: 'Apply mechanistic biological reasoning. Recall cellular and molecular pathways before selecting.',
+    business: 'Apply economic first principles. Consider opportunity cost and equilibrium before selecting.',
+    humanities: 'Apply textual and historical reasoning. Consider definitional precision before selecting.',
+    general: 'Apply careful elimination reasoning. Rule out clearly wrong answers first.',
+  };
+  return PRIMERS[domainFamily] ?? '';
+}
+
+/**
+ * inject_substrate_prime: prepends the priming bundle into each peer payload context field.
+ * Mutates the payloads array in place, returning the count of tokens injected.
+ */
+function inject_substrate_prime(payloads, bundle) {
+  if (!bundle) return 0;
+  for (const payload of payloads) {
+    if (payload && payload.payload_json) {
+      payload.payload_json.substrate_prime = bundle;
+    }
+  }
+  return bundle.length;
+}
+
 // ─── Console Formatting ──────────────────────────────────────────────────────
 
 const GREEN = '\x1b[32m';
@@ -574,7 +626,8 @@ async function main() {
   } else {
     console.log(`Plow: ${args.plow ?? 'none'} · peer inference = single-shot baseline`);
   }
-  console.log(`Topology: Supabase relay_routes dispatch -- no direct Ollama IPs\n`);
+  console.log(`Topology: Supabase relay_routes dispatch -- no direct Ollama IPs`);
+  console.log(`[TIER_WEIGHTS] ULTRA=${args.tierWeights.ULTRA} FULL=${args.tierWeights.FULL} CORE=${args.tierWeights.CORE}\n`);
 
   // Load credentials
   const pub = loadPublicEnv();
@@ -922,10 +975,18 @@ async function main() {
       if (peerRouted[p.peer_id] !== undefined) peerRouted[p.peer_id]++;
     }
 
+    // ── MOUNTAIN 1 Substrate Priming (BP094 Session 9) ───────────────────────
+    // Classify domain, fetch unfair advantage bundle, prepare for injection.
+    // Must run BEFORE routeInserts so bundle is included in each peer payload.
+    const m1DomainFamily = classify_domain(q.domain);
+    const m1Bundle = fetch_unfair_advantage_bundle(m1DomainFamily);
+    // Payloads are assembled inline below; injection is done via substrate_prime field.
+    console.log(`  [MOUNTAIN1] domain=${m1DomainFamily} unfair_bundle=${m1Bundle.length} tokens primed`);
+
     // INSERT one relay_route per peer (all concurrently)
-    // MAMBA-δ: include wire_format field in payload when hex-mcode requested
+    // MAMBA-delta: include wire_format field in payload when hex-mcode requested
     // BP090: include plow_max_iterations + allotted_timeout_ms for peer-side approaching_timeout detection
-    const routeInserts = peerPool.map(p => insertRoute(SUPABASE_URL, SERVICE_KEY, {
+    const routePayloads = peerPool.map(p => ({
       target_peer_id: p.peer_id,
       hex_frame: Buffer.from(prompt, 'utf8').toString('base64'),
       payload_json: {
@@ -938,11 +999,16 @@ async function main() {
         session_id: sessionId,
         plow_max_iterations: plowMaxIterations,
         allotted_timeout_ms: qTimeoutMs,           // BP090: for peer-side 80% threshold detection
+        substrate_prime: m1Bundle,                  // MOUNTAIN1: unfair advantage priming context
       },
       status: 'pending',
       session_id: sessionId,
       ttl_seconds: qTimeoutSec + 60,
     }));
+    // inject_substrate_prime is a no-op here since substrate_prime is already set inline above,
+    // but we call it to log the injection count and maintain the canonical call contract.
+    inject_substrate_prime(routePayloads, m1Bundle);
+    const routeInserts = routePayloads.map(payload => insertRoute(SUPABASE_URL, SERVICE_KEY, payload));
 
     let insertedRoutes;
     try {
