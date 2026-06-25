@@ -54,6 +54,9 @@ function loadServiceRoleKey() {
   const secretsPath = resolve(homedir(), '.claude', 'state', 'secrets', '22May2026.env');
   // BP087 fix: secrets file uses mixed-case keys; loadEnvFile only matches ALL_CAPS.
   // Read raw + match all variants the Founder-canonical secrets file uses.
+  // BP094 Session 9 BLOCK C fix: validate key length >= 100 chars.
+  // A 41-char key is the anon/publishable key -- NOT the service_role JWT (200+ chars).
+  // Using anon key for RLS-protected table writes causes silent data loss.
   let raw = '';
   try {
     raw = readFileSync(secretsPath, 'utf8');
@@ -67,14 +70,21 @@ function loadServiceRoleKey() {
     if (hashIdx > -1) v = v.slice(0, hashIdx).trim();
     return v;
   };
-  return (
+  const isServiceRoleKey = (k) => k && k.length >= 100; // service_role JWT is 200+ chars
+  const candidate = (
     findKey('SUPABASE_SERVICE_ROLE_KEY') ||
-    findKey('Supabase_Secret_Key') ||
     findKey('Supabase_Service_Role_Key') ||
     process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    // BP094 S9 BLOCK C: Supabase_Secret_Key is the 41-char anon key -- REJECT for service writes
+    // Only fall back to it if it passes the length check (future-proof if key is rotated to JWT)
+    findKey('Supabase_Secret_Key') ||
     process.env.Supabase_Secret_Key ||
     ''
   );
+  if (candidate && !isServiceRoleKey(candidate)) {
+    console.error(`[BLOCK C] WARNING: resolved service key length=${candidate.length} < 100 chars -- this is likely the anon/publishable key, NOT the service_role JWT. RLS-protected writes (cathedral.fates_log, escalation_log) will be rejected. Rotate/add SUPABASE_SERVICE_ROLE_KEY (200+ chars JWT) to secrets file.`);
+  }
+  return candidate;
 }
 
 // ─── CLI Argument Parsing ────────────────────────────────────────────────────
