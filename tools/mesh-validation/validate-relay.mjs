@@ -1262,8 +1262,8 @@ async function main() {
       if (!contestedResolutionTier || contestedResolutionTier === 'pending') {
         try {
           console.log(`  [POSSE] decomposing question ${questionId} -> sub-claims...`);
-          const { decomposeQuestion } = await import('../../src/main/army_ants/posse_decompose.js');
-          const { swarmDispatch } = await import('../../src/main/army_ants/posse_swarm.js');
+          const { decomposeQuestion } = await import('../../dist/main/army_ants/posse_decompose.js');
+          const { swarmDispatch } = await import('../../dist/main/army_ants/posse_swarm.js');
           const decomp = await decomposeQuestion(
             questionId, q.question, q.options, q.domain,
             SUPABASE_URL, SERVICE_KEY,
