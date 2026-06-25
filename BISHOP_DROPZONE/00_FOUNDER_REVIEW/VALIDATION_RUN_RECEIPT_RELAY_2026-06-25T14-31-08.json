@@ -1,0 +1,296 @@
+{
+  "run_type": "5-peer-relay-orchestrator",
+  "canonical": true,
+  "topology": "Supabase relay_routes table dispatch -- 4 LAN-adjacent + 1 real-WAN-hop (Son)",
+  "dispatch_method": "wan-relay-route (no direct IP routing)",
+  "model_families": "gemma2:9b (49f3e597+c532e740 CORE) + gemma4:12b (88cbf6bd+d0b47bd0 FULL) + llama3.3:70b (cb4ef450 ULTRA) — TIERED BY CAPACITY · Ah Hayelped BP091",
+  "session_id": "session-9-fp-smoke-v2-bp094",
+  "run_timestamp": "2026-06-25T14:31:08.995Z",
+  "mode": "smoke",
+  "routing": "tier-aware",
+  "flagship_tier": "claude",
+  "trial_id": null,
+  "pass": null,
+  "anthropic_api_skipped": true,
+  "question_count": 2,
+  "peer_count": 5,
+  "son_peer_id": null,
+  "fleet_composition": {
+    "peers": [
+      {
+        "peer_id": "49f3e597",
+        "ramTier": "CORE",
+        "ollamaModel": "gemma2:9b",
+        "questions_routed": 0,
+        "questions_answered": 0,
+        "questions_correct": 0,
+        "accuracy_pct": null
+      },
+      {
+        "peer_id": "c532e740",
+        "ramTier": "CORE",
+        "ollamaModel": "gemma2:9b",
+        "questions_routed": 0,
+        "questions_answered": 0,
+        "questions_correct": 0,
+        "accuracy_pct": null
+      },
+      {
+        "peer_id": "88cbf6bd",
+        "ramTier": "FULL",
+        "ollamaModel": "gemma4:12b",
+        "questions_routed": 2,
+        "questions_answered": 2,
+        "questions_correct": 2,
+        "accuracy_pct": 100
+      },
+      {
+        "peer_id": "d0b47bd0",
+        "ramTier": "FULL",
+        "ollamaModel": "gemma4:12b",
+        "questions_routed": 2,
+        "questions_answered": 1,
+        "questions_correct": 1,
+        "accuracy_pct": 100
+      },
+      {
+        "peer_id": "cb4ef450",
+        "ramTier": "ULTRA",
+        "ollamaModel": "llama3.3:70b",
+        "questions_routed": 2,
+        "questions_answered": 1,
+        "questions_correct": 1,
+        "accuracy_pct": 100
+      }
+    ],
+    "per_tier_accuracy": {
+      "ULTRA": "1/1 (100.0%)",
+      "FULL": "3/3 (100.0%)"
+    },
+    "fleet_ensemble_accuracy": "1/2 (50.0%)",
+    "model_families": "gemma2:9b (49f3e597+c532e740 CORE) + gemma4:12b (88cbf6bd+d0b47bd0 FULL) + llama3.3:70b (cb4ef450 ULTRA) — TIERED BY CAPACITY · Ah Hayelped BP091",
+    "tier_aware_routing": true,
+    "ah_hayelped_bp091": true
+  },
+  "peers": {
+    "49f3e5971518a064": {
+      "tier": "base",
+      "lan_addresses": null,
+      "last_seen_at": "2026-06-25T14:23:22.748+00:00",
+      "answered": 0,
+      "correct": 0,
+      "is_son": false
+    },
+    "c532e74069e137bc": {
+      "tier": "base",
+      "lan_addresses": null,
+      "last_seen_at": "2026-06-25T14:23:18.392+00:00",
+      "answered": 0,
+      "correct": 0,
+      "is_son": false
+    },
+    "88cbf6bdd6f74587": {
+      "tier": "base",
+      "lan_addresses": null,
+      "last_seen_at": "2026-06-25T14:22:55.314+00:00",
+      "answered": 2,
+      "correct": 2,
+      "is_son": false
+    },
+    "d0b47bd08633385b": {
+      "tier": "base",
+      "lan_addresses": null,
+      "last_seen_at": "2026-06-25T14:22:44.781+00:00",
+      "answered": 1,
+      "correct": 1,
+      "is_son": false
+    },
+    "cb4ef450cc4a18c3": {
+      "tier": "base",
+      "lan_addresses": null,
+      "last_seen_at": "2026-06-25T14:22:34.021+00:00",
+      "answered": 1,
+      "correct": 1,
+      "is_son": false
+    }
+  },
+  "staggered_phase_results": null,
+  "per_domain_timeout_config": null,
+  "escalation_summary": {
+    "andon_threshold_pct": 15,
+    "andon_escalate": "star-chamber",
+    "total_escalation_fired": 1,
+    "escalation_fired_pct": 50
+  },
+  "ensemble_score": {
+    "correct": 1,
+    "total": 2,
+    "pct": 50,
+    "contested": 1
+  },
+  "questions": [
+    {
+      "index": 1,
+      "source_id": "2804",
+      "domain": "biology",
+      "question_preview": "Which of the following would most likely provide examples of mitotic cell divisions?",
+      "num_options": 8,
+      "correct_letter": "B",
+      "correct_answer_text": "longitudinal section of a shoot tip",
+      "allotted_timeout_s": 300,
+      "route_ids": [
+        "ecb07c81-f12d-4ed7-8910-631e81c0442d",
+        "9094bf07-d1bf-4f5b-aecd-edffd59f702b",
+        "f41d1104-346f-460a-93cb-d295ac1d876a"
+      ],
+      "escalation_fired": false,
+      "escalation_peer_count": 0,
+      "escalation_route_ids": [],
+      "final_answer_source": "weighted_consensus",
+      "per_peer": {
+        "88cbf6bdd6f74587": {
+          "route_id": "ecb07c81-f12d-4ed7-8910-631e81c0442d",
+          "escalation_route_id": null,
+          "answer": "B",
+          "replied": true,
+          "correct": true,
+          "iterations_run": 1,
+          "council_votes_per_iteration": [
+            {
+              "iter": 1,
+              "valid": 1,
+              "refine": 0,
+              "invalid": 2
+            }
+          ]
+        },
+        "d0b47bd08633385b": {
+          "route_id": "9094bf07-d1bf-4f5b-aecd-edffd59f702b",
+          "escalation_route_id": null,
+          "answer": "B",
+          "replied": true,
+          "correct": true,
+          "iterations_run": 1,
+          "council_votes_per_iteration": [
+            {
+              "iter": 1,
+              "valid": 1,
+              "refine": 0,
+              "invalid": 2
+            }
+          ]
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "f41d1104-346f-460a-93cb-d295ac1d876a",
+          "escalation_route_id": null,
+          "answer": "B",
+          "replied": true,
+          "correct": true,
+          "iterations_run": 1,
+          "council_votes_per_iteration": [
+            {
+              "iter": 1,
+              "valid": 1,
+              "refine": 0,
+              "invalid": 2
+            }
+          ]
+        }
+      },
+      "ensemble": {
+        "answer": "B",
+        "contested": false,
+        "correct": true
+      },
+      "contested_resolution_tier": null,
+      "tier_1_fallback_fired": false,
+      "tier_2_fallback_fired": false,
+      "ensemble_method": "capability_weighted",
+      "cascade_step_reached": 1,
+      "ensemble_abstain_fired": false,
+      "single_peer_fallback": false,
+      "posse_dispatched": false,
+      "core_mic_judges": [
+        "49f3e5971518a064",
+        "c532e74069e137bc"
+      ]
+    },
+    {
+      "index": 2,
+      "source_id": "70",
+      "domain": "business",
+      "question_preview": "Typical advertising regulatory bodies suggest, for example that adverts must not: encourage _________, cause unnecessary...",
+      "num_options": 9,
+      "correct_letter": "I",
+      "correct_answer_text": "Unsafe practices, Distress, Fear, Serious",
+      "allotted_timeout_s": 300,
+      "route_ids": [
+        "e8a0b2b9-932c-4177-96fc-6160229c9688",
+        "83b2075c-6ad7-4305-b9d5-fdc82f2d46ab",
+        "3df74e9f-0a68-4e57-ad2d-a392a7760151"
+      ],
+      "escalation_fired": true,
+      "escalation_peer_count": 3,
+      "escalation_route_ids": [
+        "2609cef4-44db-432c-aadf-be1a488a8393",
+        "7a17857a-9cbc-4c35-bf40-16774dc9be8a",
+        "1837aec6-ce32-48e1-83c7-9982a0824810"
+      ],
+      "final_answer_source": "ensemble_abstain",
+      "per_peer": {
+        "88cbf6bdd6f74587": {
+          "route_id": "e8a0b2b9-932c-4177-96fc-6160229c9688",
+          "escalation_route_id": "2609cef4-44db-432c-aadf-be1a488a8393",
+          "answer": "I",
+          "replied": true,
+          "correct": true,
+          "iterations_run": 1,
+          "council_votes_per_iteration": [
+            {
+              "iter": 1,
+              "valid": 1,
+              "refine": 0,
+              "invalid": 2
+            }
+          ]
+        },
+        "d0b47bd08633385b": {
+          "route_id": "83b2075c-6ad7-4305-b9d5-fdc82f2d46ab",
+          "escalation_route_id": "7a17857a-9cbc-4c35-bf40-16774dc9be8a",
+          "answer": null,
+          "replied": true,
+          "correct": false,
+          "iterations_run": null,
+          "council_votes_per_iteration": null
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "3df74e9f-0a68-4e57-ad2d-a392a7760151",
+          "escalation_route_id": "1837aec6-ce32-48e1-83c7-9982a0824810",
+          "answer": null,
+          "replied": true,
+          "correct": false,
+          "iterations_run": null,
+          "council_votes_per_iteration": null
+        }
+      },
+      "ensemble": {
+        "answer": null,
+        "contested": true,
+        "correct": false
+      },
+      "contested_resolution_tier": "tier_3_contested",
+      "tier_1_fallback_fired": true,
+      "tier_2_fallback_fired": true,
+      "ensemble_method": "capability_weighted",
+      "cascade_step_reached": 2,
+      "ensemble_abstain_fired": true,
+      "single_peer_fallback": false,
+      "posse_dispatched": true,
+      "core_mic_judges": [
+        "49f3e5971518a064",
+        "c532e74069e137bc"
+      ]
+    }
+  ],
+  "truth_always_note": "BP091 Ah Hayelped tiered cooperative substrate · per-peer-tier-aware routing · llama3.3:70b ULTRA + gemma4:12b FULL + gemma2:9b CORE · fleet_composition block is canonical per-peer receipt."
+}
