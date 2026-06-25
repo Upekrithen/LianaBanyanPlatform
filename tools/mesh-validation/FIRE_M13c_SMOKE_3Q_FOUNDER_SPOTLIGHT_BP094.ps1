@@ -1,5 +1,5 @@
 # FIRE_M13c_SMOKE_3Q_FOUNDER_SPOTLIGHT_BP094.ps1
-# M13c 3Q FOUNDER SPOTLIGHT SMOKE -- BP094 Session 11 . 2026-06-25
+# M13c 3Q FOUNDER SPOTLIGHT SMOKE -- BP094 Session 12 . 2026-06-25 . stderr fix applied
 # Fires 3 questions via validate-relay.mjs to verify:
 #   Q01 (source_id=2804 . biology)       -- CANARY: basic wiring
 #   Q02 (source_id=70 . business)        -- ABSTAIN CASCADE TARGET: correct=I
@@ -156,8 +156,11 @@ $nodeArgs = @(
 )
 
 $SMOKE_START = Get-Date
+$_prevEAP = $ErrorActionPreference
+$ErrorActionPreference = 'Continue'
 & node @nodeArgs 2>&1 | Tee-Object -FilePath $LOG_FILE
 $EXIT_CODE = $LASTEXITCODE
+$ErrorActionPreference = $_prevEAP
 $SMOKE_END  = Get-Date
 $ELAPSED    = [math]::Round(($SMOKE_END - $SMOKE_START).TotalMinutes, 1)
 
