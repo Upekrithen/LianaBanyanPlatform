@@ -50,11 +50,29 @@ export async function decomposeQuestion(
   // reaches llama3.3:70b directly. LAN-AS-WAN canon satisfied: the host IS M0.
   let rawReply: string | null = null;
   let decompositionModel = `${ollamaModel} (direct Ollama on ULTRA peer)`;
-  try {
-    rawReply = await ollamaGenerate(ollamaUrl, ollamaModel, decompositionPrompt, timeoutMs);
-  } catch (ollamaErr) {
+  const RETRY_BACKOFFS = [3000, 6000, 12000];
+  let lastOllamaErr: unknown = null;
+  let ollamaSucceeded = false;
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      rawReply = await ollamaGenerate(ollamaUrl, ollamaModel, decompositionPrompt, timeoutMs);
+      ollamaSucceeded = true;
+      break;
+    } catch (ollamaErr) {
+      lastOllamaErr = ollamaErr;
+      if (isTransientOllamaError(ollamaErr) && attempt < 3) {
+        const backoffMs = RETRY_BACKOFFS[attempt - 1];
+        console.warn(`posse_decompose: Ollama transient overload (attempt ${attempt}/3), backing off ${backoffMs}ms before retry`);
+        await sleep(backoffMs);
+      } else {
+        // Non-transient error or final attempt — stop retrying.
+        break;
+      }
+    }
+  }
+  if (!ollamaSucceeded) {
     // Ollama direct call failed — fall back to relay with error-aware guard.
-    console.warn(`posse_decompose: Ollama direct failed (${(ollamaErr as Error).message}), falling back to relay`);
+    console.warn(`posse_decompose: Ollama direct failed (${(lastOllamaErr as Error).message}), falling back to relay`);
     decompositionModel = 'llama3.3:70b (ULTRA relay fallback)';
     rawReply = await decomposeViaRelay(
       questionId, decompositionPrompt, domain, supabaseUrl, serviceKey, ultraPeerId, timeoutMs
@@ -77,17 +95,31 @@ export async function decomposeQuestion(
   };
 }
 
+const TRANSIENT_OLLAMA_SIGNALS = ['503', 'server busy', 'maximum pending', 'econnreset', 'etimedout', 'timeout', 'aborted', 'request_aborted', 'socket hang up', 'eai_again'];
+
+function isTransientOllamaError(err: unknown): boolean {
+  const msg = (err instanceof Error ? err.message : String(err)).toLowerCase();
+  return TRANSIENT_OLLAMA_SIGNALS.some(signal => msg.includes(signal));
+}
+
 async function ollamaGenerate(
   baseUrl: string,
   model: string,
   prompt: string,
   timeoutMs: number,
 ): Promise<string> {
+  // BP094 Session 9 BLOCK D: clamp timeoutMs to minimum 5000ms.
+  // AbortSignal.timeout() throws RangeError if value is negative.
+  // Negative timeoutMs occurs when question deadline is already elapsed.
+  const effectiveTimeoutMs = Math.max(5000, timeoutMs);
+  if (timeoutMs < 0) {
+    console.warn(`[WARN] negative delay corrected to 0 (raw=${timeoutMs}ms) in ollamaGenerate -- question deadline already elapsed`);
+  }
   const res = await fetch(`${baseUrl}/api/generate`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ model, prompt, stream: false }),
-    signal: AbortSignal.timeout(timeoutMs),
+    signal: AbortSignal.timeout(effectiveTimeoutMs),
   });
   const text = await res.text();
   if (!res.ok) throw new Error(`Ollama HTTP ${res.status}: ${text.slice(0, 200)}`);
@@ -128,7 +160,12 @@ async function decomposeViaRelay(
   const routeId = insertedRoute?.id;
   if (!routeId) throw new Error('posse_decompose: relay_routes INSERT returned no id');
 
-  const deadline = Date.now() + timeoutMs;
+  // BP094 Session 9 BLOCK D: clamp timeoutMs to prevent negative deadline
+  const effectiveDeadlineMs = Math.max(5000, timeoutMs);
+  if (timeoutMs < 0) {
+    console.warn(`[WARN] negative delay corrected to 0 (raw=${timeoutMs}ms) in decomposeViaRelay -- question deadline already elapsed`);
+  }
+  const deadline = Date.now() + effectiveDeadlineMs;
   while (Date.now() < deadline) {
     const rows = await supabaseGet(
       supabaseUrl, serviceKey,
