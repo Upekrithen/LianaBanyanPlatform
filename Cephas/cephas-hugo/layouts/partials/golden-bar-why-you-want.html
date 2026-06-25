@@ -1,61 +1,157 @@
 {{- /* ===================================================
-     GOLDEN BAR + WHY YOU WANT OVERLAY - BP094 Mamba 1
-     Placement: below alpha-banner, above nav (in mnemosynec-homepage.html)
-     CSS class: .golden-bar-why-you-want
+     TICKER BAR + WHY YOU WANT OVERLAY - BP094 REV-1 (replaces dual-bar)
+     Placement: below alpha-banner suppression, above nav (in mnemosynec-homepage.html)
+     Dual-style: dots (default) / bullets (via ?ticker=bullets URL param)
+     Accessibility: hover pause, focus-within pause, prefers-reduced-motion static-cycle
      Brand gold: #C9A84C
      NO EM-DASHES anywhere in this file
      =================================================== */ -}}
 {{- if .Site.Params.isMnemosynec -}}
 
 <style>
-/* ---- GOLDEN BAR ---- */
-.golden-bar-why-you-want {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
+/* ---- CSS VARIABLES (BP094 REV-1 / REV-2) ---- */
+:root {
+  --top-bar-height: 38px;
+  --lb-brand-blue: #3B82F6;
+}
+
+/* ---- TICKER BAR (BP094 REV-1) ---- */
+.mn-ticker-bar {
+  height: var(--top-bar-height);
   background: #C9A84C;
   color: #1a1209;
-  padding: 0.45rem 1rem;
-  font-size: 0.82rem;
-  font-weight: 600;
-  position: relative;
-  z-index: 9998;
+  position: sticky;
+  top: 0;
+  z-index: 9999;
   border-bottom: 2px solid #a8872e;
-  flex-wrap: wrap;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
 }
-.golden-bar-why-you-want code {
-  font-family: 'IBM Plex Mono', monospace;
-  font-weight: 700;
-  font-size: 0.82rem;
-  letter-spacing: 0.03em;
-  background: transparent;
-  color: #1a1209;
-  padding: 0;
+.ticker-viewport {
+  flex: 1;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  min-width: 0;
 }
-.golden-bar-why-you-want .gbwy-btn {
+.ticker-track {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  flex-shrink: 0;
+  animation: mn-ticker-scroll 60s linear infinite;
+  will-change: transform;
+}
+@keyframes mn-ticker-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+/* Pause on hover */
+.mn-ticker-bar:hover .ticker-track {
+  animation-play-state: paused;
+}
+/* Pause on focus-within */
+.mn-ticker-bar:focus-within .ticker-track {
+  animation-play-state: paused;
+}
+/* prefers-reduced-motion: cross-fade static segments, NO horizontal motion */
+@media (prefers-reduced-motion: reduce) {
+  .ticker-track {
+    animation: none;
+    transform: none;
+    position: static;
+    width: 100%;
+    justify-content: center;
+  }
+  .ticker-seg-dup { display: none; }
+  .ticker-seg-main .ticker-rm-seg {
+    position: absolute;
+    left: 0; right: 0;
+    opacity: 0;
+    text-align: center;
+    animation: mn-ticker-fade 20s linear infinite;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .ticker-seg-main {
+    position: relative;
+    width: 100%;
+    height: var(--top-bar-height);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .ticker-seg-main .ticker-rm-seg:nth-child(1) { animation-delay: 0s; }
+  .ticker-seg-main .ticker-rm-seg:nth-child(2) { animation-delay: 5s; }
+  .ticker-seg-main .ticker-rm-seg:nth-child(3) { animation-delay: 10s; }
+  .ticker-seg-main .ticker-rm-seg:nth-child(4) { animation-delay: 15s; }
+  @keyframes mn-ticker-fade {
+    0%, 4%   { opacity: 0; }
+    8%, 22%  { opacity: 1; }
+    24%, 100%{ opacity: 0; }
+  }
+}
+/* Ticker inline why-button */
+.ticker-why-btn {
   background: #1a1209;
   color: #C9A84C;
-  border: 2px solid #1a1209;
+  border: 1.5px solid #1a1209;
   border-radius: 9999px;
-  padding: 0.25rem 0.9rem;
-  font-size: 0.78rem;
-  font-weight: 800;
-  letter-spacing: 0.04em;
+  padding: 0.1rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 700;
   cursor: pointer;
   font-family: inherit;
   white-space: nowrap;
   transition: background 150ms, color 150ms;
+  vertical-align: middle;
+  margin: 0 0.2rem;
 }
-.golden-bar-why-you-want .gbwy-btn:hover {
-  background: #C9A84C;
+.ticker-why-btn:hover { background: #C9A84C; color: #1a1209; }
+.ticker-why-btn:focus-visible { outline: 2px solid #1a1209; outline-offset: 2px; }
+/* Ticker links */
+.mn-ticker-bar a { color: #1a1209; font-weight: 700; text-decoration: underline; }
+.mn-ticker-bar a:focus-visible { outline: 2px solid #1a1209; outline-offset: 2px; }
+/* Data-ticker-style switching */
+[data-ticker-style="dots"] .ticker-dots   { display: inline-flex; }
+[data-ticker-style="dots"] .ticker-bullets { display: none; }
+[data-ticker-style="bullets"] .ticker-dots   { display: none; }
+[data-ticker-style="bullets"] .ticker-bullets { display: inline-flex; }
+/* Default (no attribute = dots) */
+html:not([data-ticker-style]) .ticker-dots { display: inline-flex; }
+html:not([data-ticker-style]) .ticker-bullets { display: none; }
+/* Ticker style toggle (top-right) */
+.ticker-style-toggle {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 0.65rem;
+  color: rgba(26,18,9,0.55);
+  padding: 0 0.65rem;
+  white-space: nowrap;
+}
+.ticker-toggle-btn {
+  background: transparent;
+  border: 1px solid rgba(26,18,9,0.35);
+  border-radius: 9999px;
+  padding: 0.08rem 0.38rem;
+  font-size: 0.62rem;
+  cursor: pointer;
+  font-family: inherit;
   color: #1a1209;
+  transition: background 120ms, color 120ms;
+}
+.ticker-toggle-btn[aria-pressed="true"] {
+  background: #1a1209;
+  color: #C9A84C;
   border-color: #1a1209;
 }
-.golden-bar-why-you-want .gbwy-btn:focus-visible {
-  outline: 2px solid #1a1209;
-  outline-offset: 3px;
-}
+.ticker-toggle-btn:focus-visible { outline: 2px solid #1a1209; outline-offset: 2px; }
 
 /* ---- OVERLAY ---- */
 #why-you-want-overlay {
@@ -425,15 +521,41 @@
 }
 </style>
 
-{{- /* GOLDEN BAR */ -}}
-<div class="golden-bar-why-you-want" id="gbwy-bar">
-  <code>Substrate Replaces New Data Centers.</code>
-  <button
-    class="gbwy-btn"
-    onclick="wyWantOpen()"
-    aria-haspopup="dialog"
-    aria-controls="why-you-want-overlay"
-  >Why YOU Want to be Part of This</button>
+{{- /* TICKER BAR (BP094 REV-1 -- replaces dual alpha-banner + golden-bar) */ -}}
+<div class="mn-ticker-bar" id="mn-ticker-bar">
+  <div class="ticker-viewport" aria-label="MnemosyneC news ticker">
+
+    {{- /* DOTS STYLE (default, active when no param or ?ticker=dots) */ -}}
+    <div class="ticker-track ticker-dots" role="marquee" aria-live="off" aria-label="Scrolling ticker: dots style">
+      {{- /* Normal motion: two identical segments for seamless CSS loop */ -}}
+      <span class="ticker-seg-main">..... Substrate Replaces New Data Centers ..... Public Alpha v0.7.2 ............ <a href="#how-it-works" tabindex="0">How it works</a> ........... <button class="ticker-why-btn" onclick="wyWantOpen()" tabindex="0" aria-haspopup="dialog" aria-controls="why-you-want-overlay">(Why YOU Want to be Part of This)</button> ....... Substrate Replaces New Data Centers ......</span>
+      <span class="ticker-seg-dup" aria-hidden="true">..... Substrate Replaces New Data Centers ..... Public Alpha v0.7.2 ............ How it works ........... (Why YOU Want to be Part of This) ....... Substrate Replaces New Data Centers ......</span>
+    </div>
+
+    {{- /* BULLETS STYLE (active when ?ticker=bullets) */ -}}
+    <div class="ticker-track ticker-bullets" role="marquee" aria-live="off" aria-label="Scrolling ticker: bullets style">
+      <span class="ticker-seg-main"> Substrate Replaces New Data Centers &middot; Public Alpha v0.7.2 &middot; <a href="#how-it-works" tabindex="0">How it works</a> &middot; <button class="ticker-why-btn" onclick="wyWantOpen()" tabindex="0" aria-haspopup="dialog" aria-controls="why-you-want-overlay">(Why YOU Want to be Part of This)</button> &middot; Substrate Replaces New Data Centers </span>
+      <span class="ticker-seg-dup" aria-hidden="true"> Substrate Replaces New Data Centers &middot; Public Alpha v0.7.2 &middot; How it works &middot; (Why YOU Want to be Part of This) &middot; Substrate Replaces New Data Centers </span>
+    </div>
+
+    {{- /* REDUCED MOTION VARIANT: static segments, shown only when prefers-reduced-motion */ -}}
+    <div class="ticker-track ticker-rm-wrap" role="status" aria-live="polite" aria-label="News updates" style="display:none">
+      <span class="ticker-seg-main" style="position:relative;width:100%;display:flex;align-items:center;justify-content:center;">
+        <span class="ticker-rm-seg">Substrate Replaces New Data Centers</span>
+        <span class="ticker-rm-seg">Public Alpha v0.7.2</span>
+        <span class="ticker-rm-seg"><a href="#how-it-works">How it works</a></span>
+        <span class="ticker-rm-seg"><button class="ticker-why-btn" onclick="wyWantOpen()">(Why YOU Want to be Part of This)</button></span>
+      </span>
+    </div>
+  </div>
+
+  {{- /* In-page style toggle (top-right, low visual weight) */ -}}
+  <span class="ticker-style-toggle" aria-label="Ticker style">
+    ticker style:
+    <button class="ticker-toggle-btn" data-style="dots" aria-pressed="false">dots</button>
+    /
+    <button class="ticker-toggle-btn" data-style="bullets" aria-pressed="false">bullets</button>
+  </span>
 </div>
 
 {{- /* OVERLAY DIALOG */ -}}
@@ -462,6 +584,18 @@
       <div class="wyw-panel wyw-panel-active" id="wyw-panel-0" role="tabpanel" aria-labelledby="wyw-tab-0">
         <div class="wyw-h2">Substrate + Free AI outperforms Flagship AI without Substrate.</div>
         <div class="wyw-sub">Two sealed trials. Methodology public. Run it yourself.</div>
+
+        {{- /* REV-7: Substrate Compounding Chart -- PROOF tab deep, full embedded lead visual */ -}}
+        <div class="wyw-cmp-chart-wrap" style="margin-bottom:1.2rem;">
+          <div class="chart-compounding-wrap chart-tile"
+               role="button" tabindex="0"
+               aria-label="Click to expand Substrate Compounding chart"
+               id="substrateCmpChartProof"
+               onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();mnExpandChart(this);}">
+            <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" font-family="Inter, system-ui, sans-serif" style="background:#0f0f0f;width:100%;height:auto;display:block;border-radius:0.5rem;"><defs><clipPath id="plotClipP"><rect x="90" y="30" width="680" height="380"/></clipPath></defs><rect x="0" y="0" width="900" height="520" fill="#0f0f0f"/><rect x="90" y="30" width="680" height="380" fill="#161616" rx="4"/><line x1="90" y1="410" x2="770" y2="410" stroke="#2a2a2a" stroke-width="1"/><line x1="90" y1="347" x2="770" y2="347" stroke="#2a2a2a" stroke-width="1"/><line x1="90" y1="284" x2="770" y2="284" stroke="#2a2a2a" stroke-width="1"/><line x1="90" y1="220" x2="770" y2="220" stroke="#2a2a2a" stroke-width="1"/><line x1="90" y1="157" x2="770" y2="157" stroke="#2a2a2a" stroke-width="1"/><line x1="90" y1="94" x2="770" y2="94" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="6 4"/><rect x="672" y="75" width="92" height="18" rx="3" fill="#2a0a0a"/><text x="718" y="88" text-anchor="middle" fill="#ef4444" font-size="11" font-weight="700" letter-spacing="0.05em">SESSION LIMIT</text><rect x="90" y="30" width="680" height="64" fill="#ef444408"/><text x="78" y="414" text-anchor="end" fill="#6b7280" font-size="12">0%</text><text x="78" y="351" text-anchor="end" fill="#6b7280" font-size="12">20%</text><text x="78" y="288" text-anchor="end" fill="#6b7280" font-size="12">40%</text><text x="78" y="224" text-anchor="end" fill="#6b7280" font-size="12">60%</text><text x="78" y="161" text-anchor="end" fill="#6b7280" font-size="12">80%</text><text x="78" y="98" text-anchor="end" fill="#ef4444" font-size="12" font-weight="600">100%</text><text x="18" y="220" text-anchor="middle" fill="#9ca3af" font-size="12" transform="rotate(-90 18 220)">Cumulative Context %</text><line x1="90" y1="410" x2="770" y2="410" stroke="#3a3a3a" stroke-width="1.5"/><text x="90" y="428" text-anchor="middle" fill="#6b7280" font-size="11">0</text><text x="152" y="428" text-anchor="middle" fill="#6b7280" font-size="11">1</text><text x="214" y="428" text-anchor="middle" fill="#6b7280" font-size="11">2</text><text x="276" y="428" text-anchor="middle" fill="#6b7280" font-size="11">3</text><text x="337" y="428" text-anchor="middle" fill="#22c55e" font-size="11" font-weight="600">4</text><text x="399" y="428" text-anchor="middle" fill="#6b7280" font-size="11">5</text><text x="461" y="428" text-anchor="middle" fill="#6b7280" font-size="11">6</text><text x="523" y="428" text-anchor="middle" fill="#6b7280" font-size="11">7</text><text x="585" y="428" text-anchor="middle" fill="#6b7280" font-size="11">8</text><text x="647" y="428" text-anchor="middle" fill="#6b7280" font-size="11">9</text><text x="709" y="428" text-anchor="middle" fill="#6b7280" font-size="11">10</text><text x="770" y="428" text-anchor="middle" fill="#f59e0b" font-size="11" font-weight="600">11</text><text x="430" y="448" text-anchor="middle" fill="#9ca3af" font-size="12">Cumulative MAMBA Count</text><line x1="337" y1="30" x2="337" y2="410" stroke="#22c55e" stroke-width="1" stroke-dasharray="4 4" opacity="0.5"/><rect x="290" y="32" width="94" height="17" rx="3" fill="#0a1a0a"/><text x="337" y="44" text-anchor="middle" fill="#22c55e" font-size="10" font-weight="600">Wave 1 complete</text><polyline points="90,410 152,138" fill="none" stroke="#6b7280" stroke-width="2" stroke-dasharray="5 4" clip-path="url(#plotClipP)"/><polyline points="152,138 174,94" fill="none" stroke="#6b7280" stroke-width="1.5" stroke-dasharray="3 4" opacity="0.4" clip-path="url(#plotClipP)"/><rect x="155" y="56" width="74" height="18" rx="3" fill="#1a0a0a" opacity="0.9"/><text x="192" y="69" text-anchor="middle" fill="#ef4444" font-size="10" font-weight="600">Crash zone</text><line x1="192" y1="70" x2="168" y2="94" stroke="#ef4444" stroke-width="1" opacity="0.6"/><polyline points="90,410 152,376 214,342 276,308 337,274" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" clip-path="url(#plotClipP)"/><circle cx="90" cy="410" r="3.5" fill="#22c55e"/><circle cx="152" cy="376" r="3.5" fill="#22c55e"/><circle cx="214" cy="342" r="3.5" fill="#22c55e"/><circle cx="276" cy="308" r="3.5" fill="#22c55e"/><circle cx="337" cy="274" r="5" fill="#22c55e" stroke="#0f0f0f" stroke-width="1.5"/><polyline points="90,410 152,376 214,342 276,308 337,274" fill="none" stroke="#22c55e" stroke-width="1.5" opacity="0.35" stroke-dasharray="3 3" clip-path="url(#plotClipP)"/><polyline points="337,274 399,253 461,232 523,212 585,191 647,170 709,150 770,128" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" clip-path="url(#plotClipP)"/><circle cx="399" cy="253" r="3.5" fill="#f59e0b"/><circle cx="461" cy="232" r="3.5" fill="#f59e0b"/><circle cx="523" cy="212" r="3.5" fill="#f59e0b"/><circle cx="585" cy="191" r="3.5" fill="#f59e0b"/><circle cx="647" cy="170" r="3.5" fill="#f59e0b"/><circle cx="709" cy="150" r="3.5" fill="#f59e0b"/><circle cx="770" cy="128" r="6" fill="#f59e0b" stroke="#0f0f0f" stroke-width="1.5"/><text x="240" y="320" fill="#22c55e" font-size="11" font-weight="600" opacity="0.9">10.75% / MAMBA</text><text x="240" y="333" fill="#22c55e" font-size="10" opacity="0.7">(Wave 1)</text><text x="538" y="195" fill="#f59e0b" font-size="11" font-weight="600" opacity="0.9">6.57% / MAMBA</text><text x="538" y="208" fill="#f59e0b" font-size="10" opacity="0.7">(Wave 2)</text><text x="96" y="125" fill="#6b7280" font-size="11" font-weight="600" opacity="0.9">86% / MAMBA</text><text x="96" y="138" fill="#6b7280" font-size="10" opacity="0.7">(No substrate)</text><line x1="337" y1="274" x2="360" y2="255" stroke="#22c55e" stroke-width="1" opacity="0.7"/><rect x="358" y="242" width="60" height="16" rx="3" fill="#0a1a0a"/><text x="388" y="254" text-anchor="middle" fill="#22c55e" font-size="10">MAMBA 4 -- 43%</text><line x1="770" y1="128" x2="748" y2="108" stroke="#f59e0b" stroke-width="1" opacity="0.7"/><rect x="648" y="93" width="148" height="28" rx="4" fill="#1a1200" stroke="#f59e0b" stroke-width="1" opacity="0.9"/><text x="722" y="106" text-anchor="middle" fill="#f59e0b" font-size="11" font-weight="700">11 MAMBAs -- same Knight session</text><text x="722" y="117" text-anchor="middle" fill="#f59e0b" font-size="10" opacity="0.8">89% context -- Wave 2 complete</text><rect x="96" y="34" width="380" height="54" rx="4" fill="#1a1a0a" stroke="#f59e0b" stroke-width="1" opacity="0.85"/><text x="104" y="47" fill="#f59e0b" font-size="10" font-weight="700" opacity="0.9"><tspan x="104" dy="0">"Notice how the MORE there is, the FASTER and MORE efficient</tspan><tspan x="104" dy="13">it gets? We need a chart for that. For real."</tspan></text><text x="104" y="78" fill="#9ca3af" font-size="9" opacity="0.7">-- Founder direct, BP087, 2026-06-20</text><rect x="592" y="310" width="172" height="76" rx="5" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/><line x1="602" y1="326" x2="622" y2="326" stroke="#6b7280" stroke-width="2" stroke-dasharray="4 3"/><text x="628" y="330" fill="#9ca3af" font-size="11">Without substrate (BP063)</text><line x1="602" y1="345" x2="622" y2="345" stroke="#22c55e" stroke-width="2.5"/><circle cx="612" cy="345" r="3" fill="#22c55e"/><text x="628" y="349" fill="#d1fae5" font-size="11">Wave 1 (with substrate)</text><line x1="602" y1="364" x2="622" y2="364" stroke="#f59e0b" stroke-width="2.5"/><circle cx="612" cy="364" r="3" fill="#f59e0b"/><text x="628" y="368" fill="#fef3c7" font-size="11">Wave 1 + Wave 2 (compounding)</text><text x="430" y="480" text-anchor="middle" fill="#e5e7eb" font-size="13" font-weight="700">Substrate Compounding -- Context Cost Per MAMBA Decreases Across Waves</text><text x="430" y="497" text-anchor="middle" fill="#9ca3af" font-size="11">More substrate, fewer tokens per unit of work. The compounding compounds.</text><text x="430" y="512" text-anchor="middle" fill="#6b7280" font-size="10">Empirical anchor: 28-screenshot Pinned Proof -- canon_pinned_proof_bp087_knight_wave_2_ride_28_screenshots_0022_0053</text></svg>
+            <div class="chart-cmp-hint" style="font-size:0.7rem;color:#9ca3af;text-align:right;padding:0.25rem 0;">Click to expand &bull; ESC to close</div>
+          </div>
+        </div>
 
         <div class="wyw-chart-wrap">
           <canvas id="wyw-proof-chart" aria-label="Bar chart comparing Free AI plus Substrate vs Flagship AI without Substrate performance"></canvas>
@@ -566,6 +700,26 @@
           </li>
         </ul>
 
+        <!-- INVITATION CTA: This bounty surface is Step 1 of the 9-step dev recruitment funnel
+             per canon_dev_recruitment_funnel_social_letter_fork_bounty_ip_ledger_attribute_loop_bp092.
+             social -> Substack letter -> fork -> Battery Dispatch -> Star Chamber -> Member vote
+             -> IP Ledger + Marks + floater patent eligibility. -->
+        <hr class="wyw-divider">
+        <div class="wyw-h2" style="font-size:1rem;">Pick a Bounty. Earn Marks. Be in the IP Ledger.</div>
+
+        {{- /* Bounty cards: query bounties_open table (status=open, limit 3).
+             Hugo static fallback -- live DB query requires server-side or build-time integration.
+             Render placeholder until Supabase edge function or Hugo data pipeline is wired. */ -}}
+        <div class="wyw-bounty-cards" style="display:flex;flex-direction:column;gap:0.75rem;margin:0.75rem 0 1rem;">
+          <div class="wyw-bounty-placeholder" style="background:var(--surfaceOff,#1f2327);border:1px dashed var(--border,#2f3439);border-radius:0.75rem;padding:1rem 1.2rem;text-align:center;">
+            <div style="font-size:0.88rem;color:var(--textMuted,#7a8088);font-style:italic;">First bounties opening soon. Watch this space.</div>
+          </div>
+        </div>
+        <div style="font-size:0.82rem;margin-top:0.5rem;">
+          <a href="/bounties/" style="color:#C9A84C;font-weight:700;text-decoration:underline;">Or browse all open bounties &rsaquo;&rsaquo;&rsaquo;</a>
+        </div>
+
+        <hr class="wyw-divider">
         <div class="wyw-sub" style="margin-bottom:0.5rem">
           16 Initiatives. Self-funding design. A cooperative model built so that the people doing the work keep 83.3% of every dollar. No venture capital. No extraction. Help each other help ourselves.
         </div>
@@ -581,6 +735,54 @@
 </div>{{- /* end #why-you-want-overlay */ -}}
 
 <script>
+/* ---- TICKER INIT (BP094 REV-1) ---- */
+(function () {
+  var params = new URLSearchParams(window.location.search);
+  var style = params.get('ticker') || 'dots';
+  if (style !== 'dots' && style !== 'bullets') { style = 'dots'; }
+  document.documentElement.setAttribute('data-ticker-style', style);
+
+  /* Reflect active style on toggle buttons */
+  function reflectToggle() {
+    var btns = document.querySelectorAll('.ticker-toggle-btn');
+    btns.forEach(function(b) {
+      b.setAttribute('aria-pressed', b.getAttribute('data-style') === style ? 'true' : 'false');
+    });
+  }
+
+  /* Inline swap (no reload) on button click */
+  document.addEventListener('click', function(e) {
+    var btn = e.target.closest('.ticker-toggle-btn');
+    if (!btn) return;
+    var newStyle = btn.getAttribute('data-style');
+    if (!newStyle || newStyle === style) return;
+    style = newStyle;
+    document.documentElement.setAttribute('data-ticker-style', style);
+    reflectToggle();
+    /* Also update URL param without reload */
+    var url = new URL(window.location.href);
+    url.searchParams.set('ticker', style);
+    window.history.replaceState({}, '', url.toString());
+  });
+
+  /* prefers-reduced-motion: show the rm-wrap, hide normal tracks */
+  var mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+  function applyRM(matched) {
+    var normalTracks = document.querySelectorAll('.ticker-track:not(.ticker-rm-wrap)');
+    var rmTrack = document.querySelector('.ticker-rm-wrap');
+    if (matched) {
+      normalTracks.forEach(function(t) { t.style.display = 'none'; });
+      if (rmTrack) rmTrack.style.display = 'inline-flex';
+    } else {
+      if (rmTrack) rmTrack.style.display = 'none';
+    }
+  }
+  if (mq) { applyRM(mq.matches); mq.addEventListener('change', function(e) { applyRM(e.matches); }); }
+
+  document.addEventListener('DOMContentLoaded', reflectToggle);
+})();
+
+/* ---- WYW OVERLAY (preserved from BP094 Mamba 1) ---- */
 (function () {
   var OVERLAY = document.getElementById('why-you-want-overlay');
   var DIALOG  = document.getElementById('wyw-dialog-inner');
@@ -720,6 +922,64 @@
     if (idx < 0) return;
     if (e.key === 'ArrowRight') { e.preventDefault(); wyWantTab((idx + 1) % 3); tabs[(idx + 1) % 3].focus(); }
     if (e.key === 'ArrowLeft')  { e.preventDefault(); wyWantTab((idx + 2) % 3); tabs[(idx + 2) % 3].focus(); }
+  });
+})();
+
+/* ---- CHART EXPAND (BP094 REV-7) ---- */
+(function () {
+  var activeBackdrop = null;
+  var originTile = null;
+
+  window.mnExpandChart = function(tile) {
+    if (activeBackdrop) return;
+    originTile = tile;
+    var backdrop = document.createElement('div');
+    backdrop.className = 'chart-tile-expanded-backdrop';
+    var box = document.createElement('div');
+    box.className = 'chart-tile-expanded';
+    box.setAttribute('role', 'dialog');
+    box.setAttribute('aria-modal', 'true');
+    box.setAttribute('aria-label', 'Substrate Compounding chart expanded');
+    var svgSrc = tile.querySelector('svg');
+    if (svgSrc) {
+      var svgClone = svgSrc.cloneNode(true);
+      svgClone.style.width = '100%';
+      svgClone.style.height = '100%';
+      box.appendChild(svgClone);
+    }
+    var hint = document.createElement('div');
+    hint.className = 'chart-tile-close-hint';
+    hint.textContent = 'Click or press ESC to close';
+    box.appendChild(hint);
+    backdrop.appendChild(box);
+    document.body.appendChild(backdrop);
+    requestAnimationFrame(function() { backdrop.classList.add('open'); });
+    activeBackdrop = backdrop;
+    box.addEventListener('click', collapse);
+    backdrop.addEventListener('click', function(e) { if (e.target === backdrop) collapse(); });
+    box.focus && box.setAttribute('tabindex', '-1');
+    setTimeout(function() { box.focus(); }, 50);
+  };
+
+  function collapse() {
+    if (!activeBackdrop) return;
+    activeBackdrop.classList.remove('open');
+    var ab = activeBackdrop;
+    setTimeout(function() { if (ab.parentNode) ab.parentNode.removeChild(ab); }, 150);
+    activeBackdrop = null;
+    if (originTile) { originTile.focus(); originTile = null; }
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && activeBackdrop) collapse();
+  });
+
+  /* Auto-wire chart-tile clicks that have no onclick */
+  document.addEventListener('DOMContentLoaded', function() {
+    var tiles = document.querySelectorAll('.chart-compounding-wrap.chart-tile');
+    tiles.forEach(function(tile) {
+      tile.addEventListener('click', function() { window.mnExpandChart(tile); });
+    });
   });
 })();
 </script>

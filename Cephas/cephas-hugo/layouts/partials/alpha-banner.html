@@ -1,4 +1,6 @@
 {{- /* ALPHA BANNER — BP092 — dismissible via localStorage · amber/yellow stripe */ -}}
+{{- /* MnemosyneC: single ticker bar replaces alpha-banner (BP094 REV-1). Hidden for isMnemosynec. */ -}}
+{{- if not .Site.Params.isMnemosynec -}}
 <div id="lb-alpha-banner" style="
   display: block;
   background: #f59e0b;
@@ -12,17 +14,9 @@
   z-index: 9999;
   border-bottom: 2px solid #d97706;
 ">
-  {{ if .Site.Params.isMnemosynec }}
-    Public Alpha v{{ with (index .Site.Data.version_trust.versions 0) }}{{ .version }}{{ end }}
-    &nbsp;&middot;&nbsp;
-    <code style="font-family:monospace;font-weight:700;font-size:0.82rem;letter-spacing:0.02em;">Substrate Replaces New Data Centers</code>
-    &nbsp;-&nbsp;
-    <a href="/how-it-works/" style="color:#1c1917;text-decoration:underline;">How it works</a>
-  {{ else }}
-    Cooperative Substrate &middot; ALPHA &middot; Members Welcome
-    &nbsp;-&nbsp;
-    <a href="https://mnemosynec.org/" style="color:#1c1917;text-decoration:underline;">Learn More</a>
-  {{ end }}
+  Cooperative Substrate &middot; ALPHA &middot; Members Welcome
+  &nbsp;-&nbsp;
+  <a href="https://mnemosynec.org/" style="color:#1c1917;text-decoration:underline;">Learn More</a>
   <button
     id="lb-alpha-banner-close"
     aria-label="Dismiss alpha banner"
@@ -50,3 +44,4 @@
     }
   })();
 </script>
+{{- end -}}

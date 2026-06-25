@@ -1,0 +1,192 @@
+{{- /* =====================================================================
+     SUBSTRATE COMPOUNDING CHART PARTIAL -- BP094 REV-7
+     Inline SVG copied verbatim from Downloads/substrate-compounding-chart.svg
+     Click-expand CSS/JS from Downloads/substrate-compounding-chart.html lines 11-61 + 254-321
+     Two placements:
+       1. Hero band inline thumbnail (~320px desktop, full-width mobile)
+       2. PROOF tab lead visual (full embedded)
+     BP087 attribution preserved verbatim.
+     ===================================================================== */ -}}
+
+<div class="chart-compounding-wrap chart-tile"
+     role="button"
+     tabindex="0"
+     aria-label="Click to expand Substrate Compounding chart"
+     id="substrateCmpChart"
+     onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();mnExpandChart(this);}">
+
+  <svg viewBox="0 0 900 520" xmlns="http://www.w3.org/2000/svg" font-family="Inter, system-ui, sans-serif" style="background:#0f0f0f;width:100%;height:auto;display:block;border-radius:0.5rem;">
+
+  <!-- DEFS -->
+  <defs>
+    <clipPath id="plotClip2">
+      <rect x="90" y="30" width="680" height="380"/>
+    </clipPath>
+    <marker id="dot-green2" markerWidth="8" markerHeight="8" refX="4" refY="4">
+      <circle cx="4" cy="4" r="3.5" fill="#22c55e"/>
+    </marker>
+    <marker id="dot-amber2" markerWidth="8" markerHeight="8" refX="4" refY="4">
+      <circle cx="4" cy="4" r="3.5" fill="#f59e0b"/>
+    </marker>
+    <marker id="dot-gray2" markerWidth="8" markerHeight="8" refX="4" refY="4">
+      <circle cx="4" cy="4" r="3.5" fill="#6b7280"/>
+    </marker>
+  </defs>
+
+  <!-- BACKGROUND PANEL -->
+  <rect x="0" y="0" width="900" height="520" fill="#0f0f0f"/>
+  <rect x="90" y="30" width="680" height="380" fill="#161616" rx="4"/>
+
+  <!-- GRID LINES (Y) -->
+  <line x1="90" y1="410" x2="770" y2="410" stroke="#2a2a2a" stroke-width="1"/>
+  <line x1="90" y1="347" x2="770" y2="347" stroke="#2a2a2a" stroke-width="1"/>
+  <line x1="90" y1="284" x2="770" y2="284" stroke="#2a2a2a" stroke-width="1"/>
+  <line x1="90" y1="220" x2="770" y2="220" stroke="#2a2a2a" stroke-width="1"/>
+  <line x1="90" y1="157" x2="770" y2="157" stroke="#2a2a2a" stroke-width="1"/>
+
+  <!-- SESSION LIMIT LINE (100%) at y=94 -->
+  <line x1="90" y1="94" x2="770" y2="94" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <rect x="672" y="75" width="92" height="18" rx="3" fill="#2a0a0a"/>
+  <text x="718" y="88" text-anchor="middle" fill="#ef4444" font-size="11" font-weight="700" letter-spacing="0.05em">SESSION LIMIT</text>
+
+  <!-- CRASH ZONE FILL -->
+  <rect x="90" y="30" width="680" height="64" fill="#ef444408"/>
+
+  <!-- Y AXIS LABELS -->
+  <text x="78" y="414" text-anchor="end" fill="#6b7280" font-size="12">0%</text>
+  <text x="78" y="351" text-anchor="end" fill="#6b7280" font-size="12">20%</text>
+  <text x="78" y="288" text-anchor="end" fill="#6b7280" font-size="12">40%</text>
+  <text x="78" y="224" text-anchor="end" fill="#6b7280" font-size="12">60%</text>
+  <text x="78" y="161" text-anchor="end" fill="#6b7280" font-size="12">80%</text>
+  <text x="78" y="98" text-anchor="end" fill="#ef4444" font-size="12" font-weight="600">100%</text>
+
+  <!-- Y AXIS TITLE -->
+  <text x="18" y="220" text-anchor="middle" fill="#9ca3af" font-size="12" transform="rotate(-90 18 220)">Cumulative Context %</text>
+
+  <!-- X AXIS -->
+  <line x1="90" y1="410" x2="770" y2="410" stroke="#3a3a3a" stroke-width="1.5"/>
+
+  <!-- X tick labels -->
+  <text x="90"  y="428" text-anchor="middle" fill="#6b7280" font-size="11">0</text>
+  <text x="152" y="428" text-anchor="middle" fill="#6b7280" font-size="11">1</text>
+  <text x="214" y="428" text-anchor="middle" fill="#6b7280" font-size="11">2</text>
+  <text x="276" y="428" text-anchor="middle" fill="#6b7280" font-size="11">3</text>
+  <text x="337" y="428" text-anchor="middle" fill="#22c55e" font-size="11" font-weight="600">4</text>
+  <text x="399" y="428" text-anchor="middle" fill="#6b7280" font-size="11">5</text>
+  <text x="461" y="428" text-anchor="middle" fill="#6b7280" font-size="11">6</text>
+  <text x="523" y="428" text-anchor="middle" fill="#6b7280" font-size="11">7</text>
+  <text x="585" y="428" text-anchor="middle" fill="#6b7280" font-size="11">8</text>
+  <text x="647" y="428" text-anchor="middle" fill="#6b7280" font-size="11">9</text>
+  <text x="709" y="428" text-anchor="middle" fill="#6b7280" font-size="11">10</text>
+  <text x="770" y="428" text-anchor="middle" fill="#f59e0b" font-size="11" font-weight="600">11</text>
+
+  <!-- X AXIS TITLE -->
+  <text x="430" y="448" text-anchor="middle" fill="#9ca3af" font-size="12">Cumulative MAMBA Count</text>
+
+  <!-- WAVE 1 COMPLETE VERTICAL DASHED LINE at x=337 -->
+  <line x1="337" y1="30" x2="337" y2="410" stroke="#22c55e" stroke-width="1" stroke-dasharray="4 4" opacity="0.5"/>
+  <rect x="290" y="32" width="94" height="17" rx="3" fill="#0a1a0a"/>
+  <text x="337" y="44" text-anchor="middle" fill="#22c55e" font-size="10" font-weight="600">Wave 1 complete</text>
+
+  <!-- CURVE A: BASELINE (no substrate) -->
+  <polyline
+    points="90,410 152,138"
+    fill="none" stroke="#6b7280" stroke-width="2" stroke-dasharray="5 4"
+    clip-path="url(#plotClip2)"/>
+  <polyline
+    points="152,138 174,94"
+    fill="none" stroke="#6b7280" stroke-width="1.5" stroke-dasharray="3 4" opacity="0.4"
+    clip-path="url(#plotClip2)"/>
+  <rect x="155" y="56" width="74" height="18" rx="3" fill="#1a0a0a" opacity="0.9"/>
+  <text x="192" y="69" text-anchor="middle" fill="#ef4444" font-size="10" font-weight="600">Crash zone</text>
+  <line x1="192" y1="70" x2="168" y2="94" stroke="#ef4444" stroke-width="1" opacity="0.6"/>
+
+  <!-- CURVE B: WAVE 1 (green, MAMBA 0-4) -->
+  <polyline
+    points="90,410 152,376 214,342 276,308 337,274"
+    fill="none" stroke="#22c55e" stroke-width="2.5"
+    stroke-linejoin="round" stroke-linecap="round"
+    clip-path="url(#plotClip2)"/>
+  <circle cx="90"  cy="410" r="3.5" fill="#22c55e"/>
+  <circle cx="152" cy="376" r="3.5" fill="#22c55e"/>
+  <circle cx="214" cy="342" r="3.5" fill="#22c55e"/>
+  <circle cx="276" cy="308" r="3.5" fill="#22c55e"/>
+  <circle cx="337" cy="274" r="5"   fill="#22c55e" stroke="#0f0f0f" stroke-width="1.5"/>
+
+  <!-- CURVE C WAVE 1 LEG (green, same as B, MAMBA 0-4) -->
+  <polyline
+    points="90,410 152,376 214,342 276,308 337,274"
+    fill="none" stroke="#22c55e" stroke-width="1.5" opacity="0.35"
+    stroke-dasharray="3 3"
+    clip-path="url(#plotClip2)"/>
+
+  <!-- CURVE C WAVE 2 LEG (amber, MAMBA 4-11) -->
+  <polyline
+    points="337,274 399,253 461,232 523,212 585,191 647,170 709,150 770,128"
+    fill="none" stroke="#f59e0b" stroke-width="2.5"
+    stroke-linejoin="round" stroke-linecap="round"
+    clip-path="url(#plotClip2)"/>
+  <circle cx="399" cy="253" r="3.5" fill="#f59e0b"/>
+  <circle cx="461" cy="232" r="3.5" fill="#f59e0b"/>
+  <circle cx="523" cy="212" r="3.5" fill="#f59e0b"/>
+  <circle cx="585" cy="191" r="3.5" fill="#f59e0b"/>
+  <circle cx="647" cy="170" r="3.5" fill="#f59e0b"/>
+  <circle cx="709" cy="150" r="3.5" fill="#f59e0b"/>
+  <circle cx="770" cy="128" r="6"   fill="#f59e0b" stroke="#0f0f0f" stroke-width="1.5"/>
+
+  <!-- SLOPE LABELS -->
+  <text x="240" y="320" fill="#22c55e" font-size="11" font-weight="600" opacity="0.9">10.75% / MAMBA</text>
+  <text x="240" y="333" fill="#22c55e" font-size="10" opacity="0.7">(Wave 1)</text>
+  <text x="538" y="195" fill="#f59e0b" font-size="11" font-weight="600" opacity="0.9">6.57% / MAMBA</text>
+  <text x="538" y="208" fill="#f59e0b" font-size="10" opacity="0.7">(Wave 2)</text>
+  <text x="96" y="125" fill="#6b7280" font-size="11" font-weight="600" opacity="0.9">86% / MAMBA</text>
+  <text x="96" y="138" fill="#6b7280" font-size="10" opacity="0.7">(No substrate)</text>
+
+  <!-- ANNOTATION: MAMBA 4 / 43% -->
+  <line x1="337" y1="274" x2="360" y2="255" stroke="#22c55e" stroke-width="1" opacity="0.7"/>
+  <rect x="358" y="242" width="60" height="16" rx="3" fill="#0a1a0a"/>
+  <text x="388" y="254" text-anchor="middle" fill="#22c55e" font-size="10">MAMBA 4 -- 43%</text>
+
+  <!-- ANNOTATION: MAMBA 11 / 89% -->
+  <line x1="770" y1="128" x2="748" y2="108" stroke="#f59e0b" stroke-width="1" opacity="0.7"/>
+  <rect x="648" y="93" width="148" height="28" rx="4" fill="#1a1200" stroke="#f59e0b" stroke-width="1" opacity="0.9"/>
+  <text x="722" y="106" text-anchor="middle" fill="#f59e0b" font-size="11" font-weight="700">11 MAMBAs -- same Knight session</text>
+  <text x="722" y="117" text-anchor="middle" fill="#f59e0b" font-size="10" opacity="0.8">89% context -- Wave 2 complete</text>
+
+  <!-- FOUNDER QUOTE CALLOUT -->
+  <rect x="96" y="34" width="380" height="54" rx="4" fill="#1a1a0a" stroke="#f59e0b" stroke-width="1" opacity="0.85"/>
+  <text x="104" y="47" fill="#f59e0b" font-size="10" font-weight="700" opacity="0.9">
+    <tspan x="104" dy="0">"Notice how the MORE there is, the FASTER and MORE efficient</tspan>
+    <tspan x="104" dy="13">it gets? We need a chart for that. For real."</tspan>
+  </text>
+  <text x="104" y="78" fill="#9ca3af" font-size="9" opacity="0.7">-- Founder direct, BP087, 2026-06-20</text>
+
+  <!-- LEGEND (upper right, inside frame) -->
+  <rect x="592" y="310" width="172" height="76" rx="5" fill="#1a1a1a" stroke="#2a2a2a" stroke-width="1"/>
+  <line x1="602" y1="326" x2="622" y2="326" stroke="#6b7280" stroke-width="2" stroke-dasharray="4 3"/>
+  <text x="628" y="330" fill="#9ca3af" font-size="11">Without substrate (BP063)</text>
+  <line x1="602" y1="345" x2="622" y2="345" stroke="#22c55e" stroke-width="2.5"/>
+  <circle cx="612" cy="345" r="3" fill="#22c55e"/>
+  <text x="628" y="349" fill="#d1fae5" font-size="11">Wave 1 (with substrate)</text>
+  <line x1="602" y1="364" x2="622" y2="364" stroke="#f59e0b" stroke-width="2.5"/>
+  <circle cx="612" cy="364" r="3" fill="#f59e0b"/>
+  <text x="628" y="368" fill="#fef3c7" font-size="11">Wave 1 + Wave 2 (compounding)</text>
+
+  <!-- TITLE -->
+  <text x="430" y="480" text-anchor="middle" fill="#e5e7eb" font-size="13" font-weight="700">Substrate Compounding -- Context Cost Per MAMBA Decreases Across Waves</text>
+  <text x="430" y="497" text-anchor="middle" fill="#9ca3af" font-size="11">More substrate, fewer tokens per unit of work. The compounding compounds.</text>
+  <text x="430" y="512" text-anchor="middle" fill="#6b7280" font-size="10">Empirical anchor: 28-screenshot Pinned Proof -- canon_pinned_proof_bp087_knight_wave_2_ride_28_screenshots_0022_0053</text>
+
+  </svg>
+  <div class="chart-cmp-hint">Click to expand &bull; ESC to close</div>
+</div>
+
+<!-- Mobile fallback (viewport under 480px): hides thumbnail, shows text + button -->
+<div class="chart-cmp-mobile-fallback" aria-hidden="true">
+  <div style="font-size:0.9rem;font-weight:700;color:#f59e0b;margin-bottom:0.5rem;">Substrate Compounding -- Context Cost Per MAMBA Decreases Across Waves</div>
+  <blockquote style="font-size:0.82rem;color:#9ca3af;border-left:3px solid #f59e0b;padding-left:0.75rem;margin:0 0 0.75rem;">
+    "Notice how the MORE there is, the FASTER and MORE efficient it gets? We need a chart for that. For real."
+    <cite style="display:block;font-size:0.72rem;color:#6b7280;margin-top:0.25rem;">-- Founder direct, BP087, 2026-06-20</cite>
+  </blockquote>
+  <button class="btn-see-proof-curve" onclick="mnExpandChart(document.getElementById('substrateCmpChart'))">See the proof curve</button>
+</div>
