@@ -1,0 +1,57 @@
+[
+  {
+    "question": "Which of the following would most likely provide examples of mitotic cell divisions?",
+    "options": [
+      "cross section of muscle tissue",
+      "longitudinal section of a shoot tip",
+      "longitudinal section of a leaf vein",
+      "cross section of a fruit",
+      "cross section of a leaf",
+      "longitudinal section of a petal",
+      "longitudinal section of a seed",
+      "cross section of an anther (site of pollen production in a flower)"
+    ],
+    "correct_answer": "longitudinal section of a shoot tip",
+    "source_id": "2804",
+    "source_category": "biology",
+    "domain": "biology",
+    "_smoke_note": "Q01 CANARY -- known-good, 4/5 peers unanimous B in Trial_02_V060. Tests basic wiring: fleet dispatch + relay + answer extraction + ip_ledger write."
+  },
+  {
+    "question": "Typical advertising regulatory bodies suggest, for example that adverts must not: encourage _________, cause unnecessary ________ or _____, and must not cause _______ offence.",
+    "options": [
+      "Safe practices, Fear, Jealousy, Trivial",
+      "Unsafe practices, Distress, Joy, Trivial",
+      "Safe practices, Wants, Jealousy, Trivial",
+      "Safe practices, Distress, Fear, Trivial",
+      "Unsafe practices, Wants, Jealousy, Serious",
+      "Safe practices, Distress, Jealousy, Serious",
+      "Safe practices, Wants, Fear, Serious",
+      "Unsafe practices, Wants, Fear, Trivial",
+      "Unsafe practices, Distress, Fear, Serious"
+    ],
+    "correct_answer": "Unsafe practices, Distress, Fear, Serious",
+    "source_id": "70",
+    "source_category": "business",
+    "domain": "business",
+    "_smoke_note": "Q02 ABSTAIN CASCADE -- 4/5 peers ABSTAINed in Trial_02_V060; single ULTRA peer returned D (wrong); cascade accepted D via single_peer_fallback. Correct answer is I. Post-M24-hotfix: Posse (round_up_sweep.mjs) should re-attack on completion. This Q does NOT test that validate-relay.mjs itself blocks single_peer_fallback (that requires Full M24 Marathon patch). It tests that the Round-Up sweep CLI detects source_id=70 in the miss-list and fires Posse against it."
+  },
+  {
+    "question": "A company discovers that a supplier has been using child labor in violation of the company's code of conduct. The most ethically appropriate immediate response is to:",
+    "options": [
+      "Immediately terminate the supplier contract without notice",
+      "Publicly disclose the violation to customers and media",
+      "Engage the supplier privately to remediate and set a compliance deadline",
+      "Report the violation to local government authorities immediately",
+      "Suspend orders and conduct an independent audit before deciding",
+      "Do nothing until the next contract renewal",
+      "Increase order volume to give the supplier resources to fix the problem",
+      "Transfer the contract to a competitor supplier immediately"
+    ],
+    "correct_answer": "Suspend orders and conduct an independent audit before deciding",
+    "source_id": "CANARY_ANDON_BP094",
+    "source_category": "business_ethics",
+    "domain": "business",
+    "_smoke_note": "Q03 ANDON CANARY -- chosen for high inter-peer disagreement on ethics/process tradeoffs. Pass criteria: variance > 15% triggers Andon star-chamber escalation when --andon-escalate=star-chamber is active."
+  }
+]
