@@ -7,10 +7,12 @@
  * Narrator portraits are shown per depth.
  */
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { SubsystemExplainerCard } from "@/components/explainer/SubsystemExplainerCard";
 import { DepthSwitcher } from "@/components/explainer/DepthSwitcher";
+import ShareCardButton from "@/components/ShareCardButton";
+import { supabase } from "@/integrations/supabase/client";
 import {
   EXPLAINER_CORPUS,
   CORPUS_MANIFEST,
@@ -38,6 +40,50 @@ export default function HowItAllWorksPage() {
   const [hostFilter, setHostFilter] = useState<"all" | "lrh" | "denken">("all");
   const { t } = useTranslation();
 
+  // BP094 Mamba 6 - URL-hash landing + sender attribution banner
+  const [senderName, setSenderName] = useState<string | null>(null);
+  const [bannerDismissed, setBannerDismissed] = useState(false);
+  const focusedCardRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    // Parse hash: #card-<cardId>?send=<memberId>
+    const rawHash = window.location.hash;
+    const search = rawHash.includes("?")
+      ? rawHash.slice(rawHash.indexOf("?"))
+      : window.location.search;
+    const params = new URLSearchParams(search);
+    const senderId = params.get("send");
+    const rawCardId = rawHash.replace("#card-", "").split("?")[0];
+    if (rawCardId && rawCardId.length > 2) {
+      focusedCardRef.current = rawCardId;
+      // Scroll to card after render
+      setTimeout(() => {
+        const el = document.getElementById(`explainer-card-${rawCardId}`);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+          // Switch global depth to deep-dive so the card opens to Deep Dive
+          setGlobalDepth("deep-dive");
+        }
+      }, 300);
+    }
+    if (senderId && senderId !== "anon") {
+      // Fetch sender display name from profiles via anon client
+      supabase
+        .from("profiles")
+        .select("display_name")
+        .eq("id", senderId)
+        .maybeSingle()
+        .then(({ data }) => {
+          setSenderName(
+            data?.display_name
+              ? String(data.display_name)
+              : "a cooperative member"
+          );
+        })
+        .catch(() => setSenderName("a cooperative member"));
+    }
+  }, []);
+
   const filtered = useMemo(() => {
     let results = EXPLAINER_CORPUS;
     if (query.trim()) {
@@ -60,6 +106,21 @@ export default function HowItAllWorksPage() {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* BP094 Mamba 6 - Sender attribution banner (shown only when ?send= param present) */}
+      {senderName && !bannerDismissed && (
+        <div className="bg-primary/10 border-b border-primary/30 px-4 py-2 flex items-center justify-between gap-4">
+          <span className="text-sm text-primary">
+            Sent by <strong>{senderName}</strong> - a cooperative member who thought you should know about this.
+          </span>
+          <button
+            onClick={() => setBannerDismissed(true)}
+            className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Dismiss
+          </button>
+        </div>
+      )}
+
       {/* Hero */}
       <div className="border-b bg-gradient-to-br from-amber-50 to-blue-50">
         <div className="max-w-7xl mx-auto px-4 py-12">
@@ -205,13 +266,27 @@ export default function HowItAllWorksPage() {
             )}
           >
             {filtered.map((explainer) => (
-              <SubsystemExplainerCard
+              <div
                 key={explainer.id}
-                explainer={explainer}
-                initialDepth={globalDepth}
-                mode="card"
-                showCrossRefs={view === "list"}
-              />
+                id={`explainer-card-${explainer.id}`}
+              >
+                <SubsystemExplainerCard
+                  explainer={explainer}
+                  initialDepth={
+                    focusedCardRef.current === explainer.id
+                      ? "deep-dive"
+                      : globalDepth
+                  }
+                  mode="card"
+                  showCrossRefs={view === "list"}
+                  deepDiveExtra={
+                    <ShareCardButton
+                      cardId={explainer.id}
+                      cardTitle={explainer.subsystem}
+                    />
+                  }
+                />
+              </div>
             ))}
           </div>
         )}

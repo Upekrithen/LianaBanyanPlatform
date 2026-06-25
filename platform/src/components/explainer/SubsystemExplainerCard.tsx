@@ -25,6 +25,8 @@ interface SubsystemExplainerCardProps {
   className?: string;
   /** If true, show cross-reference links at the bottom */
   showCrossRefs?: boolean;
+  /** BP094 Mamba 6: extra content rendered at the bottom of the Deep Dive tab (additive, does not affect other depths) */
+  deepDiveExtra?: React.ReactNode;
 }
 
 export function SubsystemExplainerCard({
@@ -33,6 +35,7 @@ export function SubsystemExplainerCard({
   mode = "card",
   className,
   showCrossRefs = true,
+  deepDiveExtra,
 }: SubsystemExplainerCardProps) {
   const [depth, setDepth] = useState<DepthLayer>(initialDepth);
   const content = getDepthContent(explainer, depth);
@@ -105,6 +108,13 @@ export function SubsystemExplainerCard({
           hostMascotId={explainer.host}
           depth={depth}
         />
+
+        {/* BP094 Mamba 6 - Deep Dive extra content (ShareCardButton, paper links, etc.) */}
+        {deepDiveExtra && depth === "deep-dive" && (
+          <div className="border-t pt-3">
+            {deepDiveExtra}
+          </div>
+        )}
 
         {/* Cross-references */}
         {showCrossRefs && explainer.crossRefs && explainer.crossRefs.length > 0 && (

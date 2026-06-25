@@ -1,0 +1,29 @@
+{
+  "harness_version": "mmlu-pro-bp094",
+  "published_at": "2026-06-24T00:00:00Z",
+  "session": "BP094-Knight-Session-4",
+  "files": [
+    {
+      "filename": "validate-relay.mjs",
+      "role": "harness-runner",
+      "sha256": "4050ea51e8dad3e57ad9c9006bfde30f3391f116f5be9de7e9fdf2f2f053a5e0"
+    },
+    {
+      "filename": "smoke_2q_bp093.json",
+      "role": "question-bank",
+      "sha256": "80fc83467118152f866a53e2819571d1d8802b07c26d2fdc41cf6906674f68db"
+    },
+    {
+      "filename": "run-and-sign.sh",
+      "role": "signing-wrapper",
+      "sha256": "computed-at-bundle-time"
+    }
+  ],
+  "bundle": {
+    "filename": "mmlu-pro-bp094.tar.gz",
+    "sha256": "3a2f638aca6dd9e30977a24273091c557c03443605ecf2136b41e675424f3143",
+    "archive_format": "tar.gz"
+  },
+  "vetting": "cryptographic-substrate-provenance",
+  "notes": "No Reddit gate. No Discord gate. Ed25519 Ring Bearer signature + Posse spot-check + IP Ledger stamp."
+}

@@ -55,6 +55,9 @@ const HowItAllWorksPage = lazy(() => import("@/pages/HowItAllWorksPage"));
 const BusinessPlanPage = lazy(() => import("@/pages/BusinessPlanPage"));
 const SpeakFriendPage = lazy(() => import("@/pages/SpeakFriendPage"));
 const ProofsPage = lazy(() => import("@/pages/ProofsPage"));
+// BP094 Session 4 - Member Proof Wall and Submit
+const MemberProofWallPage = lazy(() => import("@/pages/MemberProofWallPage"));
+const MemberProofSubmitPage = lazy(() => import("@/pages/MemberProofSubmitPage"));
 const BountyPosterPage = lazy(() => import("@/pages/BountyPosterPage"));
 const BountyPostersPage = lazy(() => import("@/pages/BountyPostersPage"));
 const CharacterRemakePostersPage = lazy(() =>
@@ -191,6 +194,9 @@ export const publicRoutes = (
     {/* Scope 28: Verification proofs */}
     <Route path="/proofs" element={<LazyPage><ProofsPage /></LazyPage>} />
     <Route path="/proofs/" element={<LazyPage><ProofsPage /></LazyPage>} />
+    {/* BP094 Session 4 - Member Proof Wall (public) and Submit (authenticated) */}
+    <Route path="/proofs/wall" element={<LazyPage><MemberProofWallPage /></LazyPage>} />
+    <Route path="/proofs/submit" element={<LazyPage><MemberProofSubmitPage /></LazyPage>} />
     {/* Scope 29: Character remake bounties (staged) */}
     <Route path="/character-remake-bounties" element={<LazyPage><CharacterRemakePostersPage /></LazyPage>} />
 

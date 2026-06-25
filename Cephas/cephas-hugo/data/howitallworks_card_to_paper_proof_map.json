@@ -1,0 +1,200 @@
+[
+  {
+    "card_id": "ingest-pipeline",
+    "card_title": "Ingest Pipeline + Soccerball / SID",
+    "cephas_paper_title": "paper pending",
+    "cephas_paper_url": null,
+    "proof_id": null,
+    "proof_verify_url": null,
+    "proof_status": "proof pending"
+  },
+  {
+    "card_id": "pearl-eblet-ssps",
+    "card_title": "Pearl / Eblet / SSPS",
+    "cephas_paper_title": "paper pending",
+    "cephas_paper_url": null,
+    "proof_id": null,
+    "proof_verify_url": null,
+    "proof_status": "proof pending"
+  },
+  {
+    "card_id": "substrate-dag",
+    "card_title": "Substrate / DAG",
+    "cephas_paper_title": "paper pending",
+    "cephas_paper_url": null,
+    "proof_id": "w20substrace100k",
+    "proof_verify_url": "https://lianabanyan.com/proofs/verify/w20substrace100k",
+    "proof_status": "verified"
+  },
+  {
+    "card_id": "mesh-frontier",
+    "card_title": "Mesh / Frontier (WAN + LAN)",
+    "cephas_paper_title": "paper pending",
+    "cephas_paper_url": null,
+    "proof_id": "bp073b4wan",
+    "proof_verify_url": "https://lianabanyan.com/proofs/verify/bp073b4wan",
+    "proof_status": "verified"
+  },
+  {
+    "card_id": "cue-cards",
+    "card_title": "Cue Cards (Deck Cue Cards)",
+    "cephas_paper_title": "paper pending",
+    "cephas_paper_url": null,
+    "proof_id": null,
+    "proof_verify_url": null,
+    "proof_status": "proof pending"
+  },
+  {
+    "card_id": "puddings",
+    "card_title": "Puddings",
+    "cephas_paper_title": "paper pending",
+    "cephas_paper_url": null,
+    "proof_id": null,
+    "proof_verify_url": null,
+    "proof_status": "proof pending"
+  },
+  {
+    "card_id": "medallion-system",
+    "card_title": "Medallion System",
+    "cephas_paper_title": "paper pending",
+    "cephas_paper_url": null,
+    "proof_id": null,
+    "proof_verify_url": null,
+    "proof_status": "proof pending"
+  },
+  {
+    "card_id": "battery-dispatch",
+    "card_title": "Battery Dispatch + Broadcast Schedule",
+    "cephas_paper_title": "paper pending",
+    "cephas_paper_url": null,
+    "proof_id": null,
+    "proof_verify_url": null,
+    "proof_status": "proof pending"
+  },
+  {
+    "card_id": "furnace",
+    "card_title": "Furnace (XP-for-Reputation Anonymous Data Furnace-Mode)",
+    "cephas_paper_title": "paper pending",
+    "cephas_paper_url": null,
+    "proof_id": null,
+    "proof_verify_url": null,
+    "proof_status": "proof pending"
+  },
+  {
+    "card_id": "shirley-temple-badges",
+    "card_title": "Shirley Temple (Affiliation Badge System)",
+    "cephas_paper_title": "paper pending",
+    "cephas_paper_url": null,
+    "proof_id": null,
+    "proof_verify_url": null,
+    "proof_status": "proof pending"
+  },
+  {
+    "card_id": "switzerland-policy",
+    "card_title": "Switzerland Policy (No Politics, No Religion)",
+    "cephas_paper_title": "paper pending",
+    "cephas_paper_url": null,
+    "proof_id": null,
+    "proof_verify_url": null,
+    "proof_status": "proof pending"
+  },
+  {
+    "card_id": "defense-klaus",
+    "card_title": "Defense Klaus (Cooperative Protective Services)",
+    "cephas_paper_title": "paper pending",
+    "cephas_paper_url": null,
+    "proof_id": null,
+    "proof_verify_url": null,
+    "proof_status": "proof pending"
+  },
+  {
+    "card_id": "contingency-operators",
+    "card_title": "Contingency Operators / Dragonriders / Mimic Trunks",
+    "cephas_paper_title": "paper pending",
+    "cephas_paper_url": null,
+    "proof_id": null,
+    "proof_verify_url": null,
+    "proof_status": "proof pending"
+  },
+  {
+    "card_id": "overlay-system",
+    "card_title": "The Overlay System + the Frame",
+    "cephas_paper_title": "paper pending",
+    "cephas_paper_url": null,
+    "proof_id": null,
+    "proof_verify_url": null,
+    "proof_status": "proof pending"
+  },
+  {
+    "card_id": "ip-ledger-brand-stamp",
+    "card_title": "IP Ledger + Brand Stamp",
+    "cephas_paper_title": "paper pending",
+    "cephas_paper_url": null,
+    "proof_id": null,
+    "proof_verify_url": null,
+    "proof_status": "proof pending"
+  },
+  {
+    "card_id": "chronos-tags",
+    "card_title": "Chronos Tags",
+    "cephas_paper_title": "paper pending",
+    "cephas_paper_url": null,
+    "proof_id": null,
+    "proof_verify_url": null,
+    "proof_status": "proof pending"
+  },
+  {
+    "card_id": "golden-keys",
+    "card_title": "Golden Keys",
+    "cephas_paper_title": "paper pending",
+    "cephas_paper_url": null,
+    "proof_id": null,
+    "proof_verify_url": null,
+    "proof_status": "proof pending"
+  },
+  {
+    "card_id": "three-currency",
+    "card_title": "Three-Currency System (Credits / Marks / Joules) + the Substitution",
+    "cephas_paper_title": "paper pending",
+    "cephas_paper_url": null,
+    "proof_id": null,
+    "proof_verify_url": null,
+    "proof_status": "proof pending"
+  },
+  {
+    "card_id": "economics-participation",
+    "card_title": "Economics: 83.3% Participation + Cost+20%",
+    "cephas_paper_title": "paper pending",
+    "cephas_paper_url": null,
+    "proof_id": "w12f3c057",
+    "proof_verify_url": "https://lianabanyan.com/proofs/verify/w12f3c057",
+    "proof_status": "verified"
+  },
+  {
+    "card_id": "heoho-bounty-stewards",
+    "card_title": "HEOHO + Bounty Posters + Stewards Guild",
+    "cephas_paper_title": "paper pending",
+    "cephas_paper_url": null,
+    "proof_id": null,
+    "proof_verify_url": null,
+    "proof_status": "proof pending"
+  },
+  {
+    "card_id": "novaculi-yoke",
+    "card_title": "Novaculi / Yoke + the Chess Crew (Bishop / Knight / Pawn / Rook / Red Queen)",
+    "cephas_paper_title": "paper pending",
+    "cephas_paper_url": null,
+    "proof_id": null,
+    "proof_verify_url": null,
+    "proof_status": "proof pending"
+  },
+  {
+    "card_id": "substrace-theorem",
+    "card_title": "The Substrace Theorem",
+    "cephas_paper_title": "paper pending",
+    "cephas_paper_url": null,
+    "proof_id": "w12f1c0de",
+    "proof_verify_url": "https://lianabanyan.com/proofs/verify/w12f1c0de",
+    "proof_status": "verified"
+  }
+]

@@ -1,0 +1,312 @@
+{{- define "main" }}
+<!-- BP094 S4 Mamba 6 - How It All Works mirror page -->
+<meta property="og:image" content="{{ .Site.BaseURL }}img/proofs/og-proof-card.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300..700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --font-body: Inter, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+  --text-xs:   clamp(0.75rem,  0.7rem  + 0.25vw, 0.875rem);
+  --text-sm:   clamp(0.875rem, 0.8rem  + 0.35vw, 1rem);
+  --text-base: clamp(1rem,     0.95rem + 0.25vw, 1.125rem);
+  --text-lg:   clamp(1.125rem, 1rem    + 0.75vw, 1.5rem);
+  --text-xl:   clamp(1.5rem,   1.2rem  + 1.25vw, 2.25rem);
+  --radius-md:.5rem;--radius-lg:.75rem;--radius-xl:1rem;--radius-full:9999px;
+  --space-2:.5rem;--space-3:.75rem;--space-4:1rem;--space-5:1.25rem;--space-6:1.5rem;--space-8:2rem;--space-10:2.5rem;--space-12:3rem;
+  --transition:180ms cubic-bezier(0.16,1,0.3,1);
+  --content-wide:1200px;
+}
+[data-theme="dark"]{
+  --bg:#0c0d0e;--surface:#131517;--surface2:#191c1f;--surfaceDyn:#272c30;
+  --divider:#252a2e;--border:#2f3439;
+  --text:#d8dce0;--textMuted:#7a8088;--textFaint:#484e55;--textInv:#0c0d0e;
+  --primary:#4fc3d0;--primaryHov:#3aafbc;--primaryHl:#1a3338;
+  --amber:#f5b942;--amberDim:#3a2e10;
+  --green:#5acd7e;--greenDim:#122d1e;--greenBorder:rgba(90,205,126,0.25);
+  --shadowSm:0 1px 3px oklch(0 0 0/.3);--shadowMd:0 4px 16px oklch(0 0 0/.4);
+}
+[data-theme="light"]{
+  --bg:#f4f5f6;--surface:#ffffff;--surface2:#f8f9fa;--surfaceDyn:#e4e7ea;
+  --divider:#dde0e4;--border:#cdd0d5;
+  --text:#1a1d21;--textMuted:#6b7280;--textFaint:#b0b5bc;--textInv:#ffffff;
+  --primary:#0e7a85;--primaryHov:#0b6570;--primaryHl:#d0eaec;
+  --amber:#c47a0a;--amberDim:#fef3dc;
+  --green:#1e7d43;--greenDim:#d4f1e2;--greenBorder:rgba(30,125,67,0.25);
+  --shadowSm:0 1px 3px oklch(0.2 0.01 22/.08);--shadowMd:0 4px 16px oklch(0.2 0.01 22/.1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased;scroll-behavior:smooth;scroll-padding-top:80px}
+body{min-height:100dvh;line-height:1.65;font-family:var(--font-body);font-size:var(--text-base);color:var(--text);background:var(--bg)}
+button{cursor:pointer;border:none;background:none;font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--primary);outline-offset:3px;border-radius:var(--radius-md)}
+.cw{max-width:var(--content-wide);margin-inline:auto;padding-inline:var(--space-6)}
+.label{font-size:var(--text-xs);font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--primary);display:flex;align-items:center;gap:var(--space-2);margin-bottom:var(--space-3)}
+.label::before{content:'';width:20px;height:1px;background:var(--primary)}
+.btn-p{background:var(--primary);color:var(--textInv);padding:var(--space-3) var(--space-6);border-radius:var(--radius-full);font-size:var(--text-sm);font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:var(--space-2)}
+.btn-s{background:transparent;color:var(--textMuted);border:1px solid var(--border);padding:var(--space-3) var(--space-6);border-radius:var(--radius-full);font-size:var(--text-sm);font-weight:500;text-decoration:none}
+
+/* HERO */
+.hero-hiaw{padding:var(--space-12) 0;border-bottom:1px solid var(--divider);background:radial-gradient(ellipse 80% 60% at 50% -10%,color-mix(in oklch,var(--amber) 8%,transparent),transparent 70%)}
+.hero-hiaw h1{font-size:var(--text-xl);font-weight:800;margin-bottom:var(--space-3)}
+.hero-hiaw p{font-size:var(--text-lg);color:var(--textMuted);max-width:56ch;margin-bottom:var(--space-8)}
+
+/* REFERRER BANNER */
+.referrer-banner{background:var(--primaryHl);border-bottom:1px solid var(--primary);padding:var(--space-3) var(--space-6);display:flex;align-items:center;justify-content:space-between;gap:var(--space-4)}
+.referrer-banner.hidden{display:none}
+.referrer-dismiss{background:transparent;border:none;cursor:pointer;color:var(--primary);font-size:var(--text-sm)}
+
+/* FILTER CHIPS */
+.filter-row{display:flex;flex-wrap:wrap;gap:var(--space-2);padding:var(--space-4) 0;position:sticky;top:0;z-index:50;background:var(--bg);border-bottom:1px solid var(--divider)}
+.chip{padding:var(--space-1) var(--space-3);border-radius:var(--radius-full);border:1px solid var(--border);font-size:var(--text-xs);font-weight:500;cursor:pointer;background:transparent;color:var(--textMuted);transition:all var(--transition)}
+.chip:hover,.chip.active{border-color:var(--primary);color:var(--primary);background:var(--primaryHl)}
+
+/* DEPTH TABS */
+.depth-tabs{display:flex;gap:0;border-radius:var(--radius-md);overflow:hidden;border:1px solid var(--border);width:fit-content;margin-bottom:var(--space-4)}
+.depth-tab{padding:var(--space-2) var(--space-4);font-size:var(--text-xs);font-weight:600;cursor:pointer;background:transparent;color:var(--textMuted);transition:all var(--transition)}
+.depth-tab.active{background:var(--primary);color:var(--textInv)}
+
+/* CARD GRID */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:var(--space-5);padding:var(--space-8) 0}
+.hw-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);overflow:hidden;box-shadow:var(--shadowSm);transition:box-shadow var(--transition),transform var(--transition)}
+.hw-card:hover{box-shadow:var(--shadowMd);transform:translateY(-2px)}
+.hw-card.focused{border-color:var(--primary);box-shadow:0 0 0 3px color-mix(in oklch,var(--primary) 25%,transparent)}
+.hw-card-header{padding:var(--space-4) var(--space-5);border-bottom:1px solid var(--divider)}
+.hw-card-num{font-size:var(--text-xs);font-family:var(--font-mono);color:var(--textFaint);margin-bottom:var(--space-1)}
+.hw-card-title{font-size:var(--text-sm);font-weight:700;color:var(--text);line-height:1.3;margin-bottom:var(--space-2)}
+.hw-card-tags{display:flex;flex-wrap:wrap;gap:var(--space-1)}
+.hw-tag{font-size:10px;padding:2px var(--space-2);border-radius:var(--radius-full);border:1px solid var(--border);color:var(--textFaint)}
+.hw-card-body{padding:var(--space-4) var(--space-5)}
+.hw-card-headline{font-size:var(--text-sm);font-weight:600;color:var(--text);margin-bottom:var(--space-2);line-height:1.4}
+.hw-card-body-text{font-size:var(--text-sm);color:var(--textMuted);line-height:1.7;margin-bottom:var(--space-4)}
+.hw-card-narrator{background:var(--surfaceDyn);border-radius:var(--radius-md);padding:var(--space-3);font-size:var(--text-xs);color:var(--textMuted);line-height:1.6;font-style:italic;border-left:2px solid var(--primary);margin-bottom:var(--space-3)}
+.hw-card-narrator strong{font-style:normal;color:var(--primary)}
+.hw-card-links{display:flex;flex-wrap:wrap;gap:var(--space-2);margin-top:var(--space-3)}
+.hw-card-link{font-size:var(--text-xs);color:var(--primary);text-decoration:none;padding:4px var(--space-3);border:1px solid var(--primary);border-radius:var(--radius-full);display:inline-flex;align-items:center;gap:4px}
+.hw-card-link:hover{background:var(--primaryHl)}
+.hw-card-link.pending{color:var(--textFaint);border-color:var(--border)}
+.hw-card-share-panel{margin-top:var(--space-4);padding-top:var(--space-3);border-top:1px solid var(--divider)}
+.share-link-row{display:flex;gap:var(--space-2);align-items:center;margin-bottom:var(--space-2)}
+.share-url-input{flex:1;font-size:11px;padding:4px var(--space-2);border:1px solid var(--border);border-radius:var(--radius-md);background:var(--surfaceDyn);color:var(--text)}
+.share-copy-btn{padding:4px var(--space-3);border:1px solid var(--border);border-radius:var(--radius-md);font-size:11px;font-weight:600;cursor:pointer;background:var(--surface)}
+.share-btns{display:flex;gap:var(--space-2);flex-wrap:wrap}
+.share-btn-tw{padding:6px var(--space-4);border-radius:var(--radius-md);background:#1DA1F2;color:#fff;font-size:var(--text-xs);font-weight:600;text-decoration:none}
+.share-btn-email{padding:6px var(--space-4);border-radius:var(--radius-md);background:var(--surface);border:1px solid var(--border);color:var(--text);font-size:var(--text-xs);font-weight:600;text-decoration:none}
+
+@media(max-width:640px){
+  .card-grid{grid-template-columns:1fr}
+  .depth-tabs{width:100%}
+  .depth-tab{flex:1;text-align:center}
+}
+</style>
+
+<!-- REFERRER BANNER (shown when ?send= param present) -->
+<div id="referrer-banner" class="referrer-banner hidden">
+  <span id="referrer-text" style="font-size:var(--text-sm);color:var(--primary)">Sent by a cooperative member</span>
+  <button class="referrer-dismiss" onclick="document.getElementById('referrer-banner').classList.add('hidden')">Dismiss</button>
+</div>
+
+<!-- HERO -->
+<section class="hero-hiaw">
+  <div class="cw">
+    <div class="label">How It All Works</div>
+    <h1>Every Subsystem. Three Depths.</h1>
+    <p>22 core concepts of the cooperative substrate - from a one-breath summary to full mechanical detail. Shared by members who get it. Verifiable on the blockchain of receipts.</p>
+    <div style="display:flex;gap:var(--space-3);flex-wrap:wrap">
+      <a href="https://lianabanyan.com/how-it-all-works" class="btn-p" target="_blank">Full Interactive Version</a>
+      <a href="/proofs/" class="btn-s">See the Proofs</a>
+    </div>
+  </div>
+</section>
+
+{{ with .Site.Data.howitallworks }}
+
+<!-- FILTER CHIPS -->
+<div class="cw">
+  <div class="filter-row" id="filter-row">
+    <button class="chip active" data-filter="all" onclick="filterCards(this, 'all')">All ({{ len .cards }})</button>
+    <button class="chip" data-filter="denken" onclick="filterCards(this, 'denken')">Denken (Northern)</button>
+    <button class="chip" data-filter="lrh" onclick="filterCards(this, 'lrh')">LRH (Southern)</button>
+    <button class="chip" data-filter="verified" onclick="filterCards(this, 'verified')">Has Proof</button>
+  </div>
+</div>
+
+<!-- CARD GRID -->
+<div class="cw">
+  <div class="card-grid" id="card-grid">
+    {{ range $i, $card := .cards }}
+    <div class="hw-card" id="card-{{ $card.id }}" data-host="{{ $card.host }}" data-proof="{{ if $card.proof_verify_url }}verified{{ else }}pending{{ end }}">
+      <div class="hw-card-header">
+        <div class="hw-card-num">#{{ printf "%02d" $card.subsystemNumber }} &middot; {{ if eq $card.province "northern" }}Denken{{ else }}LRH{{ end }}</div>
+        <div class="hw-card-title">{{ $card.subsystem }}</div>
+        <div class="hw-card-tags">
+          {{ range $card.tags }}<span class="hw-tag">{{ . }}</span>{{ end }}
+        </div>
+      </div>
+      <div class="hw-card-body">
+        <!-- DEPTH TABS -->
+        <div class="depth-tabs" role="tablist" aria-label="Depth">
+          <button class="depth-tab active" role="tab" aria-selected="true" onclick="switchDepth(this,'{{ $card.id }}','ss')">Skipping Stones</button>
+          <button class="depth-tab" role="tab" aria-selected="false" onclick="switchDepth(this,'{{ $card.id }}','wi')">Wading In</button>
+          <button class="depth-tab" role="tab" aria-selected="false" onclick="switchDepth(this,'{{ $card.id }}','dd')">Deep Dive</button>
+        </div>
+
+        {{ range $di, $depth := $card.depths }}
+        {{ $depthKey := "" }}
+        {{ if eq $depth.layer "skipping-stones" }}{{ $depthKey = "ss" }}{{ end }}
+        {{ if eq $depth.layer "wading-in" }}{{ $depthKey = "wi" }}{{ end }}
+        {{ if eq $depth.layer "deep-dive" }}{{ $depthKey = "dd" }}{{ end }}
+        <div class="hw-depth-content" id="depth-{{ $card.id }}-{{ $depthKey }}" style="{{ if ne $di 0 }}display:none{{ end }}">
+          {{ if $depth.headline }}<div class="hw-card-headline">{{ $depth.headline }}</div>{{ end }}
+          {{ if $depth.body }}<p class="hw-card-body-text">{{ $depth.body }}</p>{{ end }}
+          {{ if $depth.narrator_text }}
+          <div class="hw-card-narrator">
+            <strong>{{ if $depth.narrator_mascot }}{{ $depth.narrator_mascot | title }}{{ else }}Narrator{{ end }}:</strong>
+            "{{ $depth.narrator_text }}"
+          </div>
+          {{ end }}
+
+          <!-- Deep Dive: paper + proof links + share panel -->
+          {{ if eq $depth.layer "deep-dive" }}
+          <div class="hw-card-links">
+            {{ if $card.cephas_paper_url }}
+            <a href="{{ $card.cephas_paper_url }}" class="hw-card-link" target="_blank">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              Read the paper: {{ $card.cephas_paper_title }}
+            </a>
+            {{ else }}
+            <span class="hw-card-link pending">Paper coming soon</span>
+            {{ end }}
+
+            {{ if $card.proof_verify_url }}
+            <a href="{{ $card.proof_verify_url }}" class="hw-card-link" target="_blank">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              See the proof ({{ $card.proof_status }})
+            </a>
+            {{ else }}
+            <span class="hw-card-link pending">Proof pending</span>
+            {{ end }}
+          </div>
+
+          <!-- Vanilla JS Share Panel (no auth required for basic share; Marks credit requires login on LianaB) -->
+          <div class="hw-card-share-panel">
+            <div style="font-size:var(--text-xs);font-weight:600;color:var(--textFaint);margin-bottom:var(--space-2);text-transform:uppercase;letter-spacing:.1em">Send this card</div>
+            <div class="share-link-row">
+              <input class="share-url-input" readonly id="share-url-{{ $card.id }}" value="https://mnemosynec.org/how-it-all-works/#card-{{ $card.id }}?send=anon" />
+              <button class="share-copy-btn" onclick="copyShareUrl('{{ $card.id }}')">Copy</button>
+            </div>
+            <div class="share-btns">
+              <a class="share-btn-tw" id="share-tw-{{ $card.id }}" href="https://twitter.com/intent/tweet?text={{ $card.subsystem | urlquery }}%20-%20a%20core%20concept%20of%20the%20cooperative%20substrate.%20https%3A%2F%2Fmnemosynec.org%2Fhow-it-all-works%2F%23card-{{ $card.id }}" target="_blank" rel="noreferrer">Share on X</a>
+              <a class="share-btn-email" href="mailto:?subject={{ $card.subsystem | urlquery }}&body=I%20thought%20you%20might%20find%20this%20interesting%3A%0A%0Ahttps%3A%2F%2Fmnemosynec.org%2Fhow-it-all-works%2F%23card-{{ $card.id }}">Email</a>
+              <a class="share-btn-email" href="https://lianabanyan.com/how-it-all-works#{{ $card.id }}" target="_blank" style="color:var(--primary);border-color:var(--primary)">Earn Marks on LianaB</a>
+            </div>
+          </div>
+          {{ end }}
+        </div>
+        {{ end }}
+      </div>
+    </div>
+    {{ end }}
+  </div>
+</div>
+
+{{ end }}
+
+<script>
+// Depth switching per card
+function switchDepth(btn, cardId, depthKey) {
+  var card = document.getElementById('card-' + cardId);
+  if (!card) return;
+  card.querySelectorAll('.depth-tab').forEach(function(t) {
+    t.classList.remove('active');
+    t.setAttribute('aria-selected', 'false');
+  });
+  btn.classList.add('active');
+  btn.setAttribute('aria-selected', 'true');
+  card.querySelectorAll('.hw-depth-content').forEach(function(c) {
+    c.style.display = 'none';
+  });
+  var target = document.getElementById('depth-' + cardId + '-' + depthKey);
+  if (target) target.style.display = '';
+}
+
+// Category filter
+function filterCards(btn, filter) {
+  document.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('active'); });
+  btn.classList.add('active');
+  document.querySelectorAll('.hw-card').forEach(function(card) {
+    var host = card.getAttribute('data-host');
+    var proof = card.getAttribute('data-proof');
+    var show = false;
+    if (filter === 'all') show = true;
+    else if (filter === 'denken') show = host === 'denken';
+    else if (filter === 'lrh') show = host === 'lrh';
+    else if (filter === 'verified') show = proof === 'verified';
+    card.style.display = show ? '' : 'none';
+  });
+}
+
+// Copy share URL
+function copyShareUrl(cardId) {
+  var input = document.getElementById('share-url-' + cardId);
+  if (!input) return;
+  try { navigator.clipboard.writeText(input.value); }
+  catch { input.select(); document.execCommand('copy'); }
+  var btn = input.nextElementSibling;
+  if (btn) { var orig = btn.textContent; btn.textContent = 'Copied!'; setTimeout(function() { btn.textContent = orig; }, 2000); }
+}
+
+// URL-hash landing: scroll to card and open to Deep Dive if ?send= present
+(function() {
+  var SUPABASE_URL = "{{ .Site.Params.supabaseUrl }}";
+  var SUPABASE_ANON_KEY = "{{ .Site.Params.supabaseAnonKey }}";
+
+  var hash = window.location.hash; // e.g. #card-substrate-dag?send=<uuid>
+  var search = hash.includes('?') ? hash.slice(hash.indexOf('?')) : window.location.search;
+  var params = new URLSearchParams(search);
+  var senderId = params.get('send');
+  var cardId = hash.replace('#card-', '').split('?')[0];
+
+  // If ?send= present: show referrer banner + fetch display name
+  if (senderId && senderId !== 'anon') {
+    var banner = document.getElementById('referrer-banner');
+    var referrerText = document.getElementById('referrer-text');
+    if (banner && referrerText) {
+      banner.classList.remove('hidden');
+      // Fetch display name via Supabase anon
+      if (SUPABASE_URL && SUPABASE_ANON_KEY) {
+        fetch(SUPABASE_URL + "/rest/v1/profiles?id=eq." + encodeURIComponent(senderId) + "&select=display_name", {
+          headers: { "apikey": SUPABASE_ANON_KEY, "Authorization": "Bearer " + SUPABASE_ANON_KEY }
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(rows) {
+          if (rows && rows.length && rows[0].display_name) {
+            referrerText.textContent = 'Sent by ' + rows[0].display_name;
+          }
+        })
+        .catch(function() {});
+      }
+      // Update share URLs to include actual sender ID
+      document.querySelectorAll('.share-url-input').forEach(function(inp) {
+        inp.value = inp.value.replace('?send=anon', '?send=' + encodeURIComponent(senderId));
+      });
+    }
+  }
+
+  // If hash refers to a card: scroll to it and activate Deep Dive
+  if (cardId && cardId.length > 2) {
+    var targetCard = document.getElementById('card-' + cardId);
+    if (targetCard) {
+      setTimeout(function() {
+        targetCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        targetCard.classList.add('focused');
+        // Switch to Deep Dive tab
+        var ddBtn = targetCard.querySelector('.depth-tab:nth-child(3)');
+        if (ddBtn) ddBtn.click();
+      }, 200);
+    }
+  }
+})();
+</script>
+{{- end }}
