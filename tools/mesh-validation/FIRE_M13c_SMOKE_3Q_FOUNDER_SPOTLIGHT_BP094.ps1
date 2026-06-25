@@ -112,7 +112,7 @@ Write-Host "  Q02 source_id   : 70   (business . ABSTAIN cascade . correct=I)"
 Write-Host "  Q03 source_id   : CANARY_ANDON_BP094 (business ethics . Andon canary)"
 Write-Host "  Target fleet    : 5 peers . relay.lianabanyan.com (WAN)"
 Write-Host "  Fleet tiers     : ULTRA cb4ef450 llama3.3:70b"
-Write-Host "                    FULL  d0b47bd0+88cbf6bd+d2d05d39+2cb0ef15 gemma4:12b"
+Write-Host "                    FULL  d0b47bd0+88cbf6bd+virtual_f+virtual_f gemma4:12b"
 Write-Host "                    MIC   c532e740+49f3e597 (judge-only)"
 Write-Host "  Routing         : tier-aware (Ah Hayelped BP091)"
 Write-Host "  Mountain 1      : per-tier differentiated priming (Block A / BP094 S11)"
@@ -141,7 +141,7 @@ $nodeArgs = @(
     "--questions=3",
     "--mode=smoke",
     "--routing=tier-aware",
-    "--answer-tier-config=ultra:cb4ef450cc4a18c3,full:d0b47bd08633385b+88cbf6bdd6f74587+d2d05d3921904fff+2cb0ef159ce445b9",
+    "--answer-tier-config=ultra:cb4ef450cc4a18c3,full:d0b47bd08633385b+88cbf6bdd6f74587+virtual_full_peer_v1+virtual_full_peer_v2",
     "--mic-tier-config=core:c532e74069e137bc+49f3e5971518a064",
     "--question-difficulty-routing=hard:ultra+full,medium:ultra+full+core,short:all",
     "--andon-escalate=star-chamber",
