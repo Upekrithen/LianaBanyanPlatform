@@ -1,0 +1,39 @@
+========================================================
+BATTERY DISPATCH DRY-RUN — BP084 · Sonnet 4.6
+========================================================
+PIECE:    Canada 40K — You Have a Play. I Have a Stage. (V02)
+PIECE_ID: CANADA_40K_V02
+PLATFORM: medium
+DRY_RUN:  TRUE — NO SIDE EFFECTS
+========================================================
+
+SOURCE FILE:
+  BISHOP_DROPZONE/09_Articles/ARTICLE_CANADA_40K_PLAY_STAGE_V02.md
+
+CREDENTIAL STATE:
+  MEDIUM_API_TOKEN: NOT SET in 22May2026.env
+  → Adapter will use BROWSER-FALLBACK
+  → Battery Dispatch opens: https://medium.com/new-story
+
+PER BP083 CANON: Medium is cross-publish AFTER Substack publishes.
+  Medium post MUST include canonical-link footer pointing to Substack URL.
+  Fire order: Substack FIRST → get Substack URL → add to Medium footer → fire Medium.
+
+WHAT WOULD HAPPEN ON FIRE:
+  1. MEDIUM_API_TOKEN env var checked → NOT present
+  2. Fallback: shell.openExternal('https://medium.com/new-story')
+  3. Founder pastes: title + body + canonical link footer
+
+CANONICAL LINK FOOTER (add when Substack URL known):
+  ---
+  *Originally published on [FounderDenken]({SUBSTACK_URL}).*
+
+DISPATCH CHANNEL: medium — BROWSER-FALLBACK
+REQUIRES FOUNDER ACTION: Manual paste + add canonical link + publish
+ESTIMATED FIRE TIME: ~5 minutes after Substack fires
+
+⚠ DEPENDENCY: Medium fires AFTER Substack (need Substack URL for canonical footer)
+
+STATUS: 🟡 YELLOW — RECONSTRUCTION flag; depends on Substack firing first
+DRY-RUN RESULT: PASS (browser-fallback path confirmed; no live calls made)
+========================================================

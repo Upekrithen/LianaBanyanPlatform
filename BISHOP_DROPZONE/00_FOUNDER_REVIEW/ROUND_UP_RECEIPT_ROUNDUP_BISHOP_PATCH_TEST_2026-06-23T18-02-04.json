@@ -1,0 +1,49 @@
+{
+  "run_type": "posse-round-up-sweep",
+  "bp": "BP092",
+  "caithedral": true,
+  "session_id": "ROUNDUP_BISHOP_PATCH_TEST",
+  "source_receipt": "C:\\Users\\Administrator\\Documents\\LianaBanyanPlatform\\BISHOP_DROPZONE\\00_FOUNDER_REVIEW\\VALIDATION_RUN_RECEIPT_RELAY_2026-06-22T12-45-51.json",
+  "source_session_id": "relay-2026-06-22T04-23-42",
+  "run_timestamp": "2026-06-23T18:02:04.864Z",
+  "original_score": {
+    "correct": 26,
+    "total": 42,
+    "pct": 61.9,
+    "contested": 3
+  },
+  "miss_count": 1,
+  "newly_resolved": 0,
+  "still_missed": 1,
+  "estimated_new_score": {
+    "correct": 26,
+    "total": 42,
+    "pct": 61.9
+  },
+  "tier2_joules_budget": 0,
+  "tier2_joules_spent": 0,
+  "round_up_results": [
+    {
+      "source_id": "70",
+      "correct_letter": "I",
+      "domain": "business",
+      "miss_reason": [
+        "contested",
+        "no_answer",
+        "peer_abstain"
+      ],
+      "original_answer": null,
+      "original_correct": false,
+      "round_up_answer": null,
+      "round_up_correct": false,
+      "resolution_tier": "posse",
+      "swarm_run_id": "da48b83a-64d8-4c3a-b2e7-6edd98cfbada",
+      "sub_claim_count": 1,
+      "decomposition_model": "llama3.3:70b (ULTRA relay)",
+      "contested_after_swarm": false,
+      "elapsed_ms": 23785,
+      "question_truncated": true
+    }
+  ],
+  "truth_always_note": "Estimated new score adds newly-resolved Round-Up Q's to original correct count. Final authoritative score requires re-running full validate-relay.mjs with Round-Up answers submitted."
+}

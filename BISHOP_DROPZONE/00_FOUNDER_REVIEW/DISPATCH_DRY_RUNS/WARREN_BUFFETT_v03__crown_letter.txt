@@ -1,0 +1,26 @@
+========================================================
+BATTERY DISPATCH DRY-RUN — BP084 · Sonnet 4.6
+========================================================
+PIECE:    Letter — Warren Buffett (V03)
+PIECE_ID: WARREN_BUFFETT_v03
+PLATFORM: crown_letter (Gmail → browser-fallback)
+DRY_RUN:  TRUE — NO SIDE EFFECTS
+========================================================
+
+SOURCE FILE:
+  BISHOP_DROPZONE/00_FOUNDER_REVIEW/Wave_1_Apr12-13_Soft_Open/LETTER_WARREN_BUFFETT_v03_FINAL.md
+
+NOTE: Two Warren Buffett files exist:
+  1. LETTER_WARREN_BUFFETT_v03_FINAL.md  ← canonical
+  2. LETTER-WARREN-BUFFETT-FRENCH-FLEET-FINAL.md  ← alternate version
+  Founder must confirm which version to send.
+
+FRONTMATTER STATE:
+  ⚠ File in Wave_1_Apr12-13_Soft_Open/ subdirectory
+  SEG-5 ACTION: Move to top-level 00_FOUNDER_REVIEW/ for IPC discovery
+
+CREDENTIAL STATE: Gmail OAuth NOT SET → BROWSER-FALLBACK
+
+STATUS: 🟡 YELLOW — Confirm v03 vs French-Fleet version; subdirectory location
+DRY-RUN RESULT: PASS (source file exists; no live calls made)
+========================================================

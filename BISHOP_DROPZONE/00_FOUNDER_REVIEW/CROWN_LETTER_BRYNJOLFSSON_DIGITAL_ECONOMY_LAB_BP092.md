@@ -1,20 +1,20 @@
-# BP092 RETRO-EDIT: alpha labeling + substrate-advantage member framing per canon_public_alpha_* + canon_member_modal_substrate_advantage_*
+﻿# BP092 RETRO-EDIT: alpha labeling + substrate-advantage member framing per canon_public_alpha_* + canon_member_modal_substrate_advantage_*
 
 ---
-name: "Crown Letter — Erik Brynjolfsson (Stanford Digital Economy Lab)"
+name: "Crown Letter  -  Erik Brynjolfsson (Stanford Digital Economy Lab)"
 type: crown_letter
 tier: C
 stake: "0.025% patent pool"
 recipient: "Prof. Erik Brynjolfsson"
 session: BP092
 date: 2026-06-23
-status: DRAFT — Founder prose-pass before send
+status: DRAFT  -  Founder prose-pass before send
 ---
 
 # Check My Math
 
 **To:** Prof. Erik Brynjolfsson, Jerry Yang and Akiko Yamazaki Professor, Stanford Digital Economy Lab, Stanford University
-**Re:** Bicycle Economics paper review — cooperative-substrate inverts the capital/labor equation
+**Re:** Bicycle Economics paper review  -  cooperative-substrate inverts the capital/labor equation
 **Crown Tier:** C (Domain Expert · Advisory · 0.025% patent pool stake)
 **Draft:** BP092 · 2026-06-23
 
@@ -22,29 +22,29 @@ status: DRAFT — Founder prose-pass before send
 
 Dear Prof. Brynjolfsson,
 
-The *Turing Trap* identified the failure mode. The J-Curve papers specified the adaptation lag. Neither paper could point at an institutional form and say: that is where the adaptation occurs. I want to show you one that may be it — and I want you to tell me where the math breaks.
+The *Turing Trap* identified the failure mode. The J-Curve papers specified the adaptation lag. Neither paper could point at an institutional form and say: that is where the adaptation occurs. I want to show you one that may be it  -  and I want you to tell me where the math breaks.
 
-Here is the core claim. Call it Bicycle Economics: when cooperative substrate reduces the marginal cost of AI access toward zero, the capital/labor ratio that made AI a substitution engine gets inverted. 📜 [Bicycle Economics](https://founderdenken.substack.com/p/bicycle-economics) Capital stops being the bottleneck. The worker who holds the substrate relationship holds the durable advantage — not the platform that rents compute. The platform's margin compresses. The worker's share stabilizes. If the claim is right, it closes the institutional-form gap your papers identified. If it is wrong, I want to know exactly where before I file it.
+Here is the core claim. Call it Bicycle Economics: when cooperative substrate reduces the marginal cost of AI access toward zero, the capital/labor ratio that made AI a substitution engine gets inverted. 📜 [Bicycle Economics](https://founderdenken.substack.com/p/bicycle-economics) Capital stops being the bottleneck. The worker who holds the substrate relationship holds the durable advantage  -  not the platform that rents compute. The platform's margin compresses. The worker's share stabilizes. If the claim is right, it closes the institutional-form gap your papers identified. If it is wrong, I want to know exactly where before I file it.
 
-I am building this — the cooperative substrate is live and serving members today; the MnemosyneC interface is in Public Alpha, which means the substrate receipts are real and the interface polish is not yet finished. Three empirical receipts from this week:
+I am building this  -  the cooperative substrate is live and serving members today; the MnemosyneC interface is in Public Alpha, which means the substrate receipts are real and the interface polish is not yet finished. Three empirical receipts from this week:
 
 **First paid member, 2026-06-23.** Our first paid member, $5 annual membership. The cooperative is no longer pre-revenue. One transaction is not a dataset, but it is a proof of life. The economics have to work at one customer before they scale.
 
-**Posse decompose+swarm, wired and running.** 📜 [Check My Math — Sound Barrier](https://founderdenken.substack.com/p/check-my-math-sound-barrier) — the empirical receipt for cooperative-mesh accuracy claims. Our live cooperative substrate mesh-dispatcher (v0.6.0/v0.6.1, confirmed live on a 5-peer fleet as of this week) now wires a Posse architecture: one MMLU-Pro question gets decomposed into a set of sub-claims, each sub-claim goes to a parallel swarm agent, results reconcile into a verified answer. As of this session: 60 swarm_runs and 12 sub_claims confirmed in the database. This is the substrate doing the work the individual flagship model cannot do alone — distributed verification, not cached retrieval.
+**Posse decompose+swarm, wired and running.** 📜 [Check My Math  -  Sound Barrier](https://founderdenken.substack.com/p/check-my-math-sound-barrier)  -  the empirical receipt for cooperative-mesh accuracy claims. Our live cooperative substrate mesh-dispatcher (v0.6.0/v0.6.1, confirmed live on a 5-peer fleet as of this week) now wires a Posse architecture: one MMLU-Pro question gets decomposed into a set of sub-claims, each sub-claim goes to a parallel swarm agent, results reconcile into a verified answer. As of this session: 60 swarm_runs and 12 sub_claims confirmed in the database. This is the substrate doing the work the individual flagship model cannot do alone  -  distributed verification, not cached retrieval.
 
-**Round-Up canon, empirically instantiated.** ABSTAIN cascade fired on Q01, Q02, and Q03 from the first round of testing — the system correctly held rather than guessing when confidence thresholds were not met. The Round-Up canon is: "we aren't done answering until we get it right." The Substrate Capability Floor is: "If ANYONE can figure out the answer, so can we." Current baseline: 26/42 on MMLU-Pro (61.9%), targeting ≥90% via Round-Up + Posse. The J-Curve adaptation lag is real in our dataset — the productivity lift lags the implementation, exactly as your 2023 paper predicts. We are in the lag right now.
+**Round-Up canon, empirically instantiated.** ABSTAIN cascade fired on Q01, Q02, and Q03 from the first round of testing  -  the system correctly held rather than guessing when confidence thresholds were not met. The Round-Up canon is: "we aren't done answering until we get it right." The Substrate Capability Floor is: "If ANYONE can figure out the answer, so can we." Current baseline: 26/42 on MMLU-Pro (61.9%), targeting ≥90% via Round-Up + Posse. The J-Curve adaptation lag is real in our dataset  -  the productivity lift lags the implementation, exactly as your 2023 paper predicts. We are in the lag right now.
 
-The paper I want you to review is working-titled *"Bicycle Economics: How Cooperative Substrate Inverts the Capital/Labor Equation in AI Markets."* The central argument: when substrate is cooperative and marginal cost approaches zero, the Turing Trap's substitution incentive loses its economic engine. The institutional form that makes this structurally stable — not just as a policy promise but in the bylaws — is the cooperative corporation. 83.3% of every transaction flows to the creator or worker. Cost+20% margin locks the platform's share permanently. The two numbers together make the inversion durable across economic cycles, not just as a founding-year anomaly.
+The paper I want you to review is working-titled *"Bicycle Economics: How Cooperative Substrate Inverts the Capital/Labor Equation in AI Markets."* The central argument: when substrate is cooperative and marginal cost approaches zero, the Turing Trap's substitution incentive loses its economic engine. The institutional form that makes this structurally stable  -  not just as a policy promise but in the bylaws  -  is the cooperative corporation. 83.3% of every transaction flows to the creator or worker. Cost+20% margin locks the platform's share permanently. The two numbers together make the inversion durable across economic cycles, not just as a founding-year anomaly.
 
-Where I think the argument could break: the adaptation-cost question. If cooperative substrate requires a real-economy capability ramp that workers without technical background cannot navigate, the marginal-cost-to-zero claim is true at the platform level but not at the individual-worker level — which means the inversion benefits accrue to sophisticated early adopters and not to the workers the model is supposed to protect. I have not resolved this. I would rather you find it first.
+Where I think the argument could break: the adaptation-cost question. If cooperative substrate requires a real-economy capability ramp that workers without technical background cannot navigate, the marginal-cost-to-zero claim is true at the platform level but not at the individual-worker level  -  which means the inversion benefits accrue to sophisticated early adopters and not to the workers the model is supposed to protect. I have not resolved this. I would rather you find it first.
 
 ---
 
 ## Employ the World
 
-The *Turing Trap* paper's core concern is that AI augmentation gets systematically underinvested in because substitution returns are more immediately legible to capital. The cooperative substrate addresses this not with policy but with ownership structure: when workers own the inference infrastructure, the incentive to substitute away from them disappears. The cooperative doesn't rent compute from a platform and pass savings to shareholders — it is the platform, owned by the workers who use it. 83.3% of every transaction flows to the creator or worker at the bylaw level; the substrate's Cost+20% margin is locked in governance documents, not pricing decisions.
+The *Turing Trap* paper's core concern is that AI augmentation gets systematically underinvested in because substitution returns are more immediately legible to capital. The cooperative substrate addresses this not with policy but with ownership structure: when workers own the inference infrastructure, the incentive to substitute away from them disappears. The cooperative doesn't rent compute from a platform and pass savings to shareholders  -  it is the platform, owned by the workers who use it. 83.3% of every transaction flows to the creator or worker at the bylaw level; the substrate's Cost+20% margin is locked in governance documents, not pricing decisions.
 
-The Digital Economy Lab's productivity-sharing research points toward institutional forms that make augmentation durable. The cooperative corporation is that form — not because it promises better sharing, but because it structurally prohibits the extraction that makes sharing impossible. The empirical question your J-Curve papers raise — "does the productivity lift actually reach workers, or does it accrue to capital?" — has a clean answer in cooperative substrate: the bylaws make capital capture structurally illegal. The 83.3% is not a distribution policy; it is a constitutional constraint. If the math on that claim breaks, I want to know exactly where.
+The Digital Economy Lab's productivity-sharing research points toward institutional forms that make augmentation durable. The cooperative corporation is that form  -  not because it promises better sharing, but because it structurally prohibits the extraction that makes sharing impossible. The empirical question your J-Curve papers raise  -  "does the productivity lift actually reach workers, or does it accrue to capital?"  -  has a clean answer in cooperative substrate: the bylaws make capital capture structurally illegal. The 83.3% is not a distribution policy; it is a constitutional constraint. If the math on that claim breaks, I want to know exactly where.
 
 ---
 
@@ -52,14 +52,14 @@ The Digital Economy Lab's productivity-sharing research points toward institutio
 
 These are not projections. These are live Supabase rows, verifiable on request:
 
-- **5-peer mesh confirmed** — all peers running v0.7.1 (peer_presence rows · 1 ULTRA llama3.3:70b · 2 FULL gemma4:12b · 2 CORE gemma2:9b)
+- **5-peer mesh confirmed**  -  all peers running v0.7.1 (peer_presence rows · 1 ULTRA llama3.3:70b · 2 FULL gemma4:12b · 2 CORE gemma2:9b)
 - **Substrate performance: 97% Faster - 98% Accurate - 95% Cheaper** (benchmarked vs centralized flagship inference · receipts at lianabanyan.com/proofs/)
-- **1 paying member 2026-06-22** — member_profiles table ("first member" · no public name per founder-direct anonymization)
-- **Independent research: $4.49B/yr industry savings · $898M/yr cooperative revenue** — cite: INDEPENDENT_RESEARCH_AI_COMPANY_SUBSTRATE_SAVINGS_ANALYSIS_BP092.md
+- **1 paying member 2026-06-22**  -  member_profiles table ("first member" · no public name per founder-direct anonymization)
+- **Independent research: $4.49B/yr industry savings · $898M/yr cooperative revenue**  -  cite: INDEPENDENT_RESEARCH_AI_COMPANY_SUBSTRATE_SAVINGS_ANALYSIS_BP092.md
 - **SaltVault 504+ files preserved, zero conversion failures**
 - **22 USPTO provisional patents filed (most recent: PROV_22, Application 64/095,518)**
-- **IP Ledger Ring Bearer Ed25519 wired v0.7.1** — cryptographic attribution live
-- **The Court live at mnemosynec.org/court/** — Empress Campaign Block 3 deployed
+- **IP Ledger Ring Bearer Ed25519 wired v0.7.1**  -  cryptographic attribution live
+- **The Court live at mnemosynec.org/court/**  -  Empress Campaign Block 3 deployed
 - **MnemosyneC v0.7.1 download live at mnemosynec.org/download**
 
 Verifiable at mnemosynec.org and via MnemosyneC installer v0.7.1 download.
@@ -80,19 +80,19 @@ Every page that isn't yet live names its open Captain seat - operational and leg
 
 The ask is specific: will you review the *Bicycle Economics* draft and mark where the math does not hold? Not an endorsement, not a speaking engagement. A hard read from the economist who built the quantitative case for complementarity. If the argument survives your review, it becomes a stronger paper. If it does not, I will know why.
 
-In exchange, I am offering a Crown C position — Domain Expert and Advisory stake, 0.025% of the cooperative-defensive patent pool across all 22 provisional applications filed to date. No board seat, no operational obligation. A named advisory role and a stake in the IP that the cooperative sector is building in common.
+In exchange, I am offering a Crown C position  -  Domain Expert and Advisory stake, 0.025% of the cooperative-defensive patent pool across all 22 provisional applications filed to date. No board seat, no operational obligation. A named advisory role and a stake in the IP that the cooperative sector is building in common.
 
 The *Bicycle Economics* draft will be ready for review within two weeks of your reply. I will send it the same day you confirm interest.
 
-## Licensing — You Save More Than You Pay
+## Licensing  -  You Save More Than You Pay
 
 MnemosyneC + Cooperative Substrate ships under two licenses.
 
-**SSPL v1 + Pledge #2260 — the Cooperative License.** Free to use. Free to fork. If you ship the code, you ship the cooperative obligation — modifications and service offerings remain SSPL+Pledge, available to the cooperative pool. Zero license fees. The obligation: leave the substrate at least as good as you found it.
+**SSPL v1 + Pledge #2260  -  the Cooperative License.** Free to use. Free to fork. If you ship the code, you ship the cooperative obligation  -  modifications and service offerings remain SSPL+Pledge, available to the cooperative pool. Zero license fees. The obligation: leave the substrate at least as good as you found it.
 
-**Apache 2.0 + Cooperative Endorsement — the Business License.** For institutions and businesses requiring permissive licensing. Per-seat annual fee that scales with organization size — and we can prove the total inference cost (license + hardware electricity + local model use) is less than what you currently pay in flagship LLM API call fees.
+**Apache 2.0 + Cooperative Endorsement  -  the Business License.** For institutions and businesses requiring permissive licensing. Per-seat annual fee that scales with organization size  -  and we can prove the total inference cost (license + hardware electricity + local model use) is less than what you currently pay in flagship LLM API call fees.
 
-Here is the math. A 42Q MMLU-Pro batch run via flagship API costs real money at Anthropic/OpenAI publicly-listed per-token pricing. The same batch via cooperative substrate costs $0 in API fees — no new capex · no new cooling · no new permits · marginal infrastructure cost is zero (the electricity delta is real but small compared to data center buildout costs), and it is a constant you are already paying. For any research lab running hundreds of thousands of queries per month, the Apache license fee is a fixed, bounded line item. The per-token API cost is unbounded and scales with every research question. The cooperative substrate is cheaper at any meaningful research volume. The spreadsheet is available on request.
+Here is the math. A 42Q MMLU-Pro batch run via flagship API costs real money at Anthropic/OpenAI publicly-listed per-token pricing. The same batch via cooperative substrate costs $0 in API fees  -  no new capex · no new cooling · no new permits · marginal infrastructure cost is zero (the electricity delta is real but small compared to data center buildout costs), and it is a constant you are already paying. For any research lab running hundreds of thousands of queries per month, the Apache license fee is a fixed, bounded line item. The per-token API cost is unbounded and scales with every research question. The cooperative substrate is cheaper at any meaningful research volume. The spreadsheet is available on request.
 
 This is true. We have the receipts. Run it yourself and you'll see.
 
@@ -100,11 +100,11 @@ This is true. We have the receipts. Run it yourself and you'll see.
 
 *Of the People. By the People. For the People.*
 
-*Permission to Board — Granted. Grab an Oar. Help Make the Sails.*
+*Permission to Board  -  Granted. Grab an Oar. Help Make the Sails.*
 
 **ONE OF US.**
 
-— FounderDenken / Crewman #6
+ -  FounderDenken / Crewman #6
 Liana Banyan Corporation
 Founder@LianaBanyan.com
 lianabanyan.com
@@ -114,11 +114,11 @@ lianabanyan.com
 
 ---
 
-## Dispatch Notes (Bishop internal — strip before send)
+## Dispatch Notes (Bishop internal  -  strip before send)
 
 - **Word count (body):** ~900 words (+~200 words for Licensing section)
 - **Dispatch order:** Substack-first if published as open letter; direct email if personal Crown letter
-- **Hook:** "Check My Math" — peer-to-peer, not supplicant
+- **Hook:** "Check My Math"  -  peer-to-peer, not supplicant
 - **Receipts cited:** First paid member $5 (anonymized per BP092) · Posse 60 swarm_runs + 12 sub_claims · ABSTAIN cascade Q01/Q02/Q03
 - **Ask:** Bicycle Economics paper hard review. Crown C on accept.
 - **Founder verify before send:** (1) Is "Bicycle Economics" the correct working title Founder wants to use? (2) Is 0.025% the correct Crown C stake for Brynjolfsson specifically? (3) Confirm "22 provisional applications filed to date" is current count.

@@ -1,0 +1,36 @@
+========================================================
+BATTERY DISPATCH DRY-RUN — BP084 · Sonnet 4.6
+========================================================
+PIECE:    r/LocalLLaMA — Substrate Awakens (T5)
+PIECE_ID: REDDIT_LOCALLAMA_T5
+PLATFORM: reddit / r/LocalLLaMA (manual browser — no Reddit API adapter)
+DRY_RUN:  TRUE — NO SIDE EFFECTS
+========================================================
+
+SOURCE FILE:
+  BISHOP_DROPZONE/00_FOUNDER_REVIEW/SUBSTRATE_AWAKENS_MARKETING_WAVE/REDDIT_SUBSTRATE_AWAKENS_T5_LOCALLAMA.md
+
+FRONTMATTER STATE:
+  Status: DRAFT · Awaiting Founder ratify ✅
+  "Saturday-ish" framing: ✅ PRESENT
+
+POST TITLE (ready to use):
+  "We ran gemma4:12b across a 5-node cooperative mesh (68/70 MMLU-Pro) — doing it 
+   live Saturday with open replication"
+
+TARGET SUBREDDIT: r/LocalLLaMA
+
+NOTE: Battery Dispatch has NO Reddit API adapter. This post requires MANUAL browser
+  action by Founder. Battery Dispatch will NOT open a Reddit URL automatically.
+  Founder manually posts at: https://www.reddit.com/r/LocalLLaMA/submit
+
+REQUIRES FOUNDER ACTION:
+  1. Navigate to https://www.reddit.com/r/LocalLLaMA/submit
+  2. Paste title + body from source file
+  3. Submit
+
+TIMING: T5 = 5 days before Saturday ship
+
+STATUS: 🟢 GREEN — Content ready; manual post action by Founder
+DRY-RUN RESULT: PASS (manual path confirmed; no adapter for Reddit; no live calls made)
+========================================================

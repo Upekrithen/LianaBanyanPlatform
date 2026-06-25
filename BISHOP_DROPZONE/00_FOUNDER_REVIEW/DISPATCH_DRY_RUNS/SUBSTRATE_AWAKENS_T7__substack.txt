@@ -1,0 +1,51 @@
+========================================================
+BATTERY DISPATCH DRY-RUN — BP084 · Sonnet 4.6
+========================================================
+PIECE:    Substrate Awakens — Saturday, We Run It Live (T7 Anchor)
+PIECE_ID: SUBSTRATE_AWAKENS_T7
+PLATFORM: substack (FounderDenken)
+DRY_RUN:  TRUE — NO SIDE EFFECTS
+========================================================
+
+SOURCE FILE:
+  BISHOP_DROPZONE/00_FOUNDER_REVIEW/SUBSTRATE_AWAKENS_MARKETING_WAVE/SUBSTACK_SUBSTRATE_AWAKENS_T7_ANCHOR.md
+
+FRONTMATTER STATE:
+  <!-- STATUS: DRAFT · RATIFY PENDING · DO NOT PUBLISH -->  ✅ (HTML comment header)
+  Platform: FounderDenken (Substack)
+  Tier: T7 — Anchor post
+  Status: DRAFT · Awaiting Founder ratify
+  "Saturday-ish — we ship when she wakes up clean" framing: ✅ PRESENT
+
+⚠ SEG-5 NOTE: File is in SUBSTRATE_AWAKENS_MARKETING_WAVE/ subdirectory.
+  Battery Dispatch IPC (dispatch:list-content-files) uses readdirSync — does NOT 
+  recurse into subdirectories. This file will NOT appear in the UI queue automatically.
+  Founder must either: (a) copy to top-level 00_FOUNDER_REVIEW/, or (b) use Battery 
+  Dispatch "manual add" if available, or (c) fire manually.
+
+⚠ SEG-5 NOTE: No YAML frontmatter block (uses HTML comment + markdown headers).
+  IPC parseFrontmatter() looks for `---` YAML blocks. This file will NOT parse 
+  correctly as ContentFileMeta without YAML frontmatter addition.
+
+CREDENTIAL STATE: SUBSTACK_API_KEY NOT SET → BROWSER-FALLBACK
+
+WHAT WOULD HAPPEN ON FIRE:
+  Browser: opens founderdenken.substack.com new post editor
+  Title: "Substrate Awakens — Saturday, We Run It Live"
+  Founder pastes body + publishes
+
+BODY PREVIEW (first 200 chars):
+  "We've been building toward this since 1989. Thirty-seven years of iteration 
+   compressed into a cooperative AI architecture that runs on your hardware, never 
+   touches a paid API, and earns 83.3% for the people doing the work..."
+
+TEMPLATE VARIABLE CHECK:
+  ✅ No {{PLACEHOLDER}} variables
+  ✅ "Saturday-ish" framing present
+
+DISPATCH CHANNEL: substack — BROWSER-FALLBACK
+REQUIRES FOUNDER ACTION: Manual paste + publish (5 min)
+
+STATUS: 🟡 YELLOW — Subdirectory (not auto-discovered by IPC); no YAML frontmatter
+DRY-RUN RESULT: PASS (content valid; no live calls made)
+========================================================

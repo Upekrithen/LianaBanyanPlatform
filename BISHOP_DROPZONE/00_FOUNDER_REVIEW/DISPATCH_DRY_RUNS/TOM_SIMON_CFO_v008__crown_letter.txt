@@ -1,0 +1,32 @@
+========================================================
+BATTERY DISPATCH DRY-RUN — BP084 · Sonnet 4.6
+========================================================
+PIECE:    Crown Letter — Tom Simon (CFO Candidate) v008
+PIECE_ID: TOM_SIMON_CFO_v008
+PLATFORM: crown_letter (Gmail → browser-fallback)
+DRY_RUN:  TRUE — NO SIDE EFFECTS
+========================================================
+
+SOURCE FILE:
+  BISHOP_DROPZONE/00_FOUNDER_REVIEW/CROWN_LETTER_TOM_SIMON_CFO_v008_B103.md
+
+FRONTMATTER STATE:
+  name:            "Crown Letter -- Tom Simon (CFO)"
+  type:            crown_letter
+  recipient:       "Tom Simon"
+  ratificationDate: B103
+  wave26_audit:    "2026-06-03 — Status: DRAFT — Founder fills required (founderAge)"
+
+⚠ FOUNDER FILLS REQUIRED: `founderAge` placeholder not yet filled.
+  Do NOT fire with placeholder value.
+
+CREDENTIAL STATE: Gmail OAuth NOT SET → BROWSER-FALLBACK
+
+TEMPLATE VARIABLE CHECK:
+  ⚠ FAIL: `founderAge` needs to be filled in letter body (Founder is 53)
+  ✅ Em-dashes: clean per wave26_audit
+  ✅ Securities language: clean
+
+STATUS: 🔴 RED — founderAge placeholder must be filled before fire.
+DRY-RUN RESULT: BLOCKED — Fill founderAge (53) before ratify.
+========================================================

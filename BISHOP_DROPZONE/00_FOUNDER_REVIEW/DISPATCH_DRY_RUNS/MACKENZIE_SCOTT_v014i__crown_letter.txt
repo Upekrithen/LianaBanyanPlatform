@@ -1,0 +1,59 @@
+========================================================
+BATTERY DISPATCH DRY-RUN — BP084 · Sonnet 4.6
+========================================================
+PIECE:    Crown Letter — MacKenzie Scott (Dual-Entity Addendum v014i)
+PIECE_ID: MACKENZIE_SCOTT_v014i
+PLATFORM: crown_letter (Gmail API → browser-fallback)
+DRY_RUN:  TRUE — NO SIDE EFFECTS
+========================================================
+
+SOURCE FILE:
+  BISHOP_DROPZONE/00_FOUNDER_REVIEW/CROWN_LETTER_MACKENZIE_SCOTT_v014i_DUAL_ENTITY_ADDENDUM_B127.md
+
+FRONTMATTER STATE:
+  name:            "Crown Letter — MacKenzie Scott (Dual-Entity Addendum)"
+  type:            crown_letter
+  recipient:       "MacKenzie Scott"
+  ratificationDate: B127
+  status:          ⚠ NO explicit `status: founder-ratify-pending` field in frontmatter
+                   (type: crown_letter detected — BP078 gate applies regardless)
+
+CANONICAL VERSION: v014i (latest as of B127)
+  Earlier versions on disk: v014a through v014h — superseded by v014i.
+  Founder should confirm v014i is the send version.
+
+OPEN GAMBIT TIMING: Opening Gambit v2 places MacKenzie Scott in Wave 1 Sub-Wave 1b
+  (after Canada 40K bumps to anchor). Confirm timing still correct (Gate G2 from 
+  Canada 40K yoke-return).
+
+CREDENTIAL STATE:
+  GMAIL_OAUTH_REFRESH_TOKEN: NOT SET in 22May2026.env
+  GMAIL_OAUTH_CLIENT_ID: NOT SET in 22May2026.env
+  → Adapter: dispatchCrownLetter() → refreshGmailToken() returns null
+  → BROWSER-FALLBACK: Gmail compose URL with subject + body pre-filled
+
+WHAT WOULD HAPPEN ON FIRE:
+  Subject: [Crown Letter subject from v014i — TBD: check file body for subject line]
+  From:    Jonathan "G.I." Jones
+  To:      [MacKenzie Scott contact email — Founder must supply; not in credential doc]
+  Body:    v014i full text
+
+  Gmail compose URL: https://mail.google.com/mail/?view=cm&to={TO}&su={SUBJECT}&body={BODY_FIRST_1800}
+
+  ⚠ Gmail URL body truncated to 1800 chars — Founder must paste full letter body 
+    in Gmail compose window.
+
+TEMPLATE VARIABLE CHECK:
+  ⚠ REQUIRES AUDIT: File has v014i "Dual-Entity Addendum" addendum content.
+    Verify no founderAge placeholder left unfilled.
+  ✅ No Wyoming tail (per BP080 §5)
+
+DISPATCH CHANNEL: crown_letter → BROWSER-FALLBACK (Gmail compose)
+REQUIRES FOUNDER ACTION:
+  1. Supply recipient email address
+  2. Full letter body paste in Gmail (URL body limit 1800 chars)
+  3. Click Send
+
+STATUS: 🟡 YELLOW — Recipient email not in credential doc; Gmail OAuth not set
+DRY-RUN RESULT: PASS (browser-fallback path verified; no live calls made)
+========================================================

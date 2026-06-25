@@ -1,0 +1,24 @@
+========================================================
+BATTERY DISPATCH DRY-RUN — BP084 · Sonnet 4.6
+========================================================
+PIECE:    Canada 40K — April 2026 Companion Update
+PIECE_ID: CANADA_40K_COMPANION
+PLATFORM: substack (FounderDenken)
+DRY_RUN:  TRUE — NO SIDE EFFECTS
+========================================================
+
+SOURCE FILE:
+  BISHOP_DROPZONE/09_Articles/ARTICLE_CANADA_40K_APRIL2026_COMPANION.md
+
+CREDENTIAL STATE:
+  SUBSTACK_API_KEY: NOT SET → BROWSER-FALLBACK
+
+WHAT WOULD HAPPEN ON FIRE:
+  Browser-fallback: opens founderdenken.substack.com new post editor
+  Founder pastes ~450-word companion body + publishes as companion post
+
+NOTE: Companion fires AFTER main V02 piece. Include link to V02 in companion intro.
+
+STATUS: 🟡 YELLOW — RECONSTRUCTION flag; pair with V02 fire
+DRY-RUN RESULT: PASS (no live calls made)
+========================================================

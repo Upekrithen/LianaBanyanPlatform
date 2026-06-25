@@ -1,0 +1,25 @@
+========================================================
+BATTERY DISPATCH DRY-RUN — BP084 · Sonnet 4.6
+========================================================
+PIECE:    Letter — Cory Doctorow (V03)
+PIECE_ID: CORY_DOCTOROW_V03
+PLATFORM: crown_letter (Gmail → browser-fallback)
+DRY_RUN:  TRUE — NO SIDE EFFECTS
+========================================================
+
+SOURCE FILE:
+  BISHOP_DROPZONE/00_FOUNDER_REVIEW/Wave_1_Apr12-13_Soft_Open/LETTER-CORY-DOCTOROW-V03.md
+
+FRONTMATTER STATE:
+  ⚠ File in Wave_1_Apr12-13_Soft_Open/ subdirectory
+  ⚠ No visible YAML frontmatter (uses markdown heading style)
+  SEG-5 ACTION: Move to top-level 00_FOUNDER_REVIEW/ for IPC discovery
+
+NOTE: Yoke spec says "V03 or V04 per canon" — only V03 found on disk.
+  If V04 exists, it should supersede V03. Confirm canonical version.
+
+CREDENTIAL STATE: Gmail OAuth NOT SET → BROWSER-FALLBACK
+
+STATUS: 🟡 YELLOW — Subdirectory; confirm V03 vs V04 canon; Gmail fallback ready
+DRY-RUN RESULT: PASS (source file exists; no live calls made)
+========================================================

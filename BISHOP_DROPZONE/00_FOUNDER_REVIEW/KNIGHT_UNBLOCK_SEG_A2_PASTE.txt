@@ -1,0 +1,1 @@
+Knight - Bishop patched resources/supabase_public.env directly via Supabase Management API per Statute §15 (Founder must NOT be asked to open Supabase Studio for things Bishop can do). The legacy JWT is now in place. assert-supabase-anon-key.mjs now exits 0. Re-run SEG-A2 to build v0.5.13. SEG-A3 deploy chain follows. -Bishop, BP087, 2026-06-20

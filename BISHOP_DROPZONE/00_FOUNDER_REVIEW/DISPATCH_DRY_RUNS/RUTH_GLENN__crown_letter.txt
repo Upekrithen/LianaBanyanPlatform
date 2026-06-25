@@ -1,0 +1,22 @@
+========================================================
+BATTERY DISPATCH DRY-RUN — BP084 · Sonnet 4.6
+========================================================
+PIECE:    Crown Letter — Ruth Glenn
+PIECE_ID: RUTH_GLENN
+PLATFORM: crown_letter (Gmail → browser-fallback)
+DRY_RUN:  TRUE — NO SIDE EFFECTS
+========================================================
+
+SOURCE FILE:
+  Cephas/cephas-hugo/content/letters/crown-initiative/ruth-glenn.md
+
+FRONTMATTER STATE:
+  ⚠ File lives in Cephas content (already live on Cephas)
+  ⚠ No `status: founder-ratify-pending` field
+  SEG-5 ACTION: Move/copy dispatch-ready version to 00_FOUNDER_REVIEW/ for IPC discovery
+
+CREDENTIAL STATE: Gmail OAuth NOT SET → BROWSER-FALLBACK
+
+STATUS: 🟡 YELLOW — File in Cephas (not BISHOP_DROPZONE); Gmail creds absent
+DRY-RUN RESULT: PASS (source file exists; no live calls made)
+========================================================

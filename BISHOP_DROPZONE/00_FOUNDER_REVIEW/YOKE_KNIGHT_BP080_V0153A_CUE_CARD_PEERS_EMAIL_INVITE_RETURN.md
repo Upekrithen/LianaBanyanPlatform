@@ -43,17 +43,17 @@ SEG-V0153A-SHIP:                 GATE 1 COMPLETE â€” version bumped, installer b
 
 *Knight Â· SEG-V0153A-SHIP Â· BP080 Â· Sonnet 4.6 Â· 2026-06-11*
 
-## WAVE-2 COMPLETE · 2026-06-11
+## WAVE-2 COMPLETE ï¿½ 2026-06-11
 
-SEG-V0153A-P0-GENESIS-MINT:       COMPLETE (STAGED) — ledger NOT written; IPC gated on Founder "MINT IT" confirm
-SEG-V0153A-P1-REJECTION-COOLDOWN: COMPLETE — Edge Function + migration + cooldown gate + "Not interested" button
-SEG-V0153A-INVITE-FORM-ENHANCE:   COMPLETE — cooldown UI + "Sign this card" + subject personalization + dual IPC shape
+SEG-V0153A-P0-GENESIS-MINT:       COMPLETE (STAGED) ï¿½ ledger NOT written; IPC gated on Founder "MINT IT" confirm
+SEG-V0153A-P1-REJECTION-COOLDOWN: COMPLETE ï¿½ Edge Function + migration + cooldown gate + "Not interested" button
+SEG-V0153A-INVITE-FORM-ENHANCE:   COMPLETE ï¿½ cooldown UI + "Sign this card" + subject personalization + dual IPC shape
 
 SEG-V0153A-VERIFY-2: PASS
-  - TypeScript compile (main): PASS — 0 errors
-  - FederationTab.tsx: NO MERGE CONFLICTS — AcceptFlow "Not interested" PRESENT · InviteFlow cooldown banner PRESENT · InviteFlow "Sign this card" PRESENT
+  - TypeScript compile (main): PASS ï¿½ 0 errors
+  - FederationTab.tsx: NO MERGE CONFLICTS ï¿½ AcceptFlow "Not interested" PRESENT ï¿½ InviteFlow cooldown banner PRESENT ï¿½ InviteFlow "Sign this card" PRESENT
   - assert-preload-source-no-declare-const: OK (1367 lines)
-  - assert-ipc-handlers: 145/149 PASS · 4 FAIL (dist stale — all 4 handlers confirmed in src/main/index.ts at lines 2743, 3445, 3454, 3480)
+  - assert-ipc-handlers: 145/149 PASS ï¿½ 4 FAIL (dist stale ï¿½ all 4 handlers confirmed in src/main/index.ts at lines 2743, 3445, 3454, 3480)
   - assert-preload-sandbox: OK (449 lines)
   - npm install: OK (qrcode + @types/qrcode installed)
 
@@ -62,18 +62,18 @@ SEG-V0153A-SHIP-2: GATE 1 COMPLETE
 Build Artifacts (wave-2):
   - SHA-256: FA271A372609B797AA19EC07E5ED3D0FEF7DD6A46A4C3F89044BBDC817FC1C2E
   - Installer: release/MnemosyneC-Setup-0.1.53.exe (537,278,779 bytes)
-  - Commits: b912b1a (wave-2 code) · e905332 (Cephas SHA-256)
+  - Commits: b912b1a (wave-2 code) ï¿½ e905332 (Cephas SHA-256)
   - Pushed: 3443c4a..e905332 main -> main
 
 Open Founder Decisions:
-1. Genesis display_name: reply "MINT IT — display_name: [NAME]" to execute ledger write
-2. Cooldown decay: Option 1 (no decay — LIVE), Option 2 (Bishop rec: -1/30d clean), Option 3 (manual reset only)
-3. federation:connect-peer IPC: deferred to v0.1.54 — Confirm?
+1. Genesis display_name: reply "MINT IT ï¿½ display_name: [NAME]" to execute ledger write
+2. Cooldown decay: Option 1 (no decay ï¿½ LIVE), Option 2 (Bishop rec: -1/30d clean), Option 3 (manual reset only)
+3. federation:connect-peer IPC: deferred to v0.1.54 ï¿½ Confirm?
 4. V0.1.54 silent email via Supabase Edge Function: Confirm scope?
 
-SHIP-READY: GATE 1 COMPLETE · GATES 2+3 AWAIT "ship it"
+SHIP-READY: GATE 1 COMPLETE ï¿½ GATES 2+3 AWAIT "ship it"
 
-*Knight · SEG-V0153A-VERIFY-2 + SEG-V0153A-SHIP-2 · BP080 · Sonnet 4.6 · 2026-06-11*
+*Knight ï¿½ SEG-V0153A-VERIFY-2 + SEG-V0153A-SHIP-2 ï¿½ BP080 ï¿½ Sonnet 4.6 ï¿½ 2026-06-11*
 
 ---
 

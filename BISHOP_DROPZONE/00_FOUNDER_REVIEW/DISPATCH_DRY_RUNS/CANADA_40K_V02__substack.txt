@@ -1,0 +1,52 @@
+========================================================
+BATTERY DISPATCH DRY-RUN — BP084 · Sonnet 4.6
+========================================================
+PIECE:    Canada 40K — You Have a Play. I Have a Stage. (V02)
+PIECE_ID: CANADA_40K_V02
+PLATFORM: substack (FounderDenken · founderdenken.substack.com)
+DRY_RUN:  TRUE — NO SIDE EFFECTS
+========================================================
+
+SOURCE FILE:
+  BISHOP_DROPZONE/09_Articles/ARTICLE_CANADA_40K_PLAY_STAGE_V02.md
+
+FRONTMATTER STATE:
+  status: founder-ratify-pending  ✅
+  mimic-trunk-eligible: true  ✅
+  ⚠ RECONSTRUCTION — Founder review required
+
+CREDENTIAL STATE:
+  SUBSTACK_API_KEY: NOT SET in 22May2026.env
+  → Adapter will use BROWSER-FALLBACK (free-tier Substack)
+  → Battery Dispatch will open: https://substack.com/publish/post/new?title=Canada+40K+%E2%80%94+...
+  → Founder pastes body + clicks Publish on FounderDenken
+
+WHAT WOULD HAPPEN ON FIRE:
+  1. SUBSTACK_API_KEY env var checked → NOT present
+  2. Fallback: shell.openExternal() opens Substack new post editor with:
+     - title pre-filled: "Canada 40K — You Have a Play. I Have a Stage."
+     - subtitle pre-filled: "42,200 Dreams. One Platform. A Different Path Forward."
+  3. Founder manually pastes body + publishes
+
+PUBLICATION TARGET: FounderDenken (founderdenken.substack.com)
+  Per BP083: Substack-first (anchor canonical URL here before Medium cross-publish)
+
+TEMPLATE VARIABLE CHECK:
+  ✅ No unfilled {{PLACEHOLDER}} variables found
+  ✅ Title and subtitle: clean
+
+BODY PREVIEW (for Founder to paste — first 200 chars):
+  "Canada's Bill C-12 received Royal Assent on March 26, 2026. 42,200 entrepreneurs — 
+   people who uprooted their lives, invested their savings, bet on a dream — are now 
+   stranded. The hard deadline is June 30, 2026..."
+
+OPEN RATIFY GATE: G3 — Outlet question (Substack-first vs. pitch to The Logic / 
+  TechCrunch / Globe & Mail for Canadian angle). Founder must decide before fire.
+
+DISPATCH CHANNEL: substack — BROWSER-FALLBACK (free tier; no API key)
+REQUIRES FOUNDER ACTION: Manual paste + publish in Substack editor
+ESTIMATED FIRE TIME: ~5 minutes (browser open + Founder manual)
+
+STATUS: 🟡 YELLOW — RECONSTRUCTION flag + G3 outlet gate open
+DRY-RUN RESULT: PASS (browser-fallback path confirmed; no live calls made)
+========================================================

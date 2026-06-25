@@ -1,0 +1,29 @@
+========================================================
+BATTERY DISPATCH DRY-RUN — BP084 · Sonnet 4.6
+========================================================
+PIECE:    Cephas + lianabanyan.com Banner (Substrate Awakens)
+PIECE_ID: SUBSTRATE_AWAKENS_BANNER
+PLATFORM: cephas + lianabanyan.com
+DRY_RUN:  TRUE — NO SIDE EFFECTS
+========================================================
+
+SOURCE FILE:
+  BISHOP_DROPZONE/00_FOUNDER_REVIEW/SUBSTRATE_AWAKENS_MARKETING_WAVE/CEPHAS_BANNER_SUBSTRATE_AWAKENS.html
+
+FILE TYPE: HTML banner (not a Markdown dispatch piece)
+  → This is NOT routed through the standard Battery Dispatch IPC flow.
+  → Manual deployment required.
+
+WHAT WOULD HAPPEN ON FIRE:
+  Founder manually places banner HTML into Cephas/cephas-hugo/ layout or 
+  platform/src/components/ as appropriate.
+  Then runs: cd platform; npm run build; firebase deploy --only hosting:main,hosting:cephas
+
+REQUIRES FOUNDER ACTION:
+  1. Determine banner placement (Cephas homepage? lianabanyan.com homepage? both?)
+  2. Manually integrate HTML into template
+  3. Run build + deploy
+
+STATUS: 🟡 YELLOW — HTML file; manual integration required; not IPC-dispatchable
+DRY-RUN RESULT: PASS (file exists; no live calls made)
+========================================================

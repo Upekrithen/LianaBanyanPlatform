@@ -1,0 +1,22 @@
+========================================================
+BATTERY DISPATCH DRY-RUN — BP084 · Sonnet 4.6
+========================================================
+PIECE:    Crown Letter — Olaf Scholz (V2)
+PIECE_ID: OLAF_SCHOLZ_V2
+PLATFORM: crown_letter (Gmail → browser-fallback)
+DRY_RUN:  TRUE — NO SIDE EFFECTS
+========================================================
+
+SOURCE FILE:
+  BISHOP_DROPZONE/00_FOUNDER_REVIEW/Wave_1_Apr12-13_Soft_Open/CROWN_LETTER_OLAF_SCHOLZ_V2.md
+
+FRONTMATTER STATE:
+  ⚠ File in Wave_1_Apr12-13_Soft_Open/ subdirectory
+  ⚠ Status field presence: requires file read to confirm `status: founder-ratify-pending`
+  SEG-5 ACTION: Move to top-level 00_FOUNDER_REVIEW/ for IPC discovery
+
+CREDENTIAL STATE: Gmail OAuth NOT SET → BROWSER-FALLBACK
+
+STATUS: 🟡 YELLOW — Subdirectory location; confirm status field
+DRY-RUN RESULT: PASS (source file exists; no live calls made)
+========================================================

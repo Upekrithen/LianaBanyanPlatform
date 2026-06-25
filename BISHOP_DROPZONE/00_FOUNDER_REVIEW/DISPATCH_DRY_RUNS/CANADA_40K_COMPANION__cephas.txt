@@ -1,0 +1,42 @@
+========================================================
+BATTERY DISPATCH DRY-RUN — BP084 · Sonnet 4.6
+========================================================
+PIECE:    Canada 40K — April 2026 Companion Update
+PIECE_ID: CANADA_40K_COMPANION
+PLATFORM: cephas (Hugo + Firebase · cephas.lianabanyan.com)
+DRY_RUN:  TRUE — NO SIDE EFFECTS
+========================================================
+
+SOURCE FILE:
+  BISHOP_DROPZONE/09_Articles/ARTICLE_CANADA_40K_APRIL2026_COMPANION.md
+
+FRONTMATTER STATE:
+  title:        "Canada 40K — April 2026 Companion Update"
+  date:         2026-04-23
+  status:       founder-ratify-pending  ✅
+  class:        companion-piece
+  companion_to: ARTICLE_CANADA_40K_PLAY_STAGE_V02.md
+  mimic-trunk-eligible: true  ✅
+  recovered_from: BP064 transcript line 1718-1719 (RECONSTRUCTION — ~450 words)
+
+⚠ RECONSTRUCTION FLAG: Companion prose reconstructed from transcript description.
+   Original B113 session file was not persisted. Founder review required.
+
+WHAT WOULD HAPPEN ON FIRE:
+  → Would write to: Cephas/cephas-hugo/content/articles/canada-40k--april-2026-companion-update.md
+  → hugo --minify + firebase deploy --only hosting:cephas
+  → URL: https://cephas.lianabanyan.com/articles/canada-40k--april-2026-companion-update/
+
+BODY PREVIEW (~450 words as described):
+  "On March 26, 2026, Canada's Bill C-12 received Royal Assent... The clock is running.
+   We published the first version of this piece in January 2026, when the program pause 
+   was an announcement. Now it's law..."
+
+TEMPLATE VARIABLE CHECK:
+  ✅ No unfilled {{PLACEHOLDER}} variables
+  ✅ Title: clean; date: set
+
+DISPATCH CHANNEL: cephas — FULL-AUTO
+STATUS: 🟡 YELLOW — RECONSTRUCTION flag; Founder review required
+DRY-RUN RESULT: PASS (no errors; no live calls made)
+========================================================

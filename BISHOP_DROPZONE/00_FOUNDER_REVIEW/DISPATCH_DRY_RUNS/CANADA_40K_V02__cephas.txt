@@ -1,0 +1,56 @@
+========================================================
+BATTERY DISPATCH DRY-RUN — BP084 · Sonnet 4.6
+========================================================
+PIECE:    Canada 40K — You Have a Play. I Have a Stage. (V02)
+PIECE_ID: CANADA_40K_V02
+PLATFORM: cephas (Hugo + Firebase · cephas.lianabanyan.com)
+DRY_RUN:  TRUE — NO SIDE EFFECTS
+========================================================
+
+SOURCE FILE:
+  BISHOP_DROPZONE/09_Articles/ARTICLE_CANADA_40K_PLAY_STAGE_V02.md
+
+FRONTMATTER STATE:
+  title:   "Canada 40K — You Have a Play. I Have a Stage."
+  date:    2026-04-23
+  status:  founder-ratify-pending  ✅
+  class:   news-response-letter
+  mimic-trunk-eligible: true  ✅
+  recovered_from: BP064 transcript (RECONSTRUCTION NOTE — Founder review required)
+
+⚠ RECONSTRUCTION FLAG: V02 prose was reconstructed from V01 base + BP064 transcript 
+description. Not verbatim from B113 session. Founder review required before publish.
+
+WHAT WOULD HAPPEN ON FIRE:
+  1. Hugo section detected: 'articles' (class: news-response-letter → default)
+     → Would write to: Cephas/cephas-hugo/content/articles/canada-40k--you-have-a-play--i-have-a-stage.md
+  2. Hugo frontmatter generated:
+     ---
+     title: "Canada 40K — You Have a Play. I Have a Stage."
+     date: 2026-04-23
+     draft: false
+     category: "news-response-letter"
+     slug: "canada-40k--you-have-a-play--i-have-a-stage"
+     ---
+  3. hugo --minify would run in Cephas/cephas-hugo/
+  4. firebase deploy --only hosting:cephas would run
+  5. Resulting URL: https://cephas.lianabanyan.com/articles/canada-40k--you-have-a-play--i-have-a-stage/
+
+TEMPLATE VARIABLE CHECK:
+  ✅ No unfilled {{PLACEHOLDER}} variables found in source
+  ✅ Title: clean
+  ✅ Date: set (2026-04-23)
+  ⚠ Slug: auto-generated from title (long; verify aesthetics)
+
+BODY PREVIEW (first 200 chars of article):
+  "Canada's Bill C-12 (Strengthening Canada's Immigration System and Borders Act) received 
+   Royal Assent on March 26, 2026. It gave Canada's immigration ministry the statutory 
+   authority to cancel Start-Up Visa applications en masse..."
+
+DISPATCH CHANNEL: cephas — FULL-AUTO (Hugo build + Firebase deploy)
+REQUIRES FOUNDER ACTION: None (after ratify)
+ESTIMATED FIRE TIME: ~3 minutes (hugo build + firebase deploy)
+
+STATUS: 🟡 YELLOW — Content is RECONSTRUCTION; Founder review required before ratify.
+DRY-RUN RESULT: PASS (no errors, no missing vars, no live calls made)
+========================================================

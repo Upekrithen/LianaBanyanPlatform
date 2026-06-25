@@ -1,0 +1,40 @@
+========================================================
+BATTERY DISPATCH DRY-RUN — BP084 · Sonnet 4.6
+========================================================
+PIECE:    Show HN: 5-node cooperative mesh benchmark — live Saturday
+PIECE_ID: SHOW_HN_T5
+PLATFORM: hackernews (semi-auto browser)
+DRY_RUN:  TRUE — NO SIDE EFFECTS
+========================================================
+
+SOURCE FILE:
+  BISHOP_DROPZONE/00_FOUNDER_REVIEW/SUBSTRATE_AWAKENS_MARKETING_WAVE/SHOW_HN_SUBSTRATE_AWAKENS_T5.md
+
+FRONTMATTER STATE:
+  Status: DRAFT · Awaiting Founder ratify ✅
+  "Saturday-ish" framing: ✅ PRESENT
+
+HN TITLE (ready to use):
+  "Show HN: We ran a 5-node cooperative mesh benchmark (68/70 MMLU-Pro) and we're 
+   doing it live Saturday with open replication"
+
+CANONICAL URL REQUIRED:
+  HN adapter uses lianabanyan.com URL as the submitted link.
+  Expected: https://lianabanyan.com/op-eds/{slug}/ or https://cephas.lianabanyan.com/...
+  → Fire AFTER Substack/Cephas so there's a live URL to submit.
+
+WHAT WOULD HAPPEN ON FIRE:
+  Battery Dispatch opens:
+  https://news.ycombinator.com/submitlink?u={CANONICAL_URL}&t=Show+HN%3A+We+ran+a+5-node...
+  Founder clicks Submit in HN browser tab.
+  Founder pastes the resulting HN thread URL back into Battery Dispatch.
+
+CREDENTIAL STATE: None required (HN semi-auto browser)
+
+DEPENDENCY: Fires AFTER Substack/Cephas publish (need live URL for HN submission)
+
+TIMING: T5 = 5 days before "Saturday ship" (or as soon as live URL is available)
+
+STATUS: 🟢 GREEN — Content ready; semi-auto path confirmed; URL dependency noted
+DRY-RUN RESULT: PASS (no live calls made)
+========================================================

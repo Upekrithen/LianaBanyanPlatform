@@ -1,0 +1,22 @@
+========================================================
+BATTERY DISPATCH DRY-RUN — BP084 · Sonnet 4.6
+========================================================
+PIECE:    Crown Letter — Sal Khan
+PIECE_ID: SAL_KHAN
+PLATFORM: crown_letter (Gmail → browser-fallback)
+DRY_RUN:  TRUE — NO SIDE EFFECTS
+========================================================
+
+SOURCE FILE:
+  Cephas/cephas-hugo/content/letters/crown-initiative/sal-khan-chancellor.md
+
+FRONTMATTER STATE:
+  ⚠ File in Cephas content (already live on Cephas)
+  ⚠ No `status: founder-ratify-pending`
+  SEG-5 ACTION: Move/copy to 00_FOUNDER_REVIEW/ for IPC discovery
+
+CREDENTIAL STATE: Gmail OAuth NOT SET → BROWSER-FALLBACK
+
+STATUS: 🟡 YELLOW — File in Cephas; Gmail creds absent
+DRY-RUN RESULT: PASS (source file exists; no live calls made)
+========================================================

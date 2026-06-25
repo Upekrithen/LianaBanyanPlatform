@@ -1,0 +1,292 @@
+{
+  "run_type": "5-peer-relay-orchestrator",
+  "canonical": false,
+  "topology": "Supabase relay_routes table dispatch -- 4 LAN-adjacent + 1 real-WAN-hop (Son)",
+  "dispatch_method": "wan-relay-route (no direct IP routing)",
+  "model_families": "gemma4:12b (M0, M1, M2, M3) x qwen2.5:7b (Son) -- CROSS-VENDOR HETEROGENEOUS",
+  "session_id": "relay-2026-06-20T05-42-41",
+  "run_timestamp": "2026-06-20T05:54:06.428Z",
+  "mode": "smoke",
+  "routing": "round-robin",
+  "flagship_tier": "gemma",
+  "trial_id": "SMOKE_PAIR_20260620_003712",
+  "pass": "B",
+  "anthropic_api_skipped": true,
+  "question_count": 5,
+  "peer_count": 4,
+  "son_peer_id": null,
+  "peers": {
+    "cb4ef450cc4a18c3": {
+      "tier": "base",
+      "lan_addresses": null,
+      "last_seen_at": "2026-06-20T05:42:36.159+00:00",
+      "answered": 5,
+      "correct": 5,
+      "is_son": false
+    },
+    "d0b47bd08633385b": {
+      "tier": "base",
+      "lan_addresses": null,
+      "last_seen_at": "2026-06-20T05:42:13.828+00:00",
+      "answered": 2,
+      "correct": 2,
+      "is_son": false
+    },
+    "49f3e5971518a064": {
+      "tier": "base",
+      "lan_addresses": null,
+      "last_seen_at": "2026-06-20T05:41:48.703+00:00",
+      "answered": 2,
+      "correct": 2,
+      "is_son": false
+    },
+    "88cbf6bdd6f74587": {
+      "tier": "base",
+      "lan_addresses": null,
+      "last_seen_at": "2026-06-20T05:41:44.62+00:00",
+      "answered": 2,
+      "correct": 2,
+      "is_son": false
+    }
+  },
+  "staggered_phase_results": null,
+  "ensemble_score": {
+    "correct": 5,
+    "total": 5,
+    "pct": 100,
+    "contested": 0
+  },
+  "questions": [
+    {
+      "index": 1,
+      "source_id": "2804",
+      "domain": "biology",
+      "question_preview": "Which of the following would most likely provide examples of mitotic cell divisions?",
+      "num_options": 8,
+      "correct_letter": "B",
+      "correct_answer_text": "longitudinal section of a shoot tip",
+      "route_ids": [
+        "b203b102-75a0-498f-85ed-addea27c0b3b",
+        "67c72785-ea66-4cb6-85fe-a0661de46abf",
+        "ef0322ea-230d-4b94-90cb-4e96059f3703",
+        "f6430fed-a51d-432c-9637-e4c07356e384"
+      ],
+      "per_peer": {
+        "cb4ef450cc4a18c3": {
+          "route_id": "b203b102-75a0-498f-85ed-addea27c0b3b",
+          "answer": "B",
+          "replied": true,
+          "correct": true
+        },
+        "d0b47bd08633385b": {
+          "route_id": "67c72785-ea66-4cb6-85fe-a0661de46abf",
+          "answer": null,
+          "replied": false,
+          "correct": false
+        },
+        "49f3e5971518a064": {
+          "route_id": "ef0322ea-230d-4b94-90cb-4e96059f3703",
+          "answer": null,
+          "replied": false,
+          "correct": false
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "f6430fed-a51d-432c-9637-e4c07356e384",
+          "answer": null,
+          "replied": false,
+          "correct": false
+        }
+      },
+      "ensemble": {
+        "answer": "B",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 2,
+      "source_id": "70",
+      "domain": "business",
+      "question_preview": "Typical advertising regulatory bodies suggest, for example that adverts must not: encourage _________, cause unnecessary...",
+      "num_options": 9,
+      "correct_letter": "I",
+      "correct_answer_text": "Unsafe practices, Distress, Fear, Serious",
+      "route_ids": [
+        "c62a6626-1101-497d-a51f-0ea786b5285f",
+        "6f2829c4-2102-4657-8d90-18a8106c49fc",
+        "bf97d88c-0997-4b4c-bebe-0a2f54a69a78",
+        "7428f507-44d4-4fb6-bf96-ad42f4230b01"
+      ],
+      "per_peer": {
+        "cb4ef450cc4a18c3": {
+          "route_id": "c62a6626-1101-497d-a51f-0ea786b5285f",
+          "answer": "I",
+          "replied": true,
+          "correct": true
+        },
+        "d0b47bd08633385b": {
+          "route_id": "6f2829c4-2102-4657-8d90-18a8106c49fc",
+          "answer": null,
+          "replied": false,
+          "correct": false
+        },
+        "49f3e5971518a064": {
+          "route_id": "bf97d88c-0997-4b4c-bebe-0a2f54a69a78",
+          "answer": null,
+          "replied": false,
+          "correct": false
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "7428f507-44d4-4fb6-bf96-ad42f4230b01",
+          "answer": null,
+          "replied": false,
+          "correct": false
+        }
+      },
+      "ensemble": {
+        "answer": "I",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 3,
+      "source_id": "3526",
+      "domain": "chemistry",
+      "question_preview": "An unknown substance is found to have a high melting point. In addition, it is a poor conductor of electricity and does ...",
+      "num_options": 10,
+      "correct_letter": "C",
+      "correct_answer_text": "covalent network bonding",
+      "route_ids": [
+        "8ccc6dc2-ef3d-44a1-9415-b626ac52b882",
+        "6aeefc7c-5ad6-4935-b194-0c677d168970",
+        "bbc97369-3ddd-4079-a34f-4fb09a9f43b0",
+        "03951e91-0aab-487e-8256-ec0d6e67e4fc"
+      ],
+      "per_peer": {
+        "cb4ef450cc4a18c3": {
+          "route_id": "8ccc6dc2-ef3d-44a1-9415-b626ac52b882",
+          "answer": "C",
+          "replied": true,
+          "correct": true
+        },
+        "d0b47bd08633385b": {
+          "route_id": "6aeefc7c-5ad6-4935-b194-0c677d168970",
+          "answer": null,
+          "replied": false,
+          "correct": false
+        },
+        "49f3e5971518a064": {
+          "route_id": "bbc97369-3ddd-4079-a34f-4fb09a9f43b0",
+          "answer": null,
+          "replied": false,
+          "correct": false
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "03951e91-0aab-487e-8256-ec0d6e67e4fc",
+          "answer": null,
+          "replied": false,
+          "correct": false
+        }
+      },
+      "ensemble": {
+        "answer": "C",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 4,
+      "source_id": "10356",
+      "domain": "computer_science",
+      "question_preview": "A method is to be written to search an array for a value that is larger than a given item and return its index. The prob...",
+      "num_options": 8,
+      "correct_letter": "B",
+      "correct_answer_text": "The specification should be modified to indicate what should be done if there is more than one index of larger values.",
+      "route_ids": [
+        "3dc0fe92-18cc-4301-8cd9-afddc3050aef",
+        "6aee86fd-e7fe-4d8d-b83f-dbc39391bb8c",
+        "489dc471-306f-4ae3-bf65-cd67950b3116",
+        "3a948ca8-606f-4c86-a83d-ec4043b9c282"
+      ],
+      "per_peer": {
+        "cb4ef450cc4a18c3": {
+          "route_id": "3dc0fe92-18cc-4301-8cd9-afddc3050aef",
+          "answer": "B",
+          "replied": true,
+          "correct": true
+        },
+        "d0b47bd08633385b": {
+          "route_id": "6aee86fd-e7fe-4d8d-b83f-dbc39391bb8c",
+          "answer": "B",
+          "replied": true,
+          "correct": true
+        },
+        "49f3e5971518a064": {
+          "route_id": "489dc471-306f-4ae3-bf65-cd67950b3116",
+          "answer": "B",
+          "replied": true,
+          "correct": true
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "3a948ca8-606f-4c86-a83d-ec4043b9c282",
+          "answer": "B",
+          "replied": true,
+          "correct": true
+        }
+      },
+      "ensemble": {
+        "answer": "B",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 5,
+      "source_id": "6826",
+      "domain": "economics",
+      "question_preview": "Which of the following would be classified under C when calculating GDP?",
+      "num_options": 8,
+      "correct_letter": "G",
+      "correct_answer_text": "$50.00 spent eating out at a restaurant",
+      "route_ids": [
+        "7b654886-8783-450b-9069-80f70c2d2ed6",
+        "65cdb280-5d24-432e-8641-1a2a573a06cc",
+        "5f5706c7-403e-4c10-a204-f3abe5d4efc3",
+        "8fe31853-e2bf-404d-9bf7-0511fe7b75cb"
+      ],
+      "per_peer": {
+        "cb4ef450cc4a18c3": {
+          "route_id": "7b654886-8783-450b-9069-80f70c2d2ed6",
+          "answer": "G",
+          "replied": true,
+          "correct": true
+        },
+        "d0b47bd08633385b": {
+          "route_id": "65cdb280-5d24-432e-8641-1a2a573a06cc",
+          "answer": "G",
+          "replied": true,
+          "correct": true
+        },
+        "49f3e5971518a064": {
+          "route_id": "5f5706c7-403e-4c10-a204-f3abe5d4efc3",
+          "answer": "G",
+          "replied": true,
+          "correct": true
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "8fe31853-e2bf-404d-9bf7-0511fe7b75cb",
+          "answer": "G",
+          "replied": true,
+          "correct": true
+        }
+      },
+      "ensemble": {
+        "answer": "G",
+        "contested": false,
+        "correct": true
+      }
+    }
+  ],
+  "truth_always_note": "Pre-canonical relay diagnostic run. Canonical 5-peer cooperative substrate run requires lan_addresses population and verified peer identity mapping."
+}

@@ -1,0 +1,19 @@
+BP087 WAVE 3 - PASTE THIS INTO KNIGHT NEXT SESSION
+
+Paste prompt file (Windows path, copy-paste ready):
+
+C:\Users\Administrator\Documents\LianaBanyanPlatform\BISHOP_DROPZONE\00_FOUNDER_REVIEW\KNIGHT_PASTE_PROMPT_WAVE_3_BP087.md
+
+That file contains the standing-orders header plus 5 ordered yoke paths plus the Bishop psql queue. Open it, copy-all, paste into a fresh Knight session, ride.
+
+Wave 3 yoke files (also in this same folder):
+
+1. KNIGHT_YOKE_BLACK_MAMBA_v0_5_13_BUILD_AND_RELEASE_BP087_WAVE_3.md
+2. KNIGHT_YOKE_BLACK_MAMBA_TRIAL_02_FULL_70Q_FIRE_BP087_WAVE_3.md
+3. KNIGHT_YOKE_BLACK_MAMBA_MNEMOSYNEC_COME_WAVE_1_UI_BP087_WAVE_3.md
+4. KNIGHT_YOKE_BLACK_MAMBA_PEARL_SUBSTRACE_RLS_PLUS_EBLIT_MESH_PLUS_CLEANUP_BP087_WAVE_3.md
+5. KNIGHT_YOKE_BLACK_MAMBA_MULTI_SEG_GEMMA_DISPATCH_AND_MEMBER_UI_BP087_WAVE_3.md
+
+Fire order: Yoke 1 first (gates Yoke 2 via v0.5.13 install round). Yokes 3 + 4 + 5 can fan out in parallel SEGs.
+
+Authored: Bishop Sonnet 4.6 - 2026-06-20 - BP087 - For the keep.

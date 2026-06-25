@@ -1,0 +1,89 @@
+{
+  "run_type": "posse-round-up-sweep",
+  "bp": "BP092",
+  "caithedral": true,
+  "session_id": "ROUNDUP_SMOKE_3Q",
+  "source_receipt": "C:\\Users\\Administrator\\Documents\\LianaBanyanPlatform\\BISHOP_DROPZONE\\00_FOUNDER_REVIEW\\VALIDATION_RUN_RECEIPT_RELAY_2026-06-22T12-45-51.json",
+  "source_session_id": "relay-2026-06-22T04-23-42",
+  "run_timestamp": "2026-06-23T18:24:29.737Z",
+  "original_score": {
+    "correct": 26,
+    "total": 42,
+    "pct": 61.9,
+    "contested": 3
+  },
+  "miss_count": 3,
+  "newly_resolved": 0,
+  "still_missed": 3,
+  "estimated_new_score": {
+    "correct": 26,
+    "total": 42,
+    "pct": 61.9
+  },
+  "tier2_joules_budget": 0,
+  "tier2_joules_spent": 0,
+  "round_up_results": [
+    {
+      "source_id": "70",
+      "correct_letter": "I",
+      "domain": "business",
+      "miss_reason": [
+        "contested",
+        "no_answer",
+        "peer_abstain"
+      ],
+      "original_answer": null,
+      "original_correct": false,
+      "round_up_answer": null,
+      "round_up_correct": false,
+      "resolution_tier": "posse",
+      "swarm_run_id": "ea92c2f8-1b87-4920-811c-d095a265d7eb",
+      "sub_claim_count": 1,
+      "decomposition_model": "llama3.3:70b (ULTRA relay)",
+      "contested_after_swarm": false,
+      "elapsed_ms": 17510,
+      "question_truncated": true
+    },
+    {
+      "source_id": "6826",
+      "correct_letter": "G",
+      "domain": "economics",
+      "miss_reason": [
+        "peer_abstain"
+      ],
+      "original_answer": "G",
+      "original_correct": true,
+      "round_up_answer": null,
+      "round_up_correct": false,
+      "resolution_tier": "posse",
+      "swarm_run_id": "bf3d324f-7edc-48a7-8d2e-1812e70b6771",
+      "sub_claim_count": 1,
+      "decomposition_model": "llama3.3:70b (ULTRA relay)",
+      "contested_after_swarm": false,
+      "elapsed_ms": 19209,
+      "question_truncated": false
+    },
+    {
+      "source_id": "4669",
+      "correct_letter": "D",
+      "domain": "history",
+      "miss_reason": [
+        "contested",
+        "no_answer",
+        "peer_abstain"
+      ],
+      "original_answer": null,
+      "original_correct": false,
+      "round_up_answer": null,
+      "round_up_correct": false,
+      "resolution_tier": "posse",
+      "swarm_run_id": "e66da757-fbc2-4165-90c4-2f2f0371f4e8",
+      "sub_claim_count": 1,
+      "decomposition_model": "llama3.3:70b (ULTRA relay)",
+      "contested_after_swarm": false,
+      "elapsed_ms": 19309,
+      "question_truncated": false
+    }
+  ],
+  "truth_always_note": "Estimated new score adds newly-resolved Round-Up Q's to original correct count. Final authoritative score requires re-running full validate-relay.mjs with Round-Up answers submitted."
+}

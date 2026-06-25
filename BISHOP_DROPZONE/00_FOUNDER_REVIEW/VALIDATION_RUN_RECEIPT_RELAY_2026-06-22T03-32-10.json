@@ -1,0 +1,264 @@
+{
+  "run_type": "5-peer-relay-orchestrator",
+  "canonical": false,
+  "topology": "Supabase relay_routes table dispatch -- 4 LAN-adjacent + 1 real-WAN-hop (Son)",
+  "dispatch_method": "wan-relay-route (no direct IP routing)",
+  "model_families": "gemma4:12b (M0, M1, M2, M3) x qwen2.5:7b (Son) -- CROSS-VENDOR HETEROGENEOUS",
+  "session_id": "relay-2026-06-22T03-27-57",
+  "run_timestamp": "2026-06-22T03:32:10.520Z",
+  "mode": "smoke",
+  "routing": "round-robin",
+  "flagship_tier": "gemma",
+  "trial_id": "SMOKE_TEST_BP090_V2",
+  "pass": "A",
+  "anthropic_api_skipped": true,
+  "question_count": 3,
+  "peer_count": 4,
+  "son_peer_id": null,
+  "peers": {
+    "cb4ef450cc4a18c3": {
+      "tier": "base",
+      "lan_addresses": null,
+      "last_seen_at": "2026-06-22T03:27:45.291+00:00",
+      "answered": 3,
+      "correct": 2,
+      "is_son": false
+    },
+    "49f3e5971518a064": {
+      "tier": "base",
+      "lan_addresses": null,
+      "last_seen_at": "2026-06-22T03:27:23.589+00:00",
+      "answered": 1,
+      "correct": 1,
+      "is_son": false
+    },
+    "d0b47bd08633385b": {
+      "tier": "base",
+      "lan_addresses": null,
+      "last_seen_at": "2026-06-22T03:27:20.008+00:00",
+      "answered": 1,
+      "correct": 1,
+      "is_son": false
+    },
+    "88cbf6bdd6f74587": {
+      "tier": "base",
+      "lan_addresses": null,
+      "last_seen_at": "2026-06-22T03:27:01.088+00:00",
+      "answered": 0,
+      "correct": 0,
+      "is_son": false
+    }
+  },
+  "staggered_phase_results": null,
+  "per_domain_timeout_config": {
+    "high_disagreement": {
+      "domains": [
+        "math",
+        "physics",
+        "chemistry",
+        "law",
+        "philosophy"
+      ],
+      "timeout_s": 120
+    },
+    "medium_disagreement": {
+      "domains": [
+        "computer_science",
+        "engineering",
+        "psychology"
+      ],
+      "timeout_s": 90
+    },
+    "low_disagreement": {
+      "domains": [
+        "biology",
+        "business",
+        "health",
+        "history",
+        "economics",
+        "other"
+      ],
+      "timeout_s": 60
+    }
+  },
+  "escalation_summary": {
+    "andon_threshold_pct": 15,
+    "andon_escalate": "star-chamber",
+    "total_escalation_fired": 0,
+    "escalation_fired_pct": 0
+  },
+  "ensemble_score": {
+    "correct": 2,
+    "total": 3,
+    "pct": 66.7,
+    "contested": 0
+  },
+  "questions": [
+    {
+      "index": 1,
+      "source_id": "smoke_bio_01",
+      "domain": "biology",
+      "question_preview": "Which of the following would most likely provide examples of mitotic cell divisions?",
+      "num_options": 8,
+      "correct_letter": "B",
+      "correct_answer_text": "longitudinal section of a shoot tip",
+      "allotted_timeout_s": 60,
+      "route_ids": [
+        "8c51bd3c-1f53-458a-b575-94decb81ea29",
+        "9ae98ca8-f6b6-42d3-8821-e250cf4c0b09",
+        "bd398536-c1bc-4019-b123-57c5a6f831b0",
+        "6886a108-4465-478e-a3e4-1788fde15161"
+      ],
+      "escalation_fired": false,
+      "escalation_peer_count": 0,
+      "escalation_route_ids": [],
+      "final_answer_source": "council_unanimous",
+      "per_peer": {
+        "cb4ef450cc4a18c3": {
+          "route_id": "8c51bd3c-1f53-458a-b575-94decb81ea29",
+          "escalation_route_id": null,
+          "answer": "B",
+          "replied": true,
+          "correct": true
+        },
+        "49f3e5971518a064": {
+          "route_id": "9ae98ca8-f6b6-42d3-8821-e250cf4c0b09",
+          "escalation_route_id": null,
+          "answer": "B",
+          "replied": true,
+          "correct": true
+        },
+        "d0b47bd08633385b": {
+          "route_id": "bd398536-c1bc-4019-b123-57c5a6f831b0",
+          "escalation_route_id": null,
+          "answer": "B",
+          "replied": true,
+          "correct": true
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "6886a108-4465-478e-a3e4-1788fde15161",
+          "escalation_route_id": null,
+          "answer": null,
+          "replied": false,
+          "correct": false
+        }
+      },
+      "ensemble": {
+        "answer": "B",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 2,
+      "source_id": "smoke_math_01",
+      "domain": "math",
+      "question_preview": "Statement 1 | A ring homomorphism is one to one if and only if the kernel is {0}. Statement 2 | Q is an ideal in R.",
+      "num_options": 9,
+      "correct_letter": "H",
+      "correct_answer_text": "False, True",
+      "allotted_timeout_s": 120,
+      "route_ids": [
+        "08095cdb-a844-449c-8b3e-1c99ad30de5c",
+        "d8cc1317-f0c3-41fa-82e2-6d958a2844b0",
+        "9da01b77-d9d6-4239-b031-ac2cede20284",
+        "01e5823d-43e1-4b59-81d9-fd1bb552aa46"
+      ],
+      "escalation_fired": false,
+      "escalation_peer_count": 0,
+      "escalation_route_ids": [],
+      "final_answer_source": "single_peer_fallback",
+      "per_peer": {
+        "cb4ef450cc4a18c3": {
+          "route_id": "08095cdb-a844-449c-8b3e-1c99ad30de5c",
+          "escalation_route_id": null,
+          "answer": "C",
+          "replied": true,
+          "correct": false
+        },
+        "49f3e5971518a064": {
+          "route_id": "d8cc1317-f0c3-41fa-82e2-6d958a2844b0",
+          "escalation_route_id": null,
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "d0b47bd08633385b": {
+          "route_id": "9da01b77-d9d6-4239-b031-ac2cede20284",
+          "escalation_route_id": null,
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "01e5823d-43e1-4b59-81d9-fd1bb552aa46",
+          "escalation_route_id": null,
+          "answer": null,
+          "replied": true,
+          "correct": false
+        }
+      },
+      "ensemble": {
+        "answer": "C",
+        "contested": false,
+        "correct": false
+      }
+    },
+    {
+      "index": 3,
+      "source_id": "smoke_law_01",
+      "domain": "law",
+      "question_preview": "A woman was standing in the aisle of a subway car and put her purse on the seat next to her. A man approached the woman ...",
+      "num_options": 10,
+      "correct_letter": "D",
+      "correct_answer_text": "Robbery, because he used force in leaving with the purse.",
+      "allotted_timeout_s": 120,
+      "route_ids": [
+        "90fe22e1-ce8c-44c4-8d42-f2a8e527e6d3",
+        "47f1cef5-ed66-4f16-9c98-94899e72d1ae",
+        "d7c2ca09-374d-4b60-85fa-39a9c1d5b4d3",
+        "e095577f-941e-44ea-a7f9-39c9530a9835"
+      ],
+      "escalation_fired": false,
+      "escalation_peer_count": 0,
+      "escalation_route_ids": [],
+      "final_answer_source": "single_peer_fallback",
+      "per_peer": {
+        "cb4ef450cc4a18c3": {
+          "route_id": "90fe22e1-ce8c-44c4-8d42-f2a8e527e6d3",
+          "escalation_route_id": null,
+          "answer": "D",
+          "replied": true,
+          "correct": true
+        },
+        "49f3e5971518a064": {
+          "route_id": "47f1cef5-ed66-4f16-9c98-94899e72d1ae",
+          "escalation_route_id": null,
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "d0b47bd08633385b": {
+          "route_id": "d7c2ca09-374d-4b60-85fa-39a9c1d5b4d3",
+          "escalation_route_id": null,
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "e095577f-941e-44ea-a7f9-39c9530a9835",
+          "escalation_route_id": null,
+          "answer": null,
+          "replied": true,
+          "correct": false
+        }
+      },
+      "ensemble": {
+        "answer": "D",
+        "contested": false,
+        "correct": true
+      }
+    }
+  ],
+  "truth_always_note": "Pre-canonical relay diagnostic run. Canonical 5-peer cooperative substrate run requires lan_addresses population and verified peer identity mapping."
+}

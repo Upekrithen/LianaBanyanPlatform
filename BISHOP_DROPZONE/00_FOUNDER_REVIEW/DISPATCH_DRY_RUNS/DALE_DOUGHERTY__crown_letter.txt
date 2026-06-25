@@ -1,0 +1,31 @@
+========================================================
+BATTERY DISPATCH DRY-RUN — BP084 · Sonnet 4.6
+========================================================
+PIECE:    Crown Letter — Dale Dougherty
+PIECE_ID: DALE_DOUGHERTY
+PLATFORM: crown_letter (Gmail → browser-fallback)
+DRY_RUN:  TRUE — NO SIDE EFFECTS
+========================================================
+
+SOURCE FILE:
+  Cephas/cephas-hugo/content/letters/crown-initiative/dale-dougherty.md
+
+FRONTMATTER STATE:
+  title:  "Crown Letter: Dale Dougherty — Industry Chancellor"
+  date:   2026-01-15
+  tags:   crown-initiative, lets-make-bread, maker-movement
+  ⚠ No `status: founder-ratify-pending` field (Cephas Hugo letter — already live on Cephas)
+
+NOTE: This letter lives in Cephas content (already published as crown letter page).
+  Battery Dispatch IPC reads from BISHOP_DROPZONE/00_FOUNDER_REVIEW/ only.
+  SEG-5 ACTION: Knight recommends Founder confirm if Dale Dougherty letter dispatch
+  (Gmail) is a separate send action vs. the existing Cephas mirror.
+
+CREDENTIAL STATE: Gmail OAuth NOT SET → BROWSER-FALLBACK
+
+TEMPLATE VARIABLE CHECK: 
+  ✅ Title clean; no placeholders detected in headers
+
+STATUS: 🟡 YELLOW — File in Cephas content (not BISHOP_DROPZONE); Gmail creds absent
+DRY-RUN RESULT: PASS (no live calls made; source file exists)
+========================================================

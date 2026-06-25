@@ -1,17 +1,17 @@
-# Crown Letter — Meta · Mark Zuckerberg + Yann LeCun
-**BP092 · 2026-06-23 · Staged for Founder review — do not send without Founder approval**
+﻿# Crown Letter  -  Meta · Mark Zuckerberg + Yann LeCun
+**BP092 · 2026-06-23 · Staged for Founder review  -  do not send without Founder approval**
 
 ---
 
-name: "Crown Letter — Meta / Mark Zuckerberg + Yann LeCun"
+name: "Crown Letter  -  Meta / Mark Zuckerberg + Yann LeCun"
 type: crown_letter_ai_company_licensing
 tier: A
 recipients:
   - "Mark Zuckerberg (CEO, Meta)"
   - "Yann LeCun (Chief AI Scientist, Meta)"
 session: BP092
-status: DRAFT — Founder review required before send
-canon_source: Independent Research Analysis "AI Company Substrate Savings Math — Independent Analysis" · BP092
+status: DRAFT  -  Founder review required before send
+canon_source: Independent Research Analysis "AI Company Substrate Savings Math  -  Independent Analysis" · BP092
 
 ---
 
@@ -33,7 +33,7 @@ These are not competing moves. They compose. Meta saves money on every Llama inf
 
 **The Empirical Numbers**
 
-The analysis below is sourced from independent research and analysis ("AI Company Substrate Savings Math — Independent Analysis," BP092, June 23, 2026), citing Meta's public earnings calls, LinkedIn/investing.com reporting on Meta's capex guidance, and FactSet Research estimates.
+The analysis below is sourced from independent research and analysis ("AI Company Substrate Savings Math  -  Independent Analysis," BP092, June 23, 2026), citing Meta's public earnings calls, LinkedIn/investing.com reporting on Meta's capex guidance, and FactSet Research estimates.
 
 At the $70B+ 2025 capex with AI inference estimated at 20–30% of total compute spend:
 
@@ -48,21 +48,21 @@ Meta's 2026 capex guidance of $115–135B is the most aggressive single-year AI 
 
 **License Scaling**
 
-License fee is structurally tied to measured annual savings. As Meta's AI infrastructure spend grows from $70B+ in 2025 toward $115–135B in 2026 — and beyond — your savings grow proportionally, and so does our license fee. We do not lock in a fixed dollar amount that goes stale at scale. Fair to both.
+License fee is structurally tied to measured annual savings. As Meta's AI infrastructure spend grows from $70B+ in 2025 toward $115–135B in 2026  -  and beyond  -  your savings grow proportionally, and so does our license fee. We do not lock in a fixed dollar amount that goes stale at scale. Fair to both.
 
 **Llama Open-Weights + CAI Bonfire: Complementary Infrastructure Layers**
 
 Yann, your argument for open-source AI has always been about the locus of intelligence: the model should be a commons, not a toll gate. Cooperative substrate extends that argument to the inference layer. The model is the commons. The routing infrastructure is also the commons. The economic benefit flows to the cooperative members who provide compute and to the AI companies that license the routing mechanism at 20% of savings.
 
-The CAI Bonfire Project (Liana Banyan Corporation's first Spinout — github.com/liana-banyan/cai-bonfire — repo creating now as of BP092) publishes all substrate research free to Ollama and the open-source LLM development community. Llama runs on Ollama. Llama inference on cooperative substrate via Ollama is the canonical use case for both the CAI Bonfire research arm and the Meta licensing arrangement.
+The CAI Bonfire Project (Liana Banyan Corporation's first Spinout  -  github.com/liana-banyan/cai-bonfire  -  repo creating now as of BP092) publishes all substrate research free to Ollama and the open-source LLM development community. Llama runs on Ollama. Llama inference on cooperative substrate via Ollama is the canonical use case for both the CAI Bonfire research arm and the Meta licensing arrangement.
 
 The practical implication: every Llama inference event that runs via cooperative substrate instead of Meta's centralized infrastructure reduces Meta's inference cost. Meta licenses the mechanism at 20% of those savings. CAI Bonfire publishes the research that improves the substrate, free to the community that uses Llama. The loop closes: open-weights model → open-substrate routing → open research publication → improved open-substrate routing → more Llama inference events on substrate → more savings to Meta.
 
-Meta's capex at $115–135B in 2026 supports 3+ billion daily active users across its platforms. The high-frequency, lower-complexity inference load — Feed ranking, Reels recommendation, ad personalization sub-queries — is exactly the workload category cooperative substrate is designed to absorb at the edge. The flagship inference load for complex Llama queries remains on Meta's infrastructure; the distributed load routes cooperatively.
+Meta's capex at $115–135B in 2026 supports 3+ billion daily active users across its platforms. The high-frequency, lower-complexity inference load  -  Feed ranking, Reels recommendation, ad personalization sub-queries  -  is exactly the workload category cooperative substrate is designed to absorb at the edge. The flagship inference load for complex Llama queries remains on Meta's infrastructure; the distributed load routes cooperatively.
 
 **Cooperative Substrate is Vendor-Resilient by Design**
 
-Substrate is model-agnostic. It routes inference cooperatively regardless of whether the model is Llama 4, GPT-5, Claude 4, Gemini 2.5, or Mistral Large. Meta as a licensing partner is not endorsing cooperative substrate as a substitute for Meta AI. You are licensing the routing layer that makes inference for all models — including Llama — cheaper, and collecting the 80% that comes back to you from those savings.
+Substrate is model-agnostic. It routes inference cooperatively regardless of whether the model is Llama 4, GPT-5, Claude 4, Gemini 2.5, or Mistral Large. Meta as a licensing partner is not endorsing cooperative substrate as a substitute for Meta AI. You are licensing the routing layer that makes inference for all models  -  including Llama  -  cheaper, and collecting the 80% that comes back to you from those savings.
 
 The "Bring Your Own AI" design canon means substrate composes with Meta's existing AI infrastructure rather than competing with it. Meta keeps its frontier model advantage. The substrate handles the routing efficiency layer. Both benefit.
 
@@ -72,24 +72,24 @@ The "Bring Your Own AI" design canon means substrate composes with Meta's existi
 - **97% Faster - 98% Accurate - 95% Cheaper** (hero stats with receipts · full benchmark at lianabanyan.com/proofs/)
 - 60 swarm_runs + 12 sub_claims confirmed in Supabase
 - 97.1% accuracy on 68/70 MMLU-Pro questions via staggered single-domain methodology (PROV_23 receipt)
-- First paid cooperative member, $5, June 23, 2026 — cooperative is no longer pre-revenue
-- MnemosyneC (Public Alpha) — the interface layer; cooperative substrate itself is LIVE
+- First paid cooperative member, $5, June 23, 2026  -  cooperative is no longer pre-revenue
+- MnemosyneC (Public Alpha)  -  the interface layer; cooperative substrate itself is LIVE
 
 Every page that isn't yet live names its open Captain seat - operational and legal - and links the Wheel. We don't hide what's not yet built; we show what seat is open.
 
 ---
 
-### EMPLOY THE WORLD — Replace Scale AI · Reduce Your Labor Platform Risk
+### EMPLOY THE WORLD  -  Replace Scale AI · Reduce Your Labor Platform Risk
 
-Meta's open-weights thesis is the model as commons. Employ the World extends that thesis to the labor pipeline: the human work that makes Llama better — RLHF, content moderation across Meta's platforms, adversarial testing, data labeling for multimodal training — currently routes through extractive platforms (Scale AI, Surge AI, CrowdWorks) at 60-70% platform take. The same open-weights philosophy that says the model shouldn't be a tollgate applies to the labor pipeline.
+Meta's open-weights thesis is the model as commons. Employ the World extends that thesis to the labor pipeline: the human work that makes Llama better  -  RLHF, content moderation across Meta's platforms, adversarial testing, data labeling for multimodal training  -  currently routes through extractive platforms (Scale AI, Surge AI, CrowdWorks) at 60-70% platform take. The same open-weights philosophy that says the model shouldn't be a tollgate applies to the labor pipeline.
 
 The cooperative substrate's Employ the World bounty board delivers those same work types with:
-- **83.3% creator-keep to cooperative members** (vs Scale AI's typical 30-40% take — better-aligned, lower-churn workforce)
+- **83.3% creator-keep to cooperative members** (vs Scale AI's typical 30-40% take  -  better-aligned, lower-churn workforce)
 - **IP Ledger immutable attribution per work-unit** (chain-of-custody audit-ready for training data attribution)
 - **Star Chamber + community-vote validation** (multi-agent quality gate before payment)
 - **Cost+20% margin to cooperative** (transparent · auditable · no hidden margin)
 
-Yann, the locus-of-intelligence argument applies here: if the weights are public and the inference routing is cooperative, the labor pipeline should also be cooperative. Full stack. Employ the World is the labor layer that closes the open-AI argument at every level of the stack — not just model, not just routing, but the human feedback that trains the next model.
+Yann, the locus-of-intelligence argument applies here: if the weights are public and the inference routing is cooperative, the labor pipeline should also be cooperative. Full stack. Employ the World is the labor layer that closes the open-AI argument at every level of the stack  -  not just model, not just routing, but the human feedback that trains the next model.
 
 Meta at $115-135B in 2026 capex has one of the largest absolute human-feedback-at-scale requirements in the industry. Pilot Employ the World on a single Llama fine-tuning RLHF contract category before committing broader. Cooperative substrate handles the infrastructure; Meta posts the bounty; we route to qualified cooperative members; you receive verified-quality work with IP-Ledger-attributed chain of custody.
 
@@ -97,15 +97,15 @@ This composes orthogonally with either license tier. Different revenue line. Sam
 
 ---
 
-### LICENSE TIER CHOICE — Standard 20% OR Sanders-Fork 50%
+### LICENSE TIER CHOICE  -  Standard 20% OR Sanders-Fork 50%
 
 You have two license tier options for cooperative substrate engagement:
 
-**TIER 1 — STANDARD (20% of measured annual savings):**
+**TIER 1  -  STANDARD (20% of measured annual savings):**
 - Cooperative captures 20% · you keep 80%
 - For Meta: ~$180M/yr license · ~$720M/yr net to you (research mid-point estimate)
 
-**TIER 2 — SANDERS-FORK (50% of measured annual savings):**
+**TIER 2  -  SANDERS-FORK (50% of measured annual savings):**
 - Cooperative captures 20% · Public Sovereign Fund (Alaska-style dividend) captures 30% · you keep 50%
 - For Meta: ~$450M/yr license total · ~$450M/yr net to you (research mid-point estimate)
 - Voluntary participation positions you as cooperative-class corporate citizen · regulatory hedge against Sanders' AI-equity-tax bill (currently in committee per NYT DealBook 2026-06-13)
@@ -134,23 +134,23 @@ LB does not lock in to any single AI partner; the pipeline runs both ways. You c
 
 ---
 
-### PROOFS — Verifiable Tonight (June 23, 2026)
+### PROOFS  -  Verifiable Tonight (June 23, 2026)
 
 Sealed empirical receipts you can verify with a curl command and a Supabase anon key (all are public-readable per cooperative substrate canon):
 
-1. **MnemosyneC v0.7.1 LIVE** — `curl -I https://mnemosynec.org/download/` lists v0.7.1 as LATEST (515.6 MB · 2026-06-23) · directory confirmed live
-2. **5-peer cooperative fleet active** — `SELECT peer_id, state FROM peer_presence WHERE state='active'` returns **5 rows** (verified 2026-06-23 · anon read at ruuxzilgmuwddcofqecc.supabase.co)
-3. **First paid member** — `SELECT COUNT(*) FROM member_profiles WHERE membership_status='active'` returns **1** (anonymized per consent canon · confirmed 2026-06-23)
-4. **IP Ledger architecture wired** — `SELECT * FROM ip_ledger_entries LIMIT 1` table exists and responds; 0 entries (architecture wired · Ring Bearer shipping tonight)
-5. **97.1% on staggered MMLU-Pro** — sealed JSON receipt at `Asteroid-ProofVault/receipts/THUNDERCLAP/Trial_01/THUNDERCLAP_TRIAL_01_RECEIPT_2026-06-19T21-24-30Z.json` · 68/70 questions correct on single-node M0 ULTRA llama3.3:70b · staggered single-domain methodology · PROV_23 anchor
-6. **Code open + SSPL+Pledge published** — `github.com/liana-banyan/mnemosyne` (Founder to confirm public at dispatch time)
+1. **MnemosyneC v0.7.1 LIVE**  -  `curl -I https://mnemosynec.org/download/` lists v0.7.1 as LATEST (515.6 MB · 2026-06-23) · directory confirmed live
+2. **5-peer cooperative fleet active**  -  `SELECT peer_id, state FROM peer_presence WHERE state='active'` returns **5 rows** (verified 2026-06-23 · anon read at ruuxzilgmuwddcofqecc.supabase.co)
+3. **First paid member**  -  `SELECT COUNT(*) FROM member_profiles WHERE membership_status='active'` returns **1** (anonymized per consent canon · confirmed 2026-06-23)
+4. **IP Ledger architecture wired**  -  `SELECT * FROM ip_ledger_entries LIMIT 1` table exists and responds; 0 entries (architecture wired · Ring Bearer shipping tonight)
+5. **97.1% on staggered MMLU-Pro**  -  sealed JSON receipt at `Asteroid-ProofVault/receipts/THUNDERCLAP/Trial_01/THUNDERCLAP_TRIAL_01_RECEIPT_2026-06-19T21-24-30Z.json` · 68/70 questions correct on single-node M0 ULTRA llama3.3:70b · staggered single-domain methodology · PROV_23 anchor
+6. **Code open + SSPL+Pledge published**  -  `github.com/liana-banyan/mnemosyne` (Founder to confirm public at dispatch time)
 
 **PROJECTED (clearly labeled · not claimed-as-fact):**
 
 - Meta saves ~$900M/yr at substrate maturity = research projection · anchored to $70B+ 2025 capex · 85-90% absorption rate is maturity figure not Day 1
 - Pilot floor (10-20% absorption first year): $90M-$180M/yr savings for Meta
-- Meta 2026 capex $115-135B guidance sourced from Pawn report via kavout.com/FactSet — Founder verify before dispatch
-- Posse swarm run counts cited in letter body are session-receipt figures; live Supabase posse_swarm_runs shows 0 rows as of 2026-06-23 — Founder to verify before dispatch
+- Meta 2026 capex $115-135B guidance sourced from Pawn report via kavout.com/FactSet  -  Founder verify before dispatch
+- Posse swarm run counts cited in letter body are session-receipt figures; live Supabase posse_swarm_runs shows 0 rows as of 2026-06-23  -  Founder to verify before dispatch
 
 **The substrate works. The math is projection. The mechanism is invitation. Check it all yourself.**
 
@@ -160,9 +160,9 @@ Sealed empirical receipts you can verify with a curl command and a Supabase anon
 
 A licensing conversation. The math says Meta saves $720M/yr net after Tier 1 license at mid-point estimates, or $450M/yr net after Tier 2, scaling toward $1.5B/yr gross savings as Meta's 2026 capex and inference fraction grow. The Llama open-weights precedent and the CAI Bonfire open-research model are structurally complementary. Meta's capex trajectory makes the infrastructure savings argument concrete and material, not theoretical.
 
-📜 [CAUSEP — the cooperative economic architecture](https://lianabanyan.com/causep) · [Substrate Replaces New Data Centers](https://lianabanyan.com/substrate-replaces-data-centers) · [License Fee Canon — Cost+20%](https://lianabanyan.com/license-canon) · [Bicycle Economics](https://lianabanyan.com/bicycle-economics) · [No Atomo — Superman!](https://lianabanyan.com/no-atomo)
+📜 [CAUSEP  -  the cooperative economic architecture](https://lianabanyan.com/causep) · [Substrate Replaces New Data Centers](https://lianabanyan.com/substrate-replaces-data-centers) · [License Fee Canon  -  Cost+20%](https://lianabanyan.com/license-canon) · [Bicycle Economics](https://lianabanyan.com/bicycle-economics) · [No Atomo  -  Superman!](https://lianabanyan.com/no-atomo)
 
-**Your Name Etched in the Founding Foundation.** First 10,000 members and founding licensees are named in the cooperative's Founding Foundation — the immutable record of who built this when it was still being built.
+**Your Name Etched in the Founding Foundation.** First 10,000 members and founding licensees are named in the cooperative's Founding Foundation  -  the immutable record of who built this when it was still being built.
 
 *Help Each Other Help Ourselves.*
 
@@ -170,18 +170,18 @@ A licensing conversation. The math says Meta saves $720M/yr net after Tier 1 lic
 
 *Name the Empress. Stop the Nothing. Be a Bastion, in a Time of Storms.*
 
-— J. Jones · FounderDenken · Crewman #6
+ -  J. Jones · FounderDenken · Crewman #6
 Founder & General Manager, Liana Banyan Corporation
 Founder@LianaBanyan.com · lianabanyan.com
 *License: SSPL v1 + Pledge #2260 (Cooperative) · Apache 2.0 + Cooperative Endorsement (Business)*
 
 ---
 
-## Dispatch Notes (Bishop internal — strip before send)
+## Dispatch Notes (Bishop internal  -  strip before send)
 
 - **Word count (body):** ~980 words
-- **Research figures cited:** $900M/yr savings mid-point · $180M/yr license mid-point · $720M/yr net · conservative range $300M–$1.5B — source cited as independent research analysis + Meta earnings / LinkedIn / investing.com
-- **LeCun open-source angle:** addressed directly — "locus of intelligence" framing per LeCun's known public position; Founder verify this accurately reflects his argument
+- **Research figures cited:** $900M/yr savings mid-point · $180M/yr license mid-point · $720M/yr net · conservative range $300M–$1.5B  -  source cited as independent research analysis + Meta earnings / LinkedIn / investing.com
+- **LeCun open-source angle:** addressed directly  -  "locus of intelligence" framing per LeCun's known public position; Founder verify this accurately reflects his argument
 - **Llama + CAI Bonfire compose:** novel framing original to this letter; Founder verify
 - **Meta 2026 $115–135B capex:** cited from Pawn report sourcing kavout.com / FactSet / investing.com
 - **Brian Chapel:** Not named. "First paid cooperative member" only, anonymized.

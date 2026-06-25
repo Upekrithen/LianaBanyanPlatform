@@ -1,0 +1,529 @@
+{
+  "run_type": "5-peer-relay-orchestrator",
+  "canonical": false,
+  "topology": "Supabase relay_routes table dispatch -- 4 LAN-adjacent + 1 real-WAN-hop (Son)",
+  "dispatch_method": "wan-relay-route (no direct IP routing)",
+  "model_families": "gemma4:12b (M0, M1, M2, M3) x qwen2.5:7b (Son) -- CROSS-VENDOR HETEROGENEOUS",
+  "session_id": "relay-2026-06-20T07-26-33",
+  "run_timestamp": "2026-06-20T07:56:07.865Z",
+  "mode": "smoke",
+  "routing": "staggered-then-connected",
+  "flagship_tier": "claude",
+  "trial_id": null,
+  "pass": null,
+  "anthropic_api_skipped": false,
+  "question_count": 10,
+  "peer_count": 3,
+  "son_peer_id": null,
+  "peers": {
+    "b1c4346ca77c4c7e": {
+      "tier": "base",
+      "lan_addresses": null,
+      "last_seen_at": "2026-06-20T07:26:29.569+00:00",
+      "answered": 2,
+      "correct": 2,
+      "is_son": false
+    },
+    "88cbf6bdd6f74587": {
+      "tier": "base",
+      "lan_addresses": null,
+      "last_seen_at": "2026-06-20T07:25:45.368+00:00",
+      "answered": 4,
+      "correct": 4,
+      "is_son": false
+    },
+    "cb4ef450cc4a18c3": {
+      "tier": "base",
+      "lan_addresses": null,
+      "last_seen_at": "2026-06-20T07:25:36.874+00:00",
+      "answered": 7,
+      "correct": 7,
+      "is_son": false
+    }
+  },
+  "staggered_phase_results": {
+    "biology": {
+      "status": "GREEN",
+      "score": 1,
+      "total": 1,
+      "latencyMs": 68382
+    },
+    "business": {
+      "status": "GREEN",
+      "score": 1,
+      "total": 1,
+      "latencyMs": 92729
+    },
+    "chemistry": {
+      "status": "GREEN",
+      "score": 1,
+      "total": 1,
+      "latencyMs": 92822
+    },
+    "computer_science": {
+      "status": "GREEN",
+      "score": 1,
+      "total": 1,
+      "latencyMs": 59111
+    },
+    "economics": {
+      "status": "RED",
+      "score": 0,
+      "total": 1,
+      "latencyMs": 92676
+    },
+    "engineering": {
+      "status": "GREEN",
+      "score": 1,
+      "total": 1,
+      "latencyMs": 93037
+    },
+    "health": {
+      "status": "GREEN",
+      "score": 1,
+      "total": 1,
+      "latencyMs": 93009
+    },
+    "history": {
+      "status": "GREEN",
+      "score": 1,
+      "total": 1,
+      "latencyMs": 92949
+    },
+    "law": {
+      "status": "RED",
+      "score": 0,
+      "total": 1,
+      "latencyMs": 92717
+    },
+    "math": {
+      "status": "RED",
+      "score": 0,
+      "total": 1,
+      "latencyMs": 92782
+    },
+    "other": {
+      "status": "AMBER",
+      "score": 0,
+      "total": 0,
+      "latencyMs": 0
+    },
+    "philosophy": {
+      "status": "AMBER",
+      "score": 0,
+      "total": 0,
+      "latencyMs": 0
+    },
+    "physics": {
+      "status": "AMBER",
+      "score": 0,
+      "total": 0,
+      "latencyMs": 0
+    },
+    "psychology": {
+      "status": "AMBER",
+      "score": 0,
+      "total": 0,
+      "latencyMs": 0
+    }
+  },
+  "ensemble_score": {
+    "correct": 7,
+    "total": 10,
+    "pct": 70,
+    "contested": 3
+  },
+  "questions": [
+    {
+      "index": 1,
+      "source_id": "2804",
+      "domain": "biology",
+      "question_preview": "Which of the following would most likely provide examples of mitotic cell divisions?",
+      "num_options": 8,
+      "correct_letter": "B",
+      "correct_answer_text": "longitudinal section of a shoot tip",
+      "route_ids": [
+        "eaafc4f1-bffc-43b7-9bf2-8512d109cf50",
+        "8cc4ee8e-80c4-4bd8-a697-d6df522c55dc",
+        "5596100a-f9d8-4898-a1af-dbee109c8863"
+      ],
+      "per_peer": {
+        "b1c4346ca77c4c7e": {
+          "route_id": "eaafc4f1-bffc-43b7-9bf2-8512d109cf50",
+          "answer": "B",
+          "replied": true,
+          "correct": true
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "8cc4ee8e-80c4-4bd8-a697-d6df522c55dc",
+          "answer": null,
+          "replied": false,
+          "correct": false
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "5596100a-f9d8-4898-a1af-dbee109c8863",
+          "answer": "B",
+          "replied": true,
+          "correct": true
+        }
+      },
+      "ensemble": {
+        "answer": "B",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 2,
+      "source_id": "70",
+      "domain": "business",
+      "question_preview": "Typical advertising regulatory bodies suggest, for example that adverts must not: encourage _________, cause unnecessary...",
+      "num_options": 9,
+      "correct_letter": "I",
+      "correct_answer_text": "Unsafe practices, Distress, Fear, Serious",
+      "route_ids": [
+        "cfd9cc69-d4a3-47ac-8641-ba2d53ca3b33",
+        "7891f3fc-cc27-4306-ac60-bf9e187c3ebb",
+        "a94764e4-27a2-4adf-9a7f-ee75045e6c04"
+      ],
+      "per_peer": {
+        "b1c4346ca77c4c7e": {
+          "route_id": "cfd9cc69-d4a3-47ac-8641-ba2d53ca3b33",
+          "answer": null,
+          "replied": false,
+          "correct": false
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "7891f3fc-cc27-4306-ac60-bf9e187c3ebb",
+          "answer": null,
+          "replied": false,
+          "correct": false
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "a94764e4-27a2-4adf-9a7f-ee75045e6c04",
+          "answer": "I",
+          "replied": true,
+          "correct": true
+        }
+      },
+      "ensemble": {
+        "answer": "I",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 3,
+      "source_id": "3526",
+      "domain": "chemistry",
+      "question_preview": "An unknown substance is found to have a high melting point. In addition, it is a poor conductor of electricity and does ...",
+      "num_options": 10,
+      "correct_letter": "C",
+      "correct_answer_text": "covalent network bonding",
+      "route_ids": [
+        "8d0c3bba-a577-40f2-a4a1-57b84a961693",
+        "f5ecc6c4-ebf0-4747-9448-62d2d9f182c2",
+        "58903eb0-324f-409d-8d8e-1dca264df030"
+      ],
+      "per_peer": {
+        "b1c4346ca77c4c7e": {
+          "route_id": "8d0c3bba-a577-40f2-a4a1-57b84a961693",
+          "answer": null,
+          "replied": false,
+          "correct": false
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "f5ecc6c4-ebf0-4747-9448-62d2d9f182c2",
+          "answer": null,
+          "replied": false,
+          "correct": false
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "58903eb0-324f-409d-8d8e-1dca264df030",
+          "answer": null,
+          "replied": false,
+          "correct": false
+        }
+      },
+      "ensemble": {
+        "answer": null,
+        "contested": true,
+        "correct": false
+      }
+    },
+    {
+      "index": 4,
+      "source_id": "10356",
+      "domain": "computer_science",
+      "question_preview": "A method is to be written to search an array for a value that is larger than a given item and return its index. The prob...",
+      "num_options": 8,
+      "correct_letter": "B",
+      "correct_answer_text": "The specification should be modified to indicate what should be done if there is more than one index of larger values.",
+      "route_ids": [
+        "c0380aff-6a37-4aaf-808e-a3dd1dbfb61b",
+        "a1607ed4-4966-4b96-a826-e2ae90999cb0",
+        "9f2c4eab-49e2-4c93-8952-bfb158eb35e1"
+      ],
+      "per_peer": {
+        "b1c4346ca77c4c7e": {
+          "route_id": "c0380aff-6a37-4aaf-808e-a3dd1dbfb61b",
+          "answer": "B",
+          "replied": true,
+          "correct": true
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "a1607ed4-4966-4b96-a826-e2ae90999cb0",
+          "answer": "B",
+          "replied": true,
+          "correct": true
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "9f2c4eab-49e2-4c93-8952-bfb158eb35e1",
+          "answer": "B",
+          "replied": true,
+          "correct": true
+        }
+      },
+      "ensemble": {
+        "answer": "B",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 5,
+      "source_id": "6826",
+      "domain": "economics",
+      "question_preview": "Which of the following would be classified under C when calculating GDP?",
+      "num_options": 8,
+      "correct_letter": "G",
+      "correct_answer_text": "$50.00 spent eating out at a restaurant",
+      "route_ids": [
+        "47e4581e-b71e-420d-ad42-2a2ae078dffd",
+        "5df821e0-da5c-47a6-9284-d31706475e95",
+        "42b7a123-79a2-454b-91ec-acfb274cc7d4"
+      ],
+      "per_peer": {
+        "b1c4346ca77c4c7e": {
+          "route_id": "47e4581e-b71e-420d-ad42-2a2ae078dffd",
+          "answer": null,
+          "replied": false,
+          "correct": false
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "5df821e0-da5c-47a6-9284-d31706475e95",
+          "answer": "G",
+          "replied": true,
+          "correct": true
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "42b7a123-79a2-454b-91ec-acfb274cc7d4",
+          "answer": "G",
+          "replied": true,
+          "correct": true
+        }
+      },
+      "ensemble": {
+        "answer": "G",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 6,
+      "source_id": "11285",
+      "domain": "engineering",
+      "question_preview": "What will be the number of lamps, each having 300 lumens, required to obtain an average illuminance of 50 lux on a 4m * ...",
+      "num_options": 10,
+      "correct_letter": "C",
+      "correct_answer_text": "2",
+      "route_ids": [
+        "41afdf29-607b-45af-bc00-c3b9c2da36ed",
+        "06cfe96b-e94b-4554-b529-27bc24ad8bb7",
+        "f21708f5-1c39-4ae8-9b39-b26a91b8c4dc"
+      ],
+      "per_peer": {
+        "b1c4346ca77c4c7e": {
+          "route_id": "41afdf29-607b-45af-bc00-c3b9c2da36ed",
+          "answer": null,
+          "replied": false,
+          "correct": false
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "06cfe96b-e94b-4554-b529-27bc24ad8bb7",
+          "answer": "C",
+          "replied": true,
+          "correct": true
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "f21708f5-1c39-4ae8-9b39-b26a91b8c4dc",
+          "answer": "C",
+          "replied": true,
+          "correct": true
+        }
+      },
+      "ensemble": {
+        "answer": "C",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 7,
+      "source_id": "6001",
+      "domain": "health",
+      "question_preview": "Polio can be eradicated by which of the following?",
+      "num_options": 7,
+      "correct_letter": "E",
+      "correct_answer_text": "Attention to sewage control and hygiene",
+      "route_ids": [
+        "b0cb9620-b134-4539-bafb-128d48a62d65",
+        "fb760f5f-0f35-4a28-b453-edb2db9e4339",
+        "d2cc75a2-920c-4f7f-9810-cc6a00756041"
+      ],
+      "per_peer": {
+        "b1c4346ca77c4c7e": {
+          "route_id": "b0cb9620-b134-4539-bafb-128d48a62d65",
+          "answer": null,
+          "replied": false,
+          "correct": false
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "fb760f5f-0f35-4a28-b453-edb2db9e4339",
+          "answer": "E",
+          "replied": true,
+          "correct": true
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "d2cc75a2-920c-4f7f-9810-cc6a00756041",
+          "answer": "E",
+          "replied": true,
+          "correct": true
+        }
+      },
+      "ensemble": {
+        "answer": "E",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 8,
+      "source_id": "4669",
+      "domain": "history",
+      "question_preview": "One of the less obvious reasons for the Inca to fight so many wars may have been:",
+      "num_options": 5,
+      "correct_letter": "D",
+      "correct_answer_text": "to identify and cultivate talented leaders.",
+      "route_ids": [
+        "c36c2ae3-86cf-4f03-8f41-dc3191e4fc32",
+        "dcee55e7-d8c2-42cb-8c2a-ae804b96b6b5",
+        "f4260c41-ccbd-4a93-9217-473e4b015c6f"
+      ],
+      "per_peer": {
+        "b1c4346ca77c4c7e": {
+          "route_id": "c36c2ae3-86cf-4f03-8f41-dc3191e4fc32",
+          "answer": null,
+          "replied": false,
+          "correct": false
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "dcee55e7-d8c2-42cb-8c2a-ae804b96b6b5",
+          "answer": null,
+          "replied": false,
+          "correct": false
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "f4260c41-ccbd-4a93-9217-473e4b015c6f",
+          "answer": "D",
+          "replied": true,
+          "correct": true
+        }
+      },
+      "ensemble": {
+        "answer": "D",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 9,
+      "source_id": "866",
+      "domain": "law",
+      "question_preview": "A woman was standing in the aisle of a subway car and put her purse on the seat next to her. A man approached the woman ...",
+      "num_options": 10,
+      "correct_letter": "D",
+      "correct_answer_text": "Robbery, because he used force in leaving with the purse.",
+      "route_ids": [
+        "2f867403-2ea8-4130-b08a-e84903723d39",
+        "6ab5aa20-fcb5-42f5-aaaf-fa9dc23565e8",
+        "21b36e46-cdce-49c1-8883-e6e2c6e268dc"
+      ],
+      "per_peer": {
+        "b1c4346ca77c4c7e": {
+          "route_id": "2f867403-2ea8-4130-b08a-e84903723d39",
+          "answer": null,
+          "replied": false,
+          "correct": false
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "6ab5aa20-fcb5-42f5-aaaf-fa9dc23565e8",
+          "answer": null,
+          "replied": false,
+          "correct": false
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "21b36e46-cdce-49c1-8883-e6e2c6e268dc",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        }
+      },
+      "ensemble": {
+        "answer": null,
+        "contested": true,
+        "correct": false
+      }
+    },
+    {
+      "index": 10,
+      "source_id": "7687",
+      "domain": "math",
+      "question_preview": "Statement 1 | A ring homomorphism is one to one if and only if the kernel is {0}. Statement 2 | Q is an ideal in R.",
+      "num_options": 9,
+      "correct_letter": "H",
+      "correct_answer_text": "False, True",
+      "route_ids": [
+        "c44f57e9-3b15-4049-b5cb-0a592a6b149d",
+        "da3a64a4-ba07-4d7d-ac56-5c3edac8b9cf",
+        "0a5e6ddf-a547-4d5d-887d-635a1a81222d"
+      ],
+      "per_peer": {
+        "b1c4346ca77c4c7e": {
+          "route_id": "c44f57e9-3b15-4049-b5cb-0a592a6b149d",
+          "answer": null,
+          "replied": false,
+          "correct": false
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "da3a64a4-ba07-4d7d-ac56-5c3edac8b9cf",
+          "answer": null,
+          "replied": false,
+          "correct": false
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "0a5e6ddf-a547-4d5d-887d-635a1a81222d",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        }
+      },
+      "ensemble": {
+        "answer": null,
+        "contested": true,
+        "correct": false
+      }
+    }
+  ],
+  "truth_always_note": "Pre-canonical relay diagnostic run. Canonical 5-peer cooperative substrate run requires lan_addresses population and verified peer identity mapping."
+}

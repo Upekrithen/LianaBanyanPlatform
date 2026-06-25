@@ -1,0 +1,31 @@
+========================================================
+BATTERY DISPATCH DRY-RUN — BP084 · Sonnet 4.6
+========================================================
+PIECE:    Substrate Awakens — T7 Cross-Publish
+PIECE_ID: SUBSTRATE_AWAKENS_T7_MEDIUM
+PLATFORM: medium
+DRY_RUN:  TRUE — NO SIDE EFFECTS
+========================================================
+
+SOURCE FILE:
+  BISHOP_DROPZONE/00_FOUNDER_REVIEW/SUBSTRATE_AWAKENS_MARKETING_WAVE/MEDIUM_SUBSTRATE_AWAKENS_T7.md
+
+FRONTMATTER STATE:
+  Status: DRAFT · Awaiting Founder ratify ✅
+  "Saturday-ish" framing: ✅ PRESENT
+  Note: "(Same content as SUBSTACK_SUBSTRATE_AWAKENS_T7_ANCHOR.md — cross-publish)"
+
+CANONICAL FOOTER REQUIRED: Add canonical-link footer pointing to Substack URL
+  before fire. Medium cross-publish requires: "Originally published on FounderDenken."
+  → Fire AFTER Substack to get canonical URL.
+
+⚠ SEG-5 NOTE: Subdirectory; no YAML frontmatter → same IPC discovery issue as T7 Substack
+
+CREDENTIAL STATE: MEDIUM_API_TOKEN NOT SET → BROWSER-FALLBACK (medium.com/new-story)
+
+DISPATCH CHANNEL: medium — BROWSER-FALLBACK
+DEPENDENCY: Fires AFTER Substack (need Substack URL for canonical footer)
+
+STATUS: 🟡 YELLOW — Subdirectory; no YAML; canonical footer pending Substack URL
+DRY-RUN RESULT: PASS (no live calls made)
+========================================================

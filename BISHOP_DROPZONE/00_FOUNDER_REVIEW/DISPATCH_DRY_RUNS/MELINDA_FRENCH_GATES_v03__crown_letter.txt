@@ -1,0 +1,22 @@
+========================================================
+BATTERY DISPATCH DRY-RUN — BP084 · Sonnet 4.6
+========================================================
+PIECE:    Crown Letter — Melinda French Gates (V03)
+PIECE_ID: MELINDA_FRENCH_GATES_v03
+PLATFORM: crown_letter (Gmail → browser-fallback)
+DRY_RUN:  TRUE — NO SIDE EFFECTS
+========================================================
+
+SOURCE FILE:
+  BISHOP_DROPZONE/00_FOUNDER_REVIEW/Wave_1_Apr12-13_Soft_Open/LETTER_MELINDA_FRENCH_GATES_v03_FINAL_WITH.md
+
+FRONTMATTER STATE:
+  ⚠ File in Wave_1_Apr12-13_Soft_Open/ subdirectory
+  ⚠ "_WITH" suffix in filename suggests possible "WITH [something]" version; Founder confirm
+  SEG-5 ACTION: Move to top-level 00_FOUNDER_REVIEW/ for IPC discovery
+
+CREDENTIAL STATE: Gmail OAuth NOT SET → BROWSER-FALLBACK
+
+STATUS: 🟡 YELLOW — Subdirectory; confirm "_WITH" filename variant
+DRY-RUN RESULT: PASS (source file exists; no live calls made)
+========================================================

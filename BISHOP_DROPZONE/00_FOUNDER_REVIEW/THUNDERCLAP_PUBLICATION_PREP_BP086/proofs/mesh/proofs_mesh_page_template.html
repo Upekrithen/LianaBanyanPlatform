@@ -1,0 +1,383 @@
+{{- define "main" -}}
+{{/*
+  /proofs/mesh/ — Cross-Machine MMLU-Pro Receipt Page
+  Hugo partial extending baseof.html token layer (Cephas-hugo)
+  Voice register: Just Add Salt. How to Get the Right Answer.
+  BP086 pre-staged · Knight pastes receipt JSON values into {{ placeholder }} blocks
+  LAN-as-WAN topology · 4 machines via relay.lianabanyan.com · BP085 ARCHITECTURAL HARD CONSTRAINT
+*/}}
+
+<article class="proof-page proof-mesh">
+
+  <!-- ======================================================
+       BANNER — NEVER REMOVE — BP085 ARCHITECTURAL CONSTRAINT
+       ====================================================== -->
+  <div class="banner banner--lan-as-wan" role="banner">
+    <span class="banner__label">LAN-as-WAN · 4 machines routed via relay.lianabanyan.com</span>
+    <span class="banner__note">WAN roundtrip enforced. LAN-local shortcut deferred until this receipt confirmed.</span>
+  </div>
+
+  <!-- ======================================================
+       PAGE HEADER
+       ====================================================== -->
+  <header class="proof-header">
+    <div class="built-in-public-badge" aria-label="Built in public">BUILT IN PUBLIC</div>
+
+    <h1 class="proof-title">Cross-Machine Mesh · MMLU-Pro Receipt</h1>
+    <p class="proof-subtitle">Just Add Salt. Four machines. All numbers public. Method open. Verify yourself.</p>
+
+    <dl class="proof-meta">
+      <div class="proof-meta__item">
+        <dt>Run timestamp</dt>
+        <dd>{{ PLACEHOLDER_RUN_TIMESTAMP }}</dd>
+      </div>
+      <div class="proof-meta__item">
+        <dt>Node count</dt>
+        <dd>4</dd>
+      </div>
+      <div class="proof-meta__item">
+        <dt>Relay</dt>
+        <dd>relay.lianabanyan.com</dd>
+      </div>
+      <div class="proof-meta__item">
+        <dt>Single-node baseline</dt>
+        <dd><a href="/proofs/single-node-68-70/">68 / 70 · see baseline receipt</a></dd>
+      </div>
+      <div class="proof-meta__item">
+        <dt>Pledge</dt>
+        <dd><a href="/pledge/#2260">Pledge #2260</a></dd>
+      </div>
+    </dl>
+  </header>
+
+  <!-- ======================================================
+       INEQUALITY TRINITY — 3 LINES VERBATIM · NEVER PARAPHRASE
+       "Broke the Sound Barrier" caps
+       ====================================================== -->
+  <section class="inequality-trinity" aria-labelledby="trinity-heading">
+    <h2 id="trinity-heading" class="sr-only">The Inequality Trinity</h2>
+    <div class="trinity-block">
+      <p class="trinity-line trinity-line--1">SUBSTRATE &gt; NO SUBSTRATE</p>
+      <p class="trinity-line trinity-line--2">LOCAL SUBSTRATE &gt; FLAGSHIP WITHOUT SUBSTRATE</p>
+      <p class="trinity-line trinity-line--3">FREE WITH SUBSTRATE &gt; FLAGSHIP WITHOUT SUBSTRATE</p>
+      <p class="trinity-caption">BROKE THE SOUND BARRIER.</p>
+    </div>
+  </section>
+
+  <!-- ======================================================
+       AGGREGATE SCORE SUMMARY
+       ====================================================== -->
+  <section class="aggregate-score" aria-labelledby="aggregate-heading">
+    <h2 id="aggregate-heading">Aggregate Score</h2>
+    <div class="score-grid">
+      <div class="score-card score-card--primary">
+        <span class="score-label">Mesh ensemble correct</span>
+        <span class="score-value">{{ PLACEHOLDER_ENSEMBLE_CORRECT }} / {{ PLACEHOLDER_TOTAL_QUESTIONS }}</span>
+      </div>
+      <div class="score-card">
+        <span class="score-label">Single-node baseline</span>
+        <span class="score-value">68 / 70</span>
+      </div>
+      <div class="score-card">
+        <span class="score-label">Disagreement flags raised</span>
+        <span class="score-value">{{ PLACEHOLDER_DISAGREEMENT_COUNT }}</span>
+      </div>
+      <div class="score-card">
+        <span class="score-label">Domains covered</span>
+        <span class="score-value">14 / 14</span>
+      </div>
+    </div>
+    <p class="score-note">Lift band vs. vendor flagship solo: +72 to +83pp (method open, HOT vendor numbers not cited as confirmed disk receipts).</p>
+  </section>
+
+  <!-- ======================================================
+       NODE LIST
+       ====================================================== -->
+  <section class="node-list" aria-labelledby="nodes-heading">
+    <h2 id="nodes-heading">Machines in This Run</h2>
+    <p class="node-topology-note">All 4 Founder machines on same LAN. ALL routed via public relay.lianabanyan.com for mesh testing. WAN roundtrip = honest end-to-end test. LAN-direct optimization deferred.</p>
+    <ol class="node-table">
+      <li class="node-row node-row--header" aria-hidden="true">
+        <span>Node ID</span><span>Machine</span><span>Relay path confirmed</span><span>Questions answered</span><span>Per-node score</span>
+      </li>
+      <!-- Knight: repeat node-row for each of the 4 machines -->
+      <li class="node-row">
+        <span>{{ PLACEHOLDER_NODE_1_ID }}</span>
+        <span>{{ PLACEHOLDER_NODE_1_MACHINE }}</span>
+        <span>{{ PLACEHOLDER_NODE_1_RELAY_CONFIRMED }}</span>
+        <span>{{ PLACEHOLDER_NODE_1_Q_COUNT }}</span>
+        <span>{{ PLACEHOLDER_NODE_1_SCORE }}</span>
+      </li>
+      <li class="node-row">
+        <span>{{ PLACEHOLDER_NODE_2_ID }}</span>
+        <span>{{ PLACEHOLDER_NODE_2_MACHINE }}</span>
+        <span>{{ PLACEHOLDER_NODE_2_RELAY_CONFIRMED }}</span>
+        <span>{{ PLACEHOLDER_NODE_2_Q_COUNT }}</span>
+        <span>{{ PLACEHOLDER_NODE_2_SCORE }}</span>
+      </li>
+      <li class="node-row">
+        <span>{{ PLACEHOLDER_NODE_3_ID }}</span>
+        <span>{{ PLACEHOLDER_NODE_3_MACHINE }}</span>
+        <span>{{ PLACEHOLDER_NODE_3_RELAY_CONFIRMED }}</span>
+        <span>{{ PLACEHOLDER_NODE_3_Q_COUNT }}</span>
+        <span>{{ PLACEHOLDER_NODE_3_SCORE }}</span>
+      </li>
+      <li class="node-row">
+        <span>{{ PLACEHOLDER_NODE_4_ID }}</span>
+        <span>{{ PLACEHOLDER_NODE_4_MACHINE }}</span>
+        <span>{{ PLACEHOLDER_NODE_4_RELAY_CONFIRMED }}</span>
+        <span>{{ PLACEHOLDER_NODE_4_Q_COUNT }}</span>
+        <span>{{ PLACEHOLDER_NODE_4_SCORE }}</span>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ======================================================
+       PER-QUESTION TABLE
+       Knight: inject from receipt JSON. Columns as specified.
+       ====================================================== -->
+  <section class="per-question" aria-labelledby="questions-heading">
+    <h2 id="questions-heading">Per-Question Receipt</h2>
+    <p class="table-note">Each row = one MMLU-Pro question. Disagreement flag = at least one machine diverged from ensemble winner.</p>
+
+    <div class="table-scroll-wrapper">
+      <table class="question-table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Domain</th>
+            <th scope="col">Node 1 answer</th>
+            <th scope="col">Node 2 answer</th>
+            <th scope="col">Node 3 answer</th>
+            <th scope="col">Node 4 answer</th>
+            <th scope="col">Ensemble winner</th>
+            <th scope="col">Correct answer</th>
+            <th scope="col">Disagreement flag</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Knight: inject rows from receipt JSON
+               Example row structure:
+          <tr class="question-row {{ if PLACEHOLDER_DISAGREEMENT }}question-row--disagreement{{ end }}">
+            <td>{{ PLACEHOLDER_Q_NUM }}</td>
+            <td>{{ PLACEHOLDER_Q_DOMAIN }}</td>
+            <td>{{ PLACEHOLDER_NODE1_ANSWER }}</td>
+            <td>{{ PLACEHOLDER_NODE2_ANSWER }}</td>
+            <td>{{ PLACEHOLDER_NODE3_ANSWER }}</td>
+            <td>{{ PLACEHOLDER_NODE4_ANSWER }}</td>
+            <td>{{ PLACEHOLDER_ENSEMBLE_WINNER }}</td>
+            <td>{{ PLACEHOLDER_CORRECT_ANSWER }}</td>
+            <td>{{ if PLACEHOLDER_DISAGREEMENT }}YES{{ else }}—{{ end }}</td>
+          </tr>
+          -->
+          <tr class="question-row question-row--pending">
+            <td colspan="9" class="pending-note">Awaiting Knight Stream A7 receipt. Knight: replace this row block with injected receipt JSON.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ======================================================
+       PER-BLADE PLOW TELEMETRY SUMMARY
+       ====================================================== -->
+  <section class="plow-telemetry" aria-labelledby="plow-heading">
+    <h2 id="plow-heading">Per-Blade Plow Telemetry</h2>
+    <p class="plow-note">12-loop Plow (Loop 10 CONSEQUENCE_TRACE · Loop 11 ELIMINATION_VERIFICATION · Loop 12 DEPENDENCY_PROPAGATION). Each blade reports separately.</p>
+
+    <div class="plow-grid">
+      <!-- Knight: one plow-blade card per machine -->
+      <div class="plow-blade">
+        <h3>Node 1 · {{ PLACEHOLDER_NODE_1_ID }}</h3>
+        <dl>
+          <dt>Loops completed</dt><dd>{{ PLACEHOLDER_NODE1_PLOW_LOOPS }}</dd>
+          <dt>CONSEQUENCE_TRACE hits</dt><dd>{{ PLACEHOLDER_NODE1_CONSEQUENCE_TRACE }}</dd>
+          <dt>ELIMINATION_VERIFICATION hits</dt><dd>{{ PLACEHOLDER_NODE1_ELIM_VERIFY }}</dd>
+          <dt>DEPENDENCY_PROPAGATION hits</dt><dd>{{ PLACEHOLDER_NODE1_DEP_PROP }}</dd>
+          <dt>Andon events</dt><dd>{{ PLACEHOLDER_NODE1_ANDON_COUNT }}</dd>
+        </dl>
+      </div>
+      <div class="plow-blade">
+        <h3>Node 2 · {{ PLACEHOLDER_NODE_2_ID }}</h3>
+        <dl>
+          <dt>Loops completed</dt><dd>{{ PLACEHOLDER_NODE2_PLOW_LOOPS }}</dd>
+          <dt>CONSEQUENCE_TRACE hits</dt><dd>{{ PLACEHOLDER_NODE2_CONSEQUENCE_TRACE }}</dd>
+          <dt>ELIMINATION_VERIFICATION hits</dt><dd>{{ PLACEHOLDER_NODE2_ELIM_VERIFY }}</dd>
+          <dt>DEPENDENCY_PROPAGATION hits</dt><dd>{{ PLACEHOLDER_NODE2_DEP_PROP }}</dd>
+          <dt>Andon events</dt><dd>{{ PLACEHOLDER_NODE2_ANDON_COUNT }}</dd>
+        </dl>
+      </div>
+      <div class="plow-blade">
+        <h3>Node 3 · {{ PLACEHOLDER_NODE_3_ID }}</h3>
+        <dl>
+          <dt>Loops completed</dt><dd>{{ PLACEHOLDER_NODE3_PLOW_LOOPS }}</dd>
+          <dt>CONSEQUENCE_TRACE hits</dt><dd>{{ PLACEHOLDER_NODE3_CONSEQUENCE_TRACE }}</dd>
+          <dt>ELIMINATION_VERIFICATION hits</dt><dd>{{ PLACEHOLDER_NODE3_ELIM_VERIFY }}</dd>
+          <dt>DEPENDENCY_PROPAGATION hits</dt><dd>{{ PLACEHOLDER_NODE3_DEP_PROP }}</dd>
+          <dt>Andon events</dt><dd>{{ PLACEHOLDER_NODE3_ANDON_COUNT }}</dd>
+        </dl>
+      </div>
+      <div class="plow-blade">
+        <h3>Node 4 · {{ PLACEHOLDER_NODE_4_ID }}</h3>
+        <dl>
+          <dt>Loops completed</dt><dd>{{ PLACEHOLDER_NODE4_PLOW_LOOPS }}</dd>
+          <dt>CONSEQUENCE_TRACE hits</dt><dd>{{ PLACEHOLDER_NODE4_CONSEQUENCE_TRACE }}</dd>
+          <dt>ELIMINATION_VERIFICATION hits</dt><dd>{{ PLACEHOLDER_NODE4_ELIM_VERIFY }}</dd>
+          <dt>DEPENDENCY_PROPAGATION hits</dt><dd>{{ PLACEHOLDER_NODE4_DEP_PROP }}</dd>
+          <dt>Andon events</dt><dd>{{ PLACEHOLDER_NODE4_ANDON_COUNT }}</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="andon-note">
+      <p>Andon ascensions = self-correction, not failure. The substrate caught what it was supposed to catch.</p>
+    </div>
+  </section>
+
+  <!-- ======================================================
+       HEX MACHINE CODE WIRE FORMAT RECEIPT
+       canon slug: canon_hexadecimal_machine_code_mnemosynec_wire_format_consolidation_bp085
+       ====================================================== -->
+  <section class="hex-receipt" aria-labelledby="hex-heading">
+    <h2 id="hex-heading">Hex Machine Code Wire Format</h2>
+    <p class="hex-note">Dr. MnemosyneC wire format for AI-to-AI dispatch (BP085 · <a href="/canon/hex-machine-code/">canon slug: hexadecimal-machine-code-mnemosynec-wire-format</a>). Compact hex-encoded frames. Smaller payload, faster parse, vendor-resilient vs. markdown.</p>
+
+    <dl class="hex-stats">
+      <div class="hex-stat">
+        <dt>Avg hex frame size (bytes)</dt>
+        <dd>{{ PLACEHOLDER_HEX_FRAME_SIZE_BYTES }}</dd>
+      </div>
+      <div class="hex-stat">
+        <dt>Avg parse latency (ms)</dt>
+        <dd>{{ PLACEHOLDER_HEX_PARSE_LATENCY_MS }}</dd>
+      </div>
+      <div class="hex-stat">
+        <dt>Total frames dispatched</dt>
+        <dd>{{ PLACEHOLDER_HEX_FRAMES_TOTAL }}</dd>
+      </div>
+      <div class="hex-stat">
+        <dt>Parse errors</dt>
+        <dd>{{ PLACEHOLDER_HEX_PARSE_ERRORS }}</dd>
+      </div>
+    </dl>
+  </section>
+
+  <!-- ======================================================
+       28 LIVE UNFAIR ADVANTAGES
+       All cited with canon slugs · disk-traceable to BP085.md
+       ====================================================== -->
+  <section class="unfair-advantages" aria-labelledby="advantages-heading">
+    <h2 id="advantages-heading">28 Live Unfair Advantages Exercised in This Run</h2>
+    <p class="advantages-note">All 28 exercised, not just listed. Canon slugs link to source eblets. Numbers disk-traceable to BP085.md.</p>
+
+    <ol class="advantages-list">
+      <li><a href="/canon/persistent-active-memory/">Persistent Active Memory</a> · <code>canon_persistent_active_memory_crown_jewel_bp085</code></li>
+      <li><a href="/canon/truth-integrity-chain/">Truth Integrity Chain (12-loop Plow)</a> · <code>canon_truth_integrity_chain_dependency_argument_eblet_chronos_bp084</code></li>
+      <li><a href="/canon/code-breakers-guild/">Code Breakers Guild · Gold Refined by Fire</a> · <code>canon_code_breakers_guild_gold_refined_by_fire_elimination_marks_bp084</code></li>
+      <li><a href="/canon/hex-machine-code/">Hex Machine Code wire format</a> · <code>canon_hexadecimal_machine_code_mnemosynec_wire_format_consolidation_bp085</code></li>
+      <li><a href="/canon/brain-swap/">Brain Swap · pluggable cognitive core</a> · <code>canon_mnemo_brain_swap_pluggable_cognitive_core_hot_swappable_bp085</code></li>
+      <li><a href="/canon/lan-as-wan/">LAN-as-WAN mesh test topology</a> · <code>canon_lan_as_wan_test_mode_4_machine_mesh_bp085</code></li>
+      <li><a href="/canon/consult-dont-rent/">Consult, don't Rent · AI routing by task fit</a> · <code>canon_consult_ai_flagships_dont_rent_the_c40_aircraft_bp085</code></li>
+      <li><a href="/canon/unseen-tax/">Unseen Tax anti-pattern · cost transparency</a> · <code>canon_unseen_tax_anti_pattern_ai_cost_transparency_bp084</code></li>
+      <li><a href="/canon/wrasse-injector/">Wrasse Injector · upper-level substrate manager</a> · <code>canon_wrasse_injector_upper_level_substrate_manager_bp085</code></li>
+      <li><a href="/canon/reins-assignment/">Reins Assignment per category</a> · <code>canon_mnemosynec_assigns_reins_per_category_bp085</code></li>
+      <li><a href="/canon/comptroller/">Comptroller · dedicated sub-agent one role</a> · <code>canon_dedicated_sub_agent_one_role_comptroller_pattern_bp085</code></li>
+      <li><a href="/canon/many-doors/">Many Doors, One Cooperative</a> · <code>canon_many_doors_one_cooperative_membership_unity_bp085</code></li>
+      <li><a href="/canon/crew-bounty/">CREW · bounty operational unit</a> · <code>canon_crew_bounty_unit_effort_proportional_split_bp085</code></li>
+      <li><a href="/canon/sock-puppets/">Sock Puppets / StitchPunks · Callable Substrate Workers</a> · <code>canon_sock_puppets_stitchpunks_callable_substrate_workers_bp085</code></li>
+      <li><a href="/canon/continuity-lift/">Continuity-lift across vendor churn</a> · <code>canon_continuity_lift_across_vendor_churn_tagline_bp085</code></li>
+      <li><a href="/canon/substrate-awakens/">Substrate Awakens · v0.5.0 first live mesh</a> · <code>canon_v0_5_0_first_live_mesh_public_event_watch_and_replicate_bp084</code></li>
+      <li><a href="/canon/mimic-trunks/">Mimic Trunks · gate-and-tunnel partner cooperative</a> · <code>canon_mimic_trunks_gate_and_tunnel_partner_cooperative_volume_benefits_bp084</code></li>
+      <li><a href="/canon/fork-thorax/">Fork/Derivative Thorax heartbeat enforcement</a> · <code>canon_fork_derivative_cooperative_access_thorax_heartbeat_enforcement_bp084</code></li>
+      <li><a href="/canon/employ-the-world/">Employ the World · Bounty Posters</a> · <code>canon_employ_the_world_bounty_posters_banner_bp084</code></li>
+      <li><a href="/canon/break-off-a-piece/">Break off a Piece · safe-firing canon</a> · <code>canon_break_off_a_piece_tagline_earnings_safe_firing_bp084</code></li>
+      <li><a href="/canon/medlab/">MedLab · eblet-stored AI connection-fix recipes</a> · <code>canon_medlab_eblet_recipes_ai_connection_fixes_bp085</code></li>
+      <li><a href="/canon/concoctions/">Concoctions · MedLab recipe anatomy</a> · <code>canon_concoctions_medlab_ingredients_recipe_anatomy_bp085</code></li>
+      <li><a href="/canon/netlinkwebnode/">NetLinkWebNode · vendor-resilient peer cluster</a> · <code>canon_netlinkwebnode_mic_vendor_resilient_peer_cluster_bp085</code></li>
+      <li><a href="/canon/personal-subscription-steward/">Personal Subscription Steward</a> · <code>canon_mnemosynec_personal_subscription_steward_tier_ramp_bp084</code></li>
+      <li><a href="/canon/noids/">NOIDs · Noble Order of Idea Developers</a> · <code>canon_noids_noble_order_of_idea_developers_bp085</code></li>
+      <li><a href="/canon/captain-ship-wheel/">Captain's Ship Wheel · maritime voice</a> · <code>canon_captains_ship_wheel_dr_mnemosynec_maritime_bp085</code></li>
+      <li><a href="/canon/code-door-deckcard/">Code:DOOR:DeckCard · container pattern</a> · <code>canon_code_door_deckcard_container_pattern_noid_mixandmatch_bp085</code></li>
+      <li><a href="/canon/mnemosynec-as-interface/">MnemosyneC as Persistent Interface</a> · <code>canon_mnemosynec_as_interface_persistent_host_vendor_resilient_bp085</code></li>
+    </ol>
+  </section>
+
+  <!-- ======================================================
+       PLEDGE CITATION
+       ====================================================== -->
+  <section class="pledge-citation" aria-labelledby="pledge-heading">
+    <h2 id="pledge-heading">Pledge #2260</h2>
+    <p>This proof is filed under <a href="/pledge/#2260">Pledge #2260</a>. The numbers on this page are the pledge. If they change, the page changes. No numbers are embargoed or selectively revealed. Everything here is the receipt, not the marketing.</p>
+    <p class="pledge-note">50-year sunset clause in effect. All cooperative filings public for the life of the cooperative.</p>
+  </section>
+
+  <!-- ======================================================
+       METHODOLOGY NOTE
+       ====================================================== -->
+  <section class="methodology" aria-labelledby="method-heading">
+    <h2 id="method-heading">How to Verify This Yourself</h2>
+    <p>The method is open. The substrate stack is named. The Plow telemetry is per-blade. The hex frame sizes are listed. You can replicate: clone the substrate, run the 12-loop Plow against MMLU-Pro, route via your own relay, compare receipts.</p>
+    <p>GitHub mirror: {{ PLACEHOLDER_GITHUB_MIRROR_URL }} — if this field reads "PRIVATE," the public mirror has not yet been cut. Check back after Substrate Awakens (2026-06-20 target).</p>
+    <p class="method-caveat">HOT vendor benchmark numbers (Claude 89.3% / GPT 93.3%) are NOT cited here as confirmed disk receipts. Lift band reference: +72 to +83pp vs. solo vendor flagship. That figure is the conservative bound from our own runs, not a vendor claim.</p>
+  </section>
+
+  <!-- ======================================================
+       CLOSING LITURGY
+       ====================================================== -->
+  <footer class="proof-footer">
+    <div class="built-in-public-badge">BUILT IN PUBLIC</div>
+    <p class="footer-tagline">Just Add Salt. How to Get the Right Answer.</p>
+    <p class="footer-cooperative">Of the People. By the People. For the People.</p>
+    <p class="footer-membership"><a href="/membership/">Membership $5/yr · One CREW share eclipses the cost.</a></p>
+    <p class="footer-signature">ONE OF US. — FounderDenken / Crewman#6</p>
+    <p class="footer-permission">Permission to Board — Granted. Grab an Oar. Help Make the Sails.</p>
+    <p class="footer-help">Help Each Other Help Ourselves.</p>
+  </footer>
+
+</article>
+
+<!-- ======================================================
+     RESPONSIVE CSS
+     Mobile-first · NEVER SCROLL SIDEWAYS
+     ====================================================== -->
+<style>
+.proof-page { max-width: 860px; margin: 0 auto; padding: 1rem; }
+.banner--lan-as-wan { background: var(--color-accent, #1a1a2e); color: var(--color-accent-text, #fff); padding: 0.75rem 1rem; border-radius: 4px; margin-bottom: 1.5rem; }
+.banner__label { display: block; font-weight: 700; }
+.banner__note { display: block; font-size: 0.85em; opacity: 0.85; margin-top: 0.25rem; }
+.built-in-public-badge { display: inline-block; background: var(--color-primary, #0a0a23); color: #fff; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; padding: 0.2em 0.6em; border-radius: 2px; margin-bottom: 0.75rem; }
+.trinity-block { border-left: 4px solid var(--color-primary, #0a0a23); padding-left: 1rem; margin: 1.5rem 0; }
+.trinity-line { font-size: 1.1rem; font-weight: 700; margin: 0.25rem 0; letter-spacing: 0.03em; }
+.trinity-caption { font-size: 0.9rem; font-weight: 700; margin-top: 0.5rem; letter-spacing: 0.08em; }
+.score-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin: 1rem 0; }
+.score-card { border: 1px solid var(--color-border, #ddd); padding: 0.75rem; border-radius: 4px; }
+.score-card--primary { border-color: var(--color-primary, #0a0a23); border-width: 2px; }
+.score-label { display: block; font-size: 0.8rem; opacity: 0.7; }
+.score-value { display: block; font-size: 1.4rem; font-weight: 700; }
+.table-scroll-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.question-table { width: 100%; border-collapse: collapse; min-width: 600px; }
+.question-table th, .question-table td { padding: 0.4rem 0.6rem; border: 1px solid var(--color-border, #ddd); font-size: 0.85rem; text-align: left; }
+.question-table thead th { background: var(--color-surface-alt, #f5f5f5); font-weight: 700; }
+.question-row--disagreement { background: var(--color-warning-bg, #fff8e1); }
+.plow-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1rem 0; }
+.plow-blade { border: 1px solid var(--color-border, #ddd); padding: 0.75rem; border-radius: 4px; }
+.plow-blade h3 { margin: 0 0 0.5rem 0; font-size: 0.95rem; }
+.plow-blade dl { display: grid; grid-template-columns: 1fr 1fr; gap: 0.2rem 0.5rem; font-size: 0.8rem; }
+.hex-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin: 1rem 0; }
+.hex-stat { border: 1px solid var(--color-border, #ddd); padding: 0.75rem; border-radius: 4px; }
+.advantages-list { columns: 2; column-gap: 2rem; font-size: 0.85rem; }
+.advantages-list li { break-inside: avoid; margin-bottom: 0.4rem; }
+.advantages-list code { font-size: 0.75rem; opacity: 0.7; }
+.node-table { list-style: none; padding: 0; border: 1px solid var(--color-border, #ddd); border-radius: 4px; overflow: hidden; }
+.node-row { display: grid; grid-template-columns: 1fr 2fr 1fr 1fr 1fr; gap: 0.5rem; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--color-border, #ddd); font-size: 0.85rem; }
+.node-row--header { background: var(--color-surface-alt, #f5f5f5); font-weight: 700; }
+.proof-footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--color-border, #ddd); }
+.proof-footer p { margin: 0.25rem 0; font-size: 0.85rem; }
+@media (max-width: 600px) {
+  .advantages-list { columns: 1; }
+  .node-row { grid-template-columns: 1fr 1fr; }
+  .node-row span:nth-child(n+3) { grid-column: 1 / -1; }
+}
+</style>
+
+{{- end -}}

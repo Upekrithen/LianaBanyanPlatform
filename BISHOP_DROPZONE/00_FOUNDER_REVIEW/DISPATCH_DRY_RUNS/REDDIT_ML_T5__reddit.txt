@@ -1,0 +1,30 @@
+========================================================
+BATTERY DISPATCH DRY-RUN — BP084 · Sonnet 4.6
+========================================================
+PIECE:    r/MachineLearning — Substrate Awakens (T5)
+PIECE_ID: REDDIT_ML_T5
+PLATFORM: reddit / r/MachineLearning (manual browser — no Reddit API adapter)
+DRY_RUN:  TRUE — NO SIDE EFFECTS
+========================================================
+
+SOURCE FILE:
+  BISHOP_DROPZONE/00_FOUNDER_REVIEW/SUBSTRATE_AWAKENS_MARKETING_WAVE/REDDIT_SUBSTRATE_AWAKENS_T5_ML.md
+
+FRONTMATTER STATE:
+  Status: DRAFT · Awaiting Founder ratify ✅
+  "Saturday-ish" framing: ✅ PRESENT
+
+POST TITLE (ready to use):
+  "[Project] Cooperative substrate accumulator architecture for federated mesh 
+   benchmarking — live event Saturday"
+
+TARGET SUBREDDIT: r/MachineLearning
+
+NOTE: Battery Dispatch has NO Reddit API adapter. Manual post by Founder required.
+  URL: https://www.reddit.com/r/MachineLearning/submit
+
+REQUIRES FOUNDER ACTION: Manual Reddit post
+
+STATUS: 🟢 GREEN — Content ready; manual post action
+DRY-RUN RESULT: PASS (manual path confirmed; no live calls made)
+========================================================

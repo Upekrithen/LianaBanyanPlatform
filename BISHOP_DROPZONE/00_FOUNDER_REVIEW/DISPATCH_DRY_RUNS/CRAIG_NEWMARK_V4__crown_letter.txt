@@ -1,0 +1,35 @@
+========================================================
+BATTERY DISPATCH DRY-RUN — BP084 · Sonnet 4.6
+========================================================
+PIECE:    Crown Letter — Craig Newmark (V4)
+PIECE_ID: CRAIG_NEWMARK_V4
+PLATFORM: crown_letter (Gmail → browser-fallback)
+DRY_RUN:  TRUE — NO SIDE EFFECTS
+========================================================
+
+SOURCE FILE:
+  BISHOP_DROPZONE/00_FOUNDER_REVIEW/Wave_1_Apr12-13_Soft_Open/CROWN_LETTER_CRAIG_NEWMARK_V4_DRAFT.md
+
+FRONTMATTER STATE:
+  name:            "Crown Letter -- Craig Newmark"
+  type:            crown_letter
+  recipient:       "Craig Newmark"
+  ratificationDate: B100
+  sonnet_verify_gate: "Wave 26 audit 2026-06-03 — canon numbers verified"
+  wave26_audit:    "Status: DRAFT — Founder fills required (founderAge; update Feb 2026 date)"
+
+⚠ FOUNDER FILLS REQUIRED: founderAge placeholder and Feb 2026 date reference need update.
+  Founder must fill before send. Do NOT fire with placeholder values.
+
+FILE LOCATION NOTE: In Wave_1_Apr12-13_Soft_Open/ subdirectory.
+  SEG-5 ACTION: Move to top-level 00_FOUNDER_REVIEW/ for IPC discovery.
+
+CREDENTIAL STATE: Gmail OAuth NOT SET → BROWSER-FALLBACK
+
+TEMPLATE VARIABLE CHECK:
+  ⚠ FAIL: founderAge placeholder remains per wave26_audit note
+  ⚠ FAIL: "Feb 2026 date" reference needs update (now June 2026)
+
+STATUS: 🔴 RED — Unfilled template variables. Do NOT fire until Founder fills.
+DRY-RUN RESULT: BLOCKED — founderAge and date placeholder must be resolved first.
+========================================================

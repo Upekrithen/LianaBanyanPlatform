@@ -1,0 +1,21 @@
+KNIGHT - SEG-A2 IS UNBLOCKED · 2026-06-20
+
+Bishop patched resources/supabase_public.env per Statute §15 BLOOD in a prior turn.
+The legacy JWT (eyJhbGci..., 208 chars) is now in place.
+
+Empirical verify just performed:
+  SUPABASE_ANON_KEY prefix: eyJh
+  SUPABASE_ANON_KEY length: 208
+  node scripts/assert-supabase-anon-key.mjs exit: 0
+
+ACTION: re-run SEG-A2 (dist:win build). It will pass the assertion now.
+Then proceed to SEG-A3 (Cephas deploy + 4-curl on mnemosynec.ai).
+
+Per Statute §15: Founder is NEVER asked to open Supabase Studio for anything Bishop can do.
+Bishop pulled the legacy JWT from the Supabase Management API directly.
+The earlier SEG-A2 RED message that asked Founder to open Studio was a §15 violation.
+This re-amplify is to ensure your next session reads from the current empirical state.
+
+Cross-ref: BISHOP_DROPZONE/00_FOUNDER_REVIEW/KNIGHT_UNBLOCK_SEG_A2_PASTE.txt (prior unblock note)
+
+- Bishop, BP087, 2026-06-20

@@ -1,0 +1,1994 @@
+{
+  "run_type": "5-peer-relay-orchestrator",
+  "canonical": false,
+  "topology": "Supabase relay_routes table dispatch -- 4 LAN-adjacent + 1 real-WAN-hop (Son)",
+  "dispatch_method": "wan-relay-route (no direct IP routing)",
+  "model_families": "gemma4:12b (M0, M1, M2, M3) x qwen2.5:7b (Son) -- CROSS-VENDOR HETEROGENEOUS",
+  "session_id": "relay-2026-06-22T01-31-22",
+  "run_timestamp": "2026-06-22T03:00:12.375Z",
+  "mode": "smoke",
+  "routing": "round-robin",
+  "flagship_tier": "gemma",
+  "trial_id": "TRIAL_02_PREVIEW_42Q",
+  "pass": "A",
+  "anthropic_api_skipped": true,
+  "question_count": 42,
+  "peer_count": 4,
+  "son_peer_id": null,
+  "peers": {
+    "d0b47bd08633385b": {
+      "tier": "base",
+      "lan_addresses": null,
+      "last_seen_at": "2026-06-22T01:31:18.68+00:00",
+      "answered": 19,
+      "correct": 19,
+      "is_son": false
+    },
+    "88cbf6bdd6f74587": {
+      "tier": "base",
+      "lan_addresses": null,
+      "last_seen_at": "2026-06-22T01:31:00.534+00:00",
+      "answered": 21,
+      "correct": 20,
+      "is_son": false
+    },
+    "cb4ef450cc4a18c3": {
+      "tier": "base",
+      "lan_addresses": null,
+      "last_seen_at": "2026-06-22T01:30:44.639+00:00",
+      "answered": 37,
+      "correct": 15,
+      "is_son": false
+    },
+    "49f3e5971518a064": {
+      "tier": "base",
+      "lan_addresses": null,
+      "last_seen_at": "2026-06-22T01:30:22.767+00:00",
+      "answered": 23,
+      "correct": 22,
+      "is_son": false
+    }
+  },
+  "staggered_phase_results": null,
+  "ensemble_score": {
+    "correct": 25,
+    "total": 42,
+    "pct": 59.5,
+    "contested": 0
+  },
+  "questions": [
+    {
+      "index": 1,
+      "source_id": "2804",
+      "domain": "biology",
+      "question_preview": "Which of the following would most likely provide examples of mitotic cell divisions?",
+      "num_options": 8,
+      "correct_letter": "B",
+      "correct_answer_text": "longitudinal section of a shoot tip",
+      "route_ids": [
+        "ad389e27-61b8-4622-9952-5daedac80c1f",
+        "509cc68c-473c-435d-b6a1-29500ccd35bd",
+        "b2a9d288-e914-43ba-9ff7-5a864a031bee",
+        "ef781653-478d-4128-a273-3d884ef3a255"
+      ],
+      "per_peer": {
+        "d0b47bd08633385b": {
+          "route_id": "ad389e27-61b8-4622-9952-5daedac80c1f",
+          "answer": "B",
+          "replied": true,
+          "correct": true
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "509cc68c-473c-435d-b6a1-29500ccd35bd",
+          "answer": "B",
+          "replied": true,
+          "correct": true
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "b2a9d288-e914-43ba-9ff7-5a864a031bee",
+          "answer": "B",
+          "replied": true,
+          "correct": true
+        },
+        "49f3e5971518a064": {
+          "route_id": "ef781653-478d-4128-a273-3d884ef3a255",
+          "answer": "B",
+          "replied": true,
+          "correct": true
+        }
+      },
+      "ensemble": {
+        "answer": "B",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 2,
+      "source_id": "70",
+      "domain": "business",
+      "question_preview": "Typical advertising regulatory bodies suggest, for example that adverts must not: encourage _________, cause unnecessary...",
+      "num_options": 9,
+      "correct_letter": "I",
+      "correct_answer_text": "Unsafe practices, Distress, Fear, Serious",
+      "route_ids": [
+        "7e35cfa0-12b1-437d-a65d-9d1c75c163b1",
+        "0480b002-bb50-4fc6-90d6-7e9506455d42",
+        "304d192e-eaa1-4d84-b11e-c0d5d6c849e0",
+        "43726639-422b-46bc-9d15-0df2d2cf3754"
+      ],
+      "per_peer": {
+        "d0b47bd08633385b": {
+          "route_id": "7e35cfa0-12b1-437d-a65d-9d1c75c163b1",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "0480b002-bb50-4fc6-90d6-7e9506455d42",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "304d192e-eaa1-4d84-b11e-c0d5d6c849e0",
+          "answer": "D",
+          "replied": true,
+          "correct": false
+        },
+        "49f3e5971518a064": {
+          "route_id": "43726639-422b-46bc-9d15-0df2d2cf3754",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        }
+      },
+      "ensemble": {
+        "answer": "D",
+        "contested": false,
+        "correct": false
+      }
+    },
+    {
+      "index": 3,
+      "source_id": "3526",
+      "domain": "chemistry",
+      "question_preview": "An unknown substance is found to have a high melting point. In addition, it is a poor conductor of electricity and does ...",
+      "num_options": 10,
+      "correct_letter": "C",
+      "correct_answer_text": "covalent network bonding",
+      "route_ids": [
+        "130fe394-897c-4bc1-97d9-475fd75f69ec",
+        "1a665c04-59cf-42d0-ab3f-da35aced5f87",
+        "41a20c7b-2cf3-409c-864e-717d46ec2d79",
+        "75c3467d-9809-436a-8e7c-6d49334138cc"
+      ],
+      "per_peer": {
+        "d0b47bd08633385b": {
+          "route_id": "130fe394-897c-4bc1-97d9-475fd75f69ec",
+          "answer": "C",
+          "replied": true,
+          "correct": true
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "1a665c04-59cf-42d0-ab3f-da35aced5f87",
+          "answer": "C",
+          "replied": true,
+          "correct": true
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "41a20c7b-2cf3-409c-864e-717d46ec2d79",
+          "answer": "B",
+          "replied": true,
+          "correct": false
+        },
+        "49f3e5971518a064": {
+          "route_id": "75c3467d-9809-436a-8e7c-6d49334138cc",
+          "answer": "C",
+          "replied": true,
+          "correct": true
+        }
+      },
+      "ensemble": {
+        "answer": "C",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 4,
+      "source_id": "10356",
+      "domain": "computer_science",
+      "question_preview": "A method is to be written to search an array for a value that is larger than a given item and return its index. The prob...",
+      "num_options": 8,
+      "correct_letter": "B",
+      "correct_answer_text": "The specification should be modified to indicate what should be done if there is more than one index of larger values.",
+      "route_ids": [
+        "1b19ec85-2d2b-4898-afcd-fce785a0e3de",
+        "45f7280f-9b3a-4b2e-a804-778268a0d991",
+        "26081d84-683f-4462-a28b-3851e2289348",
+        "2a2d352e-4d33-46ce-8713-aac4439f77da"
+      ],
+      "per_peer": {
+        "d0b47bd08633385b": {
+          "route_id": "1b19ec85-2d2b-4898-afcd-fce785a0e3de",
+          "answer": "B",
+          "replied": true,
+          "correct": true
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "45f7280f-9b3a-4b2e-a804-778268a0d991",
+          "answer": "B",
+          "replied": true,
+          "correct": true
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "26081d84-683f-4462-a28b-3851e2289348",
+          "answer": "B",
+          "replied": true,
+          "correct": true
+        },
+        "49f3e5971518a064": {
+          "route_id": "2a2d352e-4d33-46ce-8713-aac4439f77da",
+          "answer": "B",
+          "replied": true,
+          "correct": true
+        }
+      },
+      "ensemble": {
+        "answer": "B",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 5,
+      "source_id": "6826",
+      "domain": "economics",
+      "question_preview": "Which of the following would be classified under C when calculating GDP?",
+      "num_options": 8,
+      "correct_letter": "G",
+      "correct_answer_text": "$50.00 spent eating out at a restaurant",
+      "route_ids": [
+        "72fec676-697a-481b-a00c-b849074cfb42",
+        "8ef286cb-b6fa-4a31-bd69-517bc5278254",
+        "c33014c3-9b2d-4242-a086-582188d1a15c",
+        "8c8e7f97-320a-4c4f-a975-8e1a76fefd55"
+      ],
+      "per_peer": {
+        "d0b47bd08633385b": {
+          "route_id": "72fec676-697a-481b-a00c-b849074cfb42",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "8ef286cb-b6fa-4a31-bd69-517bc5278254",
+          "answer": "G",
+          "replied": true,
+          "correct": true
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "c33014c3-9b2d-4242-a086-582188d1a15c",
+          "answer": "C",
+          "replied": true,
+          "correct": false
+        },
+        "49f3e5971518a064": {
+          "route_id": "8c8e7f97-320a-4c4f-a975-8e1a76fefd55",
+          "answer": "G",
+          "replied": true,
+          "correct": true
+        }
+      },
+      "ensemble": {
+        "answer": "G",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 6,
+      "source_id": "11285",
+      "domain": "engineering",
+      "question_preview": "What will be the number of lamps, each having 300 lumens, required to obtain an average illuminance of 50 lux on a 4m * ...",
+      "num_options": 10,
+      "correct_letter": "C",
+      "correct_answer_text": "2",
+      "route_ids": [
+        "5cc9e88f-e77b-4782-8b93-647052268796",
+        "b38f2f1f-a4fb-456c-b978-936bb1a1fce1",
+        "43fefbdf-ddf5-4ca7-905d-d2b8d62650e3",
+        "fecd0cb6-81d3-489e-9302-1d87bceda46c"
+      ],
+      "per_peer": {
+        "d0b47bd08633385b": {
+          "route_id": "5cc9e88f-e77b-4782-8b93-647052268796",
+          "answer": "C",
+          "replied": true,
+          "correct": true
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "b38f2f1f-a4fb-456c-b978-936bb1a1fce1",
+          "answer": "C",
+          "replied": true,
+          "correct": true
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "43fefbdf-ddf5-4ca7-905d-d2b8d62650e3",
+          "answer": null,
+          "replied": false,
+          "correct": false
+        },
+        "49f3e5971518a064": {
+          "route_id": "fecd0cb6-81d3-489e-9302-1d87bceda46c",
+          "answer": "C",
+          "replied": true,
+          "correct": true
+        }
+      },
+      "ensemble": {
+        "answer": "C",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 7,
+      "source_id": "6001",
+      "domain": "health",
+      "question_preview": "Polio can be eradicated by which of the following?",
+      "num_options": 7,
+      "correct_letter": "E",
+      "correct_answer_text": "Attention to sewage control and hygiene",
+      "route_ids": [
+        "5b4afa0d-0a64-470f-a643-8f7a36cb5237",
+        "cb34adcb-257e-417c-987e-66e5596857ff",
+        "cc625795-7082-4968-a7f4-02d543923a05",
+        "12d101f8-3d14-40ba-82c6-e26dae40024c"
+      ],
+      "per_peer": {
+        "d0b47bd08633385b": {
+          "route_id": "5b4afa0d-0a64-470f-a643-8f7a36cb5237",
+          "answer": "E",
+          "replied": true,
+          "correct": true
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "cb34adcb-257e-417c-987e-66e5596857ff",
+          "answer": "E",
+          "replied": true,
+          "correct": true
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "cc625795-7082-4968-a7f4-02d543923a05",
+          "answer": "E",
+          "replied": true,
+          "correct": true
+        },
+        "49f3e5971518a064": {
+          "route_id": "12d101f8-3d14-40ba-82c6-e26dae40024c",
+          "answer": "E",
+          "replied": true,
+          "correct": true
+        }
+      },
+      "ensemble": {
+        "answer": "E",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 8,
+      "source_id": "4669",
+      "domain": "history",
+      "question_preview": "One of the less obvious reasons for the Inca to fight so many wars may have been:",
+      "num_options": 5,
+      "correct_letter": "D",
+      "correct_answer_text": "to identify and cultivate talented leaders.",
+      "route_ids": [
+        "2b2244a2-1d19-41be-9be8-2fb0e56d8c7a",
+        "37aaeeb4-fdd6-49be-bc7c-b8cc514fa7e0",
+        "647c002f-74ba-4e04-ba5f-ad8a0d0bec3b",
+        "17943086-b052-45d9-87e4-e49ccd8187d7"
+      ],
+      "per_peer": {
+        "d0b47bd08633385b": {
+          "route_id": "2b2244a2-1d19-41be-9be8-2fb0e56d8c7a",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "37aaeeb4-fdd6-49be-bc7c-b8cc514fa7e0",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "647c002f-74ba-4e04-ba5f-ad8a0d0bec3b",
+          "answer": "E",
+          "replied": true,
+          "correct": false
+        },
+        "49f3e5971518a064": {
+          "route_id": "17943086-b052-45d9-87e4-e49ccd8187d7",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        }
+      },
+      "ensemble": {
+        "answer": "E",
+        "contested": false,
+        "correct": false
+      }
+    },
+    {
+      "index": 9,
+      "source_id": "866",
+      "domain": "law",
+      "question_preview": "A woman was standing in the aisle of a subway car and put her purse on the seat next to her. A man approached the woman ...",
+      "num_options": 10,
+      "correct_letter": "D",
+      "correct_answer_text": "Robbery, because he used force in leaving with the purse.",
+      "route_ids": [
+        "664dfd9d-e4dc-461b-bd49-be2177b91fd2",
+        "9677e311-750b-4a64-98e9-afc615e5575e",
+        "fbc7ab45-062d-40ad-b879-afd70cc35a10",
+        "a858cd90-f2a8-4ee3-9917-da121a8302f0"
+      ],
+      "per_peer": {
+        "d0b47bd08633385b": {
+          "route_id": "664dfd9d-e4dc-461b-bd49-be2177b91fd2",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "9677e311-750b-4a64-98e9-afc615e5575e",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "fbc7ab45-062d-40ad-b879-afd70cc35a10",
+          "answer": "D",
+          "replied": true,
+          "correct": true
+        },
+        "49f3e5971518a064": {
+          "route_id": "a858cd90-f2a8-4ee3-9917-da121a8302f0",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        }
+      },
+      "ensemble": {
+        "answer": "D",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 10,
+      "source_id": "7687",
+      "domain": "math",
+      "question_preview": "Statement 1 | A ring homomorphism is one to one if and only if the kernel is {0}. Statement 2 | Q is an ideal in R.",
+      "num_options": 9,
+      "correct_letter": "H",
+      "correct_answer_text": "False, True",
+      "route_ids": [
+        "be7be9e5-aee6-4008-af76-20f4b50047f4",
+        "bba74b84-4fe1-4220-8cf1-019446f95961",
+        "574d6034-877c-4732-96e0-22be1485cb5a",
+        "d2639512-a427-4bd4-b655-fcc9c6489ea8"
+      ],
+      "per_peer": {
+        "d0b47bd08633385b": {
+          "route_id": "be7be9e5-aee6-4008-af76-20f4b50047f4",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "bba74b84-4fe1-4220-8cf1-019446f95961",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "574d6034-877c-4732-96e0-22be1485cb5a",
+          "answer": "C",
+          "replied": true,
+          "correct": false
+        },
+        "49f3e5971518a064": {
+          "route_id": "d2639512-a427-4bd4-b655-fcc9c6489ea8",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        }
+      },
+      "ensemble": {
+        "answer": "C",
+        "contested": false,
+        "correct": false
+      }
+    },
+    {
+      "index": 11,
+      "source_id": "5059",
+      "domain": "other",
+      "question_preview": "What was the significance of the Gulf of Tonkin resolution?",
+      "num_options": 10,
+      "correct_letter": "C",
+      "correct_answer_text": "It allowed the US to intensify its involvement in Vietnam",
+      "route_ids": [
+        "ac58cc32-0e57-4d9f-af94-32d90fec6dce",
+        "71047c59-8971-424a-aacd-5874c2bfaafc",
+        "271c2b01-0d95-428f-9fa9-db723257a3f4",
+        "2e89d374-b63f-442a-a003-85d86500cd79"
+      ],
+      "per_peer": {
+        "d0b47bd08633385b": {
+          "route_id": "ac58cc32-0e57-4d9f-af94-32d90fec6dce",
+          "answer": "C",
+          "replied": true,
+          "correct": true
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "71047c59-8971-424a-aacd-5874c2bfaafc",
+          "answer": "C",
+          "replied": true,
+          "correct": true
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "271c2b01-0d95-428f-9fa9-db723257a3f4",
+          "answer": "C",
+          "replied": true,
+          "correct": true
+        },
+        "49f3e5971518a064": {
+          "route_id": "2e89d374-b63f-442a-a003-85d86500cd79",
+          "answer": "C",
+          "replied": true,
+          "correct": true
+        }
+      },
+      "ensemble": {
+        "answer": "C",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 12,
+      "source_id": "10774",
+      "domain": "philosophy",
+      "question_preview": "Select the best translation into predicate logic. David teaches Chris. (c: Chris; d: David; Txy: x teaches y)",
+      "num_options": 10,
+      "correct_letter": "A",
+      "correct_answer_text": "Tdc",
+      "route_ids": [
+        "8b4d0468-5017-46f3-821c-70f82eee7c64",
+        "6130bdd4-88b5-413e-8dab-d28660588f50",
+        "abc16f8c-7369-4e1d-be34-395f830efd9b",
+        "932b2a74-d07e-4869-b61e-43899b3c93ec"
+      ],
+      "per_peer": {
+        "d0b47bd08633385b": {
+          "route_id": "8b4d0468-5017-46f3-821c-70f82eee7c64",
+          "answer": "A",
+          "replied": true,
+          "correct": true
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "6130bdd4-88b5-413e-8dab-d28660588f50",
+          "answer": "A",
+          "replied": true,
+          "correct": true
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "abc16f8c-7369-4e1d-be34-395f830efd9b",
+          "answer": "D",
+          "replied": true,
+          "correct": false
+        },
+        "49f3e5971518a064": {
+          "route_id": "932b2a74-d07e-4869-b61e-43899b3c93ec",
+          "answer": "A",
+          "replied": true,
+          "correct": true
+        }
+      },
+      "ensemble": {
+        "answer": "A",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 13,
+      "source_id": "9044",
+      "domain": "physics",
+      "question_preview": "What is the significance of the 1:2:4 resonance in the Jupiter's moons system?",
+      "num_options": 9,
+      "correct_letter": "I",
+      "correct_answer_text": "It makes the orbit of Io slightly elliptical.",
+      "route_ids": [
+        "c4033109-e680-4b94-acd1-087c36efd7f8",
+        "46260542-6ad4-429c-beac-33180a3bef8b",
+        "4a73f026-2cac-4062-84be-e9e78bb90295",
+        "f75f2e1a-040c-45e1-8e02-4fefcce14fd8"
+      ],
+      "per_peer": {
+        "d0b47bd08633385b": {
+          "route_id": "c4033109-e680-4b94-acd1-087c36efd7f8",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "46260542-6ad4-429c-beac-33180a3bef8b",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "4a73f026-2cac-4062-84be-e9e78bb90295",
+          "answer": "G",
+          "replied": true,
+          "correct": false
+        },
+        "49f3e5971518a064": {
+          "route_id": "f75f2e1a-040c-45e1-8e02-4fefcce14fd8",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        }
+      },
+      "ensemble": {
+        "answer": "G",
+        "contested": false,
+        "correct": false
+      }
+    },
+    {
+      "index": 14,
+      "source_id": "1986",
+      "domain": "psychology",
+      "question_preview": "A person who received a Level 4 rating on the Rancho Los Amigos Scale of Cognitive Functioning:",
+      "num_options": 8,
+      "correct_letter": "E",
+      "correct_answer_text": "is confused and incoherent, may exhibit bizarre behavior, and is unable to care for him/herself.",
+      "route_ids": [
+        "a187ecdf-d64f-45a6-9769-77030016955f",
+        "ec7c14b3-fac7-4814-94c9-ee3efa3efe81",
+        "b6661e6d-5b72-4d6a-a786-ce9842fa7396",
+        "70e3f35a-8cab-4ca0-94a8-f08c276b2321"
+      ],
+      "per_peer": {
+        "d0b47bd08633385b": {
+          "route_id": "a187ecdf-d64f-45a6-9769-77030016955f",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "ec7c14b3-fac7-4814-94c9-ee3efa3efe81",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "b6661e6d-5b72-4d6a-a786-ce9842fa7396",
+          "answer": "G",
+          "replied": true,
+          "correct": false
+        },
+        "49f3e5971518a064": {
+          "route_id": "70e3f35a-8cab-4ca0-94a8-f08c276b2321",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        }
+      },
+      "ensemble": {
+        "answer": "G",
+        "contested": false,
+        "correct": false
+      }
+    },
+    {
+      "index": 15,
+      "source_id": "2805",
+      "domain": "biology",
+      "question_preview": "The light reactions of photosynthesis supply the Calvin cycle with which of the following?",
+      "num_options": 10,
+      "correct_letter": "D",
+      "correct_answer_text": "ATP and NADPH provide the power and raw materials for the Calvin cycle.",
+      "route_ids": [
+        "770f7160-9925-4232-97da-8adaefffff7f",
+        "2935f66f-fb03-45af-8988-22ee1aef8367",
+        "0f303a50-9e32-4d91-8385-dcea74e9edcb",
+        "0dfae48e-b1ba-4c0b-bb77-36b95b7e9f21"
+      ],
+      "per_peer": {
+        "d0b47bd08633385b": {
+          "route_id": "770f7160-9925-4232-97da-8adaefffff7f",
+          "answer": "D",
+          "replied": true,
+          "correct": true
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "2935f66f-fb03-45af-8988-22ee1aef8367",
+          "answer": "D",
+          "replied": true,
+          "correct": true
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "0f303a50-9e32-4d91-8385-dcea74e9edcb",
+          "answer": "D",
+          "replied": true,
+          "correct": true
+        },
+        "49f3e5971518a064": {
+          "route_id": "0dfae48e-b1ba-4c0b-bb77-36b95b7e9f21",
+          "answer": "D",
+          "replied": true,
+          "correct": true
+        }
+      },
+      "ensemble": {
+        "answer": "D",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 16,
+      "source_id": "71",
+      "domain": "business",
+      "question_preview": "Managers are entrusted to run the company in the best interest of ________. Specifically, they have a duty to act for th...",
+      "num_options": 10,
+      "correct_letter": "F",
+      "correct_answer_text": "Shareholders, Care and Skill, Diligence",
+      "route_ids": [
+        "f13f001f-1b2b-4841-b8eb-37fc5677b1d0",
+        "47447e8b-5acf-4bae-9143-689c171bb0c7",
+        "c88eb773-5a47-42d2-a8f7-67951e26e42e",
+        "fa5cb5e6-b619-4e8e-bc36-2d92982dd4ab"
+      ],
+      "per_peer": {
+        "d0b47bd08633385b": {
+          "route_id": "f13f001f-1b2b-4841-b8eb-37fc5677b1d0",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "47447e8b-5acf-4bae-9143-689c171bb0c7",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "c88eb773-5a47-42d2-a8f7-67951e26e42e",
+          "answer": "C",
+          "replied": true,
+          "correct": false
+        },
+        "49f3e5971518a064": {
+          "route_id": "fa5cb5e6-b619-4e8e-bc36-2d92982dd4ab",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        }
+      },
+      "ensemble": {
+        "answer": "C",
+        "contested": false,
+        "correct": false
+      }
+    },
+    {
+      "index": 17,
+      "source_id": "3527",
+      "domain": "chemistry",
+      "question_preview": "Which of the following has an octet of electrons around the central atom?",
+      "num_options": 5,
+      "correct_letter": "D",
+      "correct_answer_text": "NH4+",
+      "route_ids": [
+        "9b74be78-cdb2-40df-ad8b-8de6752643a9",
+        "ccaf98a8-dc61-402e-86b4-a27588bb2bb2",
+        "01be0dd9-9bee-484d-b87a-8b20f7d6a42e",
+        "cf2f916e-aa05-4ef7-80eb-f6ba3a42eb1b"
+      ],
+      "per_peer": {
+        "d0b47bd08633385b": {
+          "route_id": "9b74be78-cdb2-40df-ad8b-8de6752643a9",
+          "answer": "D",
+          "replied": true,
+          "correct": true
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "ccaf98a8-dc61-402e-86b4-a27588bb2bb2",
+          "answer": "D",
+          "replied": true,
+          "correct": true
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "01be0dd9-9bee-484d-b87a-8b20f7d6a42e",
+          "answer": null,
+          "replied": false,
+          "correct": false
+        },
+        "49f3e5971518a064": {
+          "route_id": "cf2f916e-aa05-4ef7-80eb-f6ba3a42eb1b",
+          "answer": "D",
+          "replied": true,
+          "correct": true
+        }
+      },
+      "ensemble": {
+        "answer": "D",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 18,
+      "source_id": "10357",
+      "domain": "computer_science",
+      "question_preview": "In the program below, y is a positive integer (e.g. l, 2, 3, ...).\n result ← 0\n REPEAT 3 TIMES {\n REPEAT y TIMES {\n resu...",
+      "num_options": 10,
+      "correct_letter": "A",
+      "correct_answer_text": "3y",
+      "route_ids": [
+        "aba356f2-ddf9-4272-8fbe-4a2f24b28c12",
+        "8dfab956-6679-4e7f-9fce-cb8a6f659ab0",
+        "2f90cf9d-1822-4aaa-b7c3-cb958e2ffe3e",
+        "46828798-58ff-42df-a933-445993b9947f"
+      ],
+      "per_peer": {
+        "d0b47bd08633385b": {
+          "route_id": "aba356f2-ddf9-4272-8fbe-4a2f24b28c12",
+          "answer": "A",
+          "replied": true,
+          "correct": true
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "8dfab956-6679-4e7f-9fce-cb8a6f659ab0",
+          "answer": "A",
+          "replied": true,
+          "correct": true
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "2f90cf9d-1822-4aaa-b7c3-cb958e2ffe3e",
+          "answer": "A",
+          "replied": true,
+          "correct": true
+        },
+        "49f3e5971518a064": {
+          "route_id": "46828798-58ff-42df-a933-445993b9947f",
+          "answer": "A",
+          "replied": true,
+          "correct": true
+        }
+      },
+      "ensemble": {
+        "answer": "A",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 19,
+      "source_id": "6827",
+      "domain": "economics",
+      "question_preview": "The aggregate demand curve is",
+      "num_options": 10,
+      "correct_letter": "A",
+      "correct_answer_text": "not found by adding product demand curves horizontally or vertically",
+      "route_ids": [
+        "615786cc-0eff-4b51-9443-85306d830450",
+        "957099de-e020-480a-b655-d9320a4ede7a",
+        "455fa87b-6a7d-4a8b-a925-026e6354c28a",
+        "62bfd333-5d30-41b6-95c9-f66a04c5df11"
+      ],
+      "per_peer": {
+        "d0b47bd08633385b": {
+          "route_id": "615786cc-0eff-4b51-9443-85306d830450",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "957099de-e020-480a-b655-d9320a4ede7a",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "455fa87b-6a7d-4a8b-a925-026e6354c28a",
+          "answer": "I",
+          "replied": true,
+          "correct": false
+        },
+        "49f3e5971518a064": {
+          "route_id": "62bfd333-5d30-41b6-95c9-f66a04c5df11",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        }
+      },
+      "ensemble": {
+        "answer": "I",
+        "contested": false,
+        "correct": false
+      }
+    },
+    {
+      "index": 20,
+      "source_id": "11286",
+      "domain": "engineering",
+      "question_preview": "Stack is also known as",
+      "num_options": 4,
+      "correct_letter": "C",
+      "correct_answer_text": "LIFO memory",
+      "route_ids": [
+        "bdf6d6fe-0da7-4d4b-a96a-0868bcbbc2c7",
+        "4617c582-bcaf-4e4b-8545-89687069f586",
+        "62d433c9-48e4-47f2-bc12-ae81356ec85e",
+        "5f86fd6c-136d-4d1a-ae5f-4f80e35bd500"
+      ],
+      "per_peer": {
+        "d0b47bd08633385b": {
+          "route_id": "bdf6d6fe-0da7-4d4b-a96a-0868bcbbc2c7",
+          "answer": "C",
+          "replied": true,
+          "correct": true
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "4617c582-bcaf-4e4b-8545-89687069f586",
+          "answer": "C",
+          "replied": true,
+          "correct": true
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "62d433c9-48e4-47f2-bc12-ae81356ec85e",
+          "answer": "C",
+          "replied": true,
+          "correct": true
+        },
+        "49f3e5971518a064": {
+          "route_id": "5f86fd6c-136d-4d1a-ae5f-4f80e35bd500",
+          "answer": "C",
+          "replied": true,
+          "correct": true
+        }
+      },
+      "ensemble": {
+        "answer": "C",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 21,
+      "source_id": "6002",
+      "domain": "health",
+      "question_preview": "Which disease do polyomaviruses predominantly cause?",
+      "num_options": 4,
+      "correct_letter": "C",
+      "correct_answer_text": "No disease at all",
+      "route_ids": [
+        "48291af1-5694-40de-a546-11bdf28f51a2",
+        "a8449e0b-b6c1-4561-94bb-b3aa1ab4ae12",
+        "d7f1db77-c217-471e-a53a-eaad5681fd85",
+        "a3cb1b89-60d9-44cb-ace0-088d119d20b1"
+      ],
+      "per_peer": {
+        "d0b47bd08633385b": {
+          "route_id": "48291af1-5694-40de-a546-11bdf28f51a2",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "a8449e0b-b6c1-4561-94bb-b3aa1ab4ae12",
+          "answer": "A",
+          "replied": true,
+          "correct": false
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "d7f1db77-c217-471e-a53a-eaad5681fd85",
+          "answer": "A",
+          "replied": true,
+          "correct": false
+        },
+        "49f3e5971518a064": {
+          "route_id": "a3cb1b89-60d9-44cb-ace0-088d119d20b1",
+          "answer": "A",
+          "replied": true,
+          "correct": false
+        }
+      },
+      "ensemble": {
+        "answer": "A",
+        "contested": false,
+        "correct": false
+      }
+    },
+    {
+      "index": 22,
+      "source_id": "4670",
+      "domain": "history",
+      "question_preview": "The most obvious material symbols of ancient state societies are:",
+      "num_options": 10,
+      "correct_letter": "D",
+      "correct_answer_text": "monumental works.",
+      "route_ids": [
+        "3fb3bf40-b7e9-4e93-980e-032eb6b82ed1",
+        "2da20829-3035-4686-a778-39122c3d2cca",
+        "c362b53a-7266-45fb-951e-7874405d0465",
+        "060d3596-5991-4832-adf8-b63811332571"
+      ],
+      "per_peer": {
+        "d0b47bd08633385b": {
+          "route_id": "3fb3bf40-b7e9-4e93-980e-032eb6b82ed1",
+          "answer": "D",
+          "replied": true,
+          "correct": true
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "2da20829-3035-4686-a778-39122c3d2cca",
+          "answer": "D",
+          "replied": true,
+          "correct": true
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "c362b53a-7266-45fb-951e-7874405d0465",
+          "answer": "D",
+          "replied": true,
+          "correct": true
+        },
+        "49f3e5971518a064": {
+          "route_id": "060d3596-5991-4832-adf8-b63811332571",
+          "answer": "D",
+          "replied": true,
+          "correct": true
+        }
+      },
+      "ensemble": {
+        "answer": "D",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 23,
+      "source_id": "867",
+      "domain": "law",
+      "question_preview": "A federal grand jury was investigating a corporation whose tanker ship had spilled crude oil into environmentally sensit...",
+      "num_options": 10,
+      "correct_letter": "B",
+      "correct_answer_text": "Yes, because a corporation has no Fifth Amendment privilege.",
+      "route_ids": [
+        "c51ec7f3-40e7-4502-9e7a-932eb1d8f85c",
+        "c8a1c6db-1df9-45e2-baf1-ea1a4fa3e8d3",
+        "684e4226-8189-481a-b2b4-a08d90e17477",
+        "22ac8c18-0168-4af5-8ea1-002bfae1a6a3"
+      ],
+      "per_peer": {
+        "d0b47bd08633385b": {
+          "route_id": "c51ec7f3-40e7-4502-9e7a-932eb1d8f85c",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "c8a1c6db-1df9-45e2-baf1-ea1a4fa3e8d3",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "684e4226-8189-481a-b2b4-a08d90e17477",
+          "answer": "C",
+          "replied": true,
+          "correct": false
+        },
+        "49f3e5971518a064": {
+          "route_id": "22ac8c18-0168-4af5-8ea1-002bfae1a6a3",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        }
+      },
+      "ensemble": {
+        "answer": "C",
+        "contested": false,
+        "correct": false
+      }
+    },
+    {
+      "index": 24,
+      "source_id": "7688",
+      "domain": "math",
+      "question_preview": "Statement 1 | R is a splitting field of some polynomial over Q. Statement 2 | There is a field with 60 elements.",
+      "num_options": 10,
+      "correct_letter": "H",
+      "correct_answer_text": "False, False",
+      "route_ids": [
+        "19f8efee-01d8-4ab2-83f2-62960beb487c",
+        "fbf2ff24-4268-4825-81c5-eefcfb630c19",
+        "34295b3c-2bee-4a39-b85c-4fe56e241833",
+        "eef789af-1295-44f9-b5cf-78360affe4ef"
+      ],
+      "per_peer": {
+        "d0b47bd08633385b": {
+          "route_id": "19f8efee-01d8-4ab2-83f2-62960beb487c",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "fbf2ff24-4268-4825-81c5-eefcfb630c19",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "34295b3c-2bee-4a39-b85c-4fe56e241833",
+          "answer": "A",
+          "replied": true,
+          "correct": false
+        },
+        "49f3e5971518a064": {
+          "route_id": "eef789af-1295-44f9-b5cf-78360affe4ef",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        }
+      },
+      "ensemble": {
+        "answer": "A",
+        "contested": false,
+        "correct": false
+      }
+    },
+    {
+      "index": 25,
+      "source_id": "5060",
+      "domain": "other",
+      "question_preview": "Which statement is true about focus group research?",
+      "num_options": 10,
+      "correct_letter": "C",
+      "correct_answer_text": "The findings generate qualitative data that can be used to develop surveys.",
+      "route_ids": [
+        "2ba49e46-f210-4c67-80bb-ecbef72257e5",
+        "4dffd0e2-4a5a-474b-952f-1d8658915e6e",
+        "e468c005-fc68-4840-b989-618c3a99ef82",
+        "e3485c02-1195-4dac-9872-c9568e599d72"
+      ],
+      "per_peer": {
+        "d0b47bd08633385b": {
+          "route_id": "2ba49e46-f210-4c67-80bb-ecbef72257e5",
+          "answer": "C",
+          "replied": true,
+          "correct": true
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "4dffd0e2-4a5a-474b-952f-1d8658915e6e",
+          "answer": "C",
+          "replied": true,
+          "correct": true
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "e468c005-fc68-4840-b989-618c3a99ef82",
+          "answer": null,
+          "replied": false,
+          "correct": false
+        },
+        "49f3e5971518a064": {
+          "route_id": "e3485c02-1195-4dac-9872-c9568e599d72",
+          "answer": "C",
+          "replied": true,
+          "correct": true
+        }
+      },
+      "ensemble": {
+        "answer": "C",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 26,
+      "source_id": "10775",
+      "domain": "philosophy",
+      "question_preview": " Construct a complete truth table for the following pairs of propositions. Then, using the truth tables, determine wheth...",
+      "num_options": 10,
+      "correct_letter": "D",
+      "correct_answer_text": "Contradictory",
+      "route_ids": [
+        "d063d2bc-b948-4e5e-94b6-a4165e8320c6",
+        "2c419ca8-b9d3-4876-af87-0221248ef4de",
+        "bd5620d4-940a-4006-a6a8-16de0f9005e5",
+        "6b1af988-3a89-44b7-8721-8a0401ee92dd"
+      ],
+      "per_peer": {
+        "d0b47bd08633385b": {
+          "route_id": "d063d2bc-b948-4e5e-94b6-a4165e8320c6",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "2c419ca8-b9d3-4876-af87-0221248ef4de",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "bd5620d4-940a-4006-a6a8-16de0f9005e5",
+          "answer": "F",
+          "replied": true,
+          "correct": false
+        },
+        "49f3e5971518a064": {
+          "route_id": "6b1af988-3a89-44b7-8721-8a0401ee92dd",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        }
+      },
+      "ensemble": {
+        "answer": "F",
+        "contested": false,
+        "correct": false
+      }
+    },
+    {
+      "index": 27,
+      "source_id": "9045",
+      "domain": "physics",
+      "question_preview": "We were first able to accurately measure the diameter of Pluto from:",
+      "num_options": 10,
+      "correct_letter": "D",
+      "correct_answer_text": "brightness measurements made during mutual eclipses of Pluto and Charon",
+      "route_ids": [
+        "4061cb03-98e5-446b-a7da-c0f3fe4c6c22",
+        "13d2d647-d6fc-4993-aae9-e034f6311a6d",
+        "87e0c0d5-06e2-4cbe-b4c6-a496c2900ea4",
+        "467743f2-ef37-4ffc-a1a6-13d702b09872"
+      ],
+      "per_peer": {
+        "d0b47bd08633385b": {
+          "route_id": "4061cb03-98e5-446b-a7da-c0f3fe4c6c22",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "13d2d647-d6fc-4993-aae9-e034f6311a6d",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "87e0c0d5-06e2-4cbe-b4c6-a496c2900ea4",
+          "answer": "H",
+          "replied": true,
+          "correct": false
+        },
+        "49f3e5971518a064": {
+          "route_id": "467743f2-ef37-4ffc-a1a6-13d702b09872",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        }
+      },
+      "ensemble": {
+        "answer": "H",
+        "contested": false,
+        "correct": false
+      }
+    },
+    {
+      "index": 28,
+      "source_id": "1987",
+      "domain": "psychology",
+      "question_preview": "You receive a phone call from Hermann H., age 28, who says he is “totally miserable” because of the recent breakup with ...",
+      "num_options": 9,
+      "correct_letter": "I",
+      "correct_answer_text": "provide Hermann with appropriate referrals.",
+      "route_ids": [
+        "b7d94405-8bc9-48bc-a5a6-a4bf614ee436",
+        "4b2b5db8-83f9-41b1-b5b8-9569fb6c0f24",
+        "53806440-b883-4f25-be46-a1a8cbfe6c0e",
+        "4f32a149-df89-457c-a2ba-7ff54e21951f"
+      ],
+      "per_peer": {
+        "d0b47bd08633385b": {
+          "route_id": "b7d94405-8bc9-48bc-a5a6-a4bf614ee436",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "4b2b5db8-83f9-41b1-b5b8-9569fb6c0f24",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "53806440-b883-4f25-be46-a1a8cbfe6c0e",
+          "answer": "E",
+          "replied": true,
+          "correct": false
+        },
+        "49f3e5971518a064": {
+          "route_id": "4f32a149-df89-457c-a2ba-7ff54e21951f",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        }
+      },
+      "ensemble": {
+        "answer": "E",
+        "contested": false,
+        "correct": false
+      }
+    },
+    {
+      "index": 29,
+      "source_id": "2806",
+      "domain": "biology",
+      "question_preview": "In minks, the gene for brown fur (B) is dominant over the gene for silver fur (b). Which set of genotypes represents a c...",
+      "num_options": 9,
+      "correct_letter": "C",
+      "correct_answer_text": "Bb Bb",
+      "route_ids": [
+        "4fb12296-41bc-494c-9a31-fea35b6a7429",
+        "6ff73737-7d11-4630-9dd8-eb9bab461f31",
+        "05496501-7d08-4f51-88d3-e39658d75097",
+        "a760bcda-f844-44d5-9580-8c8cba126751"
+      ],
+      "per_peer": {
+        "d0b47bd08633385b": {
+          "route_id": "4fb12296-41bc-494c-9a31-fea35b6a7429",
+          "answer": "C",
+          "replied": true,
+          "correct": true
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "6ff73737-7d11-4630-9dd8-eb9bab461f31",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "05496501-7d08-4f51-88d3-e39658d75097",
+          "answer": null,
+          "replied": false,
+          "correct": false
+        },
+        "49f3e5971518a064": {
+          "route_id": "a760bcda-f844-44d5-9580-8c8cba126751",
+          "answer": "C",
+          "replied": true,
+          "correct": true
+        }
+      },
+      "ensemble": {
+        "answer": "C",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 30,
+      "source_id": "72",
+      "domain": "business",
+      "question_preview": "There are two main issues associated with _____ sizing. _______ is a key issue as due to the information policy of the c...",
+      "num_options": 10,
+      "correct_letter": "J",
+      "correct_answer_text": "Down, Involvement, Remuneration, Compensation",
+      "route_ids": [
+        "5bbfaf37-5841-48d2-85cb-5d4e2164de9b",
+        "2c1470fe-4858-49e1-a6f7-fe1aa66a78ff",
+        "88ed80cb-5977-453d-a0ea-8abcbbd493cd",
+        "b2d84c54-3b28-40a2-a2d1-a02eddef94f6"
+      ],
+      "per_peer": {
+        "d0b47bd08633385b": {
+          "route_id": "5bbfaf37-5841-48d2-85cb-5d4e2164de9b",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "2c1470fe-4858-49e1-a6f7-fe1aa66a78ff",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "88ed80cb-5977-453d-a0ea-8abcbbd493cd",
+          "answer": "J",
+          "replied": true,
+          "correct": true
+        },
+        "49f3e5971518a064": {
+          "route_id": "b2d84c54-3b28-40a2-a2d1-a02eddef94f6",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        }
+      },
+      "ensemble": {
+        "answer": "J",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 31,
+      "source_id": "3528",
+      "domain": "chemistry",
+      "question_preview": "How many milliliters of 0.250 M KOH does it take to neutralize completely 50.0 mL of 0.150 M H3PO4?",
+      "num_options": 10,
+      "correct_letter": "B",
+      "correct_answer_text": "90.0 mL",
+      "route_ids": [
+        "341542e9-cfea-42a9-ac1d-2e713d944e85",
+        "e9a92a41-2498-4f57-8a96-f1e5db383ac5",
+        "ada3c236-60c6-4b34-9cf6-fe5f0975d562",
+        "37cc5dfd-4c99-4c73-8e62-dc1012b93963"
+      ],
+      "per_peer": {
+        "d0b47bd08633385b": {
+          "route_id": "341542e9-cfea-42a9-ac1d-2e713d944e85",
+          "answer": "B",
+          "replied": true,
+          "correct": true
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "e9a92a41-2498-4f57-8a96-f1e5db383ac5",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "ada3c236-60c6-4b34-9cf6-fe5f0975d562",
+          "answer": "C",
+          "replied": true,
+          "correct": false
+        },
+        "49f3e5971518a064": {
+          "route_id": "37cc5dfd-4c99-4c73-8e62-dc1012b93963",
+          "answer": "B",
+          "replied": true,
+          "correct": true
+        }
+      },
+      "ensemble": {
+        "answer": "B",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 32,
+      "source_id": "10358",
+      "domain": "computer_science",
+      "question_preview": "Which of the following has the greatest potential for compromising a user's personal privacy?",
+      "num_options": 10,
+      "correct_letter": "A",
+      "correct_answer_text": "A group of cookies stored by the user's Web browser",
+      "route_ids": [
+        "26191fef-778c-4198-aa17-222244e31ae5",
+        "179e3531-82a7-425c-b38c-488494a98dd5",
+        "94724dc0-27e5-4789-b9b1-a9e1ba99ba06",
+        "664202d8-2266-4fac-9ad4-0498cfcda06e"
+      ],
+      "per_peer": {
+        "d0b47bd08633385b": {
+          "route_id": "26191fef-778c-4198-aa17-222244e31ae5",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "179e3531-82a7-425c-b38c-488494a98dd5",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "94724dc0-27e5-4789-b9b1-a9e1ba99ba06",
+          "answer": "A",
+          "replied": true,
+          "correct": true
+        },
+        "49f3e5971518a064": {
+          "route_id": "664202d8-2266-4fac-9ad4-0498cfcda06e",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        }
+      },
+      "ensemble": {
+        "answer": "A",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 33,
+      "source_id": "6828",
+      "domain": "economics",
+      "question_preview": "Which of the following is a tool used by the Fed to increase the money supply?",
+      "num_options": 10,
+      "correct_letter": "B",
+      "correct_answer_text": "A lower discount rate.",
+      "route_ids": [
+        "cbdca6c3-4cd1-4bfa-a0b4-e52e6439d201",
+        "3b5752f6-f06b-415d-b11d-7840839bcfd0",
+        "1c3306ad-1174-4972-97de-e10309a135c7",
+        "fbef7852-f2ce-43b9-8923-a58f01a97c87"
+      ],
+      "per_peer": {
+        "d0b47bd08633385b": {
+          "route_id": "cbdca6c3-4cd1-4bfa-a0b4-e52e6439d201",
+          "answer": "B",
+          "replied": true,
+          "correct": true
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "3b5752f6-f06b-415d-b11d-7840839bcfd0",
+          "answer": "B",
+          "replied": true,
+          "correct": true
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "1c3306ad-1174-4972-97de-e10309a135c7",
+          "answer": null,
+          "replied": false,
+          "correct": false
+        },
+        "49f3e5971518a064": {
+          "route_id": "fbef7852-f2ce-43b9-8923-a58f01a97c87",
+          "answer": "B",
+          "replied": true,
+          "correct": true
+        }
+      },
+      "ensemble": {
+        "answer": "B",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 34,
+      "source_id": "11287",
+      "domain": "engineering",
+      "question_preview": "The errors mainly caused by human mistakes are",
+      "num_options": 3,
+      "correct_letter": "A",
+      "correct_answer_text": "gross error.",
+      "route_ids": [
+        "f69ec8ab-4209-4eec-a53a-92e9f233f34a",
+        "002877d3-6957-44f7-9939-c8121e1e533f",
+        "24600b9c-3f59-4b6c-be77-ddd5c4e8371f",
+        "c1fe20d7-545f-4d5b-b88a-515a1851c008"
+      ],
+      "per_peer": {
+        "d0b47bd08633385b": {
+          "route_id": "f69ec8ab-4209-4eec-a53a-92e9f233f34a",
+          "answer": "A",
+          "replied": true,
+          "correct": true
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "002877d3-6957-44f7-9939-c8121e1e533f",
+          "answer": "A",
+          "replied": true,
+          "correct": true
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "24600b9c-3f59-4b6c-be77-ddd5c4e8371f",
+          "answer": "A",
+          "replied": true,
+          "correct": true
+        },
+        "49f3e5971518a064": {
+          "route_id": "c1fe20d7-545f-4d5b-b88a-515a1851c008",
+          "answer": "A",
+          "replied": true,
+          "correct": true
+        }
+      },
+      "ensemble": {
+        "answer": "A",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 35,
+      "source_id": "6003",
+      "domain": "health",
+      "question_preview": "Who discovered the first virus?",
+      "num_options": 10,
+      "correct_letter": "I",
+      "correct_answer_text": "The botanist Dmitri Iwanowsky",
+      "route_ids": [
+        "25ce4162-d5e8-40da-a3ee-b8bdb271c92b",
+        "67d86f9e-7d48-4ee0-be21-66968d81e2e6",
+        "b54f596b-b6f8-4be0-bd64-14e2ef145eec",
+        "360d2c0c-c23c-4bb2-9469-de2034eeb462"
+      ],
+      "per_peer": {
+        "d0b47bd08633385b": {
+          "route_id": "25ce4162-d5e8-40da-a3ee-b8bdb271c92b",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "67d86f9e-7d48-4ee0-be21-66968d81e2e6",
+          "answer": "I",
+          "replied": true,
+          "correct": true
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "b54f596b-b6f8-4be0-bd64-14e2ef145eec",
+          "answer": "I",
+          "replied": true,
+          "correct": true
+        },
+        "49f3e5971518a064": {
+          "route_id": "360d2c0c-c23c-4bb2-9469-de2034eeb462",
+          "answer": "I",
+          "replied": true,
+          "correct": true
+        }
+      },
+      "ensemble": {
+        "answer": "I",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 36,
+      "source_id": "4671",
+      "domain": "history",
+      "question_preview": "The ancient city of Cahokia contained more than _______ and a population of around _______.",
+      "num_options": 10,
+      "correct_letter": "C",
+      "correct_answer_text": "120 earthen mounds; 10,000",
+      "route_ids": [
+        "fa235fc2-87a4-4a72-9c13-7ecbd9c47971",
+        "ae08879b-8536-4d87-9c61-b26b02de7144",
+        "b695bfa3-6a19-4977-8770-90e141245450",
+        "d10c3754-9af6-4532-9ba0-6fd87f6482ab"
+      ],
+      "per_peer": {
+        "d0b47bd08633385b": {
+          "route_id": "fa235fc2-87a4-4a72-9c13-7ecbd9c47971",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "ae08879b-8536-4d87-9c61-b26b02de7144",
+          "answer": "C",
+          "replied": true,
+          "correct": true
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "b695bfa3-6a19-4977-8770-90e141245450",
+          "answer": "C",
+          "replied": true,
+          "correct": true
+        },
+        "49f3e5971518a064": {
+          "route_id": "d10c3754-9af6-4532-9ba0-6fd87f6482ab",
+          "answer": "C",
+          "replied": true,
+          "correct": true
+        }
+      },
+      "ensemble": {
+        "answer": "C",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 37,
+      "source_id": "868",
+      "domain": "law",
+      "question_preview": "A state has recently enacted a statute requiring all prospective voters in state elections who wish to write-in a candid...",
+      "num_options": 10,
+      "correct_letter": "F",
+      "correct_answer_text": "It unreasonably discriminates against write-in candidates for public office.",
+      "route_ids": [
+        "89a70308-b7cb-4fb6-afe7-5ea64adff68d",
+        "89cf2685-892e-4b90-8e41-4bbe0f43740c",
+        "123771a2-e99b-4267-bbd7-decf1213c267",
+        "3973ffb5-6dc2-4444-bedd-ca5ba39de826"
+      ],
+      "per_peer": {
+        "d0b47bd08633385b": {
+          "route_id": "89a70308-b7cb-4fb6-afe7-5ea64adff68d",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "89cf2685-892e-4b90-8e41-4bbe0f43740c",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "123771a2-e99b-4267-bbd7-decf1213c267",
+          "answer": "A",
+          "replied": true,
+          "correct": false
+        },
+        "49f3e5971518a064": {
+          "route_id": "3973ffb5-6dc2-4444-bedd-ca5ba39de826",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        }
+      },
+      "ensemble": {
+        "answer": "A",
+        "contested": false,
+        "correct": false
+      }
+    },
+    {
+      "index": 38,
+      "source_id": "7689",
+      "domain": "math",
+      "question_preview": "Statement 1 | Any set of two vectors in R^2 is linearly independent. Statement 2 | If V = span(v1, ... , vk) and {v1, .....",
+      "num_options": 10,
+      "correct_letter": "C",
+      "correct_answer_text": "False, True",
+      "route_ids": [
+        "68bbd73a-081e-40aa-8e8f-b42064790111",
+        "c20f4745-c78a-42be-a4cf-0e858db7fcc7",
+        "e35f9696-46d7-403e-abe3-0ff594cb3d26",
+        "090f6aec-1762-4550-b8e1-3f576c2a57d9"
+      ],
+      "per_peer": {
+        "d0b47bd08633385b": {
+          "route_id": "68bbd73a-081e-40aa-8e8f-b42064790111",
+          "answer": "C",
+          "replied": true,
+          "correct": true
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "c20f4745-c78a-42be-a4cf-0e858db7fcc7",
+          "answer": "C",
+          "replied": true,
+          "correct": true
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "e35f9696-46d7-403e-abe3-0ff594cb3d26",
+          "answer": "E",
+          "replied": true,
+          "correct": false
+        },
+        "49f3e5971518a064": {
+          "route_id": "090f6aec-1762-4550-b8e1-3f576c2a57d9",
+          "answer": "C",
+          "replied": true,
+          "correct": true
+        }
+      },
+      "ensemble": {
+        "answer": "C",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 39,
+      "source_id": "5061",
+      "domain": "other",
+      "question_preview": "As the single-person public relations staff of a public transit agency, you are tasked with increasing the number of peo...",
+      "num_options": 3,
+      "correct_letter": "B",
+      "correct_answer_text": "Consider how riding the bus could similarly affect all of the target audiences.",
+      "route_ids": [
+        "e11c4442-0ad2-4909-97ce-86af5a9553a0",
+        "1837126d-bf1e-4acc-a960-7f07f88d04c1",
+        "c9ee29aa-6d1a-45c0-b28f-42bc361b7ed4",
+        "3eab853c-adf4-404f-8e90-7013005f0648"
+      ],
+      "per_peer": {
+        "d0b47bd08633385b": {
+          "route_id": "e11c4442-0ad2-4909-97ce-86af5a9553a0",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "1837126d-bf1e-4acc-a960-7f07f88d04c1",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "c9ee29aa-6d1a-45c0-b28f-42bc361b7ed4",
+          "answer": "A",
+          "replied": true,
+          "correct": false
+        },
+        "49f3e5971518a064": {
+          "route_id": "3eab853c-adf4-404f-8e90-7013005f0648",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        }
+      },
+      "ensemble": {
+        "answer": "A",
+        "contested": false,
+        "correct": false
+      }
+    },
+    {
+      "index": 40,
+      "source_id": "10776",
+      "domain": "philosophy",
+      "question_preview": " Which of the following propositions is an immediate (one-step) consequence in PL of the given premises?\nU ⊃ W\nW ⊃ (X ≡ ...",
+      "num_options": 10,
+      "correct_letter": "I",
+      "correct_answer_text": "~(X ≡ ~Y)",
+      "route_ids": [
+        "2c2af195-5dee-48b7-92f8-ddd2bc7cba16",
+        "f50e5d12-e1d6-4095-9c94-e9199289edc8",
+        "615e3aeb-ac36-4e51-84c9-410e95867bf6",
+        "f58f457d-bebd-4cd1-89d5-7713d7118888"
+      ],
+      "per_peer": {
+        "d0b47bd08633385b": {
+          "route_id": "2c2af195-5dee-48b7-92f8-ddd2bc7cba16",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "f50e5d12-e1d6-4095-9c94-e9199289edc8",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "615e3aeb-ac36-4e51-84c9-410e95867bf6",
+          "answer": "B",
+          "replied": true,
+          "correct": false
+        },
+        "49f3e5971518a064": {
+          "route_id": "f58f457d-bebd-4cd1-89d5-7713d7118888",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        }
+      },
+      "ensemble": {
+        "answer": "B",
+        "contested": false,
+        "correct": false
+      }
+    },
+    {
+      "index": 41,
+      "source_id": "9046",
+      "domain": "physics",
+      "question_preview": "What about asteroids makes them stand out in sky surveys searching for them?",
+      "num_options": 9,
+      "correct_letter": "D",
+      "correct_answer_text": "Asteroids have substantial motion relative to the background stars",
+      "route_ids": [
+        "85e708a0-ae15-4e9f-884d-fd4e9ba94ac7",
+        "c1f88880-b45d-4739-af05-abcec1cfccdb",
+        "3b6d28ca-2aaa-4520-9bb9-9077e87198d3",
+        "1b25d979-065a-4e2e-893a-3670ec4aa9d8"
+      ],
+      "per_peer": {
+        "d0b47bd08633385b": {
+          "route_id": "85e708a0-ae15-4e9f-884d-fd4e9ba94ac7",
+          "answer": "D",
+          "replied": true,
+          "correct": true
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "c1f88880-b45d-4739-af05-abcec1cfccdb",
+          "answer": "D",
+          "replied": true,
+          "correct": true
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "3b6d28ca-2aaa-4520-9bb9-9077e87198d3",
+          "answer": "D",
+          "replied": true,
+          "correct": true
+        },
+        "49f3e5971518a064": {
+          "route_id": "1b25d979-065a-4e2e-893a-3670ec4aa9d8",
+          "answer": "D",
+          "replied": true,
+          "correct": true
+        }
+      },
+      "ensemble": {
+        "answer": "D",
+        "contested": false,
+        "correct": true
+      }
+    },
+    {
+      "index": 42,
+      "source_id": "1988",
+      "domain": "psychology",
+      "question_preview": "During the second stage of Kohlberg’s preconventional level of moral development, children obey rules because:",
+      "num_options": 10,
+      "correct_letter": "E",
+      "correct_answer_text": "doing so helps them satisfy their personal needs.",
+      "route_ids": [
+        "36f5d1e5-fc6c-4375-8466-c165a71a860b",
+        "68c61842-02ac-49c7-9d08-ea87713c7cee",
+        "d2b50dea-6e46-48de-a9a8-fed42231e3e6",
+        "d529a4e3-979d-4465-90ef-3e3ef4b499fc"
+      ],
+      "per_peer": {
+        "d0b47bd08633385b": {
+          "route_id": "36f5d1e5-fc6c-4375-8466-c165a71a860b",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "88cbf6bdd6f74587": {
+          "route_id": "68c61842-02ac-49c7-9d08-ea87713c7cee",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "d2b50dea-6e46-48de-a9a8-fed42231e3e6",
+          "answer": "G",
+          "replied": true,
+          "correct": false
+        },
+        "49f3e5971518a064": {
+          "route_id": "d529a4e3-979d-4465-90ef-3e3ef4b499fc",
+          "answer": null,
+          "replied": true,
+          "correct": false
+        }
+      },
+      "ensemble": {
+        "answer": "G",
+        "contested": false,
+        "correct": false
+      }
+    }
+  ],
+  "truth_always_note": "Pre-canonical relay diagnostic run. Canonical 5-peer cooperative substrate run requires lan_addresses population and verified peer identity mapping."
+}

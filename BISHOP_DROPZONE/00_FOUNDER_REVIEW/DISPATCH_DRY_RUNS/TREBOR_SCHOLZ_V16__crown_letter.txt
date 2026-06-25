@@ -1,0 +1,40 @@
+========================================================
+BATTERY DISPATCH DRY-RUN — BP084 · Sonnet 4.6
+========================================================
+PIECE:    Crown Letter — Trebor Scholz (Sphinx V16)
+PIECE_ID: TREBOR_SCHOLZ_V16
+PLATFORM: crown_letter (Gmail → browser-fallback)
+DRY_RUN:  TRUE — NO SIDE EFFECTS
+========================================================
+
+SOURCE FILE:
+  BISHOP_DROPZONE/00_FOUNDER_REVIEW/CROWN_LETTER_TREBOR_SCHOLZ_V16_SPHINX_B126.md
+
+FRONTMATTER STATE:
+  name:            "Crown Letter — Trebor Scholz (Sphinx V16)"
+  type:            crown_letter
+  recipient:       "Trebor Scholz"
+  ratificationDate: B126
+  ⚠ No `status: founder-ratify-pending` field — but type: crown_letter means BP078 applies
+
+CANONICAL VERSION: V16 (SPHINX — B126). Earlier version: V13 also on disk.
+  Knight recommends V16 as canonical send version.
+
+NOTE: Wave 1 yoke spec cites "Trebor Scholz Crown Letter (V13)" but V16 is latest 
+  ratified. Founder should confirm V16 is correct send version (V13 superseded by V16).
+
+CREDENTIAL STATE: Gmail OAuth NOT SET → BROWSER-FALLBACK
+
+WHAT WOULD HAPPEN ON FIRE:
+  To:      Trebor Scholz (contact via Platform Cooperativism Consortium / New School)
+  Subject: Crown Letter — Sphinx Project co-founding invitation
+  Body:    V16 full text (invites co-founding of Sphinx Project federation)
+  Method:  Gmail browser compose (full body paste required)
+
+TEMPLATE VARIABLE CHECK:
+  ✅ No unfilled {{PLACEHOLDER}} variables detected
+
+STATUS: 🟢 GREEN — Letter exists, clean, ratified B126. Gmail fallback ready.
+  Minor: Confirm V16 vs V13 version preference with Founder.
+DRY-RUN RESULT: PASS (no live calls made)
+========================================================

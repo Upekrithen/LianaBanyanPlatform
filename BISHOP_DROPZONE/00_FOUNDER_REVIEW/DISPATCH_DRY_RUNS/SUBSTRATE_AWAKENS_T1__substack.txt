@@ -1,0 +1,32 @@
+========================================================
+BATTERY DISPATCH DRY-RUN — BP084 · Sonnet 4.6
+========================================================
+PIECE:    Battery Dispatch T-1 Reminder · Substrate Awakens
+PIECE_ID: SUBSTRATE_AWAKENS_T1_REMINDER
+PLATFORM: substack (FounderDenken) — day-before reminder
+DRY_RUN:  TRUE — NO SIDE EFFECTS
+========================================================
+
+SOURCE FILE:
+  BISHOP_DROPZONE/00_FOUNDER_REVIEW/SUBSTRATE_AWAKENS_MARKETING_WAVE/BATTERY_DISPATCH_SUBSTRATE_AWAKENS_T1.md
+
+FRONTMATTER STATE:
+  Status: DRAFT · Awaiting Founder ratify ✅
+  Subject: "Tomorrow is Saturday. Substrate Awakens."
+  "Saturday-ish" framing: ✅ PRESENT
+
+WHAT WOULD HAPPEN ON FIRE:
+  T1 = day before Saturday ship.
+  Browser-fallback: opens founderdenken.substack.com new post editor
+  Subject line: "Tomorrow is Saturday. Substrate Awakens."
+  Founder pastes body + sends as free newsletter email
+
+TIMING DEPENDENCY:
+  Must fire AFTER T7 anchor (Substack post exists) and T5 (HN/Reddit live).
+  T1 is the reminder: "Tomorrow we ship."
+
+CREDENTIAL STATE: SUBSTACK_API_KEY NOT SET → BROWSER-FALLBACK
+
+STATUS: 🟢 GREEN — Content ready; standard browser-fallback path
+DRY-RUN RESULT: PASS (no live calls made)
+========================================================

@@ -1,0 +1,197 @@
+{
+  "run_type": "5-peer-relay-orchestrator",
+  "canonical": true,
+  "topology": "Supabase relay_routes table dispatch -- 4 LAN-adjacent + 1 real-WAN-hop (Son)",
+  "dispatch_method": "wan-relay-route (no direct IP routing)",
+  "model_families": "gemma4:12b (88cbf6bd+d0b47bd0 FULL) + gemma2:9b (c532e740+49f3e597 CORE) + llama3.3:70b (cb4ef450 ULTRA) — TIERED BY CAPACITY · Ah Hayelped BP091",
+  "session_id": "relay-2026-06-22T22-55-54",
+  "run_timestamp": "2026-06-22T23:10:57.303Z",
+  "mode": "smoke",
+  "routing": "tier-aware",
+  "flagship_tier": "mixed-tiered",
+  "trial_id": null,
+  "pass": null,
+  "anthropic_api_skipped": true,
+  "question_count": 1,
+  "peer_count": 5,
+  "son_peer_id": null,
+  "fleet_composition": {
+    "peers": [
+      {
+        "peer_id": "88cbf6bd",
+        "ramTier": "FULL",
+        "ollamaModel": "gemma4:12b",
+        "questions_routed": 1,
+        "questions_answered": 0,
+        "questions_correct": 0,
+        "accuracy_pct": null
+      },
+      {
+        "peer_id": "c532e740",
+        "ramTier": "CORE",
+        "ollamaModel": "gemma2:9b",
+        "questions_routed": 1,
+        "questions_answered": 0,
+        "questions_correct": 0,
+        "accuracy_pct": null
+      },
+      {
+        "peer_id": "d0b47bd0",
+        "ramTier": "FULL",
+        "ollamaModel": "gemma4:12b",
+        "questions_routed": 1,
+        "questions_answered": 0,
+        "questions_correct": 0,
+        "accuracy_pct": null
+      },
+      {
+        "peer_id": "cb4ef450",
+        "ramTier": "ULTRA",
+        "ollamaModel": "llama3.3:70b",
+        "questions_routed": 1,
+        "questions_answered": 0,
+        "questions_correct": 0,
+        "accuracy_pct": null
+      },
+      {
+        "peer_id": "49f3e597",
+        "ramTier": "CORE",
+        "ollamaModel": "gemma2:9b",
+        "questions_routed": 1,
+        "questions_answered": 0,
+        "questions_correct": 0,
+        "accuracy_pct": null
+      }
+    ],
+    "per_tier_accuracy": {
+      "ULTRA": "0/0 (0.0%)",
+      "FULL": "0/0 (0.0%)",
+      "CORE": "0/0 (0.0%)"
+    },
+    "fleet_ensemble_accuracy": "0/1 (0.0%)",
+    "model_families": "gemma4:12b (88cbf6bd+d0b47bd0 FULL) + gemma2:9b (c532e740+49f3e597 CORE) + llama3.3:70b (cb4ef450 ULTRA) — TIERED BY CAPACITY · Ah Hayelped BP091",
+    "tier_aware_routing": true,
+    "ah_hayelped_bp091": true
+  },
+  "peers": {
+    "88cbf6bdd6f74587": {
+      "tier": "base",
+      "lan_addresses": null,
+      "last_seen_at": "2026-06-22T22:55:50.666+00:00",
+      "answered": 0,
+      "correct": 0,
+      "is_son": false
+    },
+    "c532e74069e137bc": {
+      "tier": "base",
+      "lan_addresses": null,
+      "last_seen_at": "2026-06-22T22:55:43.426+00:00",
+      "answered": 0,
+      "correct": 0,
+      "is_son": false
+    },
+    "d0b47bd08633385b": {
+      "tier": "base",
+      "lan_addresses": null,
+      "last_seen_at": "2026-06-22T22:55:39.469+00:00",
+      "answered": 0,
+      "correct": 0,
+      "is_son": false
+    },
+    "cb4ef450cc4a18c3": {
+      "tier": "base",
+      "lan_addresses": null,
+      "last_seen_at": "2026-06-22T22:55:37.172+00:00",
+      "answered": 0,
+      "correct": 0,
+      "is_son": false
+    },
+    "49f3e5971518a064": {
+      "tier": "base",
+      "lan_addresses": null,
+      "last_seen_at": "2026-06-22T22:55:12.792+00:00",
+      "answered": 0,
+      "correct": 0,
+      "is_son": false
+    }
+  },
+  "staggered_phase_results": null,
+  "per_domain_timeout_config": null,
+  "escalation_summary": {
+    "andon_threshold_pct": 15,
+    "andon_escalate": "none",
+    "total_escalation_fired": 0,
+    "escalation_fired_pct": 0
+  },
+  "ensemble_score": {
+    "correct": 0,
+    "total": 1,
+    "pct": 0,
+    "contested": 1
+  },
+  "questions": [
+    {
+      "index": 1,
+      "source_id": "7694",
+      "question_preview": "Statement 1 | There exists a free abelian group of every positive integer rank. Statement 2 | A finitely generated abeli...",
+      "num_options": 10,
+      "correct_letter": "J",
+      "correct_answer_text": "True, True",
+      "allotted_timeout_s": 900,
+      "route_ids": [
+        "19e23cf1-42f4-4c01-abf7-a44d2b0cb73d",
+        "418a4e05-be19-4138-8d24-5b3acab7f246",
+        "0317ea19-02fc-4576-86a8-51ad93dc02cb",
+        "b55590dc-98e5-4d25-b008-3ba48f192db7",
+        "ef6d3d57-5cc8-47df-949c-58ab7477347c"
+      ],
+      "escalation_fired": false,
+      "escalation_peer_count": 0,
+      "escalation_route_ids": [],
+      "final_answer_source": "no_answers",
+      "per_peer": {
+        "88cbf6bdd6f74587": {
+          "route_id": "19e23cf1-42f4-4c01-abf7-a44d2b0cb73d",
+          "escalation_route_id": null,
+          "answer": null,
+          "replied": false,
+          "correct": false
+        },
+        "c532e74069e137bc": {
+          "route_id": "418a4e05-be19-4138-8d24-5b3acab7f246",
+          "escalation_route_id": null,
+          "answer": null,
+          "replied": false,
+          "correct": false
+        },
+        "d0b47bd08633385b": {
+          "route_id": "0317ea19-02fc-4576-86a8-51ad93dc02cb",
+          "escalation_route_id": null,
+          "answer": null,
+          "replied": false,
+          "correct": false
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "b55590dc-98e5-4d25-b008-3ba48f192db7",
+          "escalation_route_id": null,
+          "answer": null,
+          "replied": true,
+          "correct": false
+        },
+        "49f3e5971518a064": {
+          "route_id": "ef6d3d57-5cc8-47df-949c-58ab7477347c",
+          "escalation_route_id": null,
+          "answer": null,
+          "replied": false,
+          "correct": false
+        }
+      },
+      "ensemble": {
+        "answer": null,
+        "contested": true,
+        "correct": false
+      }
+    }
+  ],
+  "truth_always_note": "BP091 Ah Hayelped tiered cooperative substrate · per-peer-tier-aware routing · llama3.3:70b ULTRA + gemma4:12b FULL + gemma2:9b CORE · fleet_composition block is canonical per-peer receipt."
+}

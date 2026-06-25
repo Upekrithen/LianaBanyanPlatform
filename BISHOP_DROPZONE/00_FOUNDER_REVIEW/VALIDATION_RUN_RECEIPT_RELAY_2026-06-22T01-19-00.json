@@ -1,0 +1,108 @@
+{
+  "run_type": "5-peer-relay-orchestrator",
+  "canonical": false,
+  "topology": "Supabase relay_routes table dispatch -- 4 LAN-adjacent + 1 real-WAN-hop (Son)",
+  "dispatch_method": "wan-relay-route (no direct IP routing)",
+  "model_families": "gemma4:12b (M0, M1, M2, M3) x qwen2.5:7b (Son) -- CROSS-VENDOR HETEROGENEOUS",
+  "session_id": "relay-2026-06-22T01-18-13",
+  "run_timestamp": "2026-06-22T01:19:00.490Z",
+  "mode": "smoke",
+  "routing": "round-robin",
+  "flagship_tier": "gemma",
+  "trial_id": "TRIAL_02_PREVIEW_SMOKE_1Q_HARD",
+  "pass": "SMOKE",
+  "anthropic_api_skipped": true,
+  "question_count": 1,
+  "peer_count": 4,
+  "son_peer_id": null,
+  "peers": {
+    "88cbf6bdd6f74587": {
+      "tier": "base",
+      "lan_addresses": null,
+      "last_seen_at": "2026-06-22T01:18:00.004+00:00",
+      "answered": 1,
+      "correct": 1,
+      "is_son": false
+    },
+    "cb4ef450cc4a18c3": {
+      "tier": "base",
+      "lan_addresses": null,
+      "last_seen_at": "2026-06-22T01:17:44.534+00:00",
+      "answered": 1,
+      "correct": 1,
+      "is_son": false
+    },
+    "49f3e5971518a064": {
+      "tier": "base",
+      "lan_addresses": null,
+      "last_seen_at": "2026-06-22T01:17:22.677+00:00",
+      "answered": 1,
+      "correct": 1,
+      "is_son": false
+    },
+    "d0b47bd08633385b": {
+      "tier": "base",
+      "lan_addresses": null,
+      "last_seen_at": "2026-06-22T01:17:18.58+00:00",
+      "answered": 1,
+      "correct": 1,
+      "is_son": false
+    }
+  },
+  "staggered_phase_results": null,
+  "ensemble_score": {
+    "correct": 1,
+    "total": 1,
+    "pct": 100,
+    "contested": 0
+  },
+  "questions": [
+    {
+      "index": 1,
+      "source_id": "2804",
+      "domain": "biology",
+      "question_preview": "Which of the following would most likely provide examples of mitotic cell divisions?",
+      "num_options": 8,
+      "correct_letter": "B",
+      "correct_answer_text": "longitudinal section of a shoot tip",
+      "route_ids": [
+        "09842945-14e8-477b-bcdf-34a5958c5684",
+        "424f55f4-2027-4111-9e82-8b4b3024ae9a",
+        "5f6dcaf2-6187-4b64-b21e-acb93d049bf4",
+        "4b39c80c-6349-4ad7-9260-186a76fbfeb0"
+      ],
+      "per_peer": {
+        "88cbf6bdd6f74587": {
+          "route_id": "09842945-14e8-477b-bcdf-34a5958c5684",
+          "answer": "B",
+          "replied": true,
+          "correct": true
+        },
+        "cb4ef450cc4a18c3": {
+          "route_id": "424f55f4-2027-4111-9e82-8b4b3024ae9a",
+          "answer": "B",
+          "replied": true,
+          "correct": true
+        },
+        "49f3e5971518a064": {
+          "route_id": "5f6dcaf2-6187-4b64-b21e-acb93d049bf4",
+          "answer": "B",
+          "replied": true,
+          "correct": true
+        },
+        "d0b47bd08633385b": {
+          "route_id": "4b39c80c-6349-4ad7-9260-186a76fbfeb0",
+          "answer": "B",
+          "replied": true,
+          "correct": true
+        }
+      },
+      "ensemble": {
+        "answer": "B",
+        "contested": false,
+        "correct": true
+      }
+    }
+  ],
+  "truth_always_note": "Pre-canonical relay diagnostic run. Canonical 5-peer cooperative substrate run requires lan_addresses population and verified peer identity mapping."
+}
