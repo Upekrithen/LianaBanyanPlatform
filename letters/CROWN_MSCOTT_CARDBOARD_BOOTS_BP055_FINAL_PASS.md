@@ -29,7 +29,7 @@ cephas_intro: "This piece opens the civic transparency file on a specific failur
 <!-- V2 ships when the Kimmel Pedestal Vote gate clears.          -->
 <!-- V2 includes: Patent Prosecution Defense Fund disclosure       -->
 <!--   (defused: "it is not the ask"), Board Chair Crown offer,   -->
-<!--   canonical numbers (2,270 innovations · 228 CJ · 21 patents)-->
+<!--   canonical numbers (2,270 innovations · 228 CJ · 22 patents)-->
 <!--   phone number in sig, structured numbered sections 1-10.    -->
 <!--                                                               -->
 <!-- FOUNDER: Confirm V2 ships OR revert to V1 (Cardboard Boots   -->
@@ -55,9 +55,9 @@ I don't have money. I may have something more valuable.
 
 ## 2. What's Already on the Table (Plain)
 
-As of today we have **21 USPTO provisional patents filed**, with the most recent (Provs 20 and 21) lodged in May and June 2026. In controlled benchmarking our context-persistence architecture (the Romulator 9000, Prov 13, April 2026) measured **92.7% accuracy against 3.6%** for the same model without the preload, at comparable marginal cost. For a 200-person nonprofit running AI agents at production scale, that delta is hundreds of thousands of dollars a year -- and better work.
+As of today we have **22 USPTO provisional patents filed (most recent: PROV_22, Application 64/095,518)**, with the most recent (Provs 21 and 22) lodged in May and June 2026. In controlled benchmarking our context-persistence architecture (the Romulator 9000, Prov 13, April 2026) measured **92.7% accuracy against 3.6%** for the same model without the preload, at comparable marginal cost. For a 200-person nonprofit running AI agents at production scale, that delta is hundreds of thousands of dollars a year -- and better work.
 
-Under our **Cooperative Defensive Patent Pledge** -- signed into the operating agreement, not aspirational -- that capability is given permanently to a commons, free for every nonprofit, cooperative, and academic institution with an IRS-verified EIN. No application. No committee. No gatekeeping. Every organization your foundation has ever funded is eligible on day one. **Eighty percent of the 21-patent portfolio is pledged permanently into the commons.**
+Under our **Cooperative Defensive Patent Pledge** -- signed into the operating agreement, not aspirational -- that capability is given permanently to a commons, free for every nonprofit, cooperative, and academic institution with an IRS-verified EIN. No application. No committee. No gatekeeping. Every organization your foundation has ever funded is eligible on day one. **Eighty percent of the 22-patent portfolio is pledged permanently into the commons.**
 
 That is what I bring to your table, alongside the ask.
 
@@ -103,7 +103,7 @@ Our economics show 500 members in any locale reach break-even, around 1,000 sust
 
 ## 7. The Walkthrough
 
-If you'd like to see the architecture before making any introductions, there's a walkthrough at **lianabanyan.com/RedCarpet** that will recognize your email. No scheduling, no pitch deck, no salesman. The same substrate is available as **MnemosyneC v0.1.25** -- a member-owned AI memory layer, AGPL Free Forever, no ads, no strings -- downloadable at **cephas.lianabanyan.com**.
+If you'd like to see the architecture before making any introductions, there's a walkthrough at **lianabanyan.com/RedCarpet** that will recognize your email. No scheduling, no pitch deck, no salesman. The same substrate is available as **MnemosyneC v0.7.1** -- a member-owned AI memory layer, SSPL v1 + Pledge #2260, no ads, no strings -- downloadable at **mnemosynec.org/download**.
 
 ---
 
@@ -137,9 +137,9 @@ With shared purpose,
 Founder & General Manager · Liana Banyan Corporation
 U.S. Army National Guard (Ret.) · Father of 8
 Founder@LianaBanyan.com · 406-578-1232 · lianabanyan.com
-MnemosyneC v0.1.25 download: cephas.lianabanyan.com
+MnemosyneC v0.7.1 download: mnemosynec.org/download
 
-*AGPL Free Forever · Cooperative Defensive Patent Pledge · 21 USPTO Provisionals · 80% Commons-Pledged*
+*SSPL v1 + Pledge #2260 · Cooperative Defensive Patent Pledge · 22 USPTO Provisionals · 85% Commons-Pledged*
 
 P.S. Naturally I'll move forward either way, but now I have asked.
 *"I bargained with Life for a penny..."* -- Jessie B. Rittenhouse.

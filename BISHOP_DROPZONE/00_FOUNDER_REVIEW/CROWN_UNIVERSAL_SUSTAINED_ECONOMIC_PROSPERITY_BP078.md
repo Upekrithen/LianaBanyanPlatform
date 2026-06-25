@@ -1,6 +1,6 @@
 ---
 cadence_position: 4 (after AOC Day 1, Scott Day 4, Six Steps Day 7)
-canon_numbers: claims_2473_posterity | innovations_2270_outward | provisionals_21
+canon_numbers: claims_2473_posterity | innovations_2270_outward | provisionals_22
 promoted_from: LianaBanyanOFFSITE/Working Folder/UPDATED A Considered Approach to Sustained Universal Economic Prosperity.docx
 promoted_bp: BP078
 source_date: 2025-12-18
@@ -35,7 +35,7 @@ medium_tags:
   - economic equity
 
 social_card: >
-  83.3% creator-keep. Cost+20% platform margin. $5/year. 21 provisional
+  83.3% creator-keep. Cost+20% platform margin. $5/year. 22 provisional
   patents. SSPL license. This is not a pitch deck. It is a working model.
   [Liana Banyan / MnemosyneC]
 ---
@@ -78,7 +78,7 @@ solves traditional market failures while maintaining positive cash flow
 and sustainable growth. The model is validated through mathematical
 proof, empirical case studies, and active implementation.
 
-The theoretical framework presented in this paper is not prospective. It describes the economic architecture of a system currently under active development: MnemosyneC, the cooperative AI tuning and optimization platform operating under the Server Side Public License with a Defensive Patent Pledge, and RoseBush, the peer mesh substrate through which MnemosyneC distributes inference across cooperative nodes. As of the date of this paper, 21 United States provisional patent filings cover the core mechanisms of cooperative platform economics, creator compensation structures, session-continuity architecture, and mesh-distributed inference. This paper provides the theoretical scaffolding from which those filings were derived. Readers who encounter the claim that cooperative AI economics is aspirational are invited to review the filing dates. The system described here is not waiting for policy to catch up. The policy argument is waiting for the public to notice what has already been built.
+The theoretical framework presented in this paper is not prospective. It describes the economic architecture of a system currently under active development: MnemosyneC, the cooperative AI tuning and optimization platform operating under the Server Side Public License with a Defensive Patent Pledge, and RoseBush, the peer mesh substrate through which MnemosyneC distributes inference across cooperative nodes. As of the date of this paper, 22 USPTO provisional patent filings (most recent: PROV_22, Application 64/095,518) cover the core mechanisms of cooperative platform economics, creator compensation structures, session-continuity architecture, and mesh-distributed inference. This paper provides the theoretical scaffolding from which those filings were derived. Readers who encounter the claim that cooperative AI economics is aspirational are invited to review the filing dates. The system described here is not waiting for policy to catch up. The policy argument is waiting for the public to notice what has already been built.
 
 ------------------------------------------------------------------------
 
@@ -1189,10 +1189,9 @@ increase ✓ **Property**: Accessibility improvement ✓
 
 Attribution chains preserve incentive alignment:
 
-- Success distributions flow backward through genealogy
-
+- Success distributions flow proportionally across all medallion-holders, weighted by generation and contribution record.
+- Benefit scales with active participation in the cooperative's economic activity, not in proportion to who joined first or who recruited whom.
 - Generational multipliers prevent infinite distribution
-
 - Result: Aligned incentives across all participants
 
 Network effect dominance:
