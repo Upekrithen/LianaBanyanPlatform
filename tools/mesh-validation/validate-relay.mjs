@@ -526,33 +526,60 @@ function classify_domain(domain) {
 }
 
 /**
- * fetch_unfair_advantage_bundle: returns domain-specific priming context string.
- * Stub returns static primers per family.
- * Full substrate_reader wire-in is BATCHECK -- this stub returns fixed priming.
+ * fetch_unfair_advantage_bundle: returns a per-tier dict of differentiated priming strings.
+ * Each tier receives a distinct reasoning scaffold to maximise mesh diversity.
+ * BP094 Session 11: returns { ultra: string, full: string, core: string }
  */
 function fetch_unfair_advantage_bundle(domainFamily) {
   const PRIMERS = {
-    stem_hard: 'Apply rigorous step-by-step reasoning. Eliminate wrong answers by dimensional analysis and boundary checks.',
-    life_science: 'Apply mechanistic biological reasoning. Recall cellular and molecular pathways before selecting.',
-    business: 'Apply economic first principles. Consider opportunity cost and equilibrium before selecting.',
-    humanities: 'Apply textual and historical reasoning. Consider definitional precision before selecting.',
-    general: 'Apply careful elimination reasoning. Rule out clearly wrong answers first.',
+    business: {
+      ultra: 'Apply economic first principles. Consider opportunity cost and equilibrium before selecting.',
+      full:  'Compare answer choices as competing market hypotheses; which best matches established regulatory frameworks?',
+      core:  'Eliminate clearly wrong options first. Look for absolutes, contradictions, or domain-incongruent terms in distractors.',
+    },
+    life_science: {
+      ultra: 'Apply mechanistic biological reasoning. Recall cellular and molecular pathways before selecting.',
+      full:  'Map answer choices to specific organelles, processes, or taxonomic levels; which fits the described mechanism?',
+      core:  'Eliminate answers that contradict basic cell biology or introduce incorrect taxonomic terms.',
+    },
+    stem_hard: {
+      ultra: 'Apply first-principles mathematical or physical reasoning. Derive before selecting.',
+      full:  'Map answer choices to known theorems or formulas; which best fits the given constraints?',
+      core:  'Eliminate options with dimensional errors, sign errors, or order-of-magnitude implausibility.',
+    },
+    humanities: {
+      ultra: 'Ground your reasoning in primary sources and historical causality before selecting.',
+      full:  'Compare answer choices as competing historical or literary interpretations; which has strongest textual support?',
+      core:  'Eliminate anachronisms, incorrect attributions, or options mixing unrelated movements or periods.',
+    },
+    general: {
+      ultra: 'Reason from first principles before selecting.',
+      full:  'Compare each answer choice systematically against the question core requirement.',
+      core:  'Eliminate obviously incorrect or internally contradictory options first.',
+    },
   };
-  return PRIMERS[domainFamily] ?? '';
+  return PRIMERS[domainFamily] ?? PRIMERS.general;
 }
 
 /**
- * inject_substrate_prime: prepends the priming bundle into each peer payload context field.
- * Mutates the payloads array in place, returning the count of tokens injected.
+ * inject_substrate_prime: sets per-tier substrate_prime on each payload using peerTierMap.
+ * Each peer receives the priming string for its specific tier (ultra/full/core).
+ * BP094 Session 11: bundle is a per-tier dict; peerTierMap maps full peer_id to tier label.
+ * Returns total character count summed across all injected payloads.
  */
-function inject_substrate_prime(payloads, bundle) {
+function inject_substrate_prime(payloads, bundle, peerTierMap) {
   if (!bundle) return 0;
+  let totalTokens = 0;
   for (const payload of payloads) {
     if (payload && payload.payload_json) {
-      payload.payload_json.substrate_prime = bundle;
+      const tier = (peerTierMap && peerTierMap[payload.target_peer_id]) ?? 'core';
+      const tierKey = (tier === 'ultra' || tier === 'full' || tier === 'core') ? tier : 'core';
+      const primerStr = bundle[tierKey] ?? bundle.core ?? '';
+      payload.payload_json.substrate_prime = primerStr;
+      totalTokens += primerStr.length;
     }
   }
-  return bundle.length;
+  return totalTokens;
 }
 
 // ─── Console Formatting ──────────────────────────────────────────────────────
@@ -985,13 +1012,15 @@ async function main() {
       if (peerRouted[p.peer_id] !== undefined) peerRouted[p.peer_id]++;
     }
 
-    // ── MOUNTAIN 1 Substrate Priming (BP094 Session 9) ───────────────────────
-    // Classify domain, fetch unfair advantage bundle, prepare for injection.
-    // Must run BEFORE routeInserts so bundle is included in each peer payload.
+    // ── MOUNTAIN 1 Substrate Priming (BP094 Session 11) ─────────────────────
+    // Classify domain, fetch per-tier differentiated bundle; inject distinct primer per tier.
+    // Must run BEFORE routeInserts so substrate_prime is included in each peer payload.
     const m1DomainFamily = classify_domain(q.domain);
     const m1Bundle = fetch_unfair_advantage_bundle(m1DomainFamily);
-    // Payloads are assembled inline below; injection is done via substrate_prime field.
-    console.log(`  [MOUNTAIN1] domain=${m1DomainFamily} unfair_bundle=${m1Bundle.length} tokens primed`);
+    const m1UltraTokens = m1Bundle.ultra?.length ?? 0;
+    const m1FullTokens  = m1Bundle.full?.length  ?? 0;
+    const m1CoreTokens  = m1Bundle.core?.length  ?? 0;
+    console.log(`  [MOUNTAIN1] domain=${m1DomainFamily} primed - ultra:${m1UltraTokens} tokens, full:${m1FullTokens} tokens, core:${m1CoreTokens} tokens`);
 
     // INSERT one relay_route per peer (all concurrently)
     // MAMBA-delta: include wire_format field in payload when hex-mcode requested
@@ -1008,16 +1037,15 @@ async function main() {
         domain: q.domain,
         session_id: sessionId,
         plow_max_iterations: plowMaxIterations,
-        allotted_timeout_ms: qTimeoutMs,           // BP090: for peer-side 80% threshold detection
-        substrate_prime: m1Bundle,                  // MOUNTAIN1: unfair advantage priming context
+        allotted_timeout_ms: qTimeoutMs,             // BP090: for peer-side 80% threshold detection
+        peer_tier: peerTierMap[p.peer_id] ?? 'core', // BP094 Session 11: tier label carried in payload
       },
       status: 'pending',
       session_id: sessionId,
       ttl_seconds: qTimeoutSec + 60,
     }));
-    // inject_substrate_prime is a no-op here since substrate_prime is already set inline above,
-    // but we call it to log the injection count and maintain the canonical call contract.
-    inject_substrate_prime(routePayloads, m1Bundle);
+    // inject_substrate_prime sets tier-specific substrate_prime on each payload via peerTierMap.
+    inject_substrate_prime(routePayloads, m1Bundle, peerTierMap);
     const routeInserts = routePayloads.map(payload => insertRoute(SUPABASE_URL, SERVICE_KEY, payload));
 
     let insertedRoutes;
