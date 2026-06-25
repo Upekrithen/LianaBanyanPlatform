@@ -1,5 +1,17 @@
 {{- define "main" }}
 {{/* Tower of Peace — v0.4.4 · BP084 */}}
+<!-- V2 DESIGN TOKENS · BP093 · forward-compatible only, does not override existing styles -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300..700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --font-body: Inter, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+  --primary-v2: #4fc3d0;
+  --amber-v2: #f5b942;
+}
+</style>
 
 <style>
 /* ================================================================
@@ -795,10 +807,24 @@ body { background: #0a1628; background-image: url("data:image/svg+xml,%3Csvg xml
       if (!resp.ok) throw new Error('RPC failed: ' + resp.status);
       var acceptanceId = await resp.json();
 
+      // T11: get signed URL from edge function (prevents direct .exe URL access)
+      var filename = pendingFilename || (pendingHref ? pendingHref.split('/').pop() : '');
+      var signResp = await fetch(SUPABASE_URL + '/functions/v1/download-signed', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+        },
+        body: JSON.stringify({ acceptance_id: acceptanceId, filename: filename })
+      });
+      if (!signResp.ok) throw new Error('Signed URL failed: ' + signResp.status);
+      var signData = await signResp.json();
+      var downloadUrl = signData.signed_url || pendingHref;
+
       closeLicenseModal();
       localStorage.setItem('lb_license_choice', pathChosen === 'SSPL' ? 'sspl' : 'apache');
       var a = document.createElement('a');
-      a.href = pendingHref;
+      a.href = downloadUrl;
       if (pendingFilename) a.download = pendingFilename;
       document.body.appendChild(a);
       a.click();

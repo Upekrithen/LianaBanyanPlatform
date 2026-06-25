@@ -103,6 +103,9 @@ function parseArgs() {
     questionBank: null,             // BP090: path to custom question bank JSON
     // BP091 Ah Hayelped tier-aware routing
     tierConfig: null,               // 'ultra:cb4ef450,full:d0b47bd0+88cbf6bd,core:c532e740+49f3e597'
+    answerTierConfig: null,         // BP094: 'ultra:cb4ef450,full:d0b47bd0+88cbf6bd' -- answer-tier peers only
+    micTierConfig: null,            // BP094: 'core:c532e740+49f3e597' -- MIC judge peers only
+    tierWeights: { ULTRA: 3, FULL: 2, CORE: 1 }, // BP094 §1: capability-weighted vote weights (config-driven)
     questionDifficultyRouting: null, // 'hard:ultra+full,medium:ultra+full+core,short:all'
     tier2Flagship: true,            // BP092 M24 Block 3: ENABLED by default -- use --tier2-flagship=false to disable
   };
@@ -132,6 +135,8 @@ function parseArgs() {
     else if (key === 'question-bank' && val) parsed.questionBank = val.trim();
     // BP091 Ah Hayelped tier-aware routing flags
     else if (key === 'tier-config' && val) parsed.tierConfig = val.trim();
+    else if (key === 'answer-tier-config' && val) parsed.answerTierConfig = val.trim();
+    else if (key === 'mic-tier-config' && val) parsed.micTierConfig = val.trim();
     else if (key === 'question-difficulty-routing' && val) parsed.questionDifficultyRouting = val.trim();
     else if (key === 'tier2-flagship') parsed.tier2Flagship = val === 'true';
   }
@@ -442,18 +447,50 @@ function computeAnswerVariancePct(peerAnswers) {
 
 // ─── Ensemble Logic ──────────────────────────────────────────────────────────
 
-function ensembleVote(peerAnswers) {
+function ensembleVote(peerAnswers, tierWeights, peerTierMap) {
   // peerAnswers: { peer_id: letter | null }
-  const votes = {};
-  for (const letter of Object.values(peerAnswers)) {
-    if (letter !== null) votes[letter] = (votes[letter] ?? 0) + 1;
+  // tierWeights: config-driven weight map { ULTRA: 3, FULL: 2, CORE: 1 } (passed in, not a constant)
+  // peerTierMap: { full_peer_id: tier_label } -- built from --answer-tier-config/--tier-config
+  // ABSTAIN (null) does NOT contribute vote weight; counted separately per BP094 §1
+  // Only FULL + ULTRA peers contribute to answer vote when tierWeights is active (CORE excluded per §2)
+  const useWeighted = !!(tierWeights && peerTierMap);
+  const ANSWER_TIERS = new Set(['ultra', 'full']);
+  const weightedVotes = {};
+  let totalPossibleWeight = 0;
+  let abstainCount = 0;
+
+  for (const [peerId, letter] of Object.entries(peerAnswers)) {
+    const tier = peerTierMap ? (peerTierMap[peerId] ?? '').toLowerCase() : '';
+    // If using tier-aware weighting, skip CORE peers from answer vote (CORE-to-MIC, BP094 §2)
+    if (useWeighted && tier && !ANSWER_TIERS.has(tier)) continue;
+    const weight = (useWeighted && tier && tierWeights[tier.toUpperCase()])
+      ? tierWeights[tier.toUpperCase()]
+      : 1;
+    totalPossibleWeight += weight;
+    if (letter === null) {
+      abstainCount++;
+    } else {
+      weightedVotes[letter] = (weightedVotes[letter] ?? 0) + weight;
+    }
   }
-  const entries = Object.entries(votes).sort((a, b) => b[1] - a[1]);
-  if (entries.length === 0) return { answer: null, contested: true };
-  if (entries.length > 1 && entries[0][1] === entries[1][1]) {
-    return { answer: null, contested: true };
+
+  const entries = Object.entries(weightedVotes).sort((a, b) => b[1] - a[1]);
+  if (entries.length === 0) return { answer: null, contested: true, abstainCount };
+
+  if (useWeighted && totalPossibleWeight > 0) {
+    // Weighted majority: winner must exceed 50% of total possible weight from dispatched answer-tier peers
+    const [topAnswer, topWeight] = entries[0];
+    if (topWeight > totalPossibleWeight * 0.5) {
+      return { answer: topAnswer, contested: false, abstainCount };
+    }
+    return { answer: null, contested: true, abstainCount };
+  } else {
+    // Flat majority fallback (no tier config provided)
+    if (entries.length > 1 && entries[0][1] === entries[1][1]) {
+      return { answer: null, contested: true, abstainCount };
+    }
+    return { answer: entries[0][0], contested: false, abstainCount };
   }
-  return { answer: entries[0][0], contested: false };
 }
 
 // ─── Console Formatting ──────────────────────────────────────────────────────
@@ -599,13 +636,19 @@ async function main() {
   const m0PeerId = m0Peer?.peer_id ?? 'cb4ef450';
   console.log(`[M14] Orchestrator peer identified: ${m0PeerId.slice(0,8)}`);
 
-  // BP091 Ah Hayelped: build tier → peer_id maps from --tier-config
+  // BP091 Ah Hayelped: build tier -> peer_id maps from --answer-tier-config (BP094) or --tier-config (legacy)
+  // answerTierMap: FULL + ULTRA peers only -> used for answer dispatch
+  // micTierMap:   CORE peers only -> used for MIC judge role and FireGuard heartbeat duty
   // tierPeerMap: { 'ultra': ['cb4ef450'], 'full': ['d0b47bd0','88cbf6bd'], 'core': ['c532e740','49f3e597'] }
   // peerTierMap: { 'cb4ef450...': 'ultra', 'd0b47bd0...': 'full', ... }
-  const tierPeerMap = {};  // tier label → array of peer_id prefixes
-  const peerTierMap = {};  // full peer_id → tier label
-  if (args.tierConfig) {
-    for (const segment of args.tierConfig.split(',')) {
+  const tierPeerMap = {};  // tier label -> array of peer_id prefixes
+  const peerTierMap = {};  // full peer_id -> tier label
+  const micTierPeerMap = {}; // BP094: CORE peers for MIC judge role
+  // Resolve effective tier config: answerTierConfig takes precedence; fall back to tierConfig
+  const effectiveAnswerTierConfig = args.answerTierConfig ?? args.tierConfig;
+  const effectiveMicTierConfig = args.micTierConfig;
+  if (effectiveAnswerTierConfig) {
+    for (const segment of effectiveAnswerTierConfig.split(',')) {
       const colonIdx = segment.indexOf(':');
       if (colonIdx < 0) continue;
       const tierLabel = segment.slice(0, colonIdx).toLowerCase().trim();
@@ -617,11 +660,43 @@ async function main() {
         }
       }
     }
-    console.log(`\nBP091 Tier-aware routing — tier config parsed:`);
+    console.log(`\nBP094 Tier-aware routing -- answer-tier config parsed:`);
     for (const [tier, prefixes] of Object.entries(tierPeerMap)) {
       const tierPeers = peers.filter(p => peerTierMap[p.peer_id] === tier);
       const models = [...new Set(tierPeers.map(p => p.capabilities?.ollamaModel ?? 'unknown'))].join('+');
-      console.log(`  ${tier.toUpperCase()}: ${prefixes.join('+')} → ${tierPeers.length} peer(s) · model=${models}`);
+      console.log(`  ${tier.toUpperCase()}: ${prefixes.join('+')} -> ${tierPeers.length} peer(s) * model=${models}`);
+    }
+  }
+  // BP094 §2: parse --mic-tier-config for CORE peers (MIC judge + FireGuard duty only)
+  // When answerTierConfig is set, CORE peers from tierConfig (legacy) are moved to micTierPeerMap
+  if (effectiveMicTierConfig) {
+    for (const segment of effectiveMicTierConfig.split(',')) {
+      const colonIdx = segment.indexOf(':');
+      if (colonIdx < 0) continue;
+      const tierLabel = segment.slice(0, colonIdx).toLowerCase().trim();
+      const peerPrefixes = segment.slice(colonIdx + 1).split('+').map(p => p.trim()).filter(Boolean);
+      micTierPeerMap[tierLabel] = peerPrefixes;
+      for (const peer of peers) {
+        if (peerPrefixes.some(prefix => peer.peer_id.startsWith(prefix))) {
+          peerTierMap[peer.peer_id] = tierLabel; // full map still includes core tier label
+        }
+      }
+    }
+    console.log(`BP094 MIC-tier config parsed:`);
+    for (const [tier, prefixes] of Object.entries(micTierPeerMap)) {
+      const micPeers = peers.filter(p => p.peer_id && prefixes.some(prefix => p.peer_id.startsWith(prefix)));
+      console.log(`  MIC-${tier.toUpperCase()}: ${prefixes.join('+')} -> ${micPeers.length} peer(s) [judge + FireGuard only]`);
+    }
+  } else if (!args.answerTierConfig && args.tierConfig) {
+    // Legacy path: --tier-config includes core -- parse core into micTierPeerMap for routing awareness
+    for (const segment of args.tierConfig.split(',')) {
+      const colonIdx = segment.indexOf(':');
+      if (colonIdx < 0) continue;
+      const tierLabel = segment.slice(0, colonIdx).toLowerCase().trim();
+      if (tierLabel === 'core') {
+        const peerPrefixes = segment.slice(colonIdx + 1).split('+').map(p => p.trim()).filter(Boolean);
+        micTierPeerMap[tierLabel] = peerPrefixes;
+      }
     }
   }
 
@@ -756,7 +831,7 @@ async function main() {
           }
           peerAnswers[peerId] = extractLetter(rawText, q.options.length);
         }
-        const { answer: ensembleAnswer } = ensembleVote(peerAnswers);
+        const { answer: ensembleAnswer } = ensembleVote(peerAnswers, args.tierWeights, peerTierMap);
         if (ensembleAnswer !== null && ensembleAnswer === correctLetter) domainCorrect++;
       }
 
@@ -821,20 +896,24 @@ async function main() {
       peerPool = [...peers].sort((a, b) => (affinityMap[b.peer_id] ?? 0.5) - (affinityMap[a.peer_id] ?? 0.5));
     }
 
-    // BP091 Ah Hayelped: tier-aware routing — filter peer pool by question difficulty
+    // BP091 Ah Hayelped: tier-aware routing -- filter peer pool by question difficulty
+    // BP094 §2: when answerTierConfig is set, CORE peers (micTierPeerMap) are excluded from answer dispatch
     if (isTierAwareRouting && Object.keys(tierPeerMap).length > 0) {
       const difficulty = classifyDomainDifficulty(q.domain);
       const allowedTiers = difficultyTierMap[difficulty] ?? Object.keys(tierPeerMap);
+      const micOnlyPrefixes = Object.values(micTierPeerMap).flat(); // BP094: CORE MIC-only peer prefixes
       const tierFiltered = peers.filter(p => {
+        // BP094: exclude MIC-only (CORE) peers from answer dispatch when answerTierConfig is set
+        if (args.answerTierConfig && micOnlyPrefixes.some(prefix => p.peer_id.startsWith(prefix))) return false;
         const peerTier = peerTierMap[p.peer_id];
         return allowedTiers.includes(peerTier);
       });
       if (tierFiltered.length > 0) {
         peerPool = tierFiltered;
-        console.log(`  [tier-routing] ${q.domain} → difficulty=${difficulty} → tiers=[${allowedTiers.join('+')}] → ${peerPool.map(p => (peerTierMap[p.peer_id]??'?').toUpperCase()+':'+p.peer_id.slice(0,8)).join(', ')}`);
+        console.log(`  [tier-routing] ${q.domain} -> difficulty=${difficulty} -> tiers=[${allowedTiers.join('+')}] -> ${peerPool.map(p => (peerTierMap[p.peer_id]??'?').toUpperCase()+':'+p.peer_id.slice(0,8)).join(', ')}`);
       } else {
-        // Fallback — use all peers (config mismatch; should not happen)
-        console.warn(`  [tier-routing] WARNING: no peers matched tiers=[${allowedTiers.join('+')}] for difficulty=${difficulty} — falling back to full pool`);
+        // Fallback -- use all peers (config mismatch; should not happen)
+        console.warn(`  [tier-routing] WARNING: no peers matched tiers=[${allowedTiers.join('+')}] for difficulty=${difficulty} -- falling back to full pool`);
       }
     }
 
@@ -984,7 +1063,7 @@ async function main() {
           const partialCouncilVotes = peerPool
             .filter(p => partialAnswers[p.peer_id] !== null)
             .map(p => ({ peer_id: p.peer_id, answer: partialAnswers[p.peer_id], confidence: 0.5 }));
-          const { answer: bestGuessAnswer } = ensembleVote(partialAnswers);
+          const { answer: bestGuessAnswer } = ensembleVote(partialAnswers, args.tierWeights, peerTierMap);
           const remainingMs = qDeadline - Date.now();
 
           console.log(`  ${YELLOW}ANDON: elapsed=${Math.floor(elapsed/1000)}s ≥ 80% of ${qTimeoutSec}s · variance=${variancePct.toFixed(1)}% > ${andonThreshold}% · firing Star Chamber escalation${RESET}`);
@@ -1138,21 +1217,35 @@ async function main() {
       }
     }
 
-    // Determine final_answer_source
+    // Determine final_answer_source -- BP094 §4 cascade
     const answeredCount = Object.values(peerAnswers).filter(a => a !== null).length;
-    const { answer: ensembleAnswer, contested } = ensembleVote(peerAnswers);
+    const { answer: ensembleAnswer, contested } = ensembleVote(peerAnswers, args.tierWeights, peerTierMap);
+    const totalDispatchedAnswerTier = Object.keys(peerAnswers).length;
+    const abstainCount = totalDispatchedAnswerTier - answeredCount;
+    const abstainRatio = totalDispatchedAnswerTier > 0 ? abstainCount / totalDispatchedAnswerTier : 0;
     let finalAnswerSource;
-    if (answeredCount === 0) {
+    let posseAutoDispatched = false;
+    if (answeredCount === 0 && abstainRatio < 0.8) {
       finalAnswerSource = 'no_answers';
+    } else if (abstainRatio >= 0.8) {
+      // Cascade step 2: ENSEMBLE_ABSTAIN gate -- >=80% of dispatched answer-tier peers abstained
+      finalAnswerSource = 'ensemble_abstain';
+      posseAutoDispatched = true;
+      console.log(`  [ENSEMBLE_ABSTAIN] ${abstainCount}/${totalDispatchedAnswerTier} peers abstained (>= 80%) -- auto-dispatching Round-Up Posse`);
     } else if (answeredCount === 1) {
+      // Cascade step 5: single peer fallback -- last resort; dispatch Posse in parallel (Belt-and-Suspenders)
       finalAnswerSource = 'single_peer_fallback';
-    } else if (escalationFired) {
-      finalAnswerSource = contested ? 'escalation_consensus' : 'escalation_consensus';
+      posseAutoDispatched = true;
+      console.log(`  [single_peer_fallback] only 1 answer received -- low_confidence=true -- dispatching Round-Up Posse`);
     } else if (!contested) {
-      const allSame = new Set(Object.values(peerAnswers).filter(a => a !== null)).size === 1;
-      finalAnswerSource = allSame ? 'council_unanimous' : 'council_majority';
+      // Cascade step 1: weighted majority resolved
+      finalAnswerSource = 'weighted_consensus';
+    } else if (escalationFired) {
+      // Cascade step 3 vs 4: Star Chamber fired -- contested = escalation also contested -> Round-Up Posse
+      finalAnswerSource = contested ? 'roundup_consensus' : 'escalation_consensus';
     } else {
-      finalAnswerSource = 'council_majority';
+      // Contested, no escalation yet -- label as escalation_consensus (Star Chamber resolution pending)
+      finalAnswerSource = 'escalation_consensus';
     }
 
     const ensembleIsCorrect = ensembleAnswer !== null && ensembleAnswer === correctLetter;
@@ -1214,7 +1307,7 @@ async function main() {
           const tier1Letter = extractLetter(tier1Raw, q.options.length);
           if (tier1Letter !== null && tier1Letter !== 'ABSTAIN') {
             peerAnswers[`${tiebreakerPeerId}-tier1`] = tier1Letter;
-            const { answer: resolvedAnswer, contested: stillContested } = ensembleVote(peerAnswers);
+            const { answer: resolvedAnswer, contested: stillContested } = ensembleVote(peerAnswers, args.tierWeights, peerTierMap);
             if (!stillContested && resolvedAnswer !== null) {
               contestedResolutionTier = 'tier_1';
               const tier1Correct = resolvedAnswer === correctLetter;
@@ -1426,6 +1519,22 @@ async function main() {
       contested_resolution_tier: contestedResolutionTier,
       tier_1_fallback_fired: tier1FallbackFired,
       tier_2_fallback_fired: tier2FallbackFired,
+      // BP094 §4 cascade receipt fields
+      ensemble_method: 'capability_weighted',
+      cascade_step_reached: (() => {
+        if (finalAnswerSource === 'weighted_consensus') return 1;
+        if (finalAnswerSource === 'ensemble_abstain') return 2;
+        if (finalAnswerSource === 'escalation_consensus' && !escalationFired) return 3;
+        if (finalAnswerSource === 'roundup_consensus') return 4;
+        if (finalAnswerSource === 'single_peer_fallback') return 5;
+        return 1;
+      })(),
+      ensemble_abstain_fired: finalAnswerSource === 'ensemble_abstain',
+      single_peer_fallback: finalAnswerSource === 'single_peer_fallback',
+      posse_dispatched: posseAutoDispatched,
+      core_mic_judges: Object.entries(micTierPeerMap).flatMap(([, prefixes]) =>
+        peers.filter(p => prefixes.some(prefix => p.peer_id.startsWith(prefix))).map(p => p.peer_id)
+      ),
     });
   }
 
