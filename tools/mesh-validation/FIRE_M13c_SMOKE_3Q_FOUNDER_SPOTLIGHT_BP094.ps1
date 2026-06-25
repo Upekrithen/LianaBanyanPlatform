@@ -1,5 +1,5 @@
 # FIRE_M13c_SMOKE_3Q_FOUNDER_SPOTLIGHT_BP094.ps1
-# M13c 3Q FOUNDER SPOTLIGHT SMOKE -- BP094 Session 12 . 2026-06-25 . stderr fix applied
+# M13c 3Q FOUNDER SPOTLIGHT SMOKE -- BP094 Path B . 2026-06-25 . 5-peer gemma4 fleet added
 # Fires 3 questions via validate-relay.mjs to verify:
 #   Q01 (source_id=2804 . biology)       -- CANARY: basic wiring
 #   Q02 (source_id=70 . business)        -- ABSTAIN CASCADE TARGET: correct=I
@@ -29,7 +29,7 @@ $LOG_DIR            = $SCRIPT_DIR
 
 Write-Host ""
 Write-Host "========================================================================" -ForegroundColor Cyan
-Write-Host "  M13c SMOKE 3Q FOUNDER SPOTLIGHT -- BP094 Session 11" -ForegroundColor Cyan
+Write-Host "  M13c SMOKE 3Q FOUNDER SPOTLIGHT -- BP094 Path B" -ForegroundColor Cyan
 Write-Host "  Per-tier Mountain 1 priming active. Andon star-chamber armed." -ForegroundColor Cyan
 Write-Host "========================================================================" -ForegroundColor Cyan
 Write-Host ""
@@ -112,8 +112,8 @@ Write-Host "  Q02 source_id   : 70   (business . ABSTAIN cascade . correct=I)"
 Write-Host "  Q03 source_id   : CANARY_ANDON_BP094 (business ethics . Andon canary)"
 Write-Host "  Target fleet    : 5 peers . relay.lianabanyan.com (WAN)"
 Write-Host "  Fleet tiers     : ULTRA cb4ef450 llama3.3:70b"
-Write-Host "                    FULL  d0b47bd0+88cbf6bd gemma4:12b"
-Write-Host "                    CORE  c532e740+49f3e597 gemma2:9b"
+Write-Host "                    FULL  d0b47bd0+88cbf6bd+d2d05d39+2cb0ef15 gemma4:12b"
+Write-Host "                    MIC   c532e740+49f3e597 (judge-only)"
 Write-Host "  Routing         : tier-aware (Ah Hayelped BP091)"
 Write-Host "  Mountain 1      : per-tier differentiated priming (Block A / BP094 S11)"
 Write-Host "  Andon-escalate  : star-chamber (armed)"
@@ -141,7 +141,7 @@ $nodeArgs = @(
     "--questions=3",
     "--mode=smoke",
     "--routing=tier-aware",
-    "--answer-tier-config=ultra:cb4ef450cc4a18c3,full:d0b47bd08633385b+88cbf6bdd6f74587",
+    "--answer-tier-config=ultra:cb4ef450cc4a18c3,full:d0b47bd08633385b+88cbf6bdd6f74587+d2d05d3921904fff+2cb0ef159ce445b9",
     "--mic-tier-config=core:c532e74069e137bc+49f3e5971518a064",
     "--question-difficulty-routing=hard:ultra+full,medium:ultra+full+core,short:all",
     "--andon-escalate=star-chamber",
