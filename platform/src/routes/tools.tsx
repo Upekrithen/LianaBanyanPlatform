@@ -3,6 +3,10 @@ import { Route, Navigate } from "react-router-dom";
 import { ProtectedRoute, ExplorerRoute } from "@/components/ProtectedRoute";
 import { LazyPage } from "./LazyPage";
 
+// BP094 v0.8.0 — CSIA-Hybrid
+const CSIAHybridChatPage = lazy(() => import("@/pages/CSIAHybridChatPage"));
+const CatacombsContributePage = lazy(() => import("@/pages/CatacombsContributePage"));
+
 // Bushel 8 — LB Frame Substrate UI (BP021)
 const SubstrateBrowserPage = lazy(() => import("@/pages/helm/SubstrateBrowserPage"));
 const BushelDashboard = lazy(() => import("@/pages/helm/BushelDashboard"));
@@ -244,6 +248,10 @@ export const toolsRoutes = (
     <Route path="/mainland" element={<LazyPage><MainlandHub /></LazyPage>} />
     <Route path="/bounties" element={<LazyPage><CodeBreakersHub /></LazyPage>} />
     <Route path="/business-cards" element={<LazyPage><BusinessCardPortal /></LazyPage>} />
+
+    {/* BP094 v0.8.0 — CSIA-Hybrid MnemosyneC */}
+    <Route path="/mnemosynec/csia-hybrid" element={<LazyPage><CSIAHybridChatPage /></LazyPage>} />
+    <Route path="/contribute" element={<LazyPage><CatacombsContributePage /></LazyPage>} />
 
     {/* Wave 25 -- Mesh / Frontier */}
     <Route path="/frontier/borrow" element={<ProtectedRoute><LazyPage><FrontierBorrowPage /></LazyPage></ProtectedRoute>} />

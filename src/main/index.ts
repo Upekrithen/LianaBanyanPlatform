@@ -2898,6 +2898,19 @@ function registerIPCHandlers(): void {
     );
   })();
 
+  // -- BP094 v0.8.0: CSIA-Hybrid Inference Pipeline IPC --------------------
+  void (async () => {
+    const { runCSIAHybridPipeline } = await import('./csia_hybrid/inference_pipeline');
+    safeHandle('csia:query', async (_e: unknown, question: string) => {
+      try {
+        return await runCSIAHybridPipeline(question);
+      } catch (err) {
+        console.error('[CSIA] IPC handler error:', err);
+        return { verdict: 'REFUSAL', refusal_reason: String(err), provenance: [], system_prompt_used: '', model_used: 'unknown', star_chamber: 'SKIP', scrambler: 'SKIP', keys_engines: 'SKIP', green_count: 0, run_id: 'error', elapsed_ms: 0, evidence_count: 0 };
+      }
+    });
+  })();
+
   // -- BP087 Wave 3 SEG-C1: Thunderclap trial fire IPC ----------------------
   registerThunderclapFireIPC();
 
