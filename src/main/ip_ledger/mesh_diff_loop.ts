@@ -10,6 +10,7 @@
 
 import { createHash } from 'node:crypto';
 import { powerMonitor } from 'electron';
+import ws from 'ws';
 import { getRingBearerIdentity } from './ring_bearer_keygen';
 
 const RELAY_BASE = process.env.SUBSTRATE_AWAKENS_RELAY ?? 'https://relay.lianabanyan.com/functions/v1';
@@ -55,7 +56,7 @@ function getSupabaseClient() {
   const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || '';
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
   if (!url || !key) throw new Error('[mesh_diff_loop] Supabase env vars not set');
-  return createClient(url, key, { auth: { persistSession: false } });
+  return createClient(url, key, { auth: { persistSession: false }, realtime: { transport: ws as unknown as typeof WebSocket } });
 }
 
 /**

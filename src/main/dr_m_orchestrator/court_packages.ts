@@ -11,6 +11,7 @@
 // Custom package registration via court_package_audit table is ROADMAP (post-M4).
 
 import type { DatabaseConfig } from './substrate_reader';
+import ws from 'ws';
 
 // ─── Types ────────────────────────────────────────────────────────────────────────
 
@@ -152,7 +153,7 @@ async function buildCoreMicLivePackage(): Promise<CourtPackage> {
     const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || '';
     const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
     if (!url || !key) throw new Error('[court_packages] Supabase env vars not set for CORE_MIC_LIVE');
-    const supabase = createClient(url, key, { auth: { persistSession: false } });
+    const supabase = createClient(url, key, { auth: { persistSession: false }, realtime: { transport: ws as unknown as typeof WebSocket } });
     const { data: rows, error } = await supabase
       .from('peer_presence')
       .select('peer_id, capabilities')

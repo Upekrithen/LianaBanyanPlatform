@@ -20,6 +20,8 @@ import { BatteryPublishTab } from './BatteryPublishTab';
 import { TheDiagnosisTab } from './TheDiagnosisTab';
 // v0.5.1 BP085 -- Help Tab peer pipeline
 import { HelpTab } from './HelpTab';
+// BP094 v0.8.0 -- CSIA-Hybrid in-app inference chat (replaces external URL stub)
+import { CSIAHybridChat } from './CSIAHybridChat';
 import type { FrameMode } from './FrameModeIndicator';
 import type { AuthState } from '../amplify.d';
 
@@ -44,7 +46,7 @@ async function openMembershipCheckout(
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type LeanTab = 'home' | 'gauntlet' | 'ask' | 'help' | 'publish' | 'diagnosis' | 'pipeline';
+type LeanTab = 'home' | 'gauntlet' | 'ask' | 'help' | 'publish' | 'diagnosis' | 'pipeline' | 'csia-hybrid';
 type UiMode = 'lean' | 'advanced';
 
 const LS_UI_MODE = 'mnemoUiMode';
@@ -169,13 +171,14 @@ function LeanModeNudge({ onSwitch }: { onSwitch: () => void }) {
 // ─── Tab bar ─────────────────────────────────────────────────────────────────
 
 const TABS: Array<{ id: LeanTab; label: string }> = [
-  { id: 'home',      label: 'Home' },
-  { id: 'gauntlet',  label: 'Gauntlet' },
-  { id: 'ask',       label: 'Ask' },
-  { id: 'help',      label: 'Help' },
-  { id: 'publish',   label: '🔥 Publish' },
-  { id: 'diagnosis', label: '🩺 Diagnosis' },
-  { id: 'pipeline',  label: '📋 Pipeline' },
+  { id: 'home',        label: 'Home' },
+  { id: 'gauntlet',   label: 'Gauntlet' },
+  { id: 'ask',        label: 'Ask' },
+  { id: 'help',       label: 'Help' },
+  { id: 'publish',    label: '🔥 Publish' },
+  { id: 'diagnosis',  label: '🩺 Diagnosis' },
+  { id: 'pipeline',   label: '📋 Pipeline' },
+  { id: 'csia-hybrid', label: 'CSIA-Hybrid' },
 ];
 
 function TabBar({
@@ -523,6 +526,9 @@ export function LeanShell({ currentMode, onModeChange, onClose, authState }: Lea
         )}
         {activeTab === 'pipeline' && (
           <HelpTab />
+        )}
+        {activeTab === 'csia-hybrid' && (
+          <CSIAHybridChat />
         )}
       </div>
     </div>

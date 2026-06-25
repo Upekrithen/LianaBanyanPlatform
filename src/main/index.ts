@@ -12,6 +12,7 @@ log.transports.file.level = 'info';
 log.transports.file.maxSize = 10 * 1024 * 1024; // 10 MB rotation
 // Pipe ALL main-process console.* through electron-log
 Object.assign(console, log.functions);
+import ws from 'ws';
 import { probeSubstrateApiPort } from './port_guard';
 import { probeRendererHealth } from './renderer_guard';
 
@@ -924,6 +925,7 @@ function createOverlayWindow(): void {
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: true,
+      devTools: true,
       zoomFactor: 1.15,
     },
   });
@@ -1167,6 +1169,7 @@ function openMoneyPennyWindow(): void {
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: true,
+      devTools: true,
       zoomFactor: 1.15,
     },
   });
@@ -1237,6 +1240,7 @@ function openDashboard(opts?: { focus?: boolean }): void {
       preload: join(__dirname, 'preload.js'),
       contextIsolation: true,
       nodeIntegration: false,
+      devTools: true,
       zoomFactor: 1.15,
     },
   });
@@ -1378,6 +1382,7 @@ function openHearthConjunctionWindow(): void {
       contextIsolation: true,
       nodeIntegration: false,
       webviewTag: true, // B83b: enable <webview> for EmbeddedChrome
+      devTools: true,
       zoomFactor: 1.15,
     },
   });
@@ -4587,7 +4592,7 @@ function registerIPCHandlers(): void {
       const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
       if (!supabaseUrl || !supabaseKey) return { ok: false, error: 'Supabase config not available', entries: [] };
       const { createClient } = require('@supabase/supabase-js') as typeof import('@supabase/supabase-js');
-      const sb = createClient(supabaseUrl, supabaseKey, { auth: { persistSession: false } });
+      const sb = createClient(supabaseUrl, supabaseKey, { auth: { persistSession: false }, realtime: { transport: ws as unknown as typeof WebSocket } });
       const { data, error } = await sb
         .from('ip_ledger_entries')
         .select('entry_id, contribution_type, stamped_at, mesh_replicated, payload_url')
@@ -4609,7 +4614,7 @@ function registerIPCHandlers(): void {
       const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
       if (!supabaseUrl || !supabaseKey) return { ok: false, error: 'Supabase config not available' };
       const { createClient } = require('@supabase/supabase-js') as typeof import('@supabase/supabase-js');
-      const sb = createClient(supabaseUrl, supabaseKey, { auth: { persistSession: false } });
+      const sb = createClient(supabaseUrl, supabaseKey, { auth: { persistSession: false }, realtime: { transport: ws as unknown as typeof WebSocket } });
       const { data, error } = await sb
         .from('ip_ledger_entries')
         .select('*')
@@ -5177,7 +5182,7 @@ function registerIPCHandlers(): void {
     }
     try {
       const { createClient } = require('@supabase/supabase-js') as typeof import('@supabase/supabase-js');
-      _helpSupabase = createClient(url, key, { auth: { persistSession: false } });
+      _helpSupabase = createClient(url, key, { auth: { persistSession: false }, realtime: { transport: ws as unknown as typeof WebSocket } });
       return _helpSupabase;
     } catch (err) {
       console.error('[help] Failed to create Supabase client:', (err as Error).message);
@@ -6272,6 +6277,10 @@ app.on('will-quit', () => {
 });
 
 app.whenReady().then(async () => {
+  // BP094 v0.8.0 - DevTools enablement + verbose logging for beta build
+  process.env.ELECTRON_ENABLE_LOGGING = '1';
+  if (!process.env.NODE_ENV) process.env.NODE_ENV = 'development';
+
   // BP038 Frame-boilerplate ? pre-bind port guard (singleton reuse pattern).
   // If another AMPLIFY is already on API_PORT, exit cleanly instead of EADDRINUSE crash.
   const probe = await probeSubstrateApiPort(API_PORT);
@@ -6650,6 +6659,19 @@ app.whenReady().then(async () => {
   if (!okDevMenu) {
     console.warn('[Frame] Ctrl+Shift+D dev-menu toggle unavailable ? another app may own the accelerator');
   }
+
+  // BP094 -- F12 as DevTools toggle alias (Founder-direct, pairs with Ctrl+Shift+D)
+  const okF12 = globalShortcut.register('F12', () => {
+    const focused = BrowserWindow.getFocusedWindow();
+    if (focused) {
+      if (focused.webContents.isDevToolsOpened()) {
+        focused.webContents.closeDevTools();
+      } else {
+        focused.webContents.openDevTools({ mode: 'detach' });
+      }
+    }
+  });
+  if (!okF12) console.warn('[Frame] F12 dev-tools toggle unavailable - another app may own the accelerator');
 
   // Register auth IPC handlers (after windows are created)
   authManager.registerIPCHandlers();

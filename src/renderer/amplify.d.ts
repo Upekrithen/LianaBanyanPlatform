@@ -519,6 +519,31 @@ declare global {
         ten_pearl_roundtrip: () => Promise<{ ok: boolean; result?: unknown; error?: string }>;
         areopagus_query: (query: string) => Promise<{ ok: boolean; matches?: Array<{ sid: string; pearls: string[]; score: number }>; query?: string; searched_at?: number; error?: string }>;
       };
+
+      // BP094 v0.8.0 -- CSIA-Hybrid Inference Pipeline
+      csia?: {
+        query: (question: string) => Promise<{
+          verdict: 'ANSWER' | 'REFUSAL';
+          answer?: string;
+          refusal_reason?: string;
+          provenance: Array<{
+            evidence_id: string;
+            category_slug: string;
+            content_preview: string;
+            contributor_member_id: string;
+            soccerball_hash?: string;
+          }>;
+          system_prompt_used: string;
+          model_used: string;
+          star_chamber: 'GREEN' | 'RED' | 'SKIP';
+          scrambler: 'GREEN' | 'RED' | 'SKIP';
+          keys_engines: 'GREEN' | 'RED' | 'SKIP';
+          green_count: number;
+          run_id: string;
+          elapsed_ms: number;
+          evidence_count: number;
+        }>;
+      };
     };
     // SEG-V0150-P0-DIAGNOSE-BRIDGE: sentinel -- set by preload before main bridge wires up
     __preloadLoaded?: boolean;

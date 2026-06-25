@@ -86,7 +86,7 @@ export function getTotalRamGb(): number {
 /**
  * Detects VRAM in GB (rounded to 1 decimal). Returns null on error or unsupported platform.
  *
- * Windows: wmic path win32_VideoController get AdapterRAM
+ * Windows: Get-CimInstance Win32_VideoController (wmic removed in Win11 24H2/WS2025)
  * macOS: system_profiler SPDisplaysDataType -json → parse spdisplays_vram
  * Linux: nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits
  */
@@ -95,43 +95,23 @@ export function detectVramGb(): number | null {
     const plat = platform();
 
     if (plat === 'win32') {
-      // Windows: wmic path win32_VideoController get AdapterRAM
-      const output = execSync('wmic path win32_VideoController get AdapterRAM', {
-        encoding: 'utf8',
-        timeout: 5000,
-        windowsHide: true,
-      });
-      const lines = output.split('\n').map(l => l.trim()).filter(Boolean);
-      // First line is "AdapterRAM", rest are values
-      const values = lines.slice(1).map(v => parseInt(v, 10)).filter(n => !isNaN(n) && n > 0);
-      if (values.length === 0 || Math.max(...values) === 0) {
-        // M18c AMD fix: if wmic returned 0 or empty, try PowerShell Get-WmiObject fallback
-        // AMD RDNA4 (RX 9070 XT) reports AdapterRAM=0 via raw wmic; PowerShell parses correctly
-        try {
-          const psOutput = execSync(
-            'powershell -NoProfile -Command "Get-WmiObject Win32_VideoController | Select-Object -ExpandProperty AdapterRAM"',
-            { encoding: 'utf8', timeout: 8000, windowsHide: true }
-          );
-          const psLines = psOutput.split('\n').map(l => l.trim()).filter(Boolean);
-          const psValues = psLines.map(v => parseInt(v, 10)).filter(n => !isNaN(n) && n > 0);
-          if (psValues.length > 0) {
-            const psMaxBytes = Math.max(...psValues);
-            const psGb = psMaxBytes / (1024 * 1024 * 1024);
-            const result = Math.round(psGb * 10) / 10;
-            console.log(`[ram_detector] AMD VRAM fallback (PowerShell): ${result} GB`);
-            return result;
-          }
-        } catch {
-          // PowerShell fallback also failed — return null
-          console.warn('[ram_detector] AMD VRAM: both wmic and PowerShell fallback failed — returning null');
-          return null;
+      // Win11 24H2 / WS2025: wmic removed. Use Get-CimInstance (works all Windows versions).
+      try {
+        const psOutput = execSync(
+          'powershell -NoProfile -Command "Get-CimInstance Win32_VideoController | Select-Object -ExpandProperty AdapterRAM | Measure-Object -Sum | Select-Object -ExpandProperty Sum"',
+          { encoding: 'utf8', timeout: 8000, windowsHide: true }
+        );
+        const totalBytes = parseInt(psOutput.trim(), 10);
+        if (!isNaN(totalBytes) && totalBytes > 0) {
+          const gb = totalBytes / (1024 * 1024 * 1024);
+          const result = Math.round(gb * 10) / 10;
+          console.log(`[ram_detector] VRAM detected via CIM: ${result} GB`);
+          return result;
         }
+      } catch (err) {
+        console.warn('[ram_detector] CIM VRAM detection failed:', err instanceof Error ? err.message : String(err));
       }
-      if (values.length === 0) return null;
-      // Return the LARGEST VRAM value found
-      const maxBytes = Math.max(...values);
-      const gb = maxBytes / (1024 * 1024 * 1024);
-      return Math.round(gb * 10) / 10;
+      return null;
     } else if (plat === 'darwin') {
       // macOS: system_profiler SPDisplaysDataType -json
       const output = execSync('system_profiler SPDisplaysDataType -json', {

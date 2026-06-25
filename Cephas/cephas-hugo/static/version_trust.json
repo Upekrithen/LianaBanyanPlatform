@@ -1,0 +1,10 @@
+{
+  "versions": [
+    {
+      "tier": "latest",
+      "version": "0.8.0",
+      "url": "https://mnemosynec.org/download/MnemosyneC-Setup-0.8.0.exe",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    }
+  ]
+}
