@@ -89,7 +89,7 @@ This is a business plan with six steps. Each step is a self-contained economic e
 
 If you are looking for a pitch deck, this is not one. If you are looking for a fundraising ask, there is exactly one letter for that and it went to Warren Buffett. If you are looking for the catch -- the hidden fee, the equity trap, the extraction mechanism buried in the fine print -- you will not find one. We engineered it out.
 
-What you will find instead is a cooperative commerce platform built from a six-month pivot out of a hydraulic gaming platform project -- when the Founder saw the real need, dropped the original plan, and shipped. The result: **2,270 documented innovations**, **21 USPTO provisional patent applications** protecting **2,270 formal patent claims**, **36 live production systems**, and a three-currency economic system with mathematical solvency proofs.
+What you will find instead is a cooperative commerce platform built from a six-month pivot out of a hydraulic gaming platform project -- when the Founder saw the real need, dropped the original plan, and shipped. The result: **2,270 documented innovations**, **22 USPTO provisional patent applications** protecting **2,270 formal patent claims**, **36 live production systems**, and a three-currency economic system with mathematical solvency proofs.
 
 Built by one veteran, four AI agents, and nine years of obsession.
 
@@ -289,7 +289,7 @@ All six steps run on the same infrastructure:
 
 ## The Protection
 
-**21 USPTO provisional patent applications. 2,270 formal patent claims.** Filed by the Founder as a micro-entity. The filing protects cooperative infrastructure from extraction.
+**22 USPTO provisional patent applications. 2,270 formal patent claims.** Filed by the Founder as a micro-entity. The filing protects cooperative infrastructure from extraction.
 
 **228 Crown Jewels** across the portfolio. The Canister System's swappable-barrel architecture has no commercial equivalent. The three-currency system has mathematical solvency proofs. The Cost+20% margin lock is constitutionally embedded.
 
@@ -350,9 +350,9 @@ The platform is built. The door is open. The kitchen is ready.
   2. Decide whether to ship verbatim or do a Founder-prose-pass.
   3. Confirm tags (7 tags above -- Substack has no hard limit).
   4. Verify Pledge #2260 URL is live before publish.
-  5. Schedule: Substack publish, then Medium cross-post with
-     24-72hr gap (standard cross-post SEO practice) OR same day --
-     your call.
+  5. Schedule: SUBSTACK-FIRST (Founder ratified 2026-06-24) -- publish on
+     founderdenken.substack.com before NYT submission. Then Medium cross-post
+     with 24-72hr gap (standard cross-post SEO practice).
   6. HN Show post ships same day as Substack per BP075 fire-order.
 
   PENDING ITEMS / PRE-PUBLICATION CHECKLIST:

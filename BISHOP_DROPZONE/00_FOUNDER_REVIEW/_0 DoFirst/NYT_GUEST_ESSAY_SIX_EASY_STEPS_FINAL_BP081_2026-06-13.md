@@ -37,7 +37,7 @@ That is the insight the cooperative economy has been waiting for. Not a better a
 
 This is a business plan with six steps. Each step is a self-contained economic engine that feeds the next. Each step starts with one person doing one thing in one place. Each step scales without permission, without venture capital, and without anyone's approval but the people doing the work.
 
-What you will find is a cooperative commerce platform built from a six-month pivot out of a hydraulic gaming platform project. When the Founder saw the real need, he dropped the original plan and shipped. The result: **2,270 documented innovations**, **21 USPTO provisional patent applications**, **16 live initiatives**, and a three-currency economic system with mathematical solvency proofs. Built by one veteran, four AI agents, and nine years of obsession.
+What you will find is a cooperative commerce platform built from a six-month pivot out of a hydraulic gaming platform project. When the Founder saw the real need, he dropped the original plan and shipped. The result: **2,270 documented innovations**, **22 USPTO provisional patent applications**, **16 live initiatives**, and a three-currency economic system with mathematical solvency proofs. Built by one veteran, four AI agents, and nine years of obsession.
 
 That is just, like, six things.
 
@@ -61,7 +61,7 @@ That is just, like, six things.
 
 ---
 
-**The protection:** 21 USPTO provisional patent applications covering 2,270 innovations, filed by the Founder as a micro-entity. Every patent is pledged defensively. Eight independent cooperative entities across multiple jurisdictions can inherit the full platform architecture from day one.
+**The protection:** 22 USPTO provisional patent applications covering 2,270 innovations, filed by the Founder as a micro-entity. Every patent is pledged defensively. Eight independent cooperative entities across multiple jurisdictions can inherit the full platform architecture from day one.
 
 ---
 
@@ -85,6 +85,7 @@ For the keep.
 
 ---
 <!-- BP081 FINAL PASS COMPLIANCE NOTES:
+- SEQUENCING: SUBSTACK-FIRST (Founder ratified 2026-06-24) -- publish on founderdenken.substack.com before submitting this essay to NYT Opinion.
 - Source: BP078_NYT_GUEST_ESSAY_SIX_EASY_STEPS_DRAFT.md (preserved untouched)
 - Word count: ~800 (target met; NYT guest essay max ~900)
 - 83.3%: verbatim, appears 4x
