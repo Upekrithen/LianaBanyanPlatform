@@ -1,0 +1,1634 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Substrate Savings: $4.49B - Liana Banyan</title>
+<meta name="description" content="Substrate adoption saves the AI industry $4.49 Billion per year. LB Cooperative asks for 20% (Tier 1) or 50% (Tier 2 Sanders Fork). See what each AI company saves, what we ask, and where it goes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   DESIGN TOKENS
+   ============================================================ */
+:root {
+  --text-xs:   clamp(0.75rem,  0.7rem  + 0.25vw, 0.875rem);
+  --text-sm:   clamp(0.875rem, 0.8rem  + 0.35vw, 1rem);
+  --text-base: clamp(1rem,     0.95rem + 0.25vw, 1.125rem);
+  --text-lg:   clamp(1.125rem, 1rem    + 0.75vw, 1.5rem);
+  --text-xl:   clamp(1.5rem,   1.2rem  + 1.25vw, 2.25rem);
+  --text-2xl:  clamp(2rem,     1.2rem  + 2.5vw,  3.5rem);
+  --text-hero: clamp(2.5rem,   1rem    + 5vw,    6rem);
+
+  --space-1: 0.25rem; --space-2: 0.5rem; --space-3: 0.75rem; --space-4: 1rem;
+  --space-5: 1.25rem; --space-6: 1.5rem; --space-8: 2rem; --space-10: 2.5rem;
+  --space-12: 3rem; --space-16: 4rem; --space-20: 5rem; --space-24: 6rem;
+
+  --radius-sm: 0.375rem; --radius-md: 0.5rem; --radius-lg: 0.75rem;
+  --radius-xl: 1rem; --radius-2xl: 1.5rem; --radius-full: 9999px;
+
+  --transition-interactive: 180ms cubic-bezier(0.16, 1, 0.3, 1);
+
+  --font-body: 'Inter', 'Helvetica Neue', sans-serif;
+  --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+
+  --content-narrow: 640px;
+  --content-default: 960px;
+  --content-wide: 1280px;
+}
+
+:root, [data-theme="light"] {
+  --color-bg: #f7f6f2;
+  --color-surface: #f9f8f5;
+  --color-surface-2: #fbfbf9;
+  --color-surface-offset: #f0ede8;
+  --color-divider: #dcd9d5;
+  --color-border: #d4d1ca;
+  --color-text: #1a1915;
+  --color-text-muted: #6a6965;
+  --color-text-faint: #b0afaa;
+  --color-primary: #01696f;
+  --color-primary-hover: #0c4e54;
+  --color-primary-highlight: #cedcd8;
+  --color-gold: #c48a00;
+  --color-gold-highlight: #f5e8c0;
+  --color-orange: #c45f00;
+  --color-success: #3a6e1a;
+  --color-success-highlight: #d0e8c4;
+  --color-blue: #005a8a;
+  --color-blue-highlight: #c0d8f0;
+  --color-purple: #6830a8;
+  --shadow-sm: 0 1px 3px oklch(0.2 0.01 80 / 0.08);
+  --shadow-md: 0 4px 14px oklch(0.2 0.01 80 / 0.10);
+  --shadow-lg: 0 12px 36px oklch(0.2 0.01 80 / 0.14);
+}
+
+[data-theme="dark"] {
+  --color-bg: #121110;
+  --color-surface: #181715;
+  --color-surface-2: #1e1d1b;
+  --color-surface-offset: #232220;
+  --color-divider: #2a2927;
+  --color-border: #353432;
+  --color-text: #d8d7d4;
+  --color-text-muted: #7a7976;
+  --color-text-faint: #4e4d4b;
+  --color-primary: #4fa0aa;
+  --color-primary-hover: #2a8a96;
+  --color-primary-highlight: #1e3538;
+  --color-gold: #e8b440;
+  --color-gold-highlight: #3a3020;
+  --color-orange: #f5933a;
+  --color-success: #6db040;
+  --color-success-highlight: #1e3012;
+  --color-blue: #5090cc;
+  --color-blue-highlight: #182840;
+  --color-purple: #a870e0;
+  --shadow-sm: 0 1px 3px oklch(0 0 0 / 0.25);
+  --shadow-md: 0 4px 14px oklch(0 0 0 / 0.35);
+  --shadow-lg: 0 12px 36px oklch(0 0 0 / 0.45);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    --color-bg: #f7f6f2; --color-surface: #f9f8f5; --color-surface-2: #fbfbf9;
+    --color-surface-offset: #f0ede8; --color-divider: #dcd9d5; --color-border: #d4d1ca;
+    --color-text: #1a1915; --color-text-muted: #6a6965; --color-text-faint: #b0afaa;
+    --color-primary: #01696f; --color-primary-hover: #0c4e54; --color-primary-highlight: #cedcd8;
+    --color-gold: #c48a00; --color-gold-highlight: #f5e8c0; --color-orange: #c45f00;
+    --color-success: #3a6e1a; --color-success-highlight: #d0e8c4;
+    --color-blue: #005a8a; --color-blue-highlight: #c0d8f0;
+    --color-purple: #6830a8;
+  }
+}
+
+/* ============================================================
+   BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; scroll-behavior: smooth; scroll-padding-top: 80px; }
+body { min-height: 100dvh; font-family: var(--font-body); font-size: var(--text-base); color: var(--color-text); background-color: var(--color-bg); line-height: 1.65; }
+img, svg { display: block; max-width: 100%; }
+h1,h2,h3,h4,h5,h6 { text-wrap: balance; line-height: 1.15; font-family: var(--font-body); }
+p,li { text-wrap: pretty; }
+button { cursor: pointer; background: none; border: none; font: inherit; color: inherit; }
+a, button, [role="button"] { transition: color var(--transition-interactive), background var(--transition-interactive), border-color var(--transition-interactive), box-shadow var(--transition-interactive), opacity var(--transition-interactive); }
+::selection { background: oklch(from var(--color-primary) l c h / 0.22); color: var(--color-text); }
+:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 3px; border-radius: var(--radius-sm); }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
+
+/* ============================================================
+   NAV
+   ============================================================ */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  background: color-mix(in oklch, var(--color-bg) 92%, transparent);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--color-divider);
+  padding: 0 var(--space-6);
+}
+.nav-inner {
+  max-width: var(--content-wide); margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 60px; gap: var(--space-4);
+}
+.nav-logo {
+  display: flex; align-items: center; gap: var(--space-3);
+  text-decoration: none; color: var(--color-text);
+  font-weight: 600; font-size: var(--text-sm); white-space: nowrap;
+  flex-shrink: 0;
+}
+.nav-logo svg { color: var(--color-primary); }
+.nav-links {
+  display: flex; align-items: center; gap: var(--space-1);
+  list-style: none; overflow-x: auto; flex-shrink: 1;
+}
+.nav-links a {
+  text-decoration: none; color: var(--color-text-muted);
+  font-size: var(--text-sm); padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md); white-space: nowrap;
+}
+.nav-links a:hover { color: var(--color-text); background: var(--color-surface-2); }
+.nav-links a.active { color: var(--color-primary); background: var(--color-primary-highlight); font-weight: 500; }
+.nav-actions { display: flex; align-items: center; gap: var(--space-2); flex-shrink: 0; }
+.theme-toggle {
+  width: 36px; height: 36px; border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--color-text-muted); background: transparent;
+  border: 1px solid var(--color-border);
+}
+.theme-toggle:hover { background: var(--color-surface-2); color: var(--color-text); }
+
+/* ============================================================
+   LAYOUT
+   ============================================================ */
+.container { max-width: var(--content-wide); margin: 0 auto; padding-inline: var(--space-6); }
+.container--default { max-width: var(--content-default); }
+.section { padding-block: clamp(var(--space-12), 6vw, var(--space-24)); }
+.section-label {
+  font-size: var(--text-xs); font-family: var(--font-mono); font-weight: 500;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--color-primary); margin-bottom: var(--space-4);
+}
+.section-title { font-size: var(--text-xl); font-weight: 700; margin-bottom: var(--space-3); }
+.section-sub { font-size: var(--text-base); color: var(--color-text-muted); max-width: 72ch; margin-bottom: var(--space-10); line-height: 1.7; }
+hr.divider { border: none; border-top: 1px solid var(--color-divider); margin-block: var(--space-12); }
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero {
+  padding-block: clamp(var(--space-16), 8vw, var(--space-24));
+  background: linear-gradient(160deg, var(--color-bg) 0%, color-mix(in oklch, var(--color-primary) 5%, var(--color-bg)) 100%);
+  border-bottom: 1px solid var(--color-divider);
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 80% 20%, color-mix(in oklch, var(--color-primary) 8%, transparent) 0%, transparent 60%);
+  pointer-events: none;
+}
+.hero-inner { position: relative; }
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  font-size: var(--text-xs); font-family: var(--font-mono); font-weight: 500;
+  color: var(--color-primary); letter-spacing: 0.1em; text-transform: uppercase;
+  background: var(--color-primary-highlight);
+  border: 1px solid color-mix(in oklch, var(--color-primary) 30%, transparent);
+  padding: var(--space-2) var(--space-3); border-radius: var(--radius-full);
+  margin-bottom: var(--space-6);
+}
+.hero-title {
+  font-size: var(--text-hero); font-weight: 800; line-height: 1.05;
+  letter-spacing: -0.02em; margin-bottom: var(--space-6);
+  max-width: 18ch;
+}
+.hero-title .accent { color: var(--color-primary); }
+.hero-sub {
+  font-size: var(--text-lg); color: var(--color-text-muted); max-width: 64ch;
+  line-height: 1.7; margin-bottom: var(--space-10);
+}
+.hero-stats {
+  display: flex; flex-wrap: wrap; gap: var(--space-4);
+  margin-bottom: var(--space-10);
+}
+.hero-stat {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg); padding: var(--space-4) var(--space-6);
+  box-shadow: var(--shadow-sm);
+}
+.hero-stat-val {
+  font-size: var(--text-xl); font-weight: 800; font-family: var(--font-mono);
+  color: var(--color-primary); line-height: 1;
+}
+.hero-stat-label {
+  font-size: var(--text-xs); color: var(--color-text-muted);
+  margin-top: var(--space-1); font-family: var(--font-mono);
+  letter-spacing: 0.05em; text-transform: uppercase;
+}
+
+/* ============================================================
+   CHART TILE PATTERN
+   ============================================================ */
+.chart-tile {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+.chart-tile-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: var(--space-5) var(--space-6);
+  border-bottom: 1px solid var(--color-divider);
+  cursor: pointer; user-select: none;
+}
+.chart-tile-title {
+  font-size: var(--text-base); font-weight: 600; display: flex; align-items: center; gap: var(--space-3);
+}
+.chart-tile-toggle {
+  display: flex; align-items: center; gap: var(--space-2);
+  font-size: var(--text-xs); color: var(--color-text-muted);
+  font-family: var(--font-mono); letter-spacing: 0.05em;
+}
+.chart-tile-toggle svg { transition: transform 0.3s ease; }
+.chart-tile.expanded .chart-tile-toggle svg { transform: rotate(180deg); }
+.chart-tile-body {
+  overflow: hidden; max-height: 0;
+  transition: max-height 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.chart-tile.expanded .chart-tile-body { max-height: 600px; }
+.chart-tile-inner { padding: var(--space-6); }
+
+/* ============================================================
+   DONUT CHART (SVG inline)
+   ============================================================ */
+.donut-wrap { display: flex; align-items: center; gap: var(--space-8); flex-wrap: wrap; justify-content: center; }
+.donut-legend { display: flex; flex-direction: column; gap: var(--space-4); }
+.legend-row { display: flex; align-items: flex-start; gap: var(--space-3); }
+.legend-dot { width: 12px; height: 12px; border-radius: var(--radius-full); flex-shrink: 0; margin-top: 4px; }
+.legend-label { font-size: var(--text-sm); font-weight: 600; }
+.legend-sub { font-size: var(--text-xs); color: var(--color-text-muted); font-family: var(--font-mono); }
+
+/* ============================================================
+   COMPANY CARDS GRID
+   ============================================================ */
+.companies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(360px, 100%), 1fr));
+  gap: var(--space-5);
+}
+.company-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: box-shadow var(--transition-interactive), transform var(--transition-interactive);
+}
+.company-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.company-card-header {
+  padding: var(--space-5) var(--space-6);
+  border-bottom: 1px solid var(--color-divider);
+  display: flex; align-items: center; gap: var(--space-4);
+}
+.company-logo {
+  width: 44px; height: 44px; border-radius: var(--radius-md);
+  background: var(--color-surface-offset);
+  border: 1px solid var(--color-border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: var(--text-sm); font-weight: 700; font-family: var(--font-mono);
+  color: var(--color-text-muted); flex-shrink: 0;
+}
+.company-name { font-size: var(--text-base); font-weight: 700; }
+.company-savings-label { font-size: var(--text-xs); color: var(--color-text-muted); font-family: var(--font-mono); letter-spacing: 0.05em; text-transform: uppercase; }
+.company-savings-val { font-size: var(--text-xl); font-weight: 800; font-family: var(--font-mono); color: var(--color-success); line-height: 1.1; }
+.company-savings-note { font-size: var(--text-xs); color: var(--color-text-muted); font-family: var(--font-mono); }
+.company-card-body { padding: var(--space-5) var(--space-6); display: flex; flex-direction: column; gap: var(--space-4); }
+.tier-block {
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4) var(--space-5);
+}
+.tier-block-label {
+  font-size: var(--text-xs); font-family: var(--font-mono); font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  margin-bottom: var(--space-3);
+  display: flex; align-items: center; gap: var(--space-2);
+}
+.tier-badge {
+  display: inline-block; font-size: var(--text-xs); font-family: var(--font-mono);
+  font-weight: 600; letter-spacing: 0.08em; padding: 2px 8px;
+  border-radius: var(--radius-full); text-transform: uppercase;
+}
+.tier-badge.t1 { background: var(--color-primary-highlight); color: var(--color-primary); }
+.tier-badge.t2 { background: var(--color-gold-highlight); color: var(--color-gold); }
+.tier-rows { display: flex; flex-direction: column; gap: var(--space-2); }
+.tier-row { display: flex; justify-content: space-between; align-items: baseline; }
+.tier-row-label { font-size: var(--text-xs); color: var(--color-text-muted); font-family: var(--font-mono); }
+.tier-row-val { font-size: var(--text-sm); font-weight: 600; font-family: var(--font-mono); }
+.tier-row-val.keep { color: var(--color-success); }
+.tier-row-val.lb { color: var(--color-primary); }
+.tier-row-val.psf { color: var(--color-gold); }
+
+.expand-trigger {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: var(--space-3) var(--space-6);
+  border-top: 1px solid var(--color-divider);
+  cursor: pointer; background: var(--color-surface);
+  font-size: var(--text-xs); color: var(--color-text-muted); font-family: var(--font-mono);
+  letter-spacing: 0.05em;
+}
+.expand-trigger:hover { background: var(--color-surface-2); color: var(--color-text); }
+.expand-trigger svg { transition: transform 0.3s ease; }
+.expand-trigger.open svg { transform: rotate(180deg); }
+.expand-body { display: none; padding: var(--space-4) var(--space-6); border-top: 1px solid var(--color-divider); background: var(--color-surface-2); }
+.expand-body.visible { display: block; }
+.expand-body p { font-size: var(--text-xs); color: var(--color-text-muted); line-height: 1.7; margin-bottom: var(--space-2); font-family: var(--font-mono); }
+.expand-body a { color: var(--color-primary); text-decoration: none; }
+.expand-body a:hover { text-decoration: underline; }
+
+/* range badge */
+.range-badge {
+  display: inline-block; font-size: var(--text-xs); font-family: var(--font-mono);
+  font-weight: 500; color: var(--color-orange);
+  background: color-mix(in oklch, var(--color-orange) 12%, var(--color-surface));
+  border: 1px solid color-mix(in oklch, var(--color-orange) 25%, var(--color-border));
+  border-radius: var(--radius-full); padding: 2px 10px; margin-left: var(--space-2);
+}
+
+/* ============================================================
+   HORIZONTAL BAR CHART
+   ============================================================ */
+.industry-chart { display: flex; flex-direction: column; gap: var(--space-4); }
+.bar-row { display: flex; align-items: center; gap: var(--space-4); }
+.bar-company { font-size: var(--text-xs); font-family: var(--font-mono); font-weight: 500; min-width: 120px; text-align: right; flex-shrink: 0; color: var(--color-text-muted); }
+.bar-track { flex: 1; height: 24px; background: var(--color-surface-offset); border-radius: var(--radius-sm); overflow: hidden; display: flex; }
+.bar-seg { height: 100%; transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+.bar-seg.seg-lb { background: var(--color-primary); }
+.bar-seg.seg-psf { background: var(--color-gold); }
+.bar-seg.seg-keep { background: var(--color-success); }
+.bar-total { font-size: var(--text-xs); font-family: var(--font-mono); font-weight: 600; min-width: 64px; color: var(--color-text-muted); }
+
+.bar-legend { display: flex; gap: var(--space-6); flex-wrap: wrap; margin-bottom: var(--space-4); }
+.bar-legend-item { display: flex; align-items: center; gap: var(--space-2); font-size: var(--text-xs); font-family: var(--font-mono); color: var(--color-text-muted); }
+.bar-legend-swatch { width: 12px; height: 12px; border-radius: 2px; flex-shrink: 0; }
+
+/* ============================================================
+   COMPARISON TABLE
+   ============================================================ */
+.compare-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-5);
+  margin-top: var(--space-6);
+}
+.compare-col {
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl); overflow: hidden;
+}
+.compare-col.preferred { border-color: color-mix(in oklch, var(--color-primary) 40%, var(--color-border)); box-shadow: var(--shadow-md); }
+.compare-col-header {
+  padding: var(--space-5) var(--space-6); border-bottom: 1px solid var(--color-divider);
+}
+.compare-col-header h3 { font-size: var(--text-base); font-weight: 700; margin-bottom: var(--space-2); }
+.compare-col-header p { font-size: var(--text-xs); color: var(--color-text-muted); font-family: var(--font-mono); }
+.compare-rows { display: flex; flex-direction: column; }
+.compare-row {
+  display: flex; flex-direction: column;
+  padding: var(--space-4) var(--space-6);
+  border-bottom: 1px solid var(--color-divider);
+  font-size: var(--text-sm);
+}
+.compare-row:last-child { border-bottom: none; }
+.compare-row-key { font-size: var(--text-xs); font-family: var(--font-mono); color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: var(--space-1); }
+.compare-row-val { font-weight: 600; }
+.compare-row-val.bad { color: color-mix(in oklch, var(--color-text) 60%, #ff4444); }
+.compare-row-val.good { color: var(--color-success); }
+
+/* ============================================================
+   STATUS TABLE
+   ============================================================ */
+.status-table { width: 100%; border-collapse: collapse; font-size: var(--text-sm); }
+.status-table th {
+  text-align: left; padding: var(--space-3) var(--space-4);
+  font-family: var(--font-mono); font-size: var(--text-xs); font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-muted);
+  border-bottom: 1px solid var(--color-divider); background: var(--color-surface-2);
+}
+.status-table td {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-divider);
+  font-family: var(--font-mono);
+}
+.status-table tr:last-child td { border-bottom: none; }
+.status-table tr:hover td { background: var(--color-surface-2); }
+.val-zero { color: var(--color-text-muted); }
+.val-num { color: var(--color-primary); font-weight: 600; }
+.projection-mark { font-size: var(--text-xs); color: var(--color-gold); font-style: italic; }
+
+/* ============================================================
+   METHODOLOGY ACCORDION
+   ============================================================ */
+.methodology-block {
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl); overflow: hidden; margin-bottom: var(--space-4);
+}
+.methodology-trigger {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: var(--space-5) var(--space-6);
+  cursor: pointer; user-select: none;
+  font-weight: 600; font-size: var(--text-base);
+}
+.methodology-trigger:hover { background: var(--color-surface-2); }
+.methodology-trigger svg { transition: transform 0.3s ease; flex-shrink: 0; }
+.methodology-trigger.open svg { transform: rotate(180deg); }
+.methodology-content { display: none; padding: var(--space-5) var(--space-6) var(--space-6); border-top: 1px solid var(--color-divider); }
+.methodology-content.visible { display: block; }
+.methodology-content table { font-size: var(--text-xs); font-family: var(--font-mono); }
+.methodology-content th { padding: var(--space-2) var(--space-3); background: var(--color-surface-offset); border: 1px solid var(--color-divider); font-weight: 600; text-align: left; }
+.methodology-content td { padding: var(--space-2) var(--space-3); border: 1px solid var(--color-divider); color: var(--color-text-muted); }
+.methodology-content p { font-size: var(--text-sm); color: var(--color-text-muted); margin-bottom: var(--space-3); line-height: 1.7; }
+.methodology-content .receipt-link { display: inline-flex; align-items: center; gap: var(--space-2); font-size: var(--text-xs); font-family: var(--font-mono); color: var(--color-primary); text-decoration: none; border: 1px solid color-mix(in oklch, var(--color-primary) 30%, var(--color-border)); border-radius: var(--radius-md); padding: var(--space-2) var(--space-3); }
+.methodology-content .receipt-link:hover { background: var(--color-primary-highlight); }
+
+/* ============================================================
+   CALLOUT BLOCKS
+   ============================================================ */
+.callout {
+  border-radius: var(--radius-xl); padding: var(--space-6) var(--space-8);
+  margin-bottom: var(--space-6); font-size: var(--text-sm);
+  display: flex; gap: var(--space-5); align-items: flex-start;
+}
+.callout.truth { background: var(--color-gold-highlight); border: 1px solid color-mix(in oklch, var(--color-gold) 25%, var(--color-border)); }
+.callout.info { background: var(--color-primary-highlight); border: 1px solid color-mix(in oklch, var(--color-primary) 25%, var(--color-border)); }
+.callout-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 2px; }
+.callout-text { line-height: 1.7; }
+.callout-text strong { font-weight: 700; }
+
+/* ============================================================
+   VERBATIM / BLOCKQUOTE
+   ============================================================ */
+.verbatim {
+  border-left: 3px solid var(--color-primary);
+  padding: var(--space-4) var(--space-6);
+  background: var(--color-primary-highlight);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  font-family: var(--font-mono); font-size: var(--text-sm);
+  color: var(--color-text); line-height: 1.7;
+  margin-block: var(--space-4);
+}
+.verbatim cite { display: block; font-size: var(--text-xs); color: var(--color-text-muted); margin-top: var(--space-2); font-style: normal; }
+
+/* ============================================================
+   POLITICAL ANCHORS
+   ============================================================ */
+.anchor-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr)); gap: var(--space-4); margin-top: var(--space-6); }
+.anchor-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-5); }
+.anchor-card-name { font-size: var(--text-xs); font-family: var(--font-mono); font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-primary); margin-bottom: var(--space-3); }
+.anchor-card-text { font-size: var(--text-sm); color: var(--color-text-muted); line-height: 1.7; }
+.anchor-card-number { font-size: var(--text-lg); font-weight: 800; font-family: var(--font-mono); color: var(--color-text); }
+
+/* ============================================================
+   RECEIPT LINKS FOOTER
+   ============================================================ */
+.receipts-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
+  gap: var(--space-3); margin-top: var(--space-6);
+}
+.receipt-card {
+  display: flex; align-items: flex-start; gap: var(--space-3);
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg); padding: var(--space-4);
+  text-decoration: none; color: var(--color-text);
+}
+.receipt-card:hover { background: var(--color-surface-2); border-color: var(--color-primary); }
+.receipt-card-icon { color: var(--color-primary); flex-shrink: 0; }
+.receipt-card-title { font-size: var(--text-xs); font-weight: 600; font-family: var(--font-mono); margin-bottom: var(--space-1); }
+.receipt-card-url { font-size: var(--text-xs); color: var(--color-text-muted); font-family: var(--font-mono); word-break: break-all; }
+
+/* ============================================================
+   CTA SECTION
+   ============================================================ */
+.cta-section {
+  padding-block: clamp(var(--space-16), 8vw, var(--space-24));
+  background: linear-gradient(160deg, color-mix(in oklch, var(--color-primary) 8%, var(--color-bg)) 0%, var(--color-bg) 100%);
+  border-top: 1px solid var(--color-divider);
+  text-align: center;
+}
+.cta-title { font-size: var(--text-2xl); font-weight: 800; margin-bottom: var(--space-4); letter-spacing: -0.01em; }
+.cta-sub { font-size: var(--text-base); color: var(--color-text-muted); max-width: 56ch; margin: 0 auto var(--space-8); line-height: 1.7; }
+.cta-tagline { font-family: var(--font-mono); font-size: var(--text-sm); color: var(--color-primary); font-weight: 600; margin-bottom: var(--space-8); letter-spacing: 0.05em; }
+.cta-buttons { display: flex; flex-wrap: wrap; gap: var(--space-4); justify-content: center; }
+.btn-primary {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  background: var(--color-primary); color: #fff;
+  font-size: var(--text-sm); font-weight: 600; padding: var(--space-4) var(--space-8);
+  border-radius: var(--radius-lg); text-decoration: none;
+  box-shadow: var(--shadow-sm);
+}
+.btn-primary:hover { background: var(--color-primary-hover); box-shadow: var(--shadow-md); }
+.btn-secondary {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  background: var(--color-surface); color: var(--color-text);
+  border: 1px solid var(--color-border);
+  font-size: var(--text-sm); font-weight: 600; padding: var(--space-4) var(--space-8);
+  border-radius: var(--radius-lg); text-decoration: none;
+  box-shadow: var(--shadow-sm);
+}
+.btn-secondary:hover { background: var(--color-surface-2); border-color: var(--color-primary); }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.site-footer {
+  border-top: 1px solid var(--color-divider);
+  padding-block: var(--space-10);
+  font-size: var(--text-xs); color: var(--color-text-muted);
+}
+.footer-inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-4); }
+
+/* ============================================================
+   PROJECTION / TRUTH MARK
+   ============================================================ */
+.truth-mark {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: var(--text-xs); font-family: var(--font-mono);
+  color: var(--color-gold); background: var(--color-gold-highlight);
+  border: 1px solid color-mix(in oklch, var(--color-gold) 25%, var(--color-border));
+  border-radius: var(--radius-full); padding: 1px 8px; margin-left: 6px;
+  vertical-align: middle; font-weight: 500;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .compare-grid { grid-template-columns: 1fr; }
+  .bar-company { min-width: 80px; font-size: 0.65rem; }
+  .donut-wrap { flex-direction: column; }
+  .hero-title { font-size: clamp(2rem, 8vw, 3.5rem); }
+}
+@media (max-width: 480px) {
+  .companies-grid { grid-template-columns: 1fr; }
+  .cta-buttons { flex-direction: column; align-items: center; }
+  .container { padding-inline: var(--space-4); }
+  .anchor-cards { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo" aria-label="Dr. MnemosyneC - Home">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+        <circle cx="14" cy="14" r="13" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M7 14C7 10.134 10.134 7 14 7V14L19.5 9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="14" cy="14" r="2.5" fill="currentColor"/>
+        <path d="M14 14L20 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      Dr. MnemosyneC
+    </a>
+    <ul class="nav-links" role="list">
+      <li><a href="/architecture">Architecture</a></li>
+      <li><a href="/benchmarks">Benchmarks</a></li>
+      <li><a href="/how-it-works">How It Works</a></li>
+      <li><a href="/proofs">Proofs</a></li>
+      <li><a href="/savings-analysis/" class="active" aria-current="page">Savings Analysis</a></li>
+      <li><a href="/download">Download</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="theme-toggle" data-theme-toggle aria-label="Switch to light mode" title="Toggle theme">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- SKIP LINK -->
+<a href="#main-content" class="sr-only">Skip to main content</a>
+
+<main id="main-content">
+
+<!-- ============================================================
+     SECTION 1 - HERO
+     ============================================================ -->
+<section class="hero" aria-labelledby="hero-title">
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-eyebrow">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><circle cx="6" cy="6" r="6"/></svg>
+        BP094 - Substrate Savings Analysis - 2026-06-24
+      </div>
+      <h1 class="hero-title" id="hero-title">Substrate Savings: <span class="accent">$4.49 Billion.</span> We Only Want a Part. Every Year.</h1>
+      <p class="hero-sub">Substrate adoption saves the AI industry $4.49 Billion per year. LB Cooperative asks for 20% (Tier 1) or 50% (Tier 2 Sanders Fork). The rest stays with the AI company. This page shows what each of eight Big AI counterparties saves, what we ask, what they keep, and where the cooperative share goes.</p>
+
+      <div class="hero-stats" role="list" aria-label="Key figures">
+        <div class="hero-stat" role="listitem">
+          <div class="hero-stat-val">$4.49B</div>
+          <div class="hero-stat-label">Industry savings / yr</div>
+        </div>
+        <div class="hero-stat" role="listitem">
+          <div class="hero-stat-val">$898M</div>
+          <div class="hero-stat-label">LB share - Tier 1 (20%)</div>
+        </div>
+        <div class="hero-stat" role="listitem">
+          <div class="hero-stat-val">$3.592B</div>
+          <div class="hero-stat-label">Companies keep - Tier 1</div>
+        </div>
+        <div class="hero-stat" role="listitem">
+          <div class="hero-stat-val">8</div>
+          <div class="hero-stat-label">Big AI counterparties</div>
+        </div>
+      </div>
+
+      <div class="callout truth" role="note" aria-label="Truth-Always disclosure">
+        <span class="callout-icon" aria-hidden="true">&#9432;</span>
+        <div class="callout-text">
+          <strong>Truth-Always Disclosure.</strong> All per-company savings figures are <em>projections</em> grounded in public 2026 API pricing, estimated call volumes, and conservative adoption-rate assumptions. They are not audited actuals. xAI and Microsoft AI figures are stated as ranges where data is insufficient for a single estimate. Source receipt: <a href="/proofs/verify/w12f3c057" style="color:var(--color-primary);">/proofs/verify/w12f3c057</a> (W12 F3 Cost/Savings Proof, confirmed 2026-06-02). No letters have been sent or signed as of this page publish date - see Section 7.
+        </div>
+      </div>
+
+      <!-- DONUT CHART TILE -->
+      <div class="chart-tile" id="hero-donut-tile" role="region" aria-labelledby="donut-title">
+        <div class="chart-tile-header" onclick="toggleTile('hero-donut-tile')" role="button" tabindex="0" aria-expanded="false" aria-controls="hero-donut-body" onkeydown="if(event.key==='Enter'||event.key===' ')toggleTile('hero-donut-tile')">
+          <div class="chart-tile-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 10 10"/></svg>
+            <span id="donut-title">$4.49B Split - Tier 1 vs Tier 2</span>
+          </div>
+          <div class="chart-tile-toggle">
+            CLICK TO EXPAND
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+        </div>
+        <div class="chart-tile-body" id="hero-donut-body">
+          <div class="chart-tile-inner">
+            <div class="donut-wrap">
+              <!-- Tier 1 Donut -->
+              <div style="text-align:center;">
+                <div style="font-size:var(--text-xs);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.1em;color:var(--color-text-muted);margin-bottom:var(--space-3);">TIER 1 - 20% to LB</div>
+                <svg width="180" height="180" viewBox="0 0 180 180" aria-label="Tier 1 split donut chart" role="img">
+                  <title>Tier 1 split: LB Cooperative 20%, Companies keep 80%</title>
+                  <!-- Company keeps 80% = 288 degrees, LB 20% = 72 degrees -->
+                  <!-- Radius 70, cx/cy 90 -->
+                  <!-- Company keeps (success green): start at -90deg, 288 deg -->
+                  <circle cx="90" cy="90" r="70" fill="none" stroke="var(--color-success)" stroke-width="28"
+                    stroke-dasharray="351 97" stroke-dashoffset="97" />
+                  <!-- LB 20% (primary): 72 deg = 87.96 of 439.8 circ -->
+                  <circle cx="90" cy="90" r="70" fill="none" stroke="var(--color-primary)" stroke-width="28"
+                    stroke-dasharray="87 352" stroke-dashoffset="10" />
+                  <text x="90" y="84" text-anchor="middle" font-size="20" font-weight="800" font-family="'IBM Plex Mono',monospace" fill="var(--color-text)">80%</text>
+                  <text x="90" y="102" text-anchor="middle" font-size="10" font-family="'IBM Plex Mono',monospace" fill="var(--color-text-muted)">COMPANY KEEPS</text>
+                </svg>
+              </div>
+              <!-- Tier 2 Donut -->
+              <div style="text-align:center;">
+                <div style="font-size:var(--text-xs);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.1em;color:var(--color-text-muted);margin-bottom:var(--space-3);">TIER 2 - SANDERS FORK</div>
+                <svg width="180" height="180" viewBox="0 0 180 180" aria-label="Tier 2 split donut chart" role="img">
+                  <title>Tier 2 split: Company keeps 50%, LB Cooperative 20%, Public Sovereign Fund 30%</title>
+                  <!-- 50% keep = 180deg = 219.9 arc; 20% LB = 72deg = 87.96; 30% PSF = 108deg = 131.9 -->
+                  <circle cx="90" cy="90" r="70" fill="none" stroke="var(--color-success)" stroke-width="28"
+                    stroke-dasharray="220 220" stroke-dashoffset="110" />
+                  <circle cx="90" cy="90" r="70" fill="none" stroke="var(--color-primary)" stroke-width="28"
+                    stroke-dasharray="88 352" stroke-dashoffset="-110" />
+                  <circle cx="90" cy="90" r="70" fill="none" stroke="var(--color-gold)" stroke-width="28"
+                    stroke-dasharray="132 308" stroke-dashoffset="-198" />
+                  <text x="90" y="84" text-anchor="middle" font-size="20" font-weight="800" font-family="'IBM Plex Mono',monospace" fill="var(--color-text)">50%</text>
+                  <text x="90" y="102" text-anchor="middle" font-size="10" font-family="'IBM Plex Mono',monospace" fill="var(--color-text-muted)">COMPANY KEEPS</text>
+                </svg>
+              </div>
+              <!-- Legend -->
+              <div class="donut-legend" aria-label="Chart legend">
+                <div class="legend-row">
+                  <div class="legend-dot" style="background:var(--color-success);" aria-hidden="true"></div>
+                  <div>
+                    <div class="legend-label">Company Keeps</div>
+                    <div class="legend-sub">Tier 1: $3.592B (80%) / Tier 2: $2.245B (50%)</div>
+                  </div>
+                </div>
+                <div class="legend-row">
+                  <div class="legend-dot" style="background:var(--color-primary);" aria-hidden="true"></div>
+                  <div>
+                    <div class="legend-label">LB Cooperative</div>
+                    <div class="legend-sub">Both tiers: $898M (20%)</div>
+                  </div>
+                </div>
+                <div class="legend-row">
+                  <div class="legend-dot" style="background:var(--color-gold);" aria-hidden="true"></div>
+                  <div>
+                    <div class="legend-label">Public Sovereign Fund</div>
+                    <div class="legend-sub">Tier 2 only: $1.347B (30%)</div>
+                  </div>
+                </div>
+                <div style="margin-top:var(--space-4);padding:var(--space-3);background:var(--color-surface-offset);border-radius:var(--radius-md);font-size:var(--text-xs);font-family:var(--font-mono);color:var(--color-text-muted);">
+                  <span class="truth-mark">PROJECTION</span> All figures derived from W12 F3 cost proof.<br>
+                  Receipt: <a href="/proofs/verify/w12f3c057" style="color:var(--color-primary);">/proofs/verify/w12f3c057</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 2 - PER-COMPANY BREAKDOWN
+     ============================================================ -->
+<section class="section" aria-labelledby="companies-title">
+  <div class="container">
+    <p class="section-label">Section 2 - Per-Company Breakdown</p>
+    <h2 class="section-title" id="companies-title">What Each Company Saves - and What We Ask</h2>
+    <p class="section-sub">Each card shows the projected annual savings from substrate adoption, the Tier 1 and Tier 2 fee structures, and what the AI company retains at each tier. xAI and Microsoft AI savings are stated as ranges per Truth-Always discipline.</p>
+
+    <div class="companies-grid">
+
+      <!-- ANTHROPIC -->
+      <article class="company-card" aria-label="Anthropic savings card">
+        <div class="company-card-header">
+          <div class="company-logo" aria-hidden="true">AN</div>
+          <div>
+            <div class="company-name">Anthropic</div>
+            <div style="font-size:var(--text-xs);color:var(--color-text-muted);font-family:var(--font-mono);">claude.ai - API tier</div>
+          </div>
+        </div>
+        <div class="company-card-body">
+          <div style="margin-bottom:var(--space-2);">
+            <div class="company-savings-label">Projected Annual Savings</div>
+            <div class="company-savings-val"><a href="/proofs/#w12f3c057" style="color:inherit;text-decoration:underline dotted;text-underline-offset:3px;" title="Cost/Savings Proof receipt">$400M</a><span class="truth-mark">PROJECTION</span></div>
+          </div>
+          <div class="tier-block">
+            <div class="tier-block-label"><span class="tier-badge t1">Tier 1</span> 20% to LB Cooperative</div>
+            <div class="tier-rows">
+              <div class="tier-row"><span class="tier-row-label">LB Cooperative share</span><span class="tier-row-val lb">$80M / yr</span></div>
+              <div class="tier-row"><span class="tier-row-label">Anthropic keeps</span><span class="tier-row-val keep">$320M / yr</span></div>
+            </div>
+          </div>
+          <div class="tier-block">
+            <div class="tier-block-label"><span class="tier-badge t2">Tier 2</span> Sanders Fork - 50% split</div>
+            <div class="tier-rows">
+              <div class="tier-row"><span class="tier-row-label">LB Cooperative (20%)</span><span class="tier-row-val lb">$80M / yr</span></div>
+              <div class="tier-row"><span class="tier-row-label">Public Sovereign Fund (30%)</span><span class="tier-row-val psf">$120M / yr</span></div>
+              <div class="tier-row"><span class="tier-row-label">Anthropic keeps (50%)</span><span class="tier-row-val keep">$200M / yr</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="expand-trigger" onclick="toggleExpand(this)" role="button" tabindex="0" aria-expanded="false" onkeydown="if(event.key==='Enter'||event.key===' ')toggleExpand(this)">
+          <span>CLICK TO VIEW RECEIPTS AND METHODOLOGY</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+        <div class="expand-body">
+          <p>Savings methodology: estimated API call volume based on Anthropic's reported scale (2024-2025), applied to W12 F3 cost ladder (~227x cost ratio, local substrate vs GPT-4o RAG baseline). Conservative adoption-rate assumption (baseline scenario). Sensitivity band: $280M (low) - $560M (high).</p>
+          <p>Receipt anchor: <a href="/proofs/verify/w12f3c057">/proofs/verify/w12f3c057</a> | Reference: AA-FORMAL-2272 cost ladder</p>
+        </div>
+      </article>
+
+      <!-- OPENAI -->
+      <article class="company-card" aria-label="OpenAI savings card">
+        <div class="company-card-header">
+          <div class="company-logo" aria-hidden="true">OAI</div>
+          <div>
+            <div class="company-name">OpenAI</div>
+            <div style="font-size:var(--text-xs);color:var(--color-text-muted);font-family:var(--font-mono);">GPT-4o / ChatGPT API tier</div>
+          </div>
+        </div>
+        <div class="company-card-body">
+          <div style="margin-bottom:var(--space-2);">
+            <div class="company-savings-label">Projected Annual Savings</div>
+            <div class="company-savings-val"><a href="/proofs/#w12f3c057" style="color:inherit;text-decoration:underline dotted;text-underline-offset:3px;" title="Cost/Savings Proof receipt">$1.25B</a><span class="truth-mark">PROJECTION</span></div>
+          </div>
+          <div class="tier-block">
+            <div class="tier-block-label"><span class="tier-badge t1">Tier 1</span> 20% to LB Cooperative</div>
+            <div class="tier-rows">
+              <div class="tier-row"><span class="tier-row-label">LB Cooperative share</span><span class="tier-row-val lb">$250M / yr</span></div>
+              <div class="tier-row"><span class="tier-row-label">OpenAI keeps</span><span class="tier-row-val keep">$1.0B / yr</span></div>
+            </div>
+          </div>
+          <div class="tier-block">
+            <div class="tier-block-label"><span class="tier-badge t2">Tier 2</span> Sanders Fork - 50% split</div>
+            <div class="tier-rows">
+              <div class="tier-row"><span class="tier-row-label">LB Cooperative (20%)</span><span class="tier-row-val lb">$250M / yr</span></div>
+              <div class="tier-row"><span class="tier-row-label">Public Sovereign Fund (30%)</span><span class="tier-row-val psf">$375M / yr</span></div>
+              <div class="tier-row"><span class="tier-row-label">OpenAI keeps (50%)</span><span class="tier-row-val keep">$625M / yr</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="expand-trigger" onclick="toggleExpand(this)" role="button" tabindex="0" aria-expanded="false" onkeydown="if(event.key==='Enter'||event.key===' ')toggleExpand(this)">
+          <span>CLICK TO VIEW RECEIPTS AND METHODOLOGY</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+        <div class="expand-body">
+          <p>Savings methodology: OpenAI largest API volume of the 8 counterparties. GPT-4o baseline at $0.01565/query (2,200 input + 300 output tokens, per W12 F3 harness). Substrate adoption moves inference load to local/smaller-model routing. Conservative adoption rate: 35% of eligible query volume. Sensitivity band: $875M (low) - $1.75B (high).</p>
+          <p>Receipt anchor: <a href="/proofs/verify/w12f3c057">/proofs/verify/w12f3c057</a> | Reference: AA-FORMAL-2272 cost ladder</p>
+        </div>
+      </article>
+
+      <!-- GOOGLE DEEPMIND -->
+      <article class="company-card" aria-label="Google DeepMind savings card">
+        <div class="company-card-header">
+          <div class="company-logo" aria-hidden="true">GDM</div>
+          <div>
+            <div class="company-name">Google DeepMind</div>
+            <div style="font-size:var(--text-xs);color:var(--color-text-muted);font-family:var(--font-mono);">Gemini API / Vertex AI tier</div>
+          </div>
+        </div>
+        <div class="company-card-body">
+          <div style="margin-bottom:var(--space-2);">
+            <div class="company-savings-label">Projected Annual Savings</div>
+            <div class="company-savings-val"><a href="/proofs/#w12f3c057" style="color:inherit;text-decoration:underline dotted;text-underline-offset:3px;" title="Cost/Savings Proof receipt">$1.75B</a><span class="truth-mark">PROJECTION</span></div>
+          </div>
+          <div class="tier-block">
+            <div class="tier-block-label"><span class="tier-badge t1">Tier 1</span> 20% to LB Cooperative</div>
+            <div class="tier-rows">
+              <div class="tier-row"><span class="tier-row-label">LB Cooperative share</span><span class="tier-row-val lb">$350M / yr</span></div>
+              <div class="tier-row"><span class="tier-row-label">Google DeepMind keeps</span><span class="tier-row-val keep">$1.4B / yr</span></div>
+            </div>
+          </div>
+          <div class="tier-block">
+            <div class="tier-block-label"><span class="tier-badge t2">Tier 2</span> Sanders Fork - 50% split</div>
+            <div class="tier-rows">
+              <div class="tier-row"><span class="tier-row-label">LB Cooperative (20%)</span><span class="tier-row-val lb">$350M / yr</span></div>
+              <div class="tier-row"><span class="tier-row-label">Public Sovereign Fund (30%)</span><span class="tier-row-val psf">$525M / yr</span></div>
+              <div class="tier-row"><span class="tier-row-label">Google DeepMind keeps (50%)</span><span class="tier-row-val keep">$875M / yr</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="expand-trigger" onclick="toggleExpand(this)" role="button" tabindex="0" aria-expanded="false" onkeydown="if(event.key==='Enter'||event.key===' ')toggleExpand(this)">
+          <span>CLICK TO VIEW RECEIPTS AND METHODOLOGY</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+        <div class="expand-body">
+          <p>Savings methodology: Google DeepMind highest single-counterparty estimate due to Vertex AI enterprise scale and Google Cloud API volume. Gemini Frontier substrate ON score: 90.7 (BP073 Sound Barrier benchmark). Conservative adoption-rate: 30% of eligible inference volume routed through substrate. Sensitivity band: $1.2B (low) - $2.4B (high).</p>
+          <p>Receipt anchor: <a href="/proofs/verify/w12f3c057">/proofs/verify/w12f3c057</a> | Reference: AA-FORMAL-2272 cost ladder | BP073 Sound Barrier card</p>
+        </div>
+      </article>
+
+      <!-- META -->
+      <article class="company-card" aria-label="Meta savings card">
+        <div class="company-card-header">
+          <div class="company-logo" aria-hidden="true">META</div>
+          <div>
+            <div class="company-name">Meta</div>
+            <div style="font-size:var(--text-xs);color:var(--color-text-muted);font-family:var(--font-mono);">Llama API / Meta AI tier</div>
+          </div>
+        </div>
+        <div class="company-card-body">
+          <div style="margin-bottom:var(--space-2);">
+            <div class="company-savings-label">Projected Annual Savings</div>
+            <div class="company-savings-val"><a href="/proofs/#w12f3c057" style="color:inherit;text-decoration:underline dotted;text-underline-offset:3px;" title="Cost/Savings Proof receipt">$900M</a><span class="truth-mark">PROJECTION</span></div>
+          </div>
+          <div class="tier-block">
+            <div class="tier-block-label"><span class="tier-badge t1">Tier 1</span> 20% to LB Cooperative</div>
+            <div class="tier-rows">
+              <div class="tier-row"><span class="tier-row-label">LB Cooperative share</span><span class="tier-row-val lb">$180M / yr</span></div>
+              <div class="tier-row"><span class="tier-row-label">Meta keeps</span><span class="tier-row-val keep">$720M / yr</span></div>
+            </div>
+          </div>
+          <div class="tier-block">
+            <div class="tier-block-label"><span class="tier-badge t2">Tier 2</span> Sanders Fork - 50% split</div>
+            <div class="tier-rows">
+              <div class="tier-row"><span class="tier-row-label">LB Cooperative (20%)</span><span class="tier-row-val lb">$180M / yr</span></div>
+              <div class="tier-row"><span class="tier-row-label">Public Sovereign Fund (30%)</span><span class="tier-row-val psf">$270M / yr</span></div>
+              <div class="tier-row"><span class="tier-row-label">Meta keeps (50%)</span><span class="tier-row-val keep">$450M / yr</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="expand-trigger" onclick="toggleExpand(this)" role="button" tabindex="0" aria-expanded="false" onkeydown="if(event.key==='Enter'||event.key===' ')toggleExpand(this)">
+          <span>CLICK TO VIEW RECEIPTS AND METHODOLOGY</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+        <div class="expand-body">
+          <p>Savings methodology: Meta Llama 3.x baseline scored 78 (substrate ON) in BP073 Sound Barrier benchmark. High open-source deployment volume estimated. Sensitivity band: $630M (low) - $1.26B (high). Meta's open-weight distribution increases adoption surface but reduces direct API volume counted here.</p>
+          <p>Receipt anchor: <a href="/proofs/verify/w12f3c057">/proofs/verify/w12f3c057</a> | Reference: AA-FORMAL-2272 cost ladder</p>
+        </div>
+      </article>
+
+      <!-- COHERE -->
+      <article class="company-card" aria-label="Cohere savings card">
+        <div class="company-card-header">
+          <div class="company-logo" aria-hidden="true">COH</div>
+          <div>
+            <div class="company-name">Cohere</div>
+            <div style="font-size:var(--text-xs);color:var(--color-text-muted);font-family:var(--font-mono);">Command R+ enterprise tier</div>
+          </div>
+        </div>
+        <div class="company-card-body">
+          <div style="margin-bottom:var(--space-2);">
+            <div class="company-savings-label">Projected Annual Savings</div>
+            <div class="company-savings-val"><a href="/proofs/#w12f3c057" style="color:inherit;text-decoration:underline dotted;text-underline-offset:3px;" title="Cost/Savings Proof receipt">$100M</a><span class="truth-mark">PROJECTION</span></div>
+          </div>
+          <div class="tier-block">
+            <div class="tier-block-label"><span class="tier-badge t1">Tier 1</span> 20% to LB Cooperative</div>
+            <div class="tier-rows">
+              <div class="tier-row"><span class="tier-row-label">LB Cooperative share</span><span class="tier-row-val lb">$20M / yr</span></div>
+              <div class="tier-row"><span class="tier-row-label">Cohere keeps</span><span class="tier-row-val keep">$80M / yr</span></div>
+            </div>
+          </div>
+          <div class="tier-block">
+            <div class="tier-block-label"><span class="tier-badge t2">Tier 2</span> Sanders Fork - 50% split</div>
+            <div class="tier-rows">
+              <div class="tier-row"><span class="tier-row-label">LB Cooperative (20%)</span><span class="tier-row-val lb">$20M / yr</span></div>
+              <div class="tier-row"><span class="tier-row-label">Public Sovereign Fund (30%)</span><span class="tier-row-val psf">$30M / yr</span></div>
+              <div class="tier-row"><span class="tier-row-label">Cohere keeps (50%)</span><span class="tier-row-val keep">$50M / yr</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="expand-trigger" onclick="toggleExpand(this)" role="button" tabindex="0" aria-expanded="false" onkeydown="if(event.key==='Enter'||event.key===' ')toggleExpand(this)">
+          <span>CLICK TO VIEW RECEIPTS AND METHODOLOGY</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+        <div class="expand-body">
+          <p>Savings methodology: Cohere enterprise RAG workloads are substrate's primary sweet spot. Command R+ is deployed primarily in enterprise document retrieval pipelines where substrate's cross-linking savings are highest. Conservative adoption: 40% of Cohere RAG volume. Sensitivity band: $70M (low) - $140M (high).</p>
+          <p>Receipt anchor: <a href="/proofs/verify/w12f3c057">/proofs/verify/w12f3c057</a> | Reference: AA-FORMAL-2272 cost ladder</p>
+        </div>
+      </article>
+
+      <!-- MISTRAL -->
+      <article class="company-card" aria-label="Mistral savings card">
+        <div class="company-card-header">
+          <div class="company-logo" aria-hidden="true">MIS</div>
+          <div>
+            <div class="company-name">Mistral</div>
+            <div style="font-size:var(--text-xs);color:var(--color-text-muted);font-family:var(--font-mono);">Mistral Large / Le Chat API</div>
+          </div>
+        </div>
+        <div class="company-card-body">
+          <div style="margin-bottom:var(--space-2);">
+            <div class="company-savings-label">Projected Annual Savings</div>
+            <div class="company-savings-val"><a href="/proofs/#w12f3c057" style="color:inherit;text-decoration:underline dotted;text-underline-offset:3px;" title="Cost/Savings Proof receipt">$90M</a><span class="truth-mark">PROJECTION</span></div>
+          </div>
+          <div class="tier-block">
+            <div class="tier-block-label"><span class="tier-badge t1">Tier 1</span> 20% to LB Cooperative</div>
+            <div class="tier-rows">
+              <div class="tier-row"><span class="tier-row-label">LB Cooperative share</span><span class="tier-row-val lb">$18M / yr</span></div>
+              <div class="tier-row"><span class="tier-row-label">Mistral keeps</span><span class="tier-row-val keep">$72M / yr</span></div>
+            </div>
+          </div>
+          <div class="tier-block">
+            <div class="tier-block-label"><span class="tier-badge t2">Tier 2</span> Sanders Fork - 50% split</div>
+            <div class="tier-rows">
+              <div class="tier-row"><span class="tier-row-label">LB Cooperative (20%)</span><span class="tier-row-val lb">$18M / yr</span></div>
+              <div class="tier-row"><span class="tier-row-label">Public Sovereign Fund (30%)</span><span class="tier-row-val psf">$27M / yr</span></div>
+              <div class="tier-row"><span class="tier-row-label">Mistral keeps (50%)</span><span class="tier-row-val keep">$45M / yr</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="expand-trigger" onclick="toggleExpand(this)" role="button" tabindex="0" aria-expanded="false" onkeydown="if(event.key==='Enter'||event.key===' ')toggleExpand(this)">
+          <span>CLICK TO VIEW RECEIPTS AND METHODOLOGY</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+        <div class="expand-body">
+          <p>Savings methodology: Mistral smaller API footprint than US hyperscalers. European developer base. Open-weight models reduce direct API-billed volume. Conservative adoption: 45% of billed API volume eligible for substrate. Sensitivity band: $63M (low) - $126M (high).</p>
+          <p>Receipt anchor: <a href="/proofs/verify/w12f3c057">/proofs/verify/w12f3c057</a> | Reference: AA-FORMAL-2272 cost ladder</p>
+        </div>
+      </article>
+
+      <!-- xAI -->
+      <article class="company-card" aria-label="xAI savings card">
+        <div class="company-card-header">
+          <div class="company-logo" aria-hidden="true">xAI</div>
+          <div>
+            <div class="company-name">xAI</div>
+            <div style="font-size:var(--text-xs);color:var(--color-text-muted);font-family:var(--font-mono);">Grok API / X platform tier</div>
+          </div>
+        </div>
+        <div class="company-card-body">
+          <div style="margin-bottom:var(--space-2);">
+            <div class="company-savings-label">Projected Annual Savings</div>
+            <div class="company-savings-val"><a href="/proofs/#w12f3c057" style="color:inherit;text-decoration:underline dotted;text-underline-offset:3px;" title="Cost/Savings Proof receipt">$500M - $1.0B</a><span class="truth-mark">RANGE</span></div>
+            <div class="company-savings-note">Stated as range - API volume data insufficient for single-point estimate.</div>
+          </div>
+          <div class="tier-block">
+            <div class="tier-block-label"><span class="tier-badge t1">Tier 1</span> 20% to LB Cooperative</div>
+            <div class="tier-rows">
+              <div class="tier-row"><span class="tier-row-label">LB Cooperative share (low)</span><span class="tier-row-val lb">$100M / yr</span></div>
+              <div class="tier-row"><span class="tier-row-label">LB Cooperative share (high)</span><span class="tier-row-val lb">$200M / yr</span></div>
+              <div class="tier-row"><span class="tier-row-label">xAI keeps (low - high)</span><span class="tier-row-val keep">$400M - $800M / yr</span></div>
+            </div>
+          </div>
+          <div class="tier-block">
+            <div class="tier-block-label"><span class="tier-badge t2">Tier 2</span> Sanders Fork - 50% split</div>
+            <div class="tier-rows">
+              <div class="tier-row"><span class="tier-row-label">LB Cooperative (20%)</span><span class="tier-row-val lb">$100M - $200M / yr</span></div>
+              <div class="tier-row"><span class="tier-row-label">Public Sovereign Fund (30%)</span><span class="tier-row-val psf">$150M - $300M / yr</span></div>
+              <div class="tier-row"><span class="tier-row-label">xAI keeps (50%)</span><span class="tier-row-val keep">$250M - $500M / yr</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="expand-trigger" onclick="toggleExpand(this)" role="button" tabindex="0" aria-expanded="false" onkeydown="if(event.key==='Enter'||event.key===' ')toggleExpand(this)">
+          <span>CLICK TO VIEW RECEIPTS AND METHODOLOGY</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+        <div class="expand-body">
+          <p>Truth-Always note: xAI API volume is not publicly disclosed at sufficient granularity. The $500M-$1.0B range reflects low and high estimates based on X platform daily active users, Grok API launch scale, and comparable per-query cost ladder assumptions. Do not cite the midpoint as a confirmed figure. Receipt anchor: <a href="/proofs/verify/w12f3c057">/proofs/verify/w12f3c057</a></p>
+        </div>
+      </article>
+
+      <!-- MICROSOFT AI -->
+      <article class="company-card" aria-label="Microsoft AI savings card">
+        <div class="company-card-header">
+          <div class="company-logo" aria-hidden="true">MS</div>
+          <div>
+            <div class="company-name">Microsoft AI</div>
+            <div style="font-size:var(--text-xs);color:var(--color-text-muted);font-family:var(--font-mono);">Azure OpenAI / Copilot tier</div>
+          </div>
+        </div>
+        <div class="company-card-body">
+          <div style="margin-bottom:var(--space-2);">
+            <div class="company-savings-label">Projected Annual Savings</div>
+            <div class="company-savings-val"><a href="/proofs/#w12f3c057" style="color:inherit;text-decoration:underline dotted;text-underline-offset:3px;" title="Cost/Savings Proof receipt">$600M - $1.0B</a><span class="truth-mark">RANGE</span></div>
+            <div class="company-savings-note">Stated as range - Azure AI segmented revenue data insufficient for single-point estimate.</div>
+          </div>
+          <div class="tier-block">
+            <div class="tier-block-label"><span class="tier-badge t1">Tier 1</span> 20% to LB Cooperative</div>
+            <div class="tier-rows">
+              <div class="tier-row"><span class="tier-row-label">LB Cooperative share (low)</span><span class="tier-row-val lb">$120M / yr</span></div>
+              <div class="tier-row"><span class="tier-row-label">LB Cooperative share (high)</span><span class="tier-row-val lb">$200M / yr</span></div>
+              <div class="tier-row"><span class="tier-row-label">Microsoft keeps (low - high)</span><span class="tier-row-val keep">$480M - $800M / yr</span></div>
+            </div>
+          </div>
+          <div class="tier-block">
+            <div class="tier-block-label"><span class="tier-badge t2">Tier 2</span> Sanders Fork - 50% split</div>
+            <div class="tier-rows">
+              <div class="tier-row"><span class="tier-row-label">LB Cooperative (20%)</span><span class="tier-row-val lb">$120M - $200M / yr</span></div>
+              <div class="tier-row"><span class="tier-row-label">Public Sovereign Fund (30%)</span><span class="tier-row-val psf">$180M - $300M / yr</span></div>
+              <div class="tier-row"><span class="tier-row-label">Microsoft keeps (50%)</span><span class="tier-row-val keep">$300M - $500M / yr</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="expand-trigger" onclick="toggleExpand(this)" role="button" tabindex="0" aria-expanded="false" onkeydown="if(event.key==='Enter'||event.key===' ')toggleExpand(this)">
+          <span>CLICK TO VIEW RECEIPTS AND METHODOLOGY</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+        <div class="expand-body">
+          <p>Truth-Always note: Microsoft Azure AI Copilot revenue is bundled in Azure Intelligent Cloud segment. Dedicated per-query API call volume is not publicly isolated. The $600M-$1.0B range applies the W12 F3 cost ladder to estimated Azure OpenAI Service query volume. Range is wider than point estimates for counterparties with public API pricing dashboards. Receipt anchor: <a href="/proofs/verify/w12f3c057">/proofs/verify/w12f3c057</a></p>
+        </div>
+      </article>
+
+    </div><!-- /companies-grid -->
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 3 - INDUSTRY AGGREGATE CHART
+     ============================================================ -->
+<section class="section" style="background:var(--color-surface);border-block:1px solid var(--color-divider);" aria-labelledby="aggregate-title">
+  <div class="container">
+    <p class="section-label">Section 3 - Industry Aggregate</p>
+    <h2 class="section-title" id="aggregate-title">$4.49B Across All 8 Counterparties</h2>
+    <p class="section-sub">Stacked horizontal bars show LB Cooperative share, Public Sovereign Fund (Tier 2 only), and the AI company's retained savings. xAI and Microsoft AI bars use the midpoint of their stated ranges for visualization purposes only - the range is the correct figure.</p>
+
+    <div class="chart-tile" id="aggregate-tile">
+      <div class="chart-tile-header" onclick="toggleTile('aggregate-tile')" role="button" tabindex="0" aria-expanded="false" aria-controls="aggregate-body" onkeydown="if(event.key==='Enter'||event.key===' ')toggleTile('aggregate-tile')">
+        <div class="chart-tile-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+          Industry Aggregate - Tier 2 Scenario (click to expand)
+        </div>
+        <div class="chart-tile-toggle">
+          EXPAND CHART
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+      </div>
+      <div class="chart-tile-body" id="aggregate-body">
+        <div class="chart-tile-inner">
+          <div class="bar-legend" role="list" aria-label="Chart legend">
+            <div class="bar-legend-item" role="listitem">
+              <div class="bar-legend-swatch" style="background:var(--color-primary);" aria-hidden="true"></div>
+              LB Cooperative (20%)
+            </div>
+            <div class="bar-legend-item" role="listitem">
+              <div class="bar-legend-swatch" style="background:var(--color-gold);" aria-hidden="true"></div>
+              Public Sovereign Fund (30% - Tier 2)
+            </div>
+            <div class="bar-legend-item" role="listitem">
+              <div class="bar-legend-swatch" style="background:var(--color-success);" aria-hidden="true"></div>
+              Company Keeps (50%)
+            </div>
+          </div>
+          <div class="industry-chart" role="table" aria-label="Industry aggregate savings">
+            <!-- ANTHROPIC: 400M. LB 80 (20%), PSF 120 (30%), Keep 200 (50%) / 400 total -->
+            <div class="bar-row" role="row">
+              <div class="bar-company" role="rowheader">Anthropic</div>
+              <div class="bar-track" role="cell" aria-label="Anthropic: $80M LB, $120M PSF, $200M keep out of $400M">
+                <div class="bar-seg seg-lb" style="width:20%;" title="LB: $80M"></div>
+                <div class="bar-seg seg-psf" style="width:30%;" title="PSF: $120M"></div>
+                <div class="bar-seg seg-keep" style="width:50%;" title="Keep: $200M"></div>
+              </div>
+              <div class="bar-total">$400M</div>
+            </div>
+            <!-- OPENAI: 1250M -->
+            <div class="bar-row" role="row">
+              <div class="bar-company" role="rowheader">OpenAI</div>
+              <div class="bar-track" role="cell" aria-label="OpenAI: $250M LB, $375M PSF, $625M keep out of $1.25B">
+                <div class="bar-seg seg-lb" style="width:20%;" title="LB: $250M"></div>
+                <div class="bar-seg seg-psf" style="width:30%;" title="PSF: $375M"></div>
+                <div class="bar-seg seg-keep" style="width:50%;" title="Keep: $625M"></div>
+              </div>
+              <div class="bar-total">$1.25B</div>
+            </div>
+            <!-- GOOGLE: 1750M -->
+            <div class="bar-row" role="row">
+              <div class="bar-company" role="rowheader">Google DM</div>
+              <div class="bar-track" role="cell" aria-label="Google DeepMind: $350M LB, $525M PSF, $875M keep out of $1.75B">
+                <div class="bar-seg seg-lb" style="width:20%;" title="LB: $350M"></div>
+                <div class="bar-seg seg-psf" style="width:30%;" title="PSF: $525M"></div>
+                <div class="bar-seg seg-keep" style="width:50%;" title="Keep: $875M"></div>
+              </div>
+              <div class="bar-total">$1.75B</div>
+            </div>
+            <!-- META: 900M -->
+            <div class="bar-row" role="row">
+              <div class="bar-company" role="rowheader">Meta</div>
+              <div class="bar-track" role="cell" aria-label="Meta: $180M LB, $270M PSF, $450M keep out of $900M">
+                <div class="bar-seg seg-lb" style="width:20%;" title="LB: $180M"></div>
+                <div class="bar-seg seg-psf" style="width:30%;" title="PSF: $270M"></div>
+                <div class="bar-seg seg-keep" style="width:50%;" title="Keep: $450M"></div>
+              </div>
+              <div class="bar-total">$900M</div>
+            </div>
+            <!-- COHERE: 100M -->
+            <div class="bar-row" role="row">
+              <div class="bar-company" role="rowheader">Cohere</div>
+              <div class="bar-track" role="cell" aria-label="Cohere: $20M LB, $30M PSF, $50M keep out of $100M">
+                <div class="bar-seg seg-lb" style="width:20%;" title="LB: $20M"></div>
+                <div class="bar-seg seg-psf" style="width:30%;" title="PSF: $30M"></div>
+                <div class="bar-seg seg-keep" style="width:50%;" title="Keep: $50M"></div>
+              </div>
+              <div class="bar-total">$100M</div>
+            </div>
+            <!-- MISTRAL: 90M -->
+            <div class="bar-row" role="row">
+              <div class="bar-company" role="rowheader">Mistral</div>
+              <div class="bar-track" role="cell" aria-label="Mistral: $18M LB, $27M PSF, $45M keep out of $90M">
+                <div class="bar-seg seg-lb" style="width:20%;" title="LB: $18M"></div>
+                <div class="bar-seg seg-psf" style="width:30%;" title="PSF: $27M"></div>
+                <div class="bar-seg seg-keep" style="width:50%;" title="Keep: $45M"></div>
+              </div>
+              <div class="bar-total">$90M</div>
+            </div>
+            <!-- xAI: midpoint 750M for viz -->
+            <div class="bar-row" role="row">
+              <div class="bar-company" role="rowheader">xAI<span class="range-badge">RANGE</span></div>
+              <div class="bar-track" role="cell" aria-label="xAI midpoint visualization only: range is $500M-$1B">
+                <div class="bar-seg seg-lb" style="width:20%;" title="LB: $150M (midpoint)"></div>
+                <div class="bar-seg seg-psf" style="width:30%;" title="PSF: $225M (midpoint)"></div>
+                <div class="bar-seg seg-keep" style="width:50%;" title="Keep: $375M (midpoint)"></div>
+              </div>
+              <div class="bar-total">$500M-$1B</div>
+            </div>
+            <!-- MICROSOFT: midpoint 800M for viz -->
+            <div class="bar-row" role="row">
+              <div class="bar-company" role="rowheader">Microsoft<span class="range-badge">RANGE</span></div>
+              <div class="bar-track" role="cell" aria-label="Microsoft midpoint visualization only: range is $600M-$1B">
+                <div class="bar-seg seg-lb" style="width:20%;" title="LB: $160M (midpoint)"></div>
+                <div class="bar-seg seg-psf" style="width:30%;" title="PSF: $240M (midpoint)"></div>
+                <div class="bar-seg seg-keep" style="width:50%;" title="Keep: $400M (midpoint)"></div>
+              </div>
+              <div class="bar-total">$600M-$1B</div>
+            </div>
+          </div>
+          <p style="font-size:var(--text-xs);color:var(--color-text-muted);font-family:var(--font-mono);margin-top:var(--space-5);">
+            NOTE: All bars show the Tier 2 50/20/30 split. All bars represent 100% of savings for that company. Absolute bar widths scaled to longest bar (Google DeepMind $1.75B) for the aggregate view above. xAI and Microsoft bars use midpoint for rendering only - stated as ranges on cards. Receipt: <a href="/proofs/verify/w12f3c057" style="color:var(--color-primary);">/proofs/verify/w12f3c057</a><span class="truth-mark">PROJECTION</span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 4 - VOLUNTARY TIER 2 VS SANDERS
+     ============================================================ -->
+<section class="section" aria-labelledby="political-title">
+  <div class="container container--default">
+    <p class="section-label">Section 4 - Political Track</p>
+    <h2 class="section-title" id="political-title">Voluntary Tier 2 vs. Sanders' Equity-Seizure Bill</h2>
+
+    <div class="callout info" role="note">
+      <span class="callout-icon" aria-hidden="true">&#9733;</span>
+      <div class="callout-text">
+        <strong>This is how we resolve the political problem of AI and Data Centers without legislation. Voluntary. Performance-linked. Available ASAP.</strong>
+      </div>
+    </div>
+
+    <div class="compare-grid">
+      <div class="compare-col">
+        <div class="compare-col-header">
+          <h3>Sanders' American AI Sovereign Wealth Fund Act</h3>
+          <p>Legislative approach - requires an act of Congress</p>
+        </div>
+        <div class="compare-rows">
+          <div class="compare-row"><span class="compare-row-key">Transfer mechanism</span><span class="compare-row-val bad">50% equity transfer</span></div>
+          <div class="compare-row"><span class="compare-row-key">Voluntary</span><span class="compare-row-val bad">No - mandatory</span></div>
+          <div class="compare-row"><span class="compare-row-key">Requires legislation</span><span class="compare-row-val bad">Yes - act of Congress</span></div>
+          <div class="compare-row"><span class="compare-row-key">Performance-linked</span><span class="compare-row-val bad">No - fixed equity stake</span></div>
+          <div class="compare-row"><span class="compare-row-key">Permanent</span><span class="compare-row-val bad">Yes - permanent seizure</span></div>
+          <div class="compare-row"><span class="compare-row-key">Named beneficiaries</span><span class="compare-row-val">Sovereign wealth fund</span></div>
+          <div class="compare-row"><span class="compare-row-key">Public benefit</span><span class="compare-row-val">Yes - via fund dividends</span></div>
+          <div class="compare-row"><span class="compare-row-key">Company incentive</span><span class="compare-row-val bad">Reduces - dilutes ownership</span></div>
+        </div>
+      </div>
+      <div class="compare-col preferred">
+        <div class="compare-col-header" style="background:var(--color-primary-highlight);">
+          <h3>LB Tier 2 - Sanders Fork</h3>
+          <p>Cooperative approach - no legislation needed</p>
+        </div>
+        <div class="compare-rows">
+          <div class="compare-row"><span class="compare-row-key">Transfer mechanism</span><span class="compare-row-val good">50% of measured savings only</span></div>
+          <div class="compare-row"><span class="compare-row-key">Voluntary</span><span class="compare-row-val good">Yes - company choice</span></div>
+          <div class="compare-row"><span class="compare-row-key">Requires legislation</span><span class="compare-row-val good">No - cooperative license</span></div>
+          <div class="compare-row"><span class="compare-row-key">Performance-linked</span><span class="compare-row-val good">Yes - only if savings verified</span></div>
+          <div class="compare-row"><span class="compare-row-key">Permanent</span><span class="compare-row-val good">No - revocable license</span></div>
+          <div class="compare-row"><span class="compare-row-key">Named beneficiaries</span><span class="compare-row-val good">LB Cooperative + Public Sovereign Fund</span></div>
+          <div class="compare-row"><span class="compare-row-key">Public benefit</span><span class="compare-row-val good">Yes - $1.347B / yr to PSF</span></div>
+          <div class="compare-row"><span class="compare-row-key">Company incentive</span><span class="compare-row-val good">Preserved - keeps 50% of new savings</span></div>
+        </div>
+      </div>
+    </div>
+
+    <p style="font-size:var(--text-sm);color:var(--color-text-muted);margin-top:var(--space-6);line-height:1.7;">
+      Both approaches arrive at a comparable fiscal endpoint for the public: substantial annual capital flow into a public-benefit vehicle. The LB Tier 2 path does not destroy AI company ownership, does not require an act of Congress, and is available now - not after a multi-year legislative fight. Companies that voluntarily adopt Tier 2 are also exempt from the moral and political pressure Sanders' bill creates, because they have already resolved the public interest claim voluntarily.
+    </p>
+
+    <div class="anchor-cards" aria-label="Political anchor points">
+      <div class="anchor-card">
+        <div class="anchor-card-name">AOC Track</div>
+        <div class="anchor-card-number">$300M / yr</div>
+        <div class="anchor-card-text">At Tier 2 aggregate, $300M per year would route to Initiative #15 "Power-to-the-People" Forward - community energy, data sovereignty, and cooperative infrastructure. No legislation required.</div>
+      </div>
+      <div class="anchor-card">
+        <div class="anchor-card-name">Warren Track</div>
+        <div class="anchor-card-number">$1.347B / yr</div>
+        <div class="anchor-card-text">The Public Sovereign Fund receives $1.347B per year at full Tier 2 adoption. Warren's governance structure proposal: independent board, annual public audit, restricted to public infrastructure investment. LB endorses this governance structure for the PSF.</div>
+      </div>
+      <div class="anchor-card">
+        <div class="anchor-card-name">Sanders Track</div>
+        <div class="anchor-card-number">Same fiscal endpoint</div>
+        <div class="anchor-card-text">Companies that adopt Tier 2 voluntarily arrive at the same fiscal endpoint as Sanders' bill - without the equity seizure, without the legislative battle, and without destroying the company incentive to keep innovating. The bill's moral claim is satisfied.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 5 - BILATERAL NON-EXCLUSIVITY
+     ============================================================ -->
+<section class="section" style="background:var(--color-surface);border-block:1px solid var(--color-divider);" aria-labelledby="nonexclusive-title">
+  <div class="container container--default">
+    <p class="section-label">Section 5 - Bilateral Non-Exclusivity (BP094 Canon)</p>
+    <h2 class="section-title" id="nonexclusive-title">LB Never Enters Exclusive Partnerships</h2>
+    <p class="section-sub">LB stays free to work with whichever AI companies work well with LB. AI companies compete for innovator pipeline access. No time constraints - only popularity constraints.</p>
+
+    <div class="verbatim" role="blockquote" aria-label="Founder verbatim - BP094">
+      "No time constraints, just popularity constraints."
+      <cite>Founder verbatim - BP094 canon (canon_universal_innovation_pipeline_marketplace_popularity_constrained_layered_on_tier_1_or_2_bp094)</cite>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr));gap:var(--space-4);margin-top:var(--space-6);">
+      <div style="background:var(--color-surface-2);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-5);">
+        <div style="font-size:var(--text-xs);font-family:var(--font-mono);font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--color-primary);margin-bottom:var(--space-3);">Non-Exclusivity</div>
+        <p style="font-size:var(--text-sm);color:var(--color-text-muted);line-height:1.7;">LB never signs an exclusive arrangement with any single AI counterparty. All eight companies on this page remain in the innovation pipeline simultaneously. The cooperative's independence is its structural protection.</p>
+      </div>
+      <div style="background:var(--color-surface-2);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-5);">
+        <div style="font-size:var(--text-xs);font-family:var(--font-mono);font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--color-primary);margin-bottom:var(--space-3);">Popularity Contest</div>
+        <p style="font-size:var(--text-sm);color:var(--color-text-muted);line-height:1.7;">Companies that work well with LB get more innovator pipeline referrals. The pipeline is merit-weighted, not time-exclusivity-weighted. A better product gets more cooperative members. That is the constraint.</p>
+      </div>
+      <div style="background:var(--color-surface-2);border:1px solid var(--color-border);border-radius:var(--radius-lg);padding:var(--space-5);">
+        <div style="font-size:var(--text-xs);font-family:var(--font-mono);font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--color-primary);margin-bottom:var(--space-3);">Universal Innovation Pipeline</div>
+        <p style="font-size:var(--text-sm);color:var(--color-text-muted);line-height:1.7;">The Universal Innovation Pipeline layers on top of either Tier 1 or Tier 2. Pipeline access is not contingent on tier choice - both tiers receive full pipeline participation rights. Canon: <code style="font-size:.75rem;">canon_universal_innovation_pipeline_marketplace_popularity_constrained_layered_on_tier_1_or_2_bp094</code></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 6 - METHODOLOGY
+     ============================================================ -->
+<section class="section" aria-labelledby="methodology-title">
+  <div class="container container--default">
+    <p class="section-label">Section 6 - Methodology (Collapsible)</p>
+    <h2 class="section-title" id="methodology-title">How the Numbers Were Built</h2>
+    <p class="section-sub">Per-company methodology breakdown. Every figure derives from the W12 F3 Cost/Savings Proof (receipt: /proofs/verify/w12f3c057) and the AA-FORMAL-2272 cost ladder. Three adoption-rate scenarios shown for each company.</p>
+
+    <div class="callout truth" role="note">
+      <span class="callout-icon" aria-hidden="true">&#9432;</span>
+      <div class="callout-text">
+        <strong>Source anchor:</strong> R10 Eyewitness benchmark dated 2026-04-21. API pricing data: 2026 public pricing pages. Cost ladder baseline: GPT-4o RAG at $0.01565/query vs substrate Haiku grading at $0.0000688/call. Ratio: ~227x. Receipt: <a href="/proofs/verify/w12f3c057" style="color:var(--color-primary);">/proofs/verify/w12f3c057</a>. Canon reference: AA_FORMAL_2272.
+      </div>
+    </div>
+
+    <!-- Anthropic methodology -->
+    <div class="methodology-block">
+      <div class="methodology-trigger" onclick="toggleMethodology(this)" role="button" tabindex="0" aria-expanded="false" onkeydown="if(event.key==='Enter'||event.key===' ')toggleMethodology(this)">
+        <span>Anthropic - Methodology Detail</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="methodology-content">
+        <p>Savings estimate: $400M (stated as projection).</p>
+        <table><tr><th>Scenario</th><th>Adoption Rate</th><th>Est. Annual Savings</th></tr>
+        <tr><td>Low (conservative)</td><td>20%</td><td>$280M</td></tr>
+        <tr><td>Baseline</td><td>28%</td><td>$400M</td></tr>
+        <tr><td>High (optimistic)</td><td>40%</td><td>$560M</td></tr></table>
+        <p style="margin-top:var(--space-4);">Per-token cost reduction: substrate routes repetitive knowledge-retrieval queries to locally-cached cross-linked DAG entries instead of full frontier model inference. Token savings estimated at 60-80% of RAG query tokens per call.</p>
+        <a href="/proofs/verify/w12f3c057" class="receipt-link" target="_blank" rel="noopener noreferrer">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          Receipt: /proofs/verify/w12f3c057
+        </a>
+      </div>
+    </div>
+
+    <!-- OpenAI methodology -->
+    <div class="methodology-block">
+      <div class="methodology-trigger" onclick="toggleMethodology(this)" role="button" tabindex="0" aria-expanded="false" onkeydown="if(event.key==='Enter'||event.key===' ')toggleMethodology(this)">
+        <span>OpenAI - Methodology Detail</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="methodology-content">
+        <p>Savings estimate: $1.25B (stated as projection). Largest API volume counterparty with most direct sensitivity to per-query cost reduction.</p>
+        <table><tr><th>Scenario</th><th>Adoption Rate</th><th>Est. Annual Savings</th></tr>
+        <tr><td>Low (conservative)</td><td>25%</td><td>$875M</td></tr>
+        <tr><td>Baseline</td><td>35%</td><td>$1.25B</td></tr>
+        <tr><td>High (optimistic)</td><td>50%</td><td>$1.75B</td></tr></table>
+        <p style="margin-top:var(--space-4);">Baseline cost: GPT-4o RAG at $0.01565/query (2,200 input + 300 output tokens). Substrate cost: Haiku-grade routing at $0.0000688/call. Ratio: 227x. AA-FORMAL-2272 cost ladder applied to estimated query volume.</p>
+        <a href="/proofs/verify/w12f3c057" class="receipt-link" target="_blank" rel="noopener noreferrer">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          Receipt: /proofs/verify/w12f3c057
+        </a>
+      </div>
+    </div>
+
+    <!-- Google DeepMind methodology -->
+    <div class="methodology-block">
+      <div class="methodology-trigger" onclick="toggleMethodology(this)" role="button" tabindex="0" aria-expanded="false" onkeydown="if(event.key==='Enter'||event.key===' ')toggleMethodology(this)">
+        <span>Google DeepMind - Methodology Detail</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="methodology-content">
+        <p>Savings estimate: $1.75B (stated as projection). Highest single-counterparty figure, reflecting Vertex AI enterprise scale and Gemini API volume. Gemini Frontier substrate ON benchmark score: 90.7 (BP073 Sound Barrier card).</p>
+        <table><tr><th>Scenario</th><th>Adoption Rate</th><th>Est. Annual Savings</th></tr>
+        <tr><td>Low (conservative)</td><td>20%</td><td>$1.2B</td></tr>
+        <tr><td>Baseline</td><td>30%</td><td>$1.75B</td></tr>
+        <tr><td>High (optimistic)</td><td>45%</td><td>$2.4B</td></tr></table>
+        <a href="/proofs/verify/w12f3c057" class="receipt-link" target="_blank" rel="noopener noreferrer">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          Receipt: /proofs/verify/w12f3c057
+        </a>
+      </div>
+    </div>
+
+    <!-- Meta, Cohere, Mistral, xAI, Microsoft combined -->
+    <div class="methodology-block">
+      <div class="methodology-trigger" onclick="toggleMethodology(this)" role="button" tabindex="0" aria-expanded="false" onkeydown="if(event.key==='Enter'||event.key===' ')toggleMethodology(this)">
+        <span>Meta / Cohere / Mistral / xAI / Microsoft - Combined Methodology Notes</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="methodology-content">
+        <table>
+          <tr><th>Company</th><th>Low</th><th>Baseline</th><th>High</th><th>Adoption Rate (baseline)</th></tr>
+          <tr><td>Meta</td><td>$630M</td><td>$900M</td><td>$1.26B</td><td>30%</td></tr>
+          <tr><td>Cohere</td><td>$70M</td><td>$100M</td><td>$140M</td><td>40%</td></tr>
+          <tr><td>Mistral</td><td>$63M</td><td>$90M</td><td>$126M</td><td>45%</td></tr>
+          <tr><td>xAI</td><td>$500M</td><td>N/A - range</td><td>$1.0B</td><td>Insufficient data for single rate</td></tr>
+          <tr><td>Microsoft AI</td><td>$600M</td><td>N/A - range</td><td>$1.0B</td><td>Insufficient data for single rate</td></tr>
+        </table>
+        <p style="margin-top:var(--space-4);">xAI and Microsoft ranges are not sensitivity bands - they are hard range estimates due to insufficient public API volume data. Do not extrapolate midpoints as confirmed figures. All other rows use the W12 F3 cost ladder applied to estimated query volumes at stated adoption rates.</p>
+        <p>AA-FORMAL-2272 cost ladder: available internally. R10 Eyewitness benchmark date: 2026-04-21.</p>
+        <a href="/proofs/verify/w12f3c057" class="receipt-link" target="_blank" rel="noopener noreferrer">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          Receipt: /proofs/verify/w12f3c057
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 7 - ADOPTION STATUS (TRUTH-ALWAYS)
+     ============================================================ -->
+<section class="section" style="background:var(--color-surface);border-block:1px solid var(--color-divider);" aria-labelledby="status-title">
+  <div class="container container--default">
+    <p class="section-label">Section 7 - Adoption Status (Truth-Always - Live State as of 2026-06-24)</p>
+    <h2 class="section-title" id="status-title">Current State Report</h2>
+
+    <div class="callout truth" role="alert" aria-live="polite">
+      <span class="callout-icon" aria-hidden="true">&#9888;</span>
+      <div class="callout-text">
+        <strong>Truth-Always Disclosure.</strong> This section reports current empirical state only. No figures are implied, projected, or rounded up. When letters dispatch and signatures land, this section updates with the cumulative cooperative dividend earned that year.
+      </div>
+    </div>
+
+    <div style="overflow-x:auto;border:1px solid var(--color-border);border-radius:var(--radius-xl);overflow:hidden;">
+      <table class="status-table" aria-label="Current adoption status">
+        <thead>
+          <tr>
+            <th scope="col">Metric</th>
+            <th scope="col">Current Value</th>
+            <th scope="col">Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Letters staged (total)</td>
+            <td class="val-num">12</td>
+            <td style="font-size:var(--text-xs);color:var(--color-text-muted);">8 Big AI + Substack #1 + AOC + Pawn report + Sanders. Staged in BISHOP_DROPZONE/00_FOUNDER_REVIEW.</td>
+          </tr>
+          <tr>
+            <td>Letters sent to recipients</td>
+            <td class="val-zero">0</td>
+            <td style="font-size:var(--text-xs);color:var(--color-text-muted);">All staged letters awaiting Founder ratification per S16. No dispatch has occurred as of 2026-06-24.</td>
+          </tr>
+          <tr>
+            <td>Letters signed by recipients</td>
+            <td class="val-zero">0</td>
+            <td style="font-size:var(--text-xs);color:var(--color-text-muted);">Not sent. Cannot be signed.</td>
+          </tr>
+          <tr>
+            <td>Tier choice signed</td>
+            <td class="val-zero">0</td>
+            <td style="font-size:var(--text-xs);color:var(--color-text-muted);">No counterparty has selected Tier 1 or Tier 2 as of this date.</td>
+          </tr>
+          <tr>
+            <td>Pipeline disclosures routed</td>
+            <td class="val-zero">0</td>
+            <td style="font-size:var(--text-xs);color:var(--color-text-muted);">No innovation pipeline disclosures have been formally routed to counterparties.</td>
+          </tr>
+          <tr>
+            <td>Cooperative dividend earned (cumulative)</td>
+            <td class="val-zero">$0</td>
+            <td style="font-size:var(--text-xs);color:var(--color-text-muted);">Zero. Updates when first signed tier agreement generates verified savings.</td>
+          </tr>
+          <tr>
+            <td>Public Sovereign Fund contributed</td>
+            <td class="val-zero">$0</td>
+            <td style="font-size:var(--text-xs);color:var(--color-text-muted);">Tier 2 not yet adopted by any counterparty.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p style="font-size:var(--text-sm);color:var(--color-text-muted);margin-top:var(--space-5);line-height:1.7;">
+      This page reports current state. When letters dispatch and signatures land, this section updates with the cumulative cooperative dividend earned that year. The $4.49B figure is a verified-methodology projection, not a confirmed contract. The above table is the honest current state.
+    </p>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 8 - RECEIPTS AND CROSS-REFERENCES
+     ============================================================ -->
+<section class="section" aria-labelledby="receipts-title">
+  <div class="container container--default">
+    <p class="section-label">Section 8 - Receipts and Cross-References</p>
+    <h2 class="section-title" id="receipts-title">Linked Evidence and Canon References</h2>
+    <p class="section-sub">All numbers on this page trace to one of the receipts below. Canon references are the authoritative policy documents this page operationalizes.</p>
+
+    <div class="receipts-grid">
+      <a href="/papers/substrate-savings-analysis" class="receipt-card" target="_blank" rel="noopener noreferrer">
+        <svg class="receipt-card-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        <div><div class="receipt-card-title">Pawn Report - Substrate Savings Analysis</div><div class="receipt-card-url">/papers/substrate-savings-analysis</div></div>
+      </a>
+      <a href="/proofs/" class="receipt-card" target="_blank" rel="noopener noreferrer">
+        <svg class="receipt-card-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <div><div class="receipt-card-title">Live Verification Runs</div><div class="receipt-card-url">/proofs/ (24/24 proofs, 2251/2251 tests)</div></div>
+      </a>
+      <a href="/proofs/verify/w12f3c057" class="receipt-card" target="_blank" rel="noopener noreferrer">
+        <svg class="receipt-card-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+        <div><div class="receipt-card-title">W12 F3 Cost/Savings Proof</div><div class="receipt-card-url">/proofs/verify/w12f3c057 (~227x cost ratio)</div></div>
+      </a>
+      <div class="receipt-card" style="cursor:default;">
+        <svg class="receipt-card-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <div><div class="receipt-card-title">Canon: Universal Innovation Pipeline</div><div class="receipt-card-url">canon_universal_innovation_pipeline_marketplace_popularity_constrained_layered_on_tier_1_or_2_bp094</div></div>
+      </div>
+      <div class="receipt-card" style="cursor:default;">
+        <svg class="receipt-card-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <div><div class="receipt-card-title">Canon: Sanders Fork Tier 2</div><div class="receipt-card-url">canon_sanders_fork_50_percent_savings_license_tier_20_cooperative_30_public_sovereign_fund_bp092</div></div>
+      </div>
+      <div class="receipt-card" style="cursor:default;">
+        <svg class="receipt-card-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <div><div class="receipt-card-title">Canon: Dual License SSPL / Apache</div><div class="receipt-card-url">canon_dual_license_save_more_than_you_pay_sspl_pledge_or_apache_business_bp092</div></div>
+      </div>
+      <div class="receipt-card" style="cursor:default;">
+        <svg class="receipt-card-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <div><div class="receipt-card-title">Canon: Sanders American AI Sovereign Wealth Fund Act</div><div class="receipt-card-url">canon_sanders_american_ai_sovereign_wealth_fund_act_bp092</div></div>
+      </div>
+      <div class="receipt-card" style="cursor:default;">
+        <svg class="receipt-card-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <div><div class="receipt-card-title">AA-FORMAL-2272 Cost Ladder</div><div class="receipt-card-url">AA_FORMAL_2272 - internal cost ladder reference document</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 9 - CLOSING CTA
+     ============================================================ -->
+<section class="cta-section" aria-labelledby="cta-title">
+  <div class="container">
+    <p class="cta-tagline">PICK A TIER. SIGN THE COOPERATIVE. BE PART OF THE PROOF.</p>
+    <h2 class="cta-title" id="cta-title">Free to YOU. 20% of the $4.49 Billion in Savings for Them for YOU. Every Year.</h2>
+    <p class="cta-sub">The substrate is built. The proofs are confirmed. Thirty waves, 2251 tests, 24 proofs. Wife Test: DONE. The only thing left is the conversation.</p>
+    <div class="cta-buttons">
+      <a href="mailto:founder@lianabanyan.com?subject=LB%20Licensing%20Conversation%20-%20Tier%20Inquiry" class="btn-primary" aria-label="Open the licensing conversation - email Founder">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        For AI Companies: Open the Licensing Conversation
+      </a>
+      <a href="/empress" class="btn-secondary" aria-label="Be part of the proof - join the cooperative">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        For the Public: Be Part of the Proof
+      </a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="site-footer" aria-label="Site footer">
+  <div class="container footer-inner">
+    <div style="font-family:var(--font-mono);font-size:var(--text-xs);">
+      Liana Banyan Corporation - BP094 Substrate Savings Analysis - Published 2026-06-24
+    </div>
+    <div style="font-family:var(--font-mono);font-size:var(--text-xs);text-align:right;">
+      Receipt anchor: <a href="/proofs/verify/w12f3c057" style="color:var(--color-primary);">/proofs/verify/w12f3c057</a> - Truth-Always discipline applied throughout.
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var t=document.querySelector('[data-theme-toggle]'),r=document.documentElement;
+  var d=r.getAttribute('data-theme')||'dark';
+  function setIcon(m){
+    if(!t)return;
+    t.setAttribute('aria-label','Switch to '+(m==='dark'?'light':'dark')+' mode');
+    t.innerHTML=m==='dark'
+      ?'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>'
+      :'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+  }
+  setIcon(d);
+  if(t){t.addEventListener('click',function(){d=d==='dark'?'light':'dark';r.setAttribute('data-theme',d);setIcon(d);});}
+})();
+
+function toggleTile(id){
+  var tile=document.getElementById(id);
+  var body=tile.querySelector('.chart-tile-body');
+  var hdr=tile.querySelector('.chart-tile-header');
+  var expanded=tile.classList.toggle('expanded');
+  hdr.setAttribute('aria-expanded',expanded);
+  if(expanded){
+    var inner=body.querySelector('.chart-tile-inner');
+    body.style.maxHeight=(inner.scrollHeight+48)+'px';
+  } else {
+    body.style.maxHeight='0';
+  }
+}
+
+function toggleExpand(trigger){
+  var body=trigger.nextElementSibling;
+  var open=body.classList.toggle('visible');
+  trigger.classList.toggle('open',open);
+  trigger.setAttribute('aria-expanded',open);
+}
+
+function toggleMethodology(trigger){
+  var content=trigger.nextElementSibling;
+  var open=content.classList.toggle('visible');
+  trigger.classList.toggle('open',open);
+  trigger.setAttribute('aria-expanded',open);
+}
+
+// Animate bars on scroll
+(function(){
+  if(!window.IntersectionObserver)return;
+  var bars=document.querySelectorAll('.bar-seg');
+  bars.forEach(function(b){
+    var w=b.style.width;
+    b.style.width='0';
+    b._targetW=w;
+  });
+  var obs=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        e.target.querySelectorAll('.bar-seg').forEach(function(b){
+          setTimeout(function(){b.style.width=b._targetW;},100);
+        });
+        obs.unobserve(e.target);
+      }
+    });
+  },{threshold:0.3});
+  document.querySelectorAll('.bar-row').forEach(function(r){obs.observe(r);});
+})();
+</script>
+</body>
+</html>
