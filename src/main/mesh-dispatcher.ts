@@ -353,12 +353,112 @@ export async function electNewMIC(waveId: string | null): Promise<string | null>
   console.error('[mesh-dispatcher] electNewMIC: all candidates exhausted');
   return null;
 }
+// --- emitPheromoneBlip + FireGuard reciprocal heartbeat (BP094 §3 + §A.5) ---
 
-// ΓöÇΓöÇΓöÇ emitPheromoneBlip ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+// Per-wave pheromone blip: PRIMARY MIC peer emits state blip; SHADOW subscribes for liveness.
+// Persists last_blip_at to peer_presence via service-role REST.
+export async function emitPheromoneBlip(
+  waveId: string,
+  state: {
+    wave_id: string;
+    dispatch_timestamp: number;
+    task_queue_state: string;
+    tier_assignments: Record<string, string>;
+    aggregation_progress: string;
+    next_action_intent: string;
+    role: 'PRIMARY' | 'SHADOW';
+    emitting_peer_id: string;
+  }
+): Promise<void> {
+  console.log(`[fireguard-pheromone] wave=${waveId} peer=${state.emitting_peer_id.slice(0, 8)} role=${state.role} blip=${JSON.stringify(state)}`);
+  try {
+    const supabase = getSupabaseClient();
+    await supabase
+      .from('peer_presence')
+      .update({ last_blip_at: new Date(state.dispatch_timestamp).toISOString(), wave_id: waveId })
+      .eq('peer_id', state.emitting_peer_id);
+  } catch (err) {
+    console.warn('[fireguard-pheromone] Supabase persist failed (non-fatal):', err);
+  }
+}
 
-export function emitPheromoneBlip(waveId: string, state: object): void {
-  // Full soccerball pheromone emit is M24 scope ΓÇö logging stub for now
-  console.log(`[fireguard-pheromone] wave=${waveId} blip=${JSON.stringify(state)}`);
+// Per-wave alternating PRIMARY/SHADOW: Wave 1: c532e740=PRIMARY, 49f3e597=SHADOW; Wave 2: reversed.
+// Neither permanent PRIMARY -- reciprocal pairing per BP091 §4.1.
+export function assignFireGuardRoles(
+  waveIndex: number,
+  coreMicPeers: string[]
+): { primary: string; shadow: string } | null {
+  if (coreMicPeers.length < 2) return null;
+  const [peerA, peerB] = coreMicPeers;
+  return waveIndex % 2 === 0
+    ? { primary: peerA, shadow: peerB }
+    : { primary: peerB, shadow: peerA };
+}
+
+// SHADOW monitors PRIMARY's last_blip_at in peer_presence.
+// Continuous poll: if PRIMARY emits no blip within 5 seconds, SHADOW promotes.
+// Reciprocal: c532e740 watches 49f3e597 and vice versa.
+export async function watchHeartbeat(
+  primaryPeerId: string,
+  shadowPeerId: string,
+  waveId: string,
+  blipTimeoutMs = 5000
+): Promise<{ promoted: boolean; reason: string }> {
+  const POLL_INTERVAL_MS = 1000;
+  const start = Date.now();
+  while (Date.now() - start < blipTimeoutMs) {
+    await new Promise(resolve => setTimeout(resolve, POLL_INTERVAL_MS));
+    try {
+      const supabase = getSupabaseClient();
+      const { data: row } = await supabase
+        .from('peer_presence')
+        .select('last_blip_at, wave_id')
+        .eq('peer_id', primaryPeerId)
+        .single();
+      if (row?.last_blip_at) {
+        const lastBlip = new Date(row.last_blip_at as string).getTime();
+        if (Date.now() - lastBlip < blipTimeoutMs) {
+          return { promoted: false, reason: 'primary_alive' };
+        }
+      }
+    } catch {
+      // non-fatal poll error -- continue watching
+    }
+  }
+  // PRIMARY blip not seen within timeout -- SHADOW promotes
+  console.warn(`[fireguard] SHADOW ${shadowPeerId.slice(0, 8)} promoting after ${blipTimeoutMs}ms -- PRIMARY ${primaryPeerId.slice(0, 8)} blip timeout wave=${waveId}`);
+  try {
+    const supabase = getSupabaseClient();
+    await supabase
+      .from('peer_presence')
+      .update({ role: 'MIC', wave_id: waveId })
+      .eq('peer_id', shadowPeerId);
+  } catch (err) {
+    console.warn('[fireguard] SHADOW promotion persist failed:', err);
+  }
+  return { promoted: true, reason: 'primary_blip_timeout' };
+}
+
+// If only 1 CORE-MIC peer active, raise FireGuard degraded warning per BP091 §4.4 + BP094 §3.
+// Substrate continues with reactive failover only when degraded.
+export async function checkFireGuardDegraded(): Promise<{ degraded: boolean; activeCount: number }> {
+  try {
+    const supabase = getSupabaseClient();
+    const { data: rows } = await supabase
+      .from('peer_presence')
+      .select('peer_id')
+      .eq('status', 'active')
+      .filter('capabilities->>ramTier', 'eq', 'CORE');
+    const activeCount = (rows ?? []).length;
+    if (activeCount <= 1) {
+      console.warn(`[fireguard] DEGRADED: only ${activeCount} CORE-MIC peer(s) active -- reactive failover only -- Bishop notification required`);
+      return { degraded: true, activeCount };
+    }
+    return { degraded: false, activeCount };
+  } catch (err) {
+    console.warn('[fireguard] degraded check failed:', err);
+    return { degraded: true, activeCount: 0 };
+  }
 }
 
 // ΓöÇΓöÇΓöÇ accrueMarks ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ

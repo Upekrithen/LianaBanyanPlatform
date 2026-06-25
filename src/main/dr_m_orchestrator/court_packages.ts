@@ -20,7 +20,8 @@ export type CouncilPackageName =
   | 'strategic_council'
   | 'enforcement_council'
   | 'librarian_council'
-  | 'adjudicator_council';
+  | 'adjudicator_council'
+  | 'core_mic_live';  // BP094: dynamic CORE-tier MIC judges -- members populated at runtime from peer_presence
 
 export type EscalationPolicy =
   | 'flagship_on_divergence'
@@ -53,7 +54,7 @@ export interface CourtPackageLibrary {
 
 // ─── Default packages ─────────────────────────────────────────────────────────────
 
-const DEFAULT_PACKAGES: Record<CouncilPackageName, CourtPackage> = {
+const DEFAULT_PACKAGES: Record<Exclude<CouncilPackageName, 'core_mic_live'>, CourtPackage> = {
   reader_council: {
     name: 'reader_council',
     description: '3x gemma2:2b · sub-second extraction · variance threshold 5%',
@@ -141,25 +142,86 @@ const DEFAULT_PACKAGES: Record<CouncilPackageName, CourtPackage> = {
 
 // ─── Factory ──────────────────────────────────────────────────────────────────────
 
+// BP094 §4: dynamic CORE_MIC_LIVE package -- queries peer_presence for active CORE peers at runtime
+// Both c532e740 and 49f3e597 are default CORE-MIC peers; expands if more CORE peers are active.
+// Equal MIC judge weight; neither has structural primacy (reciprocal pairing per BP091 §4.1).
+async function buildCoreMicLivePackage(): Promise<CourtPackage> {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { createClient } = require('@supabase/supabase-js') as typeof import('@supabase/supabase-js');
+    const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+    if (!url || !key) throw new Error('[court_packages] Supabase env vars not set for CORE_MIC_LIVE');
+    const supabase = createClient(url, key, { auth: { persistSession: false } });
+    const { data: rows, error } = await supabase
+      .from('peer_presence')
+      .select('peer_id, capabilities')
+      .eq('status', 'active')
+      .filter('capabilities->>ramTier', 'eq', 'CORE');
+    if (error) throw new Error(`peer_presence query error: ${error.message}`);
+    const activeCorePeers = (rows ?? []) as Array<{ peer_id: string; capabilities: { ollamaModel?: string; ramTier?: string } | null }>;
+    const members: CouncilMember[] = activeCorePeers.map(p => ({
+      model_id: p.capabilities?.ollamaModel ?? 'gemma2:9b',
+      vendor: 'local' as const,
+    }));
+    // Fall back to static defaults if no CORE peers found in peer_presence
+    if (members.length === 0) {
+      members.push(
+        { model_id: 'gemma2:9b', vendor: 'local' },
+        { model_id: 'gemma2:9b', vendor: 'local' },
+      );
+    }
+    return {
+      name: 'core_mic_live',
+      description: `${members.length}x active CORE-MIC peers (dynamic from peer_presence) -- judge-role only, FireGuard duty`,
+      members,
+      variance_threshold: 0.0,
+      escalation_policy: 'flagship_on_divergence',
+      estimated_latency_s: 30,
+      cost_per_fire: 0.00,
+    };
+  } catch (err) {
+    // Degraded fallback: return static 2-peer CORE package if peer_presence unavailable
+    console.warn('[court_packages] CORE_MIC_LIVE peer_presence query failed -- using static fallback:', err);
+    return {
+      name: 'core_mic_live',
+      description: '2x gemma2:9b CORE-MIC static fallback (peer_presence unavailable)',
+      members: [
+        { model_id: 'gemma2:9b', vendor: 'local' },
+        { model_id: 'gemma2:9b', vendor: 'local' },
+      ],
+      variance_threshold: 0.0,
+      escalation_policy: 'flagship_on_divergence',
+      estimated_latency_s: 30,
+      cost_per_fire: 0.00,
+    };
+  }
+}
+
 export function createCourtPackageLibrary(_db?: DatabaseConfig): CourtPackageLibrary {
   const _cache = new Map<CouncilPackageName, CourtPackage>();
 
   return {
     async get(name: CouncilPackageName): Promise<CourtPackage> {
+      // BP094: CORE_MIC_LIVE is always fetched fresh (dynamic membership) -- no cache
+      if (name === 'core_mic_live') {
+        return buildCoreMicLivePackage();
+      }
       if (_cache.has(name)) return _cache.get(name)!;
-      const pkg = DEFAULT_PACKAGES[name];
+      const pkg = DEFAULT_PACKAGES[name as Exclude<CouncilPackageName, 'core_mic_live'>];
       if (!pkg) throw new Error(`Unknown court package: ${name}`);
       _cache.set(name, pkg);
       return pkg;
     },
 
     list(): CouncilPackageName[] {
-      return Object.keys(DEFAULT_PACKAGES) as CouncilPackageName[];
+      return [...Object.keys(DEFAULT_PACKAGES) as CouncilPackageName[], 'core_mic_live'];
     },
 
     async preload(names: CouncilPackageName[]): Promise<void> {
       await Promise.all(names.map(async (n) => {
-        const pkg = DEFAULT_PACKAGES[n];
+        if (n === 'core_mic_live') return; // skip preload for dynamic package
+        const pkg = DEFAULT_PACKAGES[n as Exclude<CouncilPackageName, 'core_mic_live'>];
         if (pkg) _cache.set(n, pkg);
       }));
     },
