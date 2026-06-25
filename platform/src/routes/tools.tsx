@@ -106,6 +106,10 @@ const FrontierMarketplacePage = lazy(() => import("@/pages/FrontierMarketplacePa
 // BP073 Wave B -- Cross-Frame Cooperation
 const CrossFrameCooperationPage = lazy(() => import("@/pages/mesh/CrossFrameCooperationPage"));
 
+// BP094 -- CSIA-Hybrid Stage 1
+const CSIAHybridChatPage = lazy(() => import("@/pages/CSIAHybridChatPage"));
+const CatacombsContributePage = lazy(() => import("@/pages/CatacombsContributePage"));
+
 export const toolsRoutes = (
   <>
     <Route path="/cue-cards" element={<ExplorerRoute><LazyPage><CueCardDeckPage /></LazyPage></ExplorerRoute>} />
@@ -251,5 +255,11 @@ export const toolsRoutes = (
 
     {/* BP073 Wave B -- Cross-Frame Cooperation */}
     <Route path="/mesh/cross-frame" element={<ProtectedRoute><LazyPage><CrossFrameCooperationPage /></LazyPage></ProtectedRoute>} />
+
+    {/* BP094 -- CSIA-Hybrid Stage 1 (member gate enforced at component level) */}
+    <Route path="/mnemosynec/csia-hybrid" element={<ProtectedRoute><LazyPage><CSIAHybridChatPage /></LazyPage></ProtectedRoute>} />
+
+    {/* BP094 -- Catacomb contribution flow (pre-fill ?question=<encoded>) */}
+    <Route path="/contribute" element={<ProtectedRoute><LazyPage><CatacombsContributePage /></LazyPage></ProtectedRoute>} />
   </>
 );
