@@ -45,8 +45,7 @@ function computeSuccessUrl(ctx: DoorContext): string {
     case "direct":
       return `${BASE_LB}/pathways/?just_joined=1`;
     case "download": {
-      const v = ctx.refs?.download_version ?? "";
-      return `${BASE_MNEMO}/download/?member_unlock=1${v ? `&version=${v}` : ""}`;
+      return `${BASE_MNEMO}/welcome-member/?from=${encodeURIComponent("/download/")}`;
     }
     case "order": {
       const ref = ctx.refs?.order_ref ?? "";

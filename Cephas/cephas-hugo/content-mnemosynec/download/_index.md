@@ -18,7 +18,7 @@ Mnemosyne (neh-MOZ-uh-nee) is the Greek goddess of memory. **Dr. MnemosyneC inhe
 Every time you start a new session, your AI forgets everything. Your projects, your preferences, your past conversations, gone. Dr. MnemosyneC gives your AI a permanent, private memory that actually stays.
 
 <div class="cta-row">
-<a href="/download/MnemosyneC-Setup-0.4.3.exe" class="cta-primary"><strong>Download for Windows v0.4.3</strong></a>
+<a href="/download/MnemosyneC-Setup-0.4.3.exe" class="cta-primary tp-dl-btn"><strong>Download for Windows v0.4.3</strong></a>
 <a href="/install/" class="cta-secondary">Install guide &rarr;</a>
 </div>
 

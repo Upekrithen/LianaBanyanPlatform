@@ -1,0 +1,160 @@
+{{- define "main" }}
+{{/* Welcome Member — /welcome-member/ - BP094 S7 */}}
+
+<style>
+.wm-page {
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  padding: 4rem 1rem;
+  min-height: 60vh;
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto;
+  line-height: 1.7;
+  color: #faf5eb;
+}
+.wm-icon {
+  font-size: 2.8rem;
+  margin-bottom: 1.2rem;
+}
+.wm-title {
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  font-weight: 800;
+  color: #faf5eb;
+  margin: 0 0 0.5rem;
+  letter-spacing: -0.02em;
+}
+.wm-tagline {
+  font-size: 1.05rem;
+  color: rgba(250,245,235,0.72);
+  font-style: italic;
+  margin: 0 0 2rem;
+}
+.wm-confirm-box {
+  background: rgba(5,11,20,0.7);
+  border: 1px solid rgba(214,158,46,0.25);
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
+  text-align: left;
+  margin-bottom: 2rem;
+}
+.wm-confirm-box p {
+  color: rgba(250,245,235,0.85);
+  margin: 0 0 0.75rem;
+}
+.wm-confirm-box p:last-child {
+  margin: 0;
+}
+.wm-countdown-box {
+  background: rgba(214,158,46,0.08);
+  border: 1px solid rgba(214,158,46,0.3);
+  border-radius: 10px;
+  padding: 1.2rem 1.5rem;
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+  color: rgba(250,245,235,0.75);
+}
+.wm-countdown-num {
+  font-weight: 800;
+  color: #d69e2e;
+  font-size: 1.1rem;
+}
+.wm-cta-row {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 3rem;
+}
+.wm-btn-primary {
+  display: inline-block;
+  padding: 0.75rem 1.75rem;
+  background: #d69e2e;
+  border: 1px solid #d69e2e;
+  border-radius: 8px;
+  color: #0a1628;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+.wm-btn-primary:hover { background: #b7851f; }
+.wm-footer-note {
+  font-size: 0.78rem;
+  color: rgba(250,245,235,0.3);
+  border-top: 1px solid rgba(214,158,46,0.1);
+  padding-top: 1.2rem;
+}
+</style>
+
+<div class="wm-page">
+
+  <div class="wm-icon">&#127807;</div>
+
+  <h1 class="wm-title">Welcome to the Cooperative.</h1>
+  <p class="wm-tagline">Name the Empress. Stop the Nothing. Be a Bastion, in a Time of Storms.</p>
+
+  <div class="wm-confirm-box">
+    <p>Your membership is confirmed. You are now part of the Cooperative.</p>
+    <p>
+      Download is always free. Your $5/year membership unlocks the full cooperative:
+      83.3% of every dollar you earn stays with you, one vote in governance,
+      and access to all 16 substrate initiative folders.
+    </p>
+    <p>
+      Check your email for your magic-link sign-in. No password. One click.
+      If it does not arrive within a few minutes, check your spam folder.
+    </p>
+  </div>
+
+  <div class="wm-countdown-box" id="wm-countdown-box">
+    Heading to your download in <span class="wm-countdown-num" id="wm-countdown">8</span>...
+  </div>
+
+  <div class="wm-cta-row">
+    <a id="wm-cta-btn" href="/download/" class="wm-btn-primary">
+      Continue where you left off &rarr;
+    </a>
+  </div>
+
+  <p class="wm-footer-note">
+    The substrate cure to AI amnesia. &nbsp;&middot;&nbsp; Copyright 2026 Liana Banyan Corporation
+  </p>
+
+</div>
+
+<script>
+(function() {
+  // 6d - write localStorage membership keys on page load
+  // Canonical key confirmed from layouts/download/list.html: lb_member = "1"
+  // lb_subscribed_token added as supplementary signal (key name from spec; not in existing code)
+  try {
+    localStorage.setItem("lb_member", "1");
+    localStorage.setItem("lb_subscribed_token", "1");
+    localStorage.setItem("lb_member_status_verified_at", String(Date.now()));
+  } catch(e) {}
+
+  // 6c - read ?from= query param; wire CTA href; fall back to /download/
+  var fromParam = "";
+  try {
+    var params = new URLSearchParams(window.location.search);
+    fromParam = params.get("from") || "";
+  } catch(e) {}
+  var destination = fromParam || "/download/";
+
+  var ctaBtn = document.getElementById("wm-cta-btn");
+  if (ctaBtn) ctaBtn.setAttribute("href", destination);
+
+  // 8-second countdown then redirect
+  var countEl = document.getElementById("wm-countdown");
+  var seconds = 8;
+  var timer = setInterval(function() {
+    seconds--;
+    if (countEl) countEl.textContent = String(seconds);
+    if (seconds <= 0) {
+      clearInterval(timer);
+      window.location.href = destination;
+    }
+  }, 1000);
+})();
+</script>
+
+{{- end }}
