@@ -2,9 +2,17 @@
   "versions": [
     {
       "tier": "latest",
+      "version": "0.8.1",
+      "url": "https://mnemosynec.org/download/MnemosyneC-Setup-0.8.1.exe",
+      "sha256": "046ee2490e5f7ba5a1d40a46259047e6c7868fa4979a0aadb203f377b3dcadcc",
+      "released": "2026-06-25"
+    },
+    {
+      "tier": "release",
       "version": "0.8.0",
       "url": "https://mnemosynec.org/download/MnemosyneC-Setup-0.8.0.exe",
-      "sha256": "48942fe8a5d90a50a8f2ca993eaacd10e2bea44b7e810da16218b4b9b63ad34c"
+      "sha256": "48942fe8a5d90a50a8f2ca993eaacd10e2bea44b7e810da16218b4b9b63ad34c",
+      "released": "2026-06-25"
     }
   ]
 }
