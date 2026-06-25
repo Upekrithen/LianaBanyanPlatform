@@ -151,7 +151,7 @@ License: SSPL + Cooperative Defensive Patent Pledge #2260. The pledge is irrevoc
 <details>
 <summary>How do I connect to other nodes?</summary>
 
-After installing, open the **Developer Tab** → **Caithedral™ Inspector** → **Mesh Status**. Enter your Socceri address (or create one via the cooperative membership flow at [lianabanyan.com/join](/join/)). The mesh uses UDP multicast (Cathedral Federation Protocol) — your node announces itself on the local cooperative network. Cross-node exchange is opt-in per session.
+After installing, open the **Developer Tab** -> **Caithedral™ Inspector** -> **Mesh Status**. Enter your Socceri address (or create one via the cooperative membership flow at [/join/](/join/)). The mesh uses UDP multicast (Cathedral Federation Protocol) -- your node announces itself on the local cooperative network. Cross-node exchange is opt-in per session.
 
 </details>
 

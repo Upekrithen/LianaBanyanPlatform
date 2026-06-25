@@ -659,14 +659,14 @@ body { background: #0a1628; background-image: url("data:image/svg+xml,%3Csvg xml
         <input type="radio" name="license-path" value="SSPL" id="radio-sspl" style="margin-top:0.25rem; accent-color:#22d3ee;">
         <div>
           <p style="font-weight:700; color:#f1f5f9; margin:0 0 0.25rem;">Cooperative path -- SSPL v1 + Pledge #2260</p>
-          <p style="font-size:0.8rem; color:#94a3b8; margin:0;">Free to use, free to share. If you modify MnemosyneC and run it as a public service, you open-source the full modified stack. <a href="https://www.mongodb.com/licensing/server-side-public-license" target="_blank" rel="noopener" style="color:#22d3ee;">Read SSPL v1</a></p>
+          <p style="font-size:0.8rem; color:#94a3b8; margin:0;">Full cooperative substrate access. User joins the cooperative commons. <a href="https://www.mongodb.com/licensing/server-side-public-license" target="_blank" rel="noopener" style="color:#22d3ee;">Read SSPL v1</a></p>
         </div>
       </label>
       <label style="display:flex; gap:0.75rem; padding:1rem; border:1px solid rgba(100,116,139,0.3); border-radius:0.5rem; cursor:pointer;" id="apache-label">
         <input type="radio" name="license-path" value="Apache" id="radio-apache" style="margin-top:0.25rem; accent-color:#22d3ee;">
         <div>
           <p style="font-weight:700; color:#f1f5f9; margin:0 0 0.25rem;">Enterprise / fork path -- Apache 2.0</p>
-          <p style="font-size:0.8rem; color:#94a3b8; margin:0;">Free to use and modify. No open-source obligation. For commercial deployments, enterprise integrations, and forks outside the cooperative. <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank" rel="noopener" style="color:#22d3ee;">Read Apache 2.0</a></p>
+          <p style="font-size:0.8rem; color:#94a3b8; margin:0;">For library integrations and business use only. <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank" rel="noopener" style="color:#22d3ee;">Read Apache 2.0</a></p>
         </div>
       </label>
     </div>
@@ -748,11 +748,17 @@ body { background: #0a1628; background-image: url("data:image/svg+xml,%3Csvg xml
       btn.style.background = '#22d3ee';
       btn.style.color = '#0f172a';
       btn.style.cursor = 'pointer';
+      if (radioSelected.value === 'SSPL') {
+        btn.textContent = 'Accept Cooperative License and Download';
+      } else {
+        btn.textContent = 'Accept Apache 2.0 License and Download';
+      }
     } else {
       btn.disabled = true;
       btn.style.background = '#94a3b8';
       btn.style.color = '#1e293b';
       btn.style.cursor = 'not-allowed';
+      btn.textContent = 'Accept and Download';
     }
   }
 
@@ -790,6 +796,7 @@ body { background: #0a1628; background-image: url("data:image/svg+xml,%3Csvg xml
       var acceptanceId = await resp.json();
 
       closeLicenseModal();
+      localStorage.setItem('lb_license_choice', pathChosen === 'SSPL' ? 'sspl' : 'apache');
       var a = document.createElement('a');
       a.href = pendingHref;
       if (pendingFilename) a.download = pendingFilename;
