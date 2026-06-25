@@ -356,7 +356,12 @@ async function firePosse(miss, config) {
   }
 
   const roundUpCorrect = roundUpAnswer !== null && roundUpAnswer === miss.correct_letter;
-  const elapsed = Date.now() - t0;
+  // BP094 Session 9 BLOCK D: guard against negative elapsed (clock skew / async drift)
+  const rawElapsed = Date.now() - t0;
+  const elapsed = rawElapsed >= 0 ? rawElapsed : 0;
+  if (rawElapsed < 0) {
+    console.warn(`[WARN] negative delay corrected to 0 (raw=${rawElapsed}ms) in firePosse -- clock skew detected`);
+  }
 
   const statusEmoji = roundUpCorrect ? '✅' : roundUpAnswer !== null ? '❌' : '⚪';
   console.log(`  [ROUND-UP][${miss.source_id}] ${statusEmoji} correct=${miss.correct_letter} original=${miss.original_answer ?? 'null'} roundup=${roundUpAnswer ?? 'null'} tier=${resolutionTier} elapsed=${Math.round(elapsed/1000)}s`);

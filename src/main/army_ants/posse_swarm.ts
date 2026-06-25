@@ -147,6 +147,13 @@ export async function swarmDispatch(
     }
   }
 
+  // BP094 Session 9 BLOCK D: guard against negative elapsed_ms (clock skew / async drift)
+  const rawElapsedMs = Date.now() - t0;
+  const elapsedMs = rawElapsedMs >= 0 ? rawElapsedMs : 0;
+  if (rawElapsedMs < 0) {
+    console.warn(`[WARN] negative delay corrected to 0 (raw=${rawElapsedMs}ms) in swarmDispatch — clock skew or async drift detected`);
+  }
+
   return {
     run_id: runId,
     parent_question_id: parentQuestionId,
@@ -154,7 +161,7 @@ export async function swarmDispatch(
     aggregate_confidence: aggregateConfidence,
     per_sub_claim: subResults,
     contested_after_swarm: contestedAfterSwarm,
-    elapsed_ms: Date.now() - t0,
+    elapsed_ms: elapsedMs,
   };
 }
 
@@ -231,7 +238,12 @@ async function dispatchSubClaim(
   const routeId = inserted?.id;
   if (!routeId) return null;
 
-  const deadline = Date.now() + config.timeoutMs;
+  // BP094 Session 9 BLOCK D: clamp timeoutMs to minimum 5000ms to prevent negative deadline
+  const effectiveTimeoutMs = Math.max(5000, config.timeoutMs);
+  if (config.timeoutMs < 0) {
+    console.warn(`[WARN] negative delay corrected to 0 (raw=${config.timeoutMs}ms) in dispatchSubClaim — question deadline already elapsed`);
+  }
+  const deadline = Date.now() + effectiveTimeoutMs;
   while (Date.now() < deadline) {
     const rows = await supabaseGet(
       config.supabaseUrl, config.serviceKey,

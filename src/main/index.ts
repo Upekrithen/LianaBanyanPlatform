@@ -5790,7 +5790,12 @@ function startRelayRoutePoll(peerId: string): NodeJS.Timeout {
             answer = ollamaData?.response ?? null;
           }
 
-          const processingMs = Date.now() - startMs;
+          // BP094 Session 9 BLOCK D: guard against negative processingMs (clock skew / async drift)
+          const rawProcessingMs = Date.now() - startMs;
+          const processingMs = rawProcessingMs >= 0 ? rawProcessingMs : 0;
+          if (rawProcessingMs < 0) {
+            console.warn(`[WARN] negative delay corrected to 0 (raw=${rawProcessingMs}ms) in relay-poll processingMs -- clock skew detected`);
+          }
 
           // M14 Block 2: structured ABSTAIN when answer is null
           let abstainReason: string | null = null;
