@@ -42,3 +42,9 @@ Remaining BATCHECK components:
 - mnemosynec_members: 0 (member_profiles: 1)
 
 ## COMMITS
+
+- eda6aea: BLOCK A: propagate SUPABASE_SERVICE_ROLE_KEY to secrets file (BP094 Session 10)
+- 4c32c02: BLOCK B: npm run build -- Posse AbortSignal.timeout fix compiled to dist/ (BP094 Session 10)
+- 4648f99: BLOCK C: 2Q Full Power smoke re-fire post build + service_role key (BP094 Session 10)
+- 76815d6: BLOCKS D+E: WhizBang audit + canonical DB totals (BP094 Session 10)
+- (BLOCK F commit pending push)
