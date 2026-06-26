@@ -1,1061 +1,995 @@
-{{/* ═══════════════════════════════════════════════════════
-     MNEMOSYNEC HOMEPAGE — v0.1.60.3
-     BP081 SEG-1 through SEG-8 all applied here.
+﻿{{/* ═══════════════════════════════════════════════════════
+     MNEMOSYNEC HOMEPAGE · v2.0 · BP093
+     Ported from mnemosynec-design-demo-v2 (2).html (69,435 bytes)
+     Hugo adaptations: version_trust.versions, mascot local path, modal download
      Dispatcher: layouts/index.html (isMnemosynec guard)
      ═══════════════════════════════════════════════════════ */}}
+
+{{- $ver := (index .Site.Data.version_trust.versions 0) -}}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300..700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <style>
-/* ════════════════════════════════════════════════════════
-   HOMEPAGE SHELL — full-bleed dark page, no horizontal scroll
-   BP081 UX CANON: NEVER SCROLL SIDEWAYS
-   ════════════════════════════════════════════════════════ */
-.main { max-width:100% !important; padding:0 !important; margin:0 !important; overflow-x:hidden !important; }
-html, body { overflow-x:hidden !important; max-width:100% !important; background:#0a1628 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.06'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v12.7l10.99 6.34 11-6.35V17.9l-11-6.34L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L12.98 41v8h-2v-6.85L0 35.81v-2.3zM15 0v7.5L27.99 15H28v-2.31h-.01L17 6.35V0h-2zm0 49v-8l12.99-7.5H28v2.31h-.01L17 42.15V49h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat; }
+:root{--font-body:'Inter',system-ui,sans-serif;--font-mono:'IBM Plex Mono',monospace;--text-xs:clamp(0.75rem,0.7rem + 0.25vw,0.875rem);--text-sm:clamp(0.875rem,0.8rem + 0.35vw,1rem);--text-base:clamp(1rem,0.95rem + 0.25vw,1.125rem);--text-lg:clamp(1.125rem,1rem + 0.75vw,1.5rem);--text-xl:clamp(1.5rem,1.2rem + 1.25vw,2.25rem);--text-2xl:clamp(2rem,1.2rem + 2.5vw,3.5rem);--space-1:.25rem;--space-2:.5rem;--space-3:.75rem;--space-4:1rem;--space-5:1.25rem;--space-6:1.5rem;--space-8:2rem;--space-10:2.5rem;--space-12:3rem;--space-16:4rem;--space-20:5rem;--space-24:6rem;--radius-sm:.375rem;--radius-md:.5rem;--radius-lg:.75rem;--radius-xl:1rem;--radius-full:9999px;--transition:180ms cubic-bezier(0.16,1,0.3,1);--content-default:960px;--content-wide:1200px;--top-bar-height:38px;--lb-brand-blue:#3B82F6}
+[data-theme="dark"]{--bg:#0c0d0e;--surface:#131517;--surface2:#191c1f;--surfaceOff:#1f2327;--surfaceDyn:#272c30;--divider:#252a2e;--border:#2f3439;--text:#d8dce0;--textMuted:#7a8088;--textFaint:#484e55;--textInv:#0c0d0e;--primary:#4fc3d0;--primaryHov:#3aafbc;--primaryHl:#1a3338;--amber:#f5b942;--amberDim:#3a2e10;--amberBorder:rgba(245,185,66,0.25);--green:#5acd7e;--greenDim:#122d1e;--gold:#e8af34;--goldDim:#3a2e10;--red:#e05a6a;--redDim:#2e1016;--shadowSm:0 1px 3px rgba(0,0,0,.3);--shadowMd:0 4px 16px rgba(0,0,0,.4);--shadowLg:0 12px 40px rgba(0,0,0,.5)}
+:root,[data-theme="light"]{--bg:#f4f5f6;--surface:#ffffff;--surface2:#f8f9fa;--surfaceOff:#eef0f2;--surfaceDyn:#e4e7ea;--divider:#dde0e4;--border:#cdd0d5;--text:#1a1d21;--textMuted:#6b7280;--textFaint:#b0b5bc;--textInv:#ffffff;--primary:#0e7a85;--primaryHov:#0b6570;--primaryHl:#d0eaec;--amber:#c47a0a;--amberDim:#fef3dc;--amberBorder:rgba(196,122,10,0.25);--green:#1e7d43;--greenDim:#d4f1e2;--gold:#b8860b;--goldDim:#fdf6d8;--red:#c0392b;--redDim:#fde8e8;--shadowSm:0 1px 3px rgba(0,0,0,.08);--shadowMd:0 4px 16px rgba(0,0,0,.1);--shadowLg:0 12px 40px rgba(0,0,0,.14)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+body{font-family:var(--font-body);font-size:var(--text-base);color:var(--text);background:var(--bg);min-height:100dvh;line-height:1.65}
+img,canvas,svg{display:block;max-width:100%}
+h1,h2,h3{text-wrap:balance;line-height:1.15}
+p{text-wrap:pretty}
+button{cursor:pointer;border:none;background:none;font:inherit;color:inherit}
+a,button,[role="button"]{transition:color var(--transition),background var(--transition),border-color var(--transition),box-shadow var(--transition)}
+:focus-visible{outline:2px solid var(--primary);outline-offset:3px;border-radius:var(--radius-sm)}
+.c{max-width:var(--content-default);margin-inline:auto;padding-inline:var(--space-6)}
+.cw{max-width:var(--content-wide);margin-inline:auto;padding-inline:var(--space-6)}
+section{padding-block:clamp(var(--space-8),4vw,var(--space-16))}
+.label{font-size:var(--text-xs);font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--primary);display:flex;align-items:center;gap:var(--space-2);margin-bottom:var(--space-3)}
+.label::before{content:'';width:20px;height:1px;background:var(--primary)}
+.h2{font-size:var(--text-xl);font-weight:700;margin-bottom:var(--space-2)}
+.sub{font-size:var(--text-base);color:var(--textMuted);max-width:58ch}
+hr.div{height:1px;background:var(--divider);border:none}
+code{font-family:var(--font-mono);font-size:.88em;background:var(--surfaceDyn);padding:1px var(--space-2);border-radius:var(--radius-sm);color:var(--primary)}
 
-/* Hide PaperMod default footer — custom footer below handles copyright (SEG-8) */
-footer.footer { display: none !important; }
 
-.mn-hp-page {
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  background: transparent;
-  color: #faf5eb;
-  width: 100%;
-  min-height: 100vh;
-  padding: 0 0 4rem;
-  line-height: 1.7;
-}
-.mn-hp-page a { color: #d69e2e; text-decoration: none; border-bottom: 1px solid rgba(214,158,46,0.35); }
-.mn-hp-page a:hover { border-bottom-color: #d69e2e; }
+/* NAV (BP094 REV-2: dark charcoal, same height as ticker) */
+.nav{position:sticky;top:var(--top-bar-height);z-index:99;background:#1a1d21;border-bottom:1px solid #2f3439;padding:0 var(--space-6);display:flex;align-items:center;justify-content:space-between;height:var(--top-bar-height);gap:var(--space-4)}
+.logo{display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-sm);font-weight:700;color:#d8dce0;text-decoration:none;white-space:nowrap}
+.logo-icon{width:clamp(22px,2.5vw,28px);height:clamp(22px,2.5vw,28px);border-radius:50%;object-fit:cover;border:2px solid rgba(75,180,190,0.3);background:#fff;flex-shrink:0}
+.logo-substrate{color:var(--lb-brand-blue,#3B82F6)}
+.nav-r{display:flex;align-items:center;gap:var(--space-3)}
+.nl{font-size:var(--text-xs);color:#9ca3af;text-decoration:none;white-space:nowrap}
+.nl:hover{color:#d8dce0}
+/* Download button 3-state (REV-2) */
+.btn-dl{padding:0.28rem var(--space-4);border-radius:var(--radius-full);font-size:var(--text-xs);font-weight:700;cursor:pointer;border:none;font-family:inherit;white-space:nowrap;transition:background 180ms,color 180ms}
+.btn-dl.dl-idle,.btn-dl:not(.dl-progress):not(.dl-done){background:#22c55e;color:#0c0d0e}
+.btn-dl.dl-idle:hover,.btn-dl:not(.dl-progress):not(.dl-done):hover{filter:brightness(1.1)}
+.btn-dl.dl-progress{background:#C9A84C;color:#1a1209;cursor:wait}
+.btn-dl.dl-done{background:#374151;color:#9ca3af;cursor:default}
+.tog{width:30px;height:30px;border-radius:var(--radius-full);display:flex;align-items:center;justify-content:center;color:#9ca3af;border:1px solid #2f3439;background:transparent;flex-shrink:0}
+.tog:hover{color:#d8dce0;background:#252a2e}
 
-.mn-v2-wrap {
-  max-width: 760px;
-  margin: 0 auto;
-  padding: 0 1.2rem;
-}
+/* INSTALLER MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);z-index:500;display:flex;align-items:center;justify-content:center;padding:var(--space-4);opacity:0;pointer-events:none;transition:opacity .3s ease}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);max-width:540px;width:100%;box-shadow:var(--shadowLg);display:flex;flex-direction:column;max-height:90dvh;overflow:hidden;transform:scale(.96) translateY(12px);transition:transform .3s cubic-bezier(0.16,1,0.3,1)}
+.modal-overlay.open .modal{transform:scale(1) translateY(0)}
+.modal-header{padding:var(--space-6) var(--space-6) 0;display:flex;align-items:center;justify-content:space-between;gap:var(--space-4)}
+.modal-title{font-size:var(--text-lg);font-weight:700;display:flex;align-items:center;gap:var(--space-3)}
+.modal-close{width:32px;height:32px;border-radius:var(--radius-full);display:flex;align-items:center;justify-content:center;color:var(--textMuted);border:1px solid var(--border)}
+.modal-close:hover{color:var(--text);background:var(--surfaceOff)}
+.modal-body{padding:var(--space-5) var(--space-6);overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:var(--space-5)}
+.lic-block{border-radius:var(--radius-lg);padding:var(--space-4) var(--space-5)}
+.lic-block-title{font-size:var(--text-xs);font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:var(--space-2)}
+.lic-block-body{font-size:var(--text-sm);color:var(--textMuted);line-height:1.7}
+.lic-block.welcome{background:var(--primaryHl);border:1px solid color-mix(in srgb,var(--primary) 20%,transparent)}
+.lic-block.welcome .lic-block-title{color:var(--primary)}
+.lic-block.terms{background:var(--surfaceOff);border:1px solid var(--border)}
+.lic-block.terms .lic-block-title{color:var(--text)}
+.lic-row{display:flex;gap:var(--space-3);align-items:baseline;padding:var(--space-2) 0;border-bottom:1px solid var(--divider)}
+.lic-row:last-child{border-bottom:none}
+.lic-tag{font-size:var(--text-xs);font-weight:700;font-family:var(--font-mono);background:var(--surfaceDyn);color:var(--primary);padding:2px var(--space-2);border-radius:var(--radius-sm);flex-shrink:0;min-width:80px;text-align:center}
+.lic-desc{font-size:var(--text-xs);color:var(--textMuted);line-height:1.6}
+.lic-block.offer{background:var(--amberDim);border:1px solid var(--amberBorder)}
+.lic-block.offer .lic-block-title{color:var(--amber)}
+.offer-pill{display:inline-flex;align-items:center;gap:var(--space-2);background:var(--amber);color:var(--textInv);font-size:var(--text-xs);font-weight:800;padding:var(--space-1) var(--space-3);border-radius:var(--radius-full);margin-bottom:var(--space-2)}
+.lic-block.pledge{background:var(--surfaceOff);border:1px solid var(--border)}
+.lic-block.pledge .lic-block-title{color:var(--text)}
+.lic-block.warranty{background:var(--surfaceOff);border:1px solid var(--border)}
+.lic-block.warranty .lic-block-title{color:var(--textMuted)}
+.modal-footer{padding:var(--space-4) var(--space-6) var(--space-6);border-top:1px solid var(--divider);display:flex;flex-direction:column;gap:var(--space-4)}
+.check-row{display:flex;align-items:flex-start;gap:var(--space-3);cursor:pointer}
+.check-row input[type="checkbox"]{width:18px;height:18px;flex-shrink:0;margin-top:2px;accent-color:var(--primary);cursor:pointer}
+.check-label{font-size:var(--text-sm);color:var(--textMuted);line-height:1.6}
+.check-label a{color:var(--primary)}
+.btn-continue{background:var(--primary);color:var(--textInv);padding:var(--space-3) var(--space-6);border-radius:var(--radius-full);font-size:var(--text-sm);font-weight:700;width:100%;opacity:.5;cursor:not-allowed;transition:all var(--transition);text-align:center;display:block;text-decoration:none}
+.btn-continue.ready{opacity:1;cursor:pointer}
+.btn-continue.ready:hover{background:var(--primaryHov);transform:translateY(-1px);box-shadow:var(--shadowMd)}
 
-/* ── HERO ── */
-.mn-v2-hero { padding: 1rem 0 2rem; }
-.mn-v2-hero-card {
-  background: linear-gradient(135deg, rgba(10,22,40,0.97) 0%, rgba(5,14,30,0.99) 100%);
-  border: 1px solid rgba(214,158,46,0.35);
-  border-radius: 14px;
-  padding: 2.4rem 2rem 2rem;
-  box-shadow: 0 8px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(214,158,46,0.12);
-  position: relative;
-  overflow: hidden;
-}
-.mn-v2-hero-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(214,158,46,0.6), transparent);
-}
-.mn-hero-grid {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 1.8rem;
-  align-items: center;
-}
-.mn-hero-grid__text { min-width: 0; }
-.mn-hero-grid__mascot {
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-}
-.mn-hero-grid__mascot img { width: 220px; height: auto; display: block; border-radius: 8px; }
-.mn-hero-grid__mascot-caption {
-  font-size: 0.68rem;
-  color: rgba(250,245,235,0.4);
-  text-align: center;
-  font-style: italic;
-  line-height: 1.4;
-  max-width: 180px;
-}
-@media (max-width: 600px) {
-  .mn-hero-grid { grid-template-columns: 1fr; }
-  .mn-hero-grid__mascot { order: -1; margin-bottom: 0.5rem; }
-  .mn-hero-grid__mascot img { width: 110px; }
-}
-/* SEG-2: Hero top row — heading + mascot */
-.mn-hero-top-row {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 1.8rem;
-  align-items: flex-start;
-  margin-bottom: 1.2rem;
-}
-.mn-hero-top-row__text { min-width: 0; }
-.mn-hero-top-row__mascot {
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-}
-.mn-hero-top-row__mascot img { width: 220px; height: auto; display: block; border-radius: 8px; }
-@media (max-width: 600px) {
-  .mn-hero-top-row { grid-template-columns: 1fr; }
-  .mn-hero-top-row__mascot { order: -1; margin-bottom: 0.5rem; }
-  .mn-hero-top-row__mascot img { width: 110px; }
-}
-.mn-hero-body { width: 100%; }
-.mn-v2-hero-card h1 {
-  color: #faf5eb;
-  font-size: clamp(1.5rem, 4vw, 2.1rem);
-  font-weight: 800;
-  line-height: 1.2;
-  margin: 0 0 0.9rem;
-  letter-spacing: -0.02em;
-}
-.mn-hero-pronunciation {
-  font-size: 0.8rem;
-  color: rgba(250,245,235,0.45);
-  font-style: italic;
-  margin: 0 0 1rem;
-}
-.mn-v2-hero-card p {
-  color: rgba(250,245,235,0.82);
-  font-size: clamp(0.92rem, 2.2vw, 1.05rem);
-  margin: 0 0 1rem;
-  line-height: 1.75;
-}
-.mn-hero-bullets {
-  color: rgba(250,245,235,0.82);
-  font-size: clamp(0.9rem, 2vw, 1rem);
-  margin: 0 0 1.3rem;
-  padding-left: 1.3rem;
-  line-height: 1.65;
-}
-.mn-hero-bullets li { margin-bottom: 0.3rem; }
+/* HERO */
+.hero{padding-block:clamp(var(--space-6),4vw,var(--space-10));border-bottom:1px solid var(--divider);background:radial-gradient(ellipse 80% 60% at 50% -10%,color-mix(in srgb,var(--primary) 8%,transparent),transparent 70%)}
+.eyebrow{display:inline-flex;align-items:center;gap:var(--space-2);background:var(--primaryHl);color:var(--primary);padding:var(--space-1) var(--space-3);border-radius:var(--radius-full);font-size:var(--text-xs);font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:var(--space-5)}
+.hero h1{font-size:var(--text-2xl);font-weight:800;letter-spacing:-.03em;margin-bottom:var(--space-5);line-height:1.1}
+.hero h1 em{font-style:normal;color:var(--primary)}
+.hero-sub{font-size:var(--text-lg);color:var(--textMuted);max-width:52ch;margin-bottom:var(--space-8)}
+/* BP094 REV-3: hero revised -- allows large icon, removes BP093 compression */
+.hero{padding-block:clamp(var(--space-5),3vw,var(--space-10))!important}
+.hero h1{font-size:clamp(1.7rem,3.5vw,2.4rem)!important;line-height:1.1!important;margin:0 0 var(--space-3)!important}
+.hero-sub{font-size:clamp(0.95rem,1.4vw,1.1rem)!important;line-height:1.5!important;margin:var(--space-3) 0!important}
+.hero figure{flex-shrink:0!important;align-self:flex-start!important}
+.hero figure img{width:clamp(96px,10vw,128px)!important;height:clamp(96px,10vw,128px)!important;max-width:none!important;max-height:none!important}
+.hero figure figcaption{font-size:0.7rem!important;margin:0.3rem 0!important}
+.acts{display:flex;align-items:center;flex-wrap:wrap;gap:var(--space-3)}
+.btn-p{background:var(--primary);color:var(--textInv);padding:var(--space-3) var(--space-6);border-radius:var(--radius-full);font-size:var(--text-sm);font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:var(--space-2)}
+.btn-p:hover{background:var(--primaryHov);transform:translateY(-1px);box-shadow:var(--shadowMd)}
+.btn-s{background:transparent;color:var(--text);border:1px solid var(--border);padding:var(--space-3) var(--space-6);border-radius:var(--radius-full);font-size:var(--text-sm);font-weight:500;text-decoration:none}
+.btn-s:hover{color:var(--text);border-color:var(--textFaint);background:var(--surface)}
 
-/* SEG-2: GREEN download button */
-.mn-v2-dl-btn {
-  display: inline-block;
-  background: #38a169;
-  color: #fff !important;
-  border: 2px solid #38a169 !important;
-  border-bottom: 2px solid #38a169 !important;
-  border-radius: 12px;
-  padding: 1rem 2.2rem;
-  font-size: clamp(1rem, 2.5vw, 1.2rem);
-  font-weight: 800;
-  text-decoration: none !important;
-  box-shadow: 0 6px 24px rgba(56,161,105,0.35);
-  letter-spacing: 0.01em;
-  transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
-}
-.mn-v2-dl-btn:hover {
-  background: #2f8a59 !important;
-  border-color: #2f8a59 !important;
-  transform: translateY(-2px);
-  box-shadow: 0 10px 32px rgba(56,161,105,0.5);
-}
-.mn-hp-nav-links {
-  text-align: center;
-  font-size: 0.9rem;
-  margin: 0.7rem 0 0.3rem !important;
-  color: rgba(250,245,235,0.65) !important;
-}
-.mn-hp-nav-links a { color: #d69e2e !important; font-size: 0.88rem; }
-.mn-v2-hero-tagline {
-  margin-top: 0.5rem !important;
-  font-size: 0.82rem !important;
-  color: rgba(250,245,235,0.4) !important;
-  text-align: center;
-  letter-spacing: 0.03em;
-}
+/* HERO STAT ROW (BP094 REV-3) */
+.hero-stat-row{display:flex;align-items:center;flex-wrap:wrap;gap:var(--space-3);margin-top:var(--space-5)}
+.hero-stat-tile{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:var(--space-3) var(--space-5);text-decoration:none;transition:box-shadow var(--transition),transform var(--transition);flex:1;min-width:100px}
+.hero-stat-tile:hover{box-shadow:var(--shadowMd);transform:translateY(-2px)}
+.stat-val{font-size:var(--text-xl);font-weight:800;color:var(--primary);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.stat-really{font-size:var(--text-xl);font-weight:800;color:var(--amber);letter-spacing:-.02em;padding:var(--space-3) var(--space-4);align-self:center}
+.hero-stat-footnotes{margin-top:var(--space-3);display:flex;flex-direction:column;gap:2px}
+.hero-stat-footnotes p{font-size:0.7rem;color:var(--textFaint);line-height:1.4}
 
-/* First-session explainer — collapsed click-expand (v0.1.60.6 SEG-2) */
-.mn-first-session {
-  background: rgba(56,161,105,0.07);
-  border: 1px solid rgba(56,161,105,0.28);
-  border-radius: 10px;
-  padding: 0;
-  margin: 1.2rem 0 0;
-  overflow: hidden;
-}
-.mn-first-session > summary {
-  cursor: pointer;
-  list-style: none;
-  padding: 0.75rem 1.3rem;
-  color: #38a169;
-  font-size: 1rem;
-  font-weight: 700;
-  user-select: none;
-  letter-spacing: 0.01em;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: background 0.15s;
-}
-.mn-first-session > summary:hover { background: rgba(56,161,105,0.1); }
-.mn-first-session[open] > summary { border-bottom: 1px solid rgba(56,161,105,0.2); }
-.mn-first-session > summary::-webkit-details-marker { display: none; }
-.mn-first-session > summary::before {
-  content: '▸';
-  font-size: 0.8rem;
-  transition: transform 0.2s ease;
-  flex-shrink: 0;
-}
-.mn-first-session[open] > summary::before { transform: rotate(90deg); }
-.mn-first-session__body {
-  padding: 0.8rem 1.3rem 0.9rem;
-}
+/* CHART WRAPPER (BP094 REV-7) */
+.chart-compounding-wrap{cursor:zoom-in;transition:transform 200ms cubic-bezier(0.4,0,0.2,1);position:relative;border-radius:var(--radius-lg);overflow:hidden}
+.chart-compounding-wrap:hover{transform:scale(1.005)}
+.chart-compounding-wrap:focus{outline:2px solid var(--primary);outline-offset:4px}
+.chart-cmp-hint{font-size:0.68rem;color:var(--textFaint);text-align:right;padding:0.2rem 0.25rem 0;font-style:italic}
+/* Hero inline chart thumbnail */
+.hero-chart-inline{max-width:560px;margin:var(--space-5) 0}
+/* Mobile: hide thumbnail under 480px */
+@media(max-width:480px){.hero-chart-inline{display:none}.chart-cmp-mobile-fallback{display:block!important}}
+.chart-cmp-mobile-fallback{display:none}
+.btn-see-proof-curve{background:var(--amber);color:var(--textInv);padding:var(--space-2) var(--space-5);border-radius:var(--radius-full);font-size:var(--text-sm);font-weight:700;border:none;cursor:pointer;font-family:inherit;margin-top:var(--space-3);display:inline-block}
+.btn-see-proof-curve:hover{filter:brightness(1.1)}
 
-/* ── BENCHMARK CHART (Does It Actually Work?) ── */
-.mn-v2-chart-section {
-  margin: 2rem 0;
-  padding: 1.8rem;
-  background: rgba(5,11,20,0.7);
-  border: 1px solid rgba(214,158,46,0.18);
-  border-radius: 12px;
-}
-.mn-v2-chart-section h2 {
-  color: #d69e2e;
-  font-size: clamp(1.1rem, 3vw, 1.45rem);
-  margin: 0 0 0.3rem;
-  font-weight: 700;
-}
-.mn-v2-chart-subtitle {
-  color: rgba(250,245,235,0.55);
-  font-size: 0.82rem;
-  margin: 0 0 0.6rem;
-  font-style: italic;
-}
-.mn-benchmark-clarify {
-  background: rgba(214,158,46,0.06);
-  border-left: 3px solid rgba(214,158,46,0.4);
-  padding: 0.6rem 0.9rem;
-  margin: 0 0 1.4rem;
-  font-size: 0.82rem;
-  color: rgba(250,245,235,0.72);
-  line-height: 1.65;
-  border-radius: 0 6px 6px 0;
-}
-.mn-v2-chart-legend {
-  display: flex;
-  gap: 1.4rem;
-  margin: 0 0 1.2rem;
-  font-size: 0.8rem;
-  flex-wrap: wrap;
-}
-.mn-v2-legend-item { display: flex; align-items: center; gap: 0.4rem; color: rgba(250,245,235,0.7); }
-.mn-v2-legend-dot { width: 12px; height: 12px; border-radius: 2px; flex-shrink: 0; }
-.mn-v2-legend-dot--cold { background: rgba(160,174,192,0.55); }
-.mn-v2-legend-dot--hot  { background: #38a169; }
-.mn-v2-bar-group { margin-bottom: 1.4rem; }
-.mn-v2-bar-group:last-child { margin-bottom: 0; }
-.mn-v2-model-name { font-size: 0.82rem; font-weight: 700; color: rgba(250,245,235,0.9); margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.5rem; }
-.mn-v2-model-free-badge { background: rgba(56,161,105,0.2); color: #38a169; border: 1px solid rgba(56,161,105,0.4); border-radius: 4px; font-size: 0.65rem; font-weight: 700; padding: 0.1rem 0.4rem; letter-spacing: 0.05em; text-transform: uppercase; }
-.mn-v2-bar-row { display: flex; align-items: center; gap: 0.55rem; margin-bottom: 0.25rem; }
-.mn-v2-bar-row:last-child { margin-bottom: 0; }
-.mn-v2-bar-cond { font-size: 0.68rem; color: rgba(250,245,235,0.45); width: 56px; flex-shrink: 0; text-align: right; letter-spacing: 0.03em; }
-.mn-v2-bar-track { flex: 1; background: rgba(255,255,255,0.05); border-radius: 4px; height: 22px; overflow: hidden; position: relative; }
-.mn-v2-bar-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; justify-content: flex-end; padding-right: 6px; font-size: 0.72rem; font-weight: 700; white-space: nowrap; min-width: 32px; box-sizing: border-box; transition: width 0.4s ease; }
-.mn-v2-bar-fill--cold { background: rgba(160,174,192,0.5); color: rgba(255,255,255,0.7); }
-.mn-v2-bar-fill--hot  { background: linear-gradient(90deg, #2d7d52, #38a169); color: #fff; }
-.mn-v2-chart-note { margin-top: 1.2rem; font-size: 0.76rem; color: rgba(250,245,235,0.45); line-height: 1.6; border-top: 1px solid rgba(214,158,46,0.1); padding-top: 0.8rem; }
-.mn-v2-chart-note strong { color: rgba(250,245,235,0.7); }
-.prove-it-pill { display: inline-block; padding: 0.42rem 1.1rem; border-radius: 9999px; background: #c9a84c; color: #0f1117 !important; font-weight: 700; font-size: 0.8rem; letter-spacing: 0.06em; text-decoration: none; white-space: nowrap; border-bottom: none !important; flex-shrink: 0; line-height: 1.4; }
-.prove-it-pill:hover { opacity: 0.85; border-bottom: none !important; }
+/* DIVIDEND HOOK (BP094 REV-8) */
+.dividend-hook{background:var(--amberDim);border:1.5px solid var(--amberBorder);border-radius:var(--radius-xl);padding:var(--space-5) var(--space-6);margin:var(--space-5) 0}
+.dividend-hook h3{font-size:clamp(1.1rem,2vw,1.5rem);font-weight:800;color:var(--amber);line-height:1.3;margin-bottom:var(--space-2)}
+.dividend-hook h3 a{color:var(--amber);text-decoration:underline;font-weight:800}
+.dividend-hook h3 a:hover{filter:brightness(1.2)}
+.dividend-hook-disclosure{font-size:0.7rem;color:var(--textFaint);line-height:1.5;margin-top:var(--space-2)}
 
-/* ── MNEMOSYNEC REMEMBERS section ── */
-.mn-hp-remembers {
-  margin: 2rem 0;
-  padding: 2rem;
-  background: rgba(10,22,40,0.7);
-  border: 1px solid rgba(214,158,46,0.22);
-  border-radius: 12px;
-}
-.mn-hp-remembers h2 { color: #faf5eb; font-size: clamp(1.2rem,3.5vw,1.6rem); font-weight:800; margin:0 0 1rem; }
-.mn-hp-remembers h3 { color: #d69e2e; font-size: 0.95rem; margin: 0 0 0.4rem; font-weight:700; }
-.mn-hp-remembers p { color: rgba(250,245,235,0.82); font-size: 0.95rem; line-height: 1.75; margin: 0 0 0.9rem; }
-.mn-hp-remembers strong { color: #faf5eb; }
+/* PROOF/ECONOMICS/INVITATION CARDS GRID (BP094 REV-4) */
+.wyw-cards-section{margin:var(--space-6) 0}
+.wyw-cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-4);align-items:stretch}
+@media(max-width:767px){.wyw-cards-grid{grid-template-columns:1fr}}
+.wyw-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:var(--space-5);display:flex;flex-direction:column;gap:var(--space-3);box-shadow:var(--shadowSm);transition:box-shadow var(--transition),transform var(--transition)}
+.wyw-card:hover{box-shadow:var(--shadowMd);transform:translateY(-2px)}
+.wyw-card-label{font-size:var(--text-xs);font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--amber)}
+.wyw-card-title{font-size:var(--text-base);font-weight:800;color:var(--text);line-height:1.3}
+.wyw-card-body{font-size:var(--text-sm);color:var(--textMuted);line-height:1.6;flex:1}
+.wyw-card-btn{margin-top:auto;display:inline-flex;align-items:center;gap:var(--space-2);font-size:var(--text-xs);color:var(--amber);font-weight:700;padding:var(--space-2) var(--space-4);border:1px solid var(--amberBorder);border-radius:var(--radius-full);background:var(--amberDim);width:fit-content;cursor:pointer;font-family:inherit;transition:background var(--transition),color var(--transition)}
+.wyw-card-btn:hover{background:var(--amber);color:var(--textInv)}
 
-/* ── DIVIDER ── */
-.mn-v2-divider { border: none; border-top: 1px solid rgba(214,158,46,0.12); margin: 1.8rem 0; }
+/* KPI */
+.kpi-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1px;background:var(--divider);border:1px solid var(--border);border-radius:var(--radius-xl);overflow:hidden;margin-top:var(--space-4)}
+.kc{background:var(--surface);padding:var(--space-3) var(--space-5)}
+.kv{font-size:var(--text-xl);font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums;color:var(--primary)}
+.kl{font-size:var(--text-xs);color:var(--textMuted);margin-top:var(--space-1)}
 
-/* ── SEG-6: PINNED PROOFS ACCORDIONS — NEVER SCROLL SIDEWAYS ── */
-.mn-proofs-accordion-section {
-  margin: 2rem 0;
-  padding: 1.5rem 1.8rem 1.5rem;
-  background: rgba(5,11,20,0.75);
-  border: 1px solid rgba(214,158,46,0.22);
-  border-radius: 12px;
-}
-.mn-proofs-accordion-section h3 {
-  color: #d69e2e;
-  font-size: clamp(0.95rem, 2.5vw, 1.2rem);
-  font-weight: 700;
-  margin: 0 0 0.4rem;
-}
-.mn-proofs-subtitle {
-  color: rgba(250,245,235,0.45);
-  font-size: 0.75rem;
-  font-style: italic;
-  margin: 0 0 1.1rem;
-}
-/* Accordion rows — vertical only, no horizontal scroll ever */
-.mn-proof-accordion {
-  border: 1px solid rgba(214,158,46,0.2);
-  border-radius: 10px;
-  background: rgba(10,22,40,0.6);
-  overflow: hidden;
-  margin-bottom: 0.75rem;
-}
-.mn-proof-accordion:last-child { margin-bottom: 0; }
-.mn-proof-accordion > summary {
-  cursor: pointer;
-  list-style: none;
-  padding: 0.9rem 1.1rem;
-  display: flex;
-  align-items: baseline;
-  gap: 0.7rem;
-  user-select: none;
-  transition: background 0.15s;
-}
-.mn-proof-accordion > summary:hover { background: rgba(214,158,46,0.07); }
-.mn-proof-accordion[open] > summary { background: rgba(214,158,46,0.09); border-bottom: 1px solid rgba(214,158,46,0.18); }
-.mn-proof-accordion > summary::-webkit-details-marker { display: none; }
-.mn-proof-accordion__label {
-  font-size: 0.65rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #d69e2e;
-  font-weight: 700;
-  flex-shrink: 0;
-}
-.mn-proof-accordion__title {
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: #faf5eb;
-  flex: 1;
-  min-width: 0;
-  line-height: 1.35;
-}
-.mn-proof-accordion__result {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: #3ddc84;
-  letter-spacing: 0.04em;
-  white-space: nowrap;
-}
-.mn-proof-accordion__body {
-  padding: 1.2rem 1.4rem 1.3rem;
-  color: rgba(250,245,235,0.82);
-  font-size: 0.9rem;
-  line-height: 1.7;
-}
-.mn-proof-accordion__body p { margin: 0 0 0.7rem; }
-.mn-proof-accordion__body p:last-child { margin-bottom: 0; }
-/* Thumbnails — horizontal wrap, NEVER scroll sideways (BP081 HARD BINDING) */
-.mn-proof-screenshots {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;  /* wraps to next line on small screens — NEVER overflow-x: scroll */
-  gap: 0.8rem;
-  margin: 1rem 0;
-}
-.mn-proof-screenshot-placeholder {
-  background: rgba(10,22,40,0.8);
-  border: 1px dashed rgba(214,158,46,0.3);
-  border-radius: 8px;
-  padding: 1.2rem 1rem;
-  text-align: center;
-  min-height: 80px;
-  min-width: 120px;
-  flex: 1 1 140px;
-  max-width: 200px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
-  cursor: pointer;
-  transition: border-color 0.15s, background 0.15s;
-}
-.mn-proof-screenshot-placeholder:hover {
-  border-color: rgba(214,158,46,0.6);
-  background: rgba(10,22,40,0.95);
-}
-.mn-proof-screenshot-placeholder__caption {
-  font-size: 0.72rem;
-  color: rgba(250,245,235,0.45);
-  font-style: italic;
-}
-/* Lightbox overlay */
-.mn-lightbox {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.88);
-  z-index: 9999;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-}
-.mn-lightbox.open {
-  display: flex;
-}
-.mn-lightbox__inner {
-  background: rgba(10,22,40,0.98);
-  border: 1px solid rgba(214,158,46,0.4);
-  border-radius: 12px;
-  padding: 2rem;
-  max-width: 90vw;
-  max-height: 90vh;
-  overflow: auto;
-  text-align: center;
-  position: relative;
-}
-.mn-lightbox__close {
-  position: absolute;
-  top: 0.8rem;
-  right: 1rem;
-  font-size: 1.5rem;
-  cursor: pointer;
-  color: rgba(250,245,235,0.6);
-  background: none;
-  border: none;
-  line-height: 1;
-}
-.mn-lightbox__close:hover { color: #faf5eb; }
-.mn-lightbox__img { max-width: 100%; height: auto; border-radius: 8px; }
-.mn-lightbox__caption { margin-top: 0.8rem; font-size: 0.82rem; color: rgba(250,245,235,0.55); font-style: italic; }
-.mn-proof-accordion__receipt {
-  font-size: 0.72rem;
-  color: rgba(214,158,46,0.65);
-  font-style: italic;
-  border-top: 1px solid rgba(214,158,46,0.1);
-  padding-top: 0.6rem;
-  margin-top: 0.6rem;
-}
+/* CHART */
+.cw-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:var(--space-5);box-shadow:var(--shadowSm);margin-top:var(--space-5)}
+.ct-row{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:var(--space-4);margin-bottom:var(--space-6)}
+.ct{font-size:var(--text-lg);font-weight:700}
+.cs{font-size:var(--text-sm);color:var(--textMuted)}
+.leg{display:flex;gap:var(--space-5);flex-wrap:wrap}
+.li{display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-sm);color:var(--textMuted)}
+.ld{width:10px;height:10px;border-radius:var(--radius-full);flex-shrink:0}
+.ccw{position:relative;height:320px}
+.cn{margin-top:var(--space-4);font-size:var(--text-xs);color:var(--textFaint);border-top:1px solid var(--divider);padding-top:var(--space-4)}
 
-/* ── SEG-5/7: COMBINED SUBSTRATE + HOW WE MAKE SURE ── */
-.mn-substrate-card {
-  margin: 2rem 0;
-  padding: 2rem;
-  background: rgba(5,11,20,0.7);
-  border: 1px solid rgba(214,158,46,0.22);
-  border-radius: 12px;
-}
-.mn-substrate-card h2 {
-  color: #d69e2e;
-  font-size: clamp(1.05rem, 3vw, 1.35rem);
-  font-weight: 700;
-  margin: 0 0 0.4rem;
-}
-.mn-substrate-card h3 {
-  color: #d69e2e;
-  font-size: 1rem;
-  font-weight: 700;
-  margin: 1.3rem 0 0.4rem;
-}
-.mn-substrate-card p { color: rgba(250,245,235,0.82); font-size: 0.92rem; line-height: 1.78; margin: 0 0 0.9rem; }
-.mn-substrate-card p:last-child { margin-bottom: 0; }
-.mn-substrate-card strong { color: #faf5eb; }
-.mn-substrate-card table { width:100%; border-collapse:collapse; font-size:0.85rem; margin:0.8rem 0 1.2rem; }
-.mn-substrate-card th { color:#d69e2e; font-size:0.72rem; letter-spacing:0.07em; text-transform:uppercase; text-align:left; padding:0.5rem 0.7rem; border-bottom:1px solid rgba(214,158,46,0.2); }
-.mn-substrate-card td { padding:0.45rem 0.7rem; border-bottom:1px solid rgba(255,255,255,0.05); vertical-align:top; color:rgba(250,245,235,0.82); }
-.mn-substrate-card td strong { color:#faf5eb; }
-.mn-substrate-divider { border:none; border-top:1px solid rgba(214,158,46,0.15); margin:1.4rem 0; }
-.mn-substrate-card ul { padding-left:1.4rem; margin:0.5rem 0 0.9rem; }
-.mn-substrate-card li { margin-bottom:0.3rem; color:rgba(250,245,235,0.82); font-size:0.92rem; line-height:1.7; }
+/* ARCH GRID */
+.ag{display:grid;gap:var(--space-4);margin-top:var(--space-5)}
+@media(min-width:768px){.ag{grid-template-columns:repeat(3,1fr)}}
 
-/* SEG-5: Layer row accordions */
-.mn-layer-row {
-  border: 1px solid rgba(214,158,46,0.18);
-  border-radius: 8px;
-  background: rgba(10,22,40,0.5);
-  margin: 0 0 0.6rem;
-  overflow: hidden;
-}
-.mn-layer-row > summary {
-  cursor: pointer;
-  list-style: none;
-  padding: 0.75rem 1rem;
-  color: rgba(250,245,235,0.85);
-  font-size: 0.92rem;
-  line-height: 1.5;
-  transition: background 0.15s;
-}
-.mn-layer-row > summary:hover { background: rgba(214,158,46,0.07); }
-.mn-layer-row[open] > summary { background: rgba(214,158,46,0.09); border-bottom: 1px solid rgba(214,158,46,0.15); }
-.mn-layer-row > summary::-webkit-details-marker { display: none; }
-.mn-layer-row__body {
-  padding: 0.9rem 1.1rem;
-  color: rgba(250,245,235,0.78);
-  font-size: 0.88rem;
-  line-height: 1.72;
-}
+/* FLIP CARD */
+.fp{perspective:1200px}
+.fc{position:relative;min-height:220px;transform-style:preserve-3d;transition:transform .65s cubic-bezier(0.16,1,0.3,1)}
+.fc.flip{transform:rotateY(180deg)}
+.ff{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:var(--radius-xl);overflow:hidden}
+.ff-f{background:var(--surface);border:1px solid var(--border);padding:var(--space-6);display:flex;flex-direction:column;gap:var(--space-4);box-shadow:var(--shadowSm)}
+.ff-b{background:var(--surfaceOff);border:1px solid var(--border);padding:var(--space-6);display:flex;flex-direction:column;gap:var(--space-4);transform:rotateY(180deg);box-shadow:var(--shadowSm)}
+.badge{display:inline-flex;align-items:center;gap:var(--space-2);padding:var(--space-1) var(--space-3);border-radius:var(--radius-full);font-size:var(--text-xs);font-weight:600;letter-spacing:.06em;width:fit-content}
+.b-r{background:var(--primaryHl);color:var(--primary)}
+.b-v{background:var(--amberDim);color:var(--amber)}
+.b-a{background:var(--greenDim);color:var(--green)}
+.b-bk{background:var(--surfaceDyn);color:var(--textMuted)}
+.pe{font-size:var(--text-base);font-weight:700;color:var(--text)}
+.sm-txt{font-size:var(--text-sm);color:var(--textMuted);line-height:1.6}
+.fb-btn{margin-top:auto;display:inline-flex;align-items:center;gap:var(--space-2);font-size:var(--text-xs);color:var(--primary);font-weight:600;padding:var(--space-2) var(--space-3);border:1px solid var(--primaryHl);border-radius:var(--radius-full);background:var(--primaryHl);width:fit-content;transition:all var(--transition);cursor:pointer}
+.fb-btn:hover{background:var(--primary);color:var(--textInv);border-color:var(--primary)}
+.dt{width:100%;border-collapse:collapse;font-size:var(--text-sm)}
+.dt th{text-align:left;font-size:var(--text-xs);color:var(--textFaint);font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding-bottom:var(--space-2);border-bottom:1px solid var(--divider)}
+.dt td{padding:var(--space-2) 0;border-bottom:1px solid var(--divider);vertical-align:top}
+.dt td:first-child{font-weight:600;color:var(--text);width:38%;padding-right:var(--space-4)}
+.dt td:last-child{color:var(--textMuted)}
+.dt tr:last-child td{border-bottom:none}
+.pl{display:flex;flex-wrap:wrap;gap:var(--space-2);margin-top:var(--space-3)}
+.pa{display:inline-flex;align-items:center;gap:var(--space-1);font-size:var(--text-xs);color:var(--primary);border:1px solid var(--border);border-radius:var(--radius-sm);padding:var(--space-1) var(--space-2);text-decoration:none;font-family:var(--font-mono);background:var(--surface)}
+.pa:hover{background:var(--primaryHl);border-color:var(--primary)}
 
-/* SEG-7: Install card */
-.mn-install-card {
-  background: rgba(10,22,40,0.7);
-  border: 1px solid rgba(214,158,46,0.22);
-  border-radius: 12px;
-  padding: 1.8rem 2rem;
-}
-.mn-install-card__top {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  margin-bottom: 1.2rem;
-}
-.mn-install-card__mascot img {
-  width: 100px;
-  height: auto;
-  border-radius: 8px;
-  display: block;
-}
-.mn-install-card__dl {
-  flex: 1;
-  display: flex;
-  align-items: center;
-}
-.mn-v2-dl-btn--install {
-  width: 100%;
-  text-align: center;
-  display: block;
-}
-.mn-install-card__heading {
-  color: #d69e2e;
-  font-size: clamp(1rem, 2.8vw, 1.3rem);
-  font-weight: 700;
-  margin: 0 0 0.9rem;
-}
-.mn-install-card__body {
-  color: rgba(250,245,235,0.82);
-  font-size: 0.92rem;
-  line-height: 1.78;
-  margin: 0 0 1rem;
-}
-.mn-install-card__steps {
-  color: rgba(250,245,235,0.82);
-  font-size: 0.92rem;
-  padding-left: 1.5rem;
-  line-height: 1.75;
-  margin: 0 0 1rem;
-}
-.mn-install-card__steps li { margin-bottom: 0.4rem; }
-.mn-install-card__trust {
-  text-align: center;
-  font-size: 0.8rem;
-  color: rgba(250,245,235,0.38);
-  margin: 0;
-}
-@media (max-width: 500px) {
-  .mn-install-card__top { flex-direction: column; align-items: flex-start; }
-  .mn-install-card__mascot img { width: 70px; }
-}
+/* LIFECYCLE */
+.lc{background:color-mix(in srgb,var(--primary) 3%,var(--bg))}
+.fd{display:flex;align-items:stretch;flex-wrap:wrap;gap:0;margin-top:var(--space-8)}
+.fs{flex:1;min-width:160px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:var(--space-5);transition:box-shadow var(--transition),transform var(--transition)}
+.fs:hover{box-shadow:var(--shadowMd);transform:translateY(-2px)}
+.fs+.fs{margin-left:var(--space-2)}
+.fconn{display:flex;align-items:center;padding:0 var(--space-1);color:var(--textFaint);font-size:var(--text-lg);flex-shrink:0;align-self:center}
+.fi{font-size:1.8rem;margin-bottom:var(--space-2);display:block}
+.fn{font-size:var(--text-sm);font-weight:700;color:var(--text);margin-bottom:var(--space-1)}
+.fst{font-size:var(--text-xs);padding:2px var(--space-2);border-radius:var(--radius-full);width:fit-content;margin-bottom:var(--space-3)}
+.s-unc{background:var(--amberDim);color:var(--amber)}
+.s-ver{background:var(--primaryHl);color:var(--primary)}
+.s-per{background:var(--goldDim);color:var(--gold)}
+.fd-d{font-size:var(--text-xs);color:var(--textMuted);line-height:1.6}
+.fd-dec{margin-top:var(--space-3);font-size:var(--text-xs);color:var(--textFaint);font-family:var(--font-mono);border-top:1px solid var(--divider);padding-top:var(--space-2)}
 
-/* v0.1.60.7 SEG-3: Substrate Teal — consistent click-discovery color for anchor jumps to HOW IT WORKS */
-.mn-hero-substrate-link,
-.mn-cheap-how-link {
-  color: #5DBCD1 !important;
-  text-decoration: underline !important;
-  text-decoration-color: rgba(93, 188, 209, 0.4) !important;
-  text-underline-offset: 0.15em;
-  border-bottom: none !important;
-  transition: color 0.2s, text-decoration-color 0.2s;
-  cursor: pointer;
-}
-.mn-hero-substrate-link:hover,
-.mn-cheap-how-link:hover {
-  color: #7BD3E5 !important;
-  text-decoration-color: rgba(123, 211, 229, 1) !important;
-}
+/* COMMERCIAL OFFER */
+.offer-section{background:color-mix(in srgb,var(--amber) 4%,var(--bg))}
+.offer-card{background:var(--surface);border:2px solid var(--amberBorder);border-radius:var(--radius-xl);overflow:hidden;box-shadow:var(--shadowLg);margin-top:var(--space-8)}
+.offer-header{background:color-mix(in srgb,var(--amber) 10%,var(--surface));border-bottom:1px solid var(--amberBorder);padding:var(--space-6) var(--space-8);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-4)}
+.offer-eyebrow{font-size:var(--text-xs);font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--amber)}
+.offer-headline{font-size:var(--text-xl);font-weight:800;color:var(--text);line-height:1.15}
+.offer-headline span{color:var(--amber)}
+.offer-body{padding:var(--space-6) var(--space-8);display:grid;gap:var(--space-6)}
+@media(min-width:640px){.offer-body{grid-template-columns:1fr 1fr}}
+.math-table{width:100%;border-collapse:collapse}
+.math-table th{text-align:left;font-size:var(--text-xs);color:var(--textFaint);font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding-bottom:var(--space-2);border-bottom:1px solid var(--divider)}
+.math-table td{padding:var(--space-3) 0;border-bottom:1px solid var(--divider);vertical-align:top}
+.math-table tr:last-child td{border-bottom:none}
+.math-table td:first-child{font-size:var(--text-sm);font-weight:600;color:var(--text);padding-right:var(--space-4)}
+.math-table td:last-child{font-size:var(--text-sm);color:var(--textMuted)}
+.math-val{font-family:var(--font-mono);font-size:var(--text-xs);color:var(--primary);background:var(--primaryHl);padding:1px var(--space-2);border-radius:var(--radius-sm)}
+.offer-right{display:flex;flex-direction:column;gap:var(--space-4)}
+.frand-note{font-size:var(--text-xs);color:var(--textMuted);line-height:1.6}
+.frand-note strong{color:var(--text)}
+.offer-cta{padding:var(--space-5) var(--space-8);border-top:1px solid var(--amberBorder);background:color-mix(in srgb,var(--amber) 5%,var(--surface));display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-4)}
+.offer-cta-left{font-size:var(--text-sm);color:var(--textMuted)}
+.offer-cta-left a{color:var(--primary)}
+.offer-cta-left strong{color:var(--text)}
+.btn-offer{background:var(--amber);color:var(--textInv);padding:var(--space-3) var(--space-8);border-radius:var(--radius-full);font-size:var(--text-sm);font-weight:800;text-decoration:none;display:inline-flex;align-items:center;gap:var(--space-2);transition:all var(--transition)}
+.btn-offer:hover{filter:brightness(1.1);transform:translateY(-1px)}
 
-/* v0.1.60.6: Smooth scroll for anchor navigation */
-html { scroll-behavior: smooth; }
+/* PROOFS */
+.pg{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:var(--space-5);margin-top:var(--space-8)}
+.pc{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:var(--space-6);box-shadow:var(--shadowSm);display:flex;flex-direction:column;gap:var(--space-3);transition:box-shadow var(--transition),transform var(--transition)}
+.pc:hover{box-shadow:var(--shadowMd);transform:translateY(-2px)}
+.pm{font-size:var(--text-xl);font-weight:800;color:var(--primary);font-variant-numeric:tabular-nums;letter-spacing:-.03em}
+.pn{font-size:var(--text-sm);font-weight:700;color:var(--text)}
+.pd{font-size:var(--text-sm);color:var(--textMuted);line-height:1.6}
+.pb{display:inline-flex;align-items:center;gap:var(--space-1);background:var(--greenDim);color:#155e32;font-size:var(--text-xs);font-weight:700;letter-spacing:.06em;padding:2px var(--space-3);border-radius:var(--radius-full);width:fit-content;margin-top:auto}
 
-/* ── Footer (SEG-8) — single copyright via extend_footer.html for all pages ── */
+/* CHART CLICK-EXPAND */
+.chart-tile{cursor:zoom-in;transition:transform 200ms cubic-bezier(0.4,0,0.2,1);position:relative}
+.chart-tile:focus{outline:2px solid var(--primary);outline-offset:4px}
+.chart-tile-expanded-backdrop{position:fixed;inset:0;background:#000000aa;z-index:999;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 150ms}
+.chart-tile-expanded-backdrop.open{opacity:1}
+.chart-tile-expanded{position:fixed;width:90vw;height:85vh;max-width:1400px;max-height:900px;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:12px;padding:32px;z-index:1000;cursor:zoom-out;overflow:auto}
+.chart-tile-close-hint{position:absolute;top:16px;right:16px;color:#a0a0a0;font-size:12px;pointer-events:none}
+
+/* CALLOUT */
+.callout{background:var(--amberDim);border:1px solid var(--amberBorder);border-radius:var(--radius-xl);padding:var(--space-5) var(--space-6);display:flex;gap:var(--space-4);align-items:flex-start;margin-top:var(--space-6);max-width:600px}
+.c-icon{font-size:1.4rem;flex-shrink:0;line-height:1}
+.c-title{font-size:var(--text-sm);font-weight:700;color:var(--amber);margin-bottom:var(--space-1)}
+.c-body{font-size:var(--text-sm);color:var(--textMuted)}
+.c-steps{list-style:none;margin-top:var(--space-2)}
+.c-steps li{font-size:var(--text-sm);color:var(--textMuted);padding:var(--space-1) 0;display:flex;align-items:baseline;gap:var(--space-2)}
+.sn{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:var(--radius-full);background:var(--amber);color:var(--textInv);font-size:.65rem;font-weight:700;flex-shrink:0;margin-top:1px}
+
+/* FOOTER */
+footer.mn-v2-footer{border-top:1px solid var(--divider);padding-block:var(--space-12)}
+.fi2{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:var(--space-8)}
+.fls{display:flex;gap:var(--space-5);flex-wrap:wrap}
+.fls a{color:var(--text);text-decoration:none;font-size:var(--text-sm)}
+.fls a:hover{color:var(--primary)}
+.coop-tag{font-size:var(--text-xs);color:var(--primary);border:1px solid var(--primaryHl);padding:var(--space-1) var(--space-3);border-radius:var(--radius-full);width:fit-content}
+.liturgy{text-align:center;padding-top:var(--space-8);border-top:1px solid var(--divider);margin-top:var(--space-8)}
+.liturgy p{font-size:var(--text-sm);color:var(--textMuted);font-style:italic}
+.liturgy p+p{margin-top:var(--space-1);color:var(--textFaint)}
+
+/* Hide PaperMod default elements on this page */
+.main{max-width:100%!important;padding:0!important;margin:0!important}
+footer.footer{display:none!important}
+
+@media(max-width:640px){.fd{flex-direction:column}.fconn{transform:rotate(90deg);align-self:center}.fs+.fs{margin-left:0;margin-top:var(--space-2)}.kpi-strip{grid-template-columns:repeat(2,1fr)}.nav .nl{display:none}.offer-header{flex-direction:column}}
 </style>
 
-<div class="mn-hp-page">
-<div class="mn-v2-wrap">
 
-  <!-- ═══════════════════════════════════════════════
-       HERO — Amnesia/Cure + SEG-1 bullets + SEG-2 green Download + nav
-       ═══════════════════════════════════════════════ -->
-  <section class="mn-v2-hero" aria-label="MnemosyneC hero">
-    <div class="mn-v2-hero-card">
-<!-- TOP ROW: heading + mascot side-by-side (v0.1.60.7 Layout 2: subtitle escapes to full-width below) -->
-<div class="mn-hero-top-row">
-  <div class="mn-hero-top-row__text">
-    <h1>Your AI has Amnesia. Dr.&nbsp;MnemosyneC has the Cure. <a href="#how-it-works" class="mn-hero-substrate-link">Substrate.</a></h1>
-  </div>
-  <div class="mn-hero-top-row__mascot" aria-hidden="true">
-    <img src="/img/mascots/dr-mnemosynec.png"
-         alt="Dr. MnemosyneC, the gray elephant mascot in a white coat with stethoscope and half-moon spectacles"
-         width="220" height="220"
-         loading="eager">
-    <p class="mn-hero-grid__mascot-caption">Dr.&nbsp;MnemosyneC<br>Memory specialist</p>
-  </div>
-</div><!-- /mn-hero-top-row -->
-
-<!-- FULL-WIDTH body content (subtitle now full-width below the heading+mascot grid) -->
-<div class="mn-hero-body">
-  <p class="mn-hero-pronunciation">Mnemosyne (neh-MOZ-uh-nee) is the Greek goddess of memory. <strong>Dr.&nbsp;MnemosyneC inherited her Memory.</strong></p>
-
-  <!-- Download button centered below full-width subtitle (v0.1.60.7 Layout 2 alignment) -->
-  <div style="text-align:center; margin:0.5rem 0 0.2rem;">
-    <a class="mn-v2-dl-btn"
-       href="{{ .Site.Data.version.download_url }}"
-       download="MnemosyneC-Setup-{{ .Site.Data.version.version }}.exe"
-       aria-label="Download MnemosyneC {{ .Site.Data.version.version }} for Windows">
-      &#8595;&nbsp; Download for Windows v{{ .Site.Data.version.version }}
-    </a>
-  </div>
-  <p class="dl-fallback" style="font-size:0.82em; color:rgba(250,245,235,0.45); margin:0.25rem 0 0.15rem; text-align:center;">
-    Download not starting? <a href="https://github.com/liana-banyan/mnemosyne/releases/download/v{{ .Site.Data.version.version }}/MnemosyneC-Setup-{{ .Site.Data.version.version }}.exe" style="color:rgba(214,158,46,0.7);">Try the GitHub mirror</a>
-  </p>
-  <p class="mn-v2-hero-tagline" style="margin-bottom:1.1rem !important;">Mac / Linux - <em>coming soon</em></p>
-
-  <p>Every time you start a new session, your AI forgets everything. Your projects, your preferences, your past conversations, gone. Dr.&nbsp;MnemosyneC gives your AI a permanent, private memory that actually stays.</p>
-
-  <!-- SEG-1: Founder-ratified bullet text verbatim -->
-  <ul class="mn-hero-bullets">
-    <li>Works alongside ChatGPT, Claude, Gemini, or any AI you already use.</li>
-    <li>All your data stays on your own computer. No cloud. No account required.</li>
-    <li>FREE (SSPL license) to use FOREVER. No Ads. No Strings.</li>
-    <li>Optionally join the Cooperative Universal Substrate for $5 a year. Not required.</li>
-  </ul>
-
-  <!-- Nav links stay at bottom of hero card (above first-session box) -->
-  <p class="mn-hp-nav-links">
-    <a href="/install/">Install guide</a>
-    &nbsp;&middot;&nbsp;
-    <a href="#six-pillars">Six Pillars</a>
-    &nbsp;&middot;&nbsp;
-    <a href="#how-it-works">How it works</a>
-    &nbsp;&middot;&nbsp;
-    <a href="/proofs/">All proofs</a>
-    &nbsp;&middot;&nbsp;
-    <a href="/community/">Community</a>
-  </p>
-</div><!-- /mn-hero-body -->
-
-      <!-- What your first session looks like (v0.1.60.6 SEG-2: collapsed click-expand) -->
-      <details class="mn-first-session" aria-label="What your first session looks like">
-        <summary>What your first session looks like</summary>
-        <div class="mn-first-session__body">
-          <ol style="margin:0 0 0.7rem; padding-left:1.4rem; color:rgba(250,245,235,0.82); font-size:0.9rem; line-height:1.7;">
-            <li style="margin-bottom:0.4rem;"><strong>Tell it something.</strong> &ldquo;I&rsquo;m working on a report about water treatment costs in rural areas.&rdquo;</li>
-            <li><strong>Come back three days later.</strong> Start a fresh session. Ask about it. It remembers.</li>
-          </ol>
-          <p style="margin:0 0 0.5rem; font-size:0.9rem; color:rgba(250,245,235,0.82); line-height:1.7;">No copy-paste. No re-explaining. Pick up exactly where you left off, every time.</p>
-          <p style="margin:0; font-size:0.9rem; color:rgba(250,245,235,0.82); line-height:1.7;"><strong>Free.</strong> Or pair MnemosyneC with a paid AI like Claude or GPT for faster, bigger answers. Either way, the substrate carries the memory, so your paid AI bill stays smaller too.</p>
+{{/* ======= INSTALLER CLICK-THROUGH MODAL ======= */}}
+<div class="modal-overlay" id="installModal" role="dialog" aria-modal="true" aria-labelledby="modal-title-mn">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-title-mn">
+        <img src="/img/mascots/dr-mnemosynec.png" alt="Dr. MnemosyneC" width="40" height="40" style="border-radius:50%;object-fit:cover;border:2px solid var(--primaryHl);background:#fff;flex-shrink:0" loading="lazy">
+        Dr. MnemosyneC Installer
+      </div>
+      <button class="modal-close tog" onclick="closeMnModal()" aria-label="Close">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="lic-block welcome">
+        <div class="lic-block-title">Welcome to Dr. MnemosyneC</div>
+        <div class="lic-block-body">You are about to install the MnemosyneC Substrate - Dr. MnemosyneC&rsquo;s gift to forgetful AI. She inherited perfect memory from her ancestor Mnemosyne, Titan of Memory, and she&rsquo;s sharing it freely. One checkbox. Then you are free.</div>
+      </div>
+      <div class="lic-block terms">
+        <div class="lic-block-title">License Terms</div>
+        <div class="lic-row">
+          <span class="lic-tag">SSPL v1</span>
+          <span class="lic-desc">The full substrate (this installer + MnemosyneC software) is free for everyone - individuals, researchers, cooperatives, and non-profits. If you offer MnemosyneC as a service to others, <strong>SSPL Section 13</strong> requires you to open-source your entire stack, OR obtain a commercial license.</span>
         </div>
-      </details>
-
-    </div><!-- /mn-v2-hero-card -->
-  </section>
-
-  <!-- ═══════════════════════════════════════════════
-       SEG-3: Does It Actually Work? — SECOND (moved up)
-       ═══════════════════════════════════════════════ -->
-  <section class="mn-v2-chart-section" aria-labelledby="mn-hp-chart-title" id="does-it-actually-work">
-    <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem; margin:0 0 0.3rem;">
-      <h2 id="mn-hp-chart-title" style="margin:0;">Does it actually work?</h2>
-      <a href="https://github.com/liana-banyan/lb-reproducibility-pack#quick-start"
-         class="prove-it-pill" target="_blank" rel="noopener">PROVE IT YOURSELF</a>
-    </div>
-    <p class="mn-v2-chart-subtitle">75 questions &middot; 4 AI vendors &middot; real test run 2026-05-30. No tricks.</p>
-
-    <div class="mn-benchmark-clarify" role="note">
-      These 75 questions test recall of information that was manually stored in the substrate by a human, then asked again in a fresh session where the model had no access to its own context history. Without the substrate, the model forgot everything. With it, the model found the stored answer.
-    </div>
-
-    <div class="mn-v2-chart-legend" aria-hidden="true">
-      <span class="mn-v2-legend-item"><span class="mn-v2-legend-dot mn-v2-legend-dot--cold"></span>Without MnemosyneC substrate</span>
-      <span class="mn-v2-legend-item"><span class="mn-v2-legend-dot mn-v2-legend-dot--hot"></span>With MnemosyneC substrate</span>
-    </div>
-
-    <div class="mn-v2-bar-group" role="group" aria-label="Claude Opus 4.8 results">
-      <div class="mn-v2-model-name">Claude Opus 4.8</div>
-      <div class="mn-v2-bar-row">
-        <span class="mn-v2-bar-cond">Without</span>
-        <div class="mn-v2-bar-track" role="meter" aria-valuenow="6" aria-valuemin="0" aria-valuemax="100" aria-label="6% accuracy without substrate">
-          <div class="mn-v2-bar-fill mn-v2-bar-fill--cold" style="width:6%">6%</div>
+        <div class="lic-row">
+          <span class="lic-tag">Apache 2.0</span>
+          <span class="lic-desc">Selected library extractions from MnemosyneC may be forked by for-profit AI companies under Apache 2.0. Attribution required. The substrate itself (this product) is SSPL, not Apache.</span>
+        </div>
+        <div class="lic-row">
+          <span class="lic-tag">TUP v2.0</span>
+          <span class="lic-desc"><em>Dr. MnemosyneC, MnemosyneC, Liana Banyan,</em> and <em>Cephas</em> are trademarks of Upekrithen LLC. Non-licensable.</span>
+        </div>
+        <div class="lic-row" style="border-bottom:none">
+          <span class="lic-tag">Full text</span>
+          <span class="lic-desc"><a href="/license" style="color:var(--primary)">mnemosynec.org/license</a> - all four instruments in full.</span>
         </div>
       </div>
-      <div class="mn-v2-bar-row">
-        <span class="mn-v2-bar-cond">With</span>
-        <div class="mn-v2-bar-track" role="meter" aria-valuenow="89.3" aria-valuemin="0" aria-valuemax="100" aria-label="89.3% accuracy with substrate">
-          <div class="mn-v2-bar-fill mn-v2-bar-fill--hot" style="width:89.3%">89.3%</div>
+      <div class="lic-block offer">
+        <div class="lic-block-title">For Commercial / SaaS Operators &middot; BP087</div>
+        <div class="offer-pill">&#x23F0; Window 1: 50% Off &middot; 5-Year Term</div>
+        <div class="lic-block-body">If SSPL Section 13 applies to your use, you have <strong>30 days from first deployment (Window 1)</strong> to request 50% off FRAND for a <strong>5-year term</strong>. Each missed 30-day window reduces the term by 1 year. Window 6+ = full FRAND rate, no discount.<br><br>
+          <a href="mailto:licensing@lianabanyan.com" style="color:var(--amber)">licensing@lianabanyan.com</a> &middot; subject: <code>Commercial License Request</code>
         </div>
+      </div>
+      <div class="lic-block pledge">
+        <div class="lic-block-title">Patent Peace - Pledge #2260</div>
+        <div class="lic-block-body">Upekrithen LLC holds 2,700+ patent claims covering this substrate. Under Cooperative Defensive Patent Pledge #2260, we will not assert these patents against any user of Dr. MnemosyneC - <strong>unless that party initiates patent litigation against a cooperative member.</strong></div>
+      </div>
+      <div class="lic-block warranty">
+        <div class="lic-block-title" style="font-size:var(--text-xs);color:var(--textFaint)">Warranty Disclaimer &amp; Limitation of Liability</div>
+        <div class="lic-block-body" style="font-size:var(--text-xs);color:var(--textFaint)">THIS SOFTWARE IS PROVIDED "AS IS," WITHOUT WARRANTY OF ANY KIND. IN NO EVENT SHALL UPEKRITHEN LLC OR LIANA BANYAN COOPERATIVE BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY ARISING FROM YOUR USE OF THIS SOFTWARE.</div>
       </div>
     </div>
-
-    <div class="mn-v2-bar-group" role="group" aria-label="GPT-5.5 results">
-      <div class="mn-v2-model-name">GPT&#8209;5.5</div>
-      <div class="mn-v2-bar-row">
-        <span class="mn-v2-bar-cond">Without</span>
-        <div class="mn-v2-bar-track" role="meter" aria-valuenow="19.3" aria-valuemin="0" aria-valuemax="100" aria-label="19.3% accuracy without substrate">
-          <div class="mn-v2-bar-fill mn-v2-bar-fill--cold" style="width:19.3%">19.3%</div>
-        </div>
-      </div>
-      <div class="mn-v2-bar-row">
-        <span class="mn-v2-bar-cond">With</span>
-        <div class="mn-v2-bar-track" role="meter" aria-valuenow="93.3" aria-valuemin="0" aria-valuemax="100" aria-label="93.3% accuracy with substrate">
-          <div class="mn-v2-bar-fill mn-v2-bar-fill--hot" style="width:93.3%">93.3%</div>
-        </div>
-      </div>
+    <div class="modal-footer">
+      <label class="check-row" for="mnAgreeCheck">
+        <input type="checkbox" id="mnAgreeCheck" onchange="mnToggleContinue(this)">
+        <span class="check-label">I have read and agree to the <a href="/license">SSPL v1 License</a>, <a href="/license">Apache 2.0 terms</a>, <a href="/license">Patent Pledge #2260</a>, and <a href="/license">Trademark Use Policy (TUP v2.0)</a>. I understand the 30-day commercial offer window.</span>
+      </label>
+      <a class="btn-continue" id="mnContinueBtn" href="{{ $ver.download_url }}" download="MnemosyneC-Setup-{{ $ver.version }}.exe" onclick="if(!this.classList.contains('ready')){return false;}closeMnModal();">
+        Continue Installation &rarr;
+      </a>
     </div>
-
-    <div class="mn-v2-bar-group" role="group" aria-label="Llama 3.1 8b results">
-      <div class="mn-v2-model-name">
-        Llama&nbsp;3.1&nbsp;8b (Ollama)
-        <span class="mn-v2-model-free-badge">Local &middot; Free</span>
-      </div>
-      <div class="mn-v2-bar-row">
-        <span class="mn-v2-bar-cond">Without</span>
-        <div class="mn-v2-bar-track" role="meter" aria-valuenow="6" aria-valuemin="0" aria-valuemax="100" aria-label="6% accuracy without substrate">
-          <div class="mn-v2-bar-fill mn-v2-bar-fill--cold" style="width:6%">6%</div>
-        </div>
-      </div>
-      <div class="mn-v2-bar-row">
-        <span class="mn-v2-bar-cond">With</span>
-        <div class="mn-v2-bar-track" role="meter" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100" aria-label="78% accuracy with substrate">
-          <div class="mn-v2-bar-fill mn-v2-bar-fill--hot" style="width:78%">78.0%</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="mn-v2-bar-group" role="group" aria-label="Gemini 3.5 Flash results">
-      <div class="mn-v2-model-name">Gemini 3.5 Flash</div>
-      <div class="mn-v2-bar-row">
-        <span class="mn-v2-bar-cond">Without</span>
-        <div class="mn-v2-bar-track" role="meter" aria-valuenow="8" aria-valuemin="0" aria-valuemax="100" aria-label="8% accuracy without substrate">
-          <div class="mn-v2-bar-fill mn-v2-bar-fill--cold" style="width:8%">8%</div>
-        </div>
-      </div>
-      <div class="mn-v2-bar-row">
-        <span class="mn-v2-bar-cond">With</span>
-        <div class="mn-v2-bar-track" role="meter" aria-valuenow="90.7" aria-valuemin="0" aria-valuemax="100" aria-label="90.7% accuracy with substrate">
-          <div class="mn-v2-bar-fill mn-v2-bar-fill--hot" style="width:90.7%">90.7%</div>
-        </div>
-      </div>
-    </div>
-
-    <p class="mn-v2-chart-note">
-      <strong>The Banyan Metric</strong> measures recall of substrate-stored information. &ldquo;Without&rdquo; = model alone, cold start. &ldquo;With&rdquo; = same model after MnemosyneC substrate context injected.
-      <br>The <strong>free local model</strong> (Ollama, $0 inference cost) lifted from 6% to 78% entirely because of the shared substrate. <a href="/proofs/" style="font-size:0.88em;">Full proofs &rarr;</a>
-    </p>
-  </section>
-
-  <!-- ═══════════════════════════════════════════════
-       SEG-4: Good Fast Cheap — blue card with green checkmarks
-       (Founder: "Replace the right side with the left side version")
-       ═══════════════════════════════════════════════ -->
-  <section aria-label="Good Fast Cheap Private Free Yours" id="six-pillars" style="margin:0 0 2rem;">
-<div style="max-width:760px;margin:0 auto;background:#11243a;border:1px solid #21527e;border-radius:14px;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.35);">
-  <div style="padding:26px 28px 18px;text-align:center;background:linear-gradient(180deg,#143456 0%,#11243a 100%);border-bottom:1px solid #21527e;">
-    <div style="font-size:30px;font-weight:800;color:#ffffff;letter-spacing:.5px;line-height:1.15;">Good. Fast. Cheap.</div>
-    <div style="font-size:20px;font-weight:600;color:#7fd1ff;margin-top:6px;">MnemosyneC gives you all&nbsp;six.</div>
-    <div style="font-size:16px;font-style:italic;color:#bcd6ee;margin-top:10px;">Can&rsquo;t we all just get along?</div>
-  </div>
-  <table style="width:100%;border-collapse:collapse;font-size:15px;color:#e7f0fa;">
-    <tbody>
-      <tr style="border-top:1px solid #1c3f63;">
-        <td style="padding:16px 20px;line-height:1.5;"><strong style="color:#ffffff;">Good</strong> &mdash; Every AI we tested got smarter on a shared memory: <strong>+72 to +83 points of accuracy</strong> across four model families. A free, local model jumped from <strong>6% to 78%.</strong></td>
-        <td style="padding:16px 22px;text-align:right;font-size:22px;color:#3ddc84;white-space:nowrap;">&#10004;</td>
-      </tr>
-      <tr style="border-top:1px solid #1c3f63;">
-        <td style="padding:16px 20px;line-height:1.5;"><strong style="color:#ffffff;">Fast</strong> &mdash; Answers resolve against <em>your own</em> memory in milliseconds. A hash-verified mesh measured <strong>16.6&nbsp;ms</strong> median instead of a metered round-trip to someone else&rsquo;s server.</td>
-        <td style="padding:16px 22px;text-align:right;font-size:22px;color:#3ddc84;white-space:nowrap;">&#10004;</td>
-      </tr>
-      <tr style="border-top:1px solid #1c3f63;">
-        <td style="padding:16px 20px;line-height:1.5;"><strong style="color:#ffffff;">Cheap</strong> &mdash; That free local model answers at <strong>$0 a call.</strong> Our patent-pending Substrace Theorem means No new Data Centers needed &mdash; we make existing data centers 95% cheaper, more efficient, AND more accurate. For Us AND for Them. <a href="#how-it-works" class="mn-cheap-how-link">How?</a></td>
-        <td style="padding:16px 22px;text-align:right;font-size:22px;color:#3ddc84;white-space:nowrap;">&#10004;</td>
-      </tr>
-      <tr style="border-top:1px solid #1c3f63;">
-        <td style="padding:16px 20px;line-height:1.5;"><strong style="color:#ffffff;">Private</strong> &mdash; Runs <strong>entirely on your machine.</strong> No account, no upload, no telemetry, no phone&#8209;home.</td>
-        <td style="padding:16px 22px;text-align:right;font-size:22px;color:#3ddc84;white-space:nowrap;">&#10004;</td>
-      </tr>
-      <tr style="border-top:1px solid #1c3f63;">
-        <td style="padding:16px 20px;line-height:1.5;"><strong style="color:#ffffff;">Free</strong> &mdash; <strong>SSPL Free Forever</strong>, Pledge&nbsp;#2260. No ads. No strings. No subscription.<br><span style="color:rgba(214,158,46,0.8);font-size:0.88em;">Patent-pending, 19 provisional filings, pledged to the member commons, never sold for extraction.</span></td>
-        <td style="padding:16px 22px;text-align:right;font-size:22px;color:#3ddc84;white-space:nowrap;">&#10004;</td>
-      </tr>
-      <tr style="border-top:1px solid #1c3f63;border-bottom:1px solid #1c3f63;">
-        <td style="padding:16px 20px;line-height:1.5;"><strong style="color:#ffffff;">Yours</strong> &mdash; <strong>Storm-proof immutability.</strong> Three infrastructure failures hit at once. The substrate held. Every fact is sha256-stamped, content-addressed, append-only. Nothing can be overwritten. Uninstall anytime; your originals are untouched and independently verifiable.</td>
-        <td style="padding:16px 22px;text-align:right;font-size:22px;color:#3ddc84;white-space:nowrap;">&#10004;</td>
-      </tr>
-    </tbody>
-  </table>
-  <div style="padding:12px 20px;text-align:center;font-size:12px;color:#86a6c6;background:#0e1f33;">
-    Every figure is reproducible &mdash; <a href="/prove-it/" style="color:#7fd1ff;text-decoration:none;border-bottom:none !important;">Prove It</a> &middot; <a href="/run-your-own-cabinet/" style="color:#7fd1ff;text-decoration:none;border-bottom:none !important;">Run your own cabinet</a>
   </div>
 </div>
-  </section>
 
-  <!-- ═══════════════════════════════════════════════
-       SEG-6: Pinned Proofs — expandable accordions
-       HARD BINDING: NEVER SCROLL SIDEWAYS (BP081)
-       Screenshots stack VERTICALLY
-       ═══════════════════════════════════════════════ -->
-  <section class="mn-proofs-accordion-section" aria-label="Pinned proof receipts" id="proofs">
-    <h3>&#128204;&nbsp; Pinned Proofs</h3>
-    <p class="mn-proofs-subtitle">Plain receipts. Caveats stated aloud. No hype. Click any row to expand.</p>
+{{/* ======= GOLDEN BAR + WHY YOU WANT OVERLAY - BP094 Mamba 1 ======= */}}
+{{- partial "golden-bar-why-you-want.html" . -}}
 
-    <!-- Accordion 1: Storm Test -->
-    <details class="mn-proof-accordion">
-      <summary>
-        <span class="mn-proof-accordion__label">Storm Test</span>
-        <span class="mn-proof-accordion__title">Three failures at once. Nothing lost.</span>
-        <span class="mn-proof-accordion__result">&#10003; Zero work lost</span>
-      </summary>
-      <div class="mn-proof-accordion__body">
-        <p>A routine update wiped connectors. A hook-script deletion blocked every prompt. The AI service returned overload errors. Three simultaneous infrastructure failures. The substrate held.</p>
-        <p>&#10003; Zero work lost</p>
+{{/* ======= NAV (BP094 REV-2: dark charcoal, --top-bar-height, brand-blue Substrate) ======= */}}
+<nav class="nav" aria-label="MnemosyneC main navigation">
+  <a href="/" class="logo">
+    <img src="/img/mascots/dr-mnemosynec.png" alt="Dr. MnemosyneC" class="logo-icon" loading="lazy">
+    Dr.&nbsp;MnemosyneC&nbsp;&middot;&nbsp;<span class="logo-substrate">Substrate</span>
+  </a>
+  <div class="nav-r">
+    <a href="/#architecture" class="nl">Architecture</a>
+    <a href="/#benchmarks" class="nl">Benchmarks</a>
+    <a href="/#commercial" class="nl">Commercial</a>
+    <a href="/proofs/" class="nl">Proofs</a>
+    <button class="tog" id="mn-theme-tog" aria-label="Toggle theme">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+    <button class="btn-dl dl-idle" id="mn-dl-btn" onclick="mnDlClick(event)" aria-label="Download Dr. MnemosyneC">Download</button>
+  </div>
+</nav>
 
-        <!-- Screenshots stacked vertically — NEVER sideways scroll -->
-        <div class="mn-proof-screenshots" role="list">
-          <div class="mn-proof-screenshot-placeholder" role="listitem">
-            <span style="font-size:1.5rem; color:rgba(214,158,46,0.4);">&#128247;</span>
-            <span class="mn-proof-screenshot-placeholder__caption">Screenshot 1 &middot; BP071 connector wipe receipt</span>
-          </div>
-          <div class="mn-proof-screenshot-placeholder" role="listitem">
-            <span style="font-size:1.5rem; color:rgba(214,158,46,0.4);">&#128247;</span>
-            <span class="mn-proof-screenshot-placeholder__caption">Screenshot 2 &middot; BP071 hook-script deletion log</span>
-          </div>
-          <div class="mn-proof-screenshot-placeholder" role="listitem">
-            <span style="font-size:1.5rem; color:rgba(214,158,46,0.4);">&#128247;</span>
-            <span class="mn-proof-screenshot-placeholder__caption">Screenshot 3 &middot; BP071 substrate-held confirmation</span>
-          </div>
+{{/* ======= HERO (BP094 REV-3: locked copy Option 4, Substrate Memory, brand blue, large icon) ======= */}}
+<section class="hero">
+  <div class="c">
+    <div style="display:flex;align-items:flex-start;gap:var(--space-8);flex-wrap:wrap">
+      <div style="flex:1;min-width:280px">
+        <div class="eyebrow">
+          <svg width="8" height="8" viewBox="0 0 10 10"><circle cx="5" cy="5" r="5" fill="currentColor"/></svg>
+          Free &middot; Private &middot; Works with any AI
+        </div>
+        {{/* hero_copy_locked_option: 4 -- verbatim, no em-dashes, no paraphrase */}}
+        <h1>Your AI has Amnesia.<br>Dr.&nbsp;MnemosyneC has the Cure: <span style="color:var(--lb-brand-blue,#3B82F6)">Substrate</span> Memory.</h1>
+        <p class="hero-sub">Every time you start a new session, your AI forgets everything. The Substrate gives your AI a permanent, private memory that actually stays.</p>
+
+        {{/* STAT ROW (BP094 Session 3) */}}
+        <div class="hero-stat-row">
+          <a href="/proofs/#bp087wave2ride" class="hero-stat-tile" aria-label="97% Faster - see proof">
+            <span class="stat-val">97% Faster</span>
+          </a>
+          <a href="/proofs/#mmlupro6870" class="hero-stat-tile" aria-label="98% Accurate - see proof">
+            <span class="stat-val">98% Accurate</span>
+          </a>
+          <a href="/proofs/#w12f3c057" class="hero-stat-tile" aria-label="95% Cheaper - see proof">
+            <span class="stat-val">95% Cheaper</span>
+          </a>
+          <span class="stat-really">Really.</span>
+        </div>
+        {{/* Truth-Always footnotes (8-10pt muted gray) */}}
+        <div class="hero-stat-footnotes">
+          <p>97% Faster: 200K Sonnet 4.6, 16-hour session, BP087 28-screenshot Pinned Proof</p>
+          <p>98% Accurate: Haiku HOT, R10 Eyewitness, 1,200 calls cross-vendor (5 vendors, 8 models)</p>
+          <p>95% Cheaper: Haiku vs Opus at matched accuracy, AA-2272 cost ladder, W12 F3 Cost Proof</p>
         </div>
 
-        <p class="mn-proof-accordion__receipt">Receipt: BP071 close stamp &rarr;</p>
+        <div class="acts" style="margin-top:var(--space-5)">
+          <button class="btn-p" onclick="mnDlClick(event)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download Installer v{{ $ver.version }}
+          </button>
+          <a href="/how-to-read-the-substrate/" class="btn-s">Read the Substrate &rarr;</a>
+        </div>
       </div>
-    </details>
 
-    <!-- Accordion 2: Mesh Proof -->
-    <details class="mn-proof-accordion">
-      <summary>
-        <span class="mn-proof-accordion__label">Mesh Proof</span>
-        <span class="mn-proof-accordion__title">A node answered for data it did not hold.</span>
-        <span class="mn-proof-accordion__result">&#10003; 20/20 &middot; 16.6 ms p50</span>
-      </summary>
-      <div class="mn-proof-accordion__body">
-        <p>Machine A had never seen the data. Machine B held it. Connected on local network, Machine A answered 20 of 20 correctly, hash-verified. Median response: 16.6&nbsp;ms.</p>
-        <p>&#10003; 20/20 &middot; 16.6 ms p50</p>
+      {{/* Dr. MnemosyneC icon -- large, top-right (BP094 REV-3) */}}
+      <figure style="flex-shrink:0;margin:0;display:flex;flex-direction:column;align-items:center;gap:var(--space-3);align-self:flex-start">
+        <img src="/img/mascots/dr-mnemosynec.png"
+             alt="Dr. MnemosyneC - Memory Specialist"
+             loading="eager"
+             style="object-fit:cover;border-radius:var(--radius-xl);background:#ffffff;box-shadow:0 0 0 4px var(--primaryHl),var(--shadowLg);display:block">
+        <figcaption style="text-align:center;font-style:italic;color:var(--textFaint)">Dr.&nbsp;MnemosyneC<br>Memory Specialist</figcaption>
+      </figure>
+    </div>
 
-        <div class="mn-proof-screenshots" role="list">
-          <div class="mn-proof-screenshot-placeholder" role="listitem">
-            <span style="font-size:1.5rem; color:rgba(214,158,46,0.4);">&#128247;</span>
-            <span class="mn-proof-screenshot-placeholder__caption">Screenshot 1 &middot; BP063 mesh test setup</span>
+    {{/* SUBSTRATE COMPOUNDING CHART -- Position C INLINE (BP094 REV-7) */}}
+    <div class="hero-chart-inline" style="margin-top:var(--space-6)">
+      {{- partial "substrate-compounding-chart.html" . -}}
+    </div>
+
+    {{/* DIVIDEND HOOK (BP094 REV-8): amber/gold, h3 weight, Truth-Always disclosure below */}}
+    <div class="dividend-hook">
+      <h3>Free to YOU. 20% of the <a href="/savings-analysis/">4.49 Billion</a> in <a href="/papers/universal-innovation-pipeline">Savings for Them</a> for <a href="https://lianabanyan.com/16-initiatives">YOU</a>. Every year.</h3>
+      <p class="dividend-hook-disclosure">Projected annual figure based on Tier 1 license adoption by 8 Big AI counterparties. Methodology in the linked Independent Research report.</p>
+    </div>
+
+    {{/* PROOF / ECONOMICS / INVITATION CARDS (BP094 REV-4: 3-col grid, align-items:stretch) */}}
+    <div class="wyw-cards-section">
+      <div class="wyw-cards-grid">
+        <div class="wyw-card">
+          <div class="wyw-card-label">PROOF</div>
+          <div class="wyw-card-title">97% Faster. 98% Accurate. 95% Cheaper.</div>
+          <p class="wyw-card-body">Two sealed trials. Methodology public. Run the benchmark yourself. Every result is reproducible.</p>
+          <button class="wyw-card-btn" onclick="wyWantOpen();setTimeout(function(){wyWantTab(0);},50);">See Proof receipts &rarr;</button>
+        </div>
+        <div class="wyw-card">
+          <div class="wyw-card-label">ECONOMICS</div>
+          <div class="wyw-card-title">$4.49B/yr in Savings. 0 New Data Centers.</div>
+          <p class="wyw-card-body">Substrate replaces context overhead. 95% MORE capacity on existing infrastructure. 20% of savings flow to the cooperative.</p>
+          <button class="wyw-card-btn" onclick="wyWantOpen();setTimeout(function(){wyWantTab(1);},50);">See Economics &rarr;</button>
+        </div>
+        <div class="wyw-card">
+          <div class="wyw-card-label">INVITATION</div>
+          <div class="wyw-card-title">Be Part of the Proof.</div>
+          <p class="wyw-card-body">First 10,000 members lock founding status. Earn Marks. 83.3% of every dollar stays with workers and builders.</p>
+          <button class="wyw-card-btn" onclick="wyWantOpen();setTimeout(function(){wyWantTab(2);},50);">See Invitation &rarr;</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="c-icon">&#x1F6E1;&#xFE0F;</div>
+      <div>
+        <div class="c-title">Why does Windows show a warning?</div>
+        <div class="c-body">Dr. MnemosyneC is new software. Windows SmartScreen flags unsigned installers from new publishers - this is normal. Here&rsquo;s how to proceed:</div>
+        <ul class="c-steps">
+          <li><span class="sn">1</span> Click <strong>&ldquo;More info&rdquo;</strong> on the SmartScreen popup</li>
+          <li><span class="sn">2</span> Click <strong>&ldquo;Run anyway&rdquo;</strong></li>
+          <li><span class="sn">3</span> Free &amp; open-source - <a href="/license" style="color:var(--primary)">review the license anytime</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="margin-top:var(--space-10);padding-top:var(--space-8);border-top:1px solid var(--divider)">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-4);margin-bottom:var(--space-5)">
+        <div>
+          <div class="label" style="margin-bottom:var(--space-1)">Benchmark R10</div>
+          <div style="font-size:var(--text-lg);font-weight:700;color:var(--text)">Does It Actually Work?</div>
+        </div>
+        <a href="/proofs/" style="display:inline-flex;align-items:center;gap:var(--space-2);background:var(--surface);border:1.5px solid var(--primary);color:var(--primary);padding:var(--space-3) var(--space-6);border-radius:var(--radius-full);font-size:var(--text-sm);font-weight:700;text-decoration:none;white-space:nowrap">Prove It Yourself &rarr;</a>
+      </div>
+      <p style="font-size:var(--text-sm);color:var(--textMuted);margin-bottom:var(--space-5);max-width:60ch">Run the benchmark yourself. Every result below is reproducible. Full methodology, raw receipts, and caveats at the link above.</p>
+      <div class="kpi-strip" style="margin-top:0">
+        <div class="kc"><div class="kv">89.3%</div><div class="kl">Recall with Substrate (Claude)</div></div>
+        <div class="kc"><div class="kv">6%</div><div class="kl">Baseline (no substrate)</div></div>
+        <div class="kc"><div class="kv">+83 pts</div><div class="kl">Average improvement</div></div>
+        <div class="kc"><div class="kv">$0</div><div class="kl">Cost to individuals (forever)</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{{/* ======= BENCHMARKS ======= */}}
+<section id="benchmarks" style="background:var(--bg)">
+  <div class="c">
+    <div class="label">Banyan Metric</div>
+    <h2 class="h2">Memory That Actually Works</h2>
+    <p class="sub">Real results from Benchmark R10. Caveats stated below.</p>
+    <div class="cw-box chart-tile">
+      <div class="ct-row">
+        <div>
+          <div class="ct">Memory Recall: With vs. Without Substrate</div>
+          <div class="cs">Real results from Benchmark R10. Caveats stated below.</div>
+        </div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:var(--space-4)">
+          <div class="leg">
+            <div class="li"><span class="ld" style="background:#3a4046"></span>Without Substrate</div>
+            <div class="li"><span class="ld" style="background:#4fc3d0"></span>With Substrate</div>
           </div>
-          <div class="mn-proof-screenshot-placeholder" role="listitem">
-            <span style="font-size:1.5rem; color:rgba(214,158,46,0.4);">&#128247;</span>
-            <span class="mn-proof-screenshot-placeholder__caption">Screenshot 2 &middot; BP063 20/20 result log</span>
+          <a href="/proofs/" style="display:inline-flex;align-items:center;gap:var(--space-2);background:var(--surface);border:1.5px solid var(--primary);color:var(--primary);padding:var(--space-2) var(--space-4);border-radius:var(--radius-full);font-size:var(--text-xs);font-weight:700;text-decoration:none;white-space:nowrap">Prove It Yourself &rarr;</a>
+        </div>
+      </div>
+      <div class="ccw"><canvas id="benchmarkChart"></canvas></div>
+      <p class="cn">Benchmark R10 &middot; Single-session controlled evaluation &middot; Default temperature &middot; Point-in-time; model updates may affect results.</p>
+    </div>
+
+    <!-- ======= SUBSTRATE COMPOUNDING CHART · BP093 ======= -->
+    <div class="cw-box chart-tile" style="margin-top:var(--space-8)" aria-label="Click to expand chart">
+      <div class="ct-row">
+        <div>
+          <div class="ct">Substrate Compounding</div>
+          <div class="cs">Context cost per MAMBA decreases across waves - more substrate, fewer tokens per unit of work</div>
+        </div>
+      </div>
+      <img src="/charts/substrate-compounding-chart.svg"
+           alt="Substrate Compounding chart: X axis = Cumulative MAMBA Count 0-11, Y axis = Cumulative Context %. Three curves: gray dashed (no substrate, crashes at MAMBA 1-2), green Wave 1 at 10.75% per MAMBA, amber Wave 1+2 compounding at 6.57% per MAMBA. Founder quote: Notice how the MORE there is, the FASTER and MORE efficient it gets?"
+           width="900" height="520"
+           style="width:100%;height:auto;border-radius:var(--radius-lg)"
+           loading="lazy">
+      <p class="cn">Empirical anchor: 28-screenshot Pinned Proof &middot; canon_pinned_proof_bp087_knight_wave_2_ride_28_screenshots_0022_0053 &middot; Founder direct BP087 2026-06-20</p>
+    </div>
+  </div>
+</section>
+
+<hr class="div">
+
+{{/* ======= ARCHITECTURE (id="how-it-works" anchors the ticker link) ======= */}}
+<section id="architecture" style="background:var(--bg)">
+  <div id="how-it-works" style="position:relative;top:calc(-1 * var(--top-bar-height));pointer-events:none;visibility:hidden;"></div>
+  <div class="c">
+    <div class="label">Architecture</div>
+    <h2 class="h2">How the Substrate Works</h2>
+    <p class="sub">Three layers. Each does one job. Each built to mirror how memory actually works - uncertain at first, verified over time, permanent when proven. Click <strong>Technical Detail</strong> to flip any card.</p>
+    <div class="ag">
+
+      <div class="fp">
+        <div class="fc" id="card-librarian">
+          <div class="ff ff-f">
+            <div class="badge b-r">&#x1F4DA; Layer 1 &middot; The Reader</div>
+            <div class="pe">The Reader finds the right memory and hands it to your AI.</div>
+            <div style="font-size:var(--text-xs);font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--textFaint);margin-top:var(--space-2)">A little more -</div>
+            <p class="sm-txt">When you ask a question, the Reader scans the substrate for relevant stored knowledge and injects it as context before your model sees your prompt. No retraining required.</p>
+            <button class="fb-btn" onclick="mnFlip('card-librarian')">Technical Detail &#x21BB;</button>
           </div>
-          <div class="mn-proof-screenshot-placeholder" role="listitem">
-            <span style="font-size:1.5rem; color:rgba(214,158,46,0.4);">&#128247;</span>
-            <span class="mn-proof-screenshot-placeholder__caption">Screenshot 3 &middot; BP063 hash verification</span>
+          <div class="ff ff-b">
+            <div class="badge b-bk">Technical Detail &middot; The Reader</div>
+            <table class="dt">
+              <thead><tr><th>Property</th><th>Detail</th></tr></thead>
+              <tbody>
+                <tr><td>Model</td><td>Gemma 4 12B (default) or your own reader model</td></tr>
+                <tr><td>Retrieval</td><td>Semantic cosine similarity over Eblet store (JSONL)</td></tr>
+                <tr><td>Context injection</td><td>Top-k Eblets prepended as system context at inference time</td></tr>
+                <tr><td>Latency</td><td>p50 16.6 ms on Benchmark R10</td></tr>
+              </tbody>
+            </table>
+            <div class="pl">
+              <a href="#" class="pa">RAG Survey (Lewis 2020)</a>
+              <a href="#" class="pa">REALM (Guu 2020)</a>
+              <a href="#" class="pa">Atlas (Izacard 2022)</a>
+            </div>
+            <button class="fb-btn" onclick="mnFlip('card-librarian')" style="margin-top:auto">&larr; Back</button>
           </div>
         </div>
-
-        <p class="mn-proof-accordion__receipt">Receipt: Asteroid-ProofVault/MESH_6_RECEIPT_BP063.md &rarr;</p>
       </div>
-    </details>
 
-    <!-- Accordion 3: Benchmark R10 -->
-    <details class="mn-proof-accordion">
-      <summary>
-        <span class="mn-proof-accordion__label">Benchmark R10</span>
-        <span class="mn-proof-accordion__title">A free, local Ollama model jumped from 6% to 78% accuracy.</span>
-        <span class="mn-proof-accordion__result">&#10003; +72&ndash;83 pts</span>
-      </summary>
-      <div class="mn-proof-accordion__body">
-        <p>A free, local Ollama model jumped from 6% to 78% accuracy. No retraining. Just substrate.</p>
-        <p>Cohen&rsquo;s &kappa; = 0.936. Three independent raters. Hash-verified. Caithedral&trade; Core applied substrate context &mdash; no model fine-tuning, no new training data. The substrate did it. (+72&ndash;83 percentage point gain, BP065)</p>
-
-        <div class="mn-proof-screenshots" role="list">
-          <div class="mn-proof-screenshot-placeholder" role="listitem">
-            <span style="font-size:1.5rem; color:rgba(214,158,46,0.4);">&#128247;</span>
-            <span class="mn-proof-screenshot-placeholder__caption">Screenshot 1 &middot; BP065 benchmark cold run (6%)</span>
+      <div class="fp">
+        <div class="fc" id="card-verifier">
+          <div class="ff ff-f">
+            <div class="badge b-v">&#x2696;&#xFE0F; Layer 2 &middot; Verifier</div>
+            <div class="pe">Three independent checks. Two must agree before anything gets stored.</div>
+            <div style="font-size:var(--text-xs);font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--textFaint);margin-top:var(--space-2)">A little more -</div>
+            <p class="sm-txt">Wrong answers never make it in. Three Shadow E-Giant models vote independently. Fewer than two agree? The claim dies. This is why the substrate stays accurate as it grows.</p>
+            <button class="fb-btn" onclick="mnFlip('card-verifier')">Technical Detail &#x21BB;</button>
           </div>
-          <div class="mn-proof-screenshot-placeholder" role="listitem">
-            <span style="font-size:1.5rem; color:rgba(214,158,46,0.4);">&#128247;</span>
-            <span class="mn-proof-screenshot-placeholder__caption">Screenshot 2 &middot; BP065 benchmark hot run (78%)</span>
-          </div>
-          <div class="mn-proof-screenshot-placeholder" role="listitem">
-            <span style="font-size:1.5rem; color:rgba(214,158,46,0.4);">&#128247;</span>
-            <span class="mn-proof-screenshot-placeholder__caption">Screenshot 3 &middot; BP065 Cohen&rsquo;s kappa inter-rater verification</span>
+          <div class="ff ff-b">
+            <div class="badge b-bk">Technical Detail &middot; Verifier</div>
+            <table class="dt">
+              <thead><tr><th>Property</th><th>Detail</th></tr></thead>
+              <tbody>
+                <tr><td>Method</td><td>3-way Shadow E-Giant concordance vote</td></tr>
+                <tr><td>Threshold</td><td>2-of-3 agreement required for write to Eblet store</td></tr>
+                <tr><td>On disagreement</td><td>Claim downgraded to Pheromone stage with decay timer</td></tr>
+                <tr><td>Bias mitigation</td><td>Each Shadow E-Giant runs on independent context window</td></tr>
+              </tbody>
+            </table>
+            <div class="pl">
+              <a href="#" class="pa">Constitutional AI (Anthropic 2022)</a>
+              <a href="#" class="pa">Self-Consistency (Wang 2022)</a>
+              <a href="#" class="pa">LLM-as-Judge (Zheng 2023)</a>
+            </div>
+            <button class="fb-btn" onclick="mnFlip('card-verifier')" style="margin-top:auto">&larr; Back</button>
           </div>
         </div>
-
-        <p class="mn-proof-accordion__receipt">Receipt: Benchmark R10 &middot; BP065 &rarr;</p>
       </div>
-    </details>
 
-  </section>
-
-  <!-- ═══════════════════════════════════════════════
-       SEG-5 + SEG-7: HOW IT WORKS — Combined card
-       "The Substrate Is the Asset" + "How We Make Sure Things Are True"
-       ═══════════════════════════════════════════════ -->
-  <section class="mn-substrate-card" id="how-it-works" aria-labelledby="mn-substrate-title">
-    <h2 id="mn-substrate-title">HOW IT WORKS &mdash; The Substrate Persistent Memory Is the Asset &middot; How We Make Sure Things Are True &amp; Quickly &amp; Cheaply Accessed.</h2>
-
-    <!-- v0.1.60.7 SEG-2: LONG preamble — Founder direct verbatim ("you're" → "you'll" typo corrected per Bishop Truth-Always flag) -->
-    <p>That free local model answers at $0 a call. With our Patented Substrace Theorem, you will get the correct answer, in time, and if you or anyone else in the Cooperative Substrate ever asked it before - you'll get the answer FAST and FREE. The Mesh Frontier runs on hardware every user already owns. No new data center needed, since this makes existing data centers 95% cheaper, more efficient, AND more accurate! A third option to the Data Center Dilemma.</p>
-
-    <p>MnemosyneC has three layers. Each does one thing well. Click any row to expand.</p>
-
-    <details class="mn-layer-row">
-      <summary><strong>Reader</strong> &mdash; Answers your question &mdash; <em>Gemma 4 12B (local, free, private)</em></summary>
-      <div class="mn-layer-row__body">
-        Gemma 4 12B is a 12-billion parameter open-source language model from Google, running locally on your machine via Ollama. No cloud account. No API key. $0/call. The Reader is interchangeable &mdash; you can swap in any compatible model. The substrate underneath is what makes the model smart.
-      </div>
-    </details>
-
-    <details class="mn-layer-row">
-      <summary><strong>Verifier</strong> &mdash; Adjudicates whether the answer is correct &mdash; <em>Shadow E-Giant concordance (3+ parallel votes)</em></summary>
-      <div class="mn-layer-row__body">
-        Shadow E-Giant concordance fires three independent local-Gemma calls in parallel &mdash; each with a different perspective lens (correctness, consistency, coverage). Two-of-three must agree before an answer is written into the substrate. Failed answers re-plow until verified, or get quarantined. The verifier is the Andon discipline that keeps the substrate clean.
-      </div>
-    </details>
-
-    <details class="mn-layer-row">
-      <summary><strong>Accumulator</strong> &mdash; Stores verified knowledge for next time &mdash; <em>Eblet store (append-only JSONL, SHA256-stamped)</em></summary>
-      <div class="mn-layer-row__body">
-        Eblets are append-only knowledge entries. Each one is SHA256-stamped at write time &mdash; content-addressable, tamper-evident. The store is a JSONL file in your user-data directory. Append-only means nothing gets overwritten. Verified-correct only &mdash; failed answers never persist. Your substrate gets cleaner over time, not noisier.
-      </div>
-    </details>
-
-    <p>Use Ask in MnemosyneC. Use Claude Desktop. Use Cursor. Use ChatGPT in your browser (browser extension coming v0.2). Whichever surface you use, the <strong>substrate underneath compounds</strong>. Your knowledge grows. The model is interchangeable. The substrate is what makes any AI smarter &mdash; for you, for your work, for the keep.</p>
-
-    <hr class="mn-substrate-divider">
-
-    <p>The substrate doesn&rsquo;t just store knowledge. It <strong>lives</strong>.</p>
-
-    <h3>Pheromones decay.</h3>
-    <p>Every claim entering the substrate starts as a pheromone &mdash; a signal that something might be true. Pheromones have a half-life. If nothing refreshes them, they fade. Old guesses die naturally. The substrate doesn&rsquo;t accumulate noise &mdash; it lets noise wither.</p>
-
-    <h3>Socceri triads confirm.</h3>
-    <p>When three independent verifications converge &mdash; three Shadow E-Giants from different perspective lenses (correctness &middot; consistency &middot; coverage) returning the same verdict &mdash; a pheromone becomes a <strong>socceri triad confirmation</strong>. Verified. But still subject to decay. Verification without continued use still fades.</p>
-
-    <h3>Living connection buoys.</h3>
-    <p>Confirmed claims survive only if the community keeps them alive &mdash; through use, through query, through federation. Every time another user&rsquo;s substrate concordance-aligns with yours, the claim is buoyed. Without that living connection, even verified truth withers on the vine.</p>
-
-    <h3>Stone tablets are forever.</h3>
-    <p>When a claim has been buoyed by enough living connection over enough time, it gets promoted to a <strong>stone tablet</strong> &mdash; immutable, append-only, permanent. Stone tablets are the substrate&rsquo;s load-bearing canon. They don&rsquo;t decay. They are the truth the network has earned together.</p>
-
-    <h3>This is the innovation itself.</h3>
-    <p>Truth isn&rsquo;t asserted by authority. It&rsquo;s <strong>earned through use, hardened through verification, and preserved through community</strong>.</p>
-
-    <ul>
-      <li><strong>Failed claims die.</strong> No noise accumulates.</li>
-      <li><strong>Verified claims persist if used.</strong> No abandoned facts survive.</li>
-      <li><strong>Used-and-verified claims become permanent.</strong> Stone tablets compound the network&rsquo;s hardest-won knowledge.</li>
-    </ul>
-
-    <p>The substrate gets cleaner over time, not noisier. It&rsquo;s how biological memory works. It&rsquo;s how scientific consensus works. It&rsquo;s how cooperative-class trust always worked, before extraction-class platforms tried to centralize it.</p>
-
-    <p>We&rsquo;re just naming the mechanism, building it into code, and giving you the keys.</p>
-  </section>
-
-  <!-- ═══════════════════════════════════════════════
-       Economy + Get Started + About
-       ═══════════════════════════════════════════════ -->
-  <!-- ═══════════════════════════════════════════════
-       SEG-7: "One quick thing" card — replaces Get Started
-       Dr. MnemosyneC + Download button on right, content below
-       ═══════════════════════════════════════════════ -->
-  <section aria-label="Install instructions" style="margin:2rem 0;">
-    <div class="mn-install-card">
-      <!-- TOP ROW: mascot on left, download button on right — button does NOT exceed mascot head height -->
-      <div class="mn-install-card__top">
-        <div class="mn-install-card__mascot" aria-hidden="true">
-          <img src="/img/mascots/dr-mnemosynec.png"
-               alt="Dr. MnemosyneC"
-               width="100" height="100"
-               loading="lazy">
+      <div class="fp">
+        <div class="fc" id="card-accum">
+          <div class="ff ff-f">
+            <div class="badge b-a">&#x1F4BE; Layer 3 &middot; Accumulator</div>
+            <div class="pe">Stores verified knowledge permanently, append-only.</div>
+            <div style="font-size:var(--text-xs);font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--textFaint);margin-top:var(--space-2)">A little more -</div>
+            <p class="sm-txt">Eblets are SHA256-stamped knowledge entries. Append-only means nothing gets overwritten. Once verified and promoted to a Stone Tablet, the knowledge is permanent. The substrate gets cleaner over time, not noisier.</p>
+            <button class="fb-btn" onclick="mnFlip('card-accum')">Technical Detail &#x21BB;</button>
+          </div>
+          <div class="ff ff-b">
+            <div class="badge b-bk">Technical Detail &middot; Accumulator</div>
+            <table class="dt">
+              <thead><tr><th>Property</th><th>Detail</th></tr></thead>
+              <tbody>
+                <tr><td>Format</td><td>Append-only JSONL &middot; each entry SHA256-stamped at write time</td></tr>
+                <tr><td>Pheromone decay</td><td>Unconfirmed claims fade via half-life decay timer</td></tr>
+                <tr><td>Stone Tablets</td><td>Buoyed + verified claims promoted to permanent immutable tier</td></tr>
+                <tr><td>Storage</td><td>Local user-data directory &middot; no cloud dependency</td></tr>
+              </tbody>
+            </table>
+            <div class="pl">
+              <a href="#" class="pa">Content-Addressable Storage</a>
+              <a href="#" class="pa">Stigmergy (Wilson 1971)</a>
+            </div>
+            <button class="fb-btn" onclick="mnFlip('card-accum')" style="margin-top:auto">&larr; Back</button>
+          </div>
         </div>
-        <div class="mn-install-card__dl">
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<hr class="div">
+
+{{/* ======= LIFECYCLE ======= */}}
+<section class="lc" style="padding-block:clamp(var(--space-12),6vw,var(--space-24))">
+  <div class="c">
+    <div class="label">Knowledge Lifecycle</div>
+    <h2 class="h2">Truth Is Earned, Not Asserted</h2>
+    <p class="sub">Four stages. Noise fades. Verified truth hardens. Permanent knowledge compounds.</p>
+    <div class="fd">
+      <div class="fs">
+        <span class="fi">&#x1F300;</span>
+        <div class="fn">Pheromone</div>
+        <div class="fst s-unc">Unconfirmed</div>
+        <div class="fd-d">A new claim enters as a pheromone signal. Tentative. Has a half-life decay timer.</div>
+        <div class="fd-dec">half_life: 72h &middot; auto-expire if unconfirmed</div>
+      </div>
+      <div class="fconn">&rarr;</div>
+      <div class="fs">
+        <span class="fi">&#x2696;&#xFE0F;</span>
+        <div class="fn">Socceri Triad</div>
+        <div class="fst s-ver">Verifying</div>
+        <div class="fd-d">Three Shadow E-Giants vote from different lens perspectives. Two-of-three must agree for the claim to advance.</div>
+        <div class="fd-dec">votes: 3 &middot; threshold: 2-of-3 concordance</div>
+      </div>
+      <div class="fconn">&rarr;</div>
+      <div class="fs">
+        <span class="fi">&#x1F30A;</span>
+        <div class="fn">Living Connection</div>
+        <div class="fst s-ver">Buoyed</div>
+        <div class="fd-d">Verified claims survive only if the community keeps them alive through use and federated concordance.</div>
+        <div class="fd-dec">buoy_score: community-weighted &middot; decays without use</div>
+      </div>
+      <div class="fconn">&rarr;</div>
+      <div class="fs">
+        <span class="fi">&#x1FAA8;</span>
+        <div class="fn">Stone Tablet</div>
+        <div class="fst s-per">Permanent</div>
+        <div class="fd-d">Sufficiently buoyed + verified claims are promoted to Stone Tablets. Immutable. Append-only. The load-bearing canon of the substrate.</div>
+        <div class="fd-dec">sha256-stamped &middot; immutable &middot; never decays</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="div">
+
+{{/* ======= COMMERCIAL ======= */}}
+<section id="commercial" class="offer-section" style="padding-block:clamp(var(--space-12),6vw,var(--space-24))">
+  <div class="c">
+    <div class="label">Commercial License</div>
+    <h2 class="h2">Free Forever. <span style="color:var(--text)">Commercial Operators: Read This.</span></h2>
+    <p class="sub">SSPL v1 is free for individuals, researchers, and cooperatives. SaaS operators who build on the substrate must open-source their stack or take a commercial license. The window is 30 days. The math favors acting now.</p>
+
+    <div class="offer-card">
+      <div class="offer-header">
+        <div>
+          <div class="offer-eyebrow" style="color:var(--text)">SSPL Section 13 &middot; Commercial License Window</div>
+          <div class="offer-headline">Get it While It's Hot - <span>Pricing Cool-down Schedule</span></div>
+        </div>
+      </div>
+
+      <div class="offer-body">
+        <div>
+          <div style="font-size:var(--text-xs);font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--textFaint);margin-bottom:var(--space-4)">The Decay Schedule - 30-Day Windows</div>
+          <table class="math-table">
+            <thead><tr><th>Window</th><th>Days from Letter</th><th>Discount Term if Accepted</th></tr></thead>
+            <tbody>
+              <tr><td><span class="math-val">1 - Initial</span></td><td>0 &ndash; 30</td><td style="color:var(--green);font-weight:700">50% off &middot; 5 years</td></tr>
+              <tr><td>2</td><td>31 &ndash; 60</td><td>50% off &middot; 4 years</td></tr>
+              <tr><td>3</td><td>61 &ndash; 90</td><td>50% off &middot; 3 years</td></tr>
+              <tr><td>4</td><td>91 &ndash; 120</td><td>50% off &middot; 2 years</td></tr>
+              <tr><td>5</td><td>121 &ndash; 150</td><td>50% off &middot; 1 year</td></tr>
+              <tr><td>6+</td><td>151+</td><td style="color:var(--red)">Full FRAND &middot; no discount</td></tr>
+            </tbody>
+          </table>
+          <p style="font-size:var(--text-xs);color:var(--textFaint);margin-top:var(--space-4);line-height:1.6">The licensee is never refused entry. The price of waiting compounds. <a href="/proofs/" style="color:var(--primary)">See empirical receipts &rarr;</a></p>
+        </div>
+
+        <div class="offer-right">
           <div>
-            <a class="mn-v2-dl-btn mn-v2-dl-btn--install"
-               href="{{ .Site.Data.version.download_url }}"
-               download="MnemosyneC-Setup-{{ .Site.Data.version.version }}.exe"
-               aria-label="Download MnemosyneC {{ .Site.Data.version.version }} for Windows">
-              &#8595;&nbsp; Download for Windows v{{ .Site.Data.version.version }}
-            </a>
-            <p class="dl-fallback" style="font-size:0.78em; color:rgba(250,245,235,0.4); margin:0.3rem 0 0; text-align:center;">
-              Download not starting? <a href="https://github.com/liana-banyan/mnemosyne/releases/download/v{{ .Site.Data.version.version }}/MnemosyneC-Setup-{{ .Site.Data.version.version }}.exe" style="color:rgba(214,158,46,0.65);">Try the GitHub mirror</a>
-            </p>
+            <div style="font-size:var(--text-xs);font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--textFaint);margin-bottom:var(--space-3)">Why the 50% Is Empirically Justified</div>
+            <table class="math-table" style="margin-bottom:var(--space-3)">
+              <tbody>
+                <tr><td>Context amortization</td><td><span class="math-val">~10x</span> normalized work-per-token (BP087)</td></tr>
+                <tr><td>Accuracy uplift</td><td><span class="math-val">97.1%</span> MMLU-Pro vs. 75&ndash;86% baseline</td></tr>
+                <tr><td>Context at 43% vs 86%</td><td>Knight 200K Sonnet 4.6 &middot; 5 parallel MAMBAs</td></tr>
+              </tbody>
+            </table>
+            <p class="frand-note">The licensee is <strong>structurally net-positive</strong> after the discounted fee. The discount comes from what you save.</p>
+          </div>
+          <div style="background:var(--surfaceOff);border:1px solid var(--border);border-radius:var(--radius-lg);padding:var(--space-4) var(--space-5)">
+            <div style="font-size:var(--text-xs);font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:var(--space-2)">&#x2605; SSPL + Pledge #2260</div>
+            <div style="font-size:var(--text-xs);color:var(--textMuted);line-height:1.7">Section 13 is not a trap. It is a forcing function. A &middot; Don&rsquo;t integrate - accept inferiority. B &middot; Integrate and open-source your entire stack. C &middot; License commercially. The 30-day window opens C. Dr. MnemosyneC does not forget - and neither does Pledge #2260.</div>
           </div>
         </div>
       </div>
 
-      <h2 class="mn-install-card__heading">One quick thing before you run the installer</h2>
-
-      <p class="mn-install-card__body">When Windows sees new software for the first time, it shows a caution screen. This happens with all new programs, including ours. It does not mean there is a problem. When you see it, click More info and then Run anyway to continue. The installer is safe.</p>
-
-      <ol class="mn-install-card__steps">
-        <li>Click the download button above and save the file. <em>(Large file: the bundled AI model is included.)</em></li>
-        <li>Right-click the downloaded file &rarr; Run as Administrator.</li>
-        <li>When the Windows caution screen appears, click More info.</li>
-        <li>Click Run anyway. Follow the installer prompts.</li>
-        <li>Done. Your substrate starts the moment you do.</li>
-      </ol>
-
-      <p class="mn-install-card__trust">Version {{ .Site.Data.version.version }} &middot; Free forever &middot; No account required &middot; All data stays on your computer</p>
+      <div class="offer-cta">
+        <div class="offer-cta-left">
+          Email <a href="mailto:licensing@lianabanyan.com">licensing@lianabanyan.com</a> with subject line <code>Commercial License Request</code>.<br>
+          <strong>Include:</strong> company name, deployment scale, intended use. We respond within 2 business days.
+        </div>
+        <a href="mailto:licensing@lianabanyan.com?subject=Commercial%20License%20Request" class="btn-offer">
+          Request Commercial License
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
     </div>
-  </section>
-
-  <hr class="mn-v2-divider" />
-
-  <section aria-label="About Liana Banyan" style="margin:2rem 0;">
-    <h2 style="color:#d69e2e; font-size:clamp(1.05rem,3vw,1.35rem); font-weight:700; margin:0 0 1rem;">About Liana Banyan</h2>
-    <p style="color:rgba(250,245,235,0.82); font-size:0.92rem; line-height:1.78; margin:0 0 0.8rem;">Liana Banyan Corporation &mdash; the cooperative-class substrate behind MnemosyneC and 16 cooperative initiatives.</p>
-    <p style="color:rgba(250,245,235,0.82); font-size:0.92rem; line-height:1.78; margin:0 0 0.9rem;"><strong style="color:#faf5eb;">83.3% of every dollar</strong> stays with the Workers, Builders, and Creators that make it. $5 a year. One vote. Everything we build is published under a Cooperative Defensive Patent Pledge so members &mdash; and any community on Earth &mdash; can fork it, run it, and keep it.</p>
-    <p style="color:rgba(250,245,235,0.65); font-size:0.88rem;">
-      <a href="/cooperative-compact/">Read the Cooperative Compact &rarr;</a>
-      &nbsp;&middot;&nbsp;
-      <a href="/initiatives/">Browse initiatives &rarr;</a>
-      &nbsp;&middot;&nbsp;
-      <a href="/join/">Join for $5/year &rarr;</a>
-    </p>
-    <p style="color:rgba(250,245,235,0.35); font-size:0.8rem; font-style:italic; margin-top:1rem;">Caithedral&trade; &middot; Substrate &middot; Plow &middot; Stone Tablets &middot; Shadow E-Giants &middot; Cooperative-class &middot; For the keep.</p>
-  </section>
-
-</div><!-- /mn-v2-wrap -->
-<!-- SEG-8: Footer rendered by extend_footer.html (applies to all pages). One occurrence. &copy; entity. No mojibake. -->
-
-<!-- Lightbox overlay (SEG-4) -->
-<div class="mn-lightbox" id="mn-lightbox" role="dialog" aria-modal="true" aria-label="Screenshot preview">
-  <div class="mn-lightbox__inner">
-    <button class="mn-lightbox__close" onclick="document.getElementById('mn-lightbox').classList.remove('open')" aria-label="Close">&times;</button>
-    <div class="mn-lightbox__img">
-      <div style="padding:2rem 3rem; background:rgba(10,22,40,0.9); border:1px dashed rgba(214,158,46,0.3); border-radius:8px; color:rgba(250,245,235,0.5); font-size:0.9rem; font-style:italic;">Screenshot pending — Founder to provide</div>
-    </div>
-    <p class="mn-lightbox__caption" id="mn-lightbox-caption"></p>
   </div>
-</div>
+</section>
+
+<hr class="div">
+
+{{/* ======= PROOFS ======= */}}
+<section id="proofs" style="background:var(--bg)">
+  <div class="c">
+    <div class="label">Pinned Proofs</div>
+    <h2 class="h2">Receipts, Not Promises</h2>
+    <p class="sub">Real benchmark runs with full methodology notes. We state caveats aloud. No hype. <a href="/proofs/" style="color:var(--primary)">See all proofs &rarr;</a></p>
+    <div class="pg">
+      <div class="pc">
+        <div class="pm">20/20</div>
+        <div class="pn">Mesh Proof - R10</div>
+        <p class="pd">Machine A answered correctly for data held only on Machine B. 20 of 20 correct, p50 latency 16.6 ms. Hash-verified.</p>
+        <div class="pb">&#x2713; Verified &middot; BP063</div>
+      </div>
+      <div class="pc">
+        <div class="pm">6&rarr;78%</div>
+        <div class="pn">Benchmark R10 - Free Local Model</div>
+        <p class="pd">A free, local Ollama model jumped from 6% to 78% accuracy. No retraining. Just substrate. Cohen&rsquo;s &kappa; = 0.936. Three independent raters.</p>
+        <div class="pb">&#x2713; Verified &middot; BP065</div>
+      </div>
+      <div class="pc">
+        <div class="pm">81.9%</div>
+        <div class="pn">Trial 02b - 4-Peer Cooperative</div>
+        <p class="pd">4-peer cooperative gemma4:12b via relay mesh. Active-peer aggregate 172/210 = 81.9%. 70/70 full agreement across all active peers.</p>
+        <div class="pb">&#x2713; Verified &middot; BP089</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{{/* ======= CUE DECK CARD - BP094 Mamba 2 ======= */}}
+{{- partial "cue-deck-card-homepage.html" . -}}
+
+<hr class="div">
+
+{{/* ======= FOOTER ======= */}}
+<footer class="mn-v2-footer">
+  <div class="c">
+    <div class="fi2">
+      <div>
+        <div style="font-size:var(--text-sm);font-weight:600;color:var(--text);margin-bottom:var(--space-1)">Dr. MnemosyneC &middot; Liana Banyan Cooperative</div>
+        <div style="font-size:var(--text-xs);color:var(--primary);font-style:italic;margin-bottom:var(--space-1)">Great-descendant of Mnemosyne. She inherited perfect memory. She shares it freely.</div>
+        <div style="font-size:var(--text-xs);color:var(--textMuted);margin-bottom:var(--space-2)">83.3% of every dollar stays with workers, builders, and creators.</div>
+        <div class="coop-tag">Cooperative &middot; $5/yr - one vote, shared substrate, shared revenue</div>
+      </div>
+      <div>
+        <div style="font-size:var(--text-xs);font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--textFaint);margin-bottom:var(--space-3)">Links</div>
+        <div class="fls" style="flex-direction:column;gap:var(--space-2)">
+          <a href="/how-it-works/">How It Works</a>
+          <a href="/proofs/">Proofs</a>
+          <a href="/download/">Download</a>
+          <a href="/license">License</a>
+          <a href="mailto:licensing@lianabanyan.com">licensing@lianabanyan.com</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:var(--text-xs);font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--textFaint);margin-bottom:var(--space-3)">Legal</div>
+        <div style="font-size:var(--text-xs);color:var(--textFaint);line-height:1.8">
+          SSPL v1 &middot; Apache 2.0 (library extractions)<br>
+          Patent Pledge #2260 (Upekrithen LLC)<br>
+          Trademarks: TUP v2.0 &middot; Non-licensable<br>
+          &copy; Upekrithen LLC &middot; All trademarks reserved
+        </div>
+      </div>
+    </div>
+
+    {{/* Cooperative Liturgy · BP092 verbatim */}}
+    <div class="liturgy">
+      <img src="/img/mascots/dr-mnemosynec.png" alt="Dr. MnemosyneC" width="72" height="72"
+           style="border-radius:50%;object-fit:cover;border:2px solid var(--divider);background:#fff;margin:0 auto var(--space-4)" loading="lazy">
+      <p>Let&rsquo;s Help Each Other Help Ourselves.</p>
+      <p>Coffee&rsquo;s for Closers. Help Yourself.</p>
+      <p style="margin-top:var(--space-4);font-size:var(--text-xs);color:var(--textFaint);font-style:normal">&#x1F30A;&#x2693; For Alford.</p>
+    </div>
+  </div>
+</footer>
+
 <script>
+// THEME TOGGLE
 (function(){
-  var lightbox = document.getElementById('mn-lightbox');
-  if (!lightbox) return;
-  document.querySelectorAll('.mn-proof-screenshot-placeholder').forEach(function(el){
-    el.setAttribute('tabindex','0');
-    el.setAttribute('role','button');
-    function openLightbox(){
-      var cap = el.querySelector('.mn-proof-screenshot-placeholder__caption');
-      document.getElementById('mn-lightbox-caption').textContent = cap ? cap.textContent : '';
-      lightbox.classList.add('open');
+  var t = document.getElementById('mn-theme-tog');
+  var r = document.documentElement;
+  var d = r.getAttribute('data-theme') || 'dark';
+  function ui() {
+    if (!t) return;
+    t.setAttribute('aria-label', 'Switch to ' + (d === 'dark' ? 'light' : 'dark') + ' mode');
+    t.innerHTML = d === 'dark'
+      ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>'
+      : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+  }
+  ui();
+  if (t) t.addEventListener('click', function() {
+    d = d === 'dark' ? 'light' : 'dark';
+    r.setAttribute('data-theme', d);
+    ui();
+    if (window.MN_BC) mnUpd();
+  });
+})();
+
+// FLIP CARDS
+function mnFlip(id) { document.getElementById(id).classList.toggle('flip'); }
+
+// INSTALLER MODAL + DOWNLOAD BUTTON 3-STATE (BP094 REV-2)
+function openMnModal(e) { if (e) e.preventDefault(); document.getElementById('installModal').classList.add('open'); }
+function closeMnModal() { document.getElementById('installModal').classList.remove('open'); }
+// 3-state download: idle -> progress -> done (does NOT auto-reset per spec)
+function mnDlClick(e) {
+  if (e) e.preventDefault();
+  var btn = document.getElementById('mn-dl-btn');
+  if (btn && !btn.classList.contains('dl-progress') && !btn.classList.contains('dl-done')) {
+    openMnModal(e);
+  }
+}
+// After user agrees + clicks continue, transition to progress then done
+document.addEventListener('DOMContentLoaded', function() {
+  var contBtn = document.getElementById('mnContinueBtn');
+  var dlBtn = document.getElementById('mn-dl-btn');
+  if (contBtn && dlBtn) {
+    contBtn.addEventListener('click', function() {
+      if (!contBtn.classList.contains('ready')) return;
+      dlBtn.classList.remove('dl-idle');
+      dlBtn.classList.add('dl-progress');
+      dlBtn.textContent = 'Downloading...';
+      dlBtn.setAttribute('aria-label', 'Downloading Dr. MnemosyneC installer');
+      setTimeout(function() {
+        dlBtn.classList.remove('dl-progress');
+        dlBtn.classList.add('dl-done');
+        dlBtn.textContent = 'Finished';
+        dlBtn.setAttribute('aria-label', 'Download complete');
+      }, 4000);
+    });
+  }
+});
+function mnToggleContinue(cb) {
+  var btn = document.getElementById('mnContinueBtn');
+  if (!btn) return;
+  if (cb.checked) {
+    btn.classList.add('ready');
+    btn.removeAttribute('disabled');
+  } else {
+    btn.classList.remove('ready');
+    btn.setAttribute('disabled', 'disabled');
+  }
+}
+document.getElementById('installModal').addEventListener('click', function(e) {
+  if (e.target === this) closeMnModal();
+});
+
+// BENCHMARK CHART
+(function(){
+  var models = ['Claude Opus 4.8', 'GPT-5.5', 'Gemini 3.5 Flash', 'Llama 3.1 8b (Free)'];
+  var wo = [6, 19.3, 8, 6], wi = [89.3, 93.3, 90.7, 78.0];
+  function gc() {
+    var d = document.documentElement.getAttribute('data-theme') === 'dark';
+    return {
+      grid: d ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+      tick: d ? '#7a8088' : '#6b7280',
+      bg: d ? '#131517' : '#ffffff',
+      border: d ? '#2f3439' : '#cdd0d5',
+      txt: d ? '#d8dce0' : '#1a1d21',
+      off: d ? '#2c3238' : '#d1d5db',
+      on: '#4fc3d0', onh: '#3aafbc'
+    };
+  }
+  function mnUpd() {
+    if (!window.MN_BC) return;
+    var c = gc();
+    MN_BC.data.datasets[0].backgroundColor = c.off;
+    MN_BC.data.datasets[1].backgroundColor = c.on;
+    MN_BC.update();
+  }
+  window.mnUpd = mnUpd;
+  var c = gc();
+  window.MN_BC = new Chart(document.getElementById('benchmarkChart').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: models,
+      datasets: [
+        {label:'Without Substrate', data:wo, backgroundColor:c.off, borderRadius:5, borderSkipped:false, barPercentage:.6, categoryPercentage:.75},
+        {label:'With Substrate', data:wi, backgroundColor:c.on, hoverBackgroundColor:c.onh, borderRadius:5, borderSkipped:false, barPercentage:.6, categoryPercentage:.75}
+      ]
+    },
+    options: {
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      interaction: {mode:'index', intersect:false},
+      animation: {duration:900, easing:'easeOutQuart'},
+      plugins: {
+        legend: {display:false},
+        tooltip: {
+          backgroundColor:c.bg, borderColor:c.border, borderWidth:1, titleColor:c.txt, bodyColor:c.tick,
+          padding:14, cornerRadius:10,
+          callbacks: {
+            label: function(i){ return ' ' + i.dataset.label + ': ' + i.parsed.x + '%'; },
+            afterBody: function(items){
+              var a = items.find(function(i){return i.dataset.label==='Without Substrate';});
+              var b = items.find(function(i){return i.dataset.label==='With Substrate';});
+              if (a && b) return ['  Delta: +' + (b.parsed.x - a.parsed.x).toFixed(1) + ' pts'];
+              return [];
+            }
+          }
+        }
+      },
+      scales: {
+        x: {min:0, max:100, grid:{color:c.grid}, ticks:{color:c.tick, callback:function(v){return v+'%'}, maxTicksLimit:6}, border:{display:false}},
+        y: {grid:{display:false}, ticks:{color:c.tick}, border:{display:false}}
+      }
     }
-    el.addEventListener('click', openLightbox);
-    el.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openLightbox(); }});
   });
-  lightbox.addEventListener('click', function(e){
-    if(e.target === lightbox){ lightbox.classList.remove('open'); }
-  });
-  document.addEventListener('keydown', function(e){
-    if(e.key==='Escape'){ lightbox.classList.remove('open'); }
+})();
+
+// CHART CLICK-EXPAND (legacy tiles: excludes .chart-compounding-wrap which uses mnExpandChart)
+(function(){
+  document.addEventListener('DOMContentLoaded', function() {
+    var tiles = document.querySelectorAll('.chart-tile:not(.chart-compounding-wrap)');
+    var activeBackdrop = null;
+    var activeTile = null;
+    function expandTile(tile) {
+      if (activeTile) return;
+      var backdrop = document.createElement('div');
+      backdrop.className = 'chart-tile-expanded-backdrop';
+      var clone = tile.cloneNode(true);
+      clone.classList.add('chart-tile-expanded');
+      var hint = document.createElement('div');
+      hint.className = 'chart-tile-close-hint';
+      hint.textContent = 'Click again or press ESC to collapse';
+      clone.appendChild(hint);
+      backdrop.appendChild(clone);
+      document.body.appendChild(backdrop);
+      requestAnimationFrame(function(){ backdrop.classList.add('open'); });
+      activeBackdrop = backdrop; activeTile = clone;
+      clone.addEventListener('click', function(){ collapse(); });
+      backdrop.addEventListener('click', function(e){ if(e.target===backdrop) collapse(); });
+    }
+    function collapse() {
+      if (!activeBackdrop) return;
+      activeBackdrop.classList.remove('open');
+      var ab = activeBackdrop;
+      setTimeout(function(){ if(ab.parentNode) ab.parentNode.removeChild(ab); }, 200);
+      activeBackdrop = null; activeTile = null;
+    }
+    tiles.forEach(function(tile){
+      tile.addEventListener('click', function(){ expandTile(tile); });
+    });
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape') collapse(); });
   });
 })();
 </script>
-</div><!-- /mn-hp-page -->
