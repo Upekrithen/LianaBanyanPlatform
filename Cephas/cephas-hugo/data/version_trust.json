@@ -1,7 +1,7 @@
 {
   "versions": [
     {
-      "version": "0.8.0",
+      "version": "0.8.1",
       "tier": "latest",
       "release_date": "2026-06-25",
       "install_reports": 0,
@@ -9,11 +9,11 @@
       "zero_issue_days": 0,
       "open_issues": 0,
       "trust_score": 1,
-      "filename": "MnemosyneC-Setup-0.8.0.exe",
+      "filename": "MnemosyneC-Setup-0.8.1.exe",
       "size_bytes": 540626737,
       "size_display": "~515.7 MB",
-      "notes": "BP095 M01 five-fix bundle: wmic CIM migration + WebSocket transport + version_trust wiring + CSIA-Hybrid tab + gemma4 capacity (bp094-path-b)",
-      "sha256": "48942fe8a5d90a50a8f2ca993eaacd10e2bea44b7e810da16218b4b9b63ad34c"
+      "notes": "BP096 M06 canonical release. GitHub Releases distribution. sha256: 046ee2490e5f7ba5a1d40a46259047e6c7868fa4979a0aadb203f377b3dcadcc.",
+      "sha256": "046ee2490e5f7ba5a1d40a46259047e6c7868fa4979a0aadb203f377b3dcadcc"
     },
     {
       "version": "0.7.2",

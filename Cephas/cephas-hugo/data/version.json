@@ -1,12 +1,13 @@
 {
-  "version": "0.5.18",
-  "filename": "MnemosyneC-Setup-0.5.18.exe",
-  "download_url": "/download/MnemosyneC-Setup-0.5.18.exe",
-  "release_notes": "v0.5.18 (M18b): right-size.json override wired through all consumers · multi-ACTIVE-tile bug fixed (getTileState) · ULTRA tier added · dynamic model names · Caithedral Federation sweep.",
+  "version": "0.8.1",
+  "filename": "MnemosyneC-Setup-0.8.1.exe",
+  "download_url": "https://github.com/liana-banyan/mnemosyne/releases/download/v0.8.1/MnemosyneC-Setup-0.8.1.exe",
+  "release_notes": "v0.8.1: BP096 M06 canonical release. GitHub Releases distribution. sha256: 046ee2490e5f7ba5a1d40a46259047e6c7868fa4979a0aadb203f377b3dcadcc.",
+  "sha256": "046ee2490e5f7ba5a1d40a46259047e6c7868fa4979a0aadb203f377b3dcadcc",
   "previous": {
-    "version": "0.5.17",
-    "filename": "MnemosyneC-Setup-0.5.17.exe",
-    "download_url": "/download/MnemosyneC-Setup-0.5.17.exe",
+    "version": "0.8.0",
+    "filename": "MnemosyneC-Setup-0.8.0.exe",
+    "download_url": "/download/MnemosyneC-Setup-0.8.0.exe",
     "status": "HISTORICAL"
   }
 }
