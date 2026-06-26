@@ -22,7 +22,7 @@ function getDownloadUrl(version: string): { url: string; bare: string } {
 const corsHeaders = {
   "Access-Control-Allow-Origin": "https://mnemosynec.org",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, apikey",
 };
 
 serve(async (req: Request) => {
