@@ -1,0 +1,274 @@
+{{/* Download License Modal · BP096 M17
+     Native <dialog> element. No JS library needed.
+     Anon key from Hugo params (public key — safe client-side).
+     Version string data-bound, never hardcoded.
+*/}}
+{{- $anonKey := .Site.Params.supabaseAnonKey -}}
+{{- $edgeBase := .Site.Params.supabaseFunctionsUrl -}}
+{{- $ver := "" -}}
+{{- with (index .Site.Data.version_trust.versions 0) }}{{- $ver = .version -}}{{- end -}}
+
+<style>
+/* ── DOWNLOAD LICENSE MODAL · BP096 M17 ── */
+.mn-license-modal {
+  border: 1px solid rgba(214,158,46,0.45);
+  border-radius: 16px;
+  background: #0d1b2e;
+  color: #faf5eb;
+  padding: 0;
+  max-width: 480px;
+  width: calc(100vw - 2rem);
+  box-shadow: 0 16px 60px rgba(0,0,0,0.7);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+.mn-license-modal::backdrop {
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(2px);
+}
+.mn-license-modal__inner {
+  padding: 2rem 2rem 1.6rem;
+  position: relative;
+}
+.mn-license-modal__title {
+  color: #faf5eb;
+  font-size: clamp(1.1rem, 3vw, 1.4rem);
+  font-weight: 800;
+  margin: 0 0 0.4rem;
+  letter-spacing: -0.01em;
+  padding-right: 2rem;
+}
+.mn-license-modal__sub {
+  color: rgba(250,245,235,0.6);
+  font-size: 0.88rem;
+  margin: 0 0 1.4rem;
+  line-height: 1.55;
+}
+.mn-license-modal__buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.mn-license-modal__btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background: rgba(255,255,255,0.04);
+  border: 2px solid rgba(214,158,46,0.22);
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s, background 0.15s;
+  font-family: inherit;
+  width: 100%;
+  position: relative;
+}
+.mn-license-modal__btn:hover {
+  border-color: rgba(214,158,46,0.55);
+  background: rgba(255,255,255,0.07);
+}
+.mn-license-modal__btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+.mn-license-modal__btn--personal {
+  border-color: rgba(56,161,105,0.4);
+}
+.mn-license-modal__btn--personal:hover {
+  border-color: rgba(56,161,105,0.75);
+  background: rgba(56,161,105,0.07);
+}
+.mn-license-modal__btn-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #faf5eb;
+  display: block;
+  margin-bottom: 0.2rem;
+}
+.mn-license-modal__btn--personal .mn-license-modal__btn-title {
+  color: #38a169;
+}
+.mn-license-modal__btn-sub {
+  font-size: 0.8rem;
+  color: rgba(250,245,235,0.55);
+  display: block;
+}
+.mn-license-modal__btn-spinner {
+  display: none;
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(56,161,105,0.3);
+  border-top-color: #38a169;
+  border-radius: 50%;
+  animation: mn-modal-spin 0.75s linear infinite;
+}
+.mn-license-modal__btn[data-loading="true"] .mn-license-modal__btn-spinner {
+  display: block;
+}
+@keyframes mn-modal-spin {
+  to { transform: translateY(-50%) rotate(360deg); }
+}
+.mn-license-modal__close {
+  position: absolute;
+  top: 0.9rem;
+  right: 1rem;
+  font-size: 1.4rem;
+  line-height: 1;
+  background: none;
+  border: none;
+  color: rgba(250,245,235,0.4);
+  cursor: pointer;
+  padding: 0.2rem 0.4rem;
+  font-family: inherit;
+  transition: color 0.15s;
+}
+.mn-license-modal__close:hover { color: rgba(250,245,235,0.85); }
+.mn-license-modal__error {
+  display: none;
+  margin-top: 0.8rem;
+  padding: 0.5rem 0.8rem;
+  background: rgba(245,101,101,0.1);
+  border: 1px solid rgba(245,101,101,0.35);
+  border-radius: 6px;
+  font-size: 0.8rem;
+  color: #fc8181;
+  line-height: 1.5;
+}
+@media (max-width: 600px) {
+  .mn-license-modal {
+    max-width: 100%;
+    width: calc(100vw - 1.2rem);
+    border-radius: 12px;
+  }
+  .mn-license-modal__inner { padding: 1.5rem 1.2rem 1.2rem; }
+}
+</style>
+
+<dialog id="mn-license-modal"
+        class="mn-license-modal"
+        aria-labelledby="mn-license-modal-title"
+        aria-modal="true">
+  <div class="mn-license-modal__inner">
+    <button class="mn-license-modal__close" id="mn-license-modal-close" aria-label="Close dialog">&times;</button>
+    <h2 class="mn-license-modal__title" id="mn-license-modal-title">How will you use MnemosyneC?</h2>
+    <p class="mn-license-modal__sub">Choose your license track. Most users want Personal.</p>
+    <div class="mn-license-modal__buttons">
+
+      <button class="mn-license-modal__btn mn-license-modal__btn--personal"
+              id="mn-modal-btn-personal"
+              data-license-tier="SSPL_PLEDGE"
+              data-version="{{ $ver }}"
+              type="button">
+        <span class="mn-license-modal__btn-title">Personal / Open Source</span>
+        <span class="mn-license-modal__btn-sub">FREE forever &middot; SSPL + Pledge #2260</span>
+        <span class="mn-license-modal__btn-spinner" aria-hidden="true"></span>
+      </button>
+
+      <button class="mn-license-modal__btn mn-license-modal__btn--business"
+              id="mn-modal-btn-business"
+              data-license-tier="BUSINESS_REDIRECT"
+              type="button">
+        <span class="mn-license-modal__btn-title">Business / Commercial</span>
+        <span class="mn-license-modal__btn-sub">Apache &middot; or Sanders-Fork &middot; choose on next page</span>
+      </button>
+
+    </div>
+    <div class="mn-license-modal__error" id="mn-modal-error" role="alert" aria-live="assertive"></div>
+  </div>
+</dialog>
+
+<script>
+(function () {
+  var ANON_KEY   = "{{ $anonKey }}";
+  var EDGE_URL   = "{{ $edgeBase }}/record-license-selection";
+  var modal      = document.getElementById("mn-license-modal");
+  var btnPersonal = document.getElementById("mn-modal-btn-personal");
+  var btnBusiness = document.getElementById("mn-modal-btn-business");
+  var btnClose    = document.getElementById("mn-license-modal-close");
+  var errorEl     = document.getElementById("mn-modal-error");
+
+  if (!modal) return;
+
+  /* ── Open modal on any .mn-v2-dl-btn click ── */
+  document.addEventListener("click", function (e) {
+    var dlBtn = e.target.closest(".mn-v2-dl-btn");
+    if (!dlBtn) return;
+    e.preventDefault();
+    errorEl.style.display = "none";
+    modal.showModal();
+  });
+
+  /* ── Close: button ── */
+  if (btnClose) {
+    btnClose.addEventListener("click", function () {
+      modal.close();
+    });
+  }
+
+  /* ── Close: ESC (native <dialog> handles this; handler for cleanup) ── */
+  modal.addEventListener("cancel", function () {
+    /* native ESC — no extra action needed */
+  });
+
+  /* ── Close: click backdrop ── */
+  modal.addEventListener("click", function (e) {
+    if (e.target === modal) { modal.close(); }
+  });
+
+  /* ── Personal: POST to edge fn, redirect to download_url on ok:true ── */
+  if (btnPersonal) {
+    btnPersonal.addEventListener("click", function () {
+      var tier    = btnPersonal.dataset.licenseTier;
+      var version = btnPersonal.dataset.version;
+
+      btnPersonal.setAttribute("data-loading", "true");
+      btnPersonal.disabled = true;
+      if (btnBusiness) btnBusiness.disabled = true;
+      errorEl.style.display = "none";
+
+      fetch(EDGE_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": ANON_KEY,
+          "Authorization": "Bearer " + ANON_KEY
+        },
+        body: JSON.stringify({ license_tier: tier, version: "v" + version })
+      })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        btnPersonal.removeAttribute("data-loading");
+        btnPersonal.disabled = false;
+        if (btnBusiness) btnBusiness.disabled = false;
+
+        if (data.ok && data.download_url) {
+          modal.close();
+          window.location.href = data.download_url;
+        } else {
+          errorEl.textContent = "Could not start download: " + (data.error || "unknown error") + ". Try again or email Social@lianabanyan.com";
+          errorEl.style.display = "block";
+        }
+      })
+      .catch(function (err) {
+        btnPersonal.removeAttribute("data-loading");
+        btnPersonal.disabled = false;
+        if (btnBusiness) btnBusiness.disabled = false;
+        errorEl.textContent = "Network error: " + (err.message || "unknown") + ". Please try again.";
+        errorEl.style.display = "block";
+      });
+    });
+  }
+
+  /* ── Business: redirect to /download/?tier=commercial ── */
+  if (btnBusiness) {
+    btnBusiness.addEventListener("click", function () {
+      modal.close();
+      window.location.href = "/download/?tier=commercial";
+    });
+  }
+})();
+</script>
