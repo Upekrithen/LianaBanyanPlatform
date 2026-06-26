@@ -1,4 +1,4 @@
-{{- define "main" }}
+﻿{{- define "main" }}
 {{/* Tower of Peace — v0.4.4 · BP084 */}}
 <!-- V2 DESIGN TOKENS · BP093 · forward-compatible only, does not override existing styles -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -396,6 +396,122 @@ body { background: #0a1628; background-image: url("data:image/svg+xml,%3Csvg xml
   border-top: 1px solid rgba(214,158,46,0.1);
 }
 .tp-mirror-note a { color: rgba(214,158,46,0.6); border-bottom-color: rgba(214,158,46,0.2); }
+/* ---- License Choice Gate (BP095 M05) ---- */
+.license-choice-gate {
+  margin: 1.5rem 0 2rem;
+  padding: 1.5rem;
+  background: rgba(10, 22, 40, 0.7);
+  border: 1px solid rgba(214, 158, 46, 0.25);
+  border-radius: 10px;
+}
+.lcg-heading {
+  color: #f6ad55;
+  font-size: 1.15rem;
+  font-weight: 800;
+  margin: 0 0 0.4rem;
+}
+.lcg-intro {
+  color: rgba(250, 245, 235, 0.65);
+  font-size: 0.88rem;
+  margin: 0 0 1.2rem;
+}
+.lcg-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+@media (max-width: 720px) {
+  .lcg-cards { grid-template-columns: 1fr; }
+}
+.license-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 2px solid rgba(214, 158, 46, 0.18);
+  border-radius: 8px;
+  padding: 1rem;
+  cursor: pointer;
+  transition: border-color 150ms, background 150ms;
+}
+.license-card:hover {
+  border-color: rgba(214, 158, 46, 0.5);
+  background: rgba(255, 255, 255, 0.07);
+}
+.license-card.selected {
+  border-color: #f6ad55;
+  background: rgba(246, 173, 85, 0.1);
+}
+.lcg-card-badge {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: 0.5rem;
+}
+.lcg-badge-1a { background: rgba(79, 195, 208, 0.15); color: #4fc3d0; border: 1px solid rgba(79, 195, 208, 0.3); }
+.lcg-badge-1b { background: rgba(160, 174, 192, 0.15); color: #a0aec0; border: 1px solid rgba(160, 174, 192, 0.3); }
+.lcg-badge-2  { background: rgba(246, 173, 85, 0.15);  color: #f6ad55; border: 1px solid rgba(246, 173, 85, 0.3); }
+.lcg-card-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #faf5eb;
+  margin-bottom: 0.3rem;
+}
+.lcg-card-who {
+  font-size: 0.75rem;
+  color: rgba(250, 245, 235, 0.5);
+  margin-bottom: 0.5rem;
+}
+.lcg-card-price {
+  font-size: 0.82rem;
+  color: #f6ad55;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+.lcg-card-list {
+  font-size: 0.78rem;
+  color: rgba(250, 245, 235, 0.7);
+  padding-left: 1.1rem;
+  margin: 0 0 0.5rem;
+}
+.lcg-card-pitch {
+  font-size: 0.82rem;
+  font-style: italic;
+  color: rgba(250, 245, 235, 0.85);
+  margin-bottom: 0.4rem;
+  border-left: 2px solid rgba(246, 173, 85, 0.4);
+  padding-left: 0.6rem;
+}
+.lcg-card-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #4fc3d0;
+  letter-spacing: 0.04em;
+}
+.lcg-card-split, .lcg-card-switch {
+  font-size: 0.72rem;
+  color: rgba(250, 245, 235, 0.45);
+  margin-top: 0.3rem;
+}
+.license-selected-indicator {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background: rgba(79, 195, 208, 0.1);
+  border: 1px solid rgba(79, 195, 208, 0.3);
+  border-radius: 6px;
+  color: #4fc3d0;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+.lcg-noscript {
+  color: rgba(250, 245, 235, 0.6);
+  font-size: 0.82rem;
+  margin-top: 0.8rem;
+  padding: 0.5rem;
+  border: 1px dashed rgba(214, 158, 46, 0.3);
+  border-radius: 4px;
+}
 </style>
 
 <div class="tp-page">
@@ -413,6 +529,7 @@ body { background: #0a1628; background-image: url("data:image/svg+xml,%3Csvg xml
     <p class="tp-header-sub">Every version, every receipt. Pick the rung that fits.</p>
   </header>
 
+  {{- partial "license-choice-gate.html" . }}
   <!-- ── Right now ── -->
   <section aria-label="Current picks" style="margin:0 0 2rem;">
     <h2 class="tp-tower-heading">Right now</h2>
@@ -426,10 +543,11 @@ body { background: #0a1628; background-image: url("data:image/svg+xml,%3Csvg xml
           <span class="tp-callout-version">v{{ .version }}</span>
         </div>
         <p class="tp-callout-notes">{{ .notes }}</p>
-        <a class="tp-dl-btn tp-dl-btn--latest"
+        <a class="tp-dl-btn tp-dl-btn--latest download-btn"
            href="/download/{{ .filename }}"
-           download="{{ .filename }}"
-           aria-label="Download MnemosyneC v{{ .version }}">
+           data-version="{{ .version }}"
+           aria-disabled="true"
+           aria-label="Download MnemosyneC v{{ .version }} -- select license tier first">
           &#8595;&nbsp; Download v{{ .version }}
         </a>
         <p class="tp-callout-meta">{{ .size_display }} &nbsp;&middot;&nbsp; {{ .release_date }}<br>
@@ -446,10 +564,11 @@ body { background: #0a1628; background-image: url("data:image/svg+xml,%3Csvg xml
           <span class="tp-callout-version">v{{ .version }}</span>
         </div>
         <p class="tp-callout-notes">{{ .notes }}</p>
-        <a class="tp-dl-btn tp-dl-btn--stable"
+        <a class="tp-dl-btn tp-dl-btn--stable download-btn"
            href="/download/{{ .filename }}"
-           download="{{ .filename }}"
-           aria-label="Download MnemosyneC v{{ .version }} stable">
+           data-version="{{ .version }}"
+           aria-disabled="true"
+           aria-label="Download MnemosyneC v{{ .version }} stable -- select license tier first">
           &#8595;&nbsp; Download v{{ .version }}
         </a>
         <p class="tp-callout-meta">{{ .size_display }} &nbsp;&middot;&nbsp; {{ .release_date }}<br>
@@ -552,10 +671,11 @@ body { background: #0a1628; background-image: url("data:image/svg+xml,%3Csvg xml
           </td>
           <td class="tp-notes-cell" data-label="Notes">{{ .notes }}</td>
           <td data-label="Download">
-            <a class="tp-dl-link tp-dl-link--{{ $tierClass }}"
+            <a class="tp-dl-link tp-dl-link--{{ $tierClass }} download-btn"
                href="/download/{{ .filename }}"
-               download="{{ .filename }}"
-               aria-label="Download MnemosyneC v{{ .version }} ({{ .size_display }})">
+               data-version="{{ .version }}"
+               aria-disabled="true"
+               aria-label="Download MnemosyneC v{{ .version }} ({{ .size_display }}) -- select license tier first">
               &#8595; .exe
             </a>
           </td>
@@ -857,4 +977,106 @@ body { background: #0a1628; background-image: url("data:image/svg+xml,%3Csvg xml
 })();
 </script>
 
+
+<script>
+(function () {
+  var EDGE_BASE = "{{ .Site.Params.supabaseFunctionsUrl }}";
+  var EDGE_URL = EDGE_BASE + "/record-license-selection";
+  var selectedTier = null;
+  var selectedTierLabel = null;
+
+  // Save original base labels
+  document.querySelectorAll(".download-btn").forEach(function (btn) {
+    btn.dataset.baseLabel = btn.textContent.trim();
+  });
+
+  // License card selection
+  document.querySelectorAll(".license-card").forEach(function (card) {
+    card.addEventListener("click", function () {
+      selectedTier = card.dataset.tier;
+      selectedTierLabel = card.dataset.tierLabel;
+
+      document.querySelectorAll(".license-card").forEach(function (c) {
+        c.classList.remove("selected");
+        c.setAttribute("aria-checked", "false");
+      });
+      card.classList.add("selected");
+      card.setAttribute("aria-checked", "true");
+
+      document.querySelectorAll(".download-btn").forEach(function (btn) {
+        btn.removeAttribute("aria-disabled");
+        btn.dataset.licenseTier = selectedTier;
+      });
+
+      var ind = document.getElementById("license-selected-indicator");
+      if (ind) {
+        ind.textContent = "Your license: " + selectedTierLabel;
+        ind.style.display = "block";
+      }
+    });
+
+    // Keyboard accessibility
+    card.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        card.click();
+      }
+    });
+  });
+
+  // Download button click handler
+  document.querySelectorAll(".download-btn").forEach(function (btn) {
+    btn.addEventListener("click", function (e) {
+      e.preventDefault();
+
+      if (btn.getAttribute("aria-disabled") === "true") {
+        var gate = document.getElementById("license-gate");
+        if (gate) { gate.scrollIntoView({ behavior: "smooth" }); }
+        alert("Please select a license tier above before downloading.");
+        return;
+      }
+
+      var version = btn.dataset.version;
+      var tier = selectedTier;
+
+      if (!version || !tier) {
+        alert("Please select a license tier above before downloading.");
+        return;
+      }
+
+      btn.textContent = "Recording license...";
+      btn.setAttribute("aria-disabled", "true");
+
+      fetch(EDGE_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ license_tier: tier, version: version }),
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          btn.textContent = btn.dataset.baseLabel;
+          btn.removeAttribute("aria-disabled");
+          if (data.ok) {
+            window.location.href = data.download_url;
+          } else {
+            alert(
+              "License record failed: " +
+                (data.error || "unknown error") +
+                ". Please try again or contact Social@lianabanyan.com"
+            );
+          }
+        })
+        .catch(function (err) {
+          btn.textContent = btn.dataset.baseLabel;
+          btn.removeAttribute("aria-disabled");
+          alert(
+            "Network error recording license: " +
+              (err.message || "unknown") +
+              ". Please contact Social@lianabanyan.com"
+          );
+        });
+    });
+  });
+})();
+</script>
 {{- end }}
