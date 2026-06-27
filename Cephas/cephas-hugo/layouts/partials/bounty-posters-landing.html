@@ -1,0 +1,237 @@
+<style>
+.bp-card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  margin: 2rem 0;
+}
+@media (max-width: 768px) {
+  .bp-card-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.bp-card {
+  background: var(--color-surface, #1a1a1a);
+  color: var(--color-text, #f5f5f5);
+  border: 1px solid var(--color-accent, #c8a951);
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+.bp-audience-badge {
+  font-variant: small-caps;
+  font-size: 0.8rem;
+  color: var(--color-muted, #888);
+  margin-bottom: 0.5rem;
+  display: block;
+}
+.bp-card-title {
+  font-size: 1.3rem;
+  margin: 0.5rem 0;
+  color: var(--color-accent, #c8a951);
+}
+.bp-card-hook {
+  font-size: 0.95rem;
+  margin: 0.75rem 0;
+  line-height: 1.5;
+}
+.bp-card-reward {
+  font-size: 0.85rem;
+  opacity: 0.85;
+  margin: 0.5rem 0;
+  font-style: italic;
+}
+.bp-card-cta {
+  display: block;
+  margin-top: 1rem;
+  padding: 0.6rem 1.2rem;
+  background: var(--color-accent, #c8a951);
+  color: #111;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: bold;
+  text-align: center;
+}
+.bp-card-cta:hover {
+  opacity: 0.9;
+}
+.bp-sanders-disclaimer {
+  font-size: 0.85rem;
+  opacity: 0.75;
+  font-style: italic;
+  border-left: 2px solid var(--color-muted, #555);
+  padding-left: 1rem;
+  margin-top: 0.75rem;
+}
+.bp-empress-tagline {
+  font-size: 1.4rem;
+  text-align: center;
+  letter-spacing: 0.05em;
+  color: var(--color-accent, #c8a951);
+  margin-bottom: 1rem;
+}
+.bp-clarion {
+  border-left: 3px solid var(--color-accent, #c8a951);
+  padding-left: 1.5rem;
+  font-style: italic;
+  margin: 1.5rem 0;
+  line-height: 1.7;
+}
+.bp-hero {
+  max-width: 820px;
+  margin: 0 auto 3rem;
+  text-align: center;
+}
+.bp-hero-headline {
+  font-size: 2rem;
+  margin: 1rem 0;
+}
+.bp-clarion-attr {
+  text-align: right;
+  font-size: 0.85rem;
+  opacity: 0.7;
+  margin-top: 0.5rem;
+}
+.bp-chemistry {
+  margin-top: 1.5rem;
+  font-size: 1rem;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+.bp-one-of-us {
+  text-align: center;
+  margin: 3rem 0 2rem;
+  padding: 2rem;
+  border: 1px solid var(--color-accent, #c8a951);
+  border-radius: 8px;
+}
+.bp-one-of-us-headline {
+  font-size: 1.8rem;
+  color: var(--color-accent, #c8a951);
+  letter-spacing: 0.1em;
+}
+.bp-one-of-us-sub {
+  margin: 0.75rem 0;
+  font-size: 1rem;
+}
+.bp-one-of-us-cta {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+.bp-oar {
+  text-align: center;
+  margin: 2rem 0;
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--color-muted, #444);
+}
+.bp-oar-tagline {
+  font-size: 1.1rem;
+  font-style: italic;
+  margin-bottom: 0.75rem;
+}
+.bp-footer-links a {
+  color: var(--color-accent, #c8a951);
+  text-decoration: none;
+  margin: 0 0.25rem;
+}
+.bp-footer-links a:hover {
+  text-decoration: underline;
+}
+</style>
+
+<section class="bp-hero">
+  <p class="bp-empress-tagline">Name the Empress. Stop the Nothing. Be a Bastion, in a Time of Storms.</p>
+  <h1 class="bp-hero-headline">Six Open Calls. One Cooperative. Ground Floor. Now.</h1>
+  <p class="bp-clarion">
+    "All they really want is an honest chance to make something good and for their work to mean something.
+    Well, here it is. The ground floor of the future — join for $5. Use the code, play with it, try it out,
+    change stuff — then when you want to submit it back to be voted on it's a $250 fee for the pot that your
+    submission gets voted on and you get half the pot as — drawings are weekly, by category, so you could do
+    well in the immediate. More importantly, you can start a Project, hire a crew with marks, and whatever
+    patent material you make you get paid for from now on."
+    <br><br>
+    <strong>THIS IS THE CLARION CALL. THE BEACONS ARE LIT.</strong>
+  </p>
+  <p class="bp-clarion-attr">— Founder direct, BP096 close</p>
+  <p class="bp-chemistry">
+    You know those chemistry sets from the 50s through the late 80s that gave you REAL chemicals
+    and laboratory-grade experiments? Not chocolate shakes and vinegar-baking-soda volcanoes — the
+    REAL experiments. This is that. The raw, real source code that will change the future.
+    And you can decide what that future is.
+  </p>
+</section>
+
+<div class="bp-card-grid">
+
+  <article class="bp-card" id="empress">
+    <span class="bp-audience-badge">NAMERS · HISTORIANS · THINKERS</span>
+    <h2 class="bp-card-title">Name the Empress. Stop the Nothing.</h2>
+    <p class="bp-card-hook">One name. One country. One slot. The cooperative governance layer needs a constitutional name — and 60 people who give it that name get their names on a patent.</p>
+    <p class="bp-card-reward">Patent floater slot (Empress Campaign · 60 slots) · IP Ledger attribution · Founding Foundation status · Free entry</p>
+    <!-- FOUNDER FILL: confirm /empress/ live URL and cohort 1 launch date before dispatch -->
+    <a class="bp-card-cta" href="https://mnemosynec.org/empress/">Submit Your Name →</a>
+  </article>
+
+  <article class="bp-card" id="twelve-cities">
+    <span class="bp-audience-badge">ORGANIZERS · COMMUNITY BUILDERS</span>
+    <h2 class="bp-card-title">Grab a City. Build the Guild.</h2>
+    <p class="bp-card-hook">12 target cities. One founding PM per city. Bridge your gaming community to the cooperative substrate. First to anchor-community threshold claims the chapter.</p>
+    <p class="bp-card-reward">Marks (FOUNDER FILL: confirm tier) · IP Ledger attribution · Founding chapter lead role · Crow Feather status</p>
+    <!-- FOUNDER FILL: list 12 target cities, confirm competition format (race-to-threshold vs application), confirm Marks amount for PM role, confirm submission path -->
+    <a class="bp-card-cta" href="https://discord.gg/lianabanyan">Claim Your City →</a>
+  </article>
+
+  <article class="bp-card" id="captains-wheel">
+    <span class="bp-audience-badge">LEGAL · OPERATIONS · DOMAIN LEADS</span>
+    <h2 class="bp-card-title">Take the Captain's Wheel.</h2>
+    <p class="bp-card-hook">Specific captain seats are open on the cooperative's operational crew. Each seat carries Marks, IP Ledger attribution, and a direct role in building the cooperative's future.</p>
+    <p class="bp-card-reward">Marks (per seat · FOUNDER FILL) · IP Ledger attribution · Named seat in the cooperative record</p>
+    <!-- FOUNDER FILL: specific captain seat definitions required before this card goes live. Canon: generate_legal_captain_bounty_poster (BP094). Surface seat list to Founder before deploy. -->
+    <a class="bp-card-cta" href="mailto:Social@lianabanyan.com?subject=Captain%27s%20Wheel%20Interest">See Open Seats →</a>
+  </article>
+
+  <article class="bp-card" id="csia">
+    <span class="bp-audience-badge">BUILDERS · INVENTORS · RESEARCHERS</span>
+    <h2 class="bp-card-title">Join the CSIA Project. Ground Floor.</h2>
+    <p class="bp-card-hook">Build something we use. Your name in the IP Ledger. When it earns — you earn 20% of every dollar it licenses, per Cooperative Bylaws.</p>
+    <p class="bp-card-reward">20% inventor royalty (Bylaws-locked) · Patent floater slot (Puzzle · 75 slots) · IP Ledger attribution · Marks NANO/CORE/ULTRA · $250 submission fee (or $50 + 10h Stewards Guild)</p>
+    <a class="bp-card-cta" href="https://mnemosynec.org/csia-project/">Submit to CSIA →</a>
+    <p class="bp-sanders-disclaimer">
+      <em>The Sanders-Fork Tier 2 licensing structure (50% of measured AI substrate savings: 20% cooperative + 30% public sovereign fund) is a Liana Banyan cooperative proposal. It is not endorsed by Sen. Bernie Sanders or his office. The American AI Sovereign Wealth Fund Act is named introduced legislation (Sanders, 2026-06-23). The Tier 2 voluntary savings-sharing mechanism is a complementary — not competing — instrument designed to make cooperative licensing an attractive alternative to mandatory equity seizure.</em>
+    </p>
+  </article>
+
+  <article class="bp-card" id="build-site">
+    <span class="bp-audience-badge">DESIGNERS · FRONTEND DEVS</span>
+    <h2 class="bp-card-title">Build a Better Website than This.</h2>
+    <p class="bp-card-hook">Fork the repo. Redesign mnemosynec.org. If it wins the cooperative class vote, your design goes live — with your name in the footer permanently.</p>
+    <p class="bp-card-reward">ULTRA (10 Marks · patent floater · permanent footer credit) · CORE (1 Mark · IP Ledger) · NANO (0.05 Marks · IP Ledger) · WCAG AA required</p>
+    <!-- FOUNDER FILL: confirm canonical GitHub repo URL for mnemosynec.org content before dispatch -->
+    <a class="bp-card-cta" href="https://github.com/lianabanyan/mnemosynec-site">Fork the Repo →</a>
+  </article>
+
+  <article class="bp-card" id="curator">
+    <span class="bp-audience-badge">COMMUNITY MEMBERS · PATRONS</span>
+    <h2 class="bp-card-title">Fund a Curator Spot.</h2>
+    <p class="bp-card-hook">Every 10 reservations funds 1 paid curator spot. Two-layer governance: open member vote plus paid curator panel. Your reservation creates the infrastructure for real cooperative judgment.</p>
+    <p class="bp-card-reward">Your reservation = direct cooperative infrastructure investment · Curator spots are paid roles · IP Ledger acknowledgment</p>
+    <!-- Curator-Spot mechanic: canon a5c902908e30a333 · two-layer governance · one paid curator per 10 reservations · compose with Empress Campaign reservations -->
+    <a class="bp-card-cta" href="https://mnemosynec.org/empress/">Reserve Your Spot →</a>
+  </article>
+
+</div>
+
+<section class="bp-one-of-us">
+  <h2 class="bp-one-of-us-headline">ONE of US = ALL of US</h2>
+  <p class="bp-one-of-us-sub">The More of US, the Faster · Cheaper · BETTER. All of it. 📜 <a href="https://founderdenken.substack.com">Bicycle Economics</a></p>
+  <p class="bp-one-of-us-cta">Be part of the Proof.</p>
+</section>
+
+<section class="bp-oar">
+  <p class="bp-oar-tagline">Grab an Oar. We're rowing as we Build the Sails.</p>
+  <p class="bp-footer-links">
+    <a href="https://mnemosynec.org">mnemosynec.org</a> ·
+    <a href="https://mnemosynec.org/download/">Download MnemosyneC</a> ·
+    <a href="https://mnemosynec.org/proofs">Proofs</a> ·
+    <a href="mailto:Social@lianabanyan.com">Contact</a>
+  </p>
+</section>
