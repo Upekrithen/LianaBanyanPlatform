@@ -141,6 +141,21 @@
           "source": "/live/SubstrateAwakens/register/",
           "destination": "/live/substrateawakens/register/",
           "type": 301
+        },
+        {
+          "source": "/proofs",
+          "destination": "https://mnemosyne-staging-lianabanyan.web.app/mnemosynec/proofs",
+          "type": 301
+        },
+        {
+          "source": "/proofs/",
+          "destination": "https://mnemosyne-staging-lianabanyan.web.app/mnemosynec/proofs",
+          "type": 301
+        },
+        {
+          "source": "/proofs/**",
+          "destination": "https://mnemosyne-staging-lianabanyan.web.app/mnemosynec/proofs",
+          "type": 301
         }
       ]
     },
