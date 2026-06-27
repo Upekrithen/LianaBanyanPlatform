@@ -19,21 +19,40 @@ function getDownloadUrl(version: string): { url: string; bare: string } {
   };
 }
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "https://mnemosynec.org",
+// Dynamic CORS origin allowlist — regex-validated, echoed back (BP096 CORS fix)
+// Allows: mnemosynec.org, mnemosynec.ai, localhost:1313,
+//         Firebase preview channel URLs (mnemosyne-lianabanyan--*.web.app)
+const ALLOWED_ORIGIN_PATTERNS: RegExp[] = [
+  /^https:\/\/mnemosynec\.(org|ai)$/,
+  /^http:\/\/localhost:1313$/,
+  /^https:\/\/mnemosyne-lianabanyan--[a-z0-9-]+\.web\.app$/,
+];
+
+function resolveAllowOrigin(origin: string): string {
+  if (ALLOWED_ORIGIN_PATTERNS.some((re) => re.test(origin))) return origin;
+  return "https://mnemosynec.org"; // safe fallback
+}
+
+const corsBaseHeaders = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Authorization, apikey",
 };
 
+function corsHeaders(origin: string): Record<string, string> {
+  return { ...corsBaseHeaders, "Access-Control-Allow-Origin": resolveAllowOrigin(origin) };
+}
+
 serve(async (req: Request) => {
+  const origin = req.headers.get("origin") ?? "";
+
   if (req.method === "OPTIONS") {
-    return new Response(null, { status: 204, headers: corsHeaders });
+    return new Response(null, { status: 204, headers: corsHeaders(origin) });
   }
 
   if (req.method !== "POST") {
     return new Response(
       JSON.stringify({ ok: false, error: "Method not allowed" }),
-      { status: 405, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      { status: 405, headers: { ...corsHeaders(origin), "Content-Type": "application/json" } }
     );
   }
 
@@ -43,7 +62,7 @@ serve(async (req: Request) => {
   } catch {
     return new Response(
       JSON.stringify({ ok: false, error: "Invalid JSON body" }),
-      { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      { status: 400, headers: { ...corsHeaders(origin), "Content-Type": "application/json" } }
     );
   }
 
@@ -52,14 +71,14 @@ serve(async (req: Request) => {
   if (!license_tier || !VALID_TIERS.includes(license_tier)) {
     return new Response(
       JSON.stringify({ ok: false, error: `license_tier must be one of: ${VALID_TIERS.join(", ")}` }),
-      { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      { status: 400, headers: { ...corsHeaders(origin), "Content-Type": "application/json" } }
     );
   }
 
   if (!version) {
     return new Response(
       JSON.stringify({ ok: false, error: "version is required" }),
-      { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      { status: 400, headers: { ...corsHeaders(origin), "Content-Type": "application/json" } }
     );
   }
 
@@ -86,12 +105,12 @@ serve(async (req: Request) => {
     // Non-fatal -- still return the download URL so user is not blocked
     return new Response(
       JSON.stringify({ ok: true, download_url, sha256, warning: "License record failed to persist -- " + error.message }),
-      { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      { status: 200, headers: { ...corsHeaders(origin), "Content-Type": "application/json" } }
     );
   }
 
   return new Response(
     JSON.stringify({ ok: true, download_url, sha256 }),
-    { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    { status: 200, headers: { ...corsHeaders(origin), "Content-Type": "application/json" } }
   );
 });
