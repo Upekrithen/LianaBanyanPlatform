@@ -1,8 +1,23 @@
 <style>
+/* ── Google Fonts: Western serif (IM Fell English for body; load only on this page) ── */
+@import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&display=swap');
+
+/* ── Wanted Poster CSS Variables ── */
+:root {
+  --wp-parchment: #f5ead5;
+  --wp-parchment-dark: #e8d5b0;
+  --wp-brown: #4a2c1a;
+  --wp-red: #8b2500;
+  --wp-black: #1a1d21;
+  --wp-gold: #8b6914;
+  --wp-muted: #7a5c3a;
+}
+
+/* ── Card grid ── */
 .bp-card-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
+  gap: 2.5rem;
   margin: 2rem 0;
 }
 @media (max-width: 768px) {
@@ -10,80 +25,307 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ── Flip card outer shell ── */
 .bp-card {
-  background: var(--color-surface, #1a1a1a);
-  color: var(--color-text, #f5f5f5);
-  border: 1px solid var(--color-accent, #c8a951);
-  border-radius: 8px;
-  padding: 1.5rem;
+  aspect-ratio: 2 / 3;
+  min-height: 420px;
+  perspective: 1000px;
+  cursor: pointer;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
 }
-.bp-audience-badge {
-  font-variant: small-caps;
-  font-size: 0.8rem;
-  color: var(--color-muted, #888);
-  margin-bottom: 0.5rem;
-  display: block;
+
+/* ── Inner wrapper — this rotates ── */
+.bp-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.bp-card-title {
-  font-size: 1.3rem;
-  margin: 0.5rem 0;
-  color: var(--color-accent, #c8a951);
+
+/* Flip state */
+.bp-card.is-flipped .bp-card-inner {
+  transform: rotateY(180deg);
 }
-.bp-card-hook {
-  font-size: 0.95rem;
-  margin: 0.75rem 0;
-  line-height: 1.5;
-}
-.bp-card-reward {
-  font-size: 0.85rem;
-  opacity: 0.85;
-  margin: 0.5rem 0;
-  font-style: italic;
-}
-.bp-card-cta {
-  display: block;
-  margin-top: 1rem;
-  padding: 0.6rem 1.2rem;
-  background: var(--color-accent, #c8a951);
-  color: #111;
-  text-decoration: none;
+
+/* ── Shared face styles ── */
+.bp-card-front,
+.bp-card-back {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
   border-radius: 4px;
-  font-weight: bold;
+  overflow: hidden;
+}
+
+/* ────────────────────────────────
+   FRONT — Wanted Poster
+   ──────────────────────────────── */
+.bp-card-front {
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(74, 44, 26, 0.03) 2px,
+      rgba(74, 44, 26, 0.03) 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 3px,
+      rgba(74, 44, 26, 0.02) 3px,
+      rgba(74, 44, 26, 0.02) 6px
+    ),
+    radial-gradient(ellipse at 20% 20%, #ede0c0, transparent 60%),
+    radial-gradient(ellipse at 80% 80%, #e0cfa0, transparent 60%),
+    #f5ead5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0;
+  box-shadow:
+    inset 0 0 0 6px var(--wp-brown),
+    inset 0 0 0 10px var(--wp-parchment),
+    inset 0 0 0 14px var(--wp-brown),
+    0 4px 24px rgba(74, 44, 26, 0.35);
+}
+
+/* Inner content wrapper with inset margin */
+.bp-front-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 1.6rem 1.4rem 1.2rem;
+  box-sizing: border-box;
+}
+
+/* "WANTED" header */
+.bp-front-header {
+  font-family: 'IM Fell English SC', 'Georgia', serif;
+  font-size: 2.4rem;
+  font-weight: 900;
+  color: var(--wp-red);
+  letter-spacing: 0.18em;
   text-align: center;
+  line-height: 1;
+  margin: 0 0 0.4rem;
+  text-shadow: 1px 1px 0 rgba(0,0,0,0.15);
 }
-.bp-card-cta:hover {
-  opacity: 0.9;
+
+/* Ornamental divider line */
+.bp-front-divider {
+  width: 80%;
+  height: 3px;
+  background: linear-gradient(to right, transparent, var(--wp-brown), transparent);
+  margin: 0.4rem auto;
+  border: none;
 }
-.bp-sanders-disclaimer {
-  font-size: 0.85rem;
-  opacity: 0.75;
+
+/* Poster title (the actual bounty name) */
+.bp-front-title {
+  font-family: 'IM Fell English', 'Georgia', serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--wp-black);
+  text-align: center;
+  line-height: 1.3;
+  margin: 0.5rem 0;
   font-style: italic;
-  border-left: 2px solid var(--color-muted, #555);
-  padding-left: 1rem;
-  margin-top: 0.75rem;
 }
-.bp-empress-tagline {
+
+/* Audience badge / "By order of" style subtitle */
+.bp-front-audience {
+  font-family: 'IM Fell English SC', 'Georgia', serif;
+  font-size: 0.65rem;
+  color: var(--wp-muted);
+  text-align: center;
+  letter-spacing: 0.12em;
+  margin: 0.3rem 0;
+}
+
+/* Star ornament */
+.bp-front-ornament {
   font-size: 1.4rem;
+  color: var(--wp-brown);
+  margin: 0.4rem 0;
+  line-height: 1;
+}
+
+/* REWARD callout */
+.bp-front-reward-label {
+  font-family: 'IM Fell English SC', 'Georgia', serif;
+  font-size: 1rem;
+  color: var(--wp-red);
+  letter-spacing: 0.15em;
+  font-weight: 900;
+  margin: 0.3rem 0 0.2rem;
+}
+.bp-front-reward {
+  font-family: 'IM Fell English', 'Georgia', serif;
+  font-size: 0.82rem;
+  color: var(--wp-brown);
   text-align: center;
-  letter-spacing: 0.05em;
-  color: var(--color-accent, #c8a951);
-  margin-bottom: 1rem;
-}
-.bp-clarion {
-  border-left: 3px solid var(--color-accent, #c8a951);
-  padding-left: 1.5rem;
+  line-height: 1.4;
+  margin: 0 0 0.5rem;
   font-style: italic;
-  margin: 1.5rem 0;
-  line-height: 1.7;
 }
+
+/* "By Order Of" footer */
+.bp-front-footer {
+  margin-top: auto;
+  font-family: 'IM Fell English SC', 'Georgia', serif;
+  font-size: 0.6rem;
+  color: var(--wp-muted);
+  letter-spacing: 0.1em;
+  text-align: center;
+  border-top: 1px solid var(--wp-brown);
+  padding-top: 0.5rem;
+  width: 80%;
+}
+
+/* Click hint */
+.bp-flip-hint {
+  font-size: 0.65rem;
+  color: var(--wp-muted);
+  text-align: center;
+  margin-top: 0.3rem;
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+  opacity: 0.7;
+}
+
+/* ────────────────────────────────
+   BACK — Details panel
+   ──────────────────────────────── */
+.bp-card-back {
+  background: var(--wp-parchment);
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  box-shadow:
+    inset 0 0 0 4px var(--wp-brown),
+    inset 0 0 0 7px var(--wp-parchment),
+    inset 0 0 0 10px var(--wp-brown),
+    0 4px 24px rgba(74, 44, 26, 0.35);
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+.bp-back-title {
+  font-family: 'IM Fell English', 'Georgia', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--wp-black);
+  margin: 0 0 0.8rem;
+  border-bottom: 2px solid var(--wp-brown);
+  padding-bottom: 0.5rem;
+  font-style: italic;
+}
+.bp-back-details {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+.bp-back-details li {
+  font-family: 'IM Fell English', 'Georgia', serif;
+  font-size: 0.82rem;
+  color: var(--wp-brown);
+  line-height: 1.5;
+  padding-left: 1rem;
+  position: relative;
+}
+.bp-back-details li::before {
+  content: "★";
+  position: absolute;
+  left: 0;
+  color: var(--wp-red);
+  font-size: 0.65rem;
+  top: 0.15em;
+}
+.bp-back-cta {
+  display: block;
+  text-align: center;
+  background: var(--wp-red);
+  color: #fff !important;
+  font-family: 'IM Fell English SC', 'Georgia', serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  padding: 0.55rem 1rem;
+  border-radius: 2px;
+  text-decoration: none !important;
+  margin-top: auto;
+  box-shadow: 0 2px 8px rgba(139, 37, 0, 0.3);
+  transition: background 0.15s;
+}
+.bp-back-cta:hover {
+  background: #6b1c00;
+  color: #fff !important;
+}
+.bp-back-flip-hint {
+  font-size: 0.6rem;
+  text-align: center;
+  color: var(--wp-muted);
+  margin-top: 0.5rem;
+  font-family: 'IM Fell English', serif;
+  font-style: italic;
+}
+
+/* Sanders disclaimer */
+.bp-sanders-disclaimer {
+  font-size: 0.78rem;
+  color: var(--wp-muted);
+  font-style: italic;
+  border-left: 2px solid var(--wp-brown);
+  padding-left: 0.8rem;
+  margin-top: 0.75rem;
+  line-height: 1.5;
+  font-family: 'IM Fell English', serif;
+}
+
+/* ── Hero section ── */
 .bp-hero {
   max-width: 820px;
   margin: 0 auto 3rem;
   text-align: center;
 }
+.bp-empress-tagline {
+  font-family: 'IM Fell English SC', 'Georgia', serif;
+  font-size: 1.3rem;
+  text-align: center;
+  letter-spacing: 0.06em;
+  color: var(--wp-red);
+  margin-bottom: 1rem;
+}
 .bp-hero-headline {
+  font-family: 'IM Fell English', 'Georgia', serif;
   font-size: 2rem;
   margin: 1rem 0;
+  color: var(--wp-black);
+  font-style: italic;
+}
+.bp-clarion {
+  border-left: 3px solid var(--wp-brown);
+  padding-left: 1.5rem;
+  font-style: italic;
+  margin: 1.5rem 0;
+  line-height: 1.7;
+  font-family: 'IM Fell English', serif;
+  color: var(--wp-brown);
+  text-align: left;
 }
 .bp-clarion-attr {
   text-align: right;
@@ -95,47 +337,82 @@
   margin-top: 1.5rem;
   font-size: 1rem;
   line-height: 1.6;
-  opacity: 0.9;
 }
+
+/* ── One-of-Us block ── */
 .bp-one-of-us {
   text-align: center;
   margin: 3rem 0 2rem;
   padding: 2rem;
-  border: 1px solid var(--color-accent, #c8a951);
-  border-radius: 8px;
+  border: 2px solid var(--wp-brown);
+  border-radius: 4px;
+  background: var(--wp-parchment);
 }
 .bp-one-of-us-headline {
+  font-family: 'IM Fell English SC', 'Georgia', serif;
   font-size: 1.8rem;
-  color: var(--color-accent, #c8a951);
+  color: var(--wp-red);
   letter-spacing: 0.1em;
 }
 .bp-one-of-us-sub {
   margin: 0.75rem 0;
   font-size: 1rem;
+  font-family: 'IM Fell English', serif;
+}
+.bp-one-of-us-sub a {
+  color: var(--wp-gold) !important;
 }
 .bp-one-of-us-cta {
   font-weight: bold;
   font-size: 1.1rem;
+  font-family: 'IM Fell English SC', serif;
+  color: var(--wp-brown);
 }
+
+/* ── Oar footer ── */
 .bp-oar {
   text-align: center;
   margin: 2rem 0;
   padding: 1.5rem 0;
-  border-top: 1px solid var(--color-muted, #444);
+  border-top: 2px solid var(--wp-brown);
 }
 .bp-oar-tagline {
+  font-family: 'IM Fell English', serif;
   font-size: 1.1rem;
   font-style: italic;
   margin-bottom: 0.75rem;
+  color: var(--wp-brown);
 }
 .bp-footer-links a {
-  color: var(--color-accent, #c8a951);
+  color: var(--wp-gold) !important;
   text-decoration: none;
   margin: 0 0.25rem;
 }
 .bp-footer-links a:hover {
   text-decoration: underline;
 }
+
+/* ── Dark mode overrides for hero/oar/one-of-us text readability ── */
+:root[data-theme="dark"] .bp-hero-headline,
+:root[data-theme="dark"] .bp-clarion {
+  color: #e8d5b0;
+}
+:root[data-theme="dark"] .bp-one-of-us {
+  background: rgba(74, 44, 26, 0.2);
+  border-color: #c8a951;
+}
+:root[data-theme="dark"] .bp-one-of-us-headline {
+  color: #c8a951;
+}
+:root[data-theme="dark"] .bp-empress-tagline {
+  color: #c8a951;
+}
+:root[data-theme="dark"] .bp-oar-tagline {
+  color: #e8d5b0;
+}
+
+/* ── JS flip toggle ── */
+/* Handled by inline <script> at bottom of partial */
 </style>
 
 <section class="bp-hero">
@@ -162,60 +439,187 @@
 
 <div class="bp-card-grid">
 
-  <article class="bp-card" id="empress">
-    <span class="bp-audience-badge">NAMERS · HISTORIANS · THINKERS</span>
-    <h2 class="bp-card-title">Name the Empress. Stop the Nothing.</h2>
-    <p class="bp-card-hook">One name. One country. One slot. The cooperative governance layer needs a constitutional name — and 60 people who give it that name get their names on a patent.</p>
-    <p class="bp-card-reward">Patent floater slot (Empress Campaign · 60 slots) · IP Ledger attribution · Founding Foundation status · Free entry</p>
-    <!-- FOUNDER FILL: confirm /empress/ live URL and cohort 1 launch date before dispatch -->
-    <a class="bp-card-cta" href="https://mnemosynec.org/empress/">Submit Your Name →</a>
+  <article class="bp-card" id="empress" role="button" tabindex="0" aria-label="Name the Empress — click to see details">
+    <div class="bp-card-inner">
+      <div class="bp-card-front" aria-hidden="false">
+        <div class="bp-front-inner">
+          <div class="bp-front-header">WANTED</div>
+          <hr class="bp-front-divider">
+          <p class="bp-front-audience">NAMERS · HISTORIANS · THINKERS</p>
+          <h2 class="bp-front-title">Name the Empress. Stop the Nothing.</h2>
+          <div class="bp-front-ornament">&#9733; &#9733; &#9733;</div>
+          <div class="bp-front-reward-label">REWARD</div>
+          <p class="bp-front-reward">Patent floater slot · IP Ledger attribution · Founding Foundation status · Free entry</p>
+          <div class="bp-front-footer">BY ORDER OF THE LIANA BANYAN COOPERATIVE</div>
+          <p class="bp-flip-hint">&#8635; Click for details</p>
+        </div>
+      </div>
+      <div class="bp-card-back" aria-hidden="true">
+        <h3 class="bp-back-title">Name the Empress. Stop the Nothing.</h3>
+        <ul class="bp-back-details">
+          <li>One name · one country · one slot — the cooperative governance layer needs a constitutional name</li>
+          <li>60 people who give it that name get their names on a patent (Empress Campaign · 60 slots)</li>
+          <li>Open entry · Free to participate</li>
+          <li>Reward: Patent floater slot · IP Ledger attribution · Founding Foundation status</li>
+          <!-- FOUNDER FILL: confirm /empress/ live URL and cohort 1 launch date before dispatch -->
+        </ul>
+        <a class="bp-back-cta" href="https://mnemosynec.org/empress/">Submit Your Name →</a>
+        <p class="bp-back-flip-hint">&#8634; Click to flip back</p>
+      </div>
+    </div>
   </article>
 
-  <article class="bp-card" id="twelve-cities">
-    <span class="bp-audience-badge">ORGANIZERS · COMMUNITY BUILDERS</span>
-    <h2 class="bp-card-title">Grab a City. Build the Guild.</h2>
-    <p class="bp-card-hook">12 target cities. One founding PM per city. Bridge your gaming community to the cooperative substrate. First to anchor-community threshold claims the chapter.</p>
-    <p class="bp-card-reward">Marks (FOUNDER FILL: confirm tier) · IP Ledger attribution · Founding chapter lead role · Crow Feather status</p>
-    <!-- FOUNDER FILL: list 12 target cities, confirm competition format (race-to-threshold vs application), confirm Marks amount for PM role, confirm submission path -->
-    <a class="bp-card-cta" href="https://discord.gg/lianabanyan">Claim Your City →</a>
+  <article class="bp-card" id="twelve-cities" role="button" tabindex="0" aria-label="Grab a City — click to see details">
+    <div class="bp-card-inner">
+      <div class="bp-card-front" aria-hidden="false">
+        <div class="bp-front-inner">
+          <div class="bp-front-header">WANTED</div>
+          <hr class="bp-front-divider">
+          <p class="bp-front-audience">ORGANIZERS · COMMUNITY BUILDERS</p>
+          <h2 class="bp-front-title">Grab a City. Build the Guild.</h2>
+          <div class="bp-front-ornament">&#9733; &#9733; &#9733;</div>
+          <div class="bp-front-reward-label">REWARD</div>
+          <p class="bp-front-reward">Marks · IP Ledger attribution · Founding chapter lead role · Crow Feather status</p>
+          <div class="bp-front-footer">BY ORDER OF THE LIANA BANYAN COOPERATIVE</div>
+          <p class="bp-flip-hint">&#8635; Click for details</p>
+        </div>
+      </div>
+      <div class="bp-card-back" aria-hidden="true">
+        <h3 class="bp-back-title">Grab a City. Build the Guild.</h3>
+        <ul class="bp-back-details">
+          <li>12 target cities · one founding PM per city</li>
+          <li>Bridge your gaming community to the cooperative substrate</li>
+          <li>First to anchor-community threshold claims the chapter</li>
+          <li>Reward: Marks (FOUNDER FILL: confirm tier) · IP Ledger · Founding chapter lead · Crow Feather status</li>
+          <!-- FOUNDER FILL: list 12 target cities, confirm competition format (race-to-threshold vs application), confirm Marks amount for PM role, confirm submission path -->
+        </ul>
+        <a class="bp-back-cta" href="https://discord.gg/lianabanyan">Claim Your City →</a>
+        <p class="bp-back-flip-hint">&#8634; Click to flip back</p>
+      </div>
+    </div>
   </article>
 
-  <article class="bp-card" id="captains-wheel">
-    <span class="bp-audience-badge">LEGAL · OPERATIONS · DOMAIN LEADS</span>
-    <h2 class="bp-card-title">Take the Captain's Wheel.</h2>
-    <p class="bp-card-hook">Specific captain seats are open on the cooperative's operational crew. Each seat carries Marks, IP Ledger attribution, and a direct role in building the cooperative's future.</p>
-    <p class="bp-card-reward">Marks (per seat · FOUNDER FILL) · IP Ledger attribution · Named seat in the cooperative record</p>
-    <!-- FOUNDER FILL: specific captain seat definitions required before this card goes live. Canon: generate_legal_captain_bounty_poster (BP094). Surface seat list to Founder before deploy. -->
-    <a class="bp-card-cta" href="mailto:Social@lianabanyan.com?subject=Captain%27s%20Wheel%20Interest">See Open Seats →</a>
+  <article class="bp-card" id="captains-wheel" role="button" tabindex="0" aria-label="Take the Captain's Wheel — click to see details">
+    <div class="bp-card-inner">
+      <div class="bp-card-front" aria-hidden="false">
+        <div class="bp-front-inner">
+          <div class="bp-front-header">WANTED</div>
+          <hr class="bp-front-divider">
+          <p class="bp-front-audience">LEGAL · OPERATIONS · DOMAIN LEADS</p>
+          <h2 class="bp-front-title">Take the Captain's Wheel.</h2>
+          <div class="bp-front-ornament">&#9733; &#9733; &#9733;</div>
+          <div class="bp-front-reward-label">REWARD</div>
+          <p class="bp-front-reward">Marks per seat · IP Ledger attribution · Named seat in cooperative record</p>
+          <div class="bp-front-footer">BY ORDER OF THE LIANA BANYAN COOPERATIVE</div>
+          <p class="bp-flip-hint">&#8635; Click for details</p>
+        </div>
+      </div>
+      <div class="bp-card-back" aria-hidden="true">
+        <h3 class="bp-back-title">Take the Captain's Wheel.</h3>
+        <ul class="bp-back-details">
+          <li>Specific captain seats open on the cooperative's operational crew</li>
+          <li>For: legal · operations · domain leads</li>
+          <li>Each seat carries Marks, IP Ledger attribution, and a direct role in building the cooperative's future</li>
+          <li>Reward: Marks (per seat · FOUNDER FILL) · IP Ledger · Named seat in cooperative record</li>
+          <!-- FOUNDER FILL: specific captain seat definitions required before this card goes live. Canon: generate_legal_captain_bounty_poster (BP094). Surface seat list to Founder before deploy. -->
+        </ul>
+        <a class="bp-back-cta" href="mailto:Social@lianabanyan.com?subject=Captain%27s%20Wheel%20Interest">See Open Seats →</a>
+        <p class="bp-back-flip-hint">&#8634; Click to flip back</p>
+      </div>
+    </div>
   </article>
 
-  <article class="bp-card" id="csia">
-    <span class="bp-audience-badge">BUILDERS · INVENTORS · RESEARCHERS</span>
-    <h2 class="bp-card-title">Join the CSIA Project. Ground Floor.</h2>
-    <p class="bp-card-hook">Build something we use. Your name in the IP Ledger. When it earns — you earn 20% of every dollar it licenses, per Cooperative Bylaws.</p>
-    <p class="bp-card-reward">20% inventor royalty (Bylaws-locked) · Patent floater slot (Puzzle · 75 slots) · IP Ledger attribution · Marks NANO/CORE/ULTRA · $250 submission fee (or $50 + 10h Stewards Guild)</p>
-    <a class="bp-card-cta" href="https://mnemosynec.org/csia-project/">Submit to CSIA →</a>
-    <p class="bp-sanders-disclaimer">
-      <em>The Sanders-Fork Tier 2 licensing structure (50% of measured AI substrate savings: 20% cooperative + 30% public sovereign fund) is a Liana Banyan cooperative proposal. It is not endorsed by Sen. Bernie Sanders or his office. The American AI Sovereign Wealth Fund Act is named introduced legislation (Sanders, 2026-06-23). The Tier 2 voluntary savings-sharing mechanism is a complementary — not competing — instrument designed to make cooperative licensing an attractive alternative to mandatory equity seizure.</em>
-    </p>
+  <article class="bp-card" id="csia" role="button" tabindex="0" aria-label="Join the CSIA Project — click to see details">
+    <div class="bp-card-inner">
+      <div class="bp-card-front" aria-hidden="false">
+        <div class="bp-front-inner">
+          <div class="bp-front-header">WANTED</div>
+          <hr class="bp-front-divider">
+          <p class="bp-front-audience">BUILDERS · INVENTORS · RESEARCHERS</p>
+          <h2 class="bp-front-title">Join the CSIA Project. Ground Floor.</h2>
+          <div class="bp-front-ornament">&#9733; &#9733; &#9733;</div>
+          <div class="bp-front-reward-label">REWARD</div>
+          <p class="bp-front-reward">20% inventor royalty (Bylaws-locked) · Patent floater slot · Marks NANO/CORE/ULTRA</p>
+          <div class="bp-front-footer">BY ORDER OF THE LIANA BANYAN COOPERATIVE</div>
+          <p class="bp-flip-hint">&#8635; Click for details</p>
+        </div>
+      </div>
+      <div class="bp-card-back" aria-hidden="true">
+        <h3 class="bp-back-title">Join the CSIA Project. Ground Floor.</h3>
+        <ul class="bp-back-details">
+          <li>Build something the cooperative uses · Your name in the IP Ledger · When it earns — you earn</li>
+          <li>Submission: $250 fee (or $50 + 10h Stewards Guild)</li>
+          <li>20% inventor royalty — Bylaws-locked · Patent floater slot (Puzzle · 75 slots)</li>
+          <li>Marks: NANO (0.05M) · CORE (1M) · ULTRA (10M)</li>
+          <li>IP Ledger attribution · Name in cooperative record permanently</li>
+        </ul>
+        <a class="bp-back-cta" href="https://mnemosynec.org/csia-project/">Submit to CSIA →</a>
+        <p class="bp-back-flip-hint">&#8634; Click to flip back</p>
+      </div>
+    </div>
+  </article>
+  <p class="bp-sanders-disclaimer">
+    <em>The Sanders-Fork Tier 2 licensing structure (50% of measured AI substrate savings: 20% cooperative + 30% public sovereign fund) is a Liana Banyan cooperative proposal. It is not endorsed by Sen. Bernie Sanders or his office. The American AI Sovereign Wealth Fund Act is named introduced legislation (Sanders, 2026-06-23). The Tier 2 voluntary savings-sharing mechanism is a complementary — not competing — instrument designed to make cooperative licensing an attractive alternative to mandatory equity seizure.</em>
+  </p>
+
+  <article class="bp-card" id="build-site" role="button" tabindex="0" aria-label="Build a Better Website — click to see details">
+    <div class="bp-card-inner">
+      <div class="bp-card-front" aria-hidden="false">
+        <div class="bp-front-inner">
+          <div class="bp-front-header">WANTED</div>
+          <hr class="bp-front-divider">
+          <p class="bp-front-audience">DESIGNERS · FRONTEND DEVS</p>
+          <h2 class="bp-front-title">Build a Better Website than This.</h2>
+          <div class="bp-front-ornament">&#9733; &#9733; &#9733;</div>
+          <div class="bp-front-reward-label">REWARD</div>
+          <p class="bp-front-reward">ULTRA: 10 Marks · patent floater · permanent footer credit · WCAG AA required</p>
+          <div class="bp-front-footer">BY ORDER OF THE LIANA BANYAN COOPERATIVE</div>
+          <p class="bp-flip-hint">&#8635; Click for details</p>
+        </div>
+      </div>
+      <div class="bp-card-back" aria-hidden="true">
+        <h3 class="bp-back-title">Build a Better Website than This.</h3>
+        <ul class="bp-back-details">
+          <li>Fork the repo · Redesign mnemosynec.org · Submit your build</li>
+          <li>If it wins the cooperative class vote, your design goes live</li>
+          <li>ULTRA win: 10 Marks · patent floater · permanent footer credit</li>
+          <li>CORE: 1 Mark · IP Ledger · NANO: 0.05 Marks · IP Ledger</li>
+          <!-- FOUNDER FILL: confirm canonical GitHub repo URL for mnemosynec.org content before dispatch -->
+        </ul>
+        <a class="bp-back-cta" href="https://github.com/lianabanyan/mnemosynec-site">Fork the Repo →</a>
+        <p class="bp-back-flip-hint">&#8634; Click to flip back</p>
+      </div>
+    </div>
   </article>
 
-  <article class="bp-card" id="build-site">
-    <span class="bp-audience-badge">DESIGNERS · FRONTEND DEVS</span>
-    <h2 class="bp-card-title">Build a Better Website than This.</h2>
-    <p class="bp-card-hook">Fork the repo. Redesign mnemosynec.org. If it wins the cooperative class vote, your design goes live — with your name in the footer permanently.</p>
-    <p class="bp-card-reward">ULTRA (10 Marks · patent floater · permanent footer credit) · CORE (1 Mark · IP Ledger) · NANO (0.05 Marks · IP Ledger) · WCAG AA required</p>
-    <!-- FOUNDER FILL: confirm canonical GitHub repo URL for mnemosynec.org content before dispatch -->
-    <a class="bp-card-cta" href="https://github.com/lianabanyan/mnemosynec-site">Fork the Repo →</a>
-  </article>
-
-  <article class="bp-card" id="curator">
-    <span class="bp-audience-badge">COMMUNITY MEMBERS · PATRONS</span>
-    <h2 class="bp-card-title">Fund a Curator Spot.</h2>
-    <p class="bp-card-hook">Every 10 reservations funds 1 paid curator spot. Two-layer governance: open member vote plus paid curator panel. Your reservation creates the infrastructure for real cooperative judgment.</p>
-    <p class="bp-card-reward">Your reservation = direct cooperative infrastructure investment · Curator spots are paid roles · IP Ledger acknowledgment</p>
-    <!-- Curator-Spot mechanic: canon a5c902908e30a333 · two-layer governance · one paid curator per 10 reservations · compose with Empress Campaign reservations -->
-    <a class="bp-card-cta" href="https://mnemosynec.org/empress/">Reserve Your Spot →</a>
+  <article class="bp-card" id="curator" role="button" tabindex="0" aria-label="Fund a Curator Spot — click to see details">
+    <div class="bp-card-inner">
+      <div class="bp-card-front" aria-hidden="false">
+        <div class="bp-front-inner">
+          <div class="bp-front-header">WANTED</div>
+          <hr class="bp-front-divider">
+          <p class="bp-front-audience">COMMUNITY MEMBERS · PATRONS</p>
+          <h2 class="bp-front-title">Fund a Curator Spot.</h2>
+          <div class="bp-front-ornament">&#9733; &#9733; &#9733;</div>
+          <div class="bp-front-reward-label">REWARD</div>
+          <p class="bp-front-reward">Direct cooperative infrastructure investment · IP Ledger acknowledgment · Curator spots are paid roles</p>
+          <div class="bp-front-footer">BY ORDER OF THE LIANA BANYAN COOPERATIVE</div>
+          <p class="bp-flip-hint">&#8635; Click for details</p>
+        </div>
+      </div>
+      <div class="bp-card-back" aria-hidden="true">
+        <h3 class="bp-back-title">Fund a Curator Spot.</h3>
+        <ul class="bp-back-details">
+          <li>Every 10 reservations funds 1 paid curator spot</li>
+          <li>Two-layer governance: open member vote + paid curator panel</li>
+          <li>Open to any member · your reservation creates cooperative infrastructure</li>
+          <li>Curator spots are paid roles · IP Ledger acknowledgment</li>
+          <!-- Curator-Spot mechanic: canon a5c902908e30a333 · two-layer governance · one paid curator per 10 reservations · compose with Empress Campaign reservations -->
+        </ul>
+        <a class="bp-back-cta" href="https://mnemosynec.org/empress/">Reserve Your Spot →</a>
+        <p class="bp-back-flip-hint">&#8634; Click to flip back</p>
+      </div>
+    </div>
   </article>
 
 </div>
@@ -235,3 +639,24 @@
     <a href="mailto:Social@lianabanyan.com">Contact</a>
   </p>
 </section>
+
+<script>
+(function() {
+  document.querySelectorAll('.bp-card').forEach(function(card) {
+    card.addEventListener('click', function() {
+      this.classList.toggle('is-flipped');
+      var front = this.querySelector('.bp-card-front');
+      var back = this.querySelector('.bp-card-back');
+      var flipped = this.classList.contains('is-flipped');
+      if (front) front.setAttribute('aria-hidden', flipped ? 'true' : 'false');
+      if (back) back.setAttribute('aria-hidden', flipped ? 'false' : 'true');
+    });
+    card.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        this.click();
+      }
+    });
+  });
+})();
+</script>
