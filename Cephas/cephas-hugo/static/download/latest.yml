@@ -1,8 +1,8 @@
-﻿version: 0.7.0
+﻿version: 0.1.21
 files:
-  - url: MnemosyneC-Setup-0.7.0.exe
-    sha512: 0tuwvL2qUnUs09lxWwv3hndjXE43mSMs8t/PwS7Dwj8BJpqJ8I79y+NwhRZKHKldVRrgcXiylPjjw5KKEnPRjg==
-    size: 540640393
-path: MnemosyneC-Setup-0.7.0.exe
-sha512: 0tuwvL2qUnUs09lxWwv3hndjXE43mSMs8t/PwS7Dwj8BJpqJ8I79y+NwhRZKHKldVRrgcXiylPjjw5KKEnPRjg==
-releaseDate: '2026-06-23T00:00:00.000Z'
+  - url: https://github.com/liana-banyan/mnemosynec-releases/releases/download/v0.1.21/Mnemosyne-Setup-0.1.21.exe
+    sha512: rpM1l1IE+cLymdvhC8bwplIBLb57Q57/2ArzR8r0YiOrW66fVOGyfNwcPS+WpSfxhqQUh2WFkIW3fBpHHfa71g==
+    size: 80979151
+path: Mnemosyne-Setup-0.1.21.exe
+sha512: rpM1l1IE+cLymdvhC8bwplIBLb57Q57/2ArzR8r0YiOrW66fVOGyfNwcPS+WpSfxhqQUh2WFkIW3fBpHHfa71g==
+releaseDate: '2026-06-28T06:30:41.415Z'
