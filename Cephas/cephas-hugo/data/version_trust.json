@@ -1,8 +1,23 @@
 {
   "versions": [
     {
-      "version": "0.8.7",
+      "version": "0.8.8",
       "tier": "latest",
+      "release_date": "2026-06-28",
+      "install_reports": 0,
+      "verified_eblets": 0,
+      "zero_issue_days": 0,
+      "open_issues": 0,
+      "trust_score": 1,
+      "filename": "MnemosyneC-Setup-0.8.8.exe",
+      "size_bytes": 475339783,
+      "size_display": "~454 MB",
+      "notes": "BP099 K15: hardcoded SUPABASE_URL + ANON_KEY fallbacks ensure relay-answer poller starts on fresh peer installs with no env files. Fixes 0% trial results (Trials 9/10/11).",
+      "sha256": "720bbed45bcbf95968ff48dff6348060809f83fd061b90d30d2bdca3cf77c7e7"
+    },
+    {
+      "version": "0.8.7",
+      "tier": "stable",
       "release_date": "2026-06-28",
       "install_reports": 0,
       "verified_eblets": 0,

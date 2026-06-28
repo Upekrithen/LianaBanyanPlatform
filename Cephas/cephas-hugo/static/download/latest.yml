@@ -1,8 +1,8 @@
-﻿version: 0.8.7
+﻿version: 0.8.8
 files:
-  - url: https://github.com/liana-banyan/mnemosyne/releases/download/v0.8.7/MnemosyneC-Setup-0.8.7.exe
-    sha512: QTx801tgmdatyxxn6l+mHIw4Gqm8bvKfL1fWRoL1p17zPrvbJ5wNPEt3zsijzh7AHCwv4sDXR9De4sq9tHZ44A==
-    size: 475339635
-path: MnemosyneC-Setup-0.8.7.exe
-sha512: QTx801tgmdatyxxn6l+mHIw4Gqm8bvKfL1fWRoL1p17zPrvbJ5wNPEt3zsijzh7AHCwv4sDXR9De4sq9tHZ44A==
-releaseDate: '2026-06-28T17:47:22.625Z'
+  - url: https://github.com/liana-banyan/mnemosyne/releases/download/v0.8.8/MnemosyneC-Setup-0.8.8.exe
+    sha512: 5wVeQ3CG3dNeqCu3EXrn1lp/SbAGoJSghmPRbVpjgd0Upbk0fNYGmPFB/dKIxyiiEzHp7zkSEx0jJF6B/5lwVA==
+    size: 475339783
+path: MnemosyneC-Setup-0.8.8.exe
+sha512: 5wVeQ3CG3dNeqCu3EXrn1lp/SbAGoJSghmPRbVpjgd0Upbk0fNYGmPFB/dKIxyiiEzHp7zkSEx0jJF6B/5lwVA==
+releaseDate: '2026-06-28T20:09:04.291Z'
