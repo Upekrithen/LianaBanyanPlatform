@@ -1,13 +1,13 @@
 {
-  "version": "0.8.3",
-  "filename": "MnemosyneC-Setup-0.8.3.exe",
-  "download_url": "https://github.com/liana-banyan/mnemosyne/releases/download/v0.8.3/MnemosyneC-Setup-0.8.3.exe",
-  "release_notes": "v0.8.3: BP099 K4 — correct tray icon, overlay hidden by default on fresh install, SSPL explicitly named in installer license dialog. sha256: a3f909c5eaa410a32745b88536e810756ca49ec39a47b6a0f62c19352a288745.",
-  "sha256": "a3f909c5eaa410a32745b88536e810756ca49ec39a47b6a0f62c19352a288745",
+  "version": "0.8.4",
+  "filename": "MnemosyneC-Setup-0.8.4.exe",
+  "download_url": "https://github.com/liana-banyan/mnemosyne/releases/download/v0.8.4/MnemosyneC-Setup-0.8.4.exe",
+  "release_notes": "v0.8.4: BP099 K5 — LBP elephant icon restored, Hear it audio bundled locally (CSP-safe), dashboard opens at 1280x900. sha256: 5d27070db6d75c741c28b3d295dd7e8da2d25f28bbf16b00716dc1760ad5a7e9.",
+  "sha256": "5d27070db6d75c741c28b3d295dd7e8da2d25f28bbf16b00716dc1760ad5a7e9",
   "previous": {
-    "version": "0.8.2",
-    "filename": "MnemosyneC-Setup-0.8.2.exe",
-    "download_url": "https://github.com/liana-banyan/mnemosyne/releases/download/v0.8.2/MnemosyneC-Setup-0.8.2.exe",
+    "version": "0.8.3",
+    "filename": "MnemosyneC-Setup-0.8.3.exe",
+    "download_url": "https://github.com/liana-banyan/mnemosyne/releases/download/v0.8.3/MnemosyneC-Setup-0.8.3.exe",
     "status": "STABLE"
   }
 }

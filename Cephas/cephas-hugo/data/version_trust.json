@@ -1,8 +1,23 @@
 {
   "versions": [
     {
-      "version": "0.8.3",
+      "version": "0.8.4",
       "tier": "latest",
+      "release_date": "2026-06-28",
+      "install_reports": 0,
+      "verified_eblets": 0,
+      "zero_issue_days": 0,
+      "open_issues": 0,
+      "trust_score": 1,
+      "filename": "MnemosyneC-Setup-0.8.4.exe",
+      "size_bytes": 476086838,
+      "size_display": "~454.1 MB",
+      "notes": "BP099 K5: LBP elephant icon restored (tray+app-icon, verified SHA256), Hear it audio bundled locally (CSP-safe), dashboard opens at 1280x900. Folder-emptying audit PASS.",
+      "sha256": "5d27070db6d75c741c28b3d295dd7e8da2d25f28bbf16b00716dc1760ad5a7e9"
+    },
+    {
+      "version": "0.8.3",
+      "tier": "stable",
       "release_date": "2026-06-28",
       "install_reports": 0,
       "verified_eblets": 0,
