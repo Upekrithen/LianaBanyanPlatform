@@ -33,7 +33,7 @@ const TRANSLATIONS: Record<string, MirrorStrings> = {
     description: "Liana Banyan aún no está completamente traducida al {language}. Pero lo estará — porque tú puedes ayudar. Traduce o confirma traducciones en cualquier página y gana Marks por tu contribución.",
     cta: "Cada idioma importa. Justo significa que todos puedan leerlo.",
     goldenKey: "Colecciona llaves doradas para desbloquear conocimiento oculto",
-    mirrorWord: "Espejo",
+    mirrorWord: "Espejito",
     welcomeHelp: "¡Bienvenidos! ¡Los necesitamos! ¿Pueden ayudarnos a traducir?",
   },
   fr: {

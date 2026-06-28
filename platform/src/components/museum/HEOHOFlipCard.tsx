@@ -101,7 +101,16 @@ export function HEOHOFlipCard({
 
         {/* ─── BACK FACE ─── */}
         <div
-          onClick={(e) => e.stopPropagation()}
+          onClick={(e) => {
+            const target = e.target as HTMLElement;
+            const isInteractive = target.closest('a, button');
+            if (!isInteractive) {
+              e.stopPropagation();
+              setIsFlipped(false);
+            } else {
+              e.stopPropagation();
+            }
+          }}
           style={{
             position: "absolute",
             inset: 0,
@@ -113,6 +122,7 @@ export function HEOHOFlipCard({
             overflow: "hidden",
             display: "flex",
             flexDirection: "column",
+            cursor: "default",
           }}
         >
           {/* Back header */}

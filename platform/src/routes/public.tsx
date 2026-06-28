@@ -69,6 +69,8 @@ const CharacterRemakePostersPage = lazy(() =>
 const MuseumPage = lazy(() => import("@/pages/MuseumPage"));
 // BP074 -- Founder story page
 const FounderStory = lazy(() => import("@/pages/museum/FounderStory"));
+// BP098 Bug A -- Mirror Mirror friend-greeting page
+const MirrorMirror = lazy(() => import("@/pages/museum/MirrorMirror"));
 
 // BP082 -- Op-Ed: Thou Art the Man
 const OpEdThouArtTheMan = lazy(() => import("@/pages/OpEdThouArtTheMan"));
@@ -219,6 +221,9 @@ export const publicRoutes = (
     <Route path="/rope-of-history" element={<LazyPage><MuseumPage /></LazyPage>} />
     {/* BP074 -- Founder story */}
     <Route path="/founder" element={<LazyPage><FounderStory /></LazyPage>} />
+
+    {/* BP098 Bug A fix — Mirror Mirror friend-greeting page */}
+    <Route path="/mirror" element={<LazyPage><MirrorMirror /></LazyPage>} />
 
     {/* BP082 -- Op-Ed: Thou Art the Man */}
     <Route path="/op-eds/thou-art-the-man" element={<LazyPage><OpEdThouArtTheMan /></LazyPage>} />

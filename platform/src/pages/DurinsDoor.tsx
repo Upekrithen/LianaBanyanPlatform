@@ -164,7 +164,7 @@ export default function DurinsDoor() {
         });
         setTimeout(() => {
           setIsUnlocking(false);
-          navigate("/friend", { state: { fromDoor: true, language: friendLang } });
+          navigate(`/mirror?lang=${encodeURIComponent(friendLang)}&word=${encodeURIComponent(passphrase.trim())}`, { state: { fromDoor: true } });
         }, 1200);
         return;
       }

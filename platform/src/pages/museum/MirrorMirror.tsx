@@ -173,6 +173,15 @@ const MirrorMirror = () => {
             Translate with Google Translate
           </a>
         )}
+        {!isEnglish && !isTranslated && (
+          <button
+            onClick={() => navigate("/bounty")}
+            className="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs transition-colors"
+            style={{ background: "rgba(56, 161, 105, 0.12)", border: "1px solid rgba(56, 161, 105, 0.3)", color: "#38a169" }}
+          >
+            Earn Marks translating {language} → Bounty Posters
+          </button>
+        )}
 
         {/* Three specialist summons — only shown on translated-language view.
             All three start closed (LRH pill) so the card stays tidy and the

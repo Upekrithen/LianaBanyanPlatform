@@ -107,7 +107,7 @@ const WatchFable = ({ inline = false }: WatchFableProps) => {
               <p
                 style={{
                   fontFamily: "'Crimson Pro', Georgia, serif",
-                  fontSize: "clamp(0.85rem, 2.2vw, 1rem)",
+                  fontSize: inline ? "0.95rem" : "clamp(0.85rem, 2.2vw, 1rem)",
                   color: "#faf5eb",
                   lineHeight: 1.6,
                   whiteSpace: "pre-line",
