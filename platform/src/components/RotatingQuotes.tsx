@@ -81,6 +81,11 @@ const QUOTES: Quote[] = [
     text: "If you want to go fast, go alone. If you want to go far, go together.",
     author: "West African proverb (Burkina Faso)",
   },
+  // MLK - Keep Moving from This Mountain, Spelman College, April 10, 1960
+  {
+    text: "If you can't fly, run; if you can't run, walk; if you can't walk, crawl; but by all means keep moving.",
+    author: "Dr. Martin Luther King Jr., 'Keep Moving from This Mountain,' Spelman College, April 10, 1960",
+  },
   // 20. Wilma Mankiller
   {
     text: "The secret of our success is that we never, never give up.",
