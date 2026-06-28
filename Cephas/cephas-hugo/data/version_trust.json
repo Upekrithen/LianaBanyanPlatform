@@ -1,13 +1,28 @@
 {
   "versions": [
     {
-      "version": "0.8.5",
+      "version": "0.8.6",
       "tier": "latest",
       "release_date": "2026-06-28",
       "install_reports": 0,
       "verified_eblets": 0,
       "zero_issue_days": 0,
       "open_issues": 0,
+      "trust_score": 1,
+      "filename": "MnemosyneC-Setup-0.8.6.exe",
+      "size_bytes": 475338578,
+      "size_display": "~454 MB",
+      "notes": "BP099 K10: 9 runtime fixes — anon key, ws dep, IPC dupe, auto-update loop, CAI_VERSION, title bar, templated artifact names.",
+      "sha256": "250fdcf3ab007a9de9d30fa582f948b99a5476537906b0ab2dc627c7318edafe"
+    },
+    {
+      "version": "0.8.5",
+      "tier": "bad_runtime",
+      "release_date": "2026-06-28",
+      "install_reports": 0,
+      "verified_eblets": 0,
+      "zero_issue_days": 0,
+      "open_issues": 5,
       "trust_score": 1,
       "filename": "MnemosyneC-Setup-0.8.5.exe",
       "size_bytes": 475932841,

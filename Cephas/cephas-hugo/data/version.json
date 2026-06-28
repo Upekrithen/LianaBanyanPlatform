@@ -1,13 +1,13 @@
 {
-  "version": "0.8.5",
-  "filename": "MnemosyneC-Setup-0.8.5.exe",
-  "download_url": "https://github.com/liana-banyan/mnemosyne/releases/download/v0.8.5/MnemosyneC-Setup-0.8.5.exe",
-  "release_notes": "v0.8.5: BP099 K6 — Hear it button removed per Founder direction. SHINE quote and Continue button remain. sha256: 921bd793806220ca5bca98757731f106de9e3d382864b75a4bed7df424f75943.",
-  "sha256": "921bd793806220ca5bca98757731f106de9e3d382864b75a4bed7df424f75943",
+  "version": "0.8.6",
+  "filename": "MnemosyneC-Setup-0.8.6.exe",
+  "download_url": "https://github.com/liana-banyan/mnemosyne/releases/download/v0.8.6/MnemosyneC-Setup-0.8.6.exe",
+  "release_notes": "v0.8.6: BP099 K10 — 9 runtime fixes: SUPABASE_ANON_KEY injected, ws bundled, IPC dupe resolved, auto-update loop fixed, CAI_VERSION corrected, title bar fixed. sha256: 250fdcf3ab007a9de9d30fa582f948b99a5476537906b0ab2dc627c7318edafe",
+  "sha256": "250fdcf3ab007a9de9d30fa582f948b99a5476537906b0ab2dc627c7318edafe",
   "previous": {
-    "version": "0.8.4",
-    "filename": "MnemosyneC-Setup-0.8.4.exe",
-    "download_url": "https://github.com/liana-banyan/mnemosyne/releases/download/v0.8.4/MnemosyneC-Setup-0.8.4.exe",
-    "status": "STABLE"
+    "version": "0.8.5",
+    "filename": "MnemosyneC-Setup-0.8.5.exe",
+    "download_url": "https://github.com/liana-banyan/mnemosyne/releases/download/v0.8.5/MnemosyneC-Setup-0.8.5.exe",
+    "status": "BAD_RUNTIME"
   }
 }
