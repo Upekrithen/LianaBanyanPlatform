@@ -1,8 +1,23 @@
 {
   "versions": [
     {
-      "version": "0.8.4",
+      "version": "0.8.5",
       "tier": "latest",
+      "release_date": "2026-06-28",
+      "install_reports": 0,
+      "verified_eblets": 0,
+      "zero_issue_days": 0,
+      "open_issues": 0,
+      "trust_score": 1,
+      "filename": "MnemosyneC-Setup-0.8.5.exe",
+      "size_bytes": 475932841,
+      "size_display": "~454.0 MB",
+      "notes": "BP099 K6: Hear it button removed per Founder direction. SHINE quote + Continue button remain.",
+      "sha256": "921bd793806220ca5bca98757731f106de9e3d382864b75a4bed7df424f75943"
+    },
+    {
+      "version": "0.8.4",
+      "tier": "stable",
       "release_date": "2026-06-28",
       "install_reports": 0,
       "verified_eblets": 0,

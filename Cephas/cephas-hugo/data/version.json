@@ -1,13 +1,13 @@
 {
-  "version": "0.8.4",
-  "filename": "MnemosyneC-Setup-0.8.4.exe",
-  "download_url": "https://github.com/liana-banyan/mnemosyne/releases/download/v0.8.4/MnemosyneC-Setup-0.8.4.exe",
-  "release_notes": "v0.8.4: BP099 K5 — LBP elephant icon restored, Hear it audio bundled locally (CSP-safe), dashboard opens at 1280x900. sha256: 5d27070db6d75c741c28b3d295dd7e8da2d25f28bbf16b00716dc1760ad5a7e9.",
-  "sha256": "5d27070db6d75c741c28b3d295dd7e8da2d25f28bbf16b00716dc1760ad5a7e9",
+  "version": "0.8.5",
+  "filename": "MnemosyneC-Setup-0.8.5.exe",
+  "download_url": "https://github.com/liana-banyan/mnemosyne/releases/download/v0.8.5/MnemosyneC-Setup-0.8.5.exe",
+  "release_notes": "v0.8.5: BP099 K6 — Hear it button removed per Founder direction. SHINE quote and Continue button remain. sha256: 921bd793806220ca5bca98757731f106de9e3d382864b75a4bed7df424f75943.",
+  "sha256": "921bd793806220ca5bca98757731f106de9e3d382864b75a4bed7df424f75943",
   "previous": {
-    "version": "0.8.3",
-    "filename": "MnemosyneC-Setup-0.8.3.exe",
-    "download_url": "https://github.com/liana-banyan/mnemosyne/releases/download/v0.8.3/MnemosyneC-Setup-0.8.3.exe",
+    "version": "0.8.4",
+    "filename": "MnemosyneC-Setup-0.8.4.exe",
+    "download_url": "https://github.com/liana-banyan/mnemosyne/releases/download/v0.8.4/MnemosyneC-Setup-0.8.4.exe",
     "status": "STABLE"
   }
 }
