@@ -1,8 +1,38 @@
 {
   "versions": [
     {
-      "version": "0.8.1",
+      "version": "0.8.3",
       "tier": "latest",
+      "release_date": "2026-06-28",
+      "install_reports": 0,
+      "verified_eblets": 0,
+      "zero_issue_days": 0,
+      "open_issues": 0,
+      "trust_score": 1,
+      "filename": "MnemosyneC-Setup-0.8.3.exe",
+      "size_bytes": 476127589,
+      "size_display": "~454.2 MB",
+      "notes": "BP099 K4: correct tray icon (app-icon-16.png), overlay hidden by default on fresh install (B1), SSPL explicitly named in installer license dialog. Bundled Ollama + qwen2.5:0.5b model.",
+      "sha256": "a3f909c5eaa410a32745b88536e810756ca49ec39a47b6a0f62c19352a288745"
+    },
+    {
+      "version": "0.8.2",
+      "tier": "stable",
+      "release_date": "2026-06-28",
+      "install_reports": 0,
+      "verified_eblets": 0,
+      "zero_issue_days": 0,
+      "open_issues": 0,
+      "trust_score": 1,
+      "filename": "MnemosyneC-Setup-0.8.2.exe",
+      "size_bytes": 476118525,
+      "size_display": "~454.1 MB",
+      "notes": "BP098 M43: Beacons Lit (bonfire_lit) module. Active peer-mesh connection with priming-sync. NOTE: bad tray icon + no SSPL in license dialog — superseded by v0.8.3.",
+      "sha256": "5e500af2d2f93839f512546945a42884274fd2d9640af8c2716c9818482e0d3c"
+    },
+    {
+      "version": "0.8.1",
+      "tier": "stable",
       "release_date": "2026-06-25",
       "install_reports": 0,
       "verified_eblets": 0,
