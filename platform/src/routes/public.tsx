@@ -71,6 +71,8 @@ const MuseumPage = lazy(() => import("@/pages/MuseumPage"));
 const FounderStory = lazy(() => import("@/pages/museum/FounderStory"));
 // BP098 Bug A -- Mirror Mirror friend-greeting page
 const MirrorMirror = lazy(() => import("@/pages/museum/MirrorMirror"));
+// BP098 Bug B -- Yvaine SHINE clip page (missing from main app router)
+const YvaineClip = lazy(() => import("@/pages/museum/YvaineClip"));
 
 // BP082 -- Op-Ed: Thou Art the Man
 const OpEdThouArtTheMan = lazy(() => import("@/pages/OpEdThouArtTheMan"));
@@ -224,6 +226,8 @@ export const publicRoutes = (
 
     {/* BP098 Bug A fix — Mirror Mirror friend-greeting page */}
     <Route path="/mirror" element={<LazyPage><MirrorMirror /></LazyPage>} />
+    {/* BP098 Bug B fix — Yvaine SHINE clip page */}
+    <Route path="/yvaine" element={<LazyPage><YvaineClip /></LazyPage>} />
 
     {/* BP082 -- Op-Ed: Thou Art the Man */}
     <Route path="/op-eds/thou-art-the-man" element={<LazyPage><OpEdThouArtTheMan /></LazyPage>} />
