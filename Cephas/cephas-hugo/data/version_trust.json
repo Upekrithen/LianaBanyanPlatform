@@ -1,8 +1,23 @@
 {
   "versions": [
     {
-      "version": "0.8.6",
+      "version": "0.8.7",
       "tier": "latest",
+      "release_date": "2026-06-28",
+      "install_reports": 0,
+      "verified_eblets": 0,
+      "zero_issue_days": 0,
+      "open_issues": 0,
+      "trust_score": 1,
+      "filename": "MnemosyneC-Setup-0.8.7.exe",
+      "size_bytes": 475339635,
+      "size_display": "~454 MB",
+      "notes": "BP099 K13: relay-answer poller permanently wired into Electron main. Peers auto-poll relay_routes and answer via submit-relay-route-reply edge fn. Fixes 0/5 ensemble score (Trial 9).",
+      "sha256": "e4c47386d89d35bddccb6c1b94bf380463972ce24f4dd2980e6e0f1f2dfeebaa"
+    },
+    {
+      "version": "0.8.6",
+      "tier": "stable",
       "release_date": "2026-06-28",
       "install_reports": 0,
       "verified_eblets": 0,
