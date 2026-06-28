@@ -654,8 +654,8 @@ async function main() {
   console.log(`Routing: ${routing} · Wire: ${wire} · Andon-escalate: ${andonEscalate} · Andon-threshold: ${andonThreshold}%`);
   if (trialId) console.log(`Trial ID: ${trialId} · Pass: ${passLabel ?? 'unset'}`);
   if (isGemmaMode) {
-    console.log(`${YELLOW}flagship-tier=${flagshipTier}: Anthropic API DISABLED -- all calls routed local${RESET}`);
-    console.log(`[flagship-tier=${flagshipTier}] Anthropic API SKIPPED`);
+    console.log(`${YELLOW}flagship-tier=${flagshipTier}: FLAGSHIP API DISABLED -- all calls routed local${RESET}`);
+    console.log(`[flagship-tier=${flagshipTier}] FLAGSHIP API SKIPPED`);
   }
   // BP090: log plow configuration so it appears in orchestrator output
   if (plowMaxIterations > 0) {
@@ -678,7 +678,7 @@ async function main() {
   console.log(`Supabase URL loaded (${SUPABASE_URL.length > 0 ? 'OK' : 'MISSING'})`);
   console.log(`Service key loaded (length=${SERVICE_KEY.length})`);
   if (isGemmaMode) {
-    console.log(`[flagship-tier=${flagshipTier}] Anthropic API SKIPPED -- using local model via peer Ollama`);
+    console.log(`[flagship-tier=${flagshipTier}] FLAGSHIP API SKIPPED -- using local model via peer Ollama`);
   }
   console.log('');
 
@@ -976,7 +976,7 @@ async function main() {
 
     console.log(`[${qNum}] source_id=${q.source_id} (${q.domain}) correct=${correctLetter ?? '?'} timeout=${qTimeoutSec}s`);
     if (isGemmaMode) {
-      console.log(`[flagship-tier=${flagshipTier}] Anthropic API SKIPPED`);
+      console.log(`[flagship-tier=${flagshipTier}] FLAGSHIP API SKIPPED`);
     }
 
     // MAMBA-γ: load domain affinity and sort peer pool
@@ -1454,6 +1454,44 @@ async function main() {
         console.warn(`  [TIER1] tiebreaker dispatch failed: ${tier1Err.message}`);
       }
 
+      // === BP098 M41 CASCADE FAIL-FAST — INSERTION POINT 1 (before Posse) ===
+      // If question deadline already expired, skip Posse dispatch entirely.
+      // Return CONTESTED honestly with whatever partial votes were gathered.
+      // Prevents the 27-line "negative delay corrected to 0" death spiral.
+      if (Date.now() > qDeadline) {
+        const overshootMs = Date.now() - qDeadline;
+        console.warn(`  [CASCADE-FAIL-FAST] deadline expired by ${overshootMs}ms — skipping Posse dispatch; returning CONTESTED (tier_3_contested)`);
+        contestedResolutionTier = 'tier_3_contested';
+        await logEscalation(SUPABASE_URL, SERVICE_KEY, {
+          session_id: sessionId, question_id: questionId, domain: q.domain,
+          tier: 'tier_3_human', answer: null, correct: false,
+          detail: `cascade_fail_fast: deadline expired by ${overshootMs}ms before Posse dispatch`,
+        });
+        ensembleContested++;
+        console.log(`  Ensemble: ${YELLOW}CONTESTED${RESET} | source=${finalAnswerSource} | resolution=${contestedResolutionTier} | overshoot=${overshootMs}ms`);
+        results.push({
+          index: i + 1, source_id: q.source_id, domain: q.domain,
+          question_preview: q.question.slice(0, 120) + (q.question.length > 120 ? '...' : ''),
+          num_options: q.options.length, correct_letter: correctLetter,
+          correct_answer_text: q.correct_answer, allotted_timeout_s: qTimeoutSec,
+          route_ids: routeIds, escalation_fired: escalationFired,
+          escalation_peer_count: escalationPeerCount, escalation_route_ids: escalationRouteIds,
+          final_answer_source: finalAnswerSource,
+          per_peer: Object.fromEntries(peerPool.map((p, j) => [p.peer_id, {
+            route_id: routeIds[j], escalation_route_id: escalationRouteIds[j] ?? null,
+            answer: peerAnswers[p.peer_id],
+            replied: !!collectedReplies[routeIds[j]] || !!collectedReplies[escalationRouteIds[j]],
+            correct: peerAnswers[p.peer_id] !== null && peerAnswers[p.peer_id] === correctLetter,
+          }])),
+          ensemble: { answer: null, contested: true, correct: false },
+          contested_resolution_tier: contestedResolutionTier,
+          tier_1_fallback_fired: tier1FallbackFired, tier_2_fallback_fired: false,
+          cascade_fail_fast: true, overshoot_ms: overshootMs,
+        });
+        continue; // next question — NO further cascade dispatch
+      }
+      // === END BP098 M41 CASCADE FAIL-FAST INSERTION POINT 1 ===
+
       // -- BP092 M24 Step 2: POSSE decompose + swarm (if Tier 1 did not resolve) --
       let posseAnswerLetter = null;
       if (!contestedResolutionTier || contestedResolutionTier === 'pending') {
@@ -1516,6 +1554,43 @@ async function main() {
           console.warn(`  [POSSE] dispatch failed: ${posseErr.message} -- escalating to Tier 2`);
         }
       }
+
+      // === BP098 M41 CASCADE FAIL-FAST — INSERTION POINT 2 (before Tier 2) ===
+      // Second guard: if Posse ran but still didn't resolve AND deadline is now past,
+      // skip Tier 2 dispatch (avoids the 5000ms clamped-timeout Ollama attempt).
+      if (Date.now() > qDeadline && (!contestedResolutionTier || contestedResolutionTier === 'pending')) {
+        const overshootMs = Date.now() - qDeadline;
+        console.warn(`  [CASCADE-FAIL-FAST] deadline expired by ${overshootMs}ms — skipping Tier 2 flagship dispatch; returning CONTESTED`);
+        contestedResolutionTier = 'tier_3_contested';
+        await logEscalation(SUPABASE_URL, SERVICE_KEY, {
+          session_id: sessionId, question_id: questionId, domain: q.domain,
+          tier: 'tier_3_human', answer: null, correct: false,
+          detail: `cascade_fail_fast_tier2: deadline expired by ${overshootMs}ms before Tier 2 dispatch`,
+        });
+        ensembleContested++;
+        console.log(`  Ensemble: ${YELLOW}CONTESTED${RESET} | source=${finalAnswerSource} | resolution=${contestedResolutionTier} | overshoot=${overshootMs}ms`);
+        results.push({
+          index: i + 1, source_id: q.source_id, domain: q.domain,
+          question_preview: q.question.slice(0, 120) + (q.question.length > 120 ? '...' : ''),
+          num_options: q.options.length, correct_letter: correctLetter,
+          correct_answer_text: q.correct_answer, allotted_timeout_s: qTimeoutSec,
+          route_ids: routeIds, escalation_fired: escalationFired,
+          escalation_peer_count: escalationPeerCount, escalation_route_ids: escalationRouteIds,
+          final_answer_source: finalAnswerSource,
+          per_peer: Object.fromEntries(peerPool.map((p, j) => [p.peer_id, {
+            route_id: routeIds[j], escalation_route_id: escalationRouteIds[j] ?? null,
+            answer: peerAnswers[p.peer_id],
+            replied: !!collectedReplies[routeIds[j]] || !!collectedReplies[escalationRouteIds[j]],
+            correct: peerAnswers[p.peer_id] !== null && peerAnswers[p.peer_id] === correctLetter,
+          }])),
+          ensemble: { answer: null, contested: true, correct: false },
+          contested_resolution_tier: contestedResolutionTier,
+          tier_1_fallback_fired: tier1FallbackFired, tier_2_fallback_fired: false,
+          cascade_fail_fast: true, overshoot_ms: overshootMs,
+        });
+        continue; // next question — NO Tier 2 dispatch
+      }
+      // === END BP098 M41 CASCADE FAIL-FAST INSERTION POINT 2 ===
 
       // -- BP092 M24 Step 3: Tier 2 flagship escalation --
       if (tier2Flagship && (!contestedResolutionTier || contestedResolutionTier === 'pending')) {
