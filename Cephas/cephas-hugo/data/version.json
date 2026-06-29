@@ -1,13 +1,1 @@
-{
-  "version": "0.8.8",
-  "filename": "MnemosyneC-Setup-0.8.8.exe",
-  "download_url": "https://github.com/liana-banyan/mnemosyne/releases/download/v0.8.8/MnemosyneC-Setup-0.8.8.exe",
-  "release_notes": "v0.8.8: BP099 K15 — Hardcoded SUPABASE_URL + ANON_KEY fallbacks ensure relay-answer poller starts on fresh peer installs with no env files. Fixes 0% trial results (Trials 9/10/11). sha256: 720bbed45bcbf95968ff48dff6348060809f83fd061b90d30d2bdca3cf77c7e7",
-  "sha256": "720bbed45bcbf95968ff48dff6348060809f83fd061b90d30d2bdca3cf77c7e7",
-  "previous": {
-    "version": "0.8.7",
-    "filename": "MnemosyneC-Setup-0.8.7.exe",
-    "download_url": "https://github.com/liana-banyan/mnemosyne/releases/download/v0.8.7/MnemosyneC-Setup-0.8.7.exe",
-    "status": "superseded"
-  }
-}
+{"version":"0.8.9","filename":"MnemosyneC-Setup-0.8.9.exe","download_url":"https://github.com/liana-banyan/mnemosyne/releases/download/v0.8.9/MnemosyneC-Setup-0.8.9.exe","release_notes":"v0.8.9: BP099 K16 - Diagnostic Mode + Peer Startup State. Help tab grants scoped remote access. peer_startup_state records boot state for remote diagnosis. sha512: 9zjnaX/MgDHaIeoN5uBpZAQ4wuf9PZB1rdIasFYRK+cUu9E6GlcQDbPLtmEvph/vQp5BXHBBNpOpPM2c+/GBOg==","sha512":"9zjnaX/MgDHaIeoN5uBpZAQ4wuf9PZB1rdIasFYRK+cUu9E6GlcQDbPLtmEvph/vQp5BXHBBNpOpPM2c+/GBOg==","previous":{"version":"0.8.8","filename":"MnemosyneC-Setup-0.8.8.exe","download_url":"https://github.com/liana-banyan/mnemosyne/releases/download/v0.8.8/MnemosyneC-Setup-0.8.8.exe","status":"superseded"}}
