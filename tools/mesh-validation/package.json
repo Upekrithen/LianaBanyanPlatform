@@ -1,0 +1,12 @@
+{
+  "name": "mesh-validation",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "5-peer MMLU-Pro relay orchestrator",
+  "scripts": {
+    "validate": "node validate-relay.mjs"
+  },
+  "dependencies": {
+    "p-limit": "^6.2.0"
+  }
+}

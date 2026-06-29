@@ -18,6 +18,7 @@ import { join, resolve } from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { homedir } from 'os';
+import pLimit from 'p-limit';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -604,6 +605,22 @@ async function main() {
   const { questions: questionCount, mode, timeout: timeoutSec, session: sessionId } = args;
   const timeoutMs = timeoutSec * 1000;
 
+  // BP099→BP100 K18: Tiebreaker (line 1394) + Posse (lines 1506-1517) moved to background Promises.
+  // Main loop does not await escalation; merges receipt when escalation resolves.
+  // Static import hoisted to avoid per-call race under pLimit(3) concurrency.
+  // canon: canon_novaculi_extends_to_peer_mesh_at_trial_run_not_only_bishop_seg_fan_bp100
+  let _decomposeQuestion = null, _swarmDispatch = null, _tier2FlagshipEscalate = null;
+  try {
+    const _posseDecomp = await import('../../dist/main/army_ants/posse_decompose.js');
+    const _posseSw = await import('../../dist/main/army_ants/posse_swarm.js');
+    _decomposeQuestion = _posseDecomp.decomposeQuestion;
+    _swarmDispatch = _posseSw.swarmDispatch;
+  } catch (_ie) { /* optional -- posse escalation disabled if modules absent */ }
+  try {
+    const _t2mod = await import('../../src/main/tier2/flagship_escalate.js');
+    _tier2FlagshipEscalate = _t2mod.tier2FlagshipEscalate;
+  } catch (_ie) { /* optional -- tier2 escalation disabled if modules absent */ }
+
   // MAMBA-γ/δ/ε flags
   const routing = args.routing ?? 'round-robin';
   const wire = args.wire ?? 'json-legacy';
@@ -962,8 +979,16 @@ async function main() {
     } catch { /* non-fatal */ }
   }
 
-  for (let i = 0; i < questions.length; i++) {
-    const q = questions[i];
+  // BP099→BP100 K18: Sequential for-loop (line 965) replaced with pLimit(3) concurrent Q-tracks.
+  // Peer serialization preserved: each peer chain dispatches one Q at a time.
+  // Global concurrency: 3 open Q-slots. Results sorted by question_index before JSON write.
+  // canon: canon_fix_as_we_go_build_for_the_long_haul_always_convenient_immutables_bp053
+  const _peerChains = new Map();
+  for (const p of peers) _peerChains.set(p.peer_id, Promise.resolve());
+  const _qLimit = pLimit(3);
+  const _bgEscalations = []; // background escalation promises — awaited before JSON write
+
+  const _qTasks = questions.map((q, i) => _qLimit(async () => {
     const qNum = `Q${pad2(i + 1)}/${pad2(questions.length)}`;
     const correctLetter = getCorrectLetter(q);
     const prompt = buildPrompt(q);
@@ -972,7 +997,15 @@ async function main() {
     // BP090: per-domain timeout — getDomainTimeout falls back to global timeoutSec if no config
     const qTimeoutSec = getDomainTimeout(q.domain, perDomainConfig, timeoutSec);
     const qTimeoutMs = qTimeoutSec * 1000;
-    const approachThresholdMs = Math.floor(qTimeoutMs * 0.8);
+    // BP099→BP100 K18: Approach-wait removed per SEG-G diagnosis (line 975 / 1226-1230).
+    // Escalation now triggered by peer approaching_timeout signal, not orchestrator elapsed-time.
+    // canon: canon_release_verification_curl_both_human_and_machine_facing_surfaces_bp099
+    // canon: canon_accuracy_over_speed_compounds_on_bedrock_slow_is_smooth_truth_bp063
+    let approachingTimeoutSignaled = false;
+    // Per-Q fallback timer: fires approaching_timeout signal at 80% of per-Q timeout
+    // if no peer-side signal arrives first. Per-Q, per-peer — NOT a global elapsed-gate.
+    const _approachFallbackMs = Math.floor(qTimeoutMs * 0.8);
+    const _approachFallbackTimer = setTimeout(() => { approachingTimeoutSignaled = true; }, _approachFallbackMs);
 
     console.log(`[${qNum}] source_id=${q.source_id} (${q.domain}) correct=${correctLetter ?? '?'} timeout=${qTimeoutSec}s`);
     if (isGemmaMode) {
@@ -1010,6 +1043,16 @@ async function main() {
     // Track routing per peer for fleet_composition receipt (BP091)
     for (const p of peerPool) {
       if (peerRouted[p.peer_id] !== undefined) peerRouted[p.peer_id]++;
+    }
+
+    // Per-peer serialization: wait for all peers in this Q's pool to be free, then lock them.
+    // Ensures gemma4:12b (single-context) is not dispatched two Qs simultaneously.
+    await Promise.all(peerPool.map(p => _peerChains.get(p.peer_id) ?? Promise.resolve()));
+    const _thisQReleasers = {};
+    for (const p of peerPool) {
+      let _relFn;
+      _peerChains.set(p.peer_id, new Promise(resolve => { _relFn = resolve; }));
+      _thisQReleasers[p.peer_id] = _relFn;
     }
 
     // ── MOUNTAIN 1 Substrate Priming (BP094 Session 11) ─────────────────────
@@ -1053,9 +1096,15 @@ async function main() {
       insertedRoutes = await Promise.all(routeInserts);
     } catch (err) {
       console.error(`  ERROR inserting relay_routes: ${err.message}`);
-      results.push({ index: i + 1, source_id: q.source_id, domain: q.domain, error: 'insert_failed',
-        escalation_fired: false, escalation_peer_count: 0, final_answer_source: 'insert_failed' });
-      continue;
+      for (const p of peerPool) if (_thisQReleasers[p.peer_id]) _thisQReleasers[p.peer_id]();
+      return {
+        index: i + 1, question_index: i, source_id: q.source_id, domain: q.domain,
+        question_text: q.question, error: 'insert_failed',
+        escalation_fired: false, escalation_peer_count: 0, final_answer_source: 'insert_failed',
+        peers: [], variance_pct: 100, cascade_path: [], ensemble_vote: null,
+        gold_standard: { answer: q.correct_answer, source: `mmlu_pro/${q.domain}` },
+        result: 'fail', failure_class: 'insert_error',
+      };
     }
 
     const routeIds = insertedRoutes.map(r => r.id);
@@ -1064,7 +1113,7 @@ async function main() {
       routeToPeer[routeIds[j]] = peerPool[j].peer_id;
     }
 
-    console.log(`  Dispatched ${routeIds.length} routes — polling replies (timeout ${qTimeoutSec}s · approach@${Math.floor(qTimeoutSec * 0.8)}s)...`);
+    console.log(`  Dispatched ${routeIds.length} routes — polling replies (timeout ${qTimeoutSec}s · approach@signal or ${Math.floor(qTimeoutSec * 0.8)}s fallback)...`);
 
     // ── BP090 TRIPLE-MAMBA: escalation-aware polling loop ──────────────────────
     const qStartMs = Date.now();
@@ -1098,9 +1147,10 @@ async function main() {
         } catch { /* poll error — continue */ }
 
         for (const row of rows) {
-          // Skip approaching_timeout signal rows (reply_type marker from peer-side index.ts)
+          // Detect approaching_timeout signal rows (reply_type marker from peer-side index.ts)
+          // BP099→BP100 K18: set approachingTimeoutSignaled flag instead of discarding silently
           const aj = (row.answer_json && typeof row.answer_json === 'object') ? row.answer_json : {};
-          if (aj.reply_type === 'approaching_timeout') continue;
+          if (aj.reply_type === 'approaching_timeout') { approachingTimeoutSignaled = true; continue; }
           if (!collectedReplies[row.route_id]) {
             collectedReplies[row.route_id] = row;
           }
@@ -1126,8 +1176,8 @@ async function main() {
       // -- END ABSTAIN PRE-SCAN --
 
       // ── ESCALATION CHECK — runs before any exit so it always executes at threshold ──
-      if (!escalationFired && elapsed >= approachThresholdMs && andonEscalate === 'star-chamber') {
-        console.log(`\n  [escalation-trigger] elapsed=${Math.floor(elapsed/1000)}s >= ${Math.floor(approachThresholdMs/1000)}s — building partial answers`);
+      if (!escalationFired && approachingTimeoutSignaled && andonEscalate === 'star-chamber') {
+        console.log(`\n  [escalation-trigger] approaching_timeout signaled (peer signal or 80% fallback timer) — building partial answers`);
         // Build partial answer map from what we've collected so far
         const partialAnswers = {};
         for (const p of peerPool) {
@@ -1223,11 +1273,11 @@ async function main() {
       //   (c) BP091 fast-consensus: all original routes replied + variance below threshold (early exit)
       const allRouteIdsPost = [...routeIds, ...escalationRouteIds];
       const allReplied = allRouteIdsPost.every(id => !!collectedReplies[id]);
-      if (allReplied && (escalationFired || elapsed >= approachThresholdMs)) break;
-      // BP091 fast-consensus early exit: if all original routes replied before approach threshold,
-      // check variance — if consensus reached (low variance), exit without waiting for threshold.
-      // Preserves escalation: if variance is above threshold, continue to approach threshold.
-      if (!escalationFired && allReplied && elapsed < approachThresholdMs) {
+      if (allReplied && (escalationFired || approachingTimeoutSignaled)) break;
+      // BP091 fast-consensus early exit: if all original routes replied before approach signal,
+      // check variance — if consensus reached (low variance), exit without waiting for signal.
+      // Preserves escalation: if variance is above threshold, continue to approach signal.
+      if (!escalationFired && allReplied && !approachingTimeoutSignaled) {
         const fastAnswers = {};
         for (const p of peerPool) {
           const rid = routeIds[peerPool.indexOf(p)];
@@ -1254,6 +1304,9 @@ async function main() {
 
       await new Promise(r => setTimeout(r, pollIntervalMs));
     }
+    clearTimeout(_approachFallbackTimer); // BP099→BP100 K18: cancel fallback timer once polling done
+    // Release peer chains — peers are now free for the next Q-slot in their serialization chain
+    for (const p of peerPool) if (_thisQReleasers[p.peer_id]) _thisQReleasers[p.peer_id]();
 
     // ── Collect per-peer answers from all collected replies ───────────────────
     const peerAnswers = {};
@@ -1354,6 +1407,19 @@ async function main() {
 
     const ensembleIsCorrect = ensembleAnswer !== null && ensembleAnswer === correctLetter;
 
+    // Build §2 per-peer receipt array
+    const _s2Peers = peerPool.map((p, j) => {
+      const replyRow = collectedReplies[routeIds[j]] || collectedReplies[escalationRouteIds[j]] || null;
+      const rAj = (replyRow && typeof replyRow.answer_json === 'object' && replyRow.answer_json !== null) ? replyRow.answer_json : {};
+      return {
+        peer_id: p.peer_id,
+        answer: peerAnswers[p.peer_id] ?? null,
+        processing_ms: replyRow?.processing_ms ?? null,
+        tier_used: (escalationRouteIds[j] && collectedReplies[escalationRouteIds[j]]) ? 'tier1' : 'fast',
+      };
+    });
+    const _s2VariancePct = computeAnswerVariancePct(peerAnswers);
+
     // M14 Block 3: Contested resolution tiers
     let contestedResolutionTier = null;
     let tier1FallbackFired = false;
@@ -1362,311 +1428,346 @@ async function main() {
     if (contested) {
       contestedResolutionTier = 'pending';
 
-      // ── Tier 1: extended council — tiebreaker via qwen2.5:7b ──
-      try {
-        const tiebreakerPeerId = m0PeerId ?? 'cb4ef450';
-        const tier1Route = await insertRoute(SUPABASE_URL, SERVICE_KEY, {
-          target_peer_id: tiebreakerPeerId,
-          hex_frame: Buffer.from(prompt, 'utf8').toString('base64'),
-          payload_json: {
-            prompt,
-            question_id: `${questionId}-tier1`,
-            correct_answer_letter: correctLetter,
-            source_id: q.source_id,
-            wire_format: wire,
-            domain: q.domain,
-            session_id: sessionId,
-            plow_max_iterations: 4,
-            allotted_timeout_ms: Math.min(120000, qDeadline - Date.now()),
-            is_tiebreaker: true,
-            tiebreaker_model: 'qwen2.5:7b',
-            priming_context: {
-              contested_answers: Object.values(peerAnswers).filter(a => a !== null),
-              per_peer_breakdown: peerAnswers,
-            },
-          },
-          status: 'pending',
-          session_id: sessionId,
-          ttl_seconds: 180,
-        });
-        tier1FallbackFired = true;
+      // BP099→BP100 K18: Tiebreaker (line 1394) + Posse (lines 1506-1517) moved to background Promises.
+      // Main loop does not await escalation; merges receipt when escalation resolves.
+      // Static import hoisted to avoid per-call race under pLimit(3) concurrency.
+      // canon: canon_novaculi_extends_to_peer_mesh_at_trial_run_not_only_bishop_seg_fan_bp100
+      const qResultRef = {
+        index: i + 1, question_index: i,
+        source_id: q.source_id, domain: q.domain,
+        question_text: q.question,
+        question_preview: q.question.slice(0, 120) + (q.question.length > 120 ? '...' : ''),
+        num_options: q.options.length, correct_letter: correctLetter,
+        correct_answer_text: q.correct_answer, allotted_timeout_s: qTimeoutSec,
+        route_ids: routeIds, escalation_fired: escalationFired,
+        escalation_peer_count: escalationPeerCount, escalation_route_ids: escalationRouteIds,
+        final_answer_source: finalAnswerSource,
+        per_peer: Object.fromEntries(peerPool.map((p, j) => [p.peer_id, {
+          route_id: routeIds[j], escalation_route_id: escalationRouteIds[j] ?? null,
+          answer: peerAnswers[p.peer_id],
+          replied: !!collectedReplies[routeIds[j]] || !!collectedReplies[escalationRouteIds[j]],
+          correct: peerAnswers[p.peer_id] !== null && peerAnswers[p.peer_id] === correctLetter,
+        }])),
+        ensemble: { answer: ensembleAnswer, contested: true, correct: false },
+        contested_resolution_tier: 'pending',
+        tier_1_fallback_fired: false, tier_2_fallback_fired: false,
+        ensemble_method: 'capability_weighted',
+        cascade_step_reached: 1,
+        ensemble_abstain_fired: finalAnswerSource === 'ensemble_abstain',
+        single_peer_fallback: finalAnswerSource === 'single_peer_fallback',
+        posse_dispatched: posseAutoDispatched,
+        core_mic_judges: Object.entries(micTierPeerMap).flatMap(([, prefixes]) =>
+          peers.filter(p => prefixes.some(prefix => p.peer_id.startsWith(prefix))).map(p => p.peer_id)
+        ),
+        // §2 schema fields (initial — updated by background escalation)
+        peers: _s2Peers,
+        variance_pct: _s2VariancePct,
+        cascade_path: ['fast'],
+        ensemble_vote: ensembleAnswer ?? null,
+        gold_standard: { answer: q.correct_answer, source: `mmlu_pro/${q.domain}` },
+        result: 'fail',
+        failure_class: 'contested_pending',
+      };
 
-        const tier1RepliesMap = await pollReplies(
-          SUPABASE_URL, SUPABASE_ANON_KEY,
-          [tier1Route.id],
-          Math.min(120000, qDeadline - Date.now())
-        );
-        const tier1Reply = tier1RepliesMap[tier1Route.id];
-
-        if (tier1Reply) {
-          let tier1Raw = null;
-          if (tier1Reply.hex_reply) {
-            try { tier1Raw = Buffer.from(tier1Reply.hex_reply, 'base64').toString('utf8'); } catch { tier1Raw = tier1Reply.hex_reply; }
-          }
-          if (!tier1Raw && tier1Reply.answer_json) {
-            const aj4 = tier1Reply.answer_json;
-            tier1Raw = typeof aj4 === 'string' ? aj4 : (aj4.response ?? aj4.answer ?? JSON.stringify(aj4));
-          }
-
-          const tier1Letter = extractLetter(tier1Raw, q.options.length);
-          if (tier1Letter !== null && tier1Letter !== 'ABSTAIN') {
-            peerAnswers[`${tiebreakerPeerId}-tier1`] = tier1Letter;
-            const { answer: resolvedAnswer, contested: stillContested } = ensembleVote(peerAnswers, args.tierWeights, peerTierMap);
-            if (!stillContested && resolvedAnswer !== null) {
-              contestedResolutionTier = 'tier_1';
-              const tier1Correct = resolvedAnswer === correctLetter;
-              if (tier1Correct) ensembleCorrect++;
-              ensembleContested++;
-              console.log(`  [CONTESTED → TIER1 RESOLVED] tiebreaker=${tier1Letter} qwen2.5:7b | correct=${tier1Correct}`);
-              results.push({
-                index: i + 1,
+      const _bgEsc = (async () => {
+        try {
+          // ── Tier 1: extended council — tiebreaker via qwen2.5:7b ──
+          try {
+            const tiebreakerPeerId = m0PeerId ?? 'cb4ef450';
+            const tier1Route = await insertRoute(SUPABASE_URL, SERVICE_KEY, {
+              target_peer_id: tiebreakerPeerId,
+              hex_frame: Buffer.from(prompt, 'utf8').toString('base64'),
+              payload_json: {
+                prompt,
+                question_id: `${questionId}-tier1`,
+                correct_answer_letter: correctLetter,
                 source_id: q.source_id,
+                wire_format: wire,
                 domain: q.domain,
-                question_preview: q.question.slice(0, 120) + (q.question.length > 120 ? '...' : ''),
-                num_options: q.options.length,
-                correct_letter: correctLetter,
-                correct_answer_text: q.correct_answer,
-                allotted_timeout_s: qTimeoutSec,
-                route_ids: routeIds,
-                escalation_fired: escalationFired,
-                escalation_peer_count: escalationPeerCount,
-                escalation_route_ids: escalationRouteIds,
-                final_answer_source: 'tier_1_tiebreaker',
-                per_peer: Object.fromEntries(
-                  peerPool.map((p, j) => [p.peer_id, {
-                    route_id: routeIds[j],
-                    escalation_route_id: escalationRouteIds[j] ?? null,
+                session_id: sessionId,
+                plow_max_iterations: 4,
+                allotted_timeout_ms: Math.min(120000, qDeadline - Date.now()),
+                is_tiebreaker: true,
+                tiebreaker_model: 'qwen2.5:7b',
+                priming_context: {
+                  contested_answers: Object.values(peerAnswers).filter(a => a !== null),
+                  per_peer_breakdown: peerAnswers,
+                },
+              },
+              status: 'pending',
+              session_id: sessionId,
+              ttl_seconds: 180,
+            });
+            tier1FallbackFired = true;
+            qResultRef.tier_1_fallback_fired = true;
+
+            const tier1RepliesMap = await pollReplies(
+              SUPABASE_URL, SUPABASE_ANON_KEY,
+              [tier1Route.id],
+              Math.min(120000, qDeadline - Date.now())
+            );
+            const tier1Reply = tier1RepliesMap[tier1Route.id];
+
+            if (tier1Reply) {
+              let tier1Raw = null;
+              if (tier1Reply.hex_reply) {
+                try { tier1Raw = Buffer.from(tier1Reply.hex_reply, 'base64').toString('utf8'); } catch { tier1Raw = tier1Reply.hex_reply; }
+              }
+              if (!tier1Raw && tier1Reply.answer_json) {
+                const aj4 = tier1Reply.answer_json;
+                tier1Raw = typeof aj4 === 'string' ? aj4 : (aj4.response ?? aj4.answer ?? JSON.stringify(aj4));
+              }
+
+              const tier1Letter = extractLetter(tier1Raw, q.options.length);
+              if (tier1Letter !== null && tier1Letter !== 'ABSTAIN') {
+                peerAnswers[`${tiebreakerPeerId}-tier1`] = tier1Letter;
+                const { answer: resolvedAnswer, contested: stillContested } = ensembleVote(peerAnswers, args.tierWeights, peerTierMap);
+                if (!stillContested && resolvedAnswer !== null) {
+                  contestedResolutionTier = 'tier_1';
+                  const tier1Correct = resolvedAnswer === correctLetter;
+                  if (tier1Correct) ensembleCorrect++;
+                  ensembleContested++;
+                  console.log(`  [CONTESTED → TIER1 RESOLVED] tiebreaker=${tier1Letter} qwen2.5:7b | correct=${tier1Correct}`);
+                  const _isPass = tier1Correct;
+                  Object.assign(qResultRef, {
+                    final_answer_source: 'tier_1_tiebreaker',
+                    per_peer: Object.fromEntries(peerPool.map((p, j) => [p.peer_id, {
+                      route_id: routeIds[j], escalation_route_id: escalationRouteIds[j] ?? null,
+                      answer: peerAnswers[p.peer_id],
+                      replied: !!collectedReplies[routeIds[j]] || !!collectedReplies[escalationRouteIds[j]],
+                      correct: peerAnswers[p.peer_id] !== null && peerAnswers[p.peer_id] === correctLetter,
+                    }])),
+                    ensemble: { answer: resolvedAnswer, contested: false, correct: tier1Correct },
+                    contested_resolution_tier: 'tier_1',
+                    tier_1_fallback_fired: true, tier_2_fallback_fired: false,
+                    cascade_path: ['fast', 'tier1'],
+                    ensemble_vote: resolvedAnswer,
+                    result: _isPass ? 'pass' : 'fail',
+                    failure_class: _isPass ? null : 'wrong_answer',
+                    peers: _s2Peers.map(pp => {
+                      if (pp.peer_id === tiebreakerPeerId) return { ...pp, tier_used: 'tier1' };
+                      return pp;
+                    }),
+                  });
+                  return; // background escalation done
+                }
+              }
+            }
+          } catch (tier1Err) {
+            console.warn(`  [TIER1] tiebreaker dispatch failed: ${tier1Err.message}`);
+          }
+
+          // === BP098 M41 CASCADE FAIL-FAST — INSERTION POINT 1 (before Posse) ===
+          if (Date.now() > qDeadline) {
+            const overshootMs = Date.now() - qDeadline;
+            console.warn(`  [CASCADE-FAIL-FAST] deadline expired by ${overshootMs}ms — skipping Posse dispatch; returning CONTESTED (tier_3_contested)`);
+            contestedResolutionTier = 'tier_3_contested';
+            await logEscalation(SUPABASE_URL, SERVICE_KEY, {
+              session_id: sessionId, question_id: questionId, domain: q.domain,
+              tier: 'tier_3_human', answer: null, correct: false,
+              detail: `cascade_fail_fast: deadline expired by ${overshootMs}ms before Posse dispatch`,
+            });
+            ensembleContested++;
+            console.log(`  Ensemble: ${YELLOW}CONTESTED${RESET} | source=${finalAnswerSource} | resolution=${contestedResolutionTier} | overshoot=${overshootMs}ms`);
+            Object.assign(qResultRef, {
+              ensemble: { answer: null, contested: true, correct: false },
+              contested_resolution_tier: contestedResolutionTier,
+              cascade_fail_fast: true, overshoot_ms: overshootMs,
+              cascade_path: ['fast', 'tier1', 'cascade_fail_fast'],
+              result: 'fail', failure_class: 'timeout_contested',
+            });
+            return;
+          }
+
+          // -- BP092 M24 Step 2: POSSE decompose + swarm (if Tier 1 did not resolve) --
+          let posseAnswerLetter = null;
+          if (!contestedResolutionTier || contestedResolutionTier === 'pending') {
+            try {
+              console.log(`  [POSSE] decomposing question ${questionId} -> sub-claims...`);
+              // BP099→BP100 K18: hoisted imports (Option A) — no per-call await import() race
+              const decomposeQuestion = _decomposeQuestion;
+              const swarmDispatch = _swarmDispatch;
+              if (!decomposeQuestion || !swarmDispatch) throw new Error('posse modules not loaded at startup');
+              const decomp = await decomposeQuestion(
+                questionId, q.question, q.options, q.domain,
+                SUPABASE_URL, SERVICE_KEY,
+                m0PeerId,
+                Math.min(90000, qDeadline - Date.now()),
+              );
+              if (decomp.sub_claims.length > 0) {
+                const swarmResult = await swarmDispatch(
+                  decomp.sub_claims, questionId, q.question, q.options,
+                  {
+                    supabaseUrl: SUPABASE_URL, serviceKey: SERVICE_KEY, anonKey: SUPABASE_ANON_KEY,
+                    sessionId, domain: q.domain, wireFormat: wire,
+                    tierPeerMap, peerTierMap, peers: peerPool,
+                    timeoutMs: Math.min(120000, qDeadline - Date.now()),
+                    maxDepth: 2, varianceThreshold: andonThreshold,
+                  }
+                );
+                posseAnswerLetter = swarmResult.aggregate_answer;
+                if (posseAnswerLetter !== null && !swarmResult.contested_after_swarm) {
+                  contestedResolutionTier = 'posse';
+                  const posseCorrect = posseAnswerLetter === correctLetter;
+                  if (posseCorrect) ensembleCorrect++;
+                  ensembleContested++;
+                  await logEscalation(SUPABASE_URL, SERVICE_KEY, {
+                    session_id: sessionId, question_id: questionId, domain: q.domain,
+                    tier: 'posse', answer: posseAnswerLetter, correct: posseCorrect,
+                    detail: `swarm run_id=${swarmResult.run_id}`,
+                  });
+                  console.log(`  [CONTESTED -> POSSE RESOLVED] answer=${posseAnswerLetter} correct=${posseCorrect}`);
+                  const _isPossePass = posseCorrect;
+                  Object.assign(qResultRef, {
+                    final_answer_source: 'posse_swarm',
+                    per_peer: Object.fromEntries(peerPool.map((p, j) => [p.peer_id, {
+                      route_id: routeIds[j], escalation_route_id: escalationRouteIds[j] ?? null,
+                      answer: peerAnswers[p.peer_id],
+                      replied: !!collectedReplies[routeIds[j]] || !!collectedReplies[escalationRouteIds[j]],
+                      correct: peerAnswers[p.peer_id] !== null && peerAnswers[p.peer_id] === correctLetter,
+                    }])),
+                    ensemble: { answer: posseAnswerLetter, contested: false, correct: posseCorrect },
+                    contested_resolution_tier: 'posse',
+                    tier_1_fallback_fired: tier1FallbackFired, tier_2_fallback_fired: false,
+                    cascade_path: ['fast', 'tier1', 'posse'],
+                    ensemble_vote: posseAnswerLetter,
+                    result: _isPossePass ? 'pass' : 'fail',
+                    failure_class: _isPossePass ? null : 'wrong_answer',
+                    peers: _s2Peers.map(pp => ({ ...pp, tier_used: 'posse' })),
+                  });
+                  return;
+                }
+                console.log(`  [POSSE] swarm did not converge -- escalating to Tier 2`);
+              }
+            } catch (posseErr) {
+              console.warn(`  [POSSE] dispatch failed: ${posseErr.message} -- escalating to Tier 2`);
+            }
+          }
+
+          // === BP098 M41 CASCADE FAIL-FAST — INSERTION POINT 2 (before Tier 2) ===
+          if (Date.now() > qDeadline && (!contestedResolutionTier || contestedResolutionTier === 'pending')) {
+            const overshootMs = Date.now() - qDeadline;
+            console.warn(`  [CASCADE-FAIL-FAST] deadline expired by ${overshootMs}ms — skipping Tier 2 flagship dispatch; returning CONTESTED`);
+            contestedResolutionTier = 'tier_3_contested';
+            await logEscalation(SUPABASE_URL, SERVICE_KEY, {
+              session_id: sessionId, question_id: questionId, domain: q.domain,
+              tier: 'tier_3_human', answer: null, correct: false,
+              detail: `cascade_fail_fast_tier2: deadline expired by ${overshootMs}ms before Tier 2 dispatch`,
+            });
+            ensembleContested++;
+            console.log(`  Ensemble: ${YELLOW}CONTESTED${RESET} | source=${finalAnswerSource} | resolution=${contestedResolutionTier} | overshoot=${overshootMs}ms`);
+            Object.assign(qResultRef, {
+              ensemble: { answer: null, contested: true, correct: false },
+              contested_resolution_tier: contestedResolutionTier,
+              cascade_fail_fast: true, overshoot_ms: overshootMs,
+              cascade_path: ['fast', 'tier1', 'posse', 'cascade_fail_fast'],
+              result: 'fail', failure_class: 'timeout_contested',
+            });
+            return;
+          }
+
+          // -- BP092 M24 Step 3: Tier 2 flagship escalation --
+          if (tier2Flagship && (!contestedResolutionTier || contestedResolutionTier === 'pending')) {
+            try {
+              tier2FallbackFired = true;
+              qResultRef.tier_2_fallback_fired = true;
+              // BP099→BP100 K18: hoisted import (Option A) — no per-call await import() race
+              const tier2FlagshipEscalateFn = _tier2FlagshipEscalate;
+              if (!tier2FlagshipEscalateFn) throw new Error('tier2FlagshipEscalate module not loaded at startup');
+              const t2Result = await tier2FlagshipEscalateFn(
+                questionId, prompt, q.options.length, q.domain,
+                {
+                  anthropicApiKey: process.env.ANTHROPIC_API_KEY ?? '',
+                  openaiApiKey: process.env.OPENAI_API_KEY ?? '',
+                  joulesRemainingRef,
+                  joulesCapPerRun: 5000,
+                  joulesPerQuestion: 120,
+                  supabaseUrl: SUPABASE_URL,
+                  serviceKey: SERVICE_KEY,
+                  sessionId,
+                }
+              );
+              if (t2Result.answer !== null && t2Result.vendor !== 'skipped') {
+                contestedResolutionTier = 'tier_2';
+                const t2Correct = t2Result.answer === correctLetter;
+                if (t2Correct) ensembleCorrect++;
+                ensembleContested++;
+                await logEscalation(SUPABASE_URL, SERVICE_KEY, {
+                  session_id: sessionId, question_id: questionId, domain: q.domain,
+                  tier: 'tier_2', answer: t2Result.answer, correct: t2Correct,
+                  detail: `${t2Result.vendor}/${t2Result.model} cost=${t2Result.cost_joules}J`,
+                });
+                console.log(`  [CONTESTED -> TIER2 RESOLVED] vendor=${t2Result.vendor} answer=${t2Result.answer} correct=${t2Correct}`);
+                const _isT2Pass = t2Correct;
+                Object.assign(qResultRef, {
+                  final_answer_source: 'tier_2_flagship',
+                  per_peer: Object.fromEntries(peerPool.map((p, j) => [p.peer_id, {
+                    route_id: routeIds[j], escalation_route_id: escalationRouteIds[j] ?? null,
                     answer: peerAnswers[p.peer_id],
                     replied: !!collectedReplies[routeIds[j]] || !!collectedReplies[escalationRouteIds[j]],
                     correct: peerAnswers[p.peer_id] !== null && peerAnswers[p.peer_id] === correctLetter,
-                  }])
-                ),
-                ensemble: { answer: resolvedAnswer, contested: false, correct: tier1Correct },
-                contested_resolution_tier: 'tier_1',
-                tier_1_fallback_fired: true,
-                tier_2_fallback_fired: false,
-              });
-              continue;  // next question
-            }
-          }
-        }
-      } catch (tier1Err) {
-        console.warn(`  [TIER1] tiebreaker dispatch failed: ${tier1Err.message}`);
-      }
-
-      // === BP098 M41 CASCADE FAIL-FAST — INSERTION POINT 1 (before Posse) ===
-      // If question deadline already expired, skip Posse dispatch entirely.
-      // Return CONTESTED honestly with whatever partial votes were gathered.
-      // Prevents the 27-line "negative delay corrected to 0" death spiral.
-      if (Date.now() > qDeadline) {
-        const overshootMs = Date.now() - qDeadline;
-        console.warn(`  [CASCADE-FAIL-FAST] deadline expired by ${overshootMs}ms — skipping Posse dispatch; returning CONTESTED (tier_3_contested)`);
-        contestedResolutionTier = 'tier_3_contested';
-        await logEscalation(SUPABASE_URL, SERVICE_KEY, {
-          session_id: sessionId, question_id: questionId, domain: q.domain,
-          tier: 'tier_3_human', answer: null, correct: false,
-          detail: `cascade_fail_fast: deadline expired by ${overshootMs}ms before Posse dispatch`,
-        });
-        ensembleContested++;
-        console.log(`  Ensemble: ${YELLOW}CONTESTED${RESET} | source=${finalAnswerSource} | resolution=${contestedResolutionTier} | overshoot=${overshootMs}ms`);
-        results.push({
-          index: i + 1, source_id: q.source_id, domain: q.domain,
-          question_preview: q.question.slice(0, 120) + (q.question.length > 120 ? '...' : ''),
-          num_options: q.options.length, correct_letter: correctLetter,
-          correct_answer_text: q.correct_answer, allotted_timeout_s: qTimeoutSec,
-          route_ids: routeIds, escalation_fired: escalationFired,
-          escalation_peer_count: escalationPeerCount, escalation_route_ids: escalationRouteIds,
-          final_answer_source: finalAnswerSource,
-          per_peer: Object.fromEntries(peerPool.map((p, j) => [p.peer_id, {
-            route_id: routeIds[j], escalation_route_id: escalationRouteIds[j] ?? null,
-            answer: peerAnswers[p.peer_id],
-            replied: !!collectedReplies[routeIds[j]] || !!collectedReplies[escalationRouteIds[j]],
-            correct: peerAnswers[p.peer_id] !== null && peerAnswers[p.peer_id] === correctLetter,
-          }])),
-          ensemble: { answer: null, contested: true, correct: false },
-          contested_resolution_tier: contestedResolutionTier,
-          tier_1_fallback_fired: tier1FallbackFired, tier_2_fallback_fired: false,
-          cascade_fail_fast: true, overshoot_ms: overshootMs,
-        });
-        continue; // next question — NO further cascade dispatch
-      }
-      // === END BP098 M41 CASCADE FAIL-FAST INSERTION POINT 1 ===
-
-      // -- BP092 M24 Step 2: POSSE decompose + swarm (if Tier 1 did not resolve) --
-      let posseAnswerLetter = null;
-      if (!contestedResolutionTier || contestedResolutionTier === 'pending') {
-        try {
-          console.log(`  [POSSE] decomposing question ${questionId} -> sub-claims...`);
-          const { decomposeQuestion } = await import('../../dist/main/army_ants/posse_decompose.js');
-          const { swarmDispatch } = await import('../../dist/main/army_ants/posse_swarm.js');
-          const decomp = await decomposeQuestion(
-            questionId, q.question, q.options, q.domain,
-            SUPABASE_URL, SERVICE_KEY,
-            m0PeerId,
-            Math.min(90000, qDeadline - Date.now()),
-          );
-          if (decomp.sub_claims.length > 0) {
-            const swarmResult = await swarmDispatch(
-              decomp.sub_claims, questionId, q.question, q.options,
-              {
-                supabaseUrl: SUPABASE_URL, serviceKey: SERVICE_KEY, anonKey: SUPABASE_ANON_KEY,
-                sessionId, domain: q.domain, wireFormat: wire,
-                tierPeerMap, peerTierMap, peers: peerPool,
-                timeoutMs: Math.min(120000, qDeadline - Date.now()),
-                maxDepth: 2, varianceThreshold: andonThreshold,
+                  }])),
+                  ensemble: { answer: t2Result.answer, contested: false, correct: t2Correct },
+                  contested_resolution_tier: 'tier_2',
+                  tier_1_fallback_fired: tier1FallbackFired, tier_2_fallback_fired: true,
+                  cascade_path: ['fast', 'tier1', 'posse', 'tier2'],
+                  ensemble_vote: t2Result.answer,
+                  result: _isT2Pass ? 'pass' : 'fail',
+                  failure_class: _isT2Pass ? null : 'wrong_answer',
+                  peers: _s2Peers.map(pp => ({ ...pp, tier_used: 'tier2' })),
+                });
+                return;
               }
-            );
-            posseAnswerLetter = swarmResult.aggregate_answer;
-            if (posseAnswerLetter !== null && !swarmResult.contested_after_swarm) {
-              contestedResolutionTier = 'posse';
-              const posseCorrect = posseAnswerLetter === correctLetter;
-              if (posseCorrect) ensembleCorrect++;
-              ensembleContested++;
-              await logEscalation(SUPABASE_URL, SERVICE_KEY, {
-                session_id: sessionId, question_id: questionId, domain: q.domain,
-                tier: 'posse', answer: posseAnswerLetter, correct: posseCorrect,
-                detail: `swarm run_id=${swarmResult.run_id}`,
-              });
-              console.log(`  [CONTESTED -> POSSE RESOLVED] answer=${posseAnswerLetter} correct=${posseCorrect}`);
-              results.push({
-                index: i + 1, source_id: q.source_id, domain: q.domain,
-                question_preview: q.question.slice(0, 120) + (q.question.length > 120 ? '...' : ''),
-                num_options: q.options.length, correct_letter: correctLetter,
-                correct_answer_text: q.correct_answer, allotted_timeout_s: qTimeoutSec,
-                route_ids: routeIds, escalation_fired: escalationFired,
-                escalation_peer_count: escalationPeerCount, escalation_route_ids: escalationRouteIds,
-                final_answer_source: 'posse_swarm',
-                per_peer: Object.fromEntries(peerPool.map((p, j) => [p.peer_id, {
-                  route_id: routeIds[j], escalation_route_id: escalationRouteIds[j] ?? null,
-                  answer: peerAnswers[p.peer_id],
-                  replied: !!collectedReplies[routeIds[j]] || !!collectedReplies[escalationRouteIds[j]],
-                  correct: peerAnswers[p.peer_id] !== null && peerAnswers[p.peer_id] === correctLetter,
-                }])),
-                ensemble: { answer: posseAnswerLetter, contested: false, correct: posseCorrect },
-                contested_resolution_tier: 'posse',
-                tier_1_fallback_fired: tier1FallbackFired, tier_2_fallback_fired: false,
-              });
-              continue; // next question
+            } catch (t2Err) {
+              console.warn(`  [TIER2] flagship escalation threw: ${t2Err.message}`);
             }
-            console.log(`  [POSSE] swarm did not converge -- escalating to Tier 2`);
           }
-        } catch (posseErr) {
-          console.warn(`  [POSSE] dispatch failed: ${posseErr.message} -- escalating to Tier 2`);
+
+          // -- BP092 M24 Step 4: Tier 3 -- record + flag for human review --
+          contestedResolutionTier = 'tier_3_contested';
+          await logEscalation(SUPABASE_URL, SERVICE_KEY, {
+            session_id: sessionId, question_id: questionId, domain: q.domain,
+            tier: 'tier_3_human', answer: null, correct: false,
+            detail: 'all tiers exhausted -- requires human review',
+          });
+          console.log(`  [CONTESTED -> TIER3] all tiers exhausted -- flagged for human review`);
+          ensembleContested++;
+          console.log(`  Ensemble: ${YELLOW}CONTESTED${RESET} | escalation_fired=${escalationFired} | source=${finalAnswerSource} | resolution=${contestedResolutionTier}`);
+          Object.assign(qResultRef, {
+            contested_resolution_tier: contestedResolutionTier,
+            ensemble: { answer: null, contested: true, correct: false },
+            cascade_path: ['fast', 'tier1', 'posse', 'tier2', 'tier3'],
+            result: 'fail', failure_class: 'tier3_contested',
+          });
+        } catch (_bgErr) {
+          console.warn(`  [BG-ESC] background escalation error: ${_bgErr.message}`);
         }
-      }
+      })();
+      _bgEscalations.push(_bgEsc.catch(() => {}));
 
-      // === BP098 M41 CASCADE FAIL-FAST — INSERTION POINT 2 (before Tier 2) ===
-      // Second guard: if Posse ran but still didn't resolve AND deadline is now past,
-      // skip Tier 2 dispatch (avoids the 5000ms clamped-timeout Ollama attempt).
-      if (Date.now() > qDeadline && (!contestedResolutionTier || contestedResolutionTier === 'pending')) {
-        const overshootMs = Date.now() - qDeadline;
-        console.warn(`  [CASCADE-FAIL-FAST] deadline expired by ${overshootMs}ms — skipping Tier 2 flagship dispatch; returning CONTESTED`);
-        contestedResolutionTier = 'tier_3_contested';
-        await logEscalation(SUPABASE_URL, SERVICE_KEY, {
-          session_id: sessionId, question_id: questionId, domain: q.domain,
-          tier: 'tier_3_human', answer: null, correct: false,
-          detail: `cascade_fail_fast_tier2: deadline expired by ${overshootMs}ms before Tier 2 dispatch`,
-        });
-        ensembleContested++;
-        console.log(`  Ensemble: ${YELLOW}CONTESTED${RESET} | source=${finalAnswerSource} | resolution=${contestedResolutionTier} | overshoot=${overshootMs}ms`);
-        results.push({
-          index: i + 1, source_id: q.source_id, domain: q.domain,
-          question_preview: q.question.slice(0, 120) + (q.question.length > 120 ? '...' : ''),
-          num_options: q.options.length, correct_letter: correctLetter,
-          correct_answer_text: q.correct_answer, allotted_timeout_s: qTimeoutSec,
-          route_ids: routeIds, escalation_fired: escalationFired,
-          escalation_peer_count: escalationPeerCount, escalation_route_ids: escalationRouteIds,
-          final_answer_source: finalAnswerSource,
-          per_peer: Object.fromEntries(peerPool.map((p, j) => [p.peer_id, {
-            route_id: routeIds[j], escalation_route_id: escalationRouteIds[j] ?? null,
-            answer: peerAnswers[p.peer_id],
-            replied: !!collectedReplies[routeIds[j]] || !!collectedReplies[escalationRouteIds[j]],
-            correct: peerAnswers[p.peer_id] !== null && peerAnswers[p.peer_id] === correctLetter,
-          }])),
-          ensemble: { answer: null, contested: true, correct: false },
-          contested_resolution_tier: contestedResolutionTier,
-          tier_1_fallback_fired: tier1FallbackFired, tier_2_fallback_fired: false,
-          cascade_fail_fast: true, overshoot_ms: overshootMs,
-        });
-        continue; // next question — NO Tier 2 dispatch
-      }
-      // === END BP098 M41 CASCADE FAIL-FAST INSERTION POINT 2 ===
-
-      // -- BP092 M24 Step 3: Tier 2 flagship escalation --
-      if (tier2Flagship && (!contestedResolutionTier || contestedResolutionTier === 'pending')) {
-        try {
-          tier2FallbackFired = true;
-          const { tier2FlagshipEscalate } = await import('../../src/main/tier2/flagship_escalate.js');
-          const t2Result = await tier2FlagshipEscalate(
-            questionId, prompt, q.options.length, q.domain,
-            {
-              anthropicApiKey: process.env.ANTHROPIC_API_KEY ?? '',
-              openaiApiKey: process.env.OPENAI_API_KEY ?? '',
-              joulesRemainingRef,
-              joulesCapPerRun: 5000,
-              joulesPerQuestion: 120,
-              supabaseUrl: SUPABASE_URL,
-              serviceKey: SERVICE_KEY,
-              sessionId,
-            }
-          );
-          if (t2Result.answer !== null && t2Result.vendor !== 'skipped') {
-            contestedResolutionTier = 'tier_2';
-            const t2Correct = t2Result.answer === correctLetter;
-            if (t2Correct) ensembleCorrect++;
-            ensembleContested++;
-            await logEscalation(SUPABASE_URL, SERVICE_KEY, {
-              session_id: sessionId, question_id: questionId, domain: q.domain,
-              tier: 'tier_2', answer: t2Result.answer, correct: t2Correct,
-              detail: `${t2Result.vendor}/${t2Result.model} cost=${t2Result.cost_joules}J`,
-            });
-            console.log(`  [CONTESTED -> TIER2 RESOLVED] vendor=${t2Result.vendor} answer=${t2Result.answer} correct=${t2Correct}`);
-            results.push({
-              index: i + 1, source_id: q.source_id, domain: q.domain,
-              question_preview: q.question.slice(0, 120) + (q.question.length > 120 ? '...' : ''),
-              num_options: q.options.length, correct_letter: correctLetter,
-              correct_answer_text: q.correct_answer, allotted_timeout_s: qTimeoutSec,
-              route_ids: routeIds, escalation_fired: escalationFired,
-              escalation_peer_count: escalationPeerCount, escalation_route_ids: escalationRouteIds,
-              final_answer_source: 'tier_2_flagship',
-              per_peer: Object.fromEntries(peerPool.map((p, j) => [p.peer_id, {
-                route_id: routeIds[j], escalation_route_id: escalationRouteIds[j] ?? null,
-                answer: peerAnswers[p.peer_id],
-                replied: !!collectedReplies[routeIds[j]] || !!collectedReplies[escalationRouteIds[j]],
-                correct: peerAnswers[p.peer_id] !== null && peerAnswers[p.peer_id] === correctLetter,
-              }])),
-              ensemble: { answer: t2Result.answer, contested: false, correct: t2Correct },
-              contested_resolution_tier: 'tier_2',
-              tier_1_fallback_fired: tier1FallbackFired, tier_2_fallback_fired: true,
-            });
-            continue; // next question
-          }
-        } catch (t2Err) {
-          console.warn(`  [TIER2] flagship escalation threw: ${t2Err.message}`);
-        }
-      }
-
-      // -- BP092 M24 Step 4: Tier 3 -- record + flag for human review --
-      contestedResolutionTier = 'tier_3_contested';
-      await logEscalation(SUPABASE_URL, SERVICE_KEY, {
-        session_id: sessionId, question_id: questionId, domain: q.domain,
-        tier: 'tier_3_human', answer: null, correct: false,
-        detail: 'all tiers exhausted -- requires human review',
-      });
-      console.log(`  [CONTESTED -> TIER3] all tiers exhausted -- flagged for human review`);
-
-      ensembleContested++;
-      console.log(`  Ensemble: ${YELLOW}CONTESTED${RESET} | escalation_fired=${escalationFired} | source=${finalAnswerSource} | resolution=${contestedResolutionTier}`);
+      return qResultRef; // FREE the pLimit slot — escalation runs in background
     } else {
       if (ensembleIsCorrect) ensembleCorrect++;
       console.log(`  Ensemble: ${ensembleAnswer ?? 'NULL'} [${mark(ensembleIsCorrect)}] | escalation_fired=${escalationFired} | source=${finalAnswerSource}`);
     }
     console.log('');
 
-    results.push({
+    // Non-contested path: return full result with §2 schema fields
+    const _cascadeStepReached = (() => {
+      if (finalAnswerSource === 'weighted_consensus') return 1;
+      if (finalAnswerSource === 'ensemble_abstain') return 2;
+      if (finalAnswerSource === 'escalation_consensus' && !escalationFired) return 3;
+      if (finalAnswerSource === 'roundup_consensus') return 4;
+      if (finalAnswerSource === 'single_peer_fallback') return 5;
+      return 1;
+    })();
+    const _isCorrect = ensembleIsCorrect;
+    return {
       index: i + 1,
+      question_index: i,
       source_id: q.source_id,
       domain: q.domain,
+      question_text: q.question,
       question_preview: q.question.slice(0, 120) + (q.question.length > 120 ? '...' : ''),
       num_options: q.options.length,
       correct_letter: correctLetter,
@@ -1688,7 +1789,6 @@ async function main() {
             answer: peerAnswers[p.peer_id],
             replied: !!collectedReplies[routeIds[j]] || !!collectedReplies[escalationRouteIds[j]],
             correct: peerAnswers[p.peer_id] !== null && peerAnswers[p.peer_id] === correctLetter,
-            // BP093 Phase 3: Minor Council receipt fields
             iterations_run: replyAj.iterations_run ?? null,
             council_votes_per_iteration: replyAj.council_votes_per_iteration ?? null,
           }];
@@ -1698,24 +1798,30 @@ async function main() {
       contested_resolution_tier: contestedResolutionTier,
       tier_1_fallback_fired: tier1FallbackFired,
       tier_2_fallback_fired: tier2FallbackFired,
-      // BP094 §4 cascade receipt fields
       ensemble_method: 'capability_weighted',
-      cascade_step_reached: (() => {
-        if (finalAnswerSource === 'weighted_consensus') return 1;
-        if (finalAnswerSource === 'ensemble_abstain') return 2;
-        if (finalAnswerSource === 'escalation_consensus' && !escalationFired) return 3;
-        if (finalAnswerSource === 'roundup_consensus') return 4;
-        if (finalAnswerSource === 'single_peer_fallback') return 5;
-        return 1;
-      })(),
+      cascade_step_reached: _cascadeStepReached,
       ensemble_abstain_fired: finalAnswerSource === 'ensemble_abstain',
       single_peer_fallback: finalAnswerSource === 'single_peer_fallback',
       posse_dispatched: posseAutoDispatched,
       core_mic_judges: Object.entries(micTierPeerMap).flatMap(([, prefixes]) =>
         peers.filter(p => prefixes.some(prefix => p.peer_id.startsWith(prefix))).map(p => p.peer_id)
       ),
-    });
-  }
+      // §2 schema fields
+      peers: _s2Peers,
+      variance_pct: _s2VariancePct,
+      cascade_path: escalationFired ? ['fast', 'tier1'] : ['fast'],
+      ensemble_vote: ensembleAnswer ?? null,
+      gold_standard: { answer: q.correct_answer, source: `mmlu_pro/${q.domain}` },
+      result: _isCorrect ? 'pass' : 'fail',
+      failure_class: _isCorrect ? null : (ensembleAnswer === null ? 'no_answer' : 'wrong_answer'),
+    };
+  })); // end _qLimit Q-track
+
+  // Await all Q-tracks, wait for background escalations to merge, sort by question_index
+  const _qResults = await Promise.all(_qTasks);
+  await Promise.all(_bgEscalations); // merge all background escalation receipts before JSON write
+  _qResults.sort((a, b) => (a?.question_index ?? 0) - (b?.question_index ?? 0));
+  for (const r of _qResults) if (r) results.push(r);
 
   // Summary
   const ensemblePct = questions.length > 0 ? ((ensembleCorrect / questions.length) * 100).toFixed(1) : '0.0';
